@@ -1,0 +1,142 @@
+/**
+* The css file of ZenTaoMS.
+*
+* ZenTaoMS is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* ZenTaoMS is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+* 
+* You should have received a copy of the GNU Lesser General Public License
+* along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.
+*
+* @copyright   Copyright: 2009 Chunsheng Wang
+* @author      Chunsheng Wang <wwccss@263.net>
+* @package     ZenTaoMS
+* @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
+* @link        http://www.zentao.cn
+*/
+
+/*-----------------------FIELDSET SETTING----------------------------*/
+fieldset {border:1px solid #e4e4e4; padding:8px; margin-bottom:5px}
+legend   {font-weight:bold; color:darkgreen}
+fieldset .table-1 {margin:0}
+fieldset tr, fieldset td, fieldset th {border:none; padding:2px 2px 2px 10px}
+del{background:#fcc}
+ins{background:#cfc; text-decoration:none}
+
+/*-----------------------FORM SETTING----------------------------*/
+.text-1 {width: 90%}
+.text-2 {width: 120px}
+.text-3 {width: 240px}
+.text-4 {width: 360px}
+.text-5 {width: 480px}
+
+.select-1 {width: 90%}
+.select-2 {width: 125px}
+.select-3 {width: 245px} 
+.select-4 {width: 360px}
+.select-5 {width: 480px}
+
+.area-1{width: 90%;}
+.area-2{width: 120px}
+.area-3{width: 240px}
+.area-4{width: 360px}
+.area-5{width: 480px}
+
+.button-s{padding:3px 20px 3px 20px}
+.button-r{padding:3px 20px 3px 20px}
+.button-c{padding:3px 20px 3px 20px}
+
+/*-----------------------TABLE SETTING----------------------------*/
+caption  {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
+table, tr, th, td {border-color:#e4e4e4}
+tr, th, td {padding:5px}
+.table-1 {width:100%; margin-bottom:10px}
+.table-2 {width:240px;margin-bottom:10px}
+.table-3 {width:360px;margin-bottom:10px}
+.table-4 {width:480px;margin-bottom:10px}
+.table-5 {width:600px;margin-bottom:10px}
+.colhead th  {text-align:center;}
+.rowhead     {font-weight:bold; text-align:right; width:100px}
+
+/*-----------------------LAYOUT SETTING----------------------------*/
+.f-left   {float:left;}
+.f-right  {float:right}
+.c-none   {clear:none;}
+.c-left   {clear:left;}
+.c-right  {clear:right;}
+.c-both   {clear:both;}
+.a-center {text-align: center;}
+.a-right  {text-align: right;}
+.a-left   {text-align: left;}
+
+.half-left  {float:left;  width:48%; text-align:left;  clear:left}
+.half-right {float:right; width:48%; text-align:right; clear:right}
+
+/*-----------------------BORDER SETTING--------------------------*/
+.bd-1px    {border:1px solid}
+.bt-1px    {border-top:1px  solid}
+.bl-1px    {border-left:1px solid}
+.bb-1px    {border-bottom:1px solid}
+.br-1px    {border-right:1px solid}
+.bd-none   {border:none}
+.bd-green  {border-color:#58CB64}
+.bd-yellow {border-color:#F4BF20}
+.bd-blue   {border-color:#64B7D7}
+.bd-gray   {border-color:#CCC;}
+
+/*-----------------------BACKGROUND SETTING----------------------------*/
+.bg-green    {background-color:#DDF1D8;}
+.bg-blue     {background-color:#DEEEF4}
+.bg-yellow   {background-color:#FBF5C6;}
+
+/*-----------------------SPECIAL PART SETTING--------------------*/
+#navbar    {font-weight:bold; font-size:108%; margin:5px 10px 0px 10px; padding:0;}
+#navbar ul {margin:0; padding:0; width:100%; line-height: 2; border:none} 
+#navbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none}
+
+#mainmenu ul {background-color:#D6E7FF; height:28px} /* 必须设定高度，以支持opera。*/
+#mainmenu li {border-right:4px solid #73A2EF; padding:0 15px 0 15px}
+#mainmenu a         {text-decoration:none; color:black;}
+#mainmenu a:hover   {color:red; font-weight:bold}
+#mainmenu #active   {color:#FFF; background-color:#00008B;}
+#mainmenu #active a       {color:white}
+#mainmenu #active a:hover {color:red}
+
+#submenu    {color:white; clear:both}
+#submenu ul {background-color:#000888;height:28px} 
+#submenu li {padding:0 10px 0 10px}
+#submenu a  {text-decoration:none; color:yellow;}
+#submenu li a:hover {color:red;}
+
+#posbar    {margin:5px 0 5px 10px; text-align:left}
+#footer    {width:100%; position:fixed; bottom:0; left:0; margin:10px 0 0 0; border-top:2px solid #F4BF20; text-align:center; background-color:#FBF5C6; font-size:108%;}
+#hiddenwin {display:none}
+
+#tabbar    {font-weight:bold; font-size:108%; margin:0; padding:0; height:28px; background-color:#e4e4e4}
+#tabbar ul {margin:0; padding:0; float:left; line-height: 2; border:none; background-color:#e4e4e4; height:28px;; clear:left} 
+#tabbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none; border-right:4px solid #efefef; padding:0 10px 0 10px}
+#tabbar a         {text-decoration:none; color:black;}
+#tabbar a:hover   {color:red; font-weight:bold}
+#tabbar .active   {color:black; background-color:#B6F5CB;}
+#tabbar .active a:hover {color:red}
+#tabbar div{float:right; padding:5px 10px 4px 10px; background:#FFCF9C}
+#tabbar div select{font-size:11px; height:19px; margin:0; padding:0}
+
+#titlebar{font-size:16px; font-weight:bold; background:#e4e4e4; padding:5px; margin:10px 0 10px 0; height:22px}
+#titlebar #main {float:left;  width:80%; clear:none; text-align:left}
+#titlebar div   {float:right; width:20%; clear:none; text-align:right}
+#titlebar #main input {font-size:14px}
+#titlebar .button-s   {font-size:12px; padding-top:0; padding-bottom:0}
+
+.history {border:1px solid gray; background:#efefef; padding:10px; margin-top:10px; margin-bottom:10px}
+.yui-doc3, #doc3 {margin-left:10px; margin-right:10px}
+/*-----------------------STATUS COLORS--------------------*/
+.done  {color:darkgreen}
+.wait  {color:#9F9F5F}
+.doing {color:red}
