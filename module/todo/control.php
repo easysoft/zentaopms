@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     todo
- * @version     $Id: control.php 1456 2009-10-23 01:57:11Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 class todo extends control

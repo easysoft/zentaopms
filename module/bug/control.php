@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     bug
- * @version     $Id: control.php 1459 2009-10-23 05:50:21Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 class bug extends control

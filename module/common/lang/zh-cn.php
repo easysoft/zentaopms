@@ -20,7 +20,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     ZenTaoMS
- * @version     $Id: zh-cn.php 1449 2009-10-22 08:31:03Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 $lang->zentaoMS   = '禅道项目管理系统';

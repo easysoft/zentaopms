@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     project
- * @version     $Id: managechilds.html.php 1260 2009-09-03 08:31:10Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 ?>

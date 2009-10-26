@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     dept
- * @version     $Id: control.php 1342 2009-09-21 06:37:30Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 class dept extends control

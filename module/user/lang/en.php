@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     user
- * @version     $Id: en.php 1150 2009-04-04 12:05:35Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 $lang['page']['common']    = 'user';

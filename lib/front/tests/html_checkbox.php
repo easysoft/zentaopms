@@ -11,7 +11,7 @@
  * 6. 验证options为空，是否返回false。
  *
  * @author  chunsheng.wang <wwccss@gmail.com>
- * @version $Id: html_checkbox.php 1156 2009-04-24 08:53:44Z wwccss $
+ * @version $Id$
  */
 include '../front.class.php';
 

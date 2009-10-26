@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     ZenTaoMS
- * @version     $Id: config.test.php 1428 2009-10-20 03:37:53Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 $config->version     = '0.1 alpha';      // °æ±¾ºÅ£¬ÇÐÎðÐÞ¸Ä¡£

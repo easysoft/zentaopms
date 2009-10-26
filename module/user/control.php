@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     user
- * @version     $Id: control.php 1419 2009-10-14 09:39:51Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 class user extends control

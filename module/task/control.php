@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     task
- * @version     $Id: control.php 1425 2009-10-17 09:21:36Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 class task extends control

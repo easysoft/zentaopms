@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     product
- * @version     $Id: model.php 1450 2009-10-22 08:31:22Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 ?>
