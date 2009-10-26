@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     group
- * @version     $Id: zh-cn.php 1432 2009-10-20 07:38:43Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 $lang->group->common       = '分组';

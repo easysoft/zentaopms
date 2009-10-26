@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     ZenTaoMS
- * @version     $Id: deny.html.php 1347 2009-09-23 06:51:24Z wwccss $
+ * @version     $Id$
  */
 ?>
 <html xmlns='http://www.w3.org/1999/xhtml'>

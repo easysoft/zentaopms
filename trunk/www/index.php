@@ -20,7 +20,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     ZenTaoMS
- * @version     $Id: index.php 1433 2009-10-20 13:27:08Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 error_reporting(E_ALL);

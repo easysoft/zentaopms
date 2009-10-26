@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     admin
- * @version     $Id: control.php 1280 2009-09-07 05:41:14Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 class admin extends control

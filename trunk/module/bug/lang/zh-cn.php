@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     bug
- * @version     $Id: zh-cn.php 1406 2009-10-12 07:49:52Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 $lang->bug->common         = '缺陷管理';
