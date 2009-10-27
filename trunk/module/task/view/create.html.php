@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div id='doc3'>
-  <form method='post'>
+  <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $lang->task->create;?></caption>
       <tr>
@@ -33,28 +33,26 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->story;?></th>
-        <td><?php echo html::select('storyID', $stories, $storyID, 'class=select-3');?> 
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->owner;?></th>
-        <td><?php echo html::select('owner', $members, '', 'class=select-3');?> 
+        <td><?php echo html::select('story', $stories, $storyID, 'class=select-1');?> 
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->name;?></th>
-        <td><input type='text' name='name' class='text-3' /></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-        <td><input type='text' name='estimate' class='text-3' /></td>
+        <td><input type='text' name='name' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->desc;?></th>
         <td><textarea name='desc' rows='5' class='area-1'></textarea>
       </tr>  
       <tr>
-        <td colspan='2' class='a-center'>
-          <?php echo html::submitButton() . html::resetButton();?>
-        </td>
+        <th class='rowhead'><?php echo $lang->task->owner;?></th>
+        <td><?php echo html::select('owner', $members, '', 'class=select-3');?> 
+      </tr> 
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->estimate;?></th>
+        <td><input type='text' name='estimate' class='text-3' /></td>
+      </tr>
+      <tr>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
     </table>
   </form>

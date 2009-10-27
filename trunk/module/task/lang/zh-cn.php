@@ -26,7 +26,7 @@ $lang->task->index     = "任务一览";
 $lang->task->create    = "新增任务";
 $lang->task->edit      = "更新任务";
 $lang->task->delete    = "删除任务";
-$lang->task->browse    = "浏览任务";
+$lang->task->view      = "查看任务";
 $lang->task->ajaxGetUserTasks = "ajax:我的任务";
 
 $lang->task->confirmDelete = "您确定要删除这个任务吗？";
@@ -46,3 +46,10 @@ $lang->task->desc      = '描述';
 $lang->task->statusList->wait  = '未开始';
 $lang->task->statusList->doing = '进行中';
 $lang->task->statusList->done  = '已完成';
+
+$lang->task->buttonEdit       = '编辑';
+$lang->task->buttonBackToList = '返回';
+
+$lang->task->legendBasic  = '基本信息';
+$lang->task->legendDesc   = '任务描述';
+$lang->task->legendAction = '操作';
