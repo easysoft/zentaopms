@@ -45,6 +45,10 @@
         <td><?php echo html::select('pri', $lang->todo->priList, $todo->pri, 'class=select-3');?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->todo->status;?></th>
+        <td><?php echo html::select('status', $lang->todo->statusList, $todo->status, 'class=select-3');?></td>
+      </tr>  
+      <tr>
         <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
         <td><?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class=select-2') . html::select('end', $times, $todo->end, 'class=select-2');?></td>
       </tr>  

@@ -27,12 +27,14 @@ $lang->todo->create    = "新增TODO";
 $lang->todo->edit      = "更新";
 $lang->todo->markDone  = "未完成";
 $lang->todo->markWait  = "已完成";
+$lang->todo->markDoing = "已完成";
 $lang->todo->mark      = "更改状态";
 $lang->todo->delete    = "删除";
 $lang->todo->browse    = "浏览TODO";
 
-$lang->todo->confirmDelete = "您确定要删除这个todo吗？";
-$lang->todo->successMarked = "成功切换状态！";
+$lang->todo->confirmDelete  = "您确定要删除这个todo吗？";
+$lang->todo->successMarked  = "成功切换状态！";
+$lang->todo->lblDisableDate = '暂时不设定时间';
 
 $lang->todo->id          = '编号';
 $lang->todo->date        = '日期';

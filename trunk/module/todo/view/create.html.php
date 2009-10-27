@@ -50,7 +50,10 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
-        <td><?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class=select-2') . html::select('end', $times, '', 'class=select-2');?></td>
+        <td>
+        <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class=select-2') . html::select('end', $times, '', 'class=select-2');?>
+        <input type='checkbox' onclick='switchDateFeature(this);'><?php echo $lang->todo->lblDisableDate;?>
+        </td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'>
@@ -88,6 +91,20 @@ function selectNext()
 {
     endIndex = $("#begin ").get(0).selectedIndex + 2;
     $("#end ").get(0).selectedIndex = endIndex;
+}
+
+function switchDateFeature(switcher)
+{
+    if(switcher.checked) 
+    {
+        $('#begin').attr('disabled','disabled');
+        $('#end').attr('disabled','disabled');
+    }
+    else
+    {
+        $('#begin').removeAttr('disabled');
+        $('#end').removeAttr('disabled');
+    }
 }
 selectNext();
 </script>
