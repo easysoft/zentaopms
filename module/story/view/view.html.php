@@ -168,7 +168,11 @@
     <div class='a-center' style='font-size:16px; font-weight:bold'>
       <?php
       if(common::hasPriv('story', 'edit')) echo html::a($this->createLink('story', 'edit', "storyID=$story->id"),  $lang->story->buttonEdit);
-      echo html::a($this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module"), $lang->story->buttonToList);
+      if(common::hasPriv('product', 'browse'))
+      {
+          if($app->session->storyList != '') echo html::a($app->session->storyList, $lang->story->buttonToList);
+          else echo html::a($this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module"), $lang->story->buttonToList);
+      }
       ?>
     </div>
   </fieldset>
