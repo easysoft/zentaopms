@@ -34,12 +34,15 @@ class task extends control
     /* 添加任务。*/
     public function create($projectID = 0, $storyID = 0)
     {
-        $project = $this->project->getById($projectID); 
+        $project = $this->project->findById($projectID); 
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
 
         if(!empty($_POST))
         {
-            $this->task->create($projectID);
+            $taskID = $this->task->create($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action');
+            $this->action->create('task', $taskID, 'Opened', '');
             die(js::locate($browseProjectLink, 'parent'));
         }
 
@@ -64,14 +67,21 @@ class task extends control
     /* 编辑任务。*/
     public function edit($taskID)
     {
-        $task = $this->task->getById($taskID);
-        $project = $this->project->getById($task->project);
-        $browseProjectLink = $this->createLink('project', 'browse', "projectID=$project->id&tab=task");
+        $task = $this->task->findByID($taskID);
+        $project = $this->project->findByID($task->project);
 
         if(!empty($_POST))
         {
-            $this->task->update($taskID);
-            die(js::locate($browseProjectLink, 'parent'));
+            $this->loadModel('action');
+            $changes = $this->task->update($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         $stories = $this->story->getProjectStoryPair($project->id);
@@ -80,7 +90,7 @@ class task extends control
         $members = array('' => '') + $members;
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->edit;
-        $position[]      = html::a($browseProjectLink, $project->name);
+        $position[]      = html::a($this->createLink('project', 'browse', "project=$task->project"), $project->name);
         $position[]      = $this->lang->task->edit;
 
         $this->assign('header',   $header);
@@ -89,6 +99,25 @@ class task extends control
         $this->assign('stories',  $stories);
         $this->assign('members',  $members);
         $this->assign('task',     $task);
+        $this->display();
+    }
+
+    /* 查看任务。*/
+    public function view($taskID)
+    {
+        $this->loadModel('action');
+        $task = $this->task->findByID($taskID);
+        $project = $this->project->findByID($task->project);
+
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->task->view;
+        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
+        $position[]      = $this->lang->task->view;
+
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
+        $this->assign('project',  $project);
+        $this->assign('task',     $task);
+        $this->assign('actions',  $this->action->getList('task', $taskID));
         $this->display();
     }
 

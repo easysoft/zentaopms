@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div id='doc3'>
-  <form method='post'>
+  <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $header['title'];?></caption>
       <tr>
@@ -33,15 +33,19 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->story;?></th>
-        <td><?php echo html::select('storyID', $stories, $task->story, 'class=select-3');?> 
+        <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?> 
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->name;?></th>
+        <td><input type='text' name='name' value='<?php echo $task->name;?>' class='text-1' /></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->desc;?></th>
+        <td><textarea name='desc' rows='5' class='area-1'><?php echo $task->desc;?></textarea>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->owner;?></th>
         <td><?php echo html::select('owner', $members, $task->owner, 'class=select-3');?> 
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->name;?></th>
-        <td><input type='text' name='name' value='<?php echo $task->name;?>' class='text-3' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->estimate;?></th>
@@ -59,13 +63,12 @@
         <th class='rowhead'><?php echo $lang->task->status;?></th>
         <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=select-3');?></td>
       </tr>  
-
       <tr>
-        <th class='rowhead'><?php echo $lang->task->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'><?php echo $task->desc;?></textarea>
+        <th class='rowhead'><?php echo $lang->comment;?></th>
+        <td><textarea name='comment' rows='5' class='area-1'></textarea>
       </tr>  
       <tr>
-        <td colspan='2' class='a-center'><input type='submit' name='submit' value='<?php echo $lang->save;?>' class='button-s' /></td>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
     </table>
   </form>
