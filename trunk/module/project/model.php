@@ -25,33 +25,54 @@
 <?php
 class projectModel extends model
 {
+    /* 每次关联成员的数量。*/
     const LINK_MEMBERS_ONE_TIME = 10;
 
     /* 新增项目。*/
-    public function create($project = array())
+    public function create()
     {
-        if(!is_array($project) or empty($project)) return false;
-        $companyID = $this->app->company->id;
-        extract($project);
-        $sql = "INSERT INTO " . TABLE_PROJECT . " (`company`, `name`, `code`, `begin`, `end`, `goal`, `desc`, `team`) VALUES('$companyID', '$name', '$code', '$begin', '$end', '$goal', '$desc', '$team')";
-        $this->dbh->query($sql);
-        return $this->dbh->lastInsertId();
+        $project = fixer::input('post')
+            ->add('company', $this->app->company->id)
+            ->stripTags('name, code, team')
+            ->specialChars('goal, desc')
+            ->get();
+        $this->dao->insert(TABLE_PROJECT)->data($project)
+            ->autoCheck($skipFields = 'begin,end')
+            ->batchCheck('name,code,team', 'notempty')
+            ->checkIF($project->begin != '', 'begin', 'date')
+            ->checkIF($project->end != '', 'end', 'date')
+            ->check('name', 'unique')
+            ->check('code', 'unique')
+            ->exec();
+        if(!dao::isError()) return $this->dao->lastInsertId();
     }
 
     /* 更新一个项目。*/
     public function update($projectID)
     {
-        extract($_POST);
-        $sql = " UPDATE " . TABLE_PROJECT . " SET `name` = '$name', `code` = '$code', `parent` = '$parent', 
-                 `begin` = '$begin', `end` = '$end', `goal` = '$goal', `desc` = '$desc', `team` = '$team'
-                 WHERE id = '$projectID'";
-        return $this->dbh->exec($sql);
+        $projectID = (int)$projectID;
+        $project = fixer::input('post')
+            ->stripTags('name, code, team')
+            ->specialChars('goal, desc')
+            ->setIF($this->post->begin == '0000-00-00', 'begin', '')
+            ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->get();
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck($skipFields = 'begin,end')
+            ->batchCheck('name,code,team', 'notempty')
+            ->checkIF($project->begin != '', 'begin', 'date')
+            ->checkIF($project->end != '', 'end', 'date')
+            ->check('name', 'unique', "id!=$projectID")
+            ->check('code', 'unique', "id!=$projectID")
+            ->where('id')->eq($projectID)
+            ->limit(1)
+            ->exec();
     }
 
     /* 删除一个项目。*/
     public function delete($projectID)
     {
-        return $this->dbh->exec("DELETE FROM " . TABLE_PROJECT . " WHERE id = '$projectID' LIMIT 1");
+        return $this->dao->delete()->from(TABLE_PROJECT)->where('id')->eq((int)$projectID)->andWhere('company')->eq($this->app->company->id)->limit(1)->exec();
     }
     
     /* 获得项目目录列表。*/
@@ -66,45 +87,38 @@ class projectModel extends model
     /* 获得项目id=>name列表。*/
     public function getPairs()
     {
-        $projects = array();
-        $sql = "SELECT id, name FROM " . TABLE_PROJECT . " WHERE isCat = '0' AND company = '{$this->app->company->id}'";
-        return $this->fetchPairs($sql);;
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('end|desc')->fetchPairs();
     }
 
     /* 获得完整的列表。*/
     public function getList()
     {
-        $sql = "SELECT * FROM " . TABLE_PROJECT . " WHERE isCat = '0' AND company = '{$this->app->company->id}'";
-        return $this->dbh->query($sql)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('end|desc')->fetchAll();
     }
 
     /* 通过Id获取项目信息。*/
-    public function getById($projectID)
+    public function findById($projectID)
     {
-        return $this->dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE id = '$projectID'")->fetch();
+        return $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
     }
 
     /* 获得相关的产品列表。*/
     public function getProducts($projectID)
     {
-        $sql = " SELECT T2.id, T2.name FROM " . TABLE_PROJECTPRODUCT . " AS T1 " .
-                " LEFT JOIN " . TABLE_PRODUCT . " AS T2 ON T1.product = T2.id " .
-                " WHERE T1.project = '$projectID'";
-        return $this->fetchPairs($sql);
+        return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')
+            ->on('t1.product = t2.id')
+            ->where('t1.project')->eq((int)$projectID)
+            ->fetchPairs();
     }
 
     /* 更新相关产品。*/
     public function updateProducts($projectID)
     {
-        $sql = "DELETE FROM " . TABLE_PROJECTPRODUCT . " WHERE project = '$projectID'";
-        $this->dbh->exec($sql);
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
         if(!isset($_POST['products'])) return;
         $products = array_unique($_POST['products']);
-        foreach($products as $productID)
-        {
-            $sql = "REPLACE INTO " . TABLE_PROJECTPRODUCT . " VALUES('$projectID', '$productID')";
-            $this->dbh->query($sql);
-        }
+        foreach($products as $productID) $this->dao->insert(TABLE_PROJECTPRODUCT)->set('project')->eq((int)$projectID)->set('product')->eq((int)$productID)->exec();
     }
 
     /* 获得相关的子项目列表。*/
