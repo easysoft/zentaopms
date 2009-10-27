@@ -158,4 +158,10 @@ class bugModel extends model
         }
         return $bugs;
     }
+
+    /* 获得某个项目的bug列表。*/
+    public function getProjectBugs($projectID, $orderBy = 'id|desc', $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)->where('project')->eq((int)$projectID)->orderBy($orderBy)->page($pager)->fetchAll();
+    }
 }
