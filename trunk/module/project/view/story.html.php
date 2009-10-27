@@ -1,6 +1,6 @@
 <?php
 /**
- * The browse view file of story module of ZenTaoMS.
+ * The story view file of project module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,37 +17,84 @@
  *
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
- * @package     story
+ * @package     project
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
 ?>
-<table align='center' class='table-1 tablesorter'>
-  <thead>
-  <tr>
-    <th><?php echo $lang->story->id;?></th>
-    <th><?php echo $lang->story->pri;?></th>
-    <th><?php echo $lang->story->title;?></th>
-    <th><?php echo $lang->story->spec;?></th>
-    <th><?php echo $lang->story->product;?></th>
-    <th><?php echo $lang->story->status;?></th>
-    <th><?php echo $lang->action;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php foreach($stories as $story):?>
-  <tr class='a-center'>
-    <td class='a-right'><?php echo $story->id;?></td>
-    <td><?php echo $story->pri;?></td>
-    <td class='a-left'><?php echo $story->title;?></td>
-    <td class='a-left'><?php echo $story->spec;?></td>
-    <td><?php echo html::a($this->createLink('product', 'browse', "product=$story->product"), $products[$story->product], '_blank');?></td>
-    <td class='<?php echo $story->status;?>'><?php $lang->show($lang->story->statusList, $story->status);?></td>
-    <td>
-      <?php if(common::hasPriv('task', 'create'))         echo html::a($this->createLink('task', 'create', "projectid=$project->id&storyid=$story->id"), $lang->task->create);?>
-      <?php if(common::hasPriv('project', 'unlinkstory')) echo html::a($this->createLink('project', 'unlinkstory', "projectid=$project->id&storyid=$story->id"), $lang->project->unlinkStory, 'hiddenwin');?>
-    </td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-</table>
+<?php include '../../common/header.html.php';?>
+<script language='javascript'>
+function selectProject(projectID)
+{
+    link = createLink('project', 'browse', 'projectID=' + projectID);
+    location.href=link;
+}
+</script>
+<div class="yui-d0 yui-t3">                 
+  <div class="yui-b"><?php include './project.html.php';?></div>
+  <div class="yui-main">
+    <div class="yui-b">
+      <div id='tabbar' class='yui-d0'>
+      <?php 
+      include './tabbar.html.php';
+      if(common::hasPriv('project', 'linkstory')) echo '<div>' . html::a($this->createLink('project', 'linkstory', "project=$project->id"), $lang->project->linkStory) . '</div>';
+      $app->global->vars    = "projectID=$project->id";
+      $app->global->orderBy = $orderBy;
+      function printOrderLink($fieldName)
+      {
+          global $app, $lang;
+          if(strpos($app->global->orderBy, $fieldName) !== false)
+          {
+              if(stripos($app->global->orderBy, 'desc') !== false) $orderBy = str_replace('desc', 'asc', $app->global->orderBy);
+              if(stripos($app->global->orderBy, 'asc')  !== false) $orderBy = str_replace('asc', 'desc', $app->global->orderBy);
+          }
+          else
+          {
+              $orderBy = $fieldName . '|' . 'asc';
+          }
+          $link = helper::createLink('project', 'story', $app->global->vars ."&orderBy=$orderBy");
+          echo html::a($link, $lang->story->$fieldName);
+      }
+      ?>
+      </div>
+
+      <table align='center' class='table-1 tablesorter'>
+        <thead>
+          <tr>
+            <th><?php printOrderLink('id');?></th>
+            <th><?php printOrderLink('pri');?></th>
+            <th><?php printOrderLink('title');?></th>
+            <th><?php printOrderLink('assignedTo');?></th>
+            <th><?php printOrderLink('openedBy');?></th>
+            <th><?php printOrderLink('estimate');?></th>
+            <th><?php printOrderLink('status');?></th>
+            <th><?php echo $lang->action;?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($stories as $key => $story):?>
+          <?php
+          $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
+          $canView  = common::hasPriv('story', 'view');
+          ?>
+          <tr class='a-center'>
+            <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
+            <td><?php echo $story->pri;?></td>
+            <td class='a-left'><nobr><?php echo $story->title;?></nobr></td>
+            <td><?php echo $users[$story->assignedTo];?></td>
+            <td><?php echo $users[$story->openedBy];?></td>
+            <td><?php echo $story->estimate;?></td>
+            <td class='<?php echo $story->status;?>'><?php $statusList = (array)$lang->story->statusList; echo $statusList[$story->status];?></td>
+            <td>
+              <?php if(common::hasPriv('task', 'create'))         echo html::a($this->createLink('task', 'create',   "projectID={$project->id}&story={$story->id}"), $lang->task->create);?>
+              <?php if(common::hasPriv('project', 'unlinkStory')) echo html::a($this->createLink('project', 'unlinkStory', "projectID={$project->id}&story={$story->id}&confirm=no"), $lang->project->unlinkStory, 'hiddenwin');?>
+            </td>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+      <div class='a-right'><?php echo $pager;?></div>
+    </div>
+  </div>
+</div>  
+<?php include '../../common/footer.html.php';?>

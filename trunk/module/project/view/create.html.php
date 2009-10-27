@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div id='doc3'>
-  <form method='post'>
+  <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $lang->project->create;?></caption>
       <tr>
@@ -64,8 +64,7 @@
       </tr>  
       <tr>
         <td colspan='2' class='a-center'>
-          <input type='submit' name='submit' value='<?php echo $lang->save?>'  class='button-s' />
-          <input type='reset'  name='reset'  value='<?php echo $lang->reset?>' class='button-r' />
+          <?php echo html::submitButton() . html::resetButton();?>
         </td>
       </tr>
     </table>
