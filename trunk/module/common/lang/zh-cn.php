@@ -100,7 +100,9 @@ $lang->error->reg             = "『%s』不符合格式，应当为:『%s』。
 $lang->error->unique          = "『%s』已经有『%s』这条记录了。";
 $lang->error->notempty        = "『%s』不能为空。";
 $lang->error->int             = array("『%s』应当是数字。", "『%s』应当介于『%s-%s』之间。");
+$lang->error->float           = "『%s』应当是数字，可以是小数。";
 $lang->error->email           = "『%s』应当为合法的EMAIL。";
+$lang->error->date            = "『%s』应当为合法的日期。";
 
 /* 分页信息。*/
 $lang->pager->noRecord  = "暂时没有记录";
