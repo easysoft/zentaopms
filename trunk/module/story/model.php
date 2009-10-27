@@ -93,14 +93,13 @@ class storyModel extends model
     }
 
     /* 获得某一个项目相关的所有需求列表。*/
-    function getProjectStories($project = 0)
+    function getProjectStories($projectID = 0, $orderBy='id|desc', $pager = null)
     {
-        $project = (int)$project;
-        if($project == 0) return false;
-        $sql = "SELECT * FROM " . TABLE_PROJECTSTORY . " AS T1 LEFT JOIN " . TABLE_STORY . " AS T2 ON T1.story = T2.id
-                WHERE T1.project = '$project'";
-        $stmt = $this->dbh->query($sql);
-        return $stmt->fetchAll();
+        return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->eq((int)$projectID)
+            ->orderBy($orderBy)
+            ->page($pager)->fetchAll();
     }
 
     /* 获得某一个项目相关的需求id=>title的列表。*/
