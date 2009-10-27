@@ -26,12 +26,13 @@
 <table class='table-1 tablesorter'>
   <thead>
   <tr class='rowhead'>
+    <th><?php echo $lang->task->id;?></th>
     <th><?php echo $lang->task->name;?></th>
     <th><?php echo $lang->task->project;?></th>
-    <th><?php echo $lang->task->story;?></th>
     <th><?php echo $lang->task->pri;?></th>
     <th><?php echo $lang->task->estimate;?></th>
     <th><?php echo $lang->task->consumed;?></th>
+    <th><?php echo $lang->task->story;?></th>
     <th><?php echo $lang->task->status;?></th>
     <th><?php echo $lang->action;?></th>
   </tr>
@@ -39,12 +40,13 @@
   <tbody>
   <?php foreach($tasks as $task):?>
   <tr>
-    <td><?php echo html::a($this->createLink('task', 'edit', "taskID=$task->id"), $task->name);?></td>
+    <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+    <td><?php echo $task->name;?></td>
     <td><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></th>
-    <td><?php echo $task->storyTitle;?></td>
     <td><?php echo $task->pri;?></td>
     <td><?php echo $task->estimate;?></td>
     <td><?php echo $task->consumed;?></td>
+    <td><?php echo html::a($this->createLink('story', 'view', "storyID=$task->storyID"), $task->storyTitle);?></td>
     <td><?php echo $lang->task->statusList->{$task->status};?></td>
     <td><?php echo html::a($this->createLink('task', 'edit', "taskID=$task->id"), $lang->task->edit, '_blank');?></td>
   </tr>

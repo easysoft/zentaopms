@@ -69,11 +69,15 @@ class my extends control
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $position[]      = $this->lang->my->task;
 
+        /* 记录用户当前选择的列表。*/
+        $this->app->session->set('taskList',  $this->app->getURI(true));
+        $this->app->session->set('storyList', $this->app->getURI(true));
+
         /* 赋值。*/
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('tabID',    'task');
-        $this->assign('tasks', $this->user->getTasks($this->app->user->account));
+        $this->assign('tasks',     $this->task->getUserTasks($this->app->user->account));
 
         $this->display();
     }
