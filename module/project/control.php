@@ -29,54 +29,146 @@ class project extends control
     public function __construct()
     {
         parent::__construct();
-        $this->loadModel('product');
-        $this->loadModel('task');
-        $this->loadModel('story');
         $this->projects = $this->project->getPairs();
-        if(empty($this->projects)) $this->locate($this->createLink('project', 'create'));
     }
 
     /* 项目视图首页，暂时跳转到浏览页面。*/
     public function index()
     {
-        $this->locate($this->createLink($this->moduleName, 'browse'));
+        if(empty($this->projects)) $this->locate($this->createLink('project', 'create'));
+        $this->locate($this->createLink($this->moduleName, 'task'));
     }
 
     /* 浏览某一个项目。*/
-    public function browse($projectID = 0, $tabID = 'task')
+    public function browse($projectID = 0)
     {
+        $this->locate($this->createLink($this->moduleName, 'task', "productID=$projectID"));
+    }
+
+    /* task, story, bug等方法的一些公共操作。*/
+    private function commonAction($projectID = 0)
+    {
+        /* 加载product模块。*/
+        $this->loadModel('product');
+
         /* 获取当前项目的详细信息，相关产品，子项目以及团队成员。*/
-        $projectID     = common::saveProjectState($projectID, key($this->projects));
-        $project       = $this->project->getById($projectID);
+        $projectID     = common::saveProjectState($projectID, array_keys($this->projects));
+        $project       = $this->project->findByID($projectID);
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);
         $teamMembers   = $this->project->getTeamMembers($project->id);
 
-        /* 设定header和position信息。*/
-        $header['title'] = $this->lang->project->browse . $this->lang->colon . $project->name;
-        $position[]      = $project->name;
-
-        /* 赋值。*/
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
+        /* 将其赋值到模板系统。*/
         $this->assign('projects',      $this->projects);
         $this->assign('project',       $project);
         $this->assign('childProjects', $childProjects);
         $this->assign('products',      $products);
         $this->assign('teamMembers',   $teamMembers);
-        $this->assign('tabID',         $tabID);
 
-        /* 处理Tab。*/
-        if($tabID == 'task')
-        {
-            $tasks = $this->task->getProjectTasks($projectID);
-            $this->assign('tasks', $tasks);
-        }
-        elseif($tabID == 'story')
-        {
-            $stories = $this->story->getProjectStories($projectID);
-            $this->assign('stories', $stories);
-        }
+        return $project;
+    }
+
+    /* 浏览某一个项目下面的任务。*/
+    public function task($projectID = 0, $orderBy = 'status|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        /* 加载任务模块。*/
+        $this->loadModel('task');
+
+        /* 公共的操作。*/
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
+
+        /* 记录用户当前选择的列表。*/
+        $this->app->session->set('taskList',  $this->app->getURI(true));
+        $this->app->session->set('storyList', $this->app->getURI(true));
+
+        /* 设定header和position信息。*/
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->tasks;
+        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[]      = $this->lang->project->tasks;
+
+        /* 分页操作。*/
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $tasks = $this->task->getProjectTasks($projectID, $orderBy, $pager);
+
+        /* 赋值。*/
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
+        $this->assign('tasks',    $tasks);
+        $this->assign('tabID',    'task');
+        $this->assign('pager',    $pager->get());
+        $this->assign('orderBy',  $orderBy);
+
+        $this->display();
+    }
+
+    /* 浏览某一个项目下面的需求。*/
+    public function story($projectID = 0, $orderBy = 'status|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        /* 加载story, user模块，加载task模块的语言。*/
+        $this->loadModel('story');
+        $this->loadModel('user');
+        $this->app->loadLang('task');
+
+        /* 记录用户当前选择的列表。*/
+        $this->app->session->set('storyList', $this->app->getURI(true));
+
+        /* 公共的操作。*/
+        $project = $this->commonAction($projectID);
+
+        /* 设定header和position信息。*/
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->stories;
+        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[]      = $this->lang->project->stories;
+
+        /* 分页操作。*/
+        $this->app->loadClass('pager', $static = true);
+        $pager   = new pager($recTotal, $recPerPage, $pageID);
+        $stories = $this->story->getProjectStories($projectID, $orderBy, $pager);
+        $users   = array('' => '') + $this->user->getRealNames($this->story->extractAccountsFromList($stories));
+
+        /* 赋值。*/
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
+        $this->assign('stories',  $stories);
+        $this->assign('tabID',    'story');
+        $this->assign('pager',    $pager->get());
+        $this->assign('orderBy',  $orderBy);
+        $this->assign('users',    $users);
+
+        $this->display();
+    }
+
+    /* 浏览某一个项目下面的bug。*/
+    public function bug($projectID = 0, $orderBy = 'status|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        /* 加载bug和user模块。*/
+        $this->loadModel('bug');
+        $this->loadModel('user');
+
+        /* 公共的操作。*/
+        $project = $this->commonAction($projectID);
+
+        /* 设定header和position信息。*/
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->bugs;
+        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[]      = $this->lang->project->bugs;
+
+        /* 分页操作。*/
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $bugs  = $this->bug->getProjectBugs($projectID, $orderBy, $pager);
+        $users = array('' => '') + $this->user->getRealNames($this->bug->extractAccountsFromList($bugs));
+
+        /* 赋值。*/
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
+        $this->assign('bugs',     $bugs);
+        $this->assign('tabID',    'bug');
+        $this->assign('pager',    $pager->get());
+        $this->assign('orderBy',  $orderBy);
+        $this->assign('users',    $users);
 
         $this->display();
     }
@@ -86,9 +178,11 @@ class project extends control
     {
         if(!empty($_POST))
         {
-            $projectID = $this->project->create($_POST);
-            $this->locate($this->createLink('project', 'browse', "projectID=$projectID"));
+            $projectID = $this->project->create();
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate($this->createLink('project', 'browse', "projectID=$projectID"), 'parent'));
         }
+
         $header['title'] = $this->lang->project->create;
         $position[]      = $header['title'];
         $projects        = array('' => '') + $this->projects;
@@ -106,10 +200,11 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->update($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($browseProjectLink, 'parent'));
         }
         $projects = array('' => '') + $this->projects;
-        $project  = $this->project->getById($projectID);
+        $project  = $this->project->findById($projectID);
 
         /* 从列表中删除当前项目。*/
         unset($projects[$projectID]);
@@ -151,9 +246,12 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->updateProducts($projectID);
+            if(dao::isError()) dis(js::error(dao::getError()));
             die(js::locate($browseProjectLink));
         }
-        $project  = $this->project->getById($projectID);
+
+        $this->loadModel('product');
+        $project  = $this->project->findById($projectID);
 
         /* 标题和位置信息。*/
         $header['title'] = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
@@ -182,7 +280,7 @@ class project extends control
             $this->project->updateChilds($projectID);
             die(js::locate($browseProjectLink));
         }
-        $project  = $this->project->getById($projectID);
+        $project  = $this->project->findById($projectID);
         $projects = $this->projects;
         unset($projects[$projectID]);
         unset($projects[$project->parent]);
@@ -217,7 +315,7 @@ class project extends control
         }
         $this->loadModel('user');
 
-        $project = $this->project->getById($projectID);
+        $project = $this->project->findById($projectID);
         $users   = $this->user->getPairs($this->app->company->id);
         $users   = array('' => '') + $users;
         $members = $this->project->getTeamMembers($projectID);
@@ -254,9 +352,9 @@ class project extends control
     public function linkStory($projectID = 0)
     {
         /* 获得项目和相关产品信息。如果没有相关产品，则跳转到产品关联页面。*/
-        $project    = $this->project->getById($projectID);
+        $project    = $this->project->findById($projectID);
         $products   = $this->project->getProducts($projectID);
-        $browseLink = $this->createLink('project', 'browse', "projectID=$projectID&tab=story");
+        $browseLink = $this->createLink('project', 'story', "projectID=$projectID");
 
         if(empty($products))
         {
@@ -302,7 +400,7 @@ class project extends control
         else
         {
             $this->project->unlinkStory($projectID, $storyID);
-            echo js::locate($this->createLink('project', 'browse', "projectID=$projectID&tab=story"), 'parent');
+            echo js::locate($this->app->session->storyList, 'parent');
             exit;
         }
     }

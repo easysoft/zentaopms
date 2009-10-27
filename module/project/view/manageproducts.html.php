@@ -25,7 +25,7 @@
 <?php include '../../common/header.html.php';?>
 <div id='doc3'>
   <form method='post'>
-    <table align='center' class='table-1 a-left'> 
+    <table align='center' class='table-3 a-left'> 
       <caption><?php echo $lang->project->manageProducts;?></caption>
       <tr>
         <td>
@@ -34,7 +34,7 @@
         ?>
         </td>
       </tr>
-      <tr><td class='a-center'><input type='submit' name='submit' /></td></tr>
+      <tr><td class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
 </div>

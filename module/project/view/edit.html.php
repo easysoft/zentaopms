@@ -55,18 +55,15 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->goal;?></th>
-        <td><textarea name='goal' rows='5' class='area-1'><?php echo $project->goal;?></textarea></td>
+        <td><textarea name='goal' rows='5' class='area-1'><?php echo stripslashes($project->goal);?></textarea></td>
       </tr>  
 
       <tr>
         <th class='rowhead'><?php echo $lang->project->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'><?php echo $project->desc;?></textarea></td>
+        <td><textarea name='desc' rows='5' class='area-1'><?php echo stripslashes($project->desc);?></textarea></td>
       </tr>  
       <tr>
-        <td colspan='2' class='a-center'>
-          <input type='submit' name='submit' value='<?php echo $lang->save?>'  class='button-s' />
-          <input type='reset'  name='reset'  value='<?php echo $lang->reset?>' class='button-r' />
-        </td>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
     </table>
   </form>
