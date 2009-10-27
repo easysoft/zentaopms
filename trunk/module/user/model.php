@@ -161,17 +161,7 @@ class userModel extends model
         return $this->dbh->query($sql)->fetchAll();
     }
 
-     /* 获得用户的任务列表。*/
-    public function getTasks($account)
-    {
-        $sql = "SELECT T1.*, T2.name AS projectName, T2.id AS projectID, T3.id AS storyID, T3.title AS storyTitle FROM " . TABLE_TASK . " AS T1 
-                LEFT JOIN " .TABLE_PROJECT . " AS T2 ON T1.project = T2.id 
-                LEFT JOIN " . TABLE_STORY  . " AS T3 ON T1.story = T3.id 
-                WHERE T1.owner = '$account'";
-        return $this->dbh->query($sql)->fetchAll();
-    }
-    
-     /* 获得用户的Bug列表。*/
+    /* 获得用户的Bug列表。*/
     public function getBugs($account)
     {
         $sql = "SELECT * FROM " . TABLE_BUG . " WHERE assignedTO = '$account'";

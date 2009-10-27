@@ -52,6 +52,11 @@
         <td><input type='text' name='estimate' class='text-3' /></td>
       </tr>
       <tr>
+        <th class='rowhead'><?php echo $lang->task->pri;?></th>
+        <td><?php echo html::select('pri', $lang->task->priList, '', 'class=select-3');?> 
+      </tr>
+
+      <tr>
         <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
     </table>

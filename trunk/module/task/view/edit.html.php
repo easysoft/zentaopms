@@ -64,6 +64,10 @@
         <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=select-3');?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->task->pri;?></th>
+        <td><?php echo html::select('pri', $lang->task->priList, $task->status, 'class=select-3');?> 
+      </tr>
+      <tr>
         <th class='rowhead'><?php echo $lang->comment;?></th>
         <td><textarea name='comment' rows='5' class='area-1'></textarea>
       </tr>  

@@ -70,6 +70,10 @@
         <th class='rowhead'><?php echo $lang->task->status;?></th>
         <td><?php $lang->show($lang->task->statusList, $task->status);?></td>
       </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->pri;?></th>
+        <td><?php $lang->show($lang->task->priList, $task->pri);?></td>
+      </tr>  
     </table>
   </fieldset>
   <fieldset>
