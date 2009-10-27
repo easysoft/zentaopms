@@ -63,6 +63,7 @@ function selectProject(projectID)
         <thead>
         <tr>
           <th><?php printOrderLink('id');?></th>
+          <th><?php printOrderLink('pri');?></th>
           <th><?php printOrderLink('name');?></th>
           <th><?php printOrderLink('owner');?></th>
           <th><?php printOrderLink('estimate');?></th>
@@ -78,6 +79,7 @@ function selectProject(projectID)
         <?php $class = $task->owner == $app->user->account ? 'style=color:red' : '';?>
         <tr class='a-center'>
           <td class='a-right'><?php if(common::hasPriv('task', 'view')) echo html::a($this->createLink('task', 'view', "task=$task->id"), sprintf('%03d', $task->id)); else printf('%03d', $task->id);?></td>
+          <td><?php echo $task->pri;?></td>
           <td class='a-left'><?php echo $task->name;?></td>
           <td <?php echo $class;?>><?php echo $task->ownerRealName;?></td>
           <td><?php echo $task->estimate;?></td>
