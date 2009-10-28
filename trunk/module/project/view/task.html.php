@@ -88,8 +88,11 @@ function selectProject(projectID)
           <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList->{$task->status};?></td>
           <td class='a-left'>
             <?php 
-            if(common::hasPriv('story', 'view')) echo html::a($this->createLink('story', 'view', "storyid=$task->storyID"), $task->storyTitle);
-            else echo $task->storyTitle;
+            if($task->storyID)
+            {
+                if(common::hasPriv('story', 'view')) echo html::a($this->createLink('story', 'view', "storyid=$task->storyID"), $task->storyTitle);
+                else echo $task->storyTitle;
+            }
             ?>
           </td>
           <td>
