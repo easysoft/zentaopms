@@ -83,9 +83,9 @@ class project extends control
         $this->app->session->set('storyList', $this->app->getURI(true));
 
         /* 设定header和position信息。*/
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->tasks;
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->task;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->tasks;
+        $position[]      = $this->lang->project->task;
 
         /* 分页操作。*/
         $this->app->loadClass('pager', $static = true);
@@ -118,9 +118,9 @@ class project extends control
         $project = $this->commonAction($projectID);
 
         /* 设定header和position信息。*/
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->stories;
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->story;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->stories;
+        $position[]      = $this->lang->project->story;
 
         /* 分页操作。*/
         $this->app->loadClass('pager', $static = true);
@@ -151,9 +151,9 @@ class project extends control
         $project = $this->commonAction($projectID);
 
         /* 设定header和position信息。*/
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->bugs;
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->bug;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->bugs;
+        $position[]      = $this->lang->project->bug;
 
         /* 分页操作。*/
         $this->app->loadClass('pager', $static = true);
