@@ -46,7 +46,7 @@
     <td><?php echo $task->pri;?></td>
     <td><?php echo $task->estimate;?></td>
     <td><?php echo $task->consumed;?></td>
-    <td><?php if($task->id) echo html::a($this->createLink('story', 'view', "storyID=$task->storyID"), $task->storyTitle);?></td>
+    <td><?php if($task->storyID) echo html::a($this->createLink('story', 'view', "storyID=$task->storyID"), $task->storyTitle);?></td>
     <td><?php echo $lang->task->statusList->{$task->status};?></td>
     <td><?php echo html::a($this->createLink('task', 'edit', "taskID=$task->id"), $lang->task->edit, '_blank');?></td>
   </tr>
