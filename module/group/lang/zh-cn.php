@@ -86,6 +86,7 @@ $lang->resource->project->unlinkStory    = 'unlinkStory';
 $lang->resource->task->create = 'create';
 $lang->resource->task->edit   = 'edit';
 $lang->resource->task->delete = 'delete';
+$lang->resource->task->view   = 'view';
 $lang->resource->task->ajaxGetUserTasks = 'ajaxGetUserTasks';
 
 $lang->resource->qa->index = 'index';
