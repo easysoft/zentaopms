@@ -70,9 +70,9 @@ $lang->project->QM           = '测试负责人';
 $lang->project->team         = '团队名称';
 $lang->project->products     = '相关产品';
 $lang->project->childProjects= '子项目';
-$lang->project->tasks        = '任务列表';
-$lang->project->stories      = '需求列表';
-$lang->project->bugs         = 'Bug列表';
+$lang->project->task         = '任务列表';
+$lang->project->story        = '需求列表';
+$lang->project->bug          = 'Bug列表';
 $lang->project->burndown     = '燃烧图';
 
 $lang->team->account     = '用户';
