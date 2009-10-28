@@ -79,7 +79,7 @@ class user extends control
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('tabID',    'task');
-        $this->assign('tasks',    $this->user->getTasks($account));
+        $this->assign('tasks',    $this->task->getUserTasks($account));
         $this->assign('user',     $this->dao->findByAccount($account)->from(TABLE_USER)->fetch());
 
         $this->display();
