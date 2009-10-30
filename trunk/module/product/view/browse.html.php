@@ -97,7 +97,7 @@ function selectProduct(productID)
         <thead>
           <tr>
             <?php
-            $app->global->vars    = "productID=$productID&moduleID=$moduleID";
+            $app->global->vars    = "productID=$productID&moduleID=$moduleID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
             $app->global->orderBy = $orderBy;
             function printOrderLink($fieldName)
             {
@@ -111,7 +111,7 @@ function selectProduct(productID)
                 {
                     $orderBy = $fieldName . '|' . 'asc';
                 }
-                $link = helper::createLink('product', 'browse', $app->global->vars ."&orderBy=$orderBy");
+                $link = helper::createLink('product', 'browse', sprintf($app->global->vars, $orderBy));
                 echo html::a($link, $lang->story->$fieldName);
             }
             ?>
