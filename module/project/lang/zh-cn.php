@@ -75,6 +75,10 @@ $lang->project->story        = '需求列表';
 $lang->project->bug          = 'Bug列表';
 $lang->project->burndown     = '燃烧图';
 
+$lang->project->beginAndEnd = '起止时间';
+$lang->project->lblStats    = '工时统计';
+$lang->project->stats       = '总共预计『%s』工时<br />已经消耗『%s』工时<br />预计剩余『%s』工时';
+
 $lang->team->account     = '用户';
 $lang->team->role        = '角色';
 $lang->team->joinDate    = '加盟日';

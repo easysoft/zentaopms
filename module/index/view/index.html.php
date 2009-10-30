@@ -34,23 +34,23 @@
       <table class='table-1'>
         <caption><?php echo $project->name;?></caption>
         <tr>
-          <th class='rowhead'><?php echo $lang->project->name;?></th>
+          <th width='60'><?php echo $lang->project->name;?></th>
           <td><?php echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $project->name);?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->project->code;?></th>
+          <th><?php echo $lang->project->code;?></th>
           <td><?php echo $project->code;?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->project->begin;?></th>
+          <th><?php echo $lang->project->begin;?></th>
           <td><?php echo $project->begin;?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->project->end;?></th>
+          <th><?php echo $lang->project->end;?></th>
           <td><?php echo $project->end;?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->project->status;?></th>
+          <th><?php echo $lang->project->status;?></th>
           <td><?php echo $project->status;?></td>
         </tr>
       </table>
@@ -71,7 +71,7 @@
       <table class='table-1'>
       <caption><?php echo $product->name;?></caption>
         <tr>
-          <th><?php echo $lang->product->name;?></th>
+          <th width='60'><?php echo $lang->product->name;?></th>
           <td><?php echo html::a($this->createLink('product', 'browse', "productID=$product->id"), $product->name);?></td>
         </tr>
         <tr>
