@@ -4,20 +4,16 @@
     <?php echo html::select('projectID', $projects, $project->id, 'onchange="selectProject(this.value);" style="width:200px"');?>
   </caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->project->name;?></th>
+    <th><?php echo $lang->project->name;?></th>
     <td><?php echo $project->name;?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->project->code;?></th>
+    <th><?php echo $lang->project->code;?></th>
     <td><?php echo $project->code;?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->project->begin;?></th>
-    <td><?php echo $project->begin;?></td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->project->end;?></th>
-    <td><?php echo $project->end;?></td>
+    <th><?php echo $lang->project->beginAndEnd;?></th>
+    <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
   </tr>
   <!--
   <tr>
@@ -26,12 +22,16 @@
   </tr>
   -->
   <tr>
-    <th class='rowhead'><?php echo $lang->project->goal;?></th>
+    <th><?php echo $lang->project->goal;?></th>
     <td><?php echo nl2br($project->goal);?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->project->desc;?></th>
+    <th><?php echo $lang->project->desc;?></th>
     <td><?php echo nl2br($project->desc);?></td>
+  </tr>
+  <tr>
+    <th><?php echo $lang->project->lblStats;?></th>
+    <td><?php printf($lang->project->stats, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?></td>
   </tr>
   <tr>
     <td colspan='2' class='a-right'>

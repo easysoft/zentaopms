@@ -99,7 +99,12 @@ class projectModel extends model
     /* 通过Id获取项目信息。*/
     public function findById($projectID)
     {
-        return $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+        $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+        $total   = $this->dao->select('SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')->from(TABLE_TASK)->where('project')->eq((int)$projectID)->fetch();
+        $project->totalEstimate = $total->totalEstimate;
+        $project->totalConsumed = $total->totalConsumed;
+        $project->totalLeft     = $total->totalLeft;
+        return $project;
     }
 
     /* 获得相关的产品列表。*/
