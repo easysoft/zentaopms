@@ -4,7 +4,7 @@
     <?php echo html::select('projectID', $projects, $project->id, 'onchange="selectProject(this.value);" style="width:200px"');?>
   </caption>
   <tr>
-    <th><?php echo $lang->project->name;?></th>
+    <th width='60'><?php echo $lang->project->name;?></th>
     <td><?php echo $project->name;?></td>
   </tr>
   <tr>
