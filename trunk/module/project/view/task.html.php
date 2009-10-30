@@ -38,7 +38,7 @@ function selectProject(projectID)
       <?php 
       include './tabbar.html.php';
       if(common::hasPriv('task', 'create')) echo '<div>' . html::a($this->createLink('task', 'create', "project=$project->id"), $lang->task->create) . '</div>';
-      $app->global->vars    = "projectID=$project->id";
+      $app->global->vars    = "projectID=$project->id&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
       $app->global->orderBy = $orderBy;
       function printOrderLink($fieldName)
       {
@@ -52,7 +52,7 @@ function selectProject(projectID)
           {
               $orderBy = $fieldName . '|' . 'asc';
           }
-          $link = helper::createLink('project', 'task', $app->global->vars ."&orderBy=$orderBy");
+          $link = helper::createLink('project', 'task', sprintf($app->global->vars, $orderBy));
           $fieldName = str_replace('`', '', $fieldName);
           echo html::a($link, $lang->task->$fieldName);
       }

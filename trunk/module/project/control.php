@@ -93,12 +93,14 @@ class project extends control
         $tasks = $this->task->getProjectTasks($projectID, $orderBy, $pager);
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tasks',    $tasks);
-        $this->assign('tabID',    'task');
-        $this->assign('pager',    $pager->get());
-        $this->assign('orderBy',  $orderBy);
+        $this->assign('header',     $header);
+        $this->assign('position',   $position);
+        $this->assign('tasks',      $tasks);
+        $this->assign('tabID',      'task');
+        $this->assign('pager',      $pager->get());
+        $this->assign('recTotal',   $pager->recTotal);
+        $this->assign('recPerPage', $pager->recPerPage);
+        $this->assign('orderBy',    $orderBy);
 
         $this->display();
     }
