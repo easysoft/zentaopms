@@ -78,6 +78,8 @@ class product extends control
         $this->assign('moduleTree',    $this->tree->getTreeMenu($productID, $viewType = 'product', $rooteModuleID = 0, array('treeModel', 'createStoryLink')));
         $this->assign('parentModules', $this->tree->getParents($moduleID));
         $this->assign('pager',         $pager->get());
+        $this->assign('recTotal',      $pager->recTotal);
+        $this->assign('recPerPage',    $pager->recPerPage);
         $this->assign('users',         $users);
         $this->assign('orderBy',       $orderBy);
 
