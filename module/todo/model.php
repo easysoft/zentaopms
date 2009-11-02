@@ -105,7 +105,7 @@ class todoModel extends model
     }
 
     /* 生成日期列表。*/
-    public function buildDateList($before = 3, $after = 3)
+    public function buildDateList($before = 7, $after = 7)
     {
         $today = strtotime(date('Y-m-d', time()));
         $delta = 60 * 60 * 24;
