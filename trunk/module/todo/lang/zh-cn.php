@@ -34,6 +34,7 @@ $lang->todo->browse    = "浏览TODO";
 
 $lang->todo->confirmDelete  = "您确定要删除这个todo吗？";
 $lang->todo->successMarked  = "成功切换状态！";
+$lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';
 
 $lang->todo->id          = '编号';
@@ -46,6 +47,7 @@ $lang->todo->pri         = '优先级';
 $lang->todo->name        = '名称';
 $lang->todo->status      = '状态';
 $lang->todo->desc        = '描述';
+$lang->todo->private     = '私人事务';
 
 $lang->todo->week  = '星期';
 $lang->todo->today = '今天';

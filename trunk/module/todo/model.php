@@ -33,10 +33,12 @@ class todoModel extends model
             ->add('idvalue', 0)
             ->stripTags('type, name')
             ->specialChars('desc')
-            ->cleanInt('date, pri, begin, end')
+            ->cleanInt('date, pri, begin, end, private')
             ->setIF($this->post->type != 'custom', 'name', '')
             ->setIF($this->post->type == 'bug',  'idvalue', $this->post->bug)
             ->setIF($this->post->type == 'task', 'idvalue', $this->post->task)
+            ->setIF($this->post->begin == false, 'begin', '2400')
+            ->setIF($this->post->end   == false, 'end', '2400')
             ->remove('bug, task')
             ->get();
         $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->checkIF($todo->type == 'custom', 'name', 'notempty')->exec();
@@ -47,9 +49,11 @@ class todoModel extends model
     {
         $todo = fixer::input('post')
             ->stripTags('type, name')
-            ->cleanInt('date, pri, begin, end')
+            ->cleanInt('date, pri, begin, end, private')
             ->specialChars('desc')
             ->setIF($this->post->type != 'custom', 'name',  '')
+            ->setIF($this->post->begin == false, 'begin', '2400')
+            ->setIF($this->post->end   == false, 'end', '2400')
             ->get();
         $this->dao->update(TABLE_TODO)->data($todo)->autoCheck()->checkIF($todo->type == 'custom', 'name', 'notempty')->where('id')->eq($todoID)->exec();
     }
@@ -92,6 +96,9 @@ class todoModel extends model
             if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
             $todo->begin = $this->fdaoatTime($todo->begin);
             $todo->end   = $this->fdaoatTime($todo->end);
+
+            /* 如果是私人事务，且当前用户非本人，更改标题。*/
+            if($todo->private and $this->app->user->account != $todo->account) $todo->name = $this->lang->todo->thisIsPrivate;
             $todos[] = $todo;
         }
         return $todos;
@@ -175,7 +182,7 @@ class todoModel extends model
     /* 格式化时间显示。*/
     public function fdaoatTime($time)
     {
-        if(strlen($time) != 4) return '';
+        if(strlen($time) != 4 or $time == '2400') return '';
         return substr($time, 0, 2) . ':' . substr($time, 2, 2);
     }
 }

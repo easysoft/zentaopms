@@ -66,6 +66,10 @@ class todo extends control
             die(js::locate($this->createLink('my', 'todo', "date=$_POST[date]"), 'parent'));
         }
 
+        /* 获取todo信息，判断是否是私人事务。*/
+        $todo = $this->todo->findById($todoID);
+        if($todo->private and $this->app->user->account != $todo->account) die('private');
+
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
         $position[]      = $this->lang->todo->edit;
 
@@ -73,7 +77,7 @@ class todo extends control
         $this->assign('position', $position);
         $this->assign('dates',    $this->todo->buildDateList(0, 3));
         $this->assign('times',    $this->todo->buildTimeList());
-        $this->assign('todo',     $this->todo->findById($todoID));
+        $this->assign('todo',     $todo);
         $this->display();
     }
 

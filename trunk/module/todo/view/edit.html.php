@@ -37,12 +37,16 @@
         <td><input type='hidden' name='type' value='<?php echo $todo->type;?>' /><?php echo $lang->todo->typeList->{$todo->type};?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->todo->pri;?></th>
+        <td><?php echo html::select('pri', $lang->todo->priList, $todo->pri, 'class=select-3');?></td>
+      </tr>  
+      <tr>
         <th class='rowhead'><?php echo $lang->todo->name;?></th>
         <td><div id='nameBox'><input type='text' name='name' value='<?php echo $todo->name;?>' class='text-3' <?php if($todo->type != 'custom') echo 'readonly';?> /></div></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->todo->pri;?></th>
-        <td><?php echo html::select('pri', $lang->todo->priList, $todo->pri, 'class=select-3');?></td>
+        <th class='rowhead'><?php echo $lang->todo->desc;?></th>
+        <td><textarea name='desc' id='desc' rows='5' class='area-1'><?php echo $todo->desc;?></textarea>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->status;?></th>
@@ -50,12 +54,14 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
-        <td><?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class=select-2') . html::select('end', $times, $todo->end, 'class=select-2');?></td>
+        <td>
+          <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class=select-2') . html::select('end', $times, $todo->end, 'class=select-2');?>
+          <input type='checkbox' id='switcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> ><?php echo $lang->todo->lblDisableDate;?>
+        </td>
       </tr>  
-
       <tr>
-        <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-        <td><textarea name='desc' id='desc' rows='5' class='area-1'><?php echo $todo->desc;?></textarea>
+        <th class='rowhead'><?php echo $lang->todo->private;?></th>
+        <td><input type='checkbox' name='private' id='private' value='1' <?php if($todo->private) echo 'checked';?>></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'>
@@ -65,37 +71,7 @@
     </table>
   </form>
 </div>  
+<?php include './footer.html.php';?>
 <script language='Javascript'>
-account='<?php echo $app->user->account;?>';
-customHtml = $('#nameBox').html();
-function loadList(type)
-{
-    if(type == 'bug')
-    {
-        link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account);
-    }
-    else if(type == 'task')
-    {
-        link = createLink('task', 'ajaxGetUserTasks', 'account=' + account);
-    }
-   
-    if(type == 'bug' || type == 'task')
-    {
-        $('#nameBox').load(link);
-        $('#desc').attr('readonly', 'readonly');
-    }
-     else if(type == 'custom')
-    {
-        $('#nameBox').html(customHtml);
-        $('#desc').removeAttr('readonly');
-    }
-
-}
-function selectNext()
-{
-    endIndex = $("#begin ").get(0).selectedIndex + 2;
-    $("#end ").get(0).selectedIndex = endIndex;
-}
+switchDateFeature(document.getElementById('switcher'));
 </script>
-
-<?php include '../../common/footer.html.php';?>
