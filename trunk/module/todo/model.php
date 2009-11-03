@@ -86,10 +86,6 @@ class todoModel extends model
     /* 获得用户的todo列表。*/
     public function getList($date = 'today', $account = '')
     {
-//        echo date('Y-m-d', strtotime('last monday'));
-//        echo date('Y-m-d', strtotime('last sunday'));
-//        echo date('Y-m-d', strtotime('this sunday'));
-//        echo date('Y-m-d', strtotime('this monday'));
         $todos = array();
         if($date == 'today') $date = $this->today();
         if($account == '')   $account = $this->app->user->account;
@@ -98,8 +94,8 @@ class todoModel extends model
         {
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-            $todo->begin = $this->fdaoatTime($todo->begin);
-            $todo->end   = $this->fdaoatTime($todo->end);
+            $todo->begin = $this->formatTime($todo->begin);
+            $todo->end   = $this->formatTime($todo->end);
 
             /* 如果是私人事务，且当前用户非本人，更改标题。*/
             if($todo->private and $this->app->user->account != $todo->account) $todo->name = $this->lang->todo->thisIsPrivate;
@@ -184,7 +180,7 @@ class todoModel extends model
     }
 
     /* 格式化时间显示。*/
-    public function fdaoatTime($time)
+    public function formatTime($time)
     {
         if(strlen($time) != 4 or $time == '2400') return '';
         return substr($time, 0, 2) . ':' . substr($time, 2, 2);
