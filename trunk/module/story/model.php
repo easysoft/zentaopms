@@ -105,11 +105,23 @@ class storyModel extends model
     /* 获得某一个项目相关的需求id=>title的列表。*/
     function getProjectStoryPair($projectID = 0)
     {
-        $projectID = (int)$projectID;
-        if($projectID == 0) return false;
-        $sql = "SELECT T2.id, T2.title FROM " . TABLE_PROJECTSTORY . " AS T1 LEFT JOIN " . TABLE_STORY . " AS T2 ON T1.story = T2.id
-                WHERE T1.project = '$projectID'";
-        return $this->fetchPairs($sql);
+        $stories = $this->dao->select('t2.id, t2.title, t2.module, t3.name AS product')
+            ->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')
+            ->on('t1.story = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')
+            ->on('t1.product = t3.id')
+            ->where('t1.project')->eq((int)$projectID)
+            ->fetchAll();
+
+        /* 查找每个story所对应的模块名称。*/
+        foreach($stories as $story) $modules[] = $story->module;
+        $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();
+
+        /* 重新组织每一个story的展示方式。*/
+        $storyPairs = array();
+        foreach($stories as $story) $storyPairs[$story->id] = $story->product . '/' . ($story->module > 0 ? $moduleNames[$story->module] . '/' : '') . $story->title;
+        return $storyPairs;
     }
 
     /* 从story列表中提取所有出现过的账户。*/
