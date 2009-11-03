@@ -68,3 +68,6 @@
   </form>
 </div>  
 <?php include './footer.html.php';?>
+<script language = 'Javascript'>
+selectNext();
+</script>

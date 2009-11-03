@@ -41,6 +41,5 @@ function switchDateFeature(switcher)
         $('#end').removeAttr('disabled');
     }
 }
-selectNext();
 </script>
 <?php include '../../common/footer.html.php';?>
