@@ -95,6 +95,10 @@ EOT;
         <div>
           <?php 
           echo html::select('date', $dates, $date, 'onchange=changeDate(this.value)');
+          echo html::a($this->createLink('my', 'todo', "date=thisweek"),  $lang->todo->thisWeekTodos);
+          echo html::a($this->createLink('my', 'todo', "date=lastweek"),  $lang->todo->lastWeekTodos);
+          echo html::a($this->createLink('my', 'todo', "date=alldays"),   $lang->todo->allDaysTodos);
+          echo html::a($this->createLink('my', 'todo', "date=allundone"), $lang->todo->allUndone);
           echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
           ?>
         </div>

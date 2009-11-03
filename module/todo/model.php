@@ -86,6 +86,10 @@ class todoModel extends model
     /* 获得用户的todo列表。*/
     public function getList($date = 'today', $account = '')
     {
+//        echo date('Y-m-d', strtotime('last monday'));
+//        echo date('Y-m-d', strtotime('last sunday'));
+//        echo date('Y-m-d', strtotime('this sunday'));
+//        echo date('Y-m-d', strtotime('this monday'));
         $todos = array();
         if($date == 'today') $date = $this->today();
         if($account == '')   $account = $this->app->user->account;

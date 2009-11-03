@@ -32,11 +32,6 @@ $lang->todo->mark      = "更改状态";
 $lang->todo->delete    = "删除";
 $lang->todo->browse    = "浏览TODO";
 
-$lang->todo->confirmDelete  = "您确定要删除这个todo吗？";
-$lang->todo->successMarked  = "成功切换状态！";
-$lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
-$lang->todo->lblDisableDate = '暂时不设定时间';
-
 $lang->todo->id          = '编号';
 $lang->todo->date        = '日期';
 $lang->todo->begin       = '开始时间';
@@ -57,11 +52,22 @@ $lang->todo->statusList->wait  = '未开始';
 $lang->todo->statusList->doing = '进行中';
 $lang->todo->statusList->done  = '已完成';
 
-$lang->todo->priList->item3 = '一般';
-$lang->todo->priList->item1 = '最高';
-$lang->todo->priList->item2 = '较高';
-$lang->todo->priList->item4 = '最低';
+$lang->todo->priList[3] = '一般';
+$lang->todo->priList[1] = '最高';
+$lang->todo->priList[2] = '较高';
+$lang->todo->priList[4] = '最低';
 
 $lang->todo->typeList->custom = '自定义';
 $lang->todo->typeList->bug    = 'Bug';
 $lang->todo->typeList->task   = '项目任务';
+
+$lang->todo->confirmDelete  = "您确定要删除这个todo吗？";
+$lang->todo->successMarked  = "成功切换状态！";
+$lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
+$lang->todo->lblDisableDate = '暂时不设定时间';
+
+$lang->todo->thisWeekTodos = '本周计划';
+$lang->todo->lastWeekTodos = '上周总结';
+$lang->todo->allDaysTodos  = '所有任务';
+$lang->todo->allUndone     = '所有未作';
+
