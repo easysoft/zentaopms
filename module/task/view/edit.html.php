@@ -65,7 +65,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->pri;?></th>
-        <td><?php echo html::select('pri', $lang->task->priList, $task->status, 'class=select-3');?> 
+        <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=select-3');?> 
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->comment;?></th>
