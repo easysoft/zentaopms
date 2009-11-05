@@ -87,13 +87,13 @@ class projectModel extends model
     /* 获得项目id=>name列表。*/
     public function getPairs()
     {
-        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('end|desc')->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, end|desc')->fetchPairs();
     }
 
     /* 获得完整的列表。*/
     public function getList()
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('end|desc')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, end|desc')->fetchAll();
     }
 
     /* 通过Id获取项目信息。*/

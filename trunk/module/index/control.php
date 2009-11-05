@@ -35,14 +35,21 @@ class index extends control
 
     public function index()
     {
+        $this->loadModel('report');
         $header['title'] = $this->lang->index->common;
 
         $projects = $this->project->getList();
         $products = array_values($this->product->getList());
 
+        foreach($projects as $project)
+        {
+            $burns[$project->id] = $this->report->createChart('line', $this->createLink('project', 'burnData', "project=$project->id", 'xml'), 300, 300);
+        }
+
         $this->assign('header',   $header);
         $this->assign('projects', $projects);
         $this->assign('products', $products);
+        $this->assign('burns',    $burns);
         $this->display();
     }
 }

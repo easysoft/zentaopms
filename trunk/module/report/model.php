@@ -31,11 +31,11 @@ class reportModel extends model
         $chartRoot = $this->app->getWebRoot() . 'fusioncharts/';
         $swfFile   = "fcf_$swf.swf";
         return <<<EOT
-<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="600" height="500" id="Column3D" >
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="$width" height="$height" id="Column3D" >
 <param name="movie"     value="$chartRoot$swfFile" />
 <param name="FlashVars" value="&dataURL=$dataURL&chartWidth=$width&chartHeight=$height">
 <param name="quality"   value="high" />
-<embed src="$chartRoot$swfFile" flashVars="&dataURL=$dataURL&chartWidth=$width&chartHeight=$height" quality="high" width="600" height="500" name="Column3D" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="$chartRoot$swfFile" flashVars="&dataURL=$dataURL&chartWidth=$width&chartHeight=$height" quality="high" width="$width" height="$height" name="Column3D" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 EOT;
     }
