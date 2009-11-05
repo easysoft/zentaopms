@@ -23,6 +23,13 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<script language='javascript'>
+function selectProject(projectID)
+{
+    link = createLink('project', 'browse', 'projectID=' + projectID);
+    location.href=link;
+}
+</script>
 <div class="yui-d0 yui-t3">                 
   <div class="yui-b"><?php include './project.html.php';?></div>
   <div class="yui-main">
