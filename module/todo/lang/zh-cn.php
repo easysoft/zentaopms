@@ -70,4 +70,5 @@ $lang->todo->thisWeekTodos = '本周计划';
 $lang->todo->lastWeekTodos = '上周总结';
 $lang->todo->allDaysTodos  = '所有任务';
 $lang->todo->allUndone     = '所有未作';
+$lang->todo->todayTodos    = '今日安排';
 
