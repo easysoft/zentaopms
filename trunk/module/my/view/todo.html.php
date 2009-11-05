@@ -27,6 +27,7 @@
   <thead>
   <tr>
     <th><?php echo $lang->todo->id;?></th>
+    <th><?php echo $lang->todo->date;?></th>
     <th><?php echo $lang->todo->type;?></th>
     <th><?php echo $lang->todo->pri;?></th>
     <th><?php echo $lang->todo->name;?></th>
@@ -41,6 +42,7 @@
   <?php foreach($todos as $todo):?>
   <tr class='a-center'>
     <td><?php echo $todo->id;?></td>
+    <td><?php echo $todo->date;?></td>
     <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
     <td><?php echo $todo->pri;?></td>
     <td class='a-left'>
