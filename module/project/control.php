@@ -175,6 +175,52 @@ class project extends control
         $this->display();
     }
 
+    /* 某一个项目的燃烧图。*/
+    public function burn($projectID = 0)
+    {
+        $this->loadModel('report');
+        /* 公共的操作。*/
+        $project = $this->commonAction($projectID);
+
+        /* 设定header和position信息。*/
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->burn;
+        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[]      = $this->lang->project->burn;
+
+        /* 赋值。*/
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
+        $this->assign('tabID',    'burn');
+        $this->assign('charts',   $this->report->createChart('line', $this->createLink('project', 'burnData', "project=$projectID", 'xml')));
+        $this->display();
+    }
+
+    /* 燃烧图所需要的数据。*/
+    public function burnData($projectID = 0)
+    {
+        $this->loadModel('report');
+        $sets = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date')->fetchAll('name');
+
+        /* 取得burn表中最大的日期和project的结束时间。*/
+        end($sets);
+        $current = key($sets);
+        $end     = $this->dao->select('end')->from(TABLE_PROJECT)->where('id')->eq((int)$projectID)->fetch('end');
+
+        /* 根据当前日期和项目最后结束的日期，补足后续日期。*/
+        if($end != '0000-00-00' and helper::diffDate($end, $current) > 0)
+        {
+            while(true)
+            {
+                $nextDay = date('Y-m-d', strtotime('next day', strtotime($current)));
+                $current = $nextDay;
+                if($nextDay == $end) break;
+                $sets[$current]->name = $current;
+                $sets[$current]->value = '';    // value为空，这样fushioncharts不会打印节点。
+            }
+        }
+        return $this->report->createSingleXML($sets, $this->lang->project->charts->burn->graph);
+    }
+
     /* 创建一个项目。*/
     public function create()
     {

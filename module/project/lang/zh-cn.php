@@ -73,7 +73,7 @@ $lang->project->childProjects= '子项目';
 $lang->project->task         = '任务列表';
 $lang->project->story        = '需求列表';
 $lang->project->bug          = 'Bug列表';
-$lang->project->burndown     = '燃烧图';
+$lang->project->burn         = '燃烧图';
 
 $lang->project->beginAndEnd = '起止时间';
 $lang->project->lblStats    = '工时统计';
@@ -83,3 +83,11 @@ $lang->team->account     = '用户';
 $lang->team->role        = '角色';
 $lang->team->joinDate    = '加盟日';
 $lang->team->workingHour = '工时/天';
+
+$lang->project->charts->burn->graph->caption      = "燃烧图";
+$lang->project->charts->burn->graph->xAxisName    = "日期";
+$lang->project->charts->burn->graph->yAxisName    = "HOUR";
+$lang->project->charts->burn->graph->baseFontSize = 12;
+$lang->project->charts->burn->graph->formatNumber = 0;
+$lang->project->charts->burn->graph->animation    = 0;
+$lang->project->charts->burn->graph->rotateNames  = 1;
