@@ -75,7 +75,7 @@ class todo extends control
 
         $this->assign('header',   $header);
         $this->assign('position', $position);
-        $this->assign('dates',    $this->todo->buildDateList(0, 3));
+        $this->assign('dates',    $this->todo->buildDateList());
         $this->assign('times',    $this->todo->buildTimeList());
         $this->assign('todo',     $todo);
         $this->display();
