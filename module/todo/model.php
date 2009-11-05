@@ -84,12 +84,42 @@ class todoModel extends model
     }
 
     /* 获得用户的todo列表。*/
-    public function getList($date = 'today', $account = '')
+    public function getList($date = 'today', $account = '', $status = 'all')
     {
         $todos = array();
-        if($date == 'today') $date = $this->today();
+        if($date == 'today') 
+        {
+            $begin = $this->today();
+            $end   = $begin;
+        }
+        elseif($date == 'thisweek')
+        {
+            extract($this->getThisWeek());
+        }
+        elseif($date == 'lastweek')
+        {
+            extract($this->getLastWeek());
+        }
+        elseif($date == 'all')
+        {
+            $begin = '1970-01-01';
+            $end   = '2109-01-01';
+        }
+        else
+        {
+            $begin = $end = $date;
+        }
+
         if($account == '')   $account = $this->app->user->account;
-        $stmt = $this->dao->select('*')->from(TABLE_TODO)->where('account')->eq($account)->andWhere('date')->eq($date)->orderBy('status, begin')->query();
+        if($status  == 'all') $status = 'wait,doing,done';
+
+        $stmt = $this->dao->select('*')->from(TABLE_TODO)
+            ->where('account')->eq($account)
+            ->andWhere("date >= '$begin'")
+            ->andWhere("date <= '$end'")
+            ->andWhere('status')->in($status)
+            ->orderBy('date, status, begin')
+            ->query();
         while($todo = $stmt->fetch())
         {
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
@@ -184,5 +214,33 @@ class todoModel extends model
     {
         if(strlen($time) != 4 or $time == '2400') return '';
         return substr($time, 0, 2) . ':' . substr($time, 2, 2);
+    }
+
+    /* 获得本周起止时间。*/
+    public function getThisWeek()
+    {
+        $baseTime = $this->getMiddleOfWeek();
+        $begin = date('Y-m-d', strtotime('last monday', $baseTime));
+        $end   = date('Y-m-d', strtotime('next sunday', $baseTime));
+        return array('begin' => $begin, 'end' => $end);
+    }
+
+    /* 获得上周起止时间。*/
+    public function getLastWeek()
+    {
+        $baseTime = strtotime('last thursday'); // 取上个礼拜二的时间为基准时间。
+        $begin = date('Y-m-d', strtotime('last monday', $baseTime));
+        $end   = date('Y-m-d', strtotime('next sunday', $baseTime));
+        return array('begin' => $begin, 'end' => $end);
+    }
+
+    /* 获得周中的时间戳，如果当前时间为礼拜一，则往后取一天，为礼拜天，则往前取一天，保证基准时间落在周中。*/
+    private function getMiddleOfWeek()
+    {
+        $baseTime = time();
+        $weekDay  = date('N');
+        if($weekDay == 1) $baseTime = time() + 86400;
+        if($weekDay == 7) $baseTime = time() - 86400;
+        return $baseTime;
     }
 }

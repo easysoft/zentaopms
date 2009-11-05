@@ -46,7 +46,8 @@ class my extends control
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $position[]      = $this->lang->my->todo;
 
-        if($date == 'today') $date = $this->todo->today();
+        $todos = $this->todo->getList($date);
+        if((int)$date == 0) $date = $this->todo->today();
 
         /* 赋值。*/
         $this->assign('header',   $header);
@@ -54,7 +55,7 @@ class my extends control
         $this->assign('tabID',    'todo');
         $this->assign('dates',    $this->todo->buildDateList()); 
         $this->assign('date',     $date);
-        $this->assign('todos',    $this->todo->getList($date));
+        $this->assign('todos',    $todos);
 
         $this->display();
     }
