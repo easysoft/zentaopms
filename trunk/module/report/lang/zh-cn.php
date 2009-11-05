@@ -1,12 +1,12 @@
 <?php
 /**
- * The burn view file of project module of ZenTaoMS.
+ * The report module zh-cn file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *                                                                             
  * ZenTaoMS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,21 +17,8 @@
  *
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
- * @package     project
+ * @package     report
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-?>
-<?php include '../../common/header.html.php';?>
-<div class="yui-d0 yui-t3">                 
-  <div class="yui-b"><?php include './project.html.php';?></div>
-  <div class="yui-main">
-    <div class="yui-b">
-      <div id='tabbar' class='yui-d0'><?php include './tabbar.html.php'; ?></div>
-      <div class='a-center'>
-        <?php echo $charts; ?>
-      </div>
-    </div>
-  </div>
-</div>  
-<?php include '../../common/footer.html.php';?>
+$lang->report->common = '报表';
