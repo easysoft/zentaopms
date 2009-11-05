@@ -80,6 +80,10 @@ $lang->project->beginAndEnd = '起止时间';
 $lang->project->lblStats    = '工时统计';
 $lang->project->stats       = '总共预计『%s』工时<br />已经消耗『%s』工时<br />预计剩余『%s』工时';
 
+$lang->project->statusList->wait  = '未开始';
+$lang->project->statusList->doing = '进行中';
+$lang->project->statusList->done  = '已完成';
+
 $lang->team->account     = '用户';
 $lang->team->role        = '角色';
 $lang->team->joinDate    = '加盟日';

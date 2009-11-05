@@ -42,23 +42,28 @@
           <td><?php echo $project->code;?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->begin;?></th>
-          <td><?php echo $project->begin;?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->project->end;?></th>
-          <td><?php echo $project->end;?></td>
+          <th><?php echo $lang->project->beginAndEnd;?></th>
+          <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->status;?></th>
-          <td><?php echo $project->status;?></td>
+          <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
+        </tr>
+        <tr><td colspan='2' class='a-center'><?php echo $burns[$project->id];?></td></tr>
+        <tr>
+          <th><?php echo $lang->project->goal;?></th>
+          <td><?php echo nl2br($project->goal);?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->project->desc;?></th>
+          <td><?php echo nl2br($project->desc);?></td>
         </tr>
       </table>
     </div>  
     <?php endforeach;?>
   </div>
 </div>
-
+<!--
 <div class="yui-d0 yui-t7">  
   <div class="yui-gb">  
     <?php foreach($products as $key => $product):?>
@@ -87,4 +92,5 @@
     <?php endforeach;?>
   </div>
 </div>  
+-->
 <?php include '../../common/footer.html.php';?>

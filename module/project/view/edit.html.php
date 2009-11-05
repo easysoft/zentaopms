@@ -54,6 +54,11 @@
         <td><input type='text' name='team' value='<?php echo $project->team;?>' class='text-3' /></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->project->status;?></th>
+        <td><?php echo html::select('status', $lang->project->statusList, $project->status, 'class=text-3');?></td>
+      </tr>  
+
+      <tr>
         <th class='rowhead'><?php echo $lang->project->goal;?></th>
         <td><textarea name='goal' rows='5' class='area-1'><?php echo stripslashes($project->goal);?></textarea></td>
       </tr>  
