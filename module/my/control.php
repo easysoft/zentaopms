@@ -37,7 +37,7 @@ class my extends control
     }
 
     /* 用户的todo列表。*/
-    public function todo($date = 'today')
+    public function todo($date = 'today', $account = '', $status = 'all')
     {
         /* 加载todo model。*/
         $this->loadModel('todo');
@@ -46,7 +46,7 @@ class my extends control
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $position[]      = $this->lang->my->todo;
 
-        $todos = $this->todo->getList($date);
+        $todos = $this->todo->getList($date, $account, $status);
         if((int)$date == 0) $date = $this->todo->today();
 
         /* 赋值。*/
