@@ -213,9 +213,9 @@ class project extends control
             {
                 $nextDay = date('Y-m-d', strtotime('next day', strtotime($current)));
                 $current = $nextDay;
-                if($nextDay == $end) break;
                 $sets[$current]->name = $current;
                 $sets[$current]->value = '';    // value为空，这样fushioncharts不会打印节点。
+                if($nextDay == $end) break;
             }
         }
         return $this->report->createSingleXML($sets, $this->lang->project->charts->burn->graph);
