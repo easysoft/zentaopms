@@ -74,6 +74,7 @@ $lang->project->task         = '任务列表';
 $lang->project->story        = '需求列表';
 $lang->project->bug          = 'Bug列表';
 $lang->project->burn         = '燃烧图';
+$lang->project->burnData     = '燃烧图数据';
 
 $lang->project->beginAndEnd = '起止时间';
 $lang->project->lblStats    = '工时统计';

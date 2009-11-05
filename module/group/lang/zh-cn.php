@@ -82,6 +82,8 @@ $lang->resource->project->manageMembers  = 'manageMembers';
 $lang->resource->project->unlinkMember   = 'unlinkMember';
 $lang->resource->project->linkStory      = 'linkStory';
 $lang->resource->project->unlinkStory    = 'unlinkStory';
+$lang->resource->project->burn           = 'burn';
+$lang->resource->project->burnData       = 'burnData';
 
 $lang->resource->task->create = 'create';
 $lang->resource->task->edit   = 'edit';
