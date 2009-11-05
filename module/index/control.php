@@ -38,7 +38,7 @@ class index extends control
         $this->loadModel('report');
         $header['title'] = $this->lang->index->common;
 
-        $projects = $this->project->getList();
+        $projects = $this->project->getList('doing');
         $products = array_values($this->product->getList());
 
         foreach($projects as $project)

@@ -91,9 +91,11 @@ class projectModel extends model
     }
 
     /* 获得完整的列表。*/
-    public function getList()
+    public function getList($status = 'all')
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, end|desc')->fetchAll();
+        $sql = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id);
+        if($status != 'all') $sql->andWhere('status')->in($status);
+        return $sql->orderBy('status, end|desc')->fetchAll();
     }
 
     /* 通过Id获取项目信息。*/
