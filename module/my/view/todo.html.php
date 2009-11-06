@@ -23,6 +23,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>'>
 <table class='table-1 tablesorter'>
   <thead>
   <tr>
@@ -33,7 +34,6 @@
     <th><?php echo $lang->todo->name;?></th>
     <th><?php echo $lang->todo->begin;?></th>
     <th><?php echo $lang->todo->end;?></th>
-    <!--<th><?php echo $lang->todo->desc;?></th>-->
     <th><?php echo $lang->todo->status;?></th>
     <th><?php echo $lang->action;?></th>
   </tr>
@@ -41,7 +41,12 @@
   <tbody>
   <?php foreach($todos as $todo):?>
   <tr class='a-center'>
-    <td><?php echo $todo->id;?></td>
+	<td>
+      <?php
+      if($importFeature) echo "<input type='checkbox' name='todos[]' value='$todo->id' /> ";
+	  echo $todo->id;
+      ?>
+	</td>
     <td><?php echo $todo->date;?></td>
     <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
     <td><?php echo $todo->pri;?></td>
@@ -55,7 +60,6 @@
 	</td>
     <td><?php echo $todo->begin;?></td>
     <td><?php echo $todo->end;?></td>
-    <!--<td><?php echo $todo->desc;?></td>-->
 	<td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList->{$todo->status};?></td>
 	<td>
 	  <?php 
@@ -66,6 +70,14 @@
 	</td>
   </tr>
   <?php endforeach;?>
+  <?php if($importFeature):?>
+  <tr>
+    <td colspan='9'>
+	  <input type='submit' value='<?php echo $lang->todo->toToday;?>' />
+	</td>
+  </tr>
+  <?php endif;?>
   </tbody>
 </table>
+</form>
 <?php include './footer.html.php';?>

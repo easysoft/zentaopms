@@ -104,4 +104,13 @@ class todo extends control
         $this->todo->mark($todoID, $status);
         die(js::reload('parent'));
     }
+
+    /* 批量导入今天。*/
+    public function import2Today()
+    {
+        $todos = $this->post->todos;
+        $today = $this->todo->today();
+        $this->dao->update(TABLE_TODO)->set('date')->eq($today)->where('id')->in($todos)->exec();
+        die(js::reload('parent'));
+    }
 }
