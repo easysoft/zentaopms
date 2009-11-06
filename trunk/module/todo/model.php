@@ -231,7 +231,6 @@ class todoModel extends model
         $baseTime = $this->getMiddleOfLastWeek();
         $begin = date('Y-m-d', strtotime('last monday', $baseTime));
         $end   = date('Y-m-d', strtotime('next sunday', $baseTime));
-        echo $begin . $end;
         return array('begin' => $begin, 'end' => $end);
     }
 
