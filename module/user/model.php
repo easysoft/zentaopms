@@ -52,26 +52,34 @@ class userModel extends model
     /* 新增一个用户。*/
     function create($companyID)
     {
-        extract($_POST);
-        $sql = "INSERT INTO " . TABLE_USER . "(account, realname, email, gendar, `join`, password, company, dept) 
-                VALUES('$account', '$realname', '$email', '$gendar', '$join', MD5('$password'), '$companyID', '$dept')";
-        return $this->dbh->query($sql);
+        $user = fixer::input('post')
+            ->add('company', (int)$companyID)
+            ->setDefault('join', '0000-00-00')
+            ->get();
+        $this->dao->insert(TABLE_USER)->data($user)
+            ->autoCheck()
+            ->batchCheck('account, realname, password', 'notempty')
+            ->check('account', 'unique')
+            ->check('account', 'account')
+            ->exec();
     }
 
     /* 更新一个用户。*/
     function update($userID)
     {
-        extract($_POST);
-        if(empty($password))
-        {
-            $password = 'password';
-        }
-        else
-        {
-            $password = "MD5('$password')";
-        }
-        $sql = "UPDATE " . TABLE_USER . " SET account = '$account', realname = '$realname', email = '$email', gendar = '$gendar', `join` = '$join', password = $password, dept = '$dept' WHERE id = '$userID' LIMIT 1";
-        return $this->dbh->exec($sql);
+        $userID = (int)$userID;
+        $user = fixer::input('post')
+            ->setDefault('join', '0000-00-00')
+            ->setIF($this->post->password != '', 'password', md5($this->post->password))
+            ->removeIF($this->post->password == '', 'password')
+            ->get();
+        $this->dao->update(TABLE_USER)->data($user)
+            ->autoCheck()
+            ->batchCheck('account, realname, password', 'notempty')
+            ->check('account', 'unique', "id != '$userID'")
+            ->check('account', 'account')
+            ->where('id')->eq((int)$userID)
+            ->exec();
     }
     
     /* 删除一个用户。*/
