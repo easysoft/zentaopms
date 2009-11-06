@@ -73,7 +73,7 @@
   <?php if($importFeature):?>
   <tr>
     <td colspan='9'>
-	  <input type='submit' value='<?php echo $lang->todo->toToday;?>' />
+	  <input type='submit' value='<?php echo $lang->todo->import2Today;?>' />
 	</td>
   </tr>
   <?php endif;?>

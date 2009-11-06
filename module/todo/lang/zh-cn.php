@@ -31,7 +31,7 @@ $lang->todo->markDoing = "已完成";
 $lang->todo->mark      = "更改状态";
 $lang->todo->delete    = "删除";
 $lang->todo->browse    = "浏览TODO";
-$lang->todo->toToday   = "导入到今天";
+$lang->todo->import2Today = "导入到今天";
 
 $lang->todo->id          = '编号';
 $lang->todo->date        = '日期';
