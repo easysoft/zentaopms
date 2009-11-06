@@ -105,6 +105,11 @@ class todoModel extends model
             $begin = '1970-01-01';
             $end   = '2109-01-01';
         }
+        elseif($date == 'before')
+        {
+            $begin = '1970-01-01';
+            $end   = $this->yesterday();
+        }
         else
         {
             $begin = $end = $date;
@@ -180,6 +185,12 @@ class todoModel extends model
     public function today()
     {
         return date('Ymd', time());
+    }
+
+    /* 获得昨天的日期。*/
+    public function yesterday()
+    {
+        return date('Y-m-d', strtotime('yesterday'));
     }
 
     /* 获得当前的时间。*/

@@ -46,16 +46,19 @@ class my extends control
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $position[]      = $this->lang->my->todo;
 
+        $importFeature = ($date == 'before');
+
         $todos = $this->todo->getList($date, $account, $status);
         if((int)$date == 0) $date = $this->todo->today();
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'todo');
-        $this->assign('dates',    $this->todo->buildDateList()); 
-        $this->assign('date',     $date);
-        $this->assign('todos',    $todos);
+        $this->assign('header',        $header);
+        $this->assign('position',      $position);
+        $this->assign('tabID',         'todo');
+        $this->assign('dates',         $this->todo->buildDateList()); 
+        $this->assign('date',          $date);
+        $this->assign('todos',         $todos);
+        $this->assign('importFeature', $importFeature);
 
         $this->display();
     }

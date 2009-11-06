@@ -31,6 +31,7 @@ $lang->todo->markDoing = "已完成";
 $lang->todo->mark      = "更改状态";
 $lang->todo->delete    = "删除";
 $lang->todo->browse    = "浏览TODO";
+$lang->todo->toToday   = "导入到今天";
 
 $lang->todo->id          = '编号';
 $lang->todo->date        = '日期';
@@ -69,6 +70,6 @@ $lang->todo->lblDisableDate = '暂时不设定时间';
 $lang->todo->thisWeekTodos = '本周计划';
 $lang->todo->lastWeekTodos = '上周总结';
 $lang->todo->allDaysTodos  = '所有任务';
-$lang->todo->allUndone     = '所有未作';
+$lang->todo->allUndone     = '之前未完';
 $lang->todo->todayTodos    = '今日安排';
 
