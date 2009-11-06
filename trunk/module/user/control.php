@@ -152,6 +152,7 @@ class user extends control
         if(!empty($_POST))
         {
             $this->user->create($companyID);
+            if(dao::isError()) die(js::error(dao::getError()));
             if($from == 'admin')
             {
                 die(js::locate($this->createLink('admin', 'browseuser', "companyid={$this->app->company->id}"), 'parent'));
@@ -179,7 +180,8 @@ class user extends control
         if(!empty($_POST))
         {
             $this->user->update($userID);
-           if($from == 'admin')
+            if(dao::isError()) die(js::error(dao::getError()));
+            if($from == 'admin')
             {
                 die(js::locate($this->createLink('admin', 'browseuser', "companyid={$this->app->company->id}"), 'parent'));
             }

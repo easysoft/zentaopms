@@ -233,8 +233,9 @@ class deptModel extends model
     /* 获得某一个部门的成员列表。*/
     public function getUsers($deptID)
     {
-        $sql = "SELECT * FROM " . TABLE_USER . " WHERE dept " . helper::dbIN($deptID) . " ORDER BY id";
-        return $this->dbh->query($sql)->fetchAll();
+        $sql = $this->dao->select('*')->from(TABLE_USER);
+        if($deptID) $sql->where('dept')->in($deptID);
+        return $sql->orderBy('id')->fetchAll();
     }
     
     /* 删除一个部门。Todo: 需要修改下级目录的权限，还有对应的需求列表。*/
