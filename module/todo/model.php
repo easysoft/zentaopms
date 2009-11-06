@@ -219,7 +219,7 @@ class todoModel extends model
     /* 获得本周起止时间。*/
     public function getThisWeek()
     {
-        $baseTime = $this->getMiddleOfWeek();
+        $baseTime = $this->getMiddleOfThisWeek();
         $begin = date('Y-m-d', strtotime('last monday', $baseTime));
         $end   = date('Y-m-d', strtotime('next sunday', $baseTime));
         return array('begin' => $begin, 'end' => $end);
@@ -228,19 +228,31 @@ class todoModel extends model
     /* 获得上周起止时间。*/
     public function getLastWeek()
     {
-        $baseTime = strtotime('last thursday'); // 取上个礼拜二的时间为基准时间。
+        $baseTime = $this->getMiddleOfLastWeek();
         $begin = date('Y-m-d', strtotime('last monday', $baseTime));
         $end   = date('Y-m-d', strtotime('next sunday', $baseTime));
+        echo $begin . $end;
         return array('begin' => $begin, 'end' => $end);
     }
 
     /* 获得周中的时间戳，如果当前时间为礼拜一，则往后取一天，为礼拜天，则往前取一天，保证基准时间落在周中。*/
-    private function getMiddleOfWeek()
+    private function getMiddleOfThisWeek()
     {
         $baseTime = time();
         $weekDay  = date('N');
         if($weekDay == 1) $baseTime = time() + 86400;
         if($weekDay == 7) $baseTime = time() - 86400;
+        return $baseTime;
+    }
+
+    /* 获得上周周中的时间。*/
+    private function getMiddleOfLastWeek()
+    {
+        $baseTime = time();
+        $weekDay  = date('N');
+        $baseTime = time() - 86400 * 7;
+        if($weekDay == 1) $baseTime = time() - 86400 * 4;  // 上个礼拜四
+        if($weekDay == 7) $baseTime = time() - 86400 * 10; // 上个礼拜四
         return $baseTime;
     }
 }
