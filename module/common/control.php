@@ -32,6 +32,8 @@ class common extends control
     public function __construct()
     {
         parent::__construct();
+        ini_set('session.cookie_lifetime', 3600);
+        ini_set('session.gc_maxlifetime', 3600); 
         session_start();
         $this->sendHeader();
         $this->loadModel('company');
