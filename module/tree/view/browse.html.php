@@ -35,7 +35,7 @@
         <td>
           <div id='main'><?php echo $modules;?></div>
           <div class='a-center'>
-            <?php if(common::hasPriv('tree', 'updateOrder')) echo "<input type='submit' value='{$lang->tree->updateOrder}' />";?>
+            <?php if(common::hasPriv('tree', 'updateorder')) echo "<input type='submit' value='{$lang->tree->updateOrder}' />";?>
           </div>
         </td>
       </tr>

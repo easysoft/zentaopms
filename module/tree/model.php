@@ -148,7 +148,7 @@ class treeModel extends model
         //$linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "product={$module->product}&module={$module->id}"), $this->lang->tree->edit);
         if(common::hasPriv('tree', 'browse'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "product={$module->product}&viewType={$module->view}&module={$module->id}"), $this->lang->tree->child);
         if(common::hasPriv('tree', 'delete'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "product={$module->product}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
-        if(common::hasPriv('tree', 'updateOrder')) $linkHtml .= ' ' . html::input("orders[$module->id]", $module->order, 'style="width:30px;text-align:center"');
+        if(common::hasPriv('tree', 'updateorder')) $linkHtml .= ' ' . html::input("orders[$module->id]", $module->order, 'style="width:30px;text-align:center"');
         return $linkHtml;
     }
 
