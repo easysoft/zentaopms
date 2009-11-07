@@ -55,6 +55,7 @@ class userModel extends model
         $user = fixer::input('post')
             ->add('company', (int)$companyID)
             ->setDefault('join', '0000-00-00')
+            ->setForce('password', md5($this->post->password))
             ->get();
         $this->dao->insert(TABLE_USER)->data($user)
             ->autoCheck()
