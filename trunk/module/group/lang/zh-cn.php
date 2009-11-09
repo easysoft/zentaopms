@@ -63,10 +63,11 @@ $lang->resource->story->view    = 'view';
 //$lang->resource->release->delete = 'delete';
 //$lang->resource->release->browse = 'browse';
 
-$lang->resource->tree->browse      = 'browse';
-$lang->resource->tree->updateOrder = 'updateOrder';
-$lang->resource->tree->manageChild = 'manageChild';
-$lang->resource->tree->delete      = 'delete';
+$lang->resource->tree->browse            = 'browse';
+$lang->resource->tree->updateOrder       = 'updateOrder';
+$lang->resource->tree->manageChild       = 'manageChild';
+$lang->resource->tree->delete            = 'delete';
+$lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
 
 $lang->resource->project->index  = 'index';
 $lang->resource->project->browse = 'browse';
