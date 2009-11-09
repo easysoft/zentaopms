@@ -127,6 +127,8 @@ tr, th, td {padding:5px}
 #tabbar .active a:hover {color:red}
 #tabbar div{float:right; padding:5px 10px 4px 10px; background:#FFCF9C}
 #tabbar div select{font-size:11px; height:19px; margin:0; padding:0}
+#subtab  {clear:both; text-align:left; background-color:#B6F5CB; font-weight:bold; font-size:108%; padding-left:10px}
+#subtab a{text-decoration:none; color:black;}
 
 #titlebar{font-size:16px; font-weight:bold; background:#e4e4e4; padding:5px; margin:10px 0 10px 0; height:22px}
 #titlebar #main {float:left;  width:80%; clear:none; text-align:left}
