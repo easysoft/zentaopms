@@ -51,11 +51,12 @@
          }
          ?>
          </td>
-         <td>
+         <td><nobr>
            <?php echo html::a($this->createLink('group', 'edit',         "groupID=$group->id"), $lang->group->edit);?>
            <?php echo html::a($this->createLink('group', 'managepriv',   "groupID=$group->id"), $lang->group->managePriv);?>
            <?php echo html::a($this->createLink('group', 'managemember', "groupID=$group->id"), $lang->group->manageMember);?>
            <?php echo html::a($this->createLink('group', 'delete',       "groupID=$group->id"), $lang->group->delete, "hiddenwin");?>
+           </nobr>
          </td>
        </tr>
        <?php endforeach;?>
