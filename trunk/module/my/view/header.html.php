@@ -91,18 +91,18 @@ $("#{$tabID}tab").addClass('active');
 EOT;
         ?>
         </ul>
-        <?php if($tabID == 'todo'):?>
-        <div>
-          <?php 
-          echo html::a($this->createLink('my', 'todo', "date=today"),     $lang->todo->todayTodos);
-          echo html::a($this->createLink('my', 'todo', "date=thisweek"),  $lang->todo->thisWeekTodos);
-          echo html::a($this->createLink('my', 'todo', "date=lastweek"),  $lang->todo->lastWeekTodos);
-          echo html::a($this->createLink('my', 'todo', "date=all"),   $lang->todo->allDaysTodos);
-          echo html::a($this->createLink('my', 'todo', "date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone);
-
-          echo html::select('date', $dates, $date, 'onchange=changeDate(this.value)');
-          echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
-          ?>
-        </div>
-        <?php endif;?>
       </div>
+      <?php if($tabID == 'todo'):?>
+      <div id = 'subtab'>
+        <?php 
+        echo html::a($this->createLink('my', 'todo', "date=today"),     $lang->todo->todayTodos);
+        echo html::a($this->createLink('my', 'todo', "date=thisweek"),  $lang->todo->thisWeekTodos);
+        echo html::a($this->createLink('my', 'todo', "date=lastweek"),  $lang->todo->lastWeekTodos);
+        echo html::a($this->createLink('my', 'todo', "date=all"),   $lang->todo->allDaysTodos);
+        echo html::a($this->createLink('my', 'todo', "date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone);
+
+        echo html::select('date', $dates, $date, 'onchange=changeDate(this.value)');
+        echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
+        ?>
+      </div>
+      <?php endif;?>
