@@ -43,6 +43,7 @@ $lang->group->priv  = '权限';
 
 /* 所有resource列表。*/
 $lang->resource->index->index = 'index';
+$lang->resource->index->ping  = 'ping';
 
 $lang->resource->product->index  = 'index';
 $lang->resource->product->browse = 'browse';

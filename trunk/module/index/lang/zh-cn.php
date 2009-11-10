@@ -25,3 +25,4 @@
  */
 $lang->index->common = '首页';
 $lang->index->index  = '首页';
+$lang->index->ping   = '同步session';
