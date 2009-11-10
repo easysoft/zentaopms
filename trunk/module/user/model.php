@@ -28,15 +28,23 @@ class userModel extends model
     /* 获得某一个公司的用户列表。*/
     public function getList($companyID)
     {
-        $sql = "SELECT * FROM " . TABLE_USER . " WHERE company = '$companyID' ORDER BY id";
-        return $this->dbh->query($sql)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_USER)->where('company')->eq((int)$companyID)->orderBy('account')->fetchAll();
     }
 
-    /* 获得account=>realname的列表。*/
-    function getPairs($companyID = 0)
+    /* 获得account=>realname的列表。params: noletter|noempty|noclosed。*/
+    function getPairs($companyID = 0, $params = '')
     {
         if($companyID == 0) $companyID = $this->app->company->id;
-        return $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->fetchPairs();
+        $users = $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->orderBy('account')->fetchPairs();
+        foreach($users as $account => $realName)
+        {
+            $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            if(strpos($params, 'noletter') !== false) $firstLetter =  '';
+            $users[$account] =  $firstLetter . ($realName ? $realName : $account);
+        }
+        if(strpos($params, 'noempty')  === false) $users = array('' => '') + $users;
+        if(strpos($params, 'noclosed') === false) $users = $users + array('closed' => 'Closed');
+        return $users;
     }
 
     /* 通过id获取某一个用户的信息。*/
@@ -175,12 +183,5 @@ class userModel extends model
     {
         $sql = "SELECT * FROM " . TABLE_BUG . " WHERE assignedTO = '$account'";
         return $this->dbh->query($sql)->fetchAll();
-    }
-
-    /* 获得账户所对应的真实姓名。*/
-    public function getRealNames($accounts)
-    {
-        $sql = "SELECT account, realname FROM " . TABLE_USER . " WHERE account " . helper::dbIN($accounts);
-        return $this->fetchPairs($sql);
     }
 }
