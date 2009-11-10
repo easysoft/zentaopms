@@ -104,7 +104,7 @@ class testcase extends control
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->case->create;
 
-        $users = array('' => '') + $this->user->getPairs($this->app->company->id);
+        $users = $this->user->getPairs($this->app->company->id);
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('productID',     $productID);
@@ -150,7 +150,7 @@ class testcase extends control
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->case->edit;
 
-        $users = array('' => '') + $this->user->getPairs($this->app->company->id);
+        $users = $this->user->getPairs($this->app->company->id);
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('productID',     $productID);
