@@ -48,7 +48,7 @@ class story extends control
 
         $product  = $this->product->findByID($productID);
         $products = $this->product->getPairs();
-        $users    = array('' => '') + $this->user->getPairs();
+        $users    = $this->user->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'product');
 
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->create;
@@ -85,7 +85,7 @@ class story extends control
         $story    = $this->story->findByID($storyID);
         $product  = $this->product->findByID($story->product);
         $products = $this->product->getPairs();
-        $users    = array('' => '') + $this->user->getPairs();
+        $users    = $this->user->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'product');
 
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $story->title;
@@ -110,7 +110,7 @@ class story extends control
         $story      = $this->dao->findByID((int)$storyID)->from(TABLE_STORY)->fetch();
         $product    = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
         $modulePath = $this->tree->getParents($story->module);
-        $users      = array('' => '') + $this->user->getPairs();
+        $users      = $this->user->getPairs();
 
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
         $position[]      = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
@@ -141,5 +141,19 @@ class story extends control
             echo js::locate($this->createLink('product', 'browse', "productID=$story->product"), 'parent');
             exit;
         }
+    }
+
+    /* Ajax: 获取某一个项目的需求列表。*/
+    public function ajaxGetProjectStories($projectID, $productID = 0, $storyID = 0)
+    {
+        $stories = $this->story->getProjectStoryPairs($projectID, $productID);
+        die(html::select('story', $stories, $storyID));
+    }
+
+    /* Ajax: 获取某一个产品的需求列表。*/
+    public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0)
+    {
+        $stories = $this->story->getProductStoryPairs($productID, $moduleID);
+        die(html::select('story', $stories, $storyID, "class=''"));
     }
 }
