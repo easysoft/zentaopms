@@ -82,8 +82,21 @@ class productModel extends model
     }
     
     /* 删除某一个产品。*/
-    function delete($productID)
+    public function delete($productID)
     {
         return $this->dao->delete()->from(TABLE_PRODUCT)->where('id')->eq((int)$productID)->andWhere('company')->eq($this->app->company->id)->limit(1)->exec();
+    }
+
+    /* 获取产品的项目id=>value列表。*/
+    public function getProjectPairs($productID)
+    {
+        $projects = $this->dao->select('t2.id, t2.name')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->orderBy('t1.project desc')
+            ->fetchPairs();
+        $projects = array('' => '') +  $projects;
+        return $projects;
     }
 }
