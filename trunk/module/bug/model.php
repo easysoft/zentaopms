@@ -25,93 +25,151 @@
 <?php
 class bugModel extends model
 {
-    /* 构造函数。*/
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /* 创建一个Bug。*/
     function create()
     {
-        extract($_POST);
-        $openedBy     = $this->app->user->account;
-        $openedDate   = time();
-        $assignedDate = !empty($assignedTo) ? time() : 0;
-        $sql = "INSERT INTO " . TABLE_BUG . " (product, module, type, severity, os, browser, assignedTo, assignedDate, mailTo, title, steps, openedBy, openedDate) 
-                VALUES('$productID', '$moduleID', '$type', '$severity', '$os', '$browser', '$assignedTo', '$assignedDate', '$mailTo', '$title', '$steps', '$openedBy', '$openedDate' )";
-        $this->dbh->exec($sql);
-        return $this->dbh->lastInsertID();
+        $bug = fixer::input('post')
+            ->add('openedBy', $this->app->user->account)
+            ->add('openedDate', time())
+            ->setDefault('project,story,task', 0)
+            ->setIF($this->post->assignedTo != '', 'assignedDate', time())
+            ->stripTags('title')
+            ->cleanInt('product, module, severity')
+            ->specialChars('steps')
+            ->join('mailto', ',')
+            ->get();
+        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->check('title', 'notempty')->exec();
+        return $this->dao->lastInsertID();
     }
 
     /* 获得某一个产品，某一个模块下面的所有bug。*/
-    public function getModuleBugs($productID, $moduleIds = 0)
+    public function getModuleBugs($productID, $moduleIds = 0, $orderBy = 'id|desc', $pager = null)
     {
-        $where  = " WHERE `product` = '$productID'";
-        $where .= !empty($moduleIds) ? " AND module " . helper::dbIN($moduleIds) : '';
-        $sql    = "SELECT * FROM " . TABLE_BUG .  $where . " ORDER BY id DESC";
-        $stmt   = $this->dbh->query($sql);
-        return $stmt->fetchAll();
+        $sql = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq((int)$productID);
+        if(!empty($moduleIds)) $sql->andWhere('module')->in($moduleIds);
+        return $sql->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /* 获取一个bug的详细信息。*/
     public function getById($bugID)
     {
-        $bug = $this->dbh->query("SELECT * FROM " . TABLE_BUG . " WHERE id = '$bugID'")->fetch();
-        foreach($bug as $key => $value)
-        {
-            if(strpos($key, 'Date') !== false)
-            {
-                if(empty($value))
-                {
-                    $bug->$key = '';
-                }
-                else
-                {
-                    $bug->$key = date('Y-m-d H:i:s', $value);
-                }
-            }
-        }
+        $bug = $this->dao->select('t1.*, t2.name AS projectName, t3.title AS storyTitle, t4.name AS taskName')
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+            ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
+            ->where('t1.id')->eq((int)$bugID)->fetch();
+        foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !strtotime($value)) $bug->$key = '';
+        $bug->mailto = ltrim(trim($bug->mailto), ',');
+        if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
         return $bug;
     }
 
     /* 更新bug信息。*/
     public function update($bugID)
     {
-        $bug     = $this->getById($bugID);
-        $changes = array();
-        foreach($_POST as $key => $value)
-        {
-            if($key == 'comment') continue;
-            if(strpos($key, 'Date') !== false) $_POST[$key] = strtotime($value);
-            if($key == 'severity') $value = str_replace('item', '', $value);
-            if($value != $bug->$key)
-            {
-                $change['field'] = $key;
-                $change['old']   = $bug->$key;
-                $change['new']   = $value;
-                $changes[] = $change;
-            }
-        }
-        extract($_POST);
-        $now            = time();
-        $severity       = str_replace('item', '', $severity);
-        $lastEditedDate = $now;
-        $assignedDate   = $bug->assignedDate;
+        $oldBug = $this->getById($bugID);
+        $now = date('Y-m-d H:i:s');
+        $bug = fixer::input('post')
+            ->cleanInt('product,module,severity,project,story,task')
+            ->stripTags('title')
+            ->specialChars('steps')
+            ->remove('comment')
+            ->setDefault('project,module,project,story,task,duplicateBug', 0)
+            ->add('lastEditedBy',   $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->setIF($this->post->assignedTo != $oldBug->assignedTo, 'assignedDate', $now)
+            ->setIF($this->post->resolvedBy != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
+            ->setIF($this->post->resolution != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
+            ->setIF($this->post->resolution != '' and $this->post->resolvedBy   == '', 'resolvedBy',   $this->app->user->account)
+            ->setIF($this->post->closedBy   != '' and $this->post->closedDate   == '', 'closedDate',   $now)
+            ->setIF($this->post->closedDate != '' and $this->post->closedBy     == '', 'closedBy',     $this->app->user->account)
+            ->setIF($this->post->closedBy   != '' or  $this->post->closedDate   != '', 'assignedTo',   'closed') 
+            ->setIF($this->post->closedBy   != '' or  $this->post->closedDate   != '', 'assignedDate', $now) 
+            ->setIF($this->post->resolution != '' or  $this->post->resolvedDate != '', 'status',       'resolved') 
+            ->setIF($this->post->closedBy   != '' or  $this->post->closedDate   != '', 'status',       'closed') 
+            ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedTo', $oldBug->openedBy) 
+            ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedDate', $now)
+            ->setIF($this->post->resolution == '' and $this->post->resolvedDate =='', 'status', 'active')
+            ->get();
 
-        if($assignedTo != $bug->assignedTo) $assignedDate = $now;
-        if($resolution != '' and empty($resolvedDate)) $resolvedDate = $now;
-        if($closedBy   != '' and empty($closedDate))   $closedDate   = $now;
+        $this->dao->update(TABLE_BUG)->data($bug)
+            ->autoCheck()
+            ->check('title', 'notempty')
+            ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
+            ->checkIF($bug->closedBy,   'resolution', 'notempty')
+            ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
+            ->where('id')->eq((int)$bugID)
+            ->exec();
+        if(!dao::isError()) return common::createChanges($oldBug, $bug);
+    }
 
-        $sql = "UPDATE " . TABLE_BUG . " SET 
-            title = '$title', product='$product', module = '$module', 
-            type='$type', severity = '$severity', os = '$os', status = '$status', 
-            assignedTo='$assignedTo', assignedDate = '$assignedDate', resolvedBy = '$resolvedBy', resolvedDate = '$resolvedDate', resolution='$resolution',
-            closedBy = '$closedBy',  closedDate = '$closedDate', steps = '$steps', 
-            lastEditedBy = '{$this->app->user->account}', lastEditedDate = '$lastEditedDate'
-            WHERE id ='$bugID' LIMIT 1 ";
-        $this->dbh->exec($sql);
-        return $changes;
+    /* 解决Bug。*/
+    public function resolve($bugID)
+    {
+        $oldBug = $this->getById($bugID);
+        $now = date('Y-m-d H:i:s');
+        $bug = fixer::input('post')
+            ->add('resolvedBy',     $this->app->user->account)
+            ->add('resolvedDate',   $now)
+            ->add('status',         'resolved')
+            ->add('assignedTo',     $oldBug->openedBy)
+            ->add('assignedDate',   $now)
+            ->add('lastEditedBy',   $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->setDefault('duplicateBug', 0)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_BUG)->data($bug)
+            ->autoCheck()
+            ->check('resolution', 'notempty')
+            ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
+            ->where('id')->eq((int)$bugID)
+            ->exec();
+    }
+
+    /* 激活Bug。*/
+    public function activate($bugID)
+    {
+        $oldBug = $this->getById($bugID);
+        $now = date('Y-m-d H:i:s');
+        $bug = fixer::input('post')
+            ->add('assignedTo', $oldBug->resolvedBy)
+            ->add('assignedDate', $now)
+            ->add('resolution', '')
+            ->add('status', 'active')
+            ->add('resolvedDate', '0000-00-00')
+            ->add('resolvedBy', '')
+            ->add('resolvedBuild', '')
+            ->add('closedBy', '')
+            ->add('closedDate', '0000-00-00')
+            ->add('duplicateBug', 0)
+            ->add('lastEditedBy',   $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+    }
+
+    /* 关闭Bug。*/
+    public function close($bugID)
+    {
+        $oldBug = $this->getById($bugID);
+        $now = date('Y-m-d H:i:s');
+        $bug = fixer::input('post')
+            ->add('assignedTo',     'closed')
+            ->add('assignedDate',   $now)
+            ->add('status',         'closed')
+            ->add('closedBy',       $this->app->user->account)
+            ->add('closedDate',     $now)
+            ->add('lastEditedBy',   $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
     }
 
     /* 从bug列表中提取所有出现过的账户。*/

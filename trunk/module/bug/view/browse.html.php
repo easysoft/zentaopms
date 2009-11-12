@@ -24,7 +24,6 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/treeview.html.php';?>
-<?php include '../../common/tablesorter.html.php';?>
 <script language='Javascript'>
 function selectProduct(productID)
 {
@@ -70,10 +69,10 @@ $("#{$type}Tab").addClass('active');
 EOT;
         ?>
         </ul>
-        <?php if(common::hasPriv('bug', 'create')) echo '<div>' . html::a($this->createLink('bug', 'create', "productID=$productID&moduleID=$currentModuleID"), $lang->bug->create) . '</div>';?>
+        <?php if(common::hasPriv('bug', 'create')) echo '<div>' . html::a($this->createLink('bug', 'create', "type=product&productID=$productID&moduleID=$currentModuleID"), $lang->bug->create) . '</div>';?>
       </div> 
 
-      <table class='table-1 tablesorter'>
+      <table class='table-1'>
         <thead>
         <tr class='colhead'>
           <th><?php echo $lang->bug->id;?></th>
@@ -88,17 +87,18 @@ EOT;
         <tbody>
         <?php foreach($bugs as $bug):?>
         <tr class='a-center'>
-          <td class='a-right'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?></td>
+          <td class='a-right'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?></td>
           <td><?php echo $bug->severity?></td>
           <td width='50%' class='a-left'><?php echo $bug->title;?></td>
           <td><?php echo $users[$bug->openedBy];?></td>
-          <td><?php echo $users[$bug->assignedTo];?></td>
+          <td <?php if($bug->assignedTo == $this->app->user->account) echo 'style=color:red';?>><?php echo $users[$bug->assignedTo];?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
-          <td><?php echo $bug->resolution;?></td>
+          <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
         </tr>
         <?php endforeach;?>
         </tbody>
       </table>
+      <div class='a-right'><?php echo $pager;?></div>
     </div>
   </div>
 </div>  

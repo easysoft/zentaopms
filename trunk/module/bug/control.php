@@ -33,6 +33,8 @@ class bug extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
+        $this->loadModel('story');
+        $this->loadModel('task');
         $this->products = $this->product->getPairs();
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
         $this->assign('products', $this->products);
@@ -45,8 +47,10 @@ class bug extends control
     }
 
     /* 浏览一个产品下面的bug。*/
-    public function browse($productID = 0, $type = 'byModule', $param = 0)
+    public function browse($productID = 0, $type = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->session->set('bugList', $this->app->getURI(true));
+
         $productID       = common::saveProductState($productID, key($this->products));
         $currentModuleID = ($type == 'byModule') ? (int)$param : 0;
         if($currentModuleID == 0)
@@ -61,11 +65,13 @@ class bug extends control
 
         if($type == "byModule")
         {
+            $this->app->loadClass('pager', $static = true);
+            $pager = pager::init($recTotal, $recPerPage, $pageID);
             $childModuleIds = $this->tree->getAllChildId($currentModuleID);
-            $bugs = $this->bug->getModuleBugs($productID, $childModuleIds);
+            $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $orderBy, $pager);
         }
 
-        $users = array('' => '', 'Closed' => 'Closed') + $this->user->getRealNames($this->bug->extractAccountsFromList($bugs));
+        $users = $this->user->getPairs($this->app->company->id, 'noletter');
         
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -79,6 +85,7 @@ class bug extends control
         $this->assign('type',          $type);
         $this->assign('bugs',          $bugs);
         $this->assign('users',         $users);
+        $this->assign('pager',         $pager->get());
         $this->assign('currentModuleID',   $currentModuleID);
         $this->assign('currentModuleName', $currentModuleName);
 
@@ -88,47 +95,47 @@ class bug extends control
     /* 创建Bug。*/
     public function create($productID, $moduleID = 0)
     {
-        if(!empty($_POST))
-        {
-            $_POST['severity'] = str_replace('item', '', $_POST['severity']);
-            $bugID = $this->bug->create();
-            $this->action->create('bug', $bugID, 'Opened');
-            die(js::locate($this->createLink('bug', 'browse', "productID=$_POST[productID]&type=byModule&param=$_POST[moduleID]"), 'parent'));
-        }
-
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
-        $productID = (int)$productID;
-        if($productID == 0) $productID = key($this->products);
+        if(!empty($_POST))
+        {
+            $bugID = $this->bug->create();
+            if(dao::isError()) die(js::error(dao::getError()));
+            $this->action->create('bug', $bugID, 'Opened');
+            die(js::locate($this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}"), 'parent'));
+        }
+
+        $productID       = common::saveProductState($productID, key($this->products));
         $currentModuleID = (int)$moduleID;
 
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->bug->create;
 
-        $users = array('' => '') + $this->user->getPairs($this->app->company->id);
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
-        $this->assign('productID',     $productID);
-        $this->assign('productName',   $this->products[$productID]);
+        $this->assign('header',            $header);
+        $this->assign('position',          $position);
+        $this->assign('productID',         $productID);
+        $this->assign('productName',       $this->products[$productID]);
         $this->assign('moduleOptionMenu',  $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0));
         $this->assign('currentModuleID',   $currentModuleID);
-        $this->assign('users',  $users);           
-
+        $this->assign('stories',           $this->story->getProductStoryPairs($productID));
+        $this->assign('users',             $this->user->getPairs($this->app->company->id, 'noclosed'));
+        $this->assign('projects',          $this->product->getProjectPairs($productID));
         $this->display();
     }
 
     /* 查看一个bug。*/
     public function view($bugID)
     {
-        $bug = $this->bug->getById($bugID);
+        $bug         = $this->bug->getById($bugID);
         $productID   = $bug->product;
         $productName = $this->products[$productID];
+
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->view;
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
         $position[]      = $this->lang->bug->view;
 
-        $users   = array('' => '') + $this->user->getRealNames($this->bug->extractAccountsFromSingle($bug));
+        $users   = $this->user->getPairs($this->app->company->id, 'noletter');
         $actions = $this->action->getList('bug', $bugID);
         $this->assign('header',      $header);
         $this->assign('position',    $position);
@@ -148,8 +155,13 @@ class bug extends control
         if(!empty($_POST))
         {
             $changes  = $this->bug->update($bugID);
-            $actionID = $this->action->create('bug', $bugID, 'Edited', $_POST['comment']);
-            $this->action->logHistory($actionID, $changes);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('bug', $bugID, $action, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -161,7 +173,11 @@ class bug extends control
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->bug->edit;
 
-        $users = array('' => '') + $this->user->getPairs($this->app->company->id);
+        $projects = $this->product->getProjectPairs($bug->product);
+        $stories = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
+        $tasks   = $this->task->getProjectTaskPairs($bug->project);
+
+        $users = $this->user->getPairs($this->app->company->id);
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('productID',     $productID);
@@ -170,6 +186,10 @@ class bug extends control
         $this->assign('currentModuleID',   $currentModuleID);
         $this->assign('users',  $users);           
 
+        $this->assign('projects', $projects);
+        $this->assign('stories', $stories);
+        $this->assign('tasks',   $tasks);
+        
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('bug',      $bug);
@@ -177,13 +197,87 @@ class bug extends control
         $this->display();
     }
 
-    public function delete($id)
+    /* 解决bug。*/
+    public function resolve($bugID)
     {
-        $header['title'] = $this->lang->page->delete;
-        $this->assign('header', $header);
+        /* 更新bug信息。*/
+        if(!empty($_POST))
+        {
+            $this->bug->resolve($bugID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->action->create('bug', $bugID, 'Resolved', $this->post->comment);
+            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+        }
+
+        /* 生成表单。*/
+        $bug             = $this->bug->getById($bugID);
+        $productID       = $bug->product;
+        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
+        $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $position[]      = $this->lang->bug->resolve;
+
+        $users = $this->user->getPairs($this->app->company->id);
+        $this->assign('header',        $header);
+        $this->assign('position',      $position);
+        $this->assign('bug',           $bug);
         $this->display();
     }
 
+    /* 激活bug。*/
+    public function activate($bugID)
+    {
+        /* 更新bug信息。*/
+        if(!empty($_POST))
+        {
+            $this->bug->activate($bugID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
+            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+        }
+
+        /* 生成表单。*/
+        $bug        = $this->bug->getById($bugID);
+        $productID  = $bug->product;
+        $users      = $this->user->getPairs($this->app->company->id);
+
+        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
+        $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $position[]      = $this->lang->bug->activate;
+
+        $this->assign('header',    $header);
+        $this->assign('position',  $position);
+        $this->assign('bug',       $bug);
+        $this->assign('users',     $users);
+        $this->display();
+    }
+
+    /* 激活bug。*/
+    public function close($bugID)
+    {
+        /* 更新bug信息。*/
+        if(!empty($_POST))
+        {
+            $this->bug->close($bugID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
+            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+        }
+
+        /* 生成表单。*/
+        $bug        = $this->bug->getById($bugID);
+        $productID  = $bug->product;
+
+        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
+        $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $position[]      = $this->lang->bug->activate;
+
+        $this->assign('header',    $header);
+        $this->assign('position',  $position);
+        $this->assign('bug',       $bug);
+        $this->display();
+    }
+
+    /* 获得用户的bug列表。*/
     public function ajaxGetUserBugs($account = '')
     {
         if($account == '') $account = $this->app->user->account;
