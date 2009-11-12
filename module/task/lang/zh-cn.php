@@ -28,7 +28,8 @@ $lang->task->edit      = "更新任务";
 $lang->task->delete    = "删除任务";
 $lang->task->view      = "查看任务";
 
-$lang->task->ajaxGetUserTasks = "ajax:我的任务";
+$lang->task->ajaxGetUserTasks    = "ajax:我的任务";
+$lang->task->ajaxGetProjectTasks = "ajax:项目任务";
 $lang->task->confirmDelete    = "您确定要删除这个任务吗？";
 
 $lang->task->id        = '编号';
