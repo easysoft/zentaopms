@@ -46,10 +46,8 @@ class task extends control
             die(js::locate($browseProjectLink, 'parent'));
         }
 
-        $stories = $this->story->getProjectStoryPair($projectID);
-        $members = $this->project->getTeamMemberPair($projectID);
-        $stories = array(0  => '') + $stories;
-        $members = array('' => '') + $members;
+        $stories = $this->story->getProjectStoryPairs($projectID);
+        $members = $this->project->getTeamMemberPairs($projectID);
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[]      = html::a($browseProjectLink, $project->name);
@@ -84,10 +82,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $stories = $this->story->getProjectStoryPair($project->id);
-        $members = $this->project->getTeamMemberPair($project->id);
-        $stories = array(0  => '') + $stories;
-        $members = array('' => '') + $members;
+        $stories = $this->story->getProjectStoryPairs($project->id);
+        $members = $this->project->getTeamMemberPairs($project->id);
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->edit;
         $position[]      = html::a($this->createLink('project', 'browse', "project=$task->project"), $project->name);
@@ -143,5 +139,12 @@ class task extends control
         if($account == '') $account = $this->app->user->account;
         $tasks = $this->task->getUserTaskPairs($account, $status);
         die(html::select('task', $tasks, '', 'class=select-1'));
+    }
+
+    /* Ajax请求： 返回项目任务的下拉列表框。*/
+    public function ajaxGetProjectTasks($projectID, $taskID = 0)
+    {
+        $tasks = $this->task->getProjectTaskPairs((int)$projectID);
+        die(html::select('task', $tasks, $taskID));
     }
 }
