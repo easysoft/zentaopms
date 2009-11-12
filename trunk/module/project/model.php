@@ -178,7 +178,7 @@ class projectModel extends model
     }
 
    /* 获取团队成员account=>name列表。*/
-    public function getTeamMemberPair($projectID)
+    public function getTeamMemberPairs($projectID)
     {
         $sql = "SELECT T2.account, T2.realname FROM " . TABLE_TEAM . " AS T1 LEFT JOIN " . TABLE_USER . " AS T2 ON T1.account = T2.account  WHERE T1.project = '$projectID'"; 
         return $this->fetchPairs($sql);
