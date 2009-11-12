@@ -84,12 +84,15 @@ class storyModel extends model
     }
 
     /* 获得某一个产品某一个模块下面的所有需求id=>title列表。*/
-    function getProductStoryPair($productID = 0, $moduleIds = 0, $order = 'id|desc')
+    function getProductStoryPairs($productID = 0, $moduleIds = 0, $order = 'id|desc')
     {
-        $where  = $productID > 0 ? " WHERE `product`" . helper::dbIN($productID) : '';
-        $where .= !empty($moduleIds) ? " AND module " . helper::dbIN($moduleIds) : '';
-        $sql    = "SELECT id, title FROM " . TABLE_STORY . $where . ' ORDER BY ' . str_replace('|', ' ', $order);
-        return $this->fetchPairs($sql);
+        $sql = $this->dao->select('t1.id, t1.title, t1.module, t2.name AS product')
+            ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->where('1=1');
+        if($productID) $sql->andWhere('t1.product')->in($productID);
+        if($moduleIds) $sql->andWhere('t1.module')->in($moduleIds);
+        $stories = $sql->orderBy($order)->fetchAll();
+        return $this->formatStories($stories);
     }
 
     /* 获得某一个项目相关的所有需求列表。*/
@@ -103,24 +106,31 @@ class storyModel extends model
     }
 
     /* 获得某一个项目相关的需求id=>title的列表。*/
-    function getProjectStoryPair($projectID = 0)
+    function getProjectStoryPairs($projectID = 0, $productID = 0)
     {
-        $stories = $this->dao->select('t2.id, t2.title, t2.module, t3.name AS product')
+        $sql = $this->dao->select('t2.id, t2.title, t2.module, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')
             ->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')
             ->on('t1.product = t3.id')
-            ->where('t1.project')->eq((int)$projectID)
-            ->fetchAll();
+            ->where('t1.project')->eq((int)$projectID);
+        if($productID) $sql->andWhere('t1.product')->eq((int)$productID);
+        $stories = $sql->fetchAll();
+        return $this->formatStories($stories);
+    }
 
+    /* 格式化需求显示。*/
+    private function formatStories($stories)
+    {
         /* 查找每个story所对应的模块名称。*/
+        $modules = array();
         foreach($stories as $story) $modules[] = $story->module;
         $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();
 
         /* 重新组织每一个story的展示方式。*/
-        $storyPairs = array();
-        foreach($stories as $story) $storyPairs[$story->id] = $story->product . '/' . ($story->module > 0 ? $moduleNames[$story->module] . '/' : '') . $story->title;
+        $storyPairs = array('' => '');
+        foreach($stories as $story) $storyPairs[$story->id] = $story->id . ':' . $story->product . '/' . ($story->module > 0 ? $moduleNames[$story->module] . '/' : '') . $story->title;
         return $storyPairs;
     }
 
