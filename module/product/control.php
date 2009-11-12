@@ -77,7 +77,7 @@ class product extends control
         $this->assign('pager',         $pager->get());
         $this->assign('recTotal',      $pager->recTotal);
         $this->assign('recPerPage',    $pager->recPerPage);
-        $this->assign('users',         $this->user->getPairs());
+        $this->assign('users',         $this->user->getPairs($this->app->company->id, 'noletter'));
         $this->assign('orderBy',       $orderBy);
 
         $this->display();
