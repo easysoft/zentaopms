@@ -34,6 +34,7 @@ class taskModel extends model
             ->cleanFloat('estimate')
             ->add('project', (int)$projectID)
             ->setIF($this->post->estimate == '', 'estimate', 0)
+            ->setIF($this->post->story    == '', 'story', 0)
             ->get();
         $task->left = $task->estimate;
 
@@ -53,6 +54,7 @@ class taskModel extends model
             ->striptags('name')
             ->specialChars('desc')
             ->cleanFloat('estimate, left, consumed')
+            ->setIF($this->post->story    == '', 'story', 0)
             ->setIF($this->post->estimate == '', 'estimate', 0)
             ->setIF($this->post->left     == '', 'left', 0)
             ->setIF($this->post->consumed == '', 'consumed', 0)
@@ -100,6 +102,21 @@ class taskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+    /* 获得某一个项目的任务id=>name列表。*/
+    public function getProjectTaskPairs($projectID, $orderBy = 'id|desc')
+    {
+        $tasks = array('' => '');
+        $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS ownerRealName')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')
+            ->on('t1.owner = t2.account')
+            ->where('t1.project')->eq((int)$projectID)
+            ->orderBy($orderBy)
+            ->query();
+        while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->ownerRealName:$task->name";
+        return $tasks;
     }
 
     /* 获得用户的任务列表。*/
