@@ -91,3 +91,4 @@ define('TABLE_TASKESTIMATE',   $config->db->prefix . 'taskEstimate');
 define('TABLE_TESTPLAN',       $config->db->prefix . 'testPlan');
 define('TABLE_PROJECTPRODUCT', $config->db->prefix . 'projectProduct');
 define('TABLE_TODO',           $config->db->prefix . 'todo');
+define('TABLE_BURN',           $config->db->prefix . 'burn');
