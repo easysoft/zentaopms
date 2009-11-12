@@ -59,7 +59,7 @@ class bugModel extends model
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
             ->where('t1.id')->eq((int)$bugID)->fetch();
-        foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !strtotime($value)) $bug->$key = '';
+        foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
         $bug->mailto = ltrim(trim($bug->mailto), ',');
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
         return $bug;
