@@ -30,6 +30,7 @@ changeProjectConfirmed = false;
 oldProjectID = '<?php echo $bug->project;?>';
 oldStoryID   = '<?php echo $bug->story;?>';
 oldTaskID    = '<?php echo $bug->task;?>';
+emptySelect  = "<select name='task' id='task'><option value=''></option></select>";
 /* 当选择产品时，触发这个方法。*/
 function loadAll(productID)
 {
@@ -40,6 +41,7 @@ function loadAll(productID)
     }
     if(changeProductConfirmed || firstChoice)
     {
+        $('#taskIdBox').get(0).innerHTML = emptySelect;
         loadModuleMenu(productID);      // 加载产品的模块列表。
         loadProductStories(productID);  // 加载产品的需求列表。
         loadProjects(productID);        // 加载项目列表。
@@ -77,8 +79,7 @@ function loadProjectStoriesAndTasks(projectID)
     }
     else
     {
-        /* 将projectID, taskID, storyID内容复位。*/
-        $('#taskIdBox').get(0).innerHTML = '';
+        $('#taskIdBox').get(0).innerHTML = emptySelect;
         loadProductStories($('#product').get(0).value);
     }
 }
