@@ -66,9 +66,6 @@ class product extends control
         $pager   = new pager($recTotal, $recPerPage, $pageID);
         $stories = $this->story->getProductStories($productID, $childModuleIds, $orderBy, $pager);
 
-        /* 获取用户列表。*/
-        $users = array('' => '') + $this->user->getRealNames($this->story->extractAccountsFromList($stories));
-
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('productID',     $productID);
@@ -80,7 +77,7 @@ class product extends control
         $this->assign('pager',         $pager->get());
         $this->assign('recTotal',      $pager->recTotal);
         $this->assign('recPerPage',    $pager->recPerPage);
-        $this->assign('users',         $users);
+        $this->assign('users',         $this->user->getPairs());
         $this->assign('orderBy',       $orderBy);
 
         $this->display();
@@ -139,5 +136,12 @@ class product extends control
             echo js::locate($this->createLink('product', 'browse'), 'parent');
             exit;
         }
+    }
+
+    /* 获得某一个产品对应的项目列表。*/
+    public function ajaxGetProjects($productID, $projectID = 0)
+    {
+        $projects = $this->product->getProjectPairs($productID);
+        die(html::select('project', $projects, $projectID, 'onchange=loadProjectStoriesAndTasks(this.value)'));
     }
 }
