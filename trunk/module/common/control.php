@@ -181,7 +181,7 @@ EOT;
         foreach($new as $key => $value)
         {
             if(strtolower($key) == 'lastediteddate') continue;
-            if($new->$key !== $old->$key)
+            if($new->$key != $old->$key)
             { 
                 $diff = '';
                 if(substr_count($value, "\n") > 1 or substr_count($old->$key, "\n") > 1) $diff = self::diff($old->$key, $value);
