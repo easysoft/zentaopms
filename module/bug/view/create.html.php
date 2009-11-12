@@ -23,11 +23,70 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<style>
+#project{width:245px}
+#product{width:245px}
+#story{width:245px}
+</style>
 <script language='Javascript'>
+/* 当选择产品时，触发这个方法。*/
+function loadAll(productID)
+{
+    $('#taskIdBox').get(0).innerHTML = '';  // 将taskID内容复位。
+    loadModuleMenu(productID);              // 加载产品的模块列表。
+    loadProductStories(productID);          // 加载产品的需求列表。
+    loadProjects(productID);                // 加载项目列表。
+}
+
+/* 加载模块列表。*/
 function loadModuleMenu(productID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug');
     $('#moduleIdBox').load(link);
+}
+
+/* 加载产品的需求列表。*/
+function loadProductStories(productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
+    $('#storyIdBox').load(link);
+}
+
+/* 加载项目列表。*/
+function loadProjects(productID)
+{
+    link = createLink('product', 'ajaxGetProjects', 'productID=' + productID);
+    $('#projectIdBox').load(link);
+}
+
+/* 加载项目的任务列表和需求列表。*/
+function loadProjectStoriesAndTasks(projectID)
+{
+    if(projectID)
+    {
+        loadProjectTasks(projectID);
+        loadProjectStories(projectID);
+    }
+    else
+    {
+        $('#taskIdBox').get(0).innerHTML = '';
+        loadProductStories($('#product').get(0).value);
+    }
+}
+
+/* 加载项目的任务列表。*/
+function loadProjectTasks(projectID)
+{
+    link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID);
+    $('#taskIdBox').load(link);
+}
+
+/* 加载项目的需求列表。*/
+function loadProjectStories(projectID)
+{
+    productID = $('#product').get(0).value; 
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID);
+    $('#storyIdBox').load(link);
 }
 
 </script>
@@ -38,26 +97,30 @@ function loadModuleMenu(productID)
       <tr>
         <th class='rowhead'><?php echo $lang->bug->labProductAndModule;?></th>
         <td class='a-left'>
-          <?php echo html::select('productID', $products, $productID, "onchange=loadModuleMenu(this.value); class='select-2'");?>
-          <span id='moduleIdBox'><?php echo html::select('moduleID', $moduleOptionMenu, $currentModuleID, 'class=select-3');?></span>
-        </td>
-      </tr>  
-      <!--
-      <tr>
-        <th class='rowhead'><?php echo $lang->bug->labStory;?></th>
-        <td class='a-left'>
+          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
+          <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, 'class=select-3');?></span>
         </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->labProjectAndTask;?></th>
         <td class='a-left'>
+        <span id='projectIdBox'><?php echo html::select('project', $projects, '', 'onchange=loadProjectStoriesAndTasks(this.value)');?></span>
+          <span id='taskIdBox'></span>
         </td>
       </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->bug->labStory;?></th>
+        <td class='a-left'>
+          <span id='storyIdBox'><?php echo html::select('story', $stories);?></span>
+        </td>
+      </tr>  
+      <!--
       <tr>
         <th class='rowhead'><?php echo $lang->bug->labBuild;?></th>
         <td class='a-left'>
         </td>
-      </tr>-->
+      </tr>
+      -->
       <tr>
         <th class='rowhead'><?php echo $lang->bug->labTypeAndSeverity;?></th>
         <td class='a-left'>
@@ -73,12 +136,17 @@ function loadModuleMenu(productID)
         </td>
       </tr>  
       <tr>
-        <th class='rowhead'><nobr><?php echo $lang->bug->labAssignAndMail;?></nobr></th>
+        <th class='rowhead'><nobr><?php echo $lang->bug->labAssignedTo;?></nobr></th>
         <td class='a-left'>
-          <?php echo html::select('assignedTo', $users, '', 'class=select-2');?>
-          <?php echo html::select('mailTo', $users, '', 'class=select-2');?>
+          <?php echo html::select('assignedTo', $users, '', 'class=select-3');?>
         </td>
       </tr>  
+      <tr>
+        <th class='rowhead'><nobr><?php echo $lang->bug->labMailto;?></nobr></th>
+        <td class='a-left'>
+          <?php echo html::select('mailto[]', $users, '', 'class=select-3 size=5 multiple=multiple');?>
+        </td>
+      </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->title;?></th>
         <td class='a-left'><input type='text' name='title' class='text-1' /></td>

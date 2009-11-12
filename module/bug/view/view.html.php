@@ -29,11 +29,11 @@
     <div id='main'>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
     <div>
     <?php
-    if(common::hasPriv('bug', 'edit')) echo html::a($this->createLink('bug', 'edit',     "bugID=$bug->id"),          $lang->bug->buttonEdit);
-    //echo html::a($this->createLink('bug', 'resolve',  "bugID=$bug->id"),          $lang->bug->buttonResolve);
-    //echo html::a($this->createLink('bug', 'close',    "bugID=$bug->id"),          $lang->bug->buttonClose);
-    //echo html::a($this->createLink('bug', 'activate', "bugID=$bug->id"),          $lang->bug->buttonActivate);
-    echo html::a($this->createLink('bug', 'browse',   "productID=$bug->product"), $lang->bug->buttonToList);
+    if(common::hasPriv('bug', 'edit')) echo html::a($this->createLink('bug', 'edit',     "bugID=$bug->id"), $lang->bug->buttonEdit);
+    if(common::hasPriv('bug', 'resolve')  and $bug->status == 'active')   echo html::a($this->createLink('bug', 'resolve',  "bugID=$bug->id"), $lang->bug->buttonResolve); else echo $lang->bug->buttonResolve . ' ';
+    if(common::hasPriv('bug', 'close')    and $bug->status == 'resolved') echo html::a($this->createLink('bug', 'close',    "bugID=$bug->id"), $lang->bug->buttonClose); else echo $lang->bug->buttonClose . ' ';
+    if(common::hasPriv('bug', 'activate') and ($bug->status == 'closed' or $bug->status == 'resolved')) echo html::a($this->createLink('bug', 'activate', "bugID=$bug->id"), $lang->bug->buttonActivate); else echo $lang->bug->buttonActivate . ' ';
+    if(common::hasPriv('bug', 'browse'))   echo html::a($this->session->bugList, $lang->bug->buttonToList);
     ?>
     </div>
   </div>
@@ -96,22 +96,26 @@
       </fieldset>
 
       <fieldset>
-        <legend><?php echo $lang->bug->legendStoryAndTask;?></legend>
+        <legend><?php echo $lang->bug->legendPrjStoryTask;?></legend>
         <table class='table-1 a-left'>
           <tr>
+            <td class='rowhead'><?php echo $lang->bug->project;?></td>
+            <td><?php echo $bug->projectName;?></td>
+          </tr>
+          <tr>
             <td class='rowhead'><?php echo $lang->bug->story;?></td>
-            <td><?php //echo $bug->story;?></td>
+            <td><?php echo $bug->storyTitle;?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->task;?></td>
-            <td><?php //echo $bug->task;?></td>
+            <td><?php echo $bug->taskName;?></td>
           </tr>
         </table>
       </fieldset>
 
       <fieldset>
         <legend><?php echo $lang->bug->legendMailto;?></legend>
-        <div></div>
+        <div><?php $mailto = explode(',', $bug->mailto); foreach($mailto as $account) echo ' ' . $users[$account]; ?></div>
       </fieldset>
 
       <fieldset>
@@ -157,7 +161,12 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolution;?></td>
-            <td><?php if(!empty($bug->resolution)) echo $lang->bug->resolutionList->{$bug->resolution};?></td>
+            <td>
+              <?php 
+              echo $lang->bug->resolutionList[$bug->resolution];
+              if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug"), $bug->duplicateBugTitle);
+              ?>
+            </td>
           </tr>
         </table>
       </fieldset>
@@ -194,13 +203,13 @@
   <fieldset>
     <legend><?php echo $lang->bug->legendAction;?></legend>
     <div class='a-center' style='font-size:16px; font-weight:bold'>
-      <?php
-      if(common::hasPriv('bug', 'edit')) echo html::a($this->createLink('bug', 'edit',     "bugID=$bug->id"),          $lang->bug->buttonEdit);
-      //echo html::a($this->createLink('bug', 'resolve',  "bugID=$bug->id"),          $lang->bug->buttonResolve);
-      //echo html::a($this->createLink('bug', 'close',    "bugID=$bug->id"),          $lang->bug->buttonClose);
-      //echo html::a($this->createLink('bug', 'activate', "bugID=$bug->id"),          $lang->bug->buttonActivate);
-      echo html::a($this->createLink('bug', 'browse',   "productID=$bug->product"), $lang->bug->buttonToList);
-      ?>
+    <?php
+    if(common::hasPriv('bug', 'edit')) echo html::a($this->createLink('bug', 'edit',     "bugID=$bug->id"), $lang->bug->buttonEdit);
+    if(common::hasPriv('bug', 'resolve')  and $bug->status == 'active')   echo html::a($this->createLink('bug', 'resolve',  "bugID=$bug->id"), $lang->bug->buttonResolve); else echo $lang->bug->buttonResolve . ' ';
+    if(common::hasPriv('bug', 'close')    and $bug->status == 'resolved') echo html::a($this->createLink('bug', 'close',    "bugID=$bug->id"), $lang->bug->buttonClose); else echo $lang->bug->buttonClose . ' ';
+    if(common::hasPriv('bug', 'activate') and ($bug->status == 'closed' or $bug->status == 'resolved')) echo html::a($this->createLink('bug', 'activate', "bugID=$bug->id"), $lang->bug->buttonActivate); else echo $lang->bug->buttonActivate . ' ';
+    if(common::hasPriv('bug', 'browse'))   echo html::a($this->session->bugList, $lang->bug->buttonToList);
+    ?>
     </div>
   </fieldset>
   <fieldset>

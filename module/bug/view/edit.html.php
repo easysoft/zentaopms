@@ -23,14 +23,94 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<style>#project, #story, #task{width:245px}</style>
 <script language='Javascript'>
+changeProductConfirmed = false;
+changeProjectConfirmed = false;
+oldProjectID = '<?php echo $bug->project;?>';
+oldStoryID   = '<?php echo $bug->story;?>';
+oldTaskID    = '<?php echo $bug->task;?>';
+/* 当选择产品时，触发这个方法。*/
+function loadAll(productID)
+{
+    if(!changeProductConfirmed)
+    {
+         firstChoice = confirm('<?php echo $lang->bug->confirmChangeProduct;?>');
+         changeProductConfirmed = true;    // 已经提示过，下次就不再提示了。
+    }
+    if(changeProductConfirmed || firstChoice)
+    {
+        loadModuleMenu(productID);      // 加载产品的模块列表。
+        loadProductStories(productID);  // 加载产品的需求列表。
+        loadProjects(productID);        // 加载项目列表。
+    }
+}
+
+/* 加载模块列表。*/
 function loadModuleMenu(productID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug');
     $('#moduleIdBox').load(link);
 }
+
+/* 加载产品的需求列表。*/
+function loadProductStories(productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleId=0&storyID=' + oldStoryID);
+    $('#storyIdBox').load(link);
+}
+
+/* 加载项目列表。*/
+function loadProjects(productID)
+{
+    link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=' + oldProjectID);
+    $('#projectIdBox').load(link);
+}
+
+/* 加载项目的任务列表和需求列表。*/
+function loadProjectStoriesAndTasks(projectID)
+{
+    if(projectID)
+    {
+        loadProjectTasks(projectID);
+        loadProjectStories(projectID);
+    }
+    else
+    {
+        /* 将projectID, taskID, storyID内容复位。*/
+        $('#taskIdBox').get(0).innerHTML = '';
+        loadProductStories($('#product').get(0).value);
+    }
+}
+
+/* 加载项目的任务列表。*/
+function loadProjectTasks(projectID)
+{
+    link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID + '&taskID=' + oldTaskID);
+    $('#taskIdBox').load(link);
+}
+
+/* 加载项目的需求列表。*/
+function loadProjectStories(projectID)
+{
+    productID = $('#product').get(0).value; 
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID + '&storyID=' + oldStoryID);
+    $('#storyIdBox').load(link);
+}
+
+function setDuplicate(resolution)
+{
+    if(resolution == 'duplicate')
+    {
+        $('#duplicateBugBox').show();
+    }
+    else
+    {
+        $('#duplicateBugBox').hide();
+    }
+}
 </script>
-<form method='post'>
+<form method='post' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>
     <div id='main'>
@@ -51,7 +131,7 @@ function loadModuleMenu(productID)
           <tr>
             <td class='rowhead'><?php echo $lang->bug->labProductAndModule;?></td>
             <td>
-              <?php echo html::select('product', $products, $productID, "onchange=loadModuleMenu(this.value); class='select-2'");?>
+              <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
               <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
             </td>
           </tr>
@@ -77,38 +157,35 @@ function loadModuleMenu(productID)
             <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
             <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, 'class=select-2');?></td>
           </tr>
-          <tr>
-            <td width='40%' class='rowhead'><?php echo $lang->bug->assignedDate;?></td>
-            <td><?php echo $bug->assignedDate;?></td>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->bug->lastEditedBy;?></td>
-            <td><?php echo $bug->lastEditedBy;?></td>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->bug->lastEditedDate;?></td>
-            <td><?php echo $bug->lastEditedDate;?></td>
-          </tr>
         </table>
       </fieldset>
 
       <fieldset>
-        <legend><?php echo $lang->bug->legendStoryAndTask;?></legend>
+        <legend><?php echo $lang->bug->legendPrjStoryTask;?></legend>
         <table class='table-1 a-left'>
           <tr>
+            <td class='rowhead'><?php echo $lang->bug->project;?></td>
+            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, 'class=select-3 onchange=loadProjectStoriesAndTasks(this.value)');?></span></td>
+          </tr>
+          <tr>
             <td class='rowhead'><?php echo $lang->bug->story;?></td>
-            <td></td>
+            <td><span id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, 'class=select-3');?></span></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->task;?></td>
-            <td></td>
+            <td><span id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></td>
           </tr>
         </table>
       </fieldset>
 
       <fieldset>
         <legend><?php echo $lang->bug->legendMailto;?></legend>
-        <div>&nbsp;</div>
+        <table class='table-1 a-left'>
+          <tr>
+            <td class='rowhead'></td>
+            <td><?php echo html::input('mailto', $bug->mailto, 'class=text-3');?></div>
+          </tr>
+        </table>
       </fieldset>
 
       <fieldset>
@@ -125,10 +202,6 @@ function loadModuleMenu(productID)
           <tr>
             <td width='40%' class='rowhead'><?php echo $lang->bug->openedBy;?></td>
             <td><?php echo $users[$bug->openedBy];?></td>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->bug->openedDate;?></td>
-            <td><?php echo $bug->openedDate;?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->openedBuild;?></td>
@@ -154,7 +227,11 @@ function loadModuleMenu(productID)
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->resolution;?></td>
-            <td><?php echo html::select('resolution', array(''=> '') + (array)$lang->bug->resolutionList, $bug->resolution, 'class=select-2');?></td>
+            <td><?php echo html::select('resolution', $lang->bug->resolutionList, $bug->resolution, 'class=select-2 onchange=setDuplicate(this.value)');?></td>
+          </tr>
+          <tr id='duplicateBugBox' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
+            <td class='rowhead'><?php echo $lang->bug->duplicateBug;?></td>
+            <td><?php echo html::input('duplicateBug', $bug->duplicateBug, 'class=text-2');?></td>
           </tr>
         </table>
       </fieldset>
