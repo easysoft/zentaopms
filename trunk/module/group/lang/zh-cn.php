@@ -50,11 +50,14 @@ $lang->resource->product->browse = 'browse';
 $lang->resource->product->create = 'create';
 $lang->resource->product->edit   = 'edit';
 $lang->resource->product->delete = 'delete';
+$lang->resource->product->ajaxGetProjects = 'ajaxGetProjects';
 
 $lang->resource->story->create  = 'create';
 $lang->resource->story->edit    = 'edit';
 $lang->resource->story->delete  = 'delete';
 $lang->resource->story->view    = 'view';
+$lang->resource->story->ajaxGetProjectStories = 'ajaxGetProjectStories';
+$lang->resource->story->ajaxGetProductStories = 'ajaxGetProductStories';
 //$lang->resource->story->comment = 'comment';
 
 //$lang->resource->release->index  = 'index';
@@ -91,15 +94,19 @@ $lang->resource->task->create = 'create';
 $lang->resource->task->edit   = 'edit';
 $lang->resource->task->delete = 'delete';
 $lang->resource->task->view   = 'view';
-$lang->resource->task->ajaxGetUserTasks = 'ajaxGetUserTasks';
+$lang->resource->task->ajaxGetUserTasks    = 'ajaxGetUserTasks';
+$lang->resource->task->ajaxGetProjectTasks = 'ajaxGetProjectTasks';
 
 $lang->resource->qa->index = 'index';
 
-$lang->resource->bug->index  = 'index';
-$lang->resource->bug->browse = 'browse';
-$lang->resource->bug->create = 'create';
-$lang->resource->bug->view   = 'view';
-$lang->resource->bug->edit   = 'edit';
+$lang->resource->bug->index   = 'index';
+$lang->resource->bug->browse  = 'browse';
+$lang->resource->bug->create  = 'create';
+$lang->resource->bug->view    = 'view';
+$lang->resource->bug->edit    = 'edit';
+$lang->resource->bug->resolve = 'resolve';
+$lang->resource->bug->activate= 'activate';
+$lang->resource->bug->close   = 'close';
 $lang->resource->bug->ajaxGetUserBugs = 'ajaxGetUserBugs';
 
 $lang->resource->admin->index         = 'index';
