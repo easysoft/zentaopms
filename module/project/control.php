@@ -128,7 +128,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager   = new pager($recTotal, $recPerPage, $pageID);
         $stories = $this->story->getProjectStories($projectID, $orderBy, $pager);
-        $users   = array('' => '') + $this->user->getRealNames($this->story->extractAccountsFromList($stories));
+        $users   = $this->user->getPairs($this->app->company->id, 'noletter');
 
         /* 赋值。*/
         $this->assign('header',   $header);
@@ -161,7 +161,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $bugs  = $this->bug->getProjectBugs($projectID, $orderBy, $pager);
-        $users = array('' => '') + $this->user->getRealNames($this->bug->extractAccountsFromList($bugs));
+        $users = $this->user->getPairs($this->app->company->id, 'noletter');
 
         /* 赋值。*/
         $this->assign('header',   $header);
@@ -364,7 +364,7 @@ class project extends control
         $this->loadModel('user');
 
         $project = $this->project->findById($projectID);
-        $users   = $this->user->getPairs($this->app->company->id);
+        $users   = $this->user->getPairs($this->app->company->id, 'noclosed');
         $users   = array('' => '') + $users;
         $members = $this->project->getTeamMembers($projectID);
 
@@ -426,7 +426,7 @@ class project extends control
         $position[]      = $this->lang->project->linkStory;
 
         $allStories = $this->story->getProductStories(array_keys($products));
-        $prjStories = $this->story->getProjectStoryPair($projectID);
+        $prjStories = $this->story->getProjectStoryPairs($projectID);
 
         $this->assign('header',     $header);
         $this->assign('position',   $position);
