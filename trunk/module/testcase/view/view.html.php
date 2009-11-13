@@ -29,8 +29,8 @@
     CASE #<?php echo $case->id . $lang->colon . $case->title;?>
     <div class='f-right'>
     <?php
-    if(common::hasPriv('testcase', 'edit'))   echo html::a($this->createLink('testcase', 'edit',     "caseID=$case->id"), $lang->case->buttonEdit);
-    if(common::hasPriv('testcase', 'browse')) echo html::a($this->createLink('testcase', 'browse',   "productID=$case->product"), $lang->case->buttonToList);
+    if(common::hasPriv('testcase', 'edit'))   echo html::a($this->createLink('testcase', 'edit',     "caseID=$case->id"), $lang->testcase->buttonEdit);
+    if(common::hasPriv('testcase', 'browse')) echo html::a($this->createLink('testcase', 'browse',   "productID=$case->product"), $lang->testcase->buttonToList);
     ?>
     </div>
   </div>
@@ -41,10 +41,10 @@
 
     <div class='yui-u first'>  
       <fieldset>
-        <legend><?php echo $lang->case->legendBasicInfo;?></legend>
+        <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
         <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->labProductAndModule;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->labProductAndModule;?></td>
             <td>
               <?php 
               echo $productName;
@@ -58,19 +58,19 @@
             </td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->type;?></td>
-            <td><?php echo $lang->case->typeList[$case->type];?></td>
+            <td class='rowhead'><?php echo $lang->testcase->type;?></td>
+            <td><?php echo $lang->testcase->typeList[$case->type];?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->pri;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
             <td><?php echo $case->pri;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->status;?></td>
-            <td><?php echo $lang->case->statusList[$case->status];?></td>
+            <td class='rowhead'><?php echo $lang->testcase->status;?></td>
+            <td><?php echo $lang->testcase->statusList[$case->status];?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->story;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->story;?></td>
             <td><?php echo $case->story;?></td>
           </tr>
           
@@ -79,12 +79,12 @@
 
       <!--
       <fieldset>
-        <legend><?php echo $lang->case->legendMailto;?></legend>
+        <legend><?php echo $lang->testcase->legendMailto;?></legend>
         <div>mailto</div>
       </fieldset>
 
       <fieldset>
-      <legend><?php echo $lang->case->legendAttatch;?></legend>
+      <legend><?php echo $lang->testcase->legendAttatch;?></legend>
         <div>attatch</div>
       </fieldset>
       -->
@@ -93,28 +93,28 @@
 
     <div class='yui-u'>  
       <fieldset>
-        <legend><?php echo $lang->case->legendOpenInfo;?></legend>
+        <legend><?php echo $lang->testcase->legendOpenInfo;?></legend>
         <table class='table-1 a-left'>
           <tr>
-            <td width='40%' class='rowhead'><?php echo $lang->case->openedBy;?></td>
+            <td width='40%' class='rowhead'><?php echo $lang->testcase->openedBy;?></td>
             <td><?php echo $case->openedBy;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->openedDate;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->openedDate;?></td>
             <td><?php echo $case->openedDate;?></td>
           </tr>
         </table>
       </fieldset>
 
       <fieldset>
-        <legend><?php echo $lang->case->legendLastInfo;?></legend>
+        <legend><?php echo $lang->testcase->legendLastInfo;?></legend>
         <table class='table-1 a-left'>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->lastEditedBy;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->lastEditedBy;?></td>
             <td><?php echo $case->lastEditedBy;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->lastEditedDate;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->lastEditedDate;?></td>
             <td><?php echo $case->lastEditedDate;?></td>
           </tr>
         </table>
@@ -122,7 +122,7 @@
 
       <!--
       <fieldset>
-        <legend><?php echo $lang->case->legendLinkBugs;?></legend>
+        <legend><?php echo $lang->testcase->legendLinkBugs;?></legend>
         <div> linkcase </div>
       </fieldset>
       -->
@@ -133,17 +133,17 @@
 
 <div class='yui-d0'>
   <fieldset>
-    <legend><?php echo $lang->case->legendAction;?></legend>
+    <legend><?php echo $lang->testcase->legendAction;?></legend>
     <div class='a-center' style='font-size:16px; font-weight:bold'>
       <?php
-      if(common::hasPriv('testcase', 'edit'))   echo html::a($this->createLink('testcase', 'edit',     "caseID=$case->id"), $lang->case->buttonEdit);
-      if(common::hasPriv('testcase', 'browse')) echo html::a($this->createLink('testcase', 'browse',   "productID=$case->product"), $lang->case->buttonToList);
+      if(common::hasPriv('testcase', 'edit'))   echo html::a($this->createLink('testcase', 'edit',     "caseID=$case->id"), $lang->testcase->buttonEdit);
+      if(common::hasPriv('testcase', 'browse')) echo html::a($this->createLink('testcase', 'browse',   "productID=$case->product"), $lang->testcase->buttonToList);
       ?>
     </div>
   </fieldset>
 
   <fieldset>
-    <legend><?php echo $lang->case->legendSteps;?></legend>
+    <legend><?php echo $lang->testcase->legendSteps;?></legend>
     <div class='content'>
     <?php echo nl2br($case->steps);?>
     </div>

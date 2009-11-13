@@ -65,29 +65,29 @@ function loadStory(productID)
 
     <div class='yui-u first'>  
       <fieldset>
-        <legend><?php echo $lang->case->legendBasicInfo;?></legend>
+        <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
         <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->labProductAndModule;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->labProductAndModule;?></td>
             <td>
               <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
               <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
             </td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->type;?></td>
-            <td><?php echo html::select('type', (array)$lang->case->typeList, $case->type, 'class=select-2');?>
+            <td class='rowhead'><?php echo $lang->testcase->type;?></td>
+            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=select-2');?>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->pri;?></td>
-            <td><?php echo html::select('pri', (array)$lang->case->priList, $case->pri, 'class=select-2');?>
+            <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
+            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=select-2');?>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->status;?></td>
-            <td><?php echo html::select('status', (array)$lang->case->statusList, $case->status, 'class=select-2');?></td>
+            <td class='rowhead'><?php echo $lang->testcase->status;?></td>
+            <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=select-2');?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->story;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->story;?></td>
             <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-3');?></span></td>
           </tr>
         </table>
@@ -95,12 +95,12 @@ function loadStory(productID)
 
       <!--
       <fieldset>
-        <legend><?php echo $lang->case->legendMailto;?></legend>
+        <legend><?php echo $lang->testcase->legendMailto;?></legend>
         <div>mailto</div>
       </fieldset>
 
       <fieldset>
-      <legend><?php echo $lang->case->legendAttatch;?></legend>
+      <legend><?php echo $lang->testcase->legendAttatch;?></legend>
         <div>attatch</div>
       </fieldset>
       -->
@@ -109,35 +109,35 @@ function loadStory(productID)
 
     <div class='yui-u'>  
       <fieldset>
-        <legend><?php echo $lang->case->legendOpenInfo;?></legend>
+        <legend><?php echo $lang->testcase->legendOpenInfo;?></legend>
         <table class='table-1 a-left'>
           <tr>
-            <td width='40%' class='rowhead'><?php echo $lang->case->openedBy;?></td>
+            <td width='40%' class='rowhead'><?php echo $lang->testcase->openedBy;?></td>
             <td><?php echo $case->openedBy;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->openedDate;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->openedDate;?></td>
             <td><?php echo $case->openedDate;?></td>
           </tr>
         </table>
       </fieldset>
 
       <fieldset>
-        <legend><?php echo $lang->case->legendLastInfo;?></legend>
+        <legend><?php echo $lang->testcase->legendLastInfo;?></legend>
         <table class='table-1 a-left'>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->lastEditedBy;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->lastEditedBy;?></td>
             <td><?php echo $case->lastEditedBy;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->case->lastEditedDate;?></td>
+            <td class='rowhead'><?php echo $lang->testcase->lastEditedDate;?></td>
             <td><?php echo $case->lastEditedDate;?></td>
           </tr>
         </table>
       </fieldset>
       <!--
       <fieldset>
-        <legend><?php echo $lang->case->legendLinkBugs;?></legend>
+        <legend><?php echo $lang->testcase->legendLinkBugs;?></legend>
         <div> linkcase </div>
       </fieldset>
       -->
@@ -148,22 +148,22 @@ function loadStory(productID)
 
 <div class='yui-d0'>
   <fieldset>
-    <legend><?php echo $lang->case->legendSteps;?></legend>
+    <legend><?php echo $lang->testcase->legendSteps;?></legend>
     <div class='a-center'>
       <textarea name='steps' rows='5' class='area-1'><?php echo $case->steps;?></textarea>
     </div>
   </fieldset>
   <fieldset>
-    <legend><?php echo $lang->case->legendComment;?></legend>
+    <legend><?php echo $lang->testcase->legendComment;?></legend>
     <div class='a-center'>
       <textarea name='comment' rows='4' class='area-1'></textarea></td>
     </div>
   </fieldset>
   <fieldset>
-    <legend><?php echo $lang->case->legendAction;?></legend>
+    <legend><?php echo $lang->testcase->legendAction;?></legend>
     <div class='a-center'>
       <?php echo html::submitButton();?>
-      <input type='button' value='<?php echo $lang->case->buttonToList;?>' class='button-s' 
+      <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='button-s' 
            onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
     </div>
   </fieldset>
