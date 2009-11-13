@@ -54,6 +54,7 @@ class testcaseModel extends model
     {
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
+        if($case->story) $case->storyTitle = $this->dao->findById($case->story)->from(TABLE_STORY)->fetch('title');
         return $case;
     }
 

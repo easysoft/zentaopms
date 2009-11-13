@@ -71,7 +71,11 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-            <td><?php echo $case->story;?></td>
+            <td>
+              <?php
+              if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
+              ?>
+            </td>
           </tr>
           
         </table>
