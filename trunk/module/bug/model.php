@@ -28,11 +28,12 @@ class bugModel extends model
     /* 创建一个Bug。*/
     function create()
     {
+        $now = date('Y-m-d H:i:s');
         $bug = fixer::input('post')
             ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', time())
+            ->add('openedDate', $now)
             ->setDefault('project,story,task', 0)
-            ->setIF($this->post->assignedTo != '', 'assignedDate', time())
+            ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->stripTags('title')
             ->cleanInt('product, module, severity')
             ->specialChars('steps')
