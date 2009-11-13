@@ -109,6 +109,12 @@ $lang->resource->bug->activate= 'activate';
 $lang->resource->bug->close   = 'close';
 $lang->resource->bug->ajaxGetUserBugs = 'ajaxGetUserBugs';
 
+$lang->resource->testcase->index   = 'index';
+$lang->resource->testcase->browse  = 'browse';
+$lang->resource->testcase->create  = 'create';
+$lang->resource->testcase->view    = 'view';
+$lang->resource->testcase->edit    = 'edit';
+
 $lang->resource->admin->index         = 'index';
 $lang->resource->admin->browseCompany = 'browseCompany';
 $lang->resource->admin->browseUser    = 'browseUser';

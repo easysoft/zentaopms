@@ -35,14 +35,14 @@ function selectProduct(productID)
   <div class="yui-b">
     <table class='table-1'>
       <caption>
-        <?php echo $lang->case->selectProduct;?>
+        <?php echo $lang->testcase->selectProduct;?>
         <?php echo html::select('productID', $products, $productID, 'onchange="selectProduct(this.value);" style="width:200px"');?>
       </caption>
       <tr>
         <td>
           <div id='main'><?php echo $moduleTree;?></div>
           <div class='a-right'>
-            <?php echo html::a($this->createLink('testcase', 'browse', "productId=$productID"), $lang->case->allCases);?>
+            <?php echo html::a($this->createLink('testcase', 'browse', "productId=$productID"), $lang->testcase->allCases);?>
             <?php echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=case"), $lang->tree->manageCase);?>
           </div>
         </td>
@@ -56,12 +56,12 @@ function selectProduct(productID)
         <?php
         echo "<li><nobr>$productName</nobr></li>";
         echo "<li id='byModuleTab'><nobr>"      . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=byModule&param=$currentModuleID"), $currentModuleName)    . "</nobr></li>";
-        //echo "<li id='assignToMeTab'><nobr>"    . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=assignToMe"),    $lang->case->assignToMe)    . "</nobr></li>";
-        //echo "<li id='openedByMeTab'><nobr>"    . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=openedByMe"),    $lang->case->openedByMe)    . "</nobr></li>";
-        //echo "<li id='resolvedByMeTab'><nobr>"  . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=resolvedByMe"),  $lang->case->resolvedByMe)  . "</nobr></li>";
-        //echo "<li id='assignToNullTab'><nobr>"  . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=assignToNull"),  $lang->case->assignToNull)  . "</nobr></li>";
-        //echo "<li id='longLifeBugsTab'><nobr>"  . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=longLifeBugs"),  $lang->case->longLifeBugs)  . "</nobr></li>";
-        //echo "<li id='postponedBugsTab'><nobr>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=postponedBugs"), $lang->case->postponedBugs) . "</nobr></li>";
+        //echo "<li id='assignToMeTab'><nobr>"    . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=assignToMe"),    $lang->testcase->assignToMe)    . "</nobr></li>";
+        //echo "<li id='openedByMeTab'><nobr>"    . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=openedByMe"),    $lang->testcase->openedByMe)    . "</nobr></li>";
+        //echo "<li id='resolvedByMeTab'><nobr>"  . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=resolvedByMe"),  $lang->testcase->resolvedByMe)  . "</nobr></li>";
+        //echo "<li id='assignToNullTab'><nobr>"  . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=assignToNull"),  $lang->testcase->assignToNull)  . "</nobr></li>";
+        //echo "<li id='longLifeBugsTab'><nobr>"  . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=longLifeBugs"),  $lang->testcase->longLifeBugs)  . "</nobr></li>";
+        //echo "<li id='postponedBugsTab'><nobr>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&type=postponedBugs"), $lang->testcase->postponedBugs) . "</nobr></li>";
         echo <<<EOT
 <script language="Javascript">
 $("#{$type}Tab").addClass('active');
@@ -70,27 +70,27 @@ EOT;
         ?>
         </ul>
         <div>
-        <?php if(common::hasPriv('testcase', 'create')) echo html::a($this->createLink('testcase', 'create', "productID=$productID&moduleID=$currentModuleID"), $lang->case->create);?>
+        <?php if(common::hasPriv('testcase', 'create')) echo html::a($this->createLink('testcase', 'create', "productID=$productID&moduleID=$currentModuleID"), $lang->testcase->create);?>
         </div>
       </div> 
 
       <table class='table-1'>
         <tr class='colhead'>
-          <th><?php echo $lang->case->id;?></th>
-          <th><?php echo $lang->case->pri;?></th>
-          <th><?php echo $lang->case->title;?></th>
-          <th><?php echo $lang->case->type;?></th>
-          <th><?php echo $lang->case->openedBy;?></th>
-          <th><?php echo $lang->case->status;?></th>
+          <th><?php echo $lang->testcase->id;?></th>
+          <th><?php echo $lang->testcase->pri;?></th>
+          <th><?php echo $lang->testcase->title;?></th>
+          <th><?php echo $lang->testcase->type;?></th>
+          <th><?php echo $lang->testcase->openedBy;?></th>
+          <th><?php echo $lang->testcase->status;?></th>
         </tr>
         <?php foreach($cases as $case):?>
         <tr class='a-center'>
           <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
           <td><?php echo $case->pri?></td>
           <td width='50%' class='a-left'><?php echo $case->title;?></td>
-          <td><?php echo $lang->case->typeList[$case->type];?></td>
+          <td><?php echo $lang->testcase->typeList[$case->type];?></td>
           <td><?php echo $users[$case->openedBy];?></td>
-          <td><?php echo $lang->case->statusList[$case->status];?></td>
+          <td><?php echo $lang->testcase->statusList[$case->status];?></td>
         </tr>
         <?php endforeach;?>
       </table>

@@ -50,31 +50,31 @@ function loadStory(productID)
 <div class='yui-doc3'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1'> 
-      <caption><?php echo $lang->case->create;?></caption>
+      <caption><?php echo $lang->testcase->create;?></caption>
       <tr>
-        <th class='rowhead'><?php echo $lang->case->labProductAndModule;?></th>
+        <th class='rowhead'><?php echo $lang->testcase->labProductAndModule;?></th>
         <td class='a-left'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
           <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
         </td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->case->labStory;?></th>
+        <th class='rowhead'><?php echo $lang->testcase->labStory;?></th>
         <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, '', 'class=select-3');?></span></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->case->title;?></th>
+        <th class='rowhead'><?php echo $lang->testcase->title;?></th>
         <td class='a-left'><input type='text' name='title' class='text-1' /></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->case->steps;?></th>
+        <th class='rowhead'><?php echo $lang->testcase->steps;?></th>
         <td class='a-left'><textarea name='steps' class='area-1' rows='8'></textarea></td>
       </tr>
       <tr>
-        <th class='rowhead'><?php echo $lang->case->labTypeAndPri;?></th>
+        <th class='rowhead'><?php echo $lang->testcase->labTypeAndPri;?></th>
         <td class='a-left'>
-          <?php echo html::select('type', (array)$lang->case->typeList, '', 'class=select-2');?>
-          <?php echo html::select('pri', (array)$lang->case->priList, '', 'class=select-2');?>
+          <?php echo html::select('type', (array)$lang->testcase->typeList, '', 'class=select-2');?>
+          <?php echo html::select('pri', (array)$lang->testcase->priList, '', 'class=select-2');?>
         </td>
       </tr>  
       <tr>

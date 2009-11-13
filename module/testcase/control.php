@@ -53,12 +53,12 @@ class testcase extends control
         $currentModuleID = ($type == 'byModule') ? (int)$param : 0;
         if($currentModuleID == 0)
         {
-            $currentModuleName = $this->lang->case->allCases;
+            $currentModuleName = $this->lang->testcase->allCases;
         }
         else
         {
             $currentModule = $this->tree->getById($currentModuleID);
-            $currentModuleName = sprintf($this->lang->case->moduleCases, $currentModule->name);
+            $currentModuleName = sprintf($this->lang->testcase->moduleCases, $currentModule->name);
         }
 
         if($type == "byModule")
@@ -69,9 +69,9 @@ class testcase extends control
             $cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
         }
         
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->case->common;
+        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->case->common;
+        $position[]      = $this->lang->testcase->common;
 
         $this->assign('header',        $header);
         $this->assign('position',      $position);
@@ -105,9 +105,9 @@ class testcase extends control
         $productID       = common::saveProductState($productID, key($this->products));
         $currentModuleID = (int)$moduleID;
 
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->case->create;
+        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->case->create;
+        $position[]      = $this->lang->testcase->create;
 
         $users = $this->user->getPairs($this->app->company->id);
         $this->assign('header',        $header);
@@ -128,9 +128,9 @@ class testcase extends control
         $this->loadModel('action');
         $case = $this->testcase->getById($caseID);
         $productID = $case->product;
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->case->view;
+        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->view;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->case->view;
+        $position[]      = $this->lang->testcase->view;
 
         $users   = $this->user->getPairs($this->app->company->id, 'noletter');
         $actions = $this->action->getList('case', $caseID);
@@ -169,9 +169,9 @@ class testcase extends control
         $case            = $this->testcase->getById($caseID);
         $productID       = $case->product;
         $currentModuleID = $case->module;
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->case->edit;
+        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->case->edit;
+        $position[]      = $this->lang->testcase->edit;
 
         $users = $this->user->getPairs($this->app->company->id);
         $this->assign('header',        $header);
