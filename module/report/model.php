@@ -40,16 +40,39 @@ class reportModel extends model
 EOT;
     }
 
+    /* 创建js输出的chart。*/
+    public function createJSChart($swf, $dataXML, $width = 600, $height = 500)
+    {
+        static $count = 0;
+        $count ++;
+        $chartRoot = $this->app->getWebRoot() . 'fusioncharts/';
+        $swfFile   = "fcf_$swf.swf";
+        $divID     = "chart{$count}div";
+        $chartID   = "chart{$count}";
+
+        $js = '';
+        if($count == 1) $js = "<script language='Javascript' src='/js/misc/FusionCharts.js'></script>";
+        return <<<EOT
+$js
+<div id="$divID"></div>
+<script language="JavaScript"> 
+var $chartID = new FusionCharts("$chartRoot$swfFile", "{$chartID}id", "$width", "$height"); 
+$chartID.setDataXML("$dataXML");
+$chartID.render("$divID");
+</script>
+EOT;
+    }
+
     /* 生成single系列的xml数据。。 */
     function createSingleXML($sets, $chartOptions = array())
     {
         $data  = pack("CCC", 0xef, 0xbb, 0xbf);
-        $data .='<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        $data .="<?xml version='1.0' encoding='UTF-8'?>";
         $data .= '<graph';
         foreach($chartOptions as $key => $value) $data .= " $key='$value'";
-        $data .= ">\n";
-        foreach($sets as $set) $data .= "<set name='$set->name' value='$set->value' />\n";
+        $data .= ">";
+        foreach($sets as $set) $data .= "<set name='$set->name' value='$set->value' />";
         $data .= "</graph>";
-        die($data);
+        return $data;
     }
 }
