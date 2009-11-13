@@ -74,7 +74,7 @@ function selectProject(projectID)
         <tbody>
         <?php foreach($bugs as $bug):?>
         <tr class='a-center'>
-          <td class='a-right'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?></td>
+          <td class='a-right'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?></td>
           <td><?php echo $bug->severity?></td>
           <td width='50%' class='a-left'><?php echo $bug->title;?></td>
           <td><?php echo $users[$bug->openedBy];?></td>
