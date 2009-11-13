@@ -211,7 +211,7 @@ class project extends control
         {
             while(true)
             {
-                $nextDay = date('Y-m-d', strtotime('next day', strtotime($current)));
+                $nextDay = date('m-d', strtotime('next day', strtotime($current)));
                 $current = $nextDay;
                 $sets[$current]->name = $current;
                 $sets[$current]->value = '';    // value为空，这样fushioncharts不会打印节点。
