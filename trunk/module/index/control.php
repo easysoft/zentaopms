@@ -41,10 +41,8 @@ class index extends control
         $projects = $this->project->getList('doing');
         $products = array_values($this->product->getList());
 
-        foreach($projects as $project)
-        {
-            $burns[$project->id] = $this->report->createChart('line', $this->createLink('project', 'burnData', "project=$project->id", 'xml'), 300, 300);
-        }
+        $burns = array();
+        foreach($projects as $project) $burns[$project->id] = $this->report->createChart('line', $this->createLink('project', 'burnData', "project=$project->id", 'xml'), 300, 300);
 
         $this->assign('header',   $header);
         $this->assign('projects', $projects);
