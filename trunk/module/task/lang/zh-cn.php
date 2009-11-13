@@ -24,8 +24,8 @@
 $lang->task->common    = '任务';
 $lang->task->index     = "任务一览";
 $lang->task->create    = "新增任务";
-$lang->task->edit      = "更新任务";
-$lang->task->delete    = "删除任务";
+$lang->task->edit      = "更新";
+$lang->task->delete    = "删除";
 $lang->task->view      = "查看任务";
 
 $lang->task->ajaxGetUserTasks    = "ajax:我的任务";
