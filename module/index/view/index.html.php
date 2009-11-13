@@ -23,6 +23,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class="yui-d0 yui-t7">  
+  <?php foreach($projectGroups as $projects):?>
   <div class="yui-gb">  
     <?php foreach($projects as $key => $project):?>
     <?php
@@ -32,15 +33,7 @@
     ?>
     <div class="yui-u <?php echo $class;?>">  
       <table class='table-1'>
-        <caption><?php echo $project->name;?></caption>
-        <tr>
-          <th width='60'><?php echo $lang->project->name;?></th>
-          <td><?php echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $project->name);?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->project->code;?></th>
-          <td><?php echo $project->code;?></td>
-        </tr>
+        <caption class='a-center'><?php echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $project->name);?></caption>
         <tr>
           <th><?php echo $lang->project->beginAndEnd;?></th>
           <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
@@ -50,18 +43,11 @@
           <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
         </tr>
         <tr><td colspan='2' class='a-center'><?php echo $burns[$project->id];?></td></tr>
-        <tr>
-          <th><?php echo $lang->project->goal;?></th>
-          <td><?php echo nl2br($project->goal);?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->project->desc;?></th>
-          <td><?php echo nl2br($project->desc);?></td>
-        </tr>
       </table>
     </div>  
     <?php endforeach;?>
   </div>
+  <?php endforeach;?>
 </div>
 <!--
 <div class="yui-d0 yui-t7">  
