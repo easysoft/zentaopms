@@ -143,11 +143,14 @@ class project extends control
     }
 
     /* 浏览某一个项目下面的bug。*/
-    public function bug($projectID = 0, $orderBy = 'status|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function bug($projectID = 0, $orderBy = 'status,id|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         /* 加载bug和user模块。*/
         $this->loadModel('bug');
         $this->loadModel('user');
+
+        /* 登记session。*/
+        $this->session->set('bugList', $this->app->getURI(true));
 
         /* 公共的操作。*/
         $project = $this->commonAction($projectID);
