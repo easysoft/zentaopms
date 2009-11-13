@@ -38,16 +38,16 @@ class index extends control
         $this->loadModel('report');
         $header['title'] = $this->lang->index->common;
 
-        $projects = $this->project->getList('doing');
         $products = array_values($this->product->getList());
+        $burns    = array();
+        $projects = $this->project->getList('doing');
+        foreach($projects as $project) $burns[$project->id] = $this->report->createChart('line', $this->createLink('project', 'burnData', "project=$project->id", 'xml'), 200, 200);
+        $projectGroups = array_chunk($projects, 3);
 
-        $burns = array();
-        foreach($projects as $project) $burns[$project->id] = $this->report->createChart('line', $this->createLink('project', 'burnData', "project=$project->id", 'xml'), 300, 300);
-
-        $this->assign('header',   $header);
-        $this->assign('projects', $projects);
-        $this->assign('products', $products);
-        $this->assign('burns',    $burns);
+        $this->assign('header',        $header);
+        $this->assign('projectGroups', $projectGroups);
+        $this->assign('products',      $products);
+        $this->assign('burns',         $burns);
         $this->display();
     }
 
