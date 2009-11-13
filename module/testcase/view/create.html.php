@@ -23,11 +23,27 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<style>#produc{width:245px} #story {width:90%}</style>
 <script language='Javascript'>
+/* 加载产品对应的模块和需求。*/
+function loadAll(productID)
+{
+    loadModuleMenu(productID);
+    loadStory(productID);
+}
+
+/* 加载模块。*/
 function loadModuleMenu(productID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case');
     $('#moduleIdBox').load(link);
+}
+
+/* 加载需求列表。*/
+function loadStory(productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
+    $('#storyIdBox').load(link);
 }
 
 </script>
@@ -38,27 +54,13 @@ function loadModuleMenu(productID)
       <tr>
         <th class='rowhead'><?php echo $lang->case->labProductAndModule;?></th>
         <td class='a-left'>
-          <?php echo html::select('productID', $products, $productID, "onchange=loadModuleMenu(this.value); class='select-2'");?>
-          <span id='moduleIdBox'><?php echo html::select('moduleID', $moduleOptionMenu, $currentModuleID, 'class=select-3');?></span>
+          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
+          <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
         </td>
       </tr>  
-      <!--
       <tr>
         <th class='rowhead'><?php echo $lang->case->labStory;?></th>
-        <td class='a-left'>
-        </td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->case->labProjectAndTask;?></th>
-        <td class='a-left'>
-        </td>
-      </tr>-->
-      <tr>
-        <th class='rowhead'><?php echo $lang->case->labTypeAndPri;?></th>
-        <td class='a-left'>
-          <?php echo html::select('type', (array)$lang->case->typeList, '', 'class=select-2');?>
-          <?php echo html::select('pri', (array)$lang->case->priList, '', 'class=select-2');?>
-        </td>
+        <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, '', 'class=select-3');?></span></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->case->title;?></th>
@@ -67,12 +69,16 @@ function loadModuleMenu(productID)
       <tr>
         <th class='rowhead'><?php echo $lang->case->steps;?></th>
         <td class='a-left'><textarea name='steps' class='area-1' rows='8'></textarea></td>
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->case->labTypeAndPri;?></th>
+        <td class='a-left'>
+          <?php echo html::select('type', (array)$lang->case->typeList, '', 'class=select-2');?>
+          <?php echo html::select('pri', (array)$lang->case->priList, '', 'class=select-2');?>
+        </td>
       </tr>  
       <tr>
-        <td colspan='2'>
-          <input type='submit' class='button-s' />
-          <input type='reset'  class='button-r' />
-        </td>
+        <td colspan='2'><?php echo html::submitButton() . html::resetButton();?> </td>
       </tr>
     </table>
   </form>

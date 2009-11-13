@@ -23,19 +23,40 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<style>#produc{width:245px} #story {width:90%}</style>
 <script language='Javascript'>
+storyID ='<?php echo $case->story;?>'
+/* 加载产品对应的模块和需求。*/
+function loadAll(productID)
+{
+    loadModuleMenu(productID);
+    loadStory(productID);
+}
+
+/* 加载模块。*/
 function loadModuleMenu(productID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case');
     $('#moduleIdBox').load(link);
 }
+
+/* 加载需求列表。*/
+function loadStory(productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=0&storyID=' + storyID);
+    $('#storyIdBox').load(link);
+}
+
 </script>
+
 <form method='post'>
 <div class='yui-d0'>
   <div id='titlebar'>
+    <div id='main'>
     CASE #<?php echo $case->id . $lang->colon;?>
-    <?php echo html::input('title', $case->title, 'class=text-5');?>
-    <div class='f-right'><input type='submit' value='<?php echo $lang->save;?>' name='submit' /></div>
+    <?php echo html::input('title', $case->title, 'class=text-1');?>
+    </div>
+    <div><?php echo html::submitButton();?></div>
   </div>
 </div>
 
@@ -49,11 +70,10 @@ function loadModuleMenu(productID)
           <tr>
             <td class='rowhead'><?php echo $lang->case->labProductAndModule;?></td>
             <td>
-              <?php echo html::select('productID', $products, $productID, "onchange=loadModuleMenu(this.value); class='select-2'");?>
-              <span id='moduleIdBox'><?php echo html::select('moduleID', $moduleOptionMenu, $currentModuleID);?></span>
+              <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
+              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
             </td>
           </tr>
-
           <tr>
             <td class='rowhead'><?php echo $lang->case->type;?></td>
             <td><?php echo html::select('type', (array)$lang->case->typeList, $case->type, 'class=select-2');?>
@@ -68,11 +88,12 @@ function loadModuleMenu(productID)
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->case->story;?></td>
-            <td><?php echo $case->story;?></td>
+            <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-3');?></span></td>
           </tr>
         </table>
       </fieldset>
 
+      <!--
       <fieldset>
         <legend><?php echo $lang->case->legendMailto;?></legend>
         <div>mailto</div>
@@ -82,6 +103,7 @@ function loadModuleMenu(productID)
       <legend><?php echo $lang->case->legendAttatch;?></legend>
         <div>attatch</div>
       </fieldset>
+      -->
       
     </div>  
 
@@ -113,11 +135,12 @@ function loadModuleMenu(productID)
           </tr>
         </table>
       </fieldset>
-
+      <!--
       <fieldset>
         <legend><?php echo $lang->case->legendLinkBugs;?></legend>
         <div> linkcase </div>
       </fieldset>
+      -->
 
     </div>  
   </div>
@@ -127,25 +150,22 @@ function loadModuleMenu(productID)
   <fieldset>
     <legend><?php echo $lang->case->legendSteps;?></legend>
     <div class='a-center'>
-      <textarea name='steps' rows='10' class='area-1'><?php echo $case->steps;?></textarea>
+      <textarea name='steps' rows='5' class='area-1'><?php echo $case->steps;?></textarea>
     </div>
   </fieldset>
-
+  <fieldset>
+    <legend><?php echo $lang->case->legendComment;?></legend>
+    <div class='a-center'>
+      <textarea name='comment' rows='4' class='area-1'></textarea></td>
+    </div>
+  </fieldset>
   <fieldset>
     <legend><?php echo $lang->case->legendAction;?></legend>
     <div class='a-center'>
-      <input type='submit' value='<?php echo $lang->save;?>' name='submit' />
-      <input type='button' value='<?php echo $lang->case->buttonToList;?>' />
+      <?php echo html::submitButton();?>
+      <input type='button' value='<?php echo $lang->case->buttonToList;?>' class='button-s' 
+           onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
     </div>
   </fieldset>
-
-  <fieldset>
-  <legend><?php echo $lang->case->legendHistory;?></legend>
-    <table class='table-1' cellpadding='0' cellspacing='0'>
-      <tr>
-      </tr>
-    </table>
-  </fieldset>
-
 </div>
 <?php include '../../common/footer.html.php';?>

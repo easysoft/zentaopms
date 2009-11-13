@@ -43,7 +43,7 @@ class testcase extends control
     }
 
     /* 浏览一个产品下面的case。*/
-    public function browse($productID = 0, $type = 'byModule', $param = 0)
+    public function browse($productID = 0, $type = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -63,8 +63,10 @@ class testcase extends control
 
         if($type == "byModule")
         {
+            $this->app->loadClass('pager', $static = true);
+            $pager = pager::init($recTotal, $recPerPage, $pageID);
             $childModuleIds = $this->tree->getAllChildId($currentModuleID);
-            $cases = $this->testcase->getModuleCases($productID, $childModuleIds);
+            $cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
         }
         
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->case->common;
@@ -78,6 +80,8 @@ class testcase extends control
         $this->assign('moduleTree',    $this->tree->getTreeMenu($productID, $viewType = 'case', $rooteModuleID = 0, array('treeModel', 'createCaseLink')));
         $this->assign('type',          $type);
         $this->assign('cases',         $cases);
+        $this->assign('pager',         $pager->get());
+        $this->assign('users',         $this->user->getPairs($this->app->company->id, 'noletter'));
         $this->assign('currentModuleID', $currentModuleID);
         $this->assign('currentModuleName', $currentModuleName);
 
@@ -87,17 +91,18 @@ class testcase extends control
     /* 创建case。*/
     public function create($productID, $moduleID = 0)
     {
+        $this->loadModel('story');
         if(!empty($_POST))
         {
-            $_POST['pri'] = str_replace('item', '', $_POST['pri']);
-            $this->testcase->create();
+            $caseID = $this->testcase->create();
+            if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action');
+            $this->action->create('case', $caseID, 'Opened');
             die(js::locate($this->createLink('testcase', 'browse', "productID=$_POST[productID]&type=byModule&param=$_POST[moduleID]"), 'parent'));
         }
-
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
-        $productID = (int)$productID;
-        if($productID == 0) $productID = key($this->products);
+        $productID       = common::saveProductState($productID, key($this->products));
         $currentModuleID = (int)$moduleID;
 
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->case->create;
@@ -108,10 +113,11 @@ class testcase extends control
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('productID',     $productID);
+        $this->assign('users',         $users);           
         $this->assign('productName',   $this->products[$productID]);
         $this->assign('moduleOptionMenu',  $this->tree->getOptionMenu($productID, $viewType = 'case', $rooteModuleID = 0));
         $this->assign('currentModuleID',   $currentModuleID);
-        $this->assign('users',  $users);           
+        $this->assign('stories',       $this->story->getProductStoryPairs($productID));
 
         $this->display();
     }
@@ -119,15 +125,22 @@ class testcase extends control
     /* 查看一个case。*/
     public function view($caseID)
     {
+        $this->loadModel('action');
         $case = $this->testcase->getById($caseID);
         $productID = $case->product;
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->case->view;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->case->view;
 
+        $users   = $this->user->getPairs($this->app->company->id, 'noletter');
+        $actions = $this->action->getList('case', $caseID);
+
         $this->assign('header',   $header);
         $this->assign('position', $position);
-        $this->assign('case',      $case);
+        $this->assign('case',     $case);
+        $this->assign('actions',  $actions);
+        $this->assign('productName', $this->products[$productID]);
+        $this->assign('modulePath',  $this->tree->getParents($case->module));
 
         $this->display();
     }
@@ -135,10 +148,20 @@ class testcase extends control
     /* 编辑一个Bug。*/
     public function edit($caseID)
     {
+        $this->loadModel('story');
+
         /* 更新case信息。*/
         if(!empty($_POST))
         {
-            $this->testcase->update($caseID);
+            $changes = $this->testcase->update($caseID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $this->loadModel('action');
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('case', $caseID, $action, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
             die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
         }
 
@@ -157,7 +180,8 @@ class testcase extends control
         $this->assign('productName',   $this->products[$productID]);
         $this->assign('moduleOptionMenu',  $this->tree->getOptionMenu($productID, $viewType = 'case', $rooteModuleID = 0));
         $this->assign('currentModuleID',   $currentModuleID);
-        $this->assign('users',  $users);           
+        $this->assign('users',   $users);           
+        $this->assign('stories', $this->story->getProductStoryPairs($productID));
 
         $this->assign('header',   $header);
         $this->assign('position', $position);

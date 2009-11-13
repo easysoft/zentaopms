@@ -29,11 +29,8 @@
     CASE #<?php echo $case->id . $lang->colon . $case->title;?>
     <div class='f-right'>
     <?php
-    echo html::a($this->createLink('testcase', 'edit',     "caseID=$case->id"),          $lang->case->buttonEdit);
-    //echo html::a($this->createLink('case', 'resolve',  "caseID=$case->id"),          $lang->case->buttonResolve);
-    //echo html::a($this->createLink('case', 'close',    "caseID=$case->id"),          $lang->case->buttonClose);
-    //echo html::a($this->createLink('case', 'activate', "caseID=$case->id"),          $lang->case->buttonActivate);
-    echo html::a($this->createLink('testcase', 'browse',   "productID=$case->product"), $lang->case->buttonToList);
+    if(common::hasPriv('testcase', 'edit'))   echo html::a($this->createLink('testcase', 'edit',     "caseID=$case->id"), $lang->case->buttonEdit);
+    if(common::hasPriv('testcase', 'browse')) echo html::a($this->createLink('testcase', 'browse',   "productID=$case->product"), $lang->case->buttonToList);
     ?>
     </div>
   </div>
@@ -48,11 +45,21 @@
         <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
           <tr>
             <td class='rowhead'><?php echo $lang->case->labProductAndModule;?></td>
-            <td><?php echo $case->product;?></td>
+            <td>
+              <?php 
+              echo $productName;
+              if(!empty($modulePath)) echo $lang->arrow;
+              foreach($modulePath as $key => $module)
+              {
+                  echo $module->name;
+                  if(isset($modulePath[$key + 1])) echo $lang->arrow;
+              }
+              ?>
+            </td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->case->type;?></td>
-            <td><?php echo $case->type;?></td>
+            <td><?php echo $lang->case->typeList[$case->type];?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->case->pri;?></td>
@@ -60,7 +67,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->case->status;?></td>
-            <td><?php echo $case->status;?></td>
+            <td><?php echo $lang->case->statusList[$case->status];?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->case->story;?></td>
@@ -70,6 +77,7 @@
         </table>
       </fieldset>
 
+      <!--
       <fieldset>
         <legend><?php echo $lang->case->legendMailto;?></legend>
         <div>mailto</div>
@@ -79,6 +87,7 @@
       <legend><?php echo $lang->case->legendAttatch;?></legend>
         <div>attatch</div>
       </fieldset>
+      -->
       
     </div>  
 
@@ -111,10 +120,12 @@
         </table>
       </fieldset>
 
+      <!--
       <fieldset>
         <legend><?php echo $lang->case->legendLinkBugs;?></legend>
         <div> linkcase </div>
       </fieldset>
+      -->
 
     </div>  
   </div>
@@ -125,29 +136,19 @@
     <legend><?php echo $lang->case->legendAction;?></legend>
     <div class='a-center' style='font-size:16px; font-weight:bold'>
       <?php
-      echo html::a($this->createLink('testcase', 'edit',     "caseID=$case->id"),          $lang->case->buttonEdit);
-      //echo html::a($this->createLink('case', 'resolve',  "caseID=$case->id"),          $lang->case->buttonResolve);
-      //echo html::a($this->createLink('case', 'close',    "caseID=$case->id"),          $lang->case->buttonClose);
-      //echo html::a($this->createLink('case', 'activate', "caseID=$case->id"),          $lang->case->buttonActivate);
-      echo html::a($this->createLink('testcase', 'browse',   "productID=$case->product"), $lang->case->buttonToList);
+      if(common::hasPriv('testcase', 'edit'))   echo html::a($this->createLink('testcase', 'edit',     "caseID=$case->id"), $lang->case->buttonEdit);
+      if(common::hasPriv('testcase', 'browse')) echo html::a($this->createLink('testcase', 'browse',   "productID=$case->product"), $lang->case->buttonToList);
       ?>
     </div>
   </fieldset>
 
   <fieldset>
     <legend><?php echo $lang->case->legendSteps;?></legend>
-    <div>
+    <div class='content'>
     <?php echo nl2br($case->steps);?>
     </div>
   </fieldset>
-
-  <fieldset>
-  <legend><?php echo $lang->case->legendHistory;?></legend>
-    <table class='table-1' cellpadding='0' cellspacing='0'>
-      <tr>
-      </tr>
-    </table>
-  </fieldset>
+  <?php include '../../common/action.html.php';?>
 
 </div>
 <?php include '../../common/footer.html.php';?>
