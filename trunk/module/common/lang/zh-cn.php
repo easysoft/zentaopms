@@ -61,7 +61,7 @@ $lang->submenu->project ->item1 = '新增项目|project|create';
 $lang->submenu->project ->item2 = '浏览项目|project|browse';
 
 $lang->submenu->qa->item1      = '缺陷管理|bug|index';
-//$lang->submenu->qa->item2      = '用例管理|testcase|index';
+$lang->submenu->qa->item2      = '用例管理|testcase|index';
 
 $lang->submenu->my->item1 = '我的TODO|my|todo';
 $lang->submenu->my->item2 = '我的任务|my|task';

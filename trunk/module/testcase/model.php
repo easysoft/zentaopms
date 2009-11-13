@@ -25,48 +25,52 @@
 <?php
 class testcaseModel extends model
 {
-    /* 构造函数。*/
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /* 创建一个Case。*/
     function create()
     {
-        extract($_POST);
-        $openedBy   = $this->app->user->account;
-        $openedDate = time();
-        $sql = "INSERT INTO " . TABLE_CASE . " (product, module, type, pri, title, steps, openedBy, openedDate) 
-                VALUES('$productID', '$moduleID', '$type', '$pri', '$title', '$steps', '$openedBy', '$openedDate' )";
-        $this->dbh->exec($sql);
+        $now  = date('Y-m-d H:i:s');
+        $case = fixer::input('post')
+            ->add('openedBy', $this->app->user->account)
+            ->add('openedDate', $now)
+            ->add('status', 'normal')
+            ->setDefault('story', 0)
+            ->stripTags('title')
+            ->specialChars('steps')
+            ->get();
+        $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->check('title', 'notempty')->exec();
+        return $this->dao->lastInsertID();
     }
 
     /* 获得某一个产品，某一个模块下面的所有case。*/
-    public function getModuleCases($productID, $moduleIds = 0)
+    public function getModuleCases($productID, $moduleIds = 0, $orderBy = 'id|desc', $pager = null)
     {
-        $where  = " WHERE `product` = '$productID'";
-        $where .= !empty($moduleIds) ? " AND module " . helper::dbin($moduleIds) : '';
-        $sql    = "SELECT * FROM " . TABLE_CASE .  $where;
-        $stmt   = $this->dbh->query($sql);
-        return $stmt->fetchAll();
+        $sql = $this->dao->select('*')->from(TABLE_CASE)->where('product')->eq((int)$productID);
+        if(!empty($moduleIds)) $sql->andWhere('module')->in($moduleIds);
+        return $sql->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /* 获取一个case的详细信息。*/
     public function getById($caseID)
     {
-        return $this->dbh->query("SELECT * FROM " . TABLE_CASE . " WHERE id = '$caseID'")->fetch();
+        $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
+        foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
+        return $case;
     }
 
     /* 更新case信息。*/
     public function update($caseID)
     {
-        extract($_POST);
-        $pri = str_replace('item', '', $pri);
-        $sql = "UPDATE " . TABLE_CASE . " SET 
-            title = '$title', product='$productID', module = '$moduleID', 
-            type='$type', pri = '$pri', status = '$status', steps = '$steps' 
-            WHERE id ='$caseID' LIMIT 1 ";
-        return $this->dbh->exec($sql);
+        $oldCase = $this->getById($caseID);
+        $now     = date('Y-m-d H:i:s');
+        $case    = fixer::input('post')
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->setDefault('story', 0)
+            ->stripTags('title')
+            ->specialChars('steps')
+            ->remove('comment')
+            ->get();
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->check('title', 'notempty')->where('id')->eq((int)$caseID)->exec();
+        if(!dao::isError()) return common::createChanges($oldCase, $case);
     }
 }

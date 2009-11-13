@@ -214,7 +214,7 @@
   </fieldset>
   <fieldset>
     <legend><?php echo $lang->bug->legendSteps;?></legend>
-    <div><?php echo nl2br($bug->steps);?></div>
+    <div class='content'><?php echo nl2br($bug->steps);?></div>
   </fieldset>
   <fieldset>
     <legend><?php echo $lang->bug->legendHistory;?></legend>

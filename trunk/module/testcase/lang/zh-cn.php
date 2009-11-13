@@ -35,10 +35,11 @@ $lang->case->openedByMe     = '由我创建';
 $lang->case->allCases       = '所有Case';
 $lang->case->moduleCases     = '%s';
 
-$lang->case->labProductAndModule         = '所属产品::模块';
-$lang->case->labTypeAndPri               = '类型::优先级';
+$lang->case->labProductAndModule         = '产品模块';
+$lang->case->labTypeAndPri               = '类型&优先级';
 $lang->case->labSystemBrowserAndHardware = '系统::浏览器';
 $lang->case->labAssignAndMail            = '指派给::抄送给';
+$lang->case->labStory                    = '相关需求';
 
 $lang->case->legendRelated     = '相关信息';
 $lang->case->legendBasicInfo   = '基本信息';
@@ -52,6 +53,7 @@ $lang->case->legendCases       = '相关用例';
 $lang->case->legendSteps       = '用例步骤';
 $lang->case->legendAction      = '操作';
 $lang->case->legendHistory     = '历史记录';
+$lang->case->legendComment     = '备注';
 
 $lang->case->buttonEdit     = '编辑';
 $lang->case->buttonActivate = '激活';
@@ -85,11 +87,11 @@ $lang->case->browserList->opera9   = 'opera9';
 $lang->case->browserList->oprea10  = '其他';
 
 /* Define the types. */
-$lang->case->typeList->feature     = '功能测试';
-$lang->case->typeList->performance = '性能测试';
+$lang->case->typeList['feature']     = '功能测试';
+$lang->case->typeList['performance'] = '性能测试';
 
-$lang->case->statusList->normal   = 'normal';
-$lang->case->statusList->blocked  = 'blocked';
+$lang->case->statusList['normal']   = '正常';
+$lang->case->statusList['blocked']  = 'Blocked';
 
 $lang->case->resolutionList->bydesign   = 'By Design';
 $lang->case->resolutionList->duplicate  = 'Duplicate';

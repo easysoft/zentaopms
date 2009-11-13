@@ -42,6 +42,7 @@ function selectProduct(productID)
         <td>
           <div id='main'><?php echo $moduleTree;?></div>
           <div class='a-right'>
+            <?php echo html::a($this->createLink('testcase', 'browse', "productId=$productID"), $lang->case->allCases);?>
             <?php echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=case"), $lang->tree->manageCase);?>
           </div>
         </td>
@@ -68,6 +69,9 @@ $("#{$type}Tab").addClass('active');
 EOT;
         ?>
         </ul>
+        <div>
+        <?php if(common::hasPriv('testcase', 'create')) echo html::a($this->createLink('testcase', 'create', "productID=$productID&moduleID=$currentModuleID"), $lang->case->create);?>
+        </div>
       </div> 
 
       <table class='table-1'>
@@ -81,16 +85,16 @@ EOT;
         </tr>
         <?php foreach($cases as $case):?>
         <tr class='a-center'>
-          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), $case->id);?></td>
+          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
           <td><?php echo $case->pri?></td>
           <td width='50%' class='a-left'><?php echo $case->title;?></td>
-          <th><?php echo $case->type;?></th>
-          <td><?php echo $case->openedBy;?></td>
-          <th><?php echo $case->status;?></th>
+          <td><?php echo $lang->case->typeList[$case->type];?></td>
+          <td><?php echo $users[$case->openedBy];?></td>
+          <td><?php echo $lang->case->statusList[$case->status];?></td>
         </tr>
         <?php endforeach;?>
       </table>
-      <div class='a-right'><?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&moduleID=$currentModuleID"), $lang->case->create);?> </div>
+      <div class='a-right'><?php echo $pager;?></div> 
     </div>
   </div>
 </div>  
