@@ -156,10 +156,14 @@ class bug extends control
         {
             $changes  = $this->bug->update($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($this->post->comment != '' or !empty($changes))
+            $this->loadModel('file');
+            $files = $this->file->saveUpload('files', 'bug', $bugID);
+            if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('bug', $bugID, $action, $this->post->comment);
+                $fileAction = '';
+                if(!empty($files)) $fileAction = "Add Files " . join(',', $files) . "\n" ;
+                $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
@@ -231,6 +235,8 @@ class bug extends control
         {
             $this->bug->activate($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('file');
+            $files = $this->file->saveUpload('files', 'bug', $bugID);
             $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
