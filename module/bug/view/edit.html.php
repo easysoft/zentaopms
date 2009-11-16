@@ -111,7 +111,7 @@ function setDuplicate(resolution)
     }
 }
 </script>
-<form method='post' target='hiddenwin'>
+<form method='post' target='hiddenwin' enctype='multipart/form-data'>
 <div class='yui-d0'>
   <div id='titlebar'>
     <div id='main'>
@@ -191,7 +191,15 @@ function setDuplicate(resolution)
 
       <fieldset>
       <legend><?php echo $lang->bug->legendAttatch;?></legend>
-        <div>&nbsp;</div>
+        <table class='table-1 a-left'>
+          <tr>
+            <td class='rowhead'></td>
+            <td>
+              <?php foreach($bug->files as $file) echo html::a($file->fullPath, $file->title);?>
+              <input type='file' name='files' />
+            </td>
+          </tr>
+        </table>
       </fieldset>
       
     </div>  

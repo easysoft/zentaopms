@@ -120,7 +120,11 @@
 
       <fieldset>
       <legend><?php echo $lang->bug->legendAttatch;?></legend>
-        <div>&nbsp;</div>
+        <div>
+          <?php 
+          foreach($bug->files as $file) echo html::a($file->fullPath, $file->title, '_blank');
+          ?>
+        </div>
       </fieldset>
       
     </div>  

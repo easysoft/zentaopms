@@ -23,7 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<form method='post' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
   <table class='table-1'>
     <caption><?php echo $bug->title;?></caption>
@@ -35,6 +35,13 @@
       <td class='rowhead'><?php echo $lang->comment;?></td>
       <td><textarea name='comment' rows='6' class='area-1'></textarea></td>
     </tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->bug->files;?></th>
+      <td class='a-left'>
+        <input type='file' name='files[]' class='text-4' />
+        <input type='file' name='files[]' class='text-4' />
+      </td>
+    </tr>  
     <tr>
       <td colspan='2' class='a-center'>
         <?php echo html::submitButton();?>

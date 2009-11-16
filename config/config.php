@@ -49,6 +49,9 @@ $config->default->module = 'index';                     // Ä¬ÈÏµÄÄ£¿é¡£µ±ÇëÇóÖÐÃ
 $config->default->method = 'index';                     // Ä¬ÈÏµÄ·½·¨¡£µ±ÇëÇóÖÐÃ»ÓÐÖ¸¶¨·½·¨»òÕßÖ¸¶¨µÄ·½·¨²»´æÔÚÊ±£¬µ÷ÓÃ¸Ã·½·¨¡£
 $config->default->domain = 'pms.easysoft.com';          // Ä¬ÈÏµÄÓòÃû£¬µ±ÇëÇóÖÐµÄÓòÃûÃ»ÓÐ¶ÔÓ¦µÄ¼ÇÂ¼Ê±£¬Ê¹ÓÃ´ËÄ¬ÈÏÓòÃû¶ÔÓ¦µÄ¹«Ë¾ÐÅÏ¢¡£
 
+$config->file->dangers = 'php,jsp,py,rb,asp,';          // ²»ÔÊÐíÉÏ´«µÄÎÄ¼þÀàÐÍÁÐ±í¡£
+$config->file->maxSize = 1024 * 1024;                   // ÔÊÐíÉÏ´«µÄÎÄ¼þ´óÐ¡£¬µ¥Î»Îª×Ö½Ú¡£
+
 $config->db->errorMode  = PDO::ERRMODE_EXCEPTION;       // PDOµÄ´íÎóÄ£Ê½: PDO::ERRMODE_SILENT|PDO::ERRMODE_WARNING|PDO::ERRMODE_EXCEPTION
 $config->db->persistant = false;                        // ÊÇ·ñ´ò¿ª³Ö¾ÃÁ¬½Ó¡£
 $config->db->driver     = 'mysql';                      // pdoµÄÇý¶¯ÀàÐÍ£¬Ä¿Ç°ÔÝÊ±Ö»Ö§³Ömysql¡£

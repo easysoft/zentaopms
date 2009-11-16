@@ -40,7 +40,14 @@ class bugModel extends model
             ->join('mailto', ',')
             ->get();
         $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->check('title', 'notempty')->exec();
-        return $this->dao->lastInsertID();
+        if(!dao::isError())
+        {
+            $bugID = $this->dao->lastInsertID();
+            $this->loadModel('file');
+            $this->file->saveUpload('files', 'bug', $bugID);
+            return $bugID;
+        }
+        return false;
     }
 
     /* 获得某一个产品，某一个模块下面的所有bug。*/
@@ -63,6 +70,9 @@ class bugModel extends model
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
         $bug->mailto = ltrim(trim($bug->mailto), ',');
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
+
+        $this->loadModel('file');
+        $bug->files = $this->file->getByObject('bug', $bugID);
         return $bug;
     }
 
