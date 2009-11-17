@@ -123,11 +123,11 @@ tr, th, td {padding:5px}
 #tabbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none; border-right:4px solid #efefef; padding:0 10px 0 10px}
 #tabbar a         {text-decoration:none; color:black;}
 #tabbar a:hover   {color:red; font-weight:bold}
-#tabbar .active   {color:black; background-color:#B6F5CB;}
+#tabbar .active   {color:black; background-color:#FFCF9C;}
 #tabbar .active a:hover {color:red}
 #tabbar div{float:right; padding:5px 10px 4px 10px; background:#FFCF9C}
 #tabbar div select{font-size:11px; height:19px; margin:0; padding:0}
-#subtab  {clear:both; text-align:left; background-color:#B6F5CB; font-weight:bold; font-size:108%; padding-left:10px}
+#subtab  {clear:both; text-align:left; background-color:#FFCF9C; font-weight:bold; font-size:108%; padding-left:10px}
 #subtab a{text-decoration:none; color:black;}
 
 #titlebar{font-size:16px; font-weight:bold; background:#e4e4e4; padding:5px; margin:10px 0 10px 0; height:22px}
