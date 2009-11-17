@@ -55,33 +55,52 @@ function selectProduct(productID)
         <ul>
         <?php
         echo "<li><nobr>$productName</nobr></li>";
-        echo "<li id='byModuleTab'><nobr>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&type=byModule&param=$currentModuleID"), $currentModuleName)    . "</nobr></li>";
-        //echo "<li id='assignToMeTab'><nobr>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToMe"),    $lang->bug->assignToMe)    . "</nobr></li>";
-        //echo "<li id='openedByMeTab'><nobr>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=openedByMe"),    $lang->bug->openedByMe)    . "</nobr></li>";
-        //echo "<li id='resolvedByMeTab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=resolvedByMe"),  $lang->bug->resolvedByMe)  . "</nobr></li>";
-        //echo "<li id='assignToNullTab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToNull"),  $lang->bug->assignToNull)  . "</nobr></li>";
-        //echo "<li id='longLifeBugsTab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=longLifeBugs"),  $lang->bug->longLifeBugs)  . "</nobr></li>";
-        //echo "<li id='postponedBugsTab'><nobr>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=postponedBugs"), $lang->bug->postponedBugs) . "</nobr></li>";
+        echo "<li id='bymoduletab'><nobr>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&type=byModule&param=$currentModuleID"), $currentModuleName)    . "</nobr></li>";
+        echo "<li id='assigntometab'><nobr>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</nobr></li>";
+        echo "<li id='openedbymetab'><nobr>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</nobr></li>";
+        echo "<li id='resolvedbymetab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</nobr></li>";
+        echo "<li id='assigntonulltab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</nobr></li>";
+        echo "<li id='longlifebugstab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</nobr></li>";
+        echo "<li id='postponedbugstab'><nobr>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</nobr></li>";
         echo <<<EOT
 <script language="Javascript">
-$("#{$type}Tab").addClass('active');
+$("#{$type}tab").addClass('active');
 </script>
 EOT;
         ?>
         </ul>
         <?php if(common::hasPriv('bug', 'create')) echo '<div>' . html::a($this->createLink('bug', 'create', "type=product&productID=$productID&moduleID=$currentModuleID"), $lang->bug->create) . '</div>';?>
       </div> 
+      <?php
+      $app->global->vars    = "productID=$productID&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
+      $app->global->orderBy = $orderBy;
+      function printOrderLink($fieldName)
+      {
+          global $app, $lang;
+          if(strpos($app->global->orderBy, $fieldName) !== false)
+          {
+              if(stripos($app->global->orderBy, 'desc') !== false) $orderBy = str_replace('desc', 'asc', $app->global->orderBy);
+              if(stripos($app->global->orderBy, 'asc')  !== false) $orderBy = str_replace('asc', 'desc', $app->global->orderBy);
+          }
+          else
+          {
+              $orderBy = $fieldName . '|' . 'asc';
+          }
+          $link = helper::createLink('bug', 'browse', sprintf($app->global->vars, $orderBy));
+          echo html::a($link, $lang->bug->$fieldName);
+      }
+      ?>
 
       <table class='table-1'>
         <thead>
         <tr class='colhead'>
-          <th><?php echo $lang->bug->id;?></th>
-          <th><?php echo $lang->bug->severity;?></th>
-          <th><?php echo $lang->bug->title;?></th>
-          <th><?php echo $lang->bug->openedBy;?></th>
-          <th><?php echo $lang->bug->assignedTo;?></th>
-          <th><?php echo $lang->bug->resolvedBy;?></th>
-          <th><?php echo $lang->bug->resolution;?></th>
+          <th><?php printOrderLink('id');?></th>
+          <th><?php printOrderLink('severity');?></th>
+          <th><?php printOrderLink('title');?></th>
+          <th><?php printOrderLink('openedBy');?></th>
+          <th><?php printOrderLink('assignedTo');?></th>
+          <th><?php printOrderLink('resolvedBy');?></th>
+          <th><?php printOrderLink('resolution');?></th>
         </tr>
         </thead>
         <tbody>

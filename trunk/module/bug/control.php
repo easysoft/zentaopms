@@ -49,10 +49,11 @@ class bug extends control
     /* 浏览一个产品下面的bug。*/
     public function browse($productID = 0, $type = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $type = strtolower($type);
         $this->session->set('bugList', $this->app->getURI(true));
 
         $productID       = common::saveProductState($productID, key($this->products));
-        $currentModuleID = ($type == 'byModule') ? (int)$param : 0;
+        $currentModuleID = ($type == 'bymodule') ? (int)$param : 0;
         if($currentModuleID == 0)
         {
             $currentModuleName = $this->lang->bug->allBugs;
@@ -63,12 +64,38 @@ class bug extends control
             $currentModuleName = sprintf($this->lang->bug->moduleBugs, $currentModule->name);
         }
 
-        if($type == "byModule")
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $bugs = array();
+        if($type == "bymodule")
         {
-            $this->app->loadClass('pager', $static = true);
-            $pager = pager::init($recTotal, $recPerPage, $pageID);
             $childModuleIds = $this->tree->getAllChildId($currentModuleID);
             $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $orderBy, $pager);
+        }
+        elseif($type == 'assigntome')
+        {
+            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'openedbyme')
+        {
+            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'resolvedbyme')
+        {
+            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'assigntonull')
+        {
+            $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'longlifebugs')
+        {
+            $bugs = $this->dao->findByLastEditedDate("<", date('Y-m-d', strtotime('-7 days')))->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'postponedbugs')
+        {
+            $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
         $users = $this->user->getPairs($this->app->company->id, 'noletter');
@@ -85,7 +112,11 @@ class bug extends control
         $this->assign('type',          $type);
         $this->assign('bugs',          $bugs);
         $this->assign('users',         $users);
+        $this->assign('recTotal',      $pager->recTotal);
+        $this->assign('recPerPage',    $pager->recPerPage);
         $this->assign('pager',         $pager->get());
+        $this->assign('param',         $param);
+        $this->assign('orderBy',       $orderBy);
         $this->assign('currentModuleID',   $currentModuleID);
         $this->assign('currentModuleName', $currentModuleName);
 
