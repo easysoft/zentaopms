@@ -96,7 +96,7 @@ EOT;
         echo html::a($this->createLink('user', 'todo', "account=$user->account&date=thisweek"),  $lang->todo->thisWeekTodos);
         echo html::a($this->createLink('user', 'todo', "account=$user->account&date=lastweek"),  $lang->todo->lastWeekTodos);
         echo html::a($this->createLink('user', 'todo', "account=$user->account&date=all"),   $lang->todo->allDaysTodos);
-        echo html::a($this->createLink('user', 'todo', "account=$user->account&date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone);
+        echo html::a($this->createLink('user', 'todo', "account=$user->account&date=before&account={$user->account}&status=wait,doing"), $lang->todo->allUndone);
         echo html::select('date', $dates, $date, 'onchange=changeDate(this.value)');
       ?>
       </div>
