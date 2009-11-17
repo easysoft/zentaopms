@@ -62,7 +62,7 @@ function changeDate(date)
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->user->last;?></th>
-        <td><?php echo $user->last;?></td>
+        <td><?php echo date('Y-m-d H:i:s', $user->last);?></td>
       </tr>
     </table>
     <div class='a-right'>
@@ -88,11 +88,16 @@ $("#{$tabID}tab").addClass('active');
 EOT;
         ?>
         </ul>
-        <?php if($tabID == 'todo'):?>
-        <div>
-          <?php 
-          echo html::select('date', $dates, $date, 'onchange=changeDate(this.value)');
-          ?>
-        </div>
-        <?php endif;?>
+      </div>  
+      <?php if($tabID == 'todo'):?>
+      <div id='subtab'>
+        <?php 
+        echo html::a($this->createLink('user', 'todo', "account=$user->account&date=today"),     $lang->todo->todayTodos);
+        echo html::a($this->createLink('user', 'todo', "account=$user->account&date=thisweek"),  $lang->todo->thisWeekTodos);
+        echo html::a($this->createLink('user', 'todo', "account=$user->account&date=lastweek"),  $lang->todo->lastWeekTodos);
+        echo html::a($this->createLink('user', 'todo', "account=$user->account&date=all"),   $lang->todo->allDaysTodos);
+        echo html::a($this->createLink('user', 'todo', "account=$user->account&date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone);
+        echo html::select('date', $dates, $date, 'onchange=changeDate(this.value)');
+      ?>
       </div>
+      <?php endif;?>

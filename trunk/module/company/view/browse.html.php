@@ -70,10 +70,10 @@
         </thead>
         <tbody>
         <?php foreach($users as $user):?>
-        <tr>
+        <tr class='a-center'>
           <td class='a-right'><?php echo $user->id;?></td>
-          <td><?php echo $user->realname;?></td>
-          <td><?php if(common::hasPriv('user', 'view')) echo html::a($this->createLink('user', 'view', "account=$user->account"), $user->account); else echo $user->account;?></td>
+          <td><?php if(common::hasPriv('user', 'view')) echo html::a($this->createLink('user', 'view', "account=$user->account"), $user->realname); else echo $user->realname;?></td>
+          <td><?php echo $user->account;?></td>
           <td><?php echo $user->nickname;?></td>
           <td><?php echo html::mailto($user->email);?></td>
           <td class='a-center'><?php if(isset($lang->user->gendarList->{$user->gendar})) echo $lang->user->gendarList->{$user->gendar};?></td>
