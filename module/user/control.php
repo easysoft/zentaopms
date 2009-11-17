@@ -39,13 +39,15 @@ class user extends control
     }
 
     /* 用户的todo列表。*/
-    public function todo($account, $date = 'today')
+    public function todo($account, $date = 'today', $status = 'all')
     {
         /* 加载todo model。*/
         $this->loadModel('todo');
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-        if($date == 'today') $date = $this->todo->today();
+
+        $todos = $this->todo->getList($date, $account, $status);
+        if((int)$date == 0) $date = $this->todo->today();
 
         /* 设定header和position信息。*/
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
@@ -57,8 +59,8 @@ class user extends control
         $this->assign('tabID',    'todo');
         $this->assign('dates',    $this->todo->buildDateList()); 
         $this->assign('date',     $date);
-        $this->assign('todos',    $this->todo->getList($date, $account));
-        $this->assign('user',     $this->dao->findByAccount($account)->from(TABLE_USER)->fetch());
+        $this->assign('todos',    $todos);
+        $this->assign('user',     $user);
 
         $this->display();
     }
