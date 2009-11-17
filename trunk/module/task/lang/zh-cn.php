@@ -47,6 +47,7 @@ $lang->task->desc      = '描述';
 $lang->task->statusList->wait  = '未开始';
 $lang->task->statusList->doing = '进行中';
 $lang->task->statusList->done  = '已完成';
+$lang->task->statusList->cancel= '已取消';
 
 $lang->task->priList[3]  = '一般';
 $lang->task->priList[1]  = '最高';
