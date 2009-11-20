@@ -3,7 +3,7 @@
 mysql_connect('localhost', 'root', '');
 mysql_select_db('zentao');
 
-$result = mysql_query("SELECT id FROM zt_project WHERE end > NOW() or end = '0000-00-00'");
+$result = mysql_query("SELECT id FROM zt_project WHERE end >= CURRENT_DATE() or end = '0000-00-00'");
 while($row = mysql_fetch_assoc($result))
 {
     $projects[] = $row['id'];
