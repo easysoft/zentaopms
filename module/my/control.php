@@ -96,6 +96,18 @@ class my extends control
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
         $position[]      = $this->lang->my->bug;
 
+        $this->session->set('bugList', $this->app->getURI(true));
+
+        $productID       = common::saveProductState($productID, key($this->products));
+        $currentModuleID = ($type == 'bymodule') ? (int)$param : 0;
+        if($currentModuleID == 0)
+        {
+            $currentModuleName = $this->lang->bug->allBugs;
+        }
+        else
+        {
+            $currentModule = $this->tree->getById($currentModuleID);
+
         /* 赋值。*/
         $this->assign('header',   $header);
         $this->assign('position', $position);
