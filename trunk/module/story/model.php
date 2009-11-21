@@ -75,22 +75,24 @@ class storyModel extends model
     }
     
     /* 获得某一个产品某一个模块下面的所有需求列表。*/
-    function getProductStories($productID = 0, $moduleIds = 0, $orderBy = 'id|desc', $pager = null)
+    function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id|desc', $pager = null)
     {
         $sql = $this->dao->select('*')->from(TABLE_STORY)->where('product')->in($productID);
         if(!empty($moduleIds)) $sql->andWhere('module')->in($moduleIds);
+        if($status != 'all') $sql->andWhere('status')->in($status);
         $stories = $sql->orderBy($orderBy)->page($pager)->fetchAll();
         return $stories;
     }
 
     /* 获得某一个产品某一个模块下面的所有需求id=>title列表。*/
-    function getProductStoryPairs($productID = 0, $moduleIds = 0, $order = 'id|desc')
+    function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id|desc')
     {
         $sql = $this->dao->select('t1.id, t1.title, t1.module, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1');
         if($productID) $sql->andWhere('t1.product')->in($productID);
         if($moduleIds) $sql->andWhere('t1.module')->in($moduleIds);
+        if($status != 'all') $sql->andWhere('status')->in($status);
         $stories = $sql->orderBy($order)->fetchAll();
         return $this->formatStories($stories);
     }

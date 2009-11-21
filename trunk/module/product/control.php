@@ -64,7 +64,7 @@ class product extends control
         /* 加载分页类，并查询stories列表。*/
         $this->app->loadClass('pager', $static = true);
         $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $stories = $this->story->getProductStories($productID, $childModuleIds, $orderBy, $pager);
+        $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
 
         $this->assign('header',        $header);
         $this->assign('position',      $position);
