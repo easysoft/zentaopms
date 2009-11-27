@@ -143,6 +143,15 @@ class story extends control
         }
     }
 
+    /* 需求的任务列表。*/
+    public function tasks($storyID, $projectID = 0)
+    {
+        $this->loadModel('task');
+        $tasks = $this->task->getStoryTaskPairs($storyID, $projectID);
+        $this->assign('tasks', $tasks);
+        $this->display();
+    }
+
     /* Ajax: 获取某一个项目的需求列表。*/
     public function ajaxGetProjectStories($projectID, $productID = 0, $storyID = 0)
     {
