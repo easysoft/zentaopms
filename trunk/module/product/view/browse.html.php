@@ -122,6 +122,7 @@ function selectProduct(productID)
             <th><?php printOrderLink('openedBy');?></th>
             <th><?php printOrderLink('estimate');?></th>
             <th><?php printOrderLink('status');?></th>
+            <th><?php printOrderLink('lastEditedDate');?></th>
             <th><?php echo $lang->action;?></th>
           </tr>
         </thead>
@@ -139,6 +140,7 @@ function selectProduct(productID)
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $story->estimate;?></td>
             <td class='<?php echo $story->status;?>'><?php $statusList = (array)$lang->story->statusList; echo $statusList[$story->status];?></td>
+            <td><?php echo substr($story->lastEditedDate, 5, 11);?></td>
             <td>
               <?php if(common::hasPriv('story', 'edit'))   echo html::a($this->createLink('story', 'edit',   "story={$story->id}"), $lang->edit);?>
               <?php if(common::hasPriv('story', 'delete')) echo html::a($this->createLink('story', 'delete', "story={$story->id}&confirm=no"), $lang->delete, 'hiddenwin');?>
