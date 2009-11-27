@@ -111,7 +111,6 @@ function selectProject(projectID)
             </td>
           </tr>
           <?php endforeach;?>
-          <a href='http://pms.easysoft.com/my-todo.html' class='iframe'>test</a>
         </tbody>
       </table>
       <div class='a-right'><?php echo $pager;?></div>
