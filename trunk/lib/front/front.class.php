@@ -34,8 +34,8 @@ class html
     static public function a($href = '', $title = '', $target = "_self", $misc = '')
     {
         if(empty($title)) $title = $href;
-        if($target == '_self') return "<a href='$href' $misc>$title</a>";
-        return "<a href='$href' target='$target' $misc>$title</a>";
+        if($target == '_self') return "<a href='$href' $misc>$title</a>\n";
+        return "<a href='$href' target='$target' $misc>$title</a>\n";
     }
 
     /**
