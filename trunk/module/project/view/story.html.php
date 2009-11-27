@@ -23,7 +23,13 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/colorbox.html.php';?>
 <script language='javascript'>
+$(document).ready(function()
+{
+    $("a.iframe").colorbox({width:640, height:480, iframe:true, transition:'none'});
+});
+
 function selectProject(projectID)
 {
     link = createLink('project', 'browse', 'projectID=' + projectID);
@@ -80,7 +86,21 @@ function selectProject(projectID)
           <tr class='a-center'>
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
             <td><?php echo $story->pri;?></td>
-            <td class='a-left'><nobr><?php echo $story->title . ' (' . $storyTasks[$story->id] . ')';?></nobr></td>
+            <td class='a-left'>
+              <nobr>
+              <?php
+              echo $story->title;
+              if($storyTasks[$story->id] > 0)
+              {
+                  echo ' (' . html::a($this->createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class=iframe') . ')';
+              }
+              else
+              {
+                  echo ' (0)';
+              }
+              ?> 
+              </nobr>
+            </td>
             <td><?php echo $users[$story->assignedTo];?></td>
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $story->estimate;?></td>
@@ -91,6 +111,7 @@ function selectProject(projectID)
             </td>
           </tr>
           <?php endforeach;?>
+          <a href='http://pms.easysoft.com/my-todo.html' class='iframe'>test</a>
         </tbody>
       </table>
       <div class='a-right'><?php echo $pager;?></div>

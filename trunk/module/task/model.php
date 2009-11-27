@@ -158,7 +158,7 @@ class taskModel extends model
     /* 获得story对应的task id=>name列表。*/
     public function getStoryTaskPairs($storyID, $projectID = 0)
     {
-        $sql = $this->dao->select('name, id')
+        $sql = $this->dao->select('id, name')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID);
         if($projectID > 0) $sql->andwhere('project')->eq((int)$projectID);
