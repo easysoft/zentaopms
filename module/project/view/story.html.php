@@ -92,7 +92,7 @@ function selectProject(projectID)
               echo $story->title;
               if($storyTasks[$story->id] > 0)
               {
-                  echo ' (' . html::a($this->createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class=iframe') . ')';
+                  echo ' ' . html::a($this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id"), '('. $storyTasks[$story->id] . ')', '', 'class=iframe');
               }
               else
               {
