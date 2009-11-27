@@ -56,6 +56,7 @@ $lang->resource->story->create  = 'create';
 $lang->resource->story->edit    = 'edit';
 $lang->resource->story->delete  = 'delete';
 $lang->resource->story->view    = 'view';
+$lang->resource->story->tasks   = 'tasks';
 $lang->resource->story->ajaxGetProjectStories = 'ajaxGetProjectStories';
 $lang->resource->story->ajaxGetProductStories = 'ajaxGetProductStories';
 //$lang->resource->story->comment = 'comment';
