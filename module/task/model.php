@@ -43,7 +43,11 @@ class taskModel extends model
             ->check('name', 'notempty')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->exec();
-        if(!dao::isError()) return $this->dao->lastInsertID();
+        if(!dao::isError())
+        {
+            //$this->dao->update(TABLE_STORY)->set('status')->eq('doing')->where('id')->eq()
+            return $this->dao->lastInsertID();
+        }
     }
 
     /* 更新一个任务。*/
@@ -149,5 +153,28 @@ class taskModel extends model
             $tasks[$task->id] = $task->project . ' / ' . $task->name;
         }
         return $tasks;
+    }
+
+    /* 获得story对应的task id=>name列表。*/
+    public function getStoryTaskPairs($storyID, $projectID = 0)
+    {
+        $sql = $this->dao->select('name, id')
+            ->from(TABLE_TASK)
+            ->where('story')->eq((int)$storyID);
+        if($projectID > 0) $sql->andwhere('project')->eq((int)$projectID);
+        return $sql->fetchPairs();
+    }
+
+    /* 获得story对应的task数量。*/
+    public function getStoryTaskCounts($stories, $projectID = 0)
+    {
+        $sql = $this->dao->select('story, COUNT(*) AS tasks')
+            ->from(TABLE_TASK)
+            ->where('story')->in($stories);
+        if($projectID > 0) $sql->andwhere('project')->eq((int)$projectID);
+        $sql->groupBy('story');
+        $taskCounts = $sql->fetchPairs();
+        foreach($stories as $storyID) if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
+        return $taskCounts;
     }
 }

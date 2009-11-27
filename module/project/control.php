@@ -111,7 +111,7 @@ class project extends control
         /* 加载story, user模块，加载task模块的语言。*/
         $this->loadModel('story');
         $this->loadModel('user');
-        $this->app->loadLang('task');
+        $this->loadModel('task');
 
         /* 记录用户当前选择的列表。*/
         $this->app->session->set('storyList', $this->app->getURI(true));
@@ -126,18 +126,20 @@ class project extends control
 
         /* 分页操作。*/
         $this->app->loadClass('pager', $static = true);
-        $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $stories = $this->story->getProjectStories($projectID, $orderBy, $pager);
-        $users   = $this->user->getPairs($this->app->company->id, 'noletter');
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $stories    = $this->story->getProjectStories($projectID, $orderBy, $pager);
+        $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
+        $users      = $this->user->getPairs($this->app->company->id, 'noletter');
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('stories',  $stories);
-        $this->assign('tabID',    'story');
-        $this->assign('pager',    $pager->get());
-        $this->assign('orderBy',  $orderBy);
-        $this->assign('users',    $users);
+        $this->assign('header',     $header);
+        $this->assign('position',   $position);
+        $this->assign('stories',    $stories);
+        $this->assign('storyTasks', $storyTasks);
+        $this->assign('tabID',      'story');
+        $this->assign('pager',      $pager->get());
+        $this->assign('orderBy',    $orderBy);
+        $this->assign('users',      $users);
 
         $this->display();
     }

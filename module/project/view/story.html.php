@@ -80,7 +80,7 @@ function selectProject(projectID)
           <tr class='a-center'>
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
             <td><?php echo $story->pri;?></td>
-            <td class='a-left'><nobr><?php echo $story->title;?></nobr></td>
+            <td class='a-left'><nobr><?php echo $story->title . ' (' . $storyTasks[$story->id] . ')';?></nobr></td>
             <td><?php echo $users[$story->assignedTo];?></td>
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $story->estimate;?></td>
