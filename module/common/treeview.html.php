@@ -1,6 +1,6 @@
 <style> #main ul li { list-style-type:none;}</style>
-<link rel="stylesheet" href="/theme/default/treeview.css" />
-<script src="/js/jquery/treeview/min.js" type="text/javascript"></script>
+<link rel='stylesheet' href='<?php echo $clientTheme;?>treeview.css' type='text/css' />
+<script src='<?php echo $jsRoot;?>jquery/treeview/min.js' type='text/javascript'></script>
 <script language='javascript'>
 $(function()
 {
