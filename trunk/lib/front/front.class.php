@@ -29,12 +29,13 @@ class html
      * @param string $href      the link url.
      * @param string $title     the link title.
      * @param string $target    the target window
+     * @param string $misc      other params.
      */
-    static public function a($href = '', $title = '', $target = "_self")
+    static public function a($href = '', $title = '', $target = "_self", $misc = '')
     {
         if(empty($title)) $title = $href;
-        if($target == '_self') return "<a href='$href'>$title</a>\n";
-        return "<a href='$href' target='$target'>$title</a>\n";
+        if($target == '_self') return "<a href='$href' $misc>$title</a>";
+        return "<a href='$href' target='$target' $misc>$title</a>";
     }
 
     /**
@@ -46,7 +47,7 @@ class html
     static public function mailto($mail = '', $title = '')
     {
         if(empty($title)) $title = $mail;
-        return "<a href='mailto:$mail'>$title</a>\n";
+        return "<a href='mailto:$mail'>$title</a>";
     }
 
     /**
