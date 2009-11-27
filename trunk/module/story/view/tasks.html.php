@@ -12,7 +12,7 @@ $themeRoot   = $webRoot . "theme/";
 <link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
 </head>
 <body>
-<div class="yui-d0">
+<div class="yui-d0" style='margin-top:10px'>
 <table class='table-1'>
 <caption><?php echo $lang->story->tasks;?></caption>
 <?php
