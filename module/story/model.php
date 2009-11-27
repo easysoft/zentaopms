@@ -104,7 +104,7 @@ class storyModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->eq((int)$projectID)
             ->orderBy($orderBy)
-            ->page($pager)->fetchAll();
+            ->page($pager)->fetchAll('id');
     }
 
     /* 获得某一个项目相关的需求id=>title的列表。*/
