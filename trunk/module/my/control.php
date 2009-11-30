@@ -98,6 +98,7 @@ class my extends control
 
         $this->session->set('bugList', $this->app->getURI(true));
 
+        /*
         $productID       = common::saveProductState($productID, key($this->products));
         $currentModuleID = ($type == 'bymodule') ? (int)$param : 0;
         if($currentModuleID == 0)
@@ -107,6 +108,7 @@ class my extends control
         else
         {
             $currentModule = $this->tree->getById($currentModuleID);
+        }*/
 
         /* 赋值。*/
         $this->assign('header',   $header);
