@@ -358,54 +358,30 @@ EOT;
     }
 
     /**
-     * Export the createLink function of JS version.
+     * Export the config vars for createLink() js version.
      * 
      * @static
      * @access public
-     * @return string   the js code of createLink()
+     * @return string
      */
-    static public function exportLinkFunc()
+    static public function exportConfigVars()
     {
         global $app, $config;
         $defaultViewType = $app->getViewType();
+        $themeRoot       = $app->getWebRoot() . 'theme/';
         $js = <<<EOT
 <script language = 'javascript'>
-function createLink(moduleName, methodName, vars, viewType)
-{
-    link        = '$config->webRoot';
-    requestType = '$config->requestType';
-    pathType    = '$config->pathType';
-    requestFix  = '$config->requestFix';
-    moduleVar   = '$config->moduleVar';
-    methodVar   = '$config->methodVar';
-    viewVar     = '$config->viewVar';
-    viewType    = viewType ? viewType : '$defaultViewType';
-
-    vars = vars.split('&');
-    for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
-
-    if(requestType == 'PATH_INFO')
-    {
-        link += moduleName + requestFix + methodName;
-
-        if(pathType == "full")
-        {
-            for(i = 0; i < vars.length; i ++) link += requestFix + vars[i][0] + requestFix + vars[i][1];
-        }
-        else
-        {
-            for(i = 0; i < vars.length; i ++) link += requestFix + vars[i][1];
-        }
-        link += '.' + viewType;
-    }
-    else
-    {
-        link += '?' + moduleVar + '=' + moduleName + '&' + methodVar + '=' + methodName + '&' + viewVar + '=' + viewType;
-        for(i = 0; i < vars.length; i ++) link += '&' + vars[i][0] + '=' + vars[i][1];
-    }
-    return link;
-}
+webRoot     = '$config->webRoot';
+requestType = '$config->requestType';
+pathType    = '$config->pathType';
+requestFix  = '$config->requestFix';
+moduleVar   = '$config->moduleVar';
+methodVar   = '$config->methodVar';
+viewVar     = '$config->viewVar';
+defaultView = '$defaultViewType';
+themeRoot   = '$themeRoot';
 </script>
+
 EOT;
         return $js;
     }
