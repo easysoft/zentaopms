@@ -13,34 +13,16 @@ $themeRoot   = $webRoot . "theme/";
   if(isset($header['keyword'])) echo "<meta name='keywords' content='$header[keyword]'>\n";
   if(isset($header['desc']))    echo "<meta name='description' content='$header[desc]'>\n";
   ?>
+<?php echo js::exportConfigVars();?>
+<script src="<?php echo $jsRoot;?>jquery/lib.js" type="text/javascript"></script>
+<script src="<?php echo $jsRoot;?>my.js"         type="text/javascript"></script>
 <link rel='stylesheet' href='<?php echo $clientTheme . 'yui.css';?>' type='text/css' media='screen' />
 <link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
-<script src="<?php echo $jsRoot;?>jquery/lib.js" type="text/javascript"></script>
-<?php echo js::exportLinkFunc();?>
-<script type="text/javascript">
-cssRoot = '<?php echo $themeRoot;?>';
-cssFile = '';
-if($.browser.msie && Math.floor(parseInt($.browser.version)) == 6)
-{
-    cssFile = cssRoot + 'ie.6.css';
-}
-else if($.browser.mozilla) 
-{
-    cssFile = cssRoot + 'firefox.css';
-}
-if(cssFile != '')
-{
-    document.write("<link rel='stylesheet' href='" + cssFile + "' type='text/css' media='screen' />");
-}
-</script>
+<script type="text/javascript">loadFixedCSS();</script>
 </head>
 <body>
 <div id='topbar' class='yui-d0 yui-t6'>
-  <div class='yui-main'>
-    <div class='yui-b'>
-      <?php printf($lang->welcome, $app->company->name);?>
-    </div>
-  </div>
+  <div class='yui-main'><div class='yui-b'><?php printf($lang->welcome, $app->company->name);?></div></div>
   <div class='yui-b a-right'>
     <?php if(isset($app->user)) echo $app->user->realname;?>
     <?php 
@@ -57,7 +39,6 @@ if(cssFile != '')
     <a href='http://www.zentao.cn' target='_blank'><?php echo $lang->zentaoSite;?></a>
   </div>
 </div>
-
 <div id='navbar' class='yui-d0'>
   <div id='mainmenu'>
     <ul>
