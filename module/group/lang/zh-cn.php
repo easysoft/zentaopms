@@ -132,10 +132,11 @@ $lang->resource->dept->updateOrder = 'updateOrder';
 $lang->resource->dept->manageChild = 'manageChild';
 $lang->resource->dept->delete      = 'delete';
 
-$lang->resource->group->create = 'create';
-$lang->resource->group->edit   = 'edit';
-$lang->resource->group->delete = 'delete';
-$lang->resource->group->managePriv = 'managePriv';
+$lang->resource->group->create       = 'create';
+$lang->resource->group->edit         = 'edit';
+$lang->resource->group->delete       = 'delete';
+$lang->resource->group->managePriv   = 'managePriv';
+$lang->resource->group->manageMember = 'manageMember';
 
 $lang->resource->user->create = 'create';
 $lang->resource->user->view   = 'view';
