@@ -31,11 +31,12 @@ class reportModel extends model
         $chartRoot = $this->app->getWebRoot() . 'fusioncharts/';
         $swfFile   = "fcf_$swf.swf";
         return <<<EOT
-<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="$width" height="$height" id="Column3D" >
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="$width" height="$height" id="fcf$swf" >
 <param name="movie"     value="$chartRoot$swfFile" />
 <param name="FlashVars" value="&dataURL=$dataURL&chartWidth=$width&chartHeight=$height">
 <param name="quality"   value="high" />
-<embed src="$chartRoot$swfFile" flashVars="&dataURL=$dataURL&chartWidth=$width&chartHeight=$height" quality="high" width="$width" height="$height" name="Column3D" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<param name="wmode"     value="Opaque">
+<embed src="$chartRoot$swfFile" flashVars="&dataURL=$dataURL&chartWidth=$width&chartHeight=$height" quality="high" wmode="Opaque" width="$width" height="$height" name="fcf$swf" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 EOT;
     }
@@ -43,6 +44,7 @@ EOT;
     /* 创建js输出的chart。*/
     public function createJSChart($swf, $dataXML, $width = 600, $height = 500)
     {
+        $jsRoot = $this->app->getWebRoot() . 'js/';
         static $count = 0;
         $count ++;
         $chartRoot = $this->app->getWebRoot() . 'fusioncharts/';
@@ -51,7 +53,7 @@ EOT;
         $chartID   = "chart{$count}";
 
         $js = '';
-        if($count == 1) $js = "<script language='Javascript' src='/js/misc/FusionCharts.js'></script>";
+        if($count == 1) $js = "<script language='Javascript' src='{$jsRoot}misc/fusioncharts.js'></script>";
         return <<<EOT
 $js
 <div id="$divID"></div>
