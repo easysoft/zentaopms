@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `left` float NOT NULL,
   `consumed` float NOT NULL,
   PRIMARY KEY  (`project`,`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 11.5 project status字段更改。
 ALTER TABLE `zt_project` CHANGE `status` `status` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
