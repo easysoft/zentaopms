@@ -113,7 +113,7 @@ infosoftglobal.FusionCharts.prototype = {
 		var swfNode = "";
 		if (navigator.plugins && navigator.mimeTypes && navigator.mimeTypes.length) { 
 			// netscape plugin architecture			
-			swfNode = '<embed type="application/x-shockwave-flash" src="'+ this.getAttribute('swf') +'" width="'+ this.getAttribute('width') +'" height="'+ this.getAttribute('height') +'"  ';
+			swfNode = '<embed type="application/x-shockwave-flash" wmode="Opaque" src="'+ this.getAttribute('swf') +'" width="'+ this.getAttribute('width') +'" height="'+ this.getAttribute('height') +'"  ';
 			swfNode += ' id="'+ this.getAttribute('id') +'" name="'+ this.getAttribute('id') +'" ';
 			var params = this.getParams();
 			 for(var key in params){ swfNode += [key] +'="'+ params[key] +'" '; }
@@ -129,6 +129,7 @@ infosoftglobal.FusionCharts.prototype = {
 			}
 			var pairs = this.getVariablePairs().join("&");			
 			if(pairs.length > 0) {swfNode += '<param name="flashvars" value="'+ pairs +'" />';}
+      swfNode += '<param name="wmode" value="Opaque">';
 			swfNode += "</object>";
 		}
 		return swfNode;

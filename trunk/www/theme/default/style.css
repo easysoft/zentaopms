@@ -115,7 +115,7 @@ tr, th, td {padding:5px}
 #submenu li a:hover {color:red;}
 
 #posbar    {margin:5px 0 5px 10px; text-align:left}
-#footer    {width:100%; position:fixed; bottom:0; left:0; margin:10px 0 0 0; border-top:2px solid #F4BF20; text-align:center; background-color:#FBF5C6; font-size:108%;}
+#footer    {width:100%; position:fixed; bottom:0; left:0; margin:10px 0 0 0; padding-left:10px;  border-top:2px solid #F4BF20; text-align:left; background-color:#FBF5C6; font-size:108%;}
 #hiddenwin {display:none}
 
 #tabbar    {font-weight:bold; font-size:108%; margin:0; padding:0; height:28px; background-color:#e4e4e4}
