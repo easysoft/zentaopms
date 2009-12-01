@@ -21,7 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$config->version     = '0.1 alpha';      // 版本号，切勿修改。
+$config->version     = '0.2 alpha';      // 版本号，切勿修改。
 $config->debug       = true;             // 是否打开debug功能。
 $config->webRoot     = '/';               // web网站的根目录。
 $config->encoding    = 'UTF-8';           // 网站的编码。
