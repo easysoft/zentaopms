@@ -1,6 +1,6 @@
 <?php
 /* 是否打开邮件功能。*/
-$config->mail->trunon = false;
+$config->mail->turnon = false;
 
 /* 设置发件人地址和名称。*/
 $config->mail->fromAddress    = '';     // 发件人地址。
