@@ -32,7 +32,7 @@ class userModel extends model
     }
 
     /* 获得account=>realname的列表。params: noletter|noempty|noclosed。*/
-    function getPairs($companyID = 0, $params = '')
+    public function getPairs($companyID = 0, $params = '')
     {
         if($companyID == 0) $companyID = $this->app->company->id;
         $users = $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->orderBy('account')->fetchPairs();
@@ -44,6 +44,15 @@ class userModel extends model
         }
         if(strpos($params, 'noempty')  === false) $users = array('' => '') + $users;
         if(strpos($params, 'noclosed') === false) $users = $users + array('closed' => 'Closed');
+        return $users;
+    }
+
+    /* 获得用户的真实姓名和email地址列表。*/
+    public function getRealNameAndEmails($users)
+    {
+        $users = $this->dao->select('account, email, realname')->from(TABLE_USER)->where('account')->in($users)->fetchAll('account');
+        if(!$users) return array();
+        foreach($users as $account => $user) if($user->realname == '') $user->realname = $account;
         return $users;
     }
 
