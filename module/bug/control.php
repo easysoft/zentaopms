@@ -132,7 +132,8 @@ class bug extends control
         {
             $bugID = $this->bug->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->action->create('bug', $bugID, 'Opened');
+            $actionID = $this->action->create('bug', $bugID, 'Opened');
+            $this->sendmail($bugID, $actionID);
             die(js::locate($this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}"), 'parent'));
         }
 
@@ -196,6 +197,7 @@ class bug extends control
                 if(!empty($files)) $fileAction = "Add Files " . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+                $this->sendmail($bugID, $actionID);
             }
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -241,6 +243,7 @@ class bug extends control
             $this->bug->resolve($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'Resolved', $this->post->comment);
+            $this->sendmail($bugID, $actionID);
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -268,7 +271,8 @@ class bug extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('file');
             $files = $this->file->saveUpload('files', 'bug', $bugID);
-            $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
+            $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
+            $this->sendmail($bugID, $actionID);
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -296,7 +300,8 @@ class bug extends control
         {
             $this->bug->close($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
+            $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
+            $this->sendmail($bugID, $actionID);
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -320,5 +325,48 @@ class bug extends control
         if($account == '') $account = $this->app->user->account;
         $bugs = $this->bug->getUserBugPairs($account);
         die(html::select('bug', $bugs, '', 'class=select-1'));
+    }
+
+    /* 发送变量。*/
+    private function sendmail($bugID, $actionID)
+    {
+        /* 设定toList和ccList。*/
+        $bug     = $this->bug->getByID($bugID);
+        $toList = $bug->assignedTo;
+        $ccList = trim($bug->mailto, ',');
+        if($toList == '')
+        {
+            if($ccList == '') return;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList = substr($ccList, 0, $commaPos);
+                $ccList = substr($ccList, $commaPos + 1);
+            }
+        }
+        elseif(strtolower($toList) == 'closed')
+        {
+            $toList = $bug->resolvedBy;
+        }
+
+        /* 获得action信息。*/
+        $action    = $this->action->getById($actionID);
+        $histories = $this->action->getHistory($actionID);
+        if(strtolower($action->action) == 'opened') $action->comment = $bug->steps;
+
+        /* 赋值，获得邮件内容。*/
+        $this->assign('bug', $bug);
+        $this->assign('action', $action);
+        $this->assign('histories', $histories);
+        $mailContent = $this->fetch($this->moduleName, 'sendmail');
+
+        /* 发信。*/
+        $this->loadModel('mail')->send($toList, 'BUG #' . $bug->id . $this->lang->colon . $bug->title, $mailContent, $ccList);
+        if($this->mail->isError()) echo js::error($this->mail->getError());
     }
 }

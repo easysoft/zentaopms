@@ -57,6 +57,14 @@ class actionModel extends model
         return $actions;
     }
 
+    /* 获得action信息。*/
+    public function getById($actionID)
+    {
+        $action = $this->dao->findById((int)$actionID)->from(TABLE_ACTION)->fetch();
+        $action->date = date('Y-m-d H:i:s', $action->date);
+        return $action;
+    }
+
     /* 返回某一个action所对应的字段修改记录。*/
     public function getHistory($actionID)
     {
