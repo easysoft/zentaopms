@@ -206,4 +206,24 @@ EOT;
         ksort($diff);
         return implode("\n", $diff);
     }
+
+    /* 获得系统URL地址。*/
+    public function getSysURL()
+    {
+        global $config;
+        $httpType = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on' ? 'https' : 'http';
+        $httpHost = $_SERVER['HTTP_HOST'];
+        return "$httpType://$httpHost";
+    }
+
+    /* 获得系统默认的样式表。*/
+    public function getDefaultCss()
+    {
+        global $app;
+        $pathFix = $app->getPathFix();
+        $cssFile = $app->getAppRoot() . "www{$pathFix}theme{$pathFix}default{$pathFix}style.css";
+        $cssContent = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!','', file_get_contents($cssFile));
+        $cssContent = str_replace(array(" {", "} ", '  ', "\r\n", "\r", "\n", "\t"), array("{", '}', ' ', ''), $cssContent);
+        return $cssContent;
+    }
 }
