@@ -28,6 +28,7 @@ class mailModel extends model
     private static $instance;
     private $mta;
     private $mtaType;
+    private $errors = array();
 
     public function __construct()
     {
@@ -41,31 +42,10 @@ class mailModel extends model
     {
         if(self::$instance == null) self::$instance = new phpmailer(true);
         $this->mta = self::$instance;
+        $this->mta->CharSet = $this->config->encoding;
         $funcName = "set{$this->config->mail->mta}";
         if(!method_exists($this, $funcName)) echo $this->app->error("The MTA {$this->config->mail->mta} not supported now.", __FILE__, __LINE__, $exit = false);
         $this->$funcName();
-    }
-
-    /* 发送邮件。*/
-    public function send($subject, $body, $toList, $ccList)
-    {
-        try 
-        {
-            $this->mta->setFrom($this->config->mail->fromAddress, $this->config->mail->fromName);
-            $this->setSubject($subject);
-            $this->setTO($toList);
-            $this->setCC($ccList);
-            $this->setBody($body);
-            $this->mta->send();
-        }
-        catch (phpmailerException $e) 
-        {
-            echo $e->errorMessage();
-        } 
-        catch (Exception $e) 
-        {
-            echo $e->getMessage();
-        }
     }
 
     /* SMTP方式。*/
@@ -105,17 +85,57 @@ class mailModel extends model
         $this->mta->Password   = $this->config->mail->gmail->password;
     }
 
-    /* 设置发送地址。*/
-    private function setTO($toList)
+    /* 发送邮件。*/
+    public function send($toList, $subject, $body = '', $ccList = '')
     {
-        foreach($toList as $toName => $toAddress) $this->mta->addAddress($toAddress, $toName);
+        if(!$this->config->mail->turnon) return;
+
+        /* 获得用户的真实姓名和email列表。*/
+        $this->loadModel('user');
+        $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
+
+        try 
+        {
+            $this->mta->setFrom($this->config->mail->fromAddress, $this->config->mail->fromName);
+            $this->setSubject($subject);
+            $this->setTO($toList, $emails);
+            $this->setCC($ccList, $emails);
+            $this->setBody($body);
+            $this->mta->send();
+        }
+        catch (phpmailerException $e) 
+        {
+            $this->errors[] = trim(strip_tags($e->errorMessage()));
+        } 
+        catch (Exception $e) 
+        {
+            $this->errors[] = trim(strip_tags($e->getMessage()));
+        }
+    }
+
+    /* 设置发送地址。*/
+    private function setTO($toList, $emails)
+    {
+        $toList = explode(',', str_replace(' ', '', $toList));
+        foreach($toList as $account)
+        {
+            if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
+            $this->mta->addAddress($emails[$account]->email, $emails[$account]->realname);
+            $emails[$account]->sended = true;
+        }
     }
 
     /* 设置抄送地址。*/
-    private function setCC($ccList)
+    private function setCC($ccList, $emails)
     {
+        $ccList = explode(',', str_replace(' ', '', $ccList));
         if(!is_array($ccList)) return;
-        foreach($ccList as $ccName => $ccAddress) $this->mta->addCC($ccAddress, $ccName);
+        foreach($ccList as $account)
+        {
+            if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
+            $this->mta->addCC($emails[$account]->email, $emails[$account]->realname);
+            $emails[$account]->sended = true;
+        }
     }
 
     /* 设置主题。*/
@@ -127,7 +147,7 @@ class mailModel extends model
     /* 设置body。*/
     private function setBody($body)
     {
-        $this->mta->msgHtml($body);
+        $this->mta->msgHtml("$body");
     }
 
     /* 清楚地址和附件。*/
@@ -135,5 +155,19 @@ class mailModel extends model
     {
         $this->mta->clearAddresses();
         $this->mta->cearAttachments();
+    }
+
+    /* 判断是否有错！*/
+    public function isError()
+    {
+        return !empty($this->errors);
+    }
+
+    /* 获得错误。*/
+    public function getError()
+    {
+        $errors = $this->errors;
+        $this->errors = array();
+        return $errors;
     }
 }

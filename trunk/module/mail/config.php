@@ -1,7 +1,10 @@
 <?php
+/* 是否打开邮件功能。*/
+$config->mail->trunon = false;
+
 /* 设置发件人地址和名称。*/
-$config->mail->fromAddress    = ''; // 发件人地址。
-$config->mail->fromName       = ''; // 发件人名称。 
+$config->mail->fromAddress    = '';     // 发件人地址。
+$config->mail->fromName       = '';     // 发件人名称。 
 
 /* 设置发信方式，目前支持mail|sendmail|smtp|gmail。*/
 $config->mail->mta            = 'gmail'; 
