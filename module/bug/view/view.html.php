@@ -220,27 +220,6 @@
     <legend><?php echo $lang->bug->legendSteps;?></legend>
     <div class='content'><?php echo nl2br($bug->steps);?></div>
   </fieldset>
-  <fieldset>
-    <legend><?php echo $lang->bug->legendHistory;?></legend>
-    <ol>
-      <?php foreach($actions as $action):?>
-      <li>
-        <span><?php echo "$action->date, <strong>$action->action</strong> BY <strong>$action->actor</strong>"; ?></span>
-        <?php if(!empty($action->comment) or !empty($action->history)):?>
-        <div class='history'>
-        <?php
-        foreach($action->history as $history)
-        {
-            echo "CHANGE <strong>$history->field</strong> FROM '$history->old' TO '$history->new' . <br />";
-        }
-        echo nl2br($action->comment); 
-        ?>
-        </div>
-        <?php endif;?>
-      </li>
-      <?php endforeach;?>
-    </ol>
-  </fieldset>
-
-</div>
+  <?php include '../../common/action.html.php';?>
+  </div>
 <?php include '../../common/footer.html.php';?>
