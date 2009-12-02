@@ -37,6 +37,7 @@ $themeRoot   = $webRoot . "theme/";
     }
     ?>
     <a href='http://www.zentao.cn' target='_blank'><?php echo $lang->zentaoSite;?></a>
+    <?php echo $lang->sponser;?>
   </div>
 </div>
 <div id='navbar' class='yui-d0'>
