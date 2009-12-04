@@ -49,6 +49,9 @@ class bug extends control
     /* 浏览一个产品下面的bug。*/
     public function browse($productID = 0, $type = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&type=byQuery");
+        $this->assign('searchForm', $this->fetch('search', 'buildForm', $this->config->bug->search));
+
         $type = strtolower($type);
         $this->session->set('bugList', $this->app->getURI(true));
 
@@ -96,6 +99,11 @@ class bug extends control
         elseif($type == 'postponedbugs')
         {
             $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'byquery')
+        {
+            if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQuery)->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
         $users = $this->user->getPairs($this->app->company->id, 'noletter');
