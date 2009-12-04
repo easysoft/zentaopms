@@ -89,7 +89,7 @@ class html
      * @param string $checked    the value to checked by default.
      * @param string $attrib     other attribs.
      */
-    static public function radio($name = '', $options = array(), $checked = "", $attrib = "")
+    static public function radio($name = '', $options = array(), $checked = '', $attrib = '')
     {
         $options = (array)($options);
         if(!is_array($options) or empty($options)) return false;
@@ -97,8 +97,6 @@ class html
         $string  = '';
         foreach($options as $key => $value)
         {
-
-            $key     = str_replace('item', '', $key);    // 因为对象的元素不能为数字，所以需要在配置里面会在数字前面添加item，这个地方将item去掉。
             $string .= "<input type='radio' name='$name' value='$key' ";
             $string .= ($key == $checked) ? " checked ='checked'" : "";
             $string .= $attrib;
@@ -143,6 +141,30 @@ class html
     static public function input($name, $value = "", $attrib = "")
     {
         return "<input type='text' name='$name' id='$name' value='$value' $attrib />\n";
+    }
+
+    /**
+     * create tags like "<input type='hidden' />"
+     *
+     * @param string $name     the name of the text input tag.
+     * @param string $value    the default value.
+     * @param string $attrib   other attribs.
+     */
+    static public function hidden($name, $value = "", $attrib = "")
+    {
+        return "<input type='hidden' name='$name' id='$name' value='$value' $attrib />\n";
+    }
+
+    /**
+     * create tags like "<input type='password' />"
+     *
+     * @param string $name     the name of the text input tag.
+     * @param string $value    the default value.
+     * @param string $attrib   other attribs.
+     */
+    static public function password($name, $value = "", $attrib = "")
+    {
+        return "<input type='password' name='$name' id='$name' value='$value' $attrib />\n";
     }
 
     /**
