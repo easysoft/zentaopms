@@ -51,6 +51,7 @@ function selectProduct(productID)
   </div>
   <div class="yui-main">
     <div class="yui-b">
+    <div><?php echo $searchForm;?></div>
       <div id='tabbar' class='yui-d0' style='clear:right'>
         <ul>
         <?php
