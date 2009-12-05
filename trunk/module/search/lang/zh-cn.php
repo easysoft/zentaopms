@@ -22,7 +22,8 @@
  * @link        http://www.zentao.cn
  */
 $lang->search->common    = '搜索';
-$lang->search->advanced  = '高级搜索';
+$lang->search->more      = '更多';
+$lang->search->lite      = '简洁';
 $lang->search->saveQuery = '保存';
 $lang->search->myQuery   = '我的查询';
 $lang->search->group1    = '第一组';

@@ -31,9 +31,29 @@ function setField(fieldName, fieldNO)
     htmlString = $('#box' + fieldName).html().replace(fieldName, 'value' + fieldNO).replace(fieldName, 'value' + fieldNO);
     $('#valueBox' + fieldNO).html(htmlString);
 }
+
+function showmore()
+{
+    for(i = 1; i <= 6; i++) $('#searchbox' + i).removeClass('hidden');
+    $('#searchmore').addClass('hidden');
+    $('#searchlite').removeClass('hidden');
+    $('#searchgroup1').removeClass('hidden');
+    $('#searchgroup2').removeClass('hidden');
+    $('#searchType').val('more');
+}
+
+function showlite()
+{
+    for(i = 1; i <= 6; i++) $('#searchbox' + i).addClass('hidden');
+    $('#searchmore').removeClass('hidden');
+    $('#searchlite').addClass('hidden');
+    $('#searchgroup1').addClass('hidden');
+    $('#searchgroup2').addClass('hidden');
+    $('#searchType').val('lite');
+}
 </script>
 
-<div style='display:none'>
+<div class='hidden'>
 <?php
 /* 输出所有字段的控件代码，当触发setField事件的时候，拷贝控件的html代码。*/
 foreach($fieldParams as $fieldName => $param)
@@ -47,9 +67,9 @@ foreach($fieldParams as $fieldName => $param)
 </div>
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin'>
 <table class='table-1'>
-  <caption><?php echo $lang->search->common;?></caption>
   <tr valign='middle'>
-    <td class='a-right' width='100'>
+    <th width='10' class='bg-gray'><?php echo $lang->search->common;?></th>
+    <td class='a-right' width='200'>
       <nobr>
       <?php
       $formSessionName = $module . 'Form';
@@ -58,12 +78,15 @@ foreach($fieldParams as $fieldName => $param)
       $fieldNO = 1;
       for($i = 1; $i <= $groupItems; $i ++)
       {
+          $spanClass = $i == 1 ? 'inline' : 'hidden';
+          echo "<span id='searchbox$fieldNO' class='$spanClass'>";
+
           /* 取当前字段的设置。*/
           $currentField = $formSession["field$fieldNO"];
           $param        = $fieldParams[$currentField];
 
           /* 打印and or。*/
-          if($i == 1) echo "<strong>{$lang->search->group1}</strong>" . html::hidden("andOr$fieldNO", 'AND');
+          if($i == 1) echo "<span id='searchgroup1' class='hidden'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
           if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
           /* 打印字段。*/
@@ -79,22 +102,26 @@ foreach($fieldParams as $fieldName => $param)
           echo '</span>';
 
           $fieldNO ++;
+          echo '</span>';
       }
       ?>
       </nobr>
     </td>
     <td class='a-center' width='20'><nobr><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'])?></nobr></td>
-    <td class='a-right' width='100'>
+    <td class='a-right' width='200'>
       <nobr>
       <?php
       for($i = 1; $i <= $groupItems; $i ++)
       {
+          $spanClass = $i == 1 ? 'inline' : 'hidden';
+          echo "<span id='searchbox$fieldNO' class='$spanClass'>";
+
           /* 取当前字段的设置。*/
           $currentField = $formSession["field$fieldNO"];
           $param        = $fieldParams[$currentField];
 
           /* 打印and or。*/
-          if($i == 1) echo "<strong>{$lang->search->group2}</strong>" . html::hidden("andOr$fieldNO", 'AND');
+          if($i == 1) echo "<span id='searchgroup2' class='hidden'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
           if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
           /* 打印字段。*/
@@ -110,22 +137,31 @@ foreach($fieldParams as $fieldName => $param)
           echo '</span>';
 
           $fieldNO ++;
+          echo '</span>';
       }
       ?>
       </nobr>
     </td>
-    <td width='20'> 
+    <td width='100'> 
       <nobr>
       <?php
       echo html::hidden('module',     $module);
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
-      echo html::submitButton($lang->search->common) . '<br />';
-      echo html::submitButton($lang->search->saveQuery);
+      echo html::submitButton($lang->search->common);
+      //echo html::submitButton($lang->search->saveQuery);
       ?>
       </nobr>
     </td>
-    <td><?php echo $lang->search->myQuery; ?></td>
+    <th width='10' class='bg-gray' style='cursor:pointer'>
+      <span id='searchmore' onclick='showmore()'><?php echo $lang->search->more;?></span>
+      <span id='searchlite' onclick='showlite()' class='hidden'><?php echo $lang->search->lite;?></span>
+      <?php echo html::hidden('searchType', 'lite');?>
+    </th>
+    <!--<td><?php echo $lang->search->myQuery; ?></td>-->
   </tr>
 </table>
 </form>
+<?php
+if(isset($formSession['searchType'])) echo "<script language='Javascript'>show{$formSession['searchType']}()</script>";
+?>
