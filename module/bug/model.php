@@ -39,7 +39,7 @@ class bugModel extends model
             ->specialChars('steps')
             ->join('mailto', ',')
             ->get();
-        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->check('title', 'notempty')->exec();
+        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck('title,type', 'notempty')->exec();
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
@@ -106,7 +106,7 @@ class bugModel extends model
 
         $this->dao->update(TABLE_BUG)->data($bug)
             ->autoCheck()
-            ->check('title', 'notempty')
+            ->batchCheck('title,type', 'notempty')
             ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
             ->checkIF($bug->closedBy,   'resolution', 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')

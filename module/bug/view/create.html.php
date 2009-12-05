@@ -122,7 +122,31 @@ function loadProjectStories(projectID)
       </tr>
       -->
       <tr>
-        <th class='rowhead'><?php echo $lang->bug->labTypeAndSeverity;?></th> <td class='a-left'> <?php echo html::select('type', (array)$lang->bug->typeList, '', 'class=select-2');?> <?php echo html::select('severity', (array)$lang->bug->severityList, '', 'class=select-2');?> </td> </tr>  <tr> <th class='rowhead'><nobr><?php echo $lang->bug->labSystemBrowserAndHardware;?></nobr></th> <td class='a-left'> <?php echo html::select('os', (array)$lang->bug->osList, '', 'class=select-2');?> <?php echo html::select('browser', (array)$lang->bug->browserList, '', 'class=select-2');?> </td> </tr>  <tr> <th class='rowhead'><nobr><?php echo $lang->bug->labAssignedTo;?></nobr></th> <td class='a-left'> <?php echo html::select('assignedTo', $users, '', 'class=select-3');?> </td> </tr>  <tr> <th class='rowhead'><nobr><?php echo $lang->bug->labMailto;?></nobr></th> <td class='a-left'> <?php echo html::select('mailto[]', $users, '', 'class=select-3 size=5 multiple=multiple');?> </td> </tr> <tr> <th class='rowhead'><?php echo $lang->bug->title;?></th> <td class='a-left'><input type='text' name='title' class='text-1' /></td> </tr>  
+        <th class='rowhead'><?php echo $lang->bug->labTypeAndSeverity;?></th>
+        <td class='a-left'> 
+          <?php echo html::select('type', (array)$lang->bug->typeList, 'codeerror', 'class=select-2');?> 
+          <?php echo html::select('severity', (array)$lang->bug->severityList, '', 'class=select-2');?>
+        </td>
+      </tr>
+      <tr>
+        <th class='rowhead'><nobr><?php echo $lang->bug->labSystemBrowserAndHardware;?></nobr></th>
+        <td class='a-left'>
+          <?php echo html::select('os', (array)$lang->bug->osList, '', 'class=select-2');?>
+          <?php echo html::select('browser', (array)$lang->bug->browserList, '', 'class=select-2');?>
+        </td>
+      </tr>
+      <tr>
+        <th class='rowhead'><nobr><?php echo $lang->bug->labAssignedTo;?></nobr></th>
+        <td class='a-left'> <?php echo html::select('assignedTo', $users, '', 'class=select-3');?></td>
+      </tr>
+      <tr>
+        <th class='rowhead'><nobr><?php echo $lang->bug->labMailto;?></nobr></th>
+        <td class='a-left'> <?php echo html::select('mailto[]', $users, '', 'class=select-3 size=5 multiple=multiple');?> </td>
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->bug->title;?></th>
+        <td class='a-left'><input type='text' name='title' class='text-1' /></td>
+      </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->steps;?></th>
         <td class='a-left'><textarea name='steps' class='area-1' rows='6'></textarea></td>

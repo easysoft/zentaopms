@@ -62,7 +62,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->type;?></td>
-            <td><?php echo $lang->bug->typeList->{$bug->type};?></td>
+            <td><?php echo $lang->bug->typeList[$bug->type];?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->os;?></td>
