@@ -23,13 +23,13 @@
  */
 class search extends control
 {
-    public function buildForm($module, $searchFields, $groupItems, $fieldParams, $actionURL)
+    public function buildForm($module, $searchFields, $fieldParams, $actionURL)
     {
-        $this->search->initSession($module, $searchFields, $groupItems, $fieldParams);
+        $this->search->initSession($module, $searchFields, $fieldParams);
 
         $this->assign('module',       $module);
+        $this->assign('groupItems',   $this->config->search->groupItems);
         $this->assign('searchFields', $searchFields);
-        $this->assign('groupItems',   $groupItems);
         $this->assign('actionURL',    $actionURL);
         $this->assign('fieldParams',  $this->search->setDefaultParams($searchFields, $fieldParams));
         $this->display();

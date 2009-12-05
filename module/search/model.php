@@ -30,7 +30,7 @@ class searchModel extends model
     {
         /* 初始化变量。*/
         $where      = '';
-        $groupItems = (int)$this->post->groupItems;
+        $groupItems = $this->config->search->groupItems;
         $groupAndOr = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
 
@@ -81,11 +81,11 @@ class searchModel extends model
     }
 
     /* 初始化查询表单的session。*/
-    public function initSession($module, $fields, $groupItems, $fieldParams)
+    public function initSession($module, $fields, $fieldParams)
     {
         $formSessionName  = $module . 'Form';
         if($this->session->$formSessionName != false) return;
-        for($i = 1; $i <= $groupItems * 2; $i ++)
+        for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
         {
             /* 设定各个变量的名称。*/
             $fieldName    = "field$i";

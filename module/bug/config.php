@@ -21,7 +21,6 @@ $config->bug->search['fields']['assignedDate']   = $lang->bug->assignedDate;
 $config->bug->search['fields']['closedDate']     = $lang->bug->closedDate;
 $config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDate;
 
-$config->bug->search['groupItems']             = 3;
 $config->bug->search['params']['title']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->bug->search['params']['product']      = array('operator' => '=',       'control' => 'select', 'values' => 'products');
 $config->bug->search['params']['assignedTo']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
