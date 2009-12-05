@@ -27,6 +27,8 @@ $lang->search->saveQuery = '保存';
 $lang->search->myQuery   = '我的查询';
 $lang->search->group1    = '第一组';
 $lang->search->group2    = '第二组';
+$lang->search->buildForm = '搜索表单';
+$lang->search->buildQuery= '执行搜索';
 
 $lang->search->operators['=']       = '等于';
 $lang->search->operators['!=']      = '不等于';

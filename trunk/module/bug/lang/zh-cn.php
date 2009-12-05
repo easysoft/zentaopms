@@ -101,14 +101,16 @@ $lang->bug->browserList->opera9   = 'opera9';
 $lang->bug->browserList->oprea10  = '其他';
 
 /* Define the types. */
-$lang->bug->typeList->codeerror    = '代码错误';
-$lang->bug->typeList->interface    = '界面优化';
-$lang->bug->typeList->designchange = '设计变更';
-$lang->bug->typeList->Others       = '其他';
+$lang->bug->typeList['']             = '';
+$lang->bug->typeList['codeerror']    = '代码错误';
+$lang->bug->typeList['interface']    = '界面优化';
+$lang->bug->typeList['designchange'] = '设计变更';
+$lang->bug->typeList['Others']       = '其他';
 
-$lang->bug->statusList->active   = 'active';
-$lang->bug->statusList->resolved = 'resolved';
-$lang->bug->statusList->closed   = 'closed';
+$lang->bug->statusList['']         = '';
+$lang->bug->statusList['active']   = 'active';
+$lang->bug->statusList['resolved'] = 'resolved';
+$lang->bug->statusList['closed']   = 'closed';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'By Design';

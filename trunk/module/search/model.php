@@ -109,12 +109,14 @@ class searchModel extends model
     /* 设置默认的参数。*/
     public function setDefaultParams($fields, $params)
     {
-        $users  = $this->loadModel('user')->getPairs();
-        $fields = array_keys($fields);
+        $users    = $this->loadModel('user')->getPairs();
+        $products = array('' => '') + $this->loadModel('product')->getPairs();
+        $fields   = array_keys($fields);
         foreach($fields as $fieldName)
         {
             if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
-            if($params[$fieldName]['values'] == 'users') $params[$fieldName]['values'] = $users;
+            if($params[$fieldName]['values'] == 'users')    $params[$fieldName]['values'] = $users;
+            if($params[$fieldName]['values'] == 'products') $params[$fieldName]['values'] = $products;
         }
         return $params;
     }
