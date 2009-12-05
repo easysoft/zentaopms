@@ -78,6 +78,10 @@ tr, th, td {padding:5px}
 .half-left  {float:left;  width:48%; text-align:left;  clear:left}
 .half-right {float:right; width:48%; text-align:right; clear:right}
 
+.hidden {display:none}
+.block  {display:block}
+.inline {display:inline}
+
 /*-----------------------BORDER SETTING--------------------------*/
 .bd-1px    {border:1px solid}
 .bt-1px    {border-top:1px  solid}
@@ -94,6 +98,7 @@ tr, th, td {padding:5px}
 .bg-green    {background-color:#DDF1D8;}
 .bg-blue     {background-color:#DEEEF4}
 .bg-yellow   {background-color:#FBF5C6;}
+.bg-gray     {background-color:#efefef;}
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
 #navbar    {font-weight:bold; font-size:108%; margin:5px 10px 0px 10px; padding:0;}
