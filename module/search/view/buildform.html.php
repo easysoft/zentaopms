@@ -24,6 +24,7 @@
 ?>
 <script language='Javascript'>
 var params = <?php echo json_encode($fieldParams);?>;
+var groupItems = <?php echo $config->search->groupItems;?>;
 /* 根据字段的参数，重新设置它对应的操作符和值。*/
 function setField(fieldName, fieldNO)
 {
@@ -34,7 +35,14 @@ function setField(fieldName, fieldNO)
 
 function showmore()
 {
-    for(i = 1; i <= 6; i++) $('#searchbox' + i).removeClass('hidden');
+    for(i = 1; i <= groupItems * 2; i ++)
+    {
+        if(i != 1 && i != groupItems + 1 )
+        {
+            $('#searchbox' + i).removeClass('hidden');
+        }
+    }
+
     $('#searchmore').addClass('hidden');
     $('#searchlite').removeClass('hidden');
     $('#searchgroup1').removeClass('hidden');
@@ -44,7 +52,14 @@ function showmore()
 
 function showlite()
 {
-    for(i = 1; i <= 6; i++) $('#searchbox' + i).addClass('hidden');
+    for(i = 1; i <= groupItems * 2; i ++)
+    {
+        if(i != 1 && i != groupItems + 1)
+        {
+            $('#value' + i).val('');
+            $('#searchbox' + i).addClass('hidden');
+        }
+    }
     $('#searchmore').removeClass('hidden');
     $('#searchlite').addClass('hidden');
     $('#searchgroup1').addClass('hidden');
@@ -121,7 +136,7 @@ foreach($fieldParams as $fieldName => $param)
           $param        = $fieldParams[$currentField];
 
           /* 打印and or。*/
-          if($i == 1) echo "<span id='searchgroup2' class='hidden'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
+          if($i == 1) echo "<span id='searchgroup2' class='hidden'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
           if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
           /* 打印字段。*/
