@@ -55,7 +55,7 @@ ins{background:#cfc; text-decoration:none}
 /*-----------------------TABLE SETTING----------------------------*/
 caption  {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
 table, tr, th, td {border-color:#e4e4e4}
-tr, th, td {padding:5px}
+tr, th, td {padding:3px}
 .table-1 {width:100%; margin-bottom:10px}
 .table-2 {width:240px;margin-bottom:10px}
 .table-3 {width:360px;margin-bottom:10px}
