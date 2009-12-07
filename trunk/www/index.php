@@ -98,7 +98,7 @@ function _saveQuery()
 /* print_r¡£*/
 function a($var)
 {
-    echo "<xmp>";
+    echo "<xmp class='a-left'>";
     print_r($var);
     echo "</xmp>";
 }
