@@ -23,8 +23,12 @@
  */
 ?>
 <script language='Javascript'>
-var params = <?php echo json_encode($fieldParams);?>;
+var params     = <?php echo json_encode($fieldParams);?>;
 var groupItems = <?php echo $config->search->groupItems;?>;
+
+var bodyWidth  = $('body').css('width');
+var bodyHeight = $('body').outerHeight();
+
 /* 根据字段的参数，重新设置它对应的操作符和值。*/
 function setField(fieldName, fieldNO)
 {
@@ -33,8 +37,10 @@ function setField(fieldName, fieldNO)
     $('#valueBox' + fieldNO).html(htmlString);
 }
 
+/* 显示更多的搜索选项。*/
 function showmore()
 {
+    setCSS();
     for(i = 1; i <= groupItems * 2; i ++)
     {
         if(i != 1 && i != groupItems + 1 )
@@ -50,8 +56,10 @@ function showmore()
     $('#searchType').val('more');
 }
 
+/* 显示简洁的搜索选项。*/
 function showlite()
 {
+    setCSS();
     for(i = 1; i <= groupItems * 2; i ++)
     {
         if(i != 1 && i != groupItems + 1)
@@ -65,6 +73,17 @@ function showlite()
     $('#searchgroup1').addClass('hidden');
     $('#searchgroup2').addClass('hidden');
     $('#searchType').val('lite');
+}
+
+/* 设置css，修正ie6下面的bug。*/
+function setCSS()
+{
+    if($.browser.msie && Math.floor(parseInt($.browser.version)) == 6)
+    {
+        $('body').css('width', bodyWidth)
+        $('body').css('height', bodyHeight)
+        $('body').css('overflow-y', 'scroll')
+    }
 }
 </script>
 
@@ -80,11 +99,11 @@ foreach($fieldParams as $fieldName => $param)
 }
 ?>
 </div>
-<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin'>
+<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform'>
 <table class='table-1'>
   <tr valign='middle'>
     <th width='10' class='bg-gray'><?php echo $lang->search->common;?></th>
-    <td class='a-right' width='200'>
+    <td class='a-right' width='200px'>
       <nobr>
       <?php
       $formSessionName = $module . 'Form';
@@ -168,15 +187,17 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </nobr>
     </td>
-    <th width='10' class='bg-gray' style='cursor:pointer'>
-      <span id='searchmore' onclick='showmore()'><?php echo $lang->search->more;?></span>
-      <span id='searchlite' onclick='showlite()' class='hidden'><?php echo $lang->search->lite;?></span>
+    <th width='10' class='bg-gray' style='cursor:pointer; padding:0'>
+      <span id='searchmore' onclick='showmore()' style='width:100%; height:100%'><?php echo $lang->search->more;?></span>
+      <span id='searchlite' onclick='showlite()' style='width:100%; height:100%' class='hidden'><?php echo $lang->search->lite;?></span>
       <?php echo html::hidden('searchType', 'lite');?>
     </th>
     <!--<td><?php echo $lang->search->myQuery; ?></td>-->
   </tr>
 </table>
 </form>
+<script language='Javascript'>
 <?php
-if(isset($formSession['searchType'])) echo "<script language='Javascript'>show{$formSession['searchType']}()</script>";
+if(isset($formSession['searchType'])) echo "show{$formSession['searchType']}()";
 ?>
+</script>
