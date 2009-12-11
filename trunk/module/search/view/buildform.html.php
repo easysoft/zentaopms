@@ -26,9 +26,6 @@
 var params     = <?php echo json_encode($fieldParams);?>;
 var groupItems = <?php echo $config->search->groupItems;?>;
 
-var bodyWidth  = $('body').css('width');
-var bodyHeight = $('body').outerHeight();
-
 /* 根据字段的参数，重新设置它对应的操作符和值。*/
 function setField(fieldName, fieldNO)
 {
@@ -40,7 +37,6 @@ function setField(fieldName, fieldNO)
 /* 显示更多的搜索选项。*/
 function showmore()
 {
-    setCSS();
     for(i = 1; i <= groupItems * 2; i ++)
     {
         if(i != 1 && i != groupItems + 1 )
@@ -59,7 +55,6 @@ function showmore()
 /* 显示简洁的搜索选项。*/
 function showlite()
 {
-    setCSS();
     for(i = 1; i <= groupItems * 2; i ++)
     {
         if(i != 1 && i != groupItems + 1)
@@ -73,17 +68,6 @@ function showlite()
     $('#searchgroup1').addClass('hidden');
     $('#searchgroup2').addClass('hidden');
     $('#searchType').val('lite');
-}
-
-/* 设置css，修正ie6下面的bug。*/
-function setCSS()
-{
-    if($.browser.msie && Math.floor(parseInt($.browser.version)) == 6)
-    {
-        $('body').css('width', bodyWidth)
-        $('body').css('height', bodyHeight)
-        $('body').css('overflow-y', 'scroll')
-    }
 }
 </script>
 

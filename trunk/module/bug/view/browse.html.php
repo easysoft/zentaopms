@@ -31,12 +31,12 @@ function selectProduct(productID)
     location.href=link;
 }
 </script>
-<div class="yui-d0 yui-t3">                 
+<div class="yui-d0 yui-t3"> 
   <div class="yui-b">
     <table class='table-1'>
       <caption>
         <?php echo $lang->bug->selectProduct;?>
-        <?php echo html::select('productID', $products, $productID, 'onchange="selectProduct(this.value);" style="width:200px"');?>
+        <?php echo html::select('productID', $products, $productID, 'onchange="selectProduct(this.value);"');?>
       </caption>
       <tr>
         <td>
