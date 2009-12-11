@@ -88,33 +88,6 @@ $themeRoot   = $webRoot . "theme/";
           }
       }
       ?>
-      <li></li>
     </ul>
   </div>
-</div>
-
-<div id='posbar' class='yui-d0'>
-  <?php
-  echo $lang->currentPos;
-  list($menuLabel, $module, $method) = explode('|', $lang->menu->index);
-  echo html::a($this->createLink($module, $method), $lang->zentaoMS) . $lang->arrow;
-  if($moduleName != 'index')
-  {
-      list($menuLabel, $module, $method) = explode('|', $lang->menu->$mainMenu);
-      echo html::a($this->createLink($module, $method), $menuLabel);
-  }
-  else
-  {
-      echo $lang->index->common;
-  }
-  if(isset($position))
-  {
-      echo $lang->arrow;
-      foreach($position as $key => $link)
-      {
-          echo $link;
-          if(isset($position[$key + 1])) echo $lang->arrow;
-      }
-  }
-  ?>
 </div>
