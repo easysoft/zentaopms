@@ -98,7 +98,7 @@ class testcase extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            die(js::locate($this->createLink('testcase', 'browse', "productID=$_POST[productID]&type=byModule&param=$_POST[moduleID]"), 'parent'));
+            die(js::locate($this->createLink('testcase', 'browse', "productID=$_POST[product]&type=byModule&param=$_POST[module]"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
