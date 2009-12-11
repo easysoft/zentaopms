@@ -113,7 +113,7 @@ tr, th, td {padding:3px}
 #mainmenu #active a       {color:white}
 #mainmenu #active a:hover {color:red}
 
-#submenu    {color:white; clear:both}
+#submenu    {color:white; clear:both; margin-bottom:10px}
 #submenu ul {background-color:#000888;height:28px} 
 #submenu li {padding:0 10px 0 10px}
 #submenu a  {text-decoration:none; color:yellow;}

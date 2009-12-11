@@ -23,7 +23,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->zentaoMS   = '禅道项目管理系统';
+$lang->zentaoMS   = '禅道管理';
 $lang->logout     = '退出系统';
 $lang->login      = '登陆';
 $lang->currentPos = '当前位置：';
