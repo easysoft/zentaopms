@@ -23,8 +23,6 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-error_reporting(E_ALL);
-
 /* 记录最开始的时间。*/
 $timeStart = _getTime();
 
@@ -39,7 +37,12 @@ include './myrouter.class.php';
 $app    = router::createApp('pms', '', 'myRouter');
 $config = $app->loadConfig('common');
 $dbh    = $app->connectDB();
-setRevision();
+
+/* 根据debug选项设置错误信息。*/
+$config->debug ? error_reporting(E_ALL) : error_reporting(0);
+
+/* 如果是debug模式，记录sql查询。*/
+if($config->debug) register_shutdown_function('_saveSQL');
 
 /* 设置客户端所使用的语言、风格。*/
 $app->setClientLang();
@@ -54,28 +57,19 @@ $app->loadClass('front',  $static = true);
 $app->loadClass('filter', $static = true);
 $app->setSuperVars();
 
-/* 如果是debug模式，记录sql查询。*/
-if($config->debug) register_shutdown_function('_saveQuery');
-
 /* 处理请求，验证权限，加载相应的模块。*/
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
 
 /* Debug信息，监控页面的执行时间和内存占用。*/
-$timeUsed = round(_getTime() - $timeStart, 4) * 1000;
-$memory   = round(memory_get_peak_usage() / 1024, 1);
-
-if(!$config->debug) exit;
-$querys = count(dao::$querys);
-
-echo <<<EOT
-<div>
-<strong>TIME</strong>: $timeUsed ms,
-<strong>MEM</strong>: $memory KB,
-<strong>SQL</strong>: $querys. 
-</div>
-EOT;
+if($config->debug)
+{
+    $timeUsed = round(_getTime() - $timeStart, 4) * 1000;
+    $memory   = round(memory_get_peak_usage() / 1024, 1);
+    $querys   = count(dao::$querys);
+    echo "<div id='debugbar'>TIME: $timeUsed ms, MEM: $memory KB, SQL: $querys.  </div>";
+}
 
 /* 获取系统时间，微秒为单位。*/
 function _getTime()
@@ -85,10 +79,11 @@ function _getTime()
 }
 
 /* 保存query记录。*/
-function _saveQuery()
+function _saveSQL()
 {
     global $app;
-    $fh = fopen('/tmp/zentao.log', 'a');
+    $sqlLog = $app->getCacheRoot() . 'sql.' . date('Ymd') . '.log';
+    $fh = fopen($sqlLog, 'a');
     fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
     foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
     fwrite($fh, "\n");
@@ -101,22 +96,4 @@ function a($var)
     echo "<xmp class='a-left'>";
     print_r($var);
     echo "</xmp>";
-}
-
-/* 设置svn版本号。*/
-function setRevision()
-{
-    global $config;
-    $revisionTxt = dirname(dirname(__FILE__)) . '/cache/revision.txt';
-    if(file_exists($revisionTxt))
-    {
-        list($revision, $date) = file($revisionTxt);
-        $config->set('svn.revision', $revision);
-        $config->set('svn.lastDate', $date);
-    }
-    else
-    {
-        $config->set('svn.revision', '');
-        $config->set('svn.lastDate', '');
-    }
 }
