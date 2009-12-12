@@ -20,6 +20,10 @@
  * @package     ZenTaoMS
  * @version     $Id$
  */
+$clientTheme = $this->app->getClientTheme();
+$webRoot     = $this->app->getWebRoot();
+$jsRoot      = $webRoot . "js/";
+$themeRoot   = $webRoot . "theme/";
 ?>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
@@ -29,9 +33,12 @@
   if(isset($header['keyword'])) echo "<meta name='keywords' content='$header[keyword]'>\n";
   if(isset($header['desc']))    echo "<meta name='description' content='$header[desc]'>\n";
   ?>
-  <link rel='stylesheet' href='<?php echo $app->getClientTheme() . 'yui.css';?>'   type='text/css' media='screen' />
-  <link rel='stylesheet' href='<?php echo $app->getClientTheme() . 'style.css';?>' type='text/css' media='screen' />
- </head>
+<?php echo js::exportConfigVars();?>
+<script src="<?php echo $jsRoot;?>jquery/lib.js" type="text/javascript"></script>
+<script src="<?php echo $jsRoot;?>my.js"         type="text/javascript"></script>
+<link rel='stylesheet' href='<?php echo $clientTheme . 'yui.css';?>' type='text/css' media='screen' />
+<link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
+<script type="text/javascript">loadFixedCSS();</script>
 <body onload="document.getElementById('account').focus();">
 <div class='yui-d0'>
   <form method='post' style='margin-top:100px'>
@@ -50,13 +57,14 @@
           <?php 
           echo html::submitButton($lang->login);
           echo html::resetButton(); 
-          if($app->company->guest) echo html::commonButton($lang->user->asGuest, "onclick='location.href=\"" . $this->createLink($config->default->module) . "\"'");
+          $onclick = "onclick='location.href=\"" . $this->createLink($config->default->module) . "\"'";
+          if($app->company->guest) echo html::commonButton($lang->user->asGuest, $onclick);
+          echo html::hidden('referer', $referer);
           ?>
-          <input type='hidden' name='referer' value='<?php echo $referer;?>' />
         </td>
       </tr>  
     </table>
-    <div class='a-center'>powered by <a href='http://www.zentao.cn' target='_blank'>ZenTaoPMS</a> <span style='font-size:8px;'>(<?php echo $config->version;?>)</span>.</div>
+    <div class='a-center'>powered by <a href='http://www.zentao.cn' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>).</div>
   </form>
 </div>  
 </body>
