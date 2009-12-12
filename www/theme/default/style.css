@@ -53,20 +53,20 @@ ins{background:#cfc; text-decoration:none}
 .button-c{padding:3px 20px 3px 20px}
 
 /*-----------------------TABLE SETTING----------------------------*/
-caption  {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
-table, tr, th, td {border-color:#e4e4e4}
-tr, th, td {padding:3px}
+table, th, td {border-color:#e4e4e4}
+tr, th, td    {padding:3px}
+caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
 .table-1 {width:100%; margin-bottom:10px}
 .table-2 {width:240px;margin-bottom:10px}
 .table-3 {width:360px;margin-bottom:10px}
 .table-4 {width:480px;margin-bottom:10px}
 .table-5 {width:600px;margin-bottom:10px}
-.colhead th  {text-align:center;}
+.colhead th  {text-align:center; background:#efefef}
 .rowhead     {font-weight:bold; text-align:right; width:100px}
 
 /*-----------------------LAYOUT SETTING----------------------------*/
-.f-left   {float:left;}
-.f-right  {float:right}
+.f-left   {float:left;  padding-left: 5px}
+.f-right  {float:right; padding-right:5px}
 .c-none   {clear:none;}
 .c-left   {clear:left;}
 .c-right  {clear:right;}
@@ -83,11 +83,11 @@ tr, th, td {padding:3px}
 .inline {display:inline}
 
 /*-----------------------BORDER SETTING--------------------------*/
-.bd-1px    {border:1px solid}
-.bt-1px    {border-top:1px  solid}
-.bl-1px    {border-left:1px solid}
+.bd-1px    {border:1px        solid}
+.bt-1px    {border-top:1px    solid}
+.bl-1px    {border-left:1px   solid}
 .bb-1px    {border-bottom:1px solid}
-.br-1px    {border-right:1px solid}
+.br-1px    {border-right:1px  solid}
 .bd-none   {border:none}
 .bd-green  {border-color:#58CB64}
 .bd-yellow {border-color:#F4BF20}
@@ -95,45 +95,43 @@ tr, th, td {padding:3px}
 .bd-gray   {border-color:#CCC;}
 
 /*-----------------------BACKGROUND SETTING----------------------------*/
-.bg-green    {background-color:#DDF1D8;}
-.bg-blue     {background-color:#DEEEF4}
-.bg-yellow   {background-color:#FBF5C6;}
-.bg-gray     {background-color:#efefef;}
+.bg-green  {background-color:#DDF1D8;}
+.bg-blue   {background-color:#DEEEF4}
+.bg-yellow {background-color:#FBF5C6;}
+.bg-gray   {background-color:#efefef;}
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
-#navbar    {font-weight:bold; font-size:108%; margin:5px 10px 0px 10px; padding:0;}
-#navbar ul {margin:0; padding:0; line-height: 2; border:none} 
+
+/* 最顶部的导航条。*/
+#topbar {margin-bottom:5px}
+
+/* 导航条通用设置。*/
+#navbar    {font-weight:bold; font-size:108%;}
+#navbar ul {margin:0; padding:0; height:28px; line-height:28px} 
 #navbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none}
+#navbar a  {text-decoration:none}
+#navbar a:hover {color:red;}
 
-#mainmenu ul {background-color:#D6E7FF; height:28px} /* 必须设定高度，以支持opera。*/
-#mainmenu li {border-right:4px solid #73A2EF; padding:0 15px 0 15px}
-#mainmenu a         {text-decoration:none; color:black;}
-#mainmenu a:hover   {color:red; font-weight:bold}
-#mainmenu #active   {color:#FFF; background-color:#00008B;}
-#mainmenu #active a       {color:white}
-#mainmenu #active a:hover {color:red}
+/* 一级菜单。*/
+#mainmenu ul {background-color:#D6E7FF;}
+#mainmenu li {padding:0 15px 0 15px;border-right:4px solid #73A2EF}
+#mainmenu a  {color:black;}
+#mainmenu .active   {color:#FFF; background-color:#00008B;}
+#mainmenu .active a {color:white}
 
-#submenu    {color:white; clear:both; margin-bottom:10px}
-#submenu ul {background-color:#000888;height:28px} 
-#submenu li {padding:0 10px 0 10px}
-#submenu a  {text-decoration:none; color:yellow;}
-#submenu li a:hover {color:red;}
+/* 模块的菜单。*/
+#modulemenu    {color:white; margin-bottom:10px; font-weight:normal; font-size:normal}
+#modulemenu ul {background-color:#000888; height:26px; line-height:26px} 
+#modulemenu li {padding:0 5px 0 5px}
+#modulemenu a  {color:white;}
+#modulemenu .active a {color:yellow; font-weight:bold}
 
-#posbar    {margin:5px 0 5px 10px; text-align:left}
-#footer    {width:100%; position:fixed; bottom:0; left:0; margin:10px 0 0 0; padding-left:10px;  border-top:2px solid #F4BF20; text-align:left; background-color:#FBF5C6; font-size:108%;}
-#hiddenwin {display:none}
-
-#tabbar    {font-weight:bold; font-size:108%; margin:0; padding:0; height:28px; background-color:#e4e4e4}
-#tabbar ul {margin:0; padding:0; float:left; line-height: 2; border:none; background-color:#e4e4e4; height:28px;; clear:left} 
-#tabbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none; border-right:4px solid #efefef; padding:0 10px 0 10px}
-#tabbar a         {text-decoration:none; color:black;}
-#tabbar a:hover   {color:red; font-weight:bold}
-#tabbar .active   {color:black; background-color:#FFCF9C;}
-#tabbar .active a:hover {color:red}
-#tabbar div{float:right; padding:5px 10px 4px 10px; background:#FFCF9C}
-#tabbar div select{font-size:11px; height:19px; margin:0; padding:0}
-#subtab  {clear:both; text-align:left; background-color:#FFCF9C; font-weight:bold; font-size:108%; padding-left:10px}
-#subtab a{text-decoration:none; color:black;}
+/* 功能菜单。*/
+#featurebar {margin-bottom:5px; background-color:#efefef; height:22px; line-height:22px;}
+#featurebar a         {text-decoration:none; color:black;}
+#featurebar a:hover   {color:red;}
+#featurebar .active   {color:red; font-weight:bold;}
+#featurebar select    {font-size:12px; height:22px}
 
 #titlebar{font-size:16px; font-weight:bold; background:#e4e4e4; padding:5px; margin:10px 0 10px 0; height:22px}
 #titlebar #main {float:left;  width:80%; clear:none; text-align:left}
@@ -141,8 +139,16 @@ tr, th, td {padding:3px}
 #titlebar #main input {font-size:14px}
 #titlebar .button-s   {font-size:12px; padding-top:0; padding-bottom:0}
 
-.history {border:1px solid gray; background:#efefef; padding:10px; margin-top:10px; margin-bottom:10px}
+#poweredby    {font-size:10.5px}
+#footer       {width:100%; position:fixed; bottom:0; left:0; margin:10px 0 0 0; padding-left:10px;  border-top:2px solid #F4BF20; text-align:left; background-color:#FBF5C6; font-size:108%;}
+#footer-right {padding-right:10px}
+
 .yui-doc3, #doc3 {margin-left:10px; margin-right:10px}
+
+.hiddenwin {display:none}
+.debugwin  {display:block; margin:10px; width:90%; height:100px; border:1px solid #fff}
+
+.history {border:1px solid gray; background:#efefef; padding:10px; margin-top:10px; margin-bottom:10px}
 /*-----------------------STATUS COLORS--------------------*/
 .done  {color:darkgreen}
 .wait  {color:#9F9F5F}

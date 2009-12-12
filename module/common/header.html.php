@@ -23,71 +23,9 @@ $themeRoot   = $webRoot . "theme/";
 <body>
 <div id='topbar' class='yui-d0 yui-t6'>
   <div class='yui-main'><div class='yui-b'><?php printf($lang->welcome, $app->company->name);?></div></div>
-  <div class='yui-b a-right'>
-    <?php if(isset($app->user)) echo $app->user->realname;?>
-    <?php 
-    if(isset($app->user) and $app->user->account != 'guest')
-    {
-        echo html::a($this->createLink('my', 'index'), $lang->myControl);
-        echo html::a($this->createLink('user', 'logout'), $lang->logout);
-    }
-    else
-    {
-        echo html::a($this->createLink('user', 'login'), $lang->login);
-    }
-    ?>
-    <a href='http://www.zentao.cn' target='_blank'><?php echo $lang->zentaoSite;?></a>
-    <?php echo $lang->sponser;?>
-  </div>
+  <div class='yui-b a-right'><?php common::printTopBar();?></div>
 </div>
 <div id='navbar' class='yui-d0'>
-  <div id='mainmenu'>
-    <ul>
-      <?php 
-      echo "<li>$lang->zentaoMS</li>";
-      /* 设定当前的主菜单项。默认先取当前的模块名，如果有该模块所对应的菜单分组，则取分组名作为主菜单项。*/
-      $moduleName = $this->app->getModuleName();
-      $mainMenu   = $moduleName;
-      if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
-
-      /* 循环打印主菜单。*/
-      foreach($lang->menu as $menuKey => $menu)
-      {
-          $active = $menuKey == $mainMenu ? 'id=active' : '';
-          list($menuLabel, $module, $method) = explode('|', $menu);
-
-          if(common::hasPriv($module, $method))
-          {
-              $link  = $this->createLink($module, $method);
-              echo "<li $active><nobr><a href='$link'>$menuLabel</a></nobr></li>\n";
-          }
-      }
-      ?>
-    </ul>
-  </div>
-
-  <div id='submenu'>
-    <ul>
-      <?php
-      if(isset($lang->menu->$mainMenu))
-      {
-          $submenus = $lang->submenu->$mainMenu;
-          foreach($submenus as $submenu)
-          {
-              if($submenu == '|')
-              {
-                  echo "<li>$submenu</li>";
-                  continue;
-              }
-              @list($menuLabel, $module, $method, $vars) = explode('|', $submenu);
-              if(common::hasPriv($module, $method))
-              {
-                  $link = $this->createLink($module, $method, $vars);
-                  echo "<li $active><a href='$link'>$menuLabel</a></li>\n";
-              }
-          }
-      }
-      ?>
-    </ul>
-  </div>
+  <div id='mainmenu'><?php common::printMainmenu($this->moduleName);?></div>
+  <div id='modulemenu'><?php common::printModuleMenu($this->moduleName);?></div>
 </div>

@@ -22,62 +22,88 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include './header.html.php';?>
-<form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>'>
-<table class='table-1 tablesorter'>
-  <thead>
-  <tr>
-    <th><?php echo $lang->todo->id;?></th>
-    <th><?php echo $lang->todo->date;?></th>
-    <th><?php echo $lang->todo->type;?></th>
-    <th><?php echo $lang->todo->pri;?></th>
-    <th><?php echo $lang->todo->name;?></th>
-    <th><?php echo $lang->todo->begin;?></th>
-    <th><?php echo $lang->todo->end;?></th>
-    <th><?php echo $lang->todo->status;?></th>
-    <th><?php echo $lang->action;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php foreach($todos as $todo):?>
-  <tr class='a-center'>
-	<td>
-      <?php
-      if($importFeature) echo "<input type='checkbox' name='todos[]' value='$todo->id' /> ";
-	  echo $todo->id;
-      ?>
-	</td>
-    <td><?php echo $todo->date;?></td>
-    <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
-    <td><?php echo $todo->pri;?></td>
-    <td class='a-left'>
-	  <?php 
-	  if($todo->type == 'bug')    $link = $this->createLink('bug',  'view', "id={$todo->idvalue}");
-	  if($todo->type == 'task')   $link = $this->createLink('task', 'edit', "id={$todo->idvalue}");
-	  if($todo->type == 'custom') $link = $this->createLink('todo', 'edit', "id={$todo->id}");
-	  echo html::a($link, $todo->name);
-	  ?>
-	</td>
-    <td><?php echo $todo->begin;?></td>
-    <td><?php echo $todo->end;?></td>
-	<td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList->{$todo->status};?></td>
-	<td>
-	  <?php 
-	  echo html::a($this->createLink('todo', 'mark',   "id=$todo->id&status=$todo->status"), $lang->todo->{'mark'.ucfirst($todo->status)}, 'hiddenwin');
-	  echo html::a($this->createLink('todo', 'edit',   "id=$todo->id"), $lang->todo->edit);
-	  echo html::a($this->createLink('todo', 'delete', "id=$todo->id"), $lang->todo->delete, 'hiddenwin');
-	  ?>
-	</td>
-  </tr>
-  <?php endforeach;?>
-  <?php if($importFeature):?>
-  <tr>
-    <td colspan='9'>
-	  <input type='submit' value='<?php echo $lang->todo->import2Today;?>' />
-	</td>
-  </tr>
-  <?php endif;?>
-  </tbody>
-</table>
+<?php include '../../common/header.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
+<script language='Javascript'>
+function changeDate(date)
+{
+    link = createLink('my', 'todo', 'date=' + date);
+    location.href=link;
+}
+</script>
+<div class='yui-d0'>
+<form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
+   <div id='featurebar'>
+     <div class='f-left'>
+       <?php 
+       echo html::a($this->createLink('my', 'todo', "date=today"),     $lang->todo->todayTodos);
+       echo html::a($this->createLink('my', 'todo', "date=thisweek"),  $lang->todo->thisWeekTodos);
+       echo html::a($this->createLink('my', 'todo', "date=lastweek"),  $lang->todo->lastWeekTodos);
+       echo html::a($this->createLink('my', 'todo', "date=all"),   $lang->todo->allDaysTodos);
+       echo html::a($this->createLink('my', 'todo', "date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone);
+       echo html::select('date', $dates, $date, 'onchange=changeDate(this.value)');
+       ?>
+    </div>
+    <div class='f-right'>
+      <?php echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);?>
+    </div>
+  </div>
+  <table class='table-1 tablesorter'>
+    <thead>
+    <tr class='colhead'>
+      <th><?php echo $lang->todo->id;?></th>
+      <th><?php echo $lang->todo->date;?></th>
+      <th><?php echo $lang->todo->type;?></th>
+      <th><?php echo $lang->todo->pri;?></th>
+      <th><?php echo $lang->todo->name;?></th>
+      <th><?php echo $lang->todo->begin;?></th>
+      <th><?php echo $lang->todo->end;?></th>
+      <th><?php echo $lang->todo->status;?></th>
+      <th><?php echo $lang->action;?></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach($todos as $todo):?>
+    <tr class='a-center'>
+      <td>
+        <?php
+        if($importFeature) echo "<input type='checkbox' name='todos[]' value='$todo->id' /> ";
+        echo $todo->id;
+        ?>
+      </td>
+      <td><?php echo $todo->date;?></td>
+      <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
+      <td><?php echo $todo->pri;?></td>
+      <td class='a-left'>
+        <?php 
+        if($todo->type == 'bug')    $link = $this->createLink('bug',  'view', "id={$todo->idvalue}");
+        if($todo->type == 'task')   $link = $this->createLink('task', 'edit', "id={$todo->idvalue}");
+        if($todo->type == 'custom') $link = $this->createLink('todo', 'edit', "id={$todo->id}");
+        echo html::a($link, $todo->name);
+        ?>
+      </td>
+      <td><?php echo $todo->begin;?></td>
+      <td><?php echo $todo->end;?></td>
+      <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList->{$todo->status};?></td>
+      <td>
+        <?php 
+        echo html::a($this->createLink('todo', 'mark',   "id=$todo->id&status=$todo->status"), $lang->todo->{'mark'.ucfirst($todo->status)}, 'hiddenwin');
+        echo html::a($this->createLink('todo', 'edit',   "id=$todo->id"), $lang->todo->edit);
+        echo html::a($this->createLink('todo', 'delete', "id=$todo->id"), $lang->todo->delete, 'hiddenwin');
+        ?>
+      </td>
+    </tr>
+    <?php endforeach;?>
+    <?php if($importFeature):?>
+    <tr>
+      <td colspan='9'>
+        <input type='submit' value='<?php echo $lang->todo->import2Today;?>' />
+      </td>
+    </tr>
+    <?php endif;?>
+    </tbody>
+  </table>
 </form>
-<?php include './footer.html.php';?>
+</div>
+<?php include '../../common/footer.html.php';?>
