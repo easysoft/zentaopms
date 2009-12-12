@@ -97,6 +97,103 @@ EOT;
         return false;
     }
 
+    /* 打印顶部的条形区域。*/
+    public static function printTopBar()
+    {
+        global $lang, $app;
+        if(isset($app->user)) echo $app->user->realname . ' ';
+        if(isset($app->user) and $app->user->account != 'guest')
+        {
+            echo html::a(helper::createLink('my', 'index'), $lang->myControl);
+            echo html::a(helper::createLink('user', 'logout'), $lang->logout);
+        }
+        else
+        {
+            echo html::a(helper::createLink('user', 'login'), $lang->login);
+        }
+        echo html::a('http://www.zentao.cn', $lang->zentaoSite, '_blank');
+        echo $lang->sponser;
+    }
+
+    /* 打印主菜单。*/
+    public static function printMainmenu($moduleName)
+    {
+        global $lang;
+        echo "<ul>\n";
+        echo "<li>$lang->zentaoMS</li>\n";
+
+        /* 设定当前的主菜单项。默认先取当前的模块名，如果有该模块所对应的菜单分组，则取分组名作为主菜单项。*/
+        $mainMenu = $moduleName;
+        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
+
+        /* 循环打印主菜单。*/
+        foreach($lang->menu as $menuKey => $menu)
+        {
+            $active = $menuKey == $mainMenu ? 'class=active' : '';
+            list($menuLabel, $module, $method) = explode('|', $menu);
+
+            if(common::hasPriv($module, $method))
+            {
+                $link  = helper::createLink($module, $method);
+                echo "<li $active><nobr><a href='$link'>$menuLabel</a></nobr></li>\n";
+            }
+        }
+        echo "</ul>\n";
+    }
+
+    /* 打印模块的菜单。*/
+    public static function printModuleMenu($moduleName)
+    {
+        global $lang;
+        if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
+        $submenus = $lang->$moduleName->menu;  
+        echo "<ul>\n";
+        foreach($submenus as $submenu)
+        {
+            if(strpos($submenu, '|') === false)
+            {
+                echo "<li>$submenu</li>\n";
+            }
+            else
+            {
+                list($label, $module, $method, $vars) = explode('|', $submenu);
+                if(common::hasPriv($module, $method))
+                {
+                    global $app;
+                    $class = $app->getMethodName() == $method ? " class='active'" : '';
+                    echo "<li $class>" . html::a(helper::createLink($module, $method, $vars), $label) . "</li>\n";
+                }
+            }
+        }
+        echo "</ul>\n";
+    }
+
+    /* 打印面包屑导航。*/
+    public static function printBreadMenu($moduleName, $position)
+    {
+        global $lang;
+        $mainMenu = $moduleName;
+        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
+        list($menuLabel, $module, $method) = explode('|', $lang->menu->index);
+        echo html::a(helper::createLink($module, $method), $lang->zentaoMS) . $lang->arrow;
+        if($moduleName != 'index')
+        {
+            list($menuLabel, $module, $method) = explode('|', $lang->menu->$mainMenu);
+            echo html::a(helper::createLink($module, $method), $menuLabel);
+        }
+        else
+        {
+            echo $lang->index->common;
+        }
+        if(empty($position)) return;
+        echo $lang->arrow;
+        foreach($position as $key => $link)
+        {
+            echo $link;
+            if(isset($position[$key + 1])) echo $lang->arrow;
+        }
+    }
+
     /**
      * 设置当前访问的公司信息。
      * 

@@ -48,10 +48,15 @@ $lang->menu->product = '产品视图|product|index';
 $lang->menu->project = '项目视图|project|index';
 $lang->menu->qa      = 'QA视图|qa|index';
 $lang->menu->company = '组织视图|company|index';
-//$lang->menu->misc    = '其他相关|misc|index';
 $lang->menu->admin   = '后台管理|admin|index';
 
 /*菜单设置：下级菜单。*/
+$lang->my->menu[] = '我的TODO|my|todo|';
+$lang->my->menu[] = '我的任务|my|task|';
+$lang->my->menu[] = '我的项目|my|project|';
+$lang->my->menu[] = '我的Bug|my|bug|';
+$lang->my->menu[] = '我的档案|my|editprofile|';
+
 $lang->submenu->index->item1 = '浏览产品|product|browse';
 $lang->submenu->index->item2 = '浏览项目|project|browse';
 
@@ -63,12 +68,6 @@ $lang->submenu->project ->item2 = '浏览项目|project|browse';
 
 $lang->submenu->qa->item1      = '缺陷管理|bug|index';
 $lang->submenu->qa->item2      = '用例管理|testcase|index';
-
-$lang->submenu->my->item1 = '我的TODO|my|todo';
-$lang->submenu->my->item2 = '我的任务|my|task';
-$lang->submenu->my->item3 = '我的项目|my|project';
-$lang->submenu->my->item4 = '我的Bug|my|bug';
-$lang->submenu->my->item6 = '我的档案|my|editprofile';
 
 $lang->submenu->company->item1 = '组织结构|company|index';
 
