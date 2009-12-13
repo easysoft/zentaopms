@@ -40,6 +40,8 @@ class product extends control
         $this->products = $this->product->getPairs();
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
         $this->assign('products', $this->products);
+
+
     }
 
     /* 产品视图首页。*/
@@ -51,6 +53,11 @@ class product extends control
     /* 浏览某一个产品。*/
     public function browse($productID = 0, $moduleID = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+
+        $this->lang->product->menu[]  = html::select('product', $this->products, $productID). $this->lang->arrow;
+        $this->lang->product->menu[] = "需求列表|product|browse|productID=$productID";
+        $this->lang->product->menu[] = '新增产品|product|create||right|';
+
         /* 设置当前的产品id和模块id。*/
         $this->session->set('storyList', $this->app->getURI(true));
         $productID      = common::saveProductState($productID, key($this->products));

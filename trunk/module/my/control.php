@@ -28,6 +28,7 @@ class my extends control
     {
         parent::__construct();
         $this->loadModel('user');
+        array_unshift($this->lang->my->menu, $this->app->user->realname . $this->lang->arrow);
     }
 
     /* 首页，暂时跳转到待办事宜。*/
