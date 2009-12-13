@@ -156,12 +156,14 @@ EOT;
             }
             else
             {
-                list($label, $module, $method, $vars) = explode('|', $submenu);
+                $submenu = explode('|', $submenu);
+                list($label, $module, $method, $vars) = $submenu;
                 if(common::hasPriv($module, $method))
                 {
                     global $app;
-                    $class = $app->getMethodName() == $method ? " class='active'" : '';
-                    echo "<li $class>" . html::a(helper::createLink($module, $method, $vars), $label) . "</li>\n";
+                    $float  = count($submenu) == 4 ? 'left' : 'right';
+                    $active = $app->getMethodName() == $method ? 'active' : '';
+                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label) . "</li>\n";
                 }
             }
         }
