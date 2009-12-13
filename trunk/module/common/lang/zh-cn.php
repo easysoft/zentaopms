@@ -51,34 +51,32 @@ $lang->menu->company = '组织视图|company|index';
 $lang->menu->admin   = '后台管理|admin|index';
 
 /*菜单设置：下级菜单。*/
-$lang->my->menu[] = '我的TODO|my|todo|';
-$lang->my->menu[] = '我的任务|my|task|';
-$lang->my->menu[] = '我的项目|my|project|';
-$lang->my->menu[] = '我的Bug|my|bug|';
-$lang->my->menu[] = '我的档案|my|editprofile|';
+$lang->index->menu[]   = '浏览产品|product|browse|';
+$lang->index->menu[]   = '浏览项目|project|browse|';
 
-$lang->submenu->index->item1 = '浏览产品|product|browse';
-$lang->submenu->index->item2 = '浏览项目|project|browse';
+$lang->my->menu[]      = '我的TODO|my|todo|';
+$lang->my->menu[]      = '我的任务|my|task|';
+$lang->my->menu[]      = '我的项目|my|project|';
+$lang->my->menu[]      = '我的Bug|my|bug|';
+$lang->my->menu[]      = '我的档案|my|editprofile|';
 
-$lang->submenu->product->item1 = '浏览产品|product|index';
-$lang->submenu->product->item2 = '新增产品|product|create';
 
-$lang->submenu->project ->item1 = '新增项目|project|create';
-$lang->submenu->project ->item2 = '浏览项目|project|browse';
+$lang->project->menu[] = '新增项目|project|create|';
+$lang->project->menu[] = '浏览项目|project|browse|';
 
-$lang->submenu->qa->item1      = '缺陷管理|bug|index';
-$lang->submenu->qa->item2      = '用例管理|testcase|index';
+$lang->bug->menu[]      = '缺陷管理|bug|index|';
+$lang->bug->menu[]      = '用例管理|testcase|index|';
+$lang->testcase->menu[] = '缺陷管理|bug|index|';
+$lang->testcase->menu[] = '用例管理|testcase|index|';
 
-$lang->submenu->company->item1 = '组织结构|company|index';
+$lang->company->menu[] = '组织结构|company|index|';
 
-$lang->submenu->admin->item1 = '浏览公司|admin|browsecompany';
-$lang->submenu->admin->item2 = '新增公司|company|create';
-$lang->submenu->admin->item3 = '|';
-$lang->submenu->admin->item4 = '浏览分组|admin|browsegroup';
-$lang->submenu->admin->item5 = '新增分组|group|create';
-$lang->submenu->admin->item6 = '|';
-$lang->submenu->admin->item7 = '浏览用户|admin|browseuser';
-$lang->submenu->admin->item8 = '新增用户|user|create';
+$lang->admin->menu[]   = '浏览公司|admin|browsecompany|';
+$lang->admin->menu[]   = '新增公司|company|create|';
+$lang->admin->menu[]   = '浏览分组|admin|browsegroup|';
+$lang->admin->menu[]   = '新增分组|group|create|';
+$lang->admin->menu[]   = '浏览用户|admin|browseuser|';
+$lang->admin->menu[]   = '新增用户|user|create|';
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release = 'product';
