@@ -43,3 +43,25 @@ function createLink(moduleName, methodName, vars, viewType)
     }
     return link;
 }
+
+/* 自动设置所有属性为nobr的title。*/
+function setNowrapObjTitle()
+{
+    $('.nobr').each(function (i) 
+    {
+        if($.browser.mozilla) 
+        {
+            this.title = this.textContent;
+        }
+        else
+        {
+            this.title = this.innerText;
+        }
+    })
+}
+
+/* 自动执行的代码。*/
+$(document).ready(function() 
+{
+    setNowrapObjTitle();
+});
