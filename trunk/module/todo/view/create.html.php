@@ -24,9 +24,9 @@
 ?>
 <?php include '../../common/header.html.php';?>
 
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1 a-left'> 
+    <table class='table-1'> 
       <caption><?php echo $lang->todo->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->todo->date;?></th>
@@ -51,8 +51,8 @@
       <tr>
         <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
         <td>
-        <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class=select-2') . html::select('end', $times, '', 'class=select-2');?>
-        <input type='checkbox' onclick='switchDateFeature(this);'><?php echo $lang->todo->lblDisableDate;?>
+          <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class=select-2') . html::select('end', $times, '', 'class=select-2');?>
+          <input type='checkbox' onclick='switchDateFeature(this);'><?php echo $lang->todo->lblDisableDate;?>
         </td>
       </tr>  
       <tr>
@@ -67,7 +67,5 @@
     </table>
   </form>
 </div>  
+<script language='Javascript'>selectNext();</script>
 <?php include './footer.html.php';?>
-<script language = 'Javascript'>
-selectNext();
-</script>

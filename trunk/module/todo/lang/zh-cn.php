@@ -69,7 +69,6 @@ $lang->todo->lblDisableDate = '暂时不设定时间';
 
 $lang->todo->thisWeekTodos = '本周计划';
 $lang->todo->lastWeekTodos = '上周总结';
-$lang->todo->allDaysTodos  = '所有任务';
+$lang->todo->allDaysTodos  = '所有TODO';
 $lang->todo->allUndone     = '之前未完';
 $lang->todo->todayTodos    = '今日安排';
-

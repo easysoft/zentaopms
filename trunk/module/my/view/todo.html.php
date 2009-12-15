@@ -36,13 +36,14 @@ function changeDate(date)
    <div id='featurebar'>
      <div class='f-left'>
        <?php 
-       echo html::a($this->createLink('my', 'todo', "date=today"),     $lang->todo->todayTodos);
-       echo html::a($this->createLink('my', 'todo', "date=thisweek"),  $lang->todo->thisWeekTodos);
-       echo html::a($this->createLink('my', 'todo', "date=lastweek"),  $lang->todo->lastWeekTodos);
-       echo html::a($this->createLink('my', 'todo', "date=all"),   $lang->todo->allDaysTodos);
-       echo html::a($this->createLink('my', 'todo', "date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone);
-       echo html::select('date', $dates, $date, 'onchange=changeDate(this.value)');
+       echo '<span id="today">'    . html::a($this->createLink('my', 'todo', "date=today"),     $lang->todo->todayTodos)    . '</span>';
+       echo '<span id="thisweek">' . html::a($this->createLink('my', 'todo', "date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
+       echo '<span id="lastweek">' . html::a($this->createLink('my', 'todo', "date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
+       echo '<span id="all">'      . html::a($this->createLink('my', 'todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
+       echo '<span id="before">'   . html::a($this->createLink('my', 'todo', "date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone) . '</span>';
+       echo "<span id='$date'>"    . html::select('date', $dates, $date, 'onchange=changeDate(this.value)') . '</span>';
        ?>
+       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
     <div class='f-right'>
       <?php echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);?>

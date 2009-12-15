@@ -23,7 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-4 a-left'> 
       <caption><?php echo $lang->my->editProfile;?></caption>
@@ -45,12 +45,14 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->password;?></th>
-        <td><input type='password' name='password' /></td>
+        <td><input type='password' name='password1' /></td>
       </tr>  
       <tr>
-        <td colspan='2' class='a-center'>
-          <?php echo html::submitButton() . html::resetButton();?>
-        </td>
+        <th class='rowhead'><?php echo $lang->user->password2;?></th>
+        <td><input type='password' name='password2' /></td>
+      </tr>  
+      <tr>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
     </table>
   </form>
