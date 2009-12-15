@@ -144,25 +144,50 @@ EOT;
     /* 打印模块的菜单。*/
     public static function printModuleMenu($moduleName)
     {
-        global $lang;
+        global $lang, $app;
+
+        /* 没有设置菜单，直接退出。*/
         if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
-        $submenus = $lang->$moduleName->menu;  
+
+        /* 获得菜单设置，并记录当前的模块名和方法名。*/
+        $submenus      = $lang->$moduleName->menu;  
+        $currentModule = $app->getModuleName();
+        $currentMethod = $app->getMethodName();
+
+        /* 菜单开始。*/
         echo "<ul>\n";
+
+        /* 循环处理每一个菜单项。*/
         foreach($submenus as $submenu)
         {
-            if(strpos($submenu, '|') === false)
+            /* 初始化设置。*/
+            $link      = $submenu;
+            $subModule = '';
+            $alias     = '';
+            $float     = '';
+            $active    = '';
+
+            /* 如果该菜单是以数组的形式配置的，则覆盖上面的默认设置。*/
+            if(is_array($submenu)) extract($submenu);
+
+            /* 打印菜单。*/
+            if(strpos($link, '|') === false)
             {
-                echo "<li>$submenu</li>\n";
+                echo "<li>$link</li>\n";
             }
             else
             {
-                $submenu = explode('|', $submenu);
-                list($label, $module, $method, $vars) = $submenu;
+                $link = explode('|', $link);
+                list($label, $module, $method) = $link;
+                $vars = isset($link[3]) ? $link[3] : '';
                 if(common::hasPriv($module, $method))
                 {
                     global $app;
-                    $float  = count($submenu) == 4 ? 'left' : 'right';
-                    $active = $app->getMethodName() == $method ? 'active' : '';
+
+                    /* 判断是否应该设置激活。*/
+                    if($currentModule == $subModule) $active = 'active';
+                    if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false)) $active = 'active';
+
                     echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label) . "</li>\n";
                 }
             }
