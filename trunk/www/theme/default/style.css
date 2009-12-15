@@ -144,11 +144,13 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 #modulemenu .right  a {color:red}
 
 /* 功能菜单。*/
-#featurebar {margin-bottom:5px; background-color:#efefef; height:22px; line-height:22px;}
+#featurebar {margin-bottom:5px; background-color:#efefef; height:24px; line-height:24px;}
 #featurebar a         {text-decoration:none; color:black;}
 #featurebar a:hover   {color:red;}
-#featurebar .active   {color:red; font-weight:bold;}
 #featurebar select    {font-size:12px; height:22px}
+#featurebar .active a       {color:red; font-weight:bold;}
+#featurebar .active select  {border:2px solid red}
+#featurebar .f-right a      {color:red;font-weight:bold;}
 
 /* 标题。*/
 #titlebar{font-size:16px; font-weight:bold; background:#e4e4e4; padding:5px; margin:10px 0 10px 0; height:22px}
