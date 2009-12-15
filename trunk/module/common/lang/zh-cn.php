@@ -41,7 +41,7 @@ $lang->zentaoSite = "官方网站";
 $lang->myControl  = "我的地盘";
 $lang->sponser    = "<a href='http://www.pujia.com' target='_blank'>普加赞助</a>";
 
-/* 菜单设置：顶级的tab。*/
+/* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
 $lang->menu->my      = '我的地盘|my|index';
 $lang->menu->product = '产品视图|product|index';
@@ -50,33 +50,44 @@ $lang->menu->qa      = 'QA视图|qa|index';
 $lang->menu->company = '组织视图|company|index';
 $lang->menu->admin   = '后台管理|admin|index';
 
-/*菜单设置：下级菜单。*/
-$lang->index->menu[]   = '浏览产品|product|browse|';
-$lang->index->menu[]   = '浏览项目|project|browse|';
+/* 首页菜单设置。*/
+$lang->index->menu->product = '浏览产品|product|browse';
+$lang->index->menu->project = '浏览项目|project|browse';
 
-$lang->my->menu[]      = '我的TODO|my|todo|';
-$lang->my->menu[]      = '我的任务|my|task|';
-$lang->my->menu[]      = '我的项目|my|project|';
-$lang->my->menu[]      = '我的Bug|my|bug|';
-$lang->my->menu[]      = '我的档案|my|editprofile|';
+/* 我的地盘菜单设置。*/
+$lang->my->menu->account  = '%s' . $lang->arrow;
+$lang->my->menu->todo     = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
+$lang->my->menu->task     = '我的任务|my|task|';
+$lang->my->menu->project  = '我的项目|my|project|';
+$lang->my->menu->bug      = '我的Bug|my|bug|';
+$lang->my->menu->profile  = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
+$lang->todo->menu         = $lang->my->menu;
 
+/* 产品视图设置。*/
+$lang->product->menu->list   = '%s';
+$lang->product->menu->story  = '需求列表|product|browse|productID=%s';
+$lang->product->menu->create = array('link' => '新增产品|product|create', 'float' => 'right');
 
-$lang->project->menu[] = '新增项目|project|create|';
-$lang->project->menu[] = '浏览项目|project|browse|';
+/* 项目视图菜单设置。*/
+$lang->project->menu->create = '新增项目|project|create';
+$lang->project->menu->browse = '浏览项目|project|browse';
 
-$lang->bug->menu[]      = '缺陷管理|bug|index|';
-$lang->bug->menu[]      = '用例管理|testcase|index|';
-$lang->testcase->menu[] = '缺陷管理|bug|index|';
-$lang->testcase->menu[] = '用例管理|testcase|index|';
+/* QA视图菜单设置。*/
+$lang->bug->menu->bug      = '缺陷管理|bug|browse';
+$lang->bug->menu->testcase = '用例管理|testcase|browse';
+$lang->testcase->menu      = $lang->bug->menu;
 
-$lang->company->menu[] = '组织结构|company|index|';
+/* 组织结构视图菜单设置。*/
+$lang->company->menu->browse = '组织结构|company|browse';
 
-$lang->admin->menu[]   = '浏览公司|admin|browsecompany|';
-$lang->admin->menu[]   = '新增公司|company|create|';
-$lang->admin->menu[]   = '浏览分组|admin|browsegroup|';
-$lang->admin->menu[]   = '新增分组|group|create|';
-$lang->admin->menu[]   = '浏览用户|admin|browseuser|';
-$lang->admin->menu[]   = '新增用户|user|create|';
+/* 后台管理菜单设置。*/
+$lang->admin->menu->browseCompany = '浏览公司|admin|browsecompany';
+$lang->admin->menu->createCompany = '新增公司|company|create';
+$lang->admin->menu->browseGroup   = '浏览分组|admin|browsegroup';
+$lang->admin->menu->createGroup   = '新增分组|group|create';
+$lang->admin->menu->browseUser    = '浏览用户|admin|browseuser';
+$lang->admin->menu->createUser    = '新增用户|user|create';
+$lang->group->menu = $lang->admin->menu;
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release = 'product';
@@ -102,6 +113,8 @@ $lang->error->float           = "『%s』应当是数字，可以是小数。";
 $lang->error->email           = "『%s』应当为合法的EMAIL。";
 $lang->error->date            = "『%s』应当为合法的日期。";
 $lang->error->account         = "『%s』应当为合法的用户名。";
+$lang->error->passwordsame    = "两次密码应当相等。";
+$lang->error->passwordrule    = "密码应该符合规则。";
 
 /* 分页信息。*/
 $lang->pager->noRecord  = "暂时没有记录";
