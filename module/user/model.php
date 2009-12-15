@@ -85,12 +85,17 @@ class userModel extends model
     /* 更新一个用户。*/
     function update($userID)
     {
+        /* 先检查密码是否符合规则。*/
+        if(!$this->checkPassword()) return;
+
+        /* 进行其他的检查，更新数据库。*/
         $userID = (int)$userID;
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
-            ->setIF($this->post->password != '', 'password', md5($this->post->password))
-            ->removeIF($this->post->password == '', 'password')
+            ->setIF($this->post->password1 != '', 'password', md5($this->post->password1))
+            ->remove('password1, password2')
             ->get();
+
         $this->dao->update(TABLE_USER)->data($user)
             ->autoCheck()
             ->batchCheck('account, realname, password', 'notempty')
@@ -98,6 +103,17 @@ class userModel extends model
             ->check('account', 'account')
             ->where('id')->eq((int)$userID)
             ->exec();
+    }
+
+    /* 检查密码是否符合要求。*/
+    function checkPassword()
+    {
+        if($this->post->password1 != false)
+        {
+            if($this->post->password1 != $this->post->password2) dao::$errors['password'] = $this->lang->error->passwordsame;
+            if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'] = $this->lang->error->passwordrule;
+        }
+        return !dao::isError();
     }
     
     /* 删除一个用户。*/

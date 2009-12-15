@@ -60,6 +60,7 @@ $lang->user->company   = '所属公司';
 $lang->user->dept      = '所属部门';
 $lang->user->account   = '用户名';
 $lang->user->password  = '密码';
+$lang->user->password2 = '请重复密码';
 $lang->user->realname  = '真实姓名';
 $lang->user->nickname  = '昵称';
 $lang->user->avatar    = '头像';
