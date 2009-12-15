@@ -28,7 +28,7 @@ class my extends control
     {
         parent::__construct();
         $this->loadModel('user');
-        array_unshift($this->lang->my->menu, $this->app->user->realname . $this->lang->arrow);
+        $this->my->setMenu();
     }
 
     /* 首页，暂时跳转到待办事宜。*/
@@ -38,7 +38,7 @@ class my extends control
     }
 
     /* 用户的todo列表。*/
-    public function todo($date = 'today', $account = '', $status = 'all')
+    public function todo($type = 'today', $account = '', $status = 'all')
     {
         /* 加载todo model。*/
         $this->loadModel('todo');
@@ -47,18 +47,18 @@ class my extends control
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $position[]      = $this->lang->my->todo;
 
-        $importFeature = ($date == 'before');
+        $importFeature = ($type == 'before');
 
-        $todos = $this->todo->getList($date, $account, $status);
-        if((int)$date == 0) $date = $this->todo->today();
+        $todos = $this->todo->getList($type, $account, $status);
+        $date  = (int)$type == 0 ? $this->todo->today() : $type;
 
         /* 赋值。*/
         $this->assign('header',        $header);
         $this->assign('position',      $position);
-        $this->assign('tabID',         'todo');
         $this->assign('dates',         $this->todo->buildDateList()); 
         $this->assign('date',          $date);
         $this->assign('todos',         $todos);
+        $this->assign('type',          $type);
         $this->assign('importFeature', $importFeature);
 
         $this->display();
@@ -142,17 +142,31 @@ class my extends control
     /* 编辑个人档案。*/
     public function editProfile()
     {
-       if(!empty($_POST))
+        if(!empty($_POST))
         {
             $this->user->update($this->app->user->id);
-            die(js::locate($this->createLink('my', 'index'), 'parent'));
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
 
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
         $position[]      = $this->lang->my->editProfile;
         $this->assign('header',   $header);
         $this->assign('position', $position);
-        $this->assign('user',     $this->app->user);
+        $this->assign('user',     $this->user->getById($this->app->user->id));
+
+        $this->display();
+    }
+
+    /* 查看个人档案。*/
+    public function profile()
+    {
+        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
+        $position[]      = $this->lang->my->profile;
+
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
+        $this->assign('user',     $this->user->getById($this->app->user->id));
 
         $this->display();
     }

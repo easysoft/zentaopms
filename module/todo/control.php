@@ -29,7 +29,7 @@ class todo extends control
         parent::__construct();
         $this->loadModel('task');
         $this->loadModel('bug');
-        $this->app->loadLang('my');
+        $this->loadModel('my')->setMenu();
     }
 
     /* 添加todo。*/

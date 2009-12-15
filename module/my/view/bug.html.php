@@ -22,31 +22,34 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include './header.html.php';?>
-<table class='table-1 tablesorter'>
-  <thead>
-  <tr class='colhead'>
-    <th><?php echo $lang->bug->id;?></th>
-    <th><?php echo $lang->bug->severity;?></th>
-    <th><?php echo $lang->bug->title;?></th>
-    <th><?php echo $lang->bug->openedBy;?></th>
-    <th><?php echo $lang->bug->assignedTo;?></th>
-    <th><?php echo $lang->bug->resolvedBy;?></th>
-    <th><?php echo $lang->bug->resolution;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php foreach($bugs as $bug):?>
-  <tr class='a-center'>
-    <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id, '_blank');?></td>
-    <td><?php echo $bug->severity?></td>
-    <td width='50%' class='a-left'><?php echo $bug->title;?></td>
-    <td><?php echo $bug->openedBy;?></td>
-    <td><?php echo $bug->assignedTo;?></td>
-    <td><?php echo $bug->resolvedBy;?></td>
-    <td><?php echo $bug->resolution;?></td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-</table>
-<?php include './footer.html.php';?>
+<?php include '../../common/header.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
+<div class='yui-d0'>
+  <table class='table-1 tablesorter'>
+    <thead>
+    <tr class='colhead'>
+      <th><?php echo $lang->bug->id;?></th>
+      <th><?php echo $lang->bug->severity;?></th>
+      <th><?php echo $lang->bug->title;?></th>
+      <th><?php echo $lang->bug->openedBy;?></th>
+      <th><?php echo $lang->bug->assignedTo;?></th>
+      <th><?php echo $lang->bug->resolvedBy;?></th>
+      <th><?php echo $lang->bug->resolution;?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($bugs as $bug):?>
+    <tr class='a-center'>
+      <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id, '_blank');?></td>
+      <td><?php echo $bug->severity?></td>
+      <td width='50%' class='a-left'><?php echo $bug->title;?></td>
+      <td><?php echo $bug->openedBy;?></td>
+      <td><?php echo $bug->assignedTo;?></td>
+      <td><?php echo $bug->resolvedBy;?></td>
+      <td><?php echo $bug->resolution;?></td>
+    </tr>
+    <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
+<?php include '../../common/footer.html.php';?>

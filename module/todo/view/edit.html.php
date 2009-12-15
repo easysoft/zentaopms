@@ -23,11 +23,10 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1 a-left'> 
-      <caption><?php echo $lang->todo->create;?></caption>
+    <table class='table-1 a-left'> 
+      <caption><?php echo $lang->todo->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->todo->date;?></th>
         <td><?php echo html::select('date', $dates, $todo->date, 'class=select-3');?></td>
@@ -72,6 +71,4 @@
   </form>
 </div>  
 <?php include './footer.html.php';?>
-<script language='Javascript'>
-switchDateFeature(document.getElementById('switcher'));
-</script>
+<script language='Javascript'>switchDateFeature(document.getElementById('switcher'));</script>
