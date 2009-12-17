@@ -53,7 +53,6 @@ ins{background:#cfc; text-decoration:none}
 .button-c{padding:3px 20px 3px 20px}
 
 /*-----------------------TABLE SETTING----------------------------*/
-table         {table-layout:fixed}
 table, th, td {border-color:#e4e4e4}
 tr, th, td    {padding:3px}
 caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
@@ -64,6 +63,9 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .table-5 {width:600px;margin-bottom:10px}
 .colhead th  {text-align:center; background:#efefef;}
 .rowhead     {font-weight:bold; text-align:right; width:100px}
+.fixed       {table-layout:fixed}
+.nobr                {overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.fixed th, .fixed td {overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
 /*-----------------------LAYOUT SETTING----------------------------*/
 .f-left   {float:left;  padding-left: 5px}
@@ -82,7 +84,6 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .hidden {display:none}
 .block  {display:block}
 .inline {display:inline}
-.nobr   {overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
 .w-p5  {width: 5%}
 .w-p10 {width: 10%}
@@ -96,6 +97,21 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .w-p50 {width: 50%}
 .w-p55 {width: 55%}
 .w-p60 {width: 60%}
+
+.margin-10px {margin:    10px}
+.padding-10px{padding:   10px}
+
+.mt-10px {margin-top:    10px}
+.mr-10px {margin-right:  10px}
+.mb-10px {margin-bottom: 10px}
+.ml-10px {margin-left:   10px}
+.pt-10px {padding-top:   10px}
+.pr-10px {padding-right: 10px}
+.pb-10px {padding-bottom:10px}
+.pl-10px {padding-left:  10px}
+
+.box-title   {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
+.box-content {border:1px solid #e4e4e4; padding:5px}
 
 /*-----------------------BORDER SETTING--------------------------*/
 .bd-1px    {border:1px        solid}
@@ -144,13 +160,19 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 #modulemenu .right  a {color:red}
 
 /* 功能菜单。*/
-#featurebar {margin-bottom:5px; background-color:#efefef; height:24px; line-height:24px;}
+#featurebar {margin-bottom:5px; background-color:#efefef; height:24px; line-height:24px; cursor:pointer}
 #featurebar a         {text-decoration:none; color:black;}
 #featurebar a:hover   {color:red;}
 #featurebar select    {font-size:12px; height:22px}
-#featurebar .active a       {color:red; font-weight:bold;}
+#featurebar .active         {color:red; font-weight:bold;}
 #featurebar .active select  {border:2px solid red}
+#featurebar .active a       {color:red; font-weight:bold;}
+#featurebar a .active       {color:red; font-weight:bold;}
 #featurebar .f-right a      {color:red;font-weight:bold;}
+
+/* TreeMenu设置。*/
+#tree .active {color:blue; font-weight:bold}
+#tree li { list-style-type:none;}
 
 /* 标题。*/
 #titlebar{font-size:16px; font-weight:bold; background:#e4e4e4; padding:5px; margin:10px 0 10px 0; height:22px}
