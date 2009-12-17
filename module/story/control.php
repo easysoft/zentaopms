@@ -51,6 +51,9 @@ class story extends control
         $users    = $this->user->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'product');
 
+        /* 设置菜单。*/
+        $this->product->setMenu($products, $product->id);
+
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->create;
         $position[]      = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
         $position[]      = $this->lang->story->create;
@@ -82,11 +85,15 @@ class story extends control
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
+
         $story    = $this->story->findByID($storyID);
         $product  = $this->product->findByID($story->product);
         $products = $this->product->getPairs();
         $users    = $this->user->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'product');
+
+        /* 设置菜单。*/
+        $this->product->setMenu($products, $product->id);
 
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $story->title;
         $position[]      = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
@@ -111,6 +118,9 @@ class story extends control
         $product    = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
         $modulePath = $this->tree->getParents($story->module);
         $users      = $this->user->getPairs();
+
+        /* 设置菜单。*/
+        $this->product->setMenu($this->product->getPairs(), $product->id);
 
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
         $position[]      = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
