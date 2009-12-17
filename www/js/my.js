@@ -60,6 +60,20 @@ function setNowrapObjTitle()
     })
 }
 
+/* 选择产品。*/
+function switchProduct(productID)
+{
+    link = createLink('product', 'browse', 'productID=' + productID);
+    location.href=link;
+}
+
+/* 选择项目。*/
+function switchProject(projectID)
+{
+    link = createLink('project', 'browse', 'projectID=' + projectID);
+    location.href=link;
+}
+
 /* 自动执行的代码。*/
 $(document).ready(function() 
 {
