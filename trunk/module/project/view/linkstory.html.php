@@ -24,28 +24,27 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/tablesorter.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1 a-left tablesorter'> 
-      <caption><?php echo $header['title']?></caption>
+    <table align='center' class='table-1 tablesorter fixed a-center'> 
       <thead>
       <tr class='colhead'>
-        <th width='60'><?php echo $lang->story->id;?></th>
-        <th width='60'><?php echo $lang->story->pri;?></th>
-        <th width='200'><?php echo $lang->story->product;?></th>
-        <th><?php echo $lang->story->title;?></th>
-        <th width='60'><?php echo $lang->story->linkStory;?></th>
+        <th><?php echo $lang->story->id;?></th>
+        <th><?php echo $lang->story->pri;?></th>
+        <th><?php echo $lang->story->product;?></th>
+        <th class='w-p50'><?php echo $lang->story->title;?></th>
+        <th><?php echo $lang->story->linkStory;?></th>
       </tr>
       </thead>
       <tbody>
       <?php foreach($allStories as $story):?>
       <?php if(isset($prjStories[$story->id])) continue;?>
       <tr>
-        <td width='60' class='a-right'><?php echo $story->id;?></td>
-        <td width='60' class='a-center'><?php echo $story->pri;?></td>
-        <td width='200'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
-        <td><?php echo $story->title;?></td>
-        <td width='60' class='a-center'>
+        <td><?php echo $story->id;?></td>
+        <td><?php echo $story->pri;?></td>
+        <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
+        <td class='a-left nobr'><?php echo $story->title;?></td>
+        <td>
           <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' />
           <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
         </td>
@@ -53,7 +52,7 @@
       <?php endforeach;?>
       </tbody>
       <tr>
-        <td colspan='5' class='a-center'><input type='submit' name='submit' value='<?php echo $lang->save;?>' /></td>
+        <td colspan='5'><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>

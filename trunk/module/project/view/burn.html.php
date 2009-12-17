@@ -23,22 +23,5 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<script language='javascript'>
-function selectProject(projectID)
-{
-    link = createLink('project', 'browse', 'projectID=' + projectID);
-    location.href=link;
-}
-</script>
-<div class="yui-d0 yui-t3">                 
-  <div class="yui-b"><?php include './project.html.php';?></div>
-  <div class="yui-main">
-    <div class="yui-b">
-      <div id='tabbar' class='yui-d0'><?php include './tabbar.html.php'; ?></div>
-      <div class='a-center'>
-        <?php echo $charts; ?>
-      </div>
-    </div>
-  </div>
-</div>  
+<div class='yui-d0 a-center'><?php echo $charts; ?></div>
 <?php include '../../common/footer.html.php';?>
