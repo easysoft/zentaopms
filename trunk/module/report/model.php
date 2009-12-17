@@ -26,7 +26,7 @@
 class reportModel extends model
 {
     /* 输出chart swf代码。*/
-    public function createChart($swf, $dataURL, $width = 600, $height = 500)
+    public function createChart($swf, $dataURL, $width = 800, $height = 500)
     {
         $chartRoot = $this->app->getWebRoot() . 'fusioncharts/';
         $swfFile   = "fcf_$swf.swf";
