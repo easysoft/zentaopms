@@ -37,6 +37,9 @@ class task extends control
         $project = $this->project->findById($projectID); 
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
 
+        /* 设置菜单。*/
+        $this->project->setMenu($this->project->getPairs(), $project->id);
+
         if(!empty($_POST))
         {
             $taskID = $this->task->create($projectID);
@@ -68,6 +71,9 @@ class task extends control
         $task = $this->task->findByID($taskID);
         $project = $this->project->findByID($task->project);
 
+        /* 设置菜单。*/
+        $this->project->setMenu($this->project->getPairs(), $project->id);
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -85,7 +91,7 @@ class task extends control
         $stories = $this->story->getProjectStoryPairs($project->id);
         $members = $this->project->getTeamMemberPairs($project->id);
 
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->task->edit;
+        $header['title'] = $this->lang->task->edit;
         $position[]      = html::a($this->createLink('project', 'browse', "project=$task->project"), $project->name);
         $position[]      = $this->lang->task->edit;
 
@@ -104,6 +110,9 @@ class task extends control
         $this->loadModel('action');
         $task = $this->task->findByID($taskID);
         $project = $this->project->findByID($task->project);
+
+        /* 设置菜单。*/
+        $this->project->setMenu($this->project->getPairs(), $project->id);
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->view;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);

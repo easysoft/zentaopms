@@ -28,6 +28,7 @@ $lang->project->delete       = "删除项目";
 $lang->project->browse       = "浏览项目";
 $lang->project->edit         = "编辑项目";
 $lang->project->manage       = "维护模块";
+$lang->project->view         = "基本信息";
 
 $lang->project->selectProject  = "请选择项目";
 $lang->project->manageMembers  = '团队管理';
@@ -79,6 +80,7 @@ $lang->project->burnData     = '燃烧图数据';
 $lang->project->beginAndEnd = '起止时间';
 $lang->project->lblStats    = '工时统计';
 $lang->project->stats       = '总共预计『%s』工时<br />已经消耗『%s』工时<br />预计剩余『%s』工时';
+$lang->project->oneLineStats = "项目『%s』, 代号为『%s』, 相关产品为『%s』，『%s』开始，『%s』结束，总预计『%s』工时，已消耗『%s』工时，预计剩余『%s』工时。";
 
 $lang->project->statusList->wait  = '未开始';
 $lang->project->statusList->doing = '进行中';

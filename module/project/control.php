@@ -32,17 +32,17 @@ class project extends control
         $this->projects = $this->project->getPairs();
     }
 
-    /* 项目视图首页，暂时跳转到浏览页面。*/
+    /* 项目视图首页，*/
     public function index()
     {
         if(empty($this->projects)) $this->locate($this->createLink('project', 'create'));
-        $this->locate($this->createLink($this->moduleName, 'task'));
+        $this->locate($this->createLink('project', 'browse'));
     }
 
     /* 浏览某一个项目。*/
     public function browse($projectID = 0)
     {
-        $this->locate($this->createLink($this->moduleName, 'task', "productID=$projectID"));
+        $this->locate($this->createLink($this->moduleName, 'task', "projectID=$projectID"));
     }
 
     /* task, story, bug等方法的一些公共操作。*/
@@ -57,6 +57,9 @@ class project extends control
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);
         $teamMembers   = $this->project->getTeamMembers($project->id);
+
+        /* 设置菜单。*/
+        $this->project->setMenu($this->projects, $project->id);
 
         /* 将其赋值到模板系统。*/
         $this->assign('projects',      $this->projects);
@@ -184,6 +187,7 @@ class project extends control
     public function burn($projectID = 0)
     {
         $this->loadModel('report');
+
         /* 公共的操作。*/
         $project = $this->commonAction($projectID);
 
@@ -208,6 +212,23 @@ class project extends control
         die($this->report->createSingleXML($sets, $this->lang->project->charts->burn->graph));
     }
 
+    /* 团队成员。*/
+    public function team($projectID = 0)
+    {
+        /* 公共的操作。*/
+        $project = $this->commonAction($projectID);
+
+        /* 设定header和position信息。*/
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->team;
+        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[]      = $this->lang->project->team;
+
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
+
+        $this->display();
+    }
+
     /* 创建一个项目。*/
     public function create()
     {
@@ -218,10 +239,13 @@ class project extends control
             die(js::locate($this->createLink('project', 'browse', "projectID=$projectID"), 'parent'));
         }
 
+        /* 设置菜单。*/
+        $this->project->setMenu($this->projects, '');
+
         $header['title'] = $this->lang->project->create;
         $position[]      = $header['title'];
         $projects        = array('' => '') + $this->projects;
-
+        
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('projects', $projects);
@@ -236,8 +260,12 @@ class project extends control
         {
             $this->project->update($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($browseProjectLink, 'parent'));
+            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
+
+        /* 设置菜单。*/
+        $this->project->setMenu($this->projects, $projectID);
+
         $projects = array('' => '') + $this->projects;
         $project  = $this->project->findById($projectID);
 
@@ -255,6 +283,20 @@ class project extends control
         $this->assign('projects', $projects);
         $this->assign('project',  $project);
 
+        $this->display();
+    }
+
+    /* 项目基本信息。*/
+    public function view($projectID)
+    {
+        /* 公共的操作。*/
+        $project = $this->commonAction($projectID);
+
+        $header['title'] = $this->lang->project->view;
+        $position[]      = $header['title'];
+
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
         $this->display();
     }
 
@@ -287,6 +329,9 @@ class project extends control
 
         $this->loadModel('product');
         $project  = $this->project->findById($projectID);
+
+        /* 设置菜单。*/
+        $this->project->setMenu($this->projects, $project->id);
 
         /* 标题和位置信息。*/
         $header['title'] = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
@@ -329,6 +374,9 @@ class project extends control
         $childProjects = $this->project->getChildProjects($project->id);
         $childProjects = join(",", array_keys($childProjects));
 
+        /* 设置菜单。*/
+        $this->project->setMenu($this->projects, $project->id);
+
         /* 赋值。*/
         $this->assign('header',        $header);
         $this->assign('position',      $position);
@@ -341,11 +389,10 @@ class project extends control
     /* 维护团队成员。*/
     public function manageMembers($projectID = 0)
     {
-        $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
-            $this->locate($browseProjectLink);
+            $this->locate($this->createLink('project', 'team', "projectID=$projectID"));
             exit;
         }
         $this->loadModel('user');
@@ -355,8 +402,11 @@ class project extends control
         $users   = array('' => '') + $users;
         $members = $this->project->getTeamMembers($projectID);
 
+        /* 设置菜单。*/
+        $this->project->setMenu($this->projects, $project->id);
+
         $header['title'] = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
-        $position[]      = html::a($browseProjectLink, $project->name);
+        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->manageMembers;
         $this->assign('header',   $header);
         $this->assign('position', $position);
@@ -390,6 +440,9 @@ class project extends control
         $project    = $this->project->findById($projectID);
         $products   = $this->project->getProducts($projectID);
         $browseLink = $this->createLink('project', 'story', "projectID=$projectID");
+
+        /* 设置菜单。*/
+        $this->project->setMenu($this->projects, $project->id);
 
         if(empty($products))
         {

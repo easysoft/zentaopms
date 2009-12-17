@@ -35,61 +35,64 @@
     </div>
   </div>
 </div>
-</div>  
 
-<div class='yui-d0'>
-
-  <fieldset>
-    <legend><?php echo $lang->task->legendBasic;?></legend>
-    <table align='center' class='table-1 a-left'> 
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->project;?></th>
-        <td><?php echo $project->name;?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->story;?></th>
-        <td><?php echo $task->storyTitle;?>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->owner;?></th>
-        <td><?php echo $task->ownerRealName;?> 
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-        <td><?php echo $task->estimate;?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-        <td><?php echo $task->consumed;?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->left;?></th>
-        <td><?php echo $task->left;?></td>
-      </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->status;?></th>
-        <td><?php $lang->show($lang->task->statusList, $task->status);?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->pri;?></th>
-        <td><?php $lang->show($lang->task->priList, $task->pri);?></td>
-      </tr>  
-    </table>
-  </fieldset>
-  <fieldset>
-    <legend><?php echo $lang->task->legendDesc;?></legend>
-    <div><?php echo nl2br($task->desc);?></div>
-  </fieldset>
-  <fieldset>
-    <legend><?php echo $lang->task->legendAction;?></legend>
-    <div class='a-center' style='font-size:16px; font-weight:bold'>
-      <?php
-      if(common::hasPriv('task', 'edit')) echo html::a($this->createLink('task', 'edit', "taskID=$task->id"),  $lang->task->buttonEdit);
-      if(common::hasPriv('project', 'task')) echo html::a($app->session->taskList,  $lang->task->buttonBackToList);
-      ?>
+<div class='yui-d0 yui-t6'>
+  <div class='yui-main'>
+    <div class='yui-b'>
+      <fieldset>
+        <legend><?php echo $lang->task->legendDesc;?></legend>
+        <div><?php echo nl2br($task->desc);?></div>
+      </fieldset>
+      <?php include '../../common/action.html.php';?>
+      <fieldset>
+        <legend><?php echo $lang->task->legendAction;?></legend>
+        <div class='a-center' style='font-size:16px; font-weight:bold'>
+          <?php
+          if(common::hasPriv('task', 'edit')) echo html::a($this->createLink('task', 'edit', "taskID=$task->id"),  $lang->task->buttonEdit);
+          if(common::hasPriv('project', 'task')) echo html::a($app->session->taskList,  $lang->task->buttonBackToList);
+          ?>
+        </div>
+      </fieldset>
     </div>
-  </fieldset>
-  <?php include '../../common/action.html.php';?>
-
+  </div>
+  <div class='yui-b'>
+    <fieldset>
+      <legend><?php echo $lang->task->legendBasic;?></legend>
+      <table class='table-1'> 
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->project;?></th>
+          <td><?php echo $project->name;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->story;?></th>
+          <td><?php echo $task->storyTitle;?>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->owner;?></th>
+          <td><?php echo $task->ownerRealName;?> 
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->estimate;?></th>
+          <td><?php echo $task->estimate;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->consumed;?></th>
+          <td><?php echo $task->consumed;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->left;?></th>
+          <td><?php echo $task->left;?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->status;?></th>
+          <td><?php $lang->show($lang->task->statusList, $task->status);?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->pri;?></th>
+          <td><?php $lang->show($lang->task->priList, $task->pri);?></td>
+        </tr>  
+      </table>
+    </fieldset>
+   </div>
 </div>
 <?php include '../../common/footer.html.php';?>

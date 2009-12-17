@@ -23,7 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $lang->project->edit;?></caption>
