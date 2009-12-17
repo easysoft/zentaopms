@@ -25,16 +25,16 @@
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/tablesorter.html.php';?>
 <div class='yui-d0'>
-  <table class='table-1 tablesorter' id='tasktable'>
+  <table class='table-1 tablesorter fixed' id='tasktable'>
     <thead>
     <tr class='colhead'>
       <th><?php echo $lang->task->id;?></th>
-      <th class='w-p30 nobr'><?php echo $lang->task->name;?></th>
-      <th class='w-p10 nobr'><?php echo $lang->task->project;?></th>
-      <th ><?php echo $lang->task->pri;?></th>
+      <th class='w-p30'><?php echo $lang->task->name;?></th>
+      <th class='w-p10'><?php echo $lang->task->project;?></th>
+      <th><?php echo $lang->task->pri;?></th>
       <th><?php echo $lang->task->estimate;?></th>
       <th><?php echo $lang->task->consumed;?></th>
-      <th class='w-p30 nobr'><?php echo $lang->task->story;?></th>
+      <th class='w-p30'><?php echo $lang->task->story;?></th>
       <th><?php echo $lang->task->status;?></th>
       <th><?php echo $lang->action;?></th>
     </tr>
