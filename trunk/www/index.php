@@ -69,6 +69,7 @@ if($config->debug)
     $memory   = round(memory_get_peak_usage() / 1024, 1);
     $querys   = count(dao::$querys);
     echo "<div id='debugbar'>TIME: $timeUsed ms, MEM: $memory KB, SQL: $querys.  </div>";
+    echo '<style>body{padding-bottom:50px}</style>';
 }
 
 /* 获取系统时间，微秒为单位。*/
