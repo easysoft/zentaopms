@@ -166,6 +166,7 @@ EOT;
             $alias     = '';
             $float     = '';
             $active    = '';
+            $target    = '';
 
             /* 如果该菜单是以数组的形式配置的，则覆盖上面的默认设置。*/
             if(is_array($submenu)) extract($submenu);
@@ -188,7 +189,7 @@ EOT;
                     if($currentModule == $subModule) $active = 'active';
                     if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false)) $active = 'active';
 
-                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label) . "</li>\n";
+                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target) . "</li>\n";
                 }
             }
         }
@@ -219,6 +220,68 @@ EOT;
             echo $link;
             if(isset($position[$key + 1])) echo $lang->arrow;
         }
+    }
+
+    /* 设置菜单的参数。*/
+    public function setMenuVars($menu, $key, $params)
+    {
+        if(is_array($params))
+        {
+            if(is_array($menu->$key))
+            {
+                $menu->$key = (object)$menu->$key;
+                $menu->$key->link = vsprintf($menu->$key->link, $params);
+                $menu->$key = (array)$menu->$key;
+            }
+            else 
+            {
+                $menu->$key = vsprintf($menu->$key, $params);
+            }
+        }
+        else
+        {
+            if(is_array($menu->$key))
+            {
+                $menu->$key = (object)$menu->$key;
+                $menu->$key->link = sprintf($menu->$key->link, $params);
+                $menu->$key = (array)$menu->$key;
+            }
+            else
+            {
+                $menu->$key = sprintf($menu->$key, $params);
+            }
+        }
+    }
+
+    /* 打印带有orderby的链接。 */
+    public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
+    {
+        global $lang, $app;
+        if(empty($module)) $module= $app->getModuleName();
+        if(empty($method)) $method= $app->getMethodName();
+        if(strpos($orderBy, $fieldName) !== false)
+        {
+            if(stripos($orderBy, 'desc') !== false)
+            {
+                $orderBy = str_ireplace('desc', 'asc', $orderBy);
+            }
+            elseif(stripos($orderBy, 'asc')  !== false)
+            {
+                $orderBy = str_ireplace('asc', 'desc', $orderBy);
+            }
+        }
+        else
+        {
+            $orderBy = $fieldName . '|' . 'asc';
+        }
+        $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
+        echo html::a($link, $label);
+    }
+
+    /* 打印链接，会检查权限*/
+    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '')
+    {
+        if(common::hasPriv($module, $method)) echo html::a(helper::createLink($module, $method, $vars), $label, $target, $misc);
     }
 
     /**
