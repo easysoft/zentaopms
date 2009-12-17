@@ -43,26 +43,31 @@ class tree extends control
     /* 模块列表。*/
     public function browse($productID, $viewType, $currentModuleID = 0)
     {
-        $this->setProduct($productID);
+        $product = $this->product->findByID($productID);
 
         if($viewType == 'product')
         {
-            $header['title'] = $this->lang->tree->manageProduct . $this->lang->colon . $this->product->name;
-            $position[]      = html::a($this->createLink('product', 'browse', "product=$productID"), $this->product->name);
-            $position[]      = $this->lang->tree->manageProduct;
+            /* 设置菜单。*/
+            $this->product->setMenu($this->product->getPairs(), $productID);
+            $this->lang->tree->menu = $this->lang->product->menu;
             $this->lang->set('menugroup.tree', 'product');
+
+            /* 设置导航。*/
+            $header['title'] = $this->lang->tree->manageProduct . $this->lang->colon . $product->name;
+            $position[]      = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
+            $position[]      = $this->lang->tree->manageProduct;
         }
         elseif($viewType == 'bug')
         {
-            $header['title'] = $this->lang->tree->manageBug . $this->lang->colon . $this->product->name;
-            $position[]      = html::a($this->createLink('bug', 'browse', "product=$productID"), $this->product->name);
+            $header['title'] = $this->lang->tree->manageBug . $this->lang->colon . $product->name;
+            $position[]      = html::a($this->createLink('bug', 'browse', "product=$productID"), $product->name);
             $position[]      = $this->lang->tree->manageBug;
             $this->lang->set('menugroup.tree', 'qa');
         }
         elseif($viewType == 'case')
         {
-            $header['title'] = $this->lang->tree->manageCase . $this->lang->colon . $this->product->name;
-            $position[]      = html::a($this->createLink('testcase', 'browse', "product=$productID"), $this->product->name);
+            $header['title'] = $this->lang->tree->manageCase . $this->lang->colon . $product->name;
+            $position[]      = html::a($this->createLink('testcase', 'browse', "product=$productID"), $product->name);
             $position[]      = $this->lang->tree->manageCase;
             $this->lang->set('menugroup.tree', 'qa');
         }
@@ -71,6 +76,7 @@ class tree extends control
         $this->assign('header',          $header);
         $this->assign('position',        $position);
         $this->assign('productID',       $productID);
+        $this->assign('product',         $product);
         $this->assign('viewType',        $viewType);
         $this->assign('modules',         $this->tree->getTreeMenu($productID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink')));
         $this->assign('sons',            $this->tree->getSons($productID, $currentModuleID, $viewType));

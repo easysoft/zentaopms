@@ -24,9 +24,9 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/treeview.html.php';?>
-<div class="yui-d0 yui-t3">                 
+<div class="yui-d0 yui-t7">
   <div class="yui-b">
-    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "product=$productID&viewType=$viewType");?>'>
+    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "product={$product->id}&viewType=$viewType");?>'>
     <table class='table-1'>
       <caption>
         <?php echo $header['title'];?>
@@ -44,18 +44,18 @@
   </div>
   <div class="yui-main">
     <div class="yui-b">
-    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "product=$productID&viewType=$viewType");?>'>
+    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "product={$product->id}&viewType=$viewType");?>'>
       <table align='center' class='table-1'>
         <caption><?php echo $lang->tree->manageChild;?></caption>
         <tr>
           <td width='10%'>
             <nobr>
             <?php
-            echo html::a($this->createLink('tree', 'browse', "product=$productID&viewType=$viewType"), $this->product->name);
+            echo html::a($this->createLink('tree', 'browse', "product={$product->id}&viewType=$viewType"), $product->name);
             echo $lang->arrow;
             foreach($parentModules as $module)
             {
-                echo html::a($this->createLink('tree', 'browse', "product=$productID&viewType=$viewType&moduleID=$module->id"), $module->name);
+                echo html::a($this->createLink('tree', 'browse', "product={$product->id}&viewType=$viewType&moduleID=$module->id"), $module->name);
                 echo $lang->arrow;
             }
             ?>
