@@ -30,9 +30,9 @@ function loadModuleMenu(productID)
     $('#moduleIdBox').load(link);
 }
 </script>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1'> 
+    <table class='table-1'> 
       <caption><?php echo $lang->story->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->story->product;?></th>
@@ -82,10 +82,7 @@ function loadModuleMenu(productID)
         <td class='a-left'><textarea name='comment' rows='5' class='text-1'></textarea></td>
       </tr>  
       <tr>
-        <td colspan='2'>
-          <input type='submit' value='<?php echo $lang->save;?>'  class='button-s' />
-          <input type='reset'  value='<?php echo $lang->reset;?>' class='button-r' />
-        </td>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
     </table>
   </form>
