@@ -65,12 +65,28 @@ $lang->todo->menu         = $lang->my->menu;
 
 /* 产品视图设置。*/
 $lang->product->menu->list   = '%s';
-$lang->product->menu->story  = '需求列表|product|browse|productID=%s';
+$lang->product->menu->story  = array('link' => '需求列表|product|browse|productID=%s', 'subModule' => 'story');
+$lang->product->menu->edit   = '编辑产品|product|edit|productID=%s';
+$lang->product->menu->delete = array('link' => '删除产品|product|delete|productID=%s', 'target' => 'hiddenwin');
+$lang->product->menu->module = '维护模块|tree|browse|productID=%s&view=product';
 $lang->product->menu->create = array('link' => '新增产品|product|create', 'float' => 'right');
+$lang->story->menu           = $lang->product->menu;
 
 /* 项目视图菜单设置。*/
-$lang->project->menu->create = '新增项目|project|create';
-$lang->project->menu->browse = '浏览项目|project|browse';
+$lang->project->menu->list   = '%s';
+$lang->project->menu->task   = array('link' => '任务列表|project|task|projectID=%s', 'subModule' => 'task');
+$lang->project->menu->story  = array('link' => '需求列表|project|story|projectID=%s', 'alias' => 'linkstory');
+$lang->project->menu->bug    = 'Bug列表|project|bug|projectID=%s';
+$lang->project->menu->burn   = '燃烧图|project|burn|projectID=%s';
+$lang->project->menu->team   = array('link' => '团队成员|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->line   = $lang->colon;
+$lang->project->menu->view   = '基本信息|project|view|projectID=%s';
+$lang->project->menu->edit   = '编辑项目|project|edit|projectID=%s';
+$lang->project->menu->delete = array('link' => '删除项目|project|delete|projectID=%s', 'target' => 'hiddenwin');
+$lang->project->menu->product= '关联产品|project|manageproducts|projectID=%s';
+
+$lang->project->menu->create = array('link' => '新增项目|project|create', 'float' => 'right');
+$lang->task->menu            = $lang->project->menu;
 
 /* QA视图菜单设置。*/
 $lang->bug->menu->bug      = '缺陷管理|bug|browse';
