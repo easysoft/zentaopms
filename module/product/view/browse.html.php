@@ -25,104 +25,55 @@
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/treeview.html.php';?>
 <script language='Javascript'>
-function selectProduct(productID)
+/* 切换浏览方式。*/
+function browseByModule()
 {
-    link = createLink('product', 'browse', 'productID=' + productID);
-    location.href=link;
+    $('#mainbox').addClass('yui-t7');
+    $('#treebox').removeClass('hidden');
+    $('#featuremodule').addClass('active');
+    $('#featureall').removeClass('active');
 }
 </script>
-<div class="yui-d0 yui-t3">                 
-  <div class="yui-b">
-    <table class='table-1'>
-      <caption>
-        <?php echo $lang->product->selectProduct;?>
-        <?php echo html::select('productID', $products, $productID, 'onchange="selectProduct(this.value);" style="width:200px"');?>
-      </caption>
-      <tr>
-        <td>
-          <div id='main'><?php echo $moduleTree;?></div>
-          <div class='a-right'>
-            <?php if(common::hasPriv('product', 'edit'))   echo html::a($this->createLink('product', 'edit',   "productID=$productID"), $lang->edit);?>
-            <?php if(common::hasPriv('product', 'delete')) echo html::a($this->createLink('product', 'delete', "productID=$productID&confirm=no"),   $lang->delete, 'hiddenwin');?>
-            <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "productID=$productID&view=product"), $lang->tree->manage);?>
-          </div>
-        </td>
-      </tr>
-    </table>
-    <!--
-    <table align='center' class='table-1'>
-      <caption><?php echo $lang->release->browse;?></caption>
-      <tr>
-        <th><?php echo $lang->release->id;?></th>
-        <th><?php echo $lang->release->name;?></th>
-        <th><?php echo $lang->release->desc;?></th>
-        <th><?php echo $lang->release->status;?></th>
-      </tr>
-      <?php //foreach($releases as $release):?>
-      <tr>
-        <td><?php //echo $release->id;?></td>
-        <td><?php //echo $release->name;?></td>
-        <td><?php //echo $release->desc;?></td>
-        <td><?php //echo $release->status;?></td>
-      </tr>
-      <?php //endforeach;?>
-    </table>
-    <?php 
-     $vars['productID'] = $productID;
-     $addLink = $this->createLink('release', 'create', $vars);
-     echo "<a href='$addLink'>{$lang->release->create}</a>";
-     ?>
-     -->
+
+<div class='yui-d0'>
+  <div id='featurebar'>
+    <div class='f-left'>
+      <span id='featureall'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID"), $lang->product->allStory);?></span>
+      <span id='featuremodule' onclick='browseByModule()'><?php echo $lang->product->moduleStory;?></span>
     </div>
-    <div class="yui-main">
+    <div class='f-right'>
+      <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
+    </div>
+  </div>
+</div>
+
+<div class='yui-d0 <?php if($browseType == 'module') echo 'yui-t7';?>' id='mainbox'>
+  <div class='yui-b <?php if($browseType != 'module') echo 'hidden';?>' id='treebox'>
+    <div class='box-title'><?php echo $productName;?></div>
+    <div class='box-content'>
+      <?php echo $moduleTree;?>
+      <div class='a-right'>
+        <?php if(common::hasPriv('product', 'edit'))   echo html::a($this->createLink('product', 'edit',   "productID=$productID"), $lang->edit);?>
+        <?php if(common::hasPriv('product', 'delete')) echo html::a($this->createLink('product', 'delete', "productID=$productID&confirm=no"),   $lang->delete, 'hiddenwin');?>
+        <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "productID=$productID&view=product"), $lang->tree->manage);?>
+      </div>
+    </div>
+  </div>
+
+  <div class="yui-main">
     <div class="yui-b">
-      <table align='center' class='table-1'>
-        <caption>
-          <div class='half-left'>
-          <?php
-          echo html::a($this->createLink('product', 'browse', "productID=$productID"), $productName) . $lang->arrow;
-          foreach($parentModules as $module)
-          {
-              echo html::a($this->createLink('product', 'browse', "productID=$productID&moduleID=$module->id"), $module->name) . $lang->arrow;
-          }
-          echo $lang->story->browse;
-          ?>
-          </div>
-          <div class='half-right'>
-          <?php 
-          if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create);
-          ?>
-          </div>
-        </caption>
+      <table class='table-1 fixed'>
         <thead>
-          <tr>
-            <?php
-            $app->global->vars    = "productID=$productID&moduleID=$moduleID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
-            $app->global->orderBy = $orderBy;
-            function printOrderLink($fieldName)
-            {
-                global $app, $lang;
-                if(strpos($app->global->orderBy, $fieldName) !== false)
-                {
-                    if(stripos($app->global->orderBy, 'desc') !== false) $orderBy = str_replace('desc', 'asc', $app->global->orderBy);
-                    if(stripos($app->global->orderBy, 'asc')  !== false) $orderBy = str_replace('asc', 'desc', $app->global->orderBy);
-                }
-                else
-                {
-                    $orderBy = $fieldName . '|' . 'asc';
-                }
-                $link = helper::createLink('product', 'browse', sprintf($app->global->vars, $orderBy));
-                echo html::a($link, $lang->story->$fieldName);
-            }
-            ?>
-            <th><?php printOrderLink('id');?></th>
-            <th><?php printOrderLink('pri');?></th>
-            <th><?php printOrderLink('title');?></th>
-            <th><?php printOrderLink('assignedTo');?></th>
-            <th><?php printOrderLink('openedBy');?></th>
-            <th><?php printOrderLink('estimate');?></th>
-            <th><?php printOrderLink('status');?></th>
-            <th><?php printOrderLink('lastEditedDate');?></th>
+          <tr class='colhead'>
+            <?php $vars = "productID=$productID&moduleID=$moduleID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";?>
+            <th><?php common::printOrderLink('id',  $orderBy, $vars, $lang->story->id);?></th>
+            <th><?php common::printOrderLink('pri', $orderBy, $vars, $lang->story->pri);?></th>
+            <th class='w-p40'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+            <th><?php common::printOrderLink('assignedTo',     $orderBy, $vars, $lang->story->assignedTo);?></th>
+            <th><?php common::printOrderLink('openedBy',       $orderBy, $vars, $lang->story->openedBy);?></th>
+            <th><?php common::printOrderLink('estimate',       $orderBy, $vars, $lang->story->estimate);?></th>
+            <th><?php common::printOrderLink('status',         $orderBy, $vars, $lang->story->status);?></th>
+            <th><?php common::printOrderLink('lastEditedDate', $orderBy, $vars, $lang->story->lastEditedDate);?></th>
             <th><?php echo $lang->action;?></th>
           </tr>
         </thead>
@@ -135,7 +86,7 @@ function selectProduct(productID)
           <tr class='a-center'>
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
             <td><?php echo $story->pri;?></td>
-            <td class='a-left'><nobr><?php echo $story->title;?></nobr></td>
+            <td class='a-left nobr'><nobr><?php echo $story->title;?></nobr></td>
             <td><?php echo $users[$story->assignedTo];?></td>
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $story->estimate;?></td>
@@ -150,8 +101,11 @@ function selectProduct(productID)
         </tbody>
       </table>
       <?php echo $pager;?>
-      
     </div>
   </div>
 </div>  
+<script language='javascript'>
+$('#module<?php echo $moduleID;?>').addClass('active')
+$('#feature<?php echo $browseType;?>').addClass('active')
+</script>
 <?php include '../../common/footer.html.php';?>

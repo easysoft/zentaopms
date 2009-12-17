@@ -40,8 +40,6 @@ class product extends control
         $this->products = $this->product->getPairs();
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
         $this->assign('products', $this->products);
-
-
     }
 
     /* 产品视图首页。*/
@@ -53,16 +51,17 @@ class product extends control
     /* 浏览某一个产品。*/
     public function browse($productID = 0, $moduleID = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-
-        $this->lang->product->menu[]  = html::select('product', $this->products, $productID). $this->lang->arrow;
-        $this->lang->product->menu[] = "需求列表|product|browse|productID=$productID";
-        $this->lang->product->menu[] = '新增产品|product|create||right|';
+        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&type=byQuery");
+        $this->assign('searchForm', $this->fetch('search', 'buildForm', $this->config->product->search));
 
         /* 设置当前的产品id和模块id。*/
         $this->session->set('storyList', $this->app->getURI(true));
         $productID      = common::saveProductState($productID, key($this->products));
         $moduleID       = (int)$moduleID;
         $childModuleIds = $this->tree->getAllChildID($moduleID);
+
+        /* 设置菜单。*/
+        $this->product->setMenu($this->products, $productID);
 
         /* 设置header和导航条信息。*/
         $header['title'] = $this->lang->product->index . $this->lang->colon . $this->products[$productID];
@@ -72,6 +71,9 @@ class product extends control
         $this->app->loadClass('pager', $static = true);
         $pager   = new pager($recTotal, $recPerPage, $pageID);
         $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
+
+        /* 设置浏览模式。*/
+        $browseType = $moduleID > 0 ? 'module' : 'all';
 
         $this->assign('header',        $header);
         $this->assign('position',      $position);
@@ -86,6 +88,7 @@ class product extends control
         $this->assign('recPerPage',    $pager->recPerPage);
         $this->assign('users',         $this->user->getPairs($this->app->company->id, 'noletter'));
         $this->assign('orderBy',       $orderBy);
+        $this->assign('browseType',    $browseType);
 
         $this->display();
     }
@@ -99,6 +102,9 @@ class product extends control
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
         }
+
+        /* 设置菜单。*/
+        $this->product->setMenu($this->products, '');
 
         $header['title'] = $this->lang->product->create;
         $position[]      = $header['title'];
@@ -116,6 +122,9 @@ class product extends control
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('product', 'browse', "product=$productID"), 'parent'));
         }
+
+        /* 设置菜单。*/
+        $this->product->setMenu($this->products, $productID);
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $header['title'] = $this->lang->product->edit . $this->lang->colon . $product->name;

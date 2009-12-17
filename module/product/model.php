@@ -25,8 +25,19 @@
 <?php
 class productModel extends model
 {
+    /* 设置菜单。*/
+    public function setMenu($products, $productID)
+    {
+        $selectHtml = html::select('productID', $products, $productID, 'onchange="switchProduct(this.value);"');
+        common::setMenuVars($this->lang->product->menu, 'list',   $selectHtml . $this->lang->arrow);
+        common::setMenuVars($this->lang->product->menu, 'story',  $productID);
+        common::setMenuVars($this->lang->product->menu, 'edit',   $productID);
+        common::setMenuVars($this->lang->product->menu, 'delete', $productID);
+        common::setMenuVars($this->lang->product->menu, 'module', $productID);
+    }
+
     /* 通过ID获取产品信息。*/
-    function findByID($productID)
+    public function findByID($productID)
     {
         return $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
     }
