@@ -23,49 +23,47 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post'>
-    <table align='center' class='table-3 a-left'> 
+    <table align='center' class='table-5'> 
       <caption><?php echo $lang->company->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->company->name;?></th>
-        <td><input type='text' name='name' /></td>
+        <td><input type='text' name='name' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->phone;?></th>
-        <td><input type='text' name='phone' /></td>
+        <td><input type='text' name='phone' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->fax;?></th>
-        <td><input type='text' name='fax' /></td>
+        <td><input type='text' name='fax' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->address;?></th>
-        <td><input type='text' name='address' /></td>
+        <td><input type='text' name='address' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->zipcode;?></th>
-        <td><input type='text' name='zipcode' /></td>
+        <td><input type='text' name='zipcode' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->website;?></th>
-        <td><input type='text' name='website' /></td>
+        <td><input type='text' name='website' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->backyard;?></th>
-        <td><input type='text' name='backyard' /></td>
+        <td><input type='text' name='backyard' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->pms;?></th>
-        <td><input type='text' name='pms' /></td>
+        <td><input type='text' name='pms' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->guest;?></th>
-        <td><input type='text' name='guest' /></td>
+        <td><?php echo html::radio('gust', $lang->company->guestList);?></td>
       </tr>  
-      <tr>
-        <td colspan='2' class='a-center'><input type='submit' /></td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
 </div>  

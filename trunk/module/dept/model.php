@@ -147,7 +147,7 @@ class deptModel extends model
     /* 生成用户链接。*/
     function createMemberLink($dept)
     {
-        $linkHtml = html::a(helper::createLink('company', 'browse', "dept={$dept->id}"), $dept->name);
+        $linkHtml = html::a(helper::createLink('company', 'browse', "dept={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
         return $linkHtml;
     }
 

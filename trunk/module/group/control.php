@@ -31,6 +31,26 @@ class group extends control
         $this->loadModel('user');
     }
 
+    /* 分组列表。*/
+    public function browse($companyID = 0)
+    {
+        if($companyID == 0) $companyID = $this->app->company->id;
+
+        $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
+        $position[]      = $this->lang->group->browse;
+
+        $groups     = $this->group->getList($companyID);
+        $groupUsers = array();
+        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+
+        $this->assign('header',     $header);
+        $this->assign('position',   $position);
+        $this->assign('groups',     $groups);
+        $this->assign('groupUsers', $groupUsers);
+
+        $this->display();
+    }
+
     /* 创建一个用户组。*/
     public function create($companyID = 0)
     {
@@ -38,11 +58,10 @@ class group extends control
         if(!empty($_POST))
         {
             $this->group->create($companyID);
-            die(js::locate($this->createLink('admin', 'browsegroup', "companyid={$this->app->company->id}"), 'parent'));
+            die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->group->create;
-        $position[]      = html::a($this->createLink('admin', 'browsegroup', "companyid={$this->app->company->id}"), $this->lang->admin->group);
+        $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
         $position[]      = $this->lang->group->create;
         $this->assign('header',   $header);
         $this->assign('position', $position);
@@ -56,11 +75,10 @@ class group extends control
        if(!empty($_POST))
         {
             $this->group->update($groupID);
-            die(js::locate($this->createLink('admin', 'browsegroup', "companyid={$this->app->company->id}"), 'parent'));
+            die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->group->edit;
-        $position[]      = html::a($this->createLink('admin', 'browsegroup', "companyid={$this->app->company->id}"), $this->lang->admin->group);
+        $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
         $position[]      = $this->lang->group->edit;
         $this->assign('header',   $header);
         $this->assign('position', $position);
@@ -100,7 +118,7 @@ class group extends control
         if(!empty($_POST))
         {
             $this->group->updateUser($groupID);
-            die(js::locate($this->createLink('admin', 'browsegroup', "companyid={$this->app->company->id}"), 'parent'));
+            die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
         $group      = $this->group->getById($groupID);
         $groupUsers = $this->group->getUserPairs($groupID);
@@ -125,14 +143,12 @@ class group extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->group->confirmDelete, $this->createLink('group', 'delete', "groupID=$groupID&confirm=yes"));
-            exit;
+            die(js::confirm($this->lang->group->confirmDelete, $this->createLink('group', 'delete', "groupID=$groupID&confirm=yes")));
         }
         else
         {
             $this->group->delete($groupID);
-            echo js::locate($this->createLink('admin', 'browsegroup', "companyID={$this->app->company->id}"), 'parent');
-            exit;
+            die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
     }
 }

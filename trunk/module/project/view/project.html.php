@@ -1,4 +1,3 @@
-<div class='bg-gray mb-10px padding-10px'>
 <?php 
 $products = join(', ', $products);
 printf($lang->project->oneLineStats, 
@@ -11,4 +10,3 @@ printf($lang->project->oneLineStats,
     $project->totalConsumed,
     $project->totalLeft);
 ?>
-</div>

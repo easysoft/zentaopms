@@ -60,7 +60,7 @@ function loadStory(productID)
   </div>
 </div>
 
-<div class='yui-doc3 yui-t7'>
+<div class='yui-d0 yui-t7'>
   <div class='yui-g'>  
 
     <div class='yui-u first'>  

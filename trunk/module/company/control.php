@@ -44,6 +44,8 @@ class company extends control
         $this->lang->set('menugroup.company', 'company');
         $childDeptIds = $this->dept->getAllChildID($deptID);
 
+        $this->company->setMenu($deptID);
+
         $header['title'] = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $position[]      = $this->lang->dept->common;
 
@@ -52,6 +54,7 @@ class company extends control
         $this->assign('users',       $this->dept->getUsers($childDeptIds));
         $this->assign('deptTree',    $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink')));
         $this->assign('parentDepts', $this->dept->getParents($deptID));
+        $this->assign('deptID',      $deptID);
 
         $this->display();
     }
@@ -66,6 +69,8 @@ class company extends control
         }
 
         $this->lang->set('menugroup.company', 'admin');
+        $this->lang->company->menu = $this->lang->admin->menu;
+
         $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->company->create;
         $position[]      = html::a($this->createLink('admin', 'browsecompany'), $this->lang->admin->company);
         $position[]      = $this->lang->company->create;
@@ -85,6 +90,8 @@ class company extends control
         }
 
         $this->lang->set('menugroup.company', 'admin');
+        $this->lang->company->menu = $this->lang->admin->menu;
+
         $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->company->edit;
         $position[]      = html::a($this->createLink('admin', 'browsecompany'), $this->lang->admin->company);
         $position[]      = $this->lang->company->edit;

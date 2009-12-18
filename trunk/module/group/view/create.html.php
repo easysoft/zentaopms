@@ -23,21 +23,19 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-3 a-left'> 
+    <table align='center' class='table-4 a-left'> 
       <caption><?php echo $lang->group->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->group->name;?></th>
-        <td><input type='text' name='name' /></td>
+        <td><input type='text' name='name' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->group->desc;?></th>
-        <td><textarea name='desc' rows='5' style='width:100%'></textarea></td>
+        <td><textarea name='desc' rows='5' class='area-1'></textarea></td>
       </tr>  
-      <tr>
-        <td colspan='2' class='a-center'><input type='submit' /></td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
 </div>  
