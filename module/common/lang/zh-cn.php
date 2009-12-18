@@ -99,24 +99,34 @@ $lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse', 'al
 $lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse', 'alias' => 'view,create,edit', 'subModule' => 'tree');
 
 /* 组织结构视图菜单设置。*/
-$lang->company->menu->browse = '组织结构|company|browse';
+$lang->company->menu->browseUser  = array('link' => '用户管理|company|browse', 'subModule' => 'user');
+$lang->company->menu->dept        = array('link' => '部门结构|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup = array('link' => '分组管理|group|browse', 'subModule' => 'group');
+$lang->company->menu->addGroup    = array('link' => '添加分组|group|create', 'float' => 'right');
+$lang->company->menu->addUser     = array('link' => '添加用户|user|create|company=%s&dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+$lang->dept->menu            = $lang->company->menu;
+$lang->group->menu           = $lang->company->menu;
+
+/* 用户信息菜单设置。*/
+$lang->user->menu->account  = '%s' . $lang->arrow;
+$lang->user->menu->todo     = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
+$lang->user->menu->task     = '任务列表|user|task|account=%s';
+$lang->user->menu->project  = '项目列表|user|project|account=%s';
+$lang->user->menu->bug      = 'Bug列表|user|bug|account=%s';
+$lang->user->menu->profile  = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
+$lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
 
 /* 后台管理菜单设置。*/
-$lang->admin->menu->browseCompany = '浏览公司|admin|browsecompany';
-$lang->admin->menu->createCompany = '新增公司|company|create';
-$lang->admin->menu->browseGroup   = '浏览分组|admin|browsegroup';
-$lang->admin->menu->createGroup   = '新增分组|group|create';
-$lang->admin->menu->browseUser    = '浏览用户|admin|browseuser';
-$lang->admin->menu->createUser    = '新增用户|user|create';
-$lang->group->menu = $lang->admin->menu;
+$lang->admin->menu->browseCompany = array('link' => '公司管理|admin|browsecompany', 'subModule' => 'company');
+$lang->admin->menu->createCompany = array('link' => '新增公司|company|create', 'float' => 'right');
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release = 'product';
 $lang->menugroup->story   = 'product';
 $lang->menugroup->task    = 'project';
 $lang->menugroup->company = 'admin';
-$lang->menugroup->user    = 'admin';
-$lang->menugroup->group   = 'admin';
+$lang->menugroup->user    = 'company';
+$lang->menugroup->group   = 'company';
 $lang->menugroup->bug     = 'qa';
 $lang->menugroup->testcase= 'qa';
 $lang->menugroup->people  = 'company';
