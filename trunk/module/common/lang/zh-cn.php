@@ -40,6 +40,7 @@ $lang->welcome    = "欢迎使用%s{$lang->colon}{$lang->zentaoMS}";
 $lang->zentaoSite = "官方网站";
 $lang->myControl  = "我的地盘";
 $lang->sponser    = "<a href='http://www.pujia.com' target='_blank'>普加赞助</a>";
+$lang->at         = ' 于 ';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
@@ -89,9 +90,13 @@ $lang->project->menu->create = array('link' => '新增项目|project|create', 'f
 $lang->task->menu            = $lang->project->menu;
 
 /* QA视图菜单设置。*/
-$lang->bug->menu->bug      = '缺陷管理|bug|browse';
-$lang->bug->menu->testcase = '用例管理|testcase|browse';
-$lang->testcase->menu      = $lang->bug->menu;
+$lang->bug->menu->product  = '%s';
+$lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse', 'alias' => 'view,create,edit,resolve,close,active', 'subModule' => 'tree');
+$lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse', 'alias' => 'view,create,edit');
+
+$lang->testcase->menu->product  = '%s';
+$lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse', 'alias' => 'view,create,edit,resolve,close,active');
+$lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse', 'alias' => 'view,create,edit', 'subModule' => 'tree');
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->browse = '组织结构|company|browse';
