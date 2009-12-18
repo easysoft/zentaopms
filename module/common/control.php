@@ -368,6 +368,7 @@ EOT;
         foreach($new as $key => $value)
         {
             if(strtolower($key) == 'lastediteddate') continue;
+            if(strtolower($key) == 'lasteditedby')   continue;
             if($new->$key != $old->$key)
             { 
                 $diff = '';
