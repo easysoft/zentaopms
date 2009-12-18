@@ -35,11 +35,7 @@ class admin extends control
     /* 首页。*/
     public function index($tab = 'index')
     {
-        $header['title'] = $this->lang->admin->index;
-        $position[]      = $header['title'];
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->display();
+        $this->locate($this->createLink('admin', 'browseCompany'));
     }
 
     /* 公司列表。*/
@@ -54,45 +50,6 @@ class admin extends control
         $this->assign('header',    $header);
         $this->assign('position',  $position);
         $this->assign('companies', $companies);
-
-        $this->display();
-    }
-
-    /* 用户列表。*/
-    public function browseUser($companyID = 0)
-    {
-        if($companyID == 0) $companyID = $this->app->company->id;
-
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->user->browse;
-        $position[]      = $this->lang->admin->user;
-        $position[]      = $this->lang->user->browse;
-
-        $users = $this->user->getList($companyID);
-
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('users',    $users);
-
-        $this->display();
-    }
-    
-    /* 分组列表。*/
-    public function browseGroup($companyID = 0)
-    {
-        if($companyID == 0) $companyID = $this->app->company->id;
-
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->group->browse;
-        $position[]      = $this->lang->admin->user;
-        $position[]      = $this->lang->group->browse;
-
-        $groups     = $this->group->getList($companyID);
-        $groupUsers = array();
-        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
-
-        $this->assign('header',     $header);
-        $this->assign('position',   $position);
-        $this->assign('groups',     $groups);
-        $this->assign('groupUsers', $groupUsers);
 
         $this->display();
     }
