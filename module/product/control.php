@@ -51,8 +51,8 @@ class product extends control
     /* 浏览某一个产品。*/
     public function browse($productID = 0, $moduleID = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&type=byQuery");
-        $this->assign('searchForm', $this->fetch('search', 'buildForm', $this->config->product->search));
+        //$this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&type=byQuery");
+        //$this->assign('searchForm', $this->fetch('search', 'buildForm', $this->config->product->search));
 
         /* 设置当前的产品id和模块id。*/
         $this->session->set('storyList', $this->app->getURI(true));
