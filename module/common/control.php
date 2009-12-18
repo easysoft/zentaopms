@@ -281,7 +281,9 @@ EOT;
     /* 打印链接，会检查权限*/
     public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '')
     {
-        if(common::hasPriv($module, $method)) echo html::a(helper::createLink($module, $method, $vars), $label, $target, $misc);
+        if(!common::hasPriv($module, $method)) return false;
+        echo html::a(helper::createLink($module, $method, $vars), $label, $target, $misc);
+        return true;
     }
 
     /**
