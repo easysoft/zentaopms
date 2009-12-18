@@ -25,8 +25,15 @@
 <?php
 class bugModel extends model
 {
+    /* 设置菜单。*/
+    public function setMenu($products, $productID)
+    {
+        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'bug');\"");
+        common::setMenuVars($this->lang->bug->menu, 'product', $selectHtml . $this->lang->arrow);
+    }
+
     /* 创建一个Bug。*/
-    function create()
+    public function create()
     {
         $now = date('Y-m-d H:i:s');
         $bug = fixer::input('post')
