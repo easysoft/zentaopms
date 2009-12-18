@@ -97,6 +97,12 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .w-p50 {width: 50%}
 .w-p55 {width: 55%}
 .w-p60 {width: 60%}
+.w-p65 {width: 65%}
+.w-p70 {width: 70%}
+.w-p75 {width: 75%}
+.w-p80 {width: 80%}
+.w-p85 {width: 85%}
+.w-p90 {width: 90%}
 
 .margin-10px {margin:    10px}
 .padding-10px{padding:   10px}
@@ -180,6 +186,7 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 #titlebar div   {float:right; width:20%; clear:none; text-align:right}
 #titlebar #main input {font-size:14px}
 #titlebar .button-s   {font-size:12px; padding-top:0; padding-bottom:0}
+#titlebar .text-1 {width:80%}
 
 /* 页面其他元素。*/
 .history {border:1px solid gray; background:#efefef; padding:10px; margin-top:10px; margin-bottom:10px}
