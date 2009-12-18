@@ -61,9 +61,20 @@ function setNowrapObjTitle()
 }
 
 /* 选择产品。*/
-function switchProduct(productID)
+function switchProduct(productID, type)
 {
-    link = createLink('product', 'browse', 'productID=' + productID);
+    if(type == 'product')
+    {
+        link = createLink('product', 'browse', 'productID=' + productID);
+    }
+    else if(type == 'bug')
+    {
+        link = createLink('bug', 'browse', 'productID=' + productID + '&type=byModule&param=0');
+    }
+    else if(type == 'case')
+    {
+        link = createLink('testcase', 'browse', 'productID=' + productID + '&type=byModule&param=0');
+    }
     location.href=link;
 }
 

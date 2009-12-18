@@ -47,9 +47,9 @@ function loadStory(productID)
 }
 
 </script>
-<div class='yui-doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1'> 
+    <table class='table-1'> 
       <caption><?php echo $lang->testcase->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->testcase->labProductAndModule;?></th>
@@ -78,7 +78,7 @@ function loadStory(productID)
         </td>
       </tr>  
       <tr>
-        <td colspan='2'><?php echo html::submitButton() . html::resetButton();?> </td>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?> </td>
       </tr>
     </table>
   </form>
