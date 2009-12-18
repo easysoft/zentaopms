@@ -25,6 +25,13 @@
 <?php
 class testcaseModel extends model
 {
+    /* 设置菜单。*/
+    public function setMenu($products, $productID)
+    {
+        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'case');\"");
+        common::setMenuVars($this->lang->testcase->menu, 'product',  $selectHtml . $this->lang->arrow);
+    }
+
     /* 创建一个Case。*/
     function create()
     {

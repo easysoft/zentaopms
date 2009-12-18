@@ -28,7 +28,7 @@ class productModel extends model
     /* ÉèÖÃ²Ëµ¥¡£*/
     public function setMenu($products, $productID)
     {
-        $selectHtml = html::select('productID', $products, $productID, 'onchange="switchProduct(this.value);"');
+        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'product');\"");
         common::setMenuVars($this->lang->product->menu, 'list',   $selectHtml . $this->lang->arrow);
         common::setMenuVars($this->lang->product->menu, 'story',  $productID);
         common::setMenuVars($this->lang->product->menu, 'edit',   $productID);

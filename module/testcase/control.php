@@ -50,22 +50,19 @@ class testcase extends control
         $productID = (int)$productID;
         if($productID == 0) $productID = key($this->products);
 
-        $currentModuleID = ($type == 'byModule') ? (int)$param : 0;
-        if($currentModuleID == 0)
-        {
-            $currentModuleName = $this->lang->testcase->allCases;
-        }
-        else
-        {
-            $currentModule = $this->tree->getById($currentModuleID);
-            $currentModuleName = sprintf($this->lang->testcase->moduleCases, $currentModule->name);
-        }
+        /* 设置菜单。*/
+        $this->testcase->setMenu($this->products, $productID);
 
-        if($type == "byModule")
+        /* 设置模块ID。*/
+        $type     = strtolower($type);
+        $moduleID = ($type == 'bymodule') ? (int)$param : 0;
+
+        /* 如果是按照模块查找，或者列出所有。*/
+        if($type == 'bymodule' or $type == 'all')
         {
             $this->app->loadClass('pager', $static = true);
             $pager = pager::init($recTotal, $recPerPage, $pageID);
-            $childModuleIds = $this->tree->getAllChildId($currentModuleID);
+            $childModuleIds = $this->tree->getAllChildId($moduleID);
             $cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
         }
         
@@ -82,8 +79,11 @@ class testcase extends control
         $this->assign('cases',         $cases);
         $this->assign('pager',         $pager->get());
         $this->assign('users',         $this->user->getPairs($this->app->company->id, 'noletter'));
-        $this->assign('currentModuleID', $currentModuleID);
-        $this->assign('currentModuleName', $currentModuleName);
+        $this->assign('moduleID',      $moduleID);
+        $this->assign('param',         $param);
+        $this->assign('recTotal',      $pager->recTotal);
+        $this->assign('recPerPage',    $pager->recPerPage);
+        $this->assign('orderBy',       $orderBy);
 
         $this->display();
     }
@@ -104,6 +104,9 @@ class testcase extends control
 
         $productID       = common::saveProductState($productID, key($this->products));
         $currentModuleID = (int)$moduleID;
+
+        /* 设置菜单。*/
+        $this->testcase->setMenu($this->products, $productID);
 
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -131,6 +134,9 @@ class testcase extends control
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->view;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->testcase->view;
+
+        /* 设置菜单。*/
+        $this->testcase->setMenu($this->products, $productID);
 
         $users   = $this->user->getPairs($this->app->company->id, 'noletter');
         $actions = $this->action->getList('case', $caseID);
@@ -172,6 +178,9 @@ class testcase extends control
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->testcase->edit;
+
+        /* 设置菜单。*/
+        $this->testcase->setMenu($this->products, $productID);
 
         $users = $this->user->getPairs($this->app->company->id);
         $this->assign('header',        $header);
