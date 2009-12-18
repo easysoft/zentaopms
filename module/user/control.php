@@ -39,15 +39,18 @@ class user extends control
     }
 
     /* 用户的todo列表。*/
-    public function todo($account, $date = 'today', $status = 'all')
+    public function todo($account, $type = 'today', $status = 'all')
     {
         /* 加载todo model。*/
         $this->loadModel('todo');
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
-        $todos = $this->todo->getList($date, $account, $status);
-        if((int)$date == 0) $date = $this->todo->today();
+        /* 设置菜单。*/
+        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+
+        $todos = $this->todo->getList($type, $account, $status);
+        $date  = (int)$type == 0 ? $this->todo->today() : $type;
 
         /* 设定header和position信息。*/
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
@@ -61,6 +64,8 @@ class user extends control
         $this->assign('date',     $date);
         $this->assign('todos',    $todos);
         $this->assign('user',     $user);
+        $this->assign('account',  $account);
+        $this->assign('type',     $type);
 
         $this->display();
     }
@@ -72,6 +77,9 @@ class user extends control
         $this->loadModel('task');
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+
+        /* 设置菜单。*/
+        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
  
         /* 设定header和position信息。*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
@@ -95,6 +103,9 @@ class user extends control
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
+        /* 设置菜单。*/
+        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+ 
         /* 设定header和position信息。*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
         $position[]      = $this->lang->user->bug;
@@ -117,6 +128,9 @@ class user extends control
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
+        /* 设置菜单。*/
+        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+
         /* 设定header和position信息。*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
         $position[]      = $this->lang->user->project;
@@ -131,6 +145,21 @@ class user extends control
         $this->display();
     }
 
+    /* 查看个人档案。*/
+    public function profile($account)
+    {
+        $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->profile;
+        $position[]      = $this->lang->user->profile;
+
+        /* 设置菜单。*/
+        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+
+        $this->assign('header',   $header);
+        $this->assign('position', $position);
+        $this->assign('user',     $this->user->getById($account));
+
+        $this->display();
+    }
 
     /* 设置referer信息。*/
     private function setReferer($referer = 0)
@@ -146,7 +175,7 @@ class user extends control
     }
 
     /* 创建一个用户。*/
-    public function create($companyID = 0, $from = 'admin')
+    public function create($companyID = 0, $deptID = 0, $from = 'admin')
     {
         if($companyID == 0) $companyID = $this->app->company->id;
         $this->lang->set('menugroup.user', $from);
@@ -171,6 +200,7 @@ class user extends control
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('depts',    $this->dept->getOptionMenu());
+        $this->assign('deptID',   $deptID);
 
         $this->display();
     }
@@ -179,6 +209,7 @@ class user extends control
     public function edit($userID, $from = 'admin')
     {
         $this->lang->set('menugroup.user', $from);
+        $this->lang->user->menu = $this->lang->company->menu;
         if(!empty($_POST))
         {
             $this->user->update($userID);

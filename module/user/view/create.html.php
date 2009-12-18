@@ -23,15 +23,14 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-4 a-left'> 
+    <table align='center' class='table-5'> 
       <caption><?php echo $lang->user->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->user->dept;?></th>
-        <td><?php echo html::select('dept', $depts);?>
+        <td><?php echo html::select('dept', $depts, $deptID);?>
       </tr>  
-
       <tr>
         <th class='rowhead'><?php echo $lang->user->account;?></th>
         <td><input type='text' name='account' /></td>
@@ -54,12 +53,14 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->password;?></th>
-        <td><input type='password' name='password' /></td>
+        <td><input type='password' name='password1' /></td>
       </tr>  
       <tr>
-        <td colspan='2' class='a-center'>
-          <?php echo html::submitButton() . html::resetButton();?>
-        </td>
+        <th class='rowhead'><?php echo $lang->user->password2;?></th>
+        <td><input type='password' name='password2' /></td>
+      </tr>  
+      <tr>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
     </table>
   </form>

@@ -39,6 +39,7 @@ $lang->user->confirmDelete = "您确认删除该用户吗？";
 $lang->user->relogin       = "重新登陆";
 $lang->user->asGuest       = "游客访问";
 $lang->user->goback        = "返回前一页";
+$lang->user->allUsers      = '全部用户';
 
 $lang->user->profile     = '用户档案';
 $lang->user->project     = '用户项目';

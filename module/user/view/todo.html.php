@@ -22,42 +22,60 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include './header.html.php';?>
-<table class='table-1 tablesorter'>
-  <thead>
-  <tr>
-    <th><?php echo $lang->todo->id;?></th>
-    <th><?php echo $lang->todo->date;?></th>
-    <th><?php echo $lang->todo->type;?></th>
-    <th><?php echo $lang->todo->pri;?></th>
-    <th><?php echo $lang->todo->name;?></th>
-    <th><?php echo $lang->todo->begin;?></th>
-    <th><?php echo $lang->todo->end;?></th>
-    <!--<th><?php echo $lang->todo->desc;?></th>-->
-    <th><?php echo $lang->todo->status;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php foreach($todos as $todo):?>
-  <tr class='a-center'>
-    <td><?php echo $todo->id;?></td>
-    <td><?php echo $todo->date;?></td>
-    <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
-    <td><?php echo $todo->pri;?></td>
-    <td class='a-left'>
-	  <?php 
-	  $link = '';
-	  if($todo->type == 'bug'  and common::hasPriv('bug', 'view'))  $link = $this->createLink('bug',  'view', "id={$todo->idvalue}");
-	  if($todo->type == 'task' and common::hasPriv('task', 'edit')) $link = $this->createLink('task', 'edit', "id={$todo->idvalue}");
-	  $link != '' ? print(html::a($link, $todo->name, '_blank')) : print($todo->name);
-	  ?>
-	</td>
-    <td><?php echo $todo->begin;?></td>
-    <td><?php echo $todo->end;?></td>
-    <!--<td><?php echo $todo->desc;?></td>-->
-	<td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList->{$todo->status};?></td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-</table>
-<?php include './footer.html.php';?>
+<?php include '../../common/header.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
+<script language='Javascript'>
+account='<?php echo $account;?>'
+function changeDate(date)
+{
+    link = createLink('user', 'todo', 'account=' + account + '&date=' + date);
+    location.href=link;
+}
+</script>
+<div class='yui-d0'>
+<form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
+   <div id='featurebar'>
+     <div class='f-left'>
+       <?php 
+       echo '<span id="today">'    . html::a($this->createLink('user', 'todo', "account=$account&date=today"),     $lang->todo->todayTodos)    . '</span>';
+       echo '<span id="thisweek">' . html::a($this->createLink('user', 'todo', "account=$account&date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
+       echo '<span id="lastweek">' . html::a($this->createLink('user', 'todo', "account=$account&date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
+       echo '<span id="all">'      . html::a($this->createLink('user', 'todo', "account=$account&date=all"),       $lang->todo->allDaysTodos)  . '</span>';
+       echo '<span id="before">'   . html::a($this->createLink('user', 'todo', "account=$account&date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone) . '</span>';
+       echo "<span id='$date'>"    . html::select('date', $dates, $date, 'onchange=changeDate(this.value)') . '</span>';
+       ?>
+       <script>$('#<?php echo $type;?>').addClass('active')</script>
+    </div>
+  </div>
+  <table class='table-1 tablesorter'>
+    <thead>
+    <tr class='colhead'>
+      <th><?php echo $lang->todo->id;?></th>
+      <th><?php echo $lang->todo->date;?></th>
+      <th><?php echo $lang->todo->type;?></th>
+      <th><?php echo $lang->todo->pri;?></th>
+      <th><?php echo $lang->todo->name;?></th>
+      <th><?php echo $lang->todo->begin;?></th>
+      <th><?php echo $lang->todo->end;?></th>
+      <th><?php echo $lang->todo->status;?></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <?php foreach($todos as $todo):?>
+    <tr class='a-center'>
+      <td><?php echo $todo->id;?></td>
+      <td><?php echo $todo->date;?></td>
+      <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
+      <td><?php echo $todo->pri;?></td>
+      <td class='a-left'><?php echo $todo->name;?></td>
+      <td><?php echo $todo->begin;?></td>
+      <td><?php echo $todo->end;?></td>
+      <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList->{$todo->status};?></td>
+    </tr>
+    <?php endforeach;?>
+    </tbody>
+  </table>
+</form>
+</div>
+<?php include '../../common/footer.html.php';?>
