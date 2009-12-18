@@ -25,91 +25,80 @@
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/treeview.html.php';?>
 <script language='Javascript'>
-function selectProduct(productID)
+/* 切换浏览方式。*/
+function browseByModule(active)
 {
-    link = createLink('bug', 'browse', 'productID=' + productID + '&type=byModule&param=0');
-    location.href=link;
+    $('#mainbox').addClass('yui-t7');
+    $('#treebox').removeClass('hidden');
+    $('#bymoduletab').addClass('active');
+    $('#querybox').addClass('hidden');
+    $('#' + active + 'tab').removeClass('active');
 }
+function search(active)
+{
+    $('#mainbox').removeClass('yui-t7');
+    $('#treebox').addClass('hidden');
+    $('#querybox').removeClass('hidden');
+    $('#byquerytab').addClass('active');
+    $('#' + active + 'tab').removeClass('active');
+}
+
 </script>
-<div class="yui-d0 yui-t3"> 
-  <div class="yui-b">
-    <table class='table-1'>
-      <caption>
-        <?php echo $lang->bug->selectProduct;?>
-        <?php echo html::select('productID', $products, $productID, 'onchange="selectProduct(this.value);"');?>
-      </caption>
-      <tr>
-        <td>
-          <div id='main'><?php echo $moduleTree;?></div>
-          <div class='a-right'>
-            <?php echo html::a($this->createLink('bug', 'browse', "productID=$productID"), $lang->bug->allBugs);?>
-            <?php if(common::hasPriv('tree', 'browse')) echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=bug"), $lang->tree->manageBug);?>
-          </div>
-        </td>
-      </tr>
-    </table>
+
+<div class='yui-d0'>
+  <div id='featurebar'>
+    <div class='f-left'>
+      <?php
+      echo "<span id='bymoduletab' onclick=\"browseByModule('$type')\">" . $lang->bug->moduleBugs . "</span> ";
+      echo "<span id='assigntometab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
+      echo "<span id='openedbymetab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
+      echo "<span id='resolvedbymetab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
+      echo "<span id='assigntonulltab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</span>";
+      echo "<span id='longlifebugstab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
+      echo "<span id='postponedbugstab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
+      echo "<span id='byquerytab' onclick=\"search('$type')\">{$lang->bug->byQuery}</span> ";
+      echo "<span id='alltab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&type=all&param=0"),           $lang->bug->allBugs)    . "</span>";
+      ?>
+    </div>
+    <div class='f-right'>
+      <?php common::printLink('bug', 'create', "productID=$productID&moduleID=$moduleID", $lang->bug->create); ?>
+    </div>
   </div>
+  <div id='querybox' class='<?php if($type !='byquery') echo 'hidden';?>'><?php echo $searchForm;?></div>
+</div>
+
+<div class='yui-d0 <?php if($type == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
+  <div class='yui-b  <?php if($type != 'bymodule') echo 'hidden';?>' id='treebox'>
+    <div class='box-title'><?php echo $productName;?></div>
+    <div class='box-content'>
+      <?php echo $moduleTree;?>
+      <div class='a-right'>
+        <?php if(common::hasPriv('tree', 'browse')) echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=bug"), $lang->tree->manage);?>
+      </div>
+    </div>
+  </div>
+
   <div class="yui-main">
     <div class="yui-b">
-    <div><?php echo $searchForm;?></div>
-      <div id='tabbar' class='yui-d0' style='clear:right'>
-        <ul>
-        <?php
-        echo "<li><nobr>$productName</nobr></li>";
-        echo "<li id='bymoduletab'><nobr>"      . html::a($this->createLink('bug', 'browse', "productid=$productID&type=byModule&param=$currentModuleID"), $currentModuleName)    . "</nobr></li>";
-        echo "<li id='assigntometab'><nobr>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</nobr></li>";
-        echo "<li id='openedbymetab'><nobr>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</nobr></li>";
-        echo "<li id='resolvedbymetab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</nobr></li>";
-        echo "<li id='assigntonulltab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</nobr></li>";
-        echo "<li id='longlifebugstab'><nobr>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</nobr></li>";
-        echo "<li id='postponedbugstab'><nobr>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</nobr></li>";
-        echo <<<EOT
-<script language="Javascript">
-$("#{$type}tab").addClass('active');
-</script>
-EOT;
-        ?>
-        </ul>
-        <?php if(common::hasPriv('bug', 'create')) echo '<div>' . html::a($this->createLink('bug', 'create', "type=product&productID=$productID&moduleID=$currentModuleID"), $lang->bug->create) . '</div>';?>
-      </div> 
-      <?php
-      $app->global->vars    = "productID=$productID&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
-      $app->global->orderBy = $orderBy;
-      function printOrderLink($fieldName)
-      {
-          global $app, $lang;
-          if(strpos($app->global->orderBy, $fieldName) !== false)
-          {
-              if(stripos($app->global->orderBy, 'desc') !== false) $orderBy = str_replace('desc', 'asc', $app->global->orderBy);
-              if(stripos($app->global->orderBy, 'asc')  !== false) $orderBy = str_replace('asc', 'desc', $app->global->orderBy);
-          }
-          else
-          {
-              $orderBy = $fieldName . '|' . 'asc';
-          }
-          $link = helper::createLink('bug', 'browse', sprintf($app->global->vars, $orderBy));
-          echo html::a($link, $lang->bug->$fieldName);
-      }
-      ?>
-
-      <table class='table-1'>
+      <?php $vars = "productID=$productID&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
+      <table class='table-1 fixed'>
         <thead>
         <tr class='colhead'>
-          <th><?php printOrderLink('id');?></th>
-          <th><?php printOrderLink('severity');?></th>
-          <th><?php printOrderLink('title');?></th>
-          <th><?php printOrderLink('openedBy');?></th>
-          <th><?php printOrderLink('assignedTo');?></th>
-          <th><?php printOrderLink('resolvedBy');?></th>
-          <th><?php printOrderLink('resolution');?></th>
+          <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->bug->id);?></th>
+          <th><?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severity);?></th>
+          <th class='w-p50'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+          <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->bug->openedBy);?></th>
+          <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
+          <th><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
+          <th><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolution);?></th>
         </tr>
         </thead>
         <tbody>
         <?php foreach($bugs as $bug):?>
         <tr class='a-center'>
-          <td class='a-right'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?></td>
+          <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?></td>
           <td><?php echo $bug->severity?></td>
-          <td width='50%' class='a-left'><?php echo $bug->title;?></td>
+          <td class='a-left nobr'><?php echo $bug->title;?></td>
           <td><?php echo $users[$bug->openedBy];?></td>
           <td <?php if($bug->assignedTo == $this->app->user->account) echo 'style=color:red';?>><?php echo $users[$bug->assignedTo];?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
@@ -122,4 +111,8 @@ EOT;
     </div>
   </div>
 </div>  
+<script language='javascript'>
+$("#<?php echo $type;?>tab").addClass('active'); 
+$("#module<?php echo $moduleID;?>").addClass('active'); 
+</script>
 <?php include '../../common/footer.html.php';?>
