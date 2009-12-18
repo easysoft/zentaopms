@@ -22,7 +22,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div class="yui-d0 yui-t7">  
+<div class="yui-d0">  
   <?php foreach($projectGroups as $projects):?>
   <div class="yui-gb">  
     <?php foreach($projects as $key => $project):?>

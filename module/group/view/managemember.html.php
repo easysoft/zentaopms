@@ -23,19 +23,12 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-5 a-left'> 
+    <table align='center' class='table-1 a-left'> 
       <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>
-      <tr>
-        <td>
-        <?php
-        echo html::checkbox('members', $allUsers, $groupUsers);
-        ?>
-        </td>
-      </tr>
-      <tr>
-        <td colspan='1' class='a-center'><input type='submit' name='submit' /></td>
+      <tr><td><?php echo html::checkbox('members', $allUsers, $groupUsers);?></td></tr>
+      <tr><td class='a-center'><?php echo html::submitButton();?></td></tr>
       </tr>
     </table>
   </form>

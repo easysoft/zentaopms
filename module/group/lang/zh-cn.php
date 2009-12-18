@@ -45,6 +45,20 @@ $lang->group->priv  = '权限';
 $lang->resource->index->index = 'index';
 $lang->resource->index->ping  = 'ping';
 
+$lang->resource->my->index       = 'index';
+$lang->resource->my->todo        = 'todo';
+$lang->resource->my->task        = 'task';
+$lang->resource->my->bug         = 'bug';
+$lang->resource->my->project     = 'project';
+$lang->resource->my->profile     = 'profile';
+$lang->resource->my->editProfile = 'editProfile';
+
+$lang->resource->todo->create    = 'create';
+$lang->resource->todo->edit      = 'edit';
+$lang->resource->todo->delete    = 'delete';
+$lang->resource->todo->mark      = 'mark';
+$lang->resource->todo->import2Today = 'import2Today';
+
 $lang->resource->product->index  = 'index';
 $lang->resource->product->browse = 'browse';
 $lang->resource->product->create = 'create';
@@ -59,22 +73,9 @@ $lang->resource->story->view    = 'view';
 $lang->resource->story->tasks   = 'tasks';
 $lang->resource->story->ajaxGetProjectStories = 'ajaxGetProjectStories';
 $lang->resource->story->ajaxGetProductStories = 'ajaxGetProductStories';
-//$lang->resource->story->comment = 'comment';
-
-//$lang->resource->release->index  = 'index';
-//$lang->resource->release->create = 'create';
-//$lang->resource->release->read   = 'read';
-//$lang->resource->release->update = 'update';
-//$lang->resource->release->delete = 'delete';
-//$lang->resource->release->browse = 'browse';
-
-$lang->resource->tree->browse            = 'browse';
-$lang->resource->tree->updateOrder       = 'updateOrder';
-$lang->resource->tree->manageChild       = 'manageChild';
-$lang->resource->tree->delete            = 'delete';
-$lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
 
 $lang->resource->project->index  = 'index';
+$lang->resource->project->view   = 'view';
 $lang->resource->project->browse = 'browse';
 $lang->resource->project->create = 'create';
 $lang->resource->project->edit   = 'edit';
@@ -82,14 +83,15 @@ $lang->resource->project->delete = 'delete';
 $lang->resource->project->task   = 'task';
 $lang->resource->project->story  = 'story';
 $lang->resource->project->bug    = 'bug';
+$lang->resource->project->burn   = 'burn';
+$lang->resource->project->burnData = 'burnData';
+$lang->resource->project->team   = 'team';
 $lang->resource->project->manageProducts = 'manageProducts';
 $lang->resource->project->manageChilds   = 'manageChilds';
 $lang->resource->project->manageMembers  = 'manageMembers';
 $lang->resource->project->unlinkMember   = 'unlinkMember';
 $lang->resource->project->linkStory      = 'linkStory';
 $lang->resource->project->unlinkStory    = 'unlinkStory';
-$lang->resource->project->burn           = 'burn';
-$lang->resource->project->burnData       = 'burnData';
 
 $lang->resource->task->create = 'create';
 $lang->resource->task->edit   = 'edit';
@@ -116,11 +118,6 @@ $lang->resource->testcase->create  = 'create';
 $lang->resource->testcase->view    = 'view';
 $lang->resource->testcase->edit    = 'edit';
 
-$lang->resource->admin->index         = 'index';
-$lang->resource->admin->browseCompany = 'browseCompany';
-$lang->resource->admin->browseUser    = 'browseUser';
-$lang->resource->admin->browseGroup   = 'browseGroup';
-
 $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
 $lang->resource->company->create = 'create';
@@ -132,6 +129,7 @@ $lang->resource->dept->updateOrder = 'updateOrder';
 $lang->resource->dept->manageChild = 'manageChild';
 $lang->resource->dept->delete      = 'delete';
 
+$lang->resource->group->browse       = 'browse';
 $lang->resource->group->create       = 'create';
 $lang->resource->group->edit         = 'edit';
 $lang->resource->group->delete       = 'delete';
@@ -146,19 +144,18 @@ $lang->resource->user->todo   = 'todo';
 $lang->resource->user->task   = 'task';
 $lang->resource->user->bug    = 'bug';
 $lang->resource->user->project= 'project';
+$lang->resource->user->profile= 'profile';
 
-$lang->resource->my->index       = 'index';
-$lang->resource->my->editProfile = 'editProfile';
-$lang->resource->my->todo        = 'todo';
-$lang->resource->my->task        = 'task';
-$lang->resource->my->bug         = 'bug';
-$lang->resource->my->project     = 'project';
-
-$lang->resource->todo->create    = 'create';
-$lang->resource->todo->edit      = 'edit';
-$lang->resource->todo->delete    = 'delete';
-$lang->resource->todo->mark      = 'mark';
-$lang->resource->todo->import2Today = 'import2Today';
+$lang->resource->tree->browse            = 'browse';
+$lang->resource->tree->updateOrder       = 'updateOrder';
+$lang->resource->tree->manageChild       = 'manageChild';
+$lang->resource->tree->delete            = 'delete';
+$lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
 
 $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
+
+$lang->resource->admin->index         = 'index';
+$lang->resource->admin->browseCompany = 'browseCompany';
+$lang->resource->admin->browseUser    = 'browseUser';
+$lang->resource->admin->browseGroup   = 'browseGroup';

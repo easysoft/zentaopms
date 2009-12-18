@@ -23,11 +23,10 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
-      <caption><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>
-      <tr class='rowhead'>
+      <tr class='colhead'>
         <th><?php echo $lang->group->module;?></th>
         <th><?php echo $lang->group->method;?></th>
       </tr>  
@@ -41,9 +40,7 @@
         </td>
       </tr>
       <?php endforeach;?>
-      <tr>
-        <td colspan='3' class='a-center'><input type='submit' name='submit' /></td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
 </div>  

@@ -24,22 +24,10 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/colorbox.html.php';?>
-<div class="yui-d0">                 
-  <div id='featurebar'>
-    <div class='f-left'>
-    </div>
-    <div class='f-right'>
-      <?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers);?>
-    </div>
-  </div>
-</div>
 <div class='yui-d0'>
- <table align='center' class='table-1'>
-   <caption>
-     <?php echo $lang->project->team . $lang->colon . $project->team; ?>
-   </caption>
+ <table align='center' class='table-4'>
    <thead>
-   <tr>
+   <tr class='colhead'>
      <th><?php echo $lang->team->account;?></th>
      <th><?php echo $lang->team->role;?></th>
      <th><?php echo $lang->team->joinDate;?></th>
@@ -62,6 +50,7 @@
      <?php if(common::hasPriv('project', 'unlinkmember')) echo "<td>" . html::a($this->createLink('project', 'unlinkmember', "projectID=$project->id&account=$member->account"), $lang->project->unlinkMember, 'hiddenwin') . '</td>';?>
    </tr>
    <?php endforeach;?>
+   <tr><td colspan='5' class='a-right'><?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers);?></td></tr>
    </tbody>     
  </table>
  <div class='a-right'>

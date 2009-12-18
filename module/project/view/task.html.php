@@ -25,11 +25,13 @@
 <?php include '../../common/header.html.php';?>
 <div class="yui-d0">
   <div id='featurebar'>
+    <div class='f-left'>
+    <?php include './project.html.php';?>
+    </div>
     <div class='f-right'>
       <?php if(common::hasPriv('task', 'create')) echo html::a($this->createLink('task', 'create', "project=$project->id"), $lang->task->create);?>
     </div>
   </div>
-  <?php include './project.html.php';?>
   <table class='table-1 fixed'>
     <?php $vars = "projectID=$project->id&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>
