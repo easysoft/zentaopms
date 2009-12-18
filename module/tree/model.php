@@ -155,14 +155,14 @@ class treeModel extends model
     /* 生成Bug链接。*/
     function createBugLink($module)
     {
-        $linkHtml = html::a(helper::createLink('bug', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name);
+        $linkHtml = html::a(helper::createLink('bug', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
     /* 生成case链接。*/
     function createCaseLink($module)
     {
-        $linkHtml = html::a(helper::createLink('testcase', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name);
+        $linkHtml = html::a(helper::createLink('testcase', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 

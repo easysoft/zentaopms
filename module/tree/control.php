@@ -32,6 +32,7 @@ class tree extends control
         parent::__construct();
         $this->loadModel('product');
         $this->loadModel('bug');
+        $this->loadModel('testcase');
     }
 
     /* 设置当前的产品。*/
@@ -59,6 +60,11 @@ class tree extends control
         }
         elseif($viewType == 'bug')
         {
+            /* 设置菜单。*/
+            $this->bug->setMenu($this->product->getPairs(), $productID);
+            $this->lang->tree->menu = $this->lang->bug->menu;
+            $this->lang->set('menugroup.tree', 'qa');
+
             $header['title'] = $this->lang->tree->manageBug . $this->lang->colon . $product->name;
             $position[]      = html::a($this->createLink('bug', 'browse', "product=$productID"), $product->name);
             $position[]      = $this->lang->tree->manageBug;
@@ -66,6 +72,11 @@ class tree extends control
         }
         elseif($viewType == 'case')
         {
+            /* 设置菜单。*/
+            $this->testcase->setMenu($this->product->getPairs(), $productID);
+            $this->lang->tree->menu = $this->lang->testcase->menu;
+            $this->lang->set('menugroup.tree', 'qa');
+
             $header['title'] = $this->lang->tree->manageCase . $this->lang->colon . $product->name;
             $position[]      = html::a($this->createLink('testcase', 'browse', "product=$productID"), $product->name);
             $position[]      = $this->lang->tree->manageCase;
