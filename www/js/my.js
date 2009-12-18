@@ -85,6 +85,14 @@ function switchProject(projectID)
     location.href=link;
 }
 
+/* 选择用户。*/
+function switchAccount(account)
+{
+    link = createLink('user', 'view', 'account=' + account);
+    location.href=link;
+}
+
+
 /* 自动执行的代码。*/
 $(document).ready(function() 
 {
