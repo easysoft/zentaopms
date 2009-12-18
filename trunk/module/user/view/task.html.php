@@ -22,33 +22,38 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include './header.html.php';?>
-<table class='table-1 tablesorter'>
-  <thead>
-  <tr class='rowhead'>
-    <th><?php echo $lang->task->name;?></th>
-    <th><?php echo $lang->task->project;?></th>
-    <th><?php echo $lang->task->story;?></th>
-    <th><?php echo $lang->task->pri;?></th>
-    <th><?php echo $lang->task->estimate;?></th>
-    <th><?php echo $lang->task->consumed;?></th>
-    <th><?php echo $lang->task->status;?></th>
-    <th><?php echo $lang->action;?></th>
-  </tr>
-  </thead>   
-  <tbody>
-  <?php foreach($tasks as $task):?>
-  <tr>
-    <td><?php echo html::a($this->createLink('task', 'edit', "taskID=$task->id"), $task->name);?></td>
-    <td><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></th>
-    <td><?php echo $task->storyTitle;?></td>
-    <td><?php echo $task->pri;?></td>
-    <td><?php echo $task->estimate;?></td>
-    <td><?php echo $task->consumed;?></td>
-    <td><?php echo $lang->task->statusList->{$task->status};?></td>
-    <td><?php echo html::a($this->createLink('task', 'edit', "taskID=$task->id"), $lang->task->edit, '_blank');?></td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-</table> 
-<?php include './footer.html.php';?>
+<?php include '../../common/header.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
+<div class='yui-d0'>
+  <table class='table-1 tablesorter fixed' id='tasktable'>
+    <thead>
+    <tr class='colhead'>
+      <th><?php echo $lang->task->id;?></th>
+      <th class='w-p30'><?php echo $lang->task->name;?></th>
+      <th class='w-p10'><?php echo $lang->task->project;?></th>
+      <th><?php echo $lang->task->pri;?></th>
+      <th><?php echo $lang->task->estimate;?></th>
+      <th><?php echo $lang->task->consumed;?></th>
+      <th class='w-p30'><?php echo $lang->task->story;?></th>
+      <th><?php echo $lang->task->status;?></th>
+      <th><?php echo $lang->action;?></th>
+    </tr>
+    </thead>   
+    <tbody>
+    <?php foreach($tasks as $task):?>
+    <tr class='a-center'>
+      <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+      <td class='a-left nobr'><?php echo $task->name;?></td>
+      <td class='nobr'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></th>
+      <td><?php echo $task->pri;?></td>
+      <td><?php echo $task->estimate;?></td>
+      <td><?php echo $task->consumed;?></td>
+      <td class='a-left nobr'><?php if($task->storyID) echo html::a($this->createLink('story', 'view', "storyID=$task->storyID"), $task->storyTitle);?></td>
+      <td class='<?php echo $task->status;?>'><?php echo $lang->task->statusList->{$task->status};?></td>
+      <td><?php echo html::a($this->createLink('task', 'edit', "taskID=$task->id"), $lang->task->edit, '_blank');?></td>
+    </tr>
+    <?php endforeach;?>
+    </tbody>
+  </table> 
+</div>
+<?php include '../../common/footer.html.php';?>

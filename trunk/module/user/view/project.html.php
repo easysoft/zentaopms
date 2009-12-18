@@ -22,33 +22,36 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include './header.html.php';?>
-<table class='table-1 tablesorter'>
-  <thead>
-  <tr class='rowhead'>
-    <th><?php echo $lang->project->name;?></th>
-    <th><?php echo $lang->project->code;?></th>
-    <th><?php echo $lang->project->begin;?></th>
-    <th><?php echo $lang->project->end;?></th>
-    <th><?php echo $lang->project->status;?></th>
-    <th><?php echo $lang->team->role;?></th>
-    <th><?php echo $lang->team->joinDate;?></th>
-    <th><?php echo $lang->team->workingHour;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php foreach($projects as $project):?>
-  <tr>
-    <td><?php echo html::a($this->createLink('project', 'browse', "projectID=$project->id"), $project->name);?></td>
-    <td><?php echo $project->code;?></td>
-    <td><?php echo $project->begin;?></td>
-    <td><?php echo $project->end;?></td>
-    <td><?php echo $project->status;?></td>
-    <td><?php echo $project->role;?></td>
-    <td><?php echo $project->joinDate;?></td>
-    <td><?php echo $project->workingHour;?></td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-</table> 
-<?php include './footer.html.php';?>
+<?php include '../../common/header.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
+<div class='yui-d0'>
+  <table class='table-1 tablesorter a-center'>
+    <thead>
+    <tr class='rowhead'>
+      <th><?php echo $lang->project->name;?></th>
+      <th><?php echo $lang->project->code;?></th>
+      <th><?php echo $lang->project->begin;?></th>
+      <th><?php echo $lang->project->end;?></th>
+      <th><?php echo $lang->project->status;?></th>
+      <th><?php echo $lang->team->role;?></th>
+      <th><?php echo $lang->team->joinDate;?></th>
+      <th><?php echo $lang->team->workingHour;?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($projects as $project):?>
+    <tr>
+      <td><?php echo html::a($this->createLink('project', 'browse', "projectID=$project->id"), $project->name);?></td>
+      <td><?php echo $project->code;?></td>
+      <td><?php echo $project->begin;?></td>
+      <td><?php echo $project->end;?></td>
+      <td><?php echo $project->status;?></td>
+      <td><?php echo $project->role;?></td>
+      <td><?php echo $project->joinDate;?></td>
+      <td><?php echo $project->workingHour;?></td>
+    </tr>
+    <?php endforeach;?>
+    </tbody>
+  </table> 
+</div>
+<?php include '../../common/footer.html.php';?>

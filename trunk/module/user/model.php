@@ -25,6 +25,18 @@
 <?php
 class userModel extends model
 {
+    /* 设置菜单。*/
+    public function setMenu($users, $account)
+    {
+        $selectHtml = html::select('account', $users, $account, "onchange=switchAccount(this.value)");
+        common::setMenuVars($this->lang->user->menu, 'account', $selectHtml);
+        common::setMenuVars($this->lang->user->menu, 'todo',    $account);
+        common::setMenuVars($this->lang->user->menu, 'task',    $account);
+        common::setMenuVars($this->lang->user->menu, 'bug',     $account);
+        common::setMenuVars($this->lang->user->menu, 'project', $account);
+        common::setMenuVars($this->lang->user->menu, 'profile', $account);
+    }
+
     /* 获得某一个公司的用户列表。*/
     public function getList($companyID)
     {
@@ -69,16 +81,23 @@ class userModel extends model
     /* 新增一个用户。*/
     function create($companyID)
     {
+        /* 先检查密码是否符合规则。*/
+        if(!$this->checkPassword()) return;
+
         $user = fixer::input('post')
             ->add('company', (int)$companyID)
             ->setDefault('join', '0000-00-00')
-            ->setForce('password', md5($this->post->password))
+            ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
+            ->setIF($this->post->password1 == false, 'password', '')
+            ->remove('password1, password2')
             ->get();
+
         $this->dao->insert(TABLE_USER)->data($user)
             ->autoCheck()
             ->batchCheck('account, realname, password', 'notempty')
             ->check('account', 'unique')
             ->check('account', 'account')
+            ->checkIF($this->post->email != false, 'email', 'email')
             ->exec();
     }
 
@@ -92,15 +111,16 @@ class userModel extends model
         $userID = (int)$userID;
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
-            ->setIF($this->post->password1 != '', 'password', md5($this->post->password1))
+            ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->remove('password1, password2')
             ->get();
 
         $this->dao->update(TABLE_USER)->data($user)
             ->autoCheck()
-            ->batchCheck('account, realname, password', 'notempty')
+            ->batchCheck('account, realname', 'notempty')
             ->check('account', 'unique', "id != '$userID'")
             ->check('account', 'account')
+            ->checkIF($this->post->email != false, 'email', 'email')
             ->where('id')->eq((int)$userID)
             ->exec();
     }
@@ -110,8 +130,8 @@ class userModel extends model
     {
         if($this->post->password1 != false)
         {
-            if($this->post->password1 != $this->post->password2) dao::$errors['password'] = $this->lang->error->passwordsame;
-            if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'] = $this->lang->error->passwordrule;
+            if($this->post->password1 != $this->post->password2) dao::$errors['password'][] = $this->lang->error->passwordsame;
+            if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
         }
         return !dao::isError();
     }
