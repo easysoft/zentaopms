@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/treeview.html.php';?>
-<div class="yui-d0 yui-t7">
+<div class="yui-d0 yui-t3">
   <div class="yui-b">
     <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "product={$product->id}&viewType=$viewType");?>'>
     <table class='table-1'>
@@ -35,7 +35,7 @@
         <td>
           <div id='main'><?php echo $modules;?></div>
           <div class='a-center'>
-            <?php if(common::hasPriv('tree', 'updateorder')) echo "<input type='submit' value='{$lang->tree->updateOrder}' />";?>
+            <?php if(common::hasPriv('tree', 'updateorder')) echo html::submitButton($lang->tree->updateOrder);?>
           </div>
         </td>
       </tr>
