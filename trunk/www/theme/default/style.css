@@ -20,6 +20,8 @@
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.zentao.cn
 */
+/*-----------------------GLOBAL SETTING----------------------------*/
+body{padding-bottom:30px}
 
 /*-----------------------FIELDSET SETTING----------------------------*/
 fieldset {border:1px solid #e4e4e4; padding:1px 10px 1px 10px; margin-bottom:5px}
