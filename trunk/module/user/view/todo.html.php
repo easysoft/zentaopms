@@ -41,7 +41,7 @@ function changeDate(date)
        echo '<span id="thisweek">' . html::a($this->createLink('user', 'todo', "account=$account&date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
        echo '<span id="lastweek">' . html::a($this->createLink('user', 'todo', "account=$account&date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
        echo '<span id="all">'      . html::a($this->createLink('user', 'todo', "account=$account&date=all"),       $lang->todo->allDaysTodos)  . '</span>';
-       echo '<span id="before">'   . html::a($this->createLink('user', 'todo', "account=$account&date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone) . '</span>';
+       echo '<span id="before">'   . html::a($this->createLink('user', 'todo', "account=$account&date=before&account=$account&status=wait,doing"), $lang->todo->allUndone) . '</span>';
        echo "<span id='$date'>"    . html::select('date', $dates, $date, 'onchange=changeDate(this.value)') . '</span>';
        ?>
        <script>$('#<?php echo $type;?>').addClass('active')</script>
