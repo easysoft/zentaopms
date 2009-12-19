@@ -21,25 +21,31 @@ function createLink(moduleName, methodName, vars, viewType)
 {
     link = webRoot;
     if(!viewType) viewType = defaultView;
-    vars = vars.split('&');
-    for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
+    if(vars)
+    {
+        vars = vars.split('&');
+        for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
+    }
     if(requestType == 'PATH_INFO')
     {
         link += moduleName + requestFix + methodName;
-        if(pathType == "full")
+        if(vars)
         {
-            for(i = 0; i < vars.length; i ++) link += requestFix + vars[i][0] + requestFix + vars[i][1];
-        }
-        else
-        {
-            for(i = 0; i < vars.length; i ++) link += requestFix + vars[i][1];
+            if(pathType == "full")
+            {
+                for(i = 0; i < vars.length; i ++) link += requestFix + vars[i][0] + requestFix + vars[i][1];
+            }
+            else
+            {
+                for(i = 0; i < vars.length; i ++) link += requestFix + vars[i][1];
+            }
         }
         link += '.' + viewType;
     }
     else
     {
         link += '?' + moduleVar + '=' + moduleName + '&' + methodVar + '=' + methodName + '&' + viewVar + '=' + viewType;
-        for(i = 0; i < vars.length; i ++) link += '&' + vars[i][0] + '=' + vars[i][1];
+        if(vars) for(i = 0; i < vars.length; i ++) link += '&' + vars[i][0] + '=' + vars[i][1];
     }
     return link;
 }
@@ -92,9 +98,17 @@ function switchAccount(account)
     location.href=link;
 }
 
+function setPing()
+{
+    $('#hiddenwin').attr('src', createLink('index', 'ping'));
+}
+
+/* 需要不需要ping，已保证session不过期。 */
+needPing = true;
 
 /* 自动执行的代码。*/
 $(document).ready(function() 
 {
     setNowrapObjTitle();
+    if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });

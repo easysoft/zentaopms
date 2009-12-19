@@ -34,11 +34,12 @@ $themeRoot   = $webRoot . "theme/";
   if(isset($header['desc']))    echo "<meta name='description' content='$header[desc]'>\n";
   ?>
 <?php echo js::exportConfigVars();?>
+<script language='Javascript'>var needPing=false</script>
 <script src="<?php echo $jsRoot;?>jquery/lib.js" type="text/javascript"></script>
 <script src="<?php echo $jsRoot;?>my.js"         type="text/javascript"></script>
 <link rel='stylesheet' href='<?php echo $clientTheme . 'yui.css';?>' type='text/css' media='screen' />
 <link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
-<script type="text/javascript">loadFixedCSS();</script>
+<script language='Javascript'>loadFixedCSS();</script>
 <body onload="document.getElementById('account').focus();">
 <div class='yui-d0'>
   <form method='post' style='margin-top:100px'>
