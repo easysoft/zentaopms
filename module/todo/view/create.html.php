@@ -67,5 +67,4 @@
     </table>
   </form>
 </div>  
-<script language='Javascript'>selectNext();</script>
 <?php include './footer.html.php';?>
