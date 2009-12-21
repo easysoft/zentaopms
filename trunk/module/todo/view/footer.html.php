@@ -41,5 +41,8 @@ function switchDateFeature(switcher)
         $('#end').removeAttr('disabled');
     }
 }
+
+/* 当页面加载完毕之后，调用selectNext()。*/
+selectNext();
 </script>
 <?php include '../../common/footer.html.php';?>
