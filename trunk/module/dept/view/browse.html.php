@@ -28,7 +28,7 @@
   <div class="yui-b">
     <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'updateOrder');?>'>
     <table class='table-1'>
-      <caption><?php echo $header['title'];?></caption>
+      <caption><?php echo $header->title;?></caption>
       <tr>
         <td>
           <div id='main'><?php echo $depts;?></div>
