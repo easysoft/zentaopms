@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0'>
-  <form method='post'>
+  <form method='post' target='hiddenwin'>
     <table align='center' class='table-5'> 
       <caption><?php echo $lang->company->create;?></caption>
       <tr>
@@ -61,7 +61,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->guest;?></th>
-        <td><?php echo html::radio('gust', $lang->company->guestList);?></td>
+        <td><?php echo html::radio('guest', $lang->company->guestList);?></td>
       </tr>  
       <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>

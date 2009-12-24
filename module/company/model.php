@@ -25,18 +25,16 @@
 <?php
 class companyModel extends model
 {
-
+    /* 设置菜单。*/
     public function setMenu($dept = 0)
     {
         common::setMenuVars($this->lang->company->menu, 'addUser', array($this->app->company->id, $dept));
     }
 
     /* 获得公司列表。*/
-    function getList()
+    public function getList()
     {
-        $sql = "SELECT * FROM " . TABLE_COMPANY;
-        $stmt = $this->dbh->query($sql);
-        return $stmt->fetchAll();
+        return $this->dao->select('*')->from(TABLE_COMPANY)->fetchAll();
     }
     
     /**
@@ -48,40 +46,44 @@ class companyModel extends model
      */
     public function getByDomain($domain = '')
     {
-        if(empty($domain)) $domain = filter_input(INPUT_SERVER, 'HTTP_HOST');
-        $sql  = 'SELECT * FROM ' . TABLE_COMPANY . " WHERE `pms` = '$domain' LIMIT 1";
-        return $this->dbh->query($sql)->fetch();
+        if(empty($domain)) $domain = $_SERVER['HTTP_HOST'];
+        return $this->dao->findByPMS($domain)->from(TABLE_COMPANY)->fetch();
     }
 
     /* 通过id获取公司信息。*/
     public function getByID($companyID = '')
     {
-        $sql  = 'SELECT * FROM ' . TABLE_COMPANY . " WHERE `id` = '$companyID' LIMIT 1";
-        return $this->dbh->query($sql)->fetch();
+        return $this->dao->findById((int)$companyID)->from(TABLE_COMPANY)->fetch();
     }
 
     /* 新增一个公司。*/
-    function create()
+    public function create()
     {
-        extract($_POST);
-        $sql = "INSERT INTO " . TABLE_COMPANY . " (name, phone, fax, address, zipcode, website, backyard, pms, guest) 
-                VALUES('$name', '$phone', '$fax', '$address', '$zipcode', '$website', '$backyard', '$pms', '$guest')";
-        return $this->dbh->exec($sql);
+        $company = fixer::input('post')->get();
+        $this->dao->insert(TABLE_COMPANY)
+            ->data($company)
+            ->autoCheck()
+            ->batchCheck('name, pms', 'notempty')
+            ->batchCheck('name,pms', 'unique')
+            ->exec();
     }
 
     /* 更新一个公司信息。*/
-    function update($companyID)
+    public function update($companyID)
     {
-        extract($_POST);
-        $sql = "UPDATE " . TABLE_COMPANY . " SET name = '$name', phone = '$phone', fax = '$fax', address = '$address', 
-                zipcode = '$zipcode', website = '$website', backyard = '$backyard', pms = '$pms', guest = '$guest' 
-                WHERE id = '$companyID' LIMIT 1";
-        return $this->dbh->exec($sql);
+        $company = fixer::input('post')->get();
+        $this->dao->update(TABLE_COMPANY)
+            ->data($company)
+            ->autoCheck()
+            ->batchCheck('name, pms', 'notempty')
+            ->batchCheck('name,pms', 'unique', "id != '$companyID'")
+            ->where('id')->eq($companyID)
+            ->exec();
     }
     
     /* 删除一个公司。*/
-    function delete($companyID)
+    public function delete($companyID)
     {
-        return $this->dbh->query("DELETE FROM " . TABLE_COMPANY . " WHERE id = '$companyID' LIMIT 1");
+        return $this->dao->delete()->from(TABLE_COMPANY)->where('id')->eq((int)$companyID)->limit(1)->exec();
     }
 }
