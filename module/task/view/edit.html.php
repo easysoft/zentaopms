@@ -26,7 +26,7 @@
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
-      <caption><?php echo $header['title'];?></caption>
+      <caption><?php echo $header->title;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->task->project;?></th>
         <td><?php echo $project->name;?></td>

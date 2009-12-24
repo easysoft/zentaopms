@@ -29,9 +29,10 @@ $themeRoot   = $webRoot . "theme/";
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   <?php
-  if(isset($header['title']))   echo "<title>$header[title] - $lang->zentaoMS</title>\n";
-  if(isset($header['keyword'])) echo "<meta name='keywords' content='$header[keyword]'>\n";
-  if(isset($header['desc']))    echo "<meta name='description' content='$header[desc]'>\n";
+  $header = (object)$header;
+  if(isset($header->title))   echo "<title>$header->title - $lang->zentaoMS</title>\n";
+  if(isset($header->keyword)) echo "<meta name='keywords' content='$header->keyword'>\n";
+  if(isset($header->desc))    echo "<meta name='description' content='$header->desc'>\n";
   ?>
 <?php echo js::exportConfigVars();?>
 <script language='Javascript'>var needPing=false</script>

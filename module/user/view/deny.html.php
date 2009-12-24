@@ -25,9 +25,10 @@
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   <?php
-  if(isset($header['title']))   echo "<title>$header[title] - $lang->zentaoMS</title>\n";
-  if(isset($header['keyword'])) echo "<meta name='keywords' content='$header[keyword]'>\n";
-  if(isset($header['desc']))    echo "<meta name='description' content='$header[desc]'>\n";
+  $header = (object)$header;
+  if(isset($header->title))   echo "<title>$header->title - $lang->zentaoMS</title>\n";
+  if(isset($header->keyword)) echo "<meta name='keywords' content='$header->keyword'>\n";
+  if(isset($header->desc))    echo "<meta name='description' content='$header->desc'>\n";
   ?>
   <link rel='stylesheet' href='<?php echo $app->getClientTheme() . 'yui.css';?>'   type='text/css' media='screen' />
   <link rel='stylesheet' href='<?php echo $app->getClientTheme() . 'style.css';?>' type='text/css' media='screen' />
