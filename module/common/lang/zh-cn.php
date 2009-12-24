@@ -66,12 +66,14 @@ $lang->todo->menu         = $lang->my->menu;
 
 /* 产品视图设置。*/
 $lang->product->menu->list   = '%s';
-$lang->product->menu->story  = array('link' => '需求列表|product|browse|productID=%s', 'subModule' => 'story');
+$lang->product->menu->story  = array('link' => '需求列表|product|browse|productID=%s',     'subModule' => 'story');
+$lang->product->menu->plan   = array('link' => '计划列表|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->edit   = '编辑产品|product|edit|productID=%s';
 $lang->product->menu->delete = array('link' => '删除产品|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module = '维护模块|tree|browse|productID=%s&view=product';
 $lang->product->menu->create = array('link' => '新增产品|product|create', 'float' => 'right');
 $lang->story->menu           = $lang->product->menu;
+$lang->productplan->menu     = $lang->product->menu;
 
 /* 项目视图菜单设置。*/
 $lang->project->menu->list   = '%s';
@@ -121,17 +123,18 @@ $lang->admin->menu->browseCompany = array('link' => '公司管理|admin|browseco
 $lang->admin->menu->createCompany = array('link' => '新增公司|company|create', 'float' => 'right');
 
 /*菜单设置：分组设置。*/
-$lang->menugroup->release = 'product';
-$lang->menugroup->story   = 'product';
-$lang->menugroup->task    = 'project';
-$lang->menugroup->company = 'admin';
-$lang->menugroup->user    = 'company';
-$lang->menugroup->group   = 'company';
-$lang->menugroup->bug     = 'qa';
-$lang->menugroup->testcase= 'qa';
-$lang->menugroup->people  = 'company';
-$lang->menugroup->dept    = 'company';
-$lang->menugroup->todo    = 'my';
+$lang->menugroup->release     = 'product';
+$lang->menugroup->story       = 'product';
+$lang->menugroup->productplan = 'product';
+$lang->menugroup->task        = 'project';
+$lang->menugroup->company     = 'admin';
+$lang->menugroup->user        = 'company';
+$lang->menugroup->group       = 'company';
+$lang->menugroup->bug         = 'qa';
+$lang->menugroup->testcase    = 'qa';
+$lang->menugroup->people      = 'company';
+$lang->menugroup->dept        = 'company';
+$lang->menugroup->todo        = 'my';
 
 /* 错误提示信息。*/
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";
