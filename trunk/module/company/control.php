@@ -65,6 +65,7 @@ class company extends control
         if(!empty($_POST))
         {
             $this->company->create();
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('admin', 'browsecompany'), 'parent'));
         }
 
@@ -86,6 +87,7 @@ class company extends control
         if(!empty($_POST))
         {
             $this->company->update($companyID);
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('admin', 'browsecompany'), 'parent'));
         }
 

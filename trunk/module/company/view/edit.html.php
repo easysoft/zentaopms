@@ -61,7 +61,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->guest;?></th>
-        <td><?php echo html::radio('gust', $lang->company->guestList, $company->guest);?></td>
+        <td><?php echo html::radio('guest', $lang->company->guestList, $company->guest);?></td>
       </tr>  
       <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
