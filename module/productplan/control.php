@@ -23,6 +23,7 @@
  */
 class productplan extends control
 {
+    /* 公共操作。*/
     public function commonAction($productID)
     {
         $this->loadModel('product');
@@ -43,7 +44,7 @@ class productplan extends control
 
         $this->commonAction($product);
 
-        $this->view->header->title = $this->lang->productPlan->create;
+        $this->view->header->title = $this->lang->productplan->create;
         $this->display();
     }
 
@@ -59,18 +60,18 @@ class productplan extends control
 
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product);
-        $this->view->header->title = $this->lang->productPlan->edit;
-        $this->view->position[] = $this->lang->productPlan->edit;
+        $this->view->header->title = $this->lang->productplan->edit;
+        $this->view->position[] = $this->lang->productplan->edit;
         $this->view->plan = $plan;
         $this->display();
     }
-
+                                                          
     /* 删除计划。*/
     public function delete($planID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productPlan->confirmDelete, $this->createLink('productPlan', 'delete', "planID=$planID&confirm=yes")));
+            die(js::confirm($this->lang->productplan->confirmDelete, $this->createLink('productPlan', 'delete', "planID=$planID&confirm=yes")));
         }
         else
         {
@@ -85,9 +86,39 @@ class productplan extends control
     {
         $this->commonAction($product);
 
-        $this->view->header->title = $this->lang->productPlan->browse;
-        $this->view->position[] = $this->lang->productPlan->browse;
+        $this->view->header->title = $this->lang->productplan->browse;
+        $this->view->position[] = $this->lang->productplan->browse;
         $this->view->plans      = $this->productplan->getList($product);
         $this->display();
+    }
+
+    /* 关联需求。*/
+    public function linkStory($planID = 0)
+    {
+        if(!empty($_POST)) $this->productplan->linkStory($planID);
+
+        $plan = $this->productplan->getByID($planID);
+        $this->commonAction($plan->product);
+        $this->view->header->title = $this->lang->productplan->linkStory;
+        $this->view->position[] = $this->lang->productplan->linkStory;
+        $this->view->allStories = $this->loadModel('story')->getProductStories($this->view->product->id, $moduleID = '0', $status = 'wait, doing');
+        $this->view->planStories= $this->story->getPlanStories($planID);
+        $this->view->products   = $this->product->getPairs();
+        $this->view->plan       = $plan;
+        $this->display();
+    }
+
+    /* 移除一个需求。*/
+    public function unlinkStory($storyID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('productplan', 'unlinkstory', "storyID=$storyID&confirm=yes")));
+        }
+        else
+        {
+            $this->productplan->unlinkStory($storyID);
+            die(js::reload('parent'));
+        }
     }
 }

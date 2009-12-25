@@ -77,11 +77,13 @@ class storyModel extends model
     /* 获得某一个产品某一个模块下面的所有需求列表。*/
     function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id|desc', $pager = null)
     {
-        $sql = $this->dao->select('*')->from(TABLE_STORY)->where('product')->in($productID);
-        if(!empty($moduleIds)) $sql->andWhere('module')->in($moduleIds);
-        if($status != 'all') $sql->andWhere('status')->in($status);
-        $stories = $sql->orderBy($orderBy)->page($pager)->fetchAll();
-        return $stories;
+        return $this->dao->select('t1.*, t2.title as planTitle')
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
+            ->where('t1.product')->in($productID)
+            ->onCaseOf(!empty($moduleIds))->andWhere('module')->in($moduleIds)->endCase() 
+            ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()
+            ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /* 获得某一个产品某一个模块下面的所有需求id=>title列表。*/
@@ -120,6 +122,21 @@ class storyModel extends model
         if($productID) $sql->andWhere('t1.product')->eq((int)$productID);
         $stories = $sql->fetchAll();
         return $this->formatStories($stories);
+    }
+
+    /* 获得某一个产品计划下面所有的需求列表。*/
+    public function getPlanStories($planID, $status = 'all', $orderBy = 'id|desc', $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_STORY)
+            ->where('plan')->eq((int)$planID)
+            ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+    }
+
+    /* 获得某一个产品计划下面所有的需求列表。*/
+    public function getPlanStoryPairs($planID, $status = 'all', $orderBy = 'id|desc', $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_STORY)->where('plan')->eq($planID)->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()->fetchAll();
     }
 
     /* 格式化需求显示。*/

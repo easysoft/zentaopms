@@ -1,6 +1,6 @@
 <?php
 /**
- * The create view of productPlan module of ZenTaoMS.
+ * The create view of productplan module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,7 @@
  *
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
- * @package     productPlan
+ * @package     productplan
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
@@ -26,25 +26,25 @@
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
-      <caption><?php echo $lang->productPlan->create;?></caption>
+      <caption><?php echo $lang->productplan->create;?></caption>
       <tr>
-        <th class='rowhead'><?php echo $lang->productPlan->product;?></th>
+        <th class='rowhead'><?php echo $lang->productplan->product;?></th>
         <td><?php echo $product->name;?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->productPlan->title;?></th>
+        <th class='rowhead'><?php echo $lang->productplan->title;?></th>
         <td><input type='text' name='title' class='text-3' /></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->productPlan->begin;?></th>
+        <th class='rowhead'><?php echo $lang->productplan->begin;?></th>
         <td><input type='text' name='begin' class='text-3' /></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->productPlan->end;?></th>
+        <th class='rowhead'><?php echo $lang->productplan->end;?></th>
         <td><input type='text' name='end' class='text-3' /></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->productPlan->desc;?></th>
+        <th class='rowhead'><?php echo $lang->productplan->desc;?></th>
         <td><textarea name='desc' rows='5' class='area-1'></textarea></td>
       </tr>  
       <tr>

@@ -69,6 +69,7 @@ function browseByModule()
             <th><?php common::printOrderLink('id',  $orderBy, $vars, $lang->story->id);?></th>
             <th><?php common::printOrderLink('pri', $orderBy, $vars, $lang->story->pri);?></th>
             <th class='w-p40'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+            <th><?php common::printOrderLink('plan',           $orderBy, $vars, $lang->story->plan);?></th>
             <th><?php common::printOrderLink('assignedTo',     $orderBy, $vars, $lang->story->assignedTo);?></th>
             <th><?php common::printOrderLink('openedBy',       $orderBy, $vars, $lang->story->openedBy);?></th>
             <th><?php common::printOrderLink('estimate',       $orderBy, $vars, $lang->story->estimate);?></th>
@@ -87,6 +88,7 @@ function browseByModule()
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
             <td><?php echo $story->pri;?></td>
             <td class='a-left nobr'><nobr><?php echo $story->title;?></nobr></td>
+            <td><?php echo $story->planTitle;?></td>
             <td><?php echo $users[$story->assignedTo];?></td>
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $story->estimate;?></td>
