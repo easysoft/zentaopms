@@ -42,7 +42,7 @@ EOT;
     }
 
     /* 创建js输出的chart。*/
-    public function createJSChart($swf, $dataXML, $width = 600, $height = 500)
+    public function createJSChart($swf, $dataXML, $width = 'auto', $height = 500)
     {
         $jsRoot = $this->app->getWebRoot() . 'js/';
         static $count = 0;
@@ -58,7 +58,9 @@ EOT;
 $js
 <div id="$divID"></div>
 <script language="JavaScript"> 
-var $chartID = new FusionCharts("$chartRoot$swfFile", "{$chartID}id", "$width", "$height"); 
+chartWidth = "$width";
+if(chartWidth == 'auto') chartWidth = $('#$divID').css('width').replace('px', '');
+var $chartID = new FusionCharts("$chartRoot$swfFile", "{$chartID}id", chartWidth, "$height"); 
 $chartID.setDataXML("$dataXML");
 $chartID.render("$divID");
 </script>
