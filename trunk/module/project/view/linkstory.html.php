@@ -33,6 +33,7 @@
         <th><?php echo $lang->story->pri;?></th>
         <th><?php echo $lang->story->product;?></th>
         <th class='w-p50'><?php echo $lang->story->title;?></th>
+        <th><?php echo $lang->story->plan;?></th>
         <th><?php echo $lang->story->linkStory;?></th>
       </tr>
       </thead>
@@ -44,6 +45,7 @@
         <td><?php echo $story->pri;?></td>
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
         <td class='a-left nobr'><?php echo $story->title;?></td>
+        <td><?php echo $story->planTitle;?></td>
         <td>
           <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' />
           <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
@@ -52,7 +54,7 @@
       <?php endforeach;?>
       </tbody>
       <tr>
-        <td colspan='5'><?php echo html::submitButton();?></td>
+        <td colspan='6'><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>

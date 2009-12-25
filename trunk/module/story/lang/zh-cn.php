@@ -93,3 +93,4 @@ $lang->story->closedDate     = '关闭日期';
 $lang->story->version        = '版本号';
 $lang->story->attatchment    = '附件';
 $lang->story->project        = '项目';
+$lang->story->plan           = '计划';

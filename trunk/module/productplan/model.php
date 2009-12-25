@@ -67,4 +67,19 @@ class productplanModel extends model
     {
         return $this->dao->delete()->from(TABLE_PRODUCTPLAN)->where('id')->eq((int)$planID)->exec();
     }
+
+    /* 关联需求。*/
+    public function linkStory($planID)
+    {
+        foreach($this->post->stories as $storyID)
+        {
+            $this->dao->update(TABLE_STORY)->set('plan')->eq((int)$planID)->where('id')->eq((int)$storyID)->exec();
+        }        
+    }
+
+    /* 移除需求。*/
+    public function unlinkStory($storyID)
+    {
+        $this->dao->update(TABLE_STORY)->set('plan')->eq(0)->where('id')->eq((int)$storyID)->exec();
+    }
 }

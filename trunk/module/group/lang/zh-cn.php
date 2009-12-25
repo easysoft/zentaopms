@@ -66,6 +66,13 @@ $lang->resource->product->edit   = 'edit';
 $lang->resource->product->delete = 'delete';
 $lang->resource->product->ajaxGetProjects = 'ajaxGetProjects';
 
+$lang->resource->productplan->browse = 'browse';
+$lang->resource->productplan->create = 'create';
+$lang->resource->productplan->edit   = 'edit';
+$lang->resource->productplan->delete = 'delete';
+$lang->resource->productplan->linkStory   = 'linkStory';
+$lang->resource->productplan->unlinkStory = 'unlinkStory';
+
 $lang->resource->story->create  = 'create';
 $lang->resource->story->edit    = 'edit';
 $lang->resource->story->delete  = 'delete';
