@@ -43,6 +43,10 @@ function switchDateFeature(switcher)
 }
 
 /* 当页面加载完毕之后，调用selectNext()。*/
-selectNext();
+$(document).ready(function() 
+{
+    selectNext();
+    switchDateFeature(document.getElementById('switcher'));
+});
 </script>
 <?php include '../../common/footer.html.php';?>
