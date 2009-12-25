@@ -59,7 +59,7 @@ $js
 <div id="$divID"></div>
 <script language="JavaScript"> 
 chartWidth = "$width";
-if(chartWidth == 'auto') chartWidth = $('#$divID').css('width').replace('px', '');
+if(chartWidth == 'auto') chartWidth = $('#$divID').width();
 var $chartID = new FusionCharts("$chartRoot$swfFile", "{$chartID}id", chartWidth, "$height"); 
 $chartID.setDataXML("$dataXML");
 $chartID.render("$divID");

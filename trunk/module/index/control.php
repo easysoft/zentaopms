@@ -44,7 +44,7 @@ class index extends control
         foreach($projects as $project)
         {
             $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph);
-            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 200);
+            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 300, 200);
         }
         $projectGroups = array_chunk($projects, 3);
 
