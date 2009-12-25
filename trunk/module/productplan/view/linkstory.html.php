@@ -39,7 +39,7 @@
       </thead>
       <tbody>
       <?php foreach($allStories as $story):?>
-      <?php if(isset($planStories[$story->id])) continue;?>
+      <?php if(isset($planStories[$story->id]) or $story->plan) continue;?>
       <tr>
         <td><?php echo $story->id;?></td>
         <td><?php echo $story->pri;?></td>
