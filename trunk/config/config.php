@@ -82,6 +82,7 @@ define('TABLE_USERGROUP',      $config->db->prefix . 'userGroup');
 define('TABLE_GROUPPRIV',      $config->db->prefix . 'groupPriv');
 define('TABLE_PLANCASE',       $config->db->prefix . 'planCase');
 define('TABLE_PRODUCT',        $config->db->prefix . 'product');
+define('TABLE_PRODUCTPLAN',    $config->db->prefix . 'productPlan');
 define('TABLE_RELEASE',        $config->db->prefix . 'release');
 define('TABLE_RELEATION',      $config->db->prefix . 'releation');
 define('TABLE_RESULTSTEP',     $config->db->prefix . 'resultStep');
