@@ -59,7 +59,7 @@ class productplanModel extends model
             ->setDefault('end',   '0000-00-00')
             ->specialChars('desc')
             ->get();
-        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck('title,product', 'notempty')->exec();
+        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck('title,product', 'notempty')->where('id')->eq((int)$planID)->exec();
     }
 
     /* 删除计划。*/
