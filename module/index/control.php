@@ -36,7 +36,7 @@ class index extends control
     public function index()
     {
         $this->loadModel('report');
-        $header['title'] = $this->lang->index->common;
+        $this->view->header->title = $this->lang->index->common;
 
         $products = array_values($this->product->getList());
         $burns    = array();
@@ -44,14 +44,14 @@ class index extends control
         foreach($projects as $project)
         {
             $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph);
-            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 300, 200);
+            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 200);
         }
         $projectGroups = array_chunk($projects, 3);
 
-        $this->assign('header',        $header);
-        $this->assign('projectGroups', $projectGroups);
-        $this->assign('products',      $products);
-        $this->assign('burns',         $burns);
+        $this->view->projectGroups = $projectGroups;
+        $this->view->products      = $products;
+        $this->view->burns         = $burns;
+        $this->view->counts        = count($project);
         $this->display();
     }
 

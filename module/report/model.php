@@ -58,11 +58,14 @@ EOT;
 $js
 <div id="$divID"></div>
 <script language="JavaScript"> 
+function createChart$count()
+{
 chartWidth = "$width";
 if(chartWidth == 'auto') chartWidth = $('#$divID').width();
 var $chartID = new FusionCharts("$chartRoot$swfFile", "{$chartID}id", chartWidth, "$height"); 
 $chartID.setDataXML("$dataXML");
 $chartID.render("$divID");
+}
 </script>
 EOT;
     }

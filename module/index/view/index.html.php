@@ -79,4 +79,5 @@
   </div>
 </div>  
 -->
+<script language='Javascript'><?php for($i = 1; $i <= $counts; $i ++) echo "createChart$i();"; ?></script>
 <?php include '../../common/footer.html.php';?>
