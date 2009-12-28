@@ -93,12 +93,12 @@ $lang->task->menu            = $lang->project->menu;
 
 /* QA视图菜单设置。*/
 $lang->bug->menu->product  = '%s';
-$lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse', 'alias' => 'view,create,edit,resolve,close,active', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse', 'alias' => 'view,create,edit');
+$lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active', 'subModule' => 'tree');
+$lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 
 $lang->testcase->menu->product  = '%s';
-$lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse', 'alias' => 'view,create,edit,resolve,close,active');
-$lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse', 'alias' => 'view,create,edit', 'subModule' => 'tree');
+$lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active');
+$lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->browseUser  = array('link' => '用户管理|company|browse', 'subModule' => 'user');

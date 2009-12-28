@@ -30,6 +30,8 @@ class testcaseModel extends model
     {
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'case');\"");
         common::setMenuVars($this->lang->testcase->menu, 'product',  $selectHtml . $this->lang->arrow);
+        common::setMenuVars($this->lang->testcase->menu, 'bug',      $productID);
+        common::setMenuVars($this->lang->testcase->menu, 'testcase', $productID);
     }
 
     /* 创建一个Case。*/
