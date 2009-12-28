@@ -138,3 +138,8 @@ CHANGE `openedDate` `openedDate` DATETIME NOT NULL ,
 CHANGE `lastEditedDate` `lastEditedDate` DATETIME NOT NULL
 
 ALTER TABLE `zt_case` CHANGE `title` `title` CHAR( 90 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+
+-- 12.28 zt_task字段增加自定义排序字段。
+ALTER TABLE `zt_task` ADD `statusCustom` TINYINT UNSIGNED NOT NULL AFTER `status` ,
+ADD INDEX ( statusCustom );
+update zt_task set statusCustom = locate(status, 'wait,doing,done,cancel')
