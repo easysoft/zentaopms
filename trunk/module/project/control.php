@@ -72,7 +72,7 @@ class project extends control
     }
 
     /* 浏览某一个项目下面的任务。*/
-    public function task($projectID = 0, $orderBy = 'status|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function task($projectID = 0, $orderBy = 'status|asc,id|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         /* 加载任务模块。*/
         $this->loadModel('task');

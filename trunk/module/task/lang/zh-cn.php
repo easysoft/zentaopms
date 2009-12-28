@@ -30,7 +30,10 @@ $lang->task->view      = "查看任务";
 
 $lang->task->ajaxGetUserTasks    = "ajax:我的任务";
 $lang->task->ajaxGetProjectTasks = "ajax:项目任务";
-$lang->task->confirmDelete    = "您确定要删除这个任务吗？";
+$lang->task->confirmDelete       = "您确定要删除这个任务吗？";
+$lang->task->copyStoryTitle      = "同需求";
+$lang->task->afterSubmit         = "添加之后";
+$lang->task->successSaved        = "成功添加，";
 
 $lang->task->id        = '编号';
 $lang->task->project   = '所属项目';
@@ -53,6 +56,10 @@ $lang->task->priList[3]  = '一般';
 $lang->task->priList[1]  = '最高';
 $lang->task->priList[2]  = '较高';
 $lang->task->priList[4]  = '最低';
+
+$lang->task->afterChoices['continueAdding'] = '继续为该需求添加任务';
+$lang->task->afterChoices['toTastList']     = '返回任务列表';
+$lang->task->afterChoices['toStoryList']    = '返回需求列表';
 
 $lang->task->buttonEdit       = '编辑';
 $lang->task->buttonBackToList = '返回';
