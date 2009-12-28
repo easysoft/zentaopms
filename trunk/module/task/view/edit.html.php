@@ -60,6 +60,10 @@
         <td><input type='text' name='left' value='<?php echo $task->left;?>' class='text-3' /></td>
       </tr>
       <tr>
+        <th class='rowhead'><?php echo $lang->task->type;?></th>
+        <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-3');?></td>
+      </tr>
+      <tr>
         <th class='rowhead'><?php echo $lang->task->status;?></th>
         <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=select-3');?></td>
       </tr>  

@@ -84,6 +84,10 @@
           <td><?php echo $task->left;?></td>
         </tr>
         <tr>
+          <th class='rowhead'><?php echo $lang->task->type;?></th>
+          <td><?php echo $lang->task->typeList[$task->type];?></td>
+        </tr>  
+        <tr>
           <th class='rowhead'><?php echo $lang->task->status;?></th>
           <td><?php $lang->show($lang->task->statusList, $task->status);?></td>
         </tr>  
