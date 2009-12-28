@@ -25,6 +25,8 @@
 <?php
 class taskModel extends model
 {
+    const CUSTOM_STATUS_ORDER = 'wait,doing,done,cancel';
+
     /* 新增一个任务。*/
     public function create($projectID)
     {
@@ -33,21 +35,18 @@ class taskModel extends model
             ->specialChars('desc')
             ->cleanFloat('estimate')
             ->add('project', (int)$projectID)
-            ->setIF($this->post->estimate == '', 'estimate', 0)
-            ->setIF($this->post->story    == '', 'story', 0)
+            ->setDefault('estimate, left, story', 0)
+            ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
+            ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
+            ->remove('after')
             ->get();
-        $task->left = $task->estimate;
 
         $this->dao->insert(TABLE_TASK)->data($task)
             ->autoCheck()
             ->check('name', 'notempty')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->exec();
-        if(!dao::isError())
-        {
-            //$this->dao->update(TABLE_STORY)->set('status')->eq('doing')->where('id')->eq()
-            return $this->dao->lastInsertID();
-        }
+        if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
     /* 更新一个任务。*/
@@ -58,18 +57,17 @@ class taskModel extends model
             ->striptags('name')
             ->specialChars('desc')
             ->cleanFloat('estimate, left, consumed')
-            ->setIF($this->post->story    == '', 'story', 0)
-            ->setIF($this->post->estimate == '', 'estimate', 0)
-            ->setIF($this->post->left     == '', 'left', 0)
-            ->setIF($this->post->consumed == '', 'consumed', 0)
+            ->setDefault('story, estimate, left, consumed', 0)
+            ->setIF($this->post->status == 'done', 'left', 0)
+            ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->check('name', 'notempty')
-            ->checkIF($task->estimate != '', 'estimate', 'float')
-            ->checkIF($task->left     != '', 'left',     'float')
-            ->checkIF($task->consumed != '', 'consumed', 'float')
+            ->checkIF($task->estimate != false, 'estimate', 'float')
+            ->checkIF($task->left     != false, 'left',     'float')
+            ->checkIF($task->consumed != false, 'consumed', 'float')
             ->where('id')->eq((int)$taskID)->exec();
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -94,8 +92,9 @@ class taskModel extends model
     }
     
     /* 获得某一个项目的任务列表。*/
-    public function getProjectTasks($projectID, $orderBy = 'status|desc', $pager = null)
+    public function getProjectTasks($projectID, $orderBy = 'status|asc, id|desc', $pager = null)
     {
+        $orderBy = str_replace('status', 'statusCustom', $orderBy);
         return $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')

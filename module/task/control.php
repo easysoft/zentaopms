@@ -46,7 +46,19 @@ class task extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
             $this->action->create('task', $taskID, 'Opened', '');
-            die(js::locate($browseProjectLink, 'parent'));
+            if($this->post->after == 'continueAdding')
+            {
+                echo js::alert($this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding']);
+                die(js::locate($this->createLink('task', 'create', "projectID=$projectID&storyID={$this->post->story}"), 'parent'));
+            }
+            elseif($this->post->after == 'toTastList')
+            {
+                die(js::locate($browseProjectLink, 'parent'));
+            }
+            elseif($this->post->after == 'toStoryList')
+            {
+                die(js::locate($this->createLink('project', 'story', "projectID=$projectID"), 'parent'));
+            }
         }
 
         $stories = $this->story->getProjectStoryPairs($projectID);

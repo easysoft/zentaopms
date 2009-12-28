@@ -23,7 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $lang->task->create;?></caption>
@@ -52,10 +52,17 @@
         <td><input type='text' name='estimate' class='text-3' /></td>
       </tr>
       <tr>
+        <th class='rowhead'><?php echo $lang->task->status;?></th>
+        <td><?php echo html::select('status', $lang->task->statusList, 'wait', 'class=select-3');?></td>
+      </tr>
+      <tr>
         <th class='rowhead'><?php echo $lang->task->pri;?></th>
         <td><?php echo html::select('pri', $lang->task->priList, '', 'class=select-3');?> 
       </tr>
-
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->afterSubmit;?></th>
+        <td><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td> 
+      </tr>
       <tr>
         <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
