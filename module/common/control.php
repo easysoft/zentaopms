@@ -366,12 +366,15 @@ EOT;
     /* 比较两个数组元素的不同，产生修改记录。*/
     public static function createChanges($old, $new)
     {
+        global $config;
         $changes = array();
         foreach($new as $key => $value)
         {
             if(strtolower($key) == 'lastediteddate') continue;
             if(strtolower($key) == 'lasteditedby')   continue;
-            if($new->$key != $old->$key)
+
+            if(isset($config->db->stripSlash) and $config->db->stripSlash) $value = stripslashes($value);
+            if($value != $old->$key)
             { 
                 $diff = '';
                 if(substr_count($value, "\n") > 1 or substr_count($old->$key, "\n") > 1) $diff = self::diff($old->$key, $value);

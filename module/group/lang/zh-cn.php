@@ -55,6 +55,7 @@ $lang->resource->my->editProfile = 'editProfile';
 
 $lang->resource->todo->create    = 'create';
 $lang->resource->todo->edit      = 'edit';
+$lang->resource->todo->view      = 'view';
 $lang->resource->todo->delete    = 'delete';
 $lang->resource->todo->mark      = 'mark';
 $lang->resource->todo->import2Today = 'import2Today';

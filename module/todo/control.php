@@ -81,6 +81,22 @@ class todo extends control
         $this->display();
     }
 
+    /* 查看todo。*/
+    public function view($todoID)
+    {
+        $todo = $this->todo->findById($todoID);
+        $this->lang->todo->menu = $this->lang->user->menu;
+        $this->loadModel('user')->setMenu($this->user->getPairs(), $todo->account);
+        $this->lang->set('menugroup.todo', 'company');
+
+        $this->view->header->title = $this->lang->todo->view;
+        $this->view->position[]    = $this->lang->todo->view;
+        $this->view->todo          = $todo;
+        $this->view->times         = $this->todo->buildTimeList();
+
+        $this->display();
+    }
+
     /* 删除一个todo。*/
     public function delete($todoID, $confirm = 'no')
     {

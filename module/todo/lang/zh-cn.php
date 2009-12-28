@@ -25,6 +25,7 @@ $lang->todo->common    = 'TODO';
 $lang->todo->index     = "todo一览";
 $lang->todo->create    = "新增TODO";
 $lang->todo->edit      = "更新";
+$lang->todo->view      = "TODO详情";
 $lang->todo->markDone  = "未完成";
 $lang->todo->markWait  = "已完成";
 $lang->todo->markDoing = "已完成";
@@ -32,6 +33,7 @@ $lang->todo->mark      = "更改状态";
 $lang->todo->delete    = "删除";
 $lang->todo->browse    = "浏览TODO";
 $lang->todo->import2Today = "导入到今天";
+$lang->todo->changeStatus = "更改";
 
 $lang->todo->id          = '编号';
 $lang->todo->date        = '日期';
@@ -49,9 +51,12 @@ $lang->todo->week  = '星期';
 $lang->todo->today = '今天';
 $lang->todo->weekDateList = '一,二,三,四,五,六,天';
 
-$lang->todo->statusList->wait  = '未开始';
-$lang->todo->statusList->doing = '进行中';
-$lang->todo->statusList->done  = '已完成';
+$lang->todo->statusList['']         = '';
+$lang->todo->statusList['wait']     = '未开始';
+$lang->todo->statusList['doing']    = '进行中';
+$lang->todo->statusList['done']     = '已完成';
+//$lang->todo->statusList['cancel']   = '已取消';
+//$lang->todo->statusList['postpone'] = '已延期';
 
 $lang->todo->priList[3] = '一般';
 $lang->todo->priList[1] = '最高';
