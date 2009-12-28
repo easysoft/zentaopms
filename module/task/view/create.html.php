@@ -37,7 +37,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->name;?></th>
-        <td><input type='text' name='name' class='text-1' /></td>
+        <td><input type='text' name='name' id='name' class='text-1' /><?php echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle()');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->desc;?></th>
@@ -62,4 +62,12 @@
     </table>
   </form>
 </div>  
+<script language='Javascript'>
+function copyStoryTitle()
+{
+    var storyTitle = $('#story option:selected').text();
+    storyTitle = storyTitle.substr(storyTitle.indexOf('/') + 1);
+    $('#name').attr('value', storyTitle);
+}
+</script>
 <?php include '../../common/footer.html.php';?>
