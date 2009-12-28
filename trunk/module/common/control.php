@@ -367,13 +367,14 @@ EOT;
     public static function createChanges($old, $new)
     {
         global $config;
-        $changes = array();
+        $changes    = array();
+        $magicQuote = get_magic_quotes_gpc();
         foreach($new as $key => $value)
         {
             if(strtolower($key) == 'lastediteddate') continue;
             if(strtolower($key) == 'lasteditedby')   continue;
 
-            if(isset($config->db->stripSlash) and $config->db->stripSlash) $value = stripslashes($value);
+            if($magicQuote) $value = stripslashes($value);
             if($value != $old->$key)
             { 
                 $diff = '';
