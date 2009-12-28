@@ -39,6 +39,7 @@ $lang->task->id        = '编号';
 $lang->task->project   = '所属项目';
 $lang->task->story     = '相关需求';
 $lang->task->name      = '名称';
+$lang->task->type      = '类型';
 $lang->task->pri       = '优先级';
 $lang->task->owner     = '指派给';
 $lang->task->estimate  = '最初预计';
@@ -51,6 +52,14 @@ $lang->task->statusList->wait  = '未开始';
 $lang->task->statusList->doing = '进行中';
 $lang->task->statusList->done  = '已完成';
 $lang->task->statusList->cancel= '已取消';
+
+$lang->task->typeList[''] = '';
+$lang->task->typeList['design'] = '设计';
+$lang->task->typeList['devel']  = '开发';
+$lang->task->typeList['test']   = '测试';
+$lang->task->typeList['study']  = '研究';
+$lang->task->typeList['discuss']= '讨论';
+$lang->task->typeList['misc']   = '其他';
 
 $lang->task->priList[3]  = '一般';
 $lang->task->priList[1]  = '最高';
