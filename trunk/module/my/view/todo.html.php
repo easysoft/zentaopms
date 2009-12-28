@@ -40,7 +40,7 @@ function changeDate(date)
        echo '<span id="thisweek">' . html::a($this->createLink('my', 'todo', "date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
        echo '<span id="lastweek">' . html::a($this->createLink('my', 'todo', "date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
        echo '<span id="all">'      . html::a($this->createLink('my', 'todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
-       echo '<span id="before">'   . html::a($this->createLink('my', 'todo', "date=before&account={$app->user->account}&status=wait,doing"), $lang->todo->allUndone) . '</span>';
+       echo '<span id="before">'   . html::a($this->createLink('my', 'todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
        echo "<span id='$date'>"    . html::select('date', $dates, $date, 'onchange=changeDate(this.value)') . '</span>';
        ?>
        <script>$('#<?php echo $type;?>').addClass('active')</script>
@@ -86,7 +86,7 @@ function changeDate(date)
       </td>
       <td><?php echo $todo->begin;?></td>
       <td><?php echo $todo->end;?></td>
-      <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList->{$todo->status};?></td>
+      <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
       <td>
         <?php 
         echo html::a($this->createLink('todo', 'mark',   "id=$todo->id&status=$todo->status"), $lang->todo->{'mark'.ucfirst($todo->status)}, 'hiddenwin');

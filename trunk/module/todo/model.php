@@ -116,13 +116,13 @@ class todoModel extends model
         }
 
         if($account == '')   $account = $this->app->user->account;
-        if($status  == 'all') $status = 'wait,doing,done';
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('account')->eq($account)
             ->andWhere("date >= '$begin'")
             ->andWhere("date <= '$end'")
-            ->andWhere('status')->in($status)
+            ->onCaseOf($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->endCase()
+            ->onCaseOf($status == 'undone')->andWhere('status')->ne('done')->endCase()
             ->orderBy('date, status, begin')
             ->query();
         while($todo = $stmt->fetch())
