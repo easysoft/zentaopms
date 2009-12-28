@@ -51,7 +51,7 @@ class index extends control
         $this->view->projectGroups = $projectGroups;
         $this->view->products      = $products;
         $this->view->burns         = $burns;
-        $this->view->counts        = count($project);
+        $this->view->counts        = count($projects);
         $this->display();
     }
 
