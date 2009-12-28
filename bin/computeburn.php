@@ -10,7 +10,7 @@ while($row = mysql_fetch_assoc($result))
 }
 
 $date = date('Y-m-d');
-$sql = "SELECT project, sum(`left`) as totalLeft, sum(consumed) as totalConsumed FROM zt_task WHERE project in(" . join(',', $projects) . ') group by project';
+$sql = "SELECT project, sum(`left`) as totalLeft, sum(consumed) as totalConsumed FROM zt_task WHERE project in(" . join(',', $projects) . ') and status !="cancel" group by project';
 $result = mysql_query($sql) or die(mysql_error());
 while($row = mysql_fetch_assoc($result))
 {
