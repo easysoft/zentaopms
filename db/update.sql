@@ -143,3 +143,7 @@ ALTER TABLE `zt_case` CHANGE `title` `title` CHAR( 90 ) CHARACTER SET utf8 COLLA
 ALTER TABLE `zt_task` ADD `statusCustom` TINYINT UNSIGNED NOT NULL AFTER `status` ,
 ADD INDEX ( statusCustom );
 update zt_task set statusCustom = locate(status, 'wait,doing,done,cancel')
+
+-- 增加类型字段。--
+ALTER TABLE `zt_task` ADD `type` VARCHAR( 20 ) NOT NULL AFTER `name` ,
+ADD INDEX ( TYPE )

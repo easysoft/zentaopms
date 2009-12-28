@@ -43,6 +43,7 @@
       <th><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimate);?></th>
       <th><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumed);?></th>
       <th><?php common::printOrderLink('`left`',   $orderBy, $vars, $lang->task->left);?></th>
+      <th><?php common::printOrderLink('type',     $orderBy, $vars, $lang->task->type);?></th>
       <th><?php common::printOrderLink('status',   $orderBy, $vars, $lang->task->status);?></th>
       <th class='w-p30'><?php common::printOrderLink('story',    $orderBy, $vars, $lang->task->story);?></th>
       <th><?php echo $lang->action;?></th>
@@ -59,6 +60,7 @@
       <td><?php echo $task->estimate;?></td>
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>
+      <td><?php echo $lang->task->typeList[$task->type];?></td>
       <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList->{$task->status};?></td>
       <td class='a-left nobr'>
         <?php 
