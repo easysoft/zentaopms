@@ -117,13 +117,13 @@ $lang->bug->statusList['resolved'] = 'resolved';
 $lang->bug->statusList['closed']   = 'closed';
 
 $lang->bug->resolutionList['']           = '';
-$lang->bug->resolutionList['bydesign']   = 'By Design';
-$lang->bug->resolutionList['duplicate']  = 'Duplicate';
-$lang->bug->resolutionList['external']   = 'External';
-$lang->bug->resolutionList['fixed']      = 'Fixed';
-$lang->bug->resolutionList['notrepro']   = 'Not Repro';
-$lang->bug->resolutionList['postponed']  = 'Postponed';
-$lang->bug->resolutionList['willnotfix'] = "Won't Fix";
+$lang->bug->resolutionList['bydesign']   = '设计如此';
+$lang->bug->resolutionList['duplicate']  = '重复Bug';
+$lang->bug->resolutionList['external']   = '外部原因';
+$lang->bug->resolutionList['fixed']      = '已解决';
+$lang->bug->resolutionList['notrepro']   = '无法重现';
+$lang->bug->resolutionList['postponed']  = '延期处理';
+$lang->bug->resolutionList['willnotfix'] = "不予解决";
 
 $lang->bug->id             = 'Bug编号';
 $lang->bug->product        = '所属产品';
