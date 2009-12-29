@@ -50,8 +50,8 @@ $lang->todo->private     = '私人事务';
 $lang->todo->week  = '星期';
 $lang->todo->today = '今天';
 $lang->todo->weekDateList = '一,二,三,四,五,六,天';
+$lang->todo->dayInFeature = '暂不指定';
 
-$lang->todo->statusList['']         = '';
 $lang->todo->statusList['wait']     = '未开始';
 $lang->todo->statusList['doing']    = '进行中';
 $lang->todo->statusList['done']     = '已完成';

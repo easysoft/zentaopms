@@ -49,6 +49,10 @@
         <td><textarea name='desc' id='desc' rows='5' class='area-1'></textarea>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->todo->status;?></th>
+        <td><?php echo html::select('status', $lang->todo->statusList, '', 'class=select-3');?></td>
+      </tr>  
+      <tr>
         <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
         <td>
           <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class=select-2') . html::select('end', $times, '', 'class=select-2');?>
