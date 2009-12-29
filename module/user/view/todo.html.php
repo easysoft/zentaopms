@@ -25,7 +25,7 @@
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/tablesorter.html.php';?>
 <script language='Javascript'>
-account='<?php echo $account;?>'
+var account='<?php echo $account;?>'
 function changeDate(date)
 {
     link = createLink('user', 'todo', 'account=' + account + '&date=' + date);
