@@ -229,7 +229,17 @@ class projectModel extends model
     /* 燃烧图所需要的数据。*/
     public function getBurnData($projectID = 0)
     {
-        $sets = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date')->fetchAll('name');
+        $project = $this->findById($projectID);
+        $sql     = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
+        if($project->end == '0000-00-00')
+        {
+            $sets = $sql->orderBy('date|desc')->limit(14)->fetchAll('name');
+            $sets = array_reverse($sets);
+        }
+        else
+        {
+            $sets = $sql->orderBy('date')->fetchAll('name');
+        }
 
         /* 取得burn表中最大的日期和project的结束时间。*/
         end($sets);
