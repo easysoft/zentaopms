@@ -25,6 +25,8 @@
 <?php
 class todoModel extends model
 {
+    const DAY_IN_FEATURE = 20300101;
+
     /* 新增一个todo。*/
     public function create($date, $account)
     {
@@ -162,6 +164,7 @@ class todoModel extends model
             $date   = date('Ymd', $time);
             $dates[$date] = $label;
         }
+        $dates[self::DAY_IN_FEATURE] = $this->lang->todo->dayInFeature;
         return $dates;
     }
 
