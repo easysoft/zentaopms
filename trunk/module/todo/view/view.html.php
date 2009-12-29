@@ -65,4 +65,4 @@
  <?php echo $lang->todo->thisIsPrivate;?>
  <?php endif;?>
 </div>  
-<?php include './footer.html.php';?>
+<?php include '../../common/footer.html.php';?>
