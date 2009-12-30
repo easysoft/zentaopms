@@ -83,8 +83,9 @@ function _getTime()
 function _saveSQL()
 {
     global $app;
-    $sqlLog = $app->getCacheRoot() . 'sql.' . date('Ymd') . '.log';
-    $fh = fopen($sqlLog, 'a');
+    $sqlLog = $app->getLogRoot() . 'sql.' . date('Ymd') . '.log';
+    $fh = @fopen($sqlLog, 'a');
+    if(!$fh) return false;
     fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
     foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
     fwrite($fh, "\n");
