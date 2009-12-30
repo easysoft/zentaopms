@@ -244,7 +244,7 @@ class projectModel extends model
         /* 取得burn表中最大的日期和project的结束时间。*/
         end($sets);
         $current = key($sets);
-        $end     = $this->dao->select('end')->from(TABLE_PROJECT)->where('id')->eq((int)$projectID)->fetch('end');
+        $end     = $project->end;
 
         /* 根据当前日期和项目最后结束的日期，补足后续日期。*/
         if($end != '0000-00-00' and helper::diffDate($end, $current) > 0)
