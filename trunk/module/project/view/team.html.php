@@ -24,8 +24,9 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/colorbox.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
 <div class='yui-d0'>
- <table align='center' class='table-4'>
+ <table align='center' class='table-4 tablesorter'>
    <thead>
    <tr class='colhead'>
      <th><?php echo $lang->team->account;?></th>

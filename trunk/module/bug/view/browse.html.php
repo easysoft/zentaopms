@@ -24,6 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/treeview.html.php';?>
+<?php include '../../common/colorize.html.php';?>
 <script language='Javascript'>
 /* 切换浏览方式。*/
 function browseByModule(active)
@@ -81,7 +82,7 @@ function search(active)
   <div class="yui-main">
     <div class="yui-b">
       <?php $vars = "productID=$productID&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
-      <table class='table-1 fixed'>
+      <table class='table-1 fixed colored'>
         <thead>
         <tr class='colhead'>
           <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->bug->id);?></th>

@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/colorize.html.php';?>
 <div class="yui-d0">
   <div id='featurebar'>
     <div class='f-left'>
@@ -32,7 +33,7 @@
       <?php if(common::hasPriv('task', 'create')) echo html::a($this->createLink('task', 'create', "project=$project->id"), $lang->task->create);?>
     </div>
   </div>
-  <table class='table-1 fixed'>
+  <table class='table-1 fixed colored'>
     <?php $vars = "projectID=$project->id&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>
     <tr class='colhead'>

@@ -24,6 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/treeview.html.php';?>
+<?php include '../../common/colorize.html.php';?>
 <script language='Javascript'>
 /* 切换浏览方式。*/
 function browseByModule()
@@ -62,7 +63,7 @@ function browseByModule()
 
   <div class="yui-main">
     <div class="yui-b">
-      <table class='table-1 fixed'>
+      <table class='table-1 fixed colored'>
         <thead>
           <tr class='colhead'>
             <?php $vars = "productID=$productID&moduleID=$moduleID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";?>
