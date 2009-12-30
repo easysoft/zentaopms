@@ -72,7 +72,7 @@ class project extends control
     }
 
     /* 浏览某一个项目下面的任务。*/
-    public function task($projectID = 0, $orderBy = 'status|asc,id|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function task($projectID = 0, $orderBy = 'status|asc,id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 加载任务模块。*/
         $this->loadModel('task');
@@ -109,7 +109,7 @@ class project extends control
     }
 
     /* 浏览某一个项目下面的需求。*/
-    public function story($projectID = 0, $orderBy = 'status|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function story($projectID = 0, $orderBy = 'status|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 加载story, user模块，加载task模块的语言。*/
         $this->loadModel('story');
@@ -148,7 +148,7 @@ class project extends control
     }
 
     /* 浏览某一个项目下面的bug。*/
-    public function bug($projectID = 0, $orderBy = 'status,id|desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function bug($projectID = 0, $orderBy = 'status,id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 加载bug和user模块。*/
         $this->loadModel('bug');
