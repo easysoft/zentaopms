@@ -24,6 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/colorbox.html.php';?>
+<?php include '../../common/colorize.html.php';?>
 <script language='javascript'>
 $(document).ready(function()
 {
@@ -41,7 +42,7 @@ $(document).ready(function()
 </div>
 
 <div class='yui-d0'>
-  <table class='table-1 tablesorter fixed'>
+  <table class='table-1 tablesorter fixed colored'>
     <?php $vars = "projectID=$project->id";?>
     <thead>
       <tr class='colhead'>

@@ -147,3 +147,6 @@ update zt_task set statusCustom = locate(status, 'wait,doing,done,cancel')
 -- 增加类型字段。--
 ALTER TABLE `zt_task` ADD `type` VARCHAR( 20 ) NOT NULL AFTER `name` ,
 ADD INDEX ( TYPE )
+
+-- todo 增加状态--
+ALTER TABLE `zt_todo` CHANGE `status` `status` CHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'wait'

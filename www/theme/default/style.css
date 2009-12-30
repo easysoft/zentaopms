@@ -69,6 +69,11 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .nobr                {overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .fixed th, .fixed td {overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 
+.odd     {background:white}
+.even    {background:#ECF6FC}
+.hoover  {background:#BCD4EC}
+.clicked {background:yellow}
+
 /*-----------------------LAYOUT SETTING----------------------------*/
 .f-left   {float:left;  padding-left: 5px}
 .f-right  {float:right; padding-right:5px}

@@ -27,7 +27,7 @@
 <div class='yui-d0'>
   <table class='table-1 tablesorter a-center'>
     <thead>
-    <tr class='rowhead'>
+    <tr class='colhead'>
       <th><?php echo $lang->project->name;?></th>
       <th><?php echo $lang->project->code;?></th>
       <th><?php echo $lang->project->begin;?></th>
