@@ -21,8 +21,9 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$config->version     = '0.3 beta';       // 版本号，切勿修改。
-$config->debug       = true;             // 是否打开debug功能。
+$config->version     = '0.3 beta';        // 版本号，切勿修改。
+$config->installed   = false;             // 是否已经安装。手工安装，需要修改此参数为true。 
+$config->debug       = true;              // 是否打开debug功能。
 $config->webRoot     = '/';               // web网站的根目录。
 $config->encoding    = 'UTF-8';           // 网站的编码。
 $config->cookiePath  = '/';               // cookie的有效路径。
@@ -63,6 +64,12 @@ $config->db->password   = '';                           // 密码。
 $config->db->encoding   = 'UTF8';                       // 数据库的编码。
 $config->db->prefix     = 'zt_';                        // 数据表前缀。
 $config->db->dao        = true;                         // 是否使用DAO。
+
+/* 包含自定义配置文件。*/
+$myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
+if(file_exists($myConfig)) include $myConfig;
+
+/* 数据表的定义。*/
 define('TABLE_ACTION',         $config->db->prefix . 'action');
 define('TABLE_BUG',            $config->db->prefix . 'bug');
 define('TABLE_BUILD',          $config->db->prefix . 'build');
