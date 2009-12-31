@@ -68,6 +68,7 @@ $lang->install->requestType  = 'URL方式';
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
 $lang->install->dbHost     = '数据库服务器';
+$lang->install->dbPort     = '服务器端口';
 $lang->install->dbUser     = '数据库用户名';
 $lang->install->dbPassword = '数据库密码';
 $lang->install->dbName     = 'PMS使用的库';
