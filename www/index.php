@@ -36,7 +36,12 @@ include './myrouter.class.php';
 /* 实例化路由对象，加载配置，连接到数据库。*/
 $app    = router::createApp('pms', '', 'myRouter');
 $config = $app->loadConfig('common');
-$dbh    = $app->connectDB();
+
+/* 检查是否已经安装。*/
+if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
+
+/* 连接到数据库。*/
+$dbh = $app->connectDB();
 
 /* 根据debug选项设置错误信息。*/
 $config->debug ? error_reporting(E_ALL) : error_reporting(0);
