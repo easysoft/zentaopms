@@ -43,6 +43,10 @@
       <td><?php echo html::input('dbHost', 'localhost');?></td>
     </tr>
     <tr>
+      <th><?php echo $lang->install->dbPort;?></th>
+      <td><?php echo html::input('dbPort', '3306');?></td>
+    </tr>
+    <tr>
       <th><?php echo $lang->install->dbUser;?></th>
       <td><?php echo html::input('dbUser', 'root');?></td>
     </tr>
