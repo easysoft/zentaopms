@@ -26,5 +26,44 @@ class install extends control
     /* 安装程序首页。*/
     public function index()
     {
+        $this->view->header->title = $this->lang->install->welcome;
+        $this->display();
+    }
+
+    /* 第一步： 系统检查。*/
+    public function step1()
+    {
+        $this->view->header->title  = $this->lang->install->checking;
+        $this->view->phpVersion     = $this->install->getPhpVersion();
+        $this->view->phpResult      = $this->install->checkPHP();
+        $this->view->pdoResult      = $this->install->checkPDO();
+        $this->view->pdoMySQLResult = $this->install->checkPDOMySQL();
+        $this->view->tmpRootInfo    = $this->install->getTmpRoot();
+        $this->view->tmpRootResult  = $this->install->checkTmpRoot();
+        $this->view->dataRootInfo   = $this->install->getDataRoot();
+        $this->view->dataRootResult = $this->install->checkDataRoot();
+        $this->view->iniInfo        = $this->install->getIniInfo();
+        $this->display();
+    }
+
+    /* 第二步：配置表单。*/
+    public function step2()
+    {
+        $this->view->header->title = $this->lang->install->setConfig;
+        $this->view->webRoot = $this->install->getWebRoot();
+        $this->display();
+    }
+
+    /* 生成配置文件。*/
+    public function step3()
+    {
+        if(!empty($_POST))
+        {
+            $this->view = (object)$_POST;
+            $this->view->lang   = $this->lang;
+            $this->view->config = $this->config;
+            $this->view->header->title = $this->lang->install->saveConfig;
+            $this->display();
+        }
     }
 }
