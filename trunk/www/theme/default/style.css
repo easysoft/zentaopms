@@ -63,6 +63,8 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .table-3 {width:360px;margin-bottom:10px}
 .table-4 {width:480px;margin-bottom:10px}
 .table-5 {width:600px;margin-bottom:10px}
+.table-6 {width:800px;margin-bottom:10px}
+
 .colhead th  {text-align:center; background:#efefef;}
 .rowhead     {font-weight:bold; text-align:right; width:100px}
 .fixed       {table-layout:fixed}
@@ -122,6 +124,10 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .pr-10px {padding-right: 10px}
 .pb-10px {padding-bottom:10px}
 .pl-10px {padding-left:  10px}
+
+.f-12px  {font-size:12px}
+.f-14px  {font-size:14px}
+.f-16px  {font-size:16px}
 
 .box-title   {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
 .box-content {border:1px solid #e4e4e4; padding:5px}
