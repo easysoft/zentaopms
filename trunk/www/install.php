@@ -23,6 +23,8 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
+error_reporting(E_ALL);
+
 /* 包含必须的类文件。*/
 include '../../../framework/router.class.php';
 include '../../../framework/control.class.php';
@@ -33,7 +35,13 @@ include './myrouter.class.php';
 /* 实例化路由对象，加载配置，连接到数据库。*/
 $app    = router::createApp('pms', '', 'myRouter');
 $config = $app->loadConfig('common');
+
+/* 检查是否已经安装过。*/
+if(isset($config->installed) and $config->installed) die(header('location: index.php'));
+
+/* 重新设置config参数，进行安装。*/
 $config->set('requestType', 'GET');
+$config->set('debug', true);
 $config->set('default.module', 'install');
 
 /* 设置客户端所使用的语言、风格。*/
