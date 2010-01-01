@@ -362,14 +362,17 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `project` mediumint(8) unsigned NOT NULL default '0',
   `story` mediumint(8) unsigned NOT NULL default '0',
   `name` varchar(90) NOT NULL default '',
+  `type` VARCHAR( 20 ) NOT NULL, 
   `pri` tinyint(3) unsigned NOT NULL default '0',
   `owner` varchar(30) NOT NULL default '',
   `estimate` float unsigned NOT NULL default '0',
   `consumed` float unsigned NOT NULL default '0',
   `left` float unsigned NOT NULL default '0',
   `status` enum('wait','doing','done','cancel') NOT NULL default 'wait',
+  `statusCustom` tinyint(3) unsigned NOT NULL,
   `desc` text NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `statusCustom` (`statusCustom`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskEstimate`;
 CREATE TABLE IF NOT EXISTS `zt_taskEstimate` (
