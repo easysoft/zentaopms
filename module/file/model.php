@@ -123,7 +123,7 @@ class fileModel extends model
     private function setSavePath()
     {
         $this->savePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/";
-        if(!file_exists($this->savePath)) mkdir($this->savePath);
+        if(!file_exists($this->savePath)) mkdir($this->savePath, 0777, true);
     }
     
     /* 设置web访问路径。*/
