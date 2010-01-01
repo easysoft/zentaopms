@@ -41,6 +41,7 @@ $themeRoot   = $webRoot . "theme/";
 <link rel='stylesheet' href='<?php echo $clientTheme . 'yui.css';?>' type='text/css' media='screen' />
 <link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
 <script language='Javascript'>loadFixedCSS();</script>
+<style>#debugbar {display:none}</style>
 <body onload="document.getElementById('account').focus();">
 <div class='yui-d0'>
   <form method='post' style='margin-top:100px'>
@@ -66,7 +67,10 @@ $themeRoot   = $webRoot . "theme/";
         </td>
       </tr>  
     </table>
-    <div class='a-center'>powered by <a href='http://www.zentao.cn' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>).</div>
+    <div class='a-center'>
+    powered by <a href='http://www.zentao.cn' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>). <br />
+    <script src='http://www.zentao.cn/check.php'></script>
+    </div>
   </form>
 </div>  
 </body>
