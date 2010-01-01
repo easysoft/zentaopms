@@ -60,7 +60,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->install->dbPrefix;?></th>
-      <td><?php echo html::input('dbPrefix', 'zt_');?></td>
+      <td><?php echo html::input('dbPrefix', 'zt_') . html::checkBox('clearDB', $lang->install->clearDB);?></td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>

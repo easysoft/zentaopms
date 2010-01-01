@@ -23,9 +23,17 @@
  */
 class install extends control
 {
+    /* 构造函数，检查是否是通过安装入口调用。*/
+    public function __construct()
+    {
+        if(!defined('IN_INSTALL')) die();
+        parent::__construct();
+    }
+
     /* 安装程序首页。*/
     public function index()
     {
+        if(!isset($this->config->installed) or !$this->config->installed) $this->session->set('installing', true);
         $this->view->header->title = $this->lang->install->welcome;
         $this->display();
     }
@@ -50,7 +58,6 @@ class install extends control
     public function step2()
     {
         $this->view->header->title = $this->lang->install->setConfig;
-        $this->view->webRoot = $this->install->getWebRoot();
         $this->display();
     }
 
@@ -59,10 +66,49 @@ class install extends control
     {
         if(!empty($_POST))
         {
-            $this->view = (object)$_POST;
-            $this->view->lang   = $this->lang;
-            $this->view->config = $this->config;
-            $this->view->header->title = $this->lang->install->saveConfig;
+            $return = $this->install->checkConfig();
+            if($return->result == 'ok')
+            {
+                $this->view = (object)$_POST;
+                $this->view->lang   = $this->lang;
+                $this->view->config = $this->config;
+                $this->view->header->title = $this->lang->install->saveConfig;
+                $this->display();
+            }
+            else
+            {
+                $this->view->header->title = $this->lang->install->saveConfig;
+                $this->view->error = $return->error;
+                $this->display();
+            }
+        }
+        else
+        {
+            $this->locate($this->createLink('install'));
+        }
+    }
+
+    /* 第四步，创建公司，生成管理员帐号。*/
+    public function step4()
+    {
+        if(!empty($_POST))
+        {
+            $this->install->grantPriv();
+            if(dao::isError()) die(js::error(dao::getError()));
+            echo (js::alert($this->lang->install->success));
+            unset($_SESSION['installing']);
+            die(js::locate('index.php', 'parent'));
+        }
+
+        $this->view->header->title = $this->lang->install->getPriv;
+        if(!isset($this->config->installed) or !$this->config->installed)
+        {
+            $this->view->error = $this->lang->install->errorNotSaveConfig;
+            $this->display();
+        }
+        else
+        {
+            $this->view->pmsDomain = $this->server->HTTP_HOST;
             $this->display();
         }
     }

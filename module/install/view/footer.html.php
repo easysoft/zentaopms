@@ -1,6 +1,6 @@
 <script language='Javascript'>var needPing = false;</script>
 <div class='yui-d0'>
-  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='<?php $config->debug ? print("debugwin") : print('hiddenwin')?>'></iframe>
+  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hiddenwin'></iframe>
 </div>
 <div id='footer' class='yui-d0 yui-t7'>
   <div class='yui-g'>

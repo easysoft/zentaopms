@@ -1,6 +1,6 @@
 <?php
 /**
- * The html template file of step3 method of install module of ZenTaoMS.
+ * The html template file of step4 method of install module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,24 +22,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php
-if(!isset($error))
-{
-    $configContent = <<<EOT
-<?php
-\$config->installed    = true;		//标志是否已经安装。
-\$config->debug        = true;		//是否打开debug功能。
-\$config->webRoot      = '$webRoot';		//web网站的根目录。
-\$config->requestType  = '$requestType';		//如何获取当前请求的信息，可选值：PATH_INFO|GET
-\$config->db->host     = '$dbHost';	//mysql主机。
-\$config->db->port     = '$dbPort';		//mysql主机端口号。
-\$config->db->name     = '$dbName';	//数据库名称。
-\$config->db->user     = '$dbUser';		//数据库用户名。
-\$config->db->password = '$dbPassword';		//密码。
-\$config->db->prefix   = '$dbPrefix';		//表前缀。
-EOT;
-}
-?>
 <div class='yui-d0'>
   <?php if(isset($error)):?>
   <table class='table-6' align='center'>
@@ -47,21 +29,37 @@ EOT;
     <tr><td><?php echo $error;?></td></tr>
     <tr><td><?php echo html::commonButton($lang->install->pre, "onclick='javascript:history.back(-1)'");?></td></tr>
   </table>
-  <?php else:?>
+  <?php elseif(isset($success)):?>
   <table class='table-6' align='center'>
-	<caption><?php echo $lang->install->saveConfig;?></caption>
-	<tr>
-	  <td class='a-center'><?php echo html::textArea('config', $configContent, "rows='15' class='area-1 f-12px'");?></td>
+	<caption><?php echo $lang->install->success;?></caption>
+    <tr><td><?php echo $lang->install->afterSuccess;?></td></tr>
+    <tr><td><?php echo html::commonButton($lang->install->pre, "onclick='javascript:history.back(-1)'");?></td></tr>
+  </table>
+  <?php else:?>
+  <form method='post' target='hiddenwin'>
+  <table class='table-6' align='center'>
+	<caption><?php echo $lang->install->getPriv;?></caption>
+    <tr>
+      <th class='rowhead'><?php echo $lang->install->company;?></th>
+      <td><?php echo html::input('company');?></td>
 	</tr>
     <tr>
-      <td>
-      <?php
-      printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
-      echo html::a($this->createLink('install', 'step4'), $lang->install->next);
-      ?>
-      </td>
+      <th class='rowhead'><?php echo $lang->install->pms;?></th>
+      <td><?php echo html::input('pms', $pmsDomain) . "<span class='f-12px'>{$lang->install->pmsNote}</span>";?></td>
+	</tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->install->account;?></th>
+      <td><?php echo html::input('account');?></td>
+	</tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->install->password;?></th>
+      <td><?php echo html::input('password');?></td>
+	</tr>
+    <tr class='a-center'>
+      <td colspan='2'><?php echo html::submitButton();?></td>
 	</tr>
   </table>
+  </form>
   <?php endif;?>
 </div>
 <?php include './footer.html.php';?>
