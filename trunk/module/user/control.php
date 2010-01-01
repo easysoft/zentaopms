@@ -184,14 +184,7 @@ class user extends control
         {
             $this->user->create($companyID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($from == 'admin')
-            {
-                die(js::locate($this->createLink('admin', 'browseuser', "companyid={$this->app->company->id}"), 'parent'));
-            }
-            else
-            {
-                die(js::locate($this->createLink('company', 'browse'), 'parent'));
-            }
+            die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
         $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->user->create;
