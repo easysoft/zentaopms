@@ -24,6 +24,8 @@
  * @link        http://www.zentao.cn
  */
 error_reporting(E_ALL);
+session_start();
+define('IN_INSTALL', true);
 
 /* 包含必须的类文件。*/
 include '../../../framework/router.class.php';
@@ -37,12 +39,15 @@ $app    = router::createApp('pms', '', 'myRouter');
 $config = $app->loadConfig('common');
 
 /* 检查是否已经安装过。*/
-if(isset($config->installed) and $config->installed) die(header('location: index.php'));
+if(!isset($_SESSION['installing']) and isset($config->installed) and $config->installed) die(header('location: index.php'));
 
 /* 重新设置config参数，进行安装。*/
 $config->set('requestType', 'GET');
 $config->set('debug', true);
 $config->set('default.module', 'install');
+
+/* 如果已经保存配置文件，则自动连接到数据库。*/
+if(isset($config->installed) and $config->installed) $dbh = $app->connectDB();
 
 /* 设置客户端所使用的语言、风格。*/
 $app->setClientLang();
