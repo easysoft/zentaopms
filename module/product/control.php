@@ -38,7 +38,7 @@ class product extends control
 
         /* 获取所有的产品列表。如果还没有产品，则跳转到产品的添加页面。*/
         $this->products = $this->product->getPairs();
-        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and $this->methodName != 'create') $this->locate($this->createLink('product', 'create'));
         $this->assign('products', $this->products);
     }
 
