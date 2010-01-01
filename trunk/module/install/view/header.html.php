@@ -1,6 +1,7 @@
 <?php
+$config->webRoot = $this->install->getWebRoot();
 $clientTheme = $this->app->getClientTheme();
-$webRoot     = $this->app->getWebRoot();
+$webRoot     = $this->config->webRoot;
 $jsRoot      = $webRoot . "js/";
 $themeRoot   = $webRoot . "theme/";
 ?>

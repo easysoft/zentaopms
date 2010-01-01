@@ -91,6 +91,10 @@
       else
       {
           echo html::a($this->createLink('install', 'step1'), $lang->install->reload);
+          if($pdoResult == 'fail' or $pdoMySQLResult == 'fail')
+          {
+              echo '<p class="f-12px a-left">' . '<strong>' . $lang->install->phpINI . '</strong><br />' . nl2br($this->install->getIniInfo()) . '</p>';
+          }
       }
       ?>
       </td>
