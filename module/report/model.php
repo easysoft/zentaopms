@@ -62,6 +62,7 @@ function createChart$count()
 {
 chartWidth = "$width";
 if(chartWidth == 'auto') chartWidth = $('#$divID').width();
+if(chartWidth < 300) chartWidth = 300;
 var $chartID = new FusionCharts("$chartRoot$swfFile", "{$chartID}id", chartWidth, "$height"); 
 $chartID.setDataXML("$dataXML");
 $chartID.render("$divID");
