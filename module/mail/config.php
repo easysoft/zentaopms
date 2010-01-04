@@ -16,7 +16,7 @@ if($config->mail->mta == 'smtp')
     $config->mail->smtp->auth     = true;       // 是否需要验证。 
     $config->mail->smtp->host     = '';         // smtp主机。
     $config->mail->smtp->port     = '';         // 端口号。
-    $config->mail->smtp->username = '';         // 登陆用户名，有的smtp需要完整的邮箱地址。
+    $config->mail->smtp->username = '';         // 登录用户名，有的smtp需要完整的邮箱地址。
     $config->mail->smtp->password = '';         // 密码。
 }
 /* GMAIL的配置。*/
