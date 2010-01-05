@@ -1,6 +1,6 @@
 <?php
 /**
- * The task view file of project module of ZenTaoMS.
+ * The import view file of task module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,39 +17,26 @@
  *
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
- * @package     project
+ * @package     task
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<?php include '../../common/colorize.html.php';?>
 <div class="yui-d0">
-  <div id='featurebar'>
-    <div class='f-left'>
-    <?php include './project.html.php';?>
-    </div>
-    <div class='f-right'>
-      <?php
-      common::printLink('task', 'create', "project=$project->id", $lang->task->create);
-      common::printLink('task', 'import', "project=$project->id", $lang->task->import);
-      ?>
-    </div>
-  </div>
-  <table class='table-1 fixed colored'>
-    <?php $vars = "projectID=$project->id&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
+  <table class='table-1 fixed tablesorter'>
     <thead>
     <tr class='colhead'>
-      <th><?php common::printOrderLink('id',       $orderBy, $vars, $lang->task->id);?></th>
-      <th><?php common::printOrderLink('pri',      $orderBy, $vars, $lang->task->pri);?></th>
-      <th class='w-p30'><?php common::printOrderLink('name',     $orderBy, $vars, $lang->task->name);?></th>
-      <th><?php common::printOrderLink('owner',    $orderBy, $vars, $lang->task->owner);?></th>
-      <th><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimate);?></th>
-      <th><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumed);?></th>
-      <th><?php common::printOrderLink('`left`',   $orderBy, $vars, $lang->task->left);?></th>
-      <th><?php common::printOrderLink('type',     $orderBy, $vars, $lang->task->type);?></th>
-      <th><?php common::printOrderLink('status',   $orderBy, $vars, $lang->task->status);?></th>
-      <th class='w-p30'><?php common::printOrderLink('story',    $orderBy, $vars, $lang->task->story);?></th>
+      <th><?php echo $lang->task->id;?></th>
+      <th><?php echo $lang->task->pri;?></th>
+      <th><?php echo $lang->task->name;?></th>
+      <th><?php echo $lang->task->owner;?></th>
+      <th><?php echo $lang->task->estimate;?></th>
+      <th><?php echo $lang->task->consumed;?></th>
+      <th><?php echo $lang->task->left;?></th>
+      <th><?php echo $lang->task->type;?></th>
+      <th><?php echo $lang->task->status;?></th>
+      <th class='w-p30'><?php echo $lang->task->story;?></th>
       <th class='w-100px'><?php echo $lang->action;?></th>
     </tr>
     </thead>
@@ -76,13 +63,10 @@
         ?>
       </td>
       <td>
-        <?php if(common::hasPriv('task', 'edit'))   echo html::a($this->createLink('task', 'edit',   "taskid=$task->id"), $lang->task->edit);?>
-        <?php if(common::hasPriv('task', 'delete')) echo html::a($this->createLink('task', 'delete', "projectID=$task->project&taskid=$task->id"), $lang->task->delete, 'hiddenwin');?>
       </td>
     </tr>
     <?php endforeach;?>
     </tbody>
   </table>
-  <div class='a-right'><?php echo $pager;?></div>
 </div>  
 <?php include '../../common/footer.html.php';?>

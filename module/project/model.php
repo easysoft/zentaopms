@@ -139,6 +139,21 @@ class projectModel extends model
         foreach($products as $productID) $this->dao->insert(TABLE_PROJECTPRODUCT)->set('project')->eq((int)$projectID)->set('product')->eq((int)$productID)->exec();
     }
 
+    /* 获得相关项目列表。*/
+    public function getRelatedProjects($projectID)
+    {
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchAll('product');
+        if(!$products) return array();
+        $products = array_keys($products);
+        return $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')
+            ->on('t1.id = t2.project')
+            ->where('t2.product')->in($products)
+            ->andWhere('t1.id')->ne((int)$projectID)
+            ->orderBy('t1.id')
+            ->fetchPairs();
+    }
+
     /* 获得相关的子项目列表。*/
     public function getChildProjects($projectID)
     {
