@@ -271,7 +271,7 @@ class projectModel extends model
                     $nextDay = date('Y-m-d', strtotime('next day', strtotime($current)));
                     $current = $nextDay;
                     $sets[$current]->name = $current;
-                    $sets[$current]->value = '1';    // value为空，这样fushioncharts不会打印节点。
+                    $sets[$current]->value = '';    // value为空，这样fushioncharts不会打印节点。
                     if($nextDay == $end) break;
                 }
             }
