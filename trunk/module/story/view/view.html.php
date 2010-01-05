@@ -81,6 +81,10 @@
            ?>
          </td>
        </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->plan;?></td>
+         <td><?php echo $plan;?></td>
+       </tr>
        <!--
        <tr>
          <td class='rowhead'><?php echo $lang->story->type;?></td>

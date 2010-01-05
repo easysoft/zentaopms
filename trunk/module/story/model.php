@@ -36,10 +36,11 @@ class storyModel extends model
     {
         $now   = date('Y-m-d H:i:s', time());
         $story = fixer::input('post')
-            ->cleanInt('product,module,pri')
+            ->cleanInt('product,module,pri,plan')
             ->cleanFloat('estimate')
             ->stripTags('title')
             ->specialChars('spec')
+            ->setDefault('plan', 0)
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
             ->add('assignedDate', 0)
@@ -55,13 +56,14 @@ class storyModel extends model
         $now      = date('Y-m-d H:i:s', time());
         $oldStory = $this->findByID($storyID);
         $story    = fixer::input('post')
-            ->cleanInt('product,module,pri')
+            ->cleanInt('product,module,pri,plan')
             ->stripTags('title')
             ->specialChars('spec')
             ->remove('comment')
             ->add('assignedDate', $oldStory->assignedDate)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->setDefault('plan', 0)
             ->setIF($this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->check('title', 'notempty')->where('id')->eq((int)$storyID)->exec();
