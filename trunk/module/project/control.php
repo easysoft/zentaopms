@@ -196,11 +196,16 @@ class project extends control
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->burn;
 
+        /* 生成图表。*/
+        $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph);
+        $charts  = $this->report->createJSChart('line', $dataXML, 800);
+
         /* 赋值。*/
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('tabID',    'burn');
-        $this->assign('charts',   $this->report->createChart('line', $this->createLink('project', 'burnData', "project=$projectID", 'xml')));
+        $this->assign('charts',   $charts);
+
         $this->display();
     }
 

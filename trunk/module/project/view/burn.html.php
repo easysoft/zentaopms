@@ -24,4 +24,5 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0 a-center'><?php echo $charts; ?></div>
+<script language='Javascript'>createChart1();</script>
 <?php include '../../common/footer.html.php';?>
