@@ -32,7 +32,7 @@
     <div class='f-right'>
       <?php
       common::printLink('task', 'create', "project=$project->id", $lang->task->create);
-      common::printLink('task', 'import', "project=$project->id", $lang->task->import);
+      //common::printLink('task', 'import', "project=$project->id", $lang->task->import);
       ?>
     </div>
   </div>
