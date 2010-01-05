@@ -37,6 +37,12 @@ class productplanModel extends model
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)->fetchAll();
     }
 
+    /* 获取name=>value的键值对。*/
+    public function getPairs($product = 0)
+    {
+        return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('product')->eq((int)$product)->fetchPairs();
+    }
+
     /* 创建。*/
     public function create($product)
     {
