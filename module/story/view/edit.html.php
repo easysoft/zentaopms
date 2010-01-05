@@ -42,6 +42,12 @@ function loadModuleMenu(productID)
         </td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->story->plan;?></th>
+        <td class='a-left'>
+          <?php echo html::select('plan', $plans, $story->plan, 'class=select-3');?>
+        </td>
+      </tr>
+      <tr>
         <th class='rowhead'><?php echo $lang->story->pri;?></th>
         <td class='a-left'>
           <?php echo html::select('pri', (array)$lang->story->priList, $story->pri, 'class=select-3');?>
