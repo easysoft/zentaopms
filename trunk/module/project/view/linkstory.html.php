@@ -29,12 +29,12 @@
     <table align='center' class='table-1 tablesorter fixed a-center'> 
       <thead>
       <tr class='colhead'>
-        <th><?php echo $lang->story->id;?></th>
-        <th><?php echo $lang->story->pri;?></th>
-        <th><?php echo $lang->story->product;?></th>
-        <th class='w-p50'><?php echo $lang->story->title;?></th>
-        <th><?php echo $lang->story->plan;?></th>
-        <th><?php echo $lang->story->linkStory;?></th>
+        <th class='w-50px'><?php echo $lang->story->id;?></th>
+        <th class='w-50px'><?php echo $lang->story->pri;?></th>
+        <th class='w-100px'><?php echo $lang->story->product;?></th>
+        <th><?php echo $lang->story->title;?></th>
+        <th class='w-100px'><?php echo $lang->story->plan;?></th>
+        <th class='w-50px'><?php echo $lang->story->linkStory;?></th>
       </tr>
       </thead>
       <tbody>
@@ -44,7 +44,7 @@
         <td><?php echo $story->id;?></td>
         <td><?php echo $story->pri;?></td>
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
-        <td class='a-left nobr'><?php echo $story->title;?></td>
+        <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "story=$story->id"), $story->title);?></td>
         <td><?php echo $story->planTitle;?></td>
         <td>
           <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' />

@@ -446,8 +446,8 @@ class project extends control
         $products   = $this->project->getProducts($projectID);
         $browseLink = $this->createLink('project', 'story', "projectID=$projectID");
 
-        /* 设置菜单。*/
-        $this->project->setMenu($this->projects, $project->id);
+        $this->session->set('storyList', $this->app->getURI(true)); // 记录需求列表状态。
+        $this->project->setMenu($this->projects, $project->id);     // 设置菜单。
 
         if(empty($products))
         {
