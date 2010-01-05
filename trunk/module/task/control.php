@@ -77,6 +77,21 @@ class task extends control
         $this->display();
     }
 
+    /* 导入任务。*/
+    //public function import($projectID)
+    //{
+    //    /* 设置菜单。*/
+    //    $this->project->setMenu($this->project->getPairs(), $projectID);
+
+    //    $relatedProjects = $this->project->getRelatedProjects($projectID);
+    //    $tasks = array();
+    //    foreach($relatedProjects as $projectID => $projectName) $tasks = array_merge($tasks, $this->task->getProjectTasks($projectID));
+    //    $this->view->header->title = $this->lang->task->import;
+    //    $this->view->position      = $this->lang->task->import;
+    //    $this->view->tasks = $tasks;
+    //    $this->display();
+    //}
+
     /* 编辑任务。*/
     public function edit($taskID)
     {
