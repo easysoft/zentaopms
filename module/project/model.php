@@ -231,37 +231,52 @@ class projectModel extends model
     {
         $project = $this->findById($projectID);
         $sql     = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
+
+        /* 没有指定结束日期的情况。*/
         if($project->end == '0000-00-00')
         {
             $sets = $sql->orderBy('date|desc')->limit(14)->fetchAll('name');
             $sets = array_reverse($sets);
+
+            /* 如果没有记录，手工补齐。*/
+            if(!$sets)
+            {
+                $current = time();
+                for($i = 0; $i < 14; $i ++)
+                {
+                    $nextDay = date('Y-m-d', $current + 60 * 60 * 24 * $i);
+                    $set     = array('name' => $nextDay, 'value' => '');
+                    $sets[]  = (object)$set;
+                }
+            }
+            foreach($sets as $set) $set->name = substr($set->name, 5);
+            return $sets;
         }
         else
         {
-            $sets = $sql->orderBy('date')->fetchAll('name');
-        }
-
-        /* 取得burn表中最大的日期和project的结束时间。*/
-        end($sets);
-        $current = key($sets);
-        $end     = $project->end;
-
-        /* 根据当前日期和项目最后结束的日期，补足后续日期。*/
-        if($end != '0000-00-00' and helper::diffDate($end, $current) > 0)
-        {
-            while(true)
+            $sets     = $sql->orderBy('date')->fetchAll('name');
+            $current = $project->begin;
+            $end     = $project->end;
+            if($sets)
             {
-                $nextDay = date('Y-m-d', strtotime('next day', strtotime($current)));
-                $current = $nextDay;
-                $sets[$current]->name = $current;
-                $sets[$current]->value = '';    // value为空，这样fushioncharts不会打印节点。
-                if($nextDay == $end) break;
+                end($sets);
+                $current = key($sets);
             }
+
+            /* 根据当前日期和项目最后结束的日期，补足后续日期。*/
+            if(helper::diffDate($end, $current) > 0)
+            {
+                while(true)
+                {
+                    $nextDay = date('Y-m-d', strtotime('next day', strtotime($current)));
+                    $current = $nextDay;
+                    $sets[$current]->name = $current;
+                    $sets[$current]->value = '1';    // value为空，这样fushioncharts不会打印节点。
+                    if($nextDay == $end) break;
+                }
+            }
+            foreach($sets as $set) $set->name = substr($set->name, 5);
+            return $sets;
         }
-        foreach($sets as $set)
-        {
-            $set->name = substr($set->name, 5);
-        }
-        return $sets;
     }
 }
