@@ -31,7 +31,7 @@
       <tr class='colhead'>
         <th class='w-50px'><?php echo $lang->story->id;?></th>
         <th class='w-50px'><?php echo $lang->story->pri;?></th>
-        <th class='w-100px'><?php echo $lang->story->product;?></th>
+        <th class='w-200px'><?php echo $lang->story->product;?></th>
         <th><?php echo $lang->story->title;?></th>
         <th class='w-100px'><?php echo $lang->story->plan;?></th>
         <th class='w-50px'><?php echo $lang->story->linkStory;?></th>
