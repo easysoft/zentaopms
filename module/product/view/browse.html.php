@@ -80,7 +80,7 @@ function search(active)
       <table class='table-1 fixed colored'>
         <thead>
           <tr class='colhead'>
-            <?php $vars = "productID=$productID&moduleID=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <?php $vars = "productID=$productID&type=$queryType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th><?php common::printOrderLink('id',  $orderBy, $vars, $lang->story->id);?></th>
             <th><?php common::printOrderLink('pri', $orderBy, $vars, $lang->story->pri);?></th>
             <th class='w-p40'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
