@@ -31,25 +31,39 @@ function browseByModule()
 {
     $('#mainbox').addClass('yui-t7');
     $('#treebox').removeClass('hidden');
-    $('#featuremodule').addClass('active');
-    $('#featureall').removeClass('active');
+    $('#bymoduleTab').addClass('active');
+    $('#allTab').removeClass('active');
+    $('#bysearchTab').removeClass('active');
+    $('#querybox').addClass('hidden');
 }
+function search(active)
+{
+    $('#mainbox').removeClass('yui-t7');
+    $('#treebox').addClass('hidden');
+    $('#querybox').removeClass('hidden');
+    $('#bymoduleTab').removeClass('active');
+    $('#' + active + 'Tab').removeClass('active');
+    $('#bysearchTab').addClass('active');
+}
+
 </script>
 
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'>
-      <span id='featureall'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID"), $lang->product->allStory);?></span>
-      <span id='featuremodule' onclick='browseByModule()'><?php echo $lang->product->moduleStory;?></span>
+      <span id='bymoduleTab' onclick='browseByModule()'><?php echo $lang->product->moduleStory;?></span>
+      <span id='bysearchTab' onclick='search("<?php echo $queryType;?>")'><?php echo $lang->product->searchStory;?></span>
+      <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&type=all"), $lang->product->allStory);?></span>
     </div>
     <div class='f-right'>
       <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
     </div>
   </div>
+    <div id='querybox' class='<?php if($queryType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 </div>
 
-<div class='yui-d0 <?php if($browseType == 'module') echo 'yui-t7';?>' id='mainbox'>
-  <div class='yui-b <?php if($browseType != 'module') echo 'hidden';?>' id='treebox'>
+<div class='yui-d0 <?php if($queryType == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
+  <div class='yui-b <?php if($queryType != 'bymodule') echo 'hidden';?>' id='treebox'>
     <div class='box-title'><?php echo $productName;?></div>
     <div class='box-content'>
       <?php echo $moduleTree;?>
@@ -66,7 +80,7 @@ function browseByModule()
       <table class='table-1 fixed colored'>
         <thead>
           <tr class='colhead'>
-            <?php $vars = "productID=$productID&moduleID=$moduleID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";?>
+            <?php $vars = "productID=$productID&moduleID=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th><?php common::printOrderLink('id',  $orderBy, $vars, $lang->story->id);?></th>
             <th><?php common::printOrderLink('pri', $orderBy, $vars, $lang->story->pri);?></th>
             <th class='w-p40'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
@@ -75,7 +89,7 @@ function browseByModule()
             <th><?php common::printOrderLink('openedBy',       $orderBy, $vars, $lang->story->openedBy);?></th>
             <th><?php common::printOrderLink('estimate',       $orderBy, $vars, $lang->story->estimate);?></th>
             <th><?php common::printOrderLink('status',         $orderBy, $vars, $lang->story->status);?></th>
-            <th><?php common::printOrderLink('lastEditedDate', $orderBy, $vars, $lang->story->lastEditedDate);?></th>
+            <th class='w-100px'><?php common::printOrderLink('lastEditedDate', $orderBy, $vars, $lang->story->lastEditedDate);?></th>
             <th><?php echo $lang->action;?></th>
           </tr>
         </thead>
@@ -103,12 +117,12 @@ function browseByModule()
           <?php endforeach;?>
         </tbody>
       </table>
-      <?php echo $pager;?>
+      <?php $pager->show();?>
     </div>
   </div>
 </div>  
 <script language='javascript'>
 $('#module<?php echo $moduleID;?>').addClass('active')
-$('#feature<?php echo $browseType;?>').addClass('active')
+$('#<?php echo $queryType;?>Tab').addClass('active')
 </script>
 <?php include '../../common/footer.html.php';?>

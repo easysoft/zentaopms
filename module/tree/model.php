@@ -137,7 +137,7 @@ class treeModel extends model
     /* 生成需求链接。*/
     function createStoryLink($module)
     {
-        $linkHtml = html::a(helper::createLink('product', 'browse', "product={$module->product}&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        $linkHtml = html::a(helper::createLink('product', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
