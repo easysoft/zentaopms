@@ -101,6 +101,21 @@ class storyModel extends model
         return $this->formatStories($stories);
     }
 
+    /* 按照某一个查询条件获取列表。*/
+    public function getByQuery($query, $orderBy, $pager = null)
+    {
+        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($query)->orderBy($orderBy)->page($pager)->fetchGroup('plan');
+        if(!$tmpStories) return array();
+        $plans   = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($tmpStories))->fetchPairs();
+        $stories = array();
+        foreach($tmpStories as $planID => $planStories)
+        {
+            foreach($planStories as $story) $story->planTitle = isset($plans[$planID]) ? $plans[$planID] : '';
+            $stories[] = $story;
+        }
+        return $stories;
+    }
+
     /* 获得某一个项目相关的所有需求列表。*/
     function getProjectStories($projectID = 0, $orderBy='id|desc', $pager = null)
     {

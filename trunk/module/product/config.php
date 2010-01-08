@@ -1,5 +1,6 @@
 <?php
-/*
+global $lang, $app;
+$app->loadLang('story');
 $config->product->search['module']                   = 'story';
 $config->product->search['fields']['id']             = $lang->story->id;
 $config->product->search['fields']['title']          = $lang->story->title;
@@ -20,4 +21,3 @@ $config->product->search['params']['lastEditedBy'] = array('operator' => '=',   
 $config->product->search['params']['status']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->statusList);
 $config->product->search['params']['pri']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->priList);
 $config->product->search['params']['mailto']       = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
-*/

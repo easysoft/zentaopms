@@ -48,4 +48,5 @@ $lang->product->status  = '状态';
 $lang->product->desc    = '产品描述';
 
 $lang->product->moduleStory = '按模块浏览';
+$lang->product->searchStory = '搜索';
 $lang->product->allStory    = '全部需求';

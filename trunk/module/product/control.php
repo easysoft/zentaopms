@@ -49,46 +49,58 @@ class product extends control
     }
 
     /* 浏览某一个产品。*/
-    public function browse($productID = 0, $moduleID = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $queryType = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        //$this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&type=byQuery");
-        //$this->assign('searchForm', $this->fetch('search', 'buildForm', $this->config->product->search));
+        /* 设置搜索条件。*/
+        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&type=bySearch");
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);
+
+        /* 设置查询格式。*/
+        $queryType = strtolower($queryType);
 
         /* 设置当前的产品id和模块id。*/
         $this->session->set('storyList', $this->app->getURI(true));
         $productID      = common::saveProductState($productID, key($this->products));
-        $moduleID       = (int)$moduleID;
-        $childModuleIds = $this->tree->getAllChildID($moduleID);
+        $moduleID       = ($queryType == 'bymodule') ? (int)$param : 0;
 
         /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
 
         /* 设置header和导航条信息。*/
-        $header['title'] = $this->lang->product->index . $this->lang->colon . $this->products[$productID];
-        $position[]      = $this->products[$productID];
+        $this->view->header->title = $this->lang->product->index . $this->lang->colon . $this->products[$productID];
+        $this->view->position[]    = $this->products[$productID];
 
         /* 加载分页类，并查询stories列表。*/
         $this->app->loadClass('pager', $static = true);
         $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
 
-        /* 设置浏览模式。*/
-        $browseType = $moduleID > 0 ? 'module' : 'all';
+        $stories = array();
+        if($queryType == 'all')
+        {
+            $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
+        }
+        elseif($queryType == 'bymodule')
+        {
+            $childModuleIds = $this->tree->getAllChildID($moduleID);
+            $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
+        }
+        elseif($queryType == 'bysearch')
+        {
+            if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
+            $stories = $this->story->getByQuery($this->session->storyQuery, $orderBy, $pager);
+        }
 
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
         $this->assign('productID',     $productID);
         $this->assign('productName',   $this->products[$productID]);
         $this->assign('moduleID',      $moduleID);
         $this->assign('stories',       $stories);
         $this->assign('moduleTree',    $this->tree->getTreeMenu($productID, $viewType = 'product', $rooteModuleID = 0, array('treeModel', 'createStoryLink')));
         $this->assign('parentModules', $this->tree->getParents($moduleID));
-        $this->assign('pager',         $pager->get());
-        $this->assign('recTotal',      $pager->recTotal);
-        $this->assign('recPerPage',    $pager->recPerPage);
+        $this->assign('pager',         $pager);
         $this->assign('users',         $this->user->getPairs($this->app->company->id, 'noletter'));
         $this->assign('orderBy',       $orderBy);
-        $this->assign('browseType',    $browseType);
+        $this->assign('queryType',     $queryType);
+        $this->assign('moduleID',      $moduleID);
 
         $this->display();
     }
