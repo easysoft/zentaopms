@@ -110,8 +110,11 @@ class storyModel extends model
         $stories = array();
         foreach($tmpStories as $planID => $planStories)
         {
-            foreach($planStories as $story) $story->planTitle = isset($plans[$planID]) ? $plans[$planID] : '';
-            $stories[] = $story;
+            foreach($planStories as $story)
+            {
+                $story->planTitle = isset($plans[$planID]) ? $plans[$planID] : '';
+                $stories[] = $story;
+            }
         }
         return $stories;
     }
