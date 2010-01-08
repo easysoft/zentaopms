@@ -256,7 +256,7 @@ class bug extends control
         {
             $this->bug->resolve($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->action->create('bug', $bugID, 'Resolved', $this->post->comment);
+            $actionID = $this->action->create('bug', $bugID, "Resolved as {$this->post->resolution}", $this->post->comment);
             $this->sendmail($bugID, $actionID);
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
