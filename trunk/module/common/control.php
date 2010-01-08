@@ -93,7 +93,7 @@ EOT;
 
         /* 非管理员，则检查权限列表中是否存在。*/
         $rights  = $app->user->rights;
-        if(isset($rights[$module][$method])) return true;
+        if(isset($rights[strtolower($module)][strtolower($method)])) return true;
         return false;
     }
 
