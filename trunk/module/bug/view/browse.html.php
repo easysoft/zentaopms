@@ -26,22 +26,24 @@
 <?php include '../../common/treeview.html.php';?>
 <?php include '../../common/colorize.html.php';?>
 <script language='Javascript'>
-/* 切换浏览方式。*/
+/* 通过模块浏览。*/
 function browseByModule(active)
 {
     $('#mainbox').addClass('yui-t7');
     $('#treebox').removeClass('hidden');
-    $('#bymoduletab').addClass('active');
+    $('#bymoduleTab').addClass('active');
     $('#querybox').addClass('hidden');
-    $('#' + active + 'tab').removeClass('active');
+    $('#' + active + 'Tab').removeClass('active');
 }
-function search(active)
+/* 搜索。*/
+function browseBySearch(active)
 {
     $('#mainbox').removeClass('yui-t7');
     $('#treebox').addClass('hidden');
     $('#querybox').removeClass('hidden');
-    $('#byquerytab').addClass('active');
-    $('#' + active + 'tab').removeClass('active');
+    $('#bymoduleTab').removeClass('active');
+    $('#' + active + 'Tab').removeClass('active');
+    $('#bysearchTab').addClass('active');
 }
 
 </script>
@@ -50,22 +52,22 @@ function search(active)
   <div id='featurebar'>
     <div class='f-left'>
       <?php
-      echo "<span id='bymoduletab' onclick=\"browseByModule('$type')\">" . $lang->bug->moduleBugs . "</span> ";
-      echo "<span id='assigntometab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
-      echo "<span id='openedbymetab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
-      echo "<span id='resolvedbymetab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
-      echo "<span id='assigntonulltab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</span>";
-      echo "<span id='longlifebugstab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
-      echo "<span id='postponedbugstab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
-      echo "<span id='byquerytab' onclick=\"search('$type')\">{$lang->bug->byQuery}</span> ";
-      echo "<span id='alltab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&type=all&param=0"),           $lang->bug->allBugs)    . "</span>";
+      echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\">" . $lang->bug->moduleBugs . "</span> ";
+      echo "<span id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
+      echo "<span id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
+      echo "<span id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
+      echo "<span id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</span>";
+      echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
+      echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
+      echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\">{$lang->bug->byQuery}</span> ";
+      echo "<span id='allTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=all&param=0&orderBy=$orderBy&recTotal=$recTotal&recPerPage=200"), $lang->bug->allBugs) . "</span>";
       ?>
     </div>
     <div class='f-right'>
       <?php common::printLink('bug', 'create', "productID=$productID&moduleID=$moduleID", $lang->bug->create); ?>
     </div>
   </div>
-  <div id='querybox' class='<?php if($type !='byquery') echo 'hidden';?>'><?php echo $searchForm;?></div>
+  <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 </div>
 
 <div class='yui-d0 <?php if($type == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
@@ -81,13 +83,13 @@ function search(active)
 
   <div class="yui-main">
     <div class="yui-b">
-      <?php $vars = "productID=$productID&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
+      <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
       <table class='table-1 fixed colored'>
         <thead>
         <tr class='colhead'>
           <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->bug->id);?></th>
           <th><?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severity);?></th>
-          <th class='w-p50'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+          <th class='w-p50'><?php common::printOrderLink('title',  $orderBy, $vars, $lang->bug->title);?></th>
           <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->bug->openedBy);?></th>
           <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <th><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
@@ -113,7 +115,7 @@ function search(active)
   </div>
 </div>  
 <script language='javascript'>
-$("#<?php echo $type;?>tab").addClass('active'); 
+$("#<?php echo $browseType;?>Tab").addClass('active'); 
 $("#module<?php echo $moduleID;?>").addClass('active'); 
 </script>
 <?php include '../../common/footer.html.php';?>
