@@ -55,7 +55,8 @@ $lang->testcase->byModule       = '按模块';
 $lang->testcase->assignToMe     = '指派给我';
 $lang->testcase->openedByMe     = '由我创建';
 $lang->testcase->allCases       = '所有Case';
-$lang->testcase->moduleCases     = '按模块浏览';
+$lang->testcase->moduleCases    = '按模块浏览';
+$lang->testcase->bySearch       = '搜索';
 
 $lang->testcase->labProductAndModule         = '产品模块';
 $lang->testcase->labTypeAndPri               = '类型&优先级';
@@ -103,9 +104,11 @@ $lang->testcase->browserList->opera9   = 'opera9';
 $lang->testcase->browserList->oprea10  = '其他';
 
 /* Define the types. */
+$lang->testcase->typeList['']            = '';
 $lang->testcase->typeList['feature']     = '功能测试';
 $lang->testcase->typeList['performance'] = '性能测试';
 
+$lang->testcase->statusList['']         = '';
 $lang->testcase->statusList['normal']   = '正常';
 $lang->testcase->statusList['blocked']  = 'Blocked';
 
