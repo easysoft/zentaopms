@@ -80,7 +80,7 @@ class testcaseModel extends model
             ->specialChars('steps')
             ->remove('comment')
             ->get();
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->check('title', 'notempty')->where('id')->eq((int)$caseID)->exec();
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck('title,status,type', 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!dao::isError()) return common::createChanges($oldCase, $case);
     }
 }

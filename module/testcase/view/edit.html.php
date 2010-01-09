@@ -49,7 +49,7 @@ function loadStory(productID)
 
 </script>
 
-<form method='post'>
+<form method='post' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>
     <div id='main'>

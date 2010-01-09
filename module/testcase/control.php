@@ -32,8 +32,7 @@ class testcase extends control
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
-        $this->products = $this->product->getPairs();
-        $this->assign('products', $this->products);
+        $this->view->products = $this->products = $this->product->getPairs();
     }
 
     /* case首页。*/
@@ -43,47 +42,50 @@ class testcase extends control
     }
 
     /* 浏览一个产品下面的case。*/
-    public function browse($productID = 0, $type = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+        /* 构造搜索表单。*/
+        $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch");
+        $this->assign('searchForm', $this->fetch('search', 'buildForm', $this->config->testcase->search));
 
-        $productID = (int)$productID;
-        if($productID == 0) $productID = key($this->products);
+        /* 设置浏览模式，产品ID和模块ID。 */
+        $browseType = strtolower($browseType);
+        $productID = common::saveProductState($productID, key($this->products));
+        $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
 
-        /* 设置菜单。*/
+        /* 设置菜单，登记session。*/
         $this->testcase->setMenu($this->products, $productID);
+        $this->session->set('caseList', $this->app->getURI(true));
 
-        /* 设置模块ID。*/
-        $type     = strtolower($type);
-        $moduleID = ($type == 'bymodule') ? (int)$param : 0;
+        /* 加载分页类。*/
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* 如果是按照模块查找，或者列出所有。*/
-        if($type == 'bymodule' or $type == 'all')
+        if($browseType == 'bymodule' or $browseType == 'all')
         {
-            $this->app->loadClass('pager', $static = true);
-            $pager = pager::init($recTotal, $recPerPage, $pageID);
-            $childModuleIds = $this->tree->getAllChildId($moduleID);
-            $cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
+            $childModuleIds    = $this->tree->getAllChildId($moduleID);
+            $this->view->cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
         }
-        
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->testcase->common;
+        elseif($browseType == 'bysearch')
+        {
+            if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+            $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)->orderBy($orderBy)->page($pager)->fetchAll();
+        }
 
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
-        $this->assign('productID',     $productID);
-        $this->assign('productName',   $this->products[$productID]);
-        $this->assign('moduleTree',    $this->tree->getTreeMenu($productID, $viewType = 'case', $rooteModuleID = 0, array('treeModel', 'createCaseLink')));
-        $this->assign('type',          $type);
-        $this->assign('cases',         $cases);
-        $this->assign('pager',         $pager->get());
-        $this->assign('users',         $this->user->getPairs($this->app->company->id, 'noletter'));
-        $this->assign('moduleID',      $moduleID);
-        $this->assign('param',         $param);
-        $this->assign('recTotal',      $pager->recTotal);
-        $this->assign('recPerPage',    $pager->recPerPage);
-        $this->assign('orderBy',       $orderBy);
+        /* 赋值。*/
+        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->testcase->common;
+        $this->view->productID     = $productID;
+        $this->view->productName   = $this->products[$productID];
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $rooteModuleID = 0, array('treeModel', 'createCaseLink'));
+        $this->view->moduleID      = $moduleID;
+        $this->view->pager         = $pager;
+        $this->view->users         = $this->user->getPairs($this->app->company->id, 'noletter');
+        $this->view->orderBy       = $orderBy;
+        $this->view->browseType    = $browseType;
+        $this->view->param         = $param;
 
         $this->display();
     }
@@ -98,7 +100,7 @@ class testcase extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            die(js::locate($this->createLink('testcase', 'browse', "productID=$_POST[product]&type=byModule&param=$_POST[module]"), 'parent'));
+            die(js::locate($this->createLink('testcase', 'browse', "productID=$_POST[product]&browseType=byModule&param=$_POST[module]"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
