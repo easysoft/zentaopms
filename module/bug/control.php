@@ -47,58 +47,60 @@ class bug extends control
     }
 
     /* 浏览一个产品下面的bug。*/
-    public function browse($productID = 0, $type = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&type=byQuery");
-        $this->assign('searchForm', $this->fetch('search', 'buildForm', $this->config->bug->search));
+        /* 设置搜索表单。*/
+        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch");
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
 
-        $type = strtolower($type);
+        /* 设置产品id和模块id。*/
+        $browseType = strtolower($browseType);
+        $productID  = common::saveProductState($productID, key($this->products));
+        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
+
+        /* 设置菜单，登记session。*/
+        $this->bug->setMenu($this->products, $productID);
         $this->session->set('bugList', $this->app->getURI(true));
 
-        $productID = common::saveProductState($productID, key($this->products));
-        $moduleID  = ($type == 'bymodule') ? (int)$param : 0;
-
-        /* 设置菜单。*/
-        $this->bug->setMenu($this->products, $productID);
-
+        /* 加载分页类。*/
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $bugs = array();
-        if($type == 'all')
+        if($browseType == 'all')
         {
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
-        elseif($type == "bymodule")
+        elseif($browseType == "bymodule")
         {
             $childModuleIds = $this->tree->getAllChildId($moduleID);
             $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $orderBy, $pager);
         }
-        elseif($type == 'assigntome')
+        elseif($browseType == 'assigntome')
         {
-            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
-        elseif($type == 'openedbyme')
+        elseif($browseType == 'openedbyme')
         {
-            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
-        elseif($type == 'resolvedbyme')
+        elseif($browseType == 'resolvedbyme')
         {
-            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
-        elseif($type == 'assigntonull')
+        elseif($browseType == 'assigntonull')
         {
-            $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
-        elseif($type == 'longlifebugs')
+        elseif($browseType == 'longlifebugs')
         {
-            $bugs = $this->dao->findByLastEditedDate("<", date('Y-m-d', strtotime('-7 days')))->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByLastEditedDate("<", date('Y-m-d', strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
         }
-        elseif($type == 'postponedbugs')
+        elseif($browseType == 'postponedbugs')
         {
-            $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
-        elseif($type == 'byquery')
+        elseif($browseType == 'bysearch')
         {
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQuery)->orderBy($orderBy)->page($pager)->fetchAll();
@@ -115,7 +117,7 @@ class bug extends control
         $this->assign('productID',     $productID);
         $this->assign('productName',   $this->products[$productID]);
         $this->assign('moduleTree',    $this->tree->getTreeMenu($productID, $viewType = 'bug', $rooteModuleID = 0, array('treeModel', 'createBugLink')));
-        $this->assign('type',          $type);
+        $this->assign('browseType',    $browseType);
         $this->assign('bugs',          $bugs);
         $this->assign('users',         $users);
         $this->assign('recTotal',      $pager->recTotal);

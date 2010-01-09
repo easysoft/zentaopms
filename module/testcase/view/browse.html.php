@@ -53,7 +53,7 @@ function browseBySearch(active)
       <?php
       echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\">" . $lang->testcase->moduleCases . "</span> ";
       echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\">{$lang->testcase->bySearch}</span> ";
-      echo "<span id='allTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=500"), $lang->testcase->allCases) . "</span>";
+      echo "<span id='allTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->testcase->allCases) . "</span>";
       ?>
     </div>
     <div class='f-right'>

@@ -49,19 +49,19 @@ class product extends control
     }
 
     /* 浏览某一个产品。*/
-    public function browse($productID = 0, $queryType = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 设置搜索条件。*/
-        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&type=bySearch");
+        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch");
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);
 
         /* 设置查询格式。*/
-        $queryType = strtolower($queryType);
+        $browseType = strtolower($browseType);
 
         /* 设置当前的产品id和模块id。*/
         $this->session->set('storyList', $this->app->getURI(true));
         $productID      = common::saveProductState($productID, key($this->products));
-        $moduleID       = ($queryType == 'bymodule') ? (int)$param : 0;
+        $moduleID       = ($browseType == 'bymodule') ? (int)$param : 0;
 
         /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
@@ -75,16 +75,16 @@ class product extends control
         $pager   = new pager($recTotal, $recPerPage, $pageID);
 
         $stories = array();
-        if($queryType == 'all')
+        if($browseType == 'all')
         {
             $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
         }
-        elseif($queryType == 'bymodule')
+        elseif($browseType == 'bymodule')
         {
             $childModuleIds = $this->tree->getAllChildID($moduleID);
             $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
         }
-        elseif($queryType == 'bysearch')
+        elseif($browseType == 'bysearch')
         {
             if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
             $stories = $this->story->getByQuery($this->session->storyQuery, $orderBy, $pager);
@@ -99,7 +99,7 @@ class product extends control
         $this->assign('pager',         $pager);
         $this->assign('users',         $this->user->getPairs($this->app->company->id, 'noletter'));
         $this->assign('orderBy',       $orderBy);
-        $this->assign('queryType',     $queryType);
+        $this->assign('browseType',    $browseType);
         $this->assign('moduleID',      $moduleID);
 
         $this->display();
