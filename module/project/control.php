@@ -30,6 +30,7 @@ class project extends control
     {
         parent::__construct();
         $this->projects = $this->project->getPairs();
+        if(!$this->projects and $this->methodName != 'create') $this->locate($this->createLink('project', 'create'));
     }
 
     /* 项目视图首页，*/
