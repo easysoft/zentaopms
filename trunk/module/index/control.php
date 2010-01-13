@@ -38,7 +38,6 @@ class index extends control
         $this->loadModel('report');
         $this->view->header->title = $this->lang->index->common;
 
-        $products = array_values($this->product->getList());
         $burns    = array();
         $projects = $this->project->getList('doing');
         foreach($projects as $project)
@@ -49,9 +48,9 @@ class index extends control
         $projectGroups = array_chunk($projects, 3);
 
         $this->view->projectGroups = $projectGroups;
-        $this->view->products      = $products;
         $this->view->burns         = $burns;
         $this->view->counts        = count($projects);
+        $this->view->actions       = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id desc')->limit(30)->fetchAll();
         $this->display();
     }
 
