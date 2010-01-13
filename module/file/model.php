@@ -40,7 +40,7 @@ class fileModel extends model
     public function getByObject($objectType, $objectID)
     {
         $files = array();
-        $stmt = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq($objectType)->andWhere('objectID')->eq((int)$objectID)->query();
+        $stmt = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq($objectType)->andWhere('objectID')->eq((int)$objectID)->orderBy('id')->query();
         while($file = $stmt->fetch())
         {
             $file->fullPath = $this->webPath . $file->pathname;
