@@ -153,10 +153,7 @@ function loadProjectStories(projectID)
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->files;?></th>
-        <td class='a-left'>
-          <input type='file' name='files[]' class='text-4' />
-          <input type='file' name='files[]' class='text-4' />
-        </td>
+        <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
       <tr>
         <td colspan='2'>

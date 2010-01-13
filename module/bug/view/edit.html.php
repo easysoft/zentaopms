@@ -195,8 +195,8 @@ function setDuplicate(resolution)
           <tr>
             <td class='rowhead'></td>
             <td>
+              <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
               <?php foreach($bug->files as $file) echo html::a($file->fullPath, $file->title);?>
-              <input type='file' name='files' />
             </td>
           </tr>
         </table>

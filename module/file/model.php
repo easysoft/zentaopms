@@ -28,6 +28,7 @@ class fileModel extends model
     public $savePath = '';
     public $webPath  = '';
 
+    /* 构造函数。*/
     public function __construct()
     {
         parent::__construct();
@@ -35,6 +36,7 @@ class fileModel extends model
         $this->setWebPath();
     }
 
+    /* 通过对象类型获取文件列表。*/
     public function getByObject($objectType, $objectID)
     {
         $files = array();
@@ -48,11 +50,11 @@ class fileModel extends model
     }
 
     /* 保存上传的文件。*/
-    public function saveUpload($htmlTagName = 'files', $objectType = '', $objectID = '')
+    public function saveUpload($objectType = '', $objectID = '')
     {
         $fileTitles = array();
         $now        = date('Y-m-d H:i:s');
-        $files      = $this->getUpload($htmlTagName);
+        $files      = $this->getUpload();
 
         foreach($files as $id => $file)
         {
@@ -70,7 +72,7 @@ class fileModel extends model
     }
 
     /* 获取上传的文件信息。*/
-    private function getUpload($htmlTagName)
+    private function getUpload($htmlTagName = 'files')
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
@@ -84,7 +86,7 @@ class fileModel extends model
                 if(empty($filename)) continue;
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
-                $file['title']     = pathinfo($filename, PATHINFO_FILENAME);
+                $file['title']     = isset($_POST['labels'][$id]) ? htmlspecialchars($_POST['labels'][$id]) : pathinfo($filename, PATHINFO_FILENAME);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
                 $files[] = $file;
@@ -96,7 +98,7 @@ class fileModel extends model
             extract($_FILES[$htmlTagName]);
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = pathinfo($name, PATHINFO_FILENAME);
+            $file['title']     = isset($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : pathinfo($filename, PATHINFO_FILENAME);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
             return array($file);
