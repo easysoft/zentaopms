@@ -59,7 +59,7 @@
       foreach($actions as $action)
       {
           if($action->objectType == 'case') $action->objectType = 'testcase';
-          echo date('H:i', $action->date) . ' ' . $users[$action->actor] . ' ' . $action->action . ' ' . $action->objectType . ' ' . html::a($this->createLink($action->objectType, 'view', "id=$action->objectID"), '#' . $action->objectID);
+          echo date('H:i', $action->date) . ' ' . html::a($this->createLink('user', 'view', "account=$action->actor"), $users[$action->actor]) . ' ' . $action->action . ' ' . $action->objectType . ' ' . html::a($this->createLink($action->objectType, 'view', "id=$action->objectID"), '#' . $action->objectID);
           echo "<br />";
       }
       ?>
