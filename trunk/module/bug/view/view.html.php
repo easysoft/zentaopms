@@ -46,6 +46,10 @@
         <legend><?php echo $lang->bug->legendSteps;?></legend>
         <div class='content'><?php echo nl2br($bug->steps);?></div>
       </fieldset>
+      <fieldset>
+      <legend><?php echo $lang->bug->legendAttatch;?></legend>
+        <div><?php foreach($bug->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
+      </fieldset>
       <?php include '../../common/action.html.php';?>
       <fieldset>
         <legend><?php echo $lang->bug->legendAction;?></legend>
@@ -166,16 +170,6 @@
     </fieldset>
 
     <fieldset>
-    <legend><?php echo $lang->bug->legendAttatch;?></legend>
-      <div>
-        <?php 
-        foreach($bug->files as $file) echo html::a($file->fullPath, $file->title, '_blank');
-        ?>
-      </div>
-    </fieldset>
-
-
-    <fieldset>
       <legend><?php echo $lang->bug->legendLinkBugs;?></legend>
       <div>&nbsp;</div>
     </fieldset>
@@ -184,7 +178,6 @@
       <legend><?php echo $lang->bug->legendCases;?></legend>
       <div>&nbsp;</div>
     </fieldset>
-
 
   </div>
 </div>

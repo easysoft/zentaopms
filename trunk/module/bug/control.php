@@ -201,8 +201,7 @@ class bug extends control
         {
             $changes  = $this->bug->update($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->loadModel('file');
-            $files = $this->file->saveUpload('files', 'bug', $bugID);
+            $files = $this->loadModel('file')->saveUpload('bug', $bugID);
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
