@@ -22,62 +22,48 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div class="yui-d0">  
-  <?php foreach($projectGroups as $projects):?>
-  <div class="yui-gb">  
-    <?php foreach($projects as $key => $project):?>
-    <?php
-    $class = 0;
-    if($key == 0) $class = 'first';
-    if($key == 3) break;
-    ?>
-    <div class="yui-u <?php echo $class;?>">  
-      <table class='table-1'>
-        <caption class='a-center'><?php echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $project->name);?></caption>
-        <tr>
-          <th><?php echo $lang->project->beginAndEnd;?></th>
-          <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->project->status;?></th>
-          <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
-        </tr>
-        <tr><td colspan='2' class='a-center'><?php echo $burns[$project->id];?></td></tr>
-      </table>
-    </div>  
-    <?php endforeach;?>
+<div class="yui-d0 yui-t6">  
+  <div class='yui-main'>
+    <div class='yui-b'>
+      <?php foreach($projectGroups as $projects):?>
+      <div class="yui-gb">  
+        <?php foreach($projects as $key => $project):?>
+        <?php
+        $class = 0;
+        if($key == 0) $class = 'first';
+        if($key == 3) break;
+        ?>
+        <div class="yui-u <?php echo $class;?>">  
+          <table class='table-1'>
+            <caption class='a-center'><?php echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $project->name);?></caption>
+            <tr>
+              <th><?php echo $lang->project->beginAndEnd;?></th>
+              <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->project->status;?></th>
+              <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
+            </tr>
+            <tr><td colspan='2' class='a-center'><?php echo $burns[$project->id];?></td></tr>
+          </table>
+        </div>  
+        <?php endforeach;?>
+      </div>
+      <?php endforeach;?>
+    </div>
   </div>
-  <?php endforeach;?>
+  <div class='yui-b'>
+    <div class='box-title'><?php echo $lang->index->latest;?></div>
+    <div class='box-content'>
+      <?php 
+      foreach($actions as $action)
+      {
+          echo date('H:i', $action->date) . ' ' . $action->actor . ' ' . $action->action . ' ' . $action->objectType . ' ' . html::a($this->createLink($action->objectType, 'view', "id=$action->objectID"), '#' . $action->objectID);
+          echo "<br />";
+      }
+      ?>
+    </div>
+  </div>
 </div>
-<!--
-<div class="yui-d0 yui-t7">  
-  <div class="yui-gb">  
-    <?php foreach($products as $key => $product):?>
-    <?php
-    $class = 0;
-    if($key == 0) $class = 'first';
-    if($key == 3) break;
-    ?>
-    <div class="yui-u <?php echo $class;?>">  
-      <table class='table-1'>
-      <caption><?php echo $product->name;?></caption>
-        <tr>
-          <th width='60'><?php echo $lang->product->name;?></th>
-          <td><?php echo html::a($this->createLink('product', 'browse', "productID=$product->id"), $product->name);?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->product->code;?></th>
-          <td><?php echo $product->code;?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->product->desc;?></th>
-          <td><?php echo nl2br($product->desc);?></td>
-        </tr>
-      </table>
-    </div>  
-    <?php endforeach;?>
-  </div>
-</div>  
--->
 <script language='Javascript'><?php for($i = 1; $i <= $counts; $i ++) echo "createChart$i();"; ?></script>
 <?php include '../../common/footer.html.php';?>
