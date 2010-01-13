@@ -167,6 +167,17 @@ class storyModel extends model
         return $this->dao->select('*')->from(TABLE_STORY)->where('plan')->eq($planID)->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()->fetchAll();
     }
 
+    /* 获得指派给某一个用户的需求列表。*/
+    function getUserStories($account, $status = 'all', $orderBy = 'id|desc', $pager = null)
+    {
+        return $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.assignedTo')->eq($account)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
     /* 格式化需求显示。*/
     private function formatStories($stories)
     {
