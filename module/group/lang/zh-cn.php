@@ -48,6 +48,7 @@ $lang->resource->index->ping  = 'ping';
 $lang->resource->my->index       = 'index';
 $lang->resource->my->todo        = 'todo';
 $lang->resource->my->task        = 'task';
+$lang->resource->my->story       = 'story';
 $lang->resource->my->bug         = 'bug';
 $lang->resource->my->project     = 'project';
 $lang->resource->my->profile     = 'profile';
