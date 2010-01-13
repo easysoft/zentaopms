@@ -287,8 +287,7 @@ class bug extends control
         {
             $this->bug->activate($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->loadModel('file');
-            $files = $this->file->saveUpload('files', 'bug', $bugID);
+            $files = $this->loadModel('file')->saveUpload('files', 'bug', $bugID);
             $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
             $this->sendmail($bugID, $actionID);
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));

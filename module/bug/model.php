@@ -165,7 +165,7 @@ class bugModel extends model
             ->add('duplicateBug', 0)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
-            ->remove('comment')
+            ->remove('comment,files,labels')
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
