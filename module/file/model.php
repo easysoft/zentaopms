@@ -25,13 +25,15 @@
 <?php
 class fileModel extends model
 {
-    public $savePath = '';
-    public $webPath  = '';
+    public $savePath  = '';
+    public $webPath   = '';
+    public $now       = 0;
 
     /* 构造函数。*/
     public function __construct()
     {
         parent::__construct();
+        $this->now = time();
         $this->setSavePath();
         $this->setWebPath();
     }
@@ -86,7 +88,7 @@ class fileModel extends model
                 if(empty($filename)) continue;
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
-                $file['title']     = isset($_POST['labels'][$id]) ? htmlspecialchars($_POST['labels'][$id]) : pathinfo($filename, PATHINFO_FILENAME);
+                $file['title']     = !empty($_POST['labels'][$id]) ? htmlspecialchars($_POST['labels'][$id]) : pathinfo($filename, PATHINFO_FILENAME);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
                 $files[] = $file;
@@ -98,7 +100,7 @@ class fileModel extends model
             extract($_FILES[$htmlTagName]);
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = isset($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : pathinfo($filename, PATHINFO_FILENAME);
+            $file['title']     = !empty($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : pathinfo($filename, PATHINFO_FILENAME);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
             return array($file);
@@ -118,14 +120,15 @@ class fileModel extends model
     /* 设置要存储的文件名。*/
     private function setPathName($fileID, $extension)
     {
-        return date('YmdHis') . $fileID . mt_rand(0, 10000) . '.' . $extension;
+        return date('Ym/dHis', $this->now) . $fileID . mt_rand(0, 10000) . '.' . $extension;
     }
 
     /* 设置存储路径。*/
     private function setSavePath()
     {
-        $this->savePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/";
-        if(!file_exists($this->savePath)) mkdir($this->savePath, 0777, true);
+        $savePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . date('Ym/', $this->now);
+        if(!file_exists($savePath)) mkdir($savePath, 0777, true);
+        $this->savePath = dirname($savePath) . '/';
     }
     
     /* 设置web访问路径。*/
