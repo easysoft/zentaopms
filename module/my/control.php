@@ -64,6 +64,23 @@ class my extends control
         $this->display();
     }
 
+    /* 用户的story列表。*/
+    public function story()
+    {
+       /* 设定header和position信息。*/
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->position[]    = $this->lang->my->story;
+
+        /* 记录用户当前选择的列表。*/
+        $this->app->session->set('storyList', $this->app->getURI(true));
+
+        /* 赋值。*/
+        $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, 'doing,wait');
+        $this->view->users   = $this->user->getPairs($this->app->company->id, 'noletter');
+
+        $this->display();
+    }
+
     /* 用户的task列表。*/
     public function task()
     {

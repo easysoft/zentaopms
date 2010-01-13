@@ -22,6 +22,45 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include './header.html.php';?>
-<?php include './footer.html.php';?>
-
+<?php include '../../common/header.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
+<div class='yui-d0'>
+  <table class='table-1 fixed tablesorter'>
+    <thead>
+      <tr class='colhead'>
+        <th><?php echo $lang->story->id;?></th>
+        <th><?php echo $lang->story->pri;?></th>
+        <th class='w-100px'><?php echo $lang->story->product;?></th>
+        <th class='w-p40'><?php echo $lang->story->title;?></th>
+        <th><?php echo $lang->story->plan;?></th>
+        <th><?php echo $lang->story->assignedTo;?></th>
+        <th><?php echo $lang->story->openedBy;?></th>
+        <th><?php echo $lang->story->estimate;?></th>
+        <th><?php echo $lang->story->status;?></th>
+        <th class='w-100px'><?php echo $lang->story->lastEditedDate;?></th>
+        <th><?php echo $lang->action;?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($stories as $key => $story):?>
+        <tr class='a-center'>
+        <td><?php if(!common::printLink('story', 'view', "id=$story->id", sprintf('%03d', $story->id))) printf('%03d', $story->id);?></td>
+        <td><?php echo $story->pri;?></td>
+        <td><?php echo $story->productTitle;?></td>
+        <td class='a-left nobr'><?php echo $story->title;?></td>
+        <td><?php echo $story->planTitle;?></td>
+        <td><?php echo $users[$story->assignedTo];?></td>
+        <td><?php echo $users[$story->openedBy];?></td>
+        <td><?php echo $story->estimate;?></td>
+        <td class='<?php echo $story->status;?>'><?php $statusList = (array)$lang->story->statusList; echo $statusList[$story->status];?></td>
+        <td><?php echo substr($story->lastEditedDate, 5, 11);?></td>
+        <td>
+          <?php if(common::hasPriv('story', 'edit'))   echo html::a($this->createLink('story', 'edit',   "story={$story->id}"), $lang->edit);?>
+          <?php if(common::hasPriv('story', 'delete')) echo html::a($this->createLink('story', 'delete', "story={$story->id}&confirm=no"), $lang->delete, 'hiddenwin');?>
+        </td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
+<?php include '../../common/footer.html.php';?>

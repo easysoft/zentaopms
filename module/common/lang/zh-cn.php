@@ -60,6 +60,7 @@ $lang->my->menu->account  = '%s' . $lang->arrow;
 $lang->my->menu->todo     = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task     = '我的任务|my|task|';
 $lang->my->menu->project  = '我的项目|my|project|';
+$lang->my->menu->story    = '我的需求|my|story|';
 $lang->my->menu->bug      = '我的Bug|my|bug|';
 $lang->my->menu->profile  = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
