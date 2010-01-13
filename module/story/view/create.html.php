@@ -31,7 +31,7 @@ function loadModuleMenu(productID)
 }
 </script>
 <div id='doc3'>
-  <form method='post' target='hiddenwin'>
+  <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table align='center' class='table-1'> 
       <caption><?php echo $lang->story->create;?></caption>
       <tr>
@@ -77,6 +77,11 @@ function loadModuleMenu(productID)
         <th class='rowhead'><?php echo $lang->story->spec;?></th>
         <td class='a-left'><textarea name='spec' rows='8' class='text-1'></textarea></td>
       </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->story->legendAttatch;?></th>
+        <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
+      </tr>  
+
       <tr>
         <td colspan='2'>
           <input type='submit' value='<?php echo $lang->save;?>'  class='button-s' />

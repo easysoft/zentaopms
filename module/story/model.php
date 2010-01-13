@@ -45,9 +45,16 @@ class storyModel extends model
             ->add('openedDate', $now)
             ->add('assignedDate', 0)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
+            ->remove('files,labels')
             ->get();
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->check('title', 'notempty')->exec();
-        if(!dao::isError()) return $this->dao->lastInsertID();
+        if(!dao::isError())
+        {
+            $storyID = $this->dao->lastInsertID();
+            $this->loadModel('file')->saveUpload('story', $storyID);
+            return $storyID;
+        }
+        return false;
     }
 
     /* 更新需求。*/
@@ -65,6 +72,7 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('plan', 0)
             ->setIF($this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
+            ->remove('files,labels')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->check('title', 'notempty')->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError()) return common::createChanges($oldStory, $story);

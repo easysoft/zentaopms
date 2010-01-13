@@ -74,10 +74,13 @@ class story extends control
             $this->loadModel('action');
             $changes = $this->story->update($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($this->post->comment != '' or !empty($changes))
+            $files = $this->loadModel('file')->saveUpload('story', $storyID);
+            if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
+                $fileAction = '';
+                if(!empty($files)) $fileAction = "Add Files " . join(',', $files) . "\n" ;
+                $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -110,12 +113,13 @@ class story extends control
     public function view($storyID)
     {
         $this->loadModel('action');
-        $storyID    = (int)$storyID;
-        $story      = $this->dao->findByID((int)$storyID)->from(TABLE_STORY)->fetch();
-        $product    = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
-        $plan       = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
-        $modulePath = $this->tree->getParents($story->module);
-        $users      = $this->user->getPairs();
+        $storyID      = (int)$storyID;
+        $story        = $this->dao->findByID((int)$storyID)->from(TABLE_STORY)->fetch();
+        $story->files = $this->loadModel('file')->getByObject('story', $storyID);
+        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+        $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $modulePath   = $this->tree->getParents($story->module);
+        $users        = $this->user->getPairs();
 
         /* 设置菜单。*/
         $this->product->setMenu($this->product->getPairs(), $product->id);
