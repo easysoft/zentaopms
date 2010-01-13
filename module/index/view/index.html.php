@@ -58,6 +58,7 @@
       <?php 
       foreach($actions as $action)
       {
+          if($action->objectType == 'case') $action->objectType = 'testcase';
           echo date('H:i', $action->date) . ' ' . $action->actor . ' ' . $action->action . ' ' . $action->objectType . ' ' . html::a($this->createLink($action->objectType, 'view', "id=$action->objectID"), '#' . $action->objectID);
           echo "<br />";
       }
