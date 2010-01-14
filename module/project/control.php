@@ -184,6 +184,23 @@ class project extends control
         $this->display();
     }
 
+    /* 浏览某一个项目下面的build。*/
+    public function build($projectID = 0)
+    {
+        /* 公共的操作。*/
+        $project = $this->commonAction($projectID);
+
+        /* 设定header和position信息。*/
+        $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->build;
+        $this->view->position[]    = html::a(inlink('browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]    = $this->lang->project->build;
+
+        /* 查找build列表。*/
+        $this->view->builds = $this->loadModel('build')->getProjectBuilds((int)$projectID);
+
+        $this->display();
+    }
+
     /* 某一个项目的燃烧图。*/
     public function burn($projectID = 0)
     {
