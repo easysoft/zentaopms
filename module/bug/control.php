@@ -49,14 +49,14 @@ class bug extends control
     /* 浏览一个产品下面的bug。*/
     public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 设置搜索表单。*/
-        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch");
-        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
-
         /* 设置产品id和模块id。*/
         $browseType = strtolower($browseType);
         $productID  = common::saveProductState($productID, key($this->products));
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
+
+        /* 设置搜索表单。*/
+        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch");
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
 
         /* 设置菜单，登记session。*/
         $this->bug->setMenu($this->products, $productID);
@@ -103,7 +103,7 @@ class bug extends control
         elseif($browseType == 'bysearch')
         {
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQuery)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQuery)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
         $users = $this->user->getPairs($this->app->company->id, 'noletter');
@@ -120,9 +120,7 @@ class bug extends control
         $this->assign('browseType',    $browseType);
         $this->assign('bugs',          $bugs);
         $this->assign('users',         $users);
-        $this->assign('recTotal',      $pager->recTotal);
-        $this->assign('recPerPage',    $pager->recPerPage);
-        $this->assign('pager',         $pager->get());
+        $this->assign('pager',         $pager);
         $this->assign('param',         $param);
         $this->assign('orderBy',       $orderBy);
         $this->assign('moduleID',      $moduleID);
@@ -131,7 +129,7 @@ class bug extends control
     }
 
     /* 创建Bug。*/
-    public function create($productID, $moduleID = 0)
+    public function create($productID, $moduleID = 0, $projectID)
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
