@@ -70,7 +70,7 @@ class testcase extends control
         elseif($browseType == 'bysearch')
         {
             if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
-            $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)->orderBy($orderBy)->page($pager)->fetchAll();
+            $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
         /* 赋值。*/

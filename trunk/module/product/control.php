@@ -87,7 +87,7 @@ class product extends control
         elseif($browseType == 'bysearch')
         {
             if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
-            $stories = $this->story->getByQuery($this->session->storyQuery, $orderBy, $pager);
+            $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy, $pager);
         }
 
         $this->assign('productID',     $productID);

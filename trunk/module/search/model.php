@@ -99,7 +99,8 @@ class searchModel extends model
             $queryForm[$fieldName]    = key($fields);
             $queryForm[$andOrName]    = 'and';
             $queryForm[$operatorName] = $operator;
-            $queryForm[$valueName]    = '';
+            $queryForm[$valueName]    =  '';
+
             if(!next($fields)) reset($fields);
         }
         $queryForm['groupAndOr'] = 'and';
@@ -111,12 +112,14 @@ class searchModel extends model
     {
         $users    = $this->loadModel('user')->getPairs();
         $products = array('' => '') + $this->loadModel('product')->getPairs();
+        $projects = array('' => '') + $this->loadModel('project')->getPairs();
         $fields   = array_keys($fields);
         foreach($fields as $fieldName)
         {
             if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
-            if($params[$fieldName]['values'] == 'users')    $params[$fieldName]['values'] = $users;
-            if($params[$fieldName]['values'] == 'products') $params[$fieldName]['values'] = $products;
+            if($params[$fieldName]['values'] == 'users')    $params[$fieldName]['values']  = $users;
+            if($params[$fieldName]['values'] == 'products') $params[$fieldName]['values']  = $products;
+            if($params[$fieldName]['values'] == 'projects') $params[$fieldName]['values']  = $projects;
         }
         return $params;
     }

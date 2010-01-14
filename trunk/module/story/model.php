@@ -110,9 +110,9 @@ class storyModel extends model
     }
 
     /* 按照某一个查询条件获取列表。*/
-    public function getByQuery($query, $orderBy, $pager = null)
+    public function getByQuery($productID, $query, $orderBy, $pager = null)
     {
-        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($query)->orderBy($orderBy)->page($pager)->fetchGroup('plan');
+        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($query)->andWhere('product')->eq((int)$productID)->orderBy($orderBy)->page($pager)->fetchGroup('plan');
         if(!$tmpStories) return array();
         $plans   = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($tmpStories))->fetchPairs();
         $stories = array();

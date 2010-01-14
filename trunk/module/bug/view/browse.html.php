@@ -53,14 +53,14 @@ function browseBySearch(active)
     <div class='f-left'>
       <?php
       echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\">" . $lang->bug->moduleBugs . "</span> ";
-      echo "<span id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
-      echo "<span id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&type=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
-      echo "<span id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
-      echo "<span id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</span>";
-      echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&type=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
-      echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
+      echo "<span id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
+      echo "<span id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
+      echo "<span id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
+      echo "<span id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</span>";
+      echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
+      echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
       echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\">{$lang->bug->byQuery}</span> ";
-      echo "<span id='allTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&type=all&param=0&orderBy=$orderBy&recTotal=$recTotal&recPerPage=200"), $lang->bug->allBugs) . "</span>";
+      echo "<span id='allTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage=200"), $lang->bug->allBugs) . "</span>";
       ?>
     </div>
     <div class='f-right'>
@@ -70,8 +70,8 @@ function browseBySearch(active)
   <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 </div>
 
-<div class='yui-d0 <?php if($type == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
-  <div class='yui-b  <?php if($type != 'bymodule') echo 'hidden';?>' id='treebox'>
+<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
+  <div class='yui-b  <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
     <div class='box-title'><?php echo $productName;?></div>
     <div class='box-content'>
       <?php echo $moduleTree;?>
@@ -83,7 +83,7 @@ function browseBySearch(active)
 
   <div class="yui-main">
     <div class="yui-b">
-      <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
+      <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <table class='table-1 fixed colored'>
         <thead>
         <tr class='colhead'>
@@ -110,7 +110,7 @@ function browseBySearch(active)
         <?php endforeach;?>
         </tbody>
       </table>
-      <div class='a-right'><?php echo $pager;?></div>
+      <?php $pager->show();?>
     </div>
   </div>
 </div>  
