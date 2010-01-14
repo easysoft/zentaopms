@@ -81,6 +81,7 @@ $lang->project->menu->list   = '%s';
 $lang->project->menu->task   = array('link' => '任务列表|project|task|projectID=%s', 'subModule' => 'task');
 $lang->project->menu->story  = array('link' => '需求列表|project|story|projectID=%s', 'alias' => 'linkstory');
 $lang->project->menu->bug    = 'Bug列表|project|bug|projectID=%s';
+$lang->project->menu->build  = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->burn   = '燃烧图|project|burn|projectID=%s';
 $lang->project->menu->team   = array('link' => '团队成员|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->line   = $lang->colon;
@@ -91,6 +92,7 @@ $lang->project->menu->product= '关联产品|project|manageproducts|projectID=%s
 
 $lang->project->menu->create = array('link' => '新增项目|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
+$lang->build->menu           = $lang->project->menu;
 
 /* QA视图菜单设置。*/
 $lang->bug->menu->product  = '%s';
@@ -130,6 +132,7 @@ $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
 $lang->menugroup->productplan = 'product';
 $lang->menugroup->task        = 'project';
+$lang->menugroup->build       = 'project';
 $lang->menugroup->company     = 'admin';
 $lang->menugroup->convert     = 'admin';
 $lang->menugroup->user        = 'company';

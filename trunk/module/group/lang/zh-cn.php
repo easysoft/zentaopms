@@ -91,6 +91,7 @@ $lang->resource->project->edit   = 'edit';
 $lang->resource->project->delete = 'delete';
 $lang->resource->project->task   = 'task';
 $lang->resource->project->story  = 'story';
+$lang->resource->project->build  = 'build';
 $lang->resource->project->bug    = 'bug';
 $lang->resource->project->burn   = 'burn';
 $lang->resource->project->burnData = 'burnData';
