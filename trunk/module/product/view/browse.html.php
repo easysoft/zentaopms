@@ -53,7 +53,7 @@ function search(active)
     <div class='f-left'>
       <span id='bymoduleTab' onclick='browseByModule()'><?php echo $lang->product->moduleStory;?></span>
       <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><?php echo $lang->product->searchStory;?></span>
-      <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage=200"), $lang->product->allStory);?></span>
+      <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->product->allStory);?></span>
     </div>
     <div class='f-right'>
       <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
