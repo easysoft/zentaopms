@@ -166,6 +166,22 @@ class product extends control
         }
     }
 
+    /* 产品路线图。*/
+    public function roadmap($productID)
+    {
+        /* 设置菜单。*/
+        $this->product->setMenu($this->products, $productID);
+
+        /* 赋值。*/
+        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $this->view->header->title = $this->lang->product->roadmap;
+        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[]    = $this->lang->product->roadmap;
+        $this->view->product       = $product;
+        $this->view->roadmaps      = $this->product->getRoadmap($productID);
+        $this->display();
+    }
+
     /* 获得某一个产品对应的项目列表。*/
     public function ajaxGetProjects($productID, $projectID = 0)
     {

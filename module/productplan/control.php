@@ -92,6 +92,19 @@ class productplan extends control
         $this->display();
     }
 
+    /* 计划详情。*/
+    public function view($planID = 0)
+    {
+        $plan = $this->productplan->getByID($planID);
+        $this->commonAction($plan->product);
+        $this->view->header->title = $this->lang->productplan->view;
+        $this->view->position[] = $this->lang->productplan->view;
+        $this->view->planStories= $this->loadModel('story')->getPlanStories($planID);
+        $this->view->products   = $this->product->getPairs();
+        $this->view->plan       = $plan;
+        $this->display();
+    }
+
     /* 关联需求。*/
     public function linkStory($planID = 0)
     {

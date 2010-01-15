@@ -27,6 +27,7 @@ $lang->productplan->index     = "计划列表";
 $lang->productplan->create    = "创建计划";
 $lang->productplan->edit      = "编辑计划";
 $lang->productplan->delete    = "删除计划";
+$lang->productplan->view      = "计划详情";
 $lang->productplan->linkStory       = "关联需求";
 $lang->productplan->unlinkStory     = "移除需求";
 $lang->productplan->linkedStories   = '已关联需求列表';

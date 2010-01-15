@@ -66,14 +66,22 @@ $lang->resource->product->browse = 'browse';
 $lang->resource->product->create = 'create';
 $lang->resource->product->edit   = 'edit';
 $lang->resource->product->delete = 'delete';
+$lang->resource->product->roadmap= 'roadmap';
 $lang->resource->product->ajaxGetProjects = 'ajaxGetProjects';
 
 $lang->resource->productplan->browse = 'browse';
 $lang->resource->productplan->create = 'create';
 $lang->resource->productplan->edit   = 'edit';
 $lang->resource->productplan->delete = 'delete';
+$lang->resource->productplan->view   = 'view';
 $lang->resource->productplan->linkStory   = 'linkStory';
 $lang->resource->productplan->unlinkStory = 'unlinkStory';
+
+$lang->resource->release->browse = 'browse';
+$lang->resource->release->create = 'create';
+$lang->resource->release->edit   = 'edit';
+$lang->resource->release->delete = 'delete';
+$lang->resource->release->view   = 'view';
 
 $lang->resource->story->create  = 'create';
 $lang->resource->story->edit    = 'edit';
@@ -109,6 +117,11 @@ $lang->resource->task->delete = 'delete';
 $lang->resource->task->view   = 'view';
 $lang->resource->task->ajaxGetUserTasks    = 'ajaxGetUserTasks';
 $lang->resource->task->ajaxGetProjectTasks = 'ajaxGetProjectTasks';
+
+$lang->resource->build->create = 'create';
+$lang->resource->build->edit   = 'edit';
+$lang->resource->build->delete = 'delete';
+$lang->resource->build->view   = 'view';
 
 $lang->resource->qa->index = 'index';
 
