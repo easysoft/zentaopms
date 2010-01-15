@@ -27,7 +27,7 @@
 <div class='yui-d0'>
   <div id='feature-bar'>
   </div>
-  <table align='center' class='table-6 fixed tablesorter'>
+  <table class='table-1 fixed tablesorter'>
     <caption>
       <div class='f-left'><?php echo $lang->release->browse;?></div>
       <div class='f-right'><?php common::printLink('release', 'create', "product=$product->id", $lang->release->create);?></div>
