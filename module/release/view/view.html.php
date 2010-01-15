@@ -1,6 +1,6 @@
 <?php
 /**
- * The create view of release module of ZenTaoMS.
+ * The view file of release module's view method of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,27 +26,34 @@
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
-      <caption><?php echo $lang->release->create;?></caption>
+      <caption><?php echo $lang->release->view;?></caption>
+      <tr>
+        <th class='rowhead'><?php echo $lang->release->product;?></th>
+        <td><?php echo $release->productName;?></td>
+      </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->name;?></th>
-        <td><input type='text' name='name' class='text-3' /></td>
+        <td><?php echo $release->name;?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->build;?></th>
-        <td><?php echo html::select('build', $builds, '', 'class="select-3"');?></td>
+        <td><?php echo $release->buildName;?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->date;?></th>
-        <td><input type='text' name='date' class='text-3' value='<?php echo date('Y-m-d');?>' /></td>
+        <td><?php echo $release->date;?></td>
       </tr>  
-     </tr>  
- 
       <tr>
         <th class='rowhead'><?php echo $lang->release->desc;?></th>
-        <td><textarea name='desc' rows='8' class='area-1'></textarea></td>
+        <td><?php echo nl2br($release->desc);?></td>
       </tr>  
       <tr>
-        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
+        <td colspan='2' class='a-center'>
+        <?php
+        common::printLink('release', 'edit',   "releaseID=$release->id", $lang->edit);
+        common::printLink('release', 'delete', "releaseID=$release->id", $lang->delete);
+        ?>
+      </td>
       </tr>
     </table>
   </form>

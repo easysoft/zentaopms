@@ -23,51 +23,87 @@
  */
 class release extends control
 {
-    public function __construct()
+   /* 公共操作。*/
+    public function commonAction($productID)
     {
-        parent::__construct();
+        $this->loadModel('product');
+        $this->view->product = $this->product->findByID($productID);
+        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}"), $this->view->product->name);
+        $this->product->setMenu($this->product->getPairs(), $productID);
     }
 
-    public function index()
+    /* 浏览发布列表。*/
+    public function browse($productID)
     {
-        $header['title'] = $this->lang->release->index;
-        $this->assign('header', $header);
+        $this->commonAction($productID);
+        $this->view->header->title = $this->lang->release->browse;
+        $this->view->position[]    = $this->lang->release->browse;
+        $this->view->releases      = $this->release->getList($productID);
         $this->display();
     }
 
-    public function create($product = '')
+    /* 添加release。*/
+    public function create($productID)
     {
-        $header['title'] = $this->lang->release->create;
-        $this->assign('header',  $header);
-        $this->assign('product', $product);
         if(!empty($_POST))
         {
-            $this->release->create($_POST);
-            die(js::locate($this->createLink('product', 'index', "product=$product"), 'parent'));
+            $this->release->create($productID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate($this->createLink('release', 'browse', "productID=$productID"), 'parent'));
         }
+
+        $this->commonAction($productID);
+        $this->view->header->title = $this->lang->release->create;
+        $this->view->position[]    = $this->lang->release->create;
+        $this->view->builds = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->display();
     }
 
-    public function update($id)
+    /* 编辑release。*/
+    public function edit($releaseID)
     {
-        $header['title'] = $this->lang->page->update;
-        $this->assign('header', $header);
+        if(!empty($_POST))
+        {
+            $this->release->update($releaseID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate($this->createLink('release', 'browse', "productID={$this->post->product}"), 'parent'));
+        }
+
+        $release = $this->release->getById((int)$releaseID);
+        $this->commonAction($release->product);
+
+        $this->view->header->title = $this->lang->release->edit;
+        $this->view->position[]    = $this->lang->release->edit;
+        $this->view->release       = $release;
+        $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($release->product);
         $this->display();
     }
-
-    public function delete($id)
+                                                          
+    /* 查看release。*/
+    public function view($releaseID)
     {
-        $header['title'] = $this->lang->page->delete;
-        $this->assign('header', $header);
+        $release = $this->release->getById((int)$releaseID);
+        $this->commonAction($release->product);
+
+        /* 赋值。*/
+        $this->view->header->title = $this->lang->release->view;
+        $this->view->position[]    = $this->lang->release->view;
+        $this->view->release       = $release;
         $this->display();
     }
-
-    public function browse($product = 0)
+ 
+    /* 删除release。*/
+    public function delete($releaseID, $confirm = 'no')
     {
-        $header['title'] = $this->lang->page->browse;
-        $this->assign('header',   $header);
-        $this->assign('product',  $product);
-        $this->assign('releases', $this->release->getList($product));
-        $this->display();
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->release->confirmDelete, $this->createLink('release', 'delete', "releaseID=$releaseID&confirm=yes")));
+        }
+        else
+        {
+            $release = $this->release->getById($releaseID);
+            $this->release->delete($releaseID);
+            die(js::locate($this->createLink('release', 'browse', "productID=$release->product"), 'parent'));
+        }
     }
 }

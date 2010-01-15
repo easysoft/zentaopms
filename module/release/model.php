@@ -25,42 +25,55 @@
 <?php
 class releaseModel extends model
 {
-    public function __construct()
+    /* 获取release详细信息。*/
+    public function getByID($releaseID)
     {
-        parent::__construct();
+        return $this->dao->select('t1.*, t2.name as buildName, t3.name as productName')
+            ->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.id')->eq((int)$releaseID)
+            ->orderBy('t1.id DESC')
+            ->fetch();
     }
 
-    function create($release = array())
+    /* 查找release列表。*/
+    public function getList($productID)
     {
-        if(!is_array($release) or empty($release)) die(js::alert($this->lang->release->errorErrorFormat));
-        extract($release);
-
-        if(empty($name))    $errorMSG[] = $this->lang->release->errorEmptyName;
-        if(empty($product)) $errorMSG[] = $this->lang->release->errorEmptyProduct;
-        if(!empty($errorMSG)) die(js::alert(join($errorMSG, '\n')));
-
-        $sql = "INSERT INTO " . TABLE_RELEASE . " (`name`, `product`, `desc`, `planDate`) VALUES('$name', '$product', '$desc', '$planDate')";
-        return $this->dbh->query($sql);
+        return $this->dao->select('t1.*, t2.name as productName, t3.name as buildName')
+            ->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->orderBy('t1.id DESC')
+            ->fetchAll();
     }
 
-    function read($id)
+    /* 创建。*/
+    public function create($productID)
     {
+        $release = fixer::input('post')
+            ->stripTags('name')
+            ->specialChars('desc')
+            ->add('product', (int)$productID)
+            ->get();
+        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck('name,date', 'notempty')->exec();
+        if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
-    function update($id)
+    /* 编辑。*/
+    public function update($releaseID)
     {
-    }
-    
-    function delete($id)
-    {
+        $release = fixer::input('post')
+            ->stripTags('name')
+            ->specialChars('desc')
+            ->get();
+        $this->dao->update(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck('name,date', 'notempty')->where('id')->eq((int)$releaseID)->exec();
     }
 
-    function getList($product = 0)
+    /* 删除release。*/
+    public function delete($releaseID)
     {
-        $product = (int)$product;
-        $where = $product > 0 ? " WHERE `product` = '$product'" : '';
-        $sql = "SELECT * FROM " . TABLE_RELEASE .  $where;
-        $stmt = $this->dbh->query($sql);
-        return $stmt->fetchAll();
+        return $this->dao->delete()->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->exec();
     }
 }

@@ -18,7 +18,7 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     build
- * @version     $$
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 class build extends control
