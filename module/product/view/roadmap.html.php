@@ -31,8 +31,8 @@
     echo '<tr class="f-16px">';
     foreach($years as $year)
     {
-        if($year == '0000') $year = $lang->feature;
-        echo "<th>$year$lang->year</th>";
+        $year = $year == '0000' ? $lang->feature : $year . $lang->year;
+        echo "<th>$year</th>";
     }
     echo '</tr>';
     echo '<tr valign="top">';
