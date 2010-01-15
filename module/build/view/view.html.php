@@ -45,11 +45,11 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->scmPath;?></th>
-        <td><?php echo $build->scmPath;?></td>
+        <td><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->filePath;?></th>
-        <td><?php echo $build->filePath;?></td>
+        <td><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
       </tr>  
  
       <tr>
