@@ -129,7 +129,7 @@ class bug extends control
     }
 
     /* 创建Bug。*/
-    public function create($productID, $moduleID = 0, $projectID)
+    public function create($productID, $moduleID = 0)
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -384,7 +384,7 @@ class bug extends control
         $this->assign('bug', $bug);
         $this->assign('action', $action);
         $this->assign('histories', $histories);
-        $mailContent = $this->fetch($this->moduleName, 'sendmail');
+        $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* 发信。*/
         $this->loadModel('mail')->send($toList, 'BUG #' . $bug->id . $this->lang->colon . $bug->title, $mailContent, $ccList);
