@@ -57,7 +57,7 @@ class releaseModel extends model
             ->specialChars('desc')
             ->add('product', (int)$productID)
             ->get();
-        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck('name,date', 'notempty')->exec();
+        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck('name,date,build', 'notempty')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
@@ -68,7 +68,7 @@ class releaseModel extends model
             ->stripTags('name')
             ->specialChars('desc')
             ->get();
-        $this->dao->update(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck('name,date', 'notempty')->where('id')->eq((int)$releaseID)->exec();
+        $this->dao->update(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck('name,date,build', 'notempty')->where('id')->eq((int)$releaseID)->exec();
     }
 
     /* 删除release。*/

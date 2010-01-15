@@ -34,9 +34,9 @@
     <thead>
     <tr class='colhead'>
       <th><?php echo $lang->build->product;?></th>
-      <th><?php echo $lang->build->name;?></th>
-      <th class='w-p30'><?php echo $lang->build->scmPath;?></th>
-      <th class='w-p30'><?php echo $lang->build->filePath;?></th>
+      <th class='w-p15'><?php echo $lang->build->name;?></th>
+      <th class='w-p20'><?php echo $lang->build->scmPath;?></th>
+      <th class='w-p20'><?php echo $lang->build->filePath;?></th>
       <th><?php echo $lang->build->date;?></th>
       <th><?php echo $lang->build->builder;?></th>
       <th><?php echo $lang->action;?></th>
@@ -47,8 +47,8 @@
     <tr class='a-center'>
       <td><?php echo $build->productName;?></td>
       <td><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
-      <td class='a-left nobr'><?php echo $build->scmPath?></td>
-      <td class='a-left nobr'><?php echo $build->filePath?></td>
+      <td class='a-left nobr'><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
+      <td class='a-left nobr'><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
       <td><?php echo $build->date?></td>
       <td><?php echo $build->builder?></td>
       <td>
