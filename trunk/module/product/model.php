@@ -32,6 +32,7 @@ class productModel extends model
         common::setMenuVars($this->lang->product->menu, 'list',   $selectHtml . $this->lang->arrow);
         common::setMenuVars($this->lang->product->menu, 'story',  $productID);
         common::setMenuVars($this->lang->product->menu, 'plan',   $productID);
+        common::setMenuVars($this->lang->product->menu, 'roadmap',$productID);
         common::setMenuVars($this->lang->product->menu, 'release',$productID);
         common::setMenuVars($this->lang->product->menu, 'edit',   $productID);
         common::setMenuVars($this->lang->product->menu, 'delete', $productID);
@@ -111,5 +112,27 @@ class productModel extends model
             ->fetchPairs();
         $projects = array('' => '') +  $projects;
         return $projects;
+    }
+
+    /* 计算产品路线图。*/
+    public function getRoadmap($productID)
+    {
+        $plans    = $this->loadModel('productplan')->getList($productID);
+        $releases = $this->loadModel('release')->getList($productID);
+        $roadmap  = array();
+        if(is_array($releases)) $releases = array_reverse($releases);
+        foreach($releases as $release)
+        {
+            $year = substr($release->date, 0, 4);
+            $roadmap[$year][] = $release;
+        }
+        foreach($plans as $plan)
+        {
+            if($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) continue;
+            $year = substr($plan->end, 0, 4);
+            $roadmap[$year][] = $plan;
+        }
+        arsort($roadmap);
+        return $roadmap;
     }
 }
