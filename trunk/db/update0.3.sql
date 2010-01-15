@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `name` char(30) NOT NULL default '',
   `scmPath` char(255) NOT NULL,
   `filePath` char(255) NOT NULL,
-  `buildDate` int(10) unsigned NOT NULL default '0',
+  `date` date NOT NULL,
   `builder` char(30) NOT NULL default '',
   `desc` char(255) NOT NULL default '',
   UNIQUE KEY `name` (`name`)
