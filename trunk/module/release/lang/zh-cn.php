@@ -21,20 +21,18 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->release->common     = '发布';
-$lang->release->index      = "发布计划列表";
-$lang->release->create     = "创建发布计划";
-$lang->release->delete     = "删除发布计划";
-$lang->release->browse     = "浏览访问计划";
+$lang->release->common    = '发布';
+$lang->release->create    = "创建发布";
+$lang->release->edit      = "编辑发布";
+$lang->release->delete    = "删除发布";
+$lang->release->view      = "发布详情";
+$lang->release->browse    = "浏览发布";
 
-$lang->release->errorFormat       = '发布计划数据有误';
-$lang->release->errorEmptyName    = '发布计划名称不能为空';
-$lang->release->errorEmptyProduct = '需要指定产品';
+$lang->release->confirmDelete = "您确认删除该release吗？";
 
-$lang->release->id          = '编号';
-$lang->release->product     = '产品';
-$lang->release->name        = '计划名称';
-$lang->release->desc        = '描述';
-$lang->release->status      = '状态';
-$lang->release->planDate    = '计划发布日期';
-$lang->release->releaseDate = '实际发布日期';
+$lang->release->id        = 'ID';
+$lang->release->product   = '产品';
+$lang->release->build     = 'Build';
+$lang->release->name      = '发布名称';
+$lang->release->date      = '发布日期';
+$lang->release->desc      = '描述';

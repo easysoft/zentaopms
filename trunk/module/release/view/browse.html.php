@@ -23,31 +23,40 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<div id='doc3'>
-  <table align='center' class='table-1'>
-    <caption><?php echo $lang->page->browse;?></caption>
+<?php include '../../common/tablesorter.html.php';?>
+<div class='yui-d0'>
+  <div id='feature-bar'>
+  </div>
+  <table align='center' class='table-6 fixed tablesorter'>
+    <caption>
+      <div class='f-left'><?php echo $lang->release->browse;?></div>
+      <div class='f-right'><?php common::printLink('release', 'create', "product=$product->id", $lang->release->create);?></div>
+    </caption>
+    <thead>
     <tr>
       <th><?php echo $lang->release->id;?></th>
       <th><?php echo $lang->release->name;?></th>
-      <th><?php echo $lang->release->desc;?></th>
-      <th>
-        <?php echo $lang->release->desc;?>
-      </th>
+      <th><?php echo $lang->release->build;?></th>
+      <th><?php echo $lang->release->date;?></th>
+      <th><?php echo $lang->action;?></th>
     </tr>
+    </thead>
+    <tbody>
     <?php foreach($releases as $release):?>
-    <tr>
-      <td><?php echo $release->id;?></td>
-      <td><?php echo $release->name;?></td>
-      <td><?php echo $release->desc;?></td>
+    <tr class='a-center'>
+      <td><?php echo html::a(inlink('view', "release=$release->id"), sprintf('%03d', $release->id));?></td>
+      <td class='a-left'><?php echo $release->name;?></td>
+      <td><?php echo $release->buildName;?></td>
+      <td><?php echo $release->date;?></td>
       <td>
+        <?php
+        common::printLink('release', 'edit',   "release=$release->id", $lang->edit);
+        common::printLink('release', 'delete', "release=$release->id", $lang->delete, 'hiddenwin');
+        ?>
       </td>
     </tr>
     <?php endforeach;?>
+    </tbody>
   </table>
-  <?php 
-  $vars['product'] = $product;
-  $addLink = $this->createLink($this->moduleName, 'create', $vars);
-  echo "<a href='$addLink'>{$lang->page->create}</a>";
-  ?>
 </div>  
 <?php include '../../common/footer.html.php';?>

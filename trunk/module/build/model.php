@@ -49,6 +49,12 @@ class buildModel extends model
             ->fetchAll();
     }
 
+    /* 查找产品中的build列表。*/
+    public function getProductBuildPairs($productID)
+    {
+        return $this->dao->select('id,name')->from(TABLE_BUILD)->where('product')->eq((int)$productID)->fetchPairs();
+    }
+
     /* 创建。*/
     public function create($projectID)
     {
