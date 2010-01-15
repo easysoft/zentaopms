@@ -257,7 +257,7 @@ CREATE TABLE IF NOT EXISTS `zt_productPlan` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_project`;
 CREATE TABLE IF NOT EXISTS `zt_project` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
