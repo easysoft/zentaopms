@@ -116,7 +116,7 @@
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
-          <td><?php echo $bug->openedBuild;?></td>
+          <td><?php echo $builds[$bug->openedBuild];?></td>
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->labResolved;?></th>
@@ -124,7 +124,7 @@
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->resolvedBuild;?></th>
-          <td><?php echo $bug->resolvedBuild;?></td>
+          <td><?php echo $builds[$bug->resolvedBuild];?></td>
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->resolution;?></th>
