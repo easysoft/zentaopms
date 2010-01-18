@@ -96,4 +96,17 @@ class build extends control
             die(js::locate($this->createLink('project', 'build', "projectID=$build->project"), 'parent'));
         }
     }
+
+    /* AJAX接口：获得产品的build列表。*/
+    public function ajaxGetProductBuilds($productID, $varName)
+    {
+        die(html::select($varName, $this->build->getProductBuildPairs($productID)));
+    }
+
+    /* AJAX接口：获得项目的build列表。*/
+    public function ajaxGetProjectBuilds($projectID, $varName)
+    {
+        die(html::select($varName, $this->build->getProjectBuildPairs($projectID)));
+    }
+
 }

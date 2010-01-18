@@ -106,7 +106,7 @@ class bug extends control
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQuery)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
-        $users = $this->user->getPairs($this->app->company->id, 'noletter');
+        $users = $this->user->getPairs('noletter');
         
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -142,25 +142,26 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}"), 'parent'));
         }
 
+        /* 设置当前的产品和模块。*/
         $productID       = common::saveProductState($productID, key($this->products));
         $currentModuleID = (int)$moduleID;
 
         /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
 
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
-        $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->bug->create;
+        /* 位置信息。*/
+        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
+        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->bug->create;
 
-        $this->assign('header',            $header);
-        $this->assign('position',          $position);
-        $this->assign('productID',         $productID);
-        $this->assign('productName',       $this->products[$productID]);
-        $this->assign('moduleOptionMenu',  $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0));
-        $this->assign('currentModuleID',   $currentModuleID);
-        $this->assign('stories',           $this->story->getProductStoryPairs($productID));
-        $this->assign('users',             $this->user->getPairs($this->app->company->id, 'noclosed'));
-        $this->assign('projects',          $this->product->getProjectPairs($productID));
+        $this->view->productID        = $productID;
+        $this->view->productName      = $this->products[$productID];
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
+        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->stories          = $this->story->getProductStoryPairs($productID);
+        $this->view->users            = $this->user->getPairs('noclosed');
+        $this->view->projects         = $this->product->getProjectPairs($productID);
+        $this->view->builds           = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->display();
     }
 
@@ -178,7 +179,7 @@ class bug extends control
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
         $position[]      = $this->lang->bug->view;
 
-        $users   = $this->user->getPairs($this->app->company->id, 'noletter');
+        $users   = $this->user->getPairs('noletter');
         $actions = $this->action->getList('bug', $bugID);
         $this->assign('header',      $header);
         $this->assign('position',    $position);
@@ -227,7 +228,7 @@ class bug extends control
         $stories = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
         $tasks   = $this->task->getProjectTaskPairs($bug->project);
 
-        $users = $this->user->getPairs($this->app->company->id);
+        $users = $this->user->getPairs();
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('productID',     $productID);
@@ -270,7 +271,7 @@ class bug extends control
         /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
 
-        $users = $this->user->getPairs($this->app->company->id);
+        $users = $this->user->getPairs();
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('bug',           $bug);
@@ -294,7 +295,7 @@ class bug extends control
         /* 生成表单。*/
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
-        $users      = $this->user->getPairs($this->app->company->id);
+        $users      = $this->user->getPairs();
 
         /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);

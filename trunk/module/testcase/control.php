@@ -82,7 +82,7 @@ class testcase extends control
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $rooteModuleID = 0, array('treeModel', 'createCaseLink'));
         $this->view->moduleID      = $moduleID;
         $this->view->pager         = $pager;
-        $this->view->users         = $this->user->getPairs($this->app->company->id, 'noletter');
+        $this->view->users         = $this->user->getPairs('noletter');
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
@@ -114,7 +114,7 @@ class testcase extends control
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->testcase->create;
 
-        $users = $this->user->getPairs($this->app->company->id);
+        $users = $this->user->getPairs();
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('productID',     $productID);
@@ -140,7 +140,7 @@ class testcase extends control
         /* 设置菜单。*/
         $this->testcase->setMenu($this->products, $productID);
 
-        $users   = $this->user->getPairs($this->app->company->id, 'noletter');
+        $users   = $this->user->getPairs('noletter');
         $actions = $this->action->getList('case', $caseID);
 
         $this->assign('header',   $header);
@@ -184,7 +184,7 @@ class testcase extends control
         /* 设置菜单。*/
         $this->testcase->setMenu($this->products, $productID);
 
-        $users = $this->user->getPairs($this->app->company->id);
+        $users = $this->user->getPairs();
         $this->assign('header',        $header);
         $this->assign('position',      $position);
         $this->assign('productID',     $productID);

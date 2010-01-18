@@ -49,7 +49,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->remove('files, labels')
             ->get();
-        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck('title,type', 'notempty')->exec();
+        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck('title,type,openedBuild', 'notempty')->exec();
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
