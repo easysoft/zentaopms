@@ -168,6 +168,7 @@ class bug extends control
     /* 查看一个bug。*/
     public function view($bugID)
     {
+        /* 查找bug信息及相关产品信息。*/
         $bug         = $this->bug->getById($bugID);
         $productID   = $bug->product;
         $productName = $this->products[$productID];
@@ -175,19 +176,18 @@ class bug extends control
         /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
 
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->view;
-        $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
-        $position[]      = $this->lang->bug->view;
+        /* 位置信息。*/
+        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->view;
+        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
+        $this->view->position[]    = $this->lang->bug->view;
 
-        $users   = $this->user->getPairs('noletter');
-        $actions = $this->action->getList('bug', $bugID);
-        $this->assign('header',      $header);
-        $this->assign('position',    $position);
-        $this->assign('productName', $productName);
-        $this->assign('modulePath',  $this->tree->getParents($bug->module));
-        $this->assign('bug',         $bug);
-        $this->assign('users',       $users);
-        $this->assign('actions',     $actions);
+        /* 赋值。*/
+        $this->view->productName = $productName;
+        $this->view->modulePath  = $this->tree->getParents($bug->module);
+        $this->view->bug         = $bug;
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->actions     = $this->action->getList('bug', $bugID);
+        $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID);
 
         $this->display();
     }
