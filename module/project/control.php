@@ -133,7 +133,7 @@ class project extends control
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $stories    = $this->story->getProjectStories($projectID, $orderBy, $pager);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
-        $users      = $this->user->getPairs($this->app->company->id, 'noletter');
+        $users      = $this->user->getPairs('noletter');
 
         /* 赋值。*/
         $this->assign('header',     $header);
@@ -170,7 +170,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $bugs  = $this->bug->getProjectBugs($projectID, $orderBy, $pager);
-        $users = $this->user->getPairs($this->app->company->id, 'noletter');
+        $users = $this->user->getPairs('noletter');
 
         /* 赋值。*/
         $this->assign('header',   $header);
@@ -421,7 +421,7 @@ class project extends control
         $this->loadModel('user');
 
         $project = $this->project->findById($projectID);
-        $users   = $this->user->getPairs($this->app->company->id, 'noclosed');
+        $users   = $this->user->getPairs('noclosed');
         $users   = array('' => '') + $users;
         $members = $this->project->getTeamMembers($projectID);
 

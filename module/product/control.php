@@ -97,7 +97,7 @@ class product extends control
         $this->assign('moduleTree',    $this->tree->getTreeMenu($productID, $viewType = 'product', $rooteModuleID = 0, array('treeModel', 'createStoryLink')));
         $this->assign('parentModules', $this->tree->getParents($moduleID));
         $this->assign('pager',         $pager);
-        $this->assign('users',         $this->user->getPairs($this->app->company->id, 'noletter'));
+        $this->assign('users',         $this->user->getPairs('noletter'));
         $this->assign('orderBy',       $orderBy);
         $this->assign('browseType',    $browseType);
         $this->assign('moduleID',      $moduleID);
@@ -186,6 +186,6 @@ class product extends control
     public function ajaxGetProjects($productID, $projectID = 0)
     {
         $projects = $this->product->getProjectPairs($productID);
-        die(html::select('project', $projects, $projectID, 'onchange=loadProjectStoriesAndTasks(this.value)'));
+        die(html::select('project', $projects, $projectID, 'onchange=loadProjectRelated(this.value)'));
     }
 }

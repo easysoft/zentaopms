@@ -44,7 +44,7 @@ class userModel extends model
     }
 
     /* 获得account=>realname的列表。params: noletter|noempty|noclosed。*/
-    public function getPairs($companyID = 0, $params = '')
+    public function getPairs($params = '', $companyID = 0)
     {
         if($companyID == 0) $companyID = $this->app->company->id;
         $users = $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->orderBy('account')->fetchPairs();

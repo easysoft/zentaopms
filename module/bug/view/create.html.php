@@ -27,6 +27,7 @@
 #project{width:245px}
 #product{width:245px}
 #story{width:245px}
+#openedBuild{width:245px}
 </style>
 <script language='Javascript'>
 /* 当选择产品时，触发这个方法。*/
@@ -35,7 +36,8 @@ function loadAll(productID)
     $('#taskIdBox').get(0).innerHTML = '';  // 将taskID内容复位。
     loadModuleMenu(productID);              // 加载产品的模块列表。
     loadProductStories(productID);          // 加载产品的需求列表。
-    loadProjects(productID);                // 加载项目列表。
+    loadProductProjects(productID);         // 加载项目列表。
+    loadProductBuilds(productID);           // 加载build列表。
 }
 
 /* 加载模块列表。*/
@@ -53,19 +55,27 @@ function loadProductStories(productID)
 }
 
 /* 加载项目列表。*/
-function loadProjects(productID)
+function loadProductProjects(productID)
 {
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID);
     $('#projectIdBox').load(link);
 }
 
+/* 加载产品build列表。*/
+function loadProductBuilds(productID)
+{
+    link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild');
+    $('#buildBox').load(link);
+}
+
 /* 加载项目的任务列表和需求列表。*/
-function loadProjectStoriesAndTasks(projectID)
+function loadProjectRelated(projectID)
 {
     if(projectID)
     {
         loadProjectTasks(projectID);
         loadProjectStories(projectID);
+        loadProjectBuilds(projectID);
     }
     else
     {
@@ -89,6 +99,12 @@ function loadProjectStories(projectID)
     $('#storyIdBox').load(link);
 }
 
+/* 加载项目的build列表。*/
+function loadProjectBuilds(projectID)
+{
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&varName=openedBuild');
+    $('#buildBox').load(link);
+}
 </script>
 <div class='yui-doc3'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -104,7 +120,7 @@ function loadProjectStories(projectID)
       <tr>
         <th class='rowhead'><?php echo $lang->bug->labProjectAndTask;?></th>
         <td class='a-left'>
-        <span id='projectIdBox'><?php echo html::select('project', $projects, '', 'onchange=loadProjectStoriesAndTasks(this.value)');?></span>
+        <span id='projectIdBox'><?php echo html::select('project', $projects, '', 'onchange=loadProjectRelated(this.value)');?></span>
           <span id='taskIdBox'></span>
         </td>
       </tr>
@@ -114,13 +130,12 @@ function loadProjectStories(projectID)
           <span id='storyIdBox'><?php echo html::select('story', $stories);?></span>
         </td>
       </tr>  
-      <!--
       <tr>
-        <th class='rowhead'><?php echo $lang->bug->labBuild;?></th>
+        <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
         <td class='a-left'>
+          <span id='buildBox'><?php echo html::select('openedBuild', $builds);?></span>
         </td>
       </tr>
-      -->
       <tr>
         <th class='rowhead'><?php echo $lang->bug->labTypeAndSeverity;?></th>
         <td class='a-left'> 

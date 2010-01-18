@@ -76,7 +76,7 @@ class my extends control
 
         /* 赋值。*/
         $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, 'doing,wait');
-        $this->view->users   = $this->user->getPairs($this->app->company->id, 'noletter');
+        $this->view->users   = $this->user->getPairs('noletter');
 
         $this->display();
     }

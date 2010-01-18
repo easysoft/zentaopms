@@ -47,7 +47,7 @@ class user extends control
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         /* 设置菜单。*/
-        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
         $todos = $this->todo->getList($type, $account, $status);
         $date  = (int)$type == 0 ? $this->todo->today() : $type;
@@ -79,7 +79,7 @@ class user extends control
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         /* 设置菜单。*/
-        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
  
         /* 设定header和position信息。*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
@@ -104,7 +104,7 @@ class user extends control
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         /* 设置菜单。*/
-        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
  
         /* 设定header和position信息。*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
@@ -129,7 +129,7 @@ class user extends control
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         /* 设置菜单。*/
-        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
         /* 设定header和position信息。*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
@@ -152,7 +152,7 @@ class user extends control
         $position[]      = $this->lang->user->profile;
 
         /* 设置菜单。*/
-        $this->user->setMenu($this->user->getPairs($this->app->company->id, 'noempty|noclosed'), $account);
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
         $this->assign('header',   $header);
         $this->assign('position', $position);
