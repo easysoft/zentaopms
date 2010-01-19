@@ -1,3 +1,4 @@
+<?php if($config->debug) echo '<div style="margin-bottom:50px"></div>';?>
 <div class='yui-d0' id='hiddenbar'>
   <iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='<?php $config->debug ? print("debugwin") : print('hiddenwin')?>'></iframe>
 </div>
