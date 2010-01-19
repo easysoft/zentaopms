@@ -5,7 +5,7 @@
     <li>
       <?php
       if(isset($users[$action->actor])) $action->actor = $users[$action->actor];
-      if($pos = strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, $pos + 1);
+      if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
       ?>
       <span><?php echo "$action->date, <strong>$action->action</strong> by <strong>$action->actor</strong>"; ?></span>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
