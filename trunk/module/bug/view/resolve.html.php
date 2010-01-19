@@ -44,14 +44,17 @@ function setDuplicate(resolution)
       <td class='rowhead'><?php echo $lang->bug->resolution;?></td>
       <td><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=select-3 onchange=setDuplicate(this.value)');?></td>
     </tr>
-    <!--
-    <tr>
-      <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
-      <td><?php echo html::input('resolvedBuild', '', 'class=text-3');?></td>
-    </tr>-->
     <tr id='duplicateBugBox' style='display:none'>
       <td class='rowhead'><?php echo $lang->bug->duplicateBug;?></td>
       <td><?php echo html::input('duplicateBug', '', 'class=text-3');?></td>
+    </tr>
+    <tr>
+      <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
+      <td><?php echo html::select('resolvedBuild', $builds, '', 'class=select-3');?></td>
+    </tr>
+    <tr>
+      <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->openedBy, 'class=select-3');?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>
@@ -65,5 +68,6 @@ function setDuplicate(resolution)
       </td>
     </tr>
   </table>
+  <?php include '../../common/action.html.php';?>
 </div>
 <?php include '../../common/footer.html.php';?>

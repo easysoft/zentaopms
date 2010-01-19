@@ -39,5 +39,6 @@
       </td>
     </tr>
   </table>
+  <?php include '../../common/action.html.php';?>
 </div>
 <?php include '../../common/footer.html.php';?>

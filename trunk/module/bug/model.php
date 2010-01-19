@@ -133,11 +133,11 @@ class bugModel extends model
             ->add('resolvedBy',     $this->app->user->account)
             ->add('resolvedDate',   $now)
             ->add('status',         'resolved')
-            ->add('assignedTo',     $oldBug->openedBy)
             ->add('assignedDate',   $now)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('duplicateBug', 0)
+            ->setDefault('assignedTo', $oldBug->openedBy)
             ->remove('comment')
             ->get();
 
