@@ -24,10 +24,8 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <style>
-#project{width:245px}
-#product{width:245px}
-#story{width:245px}
-#openedBuild{width:245px}
+#project, #product, #story, #openedBuild {width:245px}
+#severity, #browser {width: 113px}
 </style>
 <script language='Javascript'>
 /* 当选择产品时，触发这个方法。*/
@@ -111,21 +109,21 @@ function loadProjectBuilds(projectID)
     <table align='center' class='table-1'> 
       <caption><?php echo $lang->bug->create;?></caption>
       <tr>
-        <th class='rowhead'><?php echo $lang->bug->labProductAndModule;?></th>
+        <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
         <td class='a-left'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
           <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, 'class=select-3');?></span>
         </td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->bug->labProjectAndTask;?></th>
+        <th class='rowhead'><?php echo $lang->bug->lblProjectAndTask;?></th>
         <td class='a-left'>
         <span id='projectIdBox'><?php echo html::select('project', $projects, '', 'onchange=loadProjectRelated(this.value)');?></span>
           <span id='taskIdBox'></span>
         </td>
       </tr>
       <tr>
-        <th class='rowhead'><?php echo $lang->bug->labStory;?></th>
+        <th class='rowhead'><?php echo $lang->bug->lblStory;?></th>
         <td class='a-left'>
           <span id='storyIdBox'><?php echo html::select('story', $stories);?></span>
         </td>
@@ -137,25 +135,25 @@ function loadProjectBuilds(projectID)
         </td>
       </tr>
       <tr>
-        <th class='rowhead'><?php echo $lang->bug->labTypeAndSeverity;?></th>
+        <th class='rowhead'><?php echo $lang->bug->lblTypeAndSeverity;?></th>
         <td class='a-left'> 
           <?php echo html::select('type', (array)$lang->bug->typeList, 'codeerror', 'class=select-2');?> 
           <?php echo html::select('severity', (array)$lang->bug->severityList, '', 'class=select-2');?>
         </td>
       </tr>
       <tr>
-        <th class='rowhead'><nobr><?php echo $lang->bug->labSystemBrowserAndHardware;?></nobr></th>
+        <th class='rowhead'><nobr><?php echo $lang->bug->lblSystemBrowserAndHardware;?></nobr></th>
         <td class='a-left'>
           <?php echo html::select('os', (array)$lang->bug->osList, '', 'class=select-2');?>
           <?php echo html::select('browser', (array)$lang->bug->browserList, '', 'class=select-2');?>
         </td>
       </tr>
       <tr>
-        <th class='rowhead'><nobr><?php echo $lang->bug->labAssignedTo;?></nobr></th>
+        <th class='rowhead'><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
         <td class='a-left'> <?php echo html::select('assignedTo', $users, '', 'class=select-3');?></td>
       </tr>
       <tr>
-        <th class='rowhead'><nobr><?php echo $lang->bug->labMailto;?></nobr></th>
+        <th class='rowhead'><nobr><?php echo $lang->bug->lblMailto;?></nobr></th>
         <td class='a-left'> <?php echo html::select('mailto[]', $users, '', 'class=select-3 size=5 multiple=multiple');?> </td>
       </tr>
       <tr>

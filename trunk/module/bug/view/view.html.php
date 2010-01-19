@@ -6,14 +6,14 @@
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ZenTaoMS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
+ * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
@@ -28,18 +28,19 @@
   <div id='titlebar'>
     <div id='main'>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
     <div>
-    <?php
-    common::printLink('bug', 'edit', "bugID=$bug->id", $lang->bug->buttonEdit);
-    if($bug->status == 'active')   common::printLink('bug', 'resolve',  "bugID=$bug->id", $lang->bug->buttonResolve); else echo $lang->bug->buttonResolve . ' ';
-    if($bug->status == 'resolved') common::printLink('bug', 'close',    "bugID=$bug->id", $lang->bug->buttonClose);  else echo $lang->bug->buttonClose . ' ';
-    if($bug->status == 'closed' or $bug->status == 'resolved') common::printLink('bug', 'activate', "bugID=$bug->id", $lang->bug->buttonActivate); else echo $lang->bug->buttonActivate . ' ';
-    if(common::hasPriv('bug', 'browse'))   echo html::a($this->session->bugList, $lang->bug->buttonToList);
-    ?>
+      <?php
+      $params = "bugID=$bug->id";
+      common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+      if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+      if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
+      if(!($bug->status == 'closed'   and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+      common::printLink('bug', 'browse', '', $lang->bug->buttonToList);
+      ?>
     </div>
   </div>
 </div>
 
-<div class='yui-d0 yui-t6'>
+<div class='yui-d0 yui-t8'>
   <div class='yui-main'>
     <div class='yui-b'>
       <fieldset>
@@ -51,34 +52,31 @@
         <div><?php foreach($bug->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
       </fieldset>
       <?php include '../../common/action.html.php';?>
-      <fieldset>
-        <legend><?php echo $lang->bug->legendAction;?></legend>
-        <div class='a-center' style='font-size:16px; font-weight:bold'>
-        <?php
-        if(common::hasPriv('bug', 'edit')) echo html::a($this->createLink('bug', 'edit',     "bugID=$bug->id"), $lang->bug->buttonEdit);
-        if(common::hasPriv('bug', 'resolve')  and $bug->status == 'active')   echo html::a($this->createLink('bug', 'resolve',  "bugID=$bug->id"), $lang->bug->buttonResolve); else echo $lang->bug->buttonResolve . ' ';
-        if(common::hasPriv('bug', 'close')    and $bug->status == 'resolved') echo html::a($this->createLink('bug', 'close',    "bugID=$bug->id"), $lang->bug->buttonClose); else echo $lang->bug->buttonClose . ' ';
-        if(common::hasPriv('bug', 'activate') and ($bug->status == 'closed' or $bug->status == 'resolved')) echo html::a($this->createLink('bug', 'activate', "bugID=$bug->id"), $lang->bug->buttonActivate); else echo $lang->bug->buttonActivate . ' ';
-        if(common::hasPriv('bug', 'browse'))   echo html::a($this->session->bugList, $lang->bug->buttonToList);
-        ?>
-        </div>
-      </fieldset>
+      <div class='a-center' style='font-size:16px; font-weight:bold'>
+      <?php
+      common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+      if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+      if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
+      if(!($bug->status == 'closed'   and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+      common::printLink('bug', 'browse', '', $lang->bug->buttonToList);
+      ?>
+      </div>
     </div>
   </div>
 
   <div class='yui-b'>
     <fieldset>
       <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
-      <table class='table-1 a-left fixed'>
-        <tr>
-          <th class='w-p25 rowhead'><?php echo $lang->bug->labProductAndModule;?></th>
-          <td class='nobr'>
+      <table class='table-1 a-left'>
+        <tr valign='middle'>
+          <th class='w-p25 rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
+          <td>
             <?php
-            echo $productName;
+            if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;
             if(!empty($modulePath)) echo $lang->arrow;
             foreach($modulePath as $key => $module)
             {
-                echo $module->name;
+                if(!common::printLink('bug', 'browse', "productID=$bug->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                 if(isset($modulePath[$key + 1])) echo $lang->arrow;
             }
             ?>
@@ -88,22 +86,28 @@
           <td class='rowhead'><?php echo $lang->bug->type;?></td>
           <td><?php echo $lang->bug->typeList[$bug->type];?></td>
         </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->bug->os;?></td>
-          <td><?php echo $lang->bug->osList->{$bug->os};?></td>
-        </tr>
+
         <tr>
           <td class='rowhead'><?php echo $lang->bug->severity;?></td>
-          <td><?php echo $bug->severity;?></td>
+          <td><strong><?php echo $bug->severity;?></strong></td>
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->status;?></td>
-          <td><?php echo $bug->status;?></td>
+          <td><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
         </tr>
         <tr>
-          <td class='rowhead'><?php echo $lang->bug->labAssignedTo;?></td>
+          <td class='rowhead'><?php echo $lang->bug->lblAssignedTo;?></td>
           <td><?php if($bug->assignedTo) echo $users[$bug->assignedTo] . $lang->at . $bug->assignedDate;?></td>
         </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->os;?></td>
+          <td><?php echo $lang->bug->osList[$bug->os];?></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->browser;?></td>
+          <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
+        </tr>
+
       </table>
     </fieldset>
 
@@ -119,7 +123,7 @@
           <td><?php echo $builds[$bug->openedBuild];?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->bug->labResolved;?></th>
+          <th class='rowhead'><?php echo $lang->bug->lblResolved;?></th>
           <td><?php if($bug->resolvedBy) echo $users[$bug->resolvedBy] . $lang->at . $bug->resolvedDate;?>
         </tr>
         <tr>
@@ -129,7 +133,7 @@
         <tr>
           <th class='rowhead'><?php echo $lang->bug->resolution;?></th>
           <td>
-            <?php 
+            <?php
             echo $lang->bug->resolutionList[$bug->resolution];
             if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug"), $bug->duplicateBugTitle);
             ?>
@@ -140,7 +144,7 @@
           <td><?php if($bug->closedBy) echo $users[$bug->closedBy] . $lang->at . $bug->closedDate;?></td>
         </tr>
         <tr>
-          <th class='rowhead'><?php echo $lang->bug->labLastEdited;?></th>
+          <th class='rowhead'><?php echo $lang->bug->lblLastEdited;?></th>
           <td><?php if($bug->lastEditedBy) echo $users[$bug->lastEditedBy] . $lang->at . $bug->lastEditedDate?></td>
         </tr>
       </table>
@@ -163,23 +167,33 @@
         </tr>
       </table>
     </fieldset>
-
     <fieldset>
-      <legend><?php echo $lang->bug->legendMailto;?></legend>
-      <div><?php $mailto = explode(',', $bug->mailto); foreach($mailto as $account) echo ' ' . $users[$account]; ?></div>
+      <legend><?php echo $lang->bug->legendMisc;?></legend>
+      <table class='table-1 a-left fixed'>
+        <tr>
+          <td class='rowhead w-p25'><?php echo $lang->bug->mailto;?></td>
+          <td><?php $mailto = explode(',', $bug->mailto); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->linkBug;?></td>
+          <td>
+            <?php
+            if(isset($bug->linkBugTitles))
+            {
+                foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                {
+                    echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID"), "#$linkBugID $linkBugTitle", '_blank') . '<br />';
+                }
+            }
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->case;?></td>
+          <td><?php if(isset($bug->caseTitle)) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $linkBugTitle", '_blank');?></td>
+        </tr>
+      </table>
     </fieldset>
-
-    <fieldset>
-      <legend><?php echo $lang->bug->legendLinkBugs;?></legend>
-      <div>&nbsp;</div>
-    </fieldset>
-
-    <fieldset>
-      <legend><?php echo $lang->bug->legendCases;?></legend>
-      <div>&nbsp;</div>
-    </fieldset>
-
   </div>
 </div>
-
 <?php include '../../common/footer.html.php';?>
