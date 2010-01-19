@@ -24,7 +24,7 @@
 body{padding-bottom:50px}
 
 /*-----------------------FIELDSET SETTING----------------------------*/
-fieldset {border:1px solid #e4e4e4; padding:1px 10px 1px 10px; margin-bottom:5px}
+fieldset {border:1px solid #e4e4e4; padding:5px 10px 5px 10px; margin-bottom:5px}
 legend   {font-weight:bold; color:darkgreen}
 fieldset .table-1 {margin:0;}
 fieldset tr, fieldset td, fieldset th {border:none; padding:2px}
@@ -120,6 +120,8 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .w-200px {width:200px}
 
 .margin-10px {margin:    10px}
+.margin-15px {margin:    15px}
+.margin-20px {margin:    20px}
 .padding-10px{padding:   10px}
 
 .mt-10px {margin-top:    10px}
@@ -201,15 +203,15 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 
 /* 标题。*/
 #titlebar{font-size:16px; font-weight:bold; background:#e4e4e4; padding:5px; margin:10px 0 10px 0; height:22px}
-#titlebar #main {float:left;  width:80%; clear:none; text-align:left}
-#titlebar div   {float:right; width:20%; clear:none; text-align:right}
+#titlebar #main {float:left;  width:70%; clear:none; text-align:left}
+#titlebar div   {float:right; width:30%; clear:none; text-align:right}
 #titlebar #main input {font-size:14px}
 #titlebar .button-s   {font-size:12px; padding-top:0; padding-bottom:0}
 #titlebar .text-1 {width:80%}
 
 /* 页面其他元素。*/
 .history {border:1px solid gray; background:#efefef; padding:10px; margin-top:10px; margin-bottom:10px}
-.content {font-size:14px; padding:10px}
+.content {font-size:16px; padding:10px}
 .roadmap {width:200px; margin:10px auto 10px auto; padding:10px; border:1px solid gray;}
 .roadmap a{color:white;}
 .release {background:darkgreen; color:white}
