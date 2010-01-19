@@ -44,27 +44,22 @@ $lang->bug->allBugs        = '所有Bug';
 $lang->bug->moduleBugs     = '按模块浏览';
 $lang->bug->byQuery        = '搜索';
 
-$lang->bug->labProductAndModule         = '产品模块';
-$lang->bug->labProjectAndTask           = '项目任务';
-$lang->bug->labStory                    = '相关需求';
-$lang->bug->labBuild                    = '程序编译版本';
-$lang->bug->labTypeAndSeverity          = '类型/严重程度';
-$lang->bug->labSystemBrowserAndHardware = '系统/浏览器';
-$lang->bug->labAssignedTo               = '当前指派';
-$lang->bug->labMailto                   = '抄送给';
-$lang->bug->labLastEdited               = '最后修改';
-$lang->bug->labResolved                 = '由谁解决';
+$lang->bug->lblProductAndModule         = '产品模块';
+$lang->bug->lblProjectAndTask           = '项目任务';
+$lang->bug->lblStory                    = '相关需求';
+$lang->bug->lblTypeAndSeverity          = '类型/严重程度';
+$lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
+$lang->bug->lblAssignedTo               = '当前指派';
+$lang->bug->lblMailto                   = '抄送给';
+$lang->bug->lblLastEdited               = '最后修改';
+$lang->bug->lblResolved                 = '由谁解决';
 
 $lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';
 
-$lang->bug->legendRelated     = '相关信息';
 $lang->bug->legendBasicInfo   = '基本信息';
 $lang->bug->legendMailto      = '抄送给';
 $lang->bug->legendAttatch     = '附件';
 $lang->bug->legendLinkBugs    = '相关Bug';
-$lang->bug->legendOpenInfo    = '创建信息';
-$lang->bug->legendResolveInfo = '解决信息';
-$lang->bug->legendCloseInfo   = '关闭信息';
 $lang->bug->legendPrjStoryTask= '项目/需求/任务';
 $lang->bug->legendCases       = '相关用例';
 $lang->bug->legendSteps       = '重现步骤';
@@ -72,6 +67,7 @@ $lang->bug->legendAction      = '操作';
 $lang->bug->legendHistory     = '历史记录';
 $lang->bug->legendComment     = '备注';
 $lang->bug->legendLife        = 'BUG的一生';
+$lang->bug->legendMisc        = '其相关他';
 
 $lang->bug->buttonEdit     = '编辑';
 $lang->bug->buttonActivate = '激活';
@@ -85,24 +81,29 @@ $lang->bug->severityList[2] = 2;
 $lang->bug->severityList[4] = 4;
 
 /* Define the OS list. */
-$lang->bug->osList->all     = '全部';
-$lang->bug->osList->winxp   = 'Windows XP';
-$lang->bug->osList->win2000 = 'Windows 2000';
-$lang->bug->osList->winnt   = 'Windows NT';
-$lang->bug->osList->win98   = 'Windows 98';
-$lang->bug->osList->linux   = 'Linux';
-$lang->bug->osList->unix    = 'Unix';
-$lang->bug->osList->others  = '其他';
+$lang->bug->osList['all']     = '全部';
+$lang->bug->osList['winxp']   = 'Windows XP';
+$lang->bug->osList['win7']    = 'Windows 7';
+$lang->bug->osList['vista']   = 'Windows Vista';
+$lang->bug->osList['win2000'] = 'Windows 2000';
+$lang->bug->osList['winnt']   = 'Windows NT';
+$lang->bug->osList['win98']   = 'Windows 98';
+$lang->bug->osList['linux']   = 'Linux';
+$lang->bug->osList['unix']    = 'Unix';
+$lang->bug->osList['others']  = '其他';
 
 /* Define the OS list. */
-$lang->bug->browserList->all      = '全部';
-$lang->bug->browserList->ie6      = 'IE6';
-$lang->bug->browserList->ie7      = 'IE7';
-$lang->bug->browserList->ie8      = 'IE8';
-$lang->bug->browserList->firefox2 = 'firefox2';
-$lang->bug->browserList->firefx3  = 'firefox3';
-$lang->bug->browserList->opera9   = 'opera9';
-$lang->bug->browserList->oprea10  = '其他';
+$lang->bug->browserList['all']      = '全部';
+$lang->bug->browserList['ie6']      = 'IE6';
+$lang->bug->browserList['ie7']      = 'IE7';
+$lang->bug->browserList['ie8']      = 'IE8';
+$lang->bug->browserList['firefox2'] = 'firefox2';
+$lang->bug->browserList['firefx3']  = 'firefox3';
+$lang->bug->browserList['opera9']   = 'opera9';
+$lang->bug->browserList['oprea10']  = 'opera10';
+$lang->bug->browserList['safari']   = 'safari';
+$lang->bug->browserList['chrome']   = 'chrome';
+$lang->bug->browserList['other']    = '其他';
 
 /* Define the types. */
 $lang->bug->typeList['']             = '';
@@ -112,9 +113,9 @@ $lang->bug->typeList['designchange'] = '设计变更';
 $lang->bug->typeList['Others']       = '其他';
 
 $lang->bug->statusList['']         = '';
-$lang->bug->statusList['active']   = 'active';
-$lang->bug->statusList['resolved'] = 'resolved';
-$lang->bug->statusList['closed']   = 'closed';
+$lang->bug->statusList['active']   = '激活';
+$lang->bug->statusList['resolved'] = '已解决';
+$lang->bug->statusList['closed']   = '已关闭';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '设计如此';
@@ -156,6 +157,8 @@ $lang->bug->closedDate     = '关闭日期';
 $lang->bug->duplicateBug   = '重复Bug';
 $lang->bug->lastEditedBy   = '最后修改者';
 $lang->bug->lastEditedDate = '最后修改日期';
+$lang->bug->linkBug        = '相关Bug';
+$lang->bug->case           = '相关用例';
 $lang->bug->files          = '附件';
 $lang->bug->field1         = 'field1';
 $lang->bug->field2         = 'field2';

@@ -213,37 +213,31 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        /* 生成表单。*/
+        /* 查找当前bug信息和产品模块信息。*/
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
         $currentModuleID = $bug->module;
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->edit;
-        $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->bug->edit;
 
         /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
 
-        $projects = $this->product->getProjectPairs($bug->product);
-        $stories = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
-        $tasks   = $this->task->getProjectTaskPairs($bug->project);
+        /* 位置。*/
+        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->edit;
+        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->bug->edit;
 
-        $users = $this->user->getPairs();
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
-        $this->assign('productID',     $productID);
-        $this->assign('productName',   $this->products[$productID]);
-        $this->assign('moduleOptionMenu',  $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0));
-        $this->assign('currentModuleID',   $currentModuleID);
-        $this->assign('users',  $users);           
-
-        $this->assign('projects', $projects);
-        $this->assign('stories', $stories);
-        $this->assign('tasks',   $tasks);
-        
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('bug',      $bug);
+        /* 赋值。*/
+        $this->view->bug              = $bug;
+        $this->view->productID        = $productID;
+        $this->view->productName      = $this->products[$productID];
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
+        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->projects         = $this->product->getProjectPairs($bug->product);
+        $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
+        $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
+        $this->view->users            =  $this->user->getPairs();
+        $this->view->builds           = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->actions          = $this->action->getList('bug', $bugID);
 
         $this->display();
     }

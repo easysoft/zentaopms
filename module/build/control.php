@@ -98,15 +98,15 @@ class build extends control
     }
 
     /* AJAX接口：获得产品的build列表。*/
-    public function ajaxGetProductBuilds($productID, $varName)
+    public function ajaxGetProductBuilds($productID, $varName, $build = '')
     {
-        die(html::select($varName, $this->build->getProductBuildPairs($productID)));
+        die(html::select($varName, $this->build->getProductBuildPairs($productID), $build));
     }
 
     /* AJAX接口：获得项目的build列表。*/
-    public function ajaxGetProjectBuilds($projectID, $varName)
+    public function ajaxGetProjectBuilds($projectID, $varName, $build = '')
     {
-        die(html::select($varName, $this->build->getProjectBuildPairs($projectID)));
+        die(html::select($varName, $this->build->getProjectBuildPairs($projectID), $build));
     }
 
 }
