@@ -25,12 +25,12 @@ $lang->task->common    = '任务';
 $lang->task->index     = "任务一览";
 $lang->task->create    = "新增任务";
 $lang->task->import    = "导入之前未完任务";
-$lang->task->edit      = "更新";
-$lang->task->delete    = "删除";
+$lang->task->edit      = "更新任务";
+$lang->task->delete    = "删除任务";
 $lang->task->view      = "查看任务";
 
-$lang->task->ajaxGetUserTasks    = "ajax:我的任务";
-$lang->task->ajaxGetProjectTasks = "ajax:项目任务";
+$lang->task->ajaxGetUserTasks    = "接口:我的任务";
+$lang->task->ajaxGetProjectTasks = "接口:项目任务";
 $lang->task->confirmDelete       = "您确定要删除这个任务吗？";
 $lang->task->copyStoryTitle      = "同需求";
 $lang->task->afterSubmit         = "添加之后";

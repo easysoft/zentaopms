@@ -119,7 +119,7 @@ class story extends control
         $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $modulePath   = $this->tree->getParents($story->module);
-        $users        = $this->user->getPairs();
+        $users        = $this->user->getPairs('noletter');
 
         /* 设置菜单。*/
         $this->product->setMenu($this->product->getPairs(), $product->id);

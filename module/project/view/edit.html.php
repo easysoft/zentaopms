@@ -50,7 +50,7 @@
         <td><input type='text' name='end' value='<?php echo $project->end;?>' class='text-3' /></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->project->team;?></th>
+        <th class='rowhead'><?php echo $lang->project->teamname;?></th>
         <td><input type='text' name='team' value='<?php echo $project->team;?>' class='text-3' /></td>
       </tr>  
       <tr>

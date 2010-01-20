@@ -24,8 +24,8 @@
 $lang->dept->common      = '部门结构';
 $lang->dept->add         = "添加";
 $lang->dept->addChild    = "添加下级部门";
-$lang->dept->manageChild = "下级";
-$lang->dept->delete      = "删除";
+$lang->dept->manageChild = "下级部门";
+$lang->dept->delete      = "删除部门";
 $lang->dept->browse      = "部门列表";
 $lang->dept->manage      = "维护部门结构";
 $lang->dept->updateOrder = "更新排序";

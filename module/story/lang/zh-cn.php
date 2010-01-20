@@ -35,8 +35,8 @@ $lang->story->confirmDelete   = "您确认删除该需求吗?";
 $lang->story->errorFormat     = '需求数据有误';
 $lang->story->errorEmptyTitle = '标题不能为空';
 $lang->story->linkStory       = '关联需求';
-$lang->story->ajaxGetProjectStories = 'ajax:获取项目需求列表';
-$lang->story->ajaxGetProductStories = 'ajax:获取产品需求列表';
+$lang->story->ajaxGetProjectStories = '接口:获取项目需求列表';
+$lang->story->ajaxGetProductStories = '接口:获取产品需求列表';
 
 $lang->story->statusList->wait  = '未开始';
 $lang->story->statusList->doing = '进行中';

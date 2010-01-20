@@ -24,13 +24,13 @@
 $lang->todo->common    = 'TODO';
 $lang->todo->index     = "todo一览";
 $lang->todo->create    = "新增TODO";
-$lang->todo->edit      = "更新";
+$lang->todo->edit      = "更新TODO";
 $lang->todo->view      = "TODO详情";
 $lang->todo->markDone  = "未完成";
 $lang->todo->markWait  = "已完成";
 $lang->todo->markDoing = "已完成";
 $lang->todo->mark      = "更改状态";
-$lang->todo->delete    = "删除";
+$lang->todo->delete    = "删除TODO";
 $lang->todo->browse    = "浏览TODO";
 $lang->todo->import2Today = "导入到今天";
 $lang->todo->changeStatus = "更改";

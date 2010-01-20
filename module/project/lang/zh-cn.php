@@ -21,7 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->project->common       = '项目';
+$lang->project->common       = '项目视图';
 $lang->project->index        = "项目首页";
 $lang->project->create       = "添加项目";
 $lang->project->delete       = "删除项目";
@@ -68,7 +68,8 @@ $lang->project->canceledDate = '取消日期';
 $lang->project->PO           = '产品负责人';
 $lang->project->PM           = '项目负责人';
 $lang->project->QM           = '测试负责人';
-$lang->project->team         = '团队名称';
+$lang->project->teamname     = '团队名称';
+$lang->project->team         = '团队成员';
 $lang->project->products     = '相关产品';
 $lang->project->childProjects= '子项目';
 $lang->project->task         = '任务列表';

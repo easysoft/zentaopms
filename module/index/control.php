@@ -51,7 +51,7 @@ class index extends control
         $this->view->burns         = $burns;
         $this->view->counts        = count($projects);
         $this->view->actions       = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id desc')->limit(30)->fetchAll();
-        $this->view->users         = $this->loadModel('user')->getPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

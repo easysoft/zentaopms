@@ -21,14 +21,14 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->company->common   = '公司';
-$lang->company->index    = "公司首页";
+$lang->company->common   = '组织视图';
+$lang->company->index    = "组织视图首页";
 $lang->company->create   = "新增公司";
 $lang->company->edit     = "编辑公司";
 $lang->company->read     = "公司信息";
 $lang->company->update   = "更新公司";
 $lang->company->delete   = "删除公司";
-$lang->company->browse   = "浏览公司";
+$lang->company->browse   = "用户列表";
 $lang->company->depts    = "部门列表";
 $lang->company->orgView  = '组织视图';
 
