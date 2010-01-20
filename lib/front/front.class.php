@@ -82,6 +82,41 @@ class html
     }
 
     /**
+     * create select with optgroup.
+     *
+     * @param string $name          the name of the select tag.
+     * @param array  $groups        the option groups.
+     * @param string $selectedItems the item(s) to be selected, can like item1,item2.
+     * @param string $attrib        other params such as multiple, size and style.
+     */
+    static public function selectGroup($name = '', $groups = array(), $selectedItems = "", $attrib = "")
+    {
+        if(!is_array($groups) or empty($groups)) return false;
+
+        /* The begin. */
+        $id = $name;
+        if($pos = strpos($name, '[')) $id = substr($name, 0, $pos);
+        $string = "<select name='$name' id='$id' $attrib>\n";
+
+        /* The options. */
+        $selectedItems = ",$selectedItems,";
+        foreach($groups as $groupName => $options)
+        {
+            $string .= "<optgroup label='$groupName'>\n";
+            foreach($options as $key => $value)
+            {
+                $key      = str_replace('item', '', $key);    // 因为对象的元素不能为数字，所以需要在配置里面会在数字前面添加item，这个地方将item去掉。
+                $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
+                $string  .= "<option value='$key'$selected>$value</option>\n";
+            }
+            $string .= "</optgroup>\n";
+        }
+
+        /* End. */
+        return $string .= "</select>\n";
+    }
+
+    /**
      * Create tags like "<input type='radio' />"
      *
      * @param string $name       the name of the radio tag.
