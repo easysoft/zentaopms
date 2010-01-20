@@ -23,7 +23,6 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<?php include '../../common/colorize.html.php';?>
 <script language="Javascript">
 function check(checker, module)
 {
@@ -43,17 +42,15 @@ function checkall(checker)
 </script>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1 a-left colored'> 
+    <table align='center' class='table-1 a-left'> 
     <caption><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>
       <tr class='nobr'>
         <th><?php echo $lang->group->module;?></th>
-        <th><?php echo $lang->group->checkall;?></th>
         <th><?php echo $lang->group->method;?></th>
       </tr>  
       <?php foreach($lang->resource as $moduleName => $moduleActions):?>
       <tr>
-        <th class='rowhead'><?php echo $this->lang->$moduleName->common;?></th>
-        <td class='a-center'><input type='checkbox' onclick='check(this, "<?php echo $moduleName;?>")'></td>
+        <th class='rowhead'><?php echo $this->lang->$moduleName->common;?> <input type='checkbox' onclick='check(this, "<?php echo $moduleName;?>")'></td>
         <td id='<?php echo $moduleName;?>'>
         <?php foreach($moduleActions as $action):?>
         <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> /> <?php echo $lang->$moduleName->$action;?>
@@ -62,8 +59,7 @@ function checkall(checker)
       </tr>
       <?php endforeach;?>
       <tr>
-        <th class='rowhead'><?php echo $lang->group->checkall;?></th>
-        <th><input type='checkbox' onclick='checkall(this);'></th>
+        <th class='rowhead'><?php echo $lang->group->checkall;?><input type='checkbox' onclick='checkall(this);'></th>
         <td class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td>
       </tr>
     </table>
