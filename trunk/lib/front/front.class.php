@@ -126,7 +126,7 @@ class html
             $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
             $string .= strpos($checked, ",$key,") !== false ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " /> $value\n";
+            $string .= " /><label>$value</label>\n";
         }
         return $string;
     }
@@ -230,6 +230,18 @@ class html
     public static function commonButton($label = '', $misc = '')
     {
         return " <input type='button' value='$label' class='button-c' $misc /> ";
+    }
+
+    /**
+     * create a button with a link.
+     *
+     * @static
+     * @access public
+     * @return string   the reset button tag.
+     */
+    public static function linkButton($label = '', $link = '', $misc = '')
+    {
+        return " <input type='button' value='$label' class='button-c' $misc onclick='location.href=\"$link\"' /> ";
     }
 }
 
