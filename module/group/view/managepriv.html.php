@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/colorize.html.php';?>
 <script language="Javascript">
 function check(checker, module)
 {
@@ -42,7 +43,7 @@ function checkall(checker)
 </script>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1 a-left'> 
+    <table align='center' class='table-1 a-left colored'> 
     <caption><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>
       <tr class='nobr'>
         <th><?php echo $lang->group->module;?></th>
