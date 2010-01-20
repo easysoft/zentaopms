@@ -23,15 +23,16 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<style>
-#users input {display:block;float:left}
-label{display:block; width:100px; float:left}
-</style>
+<style>span{display:block; width:100px; float:left}</style>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>
-      <tr><td id='users'><?php echo html::checkbox('members', $allUsers, $groupUsers);?></td></tr>
+      <tr>
+        <td>
+        <?php foreach($allUsers as $user) echo '<span>' . html::checkbox('members', $user, $groupUsers) . '</span>';?>
+        </td>
+      </tr>
       <tr><td class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td></tr>
     </table>
   </form>
