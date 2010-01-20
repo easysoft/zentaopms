@@ -44,6 +44,7 @@ $lang->at         = ' 于 ';
 $lang->feature    = '未来';
 $lang->year       = '年';
 $lang->downArrow  = '↓';
+$lang->goback     = '返回';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
@@ -110,9 +111,9 @@ $lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|produ
 $lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
 
 /* 组织结构视图菜单设置。*/
-$lang->company->menu->browseUser  = array('link' => '用户管理|company|browse', 'subModule' => 'user');
-$lang->company->menu->dept        = array('link' => '部门结构|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup = array('link' => '分组管理|group|browse', 'subModule' => 'group');
+$lang->company->menu->browseUser  = array('link' => '用户列表|company|browse', 'subModule' => 'user');
+$lang->company->menu->dept        = array('link' => '部门维护|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup = array('link' => '权限分组|group|browse', 'subModule' => 'group');
 $lang->company->menu->addGroup    = array('link' => '添加分组|group|create', 'float' => 'right');
 $lang->company->menu->addUser     = array('link' => '添加用户|user|create|company=%s&dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;

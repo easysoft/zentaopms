@@ -21,5 +21,5 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->qa->common  = 'QA';
+$lang->qa->common  = 'QA视图';
 $lang->qa->index   = "QA首页";

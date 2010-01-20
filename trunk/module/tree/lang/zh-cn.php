@@ -21,7 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->tree->common      = '模块';
+$lang->tree->common      = '模块维护';
 $lang->tree->add         = "添加";
 $lang->tree->addChild    = "添加子模块";
 $lang->tree->delete      = "删除模块";
@@ -34,6 +34,6 @@ $lang->tree->manageCase   = "维护用例视图模块";
 $lang->tree->updateOrder  = "更新排序";
 $lang->tree->manageChild  = "维护子模块";
 $lang->tree->child        = "子模块";
-$lang->tree->ajaxGetOptionMenu = "ajax:获取下拉列表";
+$lang->tree->ajaxGetOptionMenu = "接口:获取下拉列表";
 
 $lang->tree->confirmDelete = " 您确定删除该模块吗？";

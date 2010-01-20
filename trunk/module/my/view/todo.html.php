@@ -90,8 +90,8 @@ function changeDate(date)
       <td>
         <?php 
         echo html::a($this->createLink('todo', 'mark',   "id=$todo->id&status=$todo->status"), $lang->todo->{'mark'.ucfirst($todo->status)}, 'hiddenwin');
-        echo html::a($this->createLink('todo', 'edit',   "id=$todo->id"), $lang->todo->edit);
-        echo html::a($this->createLink('todo', 'delete', "id=$todo->id"), $lang->todo->delete, 'hiddenwin');
+        echo html::a($this->createLink('todo', 'edit',   "id=$todo->id"), $lang->edit);
+        echo html::a($this->createLink('todo', 'delete', "id=$todo->id"), $lang->delete, 'hiddenwin');
         ?>
       </td>
     </tr>

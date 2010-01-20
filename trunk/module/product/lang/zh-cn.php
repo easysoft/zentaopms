@@ -21,7 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->product->common = '产品';
+$lang->product->common = '产品视图';
 $lang->product->index  = "产品首页";
 $lang->product->browse = "浏览产品";
 $lang->product->edit   = "编辑产品";
@@ -35,7 +35,7 @@ $lang->product->roadmap   = '路线图';
 $lang->product->selectProduct = "请选择产品";
 $lang->product->saveButton    = " 保存 (S) ";
 $lang->product->confirmDelete = " 您确定删除该产品吗？";
-$lang->product->ajaxGetProjects= "ajax:获得项目列表";
+$lang->product->ajaxGetProjects= "接口:获得项目列表";
 
 $lang->product->errorFormat    = '产品数据格式不正确';
 $lang->product->errorEmptyName = '产品名称不能为空';

@@ -23,24 +23,48 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<script language="Javascript">
+function check(checker, module)
+{
+    $('#' + module + ' input').each(function() 
+    {
+        $(this).attr("checked", checker.checked)
+    });
+}
+
+function checkall(checker)
+{
+    $('input').each(function() 
+    {
+        $(this).attr("checked", checker.checked)
+    });
+}
+</script>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
-      <tr class='colhead'>
+    <caption><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>
+      <tr class='nobr'>
         <th><?php echo $lang->group->module;?></th>
+        <th><?php echo $lang->group->checkall;?></th>
         <th><?php echo $lang->group->method;?></th>
       </tr>  
       <?php foreach($lang->resource as $moduleName => $moduleActions):?>
       <tr>
         <th class='rowhead'><?php echo $this->lang->$moduleName->common;?></th>
-        <td>
+        <td class='a-center'><input type='checkbox' onclick='check(this, "<?php echo $moduleName;?>")'></td>
+        <td id='<?php echo $moduleName;?>'>
         <?php foreach($moduleActions as $action):?>
         <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> /> <?php echo $lang->$moduleName->$action;?>
         <?php endforeach;?>
         </td>
       </tr>
       <?php endforeach;?>
-      <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->group->checkall;?></th>
+        <th><input type='checkbox' onclick='checkall(this);'></th>
+        <td class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td>
+      </tr>
     </table>
   </form>
 </div>  

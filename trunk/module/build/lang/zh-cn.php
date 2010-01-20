@@ -26,6 +26,8 @@ $lang->build->create    = "创建Build";
 $lang->build->edit      = "编辑Build";
 $lang->build->delete    = "删除Build";
 $lang->build->view      = "Build详情";
+$lang->build->ajaxGetProductBuilds = '接口:产品Build列表';
+$lang->build->ajaxGetProjectBuilds = '接口:项目Build列表';
 
 $lang->build->confirmDelete = "您确认删除该build吗？";
 

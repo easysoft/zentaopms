@@ -30,7 +30,7 @@ $lang->bug->view           = 'Bug详情';
 $lang->bug->resolve        = '解决Bug';
 $lang->bug->close          = '关闭Bug';
 $lang->bug->activate       = '激活Bug';
-$lang->bug->ajaxGetUserBugs = 'ajax:我的Bug';
+$lang->bug->ajaxGetUserBugs = '接口:我的Bug';
 
 $lang->bug->selectProduct  = '请选择产品';
 $lang->bug->byModule       = '按模块';

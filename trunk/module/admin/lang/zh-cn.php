@@ -21,7 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->admin->common  = '后台';
+$lang->admin->common  = '后台管理';
 $lang->admin->index   = '后台管理首页';
 $lang->admin->company = '公司管理';
 $lang->admin->user    = '用户管理';
