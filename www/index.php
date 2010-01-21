@@ -31,10 +31,9 @@ include '../../../framework/router.class.php';
 include '../../../framework/control.class.php';
 include '../../../framework/model.class.php';
 include '../../../framework/helper.class.php';
-include './myrouter.class.php';
 
 /* 实例化路由对象，加载配置，连接到数据库。*/
-$app    = router::createApp('pms', '', 'myRouter');
+$app    = router::createApp('pms');
 $config = $app->loadConfig('common');
 
 /* 检查是否已经安装。*/

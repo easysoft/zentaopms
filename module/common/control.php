@@ -299,13 +299,16 @@ EOT;
     {
         if(isset($_SESSION['company']) and $_SESSION['company']->pms == $_SERVER['HTTP_HOST'])
         {
-            $this->app->setSessionCompany($_SESSION['company']);
+            $this->app->company = $_SESSION['company'];
         }
-        $company = $this->company->getByDomain();
-        if(!$company) $company = $this->company->getByDomain($this->config->default->domain);
-        if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $_SERVER['HTTP_HOST']), __FILE__, __LINE__, $exit = true);
-        $_SESSION['company'] = $company;
-        $this->app->setSessionCompany($company);
+        else
+        {
+            $company = $this->company->getByDomain();
+            if(!$company) $company = $this->company->getByDomain($this->config->default->domain);
+            if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $_SERVER['HTTP_HOST']), __FILE__, __LINE__, $exit = true);
+            $_SESSION['company'] = $company;
+            $this->app->company  = $company;
+        }
     }
 
     /**
@@ -318,17 +321,16 @@ EOT;
     {
         if(isset($_SESSION['user']))
         {
-            $this->app->setSessionUser($_SESSION['user']);
+            $this->app->user = $_SESSION['user'];
         }
         elseif($this->app->company->guest)
         {
-            $user = new stdClass();
-            $user->account  = 'guest';
-            $user->realname = 'guest';
-            $this->loadModel('user');
-            $user->rights = $this->user->authorize('guest');
+            $user             = new stdClass();
+            $user->account    = 'guest';
+            $user->realname   = 'guest';
+            $user->rights     = $this->loadModel('user')->authorize('guest');
             $_SESSION['user'] = $user;
-            $this->app->setSessionUser($_SESSION['user']);
+            $this->app->user = $_SESSION['user'];
         }
     }
 
