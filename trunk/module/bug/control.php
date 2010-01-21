@@ -56,6 +56,10 @@ class bug extends control
 
         /* 设置搜索表单。*/
         $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch");
+        $this->config->bug->search['params']['module']['values']        = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
+        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID);
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
 
         /* 设置菜单，登记session。*/
