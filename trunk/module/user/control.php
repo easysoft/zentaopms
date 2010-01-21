@@ -280,7 +280,7 @@ class user extends control
             {
                 $user->rights = $this->user->authorize($_POST['account']);
                 $_SESSION['user'] = $user;
-                $this->app->setSessionUser($user);
+                $this->app->user = $_SESSION['user'];
 
                 /* POST变量中设置了referer信息，且非user/login.html, 非user/deny.html，并且包含当前系统的域名。*/
                 if(isset($_POST['referer'])  and 
