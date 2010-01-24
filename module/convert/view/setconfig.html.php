@@ -1,6 +1,6 @@
 <?php
 /**
- * The html template file of select source method of convert module of ZenTaoMS.
+ * The html template file of setconfig method of convert module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,9 +23,9 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0'>
-  <form method='post' action='<?php echo inlink('execute');?>'>
+  <form method='post' action='<?php echo inlink('checkconfig');?>'>
   <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $source;?></caption>
+    <caption><?php echo $lang->convert->setting . $lang->colon . strtoupper($source);?></caption>
     <?php echo $setting;?>
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>

@@ -1,6 +1,17 @@
 <?php
 class bugfreeConvertModel extends convertModel
 {
+    /* 检查Tables。*/
+    public function checkTables()
+    {
+    }
+
+    /* 检查安装路径。*/
+    public function checkInstallRoot()
+    {
+    }
+
+    /* 执行转换。*/
     public function execute()
     {
         $this->clear();

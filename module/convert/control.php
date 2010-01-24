@@ -37,31 +37,64 @@ class convert extends control
         $this->display();
     }
 
+    /* 转换参数设置。*/
     public function setConfig()
     {
+        if(!$this->post->source) 
+        {
+            echo js::alert($this->lang->convert->mustSelectSource);
+            die(js::locate('back'));
+        }
         list($sourceName, $version) = explode('_', $this->post->source);
         $setFunc = "set$sourceName";
-        $this->view->header->title = 'setting';
+        $this->view->header->title = $this->lang->convert->setting;
         $this->view->source  = $sourceName;
         $this->view->setting = $this->fetch('convert', $setFunc, "version=$version");
         $this->display();
     }
 
+    /* BugFree的设置界面。*/
     public function setBugFree($version)
     {
-        $this->view->source = 'BugFree';
-        $this->view->version = $version;
+        $this->view->source      = 'BugFree';
+        $this->view->version     = $version;
         $this->view->tablePrefix = $version > 1 ? 'bf' : '';
-        $this->view->dbName  = 'BugFree';
+        $this->view->dbName      = 'BugFree';
         $this->display();
     }
 
+    /* 检查配置。*/
+    public function checkConfig()
+    {
+        $checkFunc = 'check' . $this->post->source;
+        $this->view->header->title = $this->lang->convert->checkConfig;
+        $this->view->source  = $this->post->source;
+        $this->view->checkResult = $this->fetch('convert', $checkFunc, "version={$this->post->version}");
+        $this->display();
+    }
+
+    /* 检查BugFree的设置。*/
+    public function checkBugFree($version)
+    {
+        helper::import('./converter/bugfree.php');
+        $converter = new bugfreeConvertModel();
+        $checkResult['connectDB']   = $converter->connectDB();
+        $checkResult['checkTables'] = $converter->checkTables();
+        $checkResult['checkRoot']   = $converter->checkRoot();
+        a($checkResult);
+        $this->view->source  = 'bugfree';
+        $this->view->version = $version;
+        $this->display();
+    }
+
+    /* 执行转换。*/
     public function execute()
     {
         $convertFunc = 'convert' . $this->post->source;
         $this->$convertFunc($this->post->version);
     }
 
+    /* 转换BugFree。*/
     public function convertBugFree($version)
     {
         helper::import('./converter/bugfree.php');
