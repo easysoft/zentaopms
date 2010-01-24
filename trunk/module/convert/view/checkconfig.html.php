@@ -1,6 +1,6 @@
 <?php
 /**
- * The html template file of select source method of convert module of ZenTaoMS.
+ * The html template file of check config method of convert module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,19 +23,9 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0'>
-  <form method='post' action='<?php echo inlink('setConfig');?>'>
   <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $lang->convert->selectSource;?></caption>
-    <tr>
-      <th class='w-p20'><?php echo $lang->convert->source;?></th>
-      <th><?php echo $lang->convert->version;?></th>
-    </tr>
-    <?php foreach($lang->convert->sourceList as $name => $versions):?>
-    <tr>
-      <th class='rowhead'><?php echo $name;?></th>
-      <td><?php echo html::radio('source', $versions);?></td>
-    </tr>
-    <?php endforeach;?>
+    <caption><?php echo $lang->convert->checkConfig . $lang->colon . strtoupper($source);?></caption>
+    <?php echo $checkResult;?>
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
     </tr>

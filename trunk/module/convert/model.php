@@ -25,12 +25,6 @@
 <?php
 class convertModel extends model
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->connectDB();
-    }
-
     /* 连接到数据库。*/
     public function connectDB()
     {
@@ -42,6 +36,7 @@ class convertModel extends model
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $dbh->exec("SET NAMES UTF8");
             $this->sourceDBH = $dbh;
+            return $dbh;
         }
         catch (PDOException $exception)
         {
