@@ -43,21 +43,30 @@ class upgradeModel extends model
         $this->execSQL($upgradeFile);
         if(!$this->isError())
         {
-            $result = $this->dao->update(TABLE_CONFIG)
-                ->set('value')->eq('0.4 beta')
-                ->where('owner')->eq('system')
-                ->andWhere('section')->eq('global')
-                ->andWhere('`key`')->eq('version')
-                ->limit(1)
-                ->query();
-            if($result->rowCount() == 0)
-            {
-                $version->owner   = 'system';
-                $version->section = 'global';
-                $version->key     = 'version';
-                $version->value   =  '0.4 beta';
-                $this->dao->insert(TABLE_CONFIG)->data($version)->exec();
-            }
+            $this->updateVersion('0.4 beta');
+        }
+    }
+
+    /* 更新PMS的版本设置。*/
+    public function updateVersion($version)
+    {
+        $item->owner   = 'system';
+        $item->section = 'global';
+        $item->key     = 'version';
+        $item->value   =  $version;
+
+        $configID = $this->dao->select('id')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('section')->eq('global')
+            ->andWhere('`key`')->eq('version')
+            ->fetch('id');
+        if($configID > 0)
+        {
+            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($configID)->exec();
+        }
+        else
+        {
+            $this->dao->insert(TABLE_CONFIG)->data($item)->exec();
         }
     }
 
