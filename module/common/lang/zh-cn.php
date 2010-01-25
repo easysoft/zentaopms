@@ -133,8 +133,10 @@ $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'f
 /* 后台管理菜单设置。*/
 $lang->admin->menu->browseCompany = array('link' => '公司管理|admin|browsecompany', 'subModule' => 'company');
 $lang->admin->menu->convert       = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->upgrade       = array('link' => '升级|upgrade|index',           'subModule' => 'upgrade');
 $lang->admin->menu->createCompany = array('link' => '新增公司|company|create', 'float' => 'right');
 $lang->convert->menu              = $lang->admin->menu;
+$lang->upgrade->menu              = $lang->admin->menu;
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release     = 'product';
@@ -144,6 +146,7 @@ $lang->menugroup->task        = 'project';
 $lang->menugroup->build       = 'project';
 $lang->menugroup->company     = 'admin';
 $lang->menugroup->convert     = 'admin';
+$lang->menugroup->upgrade     = 'admin';
 $lang->menugroup->user        = 'company';
 $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
