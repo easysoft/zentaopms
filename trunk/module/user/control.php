@@ -232,14 +232,26 @@ class user extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->user->confirmDelete, $this->createLink('user', 'delete', "userID=$userID&confirm=yes"));
-            exit;
+            die(js::confirm($this->lang->user->confirmDelete, $this->createLink('user', 'delete', "userID=$userID&confirm=yes")));
         }
         else
         {
             $this->user->delete($userID);
-            echo js::locate($this->createLink('admin', 'browseuser', "companyID={$this->app->company->id}"), 'parent');
-            exit;
+            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+        }
+    }
+
+    /* 激活一个用户。*/
+    public function activate($userID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->user->confirmActivate, $this->createLink('user', 'activate', "userID=$userID&confirm=yes")));
+        }
+        else
+        {
+            $this->user->activate($userID);
+            die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
     }
 

@@ -55,6 +55,7 @@ include '../../common/tablesorter.html.php';
           <th><?php echo $lang->user->phone;?></th>
           <th><?php echo $lang->user->join;?></th>
           <th><?php echo $lang->user->visits;?></th>
+          <th><?php echo $lang->user->status;?></th>
           <th><?php echo $lang->action;?></th>
         </tr>
         </thead>
@@ -70,9 +71,13 @@ include '../../common/tablesorter.html.php';
           <td><?php echo $user->phone;?></td>
           <td><?php echo $user->join;?></td>
           <td><?php echo $user->visits;?></td>
+          <td><?php echo $lang->user->statusList[$user->status];?></td>
           <td>
-            <?php common::printLink('user', 'edit',   "userID=$user->id&from=company", $lang->user->edit);?>
-            <?php common::printLink('user', 'delete', "userID=$user->id", $lang->user->delete, "hiddenwin");?>
+            <?php 
+            common::printLink('user', 'edit',   "userID=$user->id&from=company", $lang->edit);
+            if($user->status == 'active') common::printLink('user', 'delete',   "userID=$user->id", $lang->delete,   "hiddenwin");
+            if($user->status == 'delete') common::printLink('user', 'activate', "userID=$user->id", $lang->activate, "hiddenwin");
+            ?>
           </td>
         </tr>
         <?php endforeach;?>
