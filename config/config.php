@@ -53,7 +53,6 @@ $config->default->domain = 'pms.easysoft.com';          // Ä¬ÈÏµÄÓòÃû£¬µ±ÇëÇóÖÐµ
 $config->file->dangers = 'php,jsp,py,rb,asp,';          // ²»ÔÊÐíÉÏ´«µÄÎÄ¼þÀàÐÍÁÐ±í¡£
 $config->file->maxSize = 1024 * 1024;                   // ÔÊÐíÉÏ´«µÄÎÄ¼þ´óÐ¡£¬µ¥Î»Îª×Ö½Ú¡£
 
-$config->db->errorMode  = PDO::ERRMODE_EXCEPTION;       // PDOµÄ´íÎóÄ£Ê½: PDO::ERRMODE_SILENT|PDO::ERRMODE_WARNING|PDO::ERRMODE_EXCEPTION
 $config->db->persistant = false;                        // ÊÇ·ñ´ò¿ª³Ö¾ÃÁ¬½Ó¡£
 $config->db->driver     = 'mysql';                      // pdoµÄÇý¶¯ÀàÐÍ£¬Ä¿Ç°ÔÝÊ±Ö»Ö§³Ömysql¡£
 $config->db->host       = '127.0.0.1';                  // mysqlÖ÷»ú¡£
