@@ -23,6 +23,8 @@
  */
 class install extends control
 {
+    const VERSION = '0.4 beta';
+
     /* 构造函数，检查是否是通过安装入口调用。*/
     public function __construct()
     {
@@ -95,6 +97,7 @@ class install extends control
         {
             $this->install->grantPriv();
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('upgrade')->updateVersion(self::VERSION);
             echo (js::alert($this->lang->install->success));
             unset($_SESSION['installing']);
             die(js::locate('index.php', 'parent'));

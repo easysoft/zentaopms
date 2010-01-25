@@ -96,7 +96,7 @@ class installModel extends model
     /* 获得webRoot的地址。*/
     public function getWebRoot()
     {
-        return rtrim(pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_DIRNAME), '/') . '/';
+        return rtrim(str_replace('\\', '/', pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_DIRNAME)), '/') . '/';
     }
 
     /* 检查配置。*/
@@ -157,7 +157,7 @@ class installModel extends model
         {
             $dbh = new PDO($dsn, $this->config->db->user, $this->config->db->password);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, $this->config->db->errorMode);
+            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $dbh->exec("SET NAMES {$this->config->db->encoding}");
             return $dbh;
         }
