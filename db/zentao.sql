@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `left` float NOT NULL,
   `consumed` float NOT NULL,
   PRIMARY KEY  (`project`,`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_case`;
 CREATE TABLE IF NOT EXISTS `zt_case` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -295,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectProduct` (
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (`project`,`product`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectStory`;
 CREATE TABLE IF NOT EXISTS `zt_projectStory` (
   `project` mediumint(8) unsigned NOT NULL default '0',
