@@ -28,3 +28,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
 
 -- 20100115: fix bug 14 
 ALTER TABLE `zt_productPlan` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+-- 20100125 user表增加status字段。
+ALTER TABLE `zt_user` ADD `status` VARCHAR( 30 ) NOT NULL DEFAULT 'active',
+ADD INDEX ( STATUS )
