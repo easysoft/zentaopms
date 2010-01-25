@@ -8,12 +8,14 @@ clean:
 tgz:
 	mkdir -p pms/lib
 	mkdir -p pms/db
-	cp -fr db/zentao.sql pms/db/zentao.sql
+	mkdir -p pms/bin
+	cp -fr db pms/
 	cp doc/COPY* pms
 	cp -fr lib/ pms/
 	cp -fr config pms/
 	cp -fr www pms/
 	cp -fr module pms/
+	cp bin/computeburn.php pms/bin
 	find pms -name .svn |xargs rm -fr
 	find pms -name tests |xargs rm -fr
 	mkdir -p pms/tmp/cache
