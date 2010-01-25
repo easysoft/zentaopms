@@ -21,7 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$config->version     = '0.3 beta';        // 版本号，切勿修改。
+$config->version     = '0.4 beta';        // 版本号，切勿修改。
 $config->installed   = false;             // 是否已经安装。手工安装，需要修改此参数为true。 
 $config->debug       = true;              // 是否打开debug功能。
 $config->webRoot     = '/';               // web网站的根目录。
