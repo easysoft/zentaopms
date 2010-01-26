@@ -69,7 +69,7 @@ $themeRoot   = $webRoot . "theme/";
     </table>
     <div class='a-center'>
     powered by <a href='http://www.zentao.cn' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>). <br />
-    <script src='http://www.zentao.cn/check.php'></script>
+    <script src='http://www.zentao.cn/check.php?v=<?php echo substr($config->version, 0, 3);?>'></script>
     </div>
   </form>
 </div>  
