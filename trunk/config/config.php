@@ -22,16 +22,12 @@
  * @link        http://www.zentao.cn
  */
 $config->version     = '0.4 beta';        // °æ±¾ºÅ£¬ÇÐÎðÐÞ¸Ä¡£
-$config->installed   = false;             // ÊÇ·ñÒÑ¾­°²×°¡£ÊÖ¹¤°²×°£¬ÐèÒªÐÞ¸Ä´Ë²ÎÊýÎªtrue¡£ 
-$config->debug       = true;              // ÊÇ·ñ´ò¿ªdebug¹¦ÄÜ¡£
-$config->webRoot     = '/';               // webÍøÕ¾µÄ¸ùÄ¿Â¼¡£
 $config->encoding    = 'UTF-8';           // ÍøÕ¾µÄ±àÂë¡£
 $config->cookiePath  = '/';               // cookieµÄÓÐÐ§Â·¾¶¡£
 $config->cookieLife  = time() + 2592000;  // cookieµÄÉúÃüÖÜÆÚ¡£
 
 $config->requestType = 'PATH_INFO';       // ÈçºÎ»ñÈ¡µ±Ç°ÇëÇóµÄÐÅÏ¢£¬¿ÉÑ¡Öµ£ºPATH_INFO|GET
 $config->pathType    = 'clean';           // requestType=PATH_INFO: ÇëÇóurlµÄ¸ñÊ½£¬¿ÉÑ¡ÖµÎªfull|clean£¬full¸ñÊ½»á´øÓÐ²ÎÊýÃû³Æ£¬cleanÔòÖ»ÓÐÈ¡Öµ¡£
-$config->strictParams= false;             // ´«µÝ²ÎÊýµÄÃû³ÆÊÇ·ñÓë·½·¨¶¨ÒåÖÐÃû³ÆÍêÈ«Ò»ÖÂ¡£Èç¹ûÉèÎªfalse£¬ÔòÐèÒª±£Ö¤Ë³ÐòÒ»ÖÂ¡£
 $config->requestFix  = '-';               // requestType=PATH_INFO: ÇëÇóurlµÄ·Ö¸ô·û£¬¿ÉÑ¡ÖµÎªÐ±Ïß¡¢ÏÂ»®Ïß¡¢¼õºÅ¡£ºóÃæÁ½ÖÖÐÎÊ½ÓÐÖúÓÚSEO¡£
 $config->moduleVar   = 'm';               // requestType=GET: Ä£¿é±äÁ¿Ãû¡£
 $config->methodVar   = 'f';               // requestType=GET: ·½·¨±äÁ¿Ãû¡£
@@ -53,16 +49,10 @@ $config->default->domain = 'pms.easysoft.com';          // Ä¬ÈÏµÄÓòÃû£¬µ±ÇëÇóÖÐµ
 $config->file->dangers = 'php,jsp,py,rb,asp,';          // ²»ÔÊÐíÉÏ´«µÄÎÄ¼þÀàÐÍÁÐ±í¡£
 $config->file->maxSize = 1024 * 1024;                   // ÔÊÐíÉÏ´«µÄÎÄ¼þ´óÐ¡£¬µ¥Î»Îª×Ö½Ú¡£
 
-$config->db->persistant = false;                        // ÊÇ·ñ´ò¿ª³Ö¾ÃÁ¬½Ó¡£
+$config->db->persistant = true;                        // ÊÇ·ñ´ò¿ª³Ö¾ÃÁ¬½Ó¡£
 $config->db->driver     = 'mysql';                      // pdoµÄÇý¶¯ÀàÐÍ£¬Ä¿Ç°ÔÝÊ±Ö»Ö§³Ömysql¡£
-$config->db->host       = '127.0.0.1';                  // mysqlÖ÷»ú¡£
-$config->db->port       = '3306';                       // mysqlÖ÷»ú¶Ë¿ÚºÅ¡£
-$config->db->name       = 'zentao';                     // Êý¾Ý¿âÃû³Æ¡£
-$config->db->user       = 'root';                       // Êý¾Ý¿âÓÃ»§Ãû¡£
-$config->db->password   = '';                           // ÃÜÂë¡£
-$config->db->encoding   = 'UTF8';                       // Êý¾Ý¿âµÄ±àÂë¡£
-$config->db->prefix     = 'zt_';                        // Êý¾Ý±íÇ°×º¡£
 $config->db->dao        = true;                         // ÊÇ·ñÊ¹ÓÃDAO¡£
+$config->db->encoding   = 'UTF8';                       // Êý¾Ý¿âµÄ±àÂë¡£
 
 /* °üº¬×Ô¶¨ÒåÅäÖÃÎÄ¼þ¡£*/
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
