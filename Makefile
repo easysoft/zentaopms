@@ -5,14 +5,16 @@ all: tgz
 clean:
 	rm -fr pms
 	rm -fr *.tar.gz
+	rm -fr *.zip
 tgz:
 	mkdir -p pms/lib
 	mkdir -p pms/db
 	mkdir -p pms/bin
+	mkdir -p pms/config
 	cp -fr db pms/
-	cp doc/COPY* pms
+	cp -fr doc/* pms/
 	cp -fr lib/ pms/
-	cp -fr config pms/
+	cp -fr config/config.php pms/config/
 	cp -fr www pms/
 	cp -fr module pms/
 	cp bin/computeburn.php pms/bin
@@ -22,6 +24,7 @@ tgz:
 	mkdir -p pms/tmp/log
 	chmod 777 -R pms/tmp/
 	tar czvf ZenTaoPMS.$(VERSION).tar.gz pms
+	zip -r -9 ZenTaoPMS.$(VERSION).zip pms
 	rm -fr pms
 pmsdoc:
 	phpdoc -d config,lib,module,www -t zentaopms -o HTML:frames:phphtmllib -ti ZenTaoPMSAPI²Î¿¼ÊÖ²á -s on -pp on -i *test*
