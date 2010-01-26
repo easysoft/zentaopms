@@ -304,7 +304,7 @@ EOT;
         else
         {
             $company = $this->company->getByDomain();
-            if(!$company) $company = $this->company->getByDomain($this->config->default->domain);
+            if(!$company and isset($this->config->default->domain)) $company = $this->company->getByDomain($this->config->default->domain);
             if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $_SERVER['HTTP_HOST']), __FILE__, __LINE__, $exit = true);
             $_SESSION['company'] = $company;
             $this->app->company  = $company;
