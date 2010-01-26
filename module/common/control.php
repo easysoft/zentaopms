@@ -289,7 +289,9 @@ EOT;
     /**
      * 设置当前访问的公司信息。
      * 
-     * 首先尝试按照当前访问的域名查找对应的公司信息，如果无法查到，再按照默认的域名进行查找。
+     * 首先尝试按照当前访问的域名查找对应的公司信息，
+     * 如果无法查到，再按照默认的域名进行查找。
+     * 如果还无法查到，则取第一个公司作为默认的公司。
      * 获取公司信息之后，将其写入到$_SESSION中。
      *
      * @access public
@@ -305,6 +307,7 @@ EOT;
         {
             $company = $this->company->getByDomain();
             if(!$company and isset($this->config->default->domain)) $company = $this->company->getByDomain($this->config->default->domain);
+            if(!$company) $company = $this->company->getFirst();
             if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $_SERVER['HTTP_HOST']), __FILE__, __LINE__, $exit = true);
             $_SESSION['company'] = $company;
             $this->app->company  = $company;

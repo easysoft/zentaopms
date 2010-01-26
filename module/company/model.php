@@ -36,6 +36,12 @@ class companyModel extends model
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->fetchAll();
     }
+
+    /* 获得第一个公司。*/
+    public function getFirst()
+    {
+        return $this->dao->select('*')->from(TABLE_COMPANY)->orderBy('id')->limit(1)->fetch();
+    }
     
     /**
      * 通过域名查找公司信息。
