@@ -1,0 +1,4 @@
+html{overflow:hidden;}
+body{height:100%; overflow:auto}
+div#footer, div#debugbar, div#hiddenbar{position:absolute;}
+.yui-d0 {width: 95%;} /* fix the error of fixed layout table. */
