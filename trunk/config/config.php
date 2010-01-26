@@ -44,7 +44,6 @@ $config->default->lang   = 'zh-cn';                     // 默认的语言。
 $config->default->theme  = 'default';                   // 默认的主题。
 $config->default->module = 'index';                     // 默认的模块。当请求中没有指定模块时，加载该模块。
 $config->default->method = 'index';                     // 默认的方法。当请求中没有指定方法或者指定的方法不存在时，调用该方法。
-$config->default->domain = 'pms.easysoft.com';          // 默认的域名，当请求中的域名没有对应的记录时，使用此默认域名对应的公司信息。
 
 $config->file->dangers = 'php,jsp,py,rb,asp,';          // 不允许上传的文件类型列表。
 $config->file->maxSize = 1024 * 1024;                   // 允许上传的文件大小，单位为字节。
@@ -57,6 +56,7 @@ $config->db->encoding   = 'UTF8';                       // 数据库的编码。
 /* 包含自定义配置文件。*/
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
 if(file_exists($myConfig)) include $myConfig;
+if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
 /* 数据表的定义。*/
 define('TABLE_ACTION',         $config->db->prefix . 'action');

@@ -74,6 +74,7 @@ class install extends control
                 $this->view = (object)$_POST;
                 $this->view->lang   = $this->lang;
                 $this->view->config = $this->config;
+                $this->view->domain = $this->server->HTTP_HOST;
                 $this->view->header->title = $this->lang->install->saveConfig;
                 $this->display();
             }
