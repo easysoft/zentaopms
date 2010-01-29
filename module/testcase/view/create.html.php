@@ -22,44 +22,20 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<style>#produc{width:245px} #story {width:90%}</style>
-<script language='Javascript'>
-/* 加载产品对应的模块和需求。*/
-function loadAll(productID)
-{
-    loadModuleMenu(productID);
-    loadStory(productID);
-}
-
-/* 加载模块。*/
-function loadModuleMenu(productID)
-{
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case');
-    $('#moduleIdBox').load(link);
-}
-
-/* 加载需求列表。*/
-function loadStory(productID)
-{
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
-    $('#storyIdBox').load(link);
-}
-
-</script>
+<?php include './header.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
       <caption><?php echo $lang->testcase->create;?></caption>
       <tr>
-        <th class='rowhead'><?php echo $lang->testcase->labProductAndModule;?></th>
+        <th class='rowhead'><?php echo $lang->testcase->lblProductAndModule;?></th>
         <td class='a-left'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
           <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
         </td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->testcase->labStory;?></th>
+        <th class='rowhead'><?php echo $lang->testcase->lblStory;?></th>
         <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, '', 'class=select-3');?></span></td>
       </tr>  
       <tr>
@@ -67,11 +43,39 @@ function loadStory(productID)
         <td class='a-left'><input type='text' name='title' class='text-1' /></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->testcase->title;?></th>
+        <td class='a-left'><textarea class='area-1'></textarea></td>
+      </tr>  
+      <tr>
         <th class='rowhead'><?php echo $lang->testcase->steps;?></th>
-        <td class='a-left'><textarea name='steps' class='area-1' rows='8'></textarea></td>
+        <td class='a-left'>
+          <table class='w-p90'>
+            <tr class='colhead'>
+              <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
+              <th><?php echo $lang->testcase->stepDesc;?></th>
+              <th><?php echo $lang->testcase->stepExpect;?></th>
+              <th class='w-100px'><?php echo $lang->action;?></th>
+            </tr>
+            <?php
+            for($i = 1; $i <= 5; $i ++)
+            {
+                echo "<tr id='row$i' class='a-center'>";
+                echo "<th class='stepID'>$i</th>";
+                echo '<td class="w-p50">' . html::textarea('steps[]', '', "class='w-p100'") . '</td>';
+                echo '<td>' . html::textarea('expects[]', '', "class='w-p100'") . '</td>';
+                echo "<td class='a-center w-100px'><nobr>";
+                echo "<input type='button' tabindex='-1' class='addbutton' onclick='preInsert($i)'  value='{$lang->testcase->insertBefore}' /> ";
+                echo "<input type='button' tabindex='-1' class='addbutton' onclick='postInsert($i)' value='{$lang->testcase->insertAfter}'  /> ";
+                echo "<input type='button' tabindex='-1' class='delbutton' onclick='deleteRow($i)'  value='{$lang->testcase->deleteStep}'   /> ";
+                echo "</nobr></td>";
+                echo '</tr>';
+            }
+            ?>
+          </table>
+        </td> 
       </tr>
       <tr>
-        <th class='rowhead'><?php echo $lang->testcase->labTypeAndPri;?></th>
+        <th class='rowhead'><?php echo $lang->testcase->lblTypeAndPri;?></th>
         <td class='a-left'>
           <?php echo html::select('type', (array)$lang->testcase->typeList, '', 'class=select-2');?>
           <?php echo html::select('pri', (array)$lang->testcase->priList, '', 'class=select-2');?>

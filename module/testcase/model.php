@@ -42,12 +42,27 @@ class testcaseModel extends model
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
             ->add('status', 'normal')
+            ->add('version', 1)
+            ->remove('steps,expects')
             ->setDefault('story', 0)
             ->stripTags('title')
             ->specialChars('steps')
             ->get();
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->check('title', 'notempty')->exec();
-        return $this->dao->lastInsertID();
+        if(!$this->dao->isError())
+        {
+            $caseID = $this->dao->lastInsertID();
+            foreach($this->post->steps as $stepID => $stepDesc)
+            {
+                if(empty($stepDesc)) continue;
+                $step->case    = $caseID;
+                $step->version = 1;
+                $step->desc    = htmlspecialchars($stepDesc);
+                $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
+                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+            }
+            return $caseID;
+        }
     }
 
     /* 获得某一个产品，某一个模块下面的所有case。*/
@@ -59,11 +74,14 @@ class testcaseModel extends model
     }
 
     /* 获取一个case的详细信息。*/
-    public function getById($caseID)
+    public function getById($caseID, $version = 0)
     {
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
         if($case->story) $case->storyTitle = $this->dao->findById($case->story)->from(TABLE_STORY)->fetch('title');
+        if($version == 0) $version = $case->version;
+        $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->fetchAll();
+        $case->files = $this->loadModel('file')->getByObject('case', $caseID);
         return $case;
     }
 
@@ -72,15 +90,40 @@ class testcaseModel extends model
     {
         $oldCase = $this->getById($caseID);
         $now     = date('Y-m-d H:i:s');
+        $version = $oldCase->version + 1;
         $case    = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->add('version', $version)
             ->setDefault('story', 0)
             ->stripTags('title')
-            ->specialChars('steps')
-            ->remove('comment')
+            ->remove('comment,steps,expects')
             ->get();
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck('title,status,type', 'notempty')->where('id')->eq((int)$caseID)->exec();
-        if(!dao::isError()) return common::createChanges($oldCase, $case);
+        if(!$this->dao->isError())
+        {
+            foreach($this->post->steps as $stepID => $stepDesc)
+            {
+                if(empty($stepDesc)) continue;
+                $step->case    = $caseID;
+                $step->version = $version;
+                $step->desc    = htmlspecialchars($stepDesc);
+                $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
+                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+            }
+
+            /* 将步骤合并为字符串，以计算diff。*/
+            $oldCase->steps = $this->joinStep($oldCase->steps);
+            $case->steps    = $this->joinStep($this->getById($caseID, $version)->steps);
+            return common::createChanges($oldCase, $case);
+        }
+    }
+
+    /* 合并步骤。*/
+    private function joinStep($steps)
+    {
+        $retrun = '';
+        foreach($steps as $step) $return .= $step->desc . ' EXPECT:' . $step->expect . "\n";
+        return $return;
     }
 }

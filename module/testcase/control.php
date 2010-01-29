@@ -128,27 +128,24 @@ class testcase extends control
     }
 
     /* 查看一个case。*/
-    public function view($caseID)
+    public function view($caseID, $version = 0)
     {
-        $this->loadModel('action');
-        $case = $this->testcase->getById($caseID);
+        /* 获取case和产品信息，并设置菜单。*/
+        $case      = $this->testcase->getById($caseID, $version);
         $productID = $case->product;
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->view;
-        $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->testcase->view;
-
-        /* 设置菜单。*/
         $this->testcase->setMenu($this->products, $productID);
 
-        $users   = $this->user->getPairs('noletter');
-        $actions = $this->action->getList('case', $caseID);
+        /* 导航信息。*/
+        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->view;
+        $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]      = $this->lang->testcase->view;
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('case',     $case);
-        $this->assign('actions',  $actions);
-        $this->assign('productName', $this->products[$productID]);
-        $this->assign('modulePath',  $this->tree->getParents($case->module));
+        /* 赋值。*/
+        $this->view->case        = $case;
+        $this->view->productName = $this->products[$productID];
+        $this->view->modulePath  = $this->tree->getParents($case->module);
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->actions     = $this->loadModel('action')->getList('case', $caseID);
 
         $this->display();
     }
@@ -197,6 +194,7 @@ class testcase extends control
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('case',      $case);
+        $this->view->actions     = $this->loadModel('action')->getList('case', $caseID);
 
         $this->display();
     }
