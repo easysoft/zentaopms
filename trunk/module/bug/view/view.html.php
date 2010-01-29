@@ -48,7 +48,7 @@
         <div class='content'><?php echo nl2br($bug->steps);?></div>
       </fieldset>
       <fieldset>
-      <legend><?php echo $lang->bug->legendAttatch;?></legend>
+        <legend><?php echo $lang->bug->legendAttatch;?></legend>
         <div><?php foreach($bug->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
       </fieldset>
       <?php include '../../common/action.html.php';?>

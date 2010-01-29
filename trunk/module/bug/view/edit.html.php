@@ -160,9 +160,8 @@ function setDuplicate(resolution)
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendAttatch;?></legend>
-            <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
+          <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
           </fieldset>
-          
           <div class='a-center'>
             <?php echo html::submitButton();?>
             <input type='button' value='<?php echo $lang->bug->buttonToList;?>' class='button-s' 
