@@ -393,8 +393,8 @@ EOT;
     /* 比较两个字符串的不同。摘自PHPQAT自动化测试框架。*/
     public static function diff($text1, $text2)
     {
-        $w  = explode("\n", $text1);
-        $o  = explode("\n", $text2);
+        $w  = explode("\n", trim($text1));
+        $o  = explode("\n", trim($text2));
         $w1 = array_diff_assoc($w,$o);
         $o1 = array_diff_assoc($o,$w);
         $w2 = array();

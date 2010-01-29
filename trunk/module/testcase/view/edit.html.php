@@ -22,33 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<style>#produc{width:245px} #story {width:90%}</style>
-<script language='Javascript'>
-storyID ='<?php echo $case->story;?>'
-/* 加载产品对应的模块和需求。*/
-function loadAll(productID)
-{
-    loadModuleMenu(productID);
-    loadStory(productID);
-}
-
-/* 加载模块。*/
-function loadModuleMenu(productID)
-{
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case');
-    $('#moduleIdBox').load(link);
-}
-
-/* 加载需求列表。*/
-function loadStory(productID)
-{
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=0&storyID=' + storyID);
-    $('#storyIdBox').load(link);
-}
-
-</script>
-
+<?php include './header.html.php';?>
+<style>#module{width:90%}</style>
 <form method='post' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -60,112 +35,102 @@ function loadStory(productID)
   </div>
 </div>
 
-<div class='yui-d0 yui-t7'>
-  <div class='yui-g'>  
-
-    <div class='yui-u first'>  
+<div class='yui-d0 yui-t8'>
+  <div class='yui-main'>
+    <div class='yui-b'>
       <fieldset>
-        <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
-        <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
-          <tr>
-            <td class='rowhead'><?php echo $lang->testcase->labProductAndModule;?></td>
-            <td>
-              <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
-              <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
-            </td>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->testcase->type;?></td>
-            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=select-2');?>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
-            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=select-2');?>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->testcase->status;?></td>
-            <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=select-2');?></td>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-            <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-3');?></span></td>
-          </tr>
-        </table>
-      </fieldset>
-
-      <!--
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendMailto;?></legend>
-        <div>mailto</div>
+        <legend><?php echo $lang->testcase->legendSteps;?></legend>
+        <div class='a-center'>
+          <table class='table-1 bd-1px'>
+            <tr class='colhead'>
+              <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
+              <th><?php echo $lang->testcase->stepDesc;?></th>
+              <th><?php echo $lang->testcase->stepExpect;?></th>
+              <th class='w-100px'><?php echo $lang->action;?></th>
+            </tr>
+            <?php
+            foreach($case->steps as $stepID => $step)
+            {
+                $stepID += 1;
+                echo "<tr id='row$stepID' class='a-center'>";
+                echo "<th class='stepID'>$stepID</th>";
+                echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "class='w-p100'") . '</td>';
+                echo '<td>' . html::textarea('expects[]', $step->expect, "class='w-p100'") . '</td>';
+                echo "<td class='a-center w-100px'><nobr>";
+                echo "<input type='button' tabindex='-1' class='addbutton' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' /> ";
+                echo "<input type='button' tabindex='-1' class='addbutton' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  /> ";
+                echo "<input type='button' tabindex='-1' class='delbutton' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   /> ";
+                echo "</nobr></td>";
+                echo '</tr>';
+            }
+            ?>
+          </table>
+        </div>
       </fieldset>
 
       <fieldset>
-      <legend><?php echo $lang->testcase->legendAttatch;?></legend>
-        <div>attatch</div>
-      </fieldset>
-      -->
-      
-    </div>  
-
-    <div class='yui-u'>  
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendOpenInfo;?></legend>
-        <table class='table-1 a-left'>
-          <tr>
-            <td width='40%' class='rowhead'><?php echo $lang->testcase->openedBy;?></td>
-            <td><?php echo $case->openedBy;?></td>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->testcase->openedDate;?></td>
-            <td><?php echo $case->openedDate;?></td>
-          </tr>
-        </table>
-      </fieldset>
-
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendLastInfo;?></legend>
-        <table class='table-1 a-left'>
-          <tr>
-            <td class='rowhead'><?php echo $lang->testcase->lastEditedBy;?></td>
-            <td><?php echo $case->lastEditedBy;?></td>
-          </tr>
-          <tr>
-            <td class='rowhead'><?php echo $lang->testcase->lastEditedDate;?></td>
-            <td><?php echo $case->lastEditedDate;?></td>
-          </tr>
-        </table>
+        <legend><?php echo $lang->testcase->legendComment;?></legend>
+        <textarea name='comment' rows='6' class='w-p100'></textarea>
       </fieldset>
       <!--
       <fieldset>
-        <legend><?php echo $lang->testcase->legendLinkBugs;?></legend>
-        <div> linkcase </div>
+        <legend><?php echo $lang->testcase->legendAttatch;?></legend>
+        <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
       </fieldset>
       -->
 
-    </div>  
+      <div class='a-center'>
+       <?php echo html::submitButton();?>
+       <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='button-s' 
+            onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
+      </div>
+      <?php include '../../common/action.html.php';?>
+
+    </div>
   </div>
-</div>  
 
-<div class='yui-d0'>
-  <fieldset>
-    <legend><?php echo $lang->testcase->legendSteps;?></legend>
-    <div class='a-center'>
-      <textarea name='steps' rows='5' class='area-1'><?php echo $case->steps;?></textarea>
-    </div>
-  </fieldset>
-  <fieldset>
-    <legend><?php echo $lang->testcase->legendComment;?></legend>
-    <div class='a-center'>
-      <textarea name='comment' rows='4' class='area-1'></textarea></td>
-    </div>
-  </fieldset>
-  <fieldset>
-    <legend><?php echo $lang->testcase->legendAction;?></legend>
-    <div class='a-center'>
-      <?php echo html::submitButton();?>
-      <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='button-s' 
-           onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
-    </div>
-  </fieldset>
+  <div class='yui-b'>
+    <fieldset>
+      <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
+      <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
+        <tr>
+          <td class='rowhead w-p20'><?php echo $lang->testcase->product;?></td>
+          <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-1'");?></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->testcase->module;?></td>
+          <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "class='select-1'");?></span></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->testcase->type;?></td>
+          <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=select-1');?>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
+          <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=select-1');?>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->testcase->status;?></td>
+          <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=select-1');?></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->testcase->story;?></td>
+          <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></span></td>
+        </tr>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>
+      <table class='table-1 a-left'>
+        <tr>
+          <td class='rowhead w-p20'><?php echo $lang->testcase->openedBy;?></td>
+          <td><?php echo $case->openedBy . $lang->at . $case->openedDate;?></td>
+        <tr>
+          <td class='rowhead'><?php echo $lang->testcase->lblLastEdited;?></td>
+          <td><?php if($case->lastEditedBy) echo $case->lastEditedBy . $lang->at . $case->lastEditedDate;?></td>
+        </tr>
+      </table>
+    </fieldset>
+  </div>
 </div>
 <?php include '../../common/footer.html.php';?>

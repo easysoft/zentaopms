@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/colorize.html.php';?>
 
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -36,15 +37,36 @@
   </div>
 </div>
 
-<div class='yui-d0 yui-t6'>
+<div class='yui-d0 yui-t8'>
   <div class='yui-main'>
     <div class='yui-b'>
       <fieldset>
         <legend><?php echo $lang->testcase->legendSteps;?></legend>
-        <div class='content'>
-        <?php echo nl2br($case->steps);?>
-        </div>
+        <table class='table-1 bd-1px bd-gray colored'>
+          <tr class='colhead'>
+          <th class='w-30px bd-1px bd-gray'><?php echo $lang->testcase->stepID;?></td>
+          <th class='w-p70 bd-1px bd-gray'><?php echo $lang->testcase->stepDesc;?></td>
+          <th class='bd-1px bd-gray'><?php echo $lang->testcase->stepExpect;?></td>
+          </tr> 
+        <?php
+        foreach($case->steps as $stepID => $step)
+        {
+            $stepID += 1;
+            echo "<tr class='bd-1px bd-gray'><th class='bd-1px bd-gray'>$stepID</th>";
+            echo "<td class='bd-1px bd-gray'>" . nl2br($step->desc) . "</td>";
+            echo "<td>" . nl2br($step->expect) . "</td>";
+            echo "</tr>";
+        }
+        ?>
+        </table>
       </fieldset>
+      <!--
+      <fieldset>
+        <legend><?php echo $lang->testcase->legendAttatch;?></legend>
+        <div><?php foreach($case->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
+      </fieldset>
+      -->
+
       <?php include '../../common/action.html.php';?>
       <fieldset>
         <legend><?php echo $lang->testcase->legendAction;?></legend>
@@ -62,21 +84,23 @@
       <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
       <table class='table-1 a-left fixed'>
         <tr>
-          <td class='rowhead'><?php echo $lang->testcase->labProductAndModule;?></td>
-          <td class='nobr'>
-            <?php 
-            echo $productName;
-            if(!empty($modulePath)) echo $lang->arrow;
-            foreach($modulePath as $key => $module)
-            {
-                echo $module->name;
-                if(isset($modulePath[$key + 1])) echo $lang->arrow;
-            }
-            ?>
+          <td class='rowhead w-p20'><?php echo $lang->testcase->product;?></td>
+          <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
+        </tr>
+        <tr>
+          <td class='rowhead w-p20'><?php echo $lang->testcase->module;?></td>
+          <td>
+          <?php 
+          foreach($modulePath as $key => $module)
+          {
+              if(!common::printLink('testcase', 'browse', "productID=$case->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+              if(isset($modulePath[$key + 1])) echo $lang->arrow;
+          }
+          ?>
           </td>
         </tr>
         <tr>
-          <td class='rowhead'><?php echo $lang->testcase->type;?></td>
+          <td class='rowhead w-p20'><?php echo $lang->testcase->type;?></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
         </tr>
         <tr>
@@ -95,55 +119,28 @@
             ?>
           </td>
         </tr>
-        
       </table>
     </fieldset>
 
-    <!--
     <fieldset>
-      <legend><?php echo $lang->testcase->legendMailto;?></legend>
-      <div>mailto</div>
-    </fieldset>
-
-    <fieldset>
-    <legend><?php echo $lang->testcase->legendAttatch;?></legend>
-      <div>attatch</div>
-    </fieldset>
-    -->
-    <fieldset>
-      <legend><?php echo $lang->testcase->legendOpenInfo;?></legend>
+      <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>
       <table class='table-1 a-left'>
         <tr>
-          <td width='40%' class='rowhead'><?php echo $lang->testcase->openedBy;?></td>
-          <td><?php echo $case->openedBy;?></td>
+          <td class='rowhead w-p20'><?php echo $lang->testcase->openedBy;?></td>
+          <td><?php echo $case->openedBy . $lang->at . $case->openedDate;?></td>
         </tr>
         <tr>
-          <td class='rowhead'><?php echo $lang->testcase->openedDate;?></td>
-          <td><?php echo $case->openedDate;?></td>
+          <td class='rowhead w-p20'><?php echo $lang->testcase->lblLastEdited;?></td>
+          <td><?php if($case->lastEditedBy) echo $case->lastEditedBy . $lang->at . $case->lastEditedDate;?></td>
         </tr>
       </table>
     </fieldset>
-
     <fieldset>
-      <legend><?php echo $lang->testcase->legendLastInfo;?></legend>
-      <table class='table-1 a-left'>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->lastEditedBy;?></td>
-          <td><?php echo $case->lastEditedBy;?></td>
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->lastEditedDate;?></td>
-          <td><?php echo $case->lastEditedDate;?></td>
-        </tr>
-      </table>
+      <legend><?php echo $lang->testcase->legendVersion;?></legend>
+      <div>
+        <?php for($i = $case->version; $i >= 1; $i --) echo html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i) . ' ';?>    
+      </div>
     </fieldset>
-
-    <!--
-    <fieldset>
-      <legend><?php echo $lang->testcase->legendLinkBugs;?></legend>
-      <div> linkcase </div>
-    </fieldset>
-    -->
   </div>
 </div>
 <?php include '../../common/footer.html.php';?>
