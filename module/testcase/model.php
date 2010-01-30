@@ -32,6 +32,7 @@ class testcaseModel extends model
         common::setMenuVars($this->lang->testcase->menu, 'product',  $selectHtml . $this->lang->arrow);
         common::setMenuVars($this->lang->testcase->menu, 'bug',      $productID);
         common::setMenuVars($this->lang->testcase->menu, 'testcase', $productID);
+        common::setMenuVars($this->lang->testcase->menu, 'testtask', $productID);
     }
 
     /* 创建一个Case。*/
