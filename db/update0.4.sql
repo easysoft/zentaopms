@@ -11,3 +11,29 @@ ALTER TABLE `zt_caseStep` ADD INDEX ( `case` , `version` ) ;
 update zt_case set version = 1 where version = 0;
 insert into zt_caseStep select '', id,version,steps, '' from zt_case;
 ALTER TABLE `zt_case` DROP `steps`;
+
+--20100139 调整taskcase表
+DROP TABLE `zt_testPlan`;
+CREATE TABLE IF NOT EXISTS `zt_testTask` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `name` char(90) NOT NULL,
+  `product` mediumint(8) unsigned NOT NULL,
+  `project` mediumint(8) unsigned NOT NULL default '0',
+  `build` char(30) NOT NULL,
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
+  `desc` text NOT NULL,
+  `status` char(30) NOT NULL,
+  PRIMARY KEY  (`id`)
+  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+DROP TABLE `zt_planCase`;
+CREATE TABLE IF NOT EXISTS `zt_taskCase` (
+    `id` mediumint(8) unsigned NOT NULL auto_increment,
+    `task` mediumint(8) unsigned NOT NULL default '0',
+    `case` mediumint(8) unsigned NOT NULL default '0',
+    `version` tinyint(3) unsigned NOT NULL default '0',
+    `assignedTo` char(30) NOT NULL default '',
+    PRIMARY KEY  (`id`),
+    UNIQUE KEY `task` (`task`,`case`)
+    ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
