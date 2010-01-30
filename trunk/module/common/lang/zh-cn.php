@@ -107,10 +107,17 @@ $lang->build->menu           = $lang->project->menu;
 $lang->bug->menu->product  = '%s';
 $lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->bug->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
 
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active');
 $lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
+$lang->testcase->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
+
+$lang->testtask->menu->product  = '%s';
+$lang->testtask->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active');
+$lang->testtask->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
+$lang->testtask->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->browseUser  = array('link' => '用户列表|company|browse', 'subModule' => 'user');
@@ -151,6 +158,7 @@ $lang->menugroup->user        = 'company';
 $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
 $lang->menugroup->testcase    = 'qa';
+$lang->menugroup->testtask    = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';

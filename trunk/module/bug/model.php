@@ -32,6 +32,7 @@ class bugModel extends model
         common::setMenuVars($this->lang->bug->menu, 'product',  $selectHtml . $this->lang->arrow);
         common::setMenuVars($this->lang->bug->menu, 'bug',      $productID);
         common::setMenuVars($this->lang->bug->menu, 'testcase', $productID);
+        common::setMenuVars($this->lang->bug->menu, 'testtask', $productID);
     }
 
     /* 创建一个Bug。*/
