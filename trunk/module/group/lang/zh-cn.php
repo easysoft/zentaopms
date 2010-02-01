@@ -145,6 +145,7 @@ $lang->resource->testcase->view    = 'view';
 $lang->resource->testcase->edit    = 'edit';
 
 $lang->resource->testtask->index       = 'index';
+$lang->resource->testtask->create      = 'create';
 $lang->resource->testtask->browse      = 'browse';
 $lang->resource->testtask->view        = 'view';
 $lang->resource->testtask->edit        = 'edit';
