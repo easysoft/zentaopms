@@ -28,12 +28,31 @@ CREATE TABLE IF NOT EXISTS `zt_testTask` (
   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 DROP TABLE `zt_planCase`;
-CREATE TABLE IF NOT EXISTS `zt_taskCase` (
-    `id` mediumint(8) unsigned NOT NULL auto_increment,
-    `task` mediumint(8) unsigned NOT NULL default '0',
-    `case` mediumint(8) unsigned NOT NULL default '0',
-    `version` tinyint(3) unsigned NOT NULL default '0',
-    `assignedTo` char(30) NOT NULL default '',
-    PRIMARY KEY  (`id`),
-    UNIQUE KEY `task` (`task`,`case`)
-    ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_testRun` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `task` mediumint(8) unsigned NOT NULL default '0',
+  `case` mediumint(8) unsigned NOT NULL default '0',
+  `version` tinyint(3) unsigned NOT NULL default '0',
+  `assignedTo` char(30) NOT NULL default '',
+  `runDate` datetime NOT NULL,
+  `result` char(30) NOT NULL,
+  `status` char(30) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `task` (`task`,`case`)
+  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+--20100201 调整测试结果表。
+DROP TABLE `zt_caseResult`;
+DROP TABLE `zt_stepResult`;
+CREATE TABLE IF NOT EXISTS `zt_testResult` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `run` mediumint(8) unsigned NOT NULL,
+  `case` mediumint(8) unsigned NOT NULL,
+  `version` smallint(5) unsigned NOT NULL,
+  `caseResult` char(30) NOT NULL,
+  `stepResults` text NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `run` (`run`),
+  KEY `case` (`case`,`version`)
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
