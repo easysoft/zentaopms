@@ -57,4 +57,4 @@ $lang->testtask->statusList['blocked'] = '被阻塞';
 
 $lang->testtask->unlinkedCases = '未关联用例列表';
 $lang->testtask->linkedCases   = '已关联用例列表';
-$lang->testtask->confirmDelete = '您确认要删除改测试任务吗？';
+$lang->testtask->confirmDelete = '您确认要删除该测试任务吗？';
