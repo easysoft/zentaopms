@@ -223,7 +223,7 @@ class testtask extends control
     /* 批量指派。*/
     public function batchAssign($taskID)
     {
-        $this->dao->update(TABLE_TASKCASE)
+        $this->dao->update(TABLE_TESTRUN)
             ->set('assignedTo')->eq($this->post->assignedTo)
             ->where('task')->eq((int)$taskID)
             ->andWhere('`case`')->in($this->post->cases)
