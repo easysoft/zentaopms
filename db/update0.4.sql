@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS `zt_testRun` (
   `case` mediumint(8) unsigned NOT NULL default '0',
   `version` tinyint(3) unsigned NOT NULL default '0',
   `assignedTo` char(30) NOT NULL default '',
-  `runDate` datetime NOT NULL,
-  `result` char(30) NOT NULL,
+  `lastRun` datetime NOT NULL,
+  `lastResult` char(30) NOT NULL,
   `status` char(30) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `task` (`task`,`case`)
