@@ -18,12 +18,28 @@
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     case
- * @version     $Id: view.html.php 355 2010-01-29 06:59:40Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/colorize.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
+<?php include '../../common/colorbox.html.php';?>
+<script language='javascript'>
+$(document).ready(function()
+{
+    $("a.iframe").colorbox({width:900, height:600, iframe:true, transition:'none'});
+});
+
+function checkall(checker)
+{
+    $('input').each(function() 
+    {
+        $(this).attr("checked", checker.checked)
+    });
+}
+</script>
 <div class='yui-d0'>
   <table class='table-1'> 
      <caption><?php echo $lang->testtask->view;?></caption>
@@ -33,7 +49,7 @@
      </tr>  
      <tr>
        <th class='rowhead'><?php echo $lang->testtask->build;?></th>
-       <td><?php echo $task->buildName;?></td>
+       <td><?php $task->buildName ? print($task->buildName) : print($task->build);?></td>
      </tr>  
      <tr>
        <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
@@ -56,38 +72,58 @@
        <td><?php echo nl2br($task->desc);?>
      </tr>  
   </table>
+  <form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'>
   <table class='table-1 colored tablesorter'>
-    <caption><?php echo $lang->testtask->linkedCases;?></caption>
+    <caption>
+      <div class='f-left'><?php echo $lang->testtask->linkedCases;?></div>
+      <div class='f-right'><?php common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);?></div>
+    </caption>
     <thead>
     <tr>
-      <th><?php echo $lang->testcase->id;?></th>
+      <th class='w-20px'><nobr><?php echo $lang->testcase->id;?></nobr></th>
       <th><?php echo $lang->testcase->pri;?></th>
-      <th><?php echo $lang->testcase->title;?></th>
+      <th class='w-p40'><?php echo $lang->testcase->title;?></th>
       <th><?php echo $lang->testcase->type;?></th>
-      <th><?php echo $lang->testcase->openedBy;?></th>
-      <th><?php echo $lang->testcase->status;?></th>
+      <th><?php echo $lang->testtask->assignedTo;?></th>
+      <th><?php echo $lang->testtask->lastRun;?></th>
+      <th><?php echo $lang->testtask->lastResult;?></th>
+      <th><?php echo $lang->testtask->status;?></th>
       <th><?php echo $lang->action;?></th>
     </tr>
     </thead>
     <tbody>
-    <?php foreach($cases as $case):?>
+    <?php foreach($runs as $run):?>
     <tr class='a-center'>
-      <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
-      <td><?php echo $case->pri?></td>
-      <td width='50%' class='a-left'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version"), $case->title, '_blank');?>
+      <td class='a-left'><?php echo "<input type='checkbox' name='cases[]' value='$run->case' /> ";  printf('%03d', $run->case);?></td>
+      <td><?php echo $run->pri?></td>
+      <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version"), $run->title, '_blank');?>
       </td>
-      <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-      <td><?php echo $users[$case->openedBy];?></td>
-      <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+      <td><?php echo $lang->testcase->typeList[$run->type];?></td>
+      <td><?php echo $users[$run->assignedTo];?></td>
+      <td><?php if(substr($run->lastRun, 0, 4) != '0000') echo date('y-m-d H:i', strtotime($run->lastRun));?></td>
+      <td class='<?php echo $run->lastResult;?>'><?php if($run->lastResult) echo $lang->testcase->resultList[$run->lastResult];?></td>
+      <td class='<?php echo $run->status;?>'><?php echo $lang->testtask->statusList[$run->status];?></td>
       <td>
         <?php
-        common::printLink('testtask', 'unlinkcase',  "id=$case->id", $lang->testtask->unlinkCase, 'hiddenwin');
-        common::printLink('testtask', 'executecase', "taskID=$task->id&caseid=$case->id", $lang->testtask->executeCase);
+        common::printLink('testtask', 'runcase',    "id=$run->id", $lang->testtask->runCase, '', 'class="iframe"');
+        common::printLink('testtask', 'results',    "id=$run->id", $lang->testtask->results, '', 'class="iframe"');
+        //common::printLink('bug',       'create',    "id=$run->id", $lang->testtask->createBug);
+        common::printLink('testtask', 'unlinkcase', "id=$run->id", $lang->testtask->unlinkCase, 'hiddenwin');
+        ?>
+      </td>
+    </tr>
+    <?php endforeach;?>
+    <tr>
+      <td><nobr><?php echo "<input type='checkbox' onclick='checkall(this);'> " . $lang->selectAll;?></nobr></td>
+      <td colspan='9'>
+        <?php
+        echo html::select('assignedTo', $users);
+        echo html::submitButton($lang->testtask->assign);
         ?>
       </td>
     </tr>
     </tbody>
-    <?php endforeach;?>
   </table>
+  </form>
 </div>
 <?php include '../../common/footer.html.php';?>

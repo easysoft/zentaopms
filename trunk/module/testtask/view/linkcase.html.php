@@ -25,6 +25,15 @@
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/colorize.html.php';?>
 <?php include '../../common/tablesorter.html.php';?>
+<script language="Javascript">
+function checkall(checker)
+{
+    $('input').each(function() 
+    {
+        $(this).attr("checked", checker.checked)
+    });
+}
+</script>
 <div class='yui-d0'>
   <?php echo $searchForm;?>
   <form method='post'>
@@ -38,7 +47,7 @@
       <th><?php echo $lang->testcase->type;?></th>
       <th><?php echo $lang->testcase->openedBy;?></th>
       <th><?php echo $lang->testcase->status;?></th>
-      <th><?php echo $lang->testtask->linkCase . '/' . $lang->testcase->version;?></th>
+      <th class='w-50px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
     </tr>
     </thead>
     <tbody>
@@ -59,14 +68,17 @@
       <td><?php echo $lang->testcase->typeList[$case->type];?></td>
       <td><?php echo $users[$case->openedBy];?></td>
       <td><?php echo $lang->testcase->statusList[$case->status];?></td>
-      <td>
+      <td class='a-left'><nobr>
         <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
-        <?php echo html::select('versions[]', array_combine(range($case->version, 1), range($case->version, 1)), '', 'style=width:50px');?>
+        <?php echo html::select('versions[]', array_combine(range($case->version, 1), range($case->version, 1)), '', 'style=width:50px');?></nobr>
       </td>
     </tr>
     </tbody>
     <?php endforeach;?>
-    <tr><td colspan='7' class='a-center'><?php echo html::submitButton();?></td></tr>
+    <tr class='a-center'>
+      <td colspan='6'><?php echo html::submitButton();?></td>
+      <td class='a-left'><input type='checkbox' onclick='checkall(this);'><?php echo $lang->selectAll;?></td>
+    </tr>
   </table>
   </form>
 </div>  

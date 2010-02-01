@@ -102,9 +102,9 @@ class testtask extends control
         $this->view->position[]      = $this->lang->testtask->view;
 
         /* 赋值。*/
-        $this->view->task   = $task;
-        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->cases  = $this->testtask->getCases($taskID);
+        $this->view->task  = $task;
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->runs  = $this->testtask->getRuns($taskID);
 
         $this->display();
     }
@@ -163,13 +163,14 @@ class testtask extends control
             $this->locate(inlink('view', "taskID=$taskID"));
         }
 
-        /* 构造搜索表单。*/
-        $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID");
-        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
-
         /* 获得task信息。*/
         $task      = $this->testtask->getById($taskID);
         $productID = common::saveProductState($task->product, key($this->products));
+
+        /* 构造搜索表单。*/
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID");
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
 
         /* 设置菜单。*/
         $this->testtask->setMenu($this->products, $productID);
@@ -181,10 +182,52 @@ class testtask extends control
 
         /* 获得用例列表。*/
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
-        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)->andWhere('product')->eq($productID)->orderBy('id desc')->fetchAll();
+        $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
+        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)->andWhere('product')->eq($productID)->andWhere('id')->notIN($linkedCases)->orderBy('id desc')->fetchAll();
 
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
+    }
+
+    /* 移除用例。*/
+    public function unlinkCase($rowID)
+    {
+        $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->exec();
+        die(js::reload('parent'));
+    }
+
+    /* 执行用例。*/
+    public function runCase($runID)
+    {
+        if(!empty($_POST))
+        {
+            $this->testtask->createResult($runID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            echo js::reload('parent');
+            die(js::closeWindow());
+        }
+
+        $this->view->run = $this->testtask->getRunById($runID);
+        die($this->display());
+    }
+
+    /* 查看结果列表。*/
+    public function results($runID)
+    {
+        $this->view->run     = $this->testtask->getRunById($runID);
+        $this->view->results = $this->testtask->getRunResults($runID);
+        die($this->display());
+    }
+
+    /* 批量指派。*/
+    public function batchAssign($taskID)
+    {
+        $this->dao->update(TABLE_TASKCASE)
+            ->set('assignedTo')->eq($this->post->assignedTo)
+            ->where('task')->eq((int)$taskID)
+            ->andWhere('`case`')->in($this->post->cases)
+            ->exec();
+        die(js::reload('parent'));
     }
 }
