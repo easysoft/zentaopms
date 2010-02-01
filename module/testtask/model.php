@@ -91,17 +91,83 @@ class testtaskModel extends model
             $row->task       = $taskID;
             $row->case       = $caseID;
             $row->version    = $this->post->versions[$key];
-            $row->assignedTo = $this->app->user->account;
-            $this->dao->replace(TABLE_TASKCASE)->data($row)->exec();
+            $row->assignedTo = '';
+            $row->status     = 'wait';
+            $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
         }
     }
 
-    /* 获得任务的用例列表。*/
-    public function getCases($taskID)
+    /* 获得任务的执行用例列表。*/
+    public function getRuns($taskID)
     {
-        return $this->dao->select('t2.*,t1.*')->from(TABLE_TASKCASE)->alias('t1')
+        return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq((int)$taskID)
             ->fetchAll();
+    }
+
+    /* 获得某一个testrun的信息。*/
+    public function getRunById($runID)
+    {
+        $testRun = $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
+        $testRun->case = $this->loadModel('testcase')->getById($testRun->case, $testRun->version);
+        return $testRun;
+    }
+
+    /* 创建测试结果。*/
+    public function createResult($runID)
+    {
+        /* 计算case的结果。*/
+        $caseResult = 'pass';
+        foreach($this->post->steps as $stepID => $stepResult)
+        {
+            if($stepResult != 'pass' and $stepResult != 'n/a')
+            {
+                $caseResult = $stepResult;
+                break;
+            }
+        }
+
+        /* 合并步骤的实际输出结果。*/
+        foreach($this->post->steps as $stepID =>$stepResult)
+        {
+            $step['result'] = $stepResult;
+            $step['real']   = $this->post->reals[$stepID];
+            $stepResults[$stepID] = $step;
+        }
+
+        $now = date('Y-m-d H:i:s');
+        $result = fixer::input('post')
+            ->add('run', $runID)
+            ->add('caseResult', $caseResult)
+            ->setForce('stepResults', serialize($stepResults))
+            ->add('date', $now)
+            ->remove('steps')
+            ->remove('reals')
+            ->get();
+        $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+        if(!dao::isError())
+        {
+            $runStatus = $caseResult == 'blocked' ? 'blocked' : 'done';
+            $this->dao->update(TABLE_TESTRUN)
+                ->set('lastResult')->eq($caseResult)
+                ->set('status')->eq($runStatus)
+                ->set('lastRun')->eq($now)
+                ->where('id')->eq($runID)
+                ->exec();
+        }
+    }
+
+    /* 获得执行结果。*/
+    public function getRunResults($runID)
+    {
+        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
+        if(!$results) return array();
+        foreach($results as $resultID => $result)
+        {
+            $result->stepResults = unserialize($result->stepResults);
+            $results[$resultID] = $result;
+        }
+        return $results;
     }
 }

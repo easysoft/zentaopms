@@ -47,6 +47,7 @@ $lang->feature    = '未来';
 $lang->year       = '年';
 $lang->downArrow  = '↓';
 $lang->goback     = '返回';
+$lang->selectAll  = '全选';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';

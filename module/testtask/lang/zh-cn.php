@@ -29,7 +29,11 @@ $lang->testtask->name           = '测试任务名称';
 $lang->testtask->begin          = '开始日期';
 $lang->testtask->end            = '结束日期';
 $lang->testtask->desc           = '任务描述';
-$lang->testtask->status         = '测试任务状态';
+$lang->testtask->status         = '状态';
+$lang->testtask->assignedTo     = '指派给';
+$lang->testtask->linkVersion    = '关联(版本)';
+$lang->testtask->lastRun        = '最后执行';
+$lang->testtask->lastResult     = '最终结果';
 
 $lang->testtask->common         = '测试任务';
 $lang->testtask->index          = "测试任务首页";
@@ -39,12 +43,17 @@ $lang->testtask->view           = "测试任务详情";
 $lang->testtask->edit           = "编辑测试任务";
 $lang->testtask->browse         = "测试任务列表";
 $lang->testtask->linkCase       = "关联用例";
-$lang->testtask->unlinkCase     = "移除用例";
-$lang->testtask->executeCase    = "执行用例";
+$lang->testtask->unlinkCase     = "移除";
+$lang->testtask->batchAssign    = "批量指派";
+$lang->testtask->runCase        = "执行";
+$lang->testtask->results        = "结果";
+$lang->testtask->createBug      = "创建Bug";
+$lang->testtask->assign         = '指派';
 
-$lang->testtask->statusList['wait']  = '未开始';
-$lang->testtask->statusList['doing'] = '进行中';
-$lang->testtask->statusList['done']  = '已完成';
+$lang->testtask->statusList['wait']    = '未开始';
+$lang->testtask->statusList['doing']   = '进行中';
+$lang->testtask->statusList['done']    = '已完成';
+$lang->testtask->statusList['blocked'] = '被阻塞';
 
 $lang->testtask->unlinkedCases = '未关联用例列表';
 $lang->testtask->linkedCases   = '已关联用例列表';

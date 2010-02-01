@@ -144,6 +144,17 @@ $lang->resource->testcase->create  = 'create';
 $lang->resource->testcase->view    = 'view';
 $lang->resource->testcase->edit    = 'edit';
 
+$lang->resource->testtask->index       = 'index';
+$lang->resource->testtask->browse      = 'browse';
+$lang->resource->testtask->view        = 'view';
+$lang->resource->testtask->edit        = 'edit';
+$lang->resource->testtask->delete      = 'delete';
+$lang->resource->testtask->batchAssign = 'batchAssign';
+$lang->resource->testtask->linkcase    = 'linkCase';
+$lang->resource->testtask->unlinkcase  = 'unlinkCase';
+$lang->resource->testtask->runcase     = 'runCase';
+$lang->resource->testtask->results     = 'results';
+
 $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
 $lang->resource->company->create = 'create';

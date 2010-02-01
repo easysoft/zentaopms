@@ -1,6 +1,6 @@
 <?php
 /**
- * The testtestcase module zh-cn file of ZenTaoMS.
+ * The testcase module zh-cn file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,7 @@
  *
  * @copyright   Copyright: 2009 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
- * @package     testtestcase
+ * @package     testcase
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
@@ -40,6 +40,8 @@ $lang->testcase->field1         = '字段一';
 $lang->testcase->field2         = '字段二';
 $lang->testcase->feidl3         = '字段三';
 $lang->testcase->version        = '用例版本';
+$lang->testcase->result         = '测试结果';
+$lang->testcase->real           = '实际情况';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID     = '编号';
@@ -101,6 +103,11 @@ $lang->testcase->typeList['performance'] = '性能测试';
 $lang->testcase->statusList['']         = '';
 $lang->testcase->statusList['normal']   = '正常';
 $lang->testcase->statusList['blocked']  = 'Blocked';
+
+$lang->testcase->resultList['n/a']     = 'N/A';
+$lang->testcase->resultList['pass']    = '通过';
+$lang->testcase->resultList['fail']    = '失败';
+$lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonEdit     = '编辑';
 $lang->testcase->buttonToList   = '返回';
