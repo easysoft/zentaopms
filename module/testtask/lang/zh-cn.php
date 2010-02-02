@@ -24,12 +24,12 @@
 $lang->testtask->id             = '任务编号';
 $lang->testtask->product        = '所属产品';
 $lang->testtask->project        = '所属项目';
-$lang->testtask->build          = '相关Build';
-$lang->testtask->name           = '测试任务名称';
+$lang->testtask->build          = 'Build';
+$lang->testtask->name           = '任务名称';
 $lang->testtask->begin          = '开始日期';
 $lang->testtask->end            = '结束日期';
 $lang->testtask->desc           = '任务描述';
-$lang->testtask->status         = '状态';
+$lang->testtask->status         = '当前状态';
 $lang->testtask->assignedTo     = '指派给';
 $lang->testtask->linkVersion    = '关联(版本)';
 $lang->testtask->lastRun        = '最后执行';

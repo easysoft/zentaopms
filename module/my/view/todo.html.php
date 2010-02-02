@@ -96,14 +96,16 @@ function changeDate(date)
       </td>
     </tr>
     <?php endforeach;?>
+    </tbody>
     <?php if($importFeature):?>
+    <tfoot>
     <tr>
       <td colspan='9'>
         <input type='submit' value='<?php echo $lang->todo->import2Today;?>' />
       </td>
     </tr>
     <?php endif;?>
-    </tbody>
+    </tfoot>
   </table>
 </form>
 </div>
