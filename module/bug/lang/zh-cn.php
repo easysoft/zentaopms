@@ -163,3 +163,7 @@ $lang->bug->files          = '附件';
 $lang->bug->field1         = 'field1';
 $lang->bug->field2         = 'field2';
 $lang->bug->feild3         = 'feild3';
+
+$lang->bug->tblStep        = "[步骤]\n";
+$lang->bug->tblResult      = "[结果]\n";
+$lang->bug->tblExpect      = "[期望]\n";

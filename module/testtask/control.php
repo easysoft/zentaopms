@@ -102,9 +102,10 @@ class testtask extends control
         $this->view->position[]      = $this->lang->testtask->view;
 
         /* 赋值。*/
-        $this->view->task  = $task;
-        $this->view->users = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->runs  = $this->testtask->getRuns($taskID);
+        $this->view->productID = $productID;
+        $this->view->task      = $task;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->runs      = $this->testtask->getRuns($taskID);
 
         $this->display();
     }
