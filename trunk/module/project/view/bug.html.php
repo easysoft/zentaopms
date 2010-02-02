@@ -26,7 +26,7 @@
 <?php include '../../common/colorize.html.php';?>
 <div class='yui-d0'>
   <div id='featurebar'>
-    <div class='f-right'><?php common::printLink('bug', 'create', "productID=0&project=$project->id", $lang->bug->create);?></div>
+    <div class='f-right'><?php common::printLink('bug', 'create', "productID=0&extra=projectID=$project->id", $lang->bug->create);?></div>
   </div>
 </div>
 <div class='yui-d0'>

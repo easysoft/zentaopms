@@ -156,6 +156,7 @@ class bug extends control
         $taskID    = 0;
         $storyID   = 0;
         $buildID   = 0;
+        $caseID    = 0;
         $runID     = 0;
         $title     = '';
         $steps     = '';
@@ -185,6 +186,7 @@ class bug extends control
         $this->view->taskID           = $taskID;
         $this->view->storyID          = $storyID;
         $this->view->buildID          = $buildID;
+        $this->view->caseID           = $caseID;
         $this->view->title            = $title;
         $this->view->steps            = $steps;
         $this->display();

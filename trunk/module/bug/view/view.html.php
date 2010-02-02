@@ -190,7 +190,7 @@
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->case;?></td>
-          <td><?php if(isset($bug->caseTitle)) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $linkBugTitle", '_blank');?></td>
+          <td><?php if(isset($bug->caseTitle)) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
         </tr>
       </table>
     </fieldset>

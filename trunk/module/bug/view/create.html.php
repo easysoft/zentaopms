@@ -170,7 +170,7 @@ function loadProjectBuilds(projectID)
       </tr>  
       <tr>
         <td colspan='2'>
-          <?php echo html::submitButton() . html::resetButton();?>
+          <?php echo html::submitButton() . html::resetButton() . html::hidden('case', $caseID);?>
         </td>
       </tr>
     </table>
