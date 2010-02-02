@@ -112,26 +112,26 @@ function loadProjectBuilds(projectID)
         <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
         <td class='a-left'>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
-          <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, 'class=select-3');?></span>
+          <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, 'class=select-3');?></span>
         </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblProjectAndTask;?></th>
         <td class='a-left'>
-        <span id='projectIdBox'><?php echo html::select('project', $projects, '', 'onchange=loadProjectRelated(this.value)');?></span>
+        <span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'onchange=loadProjectRelated(this.value)');?></span>
           <span id='taskIdBox'></span>
         </td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblStory;?></th>
         <td class='a-left'>
-          <span id='storyIdBox'><?php echo html::select('story', $stories);?></span>
+          <span id='storyIdBox'><?php echo html::select('story', $stories, $storyID);?></span>
         </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
         <td class='a-left'>
-          <span id='buildBox'><?php echo html::select('openedBuild', $builds);?></span>
+          <span id='buildBox'><?php echo html::select('openedBuild', $builds, $buildID);?></span>
         </td>
       </tr>
       <tr>
@@ -158,11 +158,11 @@ function loadProjectBuilds(projectID)
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->title;?></th>
-        <td class='a-left'><input type='text' name='title' class='text-1' /></td>
+        <td class='a-left'><input type='text' name='title' class='text-1' value='<?php echo $title;?>' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->steps;?></th>
-        <td class='a-left'><textarea name='steps' class='area-1' rows='6'></textarea></td>
+        <td class='a-left'><textarea name='steps' class='area-1' rows='6'><?php echo $steps;?></textarea></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->files;?></th>

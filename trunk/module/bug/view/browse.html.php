@@ -64,7 +64,7 @@ function browseBySearch(active)
       ?>
     </div>
     <div class='f-right'>
-      <?php common::printLink('bug', 'create', "productID=$productID&moduleID=$moduleID", $lang->bug->create); ?>
+      <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", $lang->bug->create); ?>
     </div>
   </div>
   <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>

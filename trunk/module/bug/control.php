@@ -132,8 +132,8 @@ class bug extends control
         $this->display();
     }
 
-    /* 创建Bug。*/
-    public function create($productID, $moduleID = 0)
+    /* 创建Bug。extras是其他的参数，key和value之间使用=连接，多个键值对之间使用,隔开。*/
+    public function create($productID, $extras = '')
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -146,12 +146,27 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}"), 'parent'));
         }
 
-        /* 设置当前的产品和模块。*/
-        $productID       = common::saveProductState($productID, key($this->products));
-        $currentModuleID = (int)$moduleID;
-
-        /* 设置菜单。*/
+        /* 设置当前的产品，设置菜单。*/
+        $productID = common::saveProductState($productID, key($this->products));
         $this->bug->setMenu($this->products, $productID);
+
+        /* 初始化变量。*/
+        $moduleID  = 0;
+        $projectID = 0;
+        $taskID    = 0;
+        $storyID   = 0;
+        $buildID   = 0;
+        $runID     = 0;
+        $title     = '';
+        $steps     = '';
+
+        /* 解析extra参数。*/
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras);
+
+        /* 如果设置了runID，获得最后一次的resultID。*/
+        if($runID > 0) $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->limit(1)->fetch('id');
+        if(isset($resultID) and $resultID > 0) extract($this->bug->getBugInfoFromResult($resultID));
 
         /* 位置信息。*/
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
@@ -161,11 +176,17 @@ class bug extends control
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
-        $this->view->currentModuleID  = $currentModuleID;
         $this->view->stories          = $this->story->getProductStoryPairs($productID);
         $this->view->users            = $this->user->getPairs('noclosed');
         $this->view->projects         = $this->product->getProjectPairs($productID);
         $this->view->builds           = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->moduleID         = $moduleID;
+        $this->view->projectID        = $projectID;
+        $this->view->taskID           = $taskID;
+        $this->view->storyID          = $storyID;
+        $this->view->buildID          = $buildID;
+        $this->view->title            = $title;
+        $this->view->steps            = $steps;
         $this->display();
     }
 

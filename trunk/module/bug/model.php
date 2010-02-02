@@ -243,4 +243,34 @@ class bugModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUG)->where('project')->eq((int)$projectID)->orderBy($orderBy)->page($pager)->fetchAll();
     }
+
+    /* 通过某一次测试结果获得bug的标题和步骤。*/
+    public function getBugInfoFromResult($resultID)
+    {
+        $title    = '';
+        $bugSteps = '';
+
+        $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
+        $run    = $this->loadModel('testtask')->getRunById($result->run);
+        if($result and $result->caseResult == 'fail')
+        {
+            $title       = $run->case->title;
+            $caseSteps   = $run->case->steps;
+            $stepResults = unserialize($result->stepResults);
+            $bugSteps = $this->lang->bug->tblStep;
+            foreach($caseSteps as $key => $step)
+            {
+                $bugSteps .= ($key + 1) . '. '  .$step->desc . "\n";
+                if($stepResults[$step->id]['result'] == 'fail')
+                {
+                    $bugSteps .= $this->lang->bug->tblResult;
+                    $bugSteps .= $stepResults[$step->id]['real'] . "\n";
+                    $bugSteps .= $this->lang->bug->tblExpect;
+                    $bugSteps .= $step->expect;
+                    break;
+                }
+            }
+        }
+        return array('title' => $title, 'steps' => $bugSteps);
+    }
 }
