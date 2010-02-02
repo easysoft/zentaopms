@@ -1,5 +1,6 @@
 <link rel='stylesheet' href='<?php echo $clientTheme;?>tablesorter.css' />
 <script src='<?php echo $jsRoot;?>jquery/tablesorter/min.js' type='text/javascript'></script>
+<script src='<?php echo $jsRoot;?>jquery/tablesorter/metadata.js' type='text/javascript'></script>
 <script language='javascript'>
 $(function() {
 
@@ -9,11 +10,11 @@ $(function() {
             widgetZebra: {css: ['odd', 'even'] }
         }
     ); 
-    $('.tablesorter tr').hover(
+    $('.tablesorter tbody tr').hover(
         function(){$(this).addClass('hoover')},
         function(){$(this).removeClass('hoover')}
     );
-    $('.tablesorter tr').click(
+    $('.tablesorter tbody tr').click(
         function()
         {
             if($(this).attr('class').indexOf('clicked') > 0)

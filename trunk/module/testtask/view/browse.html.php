@@ -23,10 +23,9 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<?php include '../../common/colorize.html.php';?>
 <?php include '../../common/tablesorter.html.php';?>
 <div class='yui-d0'>
-  <table class='table-1 colored tablesorter'>
+  <table class='table-1 colored tablesorter fixed'>
     <caption>
       <div class='f-left'><?php echo $lang->testtask->browse;?></div>
       <div class='f-right'><?php common::printLink('testtask', 'create', "product=$productID", $lang->testtask->create);?></div>
@@ -37,7 +36,7 @@
       <th><?php echo $lang->testtask->product;?></th>
       <th><?php echo $lang->testtask->project;?></th>
       <th><?php echo $lang->testtask->build;?></th>
-      <th><?php echo $lang->testtask->name;?></th>
+      <th class='w-p30'><?php echo $lang->testtask->name;?></th>
       <th><?php echo $lang->testtask->begin;?></th>
       <th><?php echo $lang->testtask->end;?></th>
       <th><?php echo $lang->testtask->status;?></th>
@@ -51,7 +50,7 @@
       <td><?php echo $task->productName?></td>
       <td><?php echo $task->projectName?></td>
       <td><?php echo $task->buildName?></td>
-      <td width='50%' class='a-left'><?php echo $task->name;?></td>
+      <td class='a-left nobr'><?php echo $task->name;?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
       <td><?php echo $lang->testtask->statusList[$task->status];?></td>
