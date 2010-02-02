@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `zt_testRun` (
 
 --20100201 调整测试结果表。
 DROP TABLE `zt_caseResult`;
-DROP TABLE `zt_stepResult`;
+DROP TABLE `zt_resultStep`;
 CREATE TABLE IF NOT EXISTS `zt_testResult` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `run` mediumint(8) unsigned NOT NULL,
