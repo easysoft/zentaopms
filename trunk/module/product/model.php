@@ -40,7 +40,7 @@ class productModel extends model
     }
 
     /* 通过ID获取产品信息。*/
-    public function findByID($productID)
+    public function getById($productID)
     {
         return $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
     }

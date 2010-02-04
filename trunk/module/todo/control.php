@@ -67,7 +67,7 @@ class todo extends control
         }
 
         /* 获取todo信息，判断是否是私人事务。*/
-        $todo = $this->todo->findById($todoID);
+        $todo = $this->todo->getById($todoID);
         if($todo->private and $this->app->user->account != $todo->account) die('private');
 
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
@@ -84,7 +84,7 @@ class todo extends control
     /* 查看todo。*/
     public function view($todoID)
     {
-        $todo = $this->todo->findById($todoID);
+        $todo = $this->todo->getById($todoID);
         $this->lang->todo->menu = $this->lang->user->menu;
         $this->loadModel('user')->setMenu($this->user->getPairs(), $todo->account);
         $this->lang->set('menugroup.todo', 'company');
@@ -107,7 +107,7 @@ class todo extends control
         }
         else
         {
-            $todo = $this->todo->findById($todoID);
+            $todo = $this->todo->getById($todoID);
             $this->todo->delete($todoID);
             echo js::locate($this->createLink('my', 'todo', "date={$todo->date}"), 'parent');
             exit;

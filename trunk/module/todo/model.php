@@ -74,7 +74,7 @@ class todoModel extends model
     }
 
     /* 获得一条todo信息。*/
-    public function findByID($todoID)
+    public function getById($todoID)
     {
         $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
         if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');

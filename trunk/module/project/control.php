@@ -54,7 +54,7 @@ class project extends control
 
         /* 获取当前项目的详细信息，相关产品，子项目以及团队成员。*/
         $projectID     = common::saveProjectState($projectID, array_keys($this->projects));
-        $project       = $this->project->findByID($projectID);
+        $project       = $this->project->getById($projectID);
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);
         $teamMembers   = $this->project->getTeamMembers($project->id);
@@ -290,7 +290,7 @@ class project extends control
         $this->project->setMenu($this->projects, $projectID);
 
         $projects = array('' => '') + $this->projects;
-        $project  = $this->project->findById($projectID);
+        $project  = $this->project->getById($projectID);
 
         /* 从列表中删除当前项目。*/
         unset($projects[$projectID]);
@@ -351,7 +351,7 @@ class project extends control
         }
 
         $this->loadModel('product');
-        $project  = $this->project->findById($projectID);
+        $project  = $this->project->getById($projectID);
 
         /* 设置菜单。*/
         $this->project->setMenu($this->projects, $project->id);
@@ -383,7 +383,7 @@ class project extends control
             $this->project->updateChilds($projectID);
             die(js::locate($browseProjectLink));
         }
-        $project  = $this->project->findById($projectID);
+        $project  = $this->project->getById($projectID);
         $projects = $this->projects;
         unset($projects[$projectID]);
         unset($projects[$project->parent]);
@@ -420,7 +420,7 @@ class project extends control
         }
         $this->loadModel('user');
 
-        $project = $this->project->findById($projectID);
+        $project = $this->project->getById($projectID);
         $users   = $this->user->getPairs('noclosed');
         $users   = array('' => '') + $users;
         $members = $this->project->getTeamMembers($projectID);
@@ -460,7 +460,7 @@ class project extends control
     public function linkStory($projectID = 0)
     {
         /* 获得项目和相关产品信息。如果没有相关产品，则跳转到产品关联页面。*/
-        $project    = $this->project->findById($projectID);
+        $project    = $this->project->getById($projectID);
         $products   = $this->project->getProducts($projectID);
         $browseLink = $this->createLink('project', 'story', "projectID=$projectID");
 

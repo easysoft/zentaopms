@@ -34,7 +34,7 @@ class task extends control
     /* 添加任务。*/
     public function create($projectID = 0, $storyID = 0)
     {
-        $project = $this->project->findById($projectID); 
+        $project = $this->project->getById($projectID); 
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
 
         /* 设置菜单。*/
@@ -95,8 +95,8 @@ class task extends control
     /* 编辑任务。*/
     public function edit($taskID)
     {
-        $task = $this->task->findByID($taskID);
-        $project = $this->project->findByID($task->project);
+        $task = $this->task->getById($taskID);
+        $project = $this->project->getById($task->project);
 
         /* 设置菜单。*/
         $this->project->setMenu($this->project->getPairs(), $project->id);
@@ -135,8 +135,8 @@ class task extends control
     public function view($taskID)
     {
         $this->loadModel('action');
-        $task = $this->task->findByID($taskID);
-        $project = $this->project->findByID($task->project);
+        $task = $this->task->getById($taskID);
+        $project = $this->project->getById($task->project);
 
         /* 设置菜单。*/
         $this->project->setMenu($this->project->getPairs(), $project->id);
