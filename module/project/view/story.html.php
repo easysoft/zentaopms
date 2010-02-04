@@ -43,7 +43,7 @@ $(document).ready(function()
 
 <div class='yui-d0'>
   <table class='table-1 tablesorter fixed colored'>
-    <?php $vars = "projectID=$project->id";?>
+    <?php $vars = "projectID=$project->id&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <thead>
       <tr class='colhead'>
         <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->story->id);?></th>
@@ -90,6 +90,6 @@ $(document).ready(function()
       <?php endforeach;?>
     </tbody>
   </table>
-  <div class='a-right'><?php echo $pager;?></div>
+  <?php $pager->show();?>
 </div>  
 <?php include '../../common/footer.html.php';?>

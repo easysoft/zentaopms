@@ -141,7 +141,7 @@ class project extends control
         $this->assign('stories',    $stories);
         $this->assign('storyTasks', $storyTasks);
         $this->assign('tabID',      'story');
-        $this->assign('pager',      $pager->get());
+        $this->assign('pager',      $pager);
         $this->assign('orderBy',    $orderBy);
         $this->assign('users',      $users);
 
