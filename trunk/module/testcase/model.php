@@ -89,9 +89,38 @@ class testcaseModel extends model
     /* 更新case信息。*/
     public function update($caseID)
     {
-        $oldCase = $this->getById($caseID);
-        $now     = date('Y-m-d H:i:s');
-        $version = $oldCase->version + 1;
+        $oldCase     = $this->getById($caseID);
+        $now         = date('Y-m-d H:i:s');
+        $stepChanged = false;
+        $steps       = array();
+
+        //---------------- 判断步骤是否发生了变化。-------------------- */
+        /* 先去除post变量中空的步骤。 */
+        foreach($this->post->steps as $key => $desc)
+        {
+            $desc = trim($desc);
+            if(!empty($desc)) $steps[] = array('desc' => $desc, 'expect' => trim($this->post->expects[$key]));
+        }
+
+        /* 如果步骤的数量不同，发生了变化。*/
+        if(count($oldCase->steps) != count($steps))
+        {
+            $stepChanged = true;
+        }
+        else
+        {
+            /* 比较每一个步骤是否有不同。*/
+            foreach($oldCase->steps as $key => $oldStep)
+            {
+                if(trim($oldStep->desc) != trim($steps[$key]['desc']) or trim($oldStep->expect) != $steps[$key]['expect']) 
+                {
+                    $stepChanged = true;
+                    break;
+                }
+            }
+        }
+        $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
+
         $case    = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -103,19 +132,29 @@ class testcaseModel extends model
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck('title,status,type', 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
-            foreach($this->post->steps as $stepID => $stepDesc)
+            if($stepChanged)
             {
-                if(empty($stepDesc)) continue;
-                $step->case    = $caseID;
-                $step->version = $version;
-                $step->desc    = htmlspecialchars($stepDesc);
-                $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
-                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+                foreach($this->post->steps as $stepID => $stepDesc)
+                {
+                    if(empty($stepDesc)) continue;
+                    $step->case    = $caseID;
+                    $step->version = $version;
+                    $step->desc    = htmlspecialchars($stepDesc);
+                    $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
+                    $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+                }
             }
 
             /* 将步骤合并为字符串，以计算diff。*/
-            $oldCase->steps = $this->joinStep($oldCase->steps);
-            $case->steps    = $this->joinStep($this->getById($caseID, $version)->steps);
+            if($stepChanged)
+            {
+                $oldCase->steps = $this->joinStep($oldCase->steps);
+                $case->steps    = $this->joinStep($this->getById($caseID, $version)->steps);
+            }
+            else
+            {
+                unset($oldCase->steps);
+            }
             return common::createChanges($oldCase, $case);
         }
     }
