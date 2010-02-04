@@ -160,9 +160,6 @@ $lang->bug->lastEditedDate = '最后修改日期';
 $lang->bug->linkBug        = '相关Bug';
 $lang->bug->case           = '相关用例';
 $lang->bug->files          = '附件';
-$lang->bug->field1         = 'field1';
-$lang->bug->field2         = 'field2';
-$lang->bug->feild3         = 'feild3';
 
 $lang->bug->tblStep        = "[步骤]\n";
 $lang->bug->tblResult      = "[结果]\n";

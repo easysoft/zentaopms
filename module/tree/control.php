@@ -38,13 +38,13 @@ class tree extends control
     /* 设置当前的产品。*/
     private function setProduct($productID)
     {
-        $this->product = $this->product->findByID($productID);
+        $this->product = $this->product->getById($productID);
     }
 
     /* 模块列表。*/
     public function browse($productID, $viewType, $currentModuleID = 0)
     {
-        $product = $this->product->findByID($productID);
+        $product = $this->product->getById($productID);
 
         if($viewType == 'product')
         {

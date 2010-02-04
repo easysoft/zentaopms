@@ -110,7 +110,7 @@ class projectModel extends model
     }
 
     /* 通过Id获取项目信息。*/
-    public function findById($projectID)
+    public function getById($projectID)
     {
         $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
         $total   = $this->dao->select('SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')->from(TABLE_TASK)->where('project')->eq((int)$projectID)->andWhere('status')->ne('cancel')->fetch();
@@ -244,7 +244,7 @@ class projectModel extends model
     /* 燃烧图所需要的数据。*/
     public function getBurnData($projectID = 0)
     {
-        $project = $this->findById($projectID);
+        $project = $this->getById($projectID);
         $sql     = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
 
         /* 没有指定结束日期的情况。*/

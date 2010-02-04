@@ -52,7 +52,7 @@ class taskModel extends model
     /* 更新一个任务。*/
     public function update($taskID)
     {
-        $oldTask = $this->findByID($taskID);
+        $oldTask = $this->getById($taskID);
          $task = fixer::input('post')
             ->striptags('name')
             ->specialChars('desc')
@@ -79,7 +79,7 @@ class taskModel extends model
     }
 
     /* 通过id获取一个任务信息。*/
-    public function findByID($taskID)
+    public function getById($taskID)
     {
         return $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
             ->from(TABLE_TASK)->alias('t1')

@@ -27,7 +27,7 @@ class productplan extends control
     public function commonAction($productID)
     {
         $this->loadModel('product');
-        $this->view->product = $this->product->findByID($productID);
+        $this->view->product = $this->product->getById($productID);
         $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}"), $this->view->product->name);
         $this->product->setMenu($this->product->getPairs(), $productID);
     }
