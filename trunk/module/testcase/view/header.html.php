@@ -6,6 +6,7 @@
 .addbutton{font-size:20px; font-weight:bolder; color:darkgreen; width:50px}
 </style>
 <script language='Javascript'>
+var newRowID = 0;
 /* 加载产品对应的模块和需求。*/
 function loadAll(productID)
 {
@@ -52,7 +53,9 @@ function postInsert(rowID)
 /* 创建一个row对象。*/
 function createRow()
 {
-    var newRowID  = $('.stepID').size() + 1;
+    if(newRowID == 0) newRowID = $('.stepID').size();
+    newRowID ++;
+    alert(newRowID);
     var lblDelete = '<?php echo $lang->testcase->deleteStep;?>';
     var lblBefore = '<?php echo $lang->testcase->insertBefore;?>';
     var lblAfter  = '<?php echo $lang->testcase->insertAfter;?>';
