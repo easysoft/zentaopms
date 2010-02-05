@@ -55,7 +55,6 @@ function createRow()
 {
     if(newRowID == 0) newRowID = $('.stepID').size();
     newRowID ++;
-    alert(newRowID);
     var lblDelete = '<?php echo $lang->testcase->deleteStep;?>';
     var lblBefore = '<?php echo $lang->testcase->insertBefore;?>';
     var lblAfter  = '<?php echo $lang->testcase->insertAfter;?>';
