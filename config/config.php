@@ -59,35 +59,39 @@ if(file_exists($myConfig)) include $myConfig;
 if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
 /* 数据表的定义。*/
-define('TABLE_ACTION',         $config->db->prefix . 'action');
+define('TABLE_COMPANY',        $config->db->prefix . 'company');
+define('TABLE_DEPT',           $config->db->prefix . 'dept');
+define('TABLE_CONFIG',         $config->db->prefix . 'config');
+define('TABLE_USER',           $config->db->prefix . 'user');
+define('TABLE_TODO',           $config->db->prefix . 'todo');
+define('TABLE_GROUP',          $config->db->prefix . 'group');
+define('TABLE_GROUPPRIV',      $config->db->prefix . 'groupPriv');
+define('TABLE_USERGROUP',      $config->db->prefix . 'userGroup');
+
 define('TABLE_BUG',            $config->db->prefix . 'bug');
-define('TABLE_BUILD',          $config->db->prefix . 'build');
 define('TABLE_CASE',           $config->db->prefix . 'case');
 define('TABLE_CASESTEP',       $config->db->prefix . 'caseStep');
-define('TABLE_COMPANY',        $config->db->prefix . 'company');
-define('TABLE_CONFIG',         $config->db->prefix . 'config');
-define('TABLE_DEPT',           $config->db->prefix . 'dept');
-define('TABLE_EFFORT',         $config->db->prefix . 'effort');
-define('TABLE_FILE',           $config->db->prefix . 'file');
-define('TABLE_HISTORY',        $config->db->prefix . 'history');
-define('TABLE_MODULE',         $config->db->prefix . 'module');
-define('TABLE_USER',           $config->db->prefix . 'user');
-define('TABLE_GROUP',          $config->db->prefix . 'group');
-define('TABLE_USERGROUP',      $config->db->prefix . 'userGroup');
-define('TABLE_GROUPPRIV',      $config->db->prefix . 'groupPriv');
-define('TABLE_PRODUCT',        $config->db->prefix . 'product');
-define('TABLE_PRODUCTPLAN',    $config->db->prefix . 'productPlan');
-define('TABLE_RELEASE',        $config->db->prefix . 'release');
-define('TABLE_RELEATION',      $config->db->prefix . 'releation');
-define('TABLE_PROJECT',        $config->db->prefix . 'project');
-define('TABLE_TEAM',           $config->db->prefix . 'team');
-define('TABLE_STORY',          $config->db->prefix . 'story');
-define('TABLE_PROJECTSTORY',   $config->db->prefix . 'projectStory');
-define('TABLE_TASK',           $config->db->prefix . 'task');
-define('TABLE_TASKESTIMATE',   $config->db->prefix . 'taskEstimate');
 define('TABLE_TESTTASK',       $config->db->prefix . 'testTask');
 define('TABLE_TESTRUN',        $config->db->prefix . 'testRun');
 define('TABLE_TESTRESULT',     $config->db->prefix . 'testResult');
+
+define('TABLE_PRODUCT',        $config->db->prefix . 'product');
+define('TABLE_STORY',          $config->db->prefix . 'story');
+define('TABLE_STORYSPEC',      $config->db->prefix . 'storySpec');
+define('TABLE_PRODUCTPLAN',    $config->db->prefix . 'productPlan');
+define('TABLE_RELEASE',        $config->db->prefix . 'release');
+
+define('TABLE_PROJECT',        $config->db->prefix . 'project');
+define('TABLE_TASK',           $config->db->prefix . 'task');
+define('TABLE_TEAM',           $config->db->prefix . 'team');
 define('TABLE_PROJECTPRODUCT', $config->db->prefix . 'projectProduct');
-define('TABLE_TODO',           $config->db->prefix . 'todo');
+define('TABLE_PROJECTSTORY',   $config->db->prefix . 'projectStory');
+define('TABLE_TASKESTIMATE',   $config->db->prefix . 'taskEstimate');
+define('TABLE_EFFORT',         $config->db->prefix . 'effort');
 define('TABLE_BURN',           $config->db->prefix . 'burn');
+define('TABLE_BUILD',          $config->db->prefix . 'build');
+
+define('TABLE_MODULE',         $config->db->prefix . 'module');
+define('TABLE_ACTION',         $config->db->prefix . 'action');
+define('TABLE_FILE',           $config->db->prefix . 'file');
+define('TABLE_HISTORY',        $config->db->prefix . 'history');
