@@ -32,10 +32,11 @@ $lang->product->delete = "删除产品";
 
 $lang->product->roadmap   = '路线图';
 
-$lang->product->selectProduct = "请选择产品";
-$lang->product->saveButton    = " 保存 (S) ";
-$lang->product->confirmDelete = " 您确定删除该产品吗？";
-$lang->product->ajaxGetProjects= "接口:获得项目列表";
+$lang->product->selectProduct   = "请选择产品";
+$lang->product->saveButton      = " 保存 (S) ";
+$lang->product->confirmDelete   = " 您确定删除该产品吗？";
+$lang->product->ajaxGetProjects = "接口:获得项目列表";
+$lang->product->ajaxGetPlans    = "接口:获得计划列表";
 
 $lang->product->errorFormat    = '产品数据格式不正确';
 $lang->product->errorEmptyName = '产品名称不能为空';

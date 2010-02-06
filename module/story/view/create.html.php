@@ -22,72 +22,54 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<script language='Javascript'>
-function loadModuleMenu(productID)
-{
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=product');
-    $('#moduleIdBox').load(link);
-}
-</script>
-<div id='doc3'>
+<?php include './header.html.php';?>
+<style>
+#plan {width:245px}
+</style>
+<div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table align='center' class='table-1'> 
       <caption><?php echo $lang->story->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->story->product;?></th>
-        <td class='a-left'>
-          <?php echo html::select('product', $products, $product->id, "onchange=loadModuleMenu(this.value); class='select-3'");?>
+        <td>
+          <?php echo html::select('product', $products, $product->id, "onchange=loadProduct(this.value); class='select-3'");?>
           <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID);?></span>
         </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->plan;?></th>
-        <td class='a-left'>
-          <?php echo html::select('plan', $plans, '', 'class=select-3');?>
-        </td>
+        <td><span id='planIdBox'><?php echo html::select('plan', $plans, '', 'class=select-3');?></span></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->story->pri;?></th>
-        <td class='a-left'>
-          <?php echo html::select('pri', (array)$lang->story->priList, '', 'class=select-3');?>
-        </td>
+        <td><?php echo html::select('pri', (array)$lang->story->priList, '', 'class=select-3');?></td>
       </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->story->assignedTo;?></th>
-        <td class='a-left'>
-          <?php echo html::select('assignedTo', $users, $app->user->account, 'class=select-3');?>
-        </td>
-      </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->estimate;?></th>
-        <td class='a-left'><input type='text' name='estimate' id='estimate' class='text-3' /></td>
+        <td><input type='text' name='estimate' id='estimate' class='text-3' /></td>
       </tr> 
       <tr>
-        <th class='rowhead'><?php echo $lang->story->status;?></th>
-        <td class='a-left'>
-          <?php echo html::select('status', (array)$lang->story->statusList, '', 'class=select-3');?>
-        </td>
-      </tr>
+        <th class='rowhead'><?php echo $lang->story->assignedTo;?></th>
+        <td><?php echo html::select('assignedTo', $users, '', 'class=select-3');?></td>
+      </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->title;?></th>
-        <td class='a-left'><input type='text' name='title' class='text-1' /></td>
+        <td><input type='text' name='title' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->spec;?></th>
-        <td class='a-left'><textarea name='spec' rows='8' class='text-1'></textarea></td>
+        <td><textarea name='spec' rows='8' class='text-1'></textarea></td>
       </tr>  
+      <tr>
+        <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
+        <td><?php echo html::input('mailto', '', 'class="text-1"');?></td>
+      </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->story->legendAttatch;?></th>
-        <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
+        <td><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
-
-      <tr>
-        <td colspan='2'>
-          <input type='submit' value='<?php echo $lang->save;?>'  class='button-s' />
-          <input type='reset'  value='<?php echo $lang->reset;?>' class='button-r' />
-        </td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
     </table>
   </form>
 </div>  

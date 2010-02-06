@@ -26,66 +26,163 @@
 class storyModel extends model
 {
     /* 获取某一条需求的信息。*/
-    public function findByID($storyID)
+    public function getById($storyID, $version = 0)
     {
-        return $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+        $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+        if(!$story) return false;
+        if(substr($story->closedDate, 0, 4) == '0000') $story->closedDate = '';
+        if($version == 0) $version = $story->version;
+        $story->spec     = $this->dao->select('spec')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch('spec');
+        $story->projects = $this->dao->select('t1.project, t2.name')
+            ->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t1.story')->eq($storyID)
+            ->orderBy('t1.project DESC')
+            ->fetchPairs();
+        $story->tasks     = $this->dao->select('id,name,project')->from(TABLE_TASK)->where('story')->eq($storyID)->orderBy('id DESC')->fetchAll();
+        //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
+        //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
+        if($story->toBug) $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
+        if($story->plan)  $story->planTitle  = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $extraStories = array();
+        if($story->duplicateStory) $extraStories = array($story->duplicateStory);
+        if($story->linkStories)    $extraStories = explode(',', $story->linkStories);
+        if($story->childStories)   $extraStories = array_merge($extraStories, explode(',', $story->childStories));
+        $extraStories = array_unique($extraStories);
+        if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
+        return $story;
     }
 
     /* 新增需求。*/
-    function create()
+    public function create()
     {
         $now   = date('Y-m-d H:i:s', time());
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
             ->cleanFloat('estimate')
             ->stripTags('title')
-            ->specialChars('spec')
             ->setDefault('plan', 0)
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
             ->add('assignedDate', 0)
+            ->add('version', 1)
+            ->add('status', 'draft')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
-            ->remove('files,labels')
+            ->join('mailto', ',')
+            ->remove('files,labels,spec')
             ->get();
-        $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->check('title', 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck('title,estimate', 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
             $this->loadModel('file')->saveUpload('story', $storyID);
+            $spec = htmlspecialchars($this->post->spec);
+            $this->dao->insert(TABLE_STORYSPEC)->set('story')->eq($storyID)->set('version')->eq(1)->set('spec')->eq($spec)->exec();
             return $storyID;
         }
         return false;
     }
 
-    /* 更新需求。*/
-    function update($storyID)
+    /* 变更需求。*/
+    public function change($storyID)
     {
-        $now      = date('Y-m-d H:i:s', time());
-        $oldStory = $this->findByID($storyID);
-        $story    = fixer::input('post')
+        $now         = date('Y-m-d H:i:s', time());
+        $oldStory    = $this->getById($storyID);
+        $specChanged = false;
+        if($this->post->spec != $oldStory->spec or $this->post->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
+
+        $story = fixer::input('post')
+            ->stripTags('title')
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
+            ->setIF($specChanged, 'version', $oldStory->version + 1)
+            ->setIF($specChanged, 'status',  'changed')
+            ->setIF($specChanged, 'reviewedBy',  '')
+            ->setIF($specChanged, 'closedBy', '')
+            ->setIF($specChanged, 'closedReason', '')
+            ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '')
+            ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '')
+            ->remove('files,labels,spec,comment')
+            ->get();
+
+        $this->dao->update(TABLE_STORY)
+            ->data($story)
+            ->autoCheck()
+            ->check('title', 'notempty')
+            ->where('id')->eq((int)$storyID)->exec();
+        if(!dao::isError())
+        {
+            if($specChanged)
+            {
+                $spec = htmlspecialchars($this->post->spec);
+                $this->dao->insert(TABLE_STORYSPEC)->set('story')->eq($storyID)->set('version')->eq($oldStory->version + 1)->set('spec')->eq($spec)->exec();
+                $story->spec = $this->post->spec;
+            }
+            else
+            {
+                unset($oldStory->spec);
+            }
+            return common::createChanges($oldStory, $story);
+        }
+    }
+ 
+    /* 更新需求。*/
+    public function update($storyID)
+    {
+        $now         = date('Y-m-d H:i:s', time());
+        $oldStory    = $this->getById($storyID);
+
+        $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
             ->stripTags('title')
-            ->specialChars('spec')
-            ->remove('comment')
             ->add('assignedDate', $oldStory->assignedDate)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('plan', 0)
-            ->setIF($this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
-            ->remove('files,labels')
+            ->setDefault('status', $oldStory->status)
+            ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
+            ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
+            ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
+            ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
+            ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF($oldStory->status == 'draft', 'stage', '')
+            ->remove('files,labels,comment')
             ->get();
-        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->check('title', 'notempty')->where('id')->eq((int)$storyID)->exec();
+
+        $this->dao->update(TABLE_STORY)
+            ->data($story)
+            ->autoCheck()
+            ->check('title', 'notempty')
+            ->checkIF($story->closedBy, 'closedReason', 'notempty')
+            ->checkIF($story->status == 'closed', 'stage', 'notempty')
+            ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF($story->closedReason == 'subdivided', 'childStories', 'notempty')
+            ->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError()) return common::createChanges($oldStory, $story);
     }
     
     /* 删除一条需求。*/
-    function delete($storyID)
+    public function delete($storyID)
     {
         $this->dao->delete()->from(TABLE_STORY)->where('id')->eq((int)$storyID)->limit(1)->exec();
     }
+
+    /* 评审需求。*/
+    public function review($storyID)
+    {
+        $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $story->confirmedBy   = $this->app->user->account;
+        $story->confirmedDate = date('Y-m-d H:i:s');
+        $story->status        = 'active';
+        if($oldStory->status == 'changed') $story->version = $oldStory->version + 1;
+        $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($storyID)->exec();
+        return true;
+    }
     
     /* 获得某一个产品某一个模块下面的所有需求列表。*/
-    function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id|desc', $pager = null)
+    public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id|desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
@@ -97,7 +194,7 @@ class storyModel extends model
     }
 
     /* 获得某一个产品某一个模块下面的所有需求id=>title列表。*/
-    function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id|desc')
+    public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id|desc')
     {
         $sql = $this->dao->select('t1.id, t1.title, t1.module, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
@@ -128,7 +225,7 @@ class storyModel extends model
     }
 
     /* 获得某一个项目相关的所有需求列表。*/
-    function getProjectStories($projectID = 0, $orderBy='id|desc', $pager = null)
+    public function getProjectStories($projectID = 0, $orderBy='id|desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -138,7 +235,7 @@ class storyModel extends model
     }
 
     /* 获得某一个项目相关的需求id=>title的列表。*/
-    function getProjectStoryPairs($projectID = 0, $productID = 0)
+    public function getProjectStoryPairs($projectID = 0, $productID = 0)
     {
         $sql = $this->dao->select('t2.id, t2.title, t2.module, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -168,7 +265,7 @@ class storyModel extends model
     }
 
     /* 获得指派给某一个用户的需求列表。*/
-    function getUserStories($account, $status = 'all', $orderBy = 'id|desc', $pager = null)
+    public function getUserStories($account, $status = 'all', $orderBy = 'id|desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
             ->from(TABLE_STORY)->alias('t1')
