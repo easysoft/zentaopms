@@ -56,3 +56,44 @@ CREATE TABLE IF NOT EXISTS `zt_testResult` (
   KEY `run` (`run`),
   KEY `case` (`case`,`version`)
   ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- 20100204 调整需求表
+ALTER TABLE `zt_story` DROP `attatchment`;
+ALTER TABLE `zt_story` CHANGE `version` `version` SMALLINT NOT NULL DEFAULT '1';
+ALTER TABLE `zt_story` ADD `closedReason` VARCHAR( 30 ) NOT NULL AFTER `closedDate`;
+ALTER TABLE `zt_story` ADD `stage` VARCHAR( 30 ) NOT NULL AFTER `status`;
+ALTER TABLE `zt_story` ADD `reviewedBy` VARCHAR( 30 ) NOT NULL AFTER `lastEditedDate`;
+ALTER TABLE `zt_story` ADD `reviewedDate` DATETIME NOT NULL AFTER `reviewedBy`;
+UPDATE zt_story SET version = 1 WHERE version = 0;
+UPDATE zt_story SET status = 'closed', closedReason = 'done', stage='relased' WHERE status = 'done';
+UPDATE zt_story SET status = 'active' WHERE status = 'wait' OR status = 'doing';
+ALTER TABLE `zt_story` CHANGE `bug` `fromBug` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `zt_story` ADD `toBug` MEDIUMINT NOT NULL AFTER `closedReason`;
+ALTER TABLE `zt_story` ADD `childStories` VARCHAR( 255 ) NOT NULL AFTER `toBug` ,
+ADD `linkStories` VARCHAR( 255 ) NOT NULL AFTER `childStories`;
+ALTER TABLE `zt_story` ADD `duplicateStory` MEDIUMINT UNSIGNED NOT NULL AFTER `linkStories`;
+
+CREATE TABLE IF NOT EXISTS `zt_storySpec` (
+  `story` mediumint(9) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `spec` text NOT NULL,
+  UNIQUE KEY `story` (`story`,`version`)
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+INSERT INTO zt_storySpec select id,version,spec FROM zt_story;
+ALTER TABLE `zt_story` DROP `spec`;
+
+ALTER TABLE `zt_bug` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `story`;
+ALTER TABLE `zt_bug` ADD `caseVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `case`;
+ALTER TABLE `zt_bug` DROP `field1` ,
+DROP `field2` ,
+DROP `feild3` ;
+
+ALTER TABLE `zt_case` DROP `field1` ,
+DROP `field2` ,
+DROP `feidl3` ;
+ALTER TABLE `zt_case` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `story`;
+ALTER TABLE `zt_projectStory` ADD `version` SMALLINT NOT NULL DEFAULT '1';
+ALTER TABLE `zt_task` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `story`;
+
+-- 删除releation表。
+DROP TABLE `zt_releation`;
