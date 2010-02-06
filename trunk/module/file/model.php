@@ -73,6 +73,12 @@ class fileModel extends model
         return $fileTitles;
     }
 
+    /* 获得文件数量。*/
+    public function getCount()
+    {
+        return count($this->getUpload());
+    }
+
     /* 获取上传的文件信息。*/
     private function getUpload($htmlTagName = 'files')
     {
