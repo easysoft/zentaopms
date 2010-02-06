@@ -188,4 +188,11 @@ class product extends control
         $projects = $this->product->getProjectPairs($productID);
         die(html::select('project', $projects, $projectID, 'onchange=loadProjectRelated(this.value)'));
     }
+
+    /* 获得某一个产品对应的计划列表。*/
+    public function ajaxGetPlans($productID, $planID = 0)
+    {
+        $plans = $this->loadModel('productplan')->getPairs($productID);
+        die(html::select('plan', $plans, $planID));
+    }
 }
