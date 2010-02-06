@@ -32,6 +32,7 @@
 	*/
 	line-height: 16px;
 	overflow: hidden;
+        text-align:left;
 }
 
 .ac_loading {
