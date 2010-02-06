@@ -45,7 +45,7 @@ class story extends control
         }
 
         /* 设置产品相关数据。*/
-        $product  = $this->product->findByID($productID);
+        $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
         $users    = $this->user->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'product');
@@ -66,29 +66,12 @@ class story extends control
         $this->display();
     }
 
-    /* 编辑需求：生成表单。*/
-    public function edit($storyID)
+    /* 变更、编辑时的共同操作。 */
+    private function commonAction($storyID)
     {
-        if(!empty($_POST))
-        {
-            $this->loadModel('action');
-            $changes = $this->story->update($storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('story', $storyID);
-            if($this->post->comment != '' or !empty($changes) or !empty($files))
-            {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
-                $fileAction = '';
-                if(!empty($files)) $fileAction = "Add Files " . join(',', $files) . "\n" ;
-                $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
-            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
-        }
-
         /* 获取数据。*/
-        $story    = $this->story->findByID($storyID);
-        $product  = $this->product->findByID($story->product);
+        $story    = $this->story->getById($storyID);
+        $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
         $users    = $this->user->getPairs();
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'product');
@@ -97,24 +80,75 @@ class story extends control
         $this->product->setMenu($products, $product->id);
 
         /* 赋值到模板。*/
-        $this->view->header->title    = $product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $story->title;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
-        $this->view->position[]       = $this->lang->story->edit;
         $this->view->product          = $product;
         $this->view->products         = $products;
         $this->view->story            = $story;
         $this->view->users            = $users;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id);
+        $this->view->actions          = $this->action->getList('story', $storyID);
+    }
+
+    /* 编辑需求。*/
+    public function edit($storyID)
+    {
+        $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $changes = $this->story->update($storyID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $action = !empty($changes) ? 'Changed' : 'Commented';
+                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+        }
+
+        $this->commonAction($storyID);
+
+        /* 赋值到模板。*/
+        $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $this->view->story->title;
+        $this->view->position[]    = $this->lang->story->edit;
+        $this->display();
+    }
+
+    /* 变更需求。*/
+    public function change($storyID)
+    {
+        $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $changes = $this->story->change($storyID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $files = $this->loadModel('file')->saveUpload('story', $storyID);
+            if($this->post->comment != '' or !empty($changes) or !empty($files))
+            {
+                $action = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';
+                $fileAction = '';
+                if(!empty($files)) $fileAction = "Add Files " . join(',', $files) . "\n" ;
+                $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+        }
+
+        $this->commonAction($storyID);
+
+        /* 赋值到模板。*/
+        $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->change . $this->lang->colon . $this->view->story->title;
+        $this->view->position[]    = $this->lang->story->change;
         $this->display();
     }
 
     /* 需求详情。*/
-    public function view($storyID)
+    public function view($storyID, $version = 0)
     {
         $this->loadModel('action');
         $storyID      = (int)$storyID;
-        $story        = $this->dao->findByID((int)$storyID)->from(TABLE_STORY)->fetch();
+        $story        = $this->story->getById($storyID, $version);
         $story->files = $this->loadModel('file')->getByObject('story', $storyID);
         $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
@@ -149,11 +183,48 @@ class story extends control
         }
         else
         {
-            $story = $this->story->findById($storyID);
+            $story = $this->story->getById($storyID);
             $this->story->delete($storyID);
             echo js::locate($this->createLink('product', 'browse', "productID=$story->product"), 'parent');
             exit;
         }
+    }
+
+    /* 评审一条需求。*/
+    public function review($storyID)
+    {
+        $this->loadModel('action');
+
+        if(!empty($_POST))
+        {
+            $this->story->reivew($storyID);
+            $action   = "Reviewed";
+            $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
+            $this->action->logHistory($actionID);
+            die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+        }
+
+        /* 获取需求和产品信息。*/
+        $story    = $this->story->getById($storyID);
+        $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+
+        /* 设置菜单。*/
+        $this->product->setMenu($this->product->getPairs(), $product->id);
+
+        /* 设置评审结果可选值。*/
+        if($story->status == 'draft') unset($this->lang->story->reviewResultList['revert']);
+
+        /* 导航信息。*/
+        $this->view->header->title = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
+        $this->view->position[]    = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+        $this->view->position[]    = $this->lang->story->view;
+
+        /* 赋值。*/
+        $this->view->product = $product;
+        $this->view->story   = $story;
+        $this->view->actions = $this->action->getList('story', $storyID);
+        $this->view->users   = $this->loadModel('user')->getPairs();
+        $this->display();
     }
 
     /* 需求的任务列表。*/

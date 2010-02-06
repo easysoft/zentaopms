@@ -29,18 +29,18 @@
     <div id='main'>STORY #<?php echo $story->id . $lang->colon . $story->title;?></div>
     <div>
     <?php
-    if(common::hasPriv('story', 'edit')) echo html::a($this->createLink('story', 'edit', "storyID=$story->id"),  $lang->story->buttonEdit);
-    if(common::hasPriv('product', 'browse'))
-    {
-        if($app->session->storyList != '') echo html::a($app->session->storyList, $lang->story->buttonToList);
-        else echo html::a($this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module"), $lang->story->buttonToList);
-    }
+    $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
+    common::printLink('story', 'change', "storyID=$story->id", $lang->story->change);
+    if($story->status == 'draft' or $story->status == 'changed') common::printLink('story', 'review', "storyID=$story->id", $lang->story->review); else echo $lang->story->review . ' ';
+    common::printLink('story', 'close',   "storyID=$story->id", $lang->close);
+    common::printLink('story', 'edit',    "storyID=$story->id", $lang->edit);
+    echo html::a($browseLink, $lang->goback);
     ?>
     </div>
   </div>
 </div>
 
-<div class='yui-d0 yui-t6'>
+<div class='yui-d0 yui-t8'>
   <div class='yui-main'>
     <div class='yui-b'>
       <fieldset>
@@ -52,34 +52,32 @@
         <div><?php foreach($story->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
       </fieldset>
       <?php include '../../common/action.html.php';?>
-      <fieldset>
-        <legend><?php echo $lang->story->legendAction;?></legend>
-        <div class='a-center' style='font-size:16px; font-weight:bold'>
-          <?php
-          if(common::hasPriv('story', 'edit')) echo html::a($this->createLink('story', 'edit', "storyID=$story->id"),  $lang->story->buttonEdit);
-          if(common::hasPriv('product', 'browse'))
-          {
-              if($app->session->storyList != '') echo html::a($app->session->storyList, $lang->story->buttonToList);
-              else echo html::a($this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module"), $lang->story->buttonToList);
-          }
-          ?>
-        </div>
-      </fieldset>
+      <div class='a-center' style='font-size:16px; font-weight:bold'>
+      <?php
+      common::printLink('story', 'edit',    "storyID=$story->id", $lang->edit);
+      common::printLink('story', 'review', "storyID=$story->id", $lang->story->review);
+      common::printLink('story', 'close',   "storyID=$story->id", $lang->story->close);
+      echo html::a($browseLink, $lang->goback);
+      ?>
+      </div>
     </div>
   </div>
+
   <div class='yui-b'>
    <fieldset>
      <legend><?php echo $lang->story->legendBasicInfo;?></legend>
-     <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
+     <table class='table-1'>
        <tr>
-         <td class='rowhead'><?php echo $lang->story->labProductAndModule;?></td>
-         <td>
+         <td class='rowhead w-p20'><?php echo $lang->story->product;?></td>
+         <td><?php common::printLink('product', 'view', "productID=$story->product", $product->name);?>
+       </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->module;?></td>
+         <td> 
            <?php
-           echo $product->name;
-           if(!empty($modulePath)) echo $lang->arrow;
            foreach($modulePath as $key => $module)
            {
-               echo $module->name;
+               if(!common::printLink('product', 'browse', "productID=$story->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
                if(isset($modulePath[$key + 1])) echo $lang->arrow;
            }
            ?>
@@ -87,95 +85,105 @@
        </tr>
        <tr>
          <td class='rowhead'><?php echo $lang->story->plan;?></td>
-         <td><?php echo $plan;?></td>
+         <td><?php if(isset($story->planTitle)) if(!common::printLink('productplan', 'view', "planID=$story->plan", $story->planTitle)) echo $story->planTitle;?>
        </tr>
-       <!--
-       <tr>
-         <td class='rowhead'><?php echo $lang->story->type;?></td>
-         <td><?php //echo $lang->story->typeList->{$story->type};?></td>
-       </tr>
-       -->
-       
        <tr>
          <td class='rowhead'><?php echo $lang->story->status;?></td>
-         <td><?php $lang->show($lang->story->statusList, $story->status);?></td>
+         <td><?php echo $lang->story->statusList[$story->status];?></td>
        </tr>
        <tr>
-         <td class='rowhead'><?php echo $lang->story->assignedTo;?></td>
-         <td><?php echo $users[$story->assignedTo];?></td>
-       </tr>
-       <tr>
-         <td width='40%' class='rowhead'><?php echo $lang->story->assignedDate;?></td>
-         <td><?php echo $story->assignedDate;?></td>
-       </tr>
-       <tr>
-         <td class='rowhead'><?php echo $lang->story->lastEditedBy;?></td>
-         <td><?php echo $users[$story->lastEditedBy];?></td>
-       </tr>
-       <tr>
-         <td class='rowhead'><?php echo $lang->story->lastEditedDate;?></td>
-         <td><?php echo $story->lastEditedDate;?></td>
+         <td class='rowhead'><?php echo $lang->story->stage;?></td>
+         <td><?php echo $lang->story->stageList[$story->stage];?></td>
        </tr>
      </table>
    </fieldset>
-
    <fieldset>
-     <legend><?php echo $lang->story->legendMailto;?></legend>
-     <div></div>
-   </fieldset>
-
-      <fieldset>
-     <legend><?php echo $lang->story->legendOpenInfo;?></legend>
-     <table class='table-1 a-left'>
+     <legend><?php echo $lang->story->legendLifeTime;?></legend>
+     <table class='table-1'>
        <tr>
-         <td width='40%' class='rowhead'><?php echo $lang->story->openedBy;?></td>
-         <td><?php echo $users[$story->openedBy];?></td>
+         <td class='rowhead w-p20'><?php echo $lang->story->openedBy;?></td>
+         <td><?php echo $users[$story->openedBy] . $lang->at . $story->openedDate;?></td>
        </tr>
        <tr>
-         <td class='rowhead'><?php echo $lang->story->openedDate;?></td>
-         <td><?php echo $story->openedDate;?></td>
+         <td class='rowhead'><?php echo $lang->story->assignedTo;?></td>
+         <td><?php if($story->assignedTo) echo $users[$story->assignedTo] . $lang->at . $story->assignedDate;?></td>
+       </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->reviewedBy;?></td>
+         <td><?php $reviewedBy = explode(',', $story->reviewedBy); foreach($reviewedBy as $account) echo ' ' . $users[trim($account)]; ?></td>
+       </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->closedBy;?></td>
+         <td><?php if($story->closedBy) echo $users[$story->closedBy] . $lang->at . $story->closedDate;?></td>
+       </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->closedReason;?></td>
+         <td>
+           <?php
+           if($story->closedReason) echo $lang->story->reasonList[$story->closedReason];
+           if($story->duplicateStory)
+           {
+               echo html::a(inlink('view', "storyID=$story->duplicateStory", '#' . $story->duplicateStory . ' ' . $story->extraStories[$story->duplicateStory]));
+           }
+           ?>
+         </td>
+       </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->lastEditedBy;?></td>
+         <td><?php if($story->lastEditedBy) echo $users[$story->lastEditedBy] . $lang->at . $story->lastEditedDate;?></td>
        </tr>
      </table>
    </fieldset>
 
    <fieldset>
      <legend><?php echo $lang->story->legendProjectAndTask;?></legend>
-     <table class='table-1 a-left'>
+     <table class='table-1 fixed'>
        <tr>
-         <td class='rowhead'><?php echo $lang->story->project;?></td>
-         <td><?php //echo $story->project;?></td>
-       </tr>
-       <tr>
-         <td class='rowhead'><?php echo $lang->story->tasks;?></td>
-         <td><?php //echo $story->tasks;?></td>
+         <td>
+           <?php
+           foreach($story->tasks as $task)
+           {
+               $projectName = $story->projects[$task->project];
+               echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName);
+               echo html::a($this->createLink('task', 'view', "taskID=$task->id"), "#$task->id $task->name") . '<br />';
+           }
+           ?>
+         </td>
        </tr>
      </table>
    </fieldset>
 
-   <!--
    <fieldset>
-     <legend><?php echo $lang->story->legendCloseInfo;?></legend>
-     <table class='table-1 a-left'>
-       <tr>
-         <td width='40%' class='rowhead'><?php echo $lang->story->closedBy;?></td>
-         <td><?php echo $users[$story->closedBy];?></td>
-       </tr>
-       <tr>
-         <td class='rowhead'><?php echo $lang->story->closedDate;?></td>
-         <td><?php echo $story->closedDate;?></td>
-       </tr>
-        </table>
+     <legend><?php echo $lang->story->legendLinkStories;?></legend>
+     <div>
+       <?php
+       $linkStories = explode(',', $story->linkStories) ;    
+       foreach($linkStories as $linkStoryID)
+       {
+           if(isset($story->extraStories[$linkStoryID])) echo html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '<br />';
+       }
+       ?>
+     </div>
    </fieldset>
-   -->
-
    <fieldset>
-     <legend><?php echo $lang->story->legendLinkBugs;?></legend>
-     <div>&nbsp;</div>
+     <legend><?php echo $lang->story->legendChildStories;?></legend>
+     <div>
+       <?php
+       $childStories = explode(',', $story->childStories) ;    
+       foreach($childStories as $childStoryID)
+       {
+           if(isset($story->extraStories[$childStoryID])) echo html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '<br />';
+       }
+       ?>
+     </div>
    </fieldset>
-
    <fieldset>
-     <legend><?php echo $lang->story->legendCases;?></legend>
-     <div>&nbsp;</div>
+     <legend><?php echo $lang->story->legendMailto;?></legend>
+     <div><?php $mailto = explode(',', $story->mailto); foreach($mailto as $account) echo ' ' . $users[trim($account)]; ?></div>
+   </fieldset>
+   <fieldset>
+     <legend><?php echo $lang->story->legendVersion;?></legend>
+     <div><?php for($i = $story->version; $i >= 1; $i --) echo html::a(inlink('view', "storyID=$story->id&version=$i"), "#$i");?></div>
    </fieldset>
   </div>
 </div>

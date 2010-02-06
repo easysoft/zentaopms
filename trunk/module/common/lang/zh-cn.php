@@ -32,6 +32,7 @@ $lang->colon      = '::';
 $lang->reset      = '重填';
 $lang->edit       = '编辑';
 $lang->delete     = '删除';
+$lang->close      = '关闭';
 $lang->activate   = '激活';
 $lang->delete     = '删除';
 $lang->save       = '保存';
@@ -48,6 +49,7 @@ $lang->year       = '年';
 $lang->downArrow  = '↓';
 $lang->goback     = '返回';
 $lang->selectAll  = '全选';
+$lang->attatch    = '附件';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
