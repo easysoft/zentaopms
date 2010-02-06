@@ -69,6 +69,7 @@ $lang->resource->product->edit   = 'edit';
 $lang->resource->product->delete = 'delete';
 $lang->resource->product->roadmap= 'roadmap';
 $lang->resource->product->ajaxGetProjects = 'ajaxGetProjects';
+$lang->resource->product->ajaxGetPlans    = 'ajaxGetPlans';
 
 $lang->resource->story->create  = 'create';
 $lang->resource->story->edit    = 'edit';
