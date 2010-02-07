@@ -32,7 +32,9 @@ class storyModel extends model
         if(!$story) return false;
         if(substr($story->closedDate, 0, 4) == '0000') $story->closedDate = '';
         if($version == 0) $version = $story->version;
-        $story->spec     = $this->dao->select('spec')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch('spec');
+        $spec = $this->dao->select('title,spec')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
+        $story->title = $spec->title;
+        $story->spec  = $spec->spec;
         $story->projects = $this->dao->select('t1.project, t2.name')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
@@ -76,9 +78,13 @@ class storyModel extends model
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
-            $this->loadModel('file')->saveUpload('story', $storyID);
+            $this->loadModel('file')->saveUpload('story', $storyID, $extra = 1);
             $spec = htmlspecialchars($this->post->spec);
-            $this->dao->insert(TABLE_STORYSPEC)->set('story')->eq($storyID)->set('version')->eq(1)->set('spec')->eq($spec)->exec();
+            $this->dao->insert(TABLE_STORYSPEC)
+                ->set('story')->eq($storyID)
+                ->set('version')->eq(1)
+                ->set('title')->eq($story->title)
+                ->set('spec')->eq($spec)->exec();
             return $storyID;
         }
         return false;
@@ -106,7 +112,6 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '')
             ->remove('files,labels,spec,comment')
             ->get();
-
         $this->dao->update(TABLE_STORY)
             ->data($story)
             ->autoCheck()
@@ -117,7 +122,12 @@ class storyModel extends model
             if($specChanged)
             {
                 $spec = htmlspecialchars($this->post->spec);
-                $this->dao->insert(TABLE_STORYSPEC)->set('story')->eq($storyID)->set('version')->eq($oldStory->version + 1)->set('spec')->eq($spec)->exec();
+                $this->dao->insert(TABLE_STORYSPEC)
+                    ->set('story')->eq($storyID)
+                    ->set('version')->eq($oldStory->version + 1)
+                    ->set('title')->eq($story->title)
+                    ->set('spec')->eq($spec)
+                    ->exec();
                 $story->spec = $this->post->spec;
             }
             else
@@ -172,12 +182,40 @@ class storyModel extends model
     /* 评审需求。*/
     public function review($storyID)
     {
+        if($this->post->result == false)   die(js::alert($this->lang->story->mustChooseResult));
+        if($this->post->result == 'revert' and $this->post->preVersion == false) die(js::alert($this->lang->story->mustChoosePreVersion));
+
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $story->confirmedBy   = $this->app->user->account;
-        $story->confirmedDate = date('Y-m-d H:i:s');
-        $story->status        = 'active';
-        if($oldStory->status == 'changed') $story->version = $oldStory->version + 1;
-        $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($storyID)->exec();
+        $now      = date('Y-m-d H:i:s');
+        $story = fixer::input('post')
+            ->remove('result,preVersion,comment')
+            ->add('reviewedDate', $now)
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->setIF($this->post->result == 'pass' and $oldStory->status == 'draft',   'status', 'active')
+            ->setIF($this->post->result == 'pass' and $oldStory->status == 'changed', 'status', 'active')
+            ->setIF($this->post->result == 'reject', 'closedBy',   $this->app->user->account)
+            ->setIF($this->post->result == 'reject', 'closedDate', $now)
+            ->setIF($this->post->result == 'reject', 'status', 'closed')
+            ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
+            ->setIF($this->post->result == 'revert', 'status',  'active')
+            ->removeIF($this->post->result == 'pass' or $this->post->result == 'revert', 'closedReason, duplicateStory, childStories')
+            ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
+            ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
+            ->get();
+        $this->dao->update(TABLE_STORY)->data($story)
+            ->autoCheck()
+            ->batchCheck('assignedTo, reviewedBy', 'notempty')
+            ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'subdivided', 'childStories',   'notempty')
+            ->where('id')->eq($storyID)->exec();
+        if($this->post->result == 'revert')
+        {
+            $preTitle = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($this->post->preVersion)->fetch('title');
+            $this->dao->update(TABLE_STORY)->set('title')->eq($preTitle)->where('id')->eq($storyID)->exec();
+            $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
+            $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
+        }
         return true;
     }
     
