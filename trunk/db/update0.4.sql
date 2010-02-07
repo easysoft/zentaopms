@@ -76,11 +76,14 @@ ALTER TABLE `zt_story` ADD `duplicateStory` MEDIUMINT UNSIGNED NOT NULL AFTER `l
 CREATE TABLE IF NOT EXISTS `zt_storySpec` (
   `story` mediumint(9) NOT NULL,
   `version` smallint(6) NOT NULL,
+  `title` VARCHAR( 90 ) NOT NULL,
   `spec` text NOT NULL,
   UNIQUE KEY `story` (`story`,`version`)
   ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-INSERT INTO zt_storySpec select id,version,spec FROM zt_story;
+INSERT INTO zt_storySpec select id,version,title,spec FROM zt_story;
 ALTER TABLE `zt_story` DROP `spec`;
+ALTER TABLE `zt_file` ADD `extra` VARCHAR( 255 ) NOT NULL ;
+update `zt_file` set extra = 1 where objectType = 'story';
 
 ALTER TABLE `zt_bug` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `story`;
 ALTER TABLE `zt_bug` ADD `caseVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `case`;
