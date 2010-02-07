@@ -52,7 +52,7 @@ class fileModel extends model
     }
 
     /* 保存上传的文件。*/
-    public function saveUpload($objectType = '', $objectID = '')
+    public function saveUpload($objectType = '', $objectID = '', $extra = '')
     {
         $fileTitles = array();
         $now        = date('Y-m-d H:i:s');
@@ -66,6 +66,7 @@ class fileModel extends model
             $file['objectID']   = $objectID;
             $file['addedBy']    = $this->app->user->account;
             $file['addedDate']  = $now;
+            $file['extra']      = $extra;
             unset($file['tmpname']);
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
             $fileTitles[$this->dao->lastInsertId()] = $file['title'];
