@@ -32,10 +32,12 @@ $lang->story->manage          = "操作";
 $lang->story->tasks           = "相关任务";
 $lang->story->bugs            = "Bug";
 
-$lang->story->reviewDelete   = "您确认删除该需求吗?";
-$lang->story->errorFormat     = '需求数据有误';
-$lang->story->errorEmptyTitle = '标题不能为空';
-$lang->story->linkStory       = '关联需求';
+$lang->story->reviewDelete          = "您确认删除该需求吗?";
+$lang->story->errorFormat           = '需求数据有误';
+$lang->story->errorEmptyTitle       = '标题不能为空';
+$lang->story->mustChooseResult      = '必须选择评审结果';
+$lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
+$lang->story->linkStory             = '关联需求';
 $lang->story->ajaxGetProjectStories = '接口:获取项目需求列表';
 $lang->story->ajaxGetProductStories = '接口:获取产品需求列表';
 
@@ -123,3 +125,4 @@ $lang->story->linkStories    = '相关需求';
 $lang->story->childStories   = '细分需求';
 $lang->story->duplicateStory = '重复需求';
 $lang->story->reviewResult   = '评审结果';
+$lang->story->preVersion     = '之前版本';

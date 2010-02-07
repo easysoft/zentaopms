@@ -30,10 +30,10 @@
     <div>
     <?php
     $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
-    common::printLink('story', 'change', "storyID=$story->id", $lang->story->change);
-    if($story->status == 'draft' or $story->status == 'changed') common::printLink('story', 'review', "storyID=$story->id", $lang->story->review); else echo $lang->story->review . ' ';
-    common::printLink('story', 'close',   "storyID=$story->id", $lang->close);
-    common::printLink('story', 'edit',    "storyID=$story->id", $lang->edit);
+    if(!($story->status != 'closed' and common::printLink('story', 'change', "storyID=$story->id", $lang->story->change))) echo $lang->story->change . ' ';
+    if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
+    if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
+    if(!common::printLink('story', 'edit',    "storyID=$story->id", $lang->edit)) echo $lang->edit . ' ';
     echo html::a($browseLink, $lang->goback);
     ?>
     </div>
@@ -49,14 +49,15 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->legendAttatch;?></legend>
-        <div><?php foreach($story->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
+        <div><?php foreach($story->files as $file) if($file->extra <= $version) echo html::a($file->fullPath, $file->title, '_blank');?></div>
       </fieldset>
       <?php include '../../common/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>
       <?php
-      common::printLink('story', 'edit',    "storyID=$story->id", $lang->edit);
-      common::printLink('story', 'review', "storyID=$story->id", $lang->story->review);
-      common::printLink('story', 'close',   "storyID=$story->id", $lang->story->close);
+      if(!($story->status != 'closed' and common::printLink('story', 'change', "storyID=$story->id", $lang->story->change))) echo $lang->story->change . ' ';
+      if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
+      if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
+      if(!common::printLink('story', 'edit',    "storyID=$story->id", $lang->edit)) echo $lang->edit . ' ';
       echo html::a($browseLink, $lang->goback);
       ?>
       </div>
@@ -111,6 +112,10 @@
        <tr>
          <td class='rowhead'><?php echo $lang->story->reviewedBy;?></td>
          <td><?php $reviewedBy = explode(',', $story->reviewedBy); foreach($reviewedBy as $account) echo ' ' . $users[trim($account)]; ?></td>
+       </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->reviewedDate;?></td>
+         <td><?php if($story->reviewedBy) echo $story->reviewedDate;?></td>
        </tr>
        <tr>
          <td class='rowhead'><?php echo $lang->story->closedBy;?></td>

@@ -123,7 +123,8 @@ class story extends control
         {
             $changes = $this->story->change($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('story', $storyID);
+            $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
+            $files = $this->loadModel('file')->saveUpload('story', $storyID, $version);
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';
@@ -170,6 +171,7 @@ class story extends control
         $this->assign('users',      $users);
         $this->assign('actions',    $this->action->getList('story', $storyID));
         $this->assign('modulePath', $modulePath);
+        $this->assign('version',    $version);
         $this->display();
     }
 
@@ -197,10 +199,15 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $this->story->reivew($storyID);
-            $action   = "Reviewed";
+            $this->story->review($storyID);
+            $action   = "Reviewed as " . ucfirst($this->post->result);
             $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
             $this->action->logHistory($actionID);
+            if($this->post->result == 'reject')
+            {
+                $action = "Closed for " . ucfirst($this->post->closedReason);
+                $this->action->create('story', $storyID, $action);
+            }
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
