@@ -12,7 +12,6 @@ update zt_case set version = 1 where version = 0;
 insert into zt_caseStep select '', id,version,steps, '' from zt_case;
 ALTER TABLE `zt_case` DROP `steps`;
 
---20100139 adjust the test case.
 DROP TABLE `zt_testPlan`;
 CREATE TABLE IF NOT EXISTS `zt_testTask` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -41,7 +40,6 @@ CREATE TABLE IF NOT EXISTS `zt_testRun` (
   UNIQUE KEY `task` (`task`,`case`)
   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
---20100201 adjust the test result table.
 DROP TABLE `zt_caseResult`;
 DROP TABLE `zt_resultStep`;
 CREATE TABLE IF NOT EXISTS `zt_testResult` (
