@@ -164,7 +164,7 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)
             ->data($story)
             ->autoCheck()
-            ->check('title', 'notempty')
+            ->batchCheck('title,estimate', 'notempty')
             ->checkIF($story->closedBy, 'closedReason', 'notempty')
             ->checkIF($story->status == 'closed', 'stage', 'notempty')
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')

@@ -76,6 +76,14 @@
          <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, 'class=select-1');?></td>
        </tr>
        <?php endif;?>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->pri;?></td>
+         <td><?php echo html::select('pri', $lang->story->priList, $story->pri, 'class=select-1');?></td>
+       </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->estimate;?></td>
+         <td><?php echo html::input('estimate', $story->estimate, 'class=text-1');?></td>
+       </tr>
      </table>
    </fieldset>
    <fieldset>

@@ -96,6 +96,14 @@
          <td class='rowhead'><?php echo $lang->story->stage;?></td>
          <td><?php echo $lang->story->stageList[$story->stage];?></td>
        </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->pri;?></td>
+         <td><?php echo $lang->story->priList[$story->pri];?></td>
+       </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->estimate;?></td>
+         <td><?php echo $story->estimate;?></td>
+       </tr>
      </table>
    </fieldset>
    <fieldset>
