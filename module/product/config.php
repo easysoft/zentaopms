@@ -7,8 +7,12 @@ $config->product->search['fields']['title']          = $lang->story->title;
 $config->product->search['fields']['spec']           = $lang->story->spec;
 $config->product->search['fields']['assignedTo']     = $lang->story->assignedTo;
 $config->product->search['fields']['openedBy']       = $lang->story->openedBy;
+$config->product->search['fields']['reviewedBy']     = $lang->story->reviewedBy;
+$config->product->search['fields']['closedBy']       = $lang->story->closedBy;
 $config->product->search['fields']['lastEditedBy']   = $lang->story->lastEditedBy;
 $config->product->search['fields']['status']         = $lang->story->status;
+$config->product->search['fields']['stage']          = $lang->story->stage;
+$config->product->search['fields']['closedReason']   = $lang->story->closedReason;
 $config->product->search['fields']['pri']            = $lang->story->pri;
 
 $config->product->search['params']['title']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
@@ -16,8 +20,11 @@ $config->product->search['params']['spec']         = array('operator' => 'includ
 $config->product->search['params']['assignedTo']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['resolvedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['openedBy']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->product->search['params']['reviewedBy']   = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->product->search['params']['closedBy']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['lastEditedBy'] = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['status']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->statusList);
+$config->product->search['params']['stage']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->stageList);
+$config->product->search['params']['closedReason'] = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->reasonList);
 $config->product->search['params']['pri']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->priList);
 $config->product->search['params']['mailto']       = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
