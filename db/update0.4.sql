@@ -12,7 +12,7 @@ update zt_case set version = 1 where version = 0;
 insert into zt_caseStep select '', id,version,steps, '' from zt_case;
 ALTER TABLE `zt_case` DROP `steps`;
 
---20100139 调整taskcase表
+--20100139 adjust the test case.
 DROP TABLE `zt_testPlan`;
 CREATE TABLE IF NOT EXISTS `zt_testTask` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `zt_testRun` (
   UNIQUE KEY `task` (`task`,`case`)
   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
---20100201 调整测试结果表。
+--20100201 adjust the test result table.
 DROP TABLE `zt_caseResult`;
 DROP TABLE `zt_resultStep`;
 CREATE TABLE IF NOT EXISTS `zt_testResult` (
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `zt_testResult` (
   KEY `case` (`case`,`version`)
   ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- 20100204 调整需求表
+-- 20100204 adjust the story.
 ALTER TABLE `zt_story` DROP `attatchment`;
 ALTER TABLE `zt_story` CHANGE `version` `version` SMALLINT NOT NULL DEFAULT '1';
 ALTER TABLE `zt_story` ADD `closedReason` VARCHAR( 30 ) NOT NULL AFTER `closedDate`;
@@ -98,9 +98,9 @@ ALTER TABLE `zt_case` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `st
 ALTER TABLE `zt_projectStory` ADD `version` SMALLINT NOT NULL DEFAULT '1';
 ALTER TABLE `zt_task` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `story`;
 
--- 删除releation表。
+-- delete releation.
 DROP TABLE `zt_releation`;
 
--- 20100208 调整action表，增加extra字段
+-- 20100208 adjust action table.
 ALTER TABLE `zt_action` ADD `extra` VARCHAR( 255 ) NOT NULL AFTER `id`;
 UPDATE zt_action SET extra = substr( ACTION , 13 ) , ACTION = 'Resolved' WHERE ACTION LIKE 'Resolved%';
