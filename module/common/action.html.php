@@ -6,6 +6,9 @@
       <?php
       if(isset($users[$action->actor])) $action->actor = $users[$action->actor];
       if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+      if($action->objectType == 'bug'   and $action->action == 'Resolved') $action->action .= " as $action->extra";
+      if($action->objectType == 'story' and $action->action == 'Reviewed') $action->action .= " as $action->extra";
+      if($action->objectType == 'story' and $action->action == 'Closed')   $action->action .= " for $action->extra";
       ?>
       <span><?php echo "$action->date, <strong>$action->action</strong> by <strong>$action->actor</strong>"; ?></span>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
