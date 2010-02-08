@@ -32,7 +32,7 @@ $lang->story->manage          = "操作";
 $lang->story->tasks           = "相关任务";
 $lang->story->bugs            = "Bug";
 
-$lang->story->reviewDelete          = "您确认删除该需求吗?";
+$lang->story->confirmDelete         = "您确认删除该需求吗?";
 $lang->story->errorFormat           = '需求数据有误';
 $lang->story->errorEmptyTitle       = '标题不能为空';
 $lang->story->mustChooseResult      = '必须选择评审结果';
