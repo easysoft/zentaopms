@@ -58,8 +58,13 @@ class common extends control
         {
             if(!common::hasPriv($module, $method))
             {
-                $referer  = helper::safe64Encode($_SERVER['HTTP_REFERER']);
-                $denyLink = $this->createLink('user', 'deny', "module=$module&method=$method&referer=$referer");
+                $vars = "module=$module&method=$method";
+                if(isset($_SERVER['HTTP_REFERER']))
+                {
+                    $referer  = helper::safe64Encode($_SERVER['HTTP_REFERER']);
+                    $vars .= "&referer=$referer";
+                }
+                $denyLink = $this->createLink('user', 'deny', $vars);
 
                 /* Fix the bug of IE: use js locate, can't get the referer. */
                 if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)

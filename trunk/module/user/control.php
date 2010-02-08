@@ -324,7 +324,7 @@ class user extends control
     }
 
     /* 访问受限页面。*/
-    public function deny($module, $method, $refererBeforeDeny)
+    public function deny($module, $method, $refererBeforeDeny = '')
     {
         $this->setReferer();
         $header['title'] = $this->lang->user->deny;

@@ -36,7 +36,7 @@
 <body>
 <div class='yui-d0' style='margin-top:100px'>
     <table align='center' class='table-3'> 
-      <caption><?php echo $lang->user->deny;?></caption>
+      <caption><?php echo $app->user->account, ' ', $lang->user->deny;?></caption>
       <tr>
         <td>
           <?php
@@ -46,7 +46,7 @@
           printf($lang->user->errorDeny, $moduleName, $methodName);
           echo "<br />";
           echo html::a($this->createLink($config->default->module), $lang->index->common);
-          echo html::a(helper::safe64Decode($refererBeforeDeny), $lang->user->goback);
+          if($refererBeforeDeny) echo html::a(helper::safe64Decode($refererBeforeDeny), $lang->user->goback);
           echo html::a($this->createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), $lang->user->relogin);
           ?>
         </td>
