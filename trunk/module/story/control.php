@@ -100,7 +100,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             if($this->post->comment != '' or !empty($changes))
             {
-                $action = !empty($changes) ? 'Changed' : 'Commented';
+                $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
@@ -171,7 +171,7 @@ class story extends control
         $this->assign('users',      $users);
         $this->assign('actions',    $this->action->getList('story', $storyID));
         $this->assign('modulePath', $modulePath);
-        $this->assign('version',    $version);
+        $this->assign('version',    $version == 0 ? $story->version : $version);
         $this->display();
     }
 
@@ -200,13 +200,11 @@ class story extends control
         if(!empty($_POST))
         {
             $this->story->review($storyID);
-            $action   = "Reviewed as " . ucfirst($this->post->result);
-            $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
+            $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($this->post->result));
             $this->action->logHistory($actionID);
             if($this->post->result == 'reject')
             {
-                $action = "Closed for " . ucfirst($this->post->closedReason);
-                $this->action->create('story', $storyID, $action);
+                $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
             }
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
@@ -219,12 +217,51 @@ class story extends control
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
         /* 设置评审结果可选值。*/
-        if($story->status == 'draft') unset($this->lang->story->reviewResultList['revert']);
+        if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
+        if($story->status == 'changed') unset($this->lang->story->reviewResultList['reject']);
 
         /* 导航信息。*/
         $this->view->header->title = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
         $this->view->position[]    = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $this->view->position[]    = $this->lang->story->view;
+
+        /* 赋值。*/
+        $this->view->product = $product;
+        $this->view->story   = $story;
+        $this->view->actions = $this->action->getList('story', $storyID);
+        $this->view->users   = $this->loadModel('user')->getPairs();
+        $this->display();
+    }
+
+    /* 关闭一条需求。*/
+    public function close($storyID)
+    {
+        $this->loadModel('action');
+
+        if(!empty($_POST))
+        {
+            $this->story->close($storyID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason));
+            $this->action->logHistory($actionID);
+            die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+        }
+
+        /* 获取需求和产品信息。*/
+        $story    = $this->story->getById($storyID);
+        $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+
+        /* 设置菜单。*/
+        $this->product->setMenu($this->product->getPairs(), $product->id);
+
+        /* 设置评审结果可选值。*/
+        if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
+        if($story->status == 'changed') unset($this->lang->story->reviewResultList['reject']);
+
+        /* 导航信息。*/
+        $this->view->header->title = $product->name . $this->lang->colon . $this->lang->close . $this->lang->colon . $story->title;
+        $this->view->position[]    = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
+        $this->view->position[]    = $this->lang->close;
 
         /* 赋值。*/
         $this->view->product = $product;

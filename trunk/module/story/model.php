@@ -104,7 +104,7 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
-            ->setIF($specChanged, 'status',  'changed')
+            ->setIF($specChanged and $oldStory->status == 'active', 'status',  'changed')
             ->setIF($specChanged, 'reviewedBy',  '')
             ->setIF($specChanged, 'closedBy', '')
             ->setIF($specChanged, 'closedReason', '')
@@ -199,7 +199,7 @@ class storyModel extends model
             ->setIF($this->post->result == 'reject', 'status', 'closed')
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'revert', 'status',  'active')
-            ->removeIF($this->post->result == 'pass' or $this->post->result == 'revert', 'closedReason, duplicateStory, childStories')
+            ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
             ->get();
@@ -219,6 +219,29 @@ class storyModel extends model
         return true;
     }
     
+    /* 关闭需求。*/
+    public function close($storyID)
+    {
+        $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $now      = date('Y-m-d H:i:s');
+        $story = fixer::input('post')
+            ->add('closedDate', $now)
+            ->add('assignedTo',   'closed')
+            ->add('assignedDate', $now)
+            ->add('status', 'closed') 
+            ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
+            ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
+            ->remove('comment')
+            ->get();
+        $this->dao->update(TABLE_STORY)->data($story)
+            ->autoCheck()
+            ->check('closedReason', 'notempty')
+            ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
+            ->where('id')->eq($storyID)->exec();
+        return true;
+    }
+
     /* 获得某一个产品某一个模块下面的所有需求列表。*/
     public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id|desc', $pager = null)
     {

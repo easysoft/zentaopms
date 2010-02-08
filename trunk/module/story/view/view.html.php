@@ -128,7 +128,7 @@
            if($story->closedReason) echo $lang->story->reasonList[$story->closedReason];
            if($story->duplicateStory)
            {
-               echo html::a(inlink('view', "storyID=$story->duplicateStory", '#' . $story->duplicateStory . ' ' . $story->extraStories[$story->duplicateStory]));
+               echo html::a(inlink('view', "storyID=$story->duplicateStory"), '#' . $story->duplicateStory . ' ' . $story->extraStories[$story->duplicateStory]);
            }
            ?>
          </td>

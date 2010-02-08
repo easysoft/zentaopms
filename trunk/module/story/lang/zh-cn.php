@@ -68,8 +68,9 @@ $lang->story->reasonList['cancel']     = '已取消';
 
 $lang->story->reviewResultList['']       = '';
 $lang->story->reviewResultList['pass']   = '通过';
+$lang->story->reviewResultList['clarify']= '需求不明确';
 $lang->story->reviewResultList['revert'] = '撤销变更';
-$lang->story->reviewResultList['reject'] = '拒绝';
+$lang->story->reviewResultList['reject'] = '拒绝并关闭';
 
 $lang->story->priList[3]  = '一般';
 $lang->story->priList[1]  = '最高';
