@@ -1,8 +1,10 @@
+<script src='<?php echo $jsRoot;?>jquery/reverseorder/raw.js' type='text/javascript'></script>
 <fieldset>
-  <legend><?php echo $lang->history;?></legend>
-  <ol>
+  <legend onclick='$("#historyItem li").reverseOrder();' class='hand'><?php echo $lang->history . $lang->reverse;?></legend>
+  <ol id='historyItem'>
+    <?php $i = 1;?>
     <?php foreach($actions as $action):?>
-    <li>
+    <li value='<?php echo $i ++;?>'>
       <?php
       if(isset($users[$action->actor])) $action->actor = $users[$action->actor];
       if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);

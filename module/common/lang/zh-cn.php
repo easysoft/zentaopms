@@ -50,6 +50,7 @@ $lang->downArrow  = '↓';
 $lang->goback     = '返回';
 $lang->selectAll  = '全选';
 $lang->attatch    = '附件';
+$lang->reverse    = '（切换顺序）';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
