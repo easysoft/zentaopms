@@ -37,7 +37,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->spec;?></th>
-      <td><?php echo html::textarea('spec', $story->spec, 'rows=5 class="area-1"');?></td>
+      <td><?php echo html::textarea('spec', $story->spec, 'rows=5 class="area-1"');?><br /> <?php echo $lang->story->specNote;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>

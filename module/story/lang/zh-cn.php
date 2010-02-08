@@ -100,6 +100,7 @@ $lang->story->replease       = '发布计划';
 $lang->story->bug            = '相关bug';
 $lang->story->title          = '需求名称';
 $lang->story->spec           = '需求描述';
+$lang->story->specNote       = "建议的需求模板：<br />作为一个<某种类型的用户><br />我要<达成某些目的><br />我这么做的原因是<开发的价值>";
 $lang->story->type           = '需求类型 ';
 $lang->story->pri            = '优先级';
 $lang->story->estimate       = '预计工时';

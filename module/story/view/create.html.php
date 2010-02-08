@@ -59,7 +59,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->spec;?></th>
-        <td><textarea name='spec' rows='8' class='text-1'></textarea></td>
+        <td><textarea name='spec' rows='8' class='text-1'></textarea><br /><?php echo $lang->story->specNote;?></td>
       </tr>  
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
