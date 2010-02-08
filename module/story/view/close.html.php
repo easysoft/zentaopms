@@ -1,6 +1,6 @@
 <?php
 /**
- * The view file of review method of story module of ZenTaoMS.
+ * The close view file of story module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,30 +24,6 @@
 ?>
 <?php include './header.html.php';?>
 <script language='Javascript'>
-function switchShow(result)
-{
-    if(result == 'reject')
-    {
-        $('#closedReasonBox').show();
-        $('#preVersionBox').hide();
-    }
-    else if(result == 'revert')
-    {
-        $('#preVersionBox').show();
-        $('#closedReasonBox').hide();
-        $('#duplicateStoryBox').hide();
-        $('#childStoriesBox').hide();
-    }
-    else
-    {
-        $('#preVersionBox').hide();
-        $('#closedReasonBox').hide();
-        $('#duplicateStoryBox').hide();
-        $('#childStoriesBox').hide();
-        $('#closedReasonBox').hide();
-    }
-}
-
 function setStory(reason)
 {
     if(reason == 'duplicate')
@@ -72,10 +48,6 @@ function setStory(reason)
   <table class='table-1'>
     <caption><?php echo $story->title;?></caption>
     <tr>
-      <th class='w-100px rowhead'><?php echo $lang->story->reviewResult;?></th>
-      <td><?php echo html::select('result', $lang->story->reviewResultList, '', 'class=select-3 onchange="switchShow(this.value)"');?></td>
-    </tr>
-    <tr id='closedReasonBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->story->closedReason;?></th>
       <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=select-3 onchange="setStory(this.value)"');?></td>
     </tr>
@@ -86,20 +58,6 @@ function setStory(reason)
     <tr id='childStoriesBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->story->childStories;?></th>
       <td><?php echo html::input('childStories', '', 'class=text-3');?></td>
-    </tr>
-    <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
-    <tr id='preVersionBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->story->preVersion;?></th>
-      <td><?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?></td>
-    </tr>
-    <?php endif;?>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy, 'class=select-3');?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
-      <td><?php echo html::input('reviewedBy', $app->user->account . ', ', 'class=text-1');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>
