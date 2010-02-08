@@ -65,7 +65,7 @@ ALTER TABLE `zt_story` ADD `stage` VARCHAR( 30 ) NOT NULL AFTER `status`;
 ALTER TABLE `zt_story` ADD `reviewedBy` VARCHAR( 30 ) NOT NULL AFTER `lastEditedDate`;
 ALTER TABLE `zt_story` ADD `reviewedDate` DATETIME NOT NULL AFTER `reviewedBy`;
 UPDATE zt_story SET version = 1 WHERE version = 0;
-UPDATE zt_story SET status = 'closed', closedReason = 'done', stage='relased' WHERE status = 'done';
+UPDATE zt_story SET status = 'closed', closedReason = 'done', stage='released' WHERE status = 'done';
 UPDATE zt_story SET status = 'active' WHERE status = 'wait' OR status = 'doing';
 ALTER TABLE `zt_story` CHANGE `bug` `fromBug` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `zt_story` ADD `toBug` MEDIUMINT NOT NULL AFTER `closedReason`;
