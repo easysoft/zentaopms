@@ -26,13 +26,17 @@
 class actionModel extends model
 {
     /* 创建一条action动作。*/
-    public function create($objectType, $objectID, $action, $comment = '')
+    public function create($objectType, $objectID, $actionType, $comment = '', $extra = '')
     {
-        $companyID  = $this->app->company->id;
-        $actor      = $this->app->user->account;
-        $actionDate = time();
-        $sql = "INSERT INTO " . TABLE_ACTION . " VALUES('', '$companyID', '$objectType', '$objectID', '$actor', '$action', '$actionDate', '$comment')";
-        $this->dbh->exec($sql);
+        $action->company    = $this->app->company->id;
+        $action->objectType = $objectType;
+        $action->objectID   = $objectID;
+        $action->actor      = $this->app->user->account;
+        $action->action     = $actionType;
+        $action->date       = time();
+        $action->comment    = htmlspecialchars($comment);
+        $action->extra      = $extra;
+        $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         return $this->dbh->lastInsertID();
     }
 
@@ -40,8 +44,7 @@ class actionModel extends model
     public function getList($objectType, $objectID)
     {
         $actions = array();
-        $sql = "SELECT * FROM " . TABLE_ACTION . " WHERE objectType = '$objectType' AND objectID = '$objectID' AND company = '{$this->app->company->id}' ORDER BY ID";
-        $stmt = $this->dbh->query($sql);
+        $stmt = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->orderBy('id')->query();
         while($action = $stmt->fetch())
         {
             $action->date = date('Y-m-d H:i:s', $action->date);
