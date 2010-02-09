@@ -117,7 +117,15 @@ class actionModel extends model
         }
         if(is_array($label))
         {
-            echo str_replace('$extra', $label['extra'][strtolower($action->extra)], $label['main']);
+            $extra = strtolower($action->extra);
+            if(isset($label['extra'][$extra])) 
+            {
+                echo str_replace('$extra', $label['extra'][$extra], $label['main']);
+            }
+            else
+            {
+                echo str_replace('$extra', $action->extra, $label['main']);
+            }
         }
         else
         {
