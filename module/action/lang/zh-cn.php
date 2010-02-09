@@ -30,4 +30,4 @@ $lang->action->label->closed    = '$date, 由 <strong>$actor</strong> 关闭。'
 $lang->action->label->commented = '$date, 由 <strong>$actor</strong> 发表评论。';
 $lang->action->label->activated = '$date, 由 <strong>$actor</strong> 激活。';
 $lang->action->label->diff1     = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />';
-$lang->action->label->diff2     = '修改了 <strong><i>%s</i></strong>，区别为<blockquote>%s</blockquote>';
+$lang->action->label->diff2     = '修改了 <strong><i>%s</i></strong>，区别为：<blockquote>%s</blockquote>';
