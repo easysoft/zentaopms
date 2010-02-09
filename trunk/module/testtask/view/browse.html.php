@@ -40,7 +40,7 @@
       <th><?php echo $lang->testtask->begin;?></th>
       <th><?php echo $lang->testtask->end;?></th>
       <th><?php echo $lang->testtask->status;?></th>
-      <th><?php echo $lang->action;?></th>
+      <th><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

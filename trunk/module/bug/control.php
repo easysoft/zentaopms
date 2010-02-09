@@ -232,7 +232,7 @@ class bug extends control
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
                 $fileAction = '';
-                if(!empty($files)) $fileAction = "Add Files " . join(',', $files) . "\n" ;
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($bugID, $actionID);

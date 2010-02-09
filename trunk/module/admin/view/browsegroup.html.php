@@ -36,7 +36,7 @@
          <th><?php echo $lang->group->name;?></th>
          <th><?php echo $lang->group->desc;?></th>
          <th><?php echo $lang->group->users;?></th>
-         <th><?php echo $lang->action;?></th>
+         <th><?php echo $lang->actions;?></th>
        </tr>
        <?php foreach($groups as $group):?>
        <tr>

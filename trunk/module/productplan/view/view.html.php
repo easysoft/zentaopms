@@ -56,7 +56,7 @@
       <th class='w-p5'><?php echo $lang->story->pri;?></th>
       <th class='w-p10'><?php echo $lang->story->product;?></th>
       <th><?php echo $lang->story->title;?></th>
-      <th class='w-p10'><?php echo $lang->action?></th>
+      <th class='w-p10'><?php echo $lang->actions?></th>
     </tr>
     </thead>
     <tbody>

@@ -36,7 +36,7 @@
       <th class='w-p20'><?php echo $lang->productplan->title;?></th>
       <th><?php echo $lang->productplan->begin;?></th>
       <th><?php echo $lang->productplan->end;?></th>
-      <th class='w-p20'><?php echo $lang->action;?></th>
+      <th class='w-p20'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

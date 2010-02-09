@@ -38,7 +38,7 @@
         <th><?php echo $lang->story->estimate;?></th>
         <th><?php echo $lang->story->status;?></th>
         <th class='w-100px'><?php echo $lang->story->lastEditedDate;?></th>
-        <th><?php echo $lang->action;?></th>
+        <th><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

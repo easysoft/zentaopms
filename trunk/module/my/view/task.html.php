@@ -36,7 +36,7 @@
       <th><?php echo $lang->task->consumed;?></th>
       <th class='w-p30'><?php echo $lang->task->story;?></th>
       <th><?php echo $lang->task->status;?></th>
-      <th><?php echo $lang->action;?></th>
+      <th><?php echo $lang->actions;?></th>
     </tr>
     </thead>   
     <tbody>

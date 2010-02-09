@@ -91,7 +91,7 @@ function checkall(checker)
             <th><?php echo $lang->testtask->lastRun;?></th>
             <th><?php echo $lang->testtask->lastResult;?></th>
             <th><?php echo $lang->testtask->status;?></th>
-            <th class='{sorter: false}'><?php echo $lang->action;?></th>
+            <th class='{sorter: false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>

@@ -60,7 +60,7 @@ function changeDate(date)
       <th><?php echo $lang->todo->begin;?></th>
       <th><?php echo $lang->todo->end;?></th>
       <th><?php echo $lang->todo->status;?></th>
-      <th><?php echo $lang->action;?></th>
+      <th><?php echo $lang->actions;?></th>
     </tr>
     </thead>
 

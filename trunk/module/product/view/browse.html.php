@@ -93,7 +93,7 @@ function search(active)
             <th><?php common::printOrderLink('closedBy',       $orderBy, $vars, $lang->story->closedBy);?></th>
             <th><?php common::printOrderLink('closedReason',   $orderBy, $vars, $lang->story->closedReason);?></th>
             <th class='w-100px'><?php common::printOrderLink('lastEditedDate', $orderBy, $vars, $lang->story->lastEdited);?></th>
-            <th><?php echo $lang->action;?></th>
+            <th><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>

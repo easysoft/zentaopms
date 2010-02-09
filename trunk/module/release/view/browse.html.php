@@ -38,7 +38,7 @@
       <th><?php echo $lang->release->name;?></th>
       <th><?php echo $lang->release->build;?></th>
       <th><?php echo $lang->release->date;?></th>
-      <th><?php echo $lang->action;?></th>
+      <th><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

@@ -53,7 +53,7 @@ $(document).ready(function()
         <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->story->openedBy);?></th>
         <th><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimate);?></th>
         <th><?php common::printOrderLink('status',     $orderBy, $vars, $lang->story->status);?></th>
-        <th class='w-150px'><?php echo $lang->action;?></th>
+        <th class='w-150px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

@@ -129,7 +129,7 @@ class story extends control
             {
                 $action = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';
                 $fileAction = '';
-                if(!empty($files)) $fileAction = "Add Files " . join(',', $files) . "\n" ;
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }

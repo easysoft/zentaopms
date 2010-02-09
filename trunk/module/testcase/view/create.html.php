@@ -50,7 +50,7 @@
               <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
               <th><?php echo $lang->testcase->stepDesc;?></th>
               <th><?php echo $lang->testcase->stepExpect;?></th>
-              <th class='w-100px'><?php echo $lang->action;?></th>
+              <th class='w-100px'><?php echo $lang->actions;?></th>
             </tr>
             <?php
             for($i = 1; $i <= 5; $i ++)
