@@ -53,6 +53,7 @@ class product extends control
     {
         /* 设置搜索条件。*/
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch");
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);
 
         /* 设置查询格式。*/
