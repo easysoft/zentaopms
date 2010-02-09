@@ -36,7 +36,7 @@
   </div>
 </div>
 
-<div class='yui-d0 yui-t6'>
+<div class='yui-d0 yui-t8'>
   <div class='yui-main'>
     <div class='yui-b'>
       <fieldset>
@@ -44,15 +44,12 @@
         <div><?php echo nl2br($task->desc);?></div>
       </fieldset>
       <?php include '../../common/action.html.php';?>
-      <fieldset>
-        <legend><?php echo $lang->task->legendAction;?></legend>
-        <div class='a-center' style='font-size:16px; font-weight:bold'>
-          <?php
-          if(common::hasPriv('task', 'edit')) echo html::a($this->createLink('task', 'edit', "taskID=$task->id"),  $lang->task->buttonEdit);
-          if(common::hasPriv('project', 'task')) echo html::a($app->session->taskList,  $lang->task->buttonBackToList);
-          ?>
-        </div>
-      </fieldset>
+      <div class='a-center' style='font-size:16px; font-weight:bold'>
+        <?php
+        if(common::hasPriv('task', 'edit')) echo html::a($this->createLink('task', 'edit', "taskID=$task->id"),  $lang->task->buttonEdit);
+        if(common::hasPriv('project', 'task')) echo html::a($app->session->taskList,  $lang->task->buttonBackToList);
+        ?>
+      </div>
     </div>
   </div>
   <div class='yui-b'>
@@ -60,12 +57,12 @@
       <legend><?php echo $lang->task->legendBasic;?></legend>
       <table class='table-1'> 
         <tr>
-          <th class='rowhead'><?php echo $lang->task->project;?></th>
-          <td><?php echo $project->name;?></td>
+          <th class='rowhead w-p20'><?php echo $lang->task->project;?></th>
+          <td><?php if(!common::printLink('project', 'task', "projectID=$task->project", $project->name)) echo $project->name;?></td>
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->story;?></th>
-          <td><?php echo $task->storyTitle;?>
+          <td><?php if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle)) echo $task->storyTitle;?>
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->owner;?></th>
