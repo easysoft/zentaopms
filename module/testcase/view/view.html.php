@@ -82,7 +82,7 @@
   <div class='yui-b'>
     <fieldset>
       <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
-      <table class='table-1 a-left'>
+      <table class='table-1 a-left fixed'>
         <tr>
           <td class='rowhead w-p20'><?php echo $lang->testcase->product;?></td>
           <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
