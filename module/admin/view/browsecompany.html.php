@@ -36,7 +36,7 @@
      <th><?php echo $lang->company->backyard;?></th>
      <th><?php echo $lang->company->pms;?></th>
      <th><?php echo $lang->company->guest;?></th>
-     <th><?php echo $lang->action;?></th>
+     <th><?php echo $lang->actions;?></th>
    </tr>
    <?php foreach($companies as $company):?>
    <tr>

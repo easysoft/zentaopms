@@ -37,7 +37,7 @@
       <th><?php echo $lang->task->type;?></th>
       <th><?php echo $lang->task->status;?></th>
       <th class='w-p30'><?php echo $lang->task->story;?></th>
-      <th class='w-100px'><?php echo $lang->action;?></th>
+      <th class='w-100px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

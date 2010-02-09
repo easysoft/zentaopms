@@ -36,7 +36,7 @@ $lang->close      = '关闭';
 $lang->activate   = '激活';
 $lang->delete     = '删除';
 $lang->save       = '保存';
-$lang->action     = '操作';
+$lang->actions    = '操作';
 $lang->comment    = '备注';
 $lang->history    = '历史记录';
 $lang->welcome    = "欢迎使用%s{$lang->colon}{$lang->zentaoMS}";
@@ -51,6 +51,7 @@ $lang->goback     = '返回';
 $lang->selectAll  = '全选';
 $lang->attatch    = '附件';
 $lang->reverse    = '（切换顺序）';
+$lang->addFiles   = '上传了附件 ';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';

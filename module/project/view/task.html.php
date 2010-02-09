@@ -50,7 +50,7 @@
       <th><?php common::printOrderLink('type',     $orderBy, $vars, $lang->task->type);?></th>
       <th><?php common::printOrderLink('status',   $orderBy, $vars, $lang->task->status);?></th>
       <th class='w-p30'><?php common::printOrderLink('story',    $orderBy, $vars, $lang->task->story);?></th>
-      <th class='w-100px'><?php echo $lang->action;?></th>
+      <th class='w-100px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

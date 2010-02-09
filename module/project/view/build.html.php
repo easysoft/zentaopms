@@ -39,7 +39,7 @@
       <th class='w-p20'><?php echo $lang->build->filePath;?></th>
       <th><?php echo $lang->build->date;?></th>
       <th><?php echo $lang->build->builder;?></th>
-      <th><?php echo $lang->action;?></th>
+      <th><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

@@ -128,3 +128,6 @@ $lang->story->childStories   = '细分需求';
 $lang->story->duplicateStory = '重复需求';
 $lang->story->reviewResult   = '评审结果';
 $lang->story->preVersion     = '之前版本';
+
+$lang->story->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 评审，结果为 <strong>$extra</strong>。', 'extra' => $lang->story->reviewResultList);
+$lang->story->action->closed   = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong>。', 'extra' => $lang->story->reasonList);

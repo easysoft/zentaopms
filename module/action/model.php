@@ -83,4 +83,63 @@ class actionModel extends model
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
         }
     }
+
+    /* 打印action标题。*/
+    public function printAction($action)
+    {
+        $objectType = $action->objectType;
+        $actionType = strtolower($action->action);
+        if(isset($this->lang->$objectType->action->$actionType))
+        {
+            $label = $this->lang->$objectType->action->$actionType;
+        }
+        elseif(isset($this->lang->action->label->$actionType))
+        {
+            $label = $this->lang->action->label->$actionType;
+        }
+        else
+        {
+            $label = $action->extra ? $this->lang->action->label->extra : $this->lang->action->label->common;
+        }
+
+        foreach($action as $key => $value)
+        {
+            if($key == 'history') continue;
+            if(is_array($label))
+            {
+                if($key == 'extra') continue;
+                $label['main'] = str_replace('$' . $key, $value, $label['main']);
+            }
+            else
+            {
+                $label = str_replace('$' . $key, $value, $label);
+            }
+        }
+        if(is_array($label))
+        {
+            echo str_replace('$extra', $label['extra'][strtolower($action->extra)], $label['main']);
+        }
+        else
+        {
+            echo $label;
+        }
+    }
+
+    /* 打印修改记录。*/
+    public function printChanges($objectType, $histories)
+    {
+        foreach($histories as $history)
+        {
+            $fieldName  = $history->field;
+            $fieldLabel = isset($this->lang->$objectType->$fieldName) ? $this->lang->$objectType->$fieldName : $fieldName;
+            if($history->diff != '')
+            {
+                printf($this->lang->action->label->diff2, $fieldLabel, nl2br($history->diff));
+            }
+            else
+            {
+                printf($this->lang->action->label->diff1, $fieldLabel, $history->old, $history->new);
+            }
+        }
+    }
 }

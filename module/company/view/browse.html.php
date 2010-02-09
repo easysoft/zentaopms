@@ -56,7 +56,7 @@ include '../../common/tablesorter.html.php';
           <th><?php echo $lang->user->join;?></th>
           <th><?php echo $lang->user->visits;?></th>
           <th><?php echo $lang->user->status;?></th>
-          <th><?php echo $lang->action;?></th>
+          <th><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>

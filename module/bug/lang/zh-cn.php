@@ -164,3 +164,5 @@ $lang->bug->files          = '附件';
 $lang->bug->tblStep        = "[步骤]\n";
 $lang->bug->tblResult      = "[结果]\n";
 $lang->bug->tblExpect      = "[期望]\n";
+
+$lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);

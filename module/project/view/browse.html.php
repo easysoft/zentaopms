@@ -111,7 +111,7 @@ function selectProject(projectID)
         <th><?php echo $lang->team->role;?></th>
         <th><?php echo $lang->team->joinDate;?></th>
         <th><?php echo $lang->team->workingHour;?></th>
-        <?php if(common::hasPriv('project', 'unlinkmember')) echo "<th>$lang->action</th>";?>
+        <?php if(common::hasPriv('project', 'unlinkmember')) echo "<th>$lang->actions</th>";?>
       </tr>
       </thead>
       <tbody>
