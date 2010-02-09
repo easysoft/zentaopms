@@ -152,7 +152,7 @@
      <legend><?php echo $lang->story->legendProjectAndTask;?></legend>
      <table class='table-1 fixed'>
        <tr>
-         <td>
+         <td class='nobr'>
            <?php
            foreach($story->tasks as $task)
            {
