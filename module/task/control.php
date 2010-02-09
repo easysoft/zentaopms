@@ -150,6 +150,7 @@ class task extends control
         $this->assign('project',  $project);
         $this->assign('task',     $task);
         $this->assign('actions',  $this->action->getList('task', $taskID));
+        $this->assign('users',    $this->loadModel('user')->getPairs('noletter'));
         $this->display();
     }
 
