@@ -152,13 +152,13 @@
      <legend><?php echo $lang->story->legendProjectAndTask;?></legend>
      <table class='table-1 fixed'>
        <tr>
-         <td class='nobr'>
+         <td>
            <?php
            foreach($story->tasks as $task)
            {
                $projectName = $story->projects[$task->project];
                echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName);
-               echo html::a($this->createLink('task', 'view', "taskID=$task->id"), "#$task->id $task->name") . '<br />';
+               echo '<span class="nobr">' . html::a($this->createLink('task', 'view', "taskID=$task->id"), "#$task->id $task->name") . '</span><br />';
            }
            ?>
          </td>
