@@ -119,12 +119,15 @@ class testtaskModel extends model
     {
         /* 计算case的结果。*/
         $caseResult = 'pass';
-        foreach($this->post->steps as $stepID => $stepResult)
+        if(!$this->post->passall)
         {
-            if($stepResult != 'pass' and $stepResult != 'n/a')
+            foreach($this->post->steps as $stepID => $stepResult)
             {
-                $caseResult = $stepResult;
-                break;
+                if($stepResult != 'pass' and $stepResult != 'n/a')
+                {
+                    $caseResult = $stepResult;
+                    break;
+                }
             }
         }
 
@@ -142,8 +145,7 @@ class testtaskModel extends model
             ->add('caseResult', $caseResult)
             ->setForce('stepResults', serialize($stepResults))
             ->add('date', $now)
-            ->remove('steps')
-            ->remove('reals')
+            ->remove('steps,reals,passall')
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
         if(!dao::isError())
