@@ -91,46 +91,72 @@ class actionModel extends model
         $actionType = strtolower($action->action);
         if(isset($this->lang->$objectType->action->$actionType))
         {
-            $label = $this->lang->$objectType->action->$actionType;
+            $desc = $this->lang->$objectType->action->$actionType;
         }
-        elseif(isset($this->lang->action->label->$actionType))
+        elseif(isset($this->lang->action->desc->$actionType))
         {
-            $label = $this->lang->action->label->$actionType;
+            $desc = $this->lang->action->desc->$actionType;
         }
         else
         {
-            $label = $action->extra ? $this->lang->action->label->extra : $this->lang->action->label->common;
+            $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
         }
 
         foreach($action as $key => $value)
         {
             if($key == 'history') continue;
-            if(is_array($label))
+            if(is_array($desc))
             {
                 if($key == 'extra') continue;
-                $label['main'] = str_replace('$' . $key, $value, $label['main']);
+                $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
             }
             else
             {
-                $label = str_replace('$' . $key, $value, $label);
+                $desc = str_replace('$' . $key, $value, $desc);
             }
         }
-        if(is_array($label))
+        if(is_array($desc))
         {
             $extra = strtolower($action->extra);
-            if(isset($label['extra'][$extra])) 
+            if(isset($desc['extra'][$extra])) 
             {
-                echo str_replace('$extra', $label['extra'][$extra], $label['main']);
+                echo str_replace('$extra', $desc['extra'][$extra], $desc['main']);
             }
             else
             {
-                echo str_replace('$extra', $action->extra, $label['main']);
+                echo str_replace('$extra', $action->extra, $desc['main']);
             }
         }
         else
         {
-            echo $label;
+            echo $desc;
         }
+    }
+
+    /* 打印动态信息。*/
+    public function getDynamic($objectType = 'all', $count = 30)
+    {
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)->onCaseOf($objectType != 'all')->where('objectType')->eq($objectType)->endCase()->orderBy('id desc')->limit($count)->fetchAll();
+        if(!$actions) return array();
+        foreach($actions as $action)
+        {
+            $actionType = strtolower($action->action);
+            $objectType = strtolower($action->objectType);
+            $action->date        = date('H:i', $action->date);
+            $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
+            $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
+            if(strpos($action->objectLabel, '|') !== false)
+            {
+                list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
+                $action->objectLink  = html::a(helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID)), '#' . $action->objectID);
+                $action->objectLabel = $objectLabel;
+            }
+            else
+            {
+                $action->objectLink = '#' . $action->objectID;
+            }
+        }
+        return $actions;
     }
 
     /* 打印修改记录。*/
@@ -148,11 +174,11 @@ class actionModel extends model
             $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
             if($history->diff != '')
             {
-                printf($this->lang->action->label->diff2, $history->fieldLabel, nl2br($history->diff));
+                printf($this->lang->action->desc->diff2, $history->fieldLabel, nl2br($history->diff));
             }
             else
             {
-                printf($this->lang->action->label->diff1, $history->fieldLabel, $history->old, $history->new);
+                printf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
             }
         }
     }
