@@ -108,8 +108,8 @@ class storyModel extends model
             ->setIF($specChanged, 'reviewedBy',  '')
             ->setIF($specChanged, 'closedBy', '')
             ->setIF($specChanged, 'closedReason', '')
-            ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '')
-            ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '')
+            ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
+            ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
             ->remove('files,labels,spec,comment')
             ->get();
         $this->dao->update(TABLE_STORY)
@@ -187,9 +187,10 @@ class storyModel extends model
 
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = date('Y-m-d H:i:s');
+        $date     = date('Y-m-d');
         $story = fixer::input('post')
             ->remove('result,preVersion,comment')
-            ->add('reviewedDate', $now)
+            ->setDefault('reviewedDate', $date)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setIF($this->post->result == 'pass' and $oldStory->status == 'draft',   'status', 'active')
