@@ -58,7 +58,7 @@ $lang->story->stageList['verified']   = '已验收';
 $lang->story->stageList['released']   = '已发布';
 
 $lang->story->reasonList['']           = '';
-$lang->story->reasonList['done']       = '完成';
+$lang->story->reasonList['done']       = '已完成';
 $lang->story->reasonList['subdivided'] = '已细分';
 $lang->story->reasonList['duplicate']  = '重复';
 $lang->story->reasonList['postponed']  = '延期';
