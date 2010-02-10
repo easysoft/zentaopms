@@ -33,8 +33,10 @@
         <th class='w-50px'><?php echo $lang->story->pri;?></th>
         <th class='w-200px'><?php echo $lang->story->product;?></th>
         <th><?php echo $lang->story->title;?></th>
-        <th class='w-100px'><?php echo $lang->story->plan;?></th>
-        <th class='w-50px'><?php echo $lang->story->linkStory;?></th>
+        <th><?php echo $lang->story->plan;?></th>
+        <th class='w-100px'><?php echo $lang->story->openedBy;?></th>
+        <th class='w-100px'><?php echo $lang->story->estimate;?></th>
+        <th class='w-100px'><?php echo $lang->story->linkStory;?></th>
       </tr>
       </thead>
       <tbody>
@@ -46,6 +48,8 @@
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
         <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "story=$story->id"), $story->title);?></td>
         <td><?php echo $story->planTitle;?></td>
+        <td><?php echo $users[$story->openedBy];?></td>
+        <td><?php echo $story->estimate;?></td>
         <td>
           <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' />
           <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
@@ -54,7 +58,7 @@
       <?php endforeach;?>
       </tbody>
       <tr>
-        <td colspan='6'><?php echo html::submitButton();?></td>
+        <td colspan='8'><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>

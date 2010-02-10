@@ -178,21 +178,22 @@ class projectModel extends model
     /* 关联需求。*/
     public function linkStory($projectID)
     {
-        if(!isset($_POST['stories']) or empty($_POST['stories'])) return;
-        extract($_POST);
-        foreach($stories as $key => $storyID)
+        if($this->post->stories == false) return false;
+        foreach($this->post->stories as $key => $storyID)
         {
-            $productID = $products[$key];
-            $sql = "INSERT INTO " . TABLE_PROJECTSTORY . " VALUES ('$projectID', '$productID', '$storyID')";
-            $this->dbh->query($sql);
+            $productID = $this->post->products[$key];
+            $this->dao->insert(TABLE_PROJECTSTORY)
+                ->set('project')->eq($projectID)
+                ->set('product')->eq($productID)
+                ->set('story')->eq($storyID)
+                ->exec();
         }        
     }
 
     /* 移除一个需求。*/
     public function unlinkStory($projectID, $storyID)
     {
-        $sql = "DELETE FROM " . TABLE_PROJECTSTORY . " WHERE project = '$projectID' AND story = '$storyID' LIMIT 1";
-        return $this->dbh->exec($sql);
+        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->limit(1)->exec();
     }
 
     /* 获取团队成员。*/
