@@ -1,4 +1,5 @@
 <script src='<?php echo $jsRoot;?>jquery/reverseorder/raw.js' type='text/javascript'></script>
+<div>
 <fieldset>
   <legend onclick='$("#historyItem li").reverseOrder();' class='hand'><?php echo $lang->history . $lang->reverse;?></legend>
   <ol id='historyItem'>
@@ -20,3 +21,4 @@
     <?php endforeach;?>
   </ol>
 </fieldset>
+</div>
