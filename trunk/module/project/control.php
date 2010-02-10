@@ -488,7 +488,7 @@ class project extends control
         $position[]      = html::a($browseLink, $project->name);
         $position[]      = $this->lang->project->linkStory;
 
-        $allStories = $this->story->getProductStories(array_keys($products), $moduleID = '0', $status = 'wait, doing');
+        $allStories = $this->story->getProductStories(array_keys($products), $moduleID = '0', $status = 'active');
         $prjStories = $this->story->getProjectStoryPairs($projectID);
 
         $this->assign('header',     $header);
