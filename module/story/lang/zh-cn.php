@@ -27,6 +27,7 @@ $lang->story->change    = "变更";
 $lang->story->review    = '评审';
 $lang->story->edit      = "编辑需求";
 $lang->story->close     = '关闭';
+$lang->story->activate  = '激活';
 $lang->story->delete    = "删除需求";
 $lang->story->view      = "需求详情";
 $lang->story->tasks     = "相关任务";
