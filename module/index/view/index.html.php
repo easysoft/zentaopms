@@ -22,6 +22,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/colorize.html.php';?>
 <div class="yui-d0 yui-t6">  
   <div class='yui-main'>
     <div class='yui-b'>
@@ -53,17 +54,17 @@
     </div>
   </div>
   <div class='yui-b'>
-    <div class='box-title'><?php echo $lang->index->latest;?></div>
-    <div class='box-content'>
+    <table class='table-1 colored'>
+      <caption><?php echo $lang->index->latest;?></caption>
       <?php 
       foreach($actions as $action)
       {
-          if($action->objectType == 'case') $action->objectType = 'testcase';
-          echo date('H:i', $action->date) . ' ' . html::a($this->createLink('user', 'view', "account=$action->actor"), $users[$action->actor]) . ' ' . $action->action . ' ' . $action->objectType . ' ' . html::a($this->createLink($action->objectType, 'view', "id=$action->objectID"), '#' . $action->objectID);
-          echo "<br />";
+          echo "<tr><td>";
+          printf($lang->index->action, $action->date, $users[$action->actor], $action->actionLabel, $action->objectLabel, $action->objectLink);
+          echo "</td></tr>";
       }
       ?>
-    </div>
+      </table>
   </div>
 </div>
 <script language='Javascript'><?php for($i = 1; $i <= $counts; $i ++) echo "createChart$i();"; ?></script>
