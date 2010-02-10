@@ -90,10 +90,9 @@ function search(active)
             <th><?php common::printOrderLink('estimate',       $orderBy, $vars, $lang->story->estimate);?></th>
             <th><?php common::printOrderLink('status',         $orderBy, $vars, $lang->story->status);?></th>
             <th><?php common::printOrderLink('stage',          $orderBy, $vars, $lang->story->stage);?></th>
-            <th><?php common::printOrderLink('closedBy',       $orderBy, $vars, $lang->story->closedBy);?></th>
             <th><?php common::printOrderLink('closedReason',   $orderBy, $vars, $lang->story->closedReason);?></th>
             <th class='w-100px'><?php common::printOrderLink('lastEditedDate', $orderBy, $vars, $lang->story->lastEdited);?></th>
-            <th><?php echo $lang->actions;?></th>
+            <th class='w-150px'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -112,12 +111,16 @@ function search(active)
             <td><?php echo $story->estimate;?></td>
             <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
             <td><?php echo $lang->story->stageList[$story->stage];?></td>
-            <td><?php echo $users[$story->closedBy];?></td>
             <td><?php echo $lang->story->reasonList[$story->closedReason];?></td>
             <td><?php echo substr($story->lastEditedDate, 5, 11);?></td>
             <td>
-              <?php if(common::hasPriv('story', 'edit'))   echo html::a($this->createLink('story', 'edit',   "story={$story->id}"), $lang->edit);?>
-              <?php if(common::hasPriv('story', 'delete')) echo html::a($this->createLink('story', 'delete', "story={$story->id}&confirm=no"), $lang->delete, 'hiddenwin');?>
+              <?php 
+              $vars = "story={$story->id}";
+              if(!($story->status != 'closed' and common::printLink('story', 'change', $vars, $lang->story->change))) echo $lang->story->change . ' ';
+              if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', $vars, $lang->story->review))) echo $lang->story->review . ' ';
+              if(!common::printLink('story', 'edit',   $vars, $lang->edit)) echo $lang->edit;
+              if(!common::printLink('story', 'delete', $vars, $lang->delete)) echo $lang->delete;
+              ?>
             </td>
           </tr>
           <?php endforeach;?>
