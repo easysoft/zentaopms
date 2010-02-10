@@ -29,7 +29,7 @@
     <caption><?php echo $lang->story->change;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
-      <td><?php echo html::select('assignedTo', $users, $story->reviewedBy, 'class="select-3"');?></td>
+      <td><?php echo html::select('assignedTo', $users, $story->reviewedBy, 'class="select-3"') . html::checkbox('needNotReview', $lang->story->needNotReview);?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->title;?></th>
@@ -37,7 +37,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->spec;?></th>
-      <td><?php echo html::textarea('spec', $story->spec, 'rows=5 class="area-1"');?><br /> <?php echo $lang->story->specNote;?></td>
+      <td><?php echo html::textarea('spec', $story->spec, 'rows=5 class="area-1"');?><br /> <?php echo $lang->story->specTemplate;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>

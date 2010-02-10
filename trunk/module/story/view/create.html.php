@@ -23,9 +23,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<style>
-#plan {width:245px}
-</style>
+<style>#plan {width:245px}</style>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table align='center' class='table-1'> 
@@ -50,8 +48,8 @@
         <td><input type='text' name='estimate' id='estimate' class='text-3' /></td>
       </tr> 
       <tr>
-        <th class='rowhead'><?php echo $lang->story->assignedTo;?></th>
-        <td><?php echo html::select('assignedTo', $users, '', 'class=select-3');?></td>
+        <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
+        <td><?php echo html::select('assignedTo', $users, '', 'class=select-3') . html::checkbox('needNotReview', $lang->story->needNotReview);?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->title;?></th>
@@ -59,7 +57,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->spec;?></th>
-        <td><textarea name='spec' rows='8' class='text-1'></textarea><br /><?php echo $lang->story->specNote;?></td>
+        <td><textarea name='spec' rows='8' class='text-1'></textarea><br /><?php echo $lang->story->specTemplate;?></td>
       </tr>  
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
