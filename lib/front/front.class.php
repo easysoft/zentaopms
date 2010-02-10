@@ -232,14 +232,14 @@ class html
      * @access public
      * @return string   the submit button tag.
      */
-    public static function submitButton($label = '')
+    public static function submitButton($label = '', $misc = '')
     {
         if(empty($label))
         {
             global $lang;
             $label = $lang->save;
         }
-        return " <input type='submit' id='submit' value='$label' class='button-s' /> ";
+        return " <input type='submit' id='submit' value='$label' class='button-s' $misc /> ";
     }
 
     /**
