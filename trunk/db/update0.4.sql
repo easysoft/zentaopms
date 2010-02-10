@@ -103,3 +103,6 @@ DROP TABLE `zt_releation`;
 -- 20100208 adjust action table.
 ALTER TABLE `zt_action` ADD `extra` VARCHAR( 255 ) NOT NULL AFTER `id`;
 UPDATE zt_action SET extra = substr( ACTION , 13 ) , ACTION = 'Resolved' WHERE ACTION LIKE 'Resolved%';
+
+--20100210 adjust the reviewedDate
+ALTER TABLE `zt_story` CHANGE `reviewedDate` `reviewedDate` DATE NOT NULL 
