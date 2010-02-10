@@ -21,7 +21,6 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->task->common    = '任务';
 $lang->task->index     = "任务一览";
 $lang->task->create    = "新增任务";
 $lang->task->import    = "导入之前未完任务";
@@ -29,25 +28,20 @@ $lang->task->edit      = "更新任务";
 $lang->task->delete    = "删除任务";
 $lang->task->view      = "查看任务";
 
-$lang->task->ajaxGetUserTasks    = "接口:我的任务";
-$lang->task->ajaxGetProjectTasks = "接口:项目任务";
-$lang->task->confirmDelete       = "您确定要删除这个任务吗？";
-$lang->task->copyStoryTitle      = "同需求";
-$lang->task->afterSubmit         = "添加之后";
-$lang->task->successSaved        = "成功添加，";
-
-$lang->task->id        = '编号';
-$lang->task->project   = '所属项目';
-$lang->task->story     = '相关需求';
-$lang->task->name      = '任务名称';
-$lang->task->type      = '任务类型';
-$lang->task->pri       = '优先级';
-$lang->task->owner     = '指派给';
-$lang->task->estimate  = '最初预计';
-$lang->task->left      = '预计剩余';
-$lang->task->consumed  = '已消耗';
-$lang->task->status    = '任务状态';
-$lang->task->desc      = '任务描述';
+$lang->task->common       = '任务';
+$lang->task->id           = '编号';
+$lang->task->project      = '所属项目';
+$lang->task->story        = '相关需求';
+$lang->task->name         = '任务名称';
+$lang->task->type         = '任务类型';
+$lang->task->pri          = '优先级';
+$lang->task->owner        = '指派给';
+$lang->task->estimate     = '最初预计';
+$lang->task->left         = '预计剩余';
+$lang->task->consumed     = '已消耗';
+$lang->task->status       = '任务状态';
+$lang->task->desc         = '任务描述';
+$lang->task->statusCustom = '状态排序';
 
 $lang->task->statusList->wait  = '未开始';
 $lang->task->statusList->doing = '进行中';
@@ -78,3 +72,10 @@ $lang->task->buttonBackToList = '返回';
 $lang->task->legendBasic  = '基本信息';
 $lang->task->legendDesc   = '任务描述';
 $lang->task->legendAction = '操作';
+
+$lang->task->ajaxGetUserTasks    = "接口:我的任务";
+$lang->task->ajaxGetProjectTasks = "接口:项目任务";
+$lang->task->confirmDelete       = "您确定要删除这个任务吗？";
+$lang->task->copyStoryTitle      = "同需求";
+$lang->task->afterSubmit         = "添加之后";
+$lang->task->successSaved        = "成功添加，";
