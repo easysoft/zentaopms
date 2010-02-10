@@ -144,6 +144,27 @@ class story extends control
         $this->display();
     }
 
+    /* 激活需求。*/
+    public function activate($storyID)
+    {
+        $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $this->story->activate($storyID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+        }
+
+        $this->commonAction($storyID);
+
+        /* 赋值到模板。*/
+        $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->activate . $this->lang->colon . $this->view->story->title;
+        $this->view->position[]    = $this->lang->story->activate;
+        $this->display();
+    }
+
     /* 需求详情。*/
     public function view($storyID, $version = 0)
     {

@@ -227,12 +227,17 @@ class storyModel extends model
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = date('Y-m-d H:i:s');
         $story = fixer::input('post')
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
             ->add('closedDate', $now)
+            ->add('closedBy',   $this->app->user->account)
             ->add('assignedTo',   'closed')
             ->add('assignedDate', $now)
             ->add('status', 'closed') 
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
+            ->setIF($this->post->closedReason == 'done', 'stage', 'released')
+            ->setIF($this->post->closedReason != 'done', 'plan', 0)
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)
@@ -241,6 +246,27 @@ class storyModel extends model
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
             ->where('id')->eq($storyID)->exec();
+        return true;
+    }
+
+    /* 激活需求。*/
+    public function activate($storyID)
+    {
+        $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $now      = date('Y-m-d H:i:s');
+        $story = fixer::input('post')
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->add('assignedDate', $now)
+            ->add('status', 'active') 
+            ->add('closedBy', '')
+            ->add('closedReason', '')
+            ->add('closedDate', '0000-00-00')
+            ->add('reviewedBy', '')
+            ->add('reviewedDate', '0000-00-00')
+            ->remove('comment')
+            ->get();
+        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
         return true;
     }
 
