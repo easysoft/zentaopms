@@ -497,6 +497,7 @@ class project extends control
         $this->assign('products',   $products);
         $this->assign('allStories', $allStories);
         $this->assign('prjStories', $prjStories);
+        $this->assign('users',      $this->loadModel('user')->getPairs('noletter'));
         $this->display();
     }
 
