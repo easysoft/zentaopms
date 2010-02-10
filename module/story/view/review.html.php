@@ -28,23 +28,23 @@ function switchShow(result)
 {
     if(result == 'reject')
     {
-        $('#closedReasonBox').show();
+        $('#rejectedReasonBox').show();
         $('#preVersionBox').hide();
     }
     else if(result == 'revert')
     {
         $('#preVersionBox').show();
-        $('#closedReasonBox').hide();
+        $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
     }
     else
     {
         $('#preVersionBox').hide();
-        $('#closedReasonBox').hide();
+        $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
-        $('#closedReasonBox').hide();
+        $('#rejectedReasonBox').hide();
     }
 }
 
@@ -79,8 +79,8 @@ function setStory(reason)
       <th class='rowhead'><?php echo $lang->story->reviewResult;?></th>
       <td><?php echo html::select('result', $lang->story->reviewResultList, '', 'class=select-3 onchange="switchShow(this.value)"');?></td>
     </tr>
-    <tr id='closedReasonBox' class='hidden'>
-      <th class='rowhead'><?php echo $lang->story->closedReason;?></th>
+    <tr id='rejectedReasonBox' class='hidden'>
+      <th class='rowhead'><?php echo $lang->story->rejectedReason;?></th>
       <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=select-3 onchange="setStory(this.value)"');?></td>
     </tr>
     <tr id='duplicateStoryBox' class='hidden'>

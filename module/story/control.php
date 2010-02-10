@@ -221,7 +221,9 @@ class story extends control
         if(!empty($_POST))
         {
             $this->story->review($storyID);
-            $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($this->post->result));
+            $result = $this->post->result;
+            if(strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
+            $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
             $this->action->logHistory($actionID);
             if($this->post->result == 'reject')
             {
@@ -276,8 +278,7 @@ class story extends control
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
         /* 设置评审结果可选值。*/
-        if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
-        if($story->status == 'changed') unset($this->lang->story->reviewResultList['reject']);
+        if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
 
         /* 导航信息。*/
         $this->view->header->title = $product->name . $this->lang->colon . $this->lang->close . $this->lang->colon . $story->title;

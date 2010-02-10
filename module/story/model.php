@@ -167,7 +167,7 @@ class storyModel extends model
             ->autoCheck()
             ->batchCheck('title,estimate', 'notempty')
             ->checkIF($story->closedBy, 'closedReason', 'notempty')
-            ->checkIF($story->status == 'closed', 'stage', 'notempty')
+            ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF($story->closedReason == 'subdivided', 'childStories', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
@@ -201,6 +201,7 @@ class storyModel extends model
             ->setIF($this->post->result == 'reject', 'status', 'closed')
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'revert', 'status',  'active')
+            ->setIF($this->post->closedReason == 'done', 'stage', 'released')
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')

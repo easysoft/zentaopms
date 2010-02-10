@@ -58,6 +58,7 @@ $lang->story->lastEdited     = '最后修改';
 $lang->story->closedBy       = '由谁关闭';
 $lang->story->closedDate     = '关闭日期';
 $lang->story->closedReason   = '关闭原因';
+$lang->story->rejectedReason = '拒绝原因';
 $lang->story->reviewedBy     = '由谁评审';
 $lang->story->reviewedDate   = '评审时间';
 $lang->story->version        = '版本号';
@@ -96,10 +97,10 @@ $lang->story->reasonList['cancel']     = '已取消';
 //$lang->story->reasonList['isbug']      = '是个Bug';
 
 $lang->story->reviewResultList['']       = '';
-$lang->story->reviewResultList['pass']   = '通过';
-$lang->story->reviewResultList['clarify']= '需求不明确';
+$lang->story->reviewResultList['pass']   = '确认通过';
 $lang->story->reviewResultList['revert'] = '撤销变更';
-$lang->story->reviewResultList['reject'] = '拒绝并关闭';
+$lang->story->reviewResultList['clarify']= '有待明确';
+$lang->story->reviewResultList['reject'] = '拒绝';
 
 $lang->story->priList[3]  = '一般';
 $lang->story->priList[1]  = '最高';
