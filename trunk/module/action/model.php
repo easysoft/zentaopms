@@ -136,17 +136,23 @@ class actionModel extends model
     /* 打印修改记录。*/
     public function printChanges($objectType, $histories)
     {
+        $maxLength = 0;
         foreach($histories as $history)
         {
             $fieldName  = $history->field;
-            $fieldLabel = isset($this->lang->$objectType->$fieldName) ? $this->lang->$objectType->$fieldName : $fieldName;
+            $history->fieldLabel = isset($this->lang->$objectType->$fieldName) ? $this->lang->$objectType->$fieldName : $fieldName;
+            if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
+        }
+        foreach($histories as $history)
+        {
+            $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
             if($history->diff != '')
             {
-                printf($this->lang->action->label->diff2, $fieldLabel, nl2br($history->diff));
+                printf($this->lang->action->label->diff2, $history->fieldLabel, nl2br($history->diff));
             }
             else
             {
-                printf($this->lang->action->label->diff1, $fieldLabel, $history->old, $history->new);
+                printf($this->lang->action->label->diff1, $history->fieldLabel, $history->old, $history->new);
             }
         }
     }
