@@ -114,7 +114,7 @@ class productplan extends control
         $this->commonAction($plan->product);
         $this->view->header->title = $this->lang->productplan->linkStory;
         $this->view->position[] = $this->lang->productplan->linkStory;
-        $this->view->allStories = $this->loadModel('story')->getProductStories($this->view->product->id, $moduleID = '0', $status = 'wait, doing');
+        $this->view->allStories = $this->loadModel('story')->getProductStories($this->view->product->id, $moduleID = '0', $status = 'draft,active,changed');
         $this->view->planStories= $this->story->getPlanStories($planID);
         $this->view->products   = $this->product->getPairs();
         $this->view->plan       = $plan;
