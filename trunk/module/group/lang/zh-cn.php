@@ -78,6 +78,7 @@ $lang->resource->story->view    = 'view';
 $lang->resource->story->change  = 'change';
 $lang->resource->story->review  = 'review';
 $lang->resource->story->close   = 'close';
+$lang->resource->story->activate= 'activate';
 $lang->resource->story->tasks   = 'tasks';
 $lang->resource->story->ajaxGetProjectStories = 'ajaxGetProjectStories';
 $lang->resource->story->ajaxGetProductStories = 'ajaxGetProductStories';
