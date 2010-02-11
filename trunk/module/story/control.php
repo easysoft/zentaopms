@@ -344,7 +344,7 @@ class story extends control
             $ccList = ltrim(',', $ccList);
         }
 
-        if($toList == '')
+        if($toList == '' or $toList == 'closed')
         {
             if($ccList == '') return;
             if(strpos($ccList, ',') === false)
