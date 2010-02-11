@@ -94,6 +94,7 @@ $lang->story->reasonList['duplicate']  = '重复';
 $lang->story->reasonList['postponed']  = '延期';
 $lang->story->reasonList['willnotdo']  = '不做';
 $lang->story->reasonList['cancel']     = '已取消';
+$lang->story->reasonList['bydesign']   = '设计如此';
 //$lang->story->reasonList['isbug']      = '是个Bug';
 
 $lang->story->reviewResultList['']       = '';
