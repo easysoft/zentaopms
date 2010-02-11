@@ -341,6 +341,7 @@ class story extends control
         {
             $prjMembers = $this->story->getProjectMembers($storyID);
             $ccList .= ',' . join(',', $prjMembers);
+            $ccList = ltrim(',', $ccList);
         }
 
         if($toList == '')
