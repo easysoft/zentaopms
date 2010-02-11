@@ -75,7 +75,7 @@ class my extends control
         $this->app->session->set('storyList', $this->app->getURI(true));
 
         /* 赋值。*/
-        $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, 'doing,wait');
+        $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, 'active,draft,changed');
         $this->view->users   = $this->user->getPairs('noletter');
 
         $this->display();
