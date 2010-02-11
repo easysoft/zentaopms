@@ -225,6 +225,7 @@ class story extends control
         if(!empty($_POST))
         {
             $this->story->review($storyID);
+            if(dao::isError()) die(js::error(dao::getError()));
             $result = $this->post->result;
             if(strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
