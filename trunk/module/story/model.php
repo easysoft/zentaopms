@@ -198,6 +198,7 @@ class storyModel extends model
             ->setIF($this->post->result == 'pass' and $oldStory->status == 'changed', 'status', 'active')
             ->setIF($this->post->result == 'reject', 'closedBy',   $this->app->user->account)
             ->setIF($this->post->result == 'reject', 'closedDate', $now)
+            ->setIF($this->post->result == 'reject', 'assignedTo', 'closed')
             ->setIF($this->post->result == 'reject', 'status', 'closed')
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'revert', 'status',  'active')
@@ -209,6 +210,7 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)->data($story)
             ->autoCheck()
             ->batchCheck('assignedTo, reviewedBy', 'notempty')
+            ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'subdivided', 'childStories',   'notempty')
             ->where('id')->eq($storyID)->exec();

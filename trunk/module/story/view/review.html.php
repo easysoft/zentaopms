@@ -24,12 +24,14 @@
 ?>
 <?php include './header.html.php';?>
 <script language='Javascript'>
+var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : print($story->openedBy);?>';
 function switchShow(result)
 {
     if(result == 'reject')
     {
         $('#rejectedReasonBox').show();
         $('#preVersionBox').hide();
+        $('#assignedTo').val('closed');
     }
     else if(result == 'revert')
     {
@@ -37,6 +39,7 @@ function switchShow(result)
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
+        $('#assignedTo').val(assignedTo);
     }
     else
     {
@@ -45,6 +48,7 @@ function switchShow(result)
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
         $('#rejectedReasonBox').hide();
+        $('#assignedTo').val(assignedTo);
     }
 }
 
