@@ -344,7 +344,7 @@ class story extends control
             $ccList = ltrim(',', $ccList);
         }
 
-        if($toList == '' or $toList == 'closed')
+        if($toList == '')
         {
             if($ccList == '') return;
             if(strpos($ccList, ',') === false)
@@ -358,6 +358,10 @@ class story extends control
                 $toList   = substr($ccList, 0, $commaPos);
                 $ccList   = substr($ccList, $commaPos + 1);
             }
+        }
+        elseif($toList = 'closed')
+        {
+            $toList = $story->openedBy;
         }
 
         /* 赋值，获得邮件内容。*/
