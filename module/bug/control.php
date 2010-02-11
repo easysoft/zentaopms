@@ -375,11 +375,11 @@ class bug extends control
         die(html::select('bug', $bugs, '', 'class=select-1'));
     }
 
-    /* 发送变量。*/
+    /* 发送邮件。*/
     private function sendmail($bugID, $actionID)
     {
         /* 设定toList和ccList。*/
-        $bug     = $this->bug->getByID($bugID);
+        $bug    = $this->bug->getByID($bugID);
         $toList = $bug->assignedTo;
         $ccList = trim($bug->mailto, ',');
         if($toList == '')

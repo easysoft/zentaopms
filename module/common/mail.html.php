@@ -1,23 +1,9 @@
-<span><?php echo "$action->date, <strong>$action->action</strong> by <strong>$action->actor</strong>"; ?></span>
-<?php if(!empty($action->comment) or !empty($histories)):?>
+<?php if(isset($users[$action->actor])) $action->actor = $users[$action->actor];?>
+<span><?php $this->action->printAction($action);?>
+<?php if(!empty($action->comment) or !empty($action->history)):?>
 <div class='history'>
-<?php
-if(!empty($histories))
-{
-    foreach($histories[$action->id] as $history)
-    {
-        if($history->diff != '')
-        {
-            echo "CHANGE <strong>$history->field</strong>, the diff is: <blockquote>" . nl2br($history->diff) . "</blockquote>";
-        }
-        else
-        {
-            echo "CHANGE <strong>$history->field</strong> FROM '$history->old' TO '$history->new' . <br />";
-        }
-    }
-}
-echo nl2br($action->comment); 
-?>
+<div><?php echo $this->action->printChanges($action->objectType, $action->history);?></div>
+<?php if($action->comment and $action->history) echo '<br />'; echo nl2br($action->comment);?>
 </div>
 <?php endif;?>
 <style>

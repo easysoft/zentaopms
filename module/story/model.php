@@ -365,6 +365,17 @@ class storyModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
+    /* 获得需求所在的活动的项目的成员列表。*/
+    public function getProjectMembers($storyID)
+    {
+        $projects = $this->dao->select('project')
+            ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.story')->eq((int)$storyID)
+            ->andWhere('t2.status')->eq('doing')
+            ->fetchPairs();
+        if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs('account'));
+    }
+
     /* 格式化需求显示。*/
     private function formatStories($stories)
     {
