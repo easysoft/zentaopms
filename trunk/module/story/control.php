@@ -40,7 +40,8 @@ class story extends control
             $storyID = $this->story->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
-            $this->action->create('story', $storyID, 'Opened', '');
+            $actionID = $this->action->create('story', $storyID, 'Opened', '');
+            $this->sendMail($storyID, $actionID);
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -103,6 +104,7 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+                $this->sendMail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -132,6 +134,7 @@ class story extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+                $this->sendMail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -154,6 +157,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+            $this->sendMail($storyID, $actionID);
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -225,6 +229,7 @@ class story extends control
             if(strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
             $this->action->logHistory($actionID);
+            $this->sendMail($storyID, $actionID);
             if($this->post->result == 'reject')
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
@@ -267,6 +272,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason));
             $this->action->logHistory($actionID);
+            $this->sendMail($storyID, $actionID);
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
@@ -314,5 +320,46 @@ class story extends control
     {
         $stories = $this->story->getProductStoryPairs($productID, $moduleID);
         die(html::select('story', $stories, $storyID, "class=''"));
+    }
+
+    /* 发送邮件。*/
+    private function sendmail($storyID, $actionID)
+    {
+        /* 设定toList和ccList。*/
+        $story      = $this->story->getById($storyID);
+        $prjMembers = $this->story->getProjectMembers($storyID);
+        $toList     = $story->assignedTo;
+        $ccList     = str_replace(' ', '', trim($story->mailto, ',')) . ',' . join(',', $prjMembers);
+        if($toList == '')
+        {
+            if($ccList == '') return;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+
+        /* 获得action信息。*/
+        $action          = $this->action->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+        if(strtolower($action->action) == 'opened') $action->comment = $story->spec;
+
+        /* 赋值，获得邮件内容。*/
+        $this->view->story  = $story;
+        $this->view->action = $action;
+        $this->view->users  = $this->user->getPairs('noletter');
+        $mailContent = $this->parse($this->moduleName, 'sendmail');
+
+        /* 发信。*/
+        $this->loadModel('mail')->send($toList, 'STORY #' . $story->id . $this->lang->colon . $story->title, $mailContent, $ccList);
+        if($this->mail->isError()) echo js::error($this->mail->getError());
     }
 }
