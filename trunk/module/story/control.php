@@ -325,11 +325,24 @@ class story extends control
     /* 发送邮件。*/
     private function sendmail($storyID, $actionID)
     {
+        /* 获得action信息。*/
+        $action          = $this->action->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+        if(strtolower($action->action) == 'opened') $action->comment = $story->spec;
+
         /* 设定toList和ccList。*/
-        $story      = $this->story->getById($storyID);
-        $prjMembers = $this->story->getProjectMembers($storyID);
-        $toList     = $story->assignedTo;
-        $ccList     = str_replace(' ', '', trim($story->mailto, ',')) . ',' . join(',', $prjMembers);
+        $story  = $this->story->getById($storyID);
+        $toList = $story->assignedTo;
+        $ccList = str_replace(' ', '', trim($story->mailto, ','));
+
+        /* 当需求的操作是变更或者评审的时候，抄送给项目中成员。*/
+        if(strtolower($action->action) == 'changed' or strtolower($action->action) == 'reviewed')
+        {
+            $prjMembers = $this->story->getProjectMembers($storyID);
+            $ccList .= ',' . join(',', $prjMembers);
+        }
+
         if($toList == '')
         {
             if($ccList == '') return;
@@ -345,12 +358,6 @@ class story extends control
                 $ccList   = substr($ccList, $commaPos + 1);
             }
         }
-
-        /* 获得action信息。*/
-        $action          = $this->action->getById($actionID);
-        $history         = $this->action->getHistory($actionID);
-        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
-        if(strtolower($action->action) == 'opened') $action->comment = $story->spec;
 
         /* 赋值，获得邮件内容。*/
         $this->view->story  = $story;
