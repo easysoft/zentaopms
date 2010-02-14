@@ -101,7 +101,7 @@ ALTER TABLE `zt_task` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `st
 DROP TABLE `zt_releation`;
 
 -- 20100208 adjust action table.
-ALTER TABLE `zt_action` ADD `extra` VARCHAR( 255 ) NOT NULL AFTER `id`;
+ALTER TABLE `zt_action` ADD `extra` VARCHAR( 255 ) NOT NULL;
 UPDATE zt_action SET extra = substr( ACTION , 13 ) , ACTION = 'Resolved' WHERE ACTION LIKE 'Resolved%';
 
 --20100210 adjust the reviewedDate
