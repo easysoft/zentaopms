@@ -79,7 +79,8 @@ $lang->story->statusList['changed']   = '已变更';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未开始';
-$lang->story->stageList['planned']    = '已安排';
+$lang->story->stageList['planned']    = '已计划';
+$lang->story->stageList['projected']  = '已立项';
 $lang->story->stageList['developing'] = '研发中';
 $lang->story->stageList['developed']  = '研发完毕';
 $lang->story->stageList['testing']    = '测试中';
