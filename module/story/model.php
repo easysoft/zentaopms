@@ -222,6 +222,7 @@ class storyModel extends model
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
         }
+        $this->setStage($storyID);
         return true;
     }
     
@@ -272,6 +273,72 @@ class storyModel extends model
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
         return true;
+    }
+
+    /* 设置需求的*/
+    public function setStage($storyID, $customStage = '')
+    {
+        /* 指定了customStage，以其为准。*/
+        if($customStage)
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq($customStage)->where('id')->eq((int)$storyID)->exec();
+            return;
+        }
+
+        /* 查找活动的项目。*/
+        $projects = $this->dao->select('project')
+            ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.story')->eq((int)$storyID)
+            ->andWhere('t2.status')->eq('doing')
+            ->fetchPairs();
+
+        /* 如果没有项目，但有计划，则阶段为planned或wait。*/
+        if(!$projects)
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq((int)$storyID)->andWhere('plan')->gt(0)->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq((int)$storyID)->andWhere('plan')->eq(0)->andWhere('status')->eq('active')->exec();
+            return;
+        }
+        /* 查找对应的任务。*/
+        $tasks = $this->dao->select('type,status')->from(TABLE_TASK)->where('project')->in($projects)->andWhere('story')->eq($storyID)->fetchGroup('type');
+
+        /* 没有任务，则所处阶段为'已经立项'。*/
+        if(!$tasks)
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('projected')->where('id')->eq((int)$storyID)->exec();
+            return;
+        }
+
+        /* 如果有测试任务。*/
+        if(isset($tasks['test']))
+        {
+            $stage = 'tested';
+            foreach($tasks['test'] as $task)
+            {
+                if($task->status != 'done')
+                {
+                    $stage = 'testing';
+                    break;
+                }
+            }
+        }
+        else
+        {
+            $stage = 'developed';
+            foreach($tasks as $type => $typeTasks)
+            {
+                foreach($typeTasks as $task)
+                {
+                    if($task->status != 'done')
+                    {
+                        $stage = 'developing';
+                        break;
+                    }
+                }
+            }
+        }
+        $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq((int)$storyID)->exec();
+        return;
     }
 
     /* 获得某一个产品某一个模块下面的所有需求列表。*/
