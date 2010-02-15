@@ -46,6 +46,7 @@ class taskModel extends model
             ->check('name', 'notempty')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->exec();
+        if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
@@ -69,13 +70,17 @@ class taskModel extends model
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
             ->where('id')->eq((int)$taskID)->exec();
+        if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
     
     /* 删除一个任务。*/
     public function delete($taskID)
     {
-        return $this->dao->delete()->from(TABLE_TASK)->where('id')->eq((int)$taskID)->limit(1)->exec();
+        $story = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
+        $this->dao->delete()->from(TABLE_TASK)->where('id')->eq((int)$taskID)->limit(1)->exec();
+        if($story) $this->loadModel('story')->setStage($story);
+        return;
     }
 
     /* 通过id获取一个任务信息。*/

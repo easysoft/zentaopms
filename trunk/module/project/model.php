@@ -179,6 +179,7 @@ class projectModel extends model
     public function linkStory($projectID)
     {
         if($this->post->stories == false) return false;
+        $this->loadModel('story');
         foreach($this->post->stories as $key => $storyID)
         {
             $productID = $this->post->products[$key];
@@ -187,6 +188,7 @@ class projectModel extends model
                 ->set('product')->eq($productID)
                 ->set('story')->eq($storyID)
                 ->exec();
+            $this->story->setStage($storyID);
         }        
     }
 
@@ -194,6 +196,7 @@ class projectModel extends model
     public function unlinkStory($projectID, $storyID)
     {
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+        $this->loadModel('story')->setStage($storyID);
     }
 
     /* 获取团队成员。*/
