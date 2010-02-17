@@ -48,10 +48,11 @@ $config->default->method = 'index';                     // Ä¬ÈÏµÄ·½·¨¡£µ±ÇëÇóÖĞÃ
 $config->file->dangers = 'php,jsp,py,rb,asp,';          // ²»ÔÊĞíÉÏ´«µÄÎÄ¼şÀàĞÍÁĞ±í¡£
 $config->file->maxSize = 1024 * 1024;                   // ÔÊĞíÉÏ´«µÄÎÄ¼ş´óĞ¡£¬µ¥Î»Îª×Ö½Ú¡£
 
-$config->db->persistant = true;                        // ÊÇ·ñ´ò¿ª³Ö¾ÃÁ¬½Ó¡£
+$config->db->persistant = false;                        // ÊÇ·ñ´ò¿ª³Ö¾ÃÁ¬½Ó¡£
 $config->db->driver     = 'mysql';                      // pdoµÄÇı¶¯ÀàĞÍ£¬Ä¿Ç°ÔİÊ±Ö»Ö§³Ömysql¡£
 $config->db->dao        = true;                         // ÊÇ·ñÊ¹ÓÃDAO¡£
 $config->db->encoding   = 'UTF8';                       // Êı¾İ¿âµÄ±àÂë¡£
+$config->db->strictMode = false;                        // ¹Ø±ÕMySQLµÄÑÏ¸ñÄ£Ê½¡£
 
 /* °üº¬×Ô¶¨ÒåÅäÖÃÎÄ¼ş¡£*/
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
