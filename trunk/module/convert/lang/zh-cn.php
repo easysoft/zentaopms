@@ -56,8 +56,10 @@ $lang->convert->dbName     = '%s使用的库';
 $lang->convert->dbPrefix   = '%s表前缀';
 $lang->convert->installRoot= '%s安装的根目录';
 
-$lang->convert->errorConnectDB     = '数据库连接失败 ';
-$lang->convert->errorCreateDB      = '数据库创建失败';
-$lang->convert->errorCreateTable   = '创建表失败';
+$lang->convert->checkDB    = '数据库';
+$lang->convert->checkTable = '表';
+$lang->convert->checkRoot  = '安装路径';
 
-$lang->convert->success = "安装成功！请删除convert.php，登录禅道管理系统，设置用户及分组！";
+$lang->convert->execute    = '执行转换';
+
+$lang->convert->errorConnectDB     = '数据库连接失败 ';

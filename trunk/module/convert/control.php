@@ -68,8 +68,8 @@ class convert extends control
     {
         $checkFunc = 'check' . $this->post->source;
         $this->view->header->title = $this->lang->convert->checkConfig;
-        $this->view->source  = $this->post->source;
-        $this->view->checkResult = $this->fetch('convert', $checkFunc, "version={$this->post->version}");
+        $this->view->source        = $this->post->source;
+        $this->view->checkResult   = $this->fetch('convert', $checkFunc, "version={$this->post->version}");
         $this->display();
     }
 
@@ -78,12 +78,21 @@ class convert extends control
     {
         helper::import('./converter/bugfree.php');
         $converter = new bugfreeConvertModel();
-        $checkResult['connectDB']   = $converter->connectDB();
-        $checkResult['checkTables'] = $converter->checkTables();
-        $checkResult['checkRoot']   = $converter->checkRoot();
-        a($checkResult);
-        $this->view->source  = 'bugfree';
-        $this->view->version = $version;
+
+        /* 分别检查数据库、表和安装路径。*/
+        $checkResult['db'] = $converter->connectDB();
+        if(is_object($checkResult['db'])) $checkResult['table'] = $converter->checkTables();
+        $checkResult['root'] = $converter->checkRoot();
+
+        /* 计算检查结果。*/
+        $result = 'pass';
+        if(!is_object($checkResult['db']) or !$checkResult['table'] or !$checkResult['root']) $result = 'fail';
+
+        /* 赋值。*/
+        $this->view->version     = $version;
+        $this->view->source      = 'bugfree';
+        $this->view->result      = $result;
+        $this->view->checkResult = $checkResult;
         $this->display();
     }
 
@@ -91,7 +100,11 @@ class convert extends control
     public function execute()
     {
         $convertFunc = 'convert' . $this->post->source;
-        $this->$convertFunc($this->post->version);
+        $this->view->header->title = $this->lang->convert->execute;
+        $this->view->source        = $this->post->source;
+        $this->view->executeResult = $this->fetch('convert', $convertFunc, "version={$this->post->version}");
+        $this->display();
+
     }
 
     /* 转换BugFree。*/

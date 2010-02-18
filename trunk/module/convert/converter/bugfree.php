@@ -1,47 +1,56 @@
 <?php
 class bugfreeConvertModel extends convertModel
 {
+    public function __construct()
+    {
+        parent::__construct();
+        parent::connectDB();
+    }
+
     /* 检查Tables。*/
     public function checkTables()
     {
+        return true;
     }
 
     /* 检查安装路径。*/
-    public function checkInstallRoot()
+    public function checkRoot()
     {
+        return true;
     }
 
     /* 执行转换。*/
     public function execute()
     {
         $this->clear();
+        $this->convertUser();
     }
 
     public function convertUser()
     {
-        $sql    = "SELECT * FROM BugUser";
-        $result = mysql_query($sql, $myLink);
-        while($user = mysql_fetch_assoc($result))
+        /* 查询当前系统中存在的用户。*/
+        $activeUsers = $this->dao
+            ->dbh($this->sourceDBH)
+            ->select("{$this->app->company->id} AS company, username AS account, userpassword AS password, realname, email")
+            ->from('BugUser')->fetchAll('account');
+
+        /* 查找曾经出现过的用户。*/
+        $allUsers = $this->dao->select("distinct(username) AS account")->from('BugHistory')->fetchPairs();
+
+        /* 合并二者。*/
+        foreach($allUsers as $key => $account)
         {
-            extract($user);
-            $sql = "INSERT INTO zt_user(company, id, account, password, realname, email) values('$companyID', $UserID, '$UserName', '$UserPassword', '$RealName', '$Email')";
-            mysql_query($sql) or die(mysql_error());
-        }
-        $sql = "SELECT OpenedBy AS UserName FROM BugInfo GROUP BY OpenedBy";
-        $result = mysql_query($sql, $myLink);
-        while($user = mysql_fetch_assoc($result))
-        {
-            extract($user);
-            $sql = "SELECT * FROM zt_user WHERE account = '$UserName'";
-            if(!mysql_fetch_row(mysql_query($sql)))
+            if(isset($activeUsers[$account])) 
             {
-                $sql = "INSERT INTO zt_user(company, account) values('$companyID', '$UserName')";
-                mysql_query($sql) or die(mysql_error());
+                $allUsers[$key] = $activeUsers[$account];
+            }
+            else
+            {
+                $allUsers[$key] = array('company' => $this->app->company->id, 'account' => $account, 'status' => 'delete');
             }
         }
-        $sql = "INSERT INTO zt_user(company, account) values('$companyID', 'liyp')";
-        mysql_query($sql) or die(mysql_error());
-
+        foreach($activeUsers as $account => $user) if(!isset($allUsers[$account])) $allUsers[$account] = $user;
+        foreach($allUsers as $user) $this->dao->dbh($this->dbh)->insert(TABLE_USER)->data($user)->exec();
     }
 
     public function convertProject()
