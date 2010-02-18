@@ -26,8 +26,20 @@ $lang->upgrade->result  = '升级结果';
 $lang->upgrade->fail    = '升级失败';
 $lang->upgrade->success = '升级成功';
 $lang->upgrade->tohome  = '返回首页';
-
+$lang->upgrade->warnning= '警告';
+$lang->upgrade->warnningContent = <<<EOT
+警告！升级有危险，请先备份数据库，以防万一。<br />
+备份方法：<br />
+1. 可以通过phpMyAdmin进行备份。<br />
+2. 使用mysql命令行的工具。<br />
+   # mysqldump -u <span class='red'>username</span> -p <span class='red'>dbname</span> > <span class='red'>filename</span> <br />
+   要将上面红色的部分分别替换成对应的用户名和禅道系统的数据库名。<br />
+   比如： mysqldump -u root -p zentao >zentao.bak
+EOT;
 $lang->upgrade->selectVersion = '选择版本';
 $lang->upgrade->fromVersion   = '升级版本';
+$lang->upgrade->confirm       = '确认要执行的SQL语句';
+$lang->upgrade->sureExecute   = '确认执行';
 
 $lang->upgrade->fromVersions['0_3'] = '0.3 BETA';
+$lang->upgrade->fromVersions['0_4'] = '0.4 BETA';

@@ -1,6 +1,6 @@
 <?php
 /**
- * The html template file of execute method of upgrade module of ZenTaoMS.
+ * The html template file of index method of upgrade module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,21 +24,14 @@
 <?php include '../../common/header.lite.html.php';?>
 <div class='yui-d0' style='margin-top:50px'>
   <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $lang->upgrade->$result;?></caption>
+    <caption><?php echo $lang->upgrade->warnning;?></caption>
     <tr>
-      <td>
-      <?php
-      if($result == 'fail')
-      {
-          echo nl2br(join('\n', $errors));
-      }
-      else
-      {
-          echo html::linkButton($lang->upgrade->tohome, $this->createLink('index'));
-      }
-      ?>
-      </td>
+      <td><?php echo $lang->upgrade->warnningContent;?></td>
+    </tr>
+    <tr>
+      <td colspan='2' class='a-center'><?php echo html::linkButton($lang->upgrade->common, inlink('selectVersion'));?></td>
     </tr>
   </table>
+  </form>
 </div>
 <?php include '../../common/footer.html.php';?>

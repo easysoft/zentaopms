@@ -33,18 +33,43 @@ class upgradeModel extends model
         if($fromVersion == '0_3')
         {
             $this->upgradeFrom0_3To0_4();
+            $this->upgradeFrom0_4To0_5();
+        }
+        elseif($fromVersion == '0_4')
+        {
+            $this->upgradeFrom0_4To0_5();
         }
     }
+
+    /* 确认。*/
+    public function confirm($fromVersion)
+    {
+        $confirmContent = '';
+        if($fromVersion == '0_3')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.3'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
+        }
+        elseif($fromVersion == '0_4')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
+        }
+        return str_replace('zt_', $this->config->db->prefix, $confirmContent);
+    }
+
 
     /* 从0.3版本升级到0.4版本。*/
     private function upgradeFrom0_3To0_4()
     {
-        $upgradeFile = $this->app->getAppRoot() . 'db' . $this->app->getPathFix() . 'update0.3.sql';
-        $this->execSQL($upgradeFile);
-        if(!$this->isError())
-        {
-            $this->updateVersion('0.4 beta');
-        }
+        $this->execSQL($this->getUpgradeFile('0.3'));
+        if(!$this->isError()) $this->updateVersion('0.4 beta');
+    }
+
+    /* 从0.4版本升级到0.5版本。*/
+    private function upgradeFrom0_4To0_5()
+    {
+        $this->execSQL($this->getUpgradeFile('0.4'));
+        if(!$this->isError()) $this->updateVersion('0.5 beta');
     }
 
     /* 更新PMS的版本设置。*/
@@ -68,6 +93,12 @@ class upgradeModel extends model
         {
             $this->dao->insert(TABLE_CONFIG)->data($item)->exec();
         }
+    }
+
+    /* 获得要更新的sql文件。*/
+    private function getUpgradeFile($version)
+    {
+        return $this->app->getAppRoot() . 'db' . $this->app->getPathFix() . 'update' . $version . '.sql';
     }
 
     /* 执行SQL。*/

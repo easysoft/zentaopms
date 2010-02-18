@@ -21,14 +21,14 @@
  * @version     $Id$
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<div class='yui-d0'>
-  <form method='post' action='<?php echo inlink('execute');?>'>
+<?php include '../../common/header.lite.html.php';?>
+<div class='yui-d0' style='margin-top:50px'>
+  <form method='post' action='<?php echo inlink('confirm');?>'>
   <table align='center' class='table-5 f-14px'>
     <caption><?php echo $lang->upgrade->selectVersion;?></caption>
     <tr>
       <th class='w-p20 rowhead'><?php echo $lang->upgrade->fromVersion;?></th>
-      <td><?php echo html::select('fromVersion', $lang->upgrade->fromVersions, '', 'class=select-3');?></td>
+      <td><?php echo html::select('fromVersion', $lang->upgrade->fromVersions, $version, 'class=select-3');?></td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton($lang->upgrade->common);?></td>
