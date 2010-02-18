@@ -1,6 +1,6 @@
 <?php
 /**
- * The html template file of check config method of convert module of ZenTaoMS.
+ * The html template file of execute method of convert module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,18 +23,10 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0'>
-  <form method='post' action='<?php echo inlink('execute');?>'>
   <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $lang->convert->checkConfig . $lang->colon . strtoupper($source);?></caption>
-    <?php echo $checkResult;?>
+    <caption><?php echo $lang->convert->execute . $lang->colon . strtoupper($source);?></caption>
+    <?php echo $executeResult;?>
   </table>
-  <?php 
-  echo html::hidden('dbHost',     $this->post->dbHost);
-  echo html::hidden('dbPort',     $this->post->dbPort);
-  echo html::hidden('dbUser',     $this->post->dbUser);
-  echo html::hidden('dbPassword', $this->post->dbPassword);
-  echo html::hidden('dbName',     $this->post->dbName);
-  ?>
   </form>
 </div>
 <?php include '../../common/footer.html.php';?>
