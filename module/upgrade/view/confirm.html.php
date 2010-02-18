@@ -1,6 +1,6 @@
 <?php
 /**
- * The html template file of execute method of upgrade module of ZenTaoMS.
+ * The html template file of confirm method of upgrade module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,22 +23,15 @@
 ?>
 <?php include '../../common/header.lite.html.php';?>
 <div class='yui-d0' style='margin-top:50px'>
-  <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $lang->upgrade->$result;?></caption>
+  <form method='post' action='<?php echo inlink('execute');?>'>
+  <table align='center' class='table-6 f-14px'>
+    <caption><?php echo $lang->upgrade->confirm;?></caption>
     <tr>
-      <td>
-      <?php
-      if($result == 'fail')
-      {
-          echo nl2br(join('\n', $errors));
-      }
-      else
-      {
-          echo html::linkButton($lang->upgrade->tohome, $this->createLink('index'));
-      }
-      ?>
-      </td>
+      <td><textarea rows='20' class='area-1'><?php echo $confirm;?></textarea></td>
+    <tr>
+      <td class='a-center'><?php echo html::submitButton($lang->upgrade->sureExecute) . html::hidden('fromVersion', $fromVersion);?></td>
     </tr>
   </table>
+  </form>
 </div>
 <?php include '../../common/footer.html.php';?>

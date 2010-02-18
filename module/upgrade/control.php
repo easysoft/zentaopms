@@ -26,14 +26,29 @@ class upgrade extends control
     /* 升级程序首页。*/
     public function index()
     {
-        $this->locate(inlink('selectVersion'));
+        $this->display();
     }
 
     /* 选择系统。*/
     public function selectVersion()
     {
+        /* 处理版本号。*/ 
+        $version = substr($this->config->installedVersion, 0, strpos($this->config->installedVersion, ' '));
+        $version = str_replace('.', '_', $version);
         $this->view->header->title = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
         $this->view->position[]    = $this->lang->upgrade->common;
+        $this->view->version       = $version;
+        $this->display();
+    }
+
+    /* 确认。*/
+    public function confirm()
+    {
+        $this->view->header->title = $this->lang->upgrade->confirm;
+        $this->view->position[]    = $this->lang->upgrade->common;
+        $this->view->confirm       = $this->upgrade->confirm($this->post->fromVersion);
+        $this->view->fromVersion   = $this->post->fromVersion;
+
         $this->display();
     }
 
