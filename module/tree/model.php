@@ -192,6 +192,7 @@ class treeModel extends model
         $sql  = "SELECT path FROM " . TABLE_MODULE . " WHERE id = '$moduleID'";
         $path = $this->dbh->query($sql)->fetchColumn();
         $path = substr($path, 1, -1);
+        if(!$path) return array();
         $sql = "SELECT * FROM " . TABLE_MODULE . " WHERE id IN($path) ORDER BY grade";
         $parents = $this->dbh->query($sql)->fetchAll();
         return $parents;
