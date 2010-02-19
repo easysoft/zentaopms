@@ -34,6 +34,7 @@
   echo html::hidden('dbUser',     $this->post->dbUser);
   echo html::hidden('dbPassword', $this->post->dbPassword);
   echo html::hidden('dbName',     $this->post->dbName);
+  echo html::hidden('installPath',$this->post->installPath);
   ?>
   </form>
 </div>

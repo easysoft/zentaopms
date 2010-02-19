@@ -18,12 +18,14 @@
   <th class='rowhead'><?php printf($lang->convert->dbName, $source);?></th>
   <td><?php echo html::input('dbName', $dbName);?></td>
 </tr>
+<!--
 <tr>
   <th class='rowhead'><?php printf($lang->convert->dbPrefix, $source);?></th>
   <td><?php echo html::input('dbPrefix', $tablePrefix);?></td>
 </tr>
+-->
 <tr>
-  <th class='rowhead'><?php printf($lang->convert->installRoot, $source);?></th>
-  <td><?php echo html::input('installRoot');?></td>
+  <th class='rowhead'><?php printf($lang->convert->installPath, $source);?></th>
+  <td><?php echo html::input('installPath');?></td>
 </tr>
 <?php echo html::hidden('source', $source) . html::hidden('version', $version);?>

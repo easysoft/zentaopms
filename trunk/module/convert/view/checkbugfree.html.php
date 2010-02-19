@@ -1,14 +1,20 @@
 <tr>
   <th class='rowhead'><?php echo $lang->convert->checkDB;?></th>
-  <td><?php is_object($checkResult['db']) ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
+  <td><?php is_object($checkInfo['db']) ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
 </tr>
+<!--
 <tr>
   <th class='rowhead'><?php echo $lang->convert->checkTable;?></th>
-  <td><?php $checkResult['table'] === true ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
+  <td>
+    <?php
+    if(is_object($checkInfo['db'])) $checkInfo['table'] === true ? printf($lang->convert->ok) : printf($lang->convert->fail);
+    ?>
+  </td>
 </tr>
+-->
 <tr>
-  <th class='rowhead'><?php echo $lang->convert->checkRoot;?></th>
-  <td><?php $checkResult['root'] === true ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
+  <th class='rowhead'><?php echo $lang->convert->checkPath;?></th>
+  <td><?php $checkInfo['path'] === true ? printf($lang->convert->ok) : printf($lang->convert->fail);?></td>
 </tr>
 <tr>
   <td colspan='2' class='a-center'>

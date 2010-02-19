@@ -54,11 +54,11 @@ $lang->convert->dbUser     = '数据库用户名';
 $lang->convert->dbPassword = '数据库密码';
 $lang->convert->dbName     = '%s使用的库';
 $lang->convert->dbPrefix   = '%s表前缀';
-$lang->convert->installRoot= '%s安装的根目录';
+$lang->convert->installPath= '%s安装的根目录';
 
 $lang->convert->checkDB    = '数据库';
 $lang->convert->checkTable = '表';
-$lang->convert->checkRoot  = '安装路径';
+$lang->convert->checkPath  = '安装路径';
 
 $lang->convert->execute    = '执行转换';
 

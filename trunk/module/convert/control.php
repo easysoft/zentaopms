@@ -26,6 +26,7 @@ class convert extends control
     /* 安装程序首页。*/
     public function index()
     {
+        $this->convert->saveState();
         $this->view->header->title = $this->lang->convert->common;
         $this->display();
     }
@@ -80,19 +81,19 @@ class convert extends control
         $converter = new bugfreeConvertModel();
 
         /* 分别检查数据库、表和安装路径。*/
-        $checkResult['db'] = $converter->connectDB();
-        if(is_object($checkResult['db'])) $checkResult['table'] = $converter->checkTables();
-        $checkResult['root'] = $converter->checkRoot();
+        $checkInfo['db'] = $converter->connectDB();
+        //if(is_object($checkInfo['db'])) $checkInfo['table'] = $converter->checkTables();
+        $checkInfo['path'] = $converter->checkPath();
 
         /* 计算检查结果。*/
         $result = 'pass';
-        if(!is_object($checkResult['db']) or !$checkResult['table'] or !$checkResult['root']) $result = 'fail';
+        if(!is_object($checkInfo['db']) or !$checkInfo['path']) $result = 'fail';
 
         /* 赋值。*/
-        $this->view->version     = $version;
-        $this->view->source      = 'bugfree';
-        $this->view->result      = $result;
-        $this->view->checkResult = $checkResult;
+        $this->view->version   = $version;
+        $this->view->source    = 'bugfree';
+        $this->view->result    = $result;
+        $this->view->checkInfo = $checkInfo;
         $this->display();
     }
 
@@ -104,7 +105,6 @@ class convert extends control
         $this->view->source        = $this->post->source;
         $this->view->executeResult = $this->fetch('convert', $convertFunc, "version={$this->post->version}");
         $this->display();
-
     }
 
     /* 转换BugFree。*/

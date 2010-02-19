@@ -69,11 +69,13 @@
       <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
       <table class='table-1 a-left'>
         <tr valign='middle'>
-          <th class='w-p20 rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
-          <td>
+          <th class='w-p20 rowhead'><?php echo $lang->bug->product;?></th>
+          <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->bug->module;?></th>
+          <td> 
             <?php
-            if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;
-            if(!empty($modulePath)) echo $lang->arrow;
             foreach($modulePath as $key => $module)
             {
                 if(!common::printLink('bug', 'browse', "productID=$bug->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
@@ -84,7 +86,7 @@
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->type;?></td>
-          <td><?php echo $lang->bug->typeList[$bug->type];?></td>
+          <td><?php if(isset($bug->typeList[$bug->type])) echo $lang->bug->typeList[$bug->type]; else echo $bug->type;?></td>
         </tr>
 
         <tr>
@@ -120,7 +122,7 @@
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
-          <td><?php echo $builds[$bug->openedBuild];?></td>
+          <td><?php if(isset($builds[$bug->openedBuild])) echo $builds[$bug->openedBuild]; else echo $bug->openedBuild;?></td>
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->lblResolved;?></th>
@@ -128,7 +130,7 @@
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->resolvedBuild;?></th>
-          <td><?php echo $builds[$bug->resolvedBuild];?></td>
+          <td><?php if(isset($builds[$bug->resolvedBuild])) echo $builds[$bug->resolvedBuild]; else echo $bug->resolvedBuild;?></td>
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->resolution;?></th>
