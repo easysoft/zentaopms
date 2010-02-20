@@ -33,26 +33,26 @@ $config->moduleVar   = 'm';               // requestType=GET: 模块变量名。
 $config->methodVar   = 'f';               // requestType=GET: 方法变量名。
 $config->viewVar     = 't';               // requestType=GET: 模板变量名。
 
-$config->views       = ',html,xml,json,txt,csv,doc,pdf,'; // 支持的视图列表。
-$config->langs       = 'zh-cn,zh-tw,zh-hk,en';            // 支持的语言列表。
-$config->themes      = 'default';                         // 支持的主题列表。
+$config->views       = ',html,';          // 支持的视图列表。
+$config->langs       = 'zh-cn';           // 支持的语言列表。
+$config->themes      = 'default';         // 支持的主题列表。
 
-$config->super2OBJ   = true;    // 是否通过对象来访问全局变量。
+$config->super2OBJ   = true;              // 是否通过对象来访问全局变量。
 
-$config->default->view   = 'html';                      // 默认的视图格式。
-$config->default->lang   = 'zh-cn';                     // 默认的语言。
-$config->default->theme  = 'default';                   // 默认的主题。
-$config->default->module = 'index';                     // 默认的模块。当请求中没有指定模块时，加载该模块。
-$config->default->method = 'index';                     // 默认的方法。当请求中没有指定方法或者指定的方法不存在时，调用该方法。
+$config->default->view   = 'html';             // 默认的视图格式。
+$config->default->lang   = 'zh-cn';            // 默认的语言。
+$config->default->theme  = 'default';          // 默认的主题。
+$config->default->module = 'index';            // 默认的模块。当请求中没有指定模块时，加载该模块。
+$config->default->method = 'index';            // 默认的方法。当请求中没有指定方法或者指定的方法不存在时，调用该方法。
 
-$config->file->dangers = 'php,jsp,py,rb,asp,';          // 不允许上传的文件类型列表。
-$config->file->maxSize = 1024 * 1024;                   // 允许上传的文件大小，单位为字节。
+$config->file->dangers = 'php,jsp,py,rb,asp,'; // 不允许上传的文件类型列表。
+$config->file->maxSize = 1024 * 1024;          // 允许上传的文件大小，单位为字节。
 
-$config->db->persistant = false;                        // 是否打开持久连接。
-$config->db->driver     = 'mysql';                      // pdo的驱动类型，目前暂时只支持mysql。
-$config->db->dao        = true;                         // 是否使用DAO。
-$config->db->encoding   = 'UTF8';                       // 数据库的编码。
-$config->db->strictMode = false;                        // 关闭MySQL的严格模式。
+$config->db->persistant = false;               // 是否打开持久连接。
+$config->db->driver     = 'mysql';             // pdo的驱动类型，目前暂时只支持mysql。
+$config->db->dao        = true;                // 是否使用DAO。
+$config->db->encoding   = 'UTF8';              // 数据库的编码。
+$config->db->strictMode = false;               // 关闭MySQL的严格模式。
 
 /* 包含自定义配置文件。*/
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
