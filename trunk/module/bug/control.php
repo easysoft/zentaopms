@@ -403,14 +403,14 @@ class bug extends control
         }
 
         /* 获得action信息。*/
-        $action    = $this->action->getById($actionID);
-        $histories = $this->action->getHistory($actionID);
+        $action          = $this->action->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
         if(strtolower($action->action) == 'opened') $action->comment = $bug->steps;
 
         /* 赋值，获得邮件内容。*/
         $this->assign('bug', $bug);
         $this->assign('action', $action);
-        $this->assign('histories', $histories);
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* 发信。*/

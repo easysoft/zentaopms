@@ -153,6 +153,7 @@ class actionModel extends model
     /* 打印修改记录。*/
     public function printChanges($objectType, $histories)
     {
+        if(empty($histories)) return;
         $maxLength = 0;
         foreach($histories as $history)
         {
