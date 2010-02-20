@@ -33,7 +33,7 @@ class actionModel extends model
         $action->objectID   = $objectID;
         $action->actor      = $this->app->user->account;
         $action->action     = $actionType;
-        $action->date       = time();
+        $action->date       = date('Y-m-d H:i:s');
         $action->comment    = htmlspecialchars($comment);
         $action->extra      = $extra;
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
@@ -43,14 +43,7 @@ class actionModel extends model
     /* 返回某一个对象的所有action列表。*/
     public function getList($objectType, $objectID)
     {
-        $actions = array();
-        $stmt = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->orderBy('id')->query();
-        while($action = $stmt->fetch())
-        {
-            $action->date = date('Y-m-d H:i:s', $action->date);
-            $actions[$action->id] = $action;
-        }
-
+        $actions   = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->orderBy('id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
         foreach($actions as $actionID => $action)
         {
@@ -63,9 +56,7 @@ class actionModel extends model
     /* 获得action信息。*/
     public function getById($actionID)
     {
-        $action = $this->dao->findById((int)$actionID)->from(TABLE_ACTION)->fetch();
-        $action->date = date('Y-m-d H:i:s', $action->date);
-        return $action;
+        return $this->dao->findById((int)$actionID)->from(TABLE_ACTION)->fetch();
     }
 
     /* 返回某一个action所对应的字段修改记录。*/
@@ -142,7 +133,7 @@ class actionModel extends model
         {
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
-            $action->date        = date('H:i', $action->date);
+            $action->date        = date('H:i', strtotime($action->date));
             $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
             $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
             if(strpos($action->objectLabel, '|') !== false)
