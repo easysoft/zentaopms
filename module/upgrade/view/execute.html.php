@@ -34,7 +34,7 @@
       }
       else
       {
-          echo html::linkButton($lang->upgrade->tohome, $this->createLink('index'));
+          echo html::linkButton($lang->upgrade->tohome, 'index.php');
       }
       ?>
       </td>
