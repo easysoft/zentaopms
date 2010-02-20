@@ -39,7 +39,6 @@ $lang->convert->version          = '版本';
 $lang->convert->mustSelectSource = "必须选择一个来源。";
 
 $lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x');
-$lang->convert->sourceList['Mantis'] = array('mantis_1' => '1.x');
 
 $lang->convert->setting     = '设置';
 $lang->convert->checkConfig = '检查配置';
