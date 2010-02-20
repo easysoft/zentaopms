@@ -6,8 +6,9 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `objectID` mediumint(8) unsigned NOT NULL default '0',
   `actor` varchar(30) NOT NULL default '',
   `action` varchar(30) NOT NULL default '',
-  `date` int(10) unsigned NOT NULL default '0',
+  `date` datetime NOT NULL,
   `comment` text NOT NULL,
+  `extra` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_bug`;
@@ -17,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `module` mediumint(8) unsigned NOT NULL default '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
   `story` mediumint(8) unsigned NOT NULL default '0',
+  `storyVersion` smallint(6) NOT NULL default '1',
   `task` mediumint(8) unsigned NOT NULL default '0',
   `title` varchar(150) NOT NULL default '',
   `severity` tinyint(4) NOT NULL default '0',
@@ -42,12 +44,10 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `duplicateBug` mediumint(8) unsigned NOT NULL,
   `linkBug` varchar(255) NOT NULL,
   `case` mediumint(8) unsigned NOT NULL,
+  `caseVersion` smallint(6) NOT NULL default '1',
   `result` mediumint(8) unsigned NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
-  `field1` varchar(255) NOT NULL default '',
-  `field2` varchar(255) NOT NULL default '',
-  `feild3` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_build`;
@@ -79,59 +79,43 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `module` mediumint(8) unsigned NOT NULL default '0',
   `path` mediumint(8) unsigned NOT NULL default '0',
   `story` mediumint(30) unsigned NOT NULL default '0',
+  `storyVersion` smallint(6) NOT NULL default '1',
   `title` char(90) NOT NULL,
   `pri` tinyint(3) unsigned NOT NULL default '0',
   `type` char(30) NOT NULL default '1',
   `status` char(30) NOT NULL default '1',
-  `steps` text NOT NULL,
   `frequency` enum('1','2','3') NOT NULL default '1',
   `order` tinyint(30) unsigned NOT NULL default '0',
   `openedBy` char(30) NOT NULL default '',
   `openedDate` datetime NOT NULL,
   `lastEditedBy` char(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
-  `field1` char(30) NOT NULL default '',
-  `field2` char(30) NOT NULL default '',
-  `feidl3` char(30) NOT NULL default '',
   `version` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_caseResult`;
-CREATE TABLE IF NOT EXISTS `zt_caseResult` (
-  `id` mediumint(8) unsigned NOT NULL default '0',
-  `plan` mediumint(30) unsigned NOT NULL default '0',
-  `build` mediumint(30) unsigned NOT NULL default '0',
-  `case` mediumint(30) unsigned NOT NULL default '0',
-  `result` enum('pass','fail','skip') NOT NULL default 'pass',
-  `status` enum('finished','blocked') NOT NULL default 'finished',
-  `executedBy` char(30) NOT NULL default '',
-  `executedDate` int(30) unsigned NOT NULL default '0',
-  `os` char(30) NOT NULL default '',
-  `browser` char(30) NOT NULL default '',
-  `hardware` char(30) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_caseStep`;
 CREATE TABLE IF NOT EXISTS `zt_caseStep` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `case` mediumint(8) unsigned NOT NULL default '0',
-  `caseVersion` tinyint(3) unsigned NOT NULL default '0',
-  `step` char(255) NOT NULL default '',
-  `expect` char(255) NOT NULL default '',
-  PRIMARY KEY  (`id`)
+  `version` smallint(3) unsigned NOT NULL default '0',
+  `desc` text NOT NULL,
+  `expect` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `case` (`case`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_company`;
 CREATE TABLE IF NOT EXISTS `zt_company` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `name` char(120) NOT NULL default '',
-  `phone` char(20) NOT NULL,
-  `fax` char(20) NOT NULL default '',
-  `address` char(120) NOT NULL default '',
-  `zipcode` char(10) NOT NULL default '',
-  `website` char(120) NOT NULL default '',
-  `backyard` char(120) NOT NULL default '',
-  `pms` char(120) NOT NULL default '',
+  `name` char(120) default NULL,
+  `phone` char(20) default NULL,
+  `fax` char(20) default NULL,
+  `address` char(120) default NULL,
+  `zipcode` char(10) default NULL,
+  `website` char(120) default NULL,
+  `backyard` char(120) default NULL,
+  `pms` char(120) default NULL,
   `guest` enum('1','0') NOT NULL default '0',
-  `admins` char(255) NOT NULL,
+  `admins` char(255) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `pms` (`pms`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
@@ -159,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   `manager` char(30) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `company` (`company`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_effort`;
 CREATE TABLE IF NOT EXISTS `zt_effort` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -189,6 +173,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `addedBy` char(30) NOT NULL default '',
   `addedDate` datetime NOT NULL,
   `downloads` mediumint(8) unsigned NOT NULL default '0',
+  `extra` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_group`;
@@ -198,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `zt_group` (
   `name` char(30) NOT NULL,
   `desc` char(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_groupPriv`;
 CREATE TABLE IF NOT EXISTS `zt_groupPriv` (
   `group` mediumint(8) unsigned NOT NULL default '0',
@@ -228,16 +213,6 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `view` char(30) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_planCase`;
-CREATE TABLE IF NOT EXISTS `zt_planCase` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `plan` mediumint(8) unsigned NOT NULL default '0',
-  `case` mediumint(8) unsigned NOT NULL default '0',
-  `caseVersion` tinyint(3) unsigned NOT NULL default '0',
-  `assignedTo` char(30) NOT NULL default '',
-  `assignedDate` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -259,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `zt_productPlan` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_project`;
 CREATE TABLE IF NOT EXISTS `zt_project` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -289,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `team` varchar(30) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `company` (`company`,`type`,`parent`,`begin`,`end`,`status`,`statge`,`pri`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectProduct`;
 CREATE TABLE IF NOT EXISTS `zt_projectProduct` (
   `project` mediumint(8) unsigned NOT NULL,
@@ -301,6 +276,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectStory` (
   `project` mediumint(8) unsigned NOT NULL default '0',
   `product` mediumint(8) unsigned NOT NULL,
   `story` mediumint(8) unsigned NOT NULL default '0',
+  `version` smallint(6) NOT NULL default '1',
   UNIQUE KEY `project` (`project`,`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_release`;
@@ -314,35 +290,19 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_releation`;
-CREATE TABLE IF NOT EXISTS `zt_releation` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `type` char(30) NOT NULL default '',
-  `id1` mediumint(8) unsigned NOT NULL default '0',
-  `id2` mediumint(8) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_resultStep`;
-CREATE TABLE IF NOT EXISTS `zt_resultStep` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `result` mediumint(8) unsigned NOT NULL default '0',
-  `step` mediumint(8) unsigned NOT NULL default '0',
-  `stepResult` enum('pass','fail','block','n/a') NOT NULL default 'pass',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
   `plan` mediumint(8) unsigned NOT NULL default '0',
-  `bug` mediumint(8) unsigned NOT NULL default '0',
+  `fromBug` mediumint(8) unsigned NOT NULL default '0',
   `title` varchar(90) NOT NULL default '',
-  `spec` text NOT NULL,
   `type` varchar(30) NOT NULL default '',
   `pri` tinyint(3) unsigned NOT NULL default '3',
   `estimate` float unsigned NOT NULL,
   `status` varchar(30) NOT NULL default '',
+  `stage` varchar(30) NOT NULL,
   `mailto` varchar(255) NOT NULL default '',
   `openedBy` varchar(30) NOT NULL default '',
   `openedDate` datetime NOT NULL,
@@ -350,19 +310,34 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `assignedDate` datetime NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
+  `reviewedBy` varchar(30) NOT NULL,
+  `reviewedDate` date NOT NULL,
   `closedBy` varchar(30) NOT NULL default '',
   `closedDate` datetime NOT NULL,
-  `version` float(4,1) NOT NULL default '0.0',
-  `attatchment` varchar(30) NOT NULL default '',
+  `closedReason` varchar(30) NOT NULL,
+  `toBug` mediumint(9) NOT NULL,
+  `childStories` varchar(255) NOT NULL,
+  `linkStories` varchar(255) NOT NULL,
+  `duplicateStory` mediumint(8) unsigned NOT NULL,
+  `version` smallint(6) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `product` (`product`,`module`,`plan`,`type`,`pri`),
   KEY `status` (`status`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_storySpec`;
+CREATE TABLE IF NOT EXISTS `zt_storySpec` (
+  `story` mediumint(9) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `title` varchar(90) NOT NULL,
+  `spec` text NOT NULL,
+  UNIQUE KEY `story` (`story`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_task`;
 CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `project` mediumint(8) unsigned NOT NULL default '0',
   `story` mediumint(8) unsigned NOT NULL default '0',
+  `storyVersion` smallint(6) NOT NULL default '1',
   `name` varchar(90) NOT NULL,
   `type` varchar(20) NOT NULL,
   `pri` tinyint(3) unsigned NOT NULL default '0',
@@ -376,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   PRIMARY KEY  (`id`),
   KEY `statusOrder` (`statusCustom`),
   KEY `type` (`type`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskEstimate`;
 CREATE TABLE IF NOT EXISTS `zt_taskEstimate` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -396,15 +371,43 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `workingHour` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`project`,`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_testPlan`;
-CREATE TABLE IF NOT EXISTS `zt_testPlan` (
+-- DROP TABLE IF EXISTS `zt_testResult`;
+CREATE TABLE IF NOT EXISTS `zt_testResult` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `name` char(30) NOT NULL default '',
-  `sprintprj` mediumint(8) unsigned NOT NULL default '0',
-  `planBegin` int(10) unsigned NOT NULL default '0',
-  `planEnd` int(10) unsigned NOT NULL default '0',
-  `realBegin` int(10) unsigned NOT NULL default '0',
-  `realEnd` int(10) unsigned NOT NULL default '0',
+  `run` mediumint(8) unsigned NOT NULL,
+  `case` mediumint(8) unsigned NOT NULL,
+  `version` smallint(5) unsigned NOT NULL,
+  `caseResult` char(30) NOT NULL,
+  `stepResults` text NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `run` (`run`),
+  KEY `case` (`case`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_testRun`;
+CREATE TABLE IF NOT EXISTS `zt_testRun` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `task` mediumint(8) unsigned NOT NULL default '0',
+  `case` mediumint(8) unsigned NOT NULL default '0',
+  `version` tinyint(3) unsigned NOT NULL default '0',
+  `assignedTo` char(30) NOT NULL default '',
+  `lastRun` datetime NOT NULL,
+  `lastResult` char(30) NOT NULL,
+  `status` char(30) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `task` (`task`,`case`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_testTask`;
+CREATE TABLE IF NOT EXISTS `zt_testTask` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `name` char(90) NOT NULL,
+  `product` mediumint(8) unsigned NOT NULL,
+  `project` mediumint(8) unsigned NOT NULL default '0',
+  `build` char(30) NOT NULL,
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
+  `desc` text NOT NULL,
+  `status` char(30) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_todo`;
@@ -423,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `private` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user` (`account`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_user`;
 CREATE TABLE IF NOT EXISTS `zt_user` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -449,7 +452,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `zipcode` char(10) NOT NULL default '',
   `join` date NOT NULL default '0000-00-00',
   `visits` mediumint(8) unsigned NOT NULL default '0',
-  `ip` char(15) NOT NULL,
+  `ip` char(15) NOT NULL default '',
   `last` int(10) unsigned NOT NULL default '0',
   `status` varchar(30) NOT NULL default 'active',
   PRIMARY KEY  (`id`),
