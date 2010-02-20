@@ -28,7 +28,11 @@
     <caption><?php echo $lang->upgrade->selectVersion;?></caption>
     <tr>
       <th class='w-p20 rowhead'><?php echo $lang->upgrade->fromVersion;?></th>
-      <td><?php echo html::select('fromVersion', $lang->upgrade->fromVersions, $version, 'class=select-3');?></td>
+      <td><?php echo html::select('fromVersion', $lang->upgrade->fromVersions, $version) . $lang->upgrade->noteVersion;?></td>
+    </tr>
+    <tr>
+      <th class='w-p20 rowhead'><?php echo $lang->upgrade->toVersion;?></th>
+      <td><?php echo $config->version;?></td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton($lang->upgrade->common);?></td>

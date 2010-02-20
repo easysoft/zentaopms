@@ -37,7 +37,9 @@ $lang->upgrade->warnningContent = <<<EOT
    比如： mysqldump -u root -p zentao >zentao.bak
 EOT;
 $lang->upgrade->selectVersion = '选择版本';
-$lang->upgrade->fromVersion   = '升级版本';
+$lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
+$lang->upgrade->fromVersion   = '原来的版本';
+$lang->upgrade->toVersion     = '升级到';
 $lang->upgrade->confirm       = '确认要执行的SQL语句';
 $lang->upgrade->sureExecute   = '确认执行';
 

@@ -75,13 +75,15 @@ class upgradeModel extends model
     /* 更新PMS的版本设置。*/
     public function updateVersion($version)
     {
+        $item->company = $this->app->company->id;
         $item->owner   = 'system';
         $item->section = 'global';
         $item->key     = 'version';
         $item->value   =  $version;
 
         $configID = $this->dao->select('id')->from(TABLE_CONFIG)
-            ->where('owner')->eq('system')
+            ->where('company')->eq($this->app->company->id)
+            ->andWhere('owner')->eq('system')
             ->andWhere('section')->eq('global')
             ->andWhere('`key`')->eq('version')
             ->fetch('id');
@@ -105,16 +107,28 @@ class upgradeModel extends model
     private function execSQL($sqlFile)
     {
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
-        $sqls = explode(';', file_get_contents($sqlFile));
+
+        /* 去掉注释之后，再用;隔开。*/
+        $sqls = explode("\n", file_get_contents($sqlFile));
+        foreach($sqls as $key => $line) 
+        {
+            $line       = trim($line);
+            $sqls[$key] = $line;
+            if(strpos($line, '--') !== false or empty($line)) unset($sqls[$key]);
+        }
+        $sqls = explode(';', join("\n", $sqls));
+
         foreach($sqls as $sql)
         {
             $sql = trim($sql);
             if(empty($sql)) continue;
 
-            if(strpos($sql, 'CREATE') !== false and $mysqlVersion <= 4.1)
+            if($mysqlVersion <= 4.1)
             {
                 $sql = str_replace('DEFAULT CHARSET=utf8', '', $sql);
+                $sql = str_replace('CHARACTER SET utf8 COLLATE utf8_general_ci', '', $sql);
             }
+
             $sql = str_replace('zt_', $this->config->db->prefix, $sql);
             try
             {
