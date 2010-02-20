@@ -72,7 +72,7 @@ class taskModel extends model
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
             ->where('id')->eq((int)$taskID)->exec();
-        if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
+        if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
     
