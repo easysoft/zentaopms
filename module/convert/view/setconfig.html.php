@@ -31,6 +31,7 @@
       <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
+  <?php echo html::hidden('source', $source) . html::hidden('version', $version);?>
   </form>
 </div>
 <?php include '../../common/footer.html.php';?>

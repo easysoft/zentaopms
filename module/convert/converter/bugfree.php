@@ -23,8 +23,9 @@
  */
 class bugfreeConvertModel extends convertModel
 {
-    public $map      = array();
-    public $filePath = '';
+    public $map         = array();
+    public $filePath    = '';
+    static public $info = array();
     public function __construct()
     {
         parent::__construct();
@@ -54,15 +55,17 @@ class bugfreeConvertModel extends convertModel
     public function execute()
     {
         $this->clear();
-        $this->convertUser();
-        $this->convertProject();
-        $this->convertModule();
+        $result['users']    = $this->convertUser();
+        $result['projects'] = $this->convertProject();
+        $result['modules']  = $this->convertModule();
+        $result['bugs']     = $this->convertBug();
+        $result['actions']  = $this->convertAction();
+        $result['files']    = $this->convertFile();
         $this->fixModulePath();
-        $this->convertBug();
-        $this->convertAction();
-        $this->convertFile();
+        return $result;
     }
 
+    /* 转换用户。*/
     public function convertUser()
     {
         /* 查询当前系统中存在的用户。*/
@@ -91,13 +94,20 @@ class bugfreeConvertModel extends convertModel
         foreach($activeUsers as $account => $user) if(!isset($allUsers[$account])) $allUsers[$account] = $user;
 
         /* 导入到zentao数据库中。*/
+        $convertCount = 0;
         foreach($allUsers as $account => $user)
         {
             if(!$this->dao->dbh($this->dbh)->findByAccount($account)->from(TABLE_USER)->fetch('account'))
             {
                 $this->dao->dbh($this->dbh)->insert(TABLE_USER)->data($user)->exec();
+                $convertCount ++;
+            }
+            else
+            {
+                self::$info['users'][] = sprintf($this->lang->convert->errorUserExists, $account);
             }
         }
+        return $convertCount;
     }
 
     /* 转换项目为产品。*/
@@ -110,6 +120,7 @@ class bugfreeConvertModel extends convertModel
             $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($project)->exec();
             $this->map['product'][$projectID] = $this->dao->lastInsertID();
         }
+        return count($projects);
     }
 
     /* 转换原来的模块为Bug视图模块。*/
@@ -141,6 +152,7 @@ class bugfreeConvertModel extends convertModel
         {
             $this->dao->dbh($this->dbh)->update(TABLE_MODULE)->set('parent')->eq($newModuleID)->where('parent')->eq($oldModuleID)->exec();
         }
+        return count($modules);
     }
 
     /* 修复模块路径。*/
@@ -208,6 +220,7 @@ class bugfreeConvertModel extends convertModel
         {
             $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($newBugID)->where('duplicateBug')->eq($oldBugID)->exec();
         }
+        return count($bugs);
     }
 
     /* 转换历史记录。*/
@@ -226,6 +239,7 @@ class bugfreeConvertModel extends convertModel
             ->from('BugHistory')
             ->orderBy('bugID, historyID')
             ->fetchGroup('objectID');
+        $convertCount = 0;
         foreach($actions as $bugID => $bugActions)
         {
             /* 获得转换之后的bugID。*/
@@ -243,8 +257,10 @@ class bugfreeConvertModel extends convertModel
                     $action->comment = '';
                 }
                 $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+                $convertCount ++;
             }
         }
+        return $convertCount;
     }
 
     /* 转换附件。*/
@@ -274,13 +290,21 @@ class bugfreeConvertModel extends convertModel
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
             /* 拷贝文件。*/
-            $soureFile  = $this->filePath . $file->pathname;
-            if(!file_exists($soureFile)) continue;
+            $soureFile = $this->filePath . $file->pathname;
+            if(!file_exists($soureFile))
+            {
+                self::$info['files'][] = sprintf($this->lang->convert->errorFileNotExits, $soureFile);
+                continue;
+            }
             $targetFile = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . $file->pathname;
             $targetPath = dirname($targetFile);
             if(!is_dir($targetPath)) mkdir($targetPath, 0777, true);
-            copy($soureFile, $targetFile);
+            if(!copy($soureFile, $targetFile))
+            {
+                self::$info['files'][] = sprintf($this->lang->convert->errorCopyFailed, $targetFile);
+            }
         }
+        return count($files);
     }
 
     /* 清空导入之后的数据。*/

@@ -61,5 +61,18 @@ $lang->convert->checkTable = '表';
 $lang->convert->checkPath  = '安装路径';
 
 $lang->convert->execute    = '执行转换';
+$lang->convert->item       = '转换项';
+$lang->convert->count      = '转换数量';
+$lang->convert->info       = '转换信息';
+
+$lang->convert->bugfree->users    = '用户';
+$lang->convert->bugfree->projects = '项目';
+$lang->convert->bugfree->modules  = '模块';
+$lang->convert->bugfree->bugs     = 'Bug';
+$lang->convert->bugfree->actions  = '历史记录';
+$lang->convert->bugfree->files    = '附件';
 
 $lang->convert->errorConnectDB     = '数据库连接失败 ';
+$lang->convert->errorFileNotExits  = '文件 %s 不存在';
+$lang->convert->errorUserExists    = '用户 %s 已存在';
+$lang->convert->errorCopyFailed    = '文件 %s 拷贝失败';
