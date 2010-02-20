@@ -75,14 +75,14 @@ class upgradeModel extends model
     /* 更新PMS的版本设置。*/
     public function updateVersion($version)
     {
-        $item->company = $this->app->company->id;
+        $item->company = 0;
         $item->owner   = 'system';
         $item->section = 'global';
         $item->key     = 'version';
         $item->value   =  $version;
 
         $configID = $this->dao->select('id')->from(TABLE_CONFIG)
-            ->where('company')->eq($this->app->company->id)
+            ->where('company')->eq(0)
             ->andWhere('owner')->eq('system')
             ->andWhere('section')->eq('global')
             ->andWhere('`key`')->eq('version')

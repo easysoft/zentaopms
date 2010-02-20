@@ -37,7 +37,7 @@ class settingModel extends model
     public function getItem($owner, $section, $key)
     {
         return $this->dao->select('`value`')->from(TABLE_CONFIG)
-            ->where('company')->eq($this->app->company->id)
+            ->where('company')->eq(0)
             ->andWhere('owner')->eq($owner)
             ->andWhere('section')->eq($section)
             ->andWhere('`key`')->eq($key)

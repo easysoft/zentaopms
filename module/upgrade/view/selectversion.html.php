@@ -28,7 +28,7 @@
     <caption><?php echo $lang->upgrade->selectVersion;?></caption>
     <tr>
       <th class='w-p20 rowhead'><?php echo $lang->upgrade->fromVersion;?></th>
-      <td><?php echo html::select('fromVersion', $lang->upgrade->fromVersions, $version) . $lang->upgrade->noteVersion;?></td>
+      <td><?php echo html::select('fromVersion', $lang->upgrade->fromVersions, $version) . "<span class='red'>{$lang->upgrade->noteVersion}</span>";?></td>
     </tr>
     <tr>
       <th class='w-p20 rowhead'><?php echo $lang->upgrade->toVersion;?></th>
