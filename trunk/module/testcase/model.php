@@ -126,7 +126,7 @@ class testcaseModel extends model
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('version', $version)
-            ->setIF($this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('story', 0)
             ->stripTags('title')
             ->remove('comment,steps,expects')

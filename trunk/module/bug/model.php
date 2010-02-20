@@ -113,7 +113,7 @@ class bugModel extends model
             ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedTo', $oldBug->openedBy) 
             ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedDate', $now)
             ->setIF($this->post->resolution == '' and $this->post->resolvedDate =='', 'status', 'active')
-            ->setIF($this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)
