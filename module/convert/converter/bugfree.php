@@ -249,7 +249,6 @@ class bugfreeConvertModel extends convertModel
             /* ´¦Àíaction¡£*/
             foreach($bugActions as $key => $action)
             {
-                $action->date     = strtotime($action->date);
                 $action->objectID = $zentaoBugID;
                 if($key == 0)
                 {
