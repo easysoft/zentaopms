@@ -86,7 +86,7 @@
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->type;?></td>
-          <td><?php if(isset($bug->typeList[$bug->type])) echo $lang->bug->typeList[$bug->type]; else echo $bug->type;?></td>
+          <td><?php if(isset($lang->bug->typeList[$bug->type])) echo $lang->bug->typeList[$bug->type]; else echo $bug->type;?></td>
         </tr>
 
         <tr>
