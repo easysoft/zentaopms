@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright: 2009 Chunsheng Wang
+ * @copyright   Copyright 2009-2010 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     my
  * @version     $Id$

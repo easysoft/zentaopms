@@ -13,7 +13,7 @@
  * 8. 验证options为空，是否返回false。
  *
  * @author  chunsheng.wang <wwccss@gmail.com>
- * @version $Id: html_select.php 3 2009-10-26 01:32:52Z wwccss $
+ * @version $Id$
  */
 include '../front.class.php';
 
