@@ -23,7 +23,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0'>
-  <table align='center' class='table-5 f-14px'>
+  <table align='center' class='f-14px'>
     <caption><?php echo $lang->convert->execute . $lang->colon . strtoupper($source);?></caption>
     <?php echo $executeResult;?>
   </table>

@@ -23,7 +23,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0'>
-  <table align='center' class='table-6'>
+  <table align='center' class='table-5'>
     <caption><?php echo $lang->convert->common;?></caption>
     <tr><td><?php echo nl2br($lang->convert->desc);?></td></tr>
     <tr><td><h3 class='a-center'><?php echo html::a($this->createLink('convert', 'selectsource'), $lang->convert->start);?></h3></td></tr>

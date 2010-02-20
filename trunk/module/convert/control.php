@@ -50,6 +50,7 @@ class convert extends control
         $setFunc = "set$sourceName";
         $this->view->header->title = $this->lang->convert->setting;
         $this->view->source  = $sourceName;
+        $this->view->version = $version;
         $this->view->setting = $this->fetch('convert', $setFunc, "version=$version");
         $this->display();
     }
@@ -112,6 +113,8 @@ class convert extends control
     {
         helper::import('./converter/bugfree.php');
         $converter = new bugfreeConvertModel();
-        $converter->execute();
+        $this->view->result = $converter->execute();
+        $this->view->info   = bugfreeConvertModel::$info;
+        $this->display();
     }
 }
