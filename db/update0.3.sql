@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- 20100115: fix bug 14 
-ALTER TABLE `zt_productPlan` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `zt_productPlan` CHANGE `title` `title` VARCHAR( 90 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 CHANGE `desc` `desc` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 
