@@ -28,7 +28,7 @@ if(!isset($error))
     $configContent = <<<EOT
 <?php
 \$config->installed       = true;	//标志是否已经安装。
-\$config->debug           = true;	//是否打开debug功能。运行没有问题之后，可以将其改为false。
+\$config->debug           = false;	//是否打开debug功能。如果系统运行不正常，可将其设为true。
 \$config->requestType     = '$requestType';	//如何获取当前请求的信息，可选值：PATH_INFO|GET。
 \$config->db->host        = '$dbHost';	//mysql主机。
 \$config->db->port        = '$dbPort';	//mysql主机端口号。
