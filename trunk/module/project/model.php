@@ -179,14 +179,15 @@ class projectModel extends model
     public function linkStory($projectID)
     {
         if($this->post->stories == false) return false;
-        $this->loadModel('story');
-        foreach($this->post->stories as $key => $storyID)
+        $versions = $this->loadModel('story')->getVersions($this->post->stories);
+        foreach($this->post->stories as $storyID)
         {
             $productID = $this->post->products[$key];
             $this->dao->insert(TABLE_PROJECTSTORY)
                 ->set('project')->eq($projectID)
                 ->set('product')->eq($productID)
                 ->set('story')->eq($storyID)
+                ->set('version')->eq($versions[$storyID])
                 ->exec();
             $this->story->setStage($storyID);
         }        
