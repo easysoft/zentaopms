@@ -32,6 +32,7 @@ $lang->task->common       = '任务';
 $lang->task->id           = '编号';
 $lang->task->project      = '所属项目';
 $lang->task->story        = '相关需求';
+$lang->task->storyVersion = '需求版本';
 $lang->task->name         = '任务名称';
 $lang->task->type         = '任务类型';
 $lang->task->pri          = '优先级';

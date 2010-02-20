@@ -37,6 +37,7 @@ class taskModel extends model
             ->add('project', (int)$projectID)
             ->setDefault('estimate, left, story', 0)
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
+            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
             ->remove('after')
             ->get();
@@ -59,6 +60,7 @@ class taskModel extends model
             ->specialChars('desc')
             ->cleanFloat('estimate, left, consumed')
             ->setDefault('story, estimate, left, consumed', 0)
+            ->setIF($this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF($this->post->status == 'done', 'left', 0)
             ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
             ->remove('comment')

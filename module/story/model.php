@@ -446,6 +446,18 @@ class storyModel extends model
         if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs('account'));
     }
 
+    /* 获得一个需求对应的版本号。*/
+    public function getVersion($storyID)
+    {
+        return $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq((int)$storyID)->fetch('version');
+    }
+
+    /* 获得需求列表对应的版本列表。*/
+    public function getVersions($storyID)
+    {
+        return $this->dao->select('id, version')->from(TABLE_STORY)->where('id')->in($storyID)->fetchPairs();
+    }
+
     /* 格式化需求显示。*/
     private function formatStories($stories)
     {

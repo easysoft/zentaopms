@@ -132,6 +132,7 @@ $lang->bug->module         = '所属模块';
 $lang->bug->path           = '模块路径';
 $lang->bug->project        = '所属项目';
 $lang->bug->story          = '相关需求';
+$lang->bug->storyVersion   = '需求版本';
 $lang->bug->task           = '相关任务';
 $lang->bug->title          = 'Bug标题';
 $lang->bug->severity       = '严重程度';
