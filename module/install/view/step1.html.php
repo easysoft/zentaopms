@@ -39,13 +39,13 @@
     </tr>
     <tr>
       <th><?php echo $lang->install->pdo;?></th>
-      <td><?php $pdoResult ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+      <td><?php $pdoResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
       <td class='<?php echo $pdoResult;?>'><?php echo $lang->install->$pdoResult;?></td>
       <td class='a-left f-12px'><?php if($pdoResult == 'fail') echo $lang->install->pdoFail;?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->pdoMySQL;?></th>
-      <td><?php $pdoMySQLResult ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+      <td><?php $pdoMySQLResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
       <td class='<?php echo $pdoMySQLResult;?>'><?php echo $lang->install->$pdoMySQLResult;?></td>
       <td class='a-left f-12px'><?php if($pdoMySQLResult == 'fail') echo $lang->install->pdoMySQLFail;?></td>
     </tr>
