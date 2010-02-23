@@ -1,8 +1,8 @@
 <?php
 /**
- * The common english language file of ZenTaoMS.
+ * The common simplified chinese file of ZenTaoMS.
  *
- * All items used commonly should be defined here.
+ * This file should be UTF-8 encoded.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,134 +23,133 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->zentaoMS   = 'ZenTaoPMS';
-$lang->logout     = 'Logout';
-$lang->login      = 'Login';
-$lang->currentPos = 'Current POS';
-$lang->arrow      = '>>';
+$lang->zentaoMS   = 'ç¦…é“ç®¡ç†';
+$lang->logout     = 'é€€å‡ºç³»ç»Ÿ';
+$lang->login      = 'ç™»å½•';
+$lang->currentPos = 'å½“å‰ä½ç½®ï¼š';
+$lang->arrow      = ' Â» ';
 $lang->colon      = '::';
-$lang->reset      = 'Reset';
-$lang->edit       = 'Edit';
-$lang->delete     = 'Delete';
-$lang->close      = 'Close';
-$lang->activate   = 'Activate';
-$lang->delete     = 'Delete';
-$lang->save       = 'Save';
-$lang->actions    = 'Actions';
-$lang->comment    = 'Comment';
-$lang->history    = 'History';
-$lang->welcome    = "Welcome to use %s{$lang->colon}{$lang->zentaoMS}";
-$lang->zentaoSite = "Official Site";
-$lang->myControl  = "Dashboard";
-$lang->sponser    = "<a href='http://www.pujia.com' target='_blank'>PUJIA donated</a>";
-$lang->at         = ' at ';
-$lang->feature    = 'Feature';
-$lang->year       = 'Year';
-$lang->downArrow  = '¡ı';
-$lang->goback     = 'Go Back';
-$lang->selectAll  = 'È«Ñ¡';
-$lang->attatch    = '¸½¼ş';
-$lang->reverse    = '£¨ÇĞ»»Ë³Ğò£©';
-$lang->addFiles   = 'ÉÏ´«ÁË¸½¼ş ';
+$lang->reset      = 'é‡å¡«';
+$lang->edit       = 'ç¼–è¾‘';
+$lang->delete     = 'åˆ é™¤';
+$lang->close      = 'å…³é—­';
+$lang->activate   = 'æ¿€æ´»';
+$lang->delete     = 'åˆ é™¤';
+$lang->save       = 'ä¿å­˜';
+$lang->actions    = 'æ“ä½œ';
+$lang->comment    = 'å¤‡æ³¨';
+$lang->history    = 'å†å²è®°å½•';
+$lang->welcome    = "æ¬¢è¿ä½¿ç”¨%s{$lang->colon}{$lang->zentaoMS}";
+$lang->zentaoSite = "å®˜æ–¹ç½‘ç«™";
+$lang->myControl  = "æˆ‘çš„åœ°ç›˜";
+$lang->sponser    = "<a href='http://www.pujia.com' target='_blank'>æ™®åŠ èµåŠ©</a>";
+$lang->at         = ' äº ';
+$lang->feature    = 'æœªæ¥';
+$lang->year       = 'å¹´';
+$lang->downArrow  = 'â†“';
+$lang->goback     = 'è¿”å›';
+$lang->selectAll  = 'å…¨é€‰';
+$lang->attatch    = 'é™„ä»¶';
+$lang->reverse    = 'ï¼ˆåˆ‡æ¢é¡ºåºï¼‰';
+$lang->addFiles   = 'ä¸Šä¼ äº†é™„ä»¶ ';
 
-/* Ö÷µ¼º½²Ëµ¥¡£*/
-$lang->menu->index   = 'Home|index|index';
-$lang->menu->my      = 'Dashboard|my|index';
-$lang->menu->product = 'Product View|product|index';
-$lang->menu->project = 'Project View|project|index';
-$lang->menu->qa      = 'QA View|qa|index';
-$lang->menu->company = 'Org View|company|index';
-$lang->menu->admin   = 'Admin|admin|index';
+/* ä¸»å¯¼èˆªèœå•ã€‚*/
+$lang->menu->index   = 'é¦–é¡µ|index|index';
+$lang->menu->my      = 'æˆ‘çš„åœ°ç›˜|my|index';
+$lang->menu->product = 'äº§å“è§†å›¾|product|index';
+$lang->menu->project = 'é¡¹ç›®è§†å›¾|project|index';
+$lang->menu->qa      = 'QAè§†å›¾|qa|index';
+$lang->menu->company = 'ç»„ç»‡è§†å›¾|company|index';
+$lang->menu->admin   = 'åå°ç®¡ç†|admin|index';
 
-/* Ê×Ò³²Ëµ¥ÉèÖÃ¡£*/
-$lang->index->menu->product = 'ä¯ÀÀ²úÆ·|product|browse';
-$lang->index->menu->project = 'ä¯ÀÀÏîÄ¿|project|browse';
+/* é¦–é¡µèœå•è®¾ç½®ã€‚*/
+$lang->index->menu->product = 'æµè§ˆäº§å“|product|browse';
+$lang->index->menu->project = 'æµè§ˆé¡¹ç›®|project|browse';
 
-/* ÎÒµÄµØÅÌ²Ëµ¥ÉèÖÃ¡£*/
+/* æˆ‘çš„åœ°ç›˜èœå•è®¾ç½®ã€‚*/
 $lang->my->menu->account  = '%s' . $lang->arrow;
-$lang->my->menu->todo     = array('link' => 'ÎÒµÄTODO|my|todo|', 'subModule' => 'todo');
-$lang->my->menu->task     = 'ÎÒµÄÈÎÎñ|my|task|';
-$lang->my->menu->project  = 'ÎÒµÄÏîÄ¿|my|project|';
-$lang->my->menu->story    = 'ÎÒµÄĞèÇó|my|story|';
-$lang->my->menu->bug      = 'ÎÒµÄBug|my|bug|';
-$lang->my->menu->profile  = array('link' => 'ÎÒµÄµµ°¸|my|profile|', 'alias' => 'editprofile');
+$lang->my->menu->todo     = array('link' => 'æˆ‘çš„TODO|my|todo|', 'subModule' => 'todo');
+$lang->my->menu->task     = 'æˆ‘çš„ä»»åŠ¡|my|task|';
+$lang->my->menu->project  = 'æˆ‘çš„é¡¹ç›®|my|project|';
+$lang->my->menu->story    = 'æˆ‘çš„éœ€æ±‚|my|story|';
+$lang->my->menu->bug      = 'æˆ‘çš„Bug|my|bug|';
+$lang->my->menu->profile  = array('link' => 'æˆ‘çš„æ¡£æ¡ˆ|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
 
-/* ²úÆ·ÊÓÍ¼ÉèÖÃ¡£*/
+/* äº§å“è§†å›¾è®¾ç½®ã€‚*/
 $lang->product->menu->list   = '%s';
-$lang->product->menu->story  = array('link' => 'ĞèÇóÁĞ±í|product|browse|productID=%s',     'subModule' => 'story');
-$lang->product->menu->plan   = array('link' => '¼Æ»®ÁĞ±í|productplan|browse|productID=%s', 'subModule' => 'productplan');
-$lang->product->menu->release= array('link' => '·¢²¼ÁĞ±í|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->roadmap= 'Â·ÏßÍ¼|product|roadmap|productID=%s';
-$lang->product->menu->edit   = '±à¼­²úÆ·|product|edit|productID=%s';
-$lang->product->menu->delete = array('link' => 'É¾³ı²úÆ·|product|delete|productID=%s', 'target' => 'hiddenwin');
-$lang->product->menu->module = 'Î¬»¤Ä£¿é|tree|browse|productID=%s&view=product';
-$lang->product->menu->create = array('link' => 'ĞÂÔö²úÆ·|product|create', 'float' => 'right');
+$lang->product->menu->story  = array('link' => 'éœ€æ±‚åˆ—è¡¨|product|browse|productID=%s',     'subModule' => 'story');
+$lang->product->menu->plan   = array('link' => 'è®¡åˆ’åˆ—è¡¨|productplan|browse|productID=%s', 'subModule' => 'productplan');
+$lang->product->menu->release= array('link' => 'å‘å¸ƒåˆ—è¡¨|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->menu->roadmap= 'è·¯çº¿å›¾|product|roadmap|productID=%s';
+$lang->product->menu->edit   = 'ç¼–è¾‘äº§å“|product|edit|productID=%s';
+$lang->product->menu->delete = array('link' => 'åˆ é™¤äº§å“|product|delete|productID=%s', 'target' => 'hiddenwin');
+$lang->product->menu->module = 'ç»´æŠ¤æ¨¡å—|tree|browse|productID=%s&view=product';
+$lang->product->menu->create = array('link' => 'æ–°å¢äº§å“|product|create', 'float' => 'right');
 $lang->story->menu           = $lang->product->menu;
 $lang->productplan->menu     = $lang->product->menu;
 $lang->release->menu         = $lang->product->menu;
 
-/* ÏîÄ¿ÊÓÍ¼²Ëµ¥ÉèÖÃ¡£*/
+/* é¡¹ç›®è§†å›¾èœå•è®¾ç½®ã€‚*/
 $lang->project->menu->list   = '%s';
-$lang->project->menu->task   = array('link' => 'ÈÎÎñÁĞ±í|project|task|projectID=%s', 'subModule' => 'task');
-$lang->project->menu->story  = array('link' => 'ĞèÇóÁĞ±í|project|story|projectID=%s', 'alias' => 'linkstory');
-$lang->project->menu->bug    = 'BugÁĞ±í|project|bug|projectID=%s';
-$lang->project->menu->build  = array('link' => 'BuildÁĞ±í|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->burn   = 'È¼ÉÕÍ¼|project|burn|projectID=%s';
-$lang->project->menu->team   = array('link' => 'ÍÅ¶Ó³ÉÔ±|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->task   = array('link' => 'ä»»åŠ¡åˆ—è¡¨|project|task|projectID=%s', 'subModule' => 'task');
+$lang->project->menu->story  = array('link' => 'éœ€æ±‚åˆ—è¡¨|project|story|projectID=%s', 'alias' => 'linkstory');
+$lang->project->menu->bug    = 'Bugåˆ—è¡¨|project|bug|projectID=%s';
+$lang->project->menu->build  = array('link' => 'Buildåˆ—è¡¨|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->burn   = 'ç‡ƒçƒ§å›¾|project|burn|projectID=%s';
+$lang->project->menu->team   = array('link' => 'å›¢é˜Ÿæˆå‘˜|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->line   = $lang->colon;
-$lang->project->menu->view   = '»ù±¾ĞÅÏ¢|project|view|projectID=%s';
-$lang->project->menu->edit   = '±à¼­ÏîÄ¿|project|edit|projectID=%s';
-$lang->project->menu->delete = array('link' => 'É¾³ıÏîÄ¿|project|delete|projectID=%s', 'target' => 'hiddenwin');
-$lang->project->menu->product= '¹ØÁª²úÆ·|project|manageproducts|projectID=%s';
+$lang->project->menu->view   = 'åŸºæœ¬ä¿¡æ¯|project|view|projectID=%s';
+$lang->project->menu->edit   = 'ç¼–è¾‘é¡¹ç›®|project|edit|projectID=%s';
+$lang->project->menu->delete = array('link' => 'åˆ é™¤é¡¹ç›®|project|delete|projectID=%s', 'target' => 'hiddenwin');
+$lang->project->menu->product= 'å…³è”äº§å“|project|manageproducts|projectID=%s';
 
-$lang->project->menu->create = array('link' => 'ĞÂÔöÏîÄ¿|project|create', 'float' => 'right');
+$lang->project->menu->create = array('link' => 'æ–°å¢é¡¹ç›®|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
 
-/* QAÊÓÍ¼²Ëµ¥ÉèÖÃ¡£*/
+/* QAè§†å›¾èœå•è®¾ç½®ã€‚*/
 $lang->bug->menu->product  = '%s';
-$lang->bug->menu->bug      = array('link' => 'È±Ïİ¹ÜÀí|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => 'ÓÃÀı¹ÜÀí|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
-$lang->bug->menu->testtask = array('link' => '²âÊÔÈÎÎñ|testtask|browse|productID=%s');
+$lang->bug->menu->bug      = array('link' => 'ç¼ºé™·ç®¡ç†|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active', 'subModule' => 'tree');
+$lang->bug->menu->testcase = array('link' => 'ç”¨ä¾‹ç®¡ç†|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->bug->menu->testtask = array('link' => 'æµ‹è¯•ä»»åŠ¡|testtask|browse|productID=%s');
 
 $lang->testcase->menu->product  = '%s';
-$lang->testcase->menu->bug      = array('link' => 'È±Ïİ¹ÜÀí|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active');
-$lang->testcase->menu->testcase = array('link' => 'ÓÃÀı¹ÜÀí|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => '²âÊÔÈÎÎñ|testtask|browse|productID=%s');
+$lang->testcase->menu->bug      = array('link' => 'ç¼ºé™·ç®¡ç†|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active');
+$lang->testcase->menu->testcase = array('link' => 'ç”¨ä¾‹ç®¡ç†|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
+$lang->testcase->menu->testtask = array('link' => 'æµ‹è¯•ä»»åŠ¡|testtask|browse|productID=%s');
 
 $lang->testtask->menu->product  = '%s';
-$lang->testtask->menu->bug      = array('link' => 'È±Ïİ¹ÜÀí|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active');
-$lang->testtask->menu->testcase = array('link' => 'ÓÃÀı¹ÜÀí|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
-$lang->testtask->menu->testtask = array('link' => '²âÊÔÈÎÎñ|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
+$lang->testtask->menu->bug      = array('link' => 'ç¼ºé™·ç®¡ç†|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,active');
+$lang->testtask->menu->testcase = array('link' => 'ç”¨ä¾‹ç®¡ç†|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
+$lang->testtask->menu->testtask = array('link' => 'æµ‹è¯•ä»»åŠ¡|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 
-/* ×éÖ¯½á¹¹ÊÓÍ¼²Ëµ¥ÉèÖÃ¡£*/
-$lang->company->menu->browseUser  = array('link' => 'ÓÃ»§ÁĞ±í|company|browse', 'subModule' => 'user');
-$lang->company->menu->dept        = array('link' => '²¿ÃÅÎ¬»¤|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup = array('link' => 'È¨ÏŞ·Ö×é|group|browse', 'subModule' => 'group');
-$lang->company->menu->addGroup    = array('link' => 'Ìí¼Ó·Ö×é|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => 'Ìí¼ÓÓÃ»§|user|create|company=%s&dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+/* ç»„ç»‡ç»“æ„è§†å›¾èœå•è®¾ç½®ã€‚*/
+$lang->company->menu->browseUser  = array('link' => 'ç”¨æˆ·åˆ—è¡¨|company|browse', 'subModule' => 'user');
+$lang->company->menu->dept        = array('link' => 'éƒ¨é—¨ç»´æŠ¤|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup = array('link' => 'æƒé™åˆ†ç»„|group|browse', 'subModule' => 'group');
+$lang->company->menu->addGroup    = array('link' => 'æ·»åŠ åˆ†ç»„|group|create', 'float' => 'right');
+$lang->company->menu->addUser     = array('link' => 'æ·»åŠ ç”¨æˆ·|user|create|company=%s&dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
-/* ÓÃ»§ĞÅÏ¢²Ëµ¥ÉèÖÃ¡£*/
+/* ç”¨æˆ·ä¿¡æ¯èœå•è®¾ç½®ã€‚*/
 $lang->user->menu->account  = '%s' . $lang->arrow;
-$lang->user->menu->todo     = array('link' => 'TODOÁĞ±í|user|todo|account=%s', 'subModule' => 'todo');
-$lang->user->menu->task     = 'ÈÎÎñÁĞ±í|user|task|account=%s';
-$lang->user->menu->project  = 'ÏîÄ¿ÁĞ±í|user|project|account=%s';
-$lang->user->menu->bug      = 'BugÁĞ±í|user|bug|account=%s';
-$lang->user->menu->profile  = array('link' => 'ÓÃ»§ĞÅÏ¢|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse   = array('link' => 'ÓÃ»§¹ÜÀí|company|browse|', 'float' => 'right');
+$lang->user->menu->todo     = array('link' => 'TODOåˆ—è¡¨|user|todo|account=%s', 'subModule' => 'todo');
+$lang->user->menu->task     = 'ä»»åŠ¡åˆ—è¡¨|user|task|account=%s';
+$lang->user->menu->project  = 'é¡¹ç›®åˆ—è¡¨|user|project|account=%s';
+$lang->user->menu->bug      = 'Bugåˆ—è¡¨|user|bug|account=%s';
+$lang->user->menu->profile  = array('link' => 'ç”¨æˆ·ä¿¡æ¯|user|profile|account=%s', 'alias' => 'edit');
+$lang->user->menu->browse   = array('link' => 'ç”¨æˆ·ç®¡ç†|company|browse|', 'float' => 'right');
 
-/* ºóÌ¨¹ÜÀí²Ëµ¥ÉèÖÃ¡£*/
-$lang->admin->menu->browseCompany = array('link' => '¹«Ë¾¹ÜÀí|admin|browsecompany', 'subModule' => 'company');
-//$lang->admin->menu->convert       = array('link' => '´ÓÆäËûÏµÍ³µ¼Èë|convert|index', 'subModule' => 'convert');
-$lang->admin->menu->upgrade       = array('link' => 'Éı¼¶|upgrade|index',           'subModule' => 'upgrade');
-$lang->admin->menu->createCompany = array('link' => 'ĞÂÔö¹«Ë¾|company|create', 'float' => 'right');
+/* åå°ç®¡ç†èœå•è®¾ç½®ã€‚*/
+$lang->admin->menu->browseCompany = array('link' => 'å…¬å¸ç®¡ç†|admin|browsecompany', 'subModule' => 'company');
+$lang->admin->menu->convert       = array('link' => 'ä»å…¶ä»–ç³»ç»Ÿå¯¼å…¥|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->createCompany = array('link' => 'æ–°å¢å…¬å¸|company|create', 'float' => 'right');
 $lang->convert->menu              = $lang->admin->menu;
 $lang->upgrade->menu              = $lang->admin->menu;
 
-/*²Ëµ¥ÉèÖÃ£º·Ö×éÉèÖÃ¡£*/
+/*èœå•è®¾ç½®ï¼šåˆ†ç»„è®¾ç½®ã€‚*/
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
 $lang->menugroup->productplan = 'product';
@@ -168,25 +167,25 @@ $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 
-/* ´íÎóÌáÊ¾ĞÅÏ¢¡£*/
-$lang->error->companyNotFound = "Äú·ÃÎÊµÄÓòÃû %s Ã»ÓĞ¶ÔÓ¦µÄ¹«Ë¾¡£";
-$lang->error->length          = array("¡º%s¡»³¤¶È´íÎó£¬Ó¦µ±Îª¡º%s¡»", "¡º%s¡»³¤¶ÈÓ¦µ±²»³¬¹ı¡º%s¡»£¬ÇÒ²»Ğ¡ÓÚ¡º%s¡»¡£");
-$lang->error->reg             = "¡º%s¡»²»·ûºÏ¸ñÊ½£¬Ó¦µ±Îª:¡º%s¡»¡£";
-$lang->error->unique          = "¡º%s¡»ÒÑ¾­ÓĞ¡º%s¡»ÕâÌõ¼ÇÂ¼ÁË¡£";
-$lang->error->notempty        = "¡º%s¡»²»ÄÜÎª¿Õ¡£";
-$lang->error->int             = array("¡º%s¡»Ó¦µ±ÊÇÊı×Ö¡£", "¡º%s¡»Ó¦µ±½éÓÚ¡º%s-%s¡»Ö®¼ä¡£");
-$lang->error->float           = "¡º%s¡»Ó¦µ±ÊÇÊı×Ö£¬¿ÉÒÔÊÇĞ¡Êı¡£";
-$lang->error->email           = "¡º%s¡»Ó¦µ±ÎªºÏ·¨µÄEMAIL¡£";
-$lang->error->date            = "¡º%s¡»Ó¦µ±ÎªºÏ·¨µÄÈÕÆÚ¡£";
-$lang->error->account         = "¡º%s¡»Ó¦µ±ÎªºÏ·¨µÄÓÃ»§Ãû¡£";
-$lang->error->passwordsame    = "Á½´ÎÃÜÂëÓ¦µ±ÏàµÈ¡£";
-$lang->error->passwordrule    = "ÃÜÂëÓ¦¸Ã·ûºÏ¹æÔò¡£";
+/* é”™è¯¯æç¤ºä¿¡æ¯ã€‚*/
+$lang->error->companyNotFound = "æ‚¨è®¿é—®çš„åŸŸå %s æ²¡æœ‰å¯¹åº”çš„å…¬å¸ã€‚";
+$lang->error->length          = array("ã€%sã€é•¿åº¦é”™è¯¯ï¼Œåº”å½“ä¸ºã€%sã€", "ã€%sã€é•¿åº¦åº”å½“ä¸è¶…è¿‡ã€%sã€ï¼Œä¸”ä¸å°äºã€%sã€ã€‚");
+$lang->error->reg             = "ã€%sã€ä¸ç¬¦åˆæ ¼å¼ï¼Œåº”å½“ä¸º:ã€%sã€ã€‚";
+$lang->error->unique          = "ã€%sã€å·²ç»æœ‰ã€%sã€è¿™æ¡è®°å½•äº†ã€‚";
+$lang->error->notempty        = "ã€%sã€ä¸èƒ½ä¸ºç©ºã€‚";
+$lang->error->int             = array("ã€%sã€åº”å½“æ˜¯æ•°å­—ã€‚", "ã€%sã€åº”å½“ä»‹äºã€%s-%sã€ä¹‹é—´ã€‚");
+$lang->error->float           = "ã€%sã€åº”å½“æ˜¯æ•°å­—ï¼Œå¯ä»¥æ˜¯å°æ•°ã€‚";
+$lang->error->email           = "ã€%sã€åº”å½“ä¸ºåˆæ³•çš„EMAILã€‚";
+$lang->error->date            = "ã€%sã€åº”å½“ä¸ºåˆæ³•çš„æ—¥æœŸã€‚";
+$lang->error->account         = "ã€%sã€åº”å½“ä¸ºåˆæ³•çš„ç”¨æˆ·åã€‚";
+$lang->error->passwordsame    = "ä¸¤æ¬¡å¯†ç åº”å½“ç›¸ç­‰ã€‚";
+$lang->error->passwordrule    = "å¯†ç åº”è¯¥ç¬¦åˆè§„åˆ™ã€‚";
 
-/* ·ÖÒ³ĞÅÏ¢¡£*/
-$lang->pager->noRecord  = "ÔİÊ±Ã»ÓĞ¼ÇÂ¼";
-$lang->pager->digest    = "¹²<strong>%s</strong>Ìõ¼ÇÂ¼,Ã¿Ò³ <strong>%s</strong>Ìõ£¬Ò³Ãæ£º<strong>%s/%s</strong> ";
-$lang->pager->first     = "Ê×Ò³";
-$lang->pager->pre       = "ÉÏÒ³";
-$lang->pager->next      = "ÏÂÒ³";
-$lang->pager->last      = "Ä©Ò³";
+/* åˆ†é¡µä¿¡æ¯ã€‚*/
+$lang->pager->noRecord  = "æš‚æ—¶æ²¡æœ‰è®°å½•";
+$lang->pager->digest    = "å…±<strong>%s</strong>æ¡è®°å½•,æ¯é¡µ <strong>%s</strong>æ¡ï¼Œé¡µé¢ï¼š<strong>%s/%s</strong> ";
+$lang->pager->first     = "é¦–é¡µ";
+$lang->pager->pre       = "ä¸Šé¡µ";
+$lang->pager->next      = "ä¸‹é¡µ";
+$lang->pager->last      = "æœ«é¡µ";
 $lang->pager->locate    = "GO!";

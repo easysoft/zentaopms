@@ -1,6 +1,6 @@
 <?php
 /**
- * The release module english file of ZenTaoMS.
+ * The build module english file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,22 +17,26 @@
  *
  * @copyright   Copyright 2009-2010 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
- * @package     release
+ * @package     build
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->release->common    = '发布';
-$lang->release->create    = "创建发布";
-$lang->release->edit      = "编辑发布";
-$lang->release->delete    = "删除发布";
-$lang->release->view      = "发布详情";
-$lang->release->browse    = "浏览发布";
+$lang->build->common    = 'Build';
+$lang->build->create    = "创建Build";
+$lang->build->edit      = "编辑Build";
+$lang->build->delete    = "删除Build";
+$lang->build->view      = "Build详情";
+$lang->build->ajaxGetProductBuilds = '接口:产品Build列表';
+$lang->build->ajaxGetProjectBuilds = '接口:项目Build列表';
 
-$lang->release->confirmDelete = "您确认删除该release吗？";
+$lang->build->confirmDelete = "您确认删除该build吗？";
 
-$lang->release->id        = 'ID';
-$lang->release->product   = '产品';
-$lang->release->build     = 'Build';
-$lang->release->name      = '发布名称';
-$lang->release->date      = '发布日期';
-$lang->release->desc      = '描述';
+$lang->build->id        = 'ID';
+$lang->build->product   = '产品';
+$lang->build->project   = '项目';
+$lang->build->name      = '名称编号';
+$lang->build->date      = 'Build日期';
+$lang->build->builder   = '构建者';
+$lang->build->scmPath   = '源代码地址';
+$lang->build->filePath  = '存储地址';
+$lang->build->desc      = '描述';

@@ -1,6 +1,6 @@
 <?php
 /**
- * The user module en file of ZenTaoMS.
+ * The user module english file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,34 +21,69 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang['page']['common']    = 'user';
-$lang['page']['index']     = "{$lang['page']['common']}/index";
-$lang['page']['create']    = "{$lang['page']['common']}/create";
-$lang['page']['read']      = "{$lang['page']['common']}/read";
-$lang['page']['update']    = "{$lang['page']['common']}/update";
-$lang['page']['delete']    = "{$lang['page']['common']}/delete";
-$lang['user']['id']        = 'id';
-$lang['user']['company']   = 'company';
-$lang['user']['division']  = 'division';
-$lang['user']['account']   = 'account';
-$lang['user']['password']  = 'password';
-$lang['user']['realname']  = 'realname';
-$lang['user']['nickname']  = 'nickname';
-$lang['user']['avatar']    = 'avatar';
-$lang['user']['birthyear'] = 'birthyear';
-$lang['user']['birthday']  = 'birthday';
-$lang['user']['gendar']    = 'gendar';
-$lang['user']['email']     = 'email';
-$lang['user']['msn']       = 'msn';
-$lang['user']['qq']        = 'qq';
-$lang['user']['yahoo']     = 'yahoo';
-$lang['user']['gtalk']     = 'gtalk';
-$lang['user']['wangwang']  = 'wangwang';
-$lang['user']['mobile']    = 'mobile';
-$lang['user']['phone']     = 'phone';
-$lang['user']['address']   = 'address';
-$lang['user']['zipcode']   = 'zipcode';
-$lang['user']['join']      = 'join';
-$lang['user']['visits']    = 'visits';
-$lang['user']['ip']        = 'ip';
-$lang['user']['login']     = 'login';
+$lang->user->common        = 'User';
+$lang->user->index         = "User视图首页";
+$lang->user->view          = "User Info";
+$lang->user->create        = "Add User";
+$lang->user->read          = "View User";
+$lang->user->edit          = "Edit User";
+$lang->user->update        = "Edit User";
+$lang->user->delete        = "Delete User";
+$lang->user->activate      = "Activate";
+$lang->user->browse        = "Browse User";
+$lang->user->login         = "Login";
+$lang->user->userView      = "User view";
+$lang->user->editProfile   = "修改个人信息";
+$lang->user->editPassword  = "修改密码";
+$lang->user->deny          = "访问受限";
+$lang->user->confirmDelete   = "您确认删除该User吗？";
+$lang->user->confirmActivate = "您确认激活该User吗？";
+$lang->user->relogin         = "重新登录";
+$lang->user->asGuest         = "游客访问";
+$lang->user->goback          = "返回前一页";
+$lang->user->allUsers        = '全部User';
+
+$lang->user->profile     = 'User档案';
+$lang->user->project     = 'User项目';
+$lang->user->task        = 'User任务';
+$lang->user->bug         = 'UserBug';
+$lang->user->todo        = 'UserTODO';
+$lang->user->story       = 'User需求';
+$lang->user->team        = 'User团队';
+$lang->user->editProfile = '修改信息';
+
+$lang->user->welcom    = "欢迎使用%s公司项目管理系统";
+$lang->user->errorDeny = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
+
+$lang->user->gendarList->m = '男';
+$lang->user->gendarList->f = '女';
+$lang->user->statusList['active'] = '正常';
+$lang->user->statusList['delete'] = '删除';
+
+$lang->user->id        = 'ID';
+$lang->user->company   = 'Company';
+$lang->user->dept      = 'Department';
+$lang->user->account   = 'Account';
+$lang->user->password  = 'Password';
+$lang->user->password2 = 'Repeat Password';
+$lang->user->realname  = 'Real Name';
+$lang->user->nickname  = 'Nick Name';
+$lang->user->avatar    = 'Avatar';
+$lang->user->birthyear = 'Birth Year';
+$lang->user->birthday  = 'Birth Day';
+$lang->user->gendar    = 'Gendar';
+$lang->user->email     = 'EMail';
+$lang->user->msn       = 'MSN';
+$lang->user->qq        = 'QQ';
+$lang->user->yahoo     = 'Yahoo!';
+$lang->user->gtalk     = 'GTalk';
+$lang->user->wangwang  = 'WangWang';
+$lang->user->mobile    = 'Mobile';
+$lang->user->phone     = 'Phone';
+$lang->user->address   = 'Address';
+$lang->user->zipcode   = 'Zipcode';
+$lang->user->join      = 'Join Date';
+$lang->user->visits    = 'Visists';
+$lang->user->ip        = 'IP';
+$lang->user->last      = 'Lasttime';
+$lang->user->status    = 'Status';
