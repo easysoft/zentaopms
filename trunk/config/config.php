@@ -34,7 +34,7 @@ $config->methodVar   = 'f';               // requestType=GET: 方法变量名。
 $config->viewVar     = 't';               // requestType=GET: 模板变量名。
 
 $config->views       = ',html,';          // 支持的视图列表。
-$config->langs       = 'zh-cn';           // 支持的语言列表。
+$config->langs       = 'en';           // 支持的语言列表。
 $config->themes      = 'default';         // 支持的主题列表。
 
 $config->super2OBJ   = true;              // 是否通过对象来访问全局变量。

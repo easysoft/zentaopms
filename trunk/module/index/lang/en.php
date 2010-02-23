@@ -1,6 +1,8 @@
 <?php
 /**
- * The index module english file of ZenTaoMS.
+ * The index module simplified chinese file of ZenTaoMS.
+ *
+ * This file should be UTF-8 encoded.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +21,10 @@
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     ZenTaoMS
  * @version     $Id$
- * @link        http://www.zentao.cn/
+ * @link        http://www.zentao.cn
  */
-$lang['welcome'] = 'Welcome to ZenTaoMS system!';
+$lang->index->common = '首页';
+$lang->index->index  = '首页';
+$lang->index->ping   = '接口:同步session';
+$lang->index->latest = '最新动态';
+$lang->index->action = '%s, %s <i>%s</i> %s <strong>%s</strong>';

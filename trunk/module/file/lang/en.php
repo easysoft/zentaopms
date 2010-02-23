@@ -1,6 +1,6 @@
 <?php
 /**
- * The release module english file of ZenTaoMS.
+ * The file module english file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,22 +17,9 @@
  *
  * @copyright   Copyright 2009-2010 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
- * @package     release
+ * @package     file
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->release->common    = '发布';
-$lang->release->create    = "创建发布";
-$lang->release->edit      = "编辑发布";
-$lang->release->delete    = "删除发布";
-$lang->release->view      = "发布详情";
-$lang->release->browse    = "浏览发布";
-
-$lang->release->confirmDelete = "您确认删除该release吗？";
-
-$lang->release->id        = 'ID';
-$lang->release->product   = '产品';
-$lang->release->build     = 'Build';
-$lang->release->name      = '发布名称';
-$lang->release->date      = '发布日期';
-$lang->release->desc      = '描述';
+$lang->file->common = '附件';
+$lang->file->label  = '标题：';
