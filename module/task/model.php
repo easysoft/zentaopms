@@ -47,8 +47,9 @@ class taskModel extends model
             ->check('name', 'notempty')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->exec();
+        if(!dao::isError()) $taskID = $this->dao->lastInsertID();
         if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
-        if(!dao::isError()) return $this->dao->lastInsertID();
+        return $taskID;
     }
 
     /* 更新一个任务。*/
