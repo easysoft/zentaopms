@@ -7,6 +7,7 @@ $config->bug->search['fields']['steps']          = $lang->bug->steps;
 $config->bug->search['fields']['assignedTo']     = $lang->bug->assignedTo;
 $config->bug->search['fields']['resolvedBy']     = $lang->bug->resolvedBy;
 $config->bug->search['fields']['openedBy']       = $lang->bug->openedBy;
+$config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['module']         = $lang->bug->module;
 $config->bug->search['fields']['project']        = $lang->bug->project;
 $config->bug->search['fields']['closedBy']       = $lang->bug->closedBy;
@@ -27,6 +28,7 @@ $config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDate;
 
 $config->bug->search['params']['title']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->bug->search['params']['steps']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->bug->search['params']['product']      = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['module']       = array('operator' => '=',       'control' => 'select', 'values' => 'modules');
 $config->bug->search['params']['project']      = array('operator' => '=',       'control' => 'select', 'values' => 'projects');
 $config->bug->search['params']['assignedTo']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');

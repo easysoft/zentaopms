@@ -56,6 +56,7 @@ class bug extends control
 
         /* 设置搜索表单。*/
         $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch");
+        $this->config->bug->search['params']['product']['values']       = array($productID => $this->products[$productID], 'all' => $this->lang->bug->allProduct);
         $this->config->bug->search['params']['module']['values']        = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
         $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
@@ -107,7 +108,8 @@ class bug extends control
         elseif($browseType == 'bysearch')
         {
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQuery)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // 如果指定了搜索所有的产品，去掉这个查询条件。
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
         $users = $this->user->getPairs('noletter');

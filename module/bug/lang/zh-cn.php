@@ -43,6 +43,7 @@ $lang->bug->postponedBugs  = '被延期';
 $lang->bug->allBugs        = '所有Bug';
 $lang->bug->moduleBugs     = '按模块浏览';
 $lang->bug->byQuery        = '搜索';
+$lang->bug->allProduct     = '所有产品';
 
 $lang->bug->lblProductAndModule         = '产品模块';
 $lang->bug->lblProjectAndTask           = '项目任务';
