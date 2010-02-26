@@ -24,13 +24,14 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/colorize.html.php';?>
+<?php include '../../common/tablesorter.html.php';?>
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-right'><?php common::printLink('bug', 'create', "productID=0&extra=projectID=$project->id", $lang->bug->create);?></div>
   </div>
 </div>
 <div class='yui-d0'>
-  <table class='table-1 fixed colored'>
+  <table class='table-1 fixed colored tablesorter'>
     <thead>
     <tr class='colhead'>
       <th><?php echo $lang->bug->id;?></th>
