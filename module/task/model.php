@@ -39,7 +39,7 @@ class taskModel extends model
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
-            ->remove('after')
+            ->remove('after,files,labels')
             ->get();
 
         $this->dao->insert(TABLE_TASK)->data($task)
@@ -49,6 +49,8 @@ class taskModel extends model
             ->exec();
         if(!dao::isError()) $taskID = $this->dao->lastInsertID();
         if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
+        $this->loadModel('file')->saveUpload('task', $taskID);
+
         return $taskID;
     }
 
@@ -64,7 +66,7 @@ class taskModel extends model
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF($this->post->status == 'done', 'left', 0)
             ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
-            ->remove('comment')
+            ->remove('comment,fiels,labels')
             ->get();
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
@@ -89,7 +91,7 @@ class taskModel extends model
     /* 通过id获取一个任务信息。*/
     public function getById($taskID)
     {
-        return $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
+        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')
             ->on('t1.story = t2.id')
@@ -97,6 +99,9 @@ class taskModel extends model
             ->on('t1.owner = t3.account')
             ->where('t1.id')->eq((int)$taskID)
             ->fetch();
+        if(!$task) return false;
+        $task->files = $this->loadModel('file')->getByObject('task', $taskID);
+        return $task;
     }
     
     /* 获得某一个项目的任务列表。*/
