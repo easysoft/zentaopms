@@ -133,7 +133,7 @@ needPing = true;
 $(document).ready(function() 
 {
     setNowrapObjTitle();
-    setHelpLink();
+    //setHelpLink();
     setRequiredFields();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });
