@@ -106,10 +106,14 @@ class task extends control
             $this->loadModel('action');
             $changes = $this->task->update($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($this->post->comment != '' or !empty($changes))
+            $files = $this->loadModel('file')->saveUpload('task', $taskID);
+
+            if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $fileAction = '';
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+                $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));

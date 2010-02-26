@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0'>
-  <form method='post' target='hiddenwin'>
+  <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table class='table-1'> 
       <caption><?php echo $header->title;?></caption>
       <tr>
@@ -42,6 +42,10 @@
       <tr>
         <th class='rowhead'><?php echo $lang->task->desc;?></th>
         <td><textarea name='desc' rows='5' class='area-1'><?php echo $task->desc;?></textarea>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->files;?></th>
+        <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->owner;?></th>

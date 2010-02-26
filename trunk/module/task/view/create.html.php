@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <div class='yui-d0'>
-  <form method='post' target='hiddenwin'>
+  <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $lang->task->create;?></caption>
       <tr>
@@ -33,7 +33,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->story;?></th>
-        <td><?php echo html::select('story', $stories, $storyID, 'class=select-1');?> 
+        <td><?php echo html::select('story', $stories, $storyID, 'class=select-1');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->name;?></th>
@@ -42,6 +42,10 @@
       <tr>
         <th class='rowhead'><?php echo $lang->task->desc;?></th>
         <td><textarea name='desc' rows='5' class='area-1'></textarea>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->files;?></th>
+        <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->owner;?></th>

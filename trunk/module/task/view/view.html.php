@@ -43,6 +43,10 @@
         <legend><?php echo $lang->task->legendDesc;?></legend>
         <div><?php echo nl2br($task->desc);?></div>
       </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->files;?></legend>
+        <div><?php foreach($task->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
+      </fieldset>
       <?php include '../../common/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>
         <?php
