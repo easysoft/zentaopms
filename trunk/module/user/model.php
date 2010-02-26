@@ -47,7 +47,7 @@ class userModel extends model
     public function getPairs($params = '', $companyID = 0)
     {
         if($companyID == 0) $companyID = $this->app->company->id;
-        $users = $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->orderBy('account')->fetchPairs();
+        $users = $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->andWhere('status')->eq('active')->orderBy('account')->fetchPairs();
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
