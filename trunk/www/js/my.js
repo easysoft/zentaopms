@@ -98,9 +98,32 @@ function switchAccount(account)
     location.href=link;
 }
 
+/* 设置ping的地址，防止session超时。*/
 function setPing()
 {
     $('#hiddenwin').attr('src', createLink('index', 'ping'));
+}
+
+/* 设置必填字段。*/
+function setRequiredFields()
+{
+    if(!requiredFields) return false;
+    requiredFields = requiredFields.split(',');
+    for(i = 0; i < requiredFields.length; i++)
+    {
+        $('#' + requiredFields[i]).after('<span class="red"> * </span>');
+    }
+}
+
+/* 设置帮助链接。*/
+function setHelpLink()
+{
+    $('input[id],select[id],textarea[id]').each(function()
+        {
+            if(!$(this).attr('name')) return;
+            $(this).after(' <a href=' + zentaoHelpRoot + '?lang=' + clientLang + '&module=' + currentModule + '&method=' + currentMethod + '&field=' + $(this).attr('name') + '>?</a> ');
+        }
+    );
 }
 
 /* 需要不需要ping，已保证session不过期。 */
@@ -110,5 +133,7 @@ needPing = true;
 $(document).ready(function() 
 {
     setNowrapObjTitle();
+    setHelpLink();
+    setRequiredFields();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });

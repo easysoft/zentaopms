@@ -438,17 +438,27 @@ EOT;
         global $app, $config;
         $defaultViewType = $app->getViewType();
         $themeRoot       = $app->getWebRoot() . 'theme/';
+        $moduleName      = $app->getModuleName();
+        $methodName      = $app->getMethodName();
+        $clientLang      = $app->getClientLang();
+        $requiredFields  = '';
+        if(isset($config->$moduleName->$methodName->requiredFields)) $requiredFields = str_replace(' ', '', $config->$moduleName->$methodName->requiredFields);
         $js = <<<EOT
 <script language = 'javascript'>
-webRoot     = '$config->webRoot';
-requestType = '$config->requestType';
-pathType    = '$config->pathType';
-requestFix  = '$config->requestFix';
-moduleVar   = '$config->moduleVar';
-methodVar   = '$config->methodVar';
-viewVar     = '$config->viewVar';
-defaultView = '$defaultViewType';
-themeRoot   = '$themeRoot';
+webRoot        = '$config->webRoot';
+requestType    = '$config->requestType';
+pathType       = '$config->pathType';
+requestFix     = '$config->requestFix';
+moduleVar      = '$config->moduleVar';
+methodVar      = '$config->methodVar';
+viewVar        = '$config->viewVar';
+defaultView    = '$defaultViewType';
+themeRoot      = '$themeRoot';
+currentModule  = '$moduleName';
+currentMethod  = '$methodName';
+clientLang     = '$clientLang';
+requiredFields = '$requiredFields';
+zentaoHelpRoot = '$config->helpRoot';
 </script>
 
 EOT;
