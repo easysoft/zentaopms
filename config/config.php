@@ -22,6 +22,7 @@
  * @link        http://www.zentao.cn
  */
 $config->version     = '0.5 beta';        // 版本号，切勿修改。
+$config->helpRoot    = 'http://doc.zentao.cn/help/';
 $config->encoding    = 'UTF-8';           // 网站的编码。
 $config->cookiePath  = '/';               // cookie的有效路径。
 $config->cookieLife  = time() + 2592000;  // cookie的生命周期。
@@ -34,8 +35,10 @@ $config->methodVar   = 'f';               // requestType=GET: 方法变量名。
 $config->viewVar     = 't';               // requestType=GET: 模板变量名。
 
 $config->views       = ',html,';          // 支持的视图列表。
-$config->langs       = 'en';           // 支持的语言列表。
 $config->themes      = 'default';         // 支持的主题列表。
+
+$config->langs['en']    = 'English';      
+$config->langs['zh-cn'] = 'Chinese Simplified';
 
 $config->super2OBJ   = true;              // 是否通过对象来访问全局变量。
 
