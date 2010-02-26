@@ -158,7 +158,7 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
         $now = date('Y-m-d H:i:s');
         $bug = fixer::input('post')
-            ->add('assignedTo', $oldBug->resolvedBy)
+            ->setDefault('assignedTo', $oldBug->resolvedBy)
             ->add('assignedDate', $now)
             ->add('resolution', '')
             ->add('status', 'active')
