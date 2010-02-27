@@ -1,4 +1,4 @@
-<p></p>
+<p style='margin-bottom:30px'></p>
 <div class='yui-d0' id='hiddenbar'>
   <iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='<?php $config->debug ? print("debugwin") : print('hiddenwin')?>'></iframe>
 </div>
