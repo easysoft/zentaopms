@@ -73,6 +73,7 @@ $lang->project->team         = '团队成员';
 $lang->project->products     = '相关产品';
 $lang->project->childProjects= '子项目';
 $lang->project->task         = '任务列表';
+$lang->project->groupTask    = '分组浏览任务';
 $lang->project->story        = '需求列表';
 $lang->project->bug          = 'Bug列表';
 $lang->project->build        = 'Build列表';
