@@ -75,9 +75,6 @@ class project extends control
     /* 浏览某一个项目下面的任务。*/
     public function task($projectID = 0, $orderBy = 'status|asc,id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 加载任务模块。*/
-        $this->loadModel('task');
-
         /* 公共的操作。*/
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
@@ -87,25 +84,78 @@ class project extends control
         $this->app->session->set('storyList', $this->app->getURI(true));
 
         /* 设定header和position信息。*/
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->task;
-        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->task;
+        $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->task;
+        $this->view->position[]    = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]    = $this->lang->project->task;
 
         /* 分页操作。*/
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $tasks = $this->task->getProjectTasks($projectID, $orderBy, $pager);
+        $tasks = $this->loadModel('task')->getProjectTasks($projectID, $orderBy, $pager);
 
         /* 赋值。*/
-        $this->assign('header',     $header);
-        $this->assign('position',   $position);
-        $this->assign('tasks',      $tasks);
-        $this->assign('tabID',      'task');
-        $this->assign('pager',      $pager->get());
-        $this->assign('recTotal',   $pager->recTotal);
-        $this->assign('recPerPage', $pager->recPerPage);
-        $this->assign('orderBy',    $orderBy);
+        $this->view->tasks      = $tasks;
+        $this->view->tabID      = 'task';
+        $this->view->pager      = $pager->get();
+        $this->view->recTotal   = $pager->recTotal;
+        $this->view->recPerPage = $pager->recPerPage;
+        $this->view->orderBy    = $orderBy;
+        $this->view->browseType = 'list';
 
+        $this->display();
+    }
+
+    /* 按照tree的方式查看任务。*/
+    public function grouptask($projectID = 0, $groupBy = 'story')
+    {
+        /* 公共的操作。*/
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
+
+        /* 记录用户当前选择的列表。*/
+        $this->app->session->set('taskList',  $this->app->getURI(true));
+        $this->app->session->set('storyList', $this->app->getURI(true));
+
+        /* 设定header和position信息。*/
+        $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->project->task;
+        $this->view->position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]      = $this->lang->project->task;
+
+        /* 获得任务列表，并将其分组。*/
+        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $groupBy);
+        $groupBy     = strtolower(str_replace('`', '', $groupBy));
+        $taskLang    = $this->lang->task;
+        $groupByList = array();
+        foreach($tasks as $task)
+        {
+            if($groupBy == 'story')
+            { 
+                $groupTasks[$task->story][] = $task;
+                $groupByList[$task->story]  = $task->storyTitle;
+            }
+            elseif($groupBy == 'status')
+            {
+                $groupTasks[$taskLang->statusList[$task->status]][] = $task;
+            }
+            elseif($groupBy == 'owner')
+            {
+                $groupTasks[$task->ownerRealName][] = $task;
+            }
+            elseif($groupBy == 'type')
+            {
+                $groupTasks[$taskLang->typeList[$task->type]][] = $task;
+            }
+            else
+            {
+                $groupTasks[$task->$groupBy][] = $task;
+            }
+        }
+
+        /* 赋值。*/
+        $this->view->tasks       = $groupTasks;
+        $this->view->tabID       = 'task';
+        $this->view->groupByList = $groupByList;
+        $this->view->browseType  = $groupBy;
         $this->display();
     }
 

@@ -78,6 +78,16 @@ $lang->project->bug          = 'Bug列表';
 $lang->project->build        = 'Build列表';
 $lang->project->burn         = '燃烧图';
 $lang->project->burnData     = '燃烧图数据';
+$lang->project->listTask            = '列表方式';
+$lang->project->groupTaskByStory    = '按需求分组';
+$lang->project->groupTaskByStatus   = '按状态分组';
+$lang->project->groupTaskByPri      = '按优先级分组';
+$lang->project->groupTaskByOwner    = '按指派给分组';
+$lang->project->groupTaskByEstimate = '按预计工时分组';
+$lang->project->groupTaskByConsumed = '按已消耗分组';
+$lang->project->groupTaskByLeft     = '按剩余工时分组';
+$lang->project->groupTaskByType     = '按任务类型分组';
+$lang->project->groupTaskByDeadline = '按截止日期分组';
 
 $lang->project->beginAndEnd  = '起止时间';
 $lang->project->lblStats     = '工时统计';
