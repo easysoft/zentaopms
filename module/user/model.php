@@ -71,10 +71,12 @@ class userModel extends model
     /* 通过id获取某一个用户的信息。*/
     public function getById($userID)
     {
-        $where = $userID > 0 ? " WHERE id = '$userID'" : " WHERE account = '$userID'";
-        $sql = "SELECT * FROM " . TABLE_USER .  $where;
-        $user = $this->dbh->query($sql)->fetch();
-        if($user) $user->last = date('Y-m-d H:i:s', $user->last);
+        $user = $this->dao->select('*')->from(TABLE_USER)
+            ->onCaseOf(is_int($userID))->where('id')->eq((int)$userID)->endCase()
+            ->onCaseOf(is_string($userID))->where('account')->eq($userID)->endCase()
+            ->fetch();
+        if(!$user) return false;
+        $user->last = date('Y-m-d H:i:s', $user->last);
         return $user;
     }
 
