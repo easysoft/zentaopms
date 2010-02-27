@@ -39,7 +39,6 @@
       <td><?php echo $lang->task->deadline;?></td>
       <td colspan='2' class='a-left'><?php echo $lang->task->status;?></td>
     </tr>
-    <tr><td colspan='12' style='padding:0; background:#e4e4e4; height:1px'></td></tr>
     <?php $i = 0;?>
     <?php foreach($tasks as $groupKey => $groupTasks):?>
     <?php $groupClass = ($i % 2 == 0) ? 'odd' : 'bg-yellow'; $i ++;?>
@@ -50,7 +49,7 @@
       <?php foreach($groupTasks as $task):?>
       <?php $ownerClass = $task->owner == $app->user->account ? 'style=color:red' : '';?>
       <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
-        <td class='<?php echo $groupClass;?>'></td>
+        <td class='<?php echo $groupClass;?> bd-none'></td>
         <td class='a-left'>&nbsp;<?php echo $task->id . $lang->colon; if(common::hasPriv('task', 'view')) echo html::a($this->createLink('task', 'view', "task=$task->id"), $task->name); else echo $task->name;?></td>
         <td><?php echo $task->pri;?></td>
         <td <?php echo $ownerClass;?>><?php echo $task->ownerRealName;?></td>
@@ -66,7 +65,6 @@
         </td>
       </tr>
       <?php endforeach;?>
-      <tr><td colspan='12' style='padding:0; background:#e4e4e4; height:1px'></td></tr>
     <?php endforeach;?>
   </table>
 </div>  
