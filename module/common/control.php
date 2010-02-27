@@ -388,7 +388,7 @@ EOT;
             if($value != $old->$key)
             { 
                 $diff = '';
-                if(substr_count($value, "\n") > 1 or substr_count($old->$key, "\n") > 1 or strtolower($key) == 'name' or strtolower($key) == 'title') $diff = self::diff($old->$key, $value);
+                if(substr_count($value, "\n") > 1 or substr_count($old->$key, "\n") > 1 or strpos('name,title,desc,spec', strtolower($key)) !== false) $diff = self::diff($old->$key, $value);
                 $changes[] = array('field' => $key, 'old' => $old->$key, 'new' => $value, 'diff' => $diff);
             }
         }
