@@ -154,13 +154,20 @@ class actionModel extends model
     public function printChanges($objectType, $histories)
     {
         if(empty($histories)) return;
-        $maxLength = 0;
+
+        /* 计算字段的最大长度，并将历史记录根据是否有diff分开，以保证含有diff的字段显示在最后面。*/
+        $maxLength            = 0;
+        $historiesWithDiff    = array();
+        $historiesWithoutDiff = array();
         foreach($histories as $history)
         {
-            $fieldName  = $history->field;
+            $fieldName = $history->field;
             $history->fieldLabel = isset($this->lang->$objectType->$fieldName) ? $this->lang->$objectType->$fieldName : $fieldName;
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
+            $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }
+        $histories = array_merge($historiesWithoutDiff, $historiesWithDiff);
+
         foreach($histories as $history)
         {
             $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
