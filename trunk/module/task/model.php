@@ -36,6 +36,7 @@ class taskModel extends model
             ->cleanFloat('estimate')
             ->add('project', (int)$projectID)
             ->setDefault('estimate, left, story', 0)
+            ->setDefault('deadline', '0000-00-00')
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
@@ -44,14 +45,17 @@ class taskModel extends model
 
         $this->dao->insert(TABLE_TASK)->data($task)
             ->autoCheck()
-            ->check('name', 'notempty')
+            ->batchCheck($this->config->task->create->requiredFields, 'notempty')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->exec();
-        if(!dao::isError()) $taskID = $this->dao->lastInsertID();
-        if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
-        $this->loadModel('file')->saveUpload('task', $taskID);
-
-        return $taskID;
+        if(!dao::isError())
+        {
+            $taskID = $this->dao->lastInsertID();
+            if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
+            $this->loadModel('file')->saveUpload('task', $taskID);
+            return $taskID;
+        }
+        return false;
     }
 
     /* 更新一个任务。*/
@@ -70,7 +74,7 @@ class taskModel extends model
             ->get();
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
-            ->check('name', 'notempty')
+            ->batchCheck($this->config->task->edit->requiredFields, 'notempty')
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
@@ -101,14 +105,14 @@ class taskModel extends model
             ->fetch();
         if(!$task) return false;
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
-        return $task;
+        return $this->computeDelay($task);
     }
     
     /* 获得某一个项目的任务列表。*/
     public function getProjectTasks($projectID, $orderBy = 'status|asc, id|desc', $pager = null)
     {
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
-        return $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
+        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')
             ->on('t1.story = t2.id')
@@ -118,6 +122,8 @@ class taskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+        if($tasks) return $this->computeDelays($tasks);
+        return false;
     }
 
     /* 获得某一个项目的任务id=>name列表。*/
@@ -189,4 +195,32 @@ class taskModel extends model
         foreach($stories as $storyID) if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
         return $taskCounts;
     }
+
+    /* 计算延期的天数。*/
+    private function computeDelays($tasks)
+    {
+        $now = date('Y-m-d');
+        foreach($tasks as $task)
+        {
+            if($task->deadline != '0000-00-00')
+            {
+                $delay = helper::diffDate($now, $task->deadline);
+                if($delay > 0) $task->delay = $delay;
+            }
+        }
+        return $tasks;
+    }
+
+    /* 计算延期的天数。*/
+    private function computeDelay($task)
+    {
+        $now = date('Y-m-d');
+        if($task->deadline != '0000-00-00')
+        {
+            $delay = helper::diffDate($now, $task->deadline);
+            if($delay > 0) $task->delay = $delay;
+        }
+        return $task;
+    }
+
 }

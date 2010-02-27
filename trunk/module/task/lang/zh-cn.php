@@ -40,14 +40,16 @@ $lang->task->owner        = '指派给';
 $lang->task->estimate     = '最初预计';
 $lang->task->left         = '预计剩余';
 $lang->task->consumed     = '已消耗';
+$lang->task->deadline     = '截止日期';
 $lang->task->status       = '任务状态';
 $lang->task->desc         = '任务描述';
 $lang->task->statusCustom = '状态排序';
 
-$lang->task->statusList->wait  = '未开始';
-$lang->task->statusList->doing = '进行中';
-$lang->task->statusList->done  = '已完成';
-$lang->task->statusList->cancel= '已取消';
+$lang->task->statusList->wait    = '未开始';
+$lang->task->statusList->doing   = '进行中';
+$lang->task->statusList->done    = '已完成';
+$lang->task->statusList->cancel  = '已取消';
+$lang->task->statusList->delayed = '延期';
 
 $lang->task->typeList[''] = '';
 $lang->task->typeList['design'] = '设计';
@@ -58,6 +60,7 @@ $lang->task->typeList['discuss']= '讨论';
 $lang->task->typeList['ui']     = '界面';
 $lang->task->typeList['misc']   = '其他';
 
+$lang->task->priList[''] = '';
 $lang->task->priList[3]  = '一般';
 $lang->task->priList[1]  = '最高';
 $lang->task->priList[2]  = '较高';
@@ -80,3 +83,4 @@ $lang->task->confirmDelete       = "您确定要删除这个任务吗？";
 $lang->task->copyStoryTitle      = "同需求";
 $lang->task->afterSubmit         = "添加之后";
 $lang->task->successSaved        = "成功添加，";
+$lang->task->delayWarning        = "<strong>%s</strong>天";

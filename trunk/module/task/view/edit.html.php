@@ -23,12 +23,39 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
-  <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-    <table class='table-1'> 
-      <caption><?php echo $header->title;?></caption>
+  <div id='titlebar'>
+    <div id='main'>TASK #<?php echo $task->id . $lang->colon . html::input('name', $task->name, 'class="text-1"');?></div>
+    <div><?php echo html::submitButton();?></div>
+  </div>
+</div>
+
+<div class='yui-d0 yui-t8'>
+  <div class='yui-main'>
+    <div class='yui-b'>
+      <fieldset>
+        <legend><?php echo $lang->task->desc;?></legend>
+        <?php echo html::textarea('desc', $task->desc, "rows='4' class='area-1'");?>
+      </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->comment;?></legend>
+        <?php echo html::textarea('comment', '',  "rows='5' class='area-1'");?>
+      </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->files;?></legend>
+        <?php echo $this->fetch('file', 'buildform');?>
+      </fieldset>
+      <div class='a-center'><?php echo html::submitButton() . html::resetButton();?></div>
+      <?php include '../../common/action.html.php';?>
+    </div>
+  </div>
+  <div class='yui-b'>
+    <fieldset>
+      <legend><?php echo $lang->task->legendBasic;?></legend>
+      <table class='table-1'> 
       <tr>
-        <th class='rowhead'><?php echo $lang->task->project;?></th>
+        <th class='rowhead w-p20'><?php echo $lang->task->project;?></th>
         <td><?php echo $project->name;?></td>
       </tr>  
       <tr>
@@ -36,53 +63,40 @@
         <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?> 
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->task->name;?></th>
-        <td><input type='text' name='name' value='<?php echo $task->name;?>' class='text-1' /></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'><?php echo $task->desc;?></textarea>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->files;?></th>
-        <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
-      </tr>  
-      <tr>
         <th class='rowhead'><?php echo $lang->task->owner;?></th>
-        <td><?php echo html::select('owner', $members, $task->owner, 'class=select-3');?> 
+        <td><?php echo html::select('owner', $members, $task->owner, 'class=select-1');?> 
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-        <td><input type='text' name='estimate' value='<?php echo $task->estimate;?>' class='text-3' /></td>
+        <td><?php echo html::input('estimate', $task->estimate, "class='text-1'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->deadline;?></th>
+        <td><?php echo html::input('deadline', $task->deadline, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-        <td><input type='text' name='consumed' value='<?php echo $task->consumed;?>' class='text-3' /></td>
+        <td><input type='text' name='consumed' value='<?php echo $task->consumed;?>' class='text-1' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->left;?></th>
-        <td><input type='text' name='left' value='<?php echo $task->left;?>' class='text-3' /></td>
+        <td><input type='text' name='left' value='<?php echo $task->left;?>' class='text-1' /></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->type;?></th>
-        <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-3');?></td>
+        <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-1');?></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->status;?></th>
-        <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=select-3');?></td>
+        <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=select-1');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->pri;?></th>
-        <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=select-3');?> 
-      </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->comment;?></th>
-        <td><textarea name='comment' rows='5' class='area-1'></textarea>
-      </tr>  
-      <tr>
-        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
+        <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=select-1');?> 
       </tr>
     </table>
-  </form>
-</div>  
+    </fieldset>
+  </div>
+</div>
+</form>
 <?php include '../../common/footer.html.php';?>

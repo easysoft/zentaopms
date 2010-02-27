@@ -119,19 +119,18 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $stories = $this->story->getProjectStoryPairs($project->id);
-        $members = $this->project->getTeamMemberPairs($project->id);
 
-        $header['title'] = $this->lang->task->edit;
-        $position[]      = html::a($this->createLink('project', 'browse', "project=$task->project"), $project->name);
-        $position[]      = $this->lang->task->edit;
+        /* 导航信息。*/
+        $this->view->header->title = $this->lang->task->edit;
+        $this->view->position[]    = html::a($this->createLink('project', 'browse', "project=$task->project"), $project->name);
+        $this->view->position[]    = $this->lang->task->edit;
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('project',  $project);
-        $this->assign('stories',  $stories);
-        $this->assign('members',  $members);
-        $this->assign('task',     $task);
+        $this->view->task    =  $task;
+        $this->view->project =  $project;
+        $this->view->stories = $this->story->getProjectStoryPairs($project->id);
+        $this->view->members = $this->project->getTeamMemberPairs($project->id);
+        $this->view->users   = $this->view->members;
+        $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
         $this->display();
     }
 

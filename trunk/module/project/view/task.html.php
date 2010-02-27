@@ -42,12 +42,13 @@
     <tr class='colhead'>
       <th><?php common::printOrderLink('id',       $orderBy, $vars, $lang->task->id);?></th>
       <th><?php common::printOrderLink('pri',      $orderBy, $vars, $lang->task->pri);?></th>
-      <th class='w-p30'><?php common::printOrderLink('name',     $orderBy, $vars, $lang->task->name);?></th>
+      <th class='w-p20'><?php common::printOrderLink('name',     $orderBy, $vars, $lang->task->name);?></th>
       <th><?php common::printOrderLink('owner',    $orderBy, $vars, $lang->task->owner);?></th>
       <th><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimate);?></th>
       <th><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumed);?></th>
       <th><?php common::printOrderLink('`left`',   $orderBy, $vars, $lang->task->left);?></th>
       <th><?php common::printOrderLink('type',     $orderBy, $vars, $lang->task->type);?></th>
+      <th><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadline);?></th>
       <th><?php common::printOrderLink('status',   $orderBy, $vars, $lang->task->status);?></th>
       <th class='w-p20'><?php common::printOrderLink('story',    $orderBy, $vars, $lang->task->story);?></th>
       <th class='w-100px'><?php echo $lang->actions;?></th>
@@ -65,6 +66,7 @@
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>
       <td><?php echo $lang->task->typeList[$task->type];?></td>
+      <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList->{$task->status};?></td>
       <td class='a-left nobr'>
         <?php 
