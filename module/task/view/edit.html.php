@@ -54,47 +54,52 @@
     <fieldset>
       <legend><?php echo $lang->task->legendBasic;?></legend>
       <table class='table-1'> 
-      <tr>
-        <th class='rowhead w-p20'><?php echo $lang->task->project;?></th>
-        <td><?php echo $project->name;?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->story;?></th>
-        <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?> 
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->owner;?></th>
-        <td><?php echo html::select('owner', $members, $task->owner, 'class=select-1');?> 
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-        <td><?php echo html::input('estimate', $task->estimate, "class='text-1'");?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->deadline;?></th>
-        <td><?php echo html::input('deadline', $task->deadline, "class='text-1'");?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-        <td><input type='text' name='consumed' value='<?php echo $task->consumed;?>' class='text-1' /></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->left;?></th>
-        <td><input type='text' name='left' value='<?php echo $task->left;?>' class='text-1' /></td>
-      </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->type;?></th>
-        <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-1');?></td>
-      </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->status;?></th>
-        <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=select-1');?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->pri;?></th>
-        <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=select-1');?> 
-      </tr>
-    </table>
+        <tr>
+          <th class='rowhead w-p20'><?php echo $lang->task->project;?></th>
+          <td><?php echo $project->name;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->story;?></th>
+          <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?> 
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->owner;?></th>
+          <td><?php echo html::select('owner', $members, $task->owner, 'class=select-1');?> 
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->type;?></th>
+          <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-1');?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->status;?></th>
+          <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=select-1');?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->pri;?></th>
+          <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=select-1');?> 
+        </tr>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->task->legendEffort;?></legend>
+      <table class='table-1'> 
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->deadline;?></th>
+          <td><?php echo html::input('deadline', $task->deadline, "class='text-1'");?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead w-p20'><?php echo $lang->task->estimate;?></th>
+          <td><?php echo html::input('estimate', $task->estimate, "class='text-1'");?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->consumed;?></th>
+          <td><input type='text' name='consumed' value='<?php echo $task->consumed;?>' class='text-1' /></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->left;?></th>
+          <td><input type='text' name='left' value='<?php echo $task->left;?>' class='text-1' /></td>
+        </tr>
+      </table>
     </fieldset>
   </div>
 </div>

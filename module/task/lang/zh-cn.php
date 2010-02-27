@@ -39,7 +39,7 @@ $lang->task->pri          = '优先级';
 $lang->task->owner        = '指派给';
 $lang->task->estimate     = '最初预计';
 $lang->task->left         = '预计剩余';
-$lang->task->consumed     = '已消耗';
+$lang->task->consumed     = '已经消耗';
 $lang->task->deadline     = '截止日期';
 $lang->task->status       = '任务状态';
 $lang->task->desc         = '任务描述';
@@ -74,6 +74,7 @@ $lang->task->buttonEdit       = '编辑';
 $lang->task->buttonBackToList = '返回';
 
 $lang->task->legendBasic  = '基本信息';
+$lang->task->legendEffort = '工时信息';
 $lang->task->legendDesc   = '任务描述';
 $lang->task->legendAction = '操作';
 
@@ -83,4 +84,4 @@ $lang->task->confirmDelete       = "您确定要删除这个任务吗？";
 $lang->task->copyStoryTitle      = "同需求";
 $lang->task->afterSubmit         = "添加之后";
 $lang->task->successSaved        = "成功添加，";
-$lang->task->delayWarning        = "<strong>%s</strong>天";
+$lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天 </strong>";

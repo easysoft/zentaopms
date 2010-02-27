@@ -73,18 +73,6 @@
           <td><?php echo $task->ownerRealName;?> 
         </tr>  
         <tr>
-          <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-          <td><?php echo $task->estimate;?></td>
-        </tr>  
-        <tr>
-          <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-          <td><?php echo $task->consumed;?></td>
-        </tr>  
-        <tr>
-          <th class='rowhead'><?php echo $lang->task->left;?></th>
-          <td><?php echo $task->left;?></td>
-        </tr>
-        <tr>
           <th class='rowhead'><?php echo $lang->task->type;?></th>
           <td><?php echo $lang->task->typeList[$task->type];?></td>
         </tr>  
@@ -95,7 +83,34 @@
         <tr>
           <th class='rowhead'><?php echo $lang->task->pri;?></th>
           <td><?php $lang->show($lang->task->priList, $task->pri);?></td>
+        </tr>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->task->legendEffort;?></legend>
+      <table class='table-1'> 
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->deadline;?></th>
+          <td>
+            <?php
+            echo $task->deadline;
+            if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);
+            ?>
+          </td>
         </tr>  
+        <tr>
+          <th class='rowhead w-p20'><?php echo $lang->task->estimate;?></th>
+          <td><?php echo $task->estimate . $lang->workingHour;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->consumed;?></th>
+          <td><?php echo $task->consumed . $lang->workingHour;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->left;?></th>
+          <td><?php echo $task->left . $lang->workingHour;?></td>
+        </tr>
+          
       </table>
     </fieldset>
    </div>
