@@ -52,6 +52,7 @@ $lang->selectAll  = '全选';
 $lang->attatch    = '附件';
 $lang->reverse    = '（切换顺序）';
 $lang->addFiles   = '上传了附件 ';
+$lang->files      = '附件 ';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
