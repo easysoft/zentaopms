@@ -94,7 +94,7 @@ $lang->release->menu         = $lang->product->menu;
 
 /* 项目视图菜单设置。*/
 $lang->project->menu->list   = '%s';
-$lang->project->menu->task   = array('link' => '任务列表|project|task|projectID=%s', 'subModule' => 'task');
+$lang->project->menu->task   = array('link' => '任务列表|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask');
 $lang->project->menu->story  = array('link' => '需求列表|project|story|projectID=%s', 'alias' => 'linkstory');
 $lang->project->menu->bug    = 'Bug列表|project|bug|projectID=%s';
 $lang->project->menu->build  = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');

@@ -24,18 +24,8 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/colorize.html.php';?>
-<div class="yui-d0">
-  <div id='featurebar'>
-    <div class='f-left'>
-    <?php include './project.html.php';?>
-    </div>
-    <div class='f-right'>
-      <?php
-      common::printLink('task', 'create', "project=$project->id", $lang->task->create);
-      //common::printLink('task', 'import', "project=$project->id", $lang->task->import);
-      ?>
-    </div>
-  </div>
+<?php include './taskheader.html.php';?>
+<div class='yui-d0'>
   <table class='table-1 fixed colored'>
     <?php $vars = "projectID=$project->id&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>
@@ -67,7 +57,7 @@
       <td><?php echo $task->left;?></td>
       <td><?php echo $lang->task->typeList[$task->type];?></td>
       <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
-      <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList->{$task->status};?></td>
+      <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList[$task->status];?></td>
       <td class='a-left nobr'>
         <?php 
         if($task->storyID)
@@ -87,4 +77,5 @@
   </table>
   <div class='a-right'><?php echo $pager;?></div>
 </div>  
+<script language='Javascript'>$('#by<?php echo $browseType;?>').addClass('active');</script>
 <?php include '../../common/footer.html.php';?>

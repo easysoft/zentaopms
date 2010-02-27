@@ -45,11 +45,11 @@ $lang->task->status       = '任务状态';
 $lang->task->desc         = '任务描述';
 $lang->task->statusCustom = '状态排序';
 
-$lang->task->statusList->wait    = '未开始';
-$lang->task->statusList->doing   = '进行中';
-$lang->task->statusList->done    = '已完成';
-$lang->task->statusList->cancel  = '已取消';
-$lang->task->statusList->delayed = '延期';
+$lang->task->statusList['wait']    = '未开始';
+$lang->task->statusList['doing']   = '进行中';
+$lang->task->statusList['done']    = '已完成';
+$lang->task->statusList['cancel']  = '已取消';
+$lang->task->statusList['delayed'] = '延期';
 
 $lang->task->typeList[''] = '';
 $lang->task->typeList['design'] = '设计';
