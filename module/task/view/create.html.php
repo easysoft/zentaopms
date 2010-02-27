@@ -56,6 +56,10 @@
         <td><input type='text' name='estimate' class='text-3' /></td>
       </tr>
       <tr>
+        <th class='rowhead'><?php echo $lang->task->deadline;?></th>
+        <td><input type='text' name='deadline' class='text-3' /></td>
+      </tr>
+      <tr>
         <th class='rowhead'><?php echo $lang->task->type;?></th>
         <td><?php echo html::select('type', $lang->task->typeList, '', 'class=select-3');?></td>
       </tr>
