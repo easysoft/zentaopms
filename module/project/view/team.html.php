@@ -51,8 +51,10 @@
      <?php if(common::hasPriv('project', 'unlinkmember')) echo "<td>" . html::a($this->createLink('project', 'unlinkmember', "projectID=$project->id&account=$member->account"), $lang->project->unlinkMember, 'hiddenwin') . '</td>';?>
    </tr>
    <?php endforeach;?>
-   <tr><td colspan='5' class='a-right'><?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers);?></td></tr>
    </tbody>     
+   <tfoot>
+   <tr><td colspan='5' class='a-right'><?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers);?></td></tr>
+   </tfoot>
  </table>
  <div class='a-right'>
  </div>
