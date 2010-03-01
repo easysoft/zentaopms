@@ -29,8 +29,13 @@
     <div id='main'>TASK #<?php echo $task->id . $lang->colon . $task->name;?></div>
     <div>
     <?php
-    if(common::hasPriv('task', 'edit')) echo html::a($this->createLink('task', 'edit', "taskID=$task->id"),  $lang->task->buttonEdit);
-    if(common::hasPriv('project', 'task')) echo html::a($app->session->taskList,  $lang->task->buttonBackToList);
+    //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
+    //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'close',      "taskID=$task->id", $lang->task->buttonClose)))      echo $lang->task->buttonClose . ' ';
+    //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'cancel',     "taskID=$task->id", $lang->task->buttonCancel)))     echo $lang->task->buttonCancel . ' ';
+    //if(!($task->status == 'closed' or $task->status == 'cancel'  and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
+    if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
+    if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
+    echo html::a($app->session->taskList,  $lang->task->buttonBackToList);
     ?>
     </div>
   </div>
@@ -48,10 +53,15 @@
         <div><?php foreach($task->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
       </fieldset>
       <?php include '../../common/action.html.php';?>
-      <div class='a-center' style='font-size:16px; font-weight:bold'>
+      <div class='a-center f-16px strong'>
         <?php
-        if(common::hasPriv('task', 'edit')) echo html::a($this->createLink('task', 'edit', "taskID=$task->id"),  $lang->task->buttonEdit);
-        if(common::hasPriv('project', 'task')) echo html::a($app->session->taskList,  $lang->task->buttonBackToList);
+        //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
+        //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'close',      "taskID=$task->id", $lang->task->buttonClose)))      echo $lang->task->buttonClose . ' ';
+        //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'cancel',     "taskID=$task->id", $lang->task->buttonCancel)))     echo $lang->task->buttonCancel . ' ';
+        //if(!($task->status == 'closed' or $task->status == 'cancel'  and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
+        if(!common::printLink('task', 'edit', "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
+        if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
+        echo html::a($app->session->taskList,  $lang->task->buttonBackToList);
         ?>
       </div>
     </div>

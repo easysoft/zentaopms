@@ -46,7 +46,7 @@
         <legend><?php echo $lang->files;?></legend>
         <?php echo $this->fetch('file', 'buildform');?>
       </fieldset>
-      <div class='a-center'><?php echo html::submitButton() . html::resetButton();?></div>
+      <div class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id"));?></div>
       <?php include '../../common/action.html.php';?>
     </div>
   </div>

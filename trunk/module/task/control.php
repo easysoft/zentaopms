@@ -92,14 +92,58 @@ class task extends control
     //    $this->display();
     //}
 
+    /* 公共的操作。*/
+    public function commonAction($taskID)
+    {
+        $this->view->task    = $this->task->getById($taskID);
+        $this->view->project = $this->project->getById($this->view->task->project);
+        $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id);
+        $this->view->users   = $this->view->members;
+        $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
+
+        /* 设置菜单。*/
+        $this->project->setMenu($this->project->getPairs(), $this->view->project->id);
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "project={$this->view->task->project}"), $this->view->project->name);
+
+    }
+
     /* 编辑任务。*/
     public function edit($taskID)
     {
-        $task = $this->task->getById($taskID);
-        $project = $this->project->getById($task->project);
+        /* 执行公共的操作。*/
+        $this->commonAction($taskID);
 
-        /* 设置菜单。*/
-        $this->project->setMenu($this->project->getPairs(), $project->id);
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->task->update($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $files = $this->loadModel('file')->saveUpload('task', $taskID);
+
+            if($this->post->comment != '' or !empty($changes) or !empty($files))
+            {
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $fileAction = '';
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+                $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        /* 赋值。*/
+        $this->view->header->title = $this->lang->task->edit;
+        $this->view->position[]    = $this->lang->task->edit;
+        $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
+        
+        $this->display();
+    }
+
+    /* 记录工时。*/
+    public function logEfforts($taskID)
+    {
+        /* 执行公共的操作。*/
+        $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
@@ -121,18 +165,12 @@ class task extends control
 
 
         /* 导航信息。*/
-        $this->view->header->title = $this->lang->task->edit;
-        $this->view->position[]    = html::a($this->createLink('project', 'browse', "project=$task->project"), $project->name);
-        $this->view->position[]    = $this->lang->task->edit;
+        $this->view->header->title = $this->lang->task->logEfforts;
+        $this->view->position[]    = $this->lang->task->logEfforts;
 
-        $this->view->task    =  $task;
-        $this->view->project =  $project;
-        $this->view->stories = $this->story->getProjectStoryPairs($project->id);
-        $this->view->members = $this->project->getTeamMemberPairs($project->id);
-        $this->view->users   = $this->view->members;
-        $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
         $this->display();
     }
+
 
     /* 查看任务。*/
     public function view($taskID)
