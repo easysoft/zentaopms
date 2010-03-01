@@ -48,6 +48,7 @@ class searchModel extends model
 
             /* 对应的value为空，忽略。*/
             if($this->post->$valueName == false) continue; 
+            if($this->post->$valueName == 'null') $this->post->$valueName = '';
 
             /* 设置and, or。*/
             $andOr = strtoupper($this->post->$andOrName);
@@ -120,6 +121,7 @@ class searchModel extends model
             if($params[$fieldName]['values'] == 'users')    $params[$fieldName]['values']  = $users;
             if($params[$fieldName]['values'] == 'products') $params[$fieldName]['values']  = $products;
             if($params[$fieldName]['values'] == 'projects') $params[$fieldName]['values']  = $projects;
+            if(is_array($params[$fieldName]['values'])) $params[$fieldName]['values']  = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
         }
         return $params;
     }
