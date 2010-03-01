@@ -203,16 +203,24 @@ class projectModel extends model
     /* 获取团队成员。*/
     public function getTeamMembers($projectID)
     {
-        $sql = "SELECT T1.*, T2.realname FROM " . TABLE_TEAM . " AS T1 LEFT JOIN " . TABLE_USER . " AS T2 ON T1.account = T2.account  WHERE T1.project = '$projectID'"; 
-        $stmt = $this->dbh->query($sql);
-        return $stmt->fetchAll();
+        return $this->dao->select('t1.*, t2.realname')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.project')->eq((int)$projectID)->fetchAll();
     }
 
    /* 获取团队成员account=>name列表。*/
     public function getTeamMemberPairs($projectID)
     {
-        $sql = "SELECT T2.account, T2.realname FROM " . TABLE_TEAM . " AS T1 LEFT JOIN " . TABLE_USER . " AS T2 ON T1.account = T2.account  WHERE T1.project = '$projectID'"; 
-        return $this->fetchPairs($sql);
+        $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.project')->eq((int)$projectID)->fetchPairs();
+        if(!$users) return array();
+        foreach($users as $account => $realName)
+        {
+            $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            $users[$account] =  $firstLetter . ($realName ? $realName : $account);
+        }
+        return array('' => '') + $users;
     }
 
     /* 关联成员。*/
@@ -229,21 +237,29 @@ class projectModel extends model
 
             if($mode == 'update')
             {
-                $sql = "UPDATE " . TABLE_TEAM . " SET role = '$role', workingHour = '$workingHour' WHERE project = '$projectID' AND account = '$account'";
+                $this->dao->update(TABLE_TEAM)
+                    ->set('role')->eq($role)
+                    ->set('workingHour')->eq($workingHour)
+                    ->where('project')->eq((int)$projectID)
+                    ->andWhere('account')->eq($account)
+                    ->exec();
             }
             else
             {
-                $sql = "INSERT INTO " . TABLE_TEAM . " (project, account, joinDate, role, workingHour) VALUES ('$projectID', '$account', NOW(), '$role', '$workingHour')";
+                $member->project     = (int)$projectID;
+                $member->account     = $account;
+                $member->joinDate    = date('Y-m-d');
+                $member->role        = $role;
+                $member->workingHour = $workingHour;
+                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
-            $this->dbh->query($sql);
         }        
     }
 
      /* 删除一个成员。*/
     public function unlinkMember($projectID, $account)
     {
-        $sql = "DELETE FROM " . TABLE_TEAM . " WHERE project = '$projectID' AND account = '$account'";
-        return $this->dbh->exec($sql);
+        $this->dao->delete()->from(TABLE_TEAM)->where('project')->eq((int)$projectID)->andWhere('account')->eq($account)->exec();
     }
 
     /* 燃烧图所需要的数据。*/

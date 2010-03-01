@@ -495,14 +495,12 @@ class project extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->project->confirmUnlinkMember, $this->createLink('project', 'unlinkMember', "projectID=$projectID&account=$account&confirm=yes"));
-            exit;
+            die(js::confirm($this->lang->project->confirmUnlinkMember, $this->inlink('unlinkMember', "projectID=$projectID&account=$account&confirm=yes")));
         }
         else
         {
             $this->project->unlinkMember($projectID, $account);
-            echo js::locate($this->createLink('project', 'browse', "projectID=$projectID"), 'parent');
-            exit;
+            die(js::locate($this->inlink('team', "projectID=$projectID"), 'parent'));
         }
     }
 
