@@ -300,7 +300,7 @@ class storyModel extends model
             return;
         }
         /* 查找对应的任务。*/
-        $tasks = $this->dao->select('type,status')->from(TABLE_TASK)->where('project')->in($projects)->andWhere('story')->eq($storyID)->fetchGroup('type');
+        $tasks = $this->dao->select('type,status')->from(TABLE_TASK)->where('project')->in($projects)->andWhere('story')->eq($storyID)->andWhere('status')->ne('cancel')->fetchGroup('type');
 
         /* 没有任务，则所处阶段为'已经立项'。*/
         if(!$tasks)
