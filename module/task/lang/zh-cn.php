@@ -27,6 +27,10 @@ $lang->task->import    = "导入之前未完任务";
 $lang->task->edit      = "更新任务";
 $lang->task->delete    = "删除任务";
 $lang->task->view      = "查看任务";
+$lang->task->logEfforts= "记录工时";
+$lang->task->close     = "关闭任务";
+$lang->task->cancel    = "取消任务";
+$lang->task->activate  = "激活任务";
 
 $lang->task->common       = '任务';
 $lang->task->id           = '编号';
@@ -49,7 +53,6 @@ $lang->task->statusList['wait']    = '未开始';
 $lang->task->statusList['doing']   = '进行中';
 $lang->task->statusList['done']    = '已完成';
 $lang->task->statusList['cancel']  = '已取消';
-$lang->task->statusList['delayed'] = '延期';
 
 $lang->task->typeList[''] = '';
 $lang->task->typeList['design'] = '设计';
@@ -71,6 +74,11 @@ $lang->task->afterChoices['toTastList']     = '返回任务列表';
 $lang->task->afterChoices['toStoryList']    = '返回需求列表';
 
 $lang->task->buttonEdit       = '编辑';
+$lang->task->buttonClose      = '关闭';
+$lang->task->buttonCancel     = '取消';
+$lang->task->buttonActivate   = '激活';
+$lang->task->buttonLogEfforts = '记录工时';
+$lang->task->buttonDelete     = '删除';
 $lang->task->buttonBackToList = '返回';
 
 $lang->task->legendBasic  = '基本信息';
