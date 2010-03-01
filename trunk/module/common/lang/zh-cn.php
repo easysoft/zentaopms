@@ -54,6 +54,7 @@ $lang->reverse    = '（切换顺序）';
 $lang->addFiles   = '上传了附件 ';
 $lang->files      = '附件 ';
 $lang->workingHour= '工时';
+$lang->preview    = '预览';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';

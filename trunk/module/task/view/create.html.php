@@ -23,6 +23,35 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/colorbox.html.php';?>
+<script language='javascript'>
+/* 拷贝需求标题为任务标题。*/
+function copyStoryTitle()
+{
+    var storyTitle = $('#story option:selected').text();
+    storyTitle = storyTitle.substr(storyTitle.lastIndexOf('/') + 1);
+    $('#name').attr('value', storyTitle);
+}
+
+/* 设置预览的链接。*/
+function setPreview()
+{
+    if(!$('#story').val())
+    {
+        $('#preview').addClass('hidden');
+    }
+    else
+    {
+        storyLink = createLink('story', 'view', "storyID=" + $('#story').val());
+        $('#preview').removeClass('hidden');
+        $('#preview').attr('href', storyLink);
+    }
+}
+$(document).ready(function()
+{
+    setPreview();
+});
+</script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
@@ -33,7 +62,10 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->story;?></th>
-        <td><?php echo html::select('story', $stories, $storyID, 'class=select-1');?></td>
+        <td>
+          <?php echo html::select('story', $stories, $storyID, 'class=select-1 onchange=setPreview();');?>
+          <a href='' id='preview' class='iframe' target='_blank'><?php echo $lang->preview;?></a>
+        </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->name;?></th>
@@ -81,12 +113,4 @@
     </table>
   </form>
 </div>  
-<script language='Javascript'>
-function copyStoryTitle()
-{
-    var storyTitle = $('#story option:selected').text();
-    storyTitle = storyTitle.substr(storyTitle.lastIndexOf('/') + 1);
-    $('#name').attr('value', storyTitle);
-}
-</script>
 <?php include '../../common/footer.html.php';?>
