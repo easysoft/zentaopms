@@ -41,3 +41,5 @@ $lang->search->operators['include'] = '包含';
 
 $lang->search->andor['and']         = '并且';
 $lang->search->andor['or']          = '或者';
+
+$lang->search->null = '空';
