@@ -247,7 +247,7 @@ class treeModel extends model
     /* 删除一个模块。Todo: 需要修改下级目录的权限，还有对应的需求列表。*/
     public function delete($moduleID)
     {
-        $sql = "DELETE FROM " . TABLE_MODULE . " WHERE id = '$moduleID' LIMIT 1";
-        return $this->dbh->exec($sql);
+        $module = $this->getById((int)$moduleID);
+        $this->dao->delete()->from(TABLE_MODULE)->where('id')->eq($moduleID)->exec();
     }
 }
