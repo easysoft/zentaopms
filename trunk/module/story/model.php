@@ -72,7 +72,6 @@ class storyModel extends model
             ->add('status', 'draft')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview, 'status', 'active')
-            ->join('mailto', ',')
             ->remove('files,labels,spec,needNotReview')
             ->get();
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck('title,estimate', 'notempty')->exec();
