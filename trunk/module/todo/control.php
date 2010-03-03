@@ -118,6 +118,17 @@ class todo extends control
     public function mark($todoID, $status)
     {
         $this->todo->mark($todoID, $status);
+        $todo = $this->todo->getById($todoID);
+        if($todo->status == 'done')
+        {
+            if($todo->type == 'bug' or $todo->type == 'task')
+            {
+                $confirmNote = 'confirm' . ucfirst($todo->type);
+                $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+                $cancelURL   = $this->server->HTTP_REFERER;
+                die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'parent', 'parent'));
+            }
+        }
         die(js::reload('parent'));
     }
 
