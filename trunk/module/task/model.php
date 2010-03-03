@@ -71,9 +71,10 @@ class taskModel extends model
             ->setIF($this->post->status == 'done', 'left', 0)
             ->setIF($this->post->left == 0, 'status', 'done')
             ->setIF($this->post->consumed > 0 and $this->post->left > 0 and $this->post->status == 'wait', 'status', 'doing')
-            ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
             ->remove('comment,fiels,labels')
             ->get();
+        $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
+
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->edit->requiredFields, 'notempty')
