@@ -15,3 +15,6 @@ update zt_task, zt_action
 set zt_task.openedBy = zt_action.actor , zt_task.openedDate = zt_action.date
 where zt_task.id = zt_action.objectID and zt_action.objectType = 'task' and zt_action.action='opened'*/
 ALTER TABLE `zt_task` ADD `deadline` DATE NOT NULL AFTER `left` ;
+
+-- 20100301 change the openedbuild field.
+ALTER TABLE `zt_bug` CHANGE `openedBuild` `openedBuild` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
