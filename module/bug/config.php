@@ -43,5 +43,8 @@ $config->bug->search['params']['os']           = array('operator' => '=',       
 $config->bug->search['params']['browser']      = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->browserList);
 $config->bug->search['params']['resolution']   = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->resolutionList);
 $config->bug->search['params']['mailto']       = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
-$config->bug->search['params']['openedBuild']  = array('operator' => '=',       'control' => 'select', 'values' => 'builds');
+$config->bug->search['params']['openedBuild']  = array('operator' => 'include', 'control' => 'select', 'values' => 'builds');
 $config->bug->search['params']['resolvedBuild']= array('operator' => '=',       'control' => 'select', 'values' => 'builds');
+
+$config->bug->create->requiredFields = 'title,openedBuild';
+$config->bug->edit->requiredFields   = $config->bug->create->requiredFields;

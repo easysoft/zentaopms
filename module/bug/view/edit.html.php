@@ -23,7 +23,10 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
-<style>#product, #module, #project, #story, #task, #openedBuild, #resolvedBuild{width:245px}</style>
+<?php include '../../common/autocomplete.html.php';?>
+<style>
+#product, #module, #project, #story, #task, #resolvedBuild{width:245px}
+</style>
 <script language='Javascript'>
 changeProductConfirmed = false;
 changeProjectConfirmed = false;
@@ -133,6 +136,10 @@ function setDuplicate(resolution)
         $('#duplicateBugBox').hide();
     }
 }
+var userList = "<?php echo join(',', array_keys($users));?>".split(',');
+$(function() {
+    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+})
 </script>
 <form method='post' target='hiddenwin' enctype='multipart/form-data'>
 <div class='yui-d0'>
@@ -244,7 +251,7 @@ function setDuplicate(resolution)
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->openedBuild;?></td>
-          <td><span id='openedBuildBox'><?php echo html::select('openedBuild', $builds, $bug->openedBuild, 'class=select-3');?></span></td>
+          <td><span id='openedBuildBox'><?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class=select-3');?></span></td>
         </tr>
         <tr>
           <td width='40%' class='rowhead'><?php echo $lang->bug->resolvedBy;?></td>
@@ -256,7 +263,7 @@ function setDuplicate(resolution)
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->resolvedBuild;?></td>
-          <td><span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, $bug->resolvedBuild, 'class=select-3');?></span></td>
+          <td><span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, 'class=select-3');?></span></td>
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->resolution;?></td>

@@ -43,15 +43,15 @@ class bugModel extends model
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
             ->setDefault('project,story,task', 0)
+            ->setDefault('openedBuild', '')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->stripTags('title')
+            ->specialChars('title,steps')
             ->cleanInt('product, module, severity')
-            ->specialChars('steps')
-            ->join('mailto', ',')
+            ->join('openedBuild', ',')
             ->remove('files, labels')
             ->get();
-        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck('title,type,openedBuild', 'notempty')->exec();
+        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
@@ -79,7 +79,13 @@ class bugModel extends model
             ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
             ->where('t1.id')->eq((int)$bugID)->fetch();
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
-        $bug->mailto = ltrim(trim($bug->mailto), ',');
+        if($bug->mailto)
+        {
+            $bug->mailto = ltrim(trim($bug->mailto), ',');  // 去掉开始的，。
+            $bug->mailto = str_replace(' ', '', $bug->mailto);
+            $bug->mailto = rtrim($bug->mailto, ',') . ',';
+            $bug->mailto = str_replace(',', ', ', $bug->mailto);
+        }
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
         if($bug->case)         $bug->caseTitle         = $this->dao->findById($bug->case)->from(TABLE_CASE)->fields('title')->fetch('title');
         if($bug->linkBug)      $bug->linkBugTitles     = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->in($bug->linkBug)->fetchPairs();
@@ -94,22 +100,23 @@ class bugModel extends model
         $now = date('Y-m-d H:i:s');
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,story,task')
-            ->stripTags('title')
-            ->specialChars('steps')
+            ->specialChars('title,steps')
             ->remove('comment,fiels,labels')
             ->setDefault('project,module,project,story,task,duplicateBug', 0)
+            ->setDefault('openedBuild', '')
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
-            ->setIF($this->post->assignedTo != $oldBug->assignedTo, 'assignedDate', $now)
-            ->setIF($this->post->resolvedBy != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
-            ->setIF($this->post->resolution != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
-            ->setIF($this->post->resolution != '' and $this->post->resolvedBy   == '', 'resolvedBy',   $this->app->user->account)
-            ->setIF($this->post->closedBy   != '' and $this->post->closedDate   == '', 'closedDate',   $now)
-            ->setIF($this->post->closedDate != '' and $this->post->closedBy     == '', 'closedBy',     $this->app->user->account)
-            ->setIF($this->post->closedBy   != '' or  $this->post->closedDate   != '', 'assignedTo',   'closed') 
-            ->setIF($this->post->closedBy   != '' or  $this->post->closedDate   != '', 'assignedDate', $now) 
-            ->setIF($this->post->resolution != '' or  $this->post->resolvedDate != '', 'status',       'resolved') 
-            ->setIF($this->post->closedBy   != '' or  $this->post->closedDate   != '', 'status',       'closed') 
+            ->join('openedBuild', ',')
+            ->setIF($this->post->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
+            ->setIF($this->post->resolvedBy  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
+            ->setIF($this->post->resolution  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
+            ->setIF($this->post->resolution  != '' and $this->post->resolvedBy   == '', 'resolvedBy',   $this->app->user->account)
+            ->setIF($this->post->closedBy    != '' and $this->post->closedDate   == '', 'closedDate',   $now)
+            ->setIF($this->post->closedDate  != '' and $this->post->closedBy     == '', 'closedBy',     $this->app->user->account)
+            ->setIF($this->post->closedBy    != '' or  $this->post->closedDate   != '', 'assignedTo',   'closed') 
+            ->setIF($this->post->closedBy    != '' or  $this->post->closedDate   != '', 'assignedDate', $now) 
+            ->setIF($this->post->resolution  != '' or  $this->post->resolvedDate != '', 'status',       'resolved') 
+            ->setIF($this->post->closedBy    != '' or  $this->post->closedDate   != '', 'status',       'closed') 
             ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedTo', $oldBug->openedBy) 
             ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedDate', $now)
             ->setIF($this->post->resolution == '' and $this->post->resolvedDate =='', 'status', 'active')
@@ -118,7 +125,7 @@ class bugModel extends model
 
         $this->dao->update(TABLE_BUG)->data($bug)
             ->autoCheck()
-            ->batchCheck('title,type', 'notempty')
+            ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
             ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
             ->checkIF($bug->closedBy,   'resolution', 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
