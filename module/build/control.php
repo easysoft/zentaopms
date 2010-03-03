@@ -100,13 +100,15 @@ class build extends control
     /* AJAX接口：获得产品的build列表。*/
     public function ajaxGetProductBuilds($productID, $varName, $build = '')
     {
-        die(html::select($varName, $this->build->getProductBuildPairs($productID), $build));
+        if($varName == 'openedBuild')   die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, 'noempty'), $build, 'class=select-3'));
     }
 
     /* AJAX接口：获得项目的build列表。*/
     public function ajaxGetProjectBuilds($projectID, $varName, $build = '')
     {
-        die(html::select($varName, $this->build->getProjectBuildPairs($projectID), $build));
+        if($varName == 'openedBuild')   die(html::select($varName . '[]', $this->build->getProjectBuildPairs($projectID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, 'noempty'), $build, 'class=select-3'));
     }
 
 }

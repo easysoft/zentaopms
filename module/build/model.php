@@ -49,10 +49,13 @@ class buildModel extends model
             ->fetchAll();
     }
 
-    /* 查找项目中的build key=>value对。*/
-    public function getProjectBuildPairs($projectID)
+    /* 查找项目中的build列表。params='noempty|notrunk' */
+    public function getProjectBuildPairs($projectID, $params = '')
     {
-        $sysBuilds = array('' => '', 'trunk' => 'Trunk'); 
+        $sysBuilds = array();
+        if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
+        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
+
         $builds = $this->dao->select('id,name')->from(TABLE_BUILD)->where('project')->eq((int)$projectID)->orderBy('id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
         $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)->where('build')->in(array_keys($builds))->fetchPairs();
@@ -60,10 +63,13 @@ class buildModel extends model
         return $sysBuilds + $builds;
     }
 
-    /* 查找产品中的build列表。*/
-    public function getProductBuildPairs($productID)
+    /* 查找产品中的build列表。params='noempty|notrunk' */
+    public function getProductBuildPairs($productID, $params = '')
     {
-        $sysBuilds = array('' => '', 'trunk' => 'Trunk'); 
+        $sysBuilds = array();
+        if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
+        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
+
         $builds = $this->dao->select('id,name')->from(TABLE_BUILD)->where('product')->eq((int)$productID)->orderBy('id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
         $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)->where('build')->in(array_keys($builds))->fetchPairs();
