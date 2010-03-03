@@ -45,7 +45,7 @@ class treeModel extends model
     }
 
     /* 获取模块的下类列表，用于生成select控件。*/
-    function getOptionMenu($productID, $viewType = 'product', $rootModuleID = 0)
+    public function getOptionMenu($productID, $viewType = 'product', $rootModuleID = 0)
     {
         $treeMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($productID, $viewType, $rootModuleID));
@@ -102,7 +102,7 @@ class treeModel extends model
     }
 
     /* 获取树状的模块列表。*/
-    function getTreeMenu($productID, $viewType = 'product', $rootModuleID = 0, $userFunc)
+    public function getTreeMenu($productID, $viewType = 'product', $rootModuleID = 0, $userFunc)
     {
         $treeMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($productID, $viewType, $rootModuleID));
@@ -135,14 +135,14 @@ class treeModel extends model
     }
 
     /* 生成需求链接。*/
-    function createStoryLink($module)
+    private function createStoryLink($module)
     {
         $linkHtml = html::a(helper::createLink('product', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
     /* 生成模块编辑链接。*/
-    function createManageLink($module)
+    private function createManageLink($module)
     {
         $linkHtml  = $module->name;
         //$linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "product={$module->product}&module={$module->id}"), $this->lang->tree->edit);
@@ -153,14 +153,14 @@ class treeModel extends model
     }
 
     /* 生成Bug链接。*/
-    function createBugLink($module)
+    private function createBugLink($module)
     {
         $linkHtml = html::a(helper::createLink('bug', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
     /* 生成case链接。*/
-    function createCaseLink($module)
+    private function createCaseLink($module)
     {
         $linkHtml = html::a(helper::createLink('testcase', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -245,7 +245,7 @@ class treeModel extends model
     }
     
     /* 删除一个模块。Todo: 需要修改下级目录的权限，还有对应的需求列表。*/
-    function delete($moduleID)
+    public function delete($moduleID)
     {
         $sql = "DELETE FROM " . TABLE_MODULE . " WHERE id = '$moduleID' LIMIT 1";
         return $this->dbh->exec($sql);
