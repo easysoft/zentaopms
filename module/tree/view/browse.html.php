@@ -61,14 +61,23 @@
           </td>
           <td> 
             <?php
-            foreach($sons as $sonModule) echo html::input("modules[id$sonModule->id]", $sonModule->name, 'style="margin-bottom:5px"') . '<br />';
+            $maxOrder = 0;
+            foreach($sons as $sonModule)
+            {
+                if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
+                echo html::input("modules[id$sonModule->id]", $sonModule->name, 'style="margin-bottom:5px"') . '<br />';
+            }
             for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo html::input("modules[]", '', 'style="margin-bottom:5px"') . '<br />';
            ?>
           </td>
         </tr>
         <tr>
           <td class='a-center' colspan='2'>
-            <?php echo html::submitButton() . html::resetButton();?>      
+            <?php 
+            echo html::submitButton() . html::resetButton();
+            echo html::hidden('parentModuleID', $currentModuleID);
+            echo html::hidden('maxOrder', $maxOrder);
+            ?>      
             <input type='hidden' value='<?php echo $currentModuleID;?>' name='parentModuleID' />
           </td>
         </tr>
