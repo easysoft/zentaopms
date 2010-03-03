@@ -23,8 +23,9 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/autocomplete.html.php';?>
 <style>
-#project, #product, #story, #openedBuild {width:245px}
+#project, #product, #story{width:245px}
 #severity, #browser {width: 113px}
 </style>
 <script language='Javascript'>
@@ -103,73 +104,78 @@ function loadProjectBuilds(projectID)
     link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&varName=openedBuild');
     $('#buildBox').load(link);
 }
+var userList = "<?php echo join(',', array_keys($users));?>".split(',');
+$(function() {
+    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+})
 </script>
-<div class='yui-doc3'>
+</script>
+<div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-    <table align='center' class='table-1'> 
+    <table class='table-1'> 
       <caption><?php echo $lang->bug->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
-        <td class='a-left'>
+        <td>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
           <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, 'class=select-3');?></span>
         </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblProjectAndTask;?></th>
-        <td class='a-left'>
+        <td>
         <span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'onchange=loadProjectRelated(this.value)');?></span>
           <span id='taskIdBox'></span>
         </td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblStory;?></th>
-        <td class='a-left'>
+        <td>
           <span id='storyIdBox'><?php echo html::select('story', $stories, $storyID);?></span>
         </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
-        <td class='a-left'>
-          <span id='buildBox'><?php echo html::select('openedBuild', $builds, $buildID);?></span>
+        <td>
+          <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, 'size=4 multiple=multiple class=select-3');?></span>
         </td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblTypeAndSeverity;?></th>
-        <td class='a-left'> 
+        <td> 
           <?php echo html::select('type', (array)$lang->bug->typeList, 'codeerror', 'class=select-2');?> 
           <?php echo html::select('severity', (array)$lang->bug->severityList, '', 'class=select-2');?>
         </td>
       </tr>
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->bug->lblSystemBrowserAndHardware;?></nobr></th>
-        <td class='a-left'>
+        <td>
           <?php echo html::select('os', (array)$lang->bug->osList, '', 'class=select-2');?>
           <?php echo html::select('browser', (array)$lang->bug->browserList, '', 'class=select-2');?>
         </td>
       </tr>
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-        <td class='a-left'> <?php echo html::select('assignedTo', $users, '', 'class=select-3');?></td>
+        <td> <?php echo html::select('assignedTo', $users, '', 'class=select-3');?></td>
       </tr>
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->bug->lblMailto;?></nobr></th>
-        <td class='a-left'> <?php echo html::select('mailto[]', $users, '', 'class=select-3 size=5 multiple=multiple');?> </td>
+        <td> <?php echo html::input('mailto', '', 'class=text-1');?> </td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->title;?></th>
-        <td class='a-left'><input type='text' name='title' class='text-1' value='<?php echo $title;?>' /></td>
+        <td><?php echo html::input('title', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->steps;?></th>
-        <td class='a-left'><textarea name='steps' class='area-1' rows='6'><?php echo $steps;?></textarea></td>
+        <td><textarea name='steps' class='area-1' rows='6'><?php echo $steps;?></textarea></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->files;?></th>
-        <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
+        <td><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
       <tr>
-        <td colspan='2'>
+        <td colspan='2' class='a-center'>
           <?php echo html::submitButton() . html::resetButton() . html::hidden('case', $caseID);?>
         </td>
       </tr>

@@ -182,7 +182,7 @@ class bug extends control
         $this->view->stories          = $this->story->getProductStoryPairs($productID);
         $this->view->users            = $this->user->getPairs('noclosed');
         $this->view->projects         = $this->product->getProjectPairs($productID);
-        $this->view->builds           = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->builds           = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         $this->view->moduleID         = $moduleID;
         $this->view->projectID        = $projectID;
         $this->view->taskID           = $taskID;
@@ -265,7 +265,8 @@ class bug extends control
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
         $this->view->users            = $this->user->getPairs();
-        $this->view->builds           = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+        $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;
         $this->view->actions          = $this->action->getList('bug', $bugID);
 
         $this->display();

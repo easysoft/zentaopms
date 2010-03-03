@@ -122,7 +122,19 @@
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
-          <td><?php if(isset($builds[$bug->openedBuild])) echo $builds[$bug->openedBuild]; else echo $bug->openedBuild;?></td>
+          <td>
+            <?php
+            if($bug->openedBuild)
+            {
+                $openedBuilds = explode(',', $bug->openedBuild);
+                foreach($openedBuilds as $openedBuild) isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
+            }
+            else
+            {
+                echo $bug->openedBuild;
+            }
+            ?>
+          </td>
         </tr>
         <tr>
           <th class='rowhead'><?php echo $lang->bug->lblResolved;?></th>
@@ -174,7 +186,7 @@
       <table class='table-1 a-left fixed'>
         <tr>
           <td class='rowhead w-p20'><?php echo $lang->bug->mailto;?></td>
-          <td><?php $mailto = explode(',', $bug->mailto); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
+          <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->linkBug;?></td>
