@@ -37,7 +37,7 @@ $config->methodVar   = 'f';               // requestType=GET: 方法变量名。
 $config->viewVar     = 't';               // requestType=GET: 模板变量名。
 
 /* 视图和主题。*/
-$config->views       = ',html,';          // 支持的视图列表。
+$config->views       = ',html,json,';          // 支持的视图列表。
 $config->themes      = 'default';         // 支持的主题列表。
 
 /* 支持的语言列表。*/
