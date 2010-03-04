@@ -22,31 +22,24 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<div id='doc3'>
-  <form method='post' target='hiddenwin'>
-    <table align='center' class='table-4'> 
-      <caption><?php echo $lang->product->edit;?></caption>
+<?php include '../../common/header.lite.html.php';?>
+<div id='yui-d0' style='margin-top:20px'>
+  <form method='post'>
+    <table class='table-1'> 
+      <caption><?php echo $lang->tree->edit;?></caption>
       <tr>
-        <th class='rowhead'><?php echo $lang->product->name;?></th>
-        <td class='a-left'><input type='text' name='name' value='<?php echo $product->name;?>' /></td>
+        <th class='rowhead'><?php echo $lang->tree->parent;?></th>
+        <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='text-1'");?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->product->code;?></th>
-        <td class='a-left'><input type='text' name='code' value='<?php echo $product->code;?>' /></td>
+        <th class='rowhead'><?php echo $lang->tree->name;?></th>
+        <td><?php echo html::input('name', $module->name, "class='text-1'");?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->product->desc;?></th>
-        <td class='a-left'><textarea name='desc' style='width:100%' rows='5'><?php echo $product->desc;?></textarea></td>
-      </tr>  
-      <tr>
-        <td colspan='2'>
-          <input type='submit' value='<?php echo $lang->product->saveButton;?>' accesskey='S' />
-          <input type='reset'  value='<?php echo $lang->reset;?>' />
-          <input type='hidden' value='<?php echo $product->id;?>' name='id' />
+        <td colspan='2' class='a-center'>
+        <?php echo html::submitButton();?>
         </td>
       </tr>
     </table>
   </form>
 </div>  
-<?php include '../../common/footer.html.php';?>

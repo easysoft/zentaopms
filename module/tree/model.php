@@ -151,7 +151,7 @@ class treeModel extends model
     private function createManageLink($module)
     {
         $linkHtml  = $module->name;
-        //$linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "product={$module->product}&module={$module->id}"), $this->lang->tree->edit);
+        if(common::hasPriv('tree', 'edit'))        $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "module={$module->id}"), $this->lang->tree->edit, '', 'class="iframe"');
         if(common::hasPriv('tree', 'browse'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "product={$module->product}&viewType={$module->view}&module={$module->id}"), $this->lang->tree->child);
         if(common::hasPriv('tree', 'delete'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "product={$module->product}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
         if(common::hasPriv('tree', 'updateorder')) $linkHtml .= ' ' . html::input("orders[$module->id]", $module->order, 'style="width:30px;text-align:center"');
@@ -251,7 +251,19 @@ class treeModel extends model
             }
         }
     }
-    
+
+    /* 编辑一个模块。*/
+    public function update($moduleID)
+    {
+        $module = fixer::input('post')->specialChars('name')->get();
+        $parent = $this->getById($this->post->parent);
+        $childs = $this->getAllChildId($moduleID);
+        $module->grade = $parent ? $parent->grade + 1 : 1;
+        $this->dao->update(TABLE_MODULE)->data($module)->autoCheck()->check('name', 'notempty')->where('id')->eq($moduleID)->exec();
+        $this->dao->update(TABLE_MODULE)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($moduleID)->exec();
+        $this->fixModulePath();
+    }
+
     /* 删除一个模块。*/
     public function delete($moduleID)
     {
@@ -279,7 +291,7 @@ class treeModel extends model
         for($grade = 1; $grade <= $maxGrade; $grade ++)
         {
             /* 当前级别的模块。*/
-            $gradeModules = $this->dao->select('id, parent')->from(TABLE_MODULE)->where('grade')->eq($grade)->fetchAll('id');
+            $gradeModules = $this->dao->select('id, parent, grade')->from(TABLE_MODULE)->where('grade')->eq($grade)->fetchAll('id');
             foreach($gradeModules as $moduleID => $module)
             {
                 if($grade == 1)
@@ -291,13 +303,8 @@ class treeModel extends model
                     /* 取parent模块的path。*/
                     if(isset($modules[$module->parent]))
                     {
-                        $module->path = $modules[$module->parent]->path . "$moduleID,";
-                    }
-                    else
-                    {
-                        $module->parent = 0;
-                        $module->grade  = 1;
-                        $module->path   = ",$moduleID,";
+                        $module->path  = $modules[$module->parent]->path . "$moduleID,";
+                        $module->grade = $modules[$module->parent]->grade + 1;
                     }
                 }
             }

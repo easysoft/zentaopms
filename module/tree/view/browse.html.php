@@ -24,6 +24,13 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/treeview.html.php';?>
+<?php include '../../common/colorbox.html.php';?>
+<script language='javascript'>
+$(document).ready(function()
+{
+    $("a.iframe").colorbox({width:480, height:320, iframe:true, transition:'none'});
+});
+</script>
 <div class="yui-d0 yui-t3">
   <div class="yui-b">
     <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "product={$product->id}&viewType=$viewType");?>'>

@@ -23,6 +23,7 @@
  */
 $lang->tree->common      = '模块维护';
 $lang->tree->add         = "添加";
+$lang->tree->edit        = "编辑";
 $lang->tree->addChild    = "添加子模块";
 $lang->tree->delete      = "删除模块";
 $lang->tree->browse      = "模块列表";
@@ -36,4 +37,8 @@ $lang->tree->manageChild  = "维护子模块";
 $lang->tree->child        = "子模块";
 $lang->tree->ajaxGetOptionMenu = "接口:获取下拉列表";
 
-$lang->tree->confirmDelete = " 您确定删除该模块吗？";
+$lang->tree->confirmDelete = "您确定删除该模块吗？";
+$lang->tree->successSave   = "成功保存";
+
+$lang->tree->name   = '模块名称';
+$lang->tree->parent = '上级模块';
