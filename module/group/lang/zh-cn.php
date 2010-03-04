@@ -193,6 +193,7 @@ $lang->resource->user->profile= 'profile';
 $lang->resource->tree->browse            = 'browse';
 $lang->resource->tree->updateOrder       = 'updateOrder';
 $lang->resource->tree->manageChild       = 'manageChild';
+$lang->resource->tree->edit              = 'edit';
 $lang->resource->tree->delete            = 'delete';
 $lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
 
