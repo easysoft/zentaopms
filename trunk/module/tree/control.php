@@ -101,13 +101,17 @@ class tree extends control
     {
         if(!empty($_POST))
         {
-            if($this->product->update($_POST)) die(js::locate($this->createLink($this->moduleName, 'index', "product=$_POST[id]"), 'parent'));
+            $this->tree->update($moduleID);
+            echo js::alert($this->lang->tree->successSave);
+            die(js::reload('parent'));
         }
+        $this->view->module     = $this->tree->getById($moduleID);
+        $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->product, $this->view->module->view);
 
-        $product = $this->product->getByID($productID);
-        $header['title'] = $this->lang->product->edit . $this->lang->colon . $product->name;
-        $this->assign('header',  $header);
-        $this->assign('product', $product);
+        /* 去掉自己和child。*/
+        $childs = $this->tree->getAllChildId($moduleID);
+        foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
+
         $this->display();
     }
 
