@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/datepicker.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-5'> 
@@ -45,7 +46,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->join;?></th>
-        <td><input type='text' name='join' /></td>
+        <td><input type='text' name='join' class='date' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->gendar;?></th>

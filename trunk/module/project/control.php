@@ -94,7 +94,7 @@ class project extends control
         $tasks = $this->loadModel('task')->getProjectTasks($projectID, $orderBy, $pager);
 
         /* 赋值。*/
-        $this->view->tasks      = $tasks;
+        $this->view->tasks      = $tasks ? $tasks : array();
         $this->view->tabID      = 'task';
         $this->view->pager      = $pager->get();
         $this->view->recTotal   = $pager->recTotal;

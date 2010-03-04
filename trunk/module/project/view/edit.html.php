@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/datepicker.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
@@ -43,11 +44,11 @@
       -->
       <tr>
         <th class='rowhead'><?php echo $lang->project->begin;?></th>
-        <td><input type='text' name='begin' value='<?php echo $project->begin;?>' class='text-3' /></td>
+        <td><input type='text' name='begin' value='<?php echo $project->begin;?>' class='text-3 date' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->end;?></th>
-        <td><input type='text' name='end' value='<?php echo $project->end;?>' class='text-3' /></td>
+        <td><input type='text' name='end' value='<?php echo $project->end;?>' class='text-3 date' /></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->teamname;?></th>

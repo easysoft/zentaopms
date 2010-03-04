@@ -86,6 +86,7 @@ class testtaskModel extends model
     /* 关联用例。*/
     public function linkCase($taskID)
     {
+        if($this->post->cases == false) return;
         foreach($this->post->cases as $key => $caseID)
         {
             $row->task       = $taskID;

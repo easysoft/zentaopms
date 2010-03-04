@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/datepicker.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
@@ -37,11 +38,11 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', $plan->begin, 'class="text-3"');?></td>
+        <td><?php echo html::input('begin', $plan->begin, 'class="text-3 date"');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->productplan->end;?></th>
-        <td><?php echo html::input('end', $plan->end, 'class="text-3"');?></td>
+        <td><?php echo html::input('end', $plan->end, 'class="text-3 date"');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->productplan->desc;?></th>

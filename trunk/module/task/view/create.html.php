@@ -24,6 +24,7 @@
 ?>
 <?php include '../../common/header.html.php';?>
 <?php include '../../common/colorbox.html.php';?>
+<?php include '../../common/datepicker.html.php';?>
 <script language='javascript'>
 /* 拷贝需求标题为任务标题。*/
 function copyStoryTitle()
@@ -85,11 +86,11 @@ $(document).ready(function()
       </tr> 
       <tr>
         <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-        <td><input type='text' name='estimate' class='text-3' /></td>
+        <td><input type='text' name='estimate' id='estimate' class='text-3' /></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->deadline;?></th>
-        <td><input type='text' name='deadline' class='text-3' /></td>
+        <td><input type='text' name='deadline' class='text-3 date' /></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->type;?></th>
