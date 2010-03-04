@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/datepicker.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -85,7 +86,7 @@
       <table class='table-1'> 
         <tr>
           <th class='rowhead'><?php echo $lang->task->deadline;?></th>
-          <td><?php echo html::input('deadline', $task->deadline, "class='text-1'");?></td>
+          <td><?php echo html::input('deadline', $task->deadline, "class='text-1 date'");?></td>
         </tr>  
         <tr>
           <th class='rowhead w-p20'><?php echo $lang->task->estimate;?></th>

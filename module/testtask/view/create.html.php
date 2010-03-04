@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/header.html.php';?>
+<?php include '../../common/datepicker.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
@@ -37,11 +38,11 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
-        <td><?php echo html::input('begin', '', "class='text-3'");?>
+        <td><?php echo html::input('begin', '', "class='text-3 date'");?>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->testtask->end;?></th>
-        <td><?php echo html::input('end', '', "class='text-3'");?>
+        <td><?php echo html::input('end', '', "class='text-3 date'");?>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->testtask->status;?></th>
