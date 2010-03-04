@@ -47,7 +47,7 @@ class userModel extends model
     public function getPairs($params = '', $companyID = 0)
     {
         if($companyID == 0) $companyID = $this->app->company->id;
-        $users = $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->andWhere('status')->eq('active')->orderBy('account')->fetchPairs();
+        $users = $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->orderBy('account')->fetchPairs();
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
@@ -72,8 +72,8 @@ class userModel extends model
     public function getById($userID)
     {
         $user = $this->dao->select('*')->from(TABLE_USER)
-            ->onCaseOf(is_int($userID))->where('id')->eq((int)$userID)->endCase()
-            ->onCaseOf(is_string($userID))->where('account')->eq($userID)->endCase()
+            ->onCaseOf(is_numeric($userID))->where('id')->eq((int)$userID)->endCase()
+            ->onCaseOf(!is_numeric($userID))->where('account')->eq($userID)->endCase()
             ->fetch();
         if(!$user) return false;
         $user->last = date('Y-m-d H:i:s', $user->last);
