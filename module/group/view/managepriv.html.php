@@ -52,8 +52,8 @@ function checkall(checker)
       <tr>
         <th class='rowhead'><?php echo $this->lang->$moduleName->common;?> <input type='checkbox' onclick='check(this, "<?php echo $moduleName;?>")'></td>
         <td id='<?php echo $moduleName;?>'>
-        <?php foreach($moduleActions as $action):?>
-        <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> /> <?php echo $lang->$moduleName->$action;?>
+        <?php foreach($moduleActions as $action => $actionLabel):?>
+        <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> /> <?php echo $lang->$moduleName->$actionLabel;?>
         <?php endforeach;?>
         </td>
       </tr>
