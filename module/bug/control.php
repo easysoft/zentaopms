@@ -112,6 +112,11 @@ class bug extends control
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
+        /* 处理查询语句，获取条件部分，并记录session。*/
+        $sql = explode('WHERE', $this->dao->get());
+        $sql = explode('ORDER', $sql[1]);
+        $this->session->set('bugReportCondition', $sql[0]);
+
         $users = $this->user->getPairs('noletter');
         
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
@@ -131,6 +136,38 @@ class bug extends control
         $this->assign('orderBy',       $orderBy);
         $this->assign('moduleID',      $moduleID);
 
+        $this->display();
+    }
+
+    /* 统计报表。*/
+    public function report($productID, $browseType, $moduleID)
+    {
+        $this->loadModel('report');
+        $this->view->charts = array();
+        $this->view->rendJS = '';
+
+        if(!empty($_POST))
+        {
+            foreach($this->post->charts as $chart)
+            {
+                $chartFunc   = 'getDataOf' . $chart;
+                $chartData   = $this->bug->$chartFunc();
+                $chartOption = $this->lang->bug->report->$chart;
+                $this->bug->mergeChartOption($chart);
+
+                $chartXML  = $this->report->createSingleXML($chartData, $chartOption->graph);
+                $this->view->charts[$chart] = $this->report->createJSChart($chartOption->swf, $chartXML, $chartOption->width, $chartOption->height);
+                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+            }
+            $this->view->rendJS = $this->report->rendJsCharts(count($this->view->charts));
+        }
+
+        $this->bug->setMenu($this->products, $productID);
+        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
+        $this->view->productID     = $productID;
+        $this->view->browseType    = $browseType;
+        $this->view->moduleID      = $moduleID;
+        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
         $this->display();
     }
 

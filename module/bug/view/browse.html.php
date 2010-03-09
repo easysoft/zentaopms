@@ -64,6 +64,7 @@ function browseBySearch(active)
       ?>
     </div>
     <div class='f-right'>
+      <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->bug->report->common); ?>
       <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", $lang->bug->create); ?>
     </div>
   </div>

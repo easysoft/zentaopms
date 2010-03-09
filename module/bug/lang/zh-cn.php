@@ -30,6 +30,7 @@ $lang->bug->view           = 'Bug详情';
 $lang->bug->resolve        = '解决Bug';
 $lang->bug->close          = '关闭Bug';
 $lang->bug->activate       = '激活Bug';
+$lang->bug->reportChart    = '报表统计';
 $lang->bug->ajaxGetUserBugs = '接口:我的Bug';
 
 $lang->bug->selectProduct  = '请选择产品';
@@ -168,3 +169,64 @@ $lang->bug->tblResult      = "[结果]\n";
 $lang->bug->tblExpect      = "[期望]\n";
 
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
+
+$lang->bug->report->common = '统计报表';
+$lang->bug->report->select = '请选择报表类型';
+$lang->bug->report->create = '生成报表';
+
+$lang->bug->report->charts['bugsPerProject']     = '项目Bug数量';
+$lang->bug->report->charts['bugsPerModule']      = '模块Bug数量';
+$lang->bug->report->charts['openedBugsPerDay']   = '每天新增Bug数';
+$lang->bug->report->charts['resolvedBugsPerDay'] = '每天解决Bug数';
+$lang->bug->report->charts['closedBugsPerDay']   = '每天关闭的Bug数';
+$lang->bug->report->charts['openedBugsPerUser']  = '每人提交的Bug数';
+$lang->bug->report->charts['resolvedBugsPerUser']= '每人解决的Bug数';
+$lang->bug->report->charts['closedBugsPerUser']  = '每人关闭的Bug数';
+$lang->bug->report->charts['bugsPerSeverity']    = 'Bug严重程度统计';
+$lang->bug->report->charts['bugsPerResolution']  = 'Bug解决方案统计';
+$lang->bug->report->charts['bugsPerStatus']      = 'Bug状态统计';
+$lang->bug->report->charts['bugsPerType']        = 'Bug类型统计';
+//$lang->bug->report->charts['bugLiveDays']        = 'Bug处理时间统计';
+//$lang->bug->report->charts['bugHistories']       = 'Bug处理步骤统计';
+
+$lang->bug->report->options->swf                     = 'pie2d';
+$lang->bug->report->options->width                   = 'auto';
+$lang->bug->report->options->height                  = 300;
+$lang->bug->report->options->graph->baseFontSize     = 12;
+$lang->bug->report->options->graph->showNames        = 1;
+$lang->bug->report->options->graph->formatNumber     = 1;
+$lang->bug->report->options->graph->decimalPrecision = 0;
+$lang->bug->report->options->graph->animation        = 0;
+$lang->bug->report->options->graph->rotateNames      = 0;
+$lang->bug->report->options->graph->yAxisName        = 'COUNT';
+$lang->bug->report->options->graph->pieRadius        = 100; // 饼图直径。
+$lang->bug->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
+
+$lang->bug->report->bugsPerProject->graph->xAxisName     = '项目';
+$lang->bug->report->bugsPerModule->graph->xAxisName      = '模块';
+
+$lang->bug->report->openedBugsPerDay->swf                = 'column2d';
+$lang->bug->report->openedBugsPerDay->height             = 400;
+$lang->bug->report->openedBugsPerDay->graph->xAxisName   = '日期';
+$lang->bug->report->openedBugsPerDay->graph->rotateNames = 1;
+
+$lang->bug->report->resolvedBugsPerDay->swf              = 'column2d';
+$lang->bug->report->resolvedBugsPerDay->height           = 400;
+$lang->bug->report->resolvedBugsPerDay->graph->xAxisName = '日期';
+$lang->bug->report->resolvedBugsPerDay->graph->rotateNames = 1;
+
+$lang->bug->report->closedBugsPerDay->swf                = 'column2d';
+$lang->bug->report->closedBugsPerDay->height             = 400;
+$lang->bug->report->closedBugsPerDay->graph->xAxisName   = '日期';
+$lang->bug->report->closedBugsPerDay->graph->rotateNames = 1;
+
+$lang->bug->report->openedBugsPerUser->graph->xAxisName  = '用户';
+$lang->bug->report->resolvedBugsPerUser->graph->xAxisName= '用户';
+$lang->bug->report->closedBugsPerUser->graph->xAxisName  = '用户';
+
+$lang->bug->report->bugsPerSeverity->graph->xAxisName    = '严重程度';
+$lang->bug->report->bugsPerResolution->graph->xAxisName  = '解决方案';
+$lang->bug->report->bugsPerStatus->graph->xAxisName      = '状态';
+$lang->bug->report->bugsPerType->graph->xAxisName        = '类型';
+$lang->bug->report->bugLiveDays->graph->xAxisName        = '处理时间';
+$lang->bug->report->bugHistories->graph->xAxisName       = '处理步骤';

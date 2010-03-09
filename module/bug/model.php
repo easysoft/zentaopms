@@ -282,4 +282,143 @@ class bugModel extends model
         }
         return array('title' => $title, 'steps' => $bugSteps);
     }
+
+    /* 按项目统计bug数。*/
+    public function getDataOfBugsPerProject()
+    {
+        $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('project')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        $projects = $this->loadModel('project')->getPairs();
+        foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+        return $datas;
+    }
+
+    /* 按产品模块统计bug数。*/
+    public function getDataOfBugsPerModule()
+    {
+        $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('module')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        $modules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in(array_keys($datas))->fetchPairs();
+        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
+        return $datas;
+    }
+
+    /* 按bug创建日期统计。*/
+    public function getDataOfOpenedBugsPerDay()
+    {
+        return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('openedDate')->fetchAll();
+    }
+
+    /* 按bug解决日期统计。*/
+    public function getDataOfResolvedBugsPerDay()
+    {
+        return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
+            ->where($this->session->bugReportCondition)->groupBy('name')
+            ->having('name != 0000-00-00')
+            ->orderBy('resolvedDate')
+            ->fetchAll();
+    }
+
+    /* 按bug关闭日期统计。*/
+    public function getDataOfClosedBugsPerDay()
+    {
+        return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('closedDate')->fetchAll();
+    }
+
+    /* 按bug创建者统计。*/
+    public function getDataOfOpenedBugsPerUser()
+    {
+        $datas = $this->dao->select('openedBy AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
+        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        return $datas;
+    }
+
+    /* 按bug解决者统计。*/
+    public function getDataOfResolvedBugsPerUser()
+    {
+        $datas = $this->dao->select('resolvedBy AS name, COUNT(*) AS value')
+            ->from(TABLE_BUG)->where($this->session->bugReportCondition)
+            ->andWhere('resolvedBy')->ne('')
+            ->groupBy('name')
+            ->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
+        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        return $datas;
+    }
+
+    /* 按bug关闭者统计。*/
+    public function getDataOfClosedBugsPerUser()
+    {
+        $datas = $this->dao->select('closedBy AS name, COUNT(*) AS value')
+            ->from(TABLE_BUG)
+            ->where($this->session->bugReportCondition)
+            ->andWhere('closedBy')->ne('')
+            ->groupBy('name')
+            ->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
+        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        return $datas;
+    }
+
+    /* 按bug严重程度统计。*/
+    public function getDataOfBugsPerSeverity()
+    {
+        $datas = $this->dao->select('severity AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        foreach($datas as $severity => $data) if(isset($this->lang->bug->severityList[$severity])) $data->name = $this->lang->bug->severityList[$severity];
+        return $datas;
+    }
+
+    /* 按bug解决方案统计。*/
+    public function getDataOfBugsPerResolution()
+    {
+        $datas = $this->dao->select('resolution AS name, COUNT(*) AS value')
+            ->from(TABLE_BUG)
+            ->where($this->session->bugReportCondition)
+            ->andWhere('resolution')->ne('')
+            ->groupBy('name')->orderBy('value DESC')
+            ->fetchAll('name');
+        if(!$datas) return array();
+        foreach($datas as $resolution => $data) if(isset($this->lang->bug->resolutionList[$resolution])) $data->name = $this->lang->bug->resolutionList[$resolution];
+        return $datas;
+    }
+
+    /* 按bug状态统计。*/
+    public function getDataOfBugsPerStatus()
+    {
+        $datas = $this->dao->select('status AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        foreach($datas as $status => $data) if(isset($this->lang->bug->statusList[$status])) $data->name = $this->lang->bug->statusList[$status];
+        return $datas;
+    }
+
+    /* 按bug类型统计。*/
+    public function getDataOfBugsPerType()
+    {
+        $datas = $this->dao->select('type AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        foreach($datas as $type => $data) if(isset($this->lang->bug->typeList[$type])) $data->name = $this->lang->bug->typeList[$type];
+        return $datas;
+    }
+
+
+    /* 合并公共的chart设置和当前chart的设置。*/
+    public function mergeChartOption($chartType)
+    {
+        $chartOption  = $this->lang->bug->report->$chartType;
+        $commonOption = $this->lang->bug->report->options;
+
+        /* 设置图表的标题和展示方式。*/
+        $chartOption->graph->caption = $this->lang->bug->report->charts[$chartType];
+        if(!isset($chartOption->swf))    $chartOption->swf    = $commonOption->swf;
+        if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
+        if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
+
+        /* 合并配置。*/
+        foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+    }
 }
