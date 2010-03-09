@@ -158,10 +158,10 @@ class html
         foreach($options as $key => $value)
         {
             $key     = str_replace('item', '', $key);    // 因为对象的元素不能为数字，所以需要在配置里面会在数字前面添加item，这个地方将item去掉。
-            $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
+            $string .= "<span><input type='checkbox' name='{$name}[]' value='$key' ";
             $string .= strpos($checked, ",$key,") !== false ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " /><label>$value</label>\n";
+            $string .= " /><label>$value</label></span>\n";
         }
         return $string;
     }
