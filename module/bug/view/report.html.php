@@ -50,8 +50,8 @@ span {display:block}
         <caption><?php echo $lang->bug->report->common;?></caption>
         <?php foreach($charts as $chartType => $chartContent):?>
         <tr valign='top'>
-          <td width='80%'><?php echo $chartContent;?></td>
-          <td>
+          <td><?php echo $chartContent;?></td>
+          <td width='300'>
             <table class='table-1'>
               <tr>
                 <th><?php echo $lang->report->item;?></th>
