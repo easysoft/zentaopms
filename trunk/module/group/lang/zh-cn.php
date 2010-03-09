@@ -142,6 +142,7 @@ $lang->resource->bug->edit    = 'edit';
 $lang->resource->bug->resolve = 'resolve';
 $lang->resource->bug->activate= 'activate';
 $lang->resource->bug->close   = 'close';
+$lang->resource->bug->report  = 'reportChart';
 $lang->resource->bug->ajaxGetUserBugs = 'ajaxGetUserBugs';
 
 $lang->resource->testcase->index   = 'index';

@@ -72,15 +72,43 @@ EOT;
     }
 
     /* 生成single系列的xml数据。。 */
-    function createSingleXML($sets, $chartOptions = array())
+    public function createSingleXML($sets, $chartOptions = array())
     {
         $data  = pack("CCC", 0xef, 0xbb, 0xbf);
         $data .="<?xml version='1.0' encoding='UTF-8'?>";
+
         $data .= '<graph';
         foreach($chartOptions as $key => $value) $data .= " $key='$value'";
         $data .= ">";
-        foreach($sets as $set) $data .= "<set name='$set->name' value='$set->value' />";
+
+        $colorCount = count($this->lang->report->colors);
+        $i = 0;
+        foreach($sets as $set)
+        {
+            if($i == $colorCount) $i = 0;
+            $color = $this->lang->report->colors[$i];
+            $i ++;
+            $data .= "<set name='$set->name' value='$set->value' color='$color' />";
+        }
         $data .= "</graph>";
         return $data;
+    }
+
+    /* 输出渲染js图标的语句。*/
+    public function rendJsCharts($chartCount)
+    {
+        $js = '<script language="Javascript">';
+        for($i = 1; $i <= $chartCount; $i ++) $js .= "createChart$i()\n";
+        $js .= '</script>';
+        return $js;
+    }
+
+    /* 计算每条数据所占的百分比。*/
+    public function computePercent($datas)
+    {
+        $sum = 0;
+        foreach($datas as $data) $sum += $data->value;
+        foreach($datas as $data) $data->percent = round($data->value / $sum, 2);
+        return $datas;
     }
 }
