@@ -1,3 +1,4 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -10,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `comment` text NOT NULL,
   `extra` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_bug`;
 CREATE TABLE IF NOT EXISTS `zt_bug` (
   `id` mediumint(8) NOT NULL auto_increment,
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `mailto` varchar(255) NOT NULL default '',
   `openedBy` varchar(30) NOT NULL default '',
   `openedDate` datetime NOT NULL,
-  `openedBuild` varchar(30) NOT NULL default '',
+  `openedBuild` varchar(255) NOT NULL,
   `assignedTo` varchar(30) NOT NULL default '',
   `assignedDate` datetime NOT NULL,
   `resolvedBy` varchar(30) NOT NULL default '',
@@ -49,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -175,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `downloads` mediumint(8) unsigned NOT NULL default '0',
   `extra` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -183,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `zt_group` (
   `name` char(30) NOT NULL,
   `desc` char(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_groupPriv`;
 CREATE TABLE IF NOT EXISTS `zt_groupPriv` (
   `group` mediumint(8) unsigned NOT NULL default '0',
@@ -200,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   `new` text NOT NULL,
   `diff` text NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_module`;
 CREATE TABLE IF NOT EXISTS `zt_module` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -212,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `order` tinyint(3) unsigned NOT NULL default '0',
   `view` char(30) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -224,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `desc` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `company` (`company`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_productPlan`;
 CREATE TABLE IF NOT EXISTS `zt_productPlan` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -264,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `team` varchar(30) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `company` (`company`,`type`,`parent`,`begin`,`end`,`status`,`statge`,`pri`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectProduct`;
 CREATE TABLE IF NOT EXISTS `zt_projectProduct` (
   `project` mediumint(8) unsigned NOT NULL,
@@ -323,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   PRIMARY KEY  (`id`),
   KEY `product` (`product`,`module`,`plan`,`type`,`pri`),
   KEY `status` (`status`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storySpec`;
 CREATE TABLE IF NOT EXISTS `zt_storySpec` (
   `story` mediumint(9) NOT NULL,
@@ -345,6 +346,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `estimate` float unsigned NOT NULL,
   `consumed` float unsigned NOT NULL,
   `left` float unsigned NOT NULL,
+  `deadline` date NOT NULL,
   `status` enum('wait','doing','done','cancel') NOT NULL default 'wait',
   `statusCustom` tinyint(3) unsigned NOT NULL,
   `desc` text NOT NULL,
@@ -469,11 +471,12 @@ CREATE TABLE IF NOT EXISTS `zt_userGroup` (
 
 INSERT INTO `zt_group` (id, company, name, `desc`) VALUES
 (1, 1, 'admin', 'Admin'),
-(2, 1, 'product', 'product'),
-(3, 1, 'develop', 'develop'),
-(4, 1, 'qa', 'qa'),
-(5, 1, 'project manager', '');
-INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
+(2, 1, 'product', 'Product'),
+(3, 1, 'develop', 'Develop'),
+(4, 1, 'qa', 'QA'),
+(5, 1, 'pm', 'PM');
+
+INSERT INTO `zt_groupPriv` (`group`, `module`, `method`) VALUES
 (1, 'admin', 'browseCompany'),
 (1, 'admin', 'index'),
 (1, 'bug', 'activate'),
@@ -483,6 +486,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (1, 'bug', 'create'),
 (1, 'bug', 'edit'),
 (1, 'bug', 'index'),
+(1, 'bug', 'report'),
 (1, 'bug', 'resolve'),
 (1, 'bug', 'view'),
 (1, 'build', 'ajaxGetProductBuilds'),
@@ -539,6 +543,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (1, 'project', 'create'),
 (1, 'project', 'delete'),
 (1, 'project', 'edit'),
+(1, 'project', 'grouptask'),
 (1, 'project', 'index'),
 (1, 'project', 'linkStory'),
 (1, 'project', 'manageChilds'),
@@ -586,10 +591,10 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (1, 'testtask', 'delete'),
 (1, 'testtask', 'edit'),
 (1, 'testtask', 'index'),
-(1, 'testtask', 'linkCase'),
+(1, 'testtask', 'linkcase'),
 (1, 'testtask', 'results'),
-(1, 'testtask', 'runCase'),
-(1, 'testtask', 'unlinkCase'),
+(1, 'testtask', 'runcase'),
+(1, 'testtask', 'unlinkcase'),
 (1, 'testtask', 'view'),
 (1, 'todo', 'create'),
 (1, 'todo', 'delete'),
@@ -600,6 +605,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (1, 'tree', 'ajaxGetOptionMenu'),
 (1, 'tree', 'browse'),
 (1, 'tree', 'delete'),
+(1, 'tree', 'edit'),
 (1, 'tree', 'manageChild'),
 (1, 'tree', 'updateOrder'),
 (1, 'user', 'bug'),
@@ -618,6 +624,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (2, 'bug', 'create'),
 (2, 'bug', 'edit'),
 (2, 'bug', 'index'),
+(2, 'bug', 'report'),
 (2, 'bug', 'resolve'),
 (2, 'bug', 'view'),
 (2, 'build', 'ajaxGetProductBuilds'),
@@ -657,6 +664,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (2, 'project', 'build'),
 (2, 'project', 'burn'),
 (2, 'project', 'burnData'),
+(2, 'project', 'grouptask'),
 (2, 'project', 'index'),
 (2, 'project', 'linkStory'),
 (2, 'project', 'manageProducts'),
@@ -707,6 +715,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (2, 'tree', 'ajaxGetOptionMenu'),
 (2, 'tree', 'browse'),
 (2, 'tree', 'delete'),
+(2, 'tree', 'edit'),
 (2, 'tree', 'manageChild'),
 (2, 'tree', 'updateOrder'),
 (2, 'user', 'bug'),
@@ -722,6 +731,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (3, 'bug', 'create'),
 (3, 'bug', 'edit'),
 (3, 'bug', 'index'),
+(3, 'bug', 'report'),
 (3, 'bug', 'resolve'),
 (3, 'bug', 'view'),
 (3, 'build', 'ajaxGetProductBuilds'),
@@ -753,6 +763,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (3, 'project', 'build'),
 (3, 'project', 'burn'),
 (3, 'project', 'burnData'),
+(3, 'project', 'grouptask'),
 (3, 'project', 'index'),
 (3, 'project', 'story'),
 (3, 'project', 'task'),
@@ -804,6 +815,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (4, 'bug', 'create'),
 (4, 'bug', 'edit'),
 (4, 'bug', 'index'),
+(4, 'bug', 'report'),
 (4, 'bug', 'resolve'),
 (4, 'bug', 'view'),
 (4, 'build', 'ajaxGetProductBuilds'),
@@ -836,6 +848,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (4, 'project', 'build'),
 (4, 'project', 'burn'),
 (4, 'project', 'burnData'),
+(4, 'project', 'grouptask'),
 (4, 'project', 'index'),
 (4, 'project', 'story'),
 (4, 'project', 'task'),
@@ -872,10 +885,10 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (4, 'testtask', 'delete'),
 (4, 'testtask', 'edit'),
 (4, 'testtask', 'index'),
-(4, 'testtask', 'linkCase'),
+(4, 'testtask', 'linkcase'),
 (4, 'testtask', 'results'),
-(4, 'testtask', 'runCase'),
-(4, 'testtask', 'unlinkCase'),
+(4, 'testtask', 'runcase'),
+(4, 'testtask', 'unlinkcase'),
 (4, 'testtask', 'view'),
 (4, 'todo', 'create'),
 (4, 'todo', 'delete'),
@@ -886,6 +899,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (4, 'tree', 'ajaxGetOptionMenu'),
 (4, 'tree', 'browse'),
 (4, 'tree', 'delete'),
+(4, 'tree', 'edit'),
 (4, 'tree', 'manageChild'),
 (4, 'tree', 'updateOrder'),
 (4, 'user', 'bug'),
@@ -901,6 +915,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (5, 'bug', 'create'),
 (5, 'bug', 'edit'),
 (5, 'bug', 'index'),
+(5, 'bug', 'report'),
 (5, 'bug', 'resolve'),
 (5, 'bug', 'view'),
 (5, 'build', 'ajaxGetProductBuilds'),
@@ -938,6 +953,7 @@ INSERT INTO `zt_groupPriv` (`group`, module, method) VALUES
 (5, 'project', 'create'),
 (5, 'project', 'delete'),
 (5, 'project', 'edit'),
+(5, 'project', 'grouptask'),
 (5, 'project', 'index'),
 (5, 'project', 'linkStory'),
 (5, 'project', 'manageChilds'),
