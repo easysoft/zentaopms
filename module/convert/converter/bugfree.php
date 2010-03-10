@@ -61,7 +61,7 @@ class bugfreeConvertModel extends convertModel
         $result['bugs']     = $this->convertBug();
         $result['actions']  = $this->convertAction();
         $result['files']    = $this->convertFile();
-        $this->fixModulePath();
+        $this->loadModel('tree')->fixModulePath();
         return $result;
     }
 
@@ -153,26 +153,6 @@ class bugfreeConvertModel extends convertModel
             $this->dao->dbh($this->dbh)->update(TABLE_MODULE)->set('parent')->eq($newModuleID)->where('parent')->eq($oldModuleID)->exec();
         }
         return count($modules);
-    }
-
-    /* ÐÞ¸´Ä£¿éÂ·¾¶¡£*/
-    public function fixModulePath()
-    { 
-        $modules = $this->dao->dbh($this->dbh)->select('*')->from(TABLE_MODULE)->where('view')->eq('bug')->fetchAll('id');
-        foreach($modules as $moduleID => $module)
-        {
-            if($module->grade == 1)
-            {
-                $path = ",$moduleID,";
-            }
-            else
-            {
-                if(!isset($modules[$module->parent])) continue;
-                $parentModule = $modules[$module->parent];
-                $path = $parentModule->path . $moduleID . ',';
-            }
-            $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($moduleID)->exec();
-        }
     }
 
     /* ×ª»»Bug¡£*/

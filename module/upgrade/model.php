@@ -34,10 +34,16 @@ class upgradeModel extends model
         {
             $this->upgradeFrom0_3To0_4();
             $this->upgradeFrom0_4To0_5();
+            $this->upgradeFrom0_5To0_6();
         }
         elseif($fromVersion == '0_4')
         {
             $this->upgradeFrom0_4To0_5();
+            $this->upgradeFrom0_5To0_6();
+        }
+        elseif($fromVersion == '0_5')
+        {
+            $this->upgradeFrom0_5To0_6();
         }
     }
 
@@ -49,11 +55,18 @@ class upgradeModel extends model
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
         }
         elseif($fromVersion == '0_4')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
         }
+        elseif($fromVersion == '0_5')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
+        }
+
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
 
@@ -70,6 +83,13 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('0.4'));
         if(!$this->isError()) $this->updateVersion('0.5 beta');
+    }
+
+    /* 从0.5版本升级到0.6版本。*/
+    private function upgradeFrom0_5To0_6()
+    {
+        $this->execSQL($this->getUpgradeFile('0.5'));
+        if(!$this->isError()) $this->updateVersion('0.6 beta');
     }
 
     /* 更新PMS的版本设置。*/
