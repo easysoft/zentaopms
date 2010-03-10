@@ -468,6 +468,14 @@ CREATE TABLE IF NOT EXISTS `zt_userGroup` (
   `group` mediumint(8) unsigned NOT NULL default '0',
   UNIQUE KEY `account` (`account`,`group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `zt_group` (id, company, name, `desc`) VALUES
+(1, 1, 'admin', 'Admin'),
+(2, 1, 'product', 'Product'),
+(3, 1, 'develop', 'Develop'),
+(4, 1, 'qa', 'QA'),
+(5, 1, 'pm', 'PM');
+
 INSERT INTO `zt_groupPriv` (`group`, `module`, `method`) VALUES
 (1, 'admin', 'browseCompany'),
 (1, 'admin', 'index'),
