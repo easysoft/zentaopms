@@ -47,7 +47,7 @@ class bug extends control
     }
 
     /* 浏览一个产品下面的bug。*/
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id|desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'iddesc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 设置产品id和模块id。*/
         $browseType = strtolower($browseType);
