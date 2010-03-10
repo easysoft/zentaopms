@@ -171,7 +171,13 @@ class testcase extends control
         }
 
         /* 生成表单。*/
-        $case            = $this->testcase->getById($caseID);
+        $case = $this->testcase->getById($caseID);
+        if(empty($case->steps))
+        {
+            $step->desc   = '';
+            $step->expect = '';
+            $case->steps[] = $step;
+        }
         $productID       = $case->product;
         $currentModuleID = $case->module;
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
