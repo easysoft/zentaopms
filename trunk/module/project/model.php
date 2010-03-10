@@ -98,7 +98,7 @@ class projectModel extends model
     /* 获得项目id=>name列表。*/
     public function getPairs()
     {
-        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, end|desc')->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, enddesc')->fetchPairs();
     }
 
     /* 获得完整的列表。*/
@@ -106,7 +106,7 @@ class projectModel extends model
     {
         $sql = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id);
         if($status != 'all') $sql->andWhere('status')->in($status);
-        return $sql->orderBy('status, end|desc')->fetchAll();
+        return $sql->orderBy('status, enddesc')->fetchAll();
     }
 
     /* 通过Id获取项目信息。*/
@@ -271,7 +271,7 @@ class projectModel extends model
         /* 没有指定结束日期的情况。*/
         if($project->end == '0000-00-00')
         {
-            $sets = $sql->orderBy('date|desc')->limit(14)->fetchAll('name');
+            $sets = $sql->orderBy('datedesc')->limit(14)->fetchAll('name');
             $sets = array_reverse($sets);
 
             /* 如果没有记录，手工补齐。*/

@@ -48,7 +48,7 @@ class testtaskModel extends model
     }
 
     /* 获得某一个产品的测试任务列表。*/
-    public function getProductTasks($productID, $orderBy = 'id|desc', $pager = null)
+    public function getProductTasks($productID, $orderBy = 'iddesc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')

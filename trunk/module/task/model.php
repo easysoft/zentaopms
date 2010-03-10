@@ -113,7 +113,7 @@ class taskModel extends model
     }
     
     /* 获得某一个项目的任务列表。*/
-    public function getProjectTasks($projectID, $orderBy = 'status|asc, id|desc', $pager = null)
+    public function getProjectTasks($projectID, $orderBy = 'statusasc, iddesc', $pager = null)
     {
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
@@ -131,7 +131,7 @@ class taskModel extends model
     }
 
     /* 获得某一个项目的任务id=>name列表。*/
-    public function getProjectTaskPairs($projectID, $orderBy = 'id|desc')
+    public function getProjectTaskPairs($projectID, $orderBy = 'iddesc')
     {
         $tasks = array('' => '');
         $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS ownerRealName')
