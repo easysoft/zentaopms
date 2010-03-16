@@ -34,13 +34,13 @@ class productplanModel extends model
     /* 获取列表。*/
     public function getList($product = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)->orderBy('begin')->fetchAll();
     }
 
     /* 获取name=>value的键值对。*/
     public function getPairs($product = 0)
     {
-        return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('product')->eq((int)$product)->fetchPairs();
+        return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('product')->eq((int)$product)->orderBy('begin')->fetchPairs();
     }
 
     /* 创建。*/
