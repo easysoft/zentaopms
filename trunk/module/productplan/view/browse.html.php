@@ -32,20 +32,20 @@
     </caption>
     <thead>
     <tr>
-      <th><?php echo $lang->productplan->id;?></th>
       <th class='w-p20'><?php echo $lang->productplan->title;?></th>
       <th><?php echo $lang->productplan->begin;?></th>
       <th><?php echo $lang->productplan->end;?></th>
+      <th><?php echo $lang->productplan->desc;?></th>
       <th class='w-p20'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($plans as $plan):?>
     <tr class='a-center'>
-      <td><?php echo html::a(inlink('view', "id=$plan->id"), sprintf('%03d', $plan->id));?></td>
-      <td class='a-left'><?php echo $plan->title;?></td>
+      <td><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
       <td><?php echo $plan->begin;?></td>
       <td><?php echo $plan->end;?></td>
+      <td class='a-left'><?php echo nl2br($plan->desc);?></td>
       <td class='nobr'>
         <?php
         common::printLink('productplan', 'edit', "planID=$plan->id", $lang->productplan->edit);

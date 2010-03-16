@@ -34,7 +34,6 @@
     </caption>
     <thead>
     <tr>
-      <th><?php echo $lang->release->id;?></th>
       <th><?php echo $lang->release->name;?></th>
       <th><?php echo $lang->release->build;?></th>
       <th><?php echo $lang->release->date;?></th>
@@ -44,8 +43,7 @@
     <tbody>
     <?php foreach($releases as $release):?>
     <tr class='a-center'>
-      <td><?php echo html::a(inlink('view', "release=$release->id"), sprintf('%03d', $release->id));?></td>
-      <td class='a-left'><?php echo $release->name;?></td>
+      <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
       <td><?php echo $release->buildName;?></td>
       <td><?php echo $release->date;?></td>
       <td>
