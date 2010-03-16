@@ -101,11 +101,10 @@ $lang->project->menu->bug    = 'Bug列表|project|bug|projectID=%s';
 $lang->project->menu->build  = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->burn   = '燃烧图|project|burn|projectID=%s';
 $lang->project->menu->team   = array('link' => '团队成员|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->line   = $lang->colon;
+$lang->project->menu->product= '关联产品|project|manageproducts|projectID=%s';
 $lang->project->menu->view   = '基本信息|project|view|projectID=%s';
 $lang->project->menu->edit   = '编辑项目|project|edit|projectID=%s';
 $lang->project->menu->delete = array('link' => '删除项目|project|delete|projectID=%s', 'target' => 'hiddenwin');
-$lang->project->menu->product= '关联产品|project|manageproducts|projectID=%s';
 
 $lang->project->menu->create = array('link' => '新增项目|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
