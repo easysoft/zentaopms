@@ -99,7 +99,7 @@ class my extends control
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('tabID',    'task');
-        $this->assign('tasks',     $this->task->getUserTasks($this->app->user->account));
+        $this->assign('tasks',     $this->task->getUserTasks($this->app->user->account, 'wait,doing'));
 
         $this->display();
     }

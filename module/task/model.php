@@ -148,15 +148,17 @@ class taskModel extends model
     /* 获得用户的任务列表。*/
     public function getUserTasks($account, $status = 'all')
     {
-        $sql = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle')
+        $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')
             ->on('t1.story = t3.id')
-            ->where('t1.owner')->eq($account);
-        if($status != 'all') $sql->andwhere('t1.status')->in($status);
-        return $sql->fetchAll();
+            ->where('t1.owner')->eq($account)
+            ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
+            ->fetchAll();
+        if($tasks) return $this->computeDelays($tasks);
+        return false;
     }
 
     /* 获得用户的任务id=>name列表。*/
