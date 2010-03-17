@@ -44,7 +44,6 @@ $lang->group->checkall = '全选';
 
 /* 所有resource列表。*/
 $lang->resource->index->index = 'index';
-$lang->resource->index->ping  = 'ping';
 
 $lang->resource->my->index       = 'index';
 $lang->resource->my->todo        = 'todo';
@@ -202,6 +201,8 @@ $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
 
 $lang->resource->file->download = 'download';
+
+$lang->resource->misc->ping  = 'ping';
 
 $lang->resource->admin->index         = 'index';
 $lang->resource->admin->browseCompany = 'browseCompany';
