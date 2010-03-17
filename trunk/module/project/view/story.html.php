@@ -53,6 +53,7 @@ $(document).ready(function()
         <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->story->openedBy);?></th>
         <th><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimate);?></th>
         <th><?php common::printOrderLink('status',     $orderBy, $vars, $lang->story->status);?></th>
+        <th><?php common::printOrderLink('stage',     $orderBy, $vars, $lang->story->stage);?></th>
         <th class='w-150px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -81,7 +82,8 @@ $(document).ready(function()
         <td><?php echo $users[$story->assignedTo];?></td>
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $story->estimate;?></td>
-        <td class='<?php echo $story->status;?>'><?php $statusList = (array)$lang->story->statusList; echo $statusList[$story->status];?></td>
+        <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+        <td><?php echo $lang->story->stageList[$story->stage];?></td>
         <td>
           <?php if(common::hasPriv('task', 'create'))         echo html::a($this->createLink('task', 'create',   "projectID={$project->id}&story={$story->id}"), $lang->task->create);?>
           <?php if(common::hasPriv('project', 'unlinkStory')) echo html::a($this->createLink('project', 'unlinkStory', "projectID={$project->id}&story={$story->id}&confirm=no"), $lang->project->unlinkStory, 'hiddenwin');?>
