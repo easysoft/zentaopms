@@ -49,7 +49,7 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->bug->legendAttatch;?></legend>
-        <div><?php foreach($bug->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
+        <div><?php foreach($bug->files as $file) echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank');?></div>
       </fieldset>
       <?php include '../../common/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>
