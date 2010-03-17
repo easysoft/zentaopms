@@ -21,5 +21,6 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->file->common = '附件';
-$lang->file->label  = '标题：';
+$lang->file->common   = '附件';
+$lang->file->download = '下载附件';
+$lang->file->label    = '标题：';

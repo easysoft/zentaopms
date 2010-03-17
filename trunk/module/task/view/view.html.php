@@ -50,7 +50,7 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->files;?></legend>
-        <div><?php foreach($task->files as $file) echo html::a($file->fullPath, $file->title, '_blank');?></div>
+        <div><?php foreach($task->files as $file) echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank');?></div>
       </fieldset>
       <?php include '../../common/action.html.php';?>
       <div class='a-center f-16px strong'>

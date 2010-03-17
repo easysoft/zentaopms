@@ -29,4 +29,12 @@ class file extends control
         $this->view->fileCount = $fileCount;
         $this->display();
     }
+
+    /* 下载一个文件。*/
+    public function download($fileID)
+    {
+        $file = $this->file->getById($fileID);
+        if(file_exists($file->realPath))$this->locate($file->webPath);
+        $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+    }
 }
