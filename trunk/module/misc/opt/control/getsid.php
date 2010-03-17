@@ -4,7 +4,9 @@ class misc extends control
 {
     public function getsid()
     {
-        echo session_id();
+        $this->view->header->title = 'getsid';
+        $this->view->sid = session_id();
+        $this->display();
     }
 }
 ?>
