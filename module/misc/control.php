@@ -26,8 +26,7 @@ class misc extends control
     /* 通过隐藏的iframe定时刷新此页面，保证session不过期。*/
     public function ping()
     {
-        echo "<html><head><meta http-equiv='refresh' content='1' /></head><body></body></html>";
-        die();
+        die("<html><head><meta http-equiv='refresh' content='300' /></head><body></body></html>");
     }
 
     /* 显示phpinfo信息。*/
