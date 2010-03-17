@@ -29,6 +29,6 @@
     </td>
   </tr>
   <tr>
-    <td><?php include '../../common/mail.html.php';?></td>
+    <td><?php include '../../common/view/mail.html.php';?></td>
   </tr>
 </table>

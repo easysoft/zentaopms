@@ -22,9 +22,9 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/colorize.html.php';?>
-<?php include '../../common/tablesorter.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <script language="Javascript">
 function checkall(checker)
 {
@@ -82,4 +82,4 @@ function checkall(checker)
   </table>
   </form>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

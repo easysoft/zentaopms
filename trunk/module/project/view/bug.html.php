@@ -22,9 +22,9 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/colorize.html.php';?>
-<?php include '../../common/tablesorter.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-right'><?php common::printLink('bug', 'create', "productID=0&extra=projectID=$project->id", $lang->bug->create);?></div>
@@ -59,4 +59,4 @@
   </table>
   <div class='a-right'><?php echo $pager;?></div>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

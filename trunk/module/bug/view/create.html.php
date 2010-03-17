@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/autocomplete.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/autocomplete.html.php';?>
 <style>
 #project, #product, #story{width:245px}
 #severity, #browser {width: 113px}
@@ -182,4 +182,4 @@ $(function() {
     </table>
   </form>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

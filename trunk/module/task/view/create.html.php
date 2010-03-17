@@ -22,9 +22,9 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/colorbox.html.php';?>
-<?php include '../../common/datepicker.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorbox.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <script language='javascript'>
 /* 拷贝需求标题为任务标题。*/
 function copyStoryTitle()
@@ -114,4 +114,4 @@ $(document).ready(function()
     </table>
   </form>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

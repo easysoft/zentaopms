@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/autocomplete.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/autocomplete.html.php';?>
 <style>
 #product, #module, #project, #story, #task, #resolvedBuild{width:245px}
 </style>
@@ -176,7 +176,7 @@ $(function() {
           </div>
         </td></tr>
       </table>
-      <?php include '../../common/action.html.php';?>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 
@@ -302,4 +302,4 @@ $(function() {
     </fieldset>
   </div>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

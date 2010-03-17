@@ -22,9 +22,9 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/treeview.html.php';?>
-<?php include '../../common/colorize.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/treeview.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <script language='Javascript'>
 /* 切换至按模块浏览。*/
 function browseByModule(active)
@@ -104,4 +104,4 @@ function browseBySearch(active)
 $("#<?php echo $browseType;?>Tab").addClass('active');
 $("#module<?php echo $moduleID;?>").addClass('active'); 
 </script>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

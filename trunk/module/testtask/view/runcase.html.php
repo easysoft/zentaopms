@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.lite.html.php';?>
+<?php include '../../common/view/header.lite.html.php';?>
 <div class='yui-d0'>
   <form method='post'>
   <table class='table-1 bd-1px'>

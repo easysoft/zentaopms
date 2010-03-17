@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <style>
 span {display:block}
 </style>
@@ -74,4 +74,4 @@ span {display:block}
   </div>
 </div>
 <?php echo $rendJS;?>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

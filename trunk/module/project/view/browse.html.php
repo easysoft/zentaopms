@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/tablesorter.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <script src="<?php echo $jsRoot;?>misc/sorttable.js" type="text/javascript"></script>
 <script language='javascript'>
 function selectProject(projectID)
@@ -163,4 +163,4 @@ EOT;
     </div>
   </div>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

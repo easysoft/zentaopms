@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -52,7 +52,7 @@
         <legend><?php echo $lang->files;?></legend>
         <div><?php foreach($task->files as $file) echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank');?></div>
       </fieldset>
-      <?php include '../../common/action.html.php';?>
+      <?php include '../../common/view/action.html.php';?>
       <div class='a-center f-16px strong'>
         <?php
         //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
@@ -125,4 +125,4 @@
     </fieldset>
    </div>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

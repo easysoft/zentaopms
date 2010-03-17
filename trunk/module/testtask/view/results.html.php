@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.lite.html.php';?>
+<?php include '../../common/view/header.lite.html.php';?>
 <div class='yui-d0'>
   <h1>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></h1>
   <?php foreach($results as $result):?>

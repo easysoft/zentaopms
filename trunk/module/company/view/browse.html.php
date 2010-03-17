@@ -23,9 +23,9 @@
  */
 ?>
 <?php 
-include '../../common/header.html.php';
-include '../../common/treeview.html.php';
-include '../../common/tablesorter.html.php';
+include '../../common/view/header.html.php';
+include '../../common/view/treeview.html.php';
+include '../../common/view/tablesorter.html.php';
 ?>
 <div class="yui-d0 yui-t7">
   <div class="yui-b">
@@ -87,4 +87,4 @@ include '../../common/tablesorter.html.php';
   </div>
 </div>  
 <script lanugage='Javascript'>$('#dept<?php echo $deptID;?>').addClass('active');</script>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

@@ -71,4 +71,4 @@
     </table>
   </form>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

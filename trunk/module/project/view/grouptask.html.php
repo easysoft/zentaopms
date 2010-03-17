@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/treetable.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/treetable.html.php';?>
 <?php include './taskheader.html.php';?>
 <div class='yui-d0'>
   <table class='table-1' id='treetable'>
@@ -69,4 +69,4 @@
   </table>
 </div>  
 <script language='Javascript'>$('#by<?php echo $browseType;?>').addClass('active');</script>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

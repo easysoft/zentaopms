@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <div id='doc3'>
   <table align='center' class='table-4'>
     <caption><?php echo $lang->task->browse;?></caption>
@@ -45,4 +45,4 @@
   echo "<a href='$addLink'>{$lang->task->create}</a>";
   ?>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

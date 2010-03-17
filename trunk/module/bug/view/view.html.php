@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -51,7 +51,7 @@
         <legend><?php echo $lang->bug->legendAttatch;?></legend>
         <div><?php foreach($bug->files as $file) echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank');?></div>
       </fieldset>
-      <?php include '../../common/action.html.php';?>
+      <?php include '../../common/view/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>
       <?php
       common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
@@ -210,4 +210,4 @@
     </fieldset>
   </div>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

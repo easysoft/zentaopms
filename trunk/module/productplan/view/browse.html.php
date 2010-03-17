@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/tablesorter.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
   <table class='table-1 tablesorter'>
     <caption>
@@ -58,4 +58,4 @@
     </tbody>
   </table>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

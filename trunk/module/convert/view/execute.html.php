@@ -21,7 +21,7 @@
  * @version     $Id$
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <div class='yui-d0'>
   <table align='center' class='f-14px'>
     <caption><?php echo $lang->convert->execute . $lang->colon . strtoupper($source);?></caption>
@@ -29,4 +29,4 @@
   </table>
   </form>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>
