@@ -54,4 +54,10 @@ class index extends control
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
+
+    /* ²âÊÔÀ©Õ¹»úÖÆ¡£*/
+    public function testext()
+    {
+        echo $this->fetch('misc', 'getsid');
+    }
 }
