@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <style> #main ul li { list-style-type:none;}</style>
 <link rel="stylesheet" href="/theme/default/treeview.css" />
 <script src="/js/jquery/lib.js" type="text/javascript"></script>
@@ -110,4 +110,4 @@ function selectProduct(product)
     </div>
   </div>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

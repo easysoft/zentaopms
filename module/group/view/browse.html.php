@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <div class='yui-d0'>                 
   <table align='center' class='table-1'>
     <tr class='colhead nobr'>
@@ -49,4 +49,4 @@
   </table>
   <div class='a-right'><?php echo html::a($this->createLink('group', 'create'), $lang->group->create);?></div>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

@@ -1,4 +1,4 @@
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <style>
 #produc{width:90%}
 #story {width:90%}

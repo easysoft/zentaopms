@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/datepicker.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -48,7 +48,7 @@
         <?php echo $this->fetch('file', 'buildform');?>
       </fieldset>
       <div class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id"));?></div>
-      <?php include '../../common/action.html.php';?>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
   <div class='yui-b'>
@@ -105,4 +105,4 @@
   </div>
 </div>
 </form>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

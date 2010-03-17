@@ -41,7 +41,7 @@
       </td>
     </tr>
   </table>
-  <?php include '../../common/action.html.php';?>
+  <?php include '../../common/view/action.html.php';?>
   </form>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

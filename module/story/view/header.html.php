@@ -1,5 +1,5 @@
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/autocomplete.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/autocomplete.html.php';?>
 <script language='Javascript'>
 function loadProduct(productID)
 {

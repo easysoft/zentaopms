@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/colorize.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -67,7 +67,7 @@
       </fieldset>
       -->
 
-      <?php include '../../common/action.html.php';?>
+      <?php include '../../common/view/action.html.php';?>
       <fieldset>
         <legend><?php echo $lang->testcase->legendAction;?></legend>
         <div class='a-center' style='font-size:16px; font-weight:bold'>
@@ -143,4 +143,4 @@
     </fieldset>
   </div>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

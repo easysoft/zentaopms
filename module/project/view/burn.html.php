@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <div class='yui-d0 a-center'><?php echo $charts; ?></div>
 <script language='Javascript'>createChart1();</script>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

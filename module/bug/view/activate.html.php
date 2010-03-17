@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
   <table class='table-1'>
@@ -51,6 +51,6 @@
       </td>
     </tr>
   </table>
-  <?php include '../../common/action.html.php';?>
+  <?php include '../../common/view/action.html.php';?>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

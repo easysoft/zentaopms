@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/colorize.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <?php include './taskheader.html.php';?>
 <div class='yui-d0'>
   <table class='table-1 fixed colored'>
@@ -78,4 +78,4 @@
   <div class='a-right'><?php echo $pager;?></div>
 </div>  
 <script language='Javascript'>$('#by<?php echo $browseType;?>').addClass('active');</script>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

@@ -22,9 +22,9 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/treeview.html.php';?>
-<?php include '../../common/colorbox.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/treeview.html.php';?>
+<?php include '../../common/view/colorbox.html.php';?>
 <script language='javascript'>
 $(document).ready(function()
 {
@@ -93,4 +93,4 @@ $(document).ready(function()
     </div>
   </div>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

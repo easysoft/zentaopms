@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/datepicker.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-5'> 
@@ -66,4 +66,4 @@
     </table>
   </form>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

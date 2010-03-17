@@ -84,7 +84,7 @@
        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='button-s' 
             onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
       </div>
-      <?php include '../../common/action.html.php';?>
+      <?php include '../../common/view/action.html.php';?>
 
     </div>
   </div>
@@ -133,4 +133,4 @@
     </fieldset>
   </div>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

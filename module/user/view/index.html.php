@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/view/header.html.php';?>
 <div id='doc3'>
 </div>  
-<?php include '../../common/view/footer.html.php';?>
+<?php include '../../common/view/view/footer.html.php';?>

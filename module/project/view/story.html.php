@@ -22,9 +22,9 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/colorbox.html.php';?>
-<?php include '../../common/colorize.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorbox.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <script language='javascript'>
 $(document).ready(function()
 {
@@ -94,4 +94,4 @@ $(document).ready(function()
   </table>
   <?php $pager->show();?>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

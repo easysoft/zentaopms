@@ -22,8 +22,8 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
-<?php include '../../common/treeview.html.php';?>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/treeview.html.php';?>
 <div class="yui-d0 yui-t3">                 
   <div class="yui-b">
     <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'updateOrder');?>'>
@@ -75,4 +75,4 @@
     </div>
   </div>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

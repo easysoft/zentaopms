@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <script language='Javascript'>
 function setDuplicate(resolution)
 {
@@ -68,6 +68,6 @@ function setDuplicate(resolution)
       </td>
     </tr>
   </table>
-  <?php include '../../common/action.html.php';?>
+  <?php include '../../common/view/action.html.php';?>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

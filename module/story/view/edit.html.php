@@ -46,7 +46,7 @@
         <textarea name='comment' rows='5' class='area-1'></textarea>
       </fieldset>
       <div class='a-center'><?php echo html::submitButton() .  html::linkButton($lang->goback, inlink('view', "storyID=$story->id"));?></div>
-      <?php include '../../common/action.html.php';?>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 
@@ -140,4 +140,4 @@
  </div>
 </div>
 </form>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

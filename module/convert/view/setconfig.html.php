@@ -21,7 +21,7 @@
  * @version     $Id$
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <div class='yui-d0'>
   <form method='post' action='<?php echo inlink('checkconfig');?>'>
   <table align='center' class='table-5 f-14px'>
@@ -34,4 +34,4 @@
   <?php echo html::hidden('source', $source) . html::hidden('version', $version);?>
   </form>
 </div>
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

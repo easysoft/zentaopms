@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
-<?php include '../../common/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <div class='yui-d0'>
   <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
   <table class='table-1 a-left'> 
@@ -65,4 +65,4 @@
  <?php echo $lang->todo->thisIsPrivate;?>
  <?php endif;?>
 </div>  
-<?php include '../../common/footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>
