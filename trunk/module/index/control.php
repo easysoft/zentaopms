@@ -54,11 +54,4 @@ class index extends control
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
-
-    /* 通过隐藏的iframe定时刷新此页面，保证session不过期。*/
-    public function ping()
-    {
-        echo "<html><head><meta http-equiv='refresh' content='300' /></head><body></body></html>";
-        die();
-    }
 }
