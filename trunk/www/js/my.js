@@ -101,7 +101,7 @@ function switchAccount(account)
 /* 设置ping的地址，防止session超时。*/
 function setPing()
 {
-    $('#hiddenwin').attr('src', createLink('index', 'ping'));
+    $('#hiddenwin').attr('src', createLink('misc', 'ping'));
 }
 
 /* 设置必填字段。*/
