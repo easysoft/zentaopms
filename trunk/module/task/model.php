@@ -69,7 +69,6 @@ class taskModel extends model
             ->setDefault('story, estimate, left, consumed', 0)
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF($this->post->status == 'done', 'left', 0)
-            ->setIF($this->post->left == 0, 'status', 'done')
             ->setIF($this->post->consumed > 0 and $this->post->left > 0 and $this->post->status == 'wait', 'status', 'doing')
             ->remove('comment,fiels,labels')
             ->get();
@@ -77,11 +76,12 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
-            ->batchCheck($this->config->task->edit->requiredFields, 'notempty')
+            ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
             ->checkIF($task->status == 'done', 'consumed', 'notempty')
+            ->checkIF($task->left == 0 and $task->status != 'cancel', 'status', 'equal', 'done')
             ->where('id')->eq((int)$taskID)->exec();
         if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
