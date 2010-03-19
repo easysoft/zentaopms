@@ -64,9 +64,10 @@ class bugModel extends model
     /* 获得某一个产品，某一个模块下面的所有bug。*/
     public function getModuleBugs($productID, $moduleIds = 0, $orderBy = 'iddesc', $pager = null)
     {
-        $sql = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq((int)$productID);
-        if(!empty($moduleIds)) $sql->andWhere('module')->in($moduleIds);
-        return $sql->orderBy($orderBy)->page($pager)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('product')->eq((int)$productID)
+            ->onCaseOf(!empty($moduleIds))->andWhere('module')->in($moduleIds)->endCase()
+            ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /* 获取一个bug的详细信息。*/
