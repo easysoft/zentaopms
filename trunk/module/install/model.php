@@ -25,6 +25,11 @@
 <?php
 class installModel extends model
 {
+    /* 检查禅道的版本。*/
+    public function checkZenTaoVersion()
+    {
+    }
+
     /* 获得PHP版本。*/
     public function getPhpVersion()
     {
