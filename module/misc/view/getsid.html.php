@@ -1,2 +1,2 @@
 <?php include '../../common/view/header.html.php';?>
-main view file:<?php echo $sid;?>
+Output from the main view file: <?php echo $sid;?>
