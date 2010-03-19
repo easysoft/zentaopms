@@ -200,9 +200,9 @@ $lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
 $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
 
+$lang->resource->api->getModel  = 'getModel';
 $lang->resource->file->download = 'download';
-
-$lang->resource->misc->ping  = 'ping';
+$lang->resource->misc->ping     = 'ping';
 
 $lang->resource->admin->index         = 'index';
 $lang->resource->admin->browseCompany = 'browseCompany';

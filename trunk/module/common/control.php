@@ -53,6 +53,10 @@ class common extends control
         {
             if($method == 'login' or $method == 'logout' or $method == 'deny') return true;
         }
+        elseif($module == 'api' and $method == 'getsessionid') 
+        {
+            return true;
+        }
 
         if(isset($this->app->user))
         {
