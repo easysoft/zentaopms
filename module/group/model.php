@@ -71,8 +71,11 @@ class groupModel extends model
     /* 获得分组的用户列表。*/
     public function getUserPairs($groupID)
     {
-        $sql = "SELECT T2.account, T2.realname FROM " . TABLE_USERGROUP . " AS T1 LEFT JOIN " . TABLE_USER . " AS T2 ON T1.account = T2.account WHERE `group` = '$groupID'";
-        return $this->fetchPairs($sql);
+        return $this->dao->select('t2.account, t2.realname')
+            ->from(TABLE_USERGROUP)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('`group`')->eq((int)$groupID)
+            ->fetchPairs();
     }
 
     /* 删除一个分组信息。*/
