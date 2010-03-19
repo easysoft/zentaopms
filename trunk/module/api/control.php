@@ -26,7 +26,8 @@ class api extends control
     /* 获得sessionid。*/
     public function getSessionID()
     {
-        $this->view->sessionID = session_id();
+        $this->view->sessionName = session_name();
+        $this->view->sessionID   = session_id();
         $this->display();
     }
 
