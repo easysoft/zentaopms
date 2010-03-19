@@ -157,8 +157,7 @@ class projectModel extends model
     /* 获得相关的子项目列表。*/
     public function getChildProjects($projectID)
     {
-        $sql = "SELECT id, name FROM " . TABLE_PROJECT . " WHERE parent = '$projectID'";
-        return $this->fetchPairs($sql, 'id', 'name');
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)->where('parent')->eq((int)$projectID)->fetchPairs();
     }
 
     /* 更新child项目。*/
