@@ -60,8 +60,8 @@ class convert extends control
     {
         $this->view->source      = 'BugFree';
         $this->view->version     = $version;
-        $this->view->tablePrefix = $version > 1 ? 'bf' : '';
-        $this->view->dbName      = 'BugFree';
+        $this->view->tablePrefix = $version > 1 ? 'bf_' : '';
+        $this->view->dbName      = $version > 1 ? 'bugfree2' : 'BugFree';
         $this->display();
     }
 
@@ -104,6 +104,7 @@ class convert extends control
         $convertFunc = 'convert' . $this->post->source;
         $this->view->header->title = $this->lang->convert->execute;
         $this->view->source        = $this->post->source;
+        $this->view->version       = $this->post->version;
         $this->view->executeResult = $this->fetch('convert', $convertFunc, "version={$this->post->version}");
         $this->display();
     }
@@ -112,9 +113,12 @@ class convert extends control
     public function convertBugFree($version)
     {
         helper::import('./converter/bugfree.php');
-        $converter = new bugfreeConvertModel();
-        $this->view->result = $converter->execute();
-        $this->view->info   = bugfreeConvertModel::$info;
+        helper::import("./converter/bugfree$version.php");
+        $className = "bugfree{$version}ConvertModel";
+        $converter = new $className();
+        $this->view->version = $version;
+        $this->view->result  = $converter->execute($version);
+        $this->view->info    = bugfreeConvertModel::$info;
         $this->display();
     }
 }
