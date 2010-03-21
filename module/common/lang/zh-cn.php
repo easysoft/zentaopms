@@ -99,7 +99,7 @@ $lang->project->menu->task   = array('link' => '任务列表|project|task|projec
 $lang->project->menu->story  = array('link' => '需求列表|project|story|projectID=%s', 'alias' => 'linkstory');
 $lang->project->menu->bug    = 'Bug列表|project|bug|projectID=%s';
 $lang->project->menu->build  = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->burn   = '燃烧图|project|burn|projectID=%s';
+$lang->project->menu->burn   = '燃尽图|project|burn|projectID=%s';
 $lang->project->menu->team   = array('link' => '团队成员|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->product= '关联产品|project|manageproducts|projectID=%s';
 $lang->project->menu->view   = '基本信息|project|view|projectID=%s';
