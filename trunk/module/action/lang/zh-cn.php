@@ -43,5 +43,5 @@ $lang->action->label->reviewed  = '评审了';
 $lang->action->label->story     = '需求|story|view|storyID=%s';
 $lang->action->label->task      = '任务|task|view|taskID=%s';
 $lang->action->label->bug       = 'Bug|bug|view|bugID=%s';
-$lang->action->label->testcase  = '用例|testcase|view|caseID=%s';
+$lang->action->label->case      = '用例|testcase|view|caseID=%s';
 $lang->action->label->space     = '　';

@@ -38,7 +38,7 @@ class bugModel extends model
     /* 创建一个Bug。*/
     public function create()
     {
-        $now = date('Y-m-d H:i:s');
+        $now = helper::now();
         $bug = fixer::input('post')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
@@ -98,7 +98,7 @@ class bugModel extends model
     public function update($bugID)
     {
         $oldBug = $this->getById($bugID);
-        $now = date('Y-m-d H:i:s');
+        $now = helper::now();
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,story,task')
             ->specialChars('title,steps')
@@ -139,7 +139,7 @@ class bugModel extends model
     public function resolve($bugID)
     {
         $oldBug = $this->getById($bugID);
-        $now = date('Y-m-d H:i:s');
+        $now = helper::now();
         $bug = fixer::input('post')
             ->add('resolvedBy',     $this->app->user->account)
             ->add('resolvedDate',   $now)
@@ -164,7 +164,7 @@ class bugModel extends model
     public function activate($bugID)
     {
         $oldBug = $this->getById($bugID);
-        $now = date('Y-m-d H:i:s');
+        $now = helper::now();
         $bug = fixer::input('post')
             ->setDefault('assignedTo', $oldBug->resolvedBy)
             ->add('assignedDate', $now)
@@ -188,7 +188,7 @@ class bugModel extends model
     public function close($bugID)
     {
         $oldBug = $this->getById($bugID);
-        $now = date('Y-m-d H:i:s');
+        $now = helper::now();
         $bug = fixer::input('post')
             ->add('assignedTo',     'closed')
             ->add('assignedDate',   $now)

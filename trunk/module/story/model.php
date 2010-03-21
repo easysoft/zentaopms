@@ -59,7 +59,7 @@ class storyModel extends model
     /* 新增需求。*/
     public function create()
     {
-        $now   = date('Y-m-d H:i:s', time());
+        $now   = helper::now();
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
             ->cleanFloat('estimate')
@@ -93,7 +93,7 @@ class storyModel extends model
     /* 变更需求。*/
     public function change($storyID)
     {
-        $now         = date('Y-m-d H:i:s', time());
+        $now         = helper::now();
         $oldStory    = $this->getById($storyID);
         $specChanged = false;
         if($this->post->spec != $oldStory->spec or $this->post->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
@@ -142,7 +142,7 @@ class storyModel extends model
     /* 更新需求。*/
     public function update($storyID)
     {
-        $now         = date('Y-m-d H:i:s', time());
+        $now         = helper::now();
         $oldStory    = $this->getById($storyID);
 
         $story = fixer::input('post')
@@ -187,8 +187,8 @@ class storyModel extends model
         if($this->post->result == 'revert' and $this->post->preVersion == false) die(js::alert($this->lang->story->mustChoosePreVersion));
 
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $now      = date('Y-m-d H:i:s');
-        $date     = date('Y-m-d');
+        $now      = helper::now();
+        $date     = helper::today();
         $story = fixer::input('post')
             ->remove('result,preVersion,comment')
             ->setDefault('reviewedDate', $date)
@@ -229,7 +229,7 @@ class storyModel extends model
     public function close($storyID)
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $now      = date('Y-m-d H:i:s');
+        $now      = helper::now();
         $story = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -257,7 +257,7 @@ class storyModel extends model
     public function activate($storyID)
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $now      = date('Y-m-d H:i:s');
+        $now      = helper::now();
         $story = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)

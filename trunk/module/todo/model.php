@@ -144,7 +144,7 @@ class todoModel extends model
     /* 生成日期列表。*/
     public function buildDateList($before = 7, $after = 7)
     {
-        $today = strtotime(date('Y-m-d', time()));
+        $today = strtotime($this->today());
         $delta = 60 * 60 * 24;
         $dates = array();
         $weekList     = range(1, 7);
@@ -152,7 +152,7 @@ class todoModel extends model
         for($i = -1 * $before; $i <= $after; $i ++)
         {
             $time   = $today + $i * $delta;
-            $label  = date('Y-m-d', $time);
+            $label  = date(DT_DATE1, $time);
             if($i == 0)
             {
                 $label .= " ({$this->lang->todo->today})";
@@ -161,7 +161,7 @@ class todoModel extends model
             {
                 $label .= str_replace($weekList, $weekDateList, date(" ({$this->lang->todo->week}N)", $time));
             }
-            $date   = date('Ymd', $time);
+            $date   = date(DT_DATE2, $time);
             $dates[$date] = $label;
         }
         $dates[self::DAY_IN_FEATURE] = $this->lang->todo->dayInFeature;
@@ -187,13 +187,13 @@ class todoModel extends model
     /* 获得当天日期。*/
     public function today()
     {
-        return date('Ymd', time());
+        return date(DT_DATE2, time());
     }
 
     /* 获得昨天的日期。*/
     public function yesterday()
     {
-        return date('Y-m-d', strtotime('yesterday'));
+        return date(DT_DATE1, strtotime('yesterday'));
     }
 
     /* 获得当前的时间。*/
@@ -234,8 +234,8 @@ class todoModel extends model
     public function getThisWeek()
     {
         $baseTime = $this->getMiddleOfThisWeek();
-        $begin = date('Y-m-d', strtotime('last monday', $baseTime));
-        $end   = date('Y-m-d', strtotime('next sunday', $baseTime));
+        $begin = date(DT_DATE1, strtotime('last monday', $baseTime));
+        $end   = date(DT_DATE1, strtotime('next sunday', $baseTime));
         return array('begin' => $begin, 'end' => $end);
     }
 
@@ -243,8 +243,8 @@ class todoModel extends model
     public function getLastWeek()
     {
         $baseTime = $this->getMiddleOfLastWeek();
-        $begin = date('Y-m-d', strtotime('last monday', $baseTime));
-        $end   = date('Y-m-d', strtotime('next sunday', $baseTime));
+        $begin = date(DT_DATE1, strtotime('last monday', $baseTime));
+        $end   = date(DT_DATE1, strtotime('next sunday', $baseTime));
         return array('begin' => $begin, 'end' => $end);
     }
 

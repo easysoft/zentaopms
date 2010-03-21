@@ -38,7 +38,7 @@ class testcaseModel extends model
     /* 创建一个Case。*/
     function create()
     {
-        $now  = date('Y-m-d H:i:s');
+        $now  = helper::now();
         $case = fixer::input('post')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
@@ -91,7 +91,7 @@ class testcaseModel extends model
     public function update($caseID)
     {
         $oldCase     = $this->getById($caseID);
-        $now         = date('Y-m-d H:i:s');
+        $now         = helper::now();
         $stepChanged = false;
         $steps       = array();
 

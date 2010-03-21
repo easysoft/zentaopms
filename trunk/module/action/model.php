@@ -33,7 +33,7 @@ class actionModel extends model
         $action->objectID   = $objectID;
         $action->actor      = $this->app->user->account;
         $action->action     = $actionType;
-        $action->date       = date('Y-m-d H:i:s');
+        $action->date       = helper::now();
         $action->comment    = htmlspecialchars($comment);
         $action->extra      = $extra;
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
@@ -133,7 +133,7 @@ class actionModel extends model
         {
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
-            $action->date        = date('H:i', strtotime($action->date));
+            $action->date        = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
             $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
             if(strpos($action->objectLabel, '|') !== false)

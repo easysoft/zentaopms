@@ -23,7 +23,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <script language="Javascript">
 function checkall(checker)
@@ -75,10 +74,12 @@ function checkall(checker)
     </tr>
     </tbody>
     <?php endforeach;?>
-    <tr class='a-center'>
+    <tfoot> 
+    <tr class='a-center nobr'>
       <td colspan='6'><?php echo html::submitButton();?></td>
       <td class='a-left'><input type='checkbox' onclick='checkall(this);'><?php echo $lang->selectAll;?></td>
     </tr>
+    </tfoot>
   </table>
   </form>
 </div>  

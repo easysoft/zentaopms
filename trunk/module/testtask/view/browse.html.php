@@ -25,7 +25,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
-  <table class='table-1 colored tablesorter fixed'>
+  <table class='table-1 colored tablesorter'>
     <caption>
       <div class='f-left'><?php echo $lang->testtask->browse;?></div>
       <div class='f-right'><?php common::printLink('testtask', 'create', "product=$productID", $lang->testtask->create);?></div>
@@ -33,10 +33,10 @@
     <thead>
     <tr>
       <th><?php echo $lang->testtask->id;?></th>
+      <th class='w-p30'><?php echo $lang->testtask->name;?></th>
       <th><?php echo $lang->testtask->product;?></th>
       <th><?php echo $lang->testtask->project;?></th>
       <th><?php echo $lang->testtask->build;?></th>
-      <th class='w-p30'><?php echo $lang->testtask->name;?></th>
       <th><?php echo $lang->testtask->begin;?></th>
       <th><?php echo $lang->testtask->end;?></th>
       <th><?php echo $lang->testtask->status;?></th>
@@ -46,11 +46,11 @@
     <tbody>
     <?php foreach($tasks as $task):?>
     <tr class='a-center'>
-      <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+      <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+      <td class='a-left nobr'><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
       <td><?php echo $task->productName?></td>
       <td><?php echo $task->projectName?></td>
       <td><?php echo $task->buildName?></td>
-      <td class='a-left nobr'><?php echo $task->name;?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
       <td><?php echo $lang->testtask->statusList[$task->status];?></td>

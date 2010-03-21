@@ -103,7 +103,7 @@ function checkall(checker)
             </td>
             <td><?php echo $lang->testcase->typeList[$run->type];?></td>
             <td><?php echo $users[$run->assignedTo];?></td>
-            <td><?php if(substr($run->lastRun, 0, 4) != '0000') echo date('y-m-d H:i', strtotime($run->lastRun));?></td>
+            <td><?php if(!helper::isZeroDate($run->lastRun)) echo date(DT_MONTHTIME1, strtotime($run->lastRun));?></td>
             <td class='<?php echo $run->lastResult;?>'><?php if($run->lastResult) echo $lang->testcase->resultList[$run->lastResult];?></td>
             <td class='<?php echo $run->status;?>'><?php echo $lang->testtask->statusList[$run->status];?></td>
             <td>
