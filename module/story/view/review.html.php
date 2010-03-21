@@ -77,7 +77,7 @@ function setStory(reason)
     <caption><?php echo $story->title;?></caption>
     <tr>
       <th class='w-100px rowhead'><?php echo $lang->story->reviewedDate;?></th>
-      <td><?php echo html::input('reviewedDate', date('Y-m-d'), 'class=text-3');?></td>
+      <td><?php echo html::input('reviewedDate', helper::today(), 'class=text-3');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->reviewResult;?></th>

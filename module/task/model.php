@@ -205,12 +205,12 @@ class taskModel extends model
     /* 计算延期的天数。*/
     private function computeDelays($tasks)
     {
-        $now = date('Y-m-d');
+        $today = helper::today();
         foreach($tasks as $task)
         {
             if($task->deadline != '0000-00-00')
             {
-                $delay = helper::diffDate($now, $task->deadline);
+                $delay = helper::diffDate($today, $task->deadline);
                 if($delay > 0) $task->delay = $delay;
             }
         }
@@ -220,10 +220,10 @@ class taskModel extends model
     /* 计算延期的天数。*/
     private function computeDelay($task)
     {
-        $now = date('Y-m-d');
+        $today = helper::today();
         if($task->deadline != '0000-00-00')
         {
-            $delay = helper::diffDate($now, $task->deadline);
+            $delay = helper::diffDate($today, $task->deadline);
             if($delay > 0) $task->delay = $delay;
         }
         return $task;

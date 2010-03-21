@@ -76,7 +76,7 @@ class userModel extends model
             ->onCaseOf(!is_numeric($userID))->where('account')->eq($userID)->endCase()
             ->fetch();
         if(!$user) return false;
-        $user->last = date('Y-m-d H:i:s', $user->last);
+        $user->last = date(DT_DATETIME1, $user->last);
         return $user;
     }
 
@@ -172,7 +172,7 @@ class userModel extends model
             $last = time();
             $sql  = "UPDATE " . TABLE_USER . " SET visits = visits + 1, ip = '$ip', last = '$last' WHERE account = '$account'";
             $this->dbh->exec($sql);
-            $user->last = date('Y-m-d H:i:s', $user->last);
+            $user->last = date(DT_DATETIME1, $user->last);
         }
         return $user;
     }

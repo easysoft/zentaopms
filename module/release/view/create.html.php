@@ -38,7 +38,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->date;?></th>
-        <td><input type='text' name='date' class='text-3 date' value='<?php echo date('Y-m-d');?>' /></td>
+        <td><input type='text' name='date' class='text-3 date' value='<?php echo helper::today();?>' /></td>
       </tr>  
      </tr>  
  

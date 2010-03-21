@@ -29,7 +29,7 @@
     <caption><?php echo $lang->todo->view;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->todo->date;?></th>
-      <td><?php echo date('Y-m-d', strtotime($todo->date));?></td>
+      <td><?php echo date(DT_DATE1, strtotime($todo->date));?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->type;?></th>

@@ -140,7 +140,7 @@ class testtaskModel extends model
             $stepResults[$stepID] = $step;
         }
 
-        $now = date('Y-m-d H:i:s');
+        $now = helper::now();
         $result = fixer::input('post')
             ->add('run', $runID)
             ->add('caseResult', $caseResult)

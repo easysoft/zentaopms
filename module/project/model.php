@@ -247,7 +247,7 @@ class projectModel extends model
             {
                 $member->project     = (int)$projectID;
                 $member->account     = $account;
-                $member->joinDate    = date('Y-m-d');
+                $member->joinDate    = helper::today();
                 $member->role        = $role;
                 $member->workingHour = $workingHour;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
@@ -264,7 +264,7 @@ class projectModel extends model
     /* 计算所有项目的燃尽图数据。*/
     public function computeBurn()
     {
-        $today    = date('Y-m-d');
+        $today    = helper::today();
         $projects = $this->dao->select('id')->from(TABLE_PROJECT)->where("end >= '$today'")->orWhere('end')->eq('0000-00-00')->fetchPairs();
         $burns = $this->dao->select("project, '$today' AS date, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
@@ -293,7 +293,7 @@ class projectModel extends model
                 $current = time();
                 for($i = 0; $i < 14; $i ++)
                 {
-                    $nextDay = date('Y-m-d', $current + 60 * 60 * 24 * $i);
+                    $nextDay = date(DT_DATE1, $current + 60 * 60 * 24 * $i);
                     $set     = array('name' => $nextDay, 'value' => '');
                     $sets[]  = (object)$set;
                 }
@@ -317,7 +317,7 @@ class projectModel extends model
             {
                 while(true)
                 {
-                    $nextDay = date('Y-m-d', strtotime('next day', strtotime($current)));
+                    $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
                     $current = $nextDay;
                     $sets[$current]->name = $current;
                     $sets[$current]->value = '';    // value为空，这样fushioncharts不会打印节点。
