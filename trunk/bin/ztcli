@@ -42,8 +42,12 @@ $app    = router::createApp('pms');
 $config = $app->loadConfig('common');
 $dbh    = $app->connectDB();
 
+/* 设置时区。*/
+$app->setTimezone();
+
 /* 设置终端使用的语言，并加载共用的模块。*/
 $app->setClientLang('zh-cn');
+$lang   = $app->loadLang('common');
 $common = $app->loadCommon();
 
 /* 加载相应的lib文件，并设置超全局变量的引用。*/

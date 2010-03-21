@@ -32,9 +32,10 @@ include '../../../framework/control.class.php';
 include '../../../framework/model.class.php';
 include '../../../framework/helper.class.php';
 
-/* 实例化路由对象，加载配置，连接到数据库。*/
+/* 实例化路由对象，加载配置，设置时区。*/
 $app    = router::createApp('pms');
 $config = $app->loadConfig('common');
+$app->setTimezone();
 
 /* 检查是否已经安装。*/
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
