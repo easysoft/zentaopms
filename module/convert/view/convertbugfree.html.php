@@ -23,6 +23,20 @@
   <td><?php echo $result['bugs'];?></td>
   <td class='f-12px'><?php if(isset($info['bugs'])) echo join('<br />', $info['bugs']);?></td>
 </tr>
+<?php if($version > 1):?>
+<tr>
+  <th class='rowhead'><?php echo $lang->convert->bugfree->cases;?></th>
+  <td><?php echo $result['cases'];?></td>
+  <td class='f-12px'><?php if(isset($info['cases'])) echo join('<br />', $info['cases']);?></td>
+</tr>
+<tr>
+  <th class='rowhead'><?php echo $lang->convert->bugfree->results;?></th>
+  <td><?php echo $result['results'];?></td>
+  <td class='f-12px'><?php if(isset($info['results'])) echo join('<br />', $info['results']);?></td>
+</tr>
+
+<?php endif;?>
+
 <tr>
   <th class='rowhead'><?php echo $lang->convert->bugfree->actions;?></th>
   <td><?php echo $result['actions'];?></td>

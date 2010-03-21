@@ -38,7 +38,7 @@ $lang->convert->source           = '来源系统';
 $lang->convert->version          = '版本';
 $lang->convert->mustSelectSource = "必须选择一个来源。";
 
-$lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x');
+$lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x', 'bugfree_2' => '2.x');
 
 $lang->convert->setting     = '设置';
 $lang->convert->checkConfig = '检查配置';
@@ -68,6 +68,8 @@ $lang->convert->bugfree->users    = '用户';
 $lang->convert->bugfree->projects = '项目';
 $lang->convert->bugfree->modules  = '模块';
 $lang->convert->bugfree->bugs     = 'Bug';
+$lang->convert->bugfree->cases    = '测试用例';
+$lang->convert->bugfree->results  = '测试结果';
 $lang->convert->bugfree->actions  = '历史记录';
 $lang->convert->bugfree->files    = '附件';
 

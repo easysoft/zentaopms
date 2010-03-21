@@ -97,10 +97,15 @@ $lang->testcase->priList[4] = 4;
 $lang->testcase->typeList['']            = '';
 $lang->testcase->typeList['feature']     = '功能测试';
 $lang->testcase->typeList['performance'] = '性能测试';
+$lang->testcase->typeList['config']      = '配置相关';
+$lang->testcase->typeList['install']     = '安装部署';
+$lang->testcase->typeList['security']    = '安全相关';
+$lang->testcase->typeList['other']       = '其他';
 
-$lang->testcase->statusList['']         = '';
-$lang->testcase->statusList['normal']   = '正常';
-$lang->testcase->statusList['blocked']  = 'Blocked';
+$lang->testcase->statusList['']            = '';
+$lang->testcase->statusList['normal']      = '正常';
+$lang->testcase->statusList['blocked']     = '被阻塞';
+$lang->testcase->statusList['investigate'] = '研究中';
 
 $lang->testcase->resultList['n/a']     = 'N/A';
 $lang->testcase->resultList['pass']    = '通过';
