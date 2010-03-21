@@ -285,6 +285,12 @@ class project extends control
         die($this->report->createSingleXML($sets, $this->lang->project->charts->burn->graph));
     }
 
+    /* 计算燃烧图数据。*/
+    public function computeBurn()
+    {
+        $this->project->computeBurn();
+    }
+
     /* 团队成员。*/
     public function team($projectID = 0)
     {

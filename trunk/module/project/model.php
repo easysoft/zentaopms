@@ -261,6 +261,20 @@ class projectModel extends model
         $this->dao->delete()->from(TABLE_TEAM)->where('project')->eq((int)$projectID)->andWhere('account')->eq($account)->exec();
     }
 
+    /* 计算所有项目的燃尽图数据。*/
+    public function computeBurn()
+    {
+        $today    = date('Y-m-d');
+        $projects = $this->dao->select('id')->from(TABLE_PROJECT)->where("end >= '$today'")->orWhere('end')->eq('0000-00-00')->fetchPairs();
+        $burns = $this->dao->select("project, '$today' AS date, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
+            ->from(TABLE_TASK)
+            ->where('project')->in($projects)
+            ->andWhere('status')->ne('cancel')
+            ->groupBy('project')
+            ->fetchAll();
+        foreach($burns as $burn) $this->dao->replace(TABLE_BURN)->data($burn)->exec();
+    }
+
     /* 燃烧图所需要的数据。*/
     public function getBurnData($projectID = 0)
     {
