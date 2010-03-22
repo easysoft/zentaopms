@@ -39,10 +39,11 @@
      <td class='a-left'><?php echo $group->desc;?></td>
      <td class='a-left'><?php foreach($groupUsers[$group->id] as $user) echo $user . ' ';?></td>
      <td class='nobr'>
-       <?php common::printLink('group', 'edit',         "groupID=$group->id", $lang->group->edit);?>
        <?php common::printLink('group', 'managepriv',   "groupID=$group->id", $lang->group->managePriv);?>
        <?php common::printLink('group', 'managemember', "groupID=$group->id", $lang->group->manageMember);?>
-       <?php common::printLink('group', 'delete',       "groupID=$group->id", $lang->group->delete, "hiddenwin");?>
+       <?php common::printLink('group', 'edit',         "groupID=$group->id", $lang->edit);?>
+       <?php common::printLink('group', 'copy',         "groupID=$group->id", $lang->copy);?>
+       <?php common::printLink('group', 'delete',       "groupID=$group->id", $lang->delete, "hiddenwin");?>
      </td>
    </tr>
    <?php endforeach;?>
