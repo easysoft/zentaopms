@@ -26,11 +26,13 @@
 class groupModel extends model
 {
     /* 为某一个公司添加分组。*/
-    public function create($companyID)
+    public function create()
     {
-        extract($_POST);
-        $sql = "INSERT INTO " . TABLE_GROUP . " (`company`, `name`, `desc`) VALUES ('$companyID', '$name', '$desc')";
-        return $this->dbh->exec($sql);
+        $group = fixer::input('post')
+            ->setDefault('company', $this->app->company->id)
+            ->specialChars('name, desc')
+            ->get();
+        return $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
     }
 
     /* 更新某一个分组信息。*/
@@ -41,6 +43,50 @@ class groupModel extends model
         return $this->dbh->exec($sql);
     }
 
+    /* 复制一个分组。*/
+    public function copy($groupID)
+    {
+        $group = fixer::input('post')
+            ->setDefault('company', $this->app->company->id)
+            ->specialChars('name, desc')
+            ->remove('options')
+            ->get();
+        $this->dao->insert(TABLE_GROUP)
+            ->data($group)
+            ->check('name', 'unique')
+            ->check('name', 'notempty')
+            ->exec();
+        if($this->post->options == false) return;
+        if(!dao::isError())
+        {
+            $newGroupID = $this->dao->lastInsertID();
+            $options    = join(',', $this->post->options);
+            if(strpos($options, 'copyPriv') !== false) $this->copyPriv($groupID, $newGroupID);
+            if(strpos($options, 'copyUser') !== false) $this->copyUser($groupID, $newGroupID);
+        }
+    }
+
+    /* 拷贝权限。*/
+    private function copyPriv($fromGroup, $toGroup)
+    {
+        $privs = $this->dao->findByGroup($fromGroup)->from(TABLE_GROUPPRIV)->fetchAll();
+        foreach($privs as $priv)
+        {
+            $priv->group = $toGroup;
+            $this->dao->insert(TABLE_GROUPPRIV)->data($priv)->exec();
+        }
+    }
+
+    /* 拷贝用户。*/
+    private function copyUser($fromGroup, $toGroup)
+    {
+        $users = $this->dao->findByGroup($fromGroup)->from(TABLE_USERGROUP)->fetchAll();
+        foreach($users as $user)
+        {
+            $user->group = $toGroup;
+            $this->dao->insert(TABLE_USERGROUP)->data($user)->exec();
+        }
+    }
 
     /* 获取某一个公司的分组列表。*/
     public function getList($companyID)

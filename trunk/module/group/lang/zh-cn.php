@@ -25,6 +25,7 @@ $lang->group->common       = '权限分组';
 $lang->group->browse       = '浏览分组';
 $lang->group->create       = '新增分组';
 $lang->group->edit         = '编辑分组';
+$lang->group->copy         = '复制分组';
 $lang->group->delete       = '删除分组';
 $lang->group->managePriv   = '权限维护';
 $lang->group->manageMember = '成员维护';
@@ -41,6 +42,10 @@ $lang->group->module   = '模块';
 $lang->group->method   = '方法';
 $lang->group->priv     = '权限';
 $lang->group->checkall = '全选';
+$lang->group->option   = '选项';
+
+$lang->group->copyOptions['copyPriv'] = '复制权限';
+$lang->group->copyOptions['copyUser'] = '复制用户';
 
 /* 所有resource列表。*/
 $lang->resource->index->index = 'index';
@@ -176,6 +181,7 @@ $lang->resource->dept->delete      = 'delete';
 $lang->resource->group->browse       = 'browse';
 $lang->resource->group->create       = 'create';
 $lang->resource->group->edit         = 'edit';
+$lang->resource->group->copy         = 'copy';
 $lang->resource->group->delete       = 'delete';
 $lang->resource->group->managePriv   = 'managePriv';
 $lang->resource->group->manageMember = 'manageMember';

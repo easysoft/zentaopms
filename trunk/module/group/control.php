@@ -52,24 +52,21 @@ class group extends control
     }
 
     /* 创建一个用户组。*/
-    public function create($companyID = 0)
+    public function create()
     {
-        if($companyID == 0) $companyID = $this->app->company->id;
         if(!empty($_POST))
         {
-            $this->group->create($companyID);
+            $this->group->create();
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
-        $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
-        $position[]      = $this->lang->group->create;
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-
+        $this->view->header->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
+        $this->view->position[]    = $this->lang->group->create;
         $this->display();
     }
 
-    /* 编辑一个用户。*/
+    /* 编辑一个用户组。*/
     public function edit($groupID)
     {
        if(!empty($_POST))
@@ -86,6 +83,23 @@ class group extends control
 
         $this->display();
     }
+
+    /* 复制一个用户组。*/
+    public function copy($groupID)
+    {
+       if(!empty($_POST))
+        {
+            $this->group->copy($groupID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate($this->createLink('group', 'browse'), 'parent'));
+        }
+
+        $this->view->header->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
+        $this->view->position[]    = $this->lang->group->copy;
+        $this->view->group         = $this->group->getById($groupID);
+        $this->display();
+    }
+
 
     /* 维护权限。*/
     public function managePriv($groupID)
