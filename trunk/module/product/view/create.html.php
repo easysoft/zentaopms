@@ -23,28 +23,23 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-4'> 
       <caption><?php echo $lang->product->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->product->name;?></th>
-        <td class='a-left'><input type='text' name='name' /></td>
+        <td><?php echo html::input('name');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->code;?></th>
-        <td class='a-left'><input type='text' name='code' /></td>
+        <td><?php echo html::input('code');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->desc;?></th>
-        <td class='a-left'><textarea name='desc' style='width:100%' rows='5'></textarea></td>
+        <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></textarea></td>
       </tr>  
-      <tr>
-        <td colspan='2'>
-          <input type='submit' value='<?php echo $lang->product->saveButton;?>' accesskey='S' />
-          <input type='reset'  value='<?php echo $lang->reset;?>' />
-        </td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
 </div>  

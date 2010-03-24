@@ -28,3 +28,6 @@ $config->product->search['params']['status']       = array('operator' => '=',   
 $config->product->search['params']['stage']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->stageList);
 $config->product->search['params']['closedReason'] = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->reasonList);
 $config->product->search['params']['mailto']       = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
+
+$config->product->create->requiredFields = 'name,code';
+$config->product->edit->requiredFields   = 'name,code';
