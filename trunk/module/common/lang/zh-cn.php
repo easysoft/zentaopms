@@ -31,6 +31,7 @@ $lang->arrow      = ' » ';
 $lang->colon      = '::';
 $lang->reset      = '重填';
 $lang->edit       = '编辑';
+$lang->copy       = '复制';
 $lang->delete     = '删除';
 $lang->close      = '关闭';
 $lang->activate   = '激活';
@@ -86,8 +87,8 @@ $lang->product->menu->plan   = array('link' => '计划列表|productplan|browse|
 $lang->product->menu->release= array('link' => '发布列表|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap= '路线图|product|roadmap|productID=%s';
 $lang->product->menu->edit   = '编辑产品|product|edit|productID=%s';
-$lang->product->menu->delete = array('link' => '删除产品|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module = '维护模块|tree|browse|productID=%s&view=product';
+$lang->product->menu->delete = array('link' => '删除产品|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->create = array('link' => '新增产品|product|create', 'float' => 'right');
 $lang->story->menu           = $lang->product->menu;
 $lang->productplan->menu     = $lang->product->menu;
