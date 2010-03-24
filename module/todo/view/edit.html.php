@@ -41,11 +41,17 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->name;?></th>
-        <td><div id='nameBox'><input type='text' name='name' value='<?php echo $todo->name;?>' class='text-3' <?php if($todo->type != 'custom') echo 'readonly';?> /></div></td>
+        <td><div id='nameBox'>
+          <?php
+          $readType = $todo->type != 'custom' ? 'readonly' : '';
+          echo html::input('name', $todo->name, "$readType class=text-1");
+          ?>
+          </div>
+        </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-        <td><textarea name='desc' id='desc' rows='5' class='area-1'><?php echo $todo->desc;?></textarea>
+        <td><?php echo html::textarea('desc', $todo->desc, "rows=5 class=area-1");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->status;?></th>

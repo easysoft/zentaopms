@@ -33,31 +33,35 @@ class todoModel extends model
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->add('idvalue', 0)
-            ->stripTags('type, name')
-            ->specialChars('desc')
+            ->specialChars('type,name,desc')
             ->cleanInt('date, pri, begin, end, private')
             ->setIF($this->post->type != 'custom', 'name', '')
             ->setIF($this->post->type == 'bug',  'idvalue', $this->post->bug)
             ->setIF($this->post->type == 'task', 'idvalue', $this->post->task)
             ->setIF($this->post->begin == false, 'begin', '2400')
-            ->setIF($this->post->end   == false, 'end', '2400')
+            ->setIF($this->post->end   == false, 'end',   '2400')
             ->remove('bug, task')
             ->get();
-        $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->checkIF($todo->type == 'custom', 'name', 'notempty')->exec();
+        $this->dao->insert(TABLE_TODO)->data($todo)
+            ->autoCheck()
+            ->checkIF($todo->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
+            ->exec();
     }
 
     /* 更新一个todo。*/
     public function update($todoID)
     {
         $todo = fixer::input('post')
-            ->stripTags('type, name')
             ->cleanInt('date, pri, begin, end, private')
-            ->specialChars('desc')
+            ->specialChars('type,name,desc')
             ->setIF($this->post->type != 'custom', 'name',  '')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
             ->get();
-        $this->dao->update(TABLE_TODO)->data($todo)->autoCheck()->checkIF($todo->type == 'custom', 'name', 'notempty')->where('id')->eq($todoID)->exec();
+        $this->dao->update(TABLE_TODO)->data($todo)
+            ->autoCheck()
+            ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')->where('id')->eq($todoID)
+            ->exec();
     }
     
     /* 删除一个todo。*/
@@ -79,8 +83,6 @@ class todoModel extends model
         $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
         if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-        $todo->name = stripslashes($todo->name);
-        $todo->desc = stripslashes($todo->desc);
         $todo->date = str_replace('-', '', $todo->date);
         return $todo;
     }
