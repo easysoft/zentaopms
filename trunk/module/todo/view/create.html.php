@@ -42,11 +42,11 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->name;?></th>
-        <td><div id='nameBox'><input type='text' name='name' class='text-1' /></div></td>
+        <td><div id='nameBox'><?php echo html::input('name', '', 'class=text-1');?></div></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-        <td><textarea name='desc' id='desc' rows='5' class='area-1'></textarea>
+        <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></textarea>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->status;?></th>
