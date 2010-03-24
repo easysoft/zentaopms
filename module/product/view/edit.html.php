@@ -23,29 +23,23 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-4'> 
       <caption><?php echo $lang->product->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->product->name;?></th>
-        <td class='a-left'><input type='text' name='name' value='<?php echo $product->name;?>' /></td>
+        <td><?php echo html::input('name', $product->name);?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->code;?></th>
-        <td class='a-left'><input type='text' name='code' value='<?php echo $product->code;?>' /></td>
+        <td><?php echo html::input('code', $product->code);?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->desc;?></th>
-        <td class='a-left'><textarea name='desc' style='width:100%' rows='5'><?php echo $product->desc;?></textarea></td>
+        <td><?php echo html::textarea('desc', $product->desc, "rows='5' class='area-1'");?></td>
       </tr>  
-      <tr>
-        <td colspan='2'>
-          <input type='submit' value='<?php echo $lang->product->saveButton;?>' accesskey='S' />
-          <input type='reset'  value='<?php echo $lang->reset;?>' />
-          <input type='hidden' value='<?php echo $product->id;?>' name='id' />
-        </td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
 </div>  

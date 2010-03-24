@@ -73,7 +73,7 @@ class product extends control
 
         /* 加载分页类，并查询stories列表。*/
         $this->app->loadClass('pager', $static = true);
-        $pager   = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $stories = array();
         if($browseType == 'all')
