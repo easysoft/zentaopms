@@ -40,7 +40,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->testcase->title;?></th>
-        <td class='a-left'><input type='text' name='title' class='text-1' /></td>
+        <td class='a-left'><?php echo html::input('title', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->testcase->steps;?></th>

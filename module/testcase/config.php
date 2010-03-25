@@ -17,3 +17,6 @@ $config->testcase->search['params']['lastEditedBy'] = array('operator' => '=',  
 $config->testcase->search['params']['status']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->testcase->statusList);
 $config->testcase->search['params']['pri']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->testcase->priList);
 $config->testcase->search['params']['type']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->testcase->typeList);
+
+$config->testcase->create->requiredFields = 'title';
+$config->testcase->edit->requiredFields   = 'title;
