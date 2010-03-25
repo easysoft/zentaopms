@@ -30,43 +30,35 @@
       <caption><?php echo $lang->project->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->project->name;?></th>
-        <td><input type='text' name='name' class='text-3' /></td>
+        <td><?php echo html::input('name', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->code;?></th>
-        <td><input type='text' name='code' class='text-3' /></td>
+        <td><?php echo html::input('code', '', "class='text-3'");?></td>
       </tr>  
-      <!--
-      <tr>
-        <th class='rowhead'><?php echo $lang->project->parent;?></th>
-        <td><?php echo html::select('parent', $projects, '', 'class=select-3');?></td>
-      </tr>  
-      -->
       <tr>
         <th class='rowhead'><?php echo $lang->project->begin;?></th>
-        <td><input type='text' name='begin' class='text-3 date' /></td>
+        <td><?php echo html::input('begin', '', "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->end;?></th>
-        <td><input type='text' name='end' class='text-3 date' /></td>
+        <td><?php echo html::input('end', '', "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->teamname;?></th>
-        <td><input type='text' name='team' class='text-3' /></td>
+        <td><?php echo html::input('team', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->goal;?></th>
-        <td><textarea name='goal' rows='5' class='area-1'></textarea></td>
+        <td><?php echo html::textarea('goal', '', "rows='5' class='area-1'");?></td>
       </tr>  
 
       <tr>
         <th class='rowhead'><?php echo $lang->project->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'></textarea></td>
+        <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></td>
       </tr>  
       <tr>
-        <td colspan='2' class='a-center'>
-          <?php echo html::submitButton() . html::resetButton();?>
-        </td>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
       </tr>
     </table>
   </form>
