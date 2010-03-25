@@ -30,7 +30,7 @@
       <caption><?php echo $lang->release->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->release->name;?></th>
-        <td><input type='text' name='name' class='text-3' /></td>
+        <td><?php echo html::input('name', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->build;?></th>
@@ -38,17 +38,14 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->date;?></th>
-        <td><input type='text' name='date' class='text-3 date' value='<?php echo helper::today();?>' /></td>
+        <td><?php echo html::input('date', helper::today(), "class='text-3 date'");?></td>
       </tr>  
-     </tr>  
- 
+      </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->desc;?></th>
-        <td><textarea name='desc' rows='8' class='area-1'></textarea></td>
+        <td><?php echo html::textarea('desc', '', "rows='10' class='area-1'");?></td>
       </tr>  
-      <tr>
-        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
     </table>
   </form>
 </div>  
