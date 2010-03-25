@@ -26,46 +26,41 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-4 a-left'> 
+    <table align='center' class='table-5'> 
       <caption><?php echo $lang->user->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->user->dept;?></th>
-        <td><?php echo html::select('dept', $depts, $user->dept);?>
+        <td><?php echo html::select('dept', $depts, $user->dept, "class='select-3'");?>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->account;?></th>
-        <td><input type='text' name='account' value='<?php echo $user->account;?>' /></td>
+        <td><?php echo html::input('account', $user->account, "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->realname;?></th>
-        <td><input type='text' name='realname' value='<?php echo $user->realname;?>' /></td>
+        <td><?php echo html::input('realname', $user->realname, "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->email;?></th>
-        <td><input type='text' name='email' value='<?php echo $user->email;?>' /></td>
+        <td><?php echo html::input('email', $user->email, "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->join;?></th>
-        <td><input type='text' name='join' value='<?php echo $user->join;?>' class='date' /></td>
+        <td><?php echo html::input('join', '', "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->gendar;?></th>
-        <td><?php echo html::radio('gendar', $lang->user->gendarList, $user->gendar)?></td>
+        <td><?php echo html::radio('gendar', (array)$lang->user->gendarList, $user->gendar);?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->password;?></th>
-        <td><input type='password' name='password1' /></td>
+        <td><?php echo html::password('password1', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->password2;?></th>
-        <td><input type='password' name='password2' /></td>
+        <td><?php echo html::password('password2', '', "class='text-3'");?></td>
       </tr>  
-
-      <tr>
-        <td colspan='2' class='a-center'>
-          <?php echo html::submitButton() . html::resetButton();?>
-        </td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
     </table>
   </form>
 </div>  

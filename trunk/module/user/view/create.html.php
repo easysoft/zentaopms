@@ -30,23 +30,23 @@
       <caption><?php echo $lang->user->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->user->dept;?></th>
-        <td><?php echo html::select('dept', $depts, $deptID);?>
+        <td><?php echo html::select('dept', $depts, $deptID, "class='select-3'");?>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->account;?></th>
-        <td><input type='text' name='account' /></td>
+        <td><?php echo html::input('account', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->realname;?></th>
-        <td><input type='text' name='realname' /></td>
+        <td><?php echo html::input('realname', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->email;?></th>
-        <td><input type='text' name='email' /></td>
+        <td><?php echo html::input('email', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->join;?></th>
-        <td><input type='text' name='join' class='date' /></td>
+        <td><?php echo html::input('join', '', "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->gendar;?></th>
@@ -54,15 +54,13 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->password;?></th>
-        <td><input type='password' name='password1' /></td>
+        <td><?php echo html::password('password1', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->password2;?></th>
-        <td><input type='password' name='password2' /></td>
+        <td><?php echo html::password('password2', '', "class='text-3'");?></td>
       </tr>  
-      <tr>
-        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
     </table>
   </form>
 </div>  
