@@ -48,11 +48,9 @@ class productplanModel extends model
     {
         $plan = fixer::input('post')
             ->stripTags('title')
-            ->setDefault('begin', '0000-00-00')
-            ->setDefault('end',   '0000-00-00')
             ->specialChars('desc')
             ->get();
-        $this->dao->insert(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck('title,product', 'notempty')->exec();
+        $this->dao->insert(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck($this->config->productplan->create->requiredFields, 'notempty')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
@@ -61,11 +59,9 @@ class productplanModel extends model
     {
         $plan = fixer::input('post')
             ->stripTags('title')
-            ->setDefault('begin', '0000-00-00')
-            ->setDefault('end',   '0000-00-00')
             ->specialChars('desc')
             ->get();
-        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck('title,product', 'notempty')->where('id')->eq((int)$planID)->exec();
+        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')->where('id')->eq((int)$planID)->exec();
     }
 
     /* 删除计划。*/

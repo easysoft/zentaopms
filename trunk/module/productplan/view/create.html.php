@@ -34,19 +34,19 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->productplan->title;?></th>
-        <td><input type='text' name='title' class='text-3' /></td>
+        <td><?php echo html::input('title', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->productplan->begin;?></th>
-        <td><input type='text' name='begin' class='text-3 date' /></td>
+        <td><?php echo html::input('begin', '', "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->productplan->end;?></th>
-        <td><input type='text' name='end' class='text-3 date' /></td>
+        <td><?php echo html::input('end', '', "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->productplan->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'></textarea></td>
+        <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'>
