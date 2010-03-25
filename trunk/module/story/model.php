@@ -74,7 +74,7 @@ class storyModel extends model
             ->setIF($this->post->needNotReview, 'status', 'active')
             ->remove('files,labels,spec,needNotReview')
             ->get();
-        $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck('title,estimate', 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -116,7 +116,7 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)
             ->data($story)
             ->autoCheck()
-            ->check('title', 'notempty')
+            ->batchCheck($this->config->story->change->requiredFields, 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError())
         {
@@ -165,7 +165,7 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)
             ->data($story)
             ->autoCheck()
-            ->batchCheck('title,estimate', 'notempty')
+            ->batchCheck($this->config->story->edit->requiredFields, 'notempty')
             ->checkIF($story->closedBy, 'closedReason', 'notempty')
             ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
@@ -209,7 +209,7 @@ class storyModel extends model
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)
             ->autoCheck()
-            ->batchCheck('assignedTo, reviewedBy', 'notempty')
+            ->batchCheck($this->config->story->review->requiredFields, 'notempty')
             ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'subdivided', 'childStories',   'notempty')
@@ -246,7 +246,7 @@ class storyModel extends model
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)
             ->autoCheck()
-            ->check('closedReason', 'notempty')
+            ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
             ->where('id')->eq($storyID)->exec();

@@ -45,7 +45,7 @@
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->story->estimate;?></th>
-        <td><input type='text' name='estimate' id='estimate' class='text-3' /></td>
+        <td><?php echo html::input('estimate', '', "class='text-3'");?></td>
       </tr> 
       <tr>
         <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
@@ -53,11 +53,11 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->title;?></th>
-        <td><input type='text' name='title' class='text-1' /></td>
+        <td><?php echo html::input('title', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->spec;?></th>
-        <td><textarea name='spec' rows='8' class='text-1'></textarea><br /><?php echo $lang->story->specTemplate;?></td>
+        <td><?php echo html::textarea('spec', '', "rows='8' class='text-1'");?><br /><?php echo $lang->story->specTemplate;?></td>
       </tr>  
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
