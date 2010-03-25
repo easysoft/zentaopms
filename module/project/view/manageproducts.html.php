@@ -23,16 +23,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='doc3'>
+<style>span{display:block; float:left; width:200px}</style>
+<div class='yui-d0'>
   <form method='post'>
-    <table align='center' class='table-3 a-left'> 
+    <table align='center' class='table-4'> 
       <caption><?php echo $lang->project->manageProducts;?></caption>
       <tr>
-        <td>
-        <?php
-        echo html::checkbox("products", $allProducts, $linkedProducts);
-        ?>
-        </td>
+        <td><?php echo html::checkbox("products", $allProducts, $linkedProducts);?></td>
       </tr>
       <tr><td class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
