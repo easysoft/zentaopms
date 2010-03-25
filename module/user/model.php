@@ -96,7 +96,7 @@ class userModel extends model
 
         $this->dao->insert(TABLE_USER)->data($user)
             ->autoCheck()
-            ->batchCheck('account, realname, password', 'notempty')
+            ->batchCheck($this->config->user->create->requiredFields, 'notempty')
             ->check('account', 'unique')
             ->check('account', 'account')
             ->checkIF($this->post->email != false, 'email', 'email')
@@ -119,7 +119,7 @@ class userModel extends model
 
         $this->dao->update(TABLE_USER)->data($user)
             ->autoCheck()
-            ->batchCheck('account, realname', 'notempty')
+            ->batchCheck($this->config->user->edit->requiredFields, 'notempty')
             ->check('account', 'unique', "id != '$userID'")
             ->check('account', 'account')
             ->checkIF($this->post->email != false, 'email', 'email')
