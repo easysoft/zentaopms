@@ -30,11 +30,11 @@
       <caption><?php echo $lang->build->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->build->product;?></th>
-        <td><?php echo html::select('product', $products);?></td>
+        <td><?php echo html::select('product', $products, '', "class='select-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->name;?></th>
-        <td><input type='text' name='name' class='text-3' /></td>
+        <td><?php echo html::input('name', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->builder;?></th>
@@ -42,24 +42,21 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->date;?></th>
-        <td><input type='text' name='date' class='text-3 date' value='<?php echo helper::today();?>' /></td>
+        <td><?php echo html::input('date', helper::today(), "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->scmPath;?></th>
-        <td><input type='text' name='scmPath' class='text-1' /></td>
+        <td><?php echo html::input('scmPath', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->filePath;?></th>
-        <td><input type='text' name='filePath' class='text-1' /></td>
+        <td><?php echo html::input('filePath', '', "class='text-1'");?></td>
       </tr>  
- 
       <tr>
         <th class='rowhead'><?php echo $lang->build->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'></textarea></td>
+        <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></td>
       </tr>  
-      <tr>
-        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
     </table>
   </form>
 </div>  

@@ -1,6 +1,6 @@
 <?php
 /**
- * The create view of build module of ZenTaoMS.
+ * The edit view of build module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -30,35 +30,33 @@
       <caption><?php echo $lang->build->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->build->product;?></th>
-        <td><?php echo html::select('product', $products, $build->product);?></td>
+        <td><?php echo html::select('product', $products, $build->product, "class='select-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->name;?></th>
-        <td><input type='text' name='name' class='text-3' value='<?php echo $build->name;?>' /></td>
+        <td><?php echo html::input('name', $build->name, "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->builder;?></th>
-        <td><?php echo html::select('builder', $users, $build->builder, 'class="select-3"');?></td>
+        <td><?php echo html::select('builder', $users, $app->user->account, 'class="select-3"');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->date;?></th>
-        <td><input type='text' name='date' class='text-3 date' value='<?php echo $build->date;?>' /></td>
+        <td><?php echo html::input('date', $build->date, "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->scmPath;?></th>
-        <td><input type='text' name='scmPath' class='text-1' value='<?php echo $build->scmPath;?>' /></td>
+        <td><?php echo html::input('scmPath', $build->scmPath, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->filePath;?></th>
-        <td><input type='text' name='filePath' class='text-1' value='<?php echo $build->filePath;?>' /></td>
+        <td><?php echo html::input('filePath', $build->filePath, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'><?php echo $build->desc;?></textarea></td>
+        <td><?php echo html::textarea('desc', $build->desc, "rows='5' class='area-1'");?></td>
       </tr>  
-      <tr>
-        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton() .html::hidden('project', $build->project);?></td>
-      </tr>
+      <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton() .html::hidden('project', $build->project);?></td></tr>
     </table>
   </form>
 </div>  

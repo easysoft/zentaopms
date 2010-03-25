@@ -85,7 +85,7 @@ class buildModel extends model
             ->specialChars('desc')
             ->add('project', (int)$projectID)
             ->get();
-        $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck('name,date,builder', 'notempty')->exec();
+        $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
@@ -96,7 +96,7 @@ class buildModel extends model
             ->stripTags('name')
             ->specialChars('desc')
             ->get();
-        $this->dao->update(TABLE_BUILD)->data($build)->autoCheck()->batchCheck('name,date,builder', 'notempty')->where('id')->eq((int)$buildID)->exec();
+        $this->dao->update(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->edit->requiredFields, 'notempty')->where('id')->eq((int)$buildID)->exec();
     }
 
     /* 删除build。*/
