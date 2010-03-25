@@ -50,7 +50,7 @@ class testcaseModel extends model
             ->stripTags('title')
             ->specialChars('steps')
             ->get();
-        $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->check('title', 'notempty')->exec();
+        $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->exec();
         if(!$this->dao->isError())
         {
             $caseID = $this->dao->lastInsertID();
@@ -131,7 +131,7 @@ class testcaseModel extends model
             ->stripTags('title')
             ->remove('comment,steps,expects')
             ->get();
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck('title,status,type', 'notempty')->where('id')->eq((int)$caseID)->exec();
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
             if($stepChanged)
