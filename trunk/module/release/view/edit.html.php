@@ -30,23 +30,19 @@
       <caption><?php echo $lang->release->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->release->name;?></th>
-        <td><input type='text' name='name' class='text-3' value='<?php echo $release->name;?>' /></td>
+        <td><?php echo html::input('name', $release->name, "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->build;?></th>
-        <td>
-          <?php
-          echo html::select('build', $builds, $release->build, 'class="select-3"');
-          ?>
-        </td>
+        <td><?php echo html::select('build', $builds, $release->build, 'class="select-3"'); ?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->date;?></th>
-        <td><input type='text' name='date' class='text-3 date' value='<?php echo $release->date;?>' /></td>
+        <td><?php echo html::input('date', $release->date, "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->release->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'><?php echo $release->desc;?></textarea></td>
+        <td><?php echo html::textarea('desc', $release->desc, "rows='10' class='area-1'");?></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton() . html::hidden('product', $release->product);?></td>
