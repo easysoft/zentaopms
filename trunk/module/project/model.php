@@ -42,6 +42,7 @@ class projectModel extends model
     /* 新增项目。*/
     public function create()
     {
+        $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->add('company', $this->app->company->id)
             ->stripTags('name, code, team')
@@ -49,7 +50,7 @@ class projectModel extends model
             ->get();
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
-            ->batchCheck('name,code,team', 'notempty')
+            ->batchcheck($this->config->project->create->requiredFields, 'notempty')
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->check('name', 'unique')
@@ -61,6 +62,7 @@ class projectModel extends model
     /* 更新一个项目。*/
     public function update($projectID)
     {
+        $this->lang->project->team = $this->lang->project->teamname;
         $projectID = (int)$projectID;
         $project = fixer::input('post')
             ->stripTags('name, code, team')
@@ -70,7 +72,7 @@ class projectModel extends model
             ->get();
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
-            ->batchCheck('name,code,team', 'notempty')
+            ->batchcheck($this->config->project->edit->requiredFields, 'notempty')
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->check('name', 'unique', "id!=$projectID")

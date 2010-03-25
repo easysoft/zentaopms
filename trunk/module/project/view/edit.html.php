@@ -30,43 +30,32 @@
       <caption><?php echo $lang->project->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->project->name;?></th>
-        <td><input type='text' name='name' value='<?php echo $project->name;?>' class='text-3' /></td>
+        <td><?php echo html::input('name', $project->name, "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->code;?></th>
-        <td><input type='text' name='code' value='<?php echo $project->code;?>' class='text-3' /></td>
+        <td><?php echo html::input('code', $project->code, "class='text-3'");?></td>
       </tr>  
-      <!---
-      <tr>
-        <th class='rowhead'><?php echo $lang->project->parent;?></th>
-        <td><?php echo html::select('parent', $projects, $project->parent, 'class=select-3');?></td>
-      </tr>  
-      -->
       <tr>
         <th class='rowhead'><?php echo $lang->project->begin;?></th>
-        <td><input type='text' name='begin' value='<?php echo $project->begin;?>' class='text-3 date' /></td>
+        <td><?php echo html::input('begin', $project->begin, "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->end;?></th>
-        <td><input type='text' name='end' value='<?php echo $project->end;?>' class='text-3 date' /></td>
+        <td><?php echo html::input('end', $project->end, "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->teamname;?></th>
-        <td><input type='text' name='team' value='<?php echo $project->team;?>' class='text-3' /></td>
+        <td><?php echo html::input('team', $project->team, "class='text-3'");?></td>
       </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->project->status;?></th>
-        <td><?php echo html::select('status', $lang->project->statusList, $project->status, 'class=text-3');?></td>
-      </tr>  
-
       <tr>
         <th class='rowhead'><?php echo $lang->project->goal;?></th>
-        <td><textarea name='goal' rows='5' class='area-1'><?php echo stripslashes($project->goal);?></textarea></td>
+        <td><?php echo html::textarea('goal', $project->goal, "rows='5' class='area-1'");?></td>
       </tr>  
 
       <tr>
         <th class='rowhead'><?php echo $lang->project->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'><?php echo stripslashes($project->desc);?></textarea></td>
+        <td><?php echo html::textarea('desc', $project->desc, "rows='5' class='area-1'");?></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
