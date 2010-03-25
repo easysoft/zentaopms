@@ -43,7 +43,7 @@ class testtaskModel extends model
             ->stripTags('name')
             ->specialChars('desc')
             ->get();
-        $this->dao->insert(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck('title,project,build', 'notempty')->exec();
+        $this->dao->insert(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck($this->config->testtask->create->requiredFields, 'notempty')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
@@ -74,7 +74,7 @@ class testtaskModel extends model
             ->stripTags('name')
             ->specialChars('desc')
             ->get();
-        $this->dao->update(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck('title,project,build', 'notempty')->where('id')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')->where('id')->eq($taskID)->exec();
     }
 
     /* 删除测试任务信息。*/
