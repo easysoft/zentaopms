@@ -26,7 +26,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1 tablesorter fixed a-center'> 
+    <table align='center' class='table-1 tablesorter a-center'> 
       <thead>
       <tr class='colhead'>
         <th class='w-50px'><?php echo $lang->story->id;?></th>
@@ -57,9 +57,7 @@
       </tr>
       <?php endforeach;?>
       </tbody>
-      <tr>
-        <td colspan='8'><?php echo html::submitButton();?></td>
-      </tr>
+      <tfoot><tr><td colspan='8'><?php echo html::submitButton();?></td></tr></tfoot>
     </table>
   </form>
 </div>
