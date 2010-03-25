@@ -29,35 +29,35 @@
       <caption><?php echo $lang->company->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->company->name;?></th>
-        <td><input type='text' name='name' class='text-1' /></td>
+        <td><?php echo html::input('name', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->phone;?></th>
-        <td><input type='text' name='phone' class='text-1' /></td>
+        <td><?php echo html::input('phone', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->fax;?></th>
-        <td><input type='text' name='fax' class='text-1' /></td>
+        <td><?php echo html::input('fax', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->address;?></th>
-        <td><input type='text' name='address' class='text-1' /></td>
+        <td><?php echo html::input('address', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->zipcode;?></th>
-        <td><input type='text' name='zipcode' class='text-1' /></td>
+        <td><?php echo html::input('zipcode', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->website;?></th>
-        <td><input type='text' name='website' class='text-1' /></td>
+        <td><?php echo html::input('website', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->backyard;?></th>
-        <td><input type='text' name='backyard' class='text-1' /></td>
+        <td><?php echo html::input('backyard', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->pms;?></th>
-        <td><input type='text' name='pms' class='text-1' /></td>
+        <td><?php echo html::input('pms', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->guest;?></th>

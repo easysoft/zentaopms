@@ -25,39 +25,39 @@
 <?php include '../../common/view/header.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-5 a-left'> 
+    <table align='center' class='table-5'> 
       <caption><?php echo $lang->company->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->company->name;?></th>
-        <td><input type='text' name='name' value='<?php echo $company->name;?>' class='text-1' /></td>
+        <td><?php echo html::input('name', $company->name, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->phone;?></th>
-        <td><input type='text' name='phone' value='<?php echo $company->phone;?>' class='text-1' /></td>
+        <td><?php echo html::input('phone', $company->phone, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->fax;?></th>
-        <td><input type='text' name='fax' value='<?php echo $company->fax;?>' class='text-1' /></td>
+        <td><?php echo html::input('fax', $company->fax, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->address;?></th>
-        <td><input type='text' name='address' value='<?php echo $company->address;?>' class='text-1' /></td>
+        <td><?php echo html::input('address', $company->address, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->zipcode;?></th>
-        <td><input type='text' name='zipcode' value='<?php echo $company->zipcode;?>' class='text-1' /></td>
+        <td><?php echo html::input('zipcode', $company->zipcode, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->website;?></th>
-        <td><input type='text' name='website' value='<?php echo $company->website;?>' class='text-1' /></td>
+        <td><?php echo html::input('website', $company->website, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->backyard;?></th>
-        <td><input type='text' name='backyard' value='<?php echo $company->backyard;?>' class='text-1' /></td>
+        <td><?php echo html::input('backyard', $company->backyard, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->pms;?></th>
-        <td><input type='text' name='pms' value='<?php echo $company->pms;?>' class='text-1' /></td>
+        <td><?php echo html::input('pms', $company->pms, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->company->guest;?></th>

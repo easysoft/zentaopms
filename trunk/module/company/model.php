@@ -69,7 +69,7 @@ class companyModel extends model
         $this->dao->insert(TABLE_COMPANY)
             ->data($company)
             ->autoCheck()
-            ->batchCheck('name, pms', 'notempty')
+            ->batchCheck($this->config->company->create->requiredFields, 'notempty')
             ->batchCheck('name,pms', 'unique')
             ->exec();
     }
@@ -81,7 +81,7 @@ class companyModel extends model
         $this->dao->update(TABLE_COMPANY)
             ->data($company)
             ->autoCheck()
-            ->batchCheck('name, pms', 'notempty')
+            ->batchCheck($this->config->company->edit->requiredFields, 'notempty')
             ->batchCheck('name,pms', 'unique', "id != '$companyID'")
             ->where('id')->eq($companyID)
             ->exec();
