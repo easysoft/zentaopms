@@ -19,4 +19,4 @@ $config->testcase->search['params']['pri']          = array('operator' => '=',  
 $config->testcase->search['params']['type']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->testcase->typeList);
 
 $config->testcase->create->requiredFields = 'title';
-$config->testcase->edit->requiredFields   = 'title;
+$config->testcase->edit->requiredFields   = 'title';
