@@ -101,7 +101,7 @@ function browseBySearch(active)
         <?php foreach($bugs as $bug):?>
         <tr class='a-center'>
           <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?></td>
-          <td><?php echo $bug->severity?></td>
+          <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
           <td class='a-left nobr'><?php echo $bug->title;?></td>
           <td><?php echo $users[$bug->openedBy];?></td>
           <td <?php if($bug->assignedTo == $this->app->user->account) echo 'style=color:red';?>><?php echo $users[$bug->assignedTo];?></td>

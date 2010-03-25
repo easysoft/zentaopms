@@ -154,7 +154,7 @@ class bugModel extends model
 
         $this->dao->update(TABLE_BUG)->data($bug)
             ->autoCheck()
-            ->check('resolution', 'notempty')
+            ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();

@@ -52,5 +52,6 @@ $config->bug->search['params']['closedDate']    = array('operator' => '>=',     
 $config->bug->search['params']['lastEditedDate']= array('operator' => '>=',      'control' => 'input',  'values' => '');
 $config->bug->search['params']['assignedDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '');
 
-$config->bug->create->requiredFields = 'title,openedBuild';
-$config->bug->edit->requiredFields   = $config->bug->create->requiredFields;
+$config->bug->create->requiredFields  = 'title,openedBuild';
+$config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
+$config->bug->resolve->requiredFields = 'resolution';
