@@ -46,7 +46,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->productplan->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'><?php echo $plan->desc;?></textarea></td>
+        <td><?php echo html::textarea('desc', $plan->desc, "rows='5' class='area-1'");?></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'>
