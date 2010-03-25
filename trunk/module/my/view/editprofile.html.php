@@ -29,15 +29,15 @@
       <caption><?php echo $lang->my->editProfile;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->user->account;?></th>
-        <td><input type='text' name='account' value='<?php echo $user->account;?>' readonly /></td>
+        <td><?php echo html::input('account', $user->account, "readonly");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->realname;?></th>
-        <td><input type='text' name='realname' value='<?php echo $user->realname;?>' /></td>
+        <td><?php echo html::input('realname', $user->realname);?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->email;?></th>
-        <td><input type='text' name='email' value='<?php echo $user->email;?>' /></td>
+        <td><?php echo html::input('email', $user->email);?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->gendar;?></th>
