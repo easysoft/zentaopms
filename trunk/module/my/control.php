@@ -40,26 +40,14 @@ class my extends control
     /* 用户的todo列表。*/
     public function todo($type = 'today', $account = '', $status = 'all')
     {
-        /* 加载todo model。*/
-        $this->loadModel('todo');
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
+        $this->view->position[]    = $this->lang->my->todo;
 
-        /* 设定header和position信息。*/
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
-        $position[]      = $this->lang->my->todo;
-
-        $importFeature = ($type == 'before');
-
-        $todos = $this->todo->getList($type, $account, $status);
-        $date  = (int)$type == 0 ? $this->todo->today() : $type;
-
-        /* 赋值。*/
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
-        $this->assign('dates',         $this->todo->buildDateList()); 
-        $this->assign('date',          $date);
-        $this->assign('todos',         $todos);
-        $this->assign('type',          $type);
-        $this->assign('importFeature', $importFeature);
+        $this->view->dates = $this->loadModel('todo')->buildDateList();
+        $this->view->todos = $this->todo->getList($type, $account, $status);
+        $this->view->date  = (int)$type == 0 ? $this->todo->today() : $type;
+        $this->view->type  = $type;
+        $this->view->importFeature = ($type == 'before');
 
         $this->display();
     }
@@ -67,16 +55,14 @@ class my extends control
     /* 用户的story列表。*/
     public function story()
     {
-       /* 设定header和position信息。*/
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
-        $this->view->position[]    = $this->lang->my->story;
-
         /* 记录用户当前选择的列表。*/
         $this->app->session->set('storyList', $this->app->getURI(true));
 
         /* 赋值。*/
-        $this->view->stories = $this->loadModel('story')->getUserStories($this->app->user->account, 'active,draft,changed');
-        $this->view->users   = $this->user->getPairs('noletter');
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->position[]    = $this->lang->my->story;
+        $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, 'active,draft,changed');
+        $this->view->users         = $this->user->getPairs('noletter');
 
         $this->display();
     }
@@ -84,55 +70,29 @@ class my extends control
     /* 用户的task列表。*/
     public function task()
     {
-        /* 加载task model。*/
-        $this->loadModel('task');
-
-        /* 设定header和position信息。*/
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
-        $position[]      = $this->lang->my->task;
-
         /* 记录用户当前选择的列表。*/
         $this->app->session->set('taskList',  $this->app->getURI(true));
         $this->app->session->set('storyList', $this->app->getURI(true));
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'task');
-        $this->assign('tasks',     $this->task->getUserTasks($this->app->user->account, 'wait,doing'));
-
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
+        $this->view->position[]    = $this->lang->my->task;
+        $this->view->tabID         = 'task';
+        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, 'wait,doing');
         $this->display();
     }
 
     /* 用户的bug列表。*/
     public function bug()
     {
-        /* 加载bug model。*/
-        $this->loadModel('bug');
-
-        /* 设定header和position信息。*/
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
-        $position[]      = $this->lang->my->bug;
-
         $this->session->set('bugList', $this->app->getURI(true));
-
-        /*
-        $productID       = common::saveProductState($productID, key($this->products));
-        $currentModuleID = ($type == 'bymodule') ? (int)$param : 0;
-        if($currentModuleID == 0)
-        {
-            $currentModuleName = $this->lang->bug->allBugs;
-        }
-        else
-        {
-            $currentModule = $this->tree->getById($currentModuleID);
-        }*/
+        $this->app->loadLang('bug');
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'bug');
-        $this->assign('bugs',     $this->user->getBugs($this->app->user->account));
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
+        $this->view->position[]    = $this->lang->my->bug;
+        $this->view->tabID         = 'bug';
+        $this->view->bugs          = $this->user->getBugs($this->app->user->account);
 
         $this->display();
     }
@@ -140,19 +100,11 @@ class my extends control
     /* 用户的project列表。*/
     public function project()
     {
-        /* 加载project model。*/
-        $this->loadModel('project');
-
-        /* 设定header和position信息。*/
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
-        $position[]      = $this->lang->my->project;
-
-        /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'project');
-        $this->assign('projects', $this->user->getProjects($this->app->user->account));
-
+        $this->app->loadLang('project');
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
+        $this->view->position[]    = $this->lang->my->project;
+        $this->view->tabID         = 'project';
+        $this->view->projects      = @array_reverse($this->user->getProjects($this->app->user->account));
         $this->display();
     }
 
@@ -166,11 +118,9 @@ class my extends control
             die(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
 
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
-        $position[]      = $this->lang->my->editProfile;
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('user',     $this->user->getById($this->app->user->id));
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
+        $this->view->position[]    = $this->lang->my->editProfile;
+        $this->view->user          = $this->user->getById($this->app->user->id);
 
         $this->display();
     }
@@ -178,13 +128,9 @@ class my extends control
     /* 查看个人档案。*/
     public function profile()
     {
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
-        $position[]      = $this->lang->my->profile;
-
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('user',     $this->user->getById($this->app->user->id));
-
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
+        $this->view->position[]    = $this->lang->my->profile;
+        $this->view->user          = $this->user->getById($this->app->user->id);
         $this->display();
     }
 }
