@@ -108,6 +108,8 @@ class productplan extends control
     /* 关联需求。*/
     public function linkStory($planID = 0)
     {
+        $this->session->set('storyList', $this->app->getURI(true));
+
         if(!empty($_POST)) $this->productplan->linkStory($planID);
 
         $plan = $this->productplan->getByID($planID);
@@ -118,6 +120,7 @@ class productplan extends control
         $this->view->planStories= $this->story->getPlanStories($planID);
         $this->view->products   = $this->product->getPairs();
         $this->view->plan       = $plan;
+        $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->display();
     }
 

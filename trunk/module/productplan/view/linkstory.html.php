@@ -33,21 +33,26 @@
         <th class='w-p5'><?php echo $lang->story->id;?></th>
         <th class='w-p5'><?php echo $lang->story->pri;?></th>
         <th class='w-p10'><?php echo $lang->story->product;?></th>
+        <th><?php echo $lang->story->plan;?></th>
         <th><?php echo $lang->story->title;?></th>
+        <th><?php echo $lang->story->status;?></th>
         <th class='w-p10'><?php echo $lang->story->linkStory;?></th>
       </tr>
       </thead>
       <tbody>
       <?php foreach($allStories as $story):?>
-      <?php if(isset($planStories[$story->id]) or $story->plan) continue;?>
+      <?php
+      if(isset($planStories[$story->id])) continue;
+      if(isset($story->plan) and helper::diffDate($plans[$story->plan]->end, helper::today()) > 0) continue;
+      ?>
       <tr>
-        <td><?php echo $story->id;?></td>
+        <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
         <td><?php echo $story->pri;?></td>
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
-        <td class='a-left nobr'><?php echo $story->title;?></td>
-        <td>
-          <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' />
-        </td>
+        <td><?php echo $story->planTitle;?></td>
+        <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+        <td><?php echo $lang->story->statusList[$story->status];?></td>
+        <td><input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' /></td>
       </tr>
       <?php endforeach;?>
       </tbody>
@@ -73,10 +78,10 @@
     <tbody>
     <?php foreach($planStories as $story):?>
     <tr>
-      <td><?php echo $story->id;?></td>
+      <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
       <td><?php echo $story->pri;?></td>
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
-      <td class='a-left nobr'><?php echo $story->title;?></td>
+      <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
       <td><?php common::printLink('productplan', 'unlinkStory', "story=$story->id", $lang->productplan->unlinkStory, 'hiddenwin');?></td>
     </tr>
     <?php endforeach;?>
