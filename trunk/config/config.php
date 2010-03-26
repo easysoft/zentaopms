@@ -38,7 +38,7 @@ $config->methodVar   = 'f';               // requestType=GET: 方法变量名。
 $config->viewVar     = 't';               // requestType=GET: 模板变量名。
 
 /* 视图和主题。*/
-$config->views       = ',html,json,';          // 支持的视图列表。
+$config->views       = ',html,json,csv,'; // 支持的视图列表。
 $config->themes      = 'default';         // 支持的主题列表。
 
 /* 支持的语言列表。*/
@@ -79,6 +79,7 @@ define('TABLE_TODO',           $config->db->prefix . 'todo');
 define('TABLE_GROUP',          $config->db->prefix . 'group');
 define('TABLE_GROUPPRIV',      $config->db->prefix . 'groupPriv');
 define('TABLE_USERGROUP',      $config->db->prefix . 'userGroup');
+define('TABLE_USERQUERY',      $config->db->prefix . 'userQuery');
 
 define('TABLE_BUG',            $config->db->prefix . 'bug');
 define('TABLE_CASE',           $config->db->prefix . 'case');
