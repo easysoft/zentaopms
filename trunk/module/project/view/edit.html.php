@@ -49,10 +49,13 @@
         <td><?php echo html::input('team', $project->team, "class='text-3'");?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->project->status;?></th>
+        <td><?php echo html::select('status', $lang->project->statusList, $project->status, 'class=text-3');?></td>
+      </tr>
+      <tr>
         <th class='rowhead'><?php echo $lang->project->goal;?></th>
         <td><?php echo html::textarea('goal', $project->goal, "rows='5' class='area-1'");?></td>
       </tr>  
-
       <tr>
         <th class='rowhead'><?php echo $lang->project->desc;?></th>
         <td><?php echo html::textarea('desc', $project->desc, "rows='5' class='area-1'");?></td>
