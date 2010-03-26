@@ -73,6 +73,8 @@ class user extends control
     /* 用户的task列表。*/
     public function task($account)
     {
+        $this->session->set('taskList', $this->app->getURI(true));
+
         /* 加载task model。*/
         $this->loadModel('task');
         $this->lang->set('menugroup.user', 'company');
@@ -98,6 +100,8 @@ class user extends control
     /* 用户的bug列表。*/
     public function bug($account)
     {
+        $this->session->set('bugList', $this->app->getURI(true));
+
         /* 加载bug model。*/
         $this->loadModel('bug');
         $this->lang->set('menugroup.user', 'company');

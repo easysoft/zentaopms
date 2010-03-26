@@ -95,6 +95,7 @@ class productplan extends control
     /* 计划详情。*/
     public function view($planID = 0)
     {
+        $this->session->set('storyList', $this->app->getURI(true));
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product);
         $this->view->header->title = $this->lang->productplan->view;

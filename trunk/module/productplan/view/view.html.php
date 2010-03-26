@@ -56,16 +56,20 @@
       <th class='w-p5'><?php echo $lang->story->pri;?></th>
       <th class='w-p10'><?php echo $lang->story->product;?></th>
       <th><?php echo $lang->story->title;?></th>
+      <th><?php echo $lang->story->status;?></th>
+      <th><?php echo $lang->story->stage;?></th>
       <th class='w-p10'><?php echo $lang->actions?></th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($planStories as $story):?>
     <tr>
-      <td><?php echo $story->id;?></td>
+      <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
       <td><?php echo $story->pri;?></td>
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
-      <td class='a-left nobr'><?php echo $story->title;?></td>
+      <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+      <td><?php echo $lang->story->statusList[$story->status];?></td>
+      <td><?php echo $lang->story->stageList[$story->stage];?></td>
       <td><?php common::printLink('productplan', 'unlinkStory', "story=$story->id", $lang->productplan->unlinkStory, 'hiddenwin');?></td>
     </tr>
     <?php endforeach;?>
