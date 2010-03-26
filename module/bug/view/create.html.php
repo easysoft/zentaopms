@@ -168,7 +168,7 @@ $(function() {
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->steps;?></th>
-        <td><textarea name='steps' class='area-1' rows='6'><?php echo $steps;?></textarea></td>
+        <td><?php echo html::textarea('steps', '', "class='area-1' rows='6'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->files;?></th>

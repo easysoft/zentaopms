@@ -29,11 +29,11 @@
       <caption><?php echo $lang->group->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->group->name;?></th>
-        <td><input type='text' name='name' value="<?php echo $group->name;?>"  class='text-1' /></td>
+        <td><?php echo html::input('name', $group->name, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->group->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'><?php echo $group->desc;?></textarea></td>
+        <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='area-1'");?></td>
       </tr>  
       <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>

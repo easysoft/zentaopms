@@ -56,6 +56,7 @@ $lang->addFiles   = '上传了附件 ';
 $lang->files      = '附件 ';
 $lang->workingHour= '工时';
 $lang->preview    = '预览';
+$lang->showHelp   = '显示帮助';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';

@@ -111,7 +111,7 @@ function setStory(reason)
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>
-      <td><textarea rows='8' name='comment' class='area-1'></textarea></td>
+      <td><?php echo html::textarea('comment', '', "rows='8' class='area-1'");?></td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'>

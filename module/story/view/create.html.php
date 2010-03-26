@@ -49,7 +49,7 @@
       </tr> 
       <tr>
         <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
-        <td><?php echo html::select('assignedTo', $users, '', 'class=select-3') . html::checkbox('needNotReview', $lang->story->needNotReview);?></td>
+        <td><?php echo html::select('assignedTo', $users, '', 'class=select-3') . html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->title;?></th>
