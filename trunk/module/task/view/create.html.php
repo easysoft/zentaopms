@@ -70,11 +70,15 @@ $(document).ready(function()
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->name;?></th>
-        <td><input type='text' name='name' id='name' class='text-1' /><?php echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle()');?></td>
+        <td>
+          <?php
+          echo html::input('name', '', "class='text-1'");
+          echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle()');?>
+        </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->desc;?></th>
-        <td><textarea name='desc' rows='5' class='area-1'></textarea>
+        <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->files;?></th>
@@ -86,11 +90,11 @@ $(document).ready(function()
       </tr> 
       <tr>
         <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-        <td><input type='text' name='estimate' id='estimate' class='text-3' /></td>
+        <td><?php echo html::input('estimate', '', "class='text-3'");?></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->deadline;?></th>
-        <td><input type='text' name='deadline' class='text-3 date' /></td>
+        <td><?php echo html::input('deadline', '', "class='text-3 date'");?></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->type;?></th>

@@ -56,7 +56,7 @@
         <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
         <td>
           <?php echo html::select('begin', $times, $time, 'onchange=selectNext(); class=select-2') . html::select('end', $times, '', 'class=select-2');?>
-          <input type='checkbox' onclick='switchDateFeature(this);'><?php echo $lang->todo->lblDisableDate;?>
+          <input type='checkbox' id='switchDate' onclick='switchDateFeature(this);'><?php echo $lang->todo->lblDisableDate;?>
         </td>
       </tr>  
       <tr>

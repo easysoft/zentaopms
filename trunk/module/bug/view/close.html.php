@@ -29,7 +29,7 @@
     <caption><?php echo $bug->title;?></caption>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>
-      <td><textarea name='comment' rows='6' class='area-1'></textarea></td>
+      <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'>

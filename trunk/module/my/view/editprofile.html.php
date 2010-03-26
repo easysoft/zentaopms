@@ -45,11 +45,11 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->password;?></th>
-        <td><input type='password' name='password1' /></td>
+        <td><?php echo html::password('password1');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->password2;?></th>
-        <td><input type='password' name='password2' /></td>
+        <td><?php echo html::password('password2');?></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>

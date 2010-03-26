@@ -122,7 +122,7 @@ $lang->story->legendHistory        = '历史记录';
 $lang->story->legendVersion        = '历史版本';
 $lang->story->legendMisc           = '其他相关';
 
-$lang->story->specTemplate          = "建议参考的模板：<br />作为一名<<i class='red'>某种类型的用户</i>><br />我希望<<i class='red'>达成某些目的</i>><br />这样可以<<i class='red'>开发的价值</i>>";
+$lang->story->specTemplate          = "建议参考的模板：作为一名<<i class='red'>某种类型的用户</i>>，我希望<<i class='red'>达成某些目的</i>>，这样可以<<i class='red'>开发的价值</i>>。";
 $lang->story->needNotReview         = '不需要评审';
 $lang->story->confirmDelete         = "您确认删除该需求吗?";
 $lang->story->errorFormat           = '需求数据有误';

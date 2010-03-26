@@ -23,22 +23,22 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='doc3'>
+<div class='yui-d0'>
   <form method='post'>
-    <table align='center' class='table-3'> 
+    <table align='center' class='table-4 a-center'> 
       <caption><?php echo $lang->project->manageMembers;?></caption>
       <tr>
         <th><?php echo $lang->team->account;?></th>
         <th><?php echo $lang->team->role;?></th>
         <th><?php echo $lang->team->workingHour;?></th>
       </tr>
-      <?php foreach($members as $member):?>
+      <?php foreach($members as $key => $member):?>
       <?php unset($users[$member->account]);?>
       <tr>
-        <td><input type='text' name='accounts[]' value='<?php echo $member->account;?>' readonly class='text-2' /></td>
-        <td><input type='text' name='roles[]'    value='<?php echo $member->role;?>' class='text-2' /></td>
+        <td><input type='text' name='accounts[]' id='account<?php echo $key;?>' value='<?php echo $member->account;?>' readonly class='text-2' /></td>
+        <td><input type='text' name='roles[]'    id='role<?php echo $key;?>'    value='<?php echo $member->role;?>' class='text-2' /></td>
         <td>
-          <input type='text'   name='workingHours[]' value='<?php echo $member->workingHour;?>' class='text-2' />
+          <input type='text'   name='workingHours[]' id='workingHour<?php echo $key;?>' value='<?php echo $member->workingHour;?>' class='text-2' />
           <input type='hidden' name='modes[]'        value='update' />
         </td>
       </tr>
@@ -51,9 +51,9 @@
       <?php for($i = 0; $i < $count; $i ++):?>
       <tr>
         <td><?php echo html::select('accounts[]', $users, '', 'class=select-2');?></td>
-        <td><input type='text' name='roles[]' class='text-2' /></td>
+        <td><input type='text' name='roles[]' id='role<?php echo ($key + $i);?>' class='text-2' /></td>
         <td>
-          <input type='text'   name='workingHours[]' class='text-2' />
+          <input type='text'   name='workingHours[]' id='workingHour<?php echo ($key + $i);?>' class='text-2' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
       </tr>

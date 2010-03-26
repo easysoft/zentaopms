@@ -25,7 +25,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <style>
-#product, #module, #project, #story, #task, #resolvedBuild{width:245px}
+#product, #module, #project, #story, #task, #resolvedBuild{width:230px}
+.select-3 {width:230px}
+.text-3   {width:225px}
 </style>
 <script language='Javascript'>
 changeProductConfirmed = false;
@@ -159,11 +161,11 @@ $(function() {
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
           <legend><?php echo $lang->bug->legendSteps;?></legend>
-            <textarea name='steps' rows='8' class='area-1'><?php echo $bug->steps;?></textarea>
+            <?php echo html::textarea('steps', $bug->steps, "rows='8' class='area-1'");?>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendComment;?></legend>
-            <textarea name='comment' rows='6' class='area-1'></textarea>
+            <?php echo html::textarea('comment', '', "rows='6' class='area-1'");?>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendAttatch;?></legend>

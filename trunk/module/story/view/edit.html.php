@@ -43,7 +43,7 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->comment;?></legend>
-        <textarea name='comment' rows='5' class='area-1'></textarea>
+        <?php echo html::textarea('comment', '', "rows='5' class='area-1'");?>
       </fieldset>
       <div class='a-center'><?php echo html::submitButton() .  html::linkButton($lang->goback, inlink('view', "storyID=$story->id"));?></div>
       <?php include '../../common/view/action.html.php';?>

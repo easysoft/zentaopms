@@ -49,7 +49,7 @@ $themeRoot   = $webRoot . "theme/";
       <caption><?php printf($lang->welcome, $app->company->name);?></caption>
       <tr>
         <th><?php echo $lang->user->account;?></th>  
-        <td><input type='text' name='account' id='account' /></td>
+        <td><input type='text' name='account' /></td>
       </tr>  
       <tr>
         <th><?php echo $lang->user->password;?></th>  

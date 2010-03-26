@@ -94,11 +94,11 @@
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-          <td><input type='text' name='consumed' value='<?php echo $task->consumed;?>' class='text-1' /></td>
+          <td><?php echo html::input('consumed', $task->consumed, "class='text-1'");?></td>
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->left;?></th>
-          <td><input type='text' name='left' value='<?php echo $task->left;?>' class='text-1' /></td>
+          <td><?php echo html::input('left', $task->left, "class='text-1'");?></td>
         </tr>
       </table>
     </fieldset>
