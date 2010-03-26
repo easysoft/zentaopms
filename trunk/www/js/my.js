@@ -111,17 +111,21 @@ function setRequiredFields()
     requiredFields = requiredFields.split(',');
     for(i = 0; i < requiredFields.length; i++)
     {
-        $('#' + requiredFields[i]).after('<span class="red"> * </span>');
+        $('#' + requiredFields[i]).after('<span class="star"> * </span>');
     }
 }
 
 /* 设置帮助链接。*/
 function setHelpLink()
 {
-    $('input[id],select[id],textarea[id]').each(function()
+    $('form input[id], form select[id], form textarea[id]').each(function()
         {
-            if(!$(this).attr('name')) return;
-            $(this).after(' <a href=' + zentaoHelpRoot + '?lang=' + clientLang + '&module=' + currentModule + '&method=' + currentMethod + '&field=' + $(this).attr('name') + '>?</a> ');
+            if($(this).attr('type') == 'hidden') return;
+            currentFieldName = $(this).attr('name') ? $(this).attr('name') : $(this).attr('id');
+            if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
+            if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
+            currentFieldName = currentFieldName.toLowerCase();
+            $(this).after(' <a class="helplink" href=' + zentaoHelpRoot + '?lang=' + clientLang + '&module=' + currentModule + '&method=' + currentMethod + '&field=' + currentFieldName + '>?</a> ');
         }
     );
 }
@@ -133,7 +137,7 @@ needPing = true;
 $(document).ready(function() 
 {
     setNowrapObjTitle();
-    //setHelpLink();
     setRequiredFields();
+    setHelpLink();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });
