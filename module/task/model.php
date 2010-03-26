@@ -158,7 +158,7 @@ class taskModel extends model
             ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
             ->fetchAll();
         if($tasks) return $this->computeDelays($tasks);
-        return false;
+        return array();
     }
 
     /* 获得用户的任务id=>name列表。*/
