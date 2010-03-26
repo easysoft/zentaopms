@@ -75,9 +75,9 @@ $lang->index->menu->project = '浏览项目|project|browse';
 $lang->my->menu->account  = '%s' . $lang->arrow;
 $lang->my->menu->todo     = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task     = '我的任务|my|task|';
-$lang->my->menu->project  = '我的项目|my|project|';
-$lang->my->menu->story    = '我的需求|my|story|';
 $lang->my->menu->bug      = '我的Bug|my|bug|';
+$lang->my->menu->story    = '我的需求|my|story|';
+$lang->my->menu->project  = '我的项目|my|project|';
 $lang->my->menu->profile  = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
 
@@ -141,8 +141,8 @@ $lang->group->menu           = $lang->company->menu;
 $lang->user->menu->account  = '%s' . $lang->arrow;
 $lang->user->menu->todo     = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
 $lang->user->menu->task     = '任务列表|user|task|account=%s';
-$lang->user->menu->project  = '项目列表|user|project|account=%s';
 $lang->user->menu->bug      = 'Bug列表|user|bug|account=%s';
+$lang->user->menu->project  = '项目列表|user|project|account=%s';
 $lang->user->menu->profile  = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
 
