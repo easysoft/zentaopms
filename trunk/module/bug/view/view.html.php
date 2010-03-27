@@ -113,7 +113,10 @@
           <td class='rowhead'><?php echo $lang->bug->browser;?></td>
           <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
         </tr>
-
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
+          <td><?php echo $bug->keywords;?></td>
+        </tr>
       </table>
     </fieldset>
 
@@ -209,10 +212,6 @@
         <tr>
           <td class='rowhead'><?php echo $lang->bug->case;?></td>
           <td><?php if(isset($bug->caseTitle)) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
-          <td><?php echo $bug->keywords;?></td>
         </tr>
       </table>
     </fieldset>
