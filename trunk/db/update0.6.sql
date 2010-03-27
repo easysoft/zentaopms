@@ -20,4 +20,7 @@ CREATE TABLE `zentao`.`zt_userQuery` (
 ) ENGINE = MYISAM;
 
 -- 2010-03-27 fix bug 43
-update zt_projectStory,zt_story set zt_projectStory.product=zt_story.product where zt_projectStory.story=zt_story.id
+update zt_projectStory,zt_story set zt_projectStory.product=zt_story.product where zt_projectStory.story=zt_story.id;
+
+-- 2010-03-27 add keywords to story.
+ALTER TABLE `zt_story` ADD `keywords` VARCHAR( 255 ) NOT NULL ;
