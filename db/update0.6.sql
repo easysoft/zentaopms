@@ -1,8 +1,8 @@
 -- 2010-03-20 adjust bug table.
 ALTER TABLE `zt_bug` ADD `pri` TINYINT UNSIGNED NOT NULL AFTER `severity` ;
-ALTER TABLE `zt_bug` ADD `keyword` VARCHAR( 255 ) NOT NULL ;
-ALTER TABLE `zt_case` ADD `keyword` VARCHAR( 255 ) NOT NULL ;
-ALTER TABLE `zt_case` ADD `executeType` VARCHAR( 30 ) NOT NULL AFTER `keyword` ,
+ALTER TABLE `zt_bug` ADD `keywords` VARCHAR( 255 ) NOT NULL ;
+ALTER TABLE `zt_case` ADD `keywords` VARCHAR( 255 ) NOT NULL ;
+ALTER TABLE `zt_case` ADD `executeType` VARCHAR( 30 ) NOT NULL AFTER `keywords` ,
 ADD `scriptedBy` VARCHAR( 30 ) NOT NULL AFTER `executeType` ,
 ADD `scriptedDate` DATE NOT NULL AFTER `scriptedBy` ,
 ADD `scriptStatus` VARCHAR( 30 ) NOT NULL AFTER `scriptedDate` ,
@@ -18,3 +18,6 @@ CREATE TABLE `zentao`.`zt_userQuery` (
   `session` TEXT NOT NULL ,
   PRIMARY KEY ( `id` ) 
 ) ENGINE = MYISAM;
+
+-- 2010-03-27 fix bug 43
+update zt_projectStory,zt_story set zt_projectStory.product=zt_story.product where zt_projectStory.story=zt_story.id
