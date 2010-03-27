@@ -106,6 +106,10 @@
          <td class='rowhead'><?php echo $lang->story->estimate;?></td>
          <td><?php echo $story->estimate;?></td>
        </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->keywords;?></td>
+         <td><?php echo $story->keywords;?></td>
+       </tr>
      </table>
    </fieldset>
    <fieldset>

@@ -84,6 +84,10 @@
          <td class='rowhead'><?php echo $lang->story->estimate;?></td>
          <td><?php echo html::input('estimate', $story->estimate, 'class=text-1');?></td>
        </tr>
+       <tr>
+         <td class='rowhead'><?php echo $lang->story->keywords;?></td>
+         <td><?php echo html::input('keywords', $story->keywords, 'class=text-1');?></td>
+       </tr>
      </table>
    </fieldset>
    <fieldset>

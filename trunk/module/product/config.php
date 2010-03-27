@@ -4,6 +4,7 @@ $app->loadLang('story');
 $config->product->search['module']                   = 'story';
 $config->product->search['fields']['id']             = $lang->story->id;
 $config->product->search['fields']['title']          = $lang->story->title;
+$config->product->search['fields']['keywords']       = $lang->story->keywords;
 $config->product->search['fields']['pri']            = $lang->story->pri;
 $config->product->search['fields']['plan']           = $lang->story->plan;
 $config->product->search['fields']['assignedTo']     = $lang->story->assignedTo;
@@ -16,6 +17,7 @@ $config->product->search['fields']['stage']          = $lang->story->stage;
 $config->product->search['fields']['closedReason']   = $lang->story->closedReason;
 
 $config->product->search['params']['title']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->product->search['params']['keywords']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->search['params']['pri']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->priList);
 $config->product->search['params']['plan']         = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['assignedTo']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
