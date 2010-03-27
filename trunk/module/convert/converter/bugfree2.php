@@ -263,7 +263,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             caseType AS type,
             caseStatus AS status,
             caseMethod AS executeType,
-            casePlan AS scope,
+            casePlan AS stage,
             openedBy, openedDate,
             lastEditedBy, lastEditedDate,
             scriptedBy, scriptedDate, scriptStatus, scriptLocation,
@@ -290,7 +290,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             $case->type        = strtolower($case->type);
             $case->status      = strtolower($case->status);
             $case->executeType = strtolower($case->executeType);
-            $case->scope       = strtolower($case->scope);
+            $case->stage       = strtolower($case->stage);
 
             if($case->type == 'configuration') $case->type = 'config';
             if($case->type == 'setup')         $case->type = 'install';
