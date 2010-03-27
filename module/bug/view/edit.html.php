@@ -227,6 +227,10 @@ $(function() {
           <td class='rowhead'><?php echo $lang->bug->browser;?></td>
           <td><?php echo html::select('browser', $lang->bug->browserList, $bug->browser, 'class=select-3');?></td>
         </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
+          <td><?php echo html::input('keywords', $bug->keywords, 'class="text-3"');?></td>
+        </tr>
       </table>
     </fieldset>
 
@@ -303,10 +307,6 @@ $(function() {
         <tr>
           <td class='rowhead'><?php echo $lang->bug->case;?></td>
           <td><?php echo html::input('case', $bug->case, 'class="text-3"');?></td>
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
-          <td><?php echo html::input('keywords', $bug->keywords, 'class="text-3"');?></td>
         </tr>
       </table>
     </fieldset>
