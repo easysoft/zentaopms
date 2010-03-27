@@ -181,7 +181,7 @@ class projectModel extends model
     {
         if($this->post->stories == false) return false;
         $versions = $this->loadModel('story')->getVersions($this->post->stories);
-        foreach($this->post->stories as $storyID)
+        foreach($this->post->stories as $key => $storyID)
         {
             $productID = $this->post->products[$key];
             $this->dao->insert(TABLE_PROJECTSTORY)
