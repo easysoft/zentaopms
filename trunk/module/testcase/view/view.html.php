@@ -30,8 +30,9 @@
     CASE #<?php echo $case->id . $lang->colon . $case->title;?>
     <div class='f-right'>
       <?php
+      $browseLink = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
       common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-      common::printLink('testcase', 'browse', "productID=$case->product", $lang->testcase->buttonToList);
+      echo html::a($browseLink, $lang->goback);
       ?>
     </div>
   </div>
@@ -68,15 +69,12 @@
       -->
 
       <?php include '../../common/view/action.html.php';?>
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendAction;?></legend>
-        <div class='a-center' style='font-size:16px; font-weight:bold'>
-         <?php
-         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-         common::printLink('testcase', 'browse', "productID=$case->product", $lang->testcase->buttonToList);
-         ?>
-        </div>
-      </fieldset>
+      <div class='a-center' style='font-size:16px; font-weight:bold'>
+       <?php
+       common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
+       echo html::a($browseLink, $lang->goback);
+       ?>
+      </div>
     </div>
   </div>
   <div class='yui-b'>
@@ -100,8 +98,32 @@
           </td>
         </tr>
         <tr>
+          <td class='rowhead'><?php echo $lang->testcase->story;?></td>
+          <td class='nobr'>
+            <?php
+            if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
+            ?>
+          </td>
+        </tr>
+        <tr>
           <td class='rowhead w-p20'><?php echo $lang->testcase->type;?></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
+        </tr>
+        <tr>
+          <td class='rowhead w-p20'><?php echo $lang->testcase->stage;?></td>
+          <td>
+            <?php 
+            if($case->stage)
+            {
+                $stags = explode(',', $case->stage);
+                foreach($stags as $stage)
+                {
+                    isset($lang->testcase->stageList[$stage]) ? print($lang->testcase->stageList[$stage]) : print($stage);
+                    echo "<br />";
+                }
+            }
+            ?>
+          </td>
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
@@ -112,10 +134,20 @@
           <td><?php echo $lang->testcase->statusList[$case->status];?></td>
         </tr>
         <tr>
-          <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-          <td class='nobr'>
+          <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>
+          <td><?php echo $case->keywords;?></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
+          <td>
             <?php
-            if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
+            if(isset($case->linkCaseTitles))
+            {
+                foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+                {
+                    echo html::a($this->createLink('case', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank') . '<br />';
+                }
+            }
             ?>
           </td>
         </tr>

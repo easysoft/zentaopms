@@ -29,22 +29,34 @@
       <caption><?php echo $lang->testcase->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->testcase->lblProductAndModule;?></th>
-        <td class='a-left'>
-          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
+        <td>
+          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-3'");?>
           <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
         </td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->testcase->type;?></th>
+        <td><?php echo html::select('type', $lang->testcase->typeList, 'feature', 'class=select-3');?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->testcase->stage;?></th>
+        <td><?php echo html::select('stage[]', $lang->testcase->stageList, '', "class='select-3' multiple='multiple'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->testcase->pri;?></th>
+        <td><?php echo html::select('pri', $lang->testcase->priList, '', 'class=select-3');?></td>
+      </tr>  
+      <tr>
         <th class='rowhead'><?php echo $lang->testcase->lblStory;?></th>
-        <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, '', 'class=select-3');?></span></td>
+        <td><span id='storyIdBox'><?php echo html::select('story', $stories, '', 'class=select-3');?></span></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->testcase->title;?></th>
-        <td class='a-left'><?php echo html::input('title', '', "class='text-1'");?></td>
+        <td><?php echo html::input('title', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->testcase->steps;?></th>
-        <td class='a-left'>
+        <td>
           <table class='w-p90'>
             <tr class='colhead'>
               <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
@@ -71,12 +83,10 @@
         </td> 
       </tr>
       <tr>
-        <th class='rowhead'><?php echo $lang->testcase->lblTypeAndPri;?></th>
-        <td class='a-left'>
-          <?php echo html::select('type', (array)$lang->testcase->typeList, '', 'class=select-2');?>
-          <?php echo html::select('pri', (array)$lang->testcase->priList, '', 'class=select-2');?>
-        </td>
+        <th class='rowhead'><?php echo $lang->testcase->keywords;?></th>
+        <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
       </tr>  
+     
       <tr>
         <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?> </td>
       </tr>
