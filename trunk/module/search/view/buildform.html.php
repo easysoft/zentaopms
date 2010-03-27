@@ -22,6 +22,7 @@
  * @link        http://www.zentao.cn
  */
 ?>
+<style>.helplink{display:none}</style>
 <script language='Javascript'>
 var params     = <?php echo json_encode($fieldParams);?>;
 var groupItems = <?php echo $config->search->groupItems;?>;
