@@ -62,6 +62,30 @@ $(document).ready(function()
         <td><?php echo $project->name;?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->task->pri;?></th>
+        <td><?php echo html::select('pri', $lang->task->priList, '', 'class=select-3');?> 
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->estimate;?></th>
+        <td><?php echo html::input('estimate', '', "class='text-3'");?></td>
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->deadline;?></th>
+        <td><?php echo html::input('deadline', '', "class='text-3 date'");?></td>
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->type;?></th>
+        <td><?php echo html::select('type', $lang->task->typeList, '', 'class=select-3');?></td>
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->status;?></th>
+        <td><?php echo html::select('status', $lang->task->statusList, 'wait', 'class=select-3');?></td>
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->owner;?></th>
+        <td><?php echo html::select('owner', $members, '', 'class=select-3');?> 
+      </tr>
+      <tr>
         <th class='rowhead'><?php echo $lang->task->story;?></th>
         <td>
           <?php echo html::select('story', $stories, $storyID, 'class=select-1 onchange=setPreview();');?>
@@ -84,30 +108,7 @@ $(document).ready(function()
         <th class='rowhead'><?php echo $lang->files;?></th>
         <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->owner;?></th>
-        <td><?php echo html::select('owner', $members, '', 'class=select-3');?> 
-      </tr> 
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-        <td><?php echo html::input('estimate', '', "class='text-3'");?></td>
-      </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->deadline;?></th>
-        <td><?php echo html::input('deadline', '', "class='text-3 date'");?></td>
-      </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->type;?></th>
-        <td><?php echo html::select('type', $lang->task->typeList, '', 'class=select-3');?></td>
-      </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->status;?></th>
-        <td><?php echo html::select('status', $lang->task->statusList, 'wait', 'class=select-3');?></td>
-      </tr>
-      <tr>
-        <th class='rowhead'><?php echo $lang->task->pri;?></th>
-        <td><?php echo html::select('pri', $lang->task->priList, '', 'class=select-3');?> 
-      </tr>
+      
       <tr>
         <th class='rowhead'><?php echo $lang->task->afterSubmit;?></th>
         <td><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td> 
