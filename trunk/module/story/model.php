@@ -355,13 +355,15 @@ class storyModel extends model
     /* 获得某一个产品某一个模块下面的所有需求id=>title列表。*/
     public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'iddesc')
     {
-        $sql = $this->dao->select('t1.id, t1.title, t1.module, t2.name AS product')
+        $stories = $this->dao->select('t1.id, t1.title, t1.module, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('1=1');
-        if($productID) $sql->andWhere('t1.product')->in($productID);
-        if($moduleIds) $sql->andWhere('t1.module')->in($moduleIds);
-        if($status != 'all') $sql->andWhere('status')->in($status);
-        $stories = $sql->orderBy($order)->fetchAll();
+            ->where('1=1')
+            ->onCaseOf($productID)->andWhere('t1.product')->in($productID)->endCase()
+            ->onCaseOf($moduleIds)->andWhere('t1.module')->in($moduleIds)->endCase()
+            ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()
+            ->orderBy($order)
+            ->fetchAll();
+        if(!$stories) return array();
         return $this->formatStories($stories);
     }
 
@@ -396,15 +398,16 @@ class storyModel extends model
     /* 获得某一个项目相关的需求id=>title的列表。*/
     public function getProjectStoryPairs($projectID = 0, $productID = 0)
     {
-        $sql = $this->dao->select('t2.id, t2.title, t2.module, t3.name AS product')
+        $stories = $this->dao->select('t2.id, t2.title, t2.module, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')
             ->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')
             ->on('t1.product = t3.id')
-            ->where('t1.project')->eq((int)$projectID);
-        if($productID) $sql->andWhere('t1.product')->eq((int)$productID);
-        $stories = $sql->fetchAll();
+            ->where('t1.project')->eq((int)$projectID)
+            ->onCaseOf($productID)->andWhere('t1.product')->eq((int)$productID)->endCase()
+            ->fetchAll();
+        if(!$stories) return array();
         return $this->formatStories($stories);
     }
 
