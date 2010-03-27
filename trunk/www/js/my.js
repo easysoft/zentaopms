@@ -120,7 +120,7 @@ function setHelpLink()
 {
     $('form input[id], form select[id], form textarea[id]').each(function()
         {
-            if($(this).attr('type') == 'hidden') return;
+            if($(this).attr('type') == 'hidden' || $(this).attr('type') == 'file') return;
             currentFieldName = $(this).attr('name') ? $(this).attr('name') : $(this).attr('id');
             if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
             if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
