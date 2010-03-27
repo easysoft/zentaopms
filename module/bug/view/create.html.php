@@ -143,15 +143,15 @@ $(function() {
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblTypeAndSeverity;?></th>
         <td> 
-          <?php echo html::select('type', (array)$lang->bug->typeList, 'codeerror', 'class=select-2');?> 
-          <?php echo html::select('severity', (array)$lang->bug->severityList, '', 'class=select-2');?>
+          <?php echo html::select('type', $lang->bug->typeList, 'codeerror', 'class=select-2');?> 
+          <?php echo html::select('severity', $lang->bug->severityList, '', 'class=select-2');?>
         </td>
       </tr>
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->bug->lblSystemBrowserAndHardware;?></nobr></th>
         <td>
-          <?php echo html::select('os', (array)$lang->bug->osList, '', 'class=select-2');?>
-          <?php echo html::select('browser', (array)$lang->bug->browserList, '', 'class=select-2');?>
+          <?php echo html::select('os', $lang->bug->osList, '', 'class=select-2');?>
+          <?php echo html::select('browser', $lang->bug->browserList, '', 'class=select-2');?>
         </td>
       </tr>
       <tr>
@@ -164,11 +164,11 @@ $(function() {
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->title;?></th>
-        <td><?php echo html::input('title', '', "class='text-1'");?></td>
+        <td><?php echo html::input('title', $title, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->steps;?></th>
-        <td><?php echo html::textarea('steps', '', "class='area-1' rows='6'");?></td>
+        <td><?php echo html::textarea('steps', $steps, "class='area-1' rows='6'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->keywords;?></th>
