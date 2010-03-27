@@ -82,6 +82,12 @@ $lang->bug->severityList[1] = 1;
 $lang->bug->severityList[2] = 2;
 $lang->bug->severityList[4] = 4;
 
+$lang->bug->priList[0] = '';
+$lang->bug->priList[3] = 3;
+$lang->bug->priList[1] = 1;
+$lang->bug->priList[2] = 2;
+$lang->bug->priList[4] = 4;
+
 /* Define the OS list. */
 $lang->bug->osList['']        = '';
 $lang->bug->osList['all']     = '全部';
@@ -149,6 +155,7 @@ $lang->bug->storyVersion   = '需求版本';
 $lang->bug->task           = '相关任务';
 $lang->bug->title          = 'Bug标题';
 $lang->bug->severity       = '严重程度';
+$lang->bug->pri            = '优先级';
 $lang->bug->type           = 'Bug类型';
 $lang->bug->os             = '操作系统';
 $lang->bug->browser        = '浏览器';
@@ -174,6 +181,7 @@ $lang->bug->lastEditedDate = '最后修改日期';
 $lang->bug->linkBug        = '相关Bug';
 $lang->bug->case           = '相关用例';
 $lang->bug->files          = '附件';
+$lang->bug->keywords       = '关键词';
 
 $lang->bug->tblStep        = "[步骤]\n";
 $lang->bug->tblResult      = "[结果]\n";

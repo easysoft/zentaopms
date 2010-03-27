@@ -89,10 +89,13 @@
           <td class='rowhead'><?php echo $lang->bug->type;?></td>
           <td><?php if(isset($lang->bug->typeList[$bug->type])) echo $lang->bug->typeList[$bug->type]; else echo $bug->type;?></td>
         </tr>
-
         <tr>
           <td class='rowhead'><?php echo $lang->bug->severity;?></td>
-          <td><strong><?php echo $bug->severity;?></strong></td>
+          <td><strong><?php echo $lang->bug->severityList[$bug->severity];?></strong></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->pri;?></td>
+          <td><strong><?php echo $lang->bug->priList[$bug->pri];?></strong></td>
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->status;?></td>
@@ -206,6 +209,10 @@
         <tr>
           <td class='rowhead'><?php echo $lang->bug->case;?></td>
           <td><?php if(isset($bug->caseTitle)) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
+          <td><?php echo $bug->keywords;?></td>
         </tr>
       </table>
     </fieldset>

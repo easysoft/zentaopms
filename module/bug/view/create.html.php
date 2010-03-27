@@ -171,6 +171,10 @@ $(function() {
         <td><?php echo html::textarea('steps', '', "class='area-1' rows='6'");?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->bug->keywords;?></th>
+        <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
+      </tr>  
+      <tr>
         <th class='rowhead'><?php echo $lang->bug->files;?></th>
         <td><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>  

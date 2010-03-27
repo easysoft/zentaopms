@@ -206,7 +206,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             resolvedBy, resolution, resolvedBuild, resolvedDate,
             closedBy, closedDate,
             lastEditedBy, lastEditedDate,
-            bugKeyword AS keyword
+            bugKeyword AS keywords
             ')
             ->from(BUGFREE_TABLE_BUGINFO)
             ->where('isDroped')->eq(0)
@@ -268,7 +268,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             lastEditedBy, lastEditedDate,
             scriptedBy, scriptedDate, scriptStatus, scriptLocation,
             linkID AS linkCase,
-            casekeyword AS keyword,
+            casekeyword AS keywords,
             DisplayOrder AS `order`,
             1 AS version,
             bugID
