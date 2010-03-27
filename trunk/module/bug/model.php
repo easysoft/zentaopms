@@ -46,7 +46,7 @@ class bugModel extends model
             ->setDefault('openedBuild', '')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->specialChars('title,steps')
+            ->specialChars('title,steps,keyword')
             ->cleanInt('product, module, severity')
             ->join('openedBuild', ',')
             ->remove('files, labels')
@@ -101,7 +101,7 @@ class bugModel extends model
         $now = helper::now();
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,story,task')
-            ->specialChars('title,steps')
+            ->specialChars('title,steps,keyword')
             ->remove('comment,fiels,labels')
             ->setDefault('project,module,project,story,task,duplicateBug', 0)
             ->setDefault('openedBuild', '')

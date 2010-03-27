@@ -90,6 +90,7 @@ function browseBySearch(active)
         <tr class='colhead'>
           <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->bug->id);?></th>
           <th><?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severity);?></th>
+          <th><?php common::printOrderLink('pri',        $orderBy, $vars, $lang->bug->pri);?></th>
           <th class='w-p50'><?php common::printOrderLink('title',  $orderBy, $vars, $lang->bug->title);?></th>
           <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->bug->openedBy);?></th>
           <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
@@ -102,6 +103,7 @@ function browseBySearch(active)
         <tr class='a-center'>
           <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?></td>
           <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
+          <td><?php echo $lang->bug->priList[$bug->pri]?></td>
           <td class='a-left nobr'><?php echo $bug->title;?></td>
           <td><?php echo $users[$bug->openedBy];?></td>
           <td <?php if($bug->assignedTo == $this->app->user->account) echo 'style=color:red';?>><?php echo $users[$bug->assignedTo];?></td>

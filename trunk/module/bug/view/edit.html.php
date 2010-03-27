@@ -208,6 +208,10 @@ $(function() {
           <td><?php echo html::select('severity', $lang->bug->severityList, $bug->severity, 'class=select-3');?>
         </tr>
         <tr>
+          <td class='rowhead'><?php echo $lang->bug->pri;?></td>
+          <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, 'class=select-3');?>
+        </tr>
+        <tr>
           <td class='rowhead'><?php echo $lang->bug->status;?></td>
           <td><?php echo html::select('status', $lang->bug->statusList, $bug->status, 'class=select-3');?></td>
         </tr>
@@ -299,6 +303,10 @@ $(function() {
         <tr>
           <td class='rowhead'><?php echo $lang->bug->case;?></td>
           <td><?php echo html::input('case', $bug->case, 'class="text-3"');?></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->bug->keywords;?></td>
+          <td><?php echo html::input('keywords', $bug->keywords, 'class="text-3"');?></td>
         </tr>
       </table>
     </fieldset>
