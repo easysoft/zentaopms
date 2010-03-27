@@ -70,6 +70,7 @@ $lang->story->childStories   = '细分需求';
 $lang->story->duplicateStory = '重复需求';
 $lang->story->reviewResult   = '评审结果';
 $lang->story->preVersion     = '之前版本';
+$lang->story->keywords       = '关键词';
 
 $lang->story->statusList['']          = '';
 $lang->story->statusList['draft']     = '草稿';
