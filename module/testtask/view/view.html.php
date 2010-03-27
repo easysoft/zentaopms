@@ -85,7 +85,7 @@ function checkall(checker)
           <tr>
             <th class='w-20px'><nobr><?php echo $lang->testcase->id;?></nobr></th>
             <th><?php echo $lang->testcase->pri;?></th>
-            <th class='w-p40'><?php echo $lang->testcase->title;?></th>
+            <th class='w-p30'><?php echo $lang->testcase->title;?></th>
             <th><?php echo $lang->testcase->type;?></th>
             <th><?php echo $lang->testtask->assignedTo;?></th>
             <th><?php echo $lang->testtask->lastRun;?></th>

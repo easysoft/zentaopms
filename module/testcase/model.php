@@ -47,8 +47,8 @@ class testcaseModel extends model
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->remove('steps,expects')
             ->setDefault('story', 0)
-            ->stripTags('title')
-            ->specialChars('steps')
+            ->specialChars('title')
+            ->join('stage', ',')
             ->get();
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->exec();
         if(!$this->dao->isError())
@@ -80,7 +80,8 @@ class testcaseModel extends model
     {
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
-        if($case->story) $case->storyTitle = $this->dao->findById($case->story)->from(TABLE_STORY)->fetch('title');
+        if($case->story)    $case->storyTitle     = $this->dao->findById($case->story)->from(TABLE_STORY)->fetch('title');
+        if($case->linkCase) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->fetchPairs();
         if($version == 0) $version = $case->version;
         $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->fetchAll();
         $case->files = $this->loadModel('file')->getByObject('case', $caseID);
@@ -128,7 +129,8 @@ class testcaseModel extends model
             ->add('version', $version)
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('story', 0)
-            ->stripTags('title')
+            ->specialChars('title')
+            ->join('stage', ',')
             ->remove('comment,steps,expects')
             ->get();
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();

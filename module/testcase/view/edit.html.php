@@ -102,9 +102,17 @@
           <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "class='select-1'");?></span></td>
         </tr>
         <tr>
+          <td class='rowhead'><?php echo $lang->testcase->story;?></td>
+          <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></span></td>
+        </tr>
+        <tr>
           <td class='rowhead'><?php echo $lang->testcase->type;?></td>
           <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=select-1');?>
         </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->testcase->stage;?></th>
+          <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='select-1' multiple='multiple'");?></td>
+        </tr>  
         <tr>
           <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
           <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=select-1');?>
@@ -114,8 +122,12 @@
           <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=select-1');?></td>
         </tr>
         <tr>
-          <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-          <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></span></td>
+          <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>
+          <td><?php echo html::input('keywords', $case->keywords, 'class=text-1');?></td>
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
+          <td><?php echo html::input('linkCase', $case->linkCase, 'class=text-1');?></td>
         </tr>
       </table>
     </fieldset>

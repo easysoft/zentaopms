@@ -40,6 +40,14 @@ $lang->testcase->lastEditedDate = '最后修改日期';
 $lang->testcase->version        = '用例版本';
 $lang->testcase->result         = '测试结果';
 $lang->testcase->real           = '实际情况';
+$lang->testcase->keywords       = '关键词';
+$lang->testcase->executeType    = '执行方式';
+$lang->testcase->scriptedBy     = '由谁编写';
+$lang->testcase->scriptedDate   = '编写日期';
+$lang->testcase->scriptedStatus = '脚本状态';
+$lang->testcase->scriptedLocation = '脚本位置';
+$lang->testcase->linkCase         = '相关用例';
+$lang->testcase->stage            = '适用阶段';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID     = '编号';
@@ -101,6 +109,14 @@ $lang->testcase->typeList['config']      = '配置相关';
 $lang->testcase->typeList['install']     = '安装部署';
 $lang->testcase->typeList['security']    = '安全相关';
 $lang->testcase->typeList['other']       = '其他';
+
+$lang->testcase->stageList['']            = '';
+$lang->testcase->stageList['unittest']    = '单元测试阶段';
+$lang->testcase->stageList['feature']     = '功能测试阶段';
+$lang->testcase->stageList['intergrate']  = '集成测试阶段';
+$lang->testcase->stageList['system']      = '系统测试阶段';
+$lang->testcase->stageList['smoke']       = '冒烟测试阶段';
+$lang->testcase->stageList['bvt']         = '版本验证阶段';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = '正常';

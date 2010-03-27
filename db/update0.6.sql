@@ -7,8 +7,9 @@ ADD `scriptedBy` VARCHAR( 30 ) NOT NULL AFTER `executeType` ,
 ADD `scriptedDate` DATE NOT NULL AFTER `scriptedBy` ,
 ADD `scriptStatus` VARCHAR( 30 ) NOT NULL AFTER `scriptedDate` ,
 ADD `scriptLocation` VARCHAR( 255 ) NOT NULL AFTER `scriptStatus` ,
-ADD `linkCase` MEDIUMINT UNSIGNED NOT NULL AFTER `scriptLocation` ;
-ALTER TABLE `zt_case` ADD `scope` VARCHAR( 30 ) NOT NULL ;
+ADD `linkCase` VARCHAR( 255 ) NOT NULL AFTER `scriptLocation` ;
+
+ALTER TABLE `zt_case` ADD `stage` VARCHAR( 255 ) NOT NULL ;
 
 -- 2010-03-23 userQuery表。
 CREATE TABLE `zentao`.`zt_userQuery` (

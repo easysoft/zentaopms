@@ -91,6 +91,8 @@ class testtask extends control
     /* 查看一个task。*/
     public function view($taskID)
     {
+        $this->app->loadLang('testcase');
+
         /* 获取task和产品信息，并设置菜单。*/
         $task      = $this->testtask->getById($taskID);
         $productID = $task->product;
@@ -164,11 +166,14 @@ class testtask extends control
             $this->locate(inlink('view', "taskID=$taskID"));
         }
 
+        $this->session->set('caseList', $this->app->getURI(true));
+
         /* 获得task信息。*/
         $task      = $this->testtask->getById($taskID);
         $productID = common::saveProductState($task->product, key($this->products));
 
         /* 构造搜索表单。*/
+        $this->loadModel('testcase');
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID");
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
