@@ -341,7 +341,7 @@ class storyModel extends model
     }
 
     /* 获得某一个产品某一个模块下面的所有需求列表。*/
-    public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'iddesc', $pager = null)
+    public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
@@ -353,7 +353,7 @@ class storyModel extends model
     }
 
     /* 获得某一个产品某一个模块下面的所有需求id=>title列表。*/
-    public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'iddesc')
+    public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id_desc')
     {
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
@@ -386,7 +386,7 @@ class storyModel extends model
     }
 
     /* 获得某一个项目相关的所有需求列表。*/
-    public function getProjectStories($projectID = 0, $orderBy='iddesc', $pager = null)
+    public function getProjectStories($projectID = 0, $orderBy='id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -412,7 +412,7 @@ class storyModel extends model
     }
 
     /* 获得某一个产品计划下面所有的需求列表。*/
-    public function getPlanStories($planID, $status = 'all', $orderBy = 'iddesc', $pager = null)
+    public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_STORY)
             ->where('plan')->eq((int)$planID)
@@ -421,13 +421,13 @@ class storyModel extends model
     }
 
     /* 获得某一个产品计划下面所有的需求列表。*/
-    public function getPlanStoryPairs($planID, $status = 'all', $orderBy = 'iddesc', $pager = null)
+    public function getPlanStoryPairs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_STORY)->where('plan')->eq($planID)->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()->fetchAll();
     }
 
     /* 获得指派给某一个用户的需求列表。*/
-    public function getUserStories($account, $status = 'all', $orderBy = 'iddesc', $pager = null)
+    public function getUserStories($account, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
             ->from(TABLE_STORY)->alias('t1')
