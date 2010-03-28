@@ -281,7 +281,7 @@ EOT;
         }
         else
         {
-            $orderBy = $fieldName . '' . 'asc';
+            $orderBy = $fieldName . '_' . 'asc';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
         echo html::a($link, $label);

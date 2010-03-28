@@ -42,7 +42,7 @@ class testcase extends control
     }
 
     /* 浏览一个产品下面的case。*/
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'iddesc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 构造搜索表单。*/
         $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch");
