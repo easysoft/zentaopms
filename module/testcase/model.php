@@ -68,7 +68,7 @@ class testcaseModel extends model
     }
 
     /* 获得某一个产品，某一个模块下面的所有case。*/
-    public function getModuleCases($productID, $moduleIds = 0, $orderBy = 'iddesc', $pager = null)
+    public function getModuleCases($productID, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
     {
         $sql = $this->dao->select('*')->from(TABLE_CASE)->where('product')->eq((int)$productID);
         if(!empty($moduleIds)) $sql->andWhere('module')->in($moduleIds);
