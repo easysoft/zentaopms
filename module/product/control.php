@@ -49,7 +49,7 @@ class product extends control
     }
 
     /* 浏览某一个产品。*/
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'iddesc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 设置搜索条件。*/
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch");
