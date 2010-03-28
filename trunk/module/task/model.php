@@ -113,7 +113,7 @@ class taskModel extends model
     }
     
     /* 获得某一个项目的任务列表。*/
-    public function getProjectTasks($projectID, $orderBy = 'statusasc, iddesc', $pager = null)
+    public function getProjectTasks($projectID, $status = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
@@ -123,6 +123,7 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')
             ->on('t1.owner = t3.account')
             ->where('t1.project')->eq((int)$projectID)
+            ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -131,7 +132,7 @@ class taskModel extends model
     }
 
     /* 获得某一个项目的任务id=>name列表。*/
-    public function getProjectTaskPairs($projectID, $orderBy = 'iddesc')
+    public function getProjectTaskPairs($projectID, $status = 'all', $orderBy = 'id_desc')
     {
         $tasks = array('' => '');
         $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS ownerRealName')
@@ -139,6 +140,7 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.owner = t2.account')
             ->where('t1.project')->eq((int)$projectID)
+            ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
             ->orderBy($orderBy)
             ->query();
         while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->ownerRealName:$task->name";
