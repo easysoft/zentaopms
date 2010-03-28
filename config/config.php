@@ -32,7 +32,7 @@ $config->timezone    = 'Asia/Shanghai';                 //时区设置，详细的列表，
 /* 请求方式设置。*/
 $config->requestType = 'PATH_INFO';       // 如何获取当前请求的信息，可选值：PATH_INFO|GET
 $config->pathType    = 'clean';           // requestType=PATH_INFO: 请求url的格式，可选值为full|clean，full格式会带有参数名称，clean则只有取值。
-$config->requestFix  = '-';               // requestType=PATH_INFO: 请求url的分隔符，可选值为斜线、下划线、减号。后面两种形式有助于SEO。
+$config->requestFix  = '-';               // requestType=PATH_INFO: 请求url的分隔符，可选值为斜线、减号。后面两种形式有助于SEO。
 $config->moduleVar   = 'm';               // requestType=GET: 模块变量名。
 $config->methodVar   = 'f';               // requestType=GET: 方法变量名。
 $config->viewVar     = 't';               // requestType=GET: 模板变量名。
