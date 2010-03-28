@@ -62,7 +62,7 @@ class bugModel extends model
     }
 
     /* 获得某一个产品，某一个模块下面的所有bug。*/
-    public function getModuleBugs($productID, $moduleIds = 0, $orderBy = 'iddesc', $pager = null)
+    public function getModuleBugs($productID, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
@@ -249,7 +249,7 @@ class bugModel extends model
     }
 
     /* 获得某个项目的bug列表。*/
-    public function getProjectBugs($projectID, $orderBy = 'iddesc', $pager = null)
+    public function getProjectBugs($projectID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)->where('project')->eq((int)$projectID)->orderBy($orderBy)->page($pager)->fetchAll();
     }
