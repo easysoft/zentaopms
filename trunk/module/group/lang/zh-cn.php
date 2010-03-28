@@ -109,6 +109,7 @@ $lang->resource->project->edit   = 'edit';
 $lang->resource->project->delete = 'delete';
 $lang->resource->project->task           = 'task';
 $lang->resource->project->grouptask      = 'groupTask';
+$lang->resource->project->importtask     = 'importTask';
 $lang->resource->project->story          = 'story';
 $lang->resource->project->build          = 'build';
 $lang->resource->project->bug            = 'bug';

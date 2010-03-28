@@ -100,7 +100,7 @@ class projectModel extends model
     /* 获得项目id=>name列表。*/
     public function getPairs()
     {
-        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, enddesc')->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, end_desc')->fetchPairs();
     }
 
     /* 获得完整的列表。*/
@@ -108,7 +108,7 @@ class projectModel extends model
     {
         $sql = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id);
         if($status != 'all') $sql->andWhere('status')->in($status);
-        return $sql->orderBy('status, enddesc')->fetchAll();
+        return $sql->orderBy('status, end_desc')->fetchAll();
     }
 
     /* 通过Id获取项目信息。*/
@@ -154,6 +154,64 @@ class projectModel extends model
             ->andWhere('t1.id')->ne((int)$projectID)
             ->orderBy('t1.id')
             ->fetchPairs();
+    }
+
+    /* 获得可以被导入的任务列表。*/
+    public function getTasks2Imported($projectID)
+    {
+        $this->loadModel('task');
+        $releatedProjects = $this->getRelatedProjects($projectID);
+        if(!$releatedProjects) return array();
+        $tasks = array();
+        foreach($releatedProjects as $releatedProjectID => $releatedProjectName)
+        {
+            $projectTasks = $this->task->getProjectTasks($releatedProjectID, 'wait,doing,cancel');
+            if(!$projectTasks) continue;
+            $tasks = array_merge($tasks, $projectTasks); 
+        }
+        return $tasks;
+    }
+
+    /* 导入任务。*/
+    public function importTask($projectID)
+    {
+        $tasks = $this->dao->select('id, project, owner, story')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+
+        /* 更新task表。*/
+        foreach($tasks as $task)
+        {
+            /* 记录owner和story。*/
+            $owners[$task->owner]  = $task->project;
+            $stories[$task->story] = $task->story;
+
+            $status = $task->consumed > 0 ? 'doing' : 'wait';
+            $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->set('status')->eq($status)->where('id')->in($this->post->tasks)->exec();
+            $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
+        }
+
+        /* 将没有关联进来的用户加入到团队中。*/
+        $teamMembers = $this->getTeamMemberPairs($projectID);
+        foreach($owners as $account => $preProjectID)
+        {
+            if(!isset($teamMembers[$account]))
+            {
+                $role = $this->dao->select('*')->from(TABLE_TEAM)->where('project')->eq($preProjectID)->andWhere('account')->eq($account)->fetch();
+                $role->project  = $projectID;
+                $role->joinDate = helper::today();
+                $this->dao->insert(TABLE_TEAM)->data($role)->exec();
+            }
+        }
+
+        /* 将没有关联的需求关联到项目中。*/
+        $projectStories = $this->loadModel('story')->getProjectStoryPairs($projectID);
+        foreach($stories as $storyID)
+        {
+            if(!isset($projectStories[$storyID]))
+            {
+                $story = $this->dao->findById($storyID)->fields("$projectID as project, id as story, product, version")->from(TABLE_STORY)->fetch();
+                $this->dao->insert(TABLE_PROJECTSTORY)->data($story)->exec();
+            }
+        }
     }
 
     /* 获得相关的子项目列表。*/
@@ -286,7 +344,7 @@ class projectModel extends model
         /* 没有指定结束日期的情况。*/
         if($project->end == '0000-00-00')
         {
-            $sets = $sql->orderBy('datedesc')->limit(14)->fetchAll('name');
+            $sets = $sql->orderBy('date_desc')->limit(14)->fetchAll('name');
             $sets = array_reverse($sets);
 
             /* 如果没有记录，手工补齐。*/

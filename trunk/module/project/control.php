@@ -73,7 +73,7 @@ class project extends control
     }
 
     /* 浏览某一个项目下面的任务。*/
-    public function task($projectID = 0, $orderBy = 'statusasc,iddesc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($projectID = 0, $status = 'all', $orderBy = 'status_asc,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 公共的操作。*/
         $project   = $this->commonAction($projectID);
@@ -91,7 +91,7 @@ class project extends control
         /* 分页操作。*/
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $tasks = $this->loadModel('task')->getProjectTasks($projectID, $orderBy, $pager);
+        $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager);
 
         /* 赋值。*/
         $this->view->tasks      = $tasks ? $tasks : array();
@@ -122,7 +122,7 @@ class project extends control
         $this->view->position[]      = $this->lang->project->task;
 
         /* 获得任务列表，并将其分组。*/
-        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $groupBy);
+        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $groupBy);
         $groupBy     = strtolower(str_replace('`', '', $groupBy));
         $taskLang    = $this->lang->task;
         $groupByList = array();
@@ -159,8 +159,26 @@ class project extends control
         $this->display();
     }
 
+    /* 将之前未完成的项目任务导入。*/
+    public function importTask($projectID)
+    {
+        if(!empty($_POST))
+        {
+            $this->project->importTask($projectID);
+            die(js::locate(inlink('task', "projectID=$projectID"), 'parent'));
+        }
+
+        $project = $this->commonAction($projectID);
+
+        $this->view->header->title  = $project->name . $this->lang->colon . $this->lang->project->importTask;
+        $this->view->position[]     = html::a(inlink('browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]     = $this->lang->project->importTask;
+        $this->view->tasks2Imported = $this->project->getTasks2Imported($projectID);
+        $this->display();
+    }
+
     /* 浏览某一个项目下面的需求。*/
-    public function story($projectID = 0, $orderBy = 'statusdesc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($projectID = 0, $orderBy = 'status_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 加载story, user模块，加载task模块的语言。*/
         $this->loadModel('story');
@@ -199,7 +217,7 @@ class project extends control
     }
 
     /* 浏览某一个项目下面的bug。*/
-    public function bug($projectID = 0, $orderBy = 'status,iddesc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($projectID = 0, $orderBy = 'status,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 加载bug和user模块。*/
         $this->loadModel('bug');
