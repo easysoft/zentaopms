@@ -281,7 +281,7 @@ class bugModel extends model
                 }
             }
         }
-        return array('title' => $title, 'steps' => $bugSteps);
+        return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story);
     }
 
     /* 按项目统计bug数。*/
