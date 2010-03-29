@@ -47,12 +47,9 @@
       <th class='rowhead'><?php echo $lang->attatch;?></th>
       <td><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></td>
     </tr>
-    <tr>
-      <td colspan='2' class='a-center'>
-        <?php echo html::submitButton() . html::linkButton($lang->goback, inlink('view', "storyID=$story->id"));?>
-      </td>
-    </tr>
   </table>
+  <div class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, inlink('view', "storyID=$story->id"));?></div>
+  <?php include './affected.html.php';?>
   <?php include '../../common/view/action.html.php';?>
   </form>
 </div>

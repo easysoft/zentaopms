@@ -140,6 +140,11 @@ class story extends control
         }
 
         $this->commonAction($storyID);
+        $this->story->getAffectedScope($this->view->story);
+        $this->app->loadLang('task');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('testcase');
+        $this->app->loadLang('project');
 
         /* 赋值到模板。*/
         $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->change . $this->lang->colon . $this->view->story->title;
@@ -259,6 +264,14 @@ class story extends control
         $this->view->story   = $story;
         $this->view->actions = $this->action->getList('story', $storyID);
         $this->view->users   = $this->loadModel('user')->getPairs();
+
+        /* 影响范围。*/
+        $this->story->getAffectedScope($this->view->story);
+        $this->app->loadLang('task');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('testcase');
+        $this->app->loadLang('project');
+
         $this->display();
     }
 

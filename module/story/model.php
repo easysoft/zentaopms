@@ -35,14 +35,14 @@ class storyModel extends model
         $spec = $this->dao->select('title,spec')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
         $story->title = $spec->title;
         $story->spec  = $spec->spec;
-        $story->projects = $this->dao->select('t1.project, t2.name')
+        $story->projects = $this->dao->select('t1.project, t2.name, t2.status')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->where('t1.story')->eq($storyID)
             ->orderBy('t1.project DESC')
-            ->fetchPairs();
-        $story->tasks     = $this->dao->select('id,name,project')->from(TABLE_TASK)->where('story')->eq($storyID)->orderBy('id DESC')->fetchAll();
+            ->fetchAll('project');
+        $story->tasks     = $this->dao->select('id, name, owner, project, status, consumed, `left`')->from(TABLE_TASK)->where('story')->eq($storyID)->orderBy('id DESC')->fetchGroup('project');
         //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
         //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
         if($story->toBug) $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
@@ -53,6 +53,36 @@ class storyModel extends model
         if($story->childStories)   $extraStories = array_merge($extraStories, explode(',', $story->childStories));
         $extraStories = array_unique($extraStories);
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
+        return $story;
+    }
+
+    /* 获得需求的影响范围。*/
+    public function getAffectedScope($story)
+    {
+        /* 移除已经结束的项目。*/
+        if($story->projects)
+        {
+            foreach($story->projects as $projectID => $project)
+            {
+                if($project->status != 'doing') unset($story->projects[$projectID]);
+            }
+        }
+
+        /* 获得项目中的成员。*/
+        if($story->projects)
+        {
+            $story->teams = $this->dao->select('account, project')
+                ->from(TABLE_TEAM)
+                ->where('project')->in(array_keys($story->projects))
+                ->fetchGroup('project');
+        }
+
+        /* 获得影响的Bug。*/
+        $story->bugs = $this->dao->findByStory($story->id)->from(TABLE_BUG)->andWhere('status')->ne('closed')->orderBy('id desc')->fetchAll();
+
+        /* 获得影响的用例。*/
+        $story->cases = $this->dao->findByStory($story->id)->from(TABLE_CASE)->fetchAll();
+
         return $story;
     }
 

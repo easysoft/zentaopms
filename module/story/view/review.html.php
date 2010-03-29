@@ -121,6 +121,7 @@ function setStory(reason)
     </tr>
   </table>
   </form>
+  <?php include './affected.html.php';?>
   <?php include '../../common/view/action.html.php';?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
