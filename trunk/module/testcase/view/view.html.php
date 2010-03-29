@@ -145,7 +145,7 @@
             {
                 foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                 {
-                    echo html::a($this->createLink('case', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank') . '<br />';
+                    echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank') . '<br />';
                 }
             }
             ?>
