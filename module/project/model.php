@@ -28,6 +28,35 @@ class projectModel extends model
     /* 每次关联成员的数量。*/
     const LINK_MEMBERS_ONE_TIME = 10;
 
+    /* 检查权限。*/
+    public function checkPriv($project)
+    {
+        /* 访问级别为open，不做任何处理。*/
+        if($project->acl == 'open') return true;
+
+        /* 获得团队的成员列表，供后面判断。*/
+        $teamMembers = $this->getTeamMemberPairs($project->id);
+
+        /* 级别为private。*/
+        if($project->acl == 'private')
+        {
+            return isset($teamMembers[$this->app->user->account]);
+        }
+
+        /* 级别为custom。*/
+        if($project->acl == 'custom')
+        {
+            if(isset($teamMembers[$this->app->user->account])) return true;
+            $userGroups    = $this->loadModel('user')->getGroups($this->app->user->account);
+            $projectGroups = explode(',', $project->whitelist);
+            foreach($userGroups as $groupID)
+            {
+                if(in_array($groupID, $projectGroups)) return true;
+            }
+            return false;
+        }
+    }
+
     /* 设置菜单。*/
     public function setMenu($projects, $projectID)
     {
@@ -47,6 +76,8 @@ class projectModel extends model
             ->add('company', $this->app->company->id)
             ->stripTags('name, code, team')
             ->specialChars('goal, desc')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->join('whitelist', ',')
             ->get();
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
@@ -56,7 +87,17 @@ class projectModel extends model
             ->check('name', 'unique')
             ->check('code', 'unique')
             ->exec();
-        if(!dao::isError()) return $this->dao->lastInsertId();
+
+        /* 将当前操作者加入到项目团队中。*/
+        if(!dao::isError())
+        {
+            $projectID = $this->dao->lastInsertId();
+            $member->project  = $projectID;
+            $member->account  = $this->app->user->account;
+            $member->joinDate = helper::today();
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+            return $projectID;
+        } 
     }
 
     /* 更新一个项目。*/
@@ -69,6 +110,8 @@ class projectModel extends model
             ->specialChars('goal, desc')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->join('whitelist', ',')
             ->get();
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
@@ -100,7 +143,13 @@ class projectModel extends model
     /* 获得项目id=>name列表。*/
     public function getPairs()
     {
-        return $this->dao->select('id,name')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, end_desc')->fetchPairs();
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, end desc')->fetchAll();
+        $pairs = array();
+        foreach($projects as $project)
+        {
+            if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
+        }
+        return $pairs;
     }
 
     /* 获得完整的列表。*/
