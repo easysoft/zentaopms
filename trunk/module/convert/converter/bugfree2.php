@@ -262,7 +262,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             casePriority AS pri,
             caseType AS type,
             caseStatus AS status,
-            caseMethod AS executeType,
+            caseMethod AS howRun,
             casePlan AS stage,
             openedBy, openedDate,
             lastEditedBy, lastEditedDate,
@@ -287,14 +287,14 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             unset($case->step);
             unset($case->bugID);
 
-            $case->type        = strtolower($case->type);
-            $case->status      = strtolower($case->status);
-            $case->executeType = strtolower($case->executeType);
-            $case->stage       = strtolower($case->stage);
+            $case->type   = strtolower($case->type);
+            $case->status = strtolower($case->status);
+            $case->howRun = strtolower($case->howRun);
+            $case->stage  = strtolower($case->stage);
 
-            if($case->type == 'configuration') $case->type = 'config';
-            if($case->type == 'setup')         $case->type = 'install';
-            if($case->type == 'functional')    $case->type = 'feature';
+            if($case->type == 'configuration') $case->type   = 'config';
+            if($case->type == 'setup')         $case->type   = 'install';
+            if($case->type == 'functional')    $case->type   = 'feature';
             if($case->status == 'active')      $case->status = 'normal';
             
             /* 将产品和模块替换成禅道系统中的id。*/
