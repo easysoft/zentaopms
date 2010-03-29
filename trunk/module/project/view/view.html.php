@@ -61,6 +61,19 @@
      </td>
    </tr>
    <tr>
+     <th class='rowhead'><?php echo $lang->project->acl;?></th>
+     <td><?php echo $lang->project->aclList[$project->acl];?></td>
+   </tr>  
+   <tr>
+     <th class='rowhead'><?php echo $lang->project->whitelist;?></th>
+     <td>
+       <?php
+       $whitelist = explode(',', $project->whitelist);
+       foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
+       ?>
+     </td>
+   </tr>  
+   <tr>
      <td colspan='2' class='a-center'>
      <?php
      common::printLink('project', 'edit',   "projectID=$project->id", $lang->project->edit);

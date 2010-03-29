@@ -45,7 +45,6 @@ class project extends control
     {
         $this->locate($this->createLink($this->moduleName, 'task', "projectID=$projectID"));
     }
-
     /* task, story, bug等方法的一些公共操作。*/
     private function commonAction($projectID = 0)
     {
@@ -58,7 +57,7 @@ class project extends control
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);
         $teamMembers   = $this->project->getTeamMembers($project->id);
-
+        
         /* 设置菜单。*/
         $this->project->setMenu($this->projects, $project->id);
 
@@ -68,6 +67,13 @@ class project extends control
         $this->assign('childProjects', $childProjects);
         $this->assign('products',      $products);
         $this->assign('teamMembers',   $teamMembers);
+
+        /* 检查是否有访问权限。*/
+        if(!$this->project->checkPriv($project))
+        {
+            echo(js::alert($this->lang->project->accessDenied));
+            die(js::locate('back'));
+        }
 
         return $project;
     }
@@ -339,13 +345,10 @@ class project extends control
         /* 设置菜单。*/
         $this->project->setMenu($this->projects, '');
 
-        $header['title'] = $this->lang->project->create;
-        $position[]      = $header['title'];
-        $projects        = array('' => '') + $this->projects;
-        
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('projects', $projects);
+        $this->view->header->title = $this->lang->project->create;
+        $this->view->position[]    = $this->view->header->title;
+        $this->view->projects      = array('' => '') + $this->projects;
+        $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
@@ -379,6 +382,7 @@ class project extends control
         $this->assign('position', $position);
         $this->assign('projects', $projects);
         $this->assign('project',  $project);
+        $this->assign('groups',   $this->loadModel('group')->getPairs());
 
         $this->display();
     }
@@ -394,6 +398,7 @@ class project extends control
 
         $this->assign('header',   $header);
         $this->assign('position', $position);
+        $this->assign('groups',   $this->loadModel('group')->getPairs());
         $this->display();
     }
 

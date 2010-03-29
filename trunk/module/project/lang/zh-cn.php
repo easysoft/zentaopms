@@ -70,6 +70,9 @@ $lang->project->canceledDate = '取消日期';
 $lang->project->PO           = '产品负责人';
 $lang->project->PM           = '项目负责人';
 $lang->project->QM           = '测试负责人';
+$lang->project->acl          = '访问控制';
+$lang->project->whitelist    = '分组白名单';
+
 $lang->project->teamname     = '团队名称';
 $lang->project->team         = '团队成员';
 $lang->project->products     = '相关产品';
@@ -100,6 +103,12 @@ $lang->project->oneLineStats = "项目『%s』, 代号为『%s』, 相关产品�
 $lang->project->statusList->wait  = '未开始';
 $lang->project->statusList->doing = '进行中';
 $lang->project->statusList->done  = '已完成';
+
+$lang->project->aclList['open']    = '默认设置(有项目视图权限，即可访问)';
+$lang->project->aclList['private'] = '私有项目(只有项目团队成员才能访问)';
+$lang->project->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
+
+$lang->project->accessDenied = '您无权访问该项目！';
 
 $lang->team->account     = '用户';
 $lang->team->role        = '角色';

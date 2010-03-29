@@ -24,6 +24,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<script language='Javascript'>
+function setWhite(acl)
+{
+    acl == 'custom' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
+}
+</script>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
@@ -56,6 +62,14 @@
       <tr>
         <th class='rowhead'><?php echo $lang->project->desc;?></th>
         <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->project->acl;?></th>
+        <td><?php echo html::radio('acl', $lang->project->aclList, 'open', "onclick='setWhite(this.value);'");?></td>
+      </tr>  
+      <tr id='whitelistBox' class='hidden'>
+        <th class='rowhead'><?php echo $lang->project->whitelist;?></th>
+        <td><?php echo html::checkbox('whitelist', $groups);?></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
