@@ -123,6 +123,10 @@ $lang->story->legendHistory        = '历史记录';
 $lang->story->legendVersion        = '历史版本';
 $lang->story->legendMisc           = '其他相关';
 
+$lang->story->affectedProjects     = '影响的项目';
+$lang->story->affectedBugs         = '影响的Bug';
+$lang->story->affectedCases        = '影响的用例';
+
 $lang->story->specTemplate          = "建议参考的模板：作为一名<<i class='red'>某种类型的用户</i>>，我希望<<i class='red'>达成某些目的</i>>，这样可以<<i class='red'>开发的价值</i>>。";
 $lang->story->needNotReview         = '不需要评审';
 $lang->story->confirmDelete         = "您确认删除该需求吗?";
