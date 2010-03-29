@@ -41,7 +41,7 @@ $themeRoot   = $webRoot . "theme/";
 <link rel='stylesheet' href='<?php echo $clientTheme . 'yui.css';?>' type='text/css' media='screen' />
 <link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
 <script language='Javascript'>loadFixedCSS();</script>
-<style>#debugbar {display:none}</style>
+<style>#debugbar, .helplink {display:none}</style>
 <body onload="document.getElementById('account').focus();">
 <div class='yui-d0'>
   <form method='post' style='margin-top:100px'>
@@ -49,7 +49,7 @@ $themeRoot   = $webRoot . "theme/";
       <caption><?php printf($lang->welcome, $app->company->name);?></caption>
       <tr>
         <th><?php echo $lang->user->account;?></th>  
-        <td><input type='text' name='account' /></td>
+        <td><input type='text' name='account' id='account' /></td>
       </tr>  
       <tr>
         <th><?php echo $lang->user->password;?></th>  
