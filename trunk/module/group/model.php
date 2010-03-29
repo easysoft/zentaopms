@@ -91,10 +91,13 @@ class groupModel extends model
     /* 获取某一个公司的分组列表。*/
     public function getList($companyID)
     {
-        $sql = "SELECT * FROM " . TABLE_GROUP . " WHERE company = '$companyID'";
-        $groups = $this->dbh->query($sql)->fetchAll();
-        if($groups) return $groups;
-        return array();
+        return $this->dao->findByCompany($companyID)->from(TABLE_GROUP)->fetchAll();
+    }
+
+    /* 获得分组的key => value对。*/
+    public function getPairs()
+    {
+        return $this->dao->findByCompany($this->app->company->id)->fields('id, name')->from(TABLE_GROUP)->fetchPairs();
     }
 
     /* 通过 id获取某一个分组信息。*/
