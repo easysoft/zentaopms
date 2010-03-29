@@ -223,6 +223,12 @@ class userModel extends model
         return (isset($_SESSION['user']) and !empty($_SESSION['user']) and $_SESSION['user']->account != 'guest');
     }
 
+    /* 获得用户所属的分组。*/
+    public function getGroups($account)
+    {
+        return $this->dao->findByAccount($account)->from(TABLE_USERGROUP)->fields('`group`')->fetchPairs();
+    }
+
     /* 获得用户参与的项目列表。*/
     public function getProjects($account)
     {
