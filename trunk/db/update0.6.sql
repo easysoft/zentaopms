@@ -15,3 +15,13 @@ update zt_projectStory,zt_story set zt_projectStory.product=zt_story.product whe
 
 -- 2010-03-27 add keywords to story.
 ALTER TABLE `zt_story` ADD `keywords` VARCHAR( 255 ) NOT NULL AFTER `title` ;
+
+-- 2010-03-29 add fields of project.
+ALTER TABLE `zt_project` ADD `acl` ENUM( 'open', 'private', 'custom' ) NOT NULL DEFAULT 'open', 
+ADD `whitelist` VARCHAR( 255 ) NOT NULL ;
+
+-- 2010-03-29 adjust the field length.
+ALTER TABLE `zt_project` CHANGE `name` `name` VARCHAR( 90 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE `code` `code` VARCHAR( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_product` CHANGE `name` `name` VARCHAR( 90 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE `code` `code` VARCHAR( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
