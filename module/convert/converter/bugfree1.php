@@ -148,9 +148,11 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         }
 
         /* ¸üÐÂparent¡£*/
-        foreach($this->map['module'] as $oldModuleID => $newModuleID)
+        foreach($modules as $oldModuleID => $module)
         {
-            $this->dao->dbh($this->dbh)->update(TABLE_MODULE)->set('parent')->eq($newModuleID)->where('parent')->eq($oldModuleID)->exec();
+            $newModuleID = $this->map['module'][$oldModuleID];
+            $newParentID = $this->map['module'][$module->parent];
+            $this->dao->dbh($this->dbh)->update(TABLE_MODULE)->set('parent')->eq($newParentID)->where('id')->eq($newModuleID)->exec();
         }
         return count($modules);
     }
