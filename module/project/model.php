@@ -31,6 +31,10 @@ class projectModel extends model
     /* 检查权限。*/
     public function checkPriv($project)
     {
+        /* 检查是否是管理员。*/
+        $account = ',' . $this->app->user->account . ',';
+        if(strpos($this->app->company->admins, $account) !== false) return true; 
+
         /* 访问级别为open，不做任何处理。*/
         if($project->acl == 'open') return true;
 
