@@ -83,7 +83,7 @@
             if($task->needConfirm)
             {
                 echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$task->id"), $lang->story->confirm, 'hiddenwin');
+                echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$task->id"), $lang->confirm, 'hiddenwin');
                 echo ")";
             }
             ?>

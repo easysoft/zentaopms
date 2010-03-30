@@ -35,8 +35,9 @@ $lang->copy       = '复制';
 $lang->delete     = '删除';
 $lang->close      = '关闭';
 $lang->activate   = '激活';
-$lang->delete     = '删除';
 $lang->save       = '保存';
+$lang->confirm    = '确认';
+$lang->preview    = '预览';
 $lang->actions    = '操作';
 $lang->comment    = '备注';
 $lang->history    = '历史记录';
@@ -55,7 +56,6 @@ $lang->reverse    = '（切换顺序）';
 $lang->addFiles   = '上传了附件 ';
 $lang->files      = '附件 ';
 $lang->workingHour= '工时';
-$lang->preview    = '预览';
 $lang->showHelp   = '显示帮助';
 
 /* 主导航菜单。*/

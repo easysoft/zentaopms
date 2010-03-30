@@ -80,7 +80,16 @@
       </td>
       <td>
         <?php common::printLink('task', 'edit',   "taskid=$task->id", $lang->edit);?>
-        <?php common::printLink('task', 'delete', "projectID=$task->project&taskid=$task->id", $lang->delete, 'hiddenwin');?>
+        <?php 
+        if($browseType == 'needconfirm')
+        {
+            common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
+        }
+        else
+        {
+            common::printLink('task', 'delete', "projectID=$task->project&taskid=$task->id", $lang->delete, 'hiddenwin');
+        }
+        ?>
       </td>
     </tr>
     <?php endforeach;?>
@@ -88,5 +97,5 @@
   </table>
   <div class='a-right'><?php echo $pager;?></div>
 </div>  
-<script language='Javascript'>$('#by<?php echo $browseType;?>').addClass('active');</script>
+<script language='Javascript'>$('#<?php echo $browseType;?>').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>
