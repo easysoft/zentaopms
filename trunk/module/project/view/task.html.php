@@ -57,7 +57,18 @@
       <td><?php echo $task->left;?></td>
       <td><?php echo $lang->task->typeList[$task->type];?></td>
       <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
-      <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList[$task->status];?></td>
+      <td class=<?php echo $task->status;?> >
+        <?php
+        if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
+        {
+            echo "<span class='warning'>{$lang->story->changed}</span> ";
+        }
+        else
+        {
+            echo $lang->task->statusList[$task->status];
+        }
+        ?>
+      </td>
       <td class='a-left nobr'>
         <?php 
         if($task->storyID)

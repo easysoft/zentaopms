@@ -180,6 +180,15 @@ class task extends control
         $this->display();
     }
 
+    /* 确认需求变动。*/
+    public function confirmStoryChange($taskID)
+    {
+        $task = $this->task->getById($taskID);
+        $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
+        $this->loadModel('action')->create('task', $taskID, 'confirmed', '', $task->latestStoryVersion);
+        die(js::reload('parent'));
+    }
+
     /* 删除一个任务。*/
     public function delete($projectID, $taskID, $confirm = 'no')
     {

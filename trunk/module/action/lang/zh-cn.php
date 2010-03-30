@@ -30,6 +30,7 @@ $lang->action->desc->closed    = '$date, 由 <strong>$actor</strong> 关闭。';
 $lang->action->desc->commented = '$date, 由 <strong>$actor</strong> 发表评论。';
 $lang->action->desc->activated = '$date, 由 <strong>$actor</strong> 激活。';
 $lang->action->desc->moved     = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"';
+$lang->action->desc->confirmed = '$date, 由 <strong>$actor</strong> 确认需求变动，最新版本为<strong>#$extra</strong>';
 $lang->action->desc->diff1     = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />';
 $lang->action->desc->diff2     = '修改了 <strong><i>%s</i></strong>，区别为：<blockquote>%s</blockquote>';
 
@@ -42,6 +43,7 @@ $lang->action->label->activated = '激活了';
 $lang->action->label->resolved  = '解决了';
 $lang->action->label->reviewed  = '评审了';
 $lang->action->label->moved     = '移动了';
+$lang->action->label->confirmed = '确认了需求，';
 $lang->action->label->story     = '需求|story|view|storyID=%s';
 $lang->action->label->task      = '任务|task|view|taskID=%s';
 $lang->action->label->bug       = 'Bug|bug|view|bugID=%s';

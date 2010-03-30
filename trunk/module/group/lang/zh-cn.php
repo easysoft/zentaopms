@@ -127,6 +127,7 @@ $lang->resource->task->create = 'create';
 $lang->resource->task->edit   = 'edit';
 $lang->resource->task->delete = 'delete';
 $lang->resource->task->view   = 'view';
+$lang->resource->task->confirmStoryChange  = 'confirmStoryChange';
 $lang->resource->task->ajaxGetUserTasks    = 'ajaxGetUserTasks';
 $lang->resource->task->ajaxGetProjectTasks = 'ajaxGetProjectTasks';
 
@@ -148,13 +149,15 @@ $lang->resource->bug->resolve = 'resolve';
 $lang->resource->bug->activate= 'activate';
 $lang->resource->bug->close   = 'close';
 $lang->resource->bug->report  = 'reportChart';
-$lang->resource->bug->ajaxGetUserBugs = 'ajaxGetUserBugs';
+$lang->resource->bug->confirmStoryChange  = 'confirmStoryChange';
+$lang->resource->bug->ajaxGetUserBugs     = 'ajaxGetUserBugs';
 
 $lang->resource->testcase->index   = 'index';
 $lang->resource->testcase->browse  = 'browse';
 $lang->resource->testcase->create  = 'create';
 $lang->resource->testcase->view    = 'view';
 $lang->resource->testcase->edit    = 'edit';
+$lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 
 $lang->resource->testtask->index       = 'index';
 $lang->resource->testtask->create      = 'create';
