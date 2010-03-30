@@ -22,7 +22,7 @@
  * @link        http://www.zentao.cn
  */
 /* 基本参数设定。*/
-$config->version     = '0.6 beta';                      // 版本号，切勿修改。
+$config->version     = '1.0 beta';                      // 版本号，切勿修改。
 $config->helpRoot    = 'http://doc.zentao.cn/help/';    // 在线帮助的URI地址。
 $config->encoding    = 'UTF-8';                         // 网站的编码。
 $config->cookiePath  = '/';                             // cookie的有效路径。
