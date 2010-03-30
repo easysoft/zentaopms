@@ -80,7 +80,13 @@ class testcaseModel extends model
     {
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
-        if($case->story)    $case->storyTitle     = $this->dao->findById($case->story)->from(TABLE_STORY)->fetch('title');
+        if($case->story)
+        {
+            $story = $this->dao->findById($case->story)->from(TABLE_STORY)->fields('title, status, version')->fetch();
+            $case->storyTitle         = $story->title;
+            $case->storyStatus        = $story->status;
+            $case->latestStoryVersion = $story->version;
+        }
         if($case->linkCase) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->fetchPairs();
         if($version == 0) $version = $case->version;
         $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->fetchAll();

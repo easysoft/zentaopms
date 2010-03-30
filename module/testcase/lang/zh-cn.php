@@ -71,6 +71,7 @@ $lang->testcase->byModule       = '按模块';
 $lang->testcase->assignToMe     = '指派给我';
 $lang->testcase->openedByMe     = '由我创建';
 $lang->testcase->allCases       = '所有Case';
+$lang->testcase->needConfirm    = '需求有变动的用例';
 $lang->testcase->moduleCases    = '按模块浏览';
 $lang->testcase->bySearch       = '搜索';
 
