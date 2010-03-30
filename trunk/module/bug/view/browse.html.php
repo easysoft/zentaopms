@@ -60,7 +60,8 @@ function browseBySearch(active)
       echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
       echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
       echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\">{$lang->bug->byQuery}</span> ";
-      echo "<span id='allTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
+      echo "<span id='allTab'>"         . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
+      echo "<span id='needconfirmTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
       ?>
     </div>
     <div class='f-right'>
@@ -91,11 +92,17 @@ function browseBySearch(active)
           <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->bug->id);?></th>
           <th><?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severity);?></th>
           <th><?php common::printOrderLink('pri',        $orderBy, $vars, $lang->bug->pri);?></th>
-          <th class='w-p50'><?php common::printOrderLink('title',  $orderBy, $vars, $lang->bug->title);?></th>
+          <th class='w-p40'><?php common::printOrderLink('title',  $orderBy, $vars, $lang->bug->title);?></th>
+          <?php if($browseType == 'needconfirm'):?>
+          <th class='w-p40'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
+          <th><?php echo $lang->actions;?></th>
+          <?php else:?>
+          <th><?php common::printOrderLink('story',  $orderBy, $vars, $lang->bug->story);?></th>
           <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->bug->openedBy);?></th>
           <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <th><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolution);?></th>
+          <?php endif;?>
         </tr>
         </thead>
         <tbody>
@@ -105,10 +112,15 @@ function browseBySearch(active)
           <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
           <td><?php echo $lang->bug->priList[$bug->pri]?></td>
           <td class='a-left nobr'><?php echo $bug->title;?></td>
+          <?php if($browseType == 'needconfirm'):?>
+          <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
+          <td><?php echo html::a(inlink('confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin')?></td>
+          <?php else:?>
           <td><?php echo $users[$bug->openedBy];?></td>
           <td <?php if($bug->assignedTo == $this->app->user->account) echo 'style=color:red';?>><?php echo $users[$bug->assignedTo];?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
           <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+          <?php endif;?>
         </tr>
         <?php endforeach;?>
         </tbody>
