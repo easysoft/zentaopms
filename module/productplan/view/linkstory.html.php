@@ -43,7 +43,7 @@
       <?php foreach($allStories as $story):?>
       <?php
       if(isset($planStories[$story->id])) continue;
-      if(isset($story->plan) and helper::diffDate($plans[$story->plan]->end, helper::today()) > 0) continue;
+      if($story->plan and helper::diffDate($plans[$story->plan], helper::today()) > 0) continue;
       ?>
       <tr>
         <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
