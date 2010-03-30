@@ -73,7 +73,7 @@ class bugModel extends model
     /* 获取一个bug的详细信息。*/
     public function getById($bugID)
     {
-        $bug = $this->dao->select('t1.*, t2.name AS projectName, t3.title AS storyTitle, t4.name AS taskName')
+        $bug = $this->dao->select('t1.*, t2.name AS projectName, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, t4.name AS taskName')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')

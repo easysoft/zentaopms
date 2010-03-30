@@ -105,6 +105,14 @@ class bug extends control
         {
             $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
         }
+        elseif($browseType == 'needconfirm')
+        {
+            $bugs = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where("t2.status = 'active'")
+                ->andWhere('t2.version > t1.storyVersion')
+                ->orderBy($orderBy)
+                ->fetchAll();
+        }
         elseif($browseType == 'bysearch')
         {
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
@@ -405,6 +413,15 @@ class bug extends control
         $this->view->users   = $this->user->getPairs();
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
+    }
+
+    /* 确认需求变动。*/
+    public function confirmStoryChange($bugID)
+    {
+        $bug = $this->bug->getById($bugID);
+        $this->dao->update(TABLE_BUG)->set('storyVersion')->eq($bug->latestStoryVersion)->where('id')->eq($bugID)->exec();
+        $this->loadModel('action')->create('bug', $bugID, 'confirmed', '', $bug->latestStoryVersion);
+        die(js::reload('parent'));
     }
 
     /* 获得用户的bug列表。*/
