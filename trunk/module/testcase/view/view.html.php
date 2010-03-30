@@ -102,6 +102,12 @@
           <td class='nobr'>
             <?php
             if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
+            if($case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
+            {
+                echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+                echo ")";
+            }
             ?>
           </td>
         </tr>

@@ -67,6 +67,14 @@ class testcase extends control
             $childModuleIds    = $this->tree->getAllChildId($moduleID);
             $this->view->cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
         }
+        elseif($browseType == 'needconfirm')
+        {
+            $this->view->cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where("t2.status = 'active'")
+                ->andWhere('t2.version > t1.storyVersion')
+                ->orderBy($orderBy)
+                ->fetchAll();
+        }
         elseif($browseType == 'bysearch')
         {
             if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
@@ -210,5 +218,14 @@ class testcase extends control
         $header['title'] = $this->lang->page->delete;
         $this->assign('header', $header);
         $this->display();
+    }
+
+    /* 确认需求变动。*/
+    public function confirmStoryChange($caseID)
+    {
+        $case = $this->testcase->getById($caseID);
+        $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
+        $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
+        die(js::reload('parent'));
     }
 }
