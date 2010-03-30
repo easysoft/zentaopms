@@ -99,7 +99,7 @@ class taskModel extends model
     /* 通过id获取一个任务信息。*/
     public function getById($taskID)
     {
-        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
+        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS ownerRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')
             ->on('t1.story = t2.id')
@@ -109,14 +109,14 @@ class taskModel extends model
             ->fetch();
         if(!$task) return false;
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
-        return $this->computeDelay($task);
+        return $this->processTask($task);
     }
     
     /* 获得某一个项目的任务列表。*/
     public function getProjectTasks($projectID, $status = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
-        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t3.realname AS ownerRealName')
+        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS ownerRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')
             ->on('t1.story = t2.id')
@@ -127,7 +127,7 @@ class taskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-        if($tasks) return $this->computeDelays($tasks);
+        if($tasks) return $this->processTasks($tasks);
         return false;
     }
 
@@ -150,7 +150,7 @@ class taskModel extends model
     /* 获得用户的任务列表。*/
     public function getUserTasks($account, $status = 'all')
     {
-        $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle')
+        $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
@@ -159,7 +159,7 @@ class taskModel extends model
             ->where('t1.owner')->eq($account)
             ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
             ->fetchAll();
-        if($tasks) return $this->computeDelays($tasks);
+        if($tasks) return $this->processTasks($tasks);
         return array();
     }
 
@@ -204,23 +204,30 @@ class taskModel extends model
         return $taskCounts;
     }
 
-    /* 计算延期的天数。*/
-    private function computeDelays($tasks)
+    /* 计算一组任务的相关状态。*/
+    private function processTasks($tasks)
     {
         $today = helper::today();
         foreach($tasks as $task)
         {
+            /* 计算是否延期。*/
             if($task->deadline != '0000-00-00')
             {
                 $delay = helper::diffDate($today, $task->deadline);
                 if($delay > 0) $task->delay = $delay;
             }
+            /* 判断需求是否变更。*/
+            $task->needConfirm = false;
+            if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
+            {
+                $task->needConfirm = true;
+            }
         }
         return $tasks;
     }
 
-    /* 计算延期的天数。*/
-    private function computeDelay($task)
+    /* 计算一个任务的相关状态。*/
+    private function processTask($task)
     {
         $today = helper::today();
         if($task->deadline != '0000-00-00')
@@ -228,7 +235,13 @@ class taskModel extends model
             $delay = helper::diffDate($today, $task->deadline);
             if($delay > 0) $task->delay = $delay;
         }
+
+        /* 判断需求是否变更。*/
+        $task->needConfirm = false;
+        if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
+        {
+            $task->needConfirm = true;
+        }
         return $task;
     }
-
 }

@@ -77,7 +77,17 @@
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->story;?></th>
-          <td><?php if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle)) echo $task->storyTitle;?>
+          <td>
+            <?php 
+            if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle)) echo $task->storyTitle;
+            if($task->needConfirm)
+            {
+                echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$task->id"), $lang->story->confirm, 'hiddenwin');
+                echo ")";
+            }
+            ?>
+          </td>
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->owner;?></th>
