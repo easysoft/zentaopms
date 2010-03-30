@@ -94,6 +94,7 @@ $lang->project->groupTaskByConsumed = '按已消耗分组';
 $lang->project->groupTaskByLeft     = '按剩余工时分组';
 $lang->project->groupTaskByType     = '按任务类型分组';
 $lang->project->groupTaskByDeadline = '按截止日期分组';
+$lang->project->listTaskNeedConfrim = '需求有变动的任务';
 
 $lang->project->beginAndEnd  = '起止时间';
 $lang->project->lblStats     = '工时统计';

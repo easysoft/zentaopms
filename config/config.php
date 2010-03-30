@@ -79,7 +79,7 @@ define('TABLE_TODO',           $config->db->prefix . 'todo');
 define('TABLE_GROUP',          $config->db->prefix . 'group');
 define('TABLE_GROUPPRIV',      $config->db->prefix . 'groupPriv');
 define('TABLE_USERGROUP',      $config->db->prefix . 'userGroup');
-define('TABLE_USERQUERY',      $config->db->prefix . 'userQuery');
+//define('TABLE_USERQUERY',      $config->db->prefix . 'userQuery');
 
 define('TABLE_BUG',            $config->db->prefix . 'bug');
 define('TABLE_CASE',           $config->db->prefix . 'case');

@@ -68,5 +68,5 @@
     <?php endforeach;?>
   </table>
 </div>  
-<script language='Javascript'>$('#by<?php echo $browseType;?>').addClass('active');</script>
+<script language='Javascript'>$('#<?php echo $browseType;?>').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -123,7 +123,8 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')
             ->on('t1.owner = t3.account')
             ->where('t1.project')->eq((int)$projectID)
-            ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
+            ->onCaseOf($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere('t2.status = "active"')->endCase()
+            ->onCaseOf($status != 'all' and $status != 'needConfirm')->andWhere('t1.status')->in($status)->endCase()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

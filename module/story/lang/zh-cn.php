@@ -25,7 +25,6 @@ $lang->story->browse    = "需求列表";
 $lang->story->create    = "新增需求";
 $lang->story->change    = "变更";
 $lang->story->changed   = '需求变更';
-$lang->story->confirm   = '确认';
 $lang->story->review    = '评审';
 $lang->story->edit      = "编辑需求";
 $lang->story->close     = '关闭';
