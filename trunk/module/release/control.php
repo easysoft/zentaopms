@@ -56,6 +56,7 @@ class release extends control
         $this->view->header->title = $this->lang->release->create;
         $this->view->position[]    = $this->lang->release->create;
         $this->view->builds = $this->loadModel('build')->getProductBuildPairs($productID);
+        unset($this->view->builds['trunk']);
         $this->display();
     }
 
