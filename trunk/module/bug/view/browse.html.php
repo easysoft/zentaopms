@@ -97,7 +97,6 @@ function browseBySearch(active)
           <th class='w-p40'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
           <th><?php echo $lang->actions;?></th>
           <?php else:?>
-          <th><?php common::printOrderLink('story',  $orderBy, $vars, $lang->bug->story);?></th>
           <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->bug->openedBy);?></th>
           <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <th><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
