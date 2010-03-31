@@ -184,7 +184,7 @@ class project extends control
     }
 
     /* 浏览某一个项目下面的需求。*/
-    public function story($projectID = 0, $orderBy = 'status_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($projectID = 0)
     {
         /* 加载story, user模块，加载task模块的语言。*/
         $this->loadModel('story');
@@ -203,9 +203,7 @@ class project extends control
         $position[]      = $this->lang->project->story;
 
         /* 分页操作。*/
-        $this->app->loadClass('pager', $static = true);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $stories    = $this->story->getProjectStories($projectID, $orderBy, $pager);
+        $stories    = $this->story->getProjectStories($projectID);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
 
@@ -215,8 +213,6 @@ class project extends control
         $this->assign('stories',    $stories);
         $this->assign('storyTasks', $storyTasks);
         $this->assign('tabID',      'story');
-        $this->assign('pager',      $pager);
-        $this->assign('orderBy',    $orderBy);
         $this->assign('users',      $users);
 
         $this->display();
