@@ -46,3 +46,4 @@ $lang->upgrade->sureExecute   = '确认执行';
 $lang->upgrade->fromVersions['0_3'] = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4'] = '0.4 BETA';
 $lang->upgrade->fromVersions['0_5'] = '0.5 BETA';
+$lang->upgrade->fromVersions['0_6'] = '0.6 BETA';

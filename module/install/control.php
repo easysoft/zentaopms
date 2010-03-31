@@ -23,7 +23,7 @@
  */
 class install extends control
 {
-    const VERSION = '0.6 beta';
+    const VERSION = '1.0beta';
 
     /* 构造函数，检查是否是通过安装入口调用。*/
     public function __construct()
