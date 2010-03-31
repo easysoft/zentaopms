@@ -1,4 +1,3 @@
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -22,7 +21,9 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `storyVersion` smallint(6) NOT NULL default '1',
   `task` mediumint(8) unsigned NOT NULL default '0',
   `title` varchar(150) NOT NULL default '',
+  `keywords` varchar(255) NOT NULL,
   `severity` tinyint(4) NOT NULL default '0',
+  `pri` tinyint(3) unsigned NOT NULL,
   `type` varchar(30) NOT NULL default '',
   `os` varchar(30) NOT NULL default '',
   `browser` varchar(30) NOT NULL default '',
@@ -82,8 +83,15 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `story` mediumint(30) unsigned NOT NULL default '0',
   `storyVersion` smallint(6) NOT NULL default '1',
   `title` char(90) NOT NULL,
+  `keywords` varchar(255) NOT NULL,
   `pri` tinyint(3) unsigned NOT NULL default '0',
   `type` char(30) NOT NULL default '1',
+  `stage` varchar(255) NOT NULL,
+  `howRun` varchar(30) NOT NULL,
+  `scriptedBy` varchar(30) NOT NULL,
+  `scriptedDate` date NOT NULL,
+  `scriptStatus` varchar(30) NOT NULL,
+  `scriptLocation` varchar(255) NOT NULL,
   `status` char(30) NOT NULL default '1',
   `frequency` enum('1','2','3') NOT NULL default '1',
   `order` tinyint(30) unsigned NOT NULL default '0',
@@ -92,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `lastEditedBy` char(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
   `version` tinyint(3) unsigned NOT NULL default '0',
+  `linkCase` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_caseStep`;
@@ -218,8 +227,8 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `company` mediumint(8) unsigned NOT NULL default '0',
-  `name` varchar(30) NOT NULL default '',
-  `code` varchar(10) NOT NULL default '',
+  `name` varchar(90) NOT NULL,
+  `code` varchar(45) NOT NULL,
   `order` tinyint(3) unsigned NOT NULL default '0',
   `status` varchar(30) NOT NULL default '',
   `desc` text NOT NULL,
@@ -244,8 +253,8 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `catID` mediumint(8) unsigned NOT NULL,
   `type` enum('sprint','project') NOT NULL default 'sprint',
   `parent` mediumint(8) unsigned NOT NULL default '0',
-  `name` varchar(30) NOT NULL default '',
-  `code` varchar(20) NOT NULL,
+  `name` varchar(90) NOT NULL,
+  `code` varchar(45) NOT NULL,
   `begin` date NOT NULL,
   `end` date NOT NULL,
   `status` varchar(10) NOT NULL,
@@ -263,9 +272,11 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `PM` varchar(30) NOT NULL default '',
   `QM` varchar(30) NOT NULL default '',
   `team` varchar(30) NOT NULL,
+  `acl` enum('open','private','custom') NOT NULL default 'open',
+  `whitelist` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `company` (`company`,`type`,`parent`,`begin`,`end`,`status`,`statge`,`pri`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectProduct`;
 CREATE TABLE IF NOT EXISTS `zt_projectProduct` (
   `project` mediumint(8) unsigned NOT NULL,
@@ -299,6 +310,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `plan` mediumint(8) unsigned NOT NULL default '0',
   `fromBug` mediumint(8) unsigned NOT NULL default '0',
   `title` varchar(90) NOT NULL default '',
+  `keywords` varchar(255) NOT NULL,
   `type` varchar(30) NOT NULL default '',
   `pri` tinyint(3) unsigned NOT NULL default '3',
   `estimate` float unsigned NOT NULL,
@@ -469,540 +481,554 @@ CREATE TABLE IF NOT EXISTS `zt_userGroup` (
   UNIQUE KEY `account` (`account`,`group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `zt_group` (id, company, name, `desc`) VALUES
-(1, 1, 'admin', 'Admin'),
-(2, 1, 'product', 'Product'),
-(3, 1, 'develop', 'Develop'),
-(4, 1, 'qa', 'QA'),
-(5, 1, 'pm', 'PM');
+INSERT INTO `zt_group` VALUES(1, 1, 'admin', 'Admin');
+INSERT INTO `zt_group` VALUES(2, 1, 'product', 'Product');
+INSERT INTO `zt_group` VALUES(3, 1, 'develop', 'Develop');
+INSERT INTO `zt_group` VALUES(4, 1, 'qa', 'QA');
+INSERT INTO `zt_group` VALUES(5, 1, 'pm', 'PM');
 
-INSERT INTO `zt_groupPriv` (`group`, `module`, `method`) VALUES
-(1, 'admin', 'browseCompany'),
-(1, 'admin', 'index'),
-(1, 'bug', 'activate'),
-(1, 'bug', 'ajaxGetUserBugs'),
-(1, 'bug', 'browse'),
-(1, 'bug', 'close'),
-(1, 'bug', 'create'),
-(1, 'bug', 'edit'),
-(1, 'bug', 'index'),
-(1, 'bug', 'report'),
-(1, 'bug', 'resolve'),
-(1, 'bug', 'view'),
-(1, 'build', 'ajaxGetProductBuilds'),
-(1, 'build', 'ajaxGetProjectBuilds'),
-(1, 'build', 'create'),
-(1, 'build', 'delete'),
-(1, 'build', 'edit'),
-(1, 'build', 'view'),
-(1, 'company', 'browse'),
-(1, 'company', 'create'),
-(1, 'company', 'delete'),
-(1, 'company', 'edit'),
-(1, 'company', 'index'),
-(1, 'dept', 'browse'),
-(1, 'dept', 'delete'),
-(1, 'dept', 'manageChild'),
-(1, 'dept', 'updateOrder'),
-(1, 'group', 'browse'),
-(1, 'group', 'create'),
-(1, 'group', 'delete'),
-(1, 'group', 'edit'),
-(1, 'group', 'manageMember'),
-(1, 'group', 'managePriv'),
-(1, 'index', 'index'),
-(1, 'index', 'ping'),
-(1, 'my', 'bug'),
-(1, 'my', 'editProfile'),
-(1, 'my', 'index'),
-(1, 'my', 'profile'),
-(1, 'my', 'project'),
-(1, 'my', 'story'),
-(1, 'my', 'task'),
-(1, 'my', 'todo'),
-(1, 'product', 'ajaxGetPlans'),
-(1, 'product', 'ajaxGetProjects'),
-(1, 'product', 'browse'),
-(1, 'product', 'create'),
-(1, 'product', 'delete'),
-(1, 'product', 'edit'),
-(1, 'product', 'index'),
-(1, 'product', 'roadmap'),
-(1, 'productplan', 'browse'),
-(1, 'productplan', 'create'),
-(1, 'productplan', 'delete'),
-(1, 'productplan', 'edit'),
-(1, 'productplan', 'linkStory'),
-(1, 'productplan', 'unlinkStory'),
-(1, 'productplan', 'view'),
-(1, 'project', 'browse'),
-(1, 'project', 'bug'),
-(1, 'project', 'build'),
-(1, 'project', 'burn'),
-(1, 'project', 'burnData'),
-(1, 'project', 'create'),
-(1, 'project', 'delete'),
-(1, 'project', 'edit'),
-(1, 'project', 'grouptask'),
-(1, 'project', 'index'),
-(1, 'project', 'linkStory'),
-(1, 'project', 'manageChilds'),
-(1, 'project', 'manageMembers'),
-(1, 'project', 'manageProducts'),
-(1, 'project', 'story'),
-(1, 'project', 'task'),
-(1, 'project', 'team'),
-(1, 'project', 'unlinkMember'),
-(1, 'project', 'unlinkStory'),
-(1, 'project', 'view'),
-(1, 'qa', 'index'),
-(1, 'release', 'browse'),
-(1, 'release', 'create'),
-(1, 'release', 'delete'),
-(1, 'release', 'edit'),
-(1, 'release', 'view'),
-(1, 'search', 'buildForm'),
-(1, 'search', 'buildQuery'),
-(1, 'story', 'activate'),
-(1, 'story', 'ajaxGetProductStories'),
-(1, 'story', 'ajaxGetProjectStories'),
-(1, 'story', 'change'),
-(1, 'story', 'close'),
-(1, 'story', 'create'),
-(1, 'story', 'delete'),
-(1, 'story', 'edit'),
-(1, 'story', 'review'),
-(1, 'story', 'tasks'),
-(1, 'story', 'view'),
-(1, 'task', 'ajaxGetProjectTasks'),
-(1, 'task', 'ajaxGetUserTasks'),
-(1, 'task', 'create'),
-(1, 'task', 'delete'),
-(1, 'task', 'edit'),
-(1, 'task', 'view'),
-(1, 'testcase', 'browse'),
-(1, 'testcase', 'create'),
-(1, 'testcase', 'edit'),
-(1, 'testcase', 'index'),
-(1, 'testcase', 'view'),
-(1, 'testtask', 'batchAssign'),
-(1, 'testtask', 'browse'),
-(1, 'testtask', 'create'),
-(1, 'testtask', 'delete'),
-(1, 'testtask', 'edit'),
-(1, 'testtask', 'index'),
-(1, 'testtask', 'linkcase'),
-(1, 'testtask', 'results'),
-(1, 'testtask', 'runcase'),
-(1, 'testtask', 'unlinkcase'),
-(1, 'testtask', 'view'),
-(1, 'todo', 'create'),
-(1, 'todo', 'delete'),
-(1, 'todo', 'edit'),
-(1, 'todo', 'import2Today'),
-(1, 'todo', 'mark'),
-(1, 'todo', 'view'),
-(1, 'tree', 'ajaxGetOptionMenu'),
-(1, 'tree', 'browse'),
-(1, 'tree', 'delete'),
-(1, 'tree', 'edit'),
-(1, 'tree', 'manageChild'),
-(1, 'tree', 'updateOrder'),
-(1, 'user', 'bug'),
-(1, 'user', 'create'),
-(1, 'user', 'delete'),
-(1, 'user', 'edit'),
-(1, 'user', 'profile'),
-(1, 'user', 'project'),
-(1, 'user', 'task'),
-(1, 'user', 'todo'),
-(1, 'user', 'view'),
-(2, 'bug', 'activate'),
-(2, 'bug', 'ajaxGetUserBugs'),
-(2, 'bug', 'browse'),
-(2, 'bug', 'close'),
-(2, 'bug', 'create'),
-(2, 'bug', 'edit'),
-(2, 'bug', 'index'),
-(2, 'bug', 'report'),
-(2, 'bug', 'resolve'),
-(2, 'bug', 'view'),
-(2, 'build', 'ajaxGetProductBuilds'),
-(2, 'build', 'ajaxGetProjectBuilds'),
-(2, 'build', 'create'),
-(2, 'build', 'delete'),
-(2, 'build', 'edit'),
-(2, 'build', 'view'),
-(2, 'company', 'browse'),
-(2, 'company', 'index'),
-(2, 'index', 'index'),
-(2, 'index', 'ping'),
-(2, 'my', 'bug'),
-(2, 'my', 'editProfile'),
-(2, 'my', 'index'),
-(2, 'my', 'profile'),
-(2, 'my', 'project'),
-(2, 'my', 'story'),
-(2, 'my', 'task'),
-(2, 'my', 'todo'),
-(2, 'product', 'ajaxGetPlans'),
-(2, 'product', 'ajaxGetProjects'),
-(2, 'product', 'browse'),
-(2, 'product', 'create'),
-(2, 'product', 'edit'),
-(2, 'product', 'index'),
-(2, 'product', 'roadmap'),
-(2, 'productplan', 'browse'),
-(2, 'productplan', 'create'),
-(2, 'productplan', 'delete'),
-(2, 'productplan', 'edit'),
-(2, 'productplan', 'linkStory'),
-(2, 'productplan', 'unlinkStory'),
-(2, 'productplan', 'view'),
-(2, 'project', 'browse'),
-(2, 'project', 'bug'),
-(2, 'project', 'build'),
-(2, 'project', 'burn'),
-(2, 'project', 'burnData'),
-(2, 'project', 'grouptask'),
-(2, 'project', 'index'),
-(2, 'project', 'linkStory'),
-(2, 'project', 'manageProducts'),
-(2, 'project', 'story'),
-(2, 'project', 'task'),
-(2, 'project', 'team'),
-(2, 'project', 'unlinkStory'),
-(2, 'project', 'view'),
-(2, 'qa', 'index'),
-(2, 'release', 'browse'),
-(2, 'release', 'create'),
-(2, 'release', 'delete'),
-(2, 'release', 'edit'),
-(2, 'release', 'view'),
-(2, 'search', 'buildForm'),
-(2, 'search', 'buildQuery'),
-(2, 'story', 'activate'),
-(2, 'story', 'ajaxGetProductStories'),
-(2, 'story', 'ajaxGetProjectStories'),
-(2, 'story', 'change'),
-(2, 'story', 'close'),
-(2, 'story', 'create'),
-(2, 'story', 'delete'),
-(2, 'story', 'edit'),
-(2, 'story', 'review'),
-(2, 'story', 'tasks'),
-(2, 'story', 'view'),
-(2, 'task', 'ajaxGetProjectTasks'),
-(2, 'task', 'ajaxGetUserTasks'),
-(2, 'task', 'create'),
-(2, 'task', 'edit'),
-(2, 'task', 'view'),
-(2, 'testcase', 'browse'),
-(2, 'testcase', 'create'),
-(2, 'testcase', 'edit'),
-(2, 'testcase', 'index'),
-(2, 'testcase', 'view'),
-(2, 'testtask', 'browse'),
-(2, 'testtask', 'index'),
-(2, 'testtask', 'results'),
-(2, 'testtask', 'view'),
-(2, 'todo', 'create'),
-(2, 'todo', 'delete'),
-(2, 'todo', 'edit'),
-(2, 'todo', 'import2Today'),
-(2, 'todo', 'mark'),
-(2, 'todo', 'view'),
-(2, 'tree', 'ajaxGetOptionMenu'),
-(2, 'tree', 'browse'),
-(2, 'tree', 'delete'),
-(2, 'tree', 'edit'),
-(2, 'tree', 'manageChild'),
-(2, 'tree', 'updateOrder'),
-(2, 'user', 'bug'),
-(2, 'user', 'profile'),
-(2, 'user', 'project'),
-(2, 'user', 'task'),
-(2, 'user', 'todo'),
-(2, 'user', 'view'),
-(3, 'bug', 'activate'),
-(3, 'bug', 'ajaxGetUserBugs'),
-(3, 'bug', 'browse'),
-(3, 'bug', 'close'),
-(3, 'bug', 'create'),
-(3, 'bug', 'edit'),
-(3, 'bug', 'index'),
-(3, 'bug', 'report'),
-(3, 'bug', 'resolve'),
-(3, 'bug', 'view'),
-(3, 'build', 'ajaxGetProductBuilds'),
-(3, 'build', 'ajaxGetProjectBuilds'),
-(3, 'build', 'create'),
-(3, 'build', 'edit'),
-(3, 'build', 'view'),
-(3, 'company', 'browse'),
-(3, 'company', 'index'),
-(3, 'index', 'index'),
-(3, 'index', 'ping'),
-(3, 'my', 'bug'),
-(3, 'my', 'editProfile'),
-(3, 'my', 'index'),
-(3, 'my', 'profile'),
-(3, 'my', 'project'),
-(3, 'my', 'story'),
-(3, 'my', 'task'),
-(3, 'my', 'todo'),
-(3, 'product', 'ajaxGetPlans'),
-(3, 'product', 'ajaxGetProjects'),
-(3, 'product', 'browse'),
-(3, 'product', 'index'),
-(3, 'product', 'roadmap'),
-(3, 'productplan', 'browse'),
-(3, 'productplan', 'view'),
-(3, 'project', 'browse'),
-(3, 'project', 'bug'),
-(3, 'project', 'build'),
-(3, 'project', 'burn'),
-(3, 'project', 'burnData'),
-(3, 'project', 'grouptask'),
-(3, 'project', 'index'),
-(3, 'project', 'story'),
-(3, 'project', 'task'),
-(3, 'project', 'team'),
-(3, 'project', 'view'),
-(3, 'qa', 'index'),
-(3, 'release', 'browse'),
-(3, 'release', 'view'),
-(3, 'search', 'buildForm'),
-(3, 'search', 'buildQuery'),
-(3, 'story', 'activate'),
-(3, 'story', 'ajaxGetProductStories'),
-(3, 'story', 'ajaxGetProjectStories'),
-(3, 'story', 'change'),
-(3, 'story', 'close'),
-(3, 'story', 'create'),
-(3, 'story', 'edit'),
-(3, 'story', 'review'),
-(3, 'story', 'tasks'),
-(3, 'story', 'view'),
-(3, 'task', 'ajaxGetProjectTasks'),
-(3, 'task', 'ajaxGetUserTasks'),
-(3, 'task', 'create'),
-(3, 'task', 'edit'),
-(3, 'task', 'view'),
-(3, 'testcase', 'browse'),
-(3, 'testcase', 'index'),
-(3, 'testcase', 'view'),
-(3, 'testtask', 'browse'),
-(3, 'testtask', 'index'),
-(3, 'testtask', 'results'),
-(3, 'testtask', 'view'),
-(3, 'todo', 'create'),
-(3, 'todo', 'delete'),
-(3, 'todo', 'edit'),
-(3, 'todo', 'import2Today'),
-(3, 'todo', 'mark'),
-(3, 'todo', 'view'),
-(3, 'user', 'bug'),
-(3, 'user', 'profile'),
-(3, 'user', 'project'),
-(3, 'user', 'task'),
-(3, 'user', 'todo'),
-(3, 'user', 'view'),
-(4, 'bug', 'activate'),
-(4, 'bug', 'ajaxGetUserBugs'),
-(4, 'bug', 'browse'),
-(4, 'bug', 'close'),
-(4, 'bug', 'create'),
-(4, 'bug', 'edit'),
-(4, 'bug', 'index'),
-(4, 'bug', 'report'),
-(4, 'bug', 'resolve'),
-(4, 'bug', 'view'),
-(4, 'build', 'ajaxGetProductBuilds'),
-(4, 'build', 'ajaxGetProjectBuilds'),
-(4, 'build', 'create'),
-(4, 'build', 'delete'),
-(4, 'build', 'edit'),
-(4, 'build', 'view'),
-(4, 'company', 'browse'),
-(4, 'company', 'index'),
-(4, 'index', 'index'),
-(4, 'index', 'ping'),
-(4, 'my', 'bug'),
-(4, 'my', 'editProfile'),
-(4, 'my', 'index'),
-(4, 'my', 'profile'),
-(4, 'my', 'project'),
-(4, 'my', 'story'),
-(4, 'my', 'task'),
-(4, 'my', 'todo'),
-(4, 'product', 'ajaxGetPlans'),
-(4, 'product', 'ajaxGetProjects'),
-(4, 'product', 'browse'),
-(4, 'product', 'index'),
-(4, 'product', 'roadmap'),
-(4, 'productplan', 'browse'),
-(4, 'productplan', 'view'),
-(4, 'project', 'browse'),
-(4, 'project', 'bug'),
-(4, 'project', 'build'),
-(4, 'project', 'burn'),
-(4, 'project', 'burnData'),
-(4, 'project', 'grouptask'),
-(4, 'project', 'index'),
-(4, 'project', 'story'),
-(4, 'project', 'task'),
-(4, 'project', 'team'),
-(4, 'project', 'view'),
-(4, 'qa', 'index'),
-(4, 'release', 'browse'),
-(4, 'release', 'view'),
-(4, 'search', 'buildForm'),
-(4, 'search', 'buildQuery'),
-(4, 'story', 'activate'),
-(4, 'story', 'ajaxGetProductStories'),
-(4, 'story', 'ajaxGetProjectStories'),
-(4, 'story', 'change'),
-(4, 'story', 'close'),
-(4, 'story', 'create'),
-(4, 'story', 'edit'),
-(4, 'story', 'review'),
-(4, 'story', 'tasks'),
-(4, 'story', 'view'),
-(4, 'task', 'ajaxGetProjectTasks'),
-(4, 'task', 'ajaxGetUserTasks'),
-(4, 'task', 'create'),
-(4, 'task', 'edit'),
-(4, 'task', 'view'),
-(4, 'testcase', 'browse'),
-(4, 'testcase', 'create'),
-(4, 'testcase', 'edit'),
-(4, 'testcase', 'index'),
-(4, 'testcase', 'view'),
-(4, 'testtask', 'batchAssign'),
-(4, 'testtask', 'browse'),
-(4, 'testtask', 'create'),
-(4, 'testtask', 'delete'),
-(4, 'testtask', 'edit'),
-(4, 'testtask', 'index'),
-(4, 'testtask', 'linkcase'),
-(4, 'testtask', 'results'),
-(4, 'testtask', 'runcase'),
-(4, 'testtask', 'unlinkcase'),
-(4, 'testtask', 'view'),
-(4, 'todo', 'create'),
-(4, 'todo', 'delete'),
-(4, 'todo', 'edit'),
-(4, 'todo', 'import2Today'),
-(4, 'todo', 'mark'),
-(4, 'todo', 'view'),
-(4, 'tree', 'ajaxGetOptionMenu'),
-(4, 'tree', 'browse'),
-(4, 'tree', 'delete'),
-(4, 'tree', 'edit'),
-(4, 'tree', 'manageChild'),
-(4, 'tree', 'updateOrder'),
-(4, 'user', 'bug'),
-(4, 'user', 'profile'),
-(4, 'user', 'project'),
-(4, 'user', 'task'),
-(4, 'user', 'todo'),
-(4, 'user', 'view'),
-(5, 'bug', 'activate'),
-(5, 'bug', 'ajaxGetUserBugs'),
-(5, 'bug', 'browse'),
-(5, 'bug', 'close'),
-(5, 'bug', 'create'),
-(5, 'bug', 'edit'),
-(5, 'bug', 'index'),
-(5, 'bug', 'report'),
-(5, 'bug', 'resolve'),
-(5, 'bug', 'view'),
-(5, 'build', 'ajaxGetProductBuilds'),
-(5, 'build', 'ajaxGetProjectBuilds'),
-(5, 'build', 'create'),
-(5, 'build', 'delete'),
-(5, 'build', 'edit'),
-(5, 'build', 'view'),
-(5, 'company', 'browse'),
-(5, 'company', 'index'),
-(5, 'index', 'index'),
-(5, 'index', 'ping'),
-(5, 'my', 'bug'),
-(5, 'my', 'editProfile'),
-(5, 'my', 'index'),
-(5, 'my', 'profile'),
-(5, 'my', 'project'),
-(5, 'my', 'story'),
-(5, 'my', 'task'),
-(5, 'my', 'todo'),
-(5, 'product', 'ajaxGetPlans'),
-(5, 'product', 'ajaxGetProjects'),
-(5, 'product', 'browse'),
-(5, 'product', 'index'),
-(5, 'product', 'roadmap'),
-(5, 'productplan', 'browse'),
-(5, 'productplan', 'linkStory'),
-(5, 'productplan', 'unlinkStory'),
-(5, 'productplan', 'view'),
-(5, 'project', 'browse'),
-(5, 'project', 'bug'),
-(5, 'project', 'build'),
-(5, 'project', 'burn'),
-(5, 'project', 'burnData'),
-(5, 'project', 'create'),
-(5, 'project', 'delete'),
-(5, 'project', 'edit'),
-(5, 'project', 'grouptask'),
-(5, 'project', 'index'),
-(5, 'project', 'linkStory'),
-(5, 'project', 'manageChilds'),
-(5, 'project', 'manageMembers'),
-(5, 'project', 'manageProducts'),
-(5, 'project', 'story'),
-(5, 'project', 'task'),
-(5, 'project', 'team'),
-(5, 'project', 'unlinkMember'),
-(5, 'project', 'unlinkStory'),
-(5, 'project', 'view'),
-(5, 'qa', 'index'),
-(5, 'release', 'browse'),
-(5, 'release', 'view'),
-(5, 'search', 'buildForm'),
-(5, 'search', 'buildQuery'),
-(5, 'story', 'activate'),
-(5, 'story', 'ajaxGetProductStories'),
-(5, 'story', 'ajaxGetProjectStories'),
-(5, 'story', 'change'),
-(5, 'story', 'close'),
-(5, 'story', 'create'),
-(5, 'story', 'edit'),
-(5, 'story', 'review'),
-(5, 'story', 'tasks'),
-(5, 'story', 'view'),
-(5, 'task', 'ajaxGetProjectTasks'),
-(5, 'task', 'ajaxGetUserTasks'),
-(5, 'task', 'create'),
-(5, 'task', 'delete'),
-(5, 'task', 'edit'),
-(5, 'task', 'view'),
-(5, 'testcase', 'browse'),
-(5, 'testcase', 'edit'),
-(5, 'testcase', 'index'),
-(5, 'testcase', 'view'),
-(5, 'testtask', 'browse'),
-(5, 'testtask', 'index'),
-(5, 'testtask', 'results'),
-(5, 'testtask', 'view'),
-(5, 'todo', 'create'),
-(5, 'todo', 'delete'),
-(5, 'todo', 'edit'),
-(5, 'todo', 'import2Today'),
-(5, 'todo', 'mark'),
-(5, 'todo', 'view'),
-(5, 'user', 'bug'),
-(5, 'user', 'profile'),
-(5, 'user', 'project'),
-(5, 'user', 'task'),
-(5, 'user', 'todo'),
-(5, 'user', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'admin', 'browseCompany');
+INSERT INTO `zt_groupPriv` VALUES(1, 'admin', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'api', 'getModel');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'ajaxGetUserBugs');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'close');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'confirmStoryChange');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'report');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'resolve');
+INSERT INTO `zt_groupPriv` VALUES(1, 'bug', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'build', 'ajaxGetProductBuilds');
+INSERT INTO `zt_groupPriv` VALUES(1, 'build', 'ajaxGetProjectBuilds');
+INSERT INTO `zt_groupPriv` VALUES(1, 'build', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'build', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'build', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'build', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'company', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'company', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'company', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'company', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'company', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'dept', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'dept', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'dept', 'manageChild');
+INSERT INTO `zt_groupPriv` VALUES(1, 'dept', 'updateOrder');
+INSERT INTO `zt_groupPriv` VALUES(1, 'file', 'download');
+INSERT INTO `zt_groupPriv` VALUES(1, 'group', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'group', 'copy');
+INSERT INTO `zt_groupPriv` VALUES(1, 'group', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'group', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'group', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'group', 'manageMember');
+INSERT INTO `zt_groupPriv` VALUES(1, 'group', 'managePriv');
+INSERT INTO `zt_groupPriv` VALUES(1, 'index', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'misc', 'ping');
+INSERT INTO `zt_groupPriv` VALUES(1, 'my', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(1, 'my', 'editProfile');
+INSERT INTO `zt_groupPriv` VALUES(1, 'my', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'my', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(1, 'my', 'project');
+INSERT INTO `zt_groupPriv` VALUES(1, 'my', 'story');
+INSERT INTO `zt_groupPriv` VALUES(1, 'my', 'task');
+INSERT INTO `zt_groupPriv` VALUES(1, 'my', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(1, 'product', 'ajaxGetPlans');
+INSERT INTO `zt_groupPriv` VALUES(1, 'product', 'ajaxGetProjects');
+INSERT INTO `zt_groupPriv` VALUES(1, 'product', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'product', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'product', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'product', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'product', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'product', 'roadmap');
+INSERT INTO `zt_groupPriv` VALUES(1, 'productplan', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'productplan', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'productplan', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'productplan', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'productplan', 'linkStory');
+INSERT INTO `zt_groupPriv` VALUES(1, 'productplan', 'unlinkStory');
+INSERT INTO `zt_groupPriv` VALUES(1, 'productplan', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'build');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'burn');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'burnData');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'grouptask');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'importtask');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'linkStory');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'manageChilds');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'manageMembers');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'manageProducts');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'story');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'task');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'team');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'unlinkMember');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'unlinkStory');
+INSERT INTO `zt_groupPriv` VALUES(1, 'project', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'qa', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'release', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'release', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'release', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'release', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'release', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'search', 'buildForm');
+INSERT INTO `zt_groupPriv` VALUES(1, 'search', 'buildQuery');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'ajaxGetProductStories');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'ajaxGetProjectStories');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'change');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'close');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'review');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'tasks');
+INSERT INTO `zt_groupPriv` VALUES(1, 'story', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'task', 'ajaxGetProjectTasks');
+INSERT INTO `zt_groupPriv` VALUES(1, 'task', 'ajaxGetUserTasks');
+INSERT INTO `zt_groupPriv` VALUES(1, 'task', 'confirmStoryChange');
+INSERT INTO `zt_groupPriv` VALUES(1, 'task', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'task', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'task', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'task', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testcase', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testcase', 'confirmStoryChange');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testcase', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testcase', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testcase', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testcase', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'batchAssign');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'index');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'linkcase');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'results');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'runcase');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'unlinkcase');
+INSERT INTO `zt_groupPriv` VALUES(1, 'testtask', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'todo', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'todo', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'todo', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'todo', 'import2Today');
+INSERT INTO `zt_groupPriv` VALUES(1, 'todo', 'mark');
+INSERT INTO `zt_groupPriv` VALUES(1, 'todo', 'view');
+INSERT INTO `zt_groupPriv` VALUES(1, 'tree', 'ajaxGetOptionMenu');
+INSERT INTO `zt_groupPriv` VALUES(1, 'tree', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(1, 'tree', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'tree', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'tree', 'manageChild');
+INSERT INTO `zt_groupPriv` VALUES(1, 'tree', 'updateOrder');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'create');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'project');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'task');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(1, 'user', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'ajaxGetUserBugs');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'close');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'report');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'resolve');
+INSERT INTO `zt_groupPriv` VALUES(2, 'bug', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'build', 'ajaxGetProductBuilds');
+INSERT INTO `zt_groupPriv` VALUES(2, 'build', 'ajaxGetProjectBuilds');
+INSERT INTO `zt_groupPriv` VALUES(2, 'build', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'build', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(2, 'build', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'build', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'company', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'company', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'file', 'download');
+INSERT INTO `zt_groupPriv` VALUES(2, 'index', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'misc', 'ping');
+INSERT INTO `zt_groupPriv` VALUES(2, 'my', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(2, 'my', 'editProfile');
+INSERT INTO `zt_groupPriv` VALUES(2, 'my', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'my', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(2, 'my', 'project');
+INSERT INTO `zt_groupPriv` VALUES(2, 'my', 'story');
+INSERT INTO `zt_groupPriv` VALUES(2, 'my', 'task');
+INSERT INTO `zt_groupPriv` VALUES(2, 'my', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(2, 'product', 'ajaxGetPlans');
+INSERT INTO `zt_groupPriv` VALUES(2, 'product', 'ajaxGetProjects');
+INSERT INTO `zt_groupPriv` VALUES(2, 'product', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'product', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'product', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'product', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'product', 'roadmap');
+INSERT INTO `zt_groupPriv` VALUES(2, 'productplan', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'productplan', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'productplan', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(2, 'productplan', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'productplan', 'linkStory');
+INSERT INTO `zt_groupPriv` VALUES(2, 'productplan', 'unlinkStory');
+INSERT INTO `zt_groupPriv` VALUES(2, 'productplan', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'build');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'burn');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'burnData');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'grouptask');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'linkStory');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'manageProducts');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'story');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'task');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'team');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'unlinkStory');
+INSERT INTO `zt_groupPriv` VALUES(2, 'project', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'qa', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'release', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'release', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'release', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(2, 'release', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'release', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'search', 'buildForm');
+INSERT INTO `zt_groupPriv` VALUES(2, 'search', 'buildQuery');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'ajaxGetProductStories');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'ajaxGetProjectStories');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'change');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'close');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'review');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'tasks');
+INSERT INTO `zt_groupPriv` VALUES(2, 'story', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'task', 'ajaxGetProjectTasks');
+INSERT INTO `zt_groupPriv` VALUES(2, 'task', 'ajaxGetUserTasks');
+INSERT INTO `zt_groupPriv` VALUES(2, 'task', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'task', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'task', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testcase', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testcase', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testcase', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testcase', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testcase', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testtask', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testtask', 'index');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testtask', 'results');
+INSERT INTO `zt_groupPriv` VALUES(2, 'testtask', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'todo', 'create');
+INSERT INTO `zt_groupPriv` VALUES(2, 'todo', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(2, 'todo', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'todo', 'import2Today');
+INSERT INTO `zt_groupPriv` VALUES(2, 'todo', 'mark');
+INSERT INTO `zt_groupPriv` VALUES(2, 'todo', 'view');
+INSERT INTO `zt_groupPriv` VALUES(2, 'tree', 'ajaxGetOptionMenu');
+INSERT INTO `zt_groupPriv` VALUES(2, 'tree', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(2, 'tree', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(2, 'tree', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(2, 'tree', 'manageChild');
+INSERT INTO `zt_groupPriv` VALUES(2, 'tree', 'updateOrder');
+INSERT INTO `zt_groupPriv` VALUES(2, 'user', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(2, 'user', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(2, 'user', 'project');
+INSERT INTO `zt_groupPriv` VALUES(2, 'user', 'task');
+INSERT INTO `zt_groupPriv` VALUES(2, 'user', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(2, 'user', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'ajaxGetUserBugs');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'close');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'create');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'report');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'resolve');
+INSERT INTO `zt_groupPriv` VALUES(3, 'bug', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'build', 'ajaxGetProductBuilds');
+INSERT INTO `zt_groupPriv` VALUES(3, 'build', 'ajaxGetProjectBuilds');
+INSERT INTO `zt_groupPriv` VALUES(3, 'build', 'create');
+INSERT INTO `zt_groupPriv` VALUES(3, 'build', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(3, 'build', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'company', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(3, 'company', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'file', 'download');
+INSERT INTO `zt_groupPriv` VALUES(3, 'index', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'misc', 'ping');
+INSERT INTO `zt_groupPriv` VALUES(3, 'my', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(3, 'my', 'editProfile');
+INSERT INTO `zt_groupPriv` VALUES(3, 'my', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'my', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(3, 'my', 'project');
+INSERT INTO `zt_groupPriv` VALUES(3, 'my', 'story');
+INSERT INTO `zt_groupPriv` VALUES(3, 'my', 'task');
+INSERT INTO `zt_groupPriv` VALUES(3, 'my', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(3, 'product', 'ajaxGetPlans');
+INSERT INTO `zt_groupPriv` VALUES(3, 'product', 'ajaxGetProjects');
+INSERT INTO `zt_groupPriv` VALUES(3, 'product', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(3, 'product', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'product', 'roadmap');
+INSERT INTO `zt_groupPriv` VALUES(3, 'productplan', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(3, 'productplan', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'build');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'burn');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'burnData');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'grouptask');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'story');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'task');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'team');
+INSERT INTO `zt_groupPriv` VALUES(3, 'project', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'qa', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'release', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(3, 'release', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'search', 'buildForm');
+INSERT INTO `zt_groupPriv` VALUES(3, 'search', 'buildQuery');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'ajaxGetProductStories');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'ajaxGetProjectStories');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'change');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'close');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'create');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'review');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'tasks');
+INSERT INTO `zt_groupPriv` VALUES(3, 'story', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'task', 'ajaxGetProjectTasks');
+INSERT INTO `zt_groupPriv` VALUES(3, 'task', 'ajaxGetUserTasks');
+INSERT INTO `zt_groupPriv` VALUES(3, 'task', 'confirmStoryChange');
+INSERT INTO `zt_groupPriv` VALUES(3, 'task', 'create');
+INSERT INTO `zt_groupPriv` VALUES(3, 'task', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(3, 'task', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'testcase', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(3, 'testcase', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'testcase', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'testtask', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(3, 'testtask', 'index');
+INSERT INTO `zt_groupPriv` VALUES(3, 'testtask', 'results');
+INSERT INTO `zt_groupPriv` VALUES(3, 'testtask', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'todo', 'create');
+INSERT INTO `zt_groupPriv` VALUES(3, 'todo', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(3, 'todo', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(3, 'todo', 'import2Today');
+INSERT INTO `zt_groupPriv` VALUES(3, 'todo', 'mark');
+INSERT INTO `zt_groupPriv` VALUES(3, 'todo', 'view');
+INSERT INTO `zt_groupPriv` VALUES(3, 'user', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(3, 'user', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(3, 'user', 'project');
+INSERT INTO `zt_groupPriv` VALUES(3, 'user', 'task');
+INSERT INTO `zt_groupPriv` VALUES(3, 'user', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(3, 'user', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'ajaxGetUserBugs');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'close');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'confirmStoryChange');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'create');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'report');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'resolve');
+INSERT INTO `zt_groupPriv` VALUES(4, 'bug', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'build', 'ajaxGetProductBuilds');
+INSERT INTO `zt_groupPriv` VALUES(4, 'build', 'ajaxGetProjectBuilds');
+INSERT INTO `zt_groupPriv` VALUES(4, 'build', 'create');
+INSERT INTO `zt_groupPriv` VALUES(4, 'build', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(4, 'build', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(4, 'build', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'company', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'company', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'file', 'download');
+INSERT INTO `zt_groupPriv` VALUES(4, 'index', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'misc', 'ping');
+INSERT INTO `zt_groupPriv` VALUES(4, 'my', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(4, 'my', 'editProfile');
+INSERT INTO `zt_groupPriv` VALUES(4, 'my', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'my', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(4, 'my', 'project');
+INSERT INTO `zt_groupPriv` VALUES(4, 'my', 'story');
+INSERT INTO `zt_groupPriv` VALUES(4, 'my', 'task');
+INSERT INTO `zt_groupPriv` VALUES(4, 'my', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(4, 'product', 'ajaxGetPlans');
+INSERT INTO `zt_groupPriv` VALUES(4, 'product', 'ajaxGetProjects');
+INSERT INTO `zt_groupPriv` VALUES(4, 'product', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'product', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'product', 'roadmap');
+INSERT INTO `zt_groupPriv` VALUES(4, 'productplan', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'productplan', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'build');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'burn');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'burnData');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'grouptask');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'story');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'task');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'team');
+INSERT INTO `zt_groupPriv` VALUES(4, 'project', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'qa', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'release', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'release', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'search', 'buildForm');
+INSERT INTO `zt_groupPriv` VALUES(4, 'search', 'buildQuery');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'ajaxGetProductStories');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'ajaxGetProjectStories');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'change');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'close');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'create');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'review');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'tasks');
+INSERT INTO `zt_groupPriv` VALUES(4, 'story', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'task', 'ajaxGetProjectTasks');
+INSERT INTO `zt_groupPriv` VALUES(4, 'task', 'ajaxGetUserTasks');
+INSERT INTO `zt_groupPriv` VALUES(4, 'task', 'create');
+INSERT INTO `zt_groupPriv` VALUES(4, 'task', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(4, 'task', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testcase', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testcase', 'confirmStoryChange');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testcase', 'create');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testcase', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testcase', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testcase', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'batchAssign');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'create');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'index');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'linkcase');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'results');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'runcase');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'unlinkcase');
+INSERT INTO `zt_groupPriv` VALUES(4, 'testtask', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'todo', 'create');
+INSERT INTO `zt_groupPriv` VALUES(4, 'todo', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(4, 'todo', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(4, 'todo', 'import2Today');
+INSERT INTO `zt_groupPriv` VALUES(4, 'todo', 'mark');
+INSERT INTO `zt_groupPriv` VALUES(4, 'todo', 'view');
+INSERT INTO `zt_groupPriv` VALUES(4, 'tree', 'ajaxGetOptionMenu');
+INSERT INTO `zt_groupPriv` VALUES(4, 'tree', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(4, 'tree', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(4, 'tree', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(4, 'tree', 'manageChild');
+INSERT INTO `zt_groupPriv` VALUES(4, 'tree', 'updateOrder');
+INSERT INTO `zt_groupPriv` VALUES(4, 'user', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(4, 'user', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(4, 'user', 'project');
+INSERT INTO `zt_groupPriv` VALUES(4, 'user', 'task');
+INSERT INTO `zt_groupPriv` VALUES(4, 'user', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(4, 'user', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'ajaxGetUserBugs');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'close');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'create');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'report');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'resolve');
+INSERT INTO `zt_groupPriv` VALUES(5, 'bug', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'build', 'ajaxGetProductBuilds');
+INSERT INTO `zt_groupPriv` VALUES(5, 'build', 'ajaxGetProjectBuilds');
+INSERT INTO `zt_groupPriv` VALUES(5, 'build', 'create');
+INSERT INTO `zt_groupPriv` VALUES(5, 'build', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(5, 'build', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(5, 'build', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'company', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(5, 'company', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'file', 'download');
+INSERT INTO `zt_groupPriv` VALUES(5, 'index', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'misc', 'ping');
+INSERT INTO `zt_groupPriv` VALUES(5, 'my', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(5, 'my', 'editProfile');
+INSERT INTO `zt_groupPriv` VALUES(5, 'my', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'my', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(5, 'my', 'project');
+INSERT INTO `zt_groupPriv` VALUES(5, 'my', 'story');
+INSERT INTO `zt_groupPriv` VALUES(5, 'my', 'task');
+INSERT INTO `zt_groupPriv` VALUES(5, 'my', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(5, 'product', 'ajaxGetPlans');
+INSERT INTO `zt_groupPriv` VALUES(5, 'product', 'ajaxGetProjects');
+INSERT INTO `zt_groupPriv` VALUES(5, 'product', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(5, 'product', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'product', 'roadmap');
+INSERT INTO `zt_groupPriv` VALUES(5, 'productplan', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(5, 'productplan', 'linkStory');
+INSERT INTO `zt_groupPriv` VALUES(5, 'productplan', 'unlinkStory');
+INSERT INTO `zt_groupPriv` VALUES(5, 'productplan', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'build');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'burn');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'burnData');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'create');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'grouptask');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'importtask');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'linkStory');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'manageChilds');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'manageMembers');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'manageProducts');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'story');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'task');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'team');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'unlinkMember');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'unlinkStory');
+INSERT INTO `zt_groupPriv` VALUES(5, 'project', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'qa', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'release', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(5, 'release', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'search', 'buildForm');
+INSERT INTO `zt_groupPriv` VALUES(5, 'search', 'buildQuery');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'activate');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'ajaxGetProductStories');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'ajaxGetProjectStories');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'change');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'close');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'create');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'review');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'tasks');
+INSERT INTO `zt_groupPriv` VALUES(5, 'story', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'task', 'ajaxGetProjectTasks');
+INSERT INTO `zt_groupPriv` VALUES(5, 'task', 'ajaxGetUserTasks');
+INSERT INTO `zt_groupPriv` VALUES(5, 'task', 'confirmStoryChange');
+INSERT INTO `zt_groupPriv` VALUES(5, 'task', 'create');
+INSERT INTO `zt_groupPriv` VALUES(5, 'task', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(5, 'task', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(5, 'task', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'testcase', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(5, 'testcase', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(5, 'testcase', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'testcase', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'testtask', 'browse');
+INSERT INTO `zt_groupPriv` VALUES(5, 'testtask', 'index');
+INSERT INTO `zt_groupPriv` VALUES(5, 'testtask', 'results');
+INSERT INTO `zt_groupPriv` VALUES(5, 'testtask', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'todo', 'create');
+INSERT INTO `zt_groupPriv` VALUES(5, 'todo', 'delete');
+INSERT INTO `zt_groupPriv` VALUES(5, 'todo', 'edit');
+INSERT INTO `zt_groupPriv` VALUES(5, 'todo', 'import2Today');
+INSERT INTO `zt_groupPriv` VALUES(5, 'todo', 'mark');
+INSERT INTO `zt_groupPriv` VALUES(5, 'todo', 'view');
+INSERT INTO `zt_groupPriv` VALUES(5, 'user', 'bug');
+INSERT INTO `zt_groupPriv` VALUES(5, 'user', 'profile');
+INSERT INTO `zt_groupPriv` VALUES(5, 'user', 'project');
+INSERT INTO `zt_groupPriv` VALUES(5, 'user', 'task');
+INSERT INTO `zt_groupPriv` VALUES(5, 'user', 'todo');
+INSERT INTO `zt_groupPriv` VALUES(5, 'user', 'view');
