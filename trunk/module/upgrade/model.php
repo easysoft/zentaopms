@@ -35,15 +35,22 @@ class upgradeModel extends model
             $this->upgradeFrom0_3To0_4();
             $this->upgradeFrom0_4To0_5();
             $this->upgradeFrom0_5To0_6();
+            $this->upgradeFrom0_6To1_0_B();
         }
         elseif($fromVersion == '0_4')
         {
             $this->upgradeFrom0_4To0_5();
             $this->upgradeFrom0_5To0_6();
+            $this->upgradeFrom0_6To1_0_B();
         }
         elseif($fromVersion == '0_5')
         {
             $this->upgradeFrom0_5To0_6();
+            $this->upgradeFrom0_6To1_0_B();
+        }
+        elseif($fromVersion == '0_6')
+        {
+            $this->upgradeFrom0_6To1_0_B();
         }
     }
 
@@ -56,15 +63,22 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
         }
         elseif($fromVersion == '0_4')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
         }
         elseif($fromVersion == '0_5')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
+        }
+        elseif($fromVersion == '0_6')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
         }
 
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
@@ -90,6 +104,13 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('0.5'));
         if(!$this->isError()) $this->updateVersion('0.6 beta');
+    }
+
+    /* 从0.6版本升级到1.0 beta版本。*/
+    private function upgradeFrom0_6To1_0_B()
+    {
+        $this->execSQL($this->getUpgradeFile('0.6'));
+        if(!$this->isError()) $this->updateVersion('1.0beta');
     }
 
     /* 更新PMS的版本设置。*/
