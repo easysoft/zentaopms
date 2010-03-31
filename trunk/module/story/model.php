@@ -416,13 +416,13 @@ class storyModel extends model
     }
 
     /* 获得某一个项目相关的所有需求列表。*/
-    public function getProjectStories($projectID = 0, $orderBy='id_desc', $pager = null)
+    public function getProjectStories($projectID = 0)
     {
         return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->eq((int)$projectID)
-            ->orderBy($orderBy)
-            ->page($pager)->fetchAll('id');
+            ->orderBy('t2.pri')
+            ->fetchAll('id');
     }
 
     /* 获得某一个项目相关的需求id=>title的列表。*/

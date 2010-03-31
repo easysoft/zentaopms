@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorbox.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <script language='javascript'>
 $(document).ready(function()
 {
@@ -42,18 +42,17 @@ $(document).ready(function()
 </div>
 
 <div class='yui-d0'>
-  <table class='table-1 tablesorter fixed colored'>
-    <?php $vars = "projectID=$project->id&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+  <table class='table-1 tablesorter fixed'>
     <thead>
       <tr class='colhead'>
-        <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->story->id);?></th>
-        <th><?php common::printOrderLink('pri',        $orderBy, $vars, $lang->story->pri);?></th>
-        <th class='w-p50'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
-        <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->story->assignedTo);?></th>
-        <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->story->openedBy);?></th>
-        <th><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimate);?></th>
-        <th><?php common::printOrderLink('status',     $orderBy, $vars, $lang->story->status);?></th>
-        <th><?php common::printOrderLink('stage',     $orderBy, $vars, $lang->story->stage);?></th>
+        <th><?php echo $lang->story->id;?></th>
+        <th><?php echo $lang->story->pri;?></th>
+        <th class='w-p50'><?php echo $lang->story->title;?></th>
+        <th><?php echo $lang->story->assignedTo;?></th>
+        <th><?php echo $lang->story->openedBy;?></th>
+        <th><?php echo $lang->story->estimate;?></th>
+        <th><?php echo $lang->story->status;?></th>
+        <th><?php echo $lang->story->stage;?></th>
         <th class='w-150px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -92,6 +91,5 @@ $(document).ready(function()
       <?php endforeach;?>
     </tbody>
   </table>
-  <?php $pager->show();?>
 </div>  
 <?php include '../../common/view/footer.html.php';?>
