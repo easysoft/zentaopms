@@ -31,6 +31,7 @@ $lang->task->logEfforts= "记录工时";
 $lang->task->close     = "关闭任务";
 $lang->task->cancel    = "取消任务";
 $lang->task->activate  = "激活任务";
+$lang->task->confirmStoryChange = "确认需求变动";
 
 $lang->task->common       = '任务';
 $lang->task->id           = '编号';
