@@ -138,6 +138,6 @@ $(document).ready(function()
 {
     setNowrapObjTitle();
     setRequiredFields();
-    setHelpLink();
+    //setHelpLink();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });
