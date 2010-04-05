@@ -57,10 +57,12 @@ $(document).ready(function()
       </tr>
     </thead>
     <tbody>
+      <?php $totalEstimate = 0;?>
       <?php foreach($stories as $key => $story):?>
       <?php
       $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
       $canView  = common::hasPriv('story', 'view');
+      $totalEstimate += $story->estimate;
       ?>
       <tr class='a-center'>
         <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
@@ -90,6 +92,9 @@ $(document).ready(function()
       </tr>
       <?php endforeach;?>
     </tbody>
+    <tfoot>
+      <tr><td colspan='9' class='a-right'><?php printf($lang->project->storySummary, count($stories), $totalEstimate);?></td></tr>
+    </tfoot>
   </table>
 </div>  
 <?php include '../../common/view/footer.html.php';?>
