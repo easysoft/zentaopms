@@ -50,6 +50,17 @@ function createLink(moduleName, methodName, vars, viewType)
     return link;
 }
 
+/* 快速跳转到某一个模块的某一个id。*/
+function shortcut()
+{
+    objectType  = $('#searchType').attr('value');
+    objectValue = $('#searchQuery').attr('value');
+    if(objectType && objectValue)
+    {
+        location.href=createLink(objectType, 'view', "id=" + objectValue);
+    }
+}
+
 /* 自动设置所有属性为nobr的title。*/
 function setNowrapObjTitle()
 {

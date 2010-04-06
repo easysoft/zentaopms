@@ -189,6 +189,8 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 #mainmenu a  {color:black;}
 #mainmenu .active   {color:#FFF; background-color:#00008B;}
 #mainmenu .active a {color:white}
+#mainmenu #searchbox{float:right; border:none}
+#mainmenu #searchbox .text-2{width:80px}
 
 /* Ä£¿éµÄ²Ëµ¥¡£*/
 #modulemenu    {color:white; margin-bottom:10px; font-weight:normal; font-size:normal}
