@@ -57,6 +57,7 @@ $lang->addFiles   = '上传了附件 ';
 $lang->files      = '附件 ';
 $lang->workingHour= '工时';
 $lang->showHelp   = '显示帮助';
+$lang->go         = 'GO!';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
@@ -66,6 +67,12 @@ $lang->menu->project = '项目视图|project|index';
 $lang->menu->qa      = 'QA视图|qa|index';
 $lang->menu->company = '组织视图|company|index';
 $lang->menu->admin   = '后台管理|admin|index';
+
+/* 查询条中可以选择的对象列表。*/
+$lang->searchObjects['story']   = '需求';
+$lang->searchObjects['task']    = '任务';
+$lang->searchObjects['bug']     = 'Bug';
+$lang->searchObjects['testcase']= '用例';
 
 /* 首页菜单设置。*/
 $lang->index->menu->product = '浏览产品|product|browse';
