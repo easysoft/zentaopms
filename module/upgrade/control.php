@@ -71,4 +71,19 @@ class upgrade extends control
         }
         $this->display();
     }
+
+    /* 更新每个表的company字段。*/
+    public function updateCompany()
+    {
+        $constants     = get_defined_constants(true);
+        $userConstants = $constants['user'];
+
+        /* 查找每个表的id字段的最大值。*/
+        foreach($userConstants as $key => $value)
+        {
+            if(strpos($key, 'TABLE') === false) continue;
+            if($key == 'TABLE_COMPANY') continue;
+            $this->dao->update($value)->set('company')->eq($this->app->company->id)->exec();
+        }
+    }
 }
