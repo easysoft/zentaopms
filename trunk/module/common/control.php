@@ -149,7 +149,7 @@ EOT;
         }
         echo "<li id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects);
-        echo html::input('searchQuery', '', "class='text-2'");
+        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value=''; class='text-2'");
         echo html::submitButton($lang->go, 'onclick="shortcut()"');
         echo "</li>";
         echo "</ul>\n";

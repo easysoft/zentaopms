@@ -73,6 +73,7 @@ $lang->searchObjects['story']   = '需求';
 $lang->searchObjects['task']    = '任务';
 $lang->searchObjects['bug']     = 'Bug';
 $lang->searchObjects['testcase']= '用例';
+$lang->searchTips               = '输入编号';
 
 /* 首页菜单设置。*/
 $lang->index->menu->product = '浏览产品|product|browse';
