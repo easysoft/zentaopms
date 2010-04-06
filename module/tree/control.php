@@ -49,7 +49,7 @@ class tree extends control
         if($viewType == 'product')
         {
             /* 设置菜单。*/
-            $this->product->setMenu($this->product->getPairs(), $productID);
+            $this->product->setMenu($this->product->getPairs(), $productID, 'product');
             $this->lang->tree->menu = $this->lang->product->menu;
             $this->lang->set('menugroup.tree', 'product');
 

@@ -26,9 +26,13 @@
 class productModel extends model
 {
     /* 设置菜单。*/
-    public function setMenu($products, $productID)
+    public function setMenu($products, $productID, $extra = '')
     {
-        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'product');\"");
+        /* 获得当前的模块和方法，传递给switchProduct方法，供页面跳转使用。*/
+        $currentModule = $this->app->getModuleName();
+        $currentMethod = $this->app->getMethodName();
+
+        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, '$currentModule', '$currentMethod', '$extra');\"");
         common::setMenuVars($this->lang->product->menu, 'list',   $selectHtml . $this->lang->arrow);
         common::setMenuVars($this->lang->product->menu, 'story',  $productID);
         common::setMenuVars($this->lang->product->menu, 'plan',   $productID);
@@ -77,7 +81,7 @@ class productModel extends model
     }
 
     /* 更新产品。*/
-    function update($productID)
+    public function update($productID)
     {
         /* 处理数据。*/
         $productID = (int)$productID;

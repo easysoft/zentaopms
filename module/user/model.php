@@ -28,7 +28,8 @@ class userModel extends model
     /* ÉèÖÃ²Ëµ¥¡£*/
     public function setMenu($users, $account)
     {
-        $selectHtml = html::select('account', $users, $account, "onchange=switchAccount(this.value)");
+        $methodName = $this->app->getMethodName();
+        $selectHtml = html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '$methodName')\"");
         common::setMenuVars($this->lang->user->menu, 'account', $selectHtml);
         common::setMenuVars($this->lang->user->menu, 'todo',    $account);
         common::setMenuVars($this->lang->user->menu, 'task',    $account);
