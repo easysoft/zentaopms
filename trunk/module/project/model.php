@@ -64,7 +64,9 @@ class projectModel extends model
     /* 设置菜单。*/
     public function setMenu($projects, $projectID)
     {
-        $selectHtml = html::select('projectID', $projects, $projectID, 'onchange="switchProject(this.value);"');
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
+        $selectHtml = html::select('projectID', $projects, $projectID, "onchange=\"switchProject(this.value, '$moduleName', '$methodName');\"");
         foreach($this->lang->project->menu as $key => $menu)
         {
             if($key == 'list') common::setMenuVars($this->lang->project->menu, 'list',  $selectHtml . $this->lang->arrow);

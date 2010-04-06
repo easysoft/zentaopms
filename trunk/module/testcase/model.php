@@ -28,7 +28,7 @@ class testcaseModel extends model
     /* 设置菜单。*/
     public function setMenu($products, $productID)
     {
-        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'case');\"");
+        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testcase', 'browse');\"");
         common::setMenuVars($this->lang->testcase->menu, 'product',  $selectHtml . $this->lang->arrow);
         common::setMenuVars($this->lang->testcase->menu, 'bug',      $productID);
         common::setMenuVars($this->lang->testcase->menu, 'testcase', $productID);

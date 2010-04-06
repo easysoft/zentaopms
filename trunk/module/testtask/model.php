@@ -28,7 +28,7 @@ class testtaskModel extends model
     /* 设置菜单。*/
     public function setMenu($products, $productID)
     {
-        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'case');\"");
+        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testtask', 'browse');\"");
         common::setMenuVars($this->lang->testtask->menu, 'product',  $selectHtml . $this->lang->arrow);
         common::setMenuVars($this->lang->testtask->menu, 'bug',      $productID);
         common::setMenuVars($this->lang->testtask->menu, 'testcase', $productID);

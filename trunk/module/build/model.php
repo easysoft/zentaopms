@@ -102,6 +102,6 @@ class buildModel extends model
     /* 删除build。*/
     public function delete($buildID)
     {
-        return $this->dao->delete()->from(TABLE_BUILD)->where('id')->eq((int)$buildID)->exec();
+        return $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq((int)$buildID)->exec();
     }
 }

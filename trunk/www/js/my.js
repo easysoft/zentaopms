@@ -78,34 +78,43 @@ function setNowrapObjTitle()
 }
 
 /* 选择产品。*/
-function switchProduct(productID, type)
+function switchProduct(productID, module, method, extra)
 {
-    if(type == 'product')
+    /* product, roadmap, bug, testcase, testtask，直接传递参数。*/
+    if(module == 'product' || module == 'roadmap' || module == 'bug' || module == 'testcase' || module == 'testtask')
     {
-        link = createLink('product', 'browse', 'productID=' + productID);
+        link = createLink(module, method, "productID=" + productID);
     }
-    else if(type == 'bug')
+    /* productplan, relase模块需要处理非browse和create的方法。*/
+    else if(module == 'productplan' || module == 'release')
     {
-        link = createLink('bug', 'browse', 'productID=' + productID + '&type=byModule&param=0');
+        if(method != 'browse' && method != 'create') method = 'browse';
+        link = createLink(module, method, "productID=" + productID);
     }
-    else if(type == 'case')
+    /* tree，需要单独传递参数。*/
+    else if(module == 'tree')
     {
-        link = createLink('testcase', 'browse', 'productID=' + productID + '&type=byModule&param=0');
+        link = createLink(module, method, "productID=" + productID + '&type=' + extra);
     }
-    location.href=link;
 }
 
 /* 选择项目。*/
-function switchProject(projectID)
+function switchProject(projectID, module, method)
 {
-    link = createLink('project', 'browse', 'projectID=' + projectID);
+    /* 如果是build模块，而且是edit方法，跳转地址改为project-build-xx.html。*/
+    if(module == 'build' && method == 'edit')
+    {
+        module = 'project';
+        method = 'build';
+    }
+    link = createLink(module, method, 'projectID=' + projectID);
     location.href=link;
 }
 
 /* 选择用户。*/
-function switchAccount(account)
+function switchAccount(account, method)
 {
-    link = createLink('user', 'view', 'account=' + account);
+    link = createLink('user', method, 'account=' + account);
     location.href=link;
 }
 
