@@ -141,7 +141,7 @@ $lang->company->menu->browseUser  = array('link' => '用户列表|company|browse
 $lang->company->menu->dept        = array('link' => '部门维护|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '权限分组|group|browse', 'subModule' => 'group');
 $lang->company->menu->addGroup    = array('link' => '添加分组|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => '添加用户|user|create|company=%s&dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser     = array('link' => '添加用户|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
@@ -192,7 +192,7 @@ $lang->error->email           = "『%s』应当为合法的EMAIL。";
 $lang->error->date            = "『%s』应当为合法的日期。";
 $lang->error->account         = "『%s』应当为合法的用户名。";
 $lang->error->passwordsame    = "两次密码应当相等。";
-$lang->error->passwordrule    = "密码应该符合规则。";
+$lang->error->passwordrule    = "密码应该符合规则，长度至少为六位。";
 
 /* 分页信息。*/
 $lang->pager->noRecord  = "暂时没有记录";
