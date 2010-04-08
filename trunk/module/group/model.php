@@ -99,8 +99,7 @@ class groupModel extends model
     public function getPrivs($groupID)
     {
         $privs = array();
-        $sql   = "SELECT module, method FROM " . TABLE_GROUPPRIV . " WHERE `group` = '$groupID' ORDER BY module";
-        $stmt  = $this->dbh->query($sql);
+        $stmt  = $this->dao->select('module, method')->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->orderBy('module')->query();
         while($priv = $stmt->fetch()) $privs[$priv->module][$priv->method] = $priv->method;
         return $privs;
     }
