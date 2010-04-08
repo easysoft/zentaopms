@@ -297,12 +297,11 @@ class projectModel extends model
         foreach($this->post->stories as $key => $storyID)
         {
             $productID = $this->post->products[$key];
-            $this->dao->insert(TABLE_PROJECTSTORY)
-                ->set('project')->eq($projectID)
-                ->set('product')->eq($productID)
-                ->set('story')->eq($storyID)
-                ->set('version')->eq($versions[$storyID])
-                ->exec();
+            $data->project = $projectID;
+            $data->product = $productID;
+            $data->story   = $storyID;
+            $data->version = $versions[$storyID];
+            $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
         }        
     }
