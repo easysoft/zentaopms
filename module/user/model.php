@@ -39,16 +39,15 @@ class userModel extends model
     }
 
     /* 获得某一个公司的用户列表。*/
-    public function getList($companyID)
+    public function getList()
     {
-        return $this->dao->select('*')->from(TABLE_USER)->where('company')->eq((int)$companyID)->orderBy('account')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_USER)->orderBy('account')->fetchAll();
     }
 
     /* 获得account=>realname的列表。params: noletter|noempty|noclosed。*/
-    public function getPairs($params = '', $companyID = 0)
+    public function getPairs($params = '')
     {
-        if($companyID == 0) $companyID = $this->app->company->id;
-        $users = $this->dao->select('account, realname')->from(TABLE_USER)->where('company')->eq((int)$companyID)->orderBy('account')->fetchPairs();
+        $users = $this->dao->select('account, realname')->from(TABLE_USER)->orderBy('account')->fetchPairs();
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
@@ -82,13 +81,12 @@ class userModel extends model
     }
 
     /* 新增一个用户。*/
-    function create($companyID)
+    public function create()
     {
         /* 先检查密码是否符合规则。*/
         if(!$this->checkPassword()) return;
 
         $user = fixer::input('post')
-            ->add('company', (int)$companyID)
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->setIF($this->post->password1 == false, 'password', '')
@@ -105,7 +103,7 @@ class userModel extends model
     }
 
     /* 更新一个用户。*/
-    function update($userID)
+    public function update($userID)
     {
         /* 先检查密码是否符合规则。*/
         if(!$this->checkPassword()) return;
@@ -129,7 +127,7 @@ class userModel extends model
     }
 
     /* 检查密码是否符合要求。*/
-    function checkPassword()
+    public function checkPassword()
     {
         if($this->post->password1 != false)
         {
@@ -159,20 +157,18 @@ class userModel extends model
      * @access  public
      * @return  object
      */
-    public function identify($account, $password, $companyID)
+    public function identify($account, $password)
     {
         $account  = filter_var($account,  FILTER_SANITIZE_STRING);
         $password = filter_var($password, FILTER_SANITIZE_STRING);
         if(!$account or !$password) return false;
 
-        $sql  = "SELECT * FROM " . TABLE_USER . " WHERE account  = '$account' AND password = md5('$password') AND company  = '$companyID' AND status = 'active' LIMIT 1";
-        $user = $this->dbh->query($sql)->fetch();
+        $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->andWhere('password')->eq(md5($password))->fetch();
         if($user)
         {
             $ip   = $_SERVER['REMOTE_ADDR'];
             $last = time();
-            $sql  = "UPDATE " . TABLE_USER . " SET visits = visits + 1, ip = '$ip', last = '$last' WHERE account = '$account'";
-            $this->dbh->exec($sql);
+            $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
             $user->last = date(DT_DATETIME1, $user->last);
         }
         return $user;
@@ -193,17 +189,16 @@ class userModel extends model
         $rights = array();
         if($account == 'guest')
         {
-            $sql = "SELECT module, method FROM " . TABLE_GROUP . " AS t1 LEFT JOIN " . TABLE_GROUPPRIV . " AS t2
-                    ON t1.id = t2.group
-                 WHERE t1.name = 'guest'";
+            $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
+                ->on('t1.id = t2.group')->where('t1.name')->eq('guest');
         }
         else
         {
-            $sql = "SELECT module, method FROM " . TABLE_USERGROUP . " AS t1 LEFT JOIN " . TABLE_GROUPPRIV . " AS t2
-                ON t1.group = t2.group
-                WHERE t1.account = '$account'";
+            $sql = $this->dao->select('module, method')->from(TABLE_USERGROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
+                ->on('t1.group = t2.group')
+                ->where('t1.account')->eq($account);
         }
-        $stmt = $this->dbh->query($sql);
+        $stmt = $sql->query();
         if(!$stmt) return $rights;
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
@@ -233,14 +228,15 @@ class userModel extends model
     /* 获得用户参与的项目列表。*/
     public function getProjects($account)
     {
-        $sql = "SELECT T1.*, T2.* FROM " . TABLE_TEAM . " AS T1 LEFT JOIN " .TABLE_PROJECT . " AS T2 ON T1.project = T2.id WHERE T1.account = '$account'";
-        return $this->dbh->query($sql)->fetchAll();
+        return $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.account')->eq($account)
+            ->fetchAll();
     }
 
     /* 获得用户的Bug列表。*/
     public function getBugs($account)
     {
-        $sql = "SELECT * FROM " . TABLE_BUG . " WHERE assignedTO = '$account'";
-        return $this->dbh->query($sql)->fetchAll();
+        return $this->dao->findByAssignedTo($account)->from(TABLE_BUG)->fetchAll();
     }
 }

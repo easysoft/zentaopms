@@ -179,20 +179,20 @@ class user extends control
     }
 
     /* 创建一个用户。*/
-    public function create($companyID = 0, $deptID = 0, $from = 'admin')
+    public function create($deptID = 0, $from = 'admin')
     {
-        if($companyID == 0) $companyID = $this->app->company->id;
         $this->lang->set('menugroup.user', $from);
+        $this->lang->user->menu = $this->lang->company->menu;
 
         if(!empty($_POST))
         {
-            $this->user->create($companyID);
+            $this->user->create();
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
         $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->user->create;
-        $position[]      = html::a($this->createLink('admin', 'browseuser', "companyid={$this->app->company->id}"), $this->lang->admin->user);
+        $position[]      = html::a($this->createLink('admin', 'browseuser') , $this->lang->admin->user);
         $position[]      = $this->lang->user->create;
         $this->assign('header',   $header);
         $this->assign('position', $position);
@@ -213,7 +213,7 @@ class user extends control
             if(dao::isError()) die(js::error(dao::getError()));
             if($from == 'admin')
             {
-                die(js::locate($this->createLink('admin', 'browseuser', "companyid={$this->app->company->id}"), 'parent'));
+                die(js::locate($this->createLink('admin', 'browseuser'), 'parent'));
             }
             else
             {
@@ -291,7 +291,7 @@ class user extends control
         /* 用户提交了登陆信息，则检查用户的身份。*/
         if(!empty($_POST))
         {
-            $user = $this->user->identify($_POST['account'], $_POST['password'], $this->app->company->id);
+            $user = $this->user->identify($_POST['account'], $_POST['password']);
             if($user)
             {
                 $user->rights = $this->user->authorize($_POST['account']);

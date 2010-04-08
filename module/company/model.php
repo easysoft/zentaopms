@@ -28,7 +28,7 @@ class companyModel extends model
     /* 设置菜单。*/
     public function setMenu($dept = 0)
     {
-        common::setMenuVars($this->lang->company->menu, 'addUser', array($this->app->company->id, $dept));
+        common::setMenuVars($this->lang->company->menu, 'addUser', array($dept));
     }
 
     /* 获得公司列表。*/
