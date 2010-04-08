@@ -40,7 +40,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->install->dbHost;?></th>
-      <td><?php echo html::input('dbHost', 'localhost');?></td>
+      <td><?php echo html::input('dbHost', 'localhost');?><?php echo $lang->install->dbHostNote;?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbPort;?></th>

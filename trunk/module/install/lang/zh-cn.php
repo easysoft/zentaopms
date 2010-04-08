@@ -68,6 +68,7 @@ $lang->install->requestType  = 'URL方式';
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
 $lang->install->dbHost     = '数据库服务器';
+$lang->install->dbHostNote = '如果localhost无法访问，尝试使用127.0.0.1';
 $lang->install->dbPort     = '服务器端口';
 $lang->install->dbUser     = '数据库用户名';
 $lang->install->dbPassword = '数据库密码';
@@ -84,7 +85,8 @@ $lang->install->setConfig  = '生成配置文件';
 $lang->install->key        = '配置项';
 $lang->install->value      = '值';
 $lang->install->saveConfig = '保存配置文件';
-$lang->install->save2File  = '拷贝上面文本框中的内容，将其保存到 " %s "中。';
+$lang->install->save2File  = '<div class="a-center"><span class="fail">尝试写入配置文件，失败！</span></div>拷贝上面文本框中的内容，将其保存到 "<strong> %s </strong>"中。您以后还可继续修改此配置文件。';
+$lang->install->saved2File = '配置信息已经成功保存到" <strong>%s</strong> "中。您后面还可继续修改此文件。';
 $lang->install->errorNotSaveConfig = '还没有保存配置文件';
 
 $lang->install->getPriv  = '设置帐号';
