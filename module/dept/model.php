@@ -28,24 +28,22 @@ class deptModel extends model
     /* 通过部门id获取部门信息。*/
     public function getByID($deptID)
     {
-        return $this->dbh->query("SELECT * FROM " . TABLE_DEPT . " WHERE id = '$deptID'")->fetch();
+        return $this->dao->findById($deptID)->from(TABLE_DEPT)->fetch();
     }
 
     /* 生成查询的sql语句。*/
     private function buildMenuQuery($rootDeptID)
     {
-        $sql  = "SELECT * FROM " . TABLE_DEPT . " WHERE company = {$this->app->company->id}";
-        if($rootDeptID > 0)
-        {
-            $rootDept = $this->getByID($rootDeptID);
-            if($rootDept) $sql .= " AND `path` LIKE '$rootDept->path%'";
-        }
-        $sql .= " ORDER BY grade DESC, `order`";
-        return $sql;
+        $rootDept = $this->getByID($rootDeptID);
+        if(!$rootDept) $rootDept->path = '';
+        return $this->dao->select('*')->from(TABLE_DEPT)
+            ->onCaseOf($rootDeptID > 0)->where('path')->like($rootDept->path . '%')->endCase()
+            ->orderBy('grade desc, `order`')
+            ->get();
     }
 
     /* 获取部门的下类列表，用于生成select控件。*/
-    function getOptionMenu($rootDeptID = 0)
+    public function getOptionMenu($rootDeptID = 0)
     {
         $deptMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
@@ -102,7 +100,7 @@ class deptModel extends model
     }
 
     /* 获取树状的部门列表。*/
-    function getTreeMenu($rootDeptID = 0, $userFunc)
+    public function getTreeMenu($rootDeptID = 0, $userFunc)
     {
         $deptMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
@@ -135,7 +133,7 @@ class deptModel extends model
     }
 
     /* 生成编辑链接。*/
-    function createManageLink($dept)
+    public function createManageLink($dept)
     {
         $linkHtml  = $dept->name;
         $linkHtml .= ' ' . html::a(helper::createLink('dept', 'browse', "deptid={$dept->id}"), $this->lang->dept->manageChild);
@@ -145,7 +143,7 @@ class deptModel extends model
     }
 
     /* 生成用户链接。*/
-    function createMemberLink($dept)
+    public function createMemberLink($dept)
     {
         $linkHtml = html::a(helper::createLink('company', 'browse', "dept={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
         return $linkHtml;
@@ -154,8 +152,7 @@ class deptModel extends model
     /* 获得某一个部门的直接下级部门。*/
     public function getSons($deptID)
     {
-        $sql = "SELECT * FROM " . TABLE_DEPT . " WHERE parent = '$deptID' ORDER BY `order`";
-        return $this->dbh->query($sql)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_DEPT)->where('parent')->eq($deptID)->orderBy('`order`')->fetchAll();
     }
     
     /* 获得一个部门的id列表。*/
@@ -163,34 +160,24 @@ class deptModel extends model
     {
         if($deptID == 0) return array();
         $dept = $this->getById($deptID);
-        $sql = "SELECT id FROM " . TABLE_DEPT . " WHERE path LIKE '{$dept->path}%'";
-        $stmt = $this->dbh->query($sql);
-        $deptIds = array();
-        while($id = $stmt->fetchColumn()) $deptIds[] = $id;
-        return $deptIds;
+        $childs = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like($dept->path . '%')->fetchPairs();
+        return array_keys($childs);
     }
 
     /* 获得一个部门的所有上级部门。*/
     public function getParents($deptID)
     {
         if($deptID == 0) return array();
-        $sql  = "SELECT path FROM " . TABLE_DEPT . " WHERE id = '$deptID'";
-        $path = $this->dbh->query($sql)->fetchColumn();
+        $path = $this->dao->select('path')->from(TABLE_DEPT)->where('id')->eq($deptID)->fetch('path');
         $path = substr($path, 1, -1);
         if(empty($path)) return array();
-        $sql = "SELECT * FROM " . TABLE_DEPT . " WHERE id IN($path) ORDER BY grade";
-        $parents = $this->dbh->query($sql)->fetchAll();
-        return $parents;
+        return $this->dao->select('*')->from(TABLE_DEPT)->where('id')->in($path)->orderBy('grade')->fetchAll();
     }
 
     /* 更新排序信息。*/
     public function updateOrder($orders)
     {
-        foreach($orders as $deptID => $order)
-        {
-            $sql = "UPDATE " . TABLE_DEPT . " SET `order` = '$order' WHERE id = '$deptID' LIMIT 1";
-            $this->dbh->exec($sql);
-        }
+        foreach($orders as $deptID => $order) $this->dao->update(TABLE_DEPT)->set('`order`')->eq($order)->where('id')->eq($deptID)->exec();
     }
 
     /* 更新某一个部门的子部门。*/
@@ -213,19 +200,18 @@ class deptModel extends model
             if(empty($deptName)) continue;
             if(is_numeric($deptID))
             {
-                $sql = "INSERT INTO " . TABLE_DEPT . "(`company`, `name`, `parent`, `path`, `grade`) 
-                        VALUES('{$this->app->company->id}', '$deptName', '$parentDeptID', '', '$grade')";
-                $this->dbh->exec($sql);
-                $deptID  = $this->dbh->lastInsertID();
+                $dept->name   = $deptName;
+                $dept->parent = $parentDeptID;
+                $dept->grade  = $grade;
+                $this->dao->insert(TABLE_DEPT)->data($dept)->exec();
+                $deptID = $this->dao->lastInsertID();
                 $childPath = $parentPath . "$deptID,";
-                $sql = "UPDATE " . TABLE_DEPT . " SET `path` = '$childPath' WHERE id = '$deptID' LIMIT 1";
-                $this->dbh->exec($sql);
+                $this->dao->update(TABLE_DEPT)->set('path')->eq($childPath)->where('id')->eq($deptID)->exec();
             }
             else
             {
                 $deptID = str_replace('id', '', $deptID);
-                $sql = "UPDATE " . TABLE_DEPT . " SET `name` = '$deptName' WHERE id = '$deptID' LIMIT 1";
-                $this->dbh->exec($sql);
+                $this->dao->update(TABLE_DEPT)->set('name')->eq($deptName)->where('id')->eq($deptID)->exec();
             }
         }
     }
@@ -239,9 +225,8 @@ class deptModel extends model
     }
     
     /* 删除一个部门。Todo: 需要修改下级目录的权限，还有对应的需求列表。*/
-    function delete($deptID)
+    public function delete($deptID)
     {
-        $sql = "DELETE FROM " . TABLE_DEPT . " WHERE id = '$deptID' LIMIT 1";
-        return $this->dbh->exec($sql);
+        $this->dao->delete()->from(TABLE_DEPT)->where('id')->eq($deptID)->exec();
     }
 }
