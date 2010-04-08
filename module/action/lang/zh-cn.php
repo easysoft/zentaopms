@@ -17,7 +17,7 @@
  *
  * @copyright   Copyright 2009-2010 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
- * @package     bug
+ * @package     action
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
