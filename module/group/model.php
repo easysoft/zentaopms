@@ -28,34 +28,23 @@ class groupModel extends model
     /* 为某一个公司添加分组。*/
     public function create()
     {
-        $group = fixer::input('post')
-            ->setDefault('company', $this->app->company->id)
-            ->specialChars('name, desc')
-            ->get();
+        $group = fixer::input('post')->specialChars('name, desc')->get();
         return $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
     }
 
     /* 更新某一个分组信息。*/
     public function update($groupID)
     {
-        extract($_POST);
-        $sql = "UPDATE " . TABLE_GROUP . " SET `name` = '$name', `desc` = '$desc' WHERE id = '$groupID'";
+        $group = fixer::input('post')->specialChars('name, desc')->get();
+        return $this->dao->update(TABLE_GROUP)->data($group)->batchCheck($this->config->group->edit->requiredFields, 'notempty')->where('id')->eq($groupID)->exec();
         return $this->dbh->exec($sql);
     }
 
     /* 复制一个分组。*/
     public function copy($groupID)
     {
-        $group = fixer::input('post')
-            ->setDefault('company', $this->app->company->id)
-            ->specialChars('name, desc')
-            ->remove('options')
-            ->get();
-        $this->dao->insert(TABLE_GROUP)
-            ->data($group)
-            ->check('name', 'unique')
-            ->check('name', 'notempty')
-            ->exec();
+        $group = fixer::input('post')->specialChars('name, desc')->remove('options')->get();
+        $this->dao->insert(TABLE_GROUP)->data($group)->check('name', 'unique')->check('name', 'notempty')->exec();
         if($this->post->options == false) return;
         if(!dao::isError())
         {
@@ -103,8 +92,7 @@ class groupModel extends model
     /* 通过 id获取某一个分组信息。*/
     public function getByID($groupID)
     {
-        $sql = "SELECT * FROM " . TABLE_GROUP . " WHERE id = '$groupID'";
-        return $this->dbh->query($sql)->fetch();
+        return $this->dao->findById($groupID)->from(TABLE_GROUP)->fetch();
     }
 
     /* 获得分组的权限列表。*/
@@ -130,24 +118,27 @@ class groupModel extends model
     /* 删除一个分组信息。*/
     public function delete($groupID)
     {
-        $sqls[] = "DELETE FROM " . TABLE_GROUP     . " WHERE id    = '$groupID'";
-        $sqls[] = "DELETE FROM " . TABLE_USERGROUP . " WHERE `group` = '$groupID'";
-        $sqls[] = "DELETE FROM " . TABLE_GROUPPRIV . " WHERE `group` = '$groupID'";
-        foreach($sqls as $sql) $this->dbh->exec($sql);
+        $this->dao->delete()->from(TABLE_GROUP)->where('id')->eq($groupID)->exec();
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->exec();
     }
 
     /* 更新权限。*/
     public function updatePriv($groupID)
     {
-        $sql = "DELETE FROM " . TABLE_GROUPPRIV . " WHERE `group` = '$groupID'";
-        $this->dbh->exec($sql);
-        if(empty($_POST['actions'])) return;
-        foreach($_POST['actions'] as $moduleName => $moduleActions)
+        /* 先删除原来的记录。*/
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->exec();
+
+        /* 然后插入新的记录。*/
+        if($this->post->actions == false) return;
+        foreach($this->post->actions as $moduleName => $moduleActions)
         {
             foreach($moduleActions as $actionName)
             {
-                $sql = "INSERT INTO " . TABLE_GROUPPRIV . " VALUES('$groupID', '$moduleName', '$actionName')";
-                $this->dbh->exec($sql);
+                $data->group = $groupID;
+                $data->module = $moduleName;
+                $data->method = $actionName;
+                $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
             }
         }
     }
@@ -155,12 +146,16 @@ class groupModel extends model
     /* 更新成员。*/
     public function updateUser($groupID)
     {
-        $sql = "DELETE FROM " . TABLE_USERGROUP . " WHERE `group` = '$groupID'";
-        $this->dbh->exec($sql);
-        if(empty($_POST['members'])) return;
-        foreach($_POST['members'] as $account)
+        /* 先删除原来的记录。*/
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
+
+        /* 然后插入新的记录。*/
+        if($this->post->members == false) return;
+        foreach($this->post->members as $account)
         {
-            $sql = "INSERT INTO " . TABLE_USERGROUP . " VALUES('$account', '$groupID')";
+            $data->account = $account;
+            $data->group   = $groupID;
+            $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
             $this->dbh->exec($sql);
         }
     }
