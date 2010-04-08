@@ -122,12 +122,13 @@ class upgradeModel extends model
         $item->key     = 'version';
         $item->value   =  $version;
 
-        $configID = $this->dao->select('id')->from(TABLE_CONFIG)
+        $stmt = $this->dao->select('id')->from(TABLE_CONFIG)
             ->where('company')->eq(0)
             ->andWhere('owner')->eq('system')
             ->andWhere('section')->eq('global')
             ->andWhere('`key`')->eq('version')
-            ->fetch('id');
+            ->query($autoCompany = false);
+        $configID = $stmt->fetchColumn('id');
         if($configID > 0)
         {
             $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($configID)->exec();
