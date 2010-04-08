@@ -82,7 +82,7 @@ class upgrade extends control
         foreach($userConstants as $key => $value)
         {
             if(strpos($key, 'TABLE') === false) continue;
-            if($key == 'TABLE_COMPANY') continue;
+            if($key == 'TABLE_COMPANY' or $key == 'TABLE_CONFIG') continue;
             $this->dao->update($value)->set('company')->eq($this->app->company->id)->exec();
         }
     }
