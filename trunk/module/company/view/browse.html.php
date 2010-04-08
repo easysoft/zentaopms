@@ -35,7 +35,7 @@ include '../../common/view/tablesorter.html.php';
       <div class='a-right'>
         <?php 
         common::printLink('dept', 'browse', '', $lang->dept->manage);
-        common::printLink('user', 'create', "companyID={$this->app->company->id}&from=company", $lang->user->create);
+        common::printLink('user', 'create', "dept=$deptID&from=company", $lang->user->create);
         common::printLink('company', 'browse', '', $lang->user->allUsers);
         ?>
       </div>
