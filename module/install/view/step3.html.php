@@ -57,8 +57,25 @@ EOT;
     <tr>
       <td>
       <?php
-      printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
-      echo html::a($this->createLink('install', 'step4'), $lang->install->next);
+      $configRoot   = $this->app->getConfigRoot();
+      $myConfigFile = $configRoot . 'my.php';
+      if(is_writable($configRoot))
+      {
+          if(@file_put_contents($myConfigFile, $configContent))
+          {
+              printf($lang->install->saved2File, $myConfigFile);
+          }
+          else
+          {
+              printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
+          }
+      }
+      else
+      {
+          printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
+      }
+      echo "<br />";
+      echo "<div class='a-center'>" . html::a($this->createLink('install', 'step4'), $lang->install->next) . '</div>';
       ?>
       </td>
 	</tr>
