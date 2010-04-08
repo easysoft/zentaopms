@@ -79,7 +79,6 @@ class projectModel extends model
     {
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
-            ->add('company', $this->app->company->id)
             ->stripTags('name, code, team')
             ->specialChars('goal, desc')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
@@ -134,7 +133,7 @@ class projectModel extends model
     /* 删除一个项目。*/
     public function delete($projectID)
     {
-        return $this->dao->delete()->from(TABLE_PROJECT)->where('id')->eq((int)$projectID)->andWhere('company')->eq($this->app->company->id)->limit(1)->exec();
+        return $this->dao->delete()->from(TABLE_PROJECT)->where('id')->eq((int)$projectID)->limit(1)->exec();
     }
     
     /* 获得项目目录列表。*/
@@ -149,7 +148,7 @@ class projectModel extends model
     /* 获得项目id=>name列表。*/
     public function getPairs()
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id)->orderBy('status, end desc')->fetchAll();
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->orderBy('status, end desc')->fetchAll();
         $pairs = array();
         foreach($projects as $project)
         {
@@ -161,9 +160,10 @@ class projectModel extends model
     /* 获得完整的列表。*/
     public function getList($status = 'all')
     {
-        $sql = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andwhere('company')->eq($this->app->company->id);
-        if($status != 'all') $sql->andWhere('status')->in($status);
-        return $sql->orderBy('status, end_desc')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
+            ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endcase()
+            ->orderBy('status, end DESC')
+            ->fetchAll();
     }
 
     /* 通过Id获取项目信息。*/
