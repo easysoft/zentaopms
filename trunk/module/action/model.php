@@ -28,7 +28,6 @@ class actionModel extends model
     /* 创建一条action动作。*/
     public function create($objectType, $objectID, $actionType, $comment = '', $extra = '')
     {
-        $action->company    = $this->app->company->id;
         $action->objectType = $objectType;
         $action->objectID   = $objectID;
         $action->actor      = $this->app->user->account;
@@ -43,7 +42,10 @@ class actionModel extends model
     /* 返回某一个对象的所有action列表。*/
     public function getList($objectType, $objectID)
     {
-        $actions   = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->orderBy('id')->fetchAll('id');
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->eq($objectID)
+            ->orderBy('id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
         foreach($actions as $actionID => $action)
         {
@@ -137,7 +139,9 @@ class actionModel extends model
     /* 打印动态信息。*/
     public function getDynamic($objectType = 'all', $count = 30)
     {
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)->onCaseOf($objectType != 'all')->where('objectType')->eq($objectType)->endCase()->orderBy('id desc')->limit($count)->fetchAll();
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->onCaseOf($objectType != 'all')->where('objectType')->eq($objectType)->endCase()
+            ->orderBy('id desc')->limit($count)->fetchAll();
         if(!$actions) return array();
         foreach($actions as $action)
         {
@@ -150,7 +154,7 @@ class actionModel extends model
             /* 处理login和logout动作。*/
             if($actionType == 'login' or $actionType == 'logout')
             {
-                $action->objectLink = '';
+                $action->objectLink  = '';
                 $action->objectLabel = '';
                 continue;
             }
@@ -179,6 +183,7 @@ class actionModel extends model
         $maxLength            = 0;
         $historiesWithDiff    = array();
         $historiesWithoutDiff = array();
+
         foreach($histories as $history)
         {
             $fieldName = $history->field;
