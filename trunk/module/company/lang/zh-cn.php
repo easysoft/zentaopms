@@ -41,7 +41,7 @@ $lang->company->fax      = '传真';
 $lang->company->address  = '通讯地址';
 $lang->company->zipcode  = '邮政编码';
 $lang->company->website  = '公司网站';
-$lang->company->backyard = '内网网址';
+$lang->company->backyard = '公司内网';
 $lang->company->pms      = 'PMS网站';
 $lang->company->guest    = '匿名登录';
 
