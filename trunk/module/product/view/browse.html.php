@@ -77,7 +77,7 @@ function search(active)
 
   <div class="yui-main">
     <div class="yui-b">
-      <table class='table-1 fixed colored'>
+      <table class='table-1 fixed colored tablesorter'>
         <thead>
           <tr class='colhead'>
             <?php $vars = "productID=$productID&browseType=$browseType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>

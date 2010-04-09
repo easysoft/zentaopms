@@ -26,7 +26,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include './taskheader.html.php';?>
 <div class='yui-d0'>
-  <table class='table-1 fixed colored'>
+  <table class='table-1 fixed colored tablesorter'>
     <?php $vars = "projectID=$project->id&status=all&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>
     <tr class='colhead'>
