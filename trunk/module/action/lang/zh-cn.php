@@ -21,6 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
+/* 用来描述操作历史记录。*/
 $lang->action->desc->common    = '$date, <strong>$action</strong> by <strong>$actor</strong>';
 $lang->action->desc->extra     = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->opened    = '$date, 由 <strong>$actor</strong> 创建。';
@@ -34,6 +35,7 @@ $lang->action->desc->confirmed = '$date, 由 <strong>$actor</strong> 确认需�
 $lang->action->desc->diff1     = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />';
 $lang->action->desc->diff2     = '修改了 <strong><i>%s</i></strong>，区别为：<blockquote>%s</blockquote>';
 
+/* 用来显示动态信息。*/
 $lang->action->label->opened    = '创建了';
 $lang->action->label->changed   = '变更了';
 $lang->action->label->edited    = '编辑了';
@@ -44,8 +46,13 @@ $lang->action->label->resolved  = '解决了';
 $lang->action->label->reviewed  = '评审了';
 $lang->action->label->moved     = '移动了';
 $lang->action->label->confirmed = '确认了需求，';
+$lang->action->label->login     = '登录系统';
+$lang->action->label->logout    = "退出登录";
+
+/* 用来生成相应对象的链接。*/
 $lang->action->label->story     = '需求|story|view|storyID=%s';
 $lang->action->label->task      = '任务|task|view|taskID=%s';
 $lang->action->label->bug       = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case      = '用例|testcase|view|caseID=%s';
+
 $lang->action->label->space     = '　';

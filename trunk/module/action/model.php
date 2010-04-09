@@ -75,11 +75,16 @@ class actionModel extends model
         }
     }
 
-    /* 打印action标题。*/
+    /* 打印action标题，显示在每一个对象的详情界面。*/
     public function printAction($action)
     {
         $objectType = $action->objectType;
         $actionType = strtolower($action->action);
+
+        /**
+         * 判断使用哪一种描述。如果该模块有对应的描述，则取之，然后则取action模块中对应的方法的描述。
+         * 如果还没有，则判断当前action是否有extra信息，如果有，则取action模块的extra描述，最后使用通用的描述。
+         */
         if(isset($this->lang->$objectType->action->$actionType))
         {
             $desc = $this->lang->$objectType->action->$actionType;
@@ -93,9 +98,12 @@ class actionModel extends model
             $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
         }
 
+        /* 循环替换desc中对应的标签。*/
         foreach($action as $key => $value)
         {
             if($key == 'history') continue;
+
+            /* desc可能是数组，也有可能是一个字符串。*/
             if(is_array($desc))
             {
                 if($key == 'extra') continue;
@@ -106,6 +114,8 @@ class actionModel extends model
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }
+
+        /* 如果desc是数组，再处理extra变量。例子参考bug模块的语言设置。*/
         if(is_array($desc))
         {
             $extra = strtolower($action->extra);
@@ -136,6 +146,16 @@ class actionModel extends model
             $action->date        = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
             $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
+
+            /* 处理login和logout动作。*/
+            if($actionType == 'login' or $actionType == 'logout')
+            {
+                $action->objectLink = '';
+                $action->objectLabel = '';
+                continue;
+            }
+
+            /* 其他的动作生成相应的链接。*/
             if(strpos($action->objectLabel, '|') !== false)
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
