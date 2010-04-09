@@ -277,19 +277,22 @@ EOT;
         {
             if(stripos($orderBy, 'desc') !== false)
             {
-                $orderBy = str_ireplace('desc', 'asc', $orderBy);
+                $orderBy   = str_ireplace('desc', 'asc', $orderBy);
+                $className = 'headerSortUp';
             }
             elseif(stripos($orderBy, 'asc')  !== false)
             {
                 $orderBy = str_ireplace('asc', 'desc', $orderBy);
+                $className = 'headerSortDown';
             }
         }
         else
         {
-            $orderBy = $fieldName . '_' . 'asc';
+            $orderBy   = $fieldName . '_' . 'asc';
+            $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
-        echo html::a($link, $label);
+        echo "<div class='$className'>" . html::a($link, $label) . '</div>';
     }
 
     /* 打印链接，会检查权限*/
