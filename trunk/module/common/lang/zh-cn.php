@@ -41,7 +41,7 @@ $lang->preview    = '预览';
 $lang->actions    = '操作';
 $lang->comment    = '备注';
 $lang->history    = '历史记录';
-$lang->welcome    = "欢迎使用%s{$lang->colon}{$lang->zentaoMS}";
+$lang->welcome    = "欢迎使用%s{$lang->colon}{$lang->zentaoMS} ";
 $lang->zentaoSite = "官方网站";
 $lang->myControl  = "我的地盘";
 $lang->sponser    = "<a href='http://www.pujia.com' target='_blank'>普加赞助</a>";

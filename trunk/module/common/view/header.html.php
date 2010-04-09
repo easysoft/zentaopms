@@ -23,7 +23,15 @@ $themeRoot   = $webRoot . "theme/";
 </head>
 <body>
 <div id='topbar' class='yui-d0 yui-t6'>
-  <div class='yui-main'><div class='yui-b'><?php printf($lang->welcome, $app->company->name);?></div></div>
+  <div class='yui-main'>
+    <div class='yui-b'>
+      <?php
+      printf($lang->welcome, $app->company->name);
+      if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
+      if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
+      ?>
+    </div>
+  </div>
   <div class='yui-b a-right'><?php common::printTopBar();?></div>
 </div>
 <div id='navbar' class='yui-d0'>
