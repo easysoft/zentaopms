@@ -291,12 +291,16 @@ class user extends control
         /* 用户提交了登陆信息，则检查用户的身份。*/
         if(!empty($_POST))
         {
-            $user = $this->user->identify($_POST['account'], $_POST['password']);
+            $user = $this->user->identify($this->post->account, $this->post->password);
             if($user)
             {
-                $user->rights = $this->user->authorize($_POST['account']);
-                $_SESSION['user'] = $user;
-                $this->app->user = $_SESSION['user'];
+                /* 对用户进行授权，并登记session。*/
+                $user->rights = $this->user->authorize($this->post->account);
+                $this->session->set('user', $user);
+                $this->app->user = $this->session->user;
+
+                /* 记录登录记录。*/
+                $this->loadModel('action')->create('user', $user->id, 'login');
 
                 /* POST变量中设置了referer信息，且非user/login.html, 非user/deny.html，并且包含当前系统的域名。*/
                 if(isset($_POST['referer'])  and 
@@ -350,6 +354,7 @@ class user extends control
      */
     public function logout($referer = 0)
     {
+        $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
         session_destroy();
         $vars = !empty($referer) ? "referer=$referer" : '';
         $this->locate($this->createLink('user', 'login', $vars));
