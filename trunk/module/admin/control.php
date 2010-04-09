@@ -23,34 +23,19 @@
  */
 class admin extends control
 {
-    /* 构造函数，加载company, user, group模块。*/
-    public function __construct()
-    {
-        parent::__construct();
-        $this->loadModel('company');
-        $this->loadModel('user');
-        $this->loadModel('group');
-    }
-
     /* 首页。*/
     public function index($tab = 'index')
     {
-        $this->locate($this->createLink('admin', 'browseCompany'));
+        $this->locate(inlink('browseCompany'));
     }
 
     /* 公司列表。*/
     public function browseCompany()
     {
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->company->browse;
-        $position[]      = $this->lang->admin->company;
-        $position[]      = $this->lang->company->browse;
-
-        $companies = $this->company->getList();
-
-        $this->assign('header',    $header);
-        $this->assign('position',  $position);
-        $this->assign('companies', $companies);
-
+        $this->view->header->title = $this->lang->admin->common . $this->lang->colon . $this->lang->company->browse;
+        $this->view->position[]    = $this->lang->admin->company;
+        $this->view->position[]    = $this->lang->company->browse;
+        $this->view->companies     = $this->loadModel('company')->getList();
         $this->display();
     }
 }

@@ -29,5 +29,3 @@ $lang->admin->group   = '分组管理';
 $lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
 
 $lang->admin->browseCompany = '浏览公司';
-$lang->admin->browseUser    = '浏览用户';
-$lang->admin->browseGroup   = '浏览分组';
