@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 Chunsheng Wang
  * @author      Chunsheng Wang <wwccss@263.net>
  * @package     api
- * @version     $Id: zh-cn.php 536 2010-03-17 06:39:06Z wwccss $
+ * @version     $Id$
  * @link        http://www.zentao.cn
  */
 $lang->api->common   = 'API接口';
