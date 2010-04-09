@@ -76,36 +76,38 @@ function browseBySearch(active)
   </div>
   <div class="yui-main">
     <div class='yui-b'>
-      <table class='table-1 colored'>
-        <tr class='colhead'>
-          <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-          <th><?php common::printOrderLink('id',       $orderBy, $vars, $lang->testcase->id);?></th>
-          <th><?php common::printOrderLink('pri',      $orderBy, $vars, $lang->testcase->pri);?></th>
-          <th class='w-p40'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
-          <?php if($browseType == 'needconfirm'):?>
-          <th class='w-p40'><?php common::printOrderLink('story',    $orderBy, $vars, $lang->testcase->story);?></th>
-          <th><?php echo $lang->actions;?></th>
-          <?php else:?>
-          <th><?php common::printOrderLink('type',     $orderBy, $vars, $lang->testcase->type);?></th>
-          <th><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->testcase->openedBy);?></th>
-          <th><?php common::printOrderLink('status',   $orderBy, $vars, $lang->testcase->status);?></th>
-          <?php endif;?>
-        </tr>
-        <?php foreach($cases as $case):?>
-        <tr class='a-center'>
-          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
-          <td><?php echo $case->pri?></td>
-          <td class='a-left'><?php echo $case->title;?></td>
-          <?php if($browseType == 'needconfirm'):?>
-          <td class='a-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
-          <td><?php echo html::a(inlink('confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');?></td>
-          <?php else:?>
-          <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-          <td><?php echo $users[$case->openedBy];?></td>
-          <td><?php echo $lang->testcase->statusList[$case->status];?></td>
-          <?php endif;?>
-        </tr>
+      <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <table class='table-1 colored tablesorter'>
+        <thead>
+          <tr class='colhead'>
+            <th><?php common::printOrderLink('id',       $orderBy, $vars, $lang->testcase->id);?></th>
+            <th><?php common::printOrderLink('pri',      $orderBy, $vars, $lang->testcase->pri);?></th>
+            <th class='w-p40'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
+            <?php if($browseType == 'needconfirm'):?>
+            <th class='w-p40'><?php common::printOrderLink('story',    $orderBy, $vars, $lang->testcase->story);?></th>
+            <th><?php echo $lang->actions;?></th>
+            <?php else:?>
+            <th><?php common::printOrderLink('type',     $orderBy, $vars, $lang->testcase->type);?></th>
+            <th><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->testcase->openedBy);?></th>
+            <th><?php common::printOrderLink('status',   $orderBy, $vars, $lang->testcase->status);?></th>
+            <?php endif;?>
+          </tr>
+          <?php foreach($cases as $case):?>
+          <tr class='a-center'>
+            <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
+            <td><?php echo $case->pri?></td>
+            <td class='a-left'><?php echo $case->title;?></td>
+            <?php if($browseType == 'needconfirm'):?>
+            <td class='a-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
+            <td><?php echo html::a(inlink('confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');?></td>
+            <?php else:?>
+            <td><?php echo $lang->testcase->typeList[$case->type];?></td>
+            <td><?php echo $users[$case->openedBy];?></td>
+            <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+            <?php endif;?>
+          </tr>
         <?php endforeach;?>
+        </thead>
       </table>
       <?php $pager->show();?>
     </div>

@@ -86,7 +86,7 @@ function browseBySearch(active)
   <div class="yui-main">
     <div class="yui-b">
       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <table class='table-1 fixed colored'>
+      <table class='table-1 fixed colored tablesorter'>
         <thead>
         <tr class='colhead'>
           <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->bug->id);?></th>
