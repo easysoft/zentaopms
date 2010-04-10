@@ -96,6 +96,7 @@ function switchProduct(productID, module, method, extra)
     {
         link = createLink(module, method, "productID=" + productID + '&type=' + extra);
     }
+    location.href=link;
 }
 
 /* 选择项目。*/
