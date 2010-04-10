@@ -74,6 +74,7 @@ $lang->resource->todo->import2Today = 'import2Today';
 $lang->resource->product->index  = 'index';
 $lang->resource->product->browse = 'browse';
 $lang->resource->product->create = 'create';
+$lang->resource->product->view   = 'view';
 $lang->resource->product->edit   = 'edit';
 $lang->resource->product->delete = 'delete';
 $lang->resource->product->roadmap= 'roadmap';

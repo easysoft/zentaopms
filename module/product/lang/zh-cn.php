@@ -24,6 +24,7 @@
 $lang->product->common = '产品视图';
 $lang->product->index  = "产品首页";
 $lang->product->browse = "浏览产品";
+$lang->product->view   = "产品信息";
 $lang->product->edit   = "编辑产品";
 $lang->product->create = "新增产品";
 $lang->product->read   = "产品详情";

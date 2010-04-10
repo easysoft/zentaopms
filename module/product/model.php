@@ -53,13 +53,13 @@ class productModel extends model
     /* 获取产品列表。*/
     public function getList()
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('company')->eq($this->app->company->id)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
     }
 
     /* 获取产品id=>name列表。*/
     public function getPairs()
     {
-        return $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('company')->eq($this->app->company->id)->fetchPairs();
+        return $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
     }
 
     /* 新增产品。*/
@@ -86,6 +86,7 @@ class productModel extends model
     {
         /* 处理数据。*/
         $productID = (int)$productID;
+        $oldProduct = $this->getById($productID);
         $product = fixer::input('post')
             ->stripTags('name,code')
             ->specialChars('desc')
@@ -98,14 +99,9 @@ class productModel extends model
             ->check('code', 'unique', "id != $productID")
             ->where('id')->eq($productID)
             ->exec();
+        if(!dao::isError()) return common::createChanges($oldProduct, $product);
     }
     
-    /* 删除某一个产品。*/
-    public function delete($productID)
-    {
-        return $this->dao->delete()->from(TABLE_PRODUCT)->where('id')->eq((int)$productID)->andWhere('company')->eq($this->app->company->id)->limit(1)->exec();
-    }
-
     /* 获取产品的项目id=>value列表。*/
     public function getProjectPairs($productID)
     {
