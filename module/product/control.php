@@ -61,8 +61,8 @@ class product extends control
 
         /* 设置当前的产品id和模块id。*/
         $this->session->set('storyList', $this->app->getURI(true));
-        $productID      = common::saveProductState($productID, key($this->products));
-        $moduleID       = ($browseType == 'bymodule') ? (int)$param : 0;
+        $productID = common::saveProductState($productID, key($this->products));
+        $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
 
         /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
@@ -91,17 +91,17 @@ class product extends control
             $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy, $pager);
         }
 
-        $this->assign('productID',     $productID);
-        $this->assign('productName',   $this->products[$productID]);
-        $this->assign('moduleID',      $moduleID);
-        $this->assign('stories',       $stories);
-        $this->assign('moduleTree',    $this->tree->getTreeMenu($productID, $viewType = 'product', $rooteModuleID = 0, array('treeModel', 'createStoryLink')));
-        $this->assign('parentModules', $this->tree->getParents($moduleID));
-        $this->assign('pager',         $pager);
-        $this->assign('users',         $this->user->getPairs('noletter'));
-        $this->assign('orderBy',       $orderBy);
-        $this->assign('browseType',    $browseType);
-        $this->assign('moduleID',      $moduleID);
+        $this->view->productID     = $productID;
+        $this->view->productName   = $this->products[$productID];
+        $this->view->moduleID      = $moduleID;
+        $this->view->stories       = $stories;
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'product', $rooteModuleID = 0, array('treeModel', 'createStoryLink'));
+        $this->view->parentModules = $this->tree->getParents($moduleID);
+        $this->view->pager         = $pager;
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->orderBy       = $orderBy;
+        $this->view->browseType    = $browseType;
+        $this->view->moduleID      = $moduleID;
 
         $this->display();
     }
@@ -119,10 +119,8 @@ class product extends control
         /* 设置菜单。*/
         $this->product->setMenu($this->products, '');
 
-        $header['title'] = $this->lang->product->create;
-        $position[]      = $header['title'];
-        $this->assign('header', $header);
-        $this->assign('position', $position);
+        $this->view->header->title = $this->lang->product->create;
+        $this->view->position[]    = $this->view->header->title;
         $this->display();
     }
 
@@ -140,13 +138,10 @@ class product extends control
         $this->product->setMenu($this->products, $productID);
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $header['title'] = $this->lang->product->edit . $this->lang->colon . $product->name;
-        $position[]      = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $position[]      = $this->lang->product->edit;
-
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('product',  $product);
+        $this->view->header->title = $this->lang->product->edit . $this->lang->colon . $product->name;
+        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[]    = $this->lang->product->edit;
+        $this->view->product       = $product;
 
         $this->display();
     }
