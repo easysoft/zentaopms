@@ -38,6 +38,7 @@ class productModel extends model
         common::setMenuVars($this->lang->product->menu, 'plan',   $productID);
         common::setMenuVars($this->lang->product->menu, 'roadmap',$productID);
         common::setMenuVars($this->lang->product->menu, 'release',$productID);
+        common::setMenuVars($this->lang->product->menu, 'view',   $productID);
         common::setMenuVars($this->lang->product->menu, 'edit',   $productID);
         common::setMenuVars($this->lang->product->menu, 'delete', $productID);
         common::setMenuVars($this->lang->product->menu, 'module', $productID);
