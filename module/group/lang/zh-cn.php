@@ -172,6 +172,7 @@ $lang->resource->testcase->browse             = 'browse';
 $lang->resource->testcase->create             = 'create';
 $lang->resource->testcase->view               = 'view';
 $lang->resource->testcase->edit               = 'edit';
+$lang->resource->testcase->delete             = 'delete';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 
 /* 测试任务。*/

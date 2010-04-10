@@ -24,14 +24,17 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-
 <div class='yui-d0'>
-  <div id='titlebar'>
+  <div id='titlebar' <?php if($case->deleted) echo "class='deleted'";?>>
     CASE #<?php echo $case->id . $lang->colon . $case->title;?>
     <div class='f-right'>
       <?php
       $browseLink = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
-      common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
+      if(!$case->deleted)
+      {
+          common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
+          common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
+      }
       echo html::a($browseLink, $lang->goback);
       ?>
     </div>
@@ -71,8 +74,12 @@
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>
        <?php
-       common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-       echo html::a($browseLink, $lang->goback);
+        if(!$case->deleted)
+        {
+            common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
+            common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
+        }
+        echo html::a($browseLink, $lang->goback);
        ?>
       </div>
     </div>

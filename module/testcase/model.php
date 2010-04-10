@@ -70,15 +70,18 @@ class testcaseModel extends model
     /* 获得某一个产品，某一个模块下面的所有case。*/
     public function getModuleCases($productID, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
     {
-        $sql = $this->dao->select('*')->from(TABLE_CASE)->where('product')->eq((int)$productID);
-        if(!empty($moduleIds)) $sql->andWhere('module')->in($moduleIds);
-        return $sql->orderBy($orderBy)->page($pager)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where('product')->eq((int)$productID)
+            ->onCaseOf($moduleIds)->andWhere('module')->in($moduleIds)->endCase()
+            ->andWhere('deleted')->eq('0')
+            ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /* 获取一个case的详细信息。*/
     public function getById($caseID, $version = 0)
     {
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
+        if(!$case) return false;
         foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
         if($case->story)
         {
