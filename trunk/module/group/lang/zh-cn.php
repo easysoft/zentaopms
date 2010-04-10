@@ -163,6 +163,7 @@ $lang->resource->bug->activate            = 'activate';
 $lang->resource->bug->close               = 'close';
 $lang->resource->bug->report              = 'reportChart';
 $lang->resource->bug->confirmStoryChange  = 'confirmStoryChange';
+$lang->resource->bug->delete              = 'delete';
 $lang->resource->bug->ajaxGetUserBugs     = 'ajaxGetUserBugs';
 
 /* 测试用例。*/
@@ -232,9 +233,11 @@ $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
 
 /* 其他的一些杂项。*/
-$lang->resource->api->getModel  = 'getModel';
-$lang->resource->file->download = 'download';
-$lang->resource->misc->ping     = 'ping';
+$lang->resource->api->getModel    = 'getModel';
+$lang->resource->file->download   = 'download';
+$lang->resource->misc->ping       = 'ping';
+$lang->resource->action->trash    = 'trash';
+$lang->resource->action->undelete = 'undelete';
 
 /* 后台管理。*/
 $lang->resource->admin->index         = 'index';

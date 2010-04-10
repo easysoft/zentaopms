@@ -31,6 +31,7 @@ $lang->bug->resolve        = '解决Bug';
 $lang->bug->close          = '关闭Bug';
 $lang->bug->activate       = '激活Bug';
 $lang->bug->reportChart    = '报表统计';
+$lang->bug->delete         = '删除Bug';
 $lang->bug->ajaxGetUserBugs    = '接口:我的Bug';
 $lang->bug->confirmStoryChange = '确认需求变动';
 

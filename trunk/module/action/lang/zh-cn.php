@@ -21,6 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
+$lang->action->common   = '系统日志';
 $lang->action->trash    = '回收站';
 $lang->action->undelete = '还原';
 
