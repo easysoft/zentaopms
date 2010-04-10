@@ -34,6 +34,7 @@ $lang->edit       = '编辑';
 $lang->copy       = '复制';
 $lang->delete     = '删除';
 $lang->close      = '关闭';
+$lang->delete     = '删除';
 $lang->activate   = '激活';
 $lang->save       = '保存';
 $lang->confirm    = '确认';
@@ -58,6 +59,7 @@ $lang->files      = '附件 ';
 $lang->workingHour= '工时';
 $lang->showHelp   = '显示帮助';
 $lang->go         = 'GO!';
+$lang->notFound   = '抱歉，您访问的对象并不存在！';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
@@ -157,9 +159,11 @@ $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'f
 /* 后台管理菜单设置。*/
 $lang->admin->menu->browseCompany = array('link' => '公司管理|admin|browsecompany', 'subModule' => 'company');
 $lang->admin->menu->convert       = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->trashes       = array('link' => '回收站|action|trash', 'subModule' => 'action');
 $lang->admin->menu->createCompany = array('link' => '新增公司|company|create', 'float' => 'right');
 $lang->convert->menu              = $lang->admin->menu;
 $lang->upgrade->menu              = $lang->admin->menu;
+$lang->action->menu               = $lang->admin->menu;
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release     = 'product';
@@ -178,6 +182,7 @@ $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
+$lang->menugroup->action      = 'admin';
 
 /* 错误提示信息。*/
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";

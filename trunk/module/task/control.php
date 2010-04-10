@@ -194,14 +194,12 @@ class task extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->task->confirmDelete, $this->createLink('task', 'delete', "projectID=$projectID&taskID=$taskID&confirm=yes"));
-            exit;
+            die(js::confirm($this->lang->task->confirmDelete, inlink('delete', "projectID=$projectID&taskID=$taskID&confirm=yes")));
         }
         else
         {
             $this->task->delete($taskID);
-            echo js::locate($this->createLink('project', 'browse', "projectID=$projectID"), 'parent');
-            exit;
+            die(js::locate($this->createLink('project', 'browse', "projectID=$projectID"), 'parent'));
         }
     }
 

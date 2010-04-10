@@ -67,6 +67,7 @@ class bugModel extends model
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->onCaseOf(!empty($moduleIds))->andWhere('module')->in($moduleIds)->endCase()
+            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -79,6 +80,7 @@ class bugModel extends model
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
             ->where('t1.id')->eq((int)$bugID)->fetch();
+        if(!$bug) return false;
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
         if($bug->mailto)
         {
@@ -239,6 +241,7 @@ class bugModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
+            ->andWhere('t1.deleted')->eq(0)
             ->query();
         while($bug = $stmt->fetch())
         {
@@ -251,7 +254,10 @@ class bugModel extends model
     /* 获得某个项目的bug列表。*/
     public function getProjectBugs($projectID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_BUG)->where('project')->eq((int)$projectID)->orderBy($orderBy)->page($pager)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('project')->eq((int)$projectID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
     /* 通过某一次测试结果获得bug的标题和步骤。*/
@@ -323,7 +329,10 @@ class bugModel extends model
     /* 按bug关闭日期统计。*/
     public function getDataOfClosedBugsPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('closedDate')->fetchAll();
+        return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
+            ->where($this->session->bugReportCondition)->groupBy('name')
+            ->having('name != 0000-00-00')
+            ->orderBy('closedDate')->fetchAll();
     }
 
     /* 按bug创建者统计。*/

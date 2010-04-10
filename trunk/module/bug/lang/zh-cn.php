@@ -59,6 +59,7 @@ $lang->bug->lblLastEdited               = '最后修改';
 $lang->bug->lblResolved                 = '由谁解决';
 
 $lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';
+$lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
 
 $lang->bug->legendBasicInfo   = '基本信息';
 $lang->bug->legendMailto      = '抄送给';
