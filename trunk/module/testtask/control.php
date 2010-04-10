@@ -189,8 +189,11 @@ class testtask extends control
         /* 获得用例列表。*/
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
-        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)->andWhere('product')->eq($productID)->andWhere('id')->notIN($linkedCases)->orderBy('id desc')->fetchAll();
-
+        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)
+            ->andWhere('product')->eq($productID)
+            ->andWhere('id')->notIN($linkedCases)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id desc')->fetchAll();
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();

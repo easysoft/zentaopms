@@ -71,6 +71,7 @@ class testcase extends control
         {
             $this->view->cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where("t2.status = 'active'")
+                ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
                 ->orderBy($orderBy)
                 ->fetchAll();
@@ -78,7 +79,10 @@ class testcase extends control
         elseif($browseType == 'bysearch')
         {
             if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
-            $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)
+                ->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
         /* 赋值。*/
@@ -139,7 +143,9 @@ class testcase extends control
     public function view($caseID, $version = 0)
     {
         /* 获取case和产品信息，并设置菜单。*/
-        $case      = $this->testcase->getById($caseID, $version);
+        $case = $this->testcase->getById($caseID, $version);
+        if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $productID = $case->product;
         $this->testcase->setMenu($this->products, $productID);
 
@@ -213,11 +219,18 @@ class testcase extends control
         $this->display();
     }
 
-    public function delete($id)
+    /* 删除用例。*/
+    public function delete($caseID, $confirm = 'no')
     {
-        $header['title'] = $this->lang->page->delete;
-        $this->assign('header', $header);
-        $this->display();
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->testcase->confirmDelete, inlink('delete', "caseID=$caseID&confirm=yes")));
+        }
+        else
+        {
+            $this->testcase->delete(TABLE_CASE, $caseID);
+            die(js::locate($this->session->caseList, 'parent'));
+        }
     }
 
     /* 确认需求变动。*/

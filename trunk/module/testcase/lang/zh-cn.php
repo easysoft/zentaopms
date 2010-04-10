@@ -60,6 +60,7 @@ $lang->testcase->create         = "创建用例";
 $lang->testcase->delete         = "删除用例";
 $lang->testcase->view           = "用例详情";
 $lang->testcase->edit           = "编辑用例";
+$lang->testcase->delete         = "删除用例";
 $lang->testcase->browse         = "用例列表";
 $lang->testcase->confirmStoryChange = '确认需求变动';
 
@@ -97,6 +98,8 @@ $lang->testcase->legendHistory     = '历史记录';
 $lang->testcase->legendComment     = '备注';
 $lang->testcase->legendProduct     = '产品模块';
 $lang->testcase->legendVersion     = '版本历史';
+
+$lang->testcase->confirmDelete     = '您确认要删除该测试用例吗？';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
