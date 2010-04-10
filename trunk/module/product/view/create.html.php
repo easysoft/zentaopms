@@ -25,7 +25,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-4'> 
+    <table class='table-1'> 
       <caption><?php echo $lang->product->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->product->name;?></th>

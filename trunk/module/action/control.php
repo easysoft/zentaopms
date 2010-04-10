@@ -28,11 +28,16 @@ class action extends control
     {
         /* 登记session。*/
         $uri = $this->app->getURI(true);
-        $this->session->set('bugList',   $uri);
-        $this->session->set('caseList',  $uri);
-        $this->session->set('storyList', $uri);
-        $this->session->set('taskList',  $uri);
-        $this->session->set('buildList', $uri);
+        $this->session->set('productList',     $uri);
+        $this->session->set('productPlanList', $uri);
+        $this->session->set('releaseList',     $uri);
+        $this->session->set('storyList',       $uri);
+        $this->session->set('projectList',     $uri);
+        $this->session->set('taskList',        $uri);
+        $this->session->set('buildList',       $uri);
+        $this->session->set('bugList',         $uri);
+        $this->session->set('caseList',        $uri);
+        $this->session->set('testtaskList',    $uri);
 
         /* 设置标题和导航条。*/
         $this->view->header->title = $this->lang->action->trash;

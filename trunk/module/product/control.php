@@ -38,7 +38,7 @@ class product extends control
 
         /* 获取所有的产品列表。如果还没有产品，则跳转到产品的添加页面。*/
         $this->products = $this->product->getPairs();
-        if(empty($this->products) and $this->methodName != 'create') $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
         $this->assign('products', $this->products);
     }
 
@@ -60,7 +60,8 @@ class product extends control
         $browseType = strtolower($browseType);
 
         /* 设置当前的产品id和模块id。*/
-        $this->session->set('storyList', $this->app->getURI(true));
+        $this->session->set('storyList',   $this->app->getURI(true));
+        $this->session->set('productList', $this->app->getURI(true));
         $productID = common::saveProductState($productID, key($this->products));
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
 
@@ -113,6 +114,7 @@ class product extends control
         {
             $productID = $this->product->create();
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('product', $productID, 'opened');
             die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -129,9 +131,11 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $this->product->update($productID); 
+            $changes = $this->product->update($productID); 
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('product', 'browse', "product=$productID"), 'parent'));
+            $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+            die(js::locate(inlink('view', "product=$productID"), 'parent'));
         }
 
         /* 设置菜单。*/
@@ -146,19 +150,35 @@ class product extends control
         $this->display();
     }
 
+    /* 查看详情。*/
+    public function view($productID)
+    {
+        /* 设置菜单。*/
+        $this->product->setMenu($this->products, $productID);
+
+        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $this->view->header->title = $this->lang->product->view . $this->lang->colon . $product->name;
+        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[]    = $this->lang->product->view;
+        $this->view->product       = $product;
+        $this->view->actions       = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users         = $this->user->getPairs();
+
+        $this->display();
+    }
+
     /* 删除产品。*/
     public function delete($productID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes"));
-            exit;
+            die(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
         }
         else
         {
-            $this->product->delete($productID);
-            echo js::locate($this->createLink('product', 'browse'), 'parent');
-            exit;
+            $this->product->delete(TABLE_PRODUCT, $productID);
+            $this->session->set('product', '');     // 清除session。
+            die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }
     }
 

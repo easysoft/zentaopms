@@ -104,6 +104,7 @@ $lang->product->menu->story  = array('link' => '需求列表|product|browse|prod
 $lang->product->menu->plan   = array('link' => '计划列表|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release= array('link' => '发布列表|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap= '路线图|product|roadmap|productID=%s';
+$lang->product->menu->view   = '基本信息|product|view|productID=%s';
 $lang->product->menu->edit   = '编辑产品|product|edit|productID=%s';
 $lang->product->menu->module = '维护模块|tree|browse|productID=%s&view=product';
 $lang->product->menu->delete = array('link' => '删除产品|product|delete|productID=%s', 'target' => 'hiddenwin');
