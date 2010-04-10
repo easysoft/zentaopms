@@ -74,7 +74,9 @@ class bug extends control
         $bugs = array();
         if($browseType == 'all')
         {
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == "bymodule")
         {
@@ -83,32 +85,44 @@ class bug extends control
         }
         elseif($browseType == 'assigntome')
         {
-            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'openedbyme')
         {
-            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'resolvedbyme')
         {
-            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'assigntonull')
         {
-            $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'longlifebugs')
         {
-            $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'postponedbugs')
         {
-            $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'needconfirm')
         {
             $bugs = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where("t2.status = 'active'")
+                ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
                 ->orderBy($orderBy)
                 ->fetchAll();
@@ -117,7 +131,9 @@ class bug extends control
         {
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
             $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // 如果指定了搜索所有的产品，去掉这个查询条件。
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
         /* 处理查询语句，获取条件部分，并记录session。*/
@@ -243,7 +259,9 @@ class bug extends control
     public function view($bugID)
     {
         /* 查找bug信息及相关产品信息。*/
-        $bug         = $this->bug->getById($bugID);
+        $bug = $this->bug->getById($bugID);
+        if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $productID   = $bug->product;
         $productName = $this->products[$productID];
         
@@ -422,6 +440,20 @@ class bug extends control
         $this->dao->update(TABLE_BUG)->set('storyVersion')->eq($bug->latestStoryVersion)->where('id')->eq($bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'confirmed', '', $bug->latestStoryVersion);
         die(js::reload('parent'));
+    }
+
+    /* 删除bug。*/
+    public function delete($bugID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->bug->confirmDelete, inlink('delete', "bugID=$bugID&confirm=yes")));
+        }
+        else
+        {
+            $this->bug->delete(TABLE_BUG, $bugID);
+            die(js::locate($this->session->bugList, 'parent'));
+        }
     }
 
     /* 获得用户的bug列表。*/

@@ -26,15 +26,19 @@
 
 <div class='yui-d0'>
   <div id='titlebar'>
-    <div id='main'>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
+    <div id='main' <?php if($bug->deleted) echo "class='deleted'";?>>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
     <div>
       <?php
-      $params = "bugID=$bug->id";
       $browseLink = $app->session->bugList != false ? $app->session->bugList : $this->createLink('bug', 'browse', "productID=$bug->product");
-      common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
-      if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
-      if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
-      if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+      $params = "bugID=$bug->id";
+      if(!$bug->deleted)
+      {
+          common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+          if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+          if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
+          if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+          common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
+      }
       echo html::a($browseLink, $lang->goback);
       ?>
     </div>
@@ -55,10 +59,14 @@
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>
       <?php
-      common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
-      if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
-      if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
-      if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+      if(!$bug->deleted)
+      {
+          common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+          if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+          if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
+          if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+          common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
+      }
       echo html::a($browseLink, $lang->goback);
       ?>
       </div>

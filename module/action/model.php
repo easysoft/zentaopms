@@ -25,6 +25,9 @@
 <?php
 class actionModel extends model
 {
+    const CAN_UNDELETED = 1;    // 标记extra字段为可以还原。
+    const BE_UNDELETED  = 0;    // 标记extra字段为已经还原。
+
     /* 创建一条action动作。*/
     public function create($objectType, $objectID, $actionType, $comment = '', $extra = '')
     {
@@ -59,6 +62,30 @@ class actionModel extends model
     public function getById($actionID)
     {
         return $this->dao->findById((int)$actionID)->from(TABLE_ACTION)->fetch();
+    }
+
+    /* 获得所有的删除记录列表。*/
+    public function getTrashes($orderBy, $pager)
+    {
+        $trashes = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('action')->eq('deleted')
+            ->andWhere('extra')->eq(self::CAN_UNDELETED)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+        if(!$trashes) return array();
+        
+        /* 将对象按照类型分开，然后查找其对应的名称。*/
+        foreach($trashes as $object) $typeTrashes[$object->objectType][] = $object->objectID;
+        foreach($typeTrashes as $objectType => $objectIds)
+        {
+            $objectIds   = array_unique($objectIds);
+            $table       = $this->config->action->objectTables[$objectType];
+            $field       = $this->config->action->objectNameFields[$objectType];
+            $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+        }
+
+        /* 将name字段添加到trashes中。*/
+        foreach($trashes as $trash) $trash->objectName = $objectNames[$trash->objectType][$trash->objectID];
+        return $trashes;
     }
 
     /* 返回某一个action所对应的字段修改记录。*/

@@ -21,6 +21,18 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
+$lang->action->trash    = '回收站';
+$lang->action->undelete = '还原';
+
+$lang->action->objectType = '对象类型';
+$lang->action->objectID   = '对象ID';
+$lang->action->objectName = '对象名称';
+$lang->action->actor      = '操作者';
+$lang->action->date       = '日期';
+
+$lang->action->objectTypes['bug']  = 'BUG';
+$lang->action->objectTypes['case'] = '用例';
+
 /* 用来描述操作历史记录。*/
 $lang->action->desc->common    = '$date, <strong>$action</strong> by <strong>$actor</strong>';
 $lang->action->desc->extra     = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
@@ -28,6 +40,8 @@ $lang->action->desc->opened    = '$date, 由 <strong>$actor</strong> 创建。';
 $lang->action->desc->changed   = '$date, 由 <strong>$actor</strong> 变更。';
 $lang->action->desc->edited    = '$date, 由 <strong>$actor</strong> 编辑。';
 $lang->action->desc->closed    = '$date, 由 <strong>$actor</strong> 关闭。';
+$lang->action->desc->deleted   = '$date, 由 <strong>$actor</strong> 删除。';
+$lang->action->desc->undeleted = '$date, 由 <strong>$actor</strong> 还原。';
 $lang->action->desc->commented = '$date, 由 <strong>$actor</strong> 发表评论。';
 $lang->action->desc->activated = '$date, 由 <strong>$actor</strong> 激活。';
 $lang->action->desc->moved     = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"';
@@ -40,6 +54,8 @@ $lang->action->label->opened    = '创建了';
 $lang->action->label->changed   = '变更了';
 $lang->action->label->edited    = '编辑了';
 $lang->action->label->closed    = '关闭了';
+$lang->action->label->deleted   = '删除了';
+$lang->action->label->undeleted = '还原了';
 $lang->action->label->commented = '评论了';
 $lang->action->label->activated = '激活了';
 $lang->action->label->resolved  = '解决了';
