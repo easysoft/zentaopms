@@ -28,8 +28,9 @@ class build extends control
     {
         if(!empty($_POST))
         {
-            $this->build->create($projectID);
+            $buildID = $this->build->create($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('build', $buildID, 'Opened');
             die(js::locate($this->createLink('project', 'build', "project=$projectID"), 'parent'));
         }
 
@@ -48,9 +49,11 @@ class build extends control
     {
         if(!empty($_POST))
         {
-            $this->build->update($buildID);
+            $changes = $this->build->update($buildID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('project', 'build', "projectID={$this->post->project}"), 'parent'));
+            $actionID = $this->loadModel('action')->create('build', $buildID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+            die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
         }
 
         /* 设置菜单。*/
@@ -79,6 +82,7 @@ class build extends control
         $this->view->products      = $this->project->getProducts($build->project);
         $this->view->users         = $this->loadModel('user')->getPairs();
         $this->view->build         = $build;
+        $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->display();
     }
  
@@ -92,7 +96,7 @@ class build extends control
         else
         {
             $build = $this->build->getById($buildID);
-            $this->build->delete($buildID);
+            $this->build->delete(TABLE_BUILD, $buildID);
             die(js::locate($this->createLink('project', 'build', "projectID=$build->project"), 'parent'));
         }
     }
@@ -110,5 +114,4 @@ class build extends control
         if($varName == 'openedBuild')   die(html::select($varName . '[]', $this->build->getProjectBuildPairs($projectID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
         if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, 'noempty'), $build, 'class=select-3'));
     }
-
 }

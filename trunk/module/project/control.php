@@ -257,6 +257,8 @@ class project extends control
     /* 浏览某一个项目下面的build。*/
     public function build($projectID = 0)
     {
+        $this->session->set('buildList', $this->app->getURI(true));
+
         /* 公共的操作。*/
         $project = $this->commonAction($projectID);
 

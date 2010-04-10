@@ -26,6 +26,14 @@ class action extends control
     /* 已删除记录列表。*/
     public function trash($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* 登记session。*/
+        $uri = $this->app->getURI(true);
+        $this->session->set('bugList',   $uri);
+        $this->session->set('caseList',  $uri);
+        $this->session->set('storyList', $uri);
+        $this->session->set('taskList',  $uri);
+        $this->session->set('buildList', $uri);
+
         /* 设置标题和导航条。*/
         $this->view->header->title = $this->lang->action->trash;
         $this->view->position[]    = $this->lang->action->trash;
