@@ -45,6 +45,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.id DESC')
             ->fetchAll();
     }
@@ -56,9 +57,15 @@ class buildModel extends model
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
-        $builds = $this->dao->select('id,name')->from(TABLE_BUILD)->where('project')->eq((int)$projectID)->orderBy('id desc')->fetchPairs();
+        $builds = $this->dao->select('id,name')->from(TABLE_BUILD)
+            ->where('project')->eq((int)$projectID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
-        $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)->where('build')->in(array_keys($builds))->fetchPairs();
+        $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)
+            ->where('build')->in(array_keys($builds))
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
         foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
         return $sysBuilds + $builds;
     }
@@ -70,9 +77,15 @@ class buildModel extends model
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
-        $builds = $this->dao->select('id,name')->from(TABLE_BUILD)->where('product')->eq((int)$productID)->orderBy('id desc')->fetchPairs();
+        $builds = $this->dao->select('id,name')->from(TABLE_BUILD)
+            ->where('product')->eq((int)$productID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
-        $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)->where('build')->in(array_keys($builds))->fetchPairs();
+        $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)
+            ->where('build')->in(array_keys($builds))
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
         foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
         return $sysBuilds + $builds;
     }
@@ -92,16 +105,12 @@ class buildModel extends model
     /* 编辑。*/
     public function update($buildID)
     {
+        $oldBuild = $this->getByID($buildID);
         $build = fixer::input('post')
             ->stripTags('name')
             ->specialChars('desc')
             ->get();
         $this->dao->update(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->edit->requiredFields, 'notempty')->where('id')->eq((int)$buildID)->exec();
-    }
-
-    /* 删除build。*/
-    public function delete($buildID)
-    {
-        return $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq((int)$buildID)->exec();
+        if(!dao::isError()) return common::createChanges($oldBuild, $build);
     }
 }

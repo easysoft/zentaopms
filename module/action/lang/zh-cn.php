@@ -31,8 +31,17 @@ $lang->action->objectName = '对象名称';
 $lang->action->actor      = '操作者';
 $lang->action->date       = '日期';
 
-$lang->action->objectTypes['bug']  = 'BUG';
-$lang->action->objectTypes['case'] = '用例';
+$lang->action->objectTypes['company']     = '公司';
+$lang->action->objectTypes['product']     = '产品';
+$lang->action->objectTypes['story']       = '需求';
+$lang->action->objectTypes['productplan'] = '产品计划';
+$lang->action->objectTypes['release']     = '发布';
+$lang->action->objectTypes['project']     = '项目';
+$lang->action->objectTypes['task']        = '任务';
+$lang->action->objectTypes['build']       = 'Build';
+$lang->action->objectTypes['bug']         = 'Bug';
+$lang->action->objectTypes['case']        = '用例';
+$lang->action->objectTypes['testtask']    = '测试任务';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc->common    = '$date, <strong>$action</strong> by <strong>$actor</strong>';
