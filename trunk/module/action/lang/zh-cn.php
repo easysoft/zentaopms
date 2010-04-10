@@ -76,9 +76,16 @@ $lang->action->label->login     = '登录系统';
 $lang->action->label->logout    = "退出登录";
 
 /* 用来生成相应对象的链接。*/
-$lang->action->label->story     = '需求|story|view|storyID=%s';
-$lang->action->label->task      = '任务|task|view|taskID=%s';
-$lang->action->label->bug       = 'Bug|bug|view|bugID=%s';
-$lang->action->label->case      = '用例|testcase|view|caseID=%s';
+$lang->action->label->product     = '产品|product|view|productID=%s';
+$lang->action->label->productplan = '计划|productplan|view|productID=%s';
+$lang->action->label->release     = '发布|release|view|productID=%s';
+$lang->action->label->story       = '需求|story|view|storyID=%s';
+$lang->action->label->project     = '需求|story|view|storyID=%s';
+$lang->action->label->task        = '任务|task|view|taskID=%s';
+$lang->action->label->build       = 'Build|build|view|buildID=%s';
+$lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
+$lang->action->label->case        = '用例|testcase|view|caseID=%s';
+$lang->action->label->testtask    = '测试任务|testtask|view|caseID=%s';
+$lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 
 $lang->action->label->space     = '　';
