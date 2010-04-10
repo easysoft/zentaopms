@@ -71,11 +71,18 @@ $lang->menu->company = '组织视图|company|index';
 $lang->menu->admin   = '后台管理|admin|index';
 
 /* 查询条中可以选择的对象列表。*/
-$lang->searchObjects['story']   = '需求';
-$lang->searchObjects['task']    = '任务';
-$lang->searchObjects['bug']     = 'Bug';
-$lang->searchObjects['testcase']= '用例';
-$lang->searchTips               = '输入编号';
+$lang->searchObjects['bug']         = 'B:Bug';
+$lang->searchObjects['story']       = 'S:需求';
+$lang->searchObjects['task']        = 'T:任务';
+$lang->searchObjects['testcase']    = 'C:用例';
+$lang->searchObjects['project']     = 'P:项目';
+$lang->searchObjects['product']     = 'P:产品';
+$lang->searchObjects['user']        = 'U:用户';
+$lang->searchObjects['build']       = 'B:Build';
+$lang->searchObjects['release']     = 'R:发布';
+$lang->searchObjects['productplan'] = 'P:产品计划';
+$lang->searchObjects['testtask']    = 'T:测试任务';
+$lang->searchTips                   = '输入编号';
 
 /* 首页菜单设置。*/
 $lang->index->menu->product = '浏览产品|product|browse';

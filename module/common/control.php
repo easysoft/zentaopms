@@ -127,7 +127,7 @@ EOT;
     /* 打印主菜单。*/
     public static function printMainmenu($moduleName)
     {
-        global $lang;
+        global $app, $lang;
         echo "<ul>\n";
         echo "<li>$lang->zentaoMS</li>\n";
 
@@ -147,9 +147,27 @@ EOT;
                 echo "<li $active><nobr><a href='$link'>$menuLabel</a></nobr></li>\n";
             }
         }
+
+        /* 打印搜索框。*/
+        $moduleName = $app->getModuleName();
+        $methodName = $app->getMethodName();
+        $searchObject = $moduleName;
+        if($moduleName == 'product')
+        {
+           if($methodName == 'browse') $searchObject = 'story';
+        }
+        elseif($moduleName == 'project')
+        {
+            if(strpos('task|story|bug|build', $methodName) !== false) $searchObject = $methodName;
+        }
+        elseif($moduleName == 'my' or $moduleName == 'user')
+        {
+            $searchObject = $methodName;
+        }
+
         echo "<li id='searchbox'>"; 
-        echo html::select('searchType', $lang->searchObjects);
-        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value=''; class='text-2'");
+        echo html::select('searchType', $lang->searchObjects, $searchObject);
+        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='text-2'");
         echo html::submitButton($lang->go, 'onclick="shortcut()"');
         echo "</li>";
         echo "</ul>\n";
