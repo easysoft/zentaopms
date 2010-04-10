@@ -74,6 +74,8 @@ class build extends control
     {
         /* 设置菜单。*/
         $build = $this->build->getById((int)$buildID);
+        if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
 
         /* 赋值。*/
