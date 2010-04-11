@@ -35,18 +35,22 @@
 <div class='yui-d0 yui-t8'>
   <div class='yui-main'>
     <div class='yui-b'>
-      <fieldset>
-        <legend><?php echo $lang->task->desc;?></legend>
-        <?php echo html::textarea('desc', $task->desc, "rows='4' class='area-1'");?>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->comment;?></legend>
-        <?php echo html::textarea('comment', '',  "rows='5' class='area-1'");?>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->files;?></legend>
-        <?php echo $this->fetch('file', 'buildform');?>
-      </fieldset>
+      <table class='table-1 bd-none'>
+        <tr class='bd-none'><td class='bd-none'>
+          <fieldset>
+            <legend><?php echo $lang->task->desc;?></legend>
+            <?php echo html::textarea('desc', $task->desc, "rows='4' class='area-1'");?>
+          </fieldset>
+          <fieldset>
+            <legend><?php echo $lang->comment;?></legend>
+            <?php echo html::textarea('comment', '',  "rows='5' class='area-1'");?>
+          </fieldset>
+          <fieldset>
+            <legend><?php echo $lang->files;?></legend>
+            <?php echo $this->fetch('file', 'buildform');?>
+          </fieldset>
+        </td></tr>
+      </table>
       <div class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id"));?></div>
       <?php include '../../common/view/action.html.php';?>
     </div>
