@@ -204,7 +204,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /* Ò»¼¶²Ëµ¥¡£*/
 #mainmenu ul {background-color:#D6E7FF;}
-#mainmenu li {padding:0 15px 0 15px;border-right:4px solid #73A2EF}
+#mainmenu li {padding:0 10px 0 10px;border-right:3px solid #73A2EF}
 #mainmenu a  {color:black;}
 #mainmenu .active   {color:#FFF; background-color:#00008B;}
 #mainmenu .active a {color:white}
