@@ -34,13 +34,18 @@ class productplanModel extends model
     /* 获取列表。*/
     public function getList($product = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)->orderBy('begin')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('begin')->fetchAll();
     }
 
     /* 获取name=>value的键值对。*/
     public function getPairs($product = 0)
     {
-        return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('product')->eq((int)$product)->orderBy('begin')->fetchPairs();
+        return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->eq((int)$product)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('begin')->fetchPairs();
     }
 
     /* 创建。*/
@@ -57,17 +62,14 @@ class productplanModel extends model
     /* 编辑。*/
     public function update($planID)
     {
+        $oldPlan = $this->getById($planID);
         $plan = fixer::input('post')
             ->stripTags('title')
             ->specialChars('desc')
             ->get();
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')->where('id')->eq((int)$planID)->exec();
-    }
+        if(!dao::isError()) return common::createChanges($oldPlan, $plan);
 
-    /* 删除计划。*/
-    public function delete($planID)
-    {
-        return $this->dao->delete()->from(TABLE_PRODUCTPLAN)->where('id')->eq((int)$planID)->exec();
     }
 
     /* 关联需求。*/
