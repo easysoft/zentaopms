@@ -167,7 +167,7 @@ EOT;
 
         echo "<li id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject);
-        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='text-2'");
+        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-80px'");
         echo html::submitButton($lang->go, 'onclick="shortcut()"');
         echo "</li>";
         echo "</ul>\n";
