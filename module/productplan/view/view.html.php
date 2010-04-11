@@ -28,12 +28,8 @@
   <table class='table-1'>
   <caption><?php echo $plan->title . $lang->colon . $lang->productplan->view;?></caption>
     <tr>
-      <th class='rowhead w-100px'><?php echo $lang->productplan->id;?></th>
-      <td><?php echo $plan->id;?></th>
-    </tr>
-    <tr>
       <th class='rowhead'><?php echo $lang->productplan->title;?></th>
-      <td><?php echo $plan->title;?></th>
+      <td <?php if($plan->deleted) echo "class='deleted'";?>><?php echo $plan->title;?></th>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->productplan->begin;?></th>
@@ -48,6 +44,19 @@
       <td><?php echo nl2br($plan->desc);?></th>
     </tr>
   </table>
+  <div class='a-center f-16px strong'>
+    <?php
+    $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
+    if(!$plan->deleted)
+    {
+        common::printLink('productplan', 'edit',   "planID=$plan->id", $lang->edit);
+        common::printLink('productplan', 'delete', "planID=$plan->id", $lang->delete, 'hiddenwin');
+    }
+    echo html::a($browseLink, $lang->goback);
+    ?>
+  </div>
+  <?php include '../../common/view/action.html.php';?>
+
   <table align='center' class='table-1 tablesorter a-center'> 
     <caption><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
     <thead>

@@ -37,8 +37,9 @@ class productplan extends control
     {
         if(!empty($_POST))
         {
-            $this->productplan->create();
+            $planID = $this->productplan->create();
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('productplan', $planID, 'opened');
             die(js::locate($this->createLink('productplan', 'browse', "product=$product"), 'parent'));
         }
 
@@ -53,9 +54,11 @@ class productplan extends control
     {
         if(!empty($_POST))
         {
-            $this->productplan->update($planID);
+            $changes = $this->productplan->update($planID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('productplan', 'browse', "product={$this->post->product}"), 'parent'));
+            $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+            die(js::locate(inlink('view', "planID=$planID"), 'parent'));
         }
 
         $plan = $this->productplan->getByID($planID);
@@ -76,16 +79,16 @@ class productplan extends control
         else
         {
             $plan = $this->productplan->getById($planID);
-            $this->productplan->delete($planID);
-            die(js::locate($this->createLink('productplan', 'browse', "productID=$plan->product"), 'parent'));
+            $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
+            die(js::locate(inlink('browse', "productID=$plan->product"), 'parent'));
         }
     }
 
     /* 浏览计划列表。*/
     public function browse($product = 0)
     {
+        $this->session->set('productPlanList', $this->app->getURI(true));
         $this->commonAction($product);
-
         $this->view->header->title = $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->plans      = $this->productplan->getList($product);
@@ -97,12 +100,15 @@ class productplan extends control
     {
         $this->session->set('storyList', $this->app->getURI(true));
         $plan = $this->productplan->getByID($planID);
+        if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->commonAction($plan->product);
         $this->view->header->title = $this->lang->productplan->view;
         $this->view->position[] = $this->lang->productplan->view;
         $this->view->planStories= $this->loadModel('story')->getPlanStories($planID);
         $this->view->products   = $this->product->getPairs();
         $this->view->plan       = $plan;
+        $this->view->actions    = $this->loadModel('action')->getList('productplan', $planID);
+        $this->view->users      = $this->loadModel('user')->getPairs();
         $this->display();
     }
 

@@ -32,11 +32,11 @@
     </caption>
     <thead>
     <tr>
-      <th class='w-p20'><?php echo $lang->productplan->title;?></th>
+      <th><?php echo $lang->productplan->title;?></th>
       <th><?php echo $lang->productplan->begin;?></th>
       <th><?php echo $lang->productplan->end;?></th>
       <th><?php echo $lang->productplan->desc;?></th>
-      <th class='w-p20'><?php echo $lang->actions;?></th>
+      <th class="{sorter: false}"><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -48,9 +48,9 @@
       <td class='a-left'><?php echo nl2br($plan->desc);?></td>
       <td class='nobr'>
         <?php
-        common::printLink('productplan', 'edit', "planID=$plan->id", $lang->productplan->edit);
+        common::printLink('productplan', 'edit', "planID=$plan->id", $lang->edit);
         common::printLink('productplan', 'linkstory', "planID=$plan->id", $lang->productplan->linkStory);
-        common::printLink('productplan', 'delete', "planID=$plan->id", $lang->productplan->delete, 'hiddenwin');
+        common::printLink('productplan', 'delete', "planID=$plan->id", $lang->delete, 'hiddenwin');
         ?>
       </td>
     </tr>
