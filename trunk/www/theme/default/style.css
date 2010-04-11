@@ -58,7 +58,9 @@ ins{background:#cfc; text-decoration:none}
 /*-----------------------TABLE SETTING----------------------------*/
 table, th, td {border-color:#e4e4e4}
 tr, th, td    {padding:2px 3px 2px 3px}
-caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
+caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px}
+.caption-tr {caption-side:top; text-align:right; border:none; background:none;}
+.caption-tl {caption-side:top; text-align:left;  border:none; background:none;}
 .table-1 {width:100%; margin-bottom:10px}
 .table-2 {width:240px;margin-bottom:10px}
 .table-3 {width:360px;margin-bottom:10px}
@@ -73,8 +75,8 @@ caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5
 .nobr                {overflow:hidden; white-space:nowrap;}
 .fixed th, .fixed td {overflow:hidden; white-space:nowrap;}
 
-.odd     {background:#ECF6FC}
-.even    {background:white}
+.even    {background:#ECF6FC}
+.odd     {background:white}
 .hoover  {background:#BCD4EC}
 .clicked {background:yellow}
 
@@ -180,6 +182,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .bg-blue   {background-color:#DEEEF4}
 .bg-yellow {background-color:#FBF5C6;}
 .bg-gray   {background-color:#efefef;}
+.bg-white  {background-color:white;}
 
 /*-----------------------COLOR SETTING----------------------------*/
 .red     {color:red;}
