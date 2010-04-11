@@ -86,7 +86,7 @@ function search(active)
             <th class='w-p30'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
             <th><?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
             <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-            <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->story->assignedToAB);?></th>
+            <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
             <th class='w-hour'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
             <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
             <th><?php common::printOrderLink('stage',  $orderBy, $vars, $lang->story->stageAB);?></th>
