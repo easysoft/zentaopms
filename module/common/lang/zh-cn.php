@@ -23,47 +23,55 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->zentaoMS   = '禅道管理';
-$lang->logout     = '退出系统';
-$lang->login      = '登录';
-$lang->currentPos = '当前位置：';
-$lang->arrow      = ' » ';
-$lang->colon      = '::';
-$lang->reset      = '重填';
-$lang->edit       = '编辑';
-$lang->copy       = '复制';
-$lang->delete     = '删除';
-$lang->close      = '关闭';
-$lang->delete     = '删除';
-$lang->activate   = '激活';
-$lang->save       = '保存';
-$lang->confirm    = '确认';
-$lang->preview    = '预览';
-$lang->actions    = '操作';
-$lang->comment    = '备注';
-$lang->history    = '历史记录';
-$lang->welcome    = "欢迎使用%s{$lang->colon}{$lang->zentaoMS} ";
-$lang->zentaoSite = "官方网站";
-$lang->myControl  = "我的地盘";
-$lang->sponser    = "<a href='http://www.pujia.com' target='_blank'>普加赞助</a>";
-$lang->at         = ' 于 ';
-$lang->feature    = '未来';
-$lang->year       = '年';
-$lang->downArrow  = '↓';
-$lang->goback     = '返回';
-$lang->selectAll  = '全选';
-$lang->attatch    = '附件';
-$lang->reverse    = '（切换顺序）';
-$lang->addFiles   = '上传了附件 ';
-$lang->files      = '附件 ';
-$lang->workingHour= '工时';
-$lang->showHelp   = '显示帮助';
-$lang->go         = 'GO!';
-$lang->notFound   = '抱歉，您访问的对象并不存在！';
-$lang->idAB       = 'ID';
-$lang->priAB      = 'P';
-$lang->statusAB   = '状态';
-$lang->openedByAB = '创建';
+$lang->zentaoMS     = '禅道管理';
+$lang->zentaoSite   = "官方网站";
+$lang->myControl    = "我的地盘";
+$lang->sponser      = "<a href='http://www.pujia.com' target='_blank'>普加赞助</a>";
+
+$lang->arrow        = ' » ';
+$lang->colon        = '::';
+$lang->at           = ' 于 ';
+$lang->downArrow    = '↓';
+
+$lang->welcome      = "欢迎使用%s{$lang->colon}{$lang->zentaoMS} ";
+$lang->currentPos   = '当前位置：';
+$lang->logout       = '退出系统';
+$lang->login        = '登录';
+
+$lang->reset        = '重填';
+$lang->edit         = '编辑';
+$lang->copy         = '复制';
+$lang->delete       = '删除';
+$lang->close        = '关闭';
+$lang->link         = '关联';
+$lang->activate     = '激活';
+$lang->save         = '保存';
+$lang->confirm      = '确认';
+$lang->preview      = '预览';
+$lang->goback       = '返回';
+$lang->showHelp     = '显示帮助';
+$lang->go           = 'GO!';
+
+$lang->actions      = '操作';
+$lang->comment      = '备注';
+$lang->history      = '历史记录';
+$lang->attatch      = '附件';
+$lang->reverse      = '（切换顺序）';
+$lang->addFiles     = '上传了附件 ';
+$lang->files        = '附件 ';
+
+$lang->selectAll    = '全选';
+$lang->notFound     = '抱歉，您访问的对象并不存在！';
+
+$lang->feature      = '未来';
+$lang->year         = '年';
+$lang->workingHou   = '工时';
+
+$lang->idAB         = 'ID';
+$lang->priAB        = 'P';
+$lang->statusAB     = '状态';
+$lang->openedByAB   = '创建';
+$lang->assignedToAB = '指派';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
