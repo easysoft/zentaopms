@@ -162,3 +162,13 @@ $(document).ready(function()
     //setHelpLink();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });
+
+/* CTRL+g 聚焦到搜索框。*/
+$(document).bind('keydown', 'Ctrl+g', function(evt)
+{
+    $('#searchQuery').attr('value', '');
+    $('#searchType').focus();
+    evt.stopPropagation( );  
+    evt.preventDefault( );
+    return false;
+});
