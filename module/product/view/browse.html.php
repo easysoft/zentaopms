@@ -29,7 +29,7 @@
 /* 切换浏览方式。*/
 function browseByModule()
 {
-    $('#mainbox').addClass('yui-t7');
+    $('#mainbox').addClass('yui-t1');
     $('#treebox').removeClass('hidden');
     $('#bymoduleTab').addClass('active');
     $('#allTab').removeClass('active');
@@ -38,7 +38,7 @@ function browseByModule()
 }
 function search(active)
 {
-    $('#mainbox').removeClass('yui-t7');
+    $('#mainbox').removeClass('yui-t1');
     $('#treebox').addClass('hidden');
     $('#querybox').removeClass('hidden');
     $('#bymoduleTab').removeClass('active');
@@ -62,7 +62,7 @@ function search(active)
     <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 </div>
 
-<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
+<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
   <div class='yui-b <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
     <div class='box-title'><?php echo $productName;?></div>
     <div class='box-content'>
@@ -81,18 +81,16 @@ function search(active)
         <thead>
           <tr class='colhead'>
             <?php $vars = "productID=$productID&browseType=$browseType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
-            <th><?php common::printOrderLink('id',  $orderBy, $vars, $lang->story->id);?></th>
-            <th><?php common::printOrderLink('pri', $orderBy, $vars, $lang->story->pri);?></th>
+            <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
+            <th class='w-pri'><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
             <th class='w-p30'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
-            <th><?php common::printOrderLink('plan',           $orderBy, $vars, $lang->story->plan);?></th>
-            <th><?php common::printOrderLink('openedBy',       $orderBy, $vars, $lang->story->openedBy);?></th>
-            <th><?php common::printOrderLink('assignedTo',     $orderBy, $vars, $lang->story->assignedTo);?></th>
-            <th><?php common::printOrderLink('estimate',       $orderBy, $vars, $lang->story->estimate);?></th>
-            <th><?php common::printOrderLink('status',         $orderBy, $vars, $lang->story->status);?></th>
-            <th><?php common::printOrderLink('stage',          $orderBy, $vars, $lang->story->stage);?></th>
-            <th><?php common::printOrderLink('closedReason',   $orderBy, $vars, $lang->story->closedReason);?></th>
-            <th class='w-100px'><?php common::printOrderLink('lastEditedDate', $orderBy, $vars, $lang->story->lastEdited);?></th>
-            <th class='w-150px'><?php echo $lang->actions;?></th>
+            <th><?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
+            <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+            <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->story->assignedToAB);?></th>
+            <th class='w-hour'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+            <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+            <th><?php common::printOrderLink('stage',  $orderBy, $vars, $lang->story->stageAB);?></th>
+            <th class='w-100px'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -105,21 +103,18 @@ function search(active)
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
             <td><?php echo $story->pri;?></td>
             <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $story->title);?></nobr></td>
-            <td><?php echo $story->planTitle;?></td>
+            <td class='nobr'><?php echo $story->planTitle;?></td>
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $users[$story->assignedTo];?></td>
             <td><?php echo $story->estimate;?></td>
             <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
             <td><?php echo $lang->story->stageList[$story->stage];?></td>
-            <td><?php echo $lang->story->reasonList[$story->closedReason];?></td>
-            <td><?php echo substr($story->lastEditedDate, 5, 11);?></td>
             <td>
               <?php 
               $vars = "story={$story->id}";
               if(!($story->status != 'closed' and common::printLink('story', 'change', $vars, $lang->story->change))) echo $lang->story->change . ' ';
               if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', $vars, $lang->story->review))) echo $lang->story->review . ' ';
               if(!common::printLink('story', 'edit',   $vars, $lang->edit)) echo $lang->edit;
-              if(!common::printLink('story', 'delete', $vars, $lang->delete)) echo $lang->delete;
               ?>
             </td>
           </tr>
