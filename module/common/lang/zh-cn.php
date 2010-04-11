@@ -60,6 +60,10 @@ $lang->workingHour= '工时';
 $lang->showHelp   = '显示帮助';
 $lang->go         = 'GO!';
 $lang->notFound   = '抱歉，您访问的对象并不存在！';
+$lang->idAB       = 'ID';
+$lang->priAB      = 'P';
+$lang->statusAB   = '状态';
+$lang->openedByAB = '创建';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
