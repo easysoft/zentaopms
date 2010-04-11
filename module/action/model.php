@@ -31,10 +31,10 @@ class actionModel extends model
     /* 创建一条action动作。*/
     public function create($objectType, $objectID, $actionType, $comment = '', $extra = '')
     {
-        $action->objectType = $objectType;
+        $action->objectType = strtolower($objectType);
         $action->objectID   = $objectID;
         $action->actor      = $this->app->user->account;
-        $action->action     = $actionType;
+        $action->action     = strtolower($actionType);
         $action->date       = helper::now();
         $action->comment    = htmlspecialchars($comment);
         $action->extra      = $extra;
