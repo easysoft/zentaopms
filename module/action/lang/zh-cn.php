@@ -60,20 +60,24 @@ $lang->action->desc->diff1     = '修改了 <strong><i>%s</i></strong>，旧值�
 $lang->action->desc->diff2     = '修改了 <strong><i>%s</i></strong>，区别为：<blockquote>%s</blockquote>';
 
 /* 用来显示动态信息。*/
-$lang->action->label->opened    = '创建了';
-$lang->action->label->changed   = '变更了';
-$lang->action->label->edited    = '编辑了';
-$lang->action->label->closed    = '关闭了';
-$lang->action->label->deleted   = '删除了';
-$lang->action->label->undeleted = '还原了';
-$lang->action->label->commented = '评论了';
-$lang->action->label->activated = '激活了';
-$lang->action->label->resolved  = '解决了';
-$lang->action->label->reviewed  = '评审了';
-$lang->action->label->moved     = '移动了';
-$lang->action->label->confirmed = '确认了需求，';
-$lang->action->label->login     = '登录系统';
-$lang->action->label->logout    = "退出登录";
+$lang->action->label->opened           = '创建了';
+$lang->action->label->changed          = '变更了';
+$lang->action->label->edited           = '编辑了';
+$lang->action->label->closed           = '关闭了';
+$lang->action->label->deleted          = '删除了';
+$lang->action->label->undeleted        = '还原了';
+$lang->action->label->commented        = '评论了';
+$lang->action->label->activated        = '激活了';
+$lang->action->label->resolved         = '解决了';
+$lang->action->label->reviewed         = '评审了';
+$lang->action->label->moved            = '移动了';
+$lang->action->label->confirmed        = '确认了需求，';
+$lang->action->label->linked2plan      = '关联计划';
+$lang->action->label->unlinkedfromplan = '移除计划';
+$lang->action->label->linked2prj       = '关联项目';
+$lang->action->label->unlinkedfromprj  = '移除项目';
+$lang->action->label->login            = '登录系统';
+$lang->action->label->logout           = "退出登录";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = '产品|product|view|productID=%s';

@@ -49,25 +49,28 @@
     $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
     if(!$plan->deleted)
     {
-        common::printLink('productplan', 'edit',   "planID=$plan->id", $lang->edit);
-        common::printLink('productplan', 'delete', "planID=$plan->id", $lang->delete, 'hiddenwin');
+        common::printLink('productplan', 'edit',     "planID=$plan->id", $lang->edit);
+        common::printLink('productplan', 'linkstory',"planID=$plan->id", $lang->productplan->linkStory);
+        common::printLink('productplan', 'delete',   "planID=$plan->id", $lang->delete, 'hiddenwin');
     }
     echo html::a($browseLink, $lang->goback);
     ?>
   </div>
   <?php include '../../common/view/action.html.php';?>
 
-  <table align='center' class='table-1 tablesorter a-center'> 
-    <caption><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
+  <table class='table-1 tablesorter a-center'> 
+    <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
     <thead>
-    <tr>
-      <th class='w-p5'><?php echo $lang->story->id;?></th>
-      <th class='w-p5'><?php echo $lang->story->pri;?></th>
-      <th class='w-p10'><?php echo $lang->story->product;?></th>
+    <tr class='colhead'>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->story->title;?></th>
-      <th><?php echo $lang->story->status;?></th>
-      <th><?php echo $lang->story->stage;?></th>
-      <th class='w-p10'><?php echo $lang->actions?></th>
+      <th><?php echo $lang->openedByAB;?></th>
+      <th><?php echo $lang->assignedToAB;?></th>
+      <th><?php echo $lang->story->estimateAB;?></th>
+      <th><?php echo $lang->statusAB;?></th>
+      <th><?php echo $lang->story->stageAB;?></th>
+      <th class='w-p10 {sorter:false}'><?php echo $lang->actions?></th>
     </tr>
     </thead>
     <tbody>
@@ -75,8 +78,10 @@
     <tr>
       <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
       <td><?php echo $story->pri;?></td>
-      <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
       <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+      <td><?php echo $users[$story->openedBy];?></td>
+      <td><?php echo $users[$story->assignedTo];?></td>
+      <td><?php echo $story->estimate;?></td>
       <td><?php echo $lang->story->statusList[$story->status];?></td>
       <td><?php echo $lang->story->stageList[$story->stage];?></td>
       <td><?php common::printLink('productplan', 'unlinkStory', "story=$story->id", $lang->productplan->unlinkStory, 'hiddenwin');?></td>

@@ -76,9 +76,11 @@ class productplanModel extends model
     public function linkStory($planID)
     {
         $this->loadModel('story');
+        $this->loadModel('action');
         foreach($this->post->stories as $storyID)
         {
             $this->dao->update(TABLE_STORY)->set('plan')->eq((int)$planID)->where('id')->eq((int)$storyID)->exec();
+            $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
         }        
     }
@@ -86,7 +88,9 @@ class productplanModel extends model
     /* 移除需求。*/
     public function unlinkStory($storyID)
     {
+        $planID = $this->dao->findByID($storyID)->from(TABLE_STORY)->fields('plan')->fetch('plan');
         $this->dao->update(TABLE_STORY)->set('plan')->eq(0)->where('id')->eq((int)$storyID)->exec();
         $this->loadModel('story')->setStage($storyID);
+        $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
     }
 }

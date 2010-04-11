@@ -26,17 +26,19 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
   <form method='post'>
-    <table align='center' class='table-1 tablesorter a-center'> 
-      <caption><?php echo $plan->title .$lang->colon . $lang->productplan->unlinkedStories;?></caption>
+    <table class='table-1 tablesorter a-center'> 
+      <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->unlinkedStories;?></caption>
       <thead>
-      <tr>
-        <th class='w-p5'><?php echo $lang->story->id;?></th>
-        <th class='w-p5'><?php echo $lang->story->pri;?></th>
-        <th class='w-p10'><?php echo $lang->story->product;?></th>
+      <tr class='colhead'>
+        <th class='w-id'><?php echo $lang->idAB;?></th>
+        <th class='w-pri'><?php echo $lang->priAB;?></th>
         <th><?php echo $lang->story->plan;?></th>
         <th><?php echo $lang->story->title;?></th>
-        <th><?php echo $lang->story->status;?></th>
-        <th class='w-p10'><?php echo $lang->story->linkStory;?></th>
+        <th><?php echo $lang->openedByAB;?></th>
+        <th><?php echo $lang->assignedToAB;?></th>
+        <th><?php echo $lang->story->estimateAB;?></th>
+        <th><?php echo $lang->statusAB;?></th>
+        <th class='w-40px {sorter: false}'><?php echo $lang->link;?></th>
       </tr>
       </thead>
       <tbody>
@@ -48,9 +50,11 @@
       <tr>
         <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
         <td><?php echo $story->pri;?></td>
-        <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
         <td><?php echo $story->planTitle;?></td>
         <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+        <td><?php echo $users[$story->openedBy];?></td>
+        <td><?php echo $users[$story->assignedTo];?></td>
+        <td><?php echo $story->estimate;?></td>
         <td><?php echo $lang->story->statusList[$story->status];?></td>
         <td><input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' /></td>
       </tr>
@@ -58,21 +62,25 @@
       </tbody>
       <tfoot>
       <tr>
-        <td colspan='5'><?php echo html::submitButton();?></td>
+        <td colspan='9'><?php echo html::submitButton($lang->story->linkStory);?></td>
       </tr>
       </tfoot>
     </table>
   </form>
 
-  <table align='center' class='table-1 tablesorter a-center'> 
-    <caption><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
+  <table class='table-1 tablesorter a-center'> 
+    <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
     <thead>
-    <tr>
-      <th class='w-p5'><?php echo $lang->story->id;?></th>
-      <th class='w-p5'><?php echo $lang->story->pri;?></th>
-      <th class='w-p10'><?php echo $lang->story->product;?></th>
+    <tr class='colhead'>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->story->title;?></th>
-      <th class='w-p10'><?php echo $lang->actions?></th>
+      <th><?php echo $lang->openedByAB;?></th>
+      <th><?php echo $lang->assignedToAB;?></th>
+      <th><?php echo $lang->story->estimateAB;?></th>
+      <th><?php echo $lang->statusAB;?></th>
+      <th><?php echo $lang->story->stageAB;?></th>
+      <th class='w-p10 {sorter:false}'><?php echo $lang->actions?></th>
     </tr>
     </thead>
     <tbody>
@@ -80,8 +88,12 @@
     <tr>
       <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
       <td><?php echo $story->pri;?></td>
-      <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
       <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+      <td><?php echo $users[$story->openedBy];?></td>
+      <td><?php echo $users[$story->assignedTo];?></td>
+      <td><?php echo $story->estimate;?></td>
+      <td><?php echo $lang->story->statusList[$story->status];?></td>
+      <td><?php echo $lang->story->stageList[$story->stage];?></td>
       <td><?php common::printLink('productplan', 'unlinkStory', "story=$story->id", $lang->productplan->unlinkStory, 'hiddenwin');?></td>
     </tr>
     <?php endforeach;?>

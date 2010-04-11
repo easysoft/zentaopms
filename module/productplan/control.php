@@ -108,7 +108,7 @@ class productplan extends control
         $this->view->products   = $this->product->getPairs();
         $this->view->plan       = $plan;
         $this->view->actions    = $this->loadModel('action')->getList('productplan', $planID);
-        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -128,6 +128,7 @@ class productplan extends control
         $this->view->products   = $this->product->getPairs();
         $this->view->plan       = $plan;
         $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
