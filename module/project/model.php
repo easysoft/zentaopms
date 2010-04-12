@@ -161,7 +161,16 @@ class projectModel extends model
     public function getById($projectID)
     {
         $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
-        $total   = $this->dao->select('SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')->from(TABLE_TASK)->where('project')->eq((int)$projectID)->andWhere('status')->ne('cancel')->fetch();
+        if(!$project) return false;
+        $total   = $this->dao->select('
+            SUM(estimate) AS totalEstimate, 
+            SUM(consumed) AS totalConsumed, 
+            SUM(`left`) AS totalLeft')
+            ->from(TABLE_TASK)
+            ->where('project')->eq((int)$projectID)
+            ->andWhere('status')->ne('cancel')
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
         $project->totalLeft     = round($total->totalLeft, 1);
