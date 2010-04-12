@@ -51,8 +51,11 @@ class build extends control
         {
             $changes = $this->build->update($buildID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('build', $buildID, 'edited');
-            $this->action->logHistory($actionID, $changes);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('build', $buildID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
             die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
         }
 

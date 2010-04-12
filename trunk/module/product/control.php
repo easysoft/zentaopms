@@ -133,8 +133,11 @@ class product extends control
         {
             $changes = $this->product->update($productID); 
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
-            $this->action->logHistory($actionID, $changes);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
             die(js::locate(inlink('view', "product=$productID"), 'parent'));
         }
 

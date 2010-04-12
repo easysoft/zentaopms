@@ -56,8 +56,11 @@ class productplan extends control
         {
             $changes = $this->productplan->update($planID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
-            $this->action->logHistory($actionID, $changes);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
             die(js::locate(inlink('view', "planID=$planID"), 'parent'));
         }
 
