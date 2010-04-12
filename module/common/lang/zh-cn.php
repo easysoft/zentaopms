@@ -65,7 +65,7 @@ $lang->notFound     = '抱歉，您访问的对象并不存在！';
 
 $lang->feature      = '未来';
 $lang->year         = '年';
-$lang->workingHou   = '工时';
+$lang->workingHour  = '工时';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
