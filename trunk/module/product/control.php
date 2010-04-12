@@ -157,6 +157,8 @@ class product extends control
         $this->product->setMenu($this->products, $productID);
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $this->view->header->title = $this->lang->product->view . $this->lang->colon . $product->name;
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[]    = $this->lang->product->view;
