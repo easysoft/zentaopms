@@ -69,8 +69,11 @@ class release extends control
         {
             $changes = $this->release->update($releaseID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('release', $releaseID, 'edited');
-            $this->action->logHistory($actionID, $changes);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('release', $releaseID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }
 

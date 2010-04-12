@@ -362,8 +362,11 @@ class project extends control
         {
             $changes = $this->project->update($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
-            $this->action->logHistory($actionID, $changes);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
