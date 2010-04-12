@@ -45,6 +45,7 @@ class project extends control
     {
         $this->locate($this->createLink($this->moduleName, 'task', "projectID=$projectID"));
     }
+
     /* task, story, bug等方法的一些公共操作。*/
     private function commonAction($projectID = 0)
     {
@@ -86,8 +87,10 @@ class project extends control
         $projectID = $project->id;
 
         /* 记录用户当前选择的列表。*/
-        $this->app->session->set('taskList',  $this->app->getURI(true));
-        $this->app->session->set('storyList', $this->app->getURI(true));
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('taskList',    $uri);
+        $this->app->session->set('storyList',   $uri);
+        $this->app->session->set('projectList', $uri);
 
         /* 设定header和position信息。*/
         $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->task;
@@ -337,6 +340,7 @@ class project extends control
         {
             $projectID = $this->project->create();
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('project', $projectID, 'opened');
             die(js::locate($this->createLink('project', 'browse', "projectID=$projectID"), 'parent'));
         }
 
@@ -356,8 +360,10 @@ class project extends control
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
-            $this->project->update($projectID);
+            $changes = $this->project->update($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
+            $this->action->logHistory($actionID, $changes);
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
@@ -389,14 +395,21 @@ class project extends control
     public function view($projectID)
     {
         /* 公共的操作。*/
-        $project = $this->commonAction($projectID);
+        $project = $this->project->getById($projectID);
+        if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $header['title'] = $this->lang->project->view;
-        $position[]      = $header['title'];
+        /* 设置菜单。*/
+        $this->project->setMenu($this->projects, $project->id);
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('groups',   $this->loadModel('group')->getPairs());
+        $this->view->header->title = $this->lang->project->view;
+        $this->view->position[]    = $this->view->header->title;
+
+        $this->view->project  = $project;
+        $this->view->products = $this->project->getProducts($project->id);
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->actions  = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->users    = $this->loadModel('user')->getPairs();
+
         $this->display();
     }
 
@@ -410,9 +423,9 @@ class project extends control
         }
         else
         {
-            $this->project->delete($projectID);
-            echo js::locate($this->createLink('project', 'browse'), 'parent');
-            exit;
+            $this->project->delete(TABLE_PROJECT, $projectID);
+            $this->session->set('project', '');     // 清除session。
+            die(js::locate(inlink('index'), 'parent'));
         }
     }
 

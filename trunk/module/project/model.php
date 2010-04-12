@@ -108,6 +108,7 @@ class projectModel extends model
     /* 更新一个项目。*/
     public function update($projectID)
     {
+        $oldProject = $this->getById($projectID);
         $this->lang->project->team = $this->lang->project->teamname;
         $projectID = (int)$projectID;
         $project = fixer::input('post')
@@ -128,27 +129,16 @@ class projectModel extends model
             ->where('id')->eq($projectID)
             ->limit(1)
             ->exec();
-    }
-
-    /* 删除一个项目。*/
-    public function delete($projectID)
-    {
-        return $this->dao->delete()->from(TABLE_PROJECT)->where('id')->eq((int)$projectID)->limit(1)->exec();
-    }
-    
-    /* 获得项目目录列表。*/
-    public function getCats()
-    {
-        $cats = array();
-        $stmt = $this->dbh->query("SELECT id, name FROM " . TABLE_PROJECT . " WHERE isCat = '1'");
-        while($cat = $stmt->fetch()) $cats[$cat->id] = $cat->name;
-        return $cats;
+        if(!dao::isError()) return common::createChanges($oldProject, $project);
     }
 
     /* 获得项目id=>name列表。*/
     public function getPairs()
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->orderBy('status, end desc')->fetchAll();
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('iscat')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('status, end desc')->fetchAll();
         $pairs = array();
         foreach($projects as $project)
         {
@@ -162,6 +152,7 @@ class projectModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
             ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endcase()
+            ->andWhere('deleted')->eq(0)
             ->orderBy('status, end DESC')
             ->fetchAll();
     }
@@ -193,7 +184,12 @@ class projectModel extends model
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
         if(!isset($_POST['products'])) return;
         $products = array_unique($_POST['products']);
-        foreach($products as $productID) $this->dao->insert(TABLE_PROJECTPRODUCT)->set('project')->eq((int)$projectID)->set('product')->eq((int)$productID)->exec();
+        foreach($products as $productID)
+        {
+            $data->project = $projectID;
+            $data->product = $productID;
+            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+        }
     }
 
     /* 获得相关项目列表。*/
@@ -207,6 +203,7 @@ class projectModel extends model
             ->on('t1.id = t2.project')
             ->where('t2.product')->in($products)
             ->andWhere('t1.id')->ne((int)$projectID)
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.id')
             ->fetchPairs();
     }
@@ -293,6 +290,7 @@ class projectModel extends model
     public function linkStory($projectID)
     {
         if($this->post->stories == false) return false;
+        $this->loadModel('action');
         $versions = $this->loadModel('story')->getVersions($this->post->stories);
         foreach($this->post->stories as $key => $storyID)
         {
@@ -303,6 +301,7 @@ class projectModel extends model
             $data->version = $versions[$storyID];
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
+            $this->action->create('story', $storyID, 'linked2project', '', $projectID);
         }        
     }
 
@@ -311,6 +310,7 @@ class projectModel extends model
     {
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->limit(1)->exec();
         $this->loadModel('story')->setStage($storyID);
+        $this->loadModel('action')->create('story', $storyID, 'unlinkedfromproject', '', $projectID);
     }
 
     /* 获取团队成员。*/
@@ -383,7 +383,10 @@ class projectModel extends model
     public function computeBurn()
     {
         $today    = helper::today();
-        $projects = $this->dao->select('id')->from(TABLE_PROJECT)->where("end >= '$today'")->orWhere('end')->eq('0000-00-00')->fetchPairs();
+        $projects = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where("end >= '$today'")
+            ->orWhere('end')->eq('0000-00-00')
+            ->fetchPairs();
         $burns = $this->dao->select("project, '$today' AS date, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
             ->where('project')->in($projects)
@@ -421,7 +424,7 @@ class projectModel extends model
         }
         else
         {
-            $sets     = $sql->orderBy('date')->fetchAll('name');
+            $sets    = $sql->orderBy('date')->fetchAll('name');
             $current = $project->begin;
             $end     = $project->end;
             if($sets)
