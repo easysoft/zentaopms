@@ -181,6 +181,7 @@ $lang->resource->testtask->index       = 'index';
 $lang->resource->testtask->create      = 'create';
 $lang->resource->testtask->browse      = 'browse';
 $lang->resource->testtask->view        = 'view';
+$lang->resource->testtask->cases       = 'cases';
 $lang->resource->testtask->edit        = 'edit';
 $lang->resource->testtask->delete      = 'delete';
 $lang->resource->testtask->batchAssign = 'batchAssign';

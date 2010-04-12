@@ -25,22 +25,21 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
-  <table class='table-1 colored tablesorter'>
-    <caption>
+  <table class='table-1 colored tablesorter fixed'>
+    <caption class='caption-tl'>
       <div class='f-left'><?php echo $lang->testtask->browse;?></div>
       <div class='f-right'><?php common::printLink('testtask', 'create', "product=$productID", $lang->testtask->create);?></div>
     </caption>
     <thead>
     <tr>
-      <th><?php echo $lang->testtask->id;?></th>
-      <th class='w-p30'><?php echo $lang->testtask->name;?></th>
-      <th><?php echo $lang->testtask->product;?></th>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th><?php echo $lang->testtask->name;?></th>
       <th><?php echo $lang->testtask->project;?></th>
       <th><?php echo $lang->testtask->build;?></th>
-      <th><?php echo $lang->testtask->begin;?></th>
-      <th><?php echo $lang->testtask->end;?></th>
-      <th><?php echo $lang->testtask->status;?></th>
-      <th><?php echo $lang->actions;?></th>
+      <th class='w-80px'><?php echo $lang->testtask->begin;?></th>
+      <th class='w-80px'><?php echo $lang->testtask->end;?></th>
+      <th class='w-50px'><?php echo $lang->statusAB;?></th>
+      <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -48,17 +47,17 @@
     <tr class='a-center'>
       <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
       <td class='a-left nobr'><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
-      <td><?php echo $task->productName?></td>
-      <td><?php echo $task->projectName?></td>
-      <td><?php echo $task->buildName?></td>
+      <td class='nobr'><?php echo $task->projectName?></td>
+      <td class='nobr'><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
       <td><?php echo $lang->testtask->statusList[$task->status];?></td>
       <td>
         <?php
+        common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
+        common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
         common::printLink('testtask', 'edit',     "taskID=$task->id", $lang->edit);
         common::printLink('testtask', 'delete',   "taskID=$task->id", $lang->delete, 'hiddenwin');
-        common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);
         ?>
       </td>
     </tr>

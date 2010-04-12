@@ -156,7 +156,7 @@ $lang->testcase->menu->testtask = array('link' => '测试任务|testtask|browse|
 $lang->testtask->menu->product  = '%s';
 $lang->testtask->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
 $lang->testtask->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s');
-$lang->testtask->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
+$lang->testtask->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->browseUser  = array('link' => '用户列表|company|browse', 'subModule' => 'user');

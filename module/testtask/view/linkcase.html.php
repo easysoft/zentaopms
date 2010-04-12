@@ -36,17 +36,20 @@ function checkall(checker)
 <div class='yui-d0'>
   <?php echo $searchForm;?>
   <form method='post'>
-  <table class='table-1 colored tablesorter'>
-    <caption><?php echo $lang->testtask->unlinkedCases;?></caption>
+  <table class='table-1 colored tablesorter fixed'>
+    <caption class='caption-tl'>
+      <div class='f-left'><?php echo $lang->testtask->unlinkedCases;?></div>
+      <div class='f-right'><?php echo html::a($this->session->testtaskList, $lang->goback);?></div>
+    </caption>
     <thead>
-    <tr>
-      <th><?php echo $lang->testcase->id;?></th>
-      <th><?php echo $lang->testcase->pri;?></th>
+    <tr class='colhead'>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->testcase->title;?></th>
-      <th><?php echo $lang->testcase->type;?></th>
-      <th><?php echo $lang->testcase->openedBy;?></th>
-      <th><?php echo $lang->testcase->status;?></th>
-      <th class='w-50px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
+      <th class='w-80px'><?php echo $lang->testcase->type;?></th>
+      <th class='w-50px'><?php echo $lang->openedByAB;?></th>
+      <th class='w-50px'><?php echo $lang->statusAB;?></th>
+      <th class='w-80px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
     </tr>
     </thead>
     <tbody>
@@ -54,7 +57,7 @@ function checkall(checker)
     <tr class='a-center'>
       <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
       <td><?php echo $case->pri?></td>
-      <td width='50%' class='a-left'>
+      <td class='a-left'>
         <?php
         echo $case->title . ' ( ';
         for($i = $case->version; $i >= 1; $i --)
@@ -75,8 +78,8 @@ function checkall(checker)
     </tbody>
     <?php endforeach;?>
     <tfoot> 
-    <tr class='a-center nobr'>
-      <td colspan='6'><?php echo html::submitButton();?></td>
+    <tr>
+      <td colspan='6' class='a-center'><?php echo html::submitButton();?></td>
       <td class='a-left'><input type='checkbox' onclick='checkall(this);'><?php echo $lang->selectAll;?></td>
     </tr>
     </tfoot>
