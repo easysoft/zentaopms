@@ -29,12 +29,12 @@
     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <thead>
     <tr class='colhead'>
-      <th><?php common::printOrderLink('objectType',  $orderBy, $vars, $lang->action->objectType);?></th>
-      <th><?php common::printOrderLink('objectID',    $orderBy, $vars, $lang->action->objectID);?></th>
+      <th class='w-80px'><?php common::printOrderLink('objectType',  $orderBy, $vars, $lang->action->objectType);?></th>
+      <th class='w-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
       <th><?php echo $lang->action->objectName;?></th>
-      <th><?php common::printOrderLink('actor',       $orderBy, $vars, $lang->action->actor);?></th>
-      <th><?php common::printOrderLink('date',        $orderBy, $vars, $lang->action->date);?></th>
-      <th class='w-100px'><?php echo $lang->actions;?></th>
+      <th class='w-100px'><?php common::printOrderLink('actor',       $orderBy, $vars, $lang->action->actor);?></th>
+      <th class='w-150px'><?php common::printOrderLink('date',        $orderBy, $vars, $lang->action->date);?></th>
+      <th class='w-80px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
