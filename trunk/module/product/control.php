@@ -188,6 +188,10 @@ class product extends control
         /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
 
+        /* 登记session。*/
+        $this->session->set('releaseList',     $this->app->getURI(true));
+        $this->session->set('productPlanList', $this->app->getURI(true));
+
         /* 赋值。*/
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $this->view->header->title = $this->lang->product->roadmap;
