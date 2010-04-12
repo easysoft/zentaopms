@@ -26,7 +26,7 @@
 
 <div class='yui-d0'>
   <div id='titlebar'>
-    <div id='main'>TASK #<?php echo $task->id . $lang->colon . $task->name;?></div>
+    <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . $lang->colon . $task->name;?></div>
     <div>
     <?php
     $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");
@@ -34,8 +34,11 @@
     //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'close',      "taskID=$task->id", $lang->task->buttonClose)))      echo $lang->task->buttonClose . ' ';
     //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'cancel',     "taskID=$task->id", $lang->task->buttonCancel)))     echo $lang->task->buttonCancel . ' ';
     //if(!($task->status == 'closed' or $task->status == 'cancel'  and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
-    if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
-    if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
+    if(!$task->deleted)
+    {
+        if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
+        if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
+    }
     echo html::a($browseLink,  $lang->goback);
     ?>
     </div>
@@ -60,8 +63,11 @@
         //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'close',      "taskID=$task->id", $lang->task->buttonClose)))      echo $lang->task->buttonClose . ' ';
         //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'cancel',     "taskID=$task->id", $lang->task->buttonCancel)))     echo $lang->task->buttonCancel . ' ';
         //if(!($task->status == 'closed' or $task->status == 'cancel'  and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
-        if(!common::printLink('task', 'edit', "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
-        if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
+        if(!$task->deleted)
+        {
+            if(!common::printLink('task', 'edit', "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
+            if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
+        }
         echo html::a($browseLink,  $lang->goback);
         ?>
       </div>
