@@ -24,113 +24,51 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php include '../../common/view/colorbox.html.php';?>
-<script language='javascript'>
-$(document).ready(function()
-{
-    $("a.iframe").colorbox({width:900, height:600, iframe:true, transition:'none'});
-});
-
-function checkall(checker)
-{
-    $('input').each(function() 
+<div class='yui-d0'>
+  <table class='table-1'> 
+    <caption><?php echo $lang->testtask->view;?></caption>
+    <tr>
+      <th class='rowhead'><?php echo $lang->testtask->name;?></th>
+      <td class='<?php if($task->deleted) echo 'deleted';?>'><?php echo $task->name;?>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->testtask->project;?></th>
+      <td><?php echo $task->projectName;?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->testtask->build;?></th>
+      <td><?php $task->buildName ? print($task->buildName) : print($task->build);?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
+      <td><?php echo $task->begin;?>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->testtask->end;?></th>
+      <td><?php echo $task->end;?>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->testtask->status;?></th>
+      <td><?php echo $lang->testtask->statusList[$task->status];?>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->testtask->desc;?></th>
+      <td><?php echo nl2br($task->desc);?>
+    </tr>  
+  </table>
+  <div class='a-center f-16px strong'>
+    <?php
+    $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");
+    if(!$task->deleted)
     {
-        $(this).attr("checked", checker.checked)
-    });
-}
-</script>
-<div class='yui-d0 yui-t6'>
-  <div class='yui-b'>
-    <table class='table-1'> 
-      <caption><?php echo $lang->testtask->view;?></caption>
-      <tr>
-        <th class='rowhead w-p25'><?php echo $lang->testtask->project;?></th>
-        <td><?php echo $task->projectName;?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->testtask->build;?></th>
-        <td><?php $task->buildName ? print($task->buildName) : print($task->build);?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
-        <td><?php echo $task->begin;?>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->testtask->end;?></th>
-        <td><?php echo $task->end;?>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->testtask->status;?></th>
-        <td><?php echo $lang->testtask->statusList[$task->status];?>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->testtask->name;?></th>
-        <td><?php echo $task->name;?>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->testtask->desc;?></th>
-        <td><?php echo nl2br($task->desc);?>
-      </tr>  
-    </table>
+        common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
+        common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
+        common::printLink('testtask', 'edit',   "taskID=$task->id", $lang->edit);
+        common::printLink('testtask', 'delete', "taskID=$task->id", $lang->delete, 'hiddenwin');
+    }
+    echo html::a($browseLink, $lang->goback);
+    ?>
   </div>
-  <div class='yui-main'>
-    <div class='yui-b'>
-      <form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'>
-      <table class='table-1 tablesorter'>
-        <caption>
-          <div class='f-left'><?php echo $lang->testtask->linkedCases;?></div>
-          <div class='f-right'><?php common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);?></div>
-        </caption>
-        <thead>
-          <tr>
-            <th class='w-20px'><nobr><?php echo $lang->testcase->id;?></nobr></th>
-            <th><?php echo $lang->testcase->pri;?></th>
-            <th class='w-p30'><?php echo $lang->testcase->title;?></th>
-            <th><?php echo $lang->testcase->type;?></th>
-            <th><?php echo $lang->testtask->assignedTo;?></th>
-            <th><?php echo $lang->testtask->lastRun;?></th>
-            <th><?php echo $lang->testtask->lastResult;?></th>
-            <th><?php echo $lang->testtask->status;?></th>
-            <th class='{sorter: false}'><?php echo $lang->actions;?></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($runs as $run):?>
-          <tr class='a-center'>
-            <td class='a-left'><?php echo "<input type='checkbox' name='cases[]' value='$run->case' /> ";  printf('%03d', $run->case);?></td>
-            <td><?php echo $run->pri?></td>
-            <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version"), $run->title, '_blank');?>
-            </td>
-            <td><?php echo $lang->testcase->typeList[$run->type];?></td>
-            <td><?php echo $users[$run->assignedTo];?></td>
-            <td><?php if(!helper::isZeroDate($run->lastRun)) echo date(DT_MONTHTIME1, strtotime($run->lastRun));?></td>
-            <td class='<?php echo $run->lastResult;?>'><?php if($run->lastResult) echo $lang->testcase->resultList[$run->lastResult];?></td>
-            <td class='<?php echo $run->status;?>'><?php echo $lang->testtask->statusList[$run->status];?></td>
-            <td>
-              <?php
-              common::printLink('testtask', 'runcase',    "id=$run->id", $lang->testtask->runCase, '', 'class="iframe"');
-              common::printLink('testtask', 'results',    "id=$run->id", $lang->testtask->results, '', 'class="iframe"');
-              common::printLink('bug',      'create',     "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $lang->testtask->createBug);
-              common::printLink('testtask', 'unlinkcase', "id=$run->id", $lang->testtask->unlinkCase, 'hiddenwin');
-              ?>
-            </td>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-        <tfoot>
-        <tr>
-          <td><nobr><?php echo "<input type='checkbox' onclick='checkall(this);'> " . $lang->selectAll;?></nobr></td>
-          <td colspan='9'>
-            <?php
-            echo html::select('assignedTo', $users);
-            echo html::submitButton($lang->testtask->assign);
-            ?>
-          </td>
-        </tr>
-        </tfoot>
-      </table>
-      </form>
-    </div>
-  </div>
+  <?php include '../../common/view/action.html.php';?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

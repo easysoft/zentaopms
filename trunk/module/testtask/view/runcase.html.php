@@ -26,8 +26,8 @@
 <div class='yui-d0'>
   <form method='post'>
   <table class='table-1 bd-1px'>
-    <caption>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></caption>
-    <tr>
+    <caption class='caption-tl'>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></caption>
+    <tr class='colhead'>
       <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
       <th class='w-p40'><?php  echo $lang->testcase->stepDesc;?></th>
       <th class='w-p20'><?php  echo $lang->testcase->stepExpect;?></th>

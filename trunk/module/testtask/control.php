@@ -42,6 +42,9 @@ class testtask extends control
     /* 浏览一个产品下面的task。*/
     public function browse($productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* 登记session。*/
+        $this->session->set('testtaskList', $this->app->getURI(true));
+
         /* 设置产品和菜单。*/
         $productID = common::saveProductState($productID, key($this->products));
         $this->testtask->setMenu($this->products, $productID);
@@ -70,6 +73,7 @@ class testtask extends control
         {
             $taskID = $this->testtask->create($productID);
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('testtask', $taskID, 'opened');
             die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -91,10 +95,9 @@ class testtask extends control
     /* 查看一个task。*/
     public function view($taskID)
     {
-        $this->app->loadLang('testcase');
-
         /* 获取task和产品信息，并设置菜单。*/
-        $task      = $this->testtask->getById($taskID);
+        $task = $this->testtask->getById($taskID);
+        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID);
 
@@ -107,25 +110,54 @@ class testtask extends control
         $this->view->productID = $productID;
         $this->view->task      = $task;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->actions   = $this->loadModel('action')->getList('testtask', $taskID);
+
+        $this->display();
+    }
+
+    /* 查看任务的用例列表。*/
+    public function cases($taskID)
+    {
+        $this->app->loadLang('testcase');
+        $this->session->set('caseList', $this->app->getURI(true));
+
+        /* 获取task和产品信息，并设置菜单。*/
+        $task = $this->testtask->getById($taskID);
+        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+        $productID = $task->product;
+        $this->testtask->setMenu($this->products, $productID);
+
+        /* 导航信息。*/
+        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
+        $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]      = $this->lang->testtask->cases;
+
+        /* 赋值。*/
+        $this->view->productID = $productID;
+        $this->view->task      = $task;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
         $this->view->runs      = $this->testtask->getRuns($taskID);
 
         $this->display();
     }
 
+
     /* 编辑一个Bug。*/
     public function edit($taskID)
     {
-        /* 获得task信息。*/
-        $task      = $this->testtask->getById($taskID);
-        $productID = common::saveProductState($task->product, key($this->products));
-
         /* 更新task信息。*/
         if(!empty($_POST))
         {
-            $this->testtask->update($taskID);
+            $changes = $this->testtask->update($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+            die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
         }
+
+        /* 获得task信息。*/
+        $task      = $this->testtask->getById($taskID);
+        $productID = common::saveProductState($task->product, key($this->products));
 
         /* 设置菜单。*/
         $this->testtask->setMenu($this->products, $productID);
@@ -152,7 +184,7 @@ class testtask extends control
         else
         {
             $task = $this->testtask->getByID($taskID);
-            $this->testtask->delete($taskID);
+            $this->testtask->delete(TABLE_TESTTASK, $taskID);
             die(js::locate(inlink('browse', "product=$task->product"), 'parent'));
         }
     }
@@ -163,7 +195,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $this->testtask->linkCase($taskID);
-            $this->locate(inlink('view', "taskID=$taskID"));
+            $this->locate(inlink('cases', "taskID=$taskID"));
         }
 
         $this->session->set('caseList', $this->app->getURI(true));

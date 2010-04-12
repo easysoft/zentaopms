@@ -50,17 +50,23 @@ class testtaskModel extends model
     /* 获得某一个产品的测试任务列表。*/
     public function getProductTasks($productID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')->from(TABLE_TESTTASK)->alias('t1')
+        return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
+            ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-            ->where('t1.product')->eq((int)$productID)->orderBy($orderBy)->page($pager)->fetchAll();
+            ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
     }
 
     /* 获取一个测试任务的详细信息。*/
     public function getById($taskID)
     {
-        return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')->from(TABLE_TESTTASK)->alias('t1')
+        return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
+            ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
@@ -70,17 +76,13 @@ class testtaskModel extends model
     /* 更新测试任务信息。*/
     public function update($taskID)
     {
+        $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
             ->stripTags('name')
             ->specialChars('desc')
             ->get();
         $this->dao->update(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')->where('id')->eq($taskID)->exec();
-    }
-
-    /* 删除测试任务信息。*/
-    public function delete($taskID)
-    {
-        $this->dao->delete()->from(TABLE_TESTTASK)->where('id')->eq($taskID)->exec();
+        if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
     /* 关联用例。*/

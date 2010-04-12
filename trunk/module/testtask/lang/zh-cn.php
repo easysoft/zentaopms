@@ -28,12 +28,14 @@ $lang->testtask->view           = "测试任务详情";
 $lang->testtask->edit           = "编辑测试任务";
 $lang->testtask->browse         = "测试任务列表";
 $lang->testtask->linkCase       = "关联用例";
+$lang->testtask->linkCaseAB     = "关联";
 $lang->testtask->unlinkCase     = "移除";
 $lang->testtask->batchAssign    = "批量指派";
 $lang->testtask->runCase        = "执行";
 $lang->testtask->results        = "结果";
 $lang->testtask->createBug      = "创建Bug";
 $lang->testtask->assign         = '指派';
+$lang->testtask->cases          = '用例';
 
 $lang->testtask->common         = '测试任务';
 $lang->testtask->id             = '任务编号';
