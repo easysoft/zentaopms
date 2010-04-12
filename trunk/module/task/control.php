@@ -162,6 +162,8 @@ class task extends control
     {
         $this->loadModel('action');
         $task = $this->task->getById($taskID);
+        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $project = $this->project->getById($task->project);
 
         /* 设置菜单。*/
@@ -198,8 +200,10 @@ class task extends control
         }
         else
         {
-            $this->task->delete($taskID);
-            die(js::locate($this->createLink('project', 'browse', "projectID=$projectID"), 'parent'));
+            $story = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
+            $this->task->delete(TABLE_TASK, $taskID);
+            if($story) $this->loadModel('story')->setStage($story);
+            die(js::locate($this->session->taskList, 'parent'));
         }
     }
 

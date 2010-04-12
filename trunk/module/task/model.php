@@ -87,15 +87,6 @@ class taskModel extends model
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
     
-    /* 删除一个任务。*/
-    public function delete($taskID)
-    {
-        $story = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
-        $this->dao->delete()->from(TABLE_TASK)->where('id')->eq((int)$taskID)->limit(1)->exec();
-        if($story) $this->loadModel('story')->setStage($story);
-        return;
-    }
-
     /* 通过id获取一个任务信息。*/
     public function getById($taskID)
     {
@@ -124,6 +115,7 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')
             ->on('t1.owner = t3.account')
             ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t1.deleted')->eq(0)
             ->onCaseOf($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->endCase()
             ->onCaseOf($status != 'all' and $status != 'needConfirm')->andWhere('t1.status')->in($status)->endCase()
             ->andWhere('t3.company')->eq($this->app->company->id)
@@ -143,6 +135,7 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.owner = t2.account')
             ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t1.deleted')->eq(0)
             ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
             ->andWhere('t2.company')->eq($this->app->company->id)
             ->orderBy($orderBy)
@@ -161,6 +154,7 @@ class taskModel extends model
             ->leftjoin(TABLE_STORY)->alias('t3')
             ->on('t1.story = t3.id')
             ->where('t1.owner')->eq($account)
+            ->andWhere('t1.deleted')->eq(0)
             ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
             ->fetchAll();
         if($tasks) return $this->processTasks($tasks);
@@ -175,7 +169,8 @@ class taskModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
-            ->where('t1.owner')->eq($account);
+            ->where('t1.owner')->eq($account)
+            ->andWhere('t1.deleted')->eq(0);
         if($status != 'all') $sql->andwhere('t1.status')->in($status);
         $stmt = $sql->query();
         while($task = $stmt->fetch())
@@ -188,22 +183,24 @@ class taskModel extends model
     /* 获得story对应的task id=>name列表。*/
     public function getStoryTaskPairs($storyID, $projectID = 0)
     {
-        $sql = $this->dao->select('id, name')
+         return $this->dao->select('id, name')
             ->from(TABLE_TASK)
-            ->where('story')->eq((int)$storyID);
-        if($projectID > 0) $sql->andwhere('project')->eq((int)$projectID);
-        return $sql->fetchPairs();
+            ->where('story')->eq((int)$storyID)
+            ->andWhere('deleted')->eq(0)
+            ->onCaseOf($projectID)->andWhere('project')->eq($projectID)->endCase()
+            ->fetchPairs();
     }
 
     /* 获得story对应的task数量。*/
     public function getStoryTaskCounts($stories, $projectID = 0)
     {
-        $sql = $this->dao->select('story, COUNT(*) AS tasks')
+        $taskCounts = $this->dao->select('story, COUNT(*) AS tasks')
             ->from(TABLE_TASK)
-            ->where('story')->in($stories);
-        if($projectID > 0) $sql->andwhere('project')->eq((int)$projectID);
-        $sql->groupBy('story');
-        $taskCounts = $sql->fetchPairs();
+            ->where('story')->in($stories)
+            ->andWhere('deleted')->eq(0)
+            ->onCaseOf($projectID)->andWhere('project')->eq($projectID)->endCase()
+            ->groupBy('story')
+            ->fetchPairs();
         foreach($stories as $storyID) if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
         return $taskCounts;
     }
