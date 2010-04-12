@@ -111,6 +111,7 @@ class groupModel extends model
             ->from(TABLE_USERGROUP)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('`group`')->eq((int)$groupID)
+            ->andWhere('t2.company')->eq($this->app->company->id)
             ->fetchPairs();
     }
 

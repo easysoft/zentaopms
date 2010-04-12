@@ -318,7 +318,9 @@ class projectModel extends model
     {
         return $this->dao->select('t1.*, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.project')->eq((int)$projectID)->fetchAll();
+            ->where('t1.project')->eq((int)$projectID)
+            ->andWHere('t2.company')->eq($this->app->company->id)
+            ->fetchAll();
     }
 
    /* 获取团队成员account=>name列表。*/
@@ -326,7 +328,9 @@ class projectModel extends model
     {
         $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.project')->eq((int)$projectID)->fetchPairs();
+            ->where('t1.project')->eq((int)$projectID)
+            ->andWHere('t2.company')->eq($this->app->company->id)
+            ->fetchPairs();
         if(!$users) return array();
         foreach($users as $account => $realName)
         {
