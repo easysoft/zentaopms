@@ -83,7 +83,7 @@ class upgrade extends control
         {
             if(strpos($key, 'TABLE') === false) continue;
             if($key == 'TABLE_COMPANY' or $key == 'TABLE_CONFIG') continue;
-            $this->dao->update($value)->set('company')->eq($this->app->company->id)->exec();
+            $this->dbh->query("UPDATE $value SET company = '{$this->app->company->id}'");
         }
     }
 }
