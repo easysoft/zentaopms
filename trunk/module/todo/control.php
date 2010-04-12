@@ -39,8 +39,9 @@ class todo extends control
         if($account == '')   $account = $this->app->user->account;
         if(!empty($_POST))
         {
-            $this->todo->create($date, $account);
+            $todoID = $this->todo->create($date, $account);
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('todo', $todoID, 'opened');
             die(js::locate($this->createLink('my', 'todo', "date=$_POST[date]"), 'parent'));
         }
 
@@ -61,9 +62,14 @@ class todo extends control
     {
         if(!empty($_POST))
         {
-            $this->todo->update($todoID);
+            $changes = $this->todo->update($todoID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('my', 'todo', "date=$_POST[date]"), 'parent'));
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate(inlink('view', "todoID=$todoID"), 'parent'));
         }
 
         /* 获取todo信息，判断是否是私人事务。*/
@@ -82,17 +88,25 @@ class todo extends control
     }
 
     /* 查看todo。*/
-    public function view($todoID)
+    public function view($todoID, $from = 'company')
     {
         $todo = $this->todo->getById($todoID);
+        if(!$todo) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        /* 登记session。*/
+        $this->session->set('taskList', $this->app->getURI(true));
+        $this->session->set('bugList',  $this->app->getURI(true));
+
         $this->lang->todo->menu = $this->lang->user->menu;
         $this->loadModel('user')->setMenu($this->user->getPairs(), $todo->account);
-        $this->lang->set('menugroup.todo', 'company');
+        $this->lang->set('menugroup.todo', $from);
 
         $this->view->header->title = $this->lang->todo->view;
         $this->view->position[]    = $this->lang->todo->view;
         $this->view->todo          = $todo;
         $this->view->times         = $this->todo->buildTimeList();
+        $this->view->actions       = $this->loadModel('action')->getList('todo', $todoID);
+        $this->view->from          = $from;
 
         $this->display();
     }
@@ -107,10 +121,9 @@ class todo extends control
         }
         else
         {
-            $todo = $this->todo->getById($todoID);
-            $this->todo->delete($todoID);
-            echo js::locate($this->createLink('my', 'todo', "date={$todo->date}"), 'parent');
-            exit;
+            $this->dao->delete()->from(TABLE_TODO)->where('id')->eq($todoID)->exec();
+            $this->loadModel('action')->create('todo', $todoID, 'erased');
+            die(js::locate($this->session->todoList, 'parent'));
         }
     }
 

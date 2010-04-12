@@ -76,20 +76,14 @@ function changeDate(date)
       <td><?php echo $todo->date;?></td>
       <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
       <td><?php echo $todo->pri;?></td>
-      <td class='a-left'>
-        <?php 
-        if($todo->type == 'bug')    $link = $this->createLink('bug',  'view', "id={$todo->idvalue}");
-        if($todo->type == 'task')   $link = $this->createLink('task', 'edit', "id={$todo->idvalue}");
-        if($todo->type == 'custom') $link = $this->createLink('todo', 'edit', "id={$todo->id}");
-        echo html::a($link, $todo->name);
-        ?>
-      </td>
+      <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id={$todo->id}"), $todo->name);?></td>
       <td><?php echo $todo->begin;?></td>
       <td><?php echo $todo->end;?></td>
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
       <td>
         <?php 
         echo html::a($this->createLink('todo', 'mark',   "id=$todo->id&status=$todo->status"), $lang->todo->{'mark'.ucfirst($todo->status)}, 'hiddenwin');
+        echo html::a($this->createLink('todo', 'view',   "id=$todo->id&from=my"), $lang->todo->viewAB);
         echo html::a($this->createLink('todo', 'edit',   "id=$todo->id"), $lang->edit);
         echo html::a($this->createLink('todo', 'delete', "id=$todo->id"), $lang->delete, 'hiddenwin');
         ?>

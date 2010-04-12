@@ -26,7 +26,10 @@
 <div class='yui-d0'>
   <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
   <table class='table-1 a-left'> 
-    <caption><?php echo $lang->todo->view;?></caption>
+    <caption>
+      <div class='f-left'><?php echo $lang->todo->view;?></div>
+      <div class='f-right'><?php echo html::a($this->session->todoList, $lang->goback);?></div>
+    </caption>
     <tr>
       <th class='rowhead'><?php echo $lang->todo->date;?></th>
       <td><?php echo date(DT_DATE1, strtotime($todo->date));?></td>
@@ -41,7 +44,13 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->name;?></th>
-      <td><?php echo $todo->name;?></td>
+      <td>
+        <?php 
+        if($todo->type == 'bug')    echo html::a($this->createLink('bug',  'view', "id={$todo->idvalue}"), $todo->name);
+        if($todo->type == 'task')   echo html::a($this->createLink('task', 'view', "id={$todo->idvalue}"), $todo->name);
+        if($todo->type == 'custom') echo $todo->name;
+        ?>
+      </td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->desc;?></th>
@@ -60,9 +69,32 @@
         ?>
       </td>
     </tr>  
- </table>
- <?php else:?>
- <?php echo $lang->todo->thisIsPrivate;?>
- <?php endif;?>
+  </table>
+  <div class='a-center f-16px strong'>
+    <?php
+    if($this->session->todoList)
+    {
+        $browseLink = $this->session->todoList;
+    }
+    elseif($todo->account == $app->user->account)
+    {
+        $browseLink = $this->createLink('my', 'todo');
+    }
+    else
+    {
+        $browseLink = $this->createLink('user', 'todo', "account=$todo->account");
+    }
+    if($todo->account == $app->user->account)
+    {
+        common::printLink('todo', 'edit',   "todoID=$todo->id", $lang->edit);
+        common::printLink('todo', 'delete', "todoID=$todo->id", $lang->delete, 'hiddenwin');
+    }
+    echo html::a($browseLink, $lang->goback);
+    ?>
+  </div>
+  <?php include '../../common/view/action.html.php';?>
+  <?php else:?>
+  <?php echo $lang->todo->thisIsPrivate;?>
+  <?php endif;?>
 </div>  
 <?php include '../../common/view/footer.html.php';?>
