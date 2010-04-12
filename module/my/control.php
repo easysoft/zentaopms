@@ -40,6 +40,12 @@ class my extends control
     /* 用户的todo列表。*/
     public function todo($type = 'today', $account = '', $status = 'all')
     {
+        /* 登记session。*/
+        $uri = $this->app->getURI(true);
+        $this->session->set('todoList', $uri);
+        $this->session->set('bugList',  $uri);
+        $this->session->set('taskList', $uri);
+
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $this->view->position[]    = $this->lang->my->todo;
 

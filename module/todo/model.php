@@ -46,11 +46,14 @@ class todoModel extends model
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
             ->exec();
+        return $this->dao->lastInsertID();
     }
 
     /* 更新一个todo。*/
     public function update($todoID)
     {
+        $oldTodo = $this->getById($todoID);
+        if($oldTodo->type != 'custom') $oldTodo->name = '';
         $todo = fixer::input('post')
             ->cleanInt('date, pri, begin, end, private')
             ->specialChars('type,name,desc')
@@ -62,25 +65,23 @@ class todoModel extends model
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')->where('id')->eq($todoID)
             ->exec();
+        if(!dao::isError()) return common::createChanges($oldTodo, $todo);
     }
     
-    /* 删除一个todo。*/
-    public function delete($todoID)
-    {
-        return $this->dao->delete()->from(TABLE_TODO)->where('id')->eq((int)$todoID)->exec();
-    }
-
     /* 更改状态。*/
     public function mark($todoID, $status)
     {
         $status = ($status == 'done') ? 'wait' : 'done';
-        return $this->dao->update(TABLE_TODO)->set('status')->eq($status)->where('id')->eq((int)$todoID)->exec();
+        $this->dao->update(TABLE_TODO)->set('status')->eq($status)->where('id')->eq((int)$todoID)->exec();
+        $this->loadModel('action')->create('todo', $todoID, 'marked', '', $status);
+        return;
     }
 
     /* 获得一条todo信息。*/
     public function getById($todoID)
     {
         $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
+        if(!$todo) return false;
         if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);

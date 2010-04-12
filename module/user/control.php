@@ -41,6 +41,8 @@ class user extends control
     /* 用户的todo列表。*/
     public function todo($account, $type = 'today', $status = 'all')
     {
+        $this->session->set('todoList', $this->app->getURI(true));
+
         /* 加载todo model。*/
         $this->loadModel('todo');
         $this->lang->set('menugroup.user', 'company');

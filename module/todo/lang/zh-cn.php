@@ -26,6 +26,7 @@ $lang->todo->index     = "todo一览";
 $lang->todo->create    = "新增TODO";
 $lang->todo->edit      = "更新TODO";
 $lang->todo->view      = "TODO详情";
+$lang->todo->viewAB    = "详情";
 $lang->todo->markDone  = "未完成";
 $lang->todo->markWait  = "已完成";
 $lang->todo->markDoing = "已完成";
@@ -79,3 +80,5 @@ $lang->todo->lastWeekTodos = '上周总结';
 $lang->todo->allDaysTodos  = '所有TODO';
 $lang->todo->allUndone     = '之前未完';
 $lang->todo->todayTodos    = '今日安排';
+
+$lang->todo->action->marked = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);
