@@ -32,7 +32,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->build->name;?></th>
-      <td><?php echo $build->name;?></td>
+      <td class='<?php if($build->deleted) echo 'deleted';?>'><?php echo $build->name;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->build->builder;?></th>
@@ -59,8 +59,11 @@
   <div class='a-center f-16px strong'>
     <?php
     $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");
-    common::printLink('build', 'edit',   "buildID=$build->id", $lang->edit);
-    common::printLink('build', 'delete', "buildID=$build->id", $lang->delete, 'hiddenwin');
+    if(!$build->deleted)
+    {
+        common::printLink('build', 'edit',   "buildID=$build->id", $lang->edit);
+        common::printLink('build', 'delete', "buildID=$build->id", $lang->delete, 'hiddenwin');
+    }
     echo html::a($browseLink, $lang->goback);
     ?>
   </div>
