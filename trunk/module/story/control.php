@@ -178,8 +178,10 @@ class story extends control
     public function view($storyID, $version = 0)
     {
         $this->loadModel('action');
-        $storyID      = (int)$storyID;
-        $story        = $this->story->getById($storyID, $version);
+        $storyID = (int)$storyID;
+        $story   = $this->story->getById($storyID, $version);
+        if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $story->files = $this->loadModel('file')->getByObject('story', $storyID);
         $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
@@ -215,10 +217,8 @@ class story extends control
         }
         else
         {
-            $story = $this->story->getById($storyID);
-            $this->story->delete($storyID);
-            echo js::locate($this->createLink('product', 'browse', "productID=$story->product"), 'parent');
-            exit;
+            $this->story->delete(TABLE_STORY, $storyID);
+            die(js::locate($this->session->storyList, 'parent'));
         }
     }
 

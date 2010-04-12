@@ -78,10 +78,13 @@ class storyModel extends model
         }
 
         /* 获得影响的Bug。*/
-        $story->bugs = $this->dao->findByStory($story->id)->from(TABLE_BUG)->andWhere('status')->ne('closed')->orderBy('id desc')->fetchAll();
+        $story->bugs = $this->dao->findByStory($story->id)->from(TABLE_BUG)
+            ->andWhere('status')->ne('closed')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id desc')->fetchAll();
 
         /* 获得影响的用例。*/
-        $story->cases = $this->dao->findByStory($story->id)->from(TABLE_CASE)->fetchAll();
+        $story->cases = $this->dao->findByStory($story->id)->from(TABLE_CASE)->andWhere('deleted')->eq(0)->fetchAll();
 
         return $story;
     }
@@ -204,12 +207,6 @@ class storyModel extends model
         if(!dao::isError()) return common::createChanges($oldStory, $story);
     }
     
-    /* 删除一条需求。*/
-    public function delete($storyID)
-    {
-        $this->dao->delete()->from(TABLE_STORY)->where('id')->eq((int)$storyID)->limit(1)->exec();
-    }
-
     /* 评审需求。*/
     public function review($storyID)
     {
@@ -319,6 +316,7 @@ class storyModel extends model
             ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq((int)$storyID)
             ->andWhere('t2.status')->eq('doing')
+            ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs();
 
         /* 如果没有项目，但有计划，则阶段为planned或wait。*/
@@ -329,7 +327,12 @@ class storyModel extends model
             return;
         }
         /* 查找对应的任务。*/
-        $tasks = $this->dao->select('type,status')->from(TABLE_TASK)->where('project')->in($projects)->andWhere('story')->eq($storyID)->andWhere('status')->ne('cancel')->fetchGroup('type');
+        $tasks = $this->dao->select('type,status')->from(TABLE_TASK)
+            ->where('project')->in($projects)
+            ->andWhere('story')->eq($storyID)
+            ->andWhere('status')->ne('cancel')
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('type');
 
         /* 没有任务，则所处阶段为'已经立项'。*/
         if(!$tasks)
@@ -379,6 +382,7 @@ class storyModel extends model
             ->where('t1.product')->in($productID)
             ->onCaseOf(!empty($moduleIds))->andWhere('module')->in($moduleIds)->endCase() 
             ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -391,6 +395,7 @@ class storyModel extends model
             ->onCaseOf($productID)->andWhere('t1.product')->in($productID)->endCase()
             ->onCaseOf($moduleIds)->andWhere('t1.module')->in($moduleIds)->endCase()
             ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($order)
             ->fetchAll();
         if(!$stories) return array();
@@ -400,7 +405,12 @@ class storyModel extends model
     /* 按照某一个查询条件获取列表。*/
     public function getByQuery($productID, $query, $orderBy, $pager = null)
     {
-        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($query)->andWhere('product')->eq((int)$productID)->orderBy($orderBy)->page($pager)->fetchGroup('plan');
+        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($query)
+            ->andWhere('product')->eq((int)$productID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchGroup('plan');
         if(!$tmpStories) return array();
         $plans   = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($tmpStories))->fetchPairs();
         $stories = array();
@@ -421,6 +431,7 @@ class storyModel extends model
         return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.pri')
             ->fetchAll('id');
     }
@@ -435,6 +446,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')
             ->on('t1.product = t3.id')
             ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t2.deleted')->eq(0)
             ->onCaseOf($productID)->andWhere('t1.product')->eq((int)$productID)->endCase()
             ->fetchAll();
         if(!$stories) return array();
@@ -447,13 +459,18 @@ class storyModel extends model
         return $this->dao->select('*')->from(TABLE_STORY)
             ->where('plan')->eq((int)$planID)
             ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()
+            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /* 获得某一个产品计划下面所有的需求列表。*/
     public function getPlanStoryPairs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_STORY)->where('plan')->eq($planID)->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()->fetchAll();
+        return $this->dao->select('*')->from(TABLE_STORY)
+            ->where('plan')->eq($planID)
+            ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endCase()
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
     }
 
     /* 获得指派给某一个用户的需求列表。*/
@@ -464,6 +481,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.assignedTo')->eq($account)
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -474,6 +492,7 @@ class storyModel extends model
             ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq((int)$storyID)
             ->andWhere('t2.status')->eq('doing')
+            ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs();
         if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs('account'));
     }
