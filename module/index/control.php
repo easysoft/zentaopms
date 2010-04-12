@@ -52,6 +52,7 @@ class index extends control
         $this->view->counts        = count($projects);
         $this->view->actions       = $this->loadModel('action')->getDynamic('all', 25);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users['guest']= 'guest';    // append the guest account.
         $this->display();
     }
 
