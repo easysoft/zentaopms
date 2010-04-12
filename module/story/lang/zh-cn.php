@@ -141,7 +141,9 @@ $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->ajaxGetProjectStories = '接口:获取项目需求列表';
 $lang->story->ajaxGetProductStories = '接口:获取产品需求列表';
 
-$lang->story->action->reviewed         = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => $lang->story->reviewResultList);
-$lang->story->action->closed           = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong>。', 'extra' => $lang->story->reasonList);
-$lang->story->action->linked2plan      = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。'); 
-$lang->story->action->unlinkedfromplan = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
+$lang->story->action->reviewed            = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => $lang->story->reviewResultList);
+$lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong>。', 'extra' => $lang->story->reasonList);
+$lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。'); 
+$lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
+$lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。'); 
+$lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。'); 
