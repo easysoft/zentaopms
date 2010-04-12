@@ -27,17 +27,17 @@
 <div class='yui-d0'>
   <div id='feature-bar'>
   </div>
-  <table class='table-1 fixed tablesorter'>
-    <caption>
+  <table align='center' class='table-6 tablesorter'>
+    <caption class='caption-tl'>
       <div class='f-left'><?php echo $lang->release->browse;?></div>
       <div class='f-right'><?php common::printLink('release', 'create', "product=$product->id", $lang->release->create);?></div>
     </caption>
     <thead>
-    <tr>
+    <tr class='colhead'>
       <th><?php echo $lang->release->name;?></th>
       <th><?php echo $lang->release->build;?></th>
-      <th><?php echo $lang->release->date;?></th>
-      <th><?php echo $lang->actions;?></th>
+      <th class='w-100px'><?php echo $lang->release->date;?></th>
+      <th class='w-80px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

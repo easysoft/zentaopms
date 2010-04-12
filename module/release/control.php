@@ -36,6 +36,7 @@ class release extends control
     public function browse($productID)
     {
         $this->commonAction($productID);
+        $this->session->set('releaseList', $this->app->getURI(true));
         $this->view->header->title = $this->lang->release->browse;
         $this->view->position[]    = $this->lang->release->browse;
         $this->view->releases      = $this->release->getList($productID);
@@ -47,9 +48,10 @@ class release extends control
     {
         if(!empty($_POST))
         {
-            $this->release->create($productID);
+            $releaseID = $this->release->create($productID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('release', 'browse', "productID=$productID"), 'parent'));
+            $this->loadModel('action')->create('release', $releaseID, 'opened');
+            die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }
 
         $this->commonAction($productID);
@@ -65,9 +67,11 @@ class release extends control
     {
         if(!empty($_POST))
         {
-            $this->release->update($releaseID);
+            $changes = $this->release->update($releaseID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('release', 'browse', "productID={$this->post->product}"), 'parent'));
+            $actionID = $this->loadModel('action')->create('release', $releaseID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+            die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }
 
         $release = $this->release->getById((int)$releaseID);
@@ -77,6 +81,7 @@ class release extends control
         $this->view->position[]    = $this->lang->release->edit;
         $this->view->release       = $release;
         $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($release->product);
+        unset($this->view->builds['trunk']);
         $this->display();
     }
                                                           
@@ -84,12 +89,16 @@ class release extends control
     public function view($releaseID)
     {
         $release = $this->release->getById((int)$releaseID);
+        if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $this->commonAction($release->product);
 
         /* 赋值。*/
         $this->view->header->title = $this->lang->release->view;
         $this->view->position[]    = $this->lang->release->view;
         $this->view->release       = $release;
+        $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
  
@@ -102,9 +111,8 @@ class release extends control
         }
         else
         {
-            $release = $this->release->getById($releaseID);
-            $this->release->delete($releaseID);
-            die(js::locate($this->createLink('release', 'browse', "productID=$release->product"), 'parent'));
+            $this->release->delete(TABLE_RELEASE, $releaseID);
+            die(js::locate($this->session->releaseList, 'parent'));
         }
     }
 }

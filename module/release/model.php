@@ -45,6 +45,7 @@ class releaseModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.id DESC')
             ->fetchAll();
     }
@@ -64,16 +65,12 @@ class releaseModel extends model
     /* 编辑。*/
     public function update($releaseID)
     {
+        $oldRelease = $this->getByID($releaseID);
         $release = fixer::input('post')
             ->stripTags('name')
             ->specialChars('desc')
             ->get();
         $this->dao->update(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->edit->requiredFields, 'notempty')->where('id')->eq((int)$releaseID)->exec();
-    }
-
-    /* 删除release。*/
-    public function delete($releaseID)
-    {
-        return $this->dao->delete()->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->exec();
+        if(!dao::isError()) return common::createChanges($oldRelease, $release);
     }
 }
