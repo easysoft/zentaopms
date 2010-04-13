@@ -29,7 +29,7 @@
     <div id='main' <?php if($bug->deleted) echo "class='deleted'";?>>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
     <div>
       <?php
-      $browseLink = $app->session->bugList != false ? $app->session->bugList : $this->createLink('bug', 'browse', "productID=$bug->product");
+      $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
       $params = "bugID=$bug->id";
       if(!$bug->deleted)
       {

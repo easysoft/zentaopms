@@ -172,9 +172,11 @@ $(function() {
           <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
           </fieldset>
           <div class='a-center'>
-            <?php echo html::submitButton();?>
-            <input type='button' value='<?php echo $lang->bug->buttonToList;?>' class='button-s' 
-            onclick='location.href="<?php echo $this->createLink('bug', 'browse', "productID=$productID");?>"' />
+            <?php 
+            echo html::submitButton();
+            $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
+            echo html::linkButton($lang->goback, $browseLink);
+            ?>
           </div>
         </td></tr>
       </table>
