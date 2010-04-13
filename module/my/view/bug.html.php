@@ -34,7 +34,6 @@
       <th class='w-type'><?php echo $lang->typeAB;?></th>
       <th><?php echo $lang->bug->title;?></th>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
-      <th class='w-user'><?php echo $lang->assignedToAB;?></th>
       <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
       <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
       <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
@@ -49,7 +48,6 @@
       <td><?php echo $lang->bug->typeList[$bug->type]?></td>
       <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
       <td><?php echo $users[$bug->openedBy];?></td>
-      <td><?php echo $users[$bug->assignedTo];?></td>
       <td><?php echo $users[$bug->resolvedBy];?></td>
       <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
       <td>
