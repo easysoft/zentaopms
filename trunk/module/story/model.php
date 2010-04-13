@@ -155,14 +155,12 @@ class storyModel extends model
         {
             if($specChanged)
             {
-                $spec = htmlspecialchars($this->post->spec);
-                $this->dao->insert(TABLE_STORYSPEC)
-                    ->set('story')->eq($storyID)
-                    ->set('version')->eq($oldStory->version + 1)
-                    ->set('title')->eq($story->title)
-                    ->set('spec')->eq($spec)
-                    ->exec();
-                $story->spec = $this->post->spec;
+                $data->story   = $storyID;
+                $data->version = $oldStory->version + 1;
+                $data->title   = $story->title;
+                $data->spec    = htmlspecialchars($this->post->spec);
+                $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+                $story->spec   = $this->post->spec;
             }
             else
             {

@@ -32,6 +32,7 @@ $lang->story->activate  = '激活';
 $lang->story->delete    = "删除需求";
 $lang->story->view      = "需求详情";
 $lang->story->tasks     = "相关任务";
+$lang->story->taskCount = '任务数';
 $lang->story->bugs      = "Bug";
 $lang->story->linkStory = '关联需求';
 
@@ -109,10 +110,10 @@ $lang->story->reviewResultList['revert'] = '撤销变更';
 $lang->story->reviewResultList['clarify']= '有待明确';
 $lang->story->reviewResultList['reject'] = '拒绝';
 
-$lang->story->priList[3]  = '一般';
-$lang->story->priList[1]  = '最高';
-$lang->story->priList[2]  = '较高';
-$lang->story->priList[4]  = '最低';
+$lang->story->priList[3]  = '3';
+$lang->story->priList[1]  = '1';
+$lang->story->priList[2]  = '2';
+$lang->story->priList[4]  = '4';
 
 $lang->story->legendBasicInfo      = '基本信息';
 $lang->story->legendLifeTime       = '需求的一生';
