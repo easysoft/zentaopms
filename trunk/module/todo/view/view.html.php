@@ -92,7 +92,7 @@
     echo html::a($browseLink, $lang->goback);
     ?>
   </div>
-  <?php include '../../common/view/action.html.php';?>
+  <?php $actionTheme = 'table'; include '../../common/view/action.html.php';?>
   <?php else:?>
   <?php echo $lang->todo->thisIsPrivate;?>
   <?php endif;?>
