@@ -47,7 +47,7 @@
       <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
       <td><?php echo $lang->bug->priList[$bug->pri]?></td>
       <td><?php echo $lang->bug->typeList[$bug->type]?></td>
-      <td class='a-left nobr'><?php echo $bug->title;?></td>
+      <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
       <td><?php echo $users[$bug->openedBy];?></td>
       <td><?php echo $users[$bug->assignedTo];?></td>
       <td><?php echo $users[$bug->resolvedBy];?></td>
