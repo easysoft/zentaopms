@@ -29,7 +29,7 @@
 /* 通过模块浏览。*/
 function browseByModule(active)
 {
-    $('#mainbox').addClass('yui-t7');
+    $('#mainbox').addClass('yui-t1');
     $('#treebox').removeClass('hidden');
     $('#bymoduleTab').addClass('active');
     $('#querybox').addClass('hidden');
@@ -38,7 +38,7 @@ function browseByModule(active)
 /* 搜索。*/
 function browseBySearch(active)
 {
-    $('#mainbox').removeClass('yui-t7');
+    $('#mainbox').removeClass('yui-t1');
     $('#treebox').addClass('hidden');
     $('#querybox').removeClass('hidden');
     $('#bymoduleTab').removeClass('active');
@@ -72,7 +72,7 @@ function browseBySearch(active)
   <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 </div>
 
-<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
+<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
 
   <div class="yui-main">
     <div class="yui-b">
@@ -80,36 +80,46 @@ function browseBySearch(active)
       <table class='table-1 fixed colored tablesorter'>
         <thead>
         <tr class='colhead'>
-          <th><?php common::printOrderLink('id',         $orderBy, $vars, $lang->bug->id);?></th>
-          <th><?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severity);?></th>
-          <th><?php common::printOrderLink('pri',        $orderBy, $vars, $lang->bug->pri);?></th>
-          <th class='w-p40'><?php common::printOrderLink('title',  $orderBy, $vars, $lang->bug->title);?></th>
+          <th class='w-id'>      <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-severity'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='w-pri'>     <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
           <?php if($browseType == 'needconfirm'):?>
           <th class='w-p40'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
-          <th><?php echo $lang->actions;?></th>
+          <th class='w-50px'><?php echo $lang->actions;?></th>
           <?php else:?>
-          <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->bug->openedBy);?></th>
-          <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
-          <th><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
-          <th><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolution);?></th>
+          <th class='w-user'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+          <th class='w-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
+          <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
+          <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
         </thead>
         <tbody>
         <?php foreach($bugs as $bug):?>
+        <?php $bugLink = inlink('view', "bugID=$bug->id");?>
         <tr class='a-center'>
-          <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?></td>
+          <td class='linkbox'><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
           <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
           <td><?php echo $lang->bug->priList[$bug->pri]?></td>
-          <td class='a-left nobr'><?php echo $bug->title;?></td>
+          <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title);?></td>
           <?php if($browseType == 'needconfirm'):?>
           <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
           <td><?php echo html::a(inlink('confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin')?></td>
           <?php else:?>
           <td><?php echo $users[$bug->openedBy];?></td>
-          <td <?php if($bug->assignedTo == $this->app->user->account) echo 'style=color:red';?>><?php echo $users[$bug->assignedTo];?></td>
+          <td <?php if($bug->assignedTo == $this->app->user->account) echo 'class="red"';?>><?php echo $users[$bug->assignedTo];?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
           <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+          <td>
+            <?php
+            $params = "bugID=$bug->id";
+            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
+            if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))     echo $lang->bug->buttonClose . ' ';
+            common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+            ?>
+          </td>
           <?php endif;?>
         </tr>
         <?php endforeach;?>
