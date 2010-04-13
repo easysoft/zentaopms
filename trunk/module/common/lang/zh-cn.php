@@ -72,6 +72,7 @@ $lang->priAB        = 'P';
 $lang->statusAB     = '状态';
 $lang->openedByAB   = '创建';
 $lang->assignedToAB = '指派';
+$lang->typeAB       = '类型';
 
 /* 主导航菜单。*/
 $lang->menu->index   = '首页|index|index';
