@@ -73,15 +73,6 @@ function browseBySearch(active)
 </div>
 
 <div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
-  <div class='yui-b  <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
-    <div class='box-title'><?php echo $productName;?></div>
-    <div class='box-content'>
-      <?php echo $moduleTree;?>
-      <div class='a-right'>
-        <?php if(common::hasPriv('tree', 'browse')) echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=bug"), $lang->tree->manage);?>
-      </div>
-    </div>
-  </div>
 
   <div class="yui-main">
     <div class="yui-b">
@@ -127,6 +118,17 @@ function browseBySearch(active)
       <?php $pager->show();?>
     </div>
   </div>
+
+  <div class='yui-b  <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
+    <div class='box-title'><?php echo $productName;?></div>
+    <div class='box-content'>
+      <?php echo $moduleTree;?>
+      <div class='a-right'>
+        <?php if(common::hasPriv('tree', 'browse')) echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=bug"), $lang->tree->manage);?>
+      </div>
+    </div>
+  </div>
+
 </div>  
 <script language='javascript'>
 $("#<?php echo $browseType;?>Tab").addClass('active'); 

@@ -32,21 +32,6 @@ $(document).ready(function()
 });
 </script>
 <div class="yui-d0 yui-t3">
-  <div class="yui-b">
-    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "product={$product->id}&viewType=$viewType");?>'>
-    <table class='table-1'>
-      <caption><?php echo $header->title;?></caption>
-      <tr>
-        <td>
-          <div id='main'><?php echo $modules;?></div>
-          <div class='a-center'>
-            <?php if(common::hasPriv('tree', 'updateorder')) echo html::submitButton($lang->tree->updateOrder);?>
-          </div>
-        </td>
-      </tr>
-    </table>
-    </form>
-  </div>
   <div class="yui-main">
     <div class="yui-b">
     <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "product={$product->id}&viewType=$viewType");?>'>
@@ -92,5 +77,22 @@ $(document).ready(function()
       </form>
     </div>
   </div>
+
+  <div class="yui-b">
+    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "product={$product->id}&viewType=$viewType");?>'>
+    <table class='table-1'>
+      <caption><?php echo $header->title;?></caption>
+      <tr>
+        <td>
+          <div id='main'><?php echo $modules;?></div>
+          <div class='a-center'>
+            <?php if(common::hasPriv('tree', 'updateorder')) echo html::submitButton($lang->tree->updateOrder);?>
+          </div>
+        </td>
+      </tr>
+    </table>
+    </form>
+  </div>
+
 </div>  
 <?php include '../../common/view/footer.html.php';?>
