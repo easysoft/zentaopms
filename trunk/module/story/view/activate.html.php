@@ -37,7 +37,10 @@
     </tr>
     <tr>
       <td colspan='2' class='a-center'>
-        <?php echo html::submitButton() . html::linkButton($lang->goback, inlink('view', "storyID=$story->id"));?>
+        <?php 
+        echo html::submitButton();
+        echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
+        ?>
       </td>
     </tr>
   </table>

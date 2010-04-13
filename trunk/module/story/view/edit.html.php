@@ -45,7 +45,12 @@
         <legend><?php echo $lang->story->comment;?></legend>
         <?php echo html::textarea('comment', '', "rows='5' class='area-1'");?>
       </fieldset>
-      <div class='a-center'><?php echo html::submitButton() .  html::linkButton($lang->goback, inlink('view', "storyID=$story->id"));?></div>
+      <div class='a-center'>
+        <?php 
+        echo html::submitButton();
+        echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
+        ?>
+      </div>
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>

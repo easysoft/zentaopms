@@ -15,6 +15,7 @@
           <th><?php echo $lang->task->consumed;?></th>
           <th><?php echo $lang->task->left;?></th>
         </tr>
+        <?php if(isset($story->tasks[$projectID])):?>
         <?php foreach($story->tasks[$projectID] as $task):?> 
         <tr class='a-center'>
           <td><?php echo $task->id;?></td>
@@ -25,6 +26,7 @@
           <td><?php echo $task->left;?></td>
         </tr>
         <?php endforeach;?>
+        <?php endif;?>
       </table>
     </td>
   </tr>

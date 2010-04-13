@@ -48,7 +48,12 @@
       <td><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></td>
     </tr>
   </table>
-  <div class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, inlink('view', "storyID=$story->id"));?></div>
+  <div class='a-center'>
+    <?php 
+    echo html::submitButton();
+    echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
+    ?>
+  </div>
   <?php include './affected.html.php';?>
   <?php include '../../common/view/action.html.php';?>
   </form>
