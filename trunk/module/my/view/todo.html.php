@@ -58,7 +58,7 @@ function changeDate(date)
       <th><?php echo $lang->todo->beginAB;?></th>
       <th><?php echo $lang->todo->endAB;?></th>
       <th class='w-status'><?php echo $lang->todo->status;?></th>
-      <th class='w-130px'><?php echo $lang->actions;?></th>
+      <th class='w-130px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
 
