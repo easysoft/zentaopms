@@ -139,13 +139,15 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .w-150px {width:150px}
 .w-200px {width:200px}
 
-.w-id    {width:45px;}
-.w-pri   {width:30px;}
-.w-hour  {width:40px;}
-.w-date  {width:80px;}
-.w-user  {width:100px;}
-.w-status{width:50px}
-.w-type  {width:60px}
+.w-id       {width:45px;}
+.w-pri      {width:30px;}
+.w-severity {width:35px;}
+.w-hour     {width:40px;}
+.w-date     {width:80px;}
+.w-user     {width:60px;}
+.w-status   {width:50px}
+.w-type     {width:80px}
+.w-resolution{width:60px}
 
 .margin-10px {margin:    10px}
 .margin-15px {margin:    15px}
