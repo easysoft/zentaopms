@@ -46,9 +46,11 @@ class my extends control
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
 
+        /* 导航条。*/
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $this->view->position[]    = $this->lang->my->todo;
 
+        /* 赋值。*/
         $this->view->dates = $this->loadModel('todo')->buildDateList();
         $this->view->todos = $this->todo->getList($type, $account, $status);
         $this->view->date  = (int)$type == 0 ? $this->todo->today() : $type;
@@ -61,8 +63,8 @@ class my extends control
     /* 用户的story列表。*/
     public function story()
     {
-        /* 记录用户当前选择的列表。*/
-        $this->app->session->set('storyList', $this->app->getURI(true));
+        /* 登记session。*/
+        $this->session->set('storyList', $this->app->getURI(true));
 
         /* 赋值。*/
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
@@ -76,9 +78,9 @@ class my extends control
     /* 用户的task列表。*/
     public function task()
     {
-        /* 记录用户当前选择的列表。*/
-        $this->app->session->set('taskList',  $this->app->getURI(true));
-        $this->app->session->set('storyList', $this->app->getURI(true));
+        /* 登记session。*/
+        $this->session->set('taskList',  $this->app->getURI(true));
+        $this->session->set('storyList', $this->app->getURI(true));
 
         /* 赋值。*/
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
@@ -91,14 +93,16 @@ class my extends control
     /* 用户的bug列表。*/
     public function bug()
     {
+        /* 登记session，加载语言。*/
         $this->session->set('bugList', $this->app->getURI(true));
         $this->app->loadLang('bug');
 
         /* 赋值。*/
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
         $this->view->position[]    = $this->lang->my->bug;
-        $this->view->tabID         = 'bug';
         $this->view->bugs          = $this->user->getBugs($this->app->user->account);
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->tabID         = 'bug';
 
         $this->display();
     }
@@ -106,11 +110,15 @@ class my extends control
     /* 用户的project列表。*/
     public function project()
     {
+        /* 加载语言。*/
         $this->app->loadLang('project');
+
+        /* 赋值。*/
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
         $this->view->position[]    = $this->lang->my->project;
         $this->view->tabID         = 'project';
         $this->view->projects      = @array_reverse($this->user->getProjects($this->app->user->account));
+
         $this->display();
     }
 
