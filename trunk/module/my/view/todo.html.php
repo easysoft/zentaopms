@@ -36,31 +36,29 @@ function changeDate(date)
    <div id='featurebar'>
      <div class='f-left'>
        <?php 
-       echo '<span id="today">'    . html::a($this->createLink('my', 'todo', "date=today"),     $lang->todo->todayTodos)    . '</span>';
-       echo '<span id="thisweek">' . html::a($this->createLink('my', 'todo', "date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
-       echo '<span id="lastweek">' . html::a($this->createLink('my', 'todo', "date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
-       echo '<span id="all">'      . html::a($this->createLink('my', 'todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
-       echo '<span id="before">'   . html::a($this->createLink('my', 'todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
+       echo '<span id="today">'    . html::a(inlink('todo', "date=today"),     $lang->todo->todayTodos)    . '</span>';
+       echo '<span id="thisweek">' . html::a(inlink('todo', "date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
+       echo '<span id="lastweek">' . html::a(inlink('todo', "date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
+       echo '<span id="all">'      . html::a(inlink('todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
+       echo '<span id="before">'   . html::a(inlink('todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
        echo "<span id='$date'>"    . html::select('date', $dates, $date, 'onchange=changeDate(this.value)') . '</span>';
        ?>
        <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
-    <div class='f-right'>
-      <?php echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);?>
-    </div>
+    <div class='f-right'><?php echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);?></div>
   </div>
   <table class='table-1 tablesorter'>
     <thead>
     <tr class='colhead'>
-      <th><?php echo $lang->todo->id;?></th>
-      <th><?php echo $lang->todo->date;?></th>
-      <th><?php echo $lang->todo->type;?></th>
-      <th><?php echo $lang->todo->pri;?></th>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-date'><?php echo $lang->todo->date;?></th>
+      <th class='w-type'><?php echo $lang->todo->type;?></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->todo->name;?></th>
-      <th><?php echo $lang->todo->begin;?></th>
-      <th><?php echo $lang->todo->end;?></th>
-      <th><?php echo $lang->todo->status;?></th>
-      <th><?php echo $lang->actions;?></th>
+      <th><?php echo $lang->todo->beginAB;?></th>
+      <th><?php echo $lang->todo->endAB;?></th>
+      <th class='w-status'><?php echo $lang->todo->status;?></th>
+      <th class='w-130px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
 
