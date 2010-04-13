@@ -131,6 +131,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .w-40px {width:40px}
 .w-45px {width:45px}
 .w-50px {width:50px}
+.w-60px {width:60px}
+.w-70px {width:70px}
 .w-80px  {width:80px}
 .w-100px {width:100px}
 .w-120px {width:120px}
@@ -141,9 +143,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 .w-id       {width:45px;}
 .w-pri      {width:30px;}
-.w-severity {width:35px;}
+.w-severity {width:40px;}
 .w-hour     {width:40px;}
-.w-date     {width:80px;}
+.w-date     {width:70px;}
 .w-user     {width:60px;}
 .w-status   {width:50px}
 .w-type     {width:80px}
@@ -274,13 +276,14 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .debugwin  {display:block; width:100%; height:20px;}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
-.done  {color:darkgreen}
-.wait  {color:#9F9F5F}
-.doing {color:red}
-.delayed {background:red}
-.pass    {color:darkgreen}
-.blocked {color:yellow}
-.fail    {color:red}
-.hand    {cursor:pointer}
-.strong  {font-weight:bold}
-.deleted {text-decoration:line-through}
+.done      {color:darkgreen}
+.wait      {color:#9F9F5F}
+.doing     {color:red}
+.delayed   {background:red}
+.pass      {color:darkgreen}
+.blocked   {color:yellow}
+.fail      {color:red}
+.hand      {cursor:pointer}
+.strong    {font-weight:bold}
+.deleted   {text-decoration:line-through}
+.linkbox a {display:block}
