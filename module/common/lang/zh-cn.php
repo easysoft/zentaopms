@@ -44,6 +44,8 @@ $lang->copy         = '复制';
 $lang->delete       = '删除';
 $lang->close        = '关闭';
 $lang->link         = '关联';
+$lang->unlink       = '移除';
+$lang->import       = '导入';
 $lang->activate     = '激活';
 $lang->save         = '保存';
 $lang->confirm      = '确认';
@@ -127,17 +129,18 @@ $lang->productplan->menu     = $lang->product->menu;
 $lang->release->menu         = $lang->product->menu;
 
 /* 项目视图菜单设置。*/
-$lang->project->menu->list   = '%s';
-$lang->project->menu->task   = array('link' => '任务列表|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
-$lang->project->menu->story  = array('link' => '需求列表|project|story|projectID=%s', 'alias' => 'linkstory');
-$lang->project->menu->bug    = 'Bug列表|project|bug|projectID=%s';
-$lang->project->menu->build  = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->burn   = '燃尽图|project|burn|projectID=%s';
-$lang->project->menu->team   = array('link' => '团队成员|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->product= '关联产品|project|manageproducts|projectID=%s';
-$lang->project->menu->view   = '基本信息|project|view|projectID=%s';
-$lang->project->menu->edit   = '编辑项目|project|edit|projectID=%s';
-$lang->project->menu->delete = array('link' => '删除项目|project|delete|projectID=%s', 'target' => 'hiddenwin');
+$lang->project->menu->list      = '%s';
+$lang->project->menu->task      = array('link' => '任务列表|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
+$lang->project->menu->story     = array('link' => '需求列表|project|story|projectID=%s');
+$lang->project->menu->bug       = 'Bug列表|project|bug|projectID=%s';
+$lang->project->menu->build     = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->burn      = '燃尽图|project|burn|projectID=%s';
+$lang->project->menu->team      = array('link' => '团队成员|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->product   = '关联产品|project|manageproducts|projectID=%s';
+$lang->project->menu->linkstory = array('link' => '关联需求|project|linkstory|projectID=%s');
+$lang->project->menu->view      = '基本信息|project|view|projectID=%s';
+$lang->project->menu->edit      = '编辑项目|project|edit|projectID=%s';
+$lang->project->menu->delete    = array('link' => '删除项目|project|delete|projectID=%s', 'target' => 'hiddenwin');
 
 $lang->project->menu->create = array('link' => '新增项目|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
