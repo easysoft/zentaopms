@@ -28,25 +28,25 @@
   <table class='table-1 tablesorter' id='tasktable'>
     <thead>
     <tr class='colhead'>
-      <th><?php echo $lang->task->id;?></th>
-      <th><?php echo $lang->task->pri;?></th>
-      <th><?php echo $lang->task->name;?></th>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->task->project;?></th>
-      <th><?php echo $lang->task->estimate;?></th>
-      <th><?php echo $lang->task->consumed;?></th>
-      <th><?php echo $lang->task->left;?></th>
-      <th><?php echo $lang->task->deadline;?></th>
-      <th><?php echo $lang->task->status;?></th>
-      <th><?php echo $lang->actions;?></th>
+      <th><?php echo $lang->task->name;?></th>
+      <th class='w-hour'><?php echo $lang->task->estimateAB;?></th>
+      <th class='w-hour'><?php echo $lang->task->consumedAB;?></th>
+      <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
+      <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
+      <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <th class='{sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>   
     <tbody>
     <?php foreach($tasks as $task):?>
     <tr class='a-center'>
       <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-      <td><?php echo $task->pri;?></td>
-      <td class='a-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
+      <td><?php echo $lang->task->priList[$task->pri];?></td>
       <td class='nobr'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></th>
+      <td class='a-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
       <td><?php echo $task->estimate;?></td>
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>
