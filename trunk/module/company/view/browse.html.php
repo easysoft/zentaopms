@@ -28,19 +28,6 @@ include '../../common/view/treeview.html.php';
 include '../../common/view/tablesorter.html.php';
 ?>
 <div class="yui-d0 yui-t7">
-  <div class="yui-b">
-    <div class='box-title'><?php echo $lang->dept->common;?></div>
-    <div class='box-content'>
-      <?php echo $deptTree;?>
-      <div class='a-right'>
-        <?php 
-        common::printLink('dept', 'browse', '', $lang->dept->manage);
-        common::printLink('user', 'create', "dept=$deptID&from=company", $lang->user->create);
-        common::printLink('company', 'browse', '', $lang->user->allUsers);
-        ?>
-      </div>
-    </div>
-  </div>
   <div class="yui-main">
     <div class="yui-b">
       <table class='table-1 tablesorter'>
@@ -85,6 +72,21 @@ include '../../common/view/tablesorter.html.php';
       </table>
     </div>
   </div>
+
+  <div class="yui-b">
+    <div class='box-title'><?php echo $lang->dept->common;?></div>
+    <div class='box-content'>
+      <?php echo $deptTree;?>
+      <div class='a-right'>
+        <?php 
+        common::printLink('dept', 'browse', '', $lang->dept->manage);
+        common::printLink('user', 'create', "dept=$deptID&from=company", $lang->user->create);
+        common::printLink('company', 'browse', '', $lang->user->allUsers);
+        ?>
+      </div>
+    </div>
+  </div>
+
 </div>  
 <script lanugage='Javascript'>$('#dept<?php echo $deptID;?>').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

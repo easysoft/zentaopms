@@ -63,17 +63,6 @@ function search(active)
 </div>
 
 <div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
-  <div class='yui-b <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
-    <div class='box-title'><?php echo $productName;?></div>
-    <div class='box-content'>
-      <?php echo $moduleTree;?>
-      <div class='a-right'>
-        <?php if(common::hasPriv('product', 'edit'))   echo html::a($this->createLink('product', 'edit',   "productID=$productID"), $lang->edit);?>
-        <?php if(common::hasPriv('product', 'delete')) echo html::a($this->createLink('product', 'delete', "productID=$productID&confirm=no"),   $lang->delete, 'hiddenwin');?>
-        <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "productID=$productID&view=product"), $lang->tree->manage);?>
-      </div>
-    </div>
-  </div>
 
   <div class="yui-main">
     <div class="yui-b">
@@ -124,6 +113,19 @@ function search(active)
       <?php $pager->show();?>
     </div>
   </div>
+
+  <div class='yui-b <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
+    <div class='box-title'><?php echo $productName;?></div>
+    <div class='box-content'>
+      <?php echo $moduleTree;?>
+      <div class='a-right'>
+        <?php if(common::hasPriv('product', 'edit'))   echo html::a($this->createLink('product', 'edit',   "productID=$productID"), $lang->edit);?>
+        <?php if(common::hasPriv('product', 'delete')) echo html::a($this->createLink('product', 'delete', "productID=$productID&confirm=no"),   $lang->delete, 'hiddenwin');?>
+        <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "productID=$productID&view=product"), $lang->tree->manage);?>
+      </div>
+    </div>
+  </div>
+
 </div>  
 <script language='javascript'>
 $('#module<?php echo $moduleID;?>').addClass('active')
