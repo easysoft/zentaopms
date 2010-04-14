@@ -37,6 +37,7 @@ $lang->todo->import2Today = "导入到今天";
 $lang->todo->changeStatus = "更改";
 
 $lang->todo->id          = '编号';
+$lang->todo->account     = '所有者';
 $lang->todo->date        = '日期';
 $lang->todo->begin       = '开始时间';
 $lang->todo->beginAB     = '开始';

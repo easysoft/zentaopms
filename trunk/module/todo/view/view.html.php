@@ -31,6 +31,10 @@
       <div class='f-right'><?php echo html::a($this->session->todoList, $lang->goback);?></div>
     </caption>
     <tr>
+      <th class='rowhead'><?php echo $lang->todo->account;?></th>
+      <td><?php echo $todo->account;?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->todo->date;?></th>
       <td><?php echo date(DT_DATE1, strtotime($todo->date));?></td>
     </tr>  
