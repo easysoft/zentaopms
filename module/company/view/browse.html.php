@@ -27,13 +27,13 @@ include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
 include '../../common/view/tablesorter.html.php';
 ?>
-<div class="yui-d0 yui-t7">
+<div class="yui-d0 yui-t1">
   <div class="yui-main">
     <div class="yui-b">
       <table class='table-1 tablesorter'>
         <thead>
         <tr class='colhead'>
-          <th><?php echo $lang->user->id;?></th>
+          <th class='w-id'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->user->realname;?></th>
           <th><?php echo $lang->user->account;?></th>
           <th><?php echo $lang->user->nickname;?></th>
@@ -42,7 +42,6 @@ include '../../common/view/tablesorter.html.php';
           <th><?php echo $lang->user->phone;?></th>
           <th><?php echo $lang->user->join;?></th>
           <th><?php echo $lang->user->visits;?></th>
-          <th><?php echo $lang->user->status;?></th>
           <th><?php echo $lang->actions;?></th>
         </tr>
         </thead>
@@ -58,12 +57,10 @@ include '../../common/view/tablesorter.html.php';
           <td><?php echo $user->phone;?></td>
           <td><?php echo $user->join;?></td>
           <td><?php echo $user->visits;?></td>
-          <td><?php echo $lang->user->statusList[$user->status];?></td>
           <td>
             <?php 
             common::printLink('user', 'edit',   "userID=$user->id&from=company", $lang->edit);
-            if($user->status == 'active') common::printLink('user', 'delete',   "userID=$user->id", $lang->delete,   "hiddenwin");
-            if($user->status == 'delete') common::printLink('user', 'activate', "userID=$user->id", $lang->activate, "hiddenwin");
+            common::printLink('user', 'delete', "userID=$user->id", $lang->delete, "hiddenwin");
             ?>
           </td>
         </tr>
@@ -79,9 +76,9 @@ include '../../common/view/tablesorter.html.php';
       <?php echo $deptTree;?>
       <div class='a-right'>
         <?php 
+        common::printLink('user', 'create', "dept=$deptID&from=company", $lang->user->create);echo '<br />';
+        common::printLink('company', 'browse', '', $lang->user->allUsers); echo '<br />';
         common::printLink('dept', 'browse', '', $lang->dept->manage);
-        common::printLink('user', 'create', "dept=$deptID&from=company", $lang->user->create);
-        common::printLink('company', 'browse', '', $lang->user->allUsers);
         ?>
       </div>
     </div>
