@@ -55,8 +55,8 @@ function changeDate(date)
       <th class='w-type'><?php echo $lang->todo->type;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->todo->name;?></th>
-      <th><?php echo $lang->todo->beginAB;?></th>
-      <th><?php echo $lang->todo->endAB;?></th>
+      <th class='w-hour'><?php echo $lang->todo->beginAB;?></th>
+      <th class='w-hour'><?php echo $lang->todo->endAB;?></th>
       <th class='w-status'><?php echo $lang->todo->status;?></th>
       <th class='w-130px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
