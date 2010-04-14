@@ -29,7 +29,7 @@
 /* 切换至按模块浏览。*/
 function browseByModule(active)
 {
-    $('#mainbox').addClass('yui-t7');
+    $('#mainbox').addClass('yui-t1');
     $('#treebox').removeClass('hidden');
     $('#bymoduleTab').addClass('active');
     $('#' + active + 'Tab').removeClass('active');
@@ -39,7 +39,7 @@ function browseByModule(active)
 /* 通过搜索方式。*/
 function browseBySearch(active)
 {
-    $('#mainbox').removeClass('yui-t7');
+    $('#mainbox').removeClass('yui-t1');
     $('#treebox').addClass('hidden');
     $('#querybox').removeClass('hidden');
     $('#' + active + 'Tab').removeClass('active');
@@ -64,23 +64,24 @@ function browseBySearch(active)
   <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 </div>
 
-<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t7';?>' id='mainbox'>
+<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
   <div class="yui-main">
     <div class='yui-b'>
       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <table class='table-1 colored tablesorter'>
         <thead>
           <tr class='colhead'>
-            <th><?php common::printOrderLink('id',       $orderBy, $vars, $lang->testcase->id);?></th>
-            <th><?php common::printOrderLink('pri',      $orderBy, $vars, $lang->testcase->pri);?></th>
-            <th class='w-p40'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
+            <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
+            <th class='w-pri'><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
+            <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
             <?php if($browseType == 'needconfirm'):?>
-            <th class='w-p40'><?php common::printOrderLink('story',    $orderBy, $vars, $lang->testcase->story);?></th>
-            <th><?php echo $lang->actions;?></th>
+            <th>  <?php common::printOrderLink('story', $orderBy, $vars, $lang->testcase->story);?></th>
+            <th class='w-50px'><?php echo $lang->actions;?></th>
             <?php else:?>
-            <th><?php common::printOrderLink('type',     $orderBy, $vars, $lang->testcase->type);?></th>
-            <th><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->testcase->openedBy);?></th>
-            <th><?php common::printOrderLink('status',   $orderBy, $vars, $lang->testcase->status);?></th>
+            <th class='w-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
+            <th class='w-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='w-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+            <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
             <?php endif;?>
           </tr>
           <?php foreach($cases as $case):?>
@@ -95,6 +96,12 @@ function browseBySearch(active)
             <td><?php echo $lang->testcase->typeList[$case->type];?></td>
             <td><?php echo $users[$case->openedBy];?></td>
             <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+            <td>
+              <?php
+              common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
+              common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
+              ?>
+            </td>
             <?php endif;?>
           </tr>
         <?php endforeach;?>
