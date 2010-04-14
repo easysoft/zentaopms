@@ -68,11 +68,11 @@ $lang->task->typeList['discuss']= '讨论';
 $lang->task->typeList['ui']     = '界面';
 $lang->task->typeList['misc']   = '其他';
 
-$lang->task->priList[''] = '';
-$lang->task->priList[3]  = '一般';
-$lang->task->priList[1]  = '最高';
-$lang->task->priList[2]  = '较高';
-$lang->task->priList[4]  = '最低';
+$lang->task->priList[0] = '';
+$lang->task->priList[3]  = '3';
+$lang->task->priList[1]  = '1';
+$lang->task->priList[2]  = '2';
+$lang->task->priList[4]  = '4';
 
 $lang->task->afterChoices['continueAdding'] = '继续为该需求添加任务';
 $lang->task->afterChoices['toTastList']     = '返回任务列表';
