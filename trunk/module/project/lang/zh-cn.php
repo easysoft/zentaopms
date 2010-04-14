@@ -110,6 +110,7 @@ $lang->project->stats          = '总共预计『%s』工时<br />已经消耗�
 $lang->project->oneLineStats   = "项目『%s』, 代号为『%s』, 相关产品为『%s』，『%s』开始，『%s』结束，总预计『%s』工时，已消耗『%s』工时，预计剩余『%s』工时。";
 $lang->project->storySummary   = "共『%s』个需求，预计『%s』个工时。";
 $lang->project->wbs            = "分解任务";
+$lang->project->largeBurnChart = '点击查看大图';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';
