@@ -163,9 +163,11 @@ $lang->testtask->menu->testcase = array('link' => '用例管理|testcase|browse|
 $lang->testtask->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
 /* 组织结构视图菜单设置。*/
+$lang->company->menu->name        = '%s' . $lang->arrow;
 $lang->company->menu->browseUser  = array('link' => '用户列表|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => '部门维护|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '权限分组|group|browse', 'subModule' => 'group');
+$lang->company->menu->edit        = array('link' => '公司管理|company|edit');
 $lang->company->menu->addGroup    = array('link' => '添加分组|group|create', 'float' => 'right');
 $lang->company->menu->addUser     = array('link' => '添加用户|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
@@ -181,13 +183,11 @@ $lang->user->menu->profile  = array('link' => '用户信息|user|profile|account
 $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
 
 /* 后台管理菜单设置。*/
-$lang->admin->menu->browseCompany = array('link' => '公司管理|admin|browsecompany', 'subModule' => 'company');
-$lang->admin->menu->convert       = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
-$lang->admin->menu->trashes       = array('link' => '回收站|action|trash', 'subModule' => 'action');
-$lang->admin->menu->createCompany = array('link' => '新增公司|company|create', 'float' => 'right');
-$lang->convert->menu              = $lang->admin->menu;
-$lang->upgrade->menu              = $lang->admin->menu;
-$lang->action->menu               = $lang->admin->menu;
+$lang->admin->menu->trashes = array('link' => '回收站|action|trash', 'subModule' => 'action');
+$lang->admin->menu->convert = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
+$lang->convert->menu        = $lang->admin->menu;
+$lang->upgrade->menu        = $lang->admin->menu;
+$lang->action->menu         = $lang->admin->menu;
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release     = 'product';
@@ -195,7 +195,6 @@ $lang->menugroup->story       = 'product';
 $lang->menugroup->productplan = 'product';
 $lang->menugroup->task        = 'project';
 $lang->menugroup->build       = 'project';
-$lang->menugroup->company     = 'admin';
 $lang->menugroup->convert     = 'admin';
 $lang->menugroup->upgrade     = 'admin';
 $lang->menugroup->user        = 'company';

@@ -32,7 +32,8 @@ $lang->company->browse   = "用户列表";
 $lang->company->depts    = "部门列表";
 $lang->company->orgView  = '组织视图';
 
-$lang->company->confirmDelete  = "您确定删除该公司吗？";
+$lang->company->confirmDelete = "您确定删除该公司吗？";
+$lang->company->successSaved  = "成功保存";
 
 $lang->company->id       = '编号';
 $lang->company->name     = '公司名称';

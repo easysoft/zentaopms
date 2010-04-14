@@ -25,6 +25,12 @@ class dept extends control
 {
     const NEW_CHILD_COUNT = 5;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadModel('company')->setMenu();
+    }
+
     /* 部门列表。*/
     public function browse($deptID = 0)
     {

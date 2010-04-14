@@ -29,7 +29,7 @@ class user extends control
     public function __construct()
     {
         parent::__construct();
-        $this->loadModel('admin');
+        $this->loadModel('company')->setMenu();
         $this->loadModel('dept');
     }
 
@@ -198,8 +198,7 @@ class user extends control
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->user->create;
-        $position[]      = html::a($this->createLink('admin', 'browseuser') , $this->lang->admin->user);
+        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->create;
         $position[]      = $this->lang->user->create;
         $this->assign('header',   $header);
         $this->assign('position', $position);
@@ -228,7 +227,7 @@ class user extends control
             }
         }
 
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->user->edit;
+        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[]      = $this->lang->user->edit;
         $this->assign('header',   $header);
         $this->assign('position', $position);

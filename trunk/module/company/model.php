@@ -28,6 +28,7 @@ class companyModel extends model
     /* 设置菜单。*/
     public function setMenu($dept = 0)
     {
+        common::setMenuVars($this->lang->company->menu, 'name', array($this->app->company->name));
         common::setMenuVars($this->lang->company->menu, 'addUser', array($dept));
     }
 
@@ -75,9 +76,10 @@ class companyModel extends model
     }
 
     /* 更新一个公司信息。*/
-    public function update($companyID)
+    public function update()
     {
-        $company = fixer::input('post')->get();
+        $company   = fixer::input('post')->get();
+        $companyID = $this->app->company->id;
         $this->dao->update(TABLE_COMPANY)
             ->data($company)
             ->autoCheck()
