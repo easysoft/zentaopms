@@ -364,6 +364,7 @@ EOT;
         elseif($this->app->company->guest)
         {
             $user             = new stdClass();
+            $user->id         = 0;
             $user->account    = 'guest';
             $user->realname   = 'guest';
             $user->rights     = $this->loadModel('user')->authorize('guest');
