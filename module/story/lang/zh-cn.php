@@ -128,6 +128,11 @@ $lang->story->legendHistory        = '历史记录';
 $lang->story->legendVersion        = '历史版本';
 $lang->story->legendMisc           = '其他相关';
 
+$lang->story->lblChange            = '变更需求';
+$lang->story->lblReview            = '评审需求';
+$lang->story->lblActivate          = '激活需求';
+$lang->story->lblClose             = '关闭需求';
+
 $lang->story->affectedProjects     = '影响的项目';
 $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
