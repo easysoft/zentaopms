@@ -29,24 +29,25 @@
     <table align='center' class='table-1 tablesorter a-center'> 
       <thead>
       <tr class='colhead'>
-        <th class='w-50px'><?php echo $lang->story->id;?></th>
-        <th class='w-50px'><?php echo $lang->story->pri;?></th>
-        <th class='w-200px'><?php echo $lang->story->product;?></th>
+        <th class='w-id'><?php echo $lang->idAB;?></th>
+        <th class='w-pri'><?php echo $lang->priAB;?></th>
+        <th><?php echo $lang->story->product;?></th>
         <th><?php echo $lang->story->title;?></th>
         <th><?php echo $lang->story->plan;?></th>
-        <th class='w-100px'><?php echo $lang->story->openedBy;?></th>
-        <th class='w-100px'><?php echo $lang->story->estimate;?></th>
-        <th class='w-100px'><?php echo $lang->story->linkStory;?></th>
+        <th class='w-user'><?php echo $lang->openedByAB;?></th>
+        <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
+        <th class='w-50px'><?php echo $lang->link;?></th>
       </tr>
       </thead>
       <tbody>
       <?php foreach($allStories as $story):?>
       <?php if(isset($prjStories[$story->id])) continue;?>
+      <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
       <tr>
-        <td><?php echo $story->id;?></td>
-        <td><?php echo $story->pri;?></td>
+        <td><?php echo html::a($storyLink, $story->id);?></td>
+        <td><?php echo $lang->story->priList[$story->pri];?></td>
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
-        <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "story=$story->id"), $story->title);?></td>
+        <td class='a-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
         <td><?php echo $story->planTitle;?></td>
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $story->estimate;?></td>

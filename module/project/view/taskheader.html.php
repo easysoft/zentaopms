@@ -1,7 +1,4 @@
 <div class="yui-d0">
-  <div class='bg-gray mb-10px padding-5px'>
-    <?php include './project.html.php';?>
-  </div>
   <div id='featurebar'>
     <div class='f-left'>
     <?php
@@ -20,8 +17,8 @@
     </div>
     <div class='f-right'>
       <?php 
-      common::printLink('task', 'create', "project=$project->id", $lang->task->create);
       common::printLink('project', 'importTask', "project=$project->id", $lang->project->importTask);
+      common::printLink('task', 'create', "project=$project->id", $lang->task->create);
       ?>
     </div>
   </div>

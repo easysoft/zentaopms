@@ -27,24 +27,24 @@
 <?php include './taskheader.html.php';?>
 <div class='yui-d0'>
   <table class='table-1' id='treetable'>
-    <tr class='colhead bg-gray strong a-center'>
-      <td></td>
-      <td><?php echo $lang->task->name;?></td>
-      <td><?php echo $lang->task->pri;?></td>
-      <td><?php echo $lang->task->owner;?></td>
-      <td><?php echo $lang->task->estimate;?></td>
-      <td><?php echo $lang->task->consumed;?></td>
-      <td><?php echo $lang->task->left;?></td>
-      <td><?php echo $lang->task->type;?></td>
-      <td><?php echo $lang->task->deadline;?></td>
-      <td colspan='2' class='a-left'><?php echo $lang->task->status;?></td>
+    <tr class='colhead'>
+      <th></th>
+      <th><?php echo $lang->task->name;?></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
+      <th class='w-user'><?php echo $lang->task->owner;?></th>
+      <th><?php echo $lang->task->estimateAB;?></th>
+      <th><?php echo $lang->task->consumedAB;?></th>
+      <th><?php echo $lang->task->leftAB;?></th>
+      <th><?php echo $lang->typeAB;?></th>
+      <th><?php echo $lang->task->deadlineAB;?></th>
+      <th colspan='2' class='a-left'><?php echo $lang->task->status;?></th>
     </tr>
     <?php $i = 0;?>
     <?php foreach($tasks as $groupKey => $groupTasks):?>
-    <?php $groupClass = ($i % 2 == 0) ? 'odd' : 'bg-yellow'; $i ++;?>
+    <?php $groupClass = ($i % 2 == 0) ? 'even' : 'bg-yellow'; $i ++;?>
     <tr id='node-<?php echo $groupKey;?>'>
       <td class='<?php echo $groupClass;?> a-center f-16px strong'><?php echo $groupKey;?></td>
-      <td colspan='11'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
+      <td colspan='10'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
     </tr>
       <?php foreach($groupTasks as $task):?>
       <?php $ownerClass = $task->owner == $app->user->account ? 'style=color:red' : '';?>

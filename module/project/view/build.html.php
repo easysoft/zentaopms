@@ -25,21 +25,20 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
-  <div id='featurebar'>
-    <div class='f-right'><?php common::printLink('build', 'create', "project=$project->id", $lang->build->create);?></div>
-  </div>
-</div>
-<div class='yui-d0'>
-  <table class='table-1 tablesorter'>
+  <table class='table-1 tablesorter fixed'>
+    <caption class='caption-tl'>
+      <div class='f-left'><?php echo $lang->project->build;?></div>
+      <div class='f-right'><?php common::printLink('build', 'create', "project=$project->id", $lang->build->create);?></div>
+    </caption>
     <thead>
     <tr class='colhead'>
-      <th><?php echo $lang->build->product;?></th>
+      <th class='w-120px'><?php echo $lang->build->product;?></th>
       <th><?php echo $lang->build->name;?></th>
       <th><?php echo $lang->build->scmPath;?></th>
       <th><?php echo $lang->build->filePath;?></th>
-      <th><?php echo $lang->build->date;?></th>
-      <th><?php echo $lang->build->builder;?></th>
-      <th><?php echo $lang->actions;?></th>
+      <th class='w-date'><?php echo $lang->build->date;?></th>
+      <th class='w-user'><?php echo $lang->build->builder;?></th>
+      <th class='w-60px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
