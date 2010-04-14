@@ -29,17 +29,16 @@
   <table class='table-1 fixed tablesorter'>
     <thead>
     <tr class='colhead'>
-      <th class='w-p15'><?php echo $lang->task->project;?></th>
-      <th><?php echo $lang->task->id;?></th>
-      <th><?php echo $lang->task->pri;?></th>
-      <th class='w-p20'><?php echo $lang->task->name;?></th>
-      <th><?php echo $lang->task->owner;?></th>
-      <th><?php echo $lang->task->left;?></th>
-      <th><?php echo $lang->task->type;?></th>
-      <th><?php echo $lang->task->deadline;?></th>
-      <th><?php echo $lang->task->status;?></th>
-      <th class='w-p20'><?php echo $lang->task->story;?></th>
-      <th class='w-50px'><?php echo $lang->project->import;?></th>
+      <th class='w-150px'><?php echo $lang->task->project;?></th>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
+      <th class='w-p30'><?php echo $lang->task->name;?></th>
+      <th class='w-user'><?php echo $lang->task->owner;?></th>
+      <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
+      <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
+      <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <th><?php echo $lang->task->story;?></th>
+      <th class='w-30px {sorter:false}'><?php echo $lang->import;?></th>
     </tr>
     </thead>
     <tbody>
@@ -52,7 +51,6 @@
       <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td <?php echo $class;?>><?php echo $task->ownerRealName;?></td>
       <td><?php echo $task->left;?></td>
-      <td><?php echo $lang->task->typeList[$task->type];?></td>
       <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList[$task->status];?></td>
       <td class='a-left nobr'>

@@ -30,18 +30,17 @@
     <?php $vars = "projectID=$project->id&status=all&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>
     <tr class='colhead'>
-      <th><?php common::printOrderLink('id',       $orderBy, $vars, $lang->task->id);?></th>
-      <th><?php common::printOrderLink('pri',      $orderBy, $vars, $lang->task->pri);?></th>
-      <th class='w-p20'><?php common::printOrderLink('name',     $orderBy, $vars, $lang->task->name);?></th>
-      <th><?php common::printOrderLink('owner',    $orderBy, $vars, $lang->task->owner);?></th>
-      <th><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimate);?></th>
-      <th><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumed);?></th>
-      <th><?php common::printOrderLink('left',     $orderBy, $vars, $lang->task->left);?></th>
-      <th><?php common::printOrderLink('type',     $orderBy, $vars, $lang->task->type);?></th>
-      <th><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadline);?></th>
-      <th><?php common::printOrderLink('status',   $orderBy, $vars, $lang->task->status);?></th>
-      <th class='w-p20'><?php common::printOrderLink('story',    $orderBy, $vars, $lang->task->story);?></th>
-      <th class='w-100px'><?php echo $lang->actions;?></th>
+      <th class='w-id'>    <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+      <th class='w-p30'>   <?php common::printOrderLink('name',     $orderBy, $vars, $lang->task->name);?></th>
+      <th class='w-user'>  <?php common::printOrderLink('owner',    $orderBy, $vars, $lang->task->owner);?></th>
+      <th class='w-hour'>  <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
+      <th class='w-hour'>  <?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
+      <th class='w-hour'>  <?php common::printOrderLink('left',     $orderBy, $vars, $lang->task->leftAB);?></th>
+      <th class='w-date'>  <?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
+      <th class='w-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+      <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story);?></th>
+      <th class='w-70px'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -49,13 +48,12 @@
     <?php $class = $task->owner == $app->user->account ? 'style=color:red' : '';?>
     <tr class='a-center'>
       <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
-      <td><?php echo $task->pri;?></td>
+      <td><?php echo $lang->task->priList[$task->pri];?></td>
       <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td <?php echo $class;?>><?php echo $task->ownerRealName;?></td>
       <td><?php echo $task->estimate;?></td>
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>
-      <td><?php echo $lang->task->typeList[$task->type];?></td>
       <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class=<?php echo $task->status;?> >
         <?php

@@ -24,39 +24,49 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
-<div class='yui-d0'>
-  <div id='featurebar'>
-    <div class='f-right'><?php common::printLink('bug', 'create', "productID=0&extra=projectID=$project->id", $lang->bug->create);?></div>
-  </div>
-</div>
 <div class='yui-d0'>
   <table class='table-1 fixed colored tablesorter'>
+    <caption class='caption-tl'>
+      <div class='f-left'><?php echo $lang->project->bug;?></div>
+      <div class='f-right'><?php common::printLink('bug', 'create', "productID=0&extra=projectID=$project->id", $lang->bug->create);?></div>
+    </caption>
     <thead>
     <tr class='colhead'>
-      <th><?php echo $lang->bug->id;?></th>
-      <th><?php echo $lang->bug->severity;?></th>
-      <th class='w-p50'><?php echo $lang->bug->title;?></th>
-      <th><?php echo $lang->bug->openedBy;?></th>
-      <th><?php echo $lang->bug->assignedTo;?></th>
-      <th><?php echo $lang->bug->resolvedBy;?></th>
-      <th><?php echo $lang->bug->resolution;?></th>
+      <?php $vars = "projectID={$project->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <th class='w-id'>      <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-severity'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+      <th class='w-pri'>     <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+      <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+      <th class='w-user'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+      <th class='w-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+      <th class='w-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
+      <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
+      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($bugs as $bug):?>
     <tr class='a-center'>
-      <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?></td>
-      <td><?php echo $bug->severity?></td>
-      <td class='a-left nobr'><?php echo $bug->title;?></td>
+      <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id, '_blank');?></td>
+      <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
+      <td><?php echo $lang->bug->priList[$bug->pri]?></td>
+      <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
       <td><?php echo $users[$bug->openedBy];?></td>
       <td><?php echo $users[$bug->assignedTo];?></td>
       <td><?php echo $users[$bug->resolvedBy];?></td>
-      <td><?php echo $bug->resolution;?></td>
+      <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+      <td>
+        <?php
+        $params = "bugID=$bug->id";
+        if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
+        if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))     echo $lang->bug->buttonClose . ' ';
+        common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+        ?>
+      </td>
     </tr>
     <?php endforeach;?>
     </tbody>
   </table>
-  <div class='a-right'><?php echo $pager;?></div>
+  <div class='a-right'><?php $pager->show();?></div>
 </div>  
 <?php include '../../common/view/footer.html.php';?>

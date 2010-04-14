@@ -236,7 +236,7 @@ class projectModel extends model
     /* 导入任务。*/
     public function importTask($projectID)
     {
-        $tasks = $this->dao->select('id, project, owner, story')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $tasks = $this->dao->select('id, project, owner, story, consumed')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
 
         /* 更新task表。*/
         foreach($tasks as $task)
@@ -249,6 +249,9 @@ class projectModel extends model
             $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->set('status')->eq($status)->where('id')->in($this->post->tasks)->exec();
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
         }
+
+        /* 去掉story=0的记录。*/
+        unset($stories[0]);
 
         /* 将没有关联进来的用户加入到团队中。*/
         $teamMembers = $this->getTeamMemberPairs($projectID);

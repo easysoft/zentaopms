@@ -179,6 +179,10 @@ class project extends control
 
         $project = $this->commonAction($projectID);
 
+        /* 登记session。*/
+        $this->app->session->set('taskList',  $this->app->getURI(true));
+        $this->app->session->set('storyList', $this->app->getURI(true));
+
         $this->view->header->title  = $project->name . $this->lang->colon . $this->lang->project->importTask;
         $this->view->position[]     = html::a(inlink('browse', "projectID=$projectID"), $project->name);
         $this->view->position[]     = $this->lang->project->importTask;
@@ -250,7 +254,7 @@ class project extends control
         $this->assign('position', $position);
         $this->assign('bugs',     $bugs);
         $this->assign('tabID',    'bug');
-        $this->assign('pager',    $pager->get());
+        $this->assign('pager',    $pager);
         $this->assign('orderBy',  $orderBy);
         $this->assign('users',    $users);
 

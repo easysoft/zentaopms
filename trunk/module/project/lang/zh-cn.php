@@ -85,30 +85,31 @@ $lang->project->delete         = "删除项目";
 $lang->project->browse         = "浏览项目";
 $lang->project->edit           = "编辑项目";
 $lang->project->manageMembers  = '团队管理';
-$lang->project->unlinkMember   = '移除';
+$lang->project->unlinkMember   = '移除成员';
 $lang->project->unlinkStory    = '移除需求';
 $lang->project->importTask     = '导入任务';
 
 /* 分组浏览。*/
 $lang->project->listTask            = '列表方式';
-$lang->project->groupTaskByStory    = '按需求分组';
-$lang->project->groupTaskByStatus   = '按状态分组';
-$lang->project->groupTaskByPri      = '按优先级分组';
-$lang->project->groupTaskByOwner    = '按指派给分组';
-$lang->project->groupTaskByEstimate = '按预计工时分组';
-$lang->project->groupTaskByConsumed = '按已消耗分组';
-$lang->project->groupTaskByLeft     = '按剩余工时分组';
-$lang->project->groupTaskByType     = '按任务类型分组';
-$lang->project->groupTaskByDeadline = '按截止日期分组';
-$lang->project->listTaskNeedConfrim = '需求有变动的任务';
+$lang->project->groupTaskByStory    = '需求分组';
+$lang->project->groupTaskByStatus   = '状态分组';
+$lang->project->groupTaskByPri      = '优先级分组';
+$lang->project->groupTaskByOwner    = '指派给分组';
+$lang->project->groupTaskByEstimate = '预计工时分组';
+$lang->project->groupTaskByConsumed = '已消耗分组';
+$lang->project->groupTaskByLeft     = '剩余工时分组';
+$lang->project->groupTaskByType     = '任务类型分组';
+$lang->project->groupTaskByDeadline = '截止日期分组';
+$lang->project->listTaskNeedConfrim = '需求变动';
 
 /* 页面提示。*/
 $lang->project->selectProject  = "请选择项目";
-$lang->project->beginAndEnd  = '起止时间';
-$lang->project->lblStats     = '工时统计';
-$lang->project->stats        = '总共预计『%s』工时<br />已经消耗『%s』工时<br />预计剩余『%s』工时';
-$lang->project->oneLineStats = "项目『%s』, 代号为『%s』, 相关产品为『%s』，『%s』开始，『%s』结束，总预计『%s』工时，已消耗『%s』工时，预计剩余『%s』工时。";
-$lang->project->storySummary = "共『%s』个需求，预计『%s』个工时。";
+$lang->project->beginAndEnd    = '起止时间';
+$lang->project->lblStats       = '工时统计';
+$lang->project->stats          = '总共预计『%s』工时<br />已经消耗『%s』工时<br />预计剩余『%s』工时';
+$lang->project->oneLineStats   = "项目『%s』, 代号为『%s』, 相关产品为『%s』，『%s』开始，『%s』结束，总预计『%s』工时，已消耗『%s』工时，预计剩余『%s』工时。";
+$lang->project->storySummary   = "共『%s』个需求，预计『%s』个工时。";
+$lang->project->wbs            = "分解任务";
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';
