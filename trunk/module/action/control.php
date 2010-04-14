@@ -48,6 +48,7 @@ class action extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         $this->view->trashes = $this->action->getTrashes($orderBy, $pager);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users['system'] = 'system';
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
         $this->display();

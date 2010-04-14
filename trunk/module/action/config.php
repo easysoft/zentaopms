@@ -1,5 +1,4 @@
 <?php
-$config->action->objectTables['company']     = TABLE_COMPANY;
 $config->action->objectTables['product']     = TABLE_PRODUCT;
 $config->action->objectTables['story']       = TABLE_STORY;
 $config->action->objectTables['productplan'] = TABLE_PRODUCTPLAN;
@@ -10,8 +9,8 @@ $config->action->objectTables['build']       = TABLE_BUILD;
 $config->action->objectTables['bug']         = TABLE_BUG;
 $config->action->objectTables['case']        = TABLE_CASE;
 $config->action->objectTables['testtask']    = TABLE_TESTTASK;
+$config->action->objectTables['user']        = TABLE_USER;
 
-$config->action->objectNameFields['company']     = 'name';
 $config->action->objectNameFields['product']     = 'name';
 $config->action->objectNameFields['story']       = 'title';
 $config->action->objectNameFields['productplan'] = 'title';
@@ -22,3 +21,4 @@ $config->action->objectNameFields['build']       = 'name';
 $config->action->objectNameFields['bug']         = 'title';
 $config->action->objectNameFields['case']        = 'title';
 $config->action->objectNameFields['testtask']    = 'name';
+$config->action->objectNameFields['user']        = 'account';
