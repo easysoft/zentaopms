@@ -125,6 +125,7 @@ class my extends control
     /* 编辑个人档案。*/
     public function editProfile()
     {
+        if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
         if(!empty($_POST))
         {
             $this->user->update($this->app->user->id);
@@ -142,6 +143,7 @@ class my extends control
     /* 查看个人档案。*/
     public function profile()
     {
+        if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
         $this->view->position[]    = $this->lang->my->profile;
         $this->view->user          = $this->user->getById($this->app->user->id);
