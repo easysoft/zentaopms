@@ -27,25 +27,28 @@
 <div class='yui-d0'>
   <table class='table-1 tablesorter a-center'>
     <thead>
-    <tr class='rowhead'>
+    <tr class='colhead'>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-80px'><?php echo $lang->project->code;?></th>
       <th><?php echo $lang->project->name;?></th>
-      <th><?php echo $lang->project->code;?></th>
-      <th><?php echo $lang->project->begin;?></th>
-      <th><?php echo $lang->project->end;?></th>
-      <th><?php echo $lang->project->status;?></th>
-      <th><?php echo $lang->team->role;?></th>
-      <th><?php echo $lang->team->joinDate;?></th>
-      <th><?php echo $lang->team->workingHour;?></th>
+      <th class='w-date'><?php echo $lang->project->begin;?></th>
+      <th class='w-date'><?php echo $lang->project->end;?></th>
+      <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <th class='w-user'><?php echo $lang->team->role;?></th>
+      <th class='w-date'><?php echo $lang->team->joinDate;?></th>
+      <th class='w-date'><?php echo $lang->team->workingHour;?></th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($projects as $project):?>
+    <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id");?>
     <tr>
-      <td><?php echo html::a($this->createLink('project', 'browse', "projectID=$project->id"), $project->name);?></td>
+      <td><?php echo html::a($projectLink, $project->id);?></td>
       <td><?php echo $project->code;?></td>
+      <td><?php echo html::a($projectLink, $project->name);?></td>
       <td><?php echo $project->begin;?></td>
       <td><?php echo $project->end;?></td>
-      <td><?php echo $project->status;?></td>
+      <td><?php echo $lang->project->statusList[$project->status];?></td>
       <td><?php echo $project->role;?></td>
       <td><?php echo $project->joinDate;?></td>
       <td><?php echo $project->workingHour;?></td>

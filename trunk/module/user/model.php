@@ -41,7 +41,7 @@ class userModel extends model
     /* 获得某一个公司的用户列表。*/
     public function getList()
     {
-        return $this->dao->select('*')->from(TABLE_USER)->orderBy('account')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->orderBy('account')->fetchAll();
     }
 
     /* 获得account=>realname的列表。params: noletter|noempty|noclosed。*/
@@ -137,18 +137,6 @@ class userModel extends model
         return !dao::isError();
     }
     
-    /* 删除一个用户。*/
-    public function delete($userID)
-    {
-        return $this->dao->update(TABLE_USER)->set('status')->eq('delete')->where('id')->eq($userID)->limit(1)->exec();
-    }
-
-    /* 激活一个用户。*/
-    public function activate($userID)
-    {
-        return $this->dao->update(TABLE_USER)->set('status')->eq('active')->where('id')->eq($userID)->limit(1)->exec();
-    }
-
     /**
      * 验证用户的身份。
      * 
@@ -163,7 +151,11 @@ class userModel extends model
         $password = filter_var($password, FILTER_SANITIZE_STRING);
         if(!$account or !$password) return false;
 
-        $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->andWhere('password')->eq(md5($password))->fetch();
+        $user = $this->dao->select('*')->from(TABLE_USER)
+            ->where('account')->eq($account)
+            ->andWhere('password')->eq(md5($password))
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
         if($user)
         {
             $ip   = $_SERVER['REMOTE_ADDR'];
@@ -237,6 +229,6 @@ class userModel extends model
     /* 获得用户的Bug列表。*/
     public function getBugs($account)
     {
-        return $this->dao->findByAssignedTo($account)->from(TABLE_BUG)->fetchAll();
+        return $this->dao->findByAssignedTo($account)->from(TABLE_BUG)->andWhere('deleted')->eq(0)->fetchAll();
     }
 }
