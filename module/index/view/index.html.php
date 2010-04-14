@@ -46,6 +46,7 @@
               <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
             </tr>
             <tr><td colspan='2' class='a-center'><?php echo $burns[$project->id];?></td></tr>
+            <tr><td colspan='2' class='a-center'><?php echo html::a($this->createLink('project', 'burn', "projectID=$project->id"), $lang->project->largeBurnChart);?></td></tr>
           </table>
         </div>  
         <?php endforeach;?>
