@@ -136,10 +136,13 @@ class bug extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
-        /* 处理查询语句，获取条件部分，并记录session。*/
-        $sql = explode('WHERE', $this->dao->get());
-        $sql = explode('ORDER', $sql[1]);
-        $this->session->set('bugReportCondition', $sql[0]);
+        /* 处理查询语句，获取条件部分，并记录session。需求待确认的，不参与报表统计。*/
+        if($browseType != 'needconfirm')
+        {
+            $sql = explode('WHERE', $this->dao->get());
+            $sql = explode('ORDER', $sql[1]);
+            $this->session->set('bugReportCondition', $sql[0]);
+        }
 
         $users = $this->user->getPairs('noletter');
         

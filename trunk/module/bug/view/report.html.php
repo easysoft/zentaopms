@@ -33,7 +33,7 @@ span {display:block}
   </div>
 </div>
 
-<div class='yui-d0 yui-t7'>
+<div class='yui-d0 yui-t1'>
   <div class='yui-b'>
     <div class='box-title'><?php echo $lang->bug->report->select;?></div>
     <div class='box-content'>
