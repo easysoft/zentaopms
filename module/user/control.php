@@ -41,7 +41,11 @@ class user extends control
     /* 用户的todo列表。*/
     public function todo($account, $type = 'today', $status = 'all')
     {
-        $this->session->set('todoList', $this->app->getURI(true));
+        /* 登记session。*/
+        $uri = $this->app->getURI(true);
+        $this->session->set('todoList', $uri);
+        $this->session->set('bugList',  $uri);
+        $this->session->set('taskList', $uri);
 
         /* 加载todo model。*/
         $this->loadModel('todo');
@@ -122,6 +126,7 @@ class user extends control
         $this->assign('tabID',    'bug');
         $this->assign('bugs',     $this->user->getBugs($account));
         $this->assign('user',     $this->dao->findByAccount($account)->from(TABLE_USER)->fetch());
+        $this->assign('users',    $this->user->getPairs('noletter'));
 
         $this->display();
     }
@@ -242,7 +247,7 @@ class user extends control
         }
         else
         {
-            $this->user->delete($userID);
+            $this->user->delete(TABLE_USER, $userID);
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
     }
@@ -312,16 +317,16 @@ class user extends control
                    strpos($_POST['referer'], $this->app->company->pms) !== false
                 )
                 {
-                    $this->locate($_POST['referer']);
+                    die(js::locate($_POST['referer'], 'parent'));
                 }
                 else
                 {
-                    $this->locate($this->createLink($this->config->default->module));
+                    die(js::locate($this->createLink($this->config->default->module), 'parent'));
                 }
             }
             else
             {
-                $this->locate($this->createLink('user', 'login'));
+                die(js::error($this->lang->user->loginFailed));
             }
         }
         else

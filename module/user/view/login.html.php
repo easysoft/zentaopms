@@ -44,7 +44,7 @@ $themeRoot   = $webRoot . "theme/";
 <style>#debugbar, .helplink {display:none}</style>
 <body onload="document.getElementById('account').focus();">
 <div class='yui-d0'>
-  <form method='post' style='margin-top:100px'>
+  <form method='post' style='margin-top:100px' target='hiddenwin'>
     <table align='center' class='table-4'> 
       <caption><?php printf($lang->welcome, $app->company->name);?></caption>
       <tr>
@@ -73,5 +73,8 @@ $themeRoot   = $webRoot . "theme/";
     </div>
   </form>
 </div>  
+<div class='yui-d0' id='hiddenbar'>
+  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hidden'></iframe>
+</div>
 </body>
 </html>

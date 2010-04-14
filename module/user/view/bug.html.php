@@ -28,25 +28,27 @@
   <table class='table-1 tablesorter'>
     <thead>
     <tr class='colhead'>
-      <th><?php echo $lang->bug->id;?></th>
-      <th><?php echo $lang->bug->severity;?></th>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
+      <th class='w-pri'><?php echo $lang->priAB;?></th>
+      <th class='w-type'><?php echo $lang->typeAB;?></th>
       <th><?php echo $lang->bug->title;?></th>
-      <th><?php echo $lang->bug->openedBy;?></th>
-      <th><?php echo $lang->bug->assignedTo;?></th>
-      <th><?php echo $lang->bug->resolvedBy;?></th>
-      <th><?php echo $lang->bug->resolution;?></th>
+      <th class='w-user'><?php echo $lang->openedByAB;?></th>
+      <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
+      <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($bugs as $bug):?>
     <tr class='a-center'>
       <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id, '_blank');?></td>
-      <td><?php echo $bug->severity?></td>
-      <td width='50%' class='a-left'><?php echo $bug->title;?></td>
-      <td><?php echo $bug->openedBy;?></td>
-      <td><?php echo $bug->assignedTo;?></td>
-      <td><?php echo $bug->resolvedBy;?></td>
-      <td><?php echo $bug->resolution;?></td>
+      <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
+      <td><?php echo $lang->bug->priList[$bug->pri]?></td>
+      <td><?php echo $lang->bug->typeList[$bug->type]?></td>
+      <td class='a-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+      <td><?php echo $users[$bug->openedBy];?></td>
+      <td><?php echo $users[$bug->resolvedBy];?></td>
+      <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
     </tr>
     <?php endforeach;?>
     </tbody>
