@@ -14,7 +14,7 @@ ALTER TABLE `zt_testTask` ADD `deleted` ENUM( '0', '1' ) NOT NULL DEFAULT '0';
 ALTER TABLE `zt_user` ADD `deleted` ENUM( '0', '1' ) NOT NULL DEFAULT '0';
 
 -- 处理user表。
-UPDATE zt_user SET deleted = '1' WHERE STATUS = 'delete'
+UPDATE zt_user SET deleted = '1' WHERE STATUS = 'delete';
 ALTER TABLE `zt_user` DROP `status`;
 INSERT INTO zt_action(`company`, `objecttype`, `objectID`, `actor`, action, `date`, `comment` , `extra`) 
 SELECT `company`, 'user', `id`, 'system', 'deleted', now( ) , '', 1 FROM zt_user WHERE zt_user.deleted ='1'
