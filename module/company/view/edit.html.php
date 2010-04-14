@@ -26,7 +26,7 @@
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-5'> 
-      <caption><?php echo $lang->company->create;?></caption>
+      <caption><?php echo $lang->company->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->company->name;?></th>
         <td><?php echo html::input('name', $company->name, "class='text-1'");?></td>

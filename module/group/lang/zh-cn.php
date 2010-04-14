@@ -193,9 +193,7 @@ $lang->resource->testtask->results     = 'results';
 /* 组织视图。*/
 $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
-$lang->resource->company->create = 'create';
 $lang->resource->company->edit   = 'edit';
-$lang->resource->company->delete = 'delete';
 
 /* 部门。*/
 $lang->resource->dept->browse      = 'browse';
@@ -235,13 +233,12 @@ $lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
 $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
 
+/* 后台管理。*/
+$lang->resource->admin->index         = 'index';
+
 /* 其他的一些杂项。*/
 $lang->resource->api->getModel    = 'getModel';
 $lang->resource->file->download   = 'download';
 $lang->resource->misc->ping       = 'ping';
 $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undelete';
-
-/* 后台管理。*/
-$lang->resource->admin->index         = 'index';
-$lang->resource->admin->browseCompany = 'browseCompany';

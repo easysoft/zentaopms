@@ -25,7 +25,11 @@
 <?php include '../../common/view/header.html.php';?>
 <div class='yui-d0'>                 
   <table align='center' class='table-1'>
-    <tr class='colhead nobr'>
+    <caption class='caption-tl'>
+      <div class='f-left'><?php echo $lang->group->browse;?></div>
+      <div class='f-right'><?php echo html::a(inlink('create'), $lang->group->create);?></div>
+    </caption>
+    <tr class='colhead'>
      <th><?php echo $lang->group->id;?></th>
      <th><?php echo $lang->group->name;?></th>
      <th><?php echo $lang->group->desc;?></th>
@@ -38,7 +42,7 @@
      <td><?php echo $group->name;?></td>
      <td class='a-left'><?php echo $group->desc;?></td>
      <td class='a-left'><?php foreach($groupUsers[$group->id] as $user) echo $user . ' ';?></td>
-     <td class='nobr'>
+     <td>
        <?php common::printLink('group', 'managepriv',   "groupID=$group->id", $lang->group->managePriv);?>
        <?php common::printLink('group', 'managemember', "groupID=$group->id", $lang->group->manageMember);?>
        <?php common::printLink('group', 'edit',         "groupID=$group->id", $lang->edit);?>
@@ -48,6 +52,5 @@
    </tr>
    <?php endforeach;?>
   </table>
-  <div class='a-right'><?php echo html::a($this->createLink('group', 'create'), $lang->group->create);?></div>
 </div>  
 <?php include '../../common/view/footer.html.php';?>

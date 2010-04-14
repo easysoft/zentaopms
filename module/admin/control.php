@@ -26,16 +26,6 @@ class admin extends control
     /* 首页。*/
     public function index($tab = 'index')
     {
-        $this->locate(inlink('browseCompany'));
-    }
-
-    /* 公司列表。*/
-    public function browseCompany()
-    {
-        $this->view->header->title = $this->lang->admin->common . $this->lang->colon . $this->lang->company->browse;
-        $this->view->position[]    = $this->lang->admin->company;
-        $this->view->position[]    = $this->lang->company->browse;
-        $this->view->companies     = $this->loadModel('company')->getList();
-        $this->display();
+        $this->locate($this->createLink('action', 'trash'));
     }
 }

@@ -27,9 +27,9 @@ class company extends control
     public function __construct()
     {
         parent::__construct();
-        $this->loadModel('admin');
         $this->loadModel('dept');
         $this->app->loadLang('user');
+        $this->company->setMenu();
     }
 
     /* 公司首页。*/
@@ -82,24 +82,20 @@ class company extends control
     }
 
     /* 编辑一个公司。*/
-    public function edit($companyID)
+    public function edit()
     {
         if(!empty($_POST))
         {
-            $this->company->update($companyID);
+            $this->company->update();
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('admin', 'browsecompany'), 'parent'));
+            die(js::alert($this->lang->company->successSaved));
         }
 
-        $this->lang->set('menugroup.company', 'admin');
-        $this->lang->company->menu = $this->lang->admin->menu;
-
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->company->edit;
-        $position[]      = html::a($this->createLink('admin', 'browsecompany'), $this->lang->admin->company);
+        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
         $position[]      = $this->lang->company->edit;
         $this->assign('header',   $header);
         $this->assign('position', $position);
-        $this->assign('company',  $this->company->getById($companyID));
+        $this->assign('company',  $this->company->getById($this->app->company->id));
 
         $this->display();
     }

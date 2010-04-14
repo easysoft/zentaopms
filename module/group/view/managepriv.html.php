@@ -42,19 +42,21 @@ function checkall(checker)
 </script>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
-    <table align='center' class='table-1 a-left'> 
-    <caption><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>
-      <tr class='nobr'>
+    <table class='table-1 a-left'> 
+      <caption class='caption-tl'><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>
+      <tr class='colhead'>
         <th><?php echo $lang->group->module;?></th>
         <th><?php echo $lang->group->method;?></th>
       </tr>  
       <?php foreach($lang->resource as $moduleName => $moduleActions):?>
-      <tr>
-        <th class='rowhead'><?php echo $this->lang->$moduleName->common;?> <input type='checkbox' onclick='check(this, "<?php echo $moduleName;?>")'></td>
-        <td id='<?php echo $moduleName;?>'>
-        <?php foreach($moduleActions as $action => $actionLabel):?>
-        <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> /> <?php echo $lang->$moduleName->$actionLabel;?>
-        <?php endforeach;?>
+      <tr class='f-14px <?php echo cycle('even, bg-yellow');?>'>
+        <th class='a-right'><?php echo $this->lang->$moduleName->common;?> <input type='checkbox' onclick='check(this, "<?php echo $moduleName;?>")'></td>
+        <td id='<?php echo $moduleName;?>' class='pv-10px'>
+          <?php $i = 1;?>
+          <?php foreach($moduleActions as $action => $actionLabel):?>
+          <div class='w-p20 f-left'><input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> /> <?php echo $lang->$moduleName->$actionLabel;?></div>
+          <?php if(($i %  4) == 0) echo "<div class='c-both'></div>"; $i ++;?>
+          <?php endforeach;?>
         </td>
       </tr>
       <?php endforeach;?>

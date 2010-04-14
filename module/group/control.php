@@ -27,7 +27,7 @@ class group extends control
     public function __construct()
     {
         parent::__construct();
-        $this->loadModel('admin');
+        $this->loadModel('company')->setMenu();
         $this->loadModel('user');
     }
 
@@ -114,7 +114,6 @@ class group extends control
         $groupPrivs = $this->group->getPrivs($groupID);
 
         $this->view->header->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
-        $this->view->position[]    = html::a($this->createLink('admin', 'browsegroup', "companyid={$this->app->company->id}"), $this->lang->admin->group);
         $this->view->position[]    = $group->name . $this->lang->colon . $this->lang->group->managePriv;
 
         $this->view->group      = $group;
@@ -138,8 +137,7 @@ class group extends control
         $groupUsers = join(',', array_keys($groupUsers));
         $allUsers   = $this->user->getPairs('noclosed|noempty|noletter');
 
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
-        $position[]      = html::a($this->createLink('admin', 'browsegroup', "companyid={$this->app->company->id}"), $this->lang->admin->group);
+        $header['title'] = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[]      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
 
         $this->assign('header',     $header);
