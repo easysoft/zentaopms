@@ -59,8 +59,9 @@
       <?php 
       foreach($actions as $action)
       {
+          $user = isset($users[$action->actor]) ? $users[$action->actor] : $action->actor;
           echo "<tr><td>";
-          printf($lang->index->action, $action->date, $users[$action->actor], $action->actionLabel, $action->objectLabel, $action->objectLink);
+          printf($lang->index->action, $action->date, $user, $action->actionLabel, $action->objectLabel, $action->objectLink);
           echo "</td></tr>";
       }
       ?>
