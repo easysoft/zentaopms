@@ -412,30 +412,14 @@ class projectModel extends model
     public function getBurnData($projectID = 0)
     {
         $project = $this->getById($projectID);
-        if($project->end == '0000-00-00')
-        {
-            $project->end = strtotime('1 month later');
-        }
-        a($project->end);
-
-        /* 从燃烧图表中查找最近的15条记录。*/
-        $sets = $this->dao->select('date AS name, `left` AS value')
-                ->from(TABLE_BURN)
-                ->where('project')
-                ->eq((int)$projectID)
-                ->orderBy('date desc')
-                ->limit(15)
-                ->fetchAll('name');
-        if($sets) $sets = array_reverse($sets);
-
-        /* 如果记录数小于30。*/
-        if(count($sets) < 30)
-        {
-        }
+        $sql     = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
 
         /* 没有指定结束日期的情况。*/
         if($project->end == '0000-00-00')
         {
+            $sets = $sql->orderBy('date_desc')->limit(14)->fetchAll('name');
+            $sets = array_reverse($sets);
+
             /* 如果没有记录，手工补齐。*/
             if(!$sets)
             {
@@ -452,6 +436,7 @@ class projectModel extends model
         }
         else
         {
+            $sets    = $sql->orderBy('date')->fetchAll('name');
             $current = $project->begin;
             $end     = $project->end;
             if($sets)
@@ -463,7 +448,6 @@ class projectModel extends model
             /* 根据当前日期和项目最后结束的日期，补足后续日期。*/
             if(helper::diffDate($end, $current) > 0)
             {
-                $i = 0;
                 while(true)
                 {
                     $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
@@ -471,8 +455,6 @@ class projectModel extends model
                     $sets[$current]->name = $current;
                     $sets[$current]->value = '';    // value为空，这样fushioncharts不会打印节点。
                     if($nextDay == $end) break;
-                    if($i == 14) break;
-                    $i ++;
                 }
             }
             foreach($sets as $set) $set->name = substr($set->name, 5);
