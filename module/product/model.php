@@ -62,8 +62,14 @@ class productModel extends model
         return $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
     }
 
+    /* 获取产品的的状态分组。*/
+    public function getStatusGroups()
+    {
+        $products = $this->dao->select('id, name, status')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchGroup('status');
+    }
+
     /* 新增产品。*/
-    function create()
+    public function create()
     {
         /* 处理数据。*/
         $product = fixer::input('post')

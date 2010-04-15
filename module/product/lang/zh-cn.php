@@ -54,3 +54,6 @@ $lang->product->desc    = '产品描述';
 $lang->product->moduleStory = '按模块浏览';
 $lang->product->searchStory = '搜索';
 $lang->product->allStory    = '全部需求';
+
+$lang->product->statusList['normal'] = '正常';
+$lang->product->statusList['died']   = '结束';
