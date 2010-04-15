@@ -239,6 +239,7 @@ $lang->resource->admin->index         = 'index';
 /* 其他的一些杂项。*/
 $lang->resource->api->getModel    = 'getModel';
 $lang->resource->file->download   = 'download';
+$lang->resource->file->export2CSV = 'export2CSV';
 $lang->resource->misc->ping       = 'ping';
 $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undelete';

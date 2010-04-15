@@ -24,9 +24,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/table2csv.html.php';?>
 <?php include './taskheader.html.php';?>
 <div class='yui-d0'>
-  <table class='table-1 fixed colored tablesorter'>
+  <table class='table-1 fixed colored tablesorter datatable'>
     <?php $vars = "projectID=$project->id&status=all&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>
     <tr class='colhead'>
@@ -40,7 +41,7 @@
       <th class='w-date'>  <?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
       <th class='w-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
       <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story);?></th>
-      <th class='w-70px'><?php echo $lang->actions;?></th>
+      <th class='w-70px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

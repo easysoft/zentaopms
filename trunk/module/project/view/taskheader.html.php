@@ -17,6 +17,7 @@
     </div>
     <div class='f-right'>
       <?php 
+      echo html::export2csv($lang->exportCSV, $lang->setFileName);
       common::printLink('project', 'importTask', "project=$project->id", $lang->project->importTask);
       common::printLink('task', 'create', "project=$project->id", $lang->task->create);
       ?>

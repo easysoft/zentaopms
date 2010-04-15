@@ -278,6 +278,18 @@ class html
     {
         return " <input type='button' value='$label' class='button-c' $misc onclick='location.href=\"$link\"' /> ";
     }
+
+    /**
+     * create a export link.
+     *
+     * @static
+     * @access public
+     * @return string   the reset button tag.
+     */
+    public static function export2csv($label = '', $pluginTitle, $misc = '')
+    {
+        return "<a href='#' onclick=\"$('.datatable').table2CSV({title:'$pluginTitle'})\" $misc />$label</a>\n<div id='exporter' class='hidden'></div>\n";
+    }
 }
 
 class js
