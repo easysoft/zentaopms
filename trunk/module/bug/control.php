@@ -216,6 +216,11 @@ class bug extends control
         $productID = common::saveProductState($productID, key($this->products));
         $this->bug->setMenu($this->products, $productID);
 
+        /* 去掉几个类型的设置。*/
+        unset($this->lang->bug->typeList['designchange']);
+        unset($this->lang->bug->typeList['newfeature']);
+        unset($this->lang->bug->typeList['trackthings']);
+
         /* 初始化变量。*/
         $moduleID  = 0;
         $projectID = 0;
@@ -312,6 +317,11 @@ class bug extends control
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
         $currentModuleID = $bug->module;
+
+        /* 修改类型的配置。*/
+        if($bug->type != 'designchange') unset($this->lang->bug->typeList['designchange']);
+        if($bug->type != 'newfeature')   unset($this->lang->bug->typeList['newfeature']);
+        if($bug->type != 'trackthings')  unset($this->lang->bug->typeList['trackthings']);
 
         /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
