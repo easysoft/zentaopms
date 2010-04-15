@@ -29,12 +29,18 @@
       <caption><?php echo $lang->product->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->product->name;?></th>
-        <td><?php echo html::input('name');?></td>
+        <td><?php echo html::input('name', '', "class='text-2'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->code;?></th>
-        <td><?php echo html::input('code');?></td>
+        <td><?php echo html::input('code', '', "class='text-2'");?></td>
       </tr>  
+      <!--
+      <tr>
+        <th class='rowhead'><?php echo $lang->product->status;?></th>
+        <td><?php echo html::select('status', $lang->product->statusList, '', "class='select-2'");?></td>
+      </tr>  
+      -->
       <tr>
         <th class='rowhead'><?php echo $lang->product->desc;?></th>
         <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></textarea></td>
