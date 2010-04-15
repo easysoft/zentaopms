@@ -24,13 +24,13 @@
 error_reporting(E_ALL);
 
 /* 包含必须的类文件。*/
-include '../../../framework/router.class.php';
-include '../../../framework/control.class.php';
-include '../../../framework/model.class.php';
-include '../../../framework/helper.class.php';
+include '../framework/router.class.php';
+include '../framework/control.class.php';
+include '../framework/model.class.php';
+include '../framework/helper.class.php';
 
 /* 实例化路由对象，加载配置，连接到数据库。*/
-$app    = router::createApp('pms');
+$app    = router::createApp('pms', dirname(dirname(__FILE__)));
 $config = $app->loadConfig('common');
 
 /* 重新设置config参数，进行升级。*/
