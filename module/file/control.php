@@ -37,4 +37,18 @@ class file extends control
         if(file_exists($file->realPath))$this->locate($file->webPath);
         $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
     }
+
+    /* 导出csv格式的文件。*/
+    public function export2csv($agent)
+    {
+        $fileName = $this->post->fileName;
+        if(strpos($fileName, '.csv') === false) $fileName .= '.csv';
+        if($agent == 'ie') $fileName = urlencode($fileName);
+        header('Content-type: application/csv');
+        header("Content-Disposition: attachment; filename=$fileName");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        echo stripslashes($this->post->csvData);
+        die();
+    }
 }

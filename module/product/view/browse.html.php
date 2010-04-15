@@ -25,6 +25,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
 /* 切换浏览方式。*/
 function browseByModule()
@@ -56,6 +57,7 @@ function search(active)
       <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->product->allStory);?></span>
     </div>
     <div class='f-right'>
+      <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
       <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
     </div>
   </div>
@@ -66,7 +68,7 @@ function search(active)
 
   <div class="yui-main">
     <div class="yui-b">
-      <table class='table-1 fixed colored tablesorter'>
+      <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
           <tr class='colhead'>
             <?php $vars = "productID=$productID&browseType=$browseType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
@@ -79,7 +81,7 @@ function search(active)
             <th class='w-hour'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
             <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
             <th><?php common::printOrderLink('stage',  $orderBy, $vars, $lang->story->stageAB);?></th>
-            <th class='w-100px'><?php echo $lang->actions;?></th>
+            <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>

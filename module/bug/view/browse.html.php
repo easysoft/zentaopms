@@ -25,6 +25,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
 /* 通过模块浏览。*/
 function browseByModule(active)
@@ -65,6 +66,7 @@ function browseBySearch(active)
       ?>
     </div>
     <div class='f-right'>
+      <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
       <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->bug->report->common); ?>
       <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", $lang->bug->create); ?>
     </div>
@@ -77,7 +79,7 @@ function browseBySearch(active)
   <div class="yui-main">
     <div class="yui-b">
       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <table class='table-1 fixed colored tablesorter'>
+      <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
         <tr class='colhead'>
           <th class='w-id'>      <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
