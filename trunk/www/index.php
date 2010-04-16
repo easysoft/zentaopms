@@ -23,6 +23,8 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
+error_reporting(0);
+
 /* 记录最开始的时间。*/
 $timeStart = _getTime();
 
@@ -35,6 +37,7 @@ include '../framework/helper.class.php';
 /* 实例化路由对象，加载配置，设置时区。*/
 $app    = router::createApp('pms', dirname(dirname(__FILE__)));
 $config = $app->loadConfig('common');
+$app->setDebug();
 $app->setTimezone();
 
 /* 检查是否已经安装。*/
@@ -42,9 +45,6 @@ if(!isset($config->installed) or !$config->installed) die(header('location: inst
 
 /* 连接到数据库。*/
 $dbh = $app->connectDB();
-
-/* 根据debug选项设置错误信息。*/
-$config->debug ? error_reporting(E_ALL) : error_reporting(0);
 
 /* 如果是debug模式，记录sql查询。*/
 if($config->debug) register_shutdown_function('_saveSQL');
