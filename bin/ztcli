@@ -22,6 +22,7 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
+error_reporting(0);
 define('IN_SHELL', true);
 
 /* 获取命令参数。 */
@@ -32,14 +33,22 @@ if($argc != 2)
 
 /* 包含必须的类文件。*/
 chdir(dirname(__FILE__));
-include '../../../framework/router.class.php';
-include '../../../framework/control.class.php';
-include '../../../framework/model.class.php';
-include '../../../framework/helper.class.php';
+include '../framework/router.class.php';
+include '../framework/control.class.php';
+include '../framework/model.class.php';
+include '../framework/helper.class.php';
+
+/* 将输入的参数解析成对于的变量。*/
+$request = parse_url(trim($argv[1]));
+$_SERVER['HTTP_HOST']   = $request['host'];
+$_SERVER['PATH_INFO']   = $request['path'];
+$_SERVER['REQUEST_URI'] = $request['query'];
+if(isset($request['query'])) parse_str($request['query'], $_GET);
 
 /* 实例化路由对象，并加载配置，连接到数据库。*/
-$app    = router::createApp('pms');
+$app    = router::createApp('pms', dirname(dirname(__FILE__)));
 $config = $app->loadConfig('common');
+$app->setDebug();
 $dbh    = $app->connectDB();
 
 /* 设置时区。*/
@@ -54,12 +63,6 @@ $common = $app->loadCommon();
 $app->loadClass('front',  $static = true);
 $app->loadClass('filter', $static = true);
 $app->setSuperVars();
-
-/* 设置PATH_INFO变量。*/
-putenv('PATH_INFO=' . trim($argv[1]));
-$config->requestType = 'PATH_INFO';
-$config->pathType    = 'clean';
-$config->requestFix  = '-';
 
 /* 解析请求，加载模块。*/
 $app->parseRequest();
