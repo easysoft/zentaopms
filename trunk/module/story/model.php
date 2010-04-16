@@ -112,12 +112,12 @@ class storyModel extends model
         {
             $storyID = $this->dao->lastInsertID();
             $this->loadModel('file')->saveUpload('story', $storyID, $extra = 1);
-            $spec = htmlspecialchars($this->post->spec);
-            $this->dao->insert(TABLE_STORYSPEC)
-                ->set('story')->eq($storyID)
-                ->set('version')->eq(1)
-                ->set('title')->eq($story->title)
-                ->set('spec')->eq($spec)->exec();
+
+            $data->story   = $storyID;
+            $data->version = 1;
+            $data->title   = $story->title;
+            $data->spec    = htmlspecialchars($this->post->spec);
+            $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
             return $storyID;
         }
         return false;
