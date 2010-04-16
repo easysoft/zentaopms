@@ -110,6 +110,7 @@ $lang->story->reviewResultList['revert'] = '撤销变更';
 $lang->story->reviewResultList['clarify']= '有待明确';
 $lang->story->reviewResultList['reject'] = '拒绝';
 
+$lang->story->priList[]   = '';
 $lang->story->priList[3]  = '3';
 $lang->story->priList[1]  = '1';
 $lang->story->priList[2]  = '2';
