@@ -42,9 +42,9 @@ class bugfree1ConvertModel extends bugfreeConvertModel
     public function convertGroup()
     {
         $groups = $this->dao->dbh($this->sourceDBH)
-            ->select("{$this->app->company->id} AS company, groupID AS id, groupName AS name, groupUser AS users")
+            ->select("groupID AS id, groupName AS name, groupUser AS users")
             ->from('BugGroup')
-            ->fetchAll('id');
+            ->fetchAll('id', $autoCompany = false);
         foreach($groups as $groupID => $group)
         {
             /* 将分组用户拆分成数组。*/
@@ -71,13 +71,13 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         /* 查询当前系统中存在的用户。*/
         $activeUsers = $this->dao
             ->dbh($this->sourceDBH)
-            ->select("{$this->app->company->id} AS company, username AS account, userpassword AS password, realname, email")
+            ->select("username AS account, userpassword AS password, realname, email")
             ->from('BugUser')
             ->orderBy('userID ASC')
-            ->fetchAll('account');
+            ->fetchAll('account', $autoCompany = false);
 
         /* 查找曾经出现过的用户。*/
-        $allUsers = $this->dao->select("distinct(username) AS account")->from('BugHistory')->fetchPairs();
+        $allUsers = $this->dao->select("distinct(username) AS account")->from('BugHistory')->fetchPairs('', '', $autoCompany = false);
 
         /* 合并二者。*/
         foreach($allUsers as $key => $account)
@@ -88,7 +88,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             }
             else
             {
-                $allUsers[$key] = array('company' => $this->app->company->id, 'account' => $account, 'realname' => $account, 'status' => 'delete');
+                $allUsers[$key] = array('account' => $account, 'realname' => $account, 'deleted' => '1');
             }
         }
         foreach($activeUsers as $account => $user) if(!isset($allUsers[$account])) $allUsers[$account] = $user;
@@ -113,7 +113,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
     /* 转换项目为产品。*/
     public function convertProject()
     {
-        $projects = $this->dao->dbh($this->sourceDBH)->select("projectID AS id, projectName AS name, {$this->app->company->id} AS company")->from('BugProject')->fetchAll('id');
+        $projects = $this->dao->dbh($this->sourceDBH)->select("projectID AS id, projectName AS name")->from('BugProject')->fetchAll('id', $autoCompany = false);
         foreach($projects as $projectID => $project)
         {
             unset($project->id);
@@ -138,7 +138,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 "bug" AS view')
             ->from('BugModule')
             ->orderBy('id ASC')
-            ->fetchAll('id');
+            ->fetchAll('id', $autoCompany = false);
         foreach($modules as $moduleID => $module)
         {
             $module->product = $this->map['product'][$module->product];
@@ -181,7 +181,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ')
             ->from('BugInfo')
             ->orderBy('bugID')
-            ->fetchAll('id');
+            ->fetchAll('id', $autoCompany = false);
         foreach($bugs as $bugID => $bug)
         {
             /* 修正Bug数据。*/
@@ -211,8 +211,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
     {
         $actions = $this->dao
             ->dbh($this->sourceDBH)
-            ->select(
-                "{$this->app->company->id} AS company, 
+            ->select("
                 'bug' AS objectType, 
                 bugID AS objectID, 
                 userName AS actor, 
@@ -221,7 +220,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 actionDate AS date")
             ->from('BugHistory')
             ->orderBy('bugID, historyID')
-            ->fetchGroup('objectID');
+            ->fetchGroup('objectID', '', $autoCompany = false);
         $convertCount = 0;
         foreach($actions as $bugID => $bugActions)
         {
@@ -250,8 +249,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
     {
         $this->setPath();
         $files = $this->dao->dbh($this->sourceDBH)
-            ->select(
-                "{$this->app->company->id} AS company, 
+            ->select("
                 fileName AS pathname,
                 fileTitle AS title,
                 fileType AS extension,
@@ -263,7 +261,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 ")
             ->from('BugFile')
             ->orderBy('fileID')
-            ->fetchAll();
+            ->fetchAll('', $autoCompany = false);
         foreach($files as $file)
         {
             $file->objectID = $this->map['bug'][(int)$file->objectID];
