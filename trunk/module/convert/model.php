@@ -71,6 +71,7 @@ class convertModel extends model
         foreach($userConstants as $key => $value)
         {
             if(strpos($key, 'TABLE') === false) continue;
+            if($key == 'TABLE_COMPANY') continue;
             $state[$value] = (int)$this->dao->select('MAX(id) AS id')->from($value)->fetch('id');
         }
         $this->session->set('state', $state);

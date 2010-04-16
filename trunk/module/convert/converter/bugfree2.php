@@ -26,6 +26,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     /* 执行转换。*/
     public function execute()
     {
+        $this->clear();
         $this->setTable();
         $this->convertGroup();
         $result['users']    = $this->convertUser();
@@ -62,17 +63,10 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         /* 获得所有的用户列表。*/
         $users = $this->dao
             ->dbh($this->sourceDBH)
-            ->select("{$this->app->company->id} AS company, username AS account, userpassword AS password, realname, email, isDroped")
+            ->select("username AS account, userpassword AS password, realname, email, isDroped AS deleted")
             ->from(BUGFREE_TABLE_USER)
             ->orderBy('userID ASC')
-            ->fetchAll('account');
-
-        /* 转换isDroped字段。*/
-        foreach($users as $account => $user)
-        {
-            $user->status = $user->isDroped ? 'delete' : 'active';
-            unset($user->isDroped);
-        }
+            ->fetchAll('account', $autoCompany = false);
 
         /* 导入到zentao数据库中。*/
         $convertCount = 0;
@@ -95,9 +89,9 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     public function convertGroup()
     {
         $groups = $this->dao->dbh($this->sourceDBH)
-            ->select("{$this->app->company->id} AS company, groupID AS id, groupName AS name, groupUser AS users")
+            ->select("groupID AS id, groupName AS name, groupUser AS users")
             ->from(BUGFREE_TABLE_GROUP)
-            ->fetchAll('id');
+            ->fetchAll('id', $autoCompany = false);
         foreach($groups as $groupID => $group)
         {
             /* 处理group数据。*/
@@ -126,15 +120,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     public function convertProject()
     {
         $projects = $this->dao->dbh($this->sourceDBH)
-            ->select("projectID AS id, projectName AS name, {$this->app->company->id} AS company, isDroped")
+            ->select("projectID AS id, projectName AS name, isDroped AS deleted")
             ->from(BUGFREE_TABLE_PROJECT)
-            ->fetchAll('id');
+            ->fetchAll('id', $autoComapny = false);
         foreach($projects as $projectID => $project)
         {
-            $project->status = $project->isDroped ? 'delete' : 'active';
             unset($project->id);
-            unset($project->isDroped);
-
             $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($project)->exec();
             $this->map['product'][$projectID] = $this->dao->lastInsertID();
         }
@@ -157,7 +148,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
                 displayOrder AS `order`')
             ->from(BUGFREE_TABLE_MODULE)
             ->orderBy('id ASC')
-            ->fetchAll('id');
+            ->fetchAll('id', $autoCompany = false);
         foreach($modules as $moduleID => $module)
         {
             $module->product = $this->map['product'][$module->product];
@@ -212,7 +203,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->from(BUGFREE_TABLE_BUGINFO)
             ->where('isDroped')->eq(0)
             ->orderBy('bugID')
-            ->fetchAll('id');
+            ->fetchAll('id', $autoCompany = false);
         foreach($bugs as $bugID => $bug)
         {
             /* 修正Bug数据。*/
@@ -270,14 +261,13 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             scriptedBy, scriptedDate, scriptStatus, scriptLocation,
             linkID AS linkCase,
             casekeyword AS keywords,
-            DisplayOrder AS `order`,
             1 AS version,
             bugID
             ')
             ->from(BUGFREE_TABLE_CASEINFO)
             ->where('isDroped')->eq(0)
             ->orderBy('caseID')
-            ->fetchAll('id');
+            ->fetchAll('id', $autoCompany = false);
         foreach($cases as $caseID => $case)
         {
             /* 修正case的数据。*/
@@ -338,7 +328,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ')
             ->from(BUGFREE_TABLE_RESULTINFO)
             ->orderBy('id')
-            ->fetchAll('id');
+            ->fetchAll('id', $autoCompany = false);
         foreach($results as $resultID => $result)
         {
             unset($result->id);
@@ -364,8 +354,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     {
         $actions = $this->dao
             ->dbh($this->sourceDBH)
-            ->select("{$this->app->company->id} AS company,
-                actionID AS id,
+            ->select("actionID AS id,
                 actionTarget AS objectType,
                 idValue AS objectID,
                 actionUser AS actor,
@@ -376,7 +365,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->from(BUGFREE_TABLE_ACTION)
             ->where('actionTarget' != 'Result')
             ->orderBy('actionID')
-            ->fetchAll('id');
+            ->fetchAll('id', $autoComapny = false);
 
         foreach($actions as $actionID => $action)
         {
@@ -399,7 +388,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->select('actioID, actionField AS field, oldValue AS old, newValue AS new')
             ->from(BUGFREE_TABLE_HISTORY)
             ->orderBy('historyID')
-            ->fetchAll();
+            ->fetchAll('', $autoCompany = false);
         foreach($histories as $history)
         {
             $history->actionID = $this->map['action'][$history->actionID];
@@ -412,8 +401,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     {
         $this->setPath();
         $files = $this->dao->dbh($this->sourceDBH)
-            ->select(
-                "{$this->app->company->id} AS company, 
+            ->select("
                 actionID,
                 fileName AS pathname,
                 fileTitle AS title,
@@ -422,7 +410,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
                 ")
             ->from(BUGFREE_TABLE_FILE)
             ->orderBy('fileID')
-            ->fetchAll();
+            ->fetchAll('', $autoCompany = false);
         foreach($files as $file)
         {
             /* 查找对应的action信息，以获得文件的相关字段。*/
