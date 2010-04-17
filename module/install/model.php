@@ -224,21 +224,26 @@ class installModel extends model
     public function grantPriv()
     {
         if($this->post->password == '') die(js::error($this->lang->install->errorEmptyPassword));
-        $admin->account  = $this->post->account;
-        $admin->realname = $this->post->account;
-        $admin->password = md5($this->post->password);
-        $this->dao->replace(TABLE_USER)->data($admin)->autoCheck()->check('account', 'notempty')->exec();
+
+        /* 先插入公司。*/
+        $company->name   = $this->post->company;
+        $company->pms    = $this->post->pms;
+        $company->admins = ",{$this->post->account},";
+        $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->batchCheck('name, pms', 'notempty')->check('pms', 'unique')->exec();
+
         if(!dao::isError())
         {
-            $company->name = $this->post->company;
-            $company->pms  = $this->post->pms;
-            $company->admins = ",$admin->account,";
-            $this->dao->replace(TABLE_COMPANY)->data($company)->autoCheck()->batchCheck('name, pms', 'notempty')->exec();
-            if(!dao::isError())
-            {
-                $companyID = $this->dbh->lastInsertID();
-                $this->dao->update(TABLE_USER)->set('company')->eq($companyID)->where('account')->eq($admin->account)->limit(1)->exec();
-            }
+            /* 设置管理员。*/
+            $companyID = $this->dbh->lastInsertID();
+            $admin->account  = $this->post->account;
+            $admin->realname = $this->post->account;
+            $admin->password = md5($this->post->password);
+            $admin->company  = $companyID;
+            $this->dao->insert(TABLE_USER)->data($admin)->autoCheck()->check('account', 'notempty')->exec();
+
+            /* 更新group和group表的company字段。*/
+            $this->dao->update(TABLE_GROUP)->set('company')->eq($companyID)->exec($autoCompany = false);
+            $this->dao->update(TABLE_GROUPPRIV)->set('company')->eq($companyID)->exec($autoCompany = false);
         }
     }
 }
