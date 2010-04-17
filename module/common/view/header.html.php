@@ -10,15 +10,20 @@ $themeRoot   = $webRoot . "theme/";
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   <?php
   $header = (object)$header;
-  if(isset($header->title))   echo "<title>$header->title - $lang->zentaoMS</title>\n";
-  if(isset($header->keyword)) echo "<meta name='keywords' content='$header->keyword'>\n";
-  if(isset($header->desc))    echo "<meta name='description' content='$header->desc'>\n";
+  if(!isset($header->title))    $header->title = $lang->zentaoMS;
+  if(!isset($header->keywords)) $header->keywords = $lang->zentaoKeywords;
+  if(!isset($header->desc))     $header->desc     = $lang->zentaoDESC;
+  echo "<title>$header->title - $lang->zentaoMS</title>\n";
+  echo "<meta name='keywords' content='$header->keywords'>\n";
+  echo "<meta name='description' content='$header->desc'>\n";
   ?>
 <?php echo js::exportConfigVars();?>
 <script src="<?php echo $jsRoot;?>jquery/lib.js" type="text/javascript"></script>
 <script src="<?php echo $jsRoot;?>my.js"         type="text/javascript"></script>
 <link rel='stylesheet' href='<?php echo $clientTheme . 'yui.css';?>' type='text/css' media='screen' />
 <link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
+<link rel='icon'          href='<?php echo $webRoot;?>favicon.ico' type="image/x-icon" />
+<link rel='shortcut icon' href='<?php echo $webRoot;?>favicon.ico' type='image/x-icon' />
 <script type="text/javascript">loadFixedCSS();</script>
 </head>
 <body>
