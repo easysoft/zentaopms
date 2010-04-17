@@ -1,0 +1,7 @@
+禅道项目管理软件使用到的第三方类库列表
+
+CSS框架 ：YUI 3 beta 中的 CSS套件，包括basic.css, reset.css, font.css和grid.css。官方网站：http://developer.yahoo.com/yui/3/
+JS框架  ：JQUERY 1.3版本。官方网站：http://www.jquery.com
+JQUER插件：autocomplete  colorbox  colorize  incsearch  tablesorter  treeview
+MAIL类  ：phpmailer 5.1，官方网站： http://phpmailer.sourceforge.net 
+报表框架：fushioncharts free 官方网站：http://www.fusioncharts.com/free/
