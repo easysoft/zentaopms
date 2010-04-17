@@ -87,7 +87,8 @@ EOT;
         }
         else
         {
-            $this->locate($this->createLink('user', 'login'));
+            $referer  = helper::safe64Encode($this->app->getURI(true));
+            $this->locate($this->createLink('user', 'login', "referer=$referer&from=zentao"));
         }
     }
 

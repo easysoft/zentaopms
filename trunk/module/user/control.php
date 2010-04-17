@@ -271,7 +271,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function login($referer = '')
+    public function login($referer = '', $from = '')
     {
         $this->setReferer($referer);
 
@@ -308,12 +308,11 @@ class user extends control
                 /* 记录登录记录。*/
                 $this->loadModel('action')->create('user', $user->id, 'login');
 
-                /* POST变量中设置了referer信息，且非user/login.html, 非user/deny.html，并且包含当前系统的域名。*/
-                if(isset($_POST['referer'])  and 
-                   !empty($_POST['referer']) and 
-                   strpos($_POST['referer'], $loginLink) === false and 
-                   strpos($_POST['referer'], $denyLink)  === false and 
-                   strpos($_POST['referer'], $this->app->company->pms) !== false
+                /* POST变量中设置了referer信息，且非user/login.html, 非user/deny.html，并且来自zentao系统。*/
+                if($this->post->referer != false and 
+                   strpos($this->post->referer, $loginLink) === false and 
+                   strpos($this->post->referer, $denyLink)  === false and 
+                   $from == 'zentao'
                 )
                 {
                     die(js::locate($_POST['referer'], 'parent'));

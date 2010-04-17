@@ -40,6 +40,8 @@ $themeRoot   = $webRoot . "theme/";
 <script src="<?php echo $jsRoot;?>my.js"         type="text/javascript"></script>
 <link rel='stylesheet' href='<?php echo $clientTheme . 'yui.css';?>' type='text/css' media='screen' />
 <link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
+<link rel='icon'          href='<?php echo $webRoot;?>favicon.ico' type="image/x-icon" />
+<link rel='shortcut icon' href='<?php echo $webRoot;?>favicon.ico' type='image/x-icon' />
 <script language='Javascript'>loadFixedCSS();</script>
 <style>#debugbar, .helplink {display:none}</style>
 <body onload="document.getElementById('account').focus();">
