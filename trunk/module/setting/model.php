@@ -41,6 +41,6 @@ class settingModel extends model
             ->andWhere('owner')->eq($owner)
             ->andWhere('section')->eq($section)
             ->andWhere('`key`')->eq($key)
-            ->fetch('value');
+            ->fetch('value', $autoCompany = false);
     }
 }
