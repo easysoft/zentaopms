@@ -43,7 +43,8 @@ $lang->upgrade->toVersion     = '升级到';
 $lang->upgrade->confirm       = '确认要执行的SQL语句';
 $lang->upgrade->sureExecute   = '确认执行';
 
-$lang->upgrade->fromVersions['0_3'] = '0.3 BETA';
-$lang->upgrade->fromVersions['0_4'] = '0.4 BETA';
-$lang->upgrade->fromVersions['0_5'] = '0.5 BETA';
-$lang->upgrade->fromVersions['0_6'] = '0.6 BETA';
+$lang->upgrade->fromVersions['0_3beta'] = '0.3 BETA';
+$lang->upgrade->fromVersions['0_4beta'] = '0.4 BETA';
+$lang->upgrade->fromVersions['0_5beta'] = '0.5 BETA';
+$lang->upgrade->fromVersions['0_6beta'] = '0.6 BETA';
+$lang->upgrade->fromVersions['1_0beta'] = '1.0 BETA';

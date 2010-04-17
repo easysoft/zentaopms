@@ -32,9 +32,8 @@ class upgrade extends control
     /* 选择系统。*/
     public function selectVersion()
     {
-        /* 处理版本号。*/ 
-        $version = substr($this->config->installedVersion, 0, strpos($this->config->installedVersion, ' '));
-        $version = str_replace('.', '_', $version);
+        $version = str_replace(array(' ', '.'), array('', '_'), $this->config->installedVersion);
+        $version = strtolower($version);
         $this->view->header->title = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
         $this->view->position[]    = $this->lang->upgrade->common;
         $this->view->version       = $version;
@@ -70,20 +69,5 @@ class upgrade extends control
             $this->view->errors = $this->upgrade->getError();
         }
         $this->display();
-    }
-
-    /* 更新每个表的company字段。*/
-    public function updateCompany()
-    {
-        $constants     = get_defined_constants(true);
-        $userConstants = $constants['user'];
-
-        /* 查找每个表的id字段的最大值。*/
-        foreach($userConstants as $key => $value)
-        {
-            if(strpos($key, 'TABLE') === false) continue;
-            if($key == 'TABLE_COMPANY' or $key == 'TABLE_CONFIG') continue;
-            $this->dbh->query("UPDATE $value SET company = '{$this->app->company->id}'");
-        }
     }
 }
