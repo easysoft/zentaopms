@@ -23,17 +23,14 @@
  * @version     $Id$
  * @link        http://www.zentao.cn
  */
-$lang->zentaoMS     = '禅道管理';
-$lang->zentaoSite   = "官方网站";
-$lang->myControl    = "我的地盘";
-$lang->sponser      = "<a href='http://www.pujia.com' target='_blank'>普加赞助</a>";
-
 $lang->arrow        = ' » ';
 $lang->colon        = '::';
 $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 
+$lang->zentaoMS     = '禅道管理';
 $lang->welcome      = "欢迎使用%s{$lang->colon}{$lang->zentaoMS} ";
+$lang->myControl    = "我的地盘";
 $lang->currentPos   = '当前位置：';
 $lang->logout       = '退出系统';
 $lang->login        = '登录';
@@ -232,6 +229,13 @@ $lang->pager->pre       = "上页";
 $lang->pager->next      = "下页";
 $lang->pager->last      = "末页";
 $lang->pager->locate    = "GO!";
+
+$lang->zentaoSite     = "官方网站";
+$lang->sponser        = "<a href='http://www.pujia.com' target='_blank'>普加赞助</a>";
+$lang->zentaoKeywords = "开源项目管理软件,项目管理,项目管理软件,pmp,pms,php框架，国产php框架，scrum工具,scrum管理工具,scrum管理软件,敏捷项目管理,禅道";
+$lang->zentaoDESC     = "禅道项目管理软件(ZenTaoPMS)是一款国产的，基于LGPL协议，开源免费的项目管理软件(工具、系统)，同时也是一款scrum管理工具。
+    它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。禅道项目管理软件使用PHP + MySQL开发，
+基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。禅道在手，项目无忧！"; 
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
