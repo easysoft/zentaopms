@@ -18,6 +18,8 @@ tgz:
 	cp -fr www zentaopms/
 	cp -fr module zentaopms/
 	cp bin/ztc* zentaopms/bin
+	cp -fr framework zentaopms/
+	cp -fr lib/* zentaopms/lib/
 	find zentaopms -name .svn |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
 	mkdir -p zentaopms/tmp/cache
@@ -25,7 +27,10 @@ tgz:
 	chmod 777 -R zentaopms/tmp/
 	chmod 777 zentaopms/www/data
 	chmod 777 zentaopms/config
-	find -name *.svn zentaopms |xargs rm -fr
+	find zentaopms -name .svn |xargs rm -fr
+	rm -fr zentaopms/framework/tests
+	rm -fr zentaopms/www/data/*
+	rm -fr zentaopms/www/bugfree
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
 zentaopmsdoc:
