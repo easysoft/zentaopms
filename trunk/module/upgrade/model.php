@@ -30,27 +30,35 @@ class upgradeModel extends model
     /* 统一的升级入口，根据升级版本的不同，调用不同的升级步骤程序。*/
     public function execute($fromVersion)
     {
-        if($fromVersion == '0_3')
+        if($fromVersion == '0_3beta')
         {
             $this->upgradeFrom0_3To0_4();
             $this->upgradeFrom0_4To0_5();
             $this->upgradeFrom0_5To0_6();
             $this->upgradeFrom0_6To1_0_B();
+            $this->upgradeFrom1_0betaTo1_0rc1();
         }
-        elseif($fromVersion == '0_4')
+        elseif($fromVersion == '0_4beta')
         {
             $this->upgradeFrom0_4To0_5();
             $this->upgradeFrom0_5To0_6();
             $this->upgradeFrom0_6To1_0_B();
+            $this->upgradeFrom1_0betaTo1_0rc1();
         }
-        elseif($fromVersion == '0_5')
+        elseif($fromVersion == '0_5beta')
         {
             $this->upgradeFrom0_5To0_6();
             $this->upgradeFrom0_6To1_0_B();
+            $this->upgradeFrom1_0betaTo1_0rc1();
         }
-        elseif($fromVersion == '0_6')
+        elseif($fromVersion == '0_6beta')
         {
             $this->upgradeFrom0_6To1_0_B();
+            $this->upgradeFrom1_0betaTo1_0rc1();
+        }
+        elseif($fromVersion == '1_0beta')
+        {
+            $this->upgradeFrom1_0betaTo1_0rc1();
         }
     }
 
@@ -58,27 +66,35 @@ class upgradeModel extends model
     public function confirm($fromVersion)
     {
         $confirmContent = '';
-        if($fromVersion == '0_3')
+        if($fromVersion == '0_3beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
         }
-        elseif($fromVersion == '0_4')
+        elseif($fromVersion == '0_4beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
         }
-        elseif($fromVersion == '0_5')
+        elseif($fromVersion == '0_5beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
         }
-        elseif($fromVersion == '0_6')
+        elseif($fromVersion == '0_6beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
+        }
+        elseif($fromVersion == '1_0beta')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
         }
 
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
@@ -113,6 +129,29 @@ class upgradeModel extends model
         if(!$this->isError()) $this->updateVersion('1.0beta');
     }
 
+    /* 从1.0beta版本升级到1.0rc1版本。*/
+    private function upgradeFrom1_0betaTo1_0rc1()
+    {
+        $this->execSQL($this->getUpgradeFile('1.0.beta'));
+        $this->updateCompany();
+        if(!$this->isError()) $this->updateVersion('1.0rc1');
+    }
+
+    /* 更新每个表的company字段。*/
+    private function updateCompany()
+    {
+        $constants     = get_defined_constants(true);
+        $userConstants = $constants['user'];
+
+        /* 查找每个表的id字段的最大值。*/
+        foreach($userConstants as $key => $value)
+        {
+            if(strpos($key, 'TABLE') === false) continue;
+            if($key == 'TABLE_COMPANY' or $key == 'TABLE_CONFIG') continue;
+            $this->dbh->query("UPDATE $value SET company = '{$this->app->company->id}'");
+        }
+    }
+
     /* 更新PMS的版本设置。*/
     public function updateVersion($version)
     {
@@ -122,20 +161,19 @@ class upgradeModel extends model
         $item->key     = 'version';
         $item->value   =  $version;
 
-        $stmt = $this->dao->select('id')->from(TABLE_CONFIG)
+        $configID = $this->dao->select('id')->from(TABLE_CONFIG)
             ->where('company')->eq(0)
             ->andWhere('owner')->eq('system')
             ->andWhere('section')->eq('global')
             ->andWhere('`key`')->eq('version')
-            ->query($autoCompany = false);
-        $configID = $stmt->fetchColumn('id');
+            ->fetch('id', $autoComapny = false);
         if($configID > 0)
         {
-            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($configID)->exec();
+            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($configID)->exec($autoCompany = false);
         }
         else
         {
-            $this->dao->insert(TABLE_CONFIG)->data($item)->exec();
+            $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
         }
     }
 
