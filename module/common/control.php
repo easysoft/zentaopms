@@ -129,8 +129,9 @@ EOT;
     public static function printMainmenu($moduleName)
     {
         global $app, $lang;
+        $logo = $app->getWebRoot() . 'theme/default/images/main/logo.png';
         echo "<ul>\n";
-        echo "<li>$lang->zentaoMS</li>\n";
+        echo "<li style='padding:0; height:30px'><a href='http://www.zentao.cn' target='_blank'><img src='$logo' /></a></li>\n";
 
         /* 设定当前的主菜单项。默认先取当前的模块名，如果有该模块所对应的菜单分组，则取分组名作为主菜单项。*/
         $mainMenu = $moduleName;
@@ -168,7 +169,7 @@ EOT;
 
         echo "<li id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject);
-        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-80px'");
+        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-60px'");
         echo html::submitButton($lang->go, 'onclick="shortcut()"');
         echo "</li>";
         echo "</ul>\n";

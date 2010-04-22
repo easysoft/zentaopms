@@ -52,8 +52,8 @@ function search(active)
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'>
-      <span id='bymoduleTab' onclick='browseByModule()'><?php echo $lang->product->moduleStory;?></span>
-      <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><?php echo $lang->product->searchStory;?></span>
+      <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>
+      <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><a href='#'><?php echo $lang->product->searchStory;?></a></span>
       <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->product->allStory);?></span>
     </div>
     <div class='f-right'>

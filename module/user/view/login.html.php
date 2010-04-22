@@ -20,29 +20,8 @@
  * @package     ZenTaoMS
  * @version     $Id$
  */
-$clientTheme = $this->app->getClientTheme();
-$webRoot     = $this->app->getWebRoot();
-$jsRoot      = $webRoot . "js/";
-$themeRoot   = $webRoot . "theme/";
+include '../../common/view/header.lite.html.php';
 ?>
-<html xmlns='http://www.w3.org/1999/xhtml'>
-<head>
-  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-  <?php
-  $header = (object)$header;
-  if(isset($header->title))   echo "<title>$header->title - $lang->zentaoMS</title>\n";
-  if(isset($header->keyword)) echo "<meta name='keywords' content='$header->keyword'>\n";
-  if(isset($header->desc))    echo "<meta name='description' content='$header->desc'>\n";
-  ?>
-<?php echo js::exportConfigVars();?>
-<script language='Javascript'>var needPing=false</script>
-<script src="<?php echo $jsRoot;?>jquery/lib.js" type="text/javascript"></script>
-<script src="<?php echo $jsRoot;?>my.js"         type="text/javascript"></script>
-<link rel='stylesheet' href='<?php echo $clientTheme . 'yui.css';?>' type='text/css' media='screen' />
-<link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>' type='text/css' media='screen' />
-<link rel='icon'          href='<?php echo $webRoot;?>favicon.ico' type="image/x-icon" />
-<link rel='shortcut icon' href='<?php echo $webRoot;?>favicon.ico' type='image/x-icon' />
-<script language='Javascript'>loadFixedCSS();</script>
 <style>
 html{background-color:#06294e;}
 body{background-image:url(theme/default/images/main/loginbg.png); background-position:center top; background-repeat:no-repeat;}
@@ -58,7 +37,11 @@ table, tr, td, th, input{ border:none;}
 #poweredby a {color:#fff}
 .button-s, .button-c {padding:3px 5px 3px 5px; width:80px; font-size:14px; font-weight:bold}
 </style>
-<body onLoad="document.getElementById('account').focus();">
+<script language='Javascript'>
+$(document).ready(function(){
+    $('#account').focus();
+})
+</script>
 <div class='yui-d0 pt-200px'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-4'> 

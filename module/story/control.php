@@ -320,6 +320,7 @@ class story extends control
         $tasks = $this->task->getStoryTaskPairs($storyID, $projectID);
         $this->assign('tasks', $tasks);
         $this->display();
+        exit;
     }
 
     /* Ajax: 获取某一个项目的需求列表。*/

@@ -349,6 +349,7 @@ class user extends control
         $this->app->loadLang($module);
         $this->app->loadLang('index');
         $this->display();
+        exit;
     }
 
     /**

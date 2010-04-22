@@ -52,8 +52,8 @@ function browseBySearch(active)
   <div id='featurebar'>
     <div class='f-left'>
       <?php
-      echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\">" . $lang->testcase->moduleCases . "</span> ";
-      echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\">{$lang->testcase->bySearch}</span> ";
+      echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testcase->moduleCases . "</a></span> ";
+      echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->testcase->bySearch}</a></span> ";
       echo "<span id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->testcase->allCases) . "</span>";
       echo "<span id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->testcase->needConfirm) . "</span>";
       ?>
