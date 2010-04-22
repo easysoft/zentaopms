@@ -13,11 +13,11 @@
 
 jQuery.fn.colorize = function(params) {
 	options = {
-		altColor: '#ECF6FC',
+		altColor: '#ebf0f4',
 		bgColor: '#fff',
-		hoverColor: '#BCD4EC',
+		hoverColor: '#d0dee3',
 		hoverClass:'',
-		hiliteColor: 'yellow',
+		hiliteColor: '#fce6a2',
 		hiliteClass:'',
 		oneClick: false,
 		hover:'row',
