@@ -21,15 +21,15 @@
 * @link        http://www.zentao.cn
 */
 /*-----------------------GLOBAL SETTING----------------------------*/
-body{padding-bottom:50px}
+body{padding-bottom:50px; color:#000; background:url(images/main/bgmain.png) repeat-x 0 -35px;}
 
 /*-----------------------FIELDSET SETTING----------------------------*/
-fieldset {border:1px solid #e4e4e4; padding:5px 10px 5px 10px; margin-bottom:5px}
-legend   {font-weight:bold; color:darkgreen}
+fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
+legend   {font-weight:bold;}
 fieldset .table-1 {margin:0;}
-fieldset .bd-1px, fieldset .bd-1px td, fieldset .bd-1px th {border:1px solid #efefef; padding:2px}
+fieldset .bd-1px, fieldset .bd-1px td, fieldset .bd-1px th {border:1px solid #b3c8dc; padding:2px}
 fieldset tr, fieldset td, fieldset th {border:none; padding:2px}
-del{background:#fcc}
+del{background:#fcc;}
 ins{background:#cfc; text-decoration:none}
 
 /*-----------------------FORM SETTING----------------------------*/
@@ -56,29 +56,35 @@ ins{background:#cfc; text-decoration:none}
 .button-c{padding:3px 20px 3px 20px}
 
 /*-----------------------TABLE SETTING----------------------------*/
-table, th, td {border-color:#e4e4e4}
+table, th, td {border-color:#b3c8dc;}
 tr, th, td    {padding:2px 3px 2px 3px}
-caption       {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px}
+caption       {border:1px solid #b3c8dc; background:#cbd5d9; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
 .caption-tr {caption-side:top; text-align:right; border:none; background:none;}
 .caption-tl {caption-side:top; text-align:left;  border:none; background:none;}
 .table-1 {width:100%; margin-bottom:10px}
+
+/*--------------------------------------------------------*/
 .table-2 {width:240px;margin-bottom:10px}
 .table-3 {width:360px;margin-bottom:10px}
 .table-4 {width:480px;margin-bottom:10px}
 .table-5 {width:600px;margin-bottom:10px}
 .table-6 {width:800px;margin-bottom:10px}
 
-.colhead th  {text-align:center; background:#efefef; line-height:1.5; font-size:14px}
+.colhead td  {text-align:center; background-color:#cbd5d9;}
+.colhead th  {text-align:center; background-color:#cbd5d9; font-size:14px}
 .colhead a   {text-decoration:none; display:block;}
+.colhead th a{color:#333; font-size:14px;}
+.colhead th a:hover{color:#F30;}
+
 .rowhead     {font-weight:bold; text-align:right; width:100px}
 .fixed       {table-layout:fixed}
 .nobr                {overflow:hidden; white-space:nowrap;}
 .fixed th, .fixed td {overflow:hidden; white-space:nowrap;}
 
-.even    {background:#ECF6FC}
-.odd     {background:white}
-.hoover  {background:#BCD4EC}
-.clicked {background:yellow}
+.odd     {background:#fff;}
+.even    {background:#ebf0f4;}
+.hoover  {background:#d0dee3;}
+.clicked {background:#fce6a2;}
 
 /* copyed from tablesorter plugin. */
 table.tablesorter thead tr div{padding:0; margin:0} 
@@ -172,8 +178,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .f-14px  {font-size:14px}
 .f-16px  {font-size:16px}
 
-.box-title   {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold;}
-.box-content {border:1px solid #e4e4e4; padding:5px}
+.box-title   {border:1px solid #b3c8dc; background-color:#cbd5d9; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
+.box-content {border:1px solid #b3c8dc; padding:5px}
 
 /*-----------------------BORDER SETTING--------------------------*/
 .bd-1px    {border:1px        solid}
@@ -185,7 +191,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .bd-green  {border-color:#58CB64}
 .bd-yellow {border-color:#F4BF20}
 .bd-blue   {border-color:#64B7D7}
-.bd-gray   {border-color:#CCC;}
+.bd-gray   {border-color:#bcbcbc;}
 
 /*-----------------------BACKGROUND SETTING----------------------------*/
 .bg-green  {background-color:#DDF1D8;}
@@ -200,64 +206,64 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .yellow  {color:yellow;}
 .gray    {color:gray;}
 .green   {color:green;}
-.star    {color:red; font-size:14px; font-weight:bold}
+.star    {color:red; font-size:18px; font-weight:bold;}
 .warning {background:yellow; color:red; font-weight:bold}
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
 
 /* 最顶部的导航条。*/
-#topbar {margin-bottom:5px}
+#topbar  {padding:3px; color:#fff}
+#topbar .yui-b, #topbar a {color:white}
 
 /* 导航条通用设置。*/
-#navbar    {font-weight:bold; font-size:108%;}
-#navbar ul {margin:0; padding:0; height:28px; line-height:28px} 
-#navbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none}
-#navbar a  {text-decoration:none}
-#navbar a:hover {color:red;}
+#navbar ul {margin:0; padding:0;} 
+#navbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none;}
+#navbar a  {text-decoration:none;}
+#navbar a:hover {color:#ff3600;}
 
 /* 一级菜单。*/
-#mainmenu ul {background-color:#D6E7FF;}
-#mainmenu li {padding:0 10px 0 10px;border-right:3px solid #73A2EF}
-#mainmenu a  {color:black;}
-#mainmenu .active   {color:#FFF; background-color:#00008B;}
-#mainmenu .active a {color:white}
-#mainmenu #searchbox{float:right; border:none}
-#mainmenu #searchbox .text-2{width:80px}
+#mainmenu ul {background-color:#16528b; height:30px; line-height:30px}
+#mainmenu li {padding:0 8px 0 8px; border-right:3px solid #002242; color:white; font-size:14px;}
+#mainmenu a  {color:white; font-weight:normal;}
+#mainmenu .active   {background-color:#cfe5f9;}
+#mainmenu .active a {color:#333; font-weight:bold;}
+
+#mainmenu #searchbox{float:right; border:none; margin-top:4px}
+#mainmenu .button-s{border:none; padding:2px}
 
 /* 模块的菜单。*/
-#modulemenu    {color:white; margin-bottom:10px; font-weight:normal; font-size:normal}
-#modulemenu ul {background-color:#000888; height:26px; line-height:26px} 
-#modulemenu li {padding:0 5px 0 5px}
-#modulemenu a  {color:white;}
-#modulemenu .active a {color:yellow; font-weight:bold}
-#modulemenu .right    {float:right; font-weight:bold}
-#modulemenu .right  a {color:red}
+#modulemenu    {color:#F30; margin-bottom:5px; font-size:14px;}
+#modulemenu ul {background-color:#cfe5f9; height:28px; line-height:28px;}
+#modulemenu li {padding:0 5px 0 5px;}
+#modulemenu a  {color:#111; font-weight:normal; font-size:14px;}
+#modulemenu .active a {color:#002f75; font-weight:bold;}
+#modulemenu .right    {float:right; font-weight:bold;}
+#modulemenu .right  a {color:red; font-weight:bold}
 
 /* 功能菜单。*/
-#featurebar {margin-bottom:5px; background-color:#efefef; height:24px; line-height:24px; cursor:pointer}
-#featurebar a         {text-decoration:none; color:black;}
-#featurebar a:hover   {color:red;}
-#featurebar select    {font-size:12px; height:22px}
-#featurebar .active         {color:red; font-weight:bold;}
-#featurebar .active select  {border:2px solid red}
-#featurebar .active a       {color:red; font-weight:bold;}
-#featurebar a .active       {color:red; font-weight:bold;}
-#featurebar .f-right a      {color:red;font-weight:bold;}
+#featurebar {margin: 0 0 5px 0; background-color:#b8cdf0; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}
+#featurebar a              {text-decoration:none; color:#333; margin-right:3px; font-size:12px; background-color:#eee; border:1px solid #9b9b9b; padding:2px 3px 2px 3px;}
+#featurebar a:hover        {color:#ff3600; border-color:#F30;}
+#featurebar .f-right a     {color:#ff3600; font-weight:bold;}
+#featurebar #bysearchTab a {padding-left:10px; padding-right:10px}
+#featurebar select         {font-size:12px; height:22px; margin-top:3px;}
+
+#featurebar .active a       {color:#03F; font-weight:bold; background-color:#c6e2fa; border:1px solid #66a9e7;}
+#featurebar .active select  {border:1px solid #0000ff;}
 
 /* TreeMenu设置。*/
+#tree li      {list-style-type:none;}
 #tree .active {color:blue; font-weight:bold}
-#tree li { list-style-type:none;}
 
 /* 标题。*/
-#titlebar{font-size:16px; font-weight:bold; background:#e4e4e4; padding:5px; margin:10px 0 10px 0; height:22px}
+#titlebar{font-size:14px; font-weight:bold; background-color:#b8cdf0; padding:0px 5px; margin:10px 0; height:30px; line-height:30px; border:1px solid #a5cbf3;}
 #titlebar #main {float:left;  width:70%; clear:none; text-align:left}
 #titlebar div   {float:right; width:30%; clear:none; text-align:right}
 #titlebar #main input {font-size:14px}
-#titlebar .button-s   {font-size:12px; padding-top:0; padding-bottom:0}
 #titlebar .text-1 {width:80%}
 
 /* 页面其他元素。*/
-.history {border:1px solid gray; background:#efefef; padding:10px; margin-top:10px; margin-bottom:10px}
+.history {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}
 .content {font-size:14px; padding:10px}
 .roadmap {width:200px; margin:10px auto 10px auto; padding:10px; border:1px solid gray;}
 .roadmap a{color:white;}
@@ -265,23 +271,23 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .plan    {background:#9F9F5F;}
 
 /* 页脚。*/
-#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; border-top:2px solid #F4BF20; background-color:#FBF5C6;}
-#crumbs    {padding-left:10px}
-#poweredby {padding-right:10px}
+#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background-color:#CEE7F3; border-top:1px solid #59AED7;}
+#crumbs    {padding:5px 0 5px 10px;}
+#poweredby {padding-right:12px; margin-top:5px; display:block;}
 
 /* debug使用的设置。*/
-#debugbar  {width:100%; position:fixed; bottom:18px; left:0; margin:0; background-color:#FBF5C6} 
-#hiddenbar {width:100%; position:fixed; bottom:33px; left:0; margin:0; background-color:#FBF5C6}
+#debugbar  {width:100%; position:fixed; bottom:27px; left:0; margin:0; background-color:#CEE7F3} 
+#hiddenbar {width:100%; position:fixed; bottom:35px; left:0; margin:0; background-color:#CEE7F3}
 .hiddenwin {display:none}
 .debugwin  {display:block; width:100%; height:20px;}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
-.done      {color:darkgreen}
-.wait      {color:#9F9F5F}
-.doing     {color:red}
-.delayed   {background:red}
-.pass      {color:darkgreen}
-.blocked   {color:yellow}
+.done      {color:#078F0E;}
+.wait      {color:#888;}
+.doing     {color:#F30;}
+.delayed   {background:#93D5F9;}
+.pass      {color:#078F0E;}
+.blocked   {color:yellow;}
 .fail      {color:red}
 .hand      {cursor:pointer}
 .strong    {font-weight:bold}
