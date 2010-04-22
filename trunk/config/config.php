@@ -39,7 +39,7 @@ $config->viewVar     = 't';               // requestType=GET: 模板变量名。
 
 /* 视图和主题。*/
 $config->views       = ',html,json,csv,'; // 支持的视图列表。
-$config->themes      = 'default';         // 支持的主题列表。
+$config->themes      = 'default,blue';    // 支持的主题列表。
 
 /* 支持的语言列表。*/
 $config->langs['zh-cn'] = 'Chinese Simplified';
