@@ -87,6 +87,6 @@ table, tr, td, th, input{ border:none;}
     </div>
   </form>
 </div>  
-<div class='yui-d0' id='hiddenbar'><iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hidden'></iframe></div>
+<div class='yui-d0' id='debugbar'><iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hidden'></iframe></div>
 </body>
 </html>
