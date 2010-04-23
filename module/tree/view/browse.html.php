@@ -24,7 +24,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<?php include '../../common/view/colorbox.html.php';?>
 <script language='javascript'>
 $(document).ready(function()
 {

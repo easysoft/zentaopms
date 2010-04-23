@@ -23,7 +23,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorbox.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <script language='javascript'>
 /* 拷贝需求标题为任务标题。*/
