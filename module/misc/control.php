@@ -34,4 +34,11 @@ class misc extends control
     {
         die(phpinfo());
     }
+
+    /* 关于禅道。*/
+    public function about()
+    {
+        $this->display();
+        exit;
+    }
 }
