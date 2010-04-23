@@ -14,7 +14,7 @@ $(document).ready(function()
   <div class='yui-u first'>
     <div class='yui-b'>
       <?php
-      printf($lang->welcome, $app->company->name);
+      echo $app->company->name . $lang->colon;
       if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
       if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
       ?>
