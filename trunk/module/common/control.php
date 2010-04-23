@@ -57,6 +57,10 @@ class common extends control
         {
             return true;
         }
+        elseif($module == 'misc' and $method == 'about') 
+        {
+            return true;
+        }
 
         if(isset($this->app->user))
         {
@@ -111,6 +115,8 @@ EOT;
     public static function printTopBar()
     {
         global $lang, $app;
+
+        printf($lang->todayIs, date(DT_DATE3));
         if(isset($app->user)) echo $app->user->realname . ' ';
         if(isset($app->user) and $app->user->account != 'guest')
         {
@@ -121,8 +127,7 @@ EOT;
         {
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
-        echo html::a('http://www.zentao.cn', $lang->zentaoSite, '_blank');
-        echo $lang->sponser;
+        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
     }
 
     /* ´òÓ¡Ö÷²Ëµ¥¡£*/

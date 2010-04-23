@@ -29,11 +29,13 @@ $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 
 $lang->zentaoMS     = '禅道管理';
-$lang->welcome      = "欢迎使用%s{$lang->colon}{$lang->zentaoMS} ";
+$lang->welcome      = "%s{$lang->colon} ";
 $lang->myControl    = "我的地盘";
 $lang->currentPos   = '当前位置：';
 $lang->logout       = '退出系统';
 $lang->login        = '登录';
+$lang->aboutZenTao  = '关于禅道';
+$lang->todayIs      = '今天是%s，';
 
 $lang->reset        = '重填';
 $lang->edit         = '编辑';
@@ -244,5 +246,6 @@ define('DT_MONTHTIME1', 'n/d H:i');
 define('DT_MONTHTIME2', 'n月d日 H:i');
 define('DT_DATE1',     'Y-m-d');
 define('DT_DATE2',     'Ymd');
+define('DT_DATE3',     'Y年m月d日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
