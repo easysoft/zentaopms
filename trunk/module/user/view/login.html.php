@@ -33,7 +33,7 @@ table, tr, td, th, input{ border:none;}
 .pt-25px {padding-top:25px}
 #debugbar, .helplink{display:none}
 #welcome{background:none; border:none; color:#FFF; padding-top:8px;}
-#poweredby{color:#fff; margin-top:35px; text-align:center; line-height:1}
+#poweredby{color:#fff; margin-top:40px; text-align:center; line-height:1}
 #poweredby a {color:#fff}
 .button-s, .button-c {padding:3px 5px 3px 5px; width:80px; font-size:14px; font-weight:bold}
 </style>
