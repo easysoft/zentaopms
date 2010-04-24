@@ -97,6 +97,7 @@ class storyModel extends model
             ->cleanInt('product,module,pri,plan')
             ->cleanFloat('estimate')
             ->stripTags('title')
+            ->callFunc('title', 'trim')
             ->setDefault('plan', 0)
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
@@ -133,6 +134,7 @@ class storyModel extends model
 
         $story = fixer::input('post')
             ->stripTags('title')
+            ->callFunc('title', 'trim')
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setIF($this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
