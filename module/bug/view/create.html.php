@@ -25,14 +25,16 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <style>
-#project, #product, #story{width:245px}
-#severity, #browser {width: 113px}
+#project, #product  {width:200px}
+#module, #task      {width:400px}
+#severity, #browser {width:113px}
+#story{width:605px}
 </style>
 <script language='Javascript'>
 /* 当选择产品时，触发这个方法。*/
 function loadAll(productID)
 {
-    $('#taskIdBox').get(0).innerHTML = '';  // 将taskID内容复位。
+    $('#taskIdBox').get(0).innerHTML = '<select id="task"></select>';  // 将taskID内容复位。
     loadModuleMenu(productID);              // 加载产品的模块列表。
     loadProductStories(productID);          // 加载产品的需求列表。
     loadProductProjects(productID);         // 加载项目列表。
@@ -80,6 +82,7 @@ function loadProjectRelated(projectID)
     {
         $('#taskIdBox').get(0).innerHTML = '';
         loadProductStories($('#product').get(0).value);
+        loadProductBuilds($('#product').get(0).value);
     }
 }
 
@@ -124,8 +127,8 @@ $(function() {
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblProjectAndTask;?></th>
         <td>
-        <span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'onchange=loadProjectRelated(this.value)');?></span>
-          <span id='taskIdBox'></span>
+          <span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'onchange=loadProjectRelated(this.value)');?></span>
+          <span id='taskIdBox'><?php echo html::select('task', $tasks, $taskID);?></span>
         </td>
       </tr>
       <tr>
