@@ -262,6 +262,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #titlebar #main input {font-size:14px}
 #titlebar .text-1 {width:80%}
 
+/* 产品，项目切换的选择器。*/
+#switcher {color:white; font-style:bold; background:red; cursor:pointer;}
+
 /* 页面其他元素。*/
 .history {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}
 .content {font-size:14px; padding:10px}

@@ -447,7 +447,7 @@ EOT;
      */
     static public function exportConfigVars()
     {
-        global $app, $config;
+        global $app, $config, $lang;
         $defaultViewType = $app->getViewType();
         $themeRoot       = $app->getWebRoot() . 'theme/';
         $moduleName      = $app->getModuleName();
@@ -471,6 +471,8 @@ currentMethod  = '$methodName';
 clientLang     = '$clientLang';
 requiredFields = '$requiredFields';
 zentaoHelpRoot = '$config->helpRoot';
+lblShowAll     = '$lang->showAll';
+lblHideClosed  = '$lang->hideClosed';
 </script>
 
 EOT;
