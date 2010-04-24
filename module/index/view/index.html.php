@@ -23,7 +23,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<div class="yui-d0 yui-t5">  
+<div class="yui-d0 yui-t6">  
   <div class='yui-main'>
     <div class='yui-b'>
       <?php foreach($projectGroups as $projects):?>
