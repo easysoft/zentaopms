@@ -79,7 +79,6 @@ class productModel extends model
     {
         /* 处理数据。*/
         $product = fixer::input('post')
-            ->add('company', $this->app->company->id)
             ->stripTags('name,code')
             ->specialChars('desc')
             ->get();
