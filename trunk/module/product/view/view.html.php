@@ -34,12 +34,10 @@
       <th class='rowhead'><?php echo $lang->product->code;?></th>
       <td><?php echo $product->code;?></td>
     </tr>  
-    <!--
     <tr>
       <th class='rowhead'><?php echo $lang->product->status;?></th>
       <td><?php echo $lang->product->statusList[$product->status];?></td>
     </tr>  
-    -->
     <tr>
       <th class='rowhead'><?php echo $lang->product->desc;?></th>
       <td><?php echo nl2br($product->desc);?></td>

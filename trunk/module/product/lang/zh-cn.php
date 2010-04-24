@@ -56,4 +56,4 @@ $lang->product->searchStory = '搜索';
 $lang->product->allStory    = '全部需求';
 
 $lang->product->statusList['normal'] = '正常';
-$lang->product->statusList['died']   = '结束';
+$lang->product->statusList['closed'] = '结束';

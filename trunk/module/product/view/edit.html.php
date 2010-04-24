@@ -35,12 +35,10 @@
         <th class='rowhead'><?php echo $lang->product->code;?></th>
         <td><?php echo html::input('code', $product->code, "class='text-2'");?></td>
       </tr>  
-      <!--
       <tr>
         <th class='rowhead'><?php echo $lang->product->status;?></th>
         <td><?php echo html::select('status', $lang->product->statusList, $product->status, "class='select-2'");?></td>
       </tr>  
-      -->
       <tr>
         <th class='rowhead'><?php echo $lang->product->desc;?></th>
         <td><?php echo html::textarea('desc', $product->desc, "rows='5' class='area-1'");?></td>

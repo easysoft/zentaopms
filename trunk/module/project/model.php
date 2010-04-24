@@ -135,9 +135,11 @@ class projectModel extends model
     /* 获得项目id=>name列表。*/
     public function getPairs()
     {
+        $mode = $this->cookie->projectMode;
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)
+            ->onCaseOf($mode == 'noclosed')->andWhere('status')->ne('done')->endCase()
             ->orderBy('status, end desc')->fetchAll();
         $pairs = array();
         foreach($projects as $project)
