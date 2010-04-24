@@ -240,6 +240,18 @@ class bug extends control
         if($runID > 0) $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->limit(1)->fetch('id');
         if(isset($resultID) and $resultID > 0) extract($this->bug->getBugInfoFromResult($resultID));
 
+        /* 如果指定了项目，则查找项目范围内的build和story。*/
+        if($projectID)
+        {
+            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, 'noempty');
+            $stories = $this->story->getProjectStoryPairs($projectID);
+        }
+        else
+        {
+            $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+            $stories = $this->story->getProductStoryPairs($productID);
+        }
+
         /* 位置信息。*/
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -248,10 +260,11 @@ class bug extends control
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
-        $this->view->stories          = $this->story->getProductStoryPairs($productID);
+        $this->view->stories          = $stories;
         $this->view->users            = $this->user->getPairs('noclosed');
         $this->view->projects         = $this->product->getProjectPairs($productID);
-        $this->view->builds           = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+        $this->view->builds           = $builds;
+        $this->view->tasks            = $this->loadModel('task')->getProjectTaskPairs($projectID);
         $this->view->moduleID         = $moduleID;
         $this->view->projectID        = $projectID;
         $this->view->taskID           = $taskID;
