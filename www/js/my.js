@@ -87,14 +87,14 @@ function setNowrapObjTitle()
 function setProductSwitcher()
 {
     productMode = $.cookie('productMode');
-    if(!productMode) productMode = 'showAll';
-    if(productMode == 'showAll')
+    if(!productMode) productMode = 'all';
+    if(productMode == 'all')
     {
-        $("#productID").append($("<option value='hideClosed' id='switcher'>" + lblHideClosed + "</option>"));
+        $("#productID").append($("<option value='noclosed' id='switcher'>" + lblHideClosed + "</option>"));
     }
     else
     {
-      $("#productID").append($("<option value='showAll' id='switcher'>" + lblShowAll + "</option>"));
+      $("#productID").append($("<option value='all' id='switcher'>" + lblShowAll + "</option>"));
     }
 }
 
@@ -102,8 +102,11 @@ function setProductSwitcher()
 function switchProduct(productID, module, method, extra)
 {
     /* 如果传递过来的productID不是数字，则将其设置为产品选择方式。*/
-    if(isNaN(productID)) $.cookie('productMode', productID);
-    productID = 0;
+    if(isNaN(productID))
+    {
+        $.cookie('productMode', productID);
+        productID = 0;
+    }
 
     /* product, roadmap, bug, testcase, testtask，直接传递参数。*/
     if(module == 'product' || module == 'roadmap' || module == 'bug' || module == 'testcase' || module == 'testtask')
@@ -124,9 +127,31 @@ function switchProduct(productID, module, method, extra)
     location.href=link;
 }
 
+/* 设置项目选择器。*/
+function setProjectSwitcher()
+{
+    projectMode = $.cookie('projectMode');
+    if(!projectMode) projectMode = 'all';
+    if(projectMode == 'all')
+    {
+        $("#projectID").append($("<option value='noclosed' id='switcher'>" + lblHideClosed + "</option>"));
+    }
+    else
+    {
+      $("#projectID").append($("<option value='all' id='switcher'>" + lblShowAll + "</option>"));
+    }
+}
+
 /* 选择项目。*/
 function switchProject(projectID, module, method)
 {
+    /* 如果传递过来的projectID不是数字，则将其设置为产品选择方式。*/
+    if(isNaN(projectID))
+    {
+        $.cookie('projectMode', projectID);
+        projectID = 0;
+    }
+
     /* 如果是build模块，而且是edit方法，跳转地址改为project-build-xx.html。*/
     if(module == 'build' && method == 'edit')
     {
@@ -186,6 +211,7 @@ $(document).ready(function()
     setRequiredFields();
     //setHelpLink();
     setProductSwitcher();
+    setProjectSwitcher();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });
 

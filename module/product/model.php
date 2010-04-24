@@ -59,7 +59,13 @@ class productModel extends model
     /* 获取产品id=>name列表。*/
     public function getPairs()
     {
-        return $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
+        $mode = $this->cookie->productMode;
+        return $this->dao->select('id,name')
+            ->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->onCaseOf($mode == 'noclosed')->andWhere('status')->ne('closed')->endCase()
+            ->orderBy('id desc')
+            ->fetchPairs();
     }
 
     /* 获取产品的的状态分组。*/
