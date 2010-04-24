@@ -14,6 +14,12 @@ function loadFixedCSS()
     {
         document.write("<link rel='stylesheet' href='" + cssFile + "' type='text/css' media='screen' />");
     }
+
+    /* 解决safari和chrome的caption问题。*/
+    if($.browser.safari && $('.caption-tl'))
+    {
+        document.write("<style>caption{margin-bottom:15px}</style>");
+    }
 }
 
 /* JS版本的createLink。*/
@@ -77,9 +83,28 @@ function setNowrapObjTitle()
     })
 }
 
+/* 设置产品选择器。*/
+function setProductSwitcher()
+{
+    productMode = $.cookie('productMode');
+    if(!productMode) productMode = 'showAll';
+    if(productMode == 'showAll')
+    {
+        $("#productID").append($("<option value='hideClosed' id='switcher'>" + lblHideClosed + "</option>"));
+    }
+    else
+    {
+      $("#productID").append($("<option value='showAll' id='switcher'>" + lblShowAll + "</option>"));
+    }
+}
+
 /* 选择产品。*/
 function switchProduct(productID, module, method, extra)
 {
+    /* 如果传递过来的productID不是数字，则将其设置为产品选择方式。*/
+    if(isNaN(productID)) $.cookie('productMode', productID);
+    productID = 0;
+
     /* product, roadmap, bug, testcase, testtask，直接传递参数。*/
     if(module == 'product' || module == 'roadmap' || module == 'bug' || module == 'testcase' || module == 'testtask')
     {
@@ -160,6 +185,7 @@ $(document).ready(function()
     setNowrapObjTitle();
     setRequiredFields();
     //setHelpLink();
+    setProductSwitcher();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });
 
