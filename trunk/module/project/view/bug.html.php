@@ -28,7 +28,7 @@
   <table class='table-1 fixed colored tablesorter'>
     <caption class='caption-tl'>
       <div class='f-left'><?php echo $lang->project->bug;?></div>
-      <div class='f-right'><?php common::printLink('bug', 'create', "productID=0&extra=projectID=$project->id", $lang->bug->create);?></div>
+      <div class='f-right'><?php common::printLink('bug', 'create', "productID=$productID&extra=projectID=$project->id", $lang->bug->create);?></div>
     </caption>
     <thead>
     <tr class='colhead'>

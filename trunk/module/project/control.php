@@ -236,7 +236,9 @@ class project extends control
         $this->session->set('bugList', $this->app->getURI(true));
 
         /* 公共的操作。*/
-        $project = $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $products  = $this->project->getProducts($project->id);
+        $productID = key($products);    // 取第一个产品，用来提交Bug。
 
         /* 设定header和position信息。*/
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->bug;
@@ -257,6 +259,7 @@ class project extends control
         $this->assign('pager',    $pager);
         $this->assign('orderBy',  $orderBy);
         $this->assign('users',    $users);
+        $this->assign('productID',$productID);
 
         $this->display();
     }
