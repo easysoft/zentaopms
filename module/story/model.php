@@ -511,13 +511,13 @@ class storyModel extends model
     private function formatStories($stories)
     {
         /* 查找每个story所对应的模块名称。*/
-        $modules = array();
+        /*$modules = array();
         foreach($stories as $story) $modules[] = $story->module;
-        $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();
+        $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();*/
 
         /* 重新组织每一个story的展示方式。*/
         $storyPairs = array('' => '');
-        foreach($stories as $story) $storyPairs[$story->id] = $story->id . ':' . $story->product . '/' . ($story->module > 0 ? $moduleNames[$story->module] . '/' : '') . $story->title;
+        foreach($stories as $story) $storyPairs[$story->id] = $story->id . ':' . $story->title;
         return $storyPairs;
     }
 
