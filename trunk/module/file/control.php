@@ -48,6 +48,7 @@ class file extends control
         header("Content-Disposition: attachment; filename=$fileName");
         header("Pragma: no-cache");
         header("Expires: 0");
+        echo chr(0xEF) . chr(0xBB) . chr(0xBF);
         echo stripslashes($this->post->csvData);
         die();
     }
