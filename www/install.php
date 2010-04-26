@@ -34,7 +34,6 @@ include '../framework/helper.class.php';
 /* 实例化路由对象，加载配置。*/
 $app    = router::createApp('pms', dirname(dirname(__FILE__)));
 $config = $app->loadConfig('common');
-$app->setDebug();
 
 /* 检查是否已经安装过。*/
 if(!isset($_SESSION['installing']) and isset($config->installed) and $config->installed) die(header('location: index.php'));
@@ -43,6 +42,7 @@ if(!isset($_SESSION['installing']) and isset($config->installed) and $config->in
 $config->set('requestType', 'GET');
 $config->set('debug', true);
 $config->set('default.module', 'install');
+$app->setDebug();
 
 /* 如果已经保存配置文件，则自动连接到数据库。*/
 if(isset($config->installed) and $config->installed) $dbh = $app->connectDB();
