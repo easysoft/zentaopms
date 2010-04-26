@@ -34,7 +34,20 @@ class install extends control
     public function index()
     {
         if(!isset($this->config->installed) or !$this->config->installed) $this->session->set('installing', true);
+
         $this->view->header->title = $this->lang->install->welcome;
+
+        /* 获得官方网站最新的版本。*/
+        $snoopy = $this->app->loadClass('snoopy');
+        if($snoopy->fetchText('http://www.zentaoms.cn/misc-getlatestrelease.json'))
+        {
+            $result = json_decode($snoopy->results);
+            if(isset($result->release) and $this->config->version != $result->release->version)
+            {
+                $this->view->latestRelease = $result->release;
+            }
+        }
+
         $this->display();
     }
 

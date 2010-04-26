@@ -18,6 +18,7 @@ $themeRoot   = $webRoot . "theme/";
 <style>
 .ok{background:green; color:white}
 .fail{background:red; color:white}
+body{background:white}
 caption, th, td {padding:10px; font-size:16px}
 </style>
 <script type="text/javascript">loadFixedCSS();</script>
