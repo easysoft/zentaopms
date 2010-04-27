@@ -39,7 +39,7 @@ class install extends control
 
         /* 获得官方网站最新的版本。*/
         $snoopy = $this->app->loadClass('snoopy');
-        if($snoopy->fetchText('http://www.zentaoms.cn/misc-getlatestrelease.json'))
+        if($snoopy->fetchText('http://www.zentaoms.com/misc-getlatestrelease.json'))
         {
             $result = json_decode($snoopy->results);
             if(isset($result->release) and $this->config->version != $result->release->version)
