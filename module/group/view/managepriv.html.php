@@ -62,7 +62,7 @@ function checkall(checker)
       <?php endforeach;?>
       <tr>
         <th class='rowhead'><?php echo $lang->group->checkall;?><input type='checkbox' onclick='checkall(this);'></th>
-        <td class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td>
+        <td class='a-center'><?php echo html::submitButton($lang->save, 'name="submit"') . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td>
       </tr>
     </table>
   </form>
