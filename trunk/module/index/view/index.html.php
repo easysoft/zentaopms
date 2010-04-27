@@ -27,27 +27,29 @@
   <div class='yui-main'>
     <div class='yui-b'>
       <?php foreach($projectGroups as $projects):?>
-      <div class="yui-gb">  
+      <div class="yui-g">  
         <?php foreach($projects as $key => $project):?>
         <?php
         $class = 0;
         if($key == 0) $class = 'first';
-        if($key == 3) break;
+        if($key == 2) break;
         ?>
-        <div class="yui-u <?php echo $class;?>">  
-          <table class='table-1'>
-            <caption class='a-center'><?php echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $project->name);?></caption>
-            <tr>
-              <th><?php echo $lang->project->beginAndEnd;?></th>
-              <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->project->status;?></th>
-              <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
-            </tr>
-            <tr><td colspan='2' class='a-center'><?php echo $burns[$project->id];?></td></tr>
-            <tr><td colspan='2' class='a-center'><?php echo html::a($this->createLink('project', 'burn', "projectID=$project->id"), $lang->project->largeBurnChart);?></td></tr>
-          </table>
+        <div class="yui-u <?php echo $class;?> mb-10px">  
+          <div class='box-title'>
+            <div class='a-center'>
+            <?php 
+            echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $project->name);
+            echo '(' . $project->begin . ' ~ ' . $project->end . ')';
+            ?>
+            </div>
+          </div>
+          <div class='box-content a-center'>
+            <?php
+            echo $burns[$project->id];
+            echo html::linkButton($lang->project->largeBurnChart, $this->createLink('project', 'burn', "projectID=$project->id"));
+            ?>
+          </div>
+
         </div>  
         <?php endforeach;?>
       </div>
