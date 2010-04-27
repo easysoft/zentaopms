@@ -411,56 +411,41 @@ class projectModel extends model
     }
 
     /* 燃烧图所需要的数据。*/
-    public function getBurnData($projectID = 0)
+    public function getBurnData($projectID = 0, $itemCounts = 21)
     {
-        $project = $this->getById($projectID);
-        $sql     = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
+        /* 获得项目的信息，和已经计算过的燃烧图数量。*/
+        $project    = $this->getById($projectID);
+        $burnCounts = $this->dao->select('count(*) AS counts')->from(TABLE_BURN)->where('project')->eq($projectID)->fetch('counts');
 
-        /* 没有指定结束日期的情况。*/
-        if($project->end == '0000-00-00')
+        /* 如果已经有超过$itemCounts的数据，则直接查找最后$itemCounts的数据。*/
+        $sql = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
+        if($burnCounts > $itemCounts)
         {
-            $sets = $sql->orderBy('date_desc')->limit(14)->fetchAll('name');
-            $sets = array_reverse($sets);
-
-            /* 如果没有记录，手工补齐。*/
-            if(!$sets)
-            {
-                $current = time();
-                for($i = 0; $i < 14; $i ++)
-                {
-                    $nextDay = date(DT_DATE1, $current + 60 * 60 * 24 * $i);
-                    $set     = array('name' => $nextDay, 'value' => '');
-                    $sets[]  = (object)$set;
-                }
-            }
-            foreach($sets as $set) $set->name = substr($set->name, 5);
-            return $sets;
+            $sets = $sql->orderBy('date DESC')->limit($itemCounts)->fetchAll('name');
         }
         else
         {
-            $sets    = $sql->orderBy('date')->fetchAll('name');
-            $current = $project->begin;
-            $end     = $project->end;
-            if($sets)
+            /* 不足$itemCounts，先将burn表里面的数据查出，再进行补齐。*/
+            $sets    = $sql->orderBy('date ASC')->fetchAll('name');
+            $current = helper::today();
+            if($project->end != '0000-00-00')
             {
-                end($sets);
-                $current = key($sets);
+                $period = helper::diffDate($project->end, $project->begin);
+                $counts = $period > $itemCounts ? $itemCounts : $period;
             }
-
-            /* 根据当前日期和项目最后结束的日期，补足后续日期。*/
-            if(helper::diffDate($end, $current) > 0)
+            else
             {
-                while(true)
-                {
-                    $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
-                    $current = $nextDay;
-                    $sets[$current]->name = $current;
-                    $sets[$current]->value = '';    // value为空，这样fushioncharts不会打印节点。
-                    if($nextDay == $end) break;
-                }
+                $counts = $itemCounts;
             }
-            foreach($sets as $set) $set->name = substr($set->name, 5);
-            return $sets;
+            for($i = 0; $i < $counts - $burnCounts; $i ++)
+            {
+                $sets[$current]->name = $current;
+                $sets[$current]->value = '';
+                $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
+                $current = $nextDay;
+            }
         }
+        foreach($sets as $set) $set->name = substr($set->name, 5);
+        return $sets;
     }
 }
