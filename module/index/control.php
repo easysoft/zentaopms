@@ -43,14 +43,14 @@ class index extends control
         foreach($projects as $project)
         {
             $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph);
-            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 200);
+            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 260);
         }
-        $projectGroups = array_chunk($projects, 3);
+        $projectGroups = array_chunk($projects, 2);
 
         $this->view->projectGroups = $projectGroups;
         $this->view->burns         = $burns;
         $this->view->counts        = count($projects);
-        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 25);
+        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 30);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->users['guest']= 'guest';    // append the guest account.
         $this->display();
