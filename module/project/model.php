@@ -437,7 +437,7 @@ class projectModel extends model
             {
                 $counts = $itemCounts;
             }
-            for($i = 0; $i < $counts - $burnCounts; $i ++)
+            for($i = 0; $i <= $counts - $burnCounts; $i ++)
             {
                 $sets[$current]->name = $current;
                 $sets[$current]->value = '';
