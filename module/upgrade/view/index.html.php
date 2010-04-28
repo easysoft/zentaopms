@@ -22,6 +22,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<style>body{background:white}</style>
 <div class='yui-d0' style='margin-top:50px'>
   <table align='center' class='table-5 f-14px'>
     <caption><?php echo $lang->upgrade->warnning;?></caption>

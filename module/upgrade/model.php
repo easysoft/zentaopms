@@ -82,6 +82,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -89,21 +90,25 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
         }
         elseif($fromVersion == '0_5beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.5'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
         }
         elseif($fromVersion == '0_6beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
         }
         elseif($fromVersion == '1_0beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
         }
         elseif($fromVersion == '1_0rc1')
         {
@@ -151,7 +156,7 @@ class upgradeModel extends model
     }
 
     /* 从1.0rc1版本升级到1.0rc2版本。*/
-    private function upgradeFrom1_0betaTo1_0rc2()
+    private function upgradeFrom1_0rc1To1_0rc2()
     {
         $this->execSQL($this->getUpgradeFile('1.0.rc1'));
         if(!$this->isError()) $this->updateVersion('1.0rc2');

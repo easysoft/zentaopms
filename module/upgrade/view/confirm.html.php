@@ -22,6 +22,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<style>body{background:white}</style>
 <div class='yui-d0' style='margin-top:50px'>
   <form method='post' action='<?php echo inlink('execute');?>'>
   <table align='center' class='table-6 f-14px'>
