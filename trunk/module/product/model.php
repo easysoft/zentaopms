@@ -64,7 +64,6 @@ class productModel extends model
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->onCaseOf($mode == 'noclosed')->andWhere('status')->ne('closed')->endCase()
-            ->orderBy('id desc')
             ->fetchPairs();
     }
 
