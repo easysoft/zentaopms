@@ -37,6 +37,7 @@ class upgradeModel extends model
             $this->upgradeFrom0_5To0_6();
             $this->upgradeFrom0_6To1_0_B();
             $this->upgradeFrom1_0betaTo1_0rc1();
+            $this->upgradeFrom1_0rc1To1_0rc2();
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -44,21 +45,29 @@ class upgradeModel extends model
             $this->upgradeFrom0_5To0_6();
             $this->upgradeFrom0_6To1_0_B();
             $this->upgradeFrom1_0betaTo1_0rc1();
+            $this->upgradeFrom1_0rc1To1_0rc2();
         }
         elseif($fromVersion == '0_5beta')
         {
             $this->upgradeFrom0_5To0_6();
             $this->upgradeFrom0_6To1_0_B();
             $this->upgradeFrom1_0betaTo1_0rc1();
+            $this->upgradeFrom1_0rc1To1_0rc2();
         }
         elseif($fromVersion == '0_6beta')
         {
             $this->upgradeFrom0_6To1_0_B();
             $this->upgradeFrom1_0betaTo1_0rc1();
+            $this->upgradeFrom1_0rc1To1_0rc2();
         }
         elseif($fromVersion == '1_0beta')
         {
             $this->upgradeFrom1_0betaTo1_0rc1();
+            $this->upgradeFrom1_0rc1To1_0rc2();
+        }
+        elseif($fromVersion == '1_0rc1')
+        {
+            $this->upgradeFrom1_0rc1To1_0rc2();
         }
     }
 
@@ -95,6 +104,10 @@ class upgradeModel extends model
         elseif($fromVersion == '1_0beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
+        }
+        elseif($fromVersion == '1_0rc1')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
         }
 
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
@@ -135,6 +148,13 @@ class upgradeModel extends model
         $this->execSQL($this->getUpgradeFile('1.0.beta'));
         $this->updateCompany();
         if(!$this->isError()) $this->updateVersion('1.0rc1');
+    }
+
+    /* 从1.0rc1版本升级到1.0rc2版本。*/
+    private function upgradeFrom1_0betaTo1_0rc2()
+    {
+        $this->execSQL($this->getUpgradeFile('1.0.rc1'));
+        if(!$this->isError()) $this->updateVersion('1.0rc2');
     }
 
     /* 更新每个表的company字段。*/
