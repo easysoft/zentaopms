@@ -111,7 +111,7 @@ class userModel extends model
         /* 进行其他的检查，更新数据库。*/
         $userID = (int)$userID;
         $user = fixer::input('post')
-            ->setDefault('join', '0000-00-00')
+            ->setIF(isset($_POST['join']) and $this->post->join == '', 'join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->remove('password1, password2')
             ->get();

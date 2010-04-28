@@ -46,7 +46,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->join;?></th>
-        <td><?php echo html::input('join', '', "class='text-3 date'");?></td>
+        <td><?php echo html::input('join', $user->join, "class='text-3 date'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->user->gendar;?></th>
