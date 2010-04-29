@@ -31,7 +31,7 @@
       <div class='f-right'><?php common::printLink('testtask', 'create', "product=$productID", $lang->testtask->create);?></div>
     </caption>
     <thead>
-    <tr>
+    <tr class='colhead'>
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th><?php echo $lang->testtask->name;?></th>
       <th><?php echo $lang->testtask->project;?></th>
