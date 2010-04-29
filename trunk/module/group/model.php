@@ -156,7 +156,6 @@ class groupModel extends model
             $data->account = $account;
             $data->group   = $groupID;
             $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
-            $this->dbh->exec($sql);
         }
     }
 }
