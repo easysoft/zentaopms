@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<style>body{background:white}</style>
 <div id='yui-d0' style='margin-top:20px'>
   <form method='post'>
     <table class='table-1'> 
