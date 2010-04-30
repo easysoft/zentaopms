@@ -64,12 +64,12 @@ $(document).ready(function(){
         </td>
       </tr>  
     </table>
+    <div class='yui-d0' id='debugbar'><iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hidden'></iframe></div>
     <div id='poweredby'>
     powered by <a href='http://www.zentao.cn' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>). <br />
     <script src='http://www.zentao.cn/check.php?v=<?php echo $config->version;?>'></script>
     </div>
   </form>
 </div>  
-<div class='yui-d0' id='debugbar'><iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hidden'></iframe></div>
 </body>
 </html>
