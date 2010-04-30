@@ -13,6 +13,9 @@ $(function() {
         function(){$(this).addClass('hoover')},
         function(){$(this).removeClass('hoover')}
     );
+
+    /* IE6下面click事件和colorbox冲突。暂时去除该功能。*/
+    if($.browser.msie && Math.floor(parseInt($.browser.version)) == 6) return; 
     $('.tablesorter tbody tr').click(
         function()
         {
