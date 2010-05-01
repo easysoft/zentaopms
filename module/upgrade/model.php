@@ -38,6 +38,7 @@ class upgradeModel extends model
             $this->upgradeFrom0_6To1_0_B();
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
+            $this->upgradeFrom1_0rc2To1_0stable();
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -46,6 +47,7 @@ class upgradeModel extends model
             $this->upgradeFrom0_6To1_0_B();
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
+            $this->upgradeFrom1_0rc2To1_0stable();
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -53,21 +55,25 @@ class upgradeModel extends model
             $this->upgradeFrom0_6To1_0_B();
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
+            $this->upgradeFrom1_0rc2To1_0stable();
         }
         elseif($fromVersion == '0_6beta')
         {
             $this->upgradeFrom0_6To1_0_B();
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
+            $this->upgradeFrom1_0rc2To1_0stable();
         }
         elseif($fromVersion == '1_0beta')
         {
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
+            $this->upgradeFrom1_0rc2To1_0stable();
         }
         elseif($fromVersion == '1_0rc1')
         {
             $this->upgradeFrom1_0rc1To1_0rc2();
+            $this->upgradeFrom1_0rc2To1_0stable();
         }
     }
 
@@ -160,6 +166,12 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('1.0.rc1'));
         if(!$this->isError()) $this->updateVersion('1.0rc2');
+    }
+
+    /* 从1.0rc2版本升级到1.0stable版本。*/
+    private function upgradeFrom1_0rc1To1_0rc2()
+    {
+        $this->updateVersion('1.0rc2');
     }
 
     /* 更新每个表的company字段。*/
