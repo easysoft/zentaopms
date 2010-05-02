@@ -169,9 +169,9 @@ class upgradeModel extends model
     }
 
     /* 从1.0rc2版本升级到1.0stable版本。*/
-    private function upgradeFrom1_0rc1To1_0rc2()
+    private function upgradeFrom1_0rc2To1_0stable()
     {
-        $this->updateVersion('1.0rc2');
+        $this->updateVersion('1.0stable');
     }
 
     /* 更新每个表的company字段。*/
