@@ -6,7 +6,7 @@ include 'colorbox.html.php';
 /* 自动执行的代码。*/
 $(document).ready(function() 
 {
-    $("a.about").colorbox({width:800, height:330, iframe:true, transition:'elastic', speed:500, scrolling:false});
+    $("a.about").colorbox({width:900, height:330, iframe:true, transition:'elastic', speed:500, scrolling:false});
 });
 </script>
 

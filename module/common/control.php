@@ -127,7 +127,7 @@ EOT;
         {
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
-        //echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
+        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
     }
 
     /* ´òÓ¡Ö÷²Ëµ¥¡£*/
