@@ -12,7 +12,7 @@
  * 7. 验证attri的传毒是否正确。
  * 8. 验证options为空，是否返回false。
  *
- * @author  chunsheng.wang <wwccss@gmail.com>
+ * @author  chunsheng.wang <chunsheng@cnezsoft.com>
  * @version $Id$
  */
 include '../front.class.php';

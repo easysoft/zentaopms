@@ -9,7 +9,7 @@
  * 4. 验证attrib传递是否正确。
  * 5. 验证options为空，是否返回false。
  *
- * @author  chunsheng.wang <wwccss@gmail.com>
+ * @author  chunsheng.wang <chunsheng@cnezsoft.com>
  * @version $Id$
  */
 include '../front.class.php';
