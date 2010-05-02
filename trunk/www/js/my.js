@@ -196,7 +196,7 @@ function setHelpLink()
             if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
             if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
             currentFieldName = currentFieldName.toLowerCase();
-            $(this).after(' <a class="helplink" href=' + zentaoHelpRoot + '?lang=' + clientLang + '&module=' + currentModule + '&method=' + currentMethod + '&field=' + currentFieldName + '>?</a> ');
+            $(this).after(' <a class="helplink" href=http://www.zentaoms.com/goto.php?item=fieldref&extra=lang=' + clientLang + ',module=' + currentModule + ',method=' + currentMethod + ',field=' + currentFieldName + ' target="_blank">?</a> ');
         }
     );
 }
@@ -209,7 +209,7 @@ $(document).ready(function()
 {
     setNowrapObjTitle();
     setRequiredFields();
-    //setHelpLink();
+    setHelpLink();
     setProductSwitcher();
     setProjectSwitcher();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。

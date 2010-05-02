@@ -470,7 +470,6 @@ currentModule  = '$moduleName';
 currentMethod  = '$methodName';
 clientLang     = '$clientLang';
 requiredFields = '$requiredFields';
-zentaoHelpRoot = '$config->helpRoot';
 lblShowAll     = '$lang->showAll';
 lblHideClosed  = '$lang->hideClosed';
 </script>

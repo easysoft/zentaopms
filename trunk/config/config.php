@@ -23,7 +23,6 @@
  */
 /* 基本参数设定。*/
 $config->version     = '1.0.stable';                    // 版本号，切勿修改。
-$config->helpRoot    = 'http://doc.zentao.cn/help/';    // 在线帮助的URI地址。
 $config->encoding    = 'UTF-8';                         // 网站的编码。
 $config->cookiePath  = '/';                             // cookie的有效路径。
 $config->cookieLife  = time() + 2592000;                // cookie的生命周期。
