@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 Chunsheng Wang
- * @author      Chunsheng Wang <wwccss@263.net>
+ * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     common
  * @version     $Id$
- * @link        http://www.zentao.cn
+ * @link        http://www.zentaoms.com
  */
 class common extends control
 {
@@ -136,7 +136,7 @@ EOT;
         global $app, $lang;
         $logo = $app->getWebRoot() . 'theme/default/images/main/logo.png';
         echo "<ul>\n";
-        echo "<li style='padding:0; height:30px'><a href='http://www.zentao.cn' target='_blank'><img src='$logo' /></a></li>\n";
+        echo "<li style='padding:0; height:30px'><a href='http://www.zentaoms.com' target='_blank'><img src='$logo' /></a></li>\n";
 
         /* 设定当前的主菜单项。默认先取当前的模块名，如果有该模块所对应的菜单分组，则取分组名作为主菜单项。*/
         $mainMenu = $moduleName;

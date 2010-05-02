@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright   Copyright 2009-2010 Chunsheng Wang
- * @author      Chunsheng Wang <wwccss@263.net>
+ * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
  * @version     $Id$
  */
@@ -66,8 +66,8 @@ $(document).ready(function(){
     </table>
     <div class='yui-d0' id='debugbar'><iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hidden'></iframe></div>
     <div id='poweredby'>
-    powered by <a href='http://www.zentao.cn' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>). <br />
-    <script src='http://www.zentao.cn/check.php?v=<?php echo $config->version;?>'></script>
+    powered by <a href='http://www.zentaoms.com' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>). <br />
+    <script src='http://www.zentaoms.com/check.php?v=<?php echo $config->version;?>'></script>
     </div>
   </form>
 </div>  
