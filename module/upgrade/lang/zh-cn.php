@@ -49,3 +49,4 @@ $lang->upgrade->fromVersions['0_5beta'] = '0.5 BETA';
 $lang->upgrade->fromVersions['0_6beta'] = '0.6 BETA';
 $lang->upgrade->fromVersions['1_0beta'] = '1.0 BETA';
 $lang->upgrade->fromVersions['1_0rc1']  = '1.0 RC1';
+$lang->upgrade->fromVersions['1_0rc2']  = '1.0 RC2';
