@@ -38,18 +38,18 @@ include '../framework/control.class.php';
 include '../framework/model.class.php';
 include '../framework/helper.class.php';
 
-/* 将输入的参数解析成对于的变量。*/
-$request = parse_url(trim($argv[1]));
-$_SERVER['HTTP_HOST']   = $request['host'];
-$_SERVER['PATH_INFO']   = $request['path'];
-$_SERVER['REQUEST_URI'] = $request['query'];
-if(isset($request['query'])) parse_str($request['query'], $_GET);
-
 /* 实例化路由对象，并加载配置，连接到数据库。*/
 $app    = router::createApp('pms', dirname(dirname(__FILE__)));
 $config = $app->loadConfig('common');
 $app->setDebug();
 $dbh    = $app->connectDB();
+
+/* 将输入的参数解析成对于的变量。*/
+$request = parse_url(trim($argv[1]));
+$_SERVER['HTTP_HOST']   = $request['host'];
+$_SERVER['PATH_INFO']   = str_replace($config->webRoot, '', $request['path']);
+$_SERVER['REQUEST_URI'] = isset($request['query']) ? $request['query'] : '';
+if(isset($request['query'])) parse_str($request['query'], $_GET);
 
 /* 设置时区。*/
 $app->setTimezone();
