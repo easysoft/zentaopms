@@ -1,0 +1,69 @@
+#!/usr/bin/env php
+<?php
+/**
+ * The command router file of zentaopms.
+ *
+ * ZenTaoPMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * ZenTaoPMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ZenTaoPMS.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @copyright   Copyright: 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     ZenTaoPMS
+ * @version     $Id$
+ * @link        http://www.zentaoms.com
+ */
+error_reporting(0);
+define('IN_SHELL', true);
+
+/* 获取命令参数。 */
+if($argc != 2)
+{
+    die('Usage: ' . basename(__FILE__) . " <request>\n");
+}
+
+/* 包含必须的类文件。*/
+chdir(dirname(__FILE__));
+include '../framework/router.class.php';
+include '../framework/control.class.php';
+include '../framework/model.class.php';
+include '../framework/helper.class.php';
+
+/* 将输入的参数解析成对于的变量。*/
+$request = parse_url(trim($argv[1]));
+$_SERVER['HTTP_HOST']   = $request['host'];
+$_SERVER['PATH_INFO']   = $request['path'];
+$_SERVER['REQUEST_URI'] = $request['query'];
+if(isset($request['query'])) parse_str($request['query'], $_GET);
+
+/* 实例化路由对象，并加载配置，连接到数据库。*/
+$app    = router::createApp('pms', dirname(dirname(__FILE__)));
+$config = $app->loadConfig('common');
+$app->setDebug();
+$dbh    = $app->connectDB();
+
+/* 设置时区。*/
+$app->setTimezone();
+
+/* 设置终端使用的语言，并加载共用的模块。*/
+$app->setClientLang('zh-cn');
+$lang   = $app->loadLang('common');
+$common = $app->loadCommon();
+
+/* 加载相应的lib文件，并设置超全局变量的引用。*/
+$app->loadClass('front',  $static = true);
+$app->loadClass('filter', $static = true);
+$app->setSuperVars();
+
+/* 解析请求，加载模块。*/
+$app->parseRequest();
+$app->loadModule();
