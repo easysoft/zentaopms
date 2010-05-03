@@ -22,11 +22,11 @@
  * @link        http://www.zentaoms.com
  */
 /* 基本参数设定。*/
-$config->version     = '1.0.stable';                    // 版本号，切勿修改。
-$config->encoding    = 'UTF-8';                         // 网站的编码。
-$config->cookiePath  = '/';                             // cookie的有效路径。
-$config->cookieLife  = time() + 2592000;                // cookie的生命周期。
-$config->timezone    = 'Asia/Shanghai';                 //时区设置，详细的列表，请访问 http://www.php.net/manual/en/timezones.php
+$config->version     = '1.0';             // 版本号，切勿修改。
+$config->encoding    = 'UTF-8';           // 网站的编码。
+$config->cookiePath  = '/';               // cookie的有效路径。
+$config->cookieLife  = time() + 2592000;  // cookie的生命周期。
+$config->timezone    = 'Asia/Shanghai';   //时区设置，详细的列表，请访问 http://www.php.net/manual/en/timezones.php
 
 /* 请求方式设置。*/
 $config->requestType = 'PATH_INFO';       // 如何获取当前请求的信息，可选值：PATH_INFO|GET
