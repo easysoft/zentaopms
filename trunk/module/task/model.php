@@ -95,7 +95,6 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')
             ->on('t1.owner = t3.account')
             ->where('t1.id')->eq((int)$taskID)
-            ->andWhere('t3.company')->eq($this->app->company->id)
             ->fetch();
         if(!$task) return false;
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
@@ -116,7 +115,6 @@ class taskModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->onCaseOf($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->endCase()
             ->onCaseOf($status != 'all' and $status != 'needConfirm')->andWhere('t1.status')->in($status)->endCase()
-            ->andWhere('t3.company')->eq($this->app->company->id)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -135,7 +133,6 @@ class taskModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->onCaseOf($status != 'all')->andWhere('t1.status')->in($status)->endCase()
-            ->andWhere('t2.company')->eq($this->app->company->id)
             ->orderBy($orderBy)
             ->query();
         while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->ownerRealName:$task->name";
