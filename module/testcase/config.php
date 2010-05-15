@@ -1,8 +1,8 @@
 <?php
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
-$config->testcase->search['fields']['id']             = $lang->testcase->id;
 $config->testcase->search['fields']['title']          = $lang->testcase->title;
+$config->testcase->search['fields']['id']             = $lang->testcase->id;
 $config->testcase->search['fields']['keywords']       = $lang->testcase->keywords;
 $config->testcase->search['fields']['openedBy']       = $lang->testcase->openedBy;
 $config->testcase->search['fields']['lastEditedBy']   = $lang->testcase->lastEditedBy;

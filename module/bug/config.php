@@ -1,8 +1,8 @@
 <?php
 global $lang;
 $config->bug->search['module']                   = 'bug';
-$config->bug->search['fields']['id']             = $lang->bug->id;
 $config->bug->search['fields']['title']          = $lang->bug->title;
+$config->bug->search['fields']['id']             = $lang->bug->id;
 $config->bug->search['fields']['keywords']       = $lang->bug->keywords;
 $config->bug->search['fields']['steps']          = $lang->bug->steps;
 $config->bug->search['fields']['assignedTo']     = $lang->bug->assignedTo;
