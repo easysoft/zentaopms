@@ -98,7 +98,7 @@ class buildModel extends model
             ->specialChars('desc')
             ->add('project', (int)$projectID)
             ->get();
-        $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name','unique')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
