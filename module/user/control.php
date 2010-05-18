@@ -183,6 +183,7 @@ class user extends control
         {
             $this->referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
         }
+        $this->referer = htmlspecialchars($this->referer);
     }
 
     /* 创建一个用户。*/
