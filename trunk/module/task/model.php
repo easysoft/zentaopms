@@ -207,11 +207,15 @@ class taskModel extends model
         foreach($tasks as $task)
         {
             /* 计算是否延期。*/
-            if($task->deadline != '0000-00-00')
-            {
-                $delay = helper::diffDate($today, $task->deadline);
-                if($delay > 0) $task->delay = $delay;
-            }
+            if($task->status !== 'done' and $task->status !== 'cancel')
+            {   
+                if($task->deadline != '0000-00-00')
+                {
+                    $delay = helper::diffDate($today, $task->deadline);
+                    if($delay > 0) $task->delay = $delay;
+                }
+            }    
+	    
             /* 判断需求是否变更。*/
             $task->needConfirm = false;
             if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
@@ -226,12 +230,17 @@ class taskModel extends model
     private function processTask($task)
     {
         $today = helper::today();
-        if($task->deadline != '0000-00-00')
+       
+        /* 计算是否延期。*/
+        if($task->status !== 'done' and $task->status !== 'cancel')
         {
-            $delay = helper::diffDate($today, $task->deadline);
-            if($delay > 0) $task->delay = $delay;
-        }
-
+            if($task->deadline != '0000-00-00')
+            {
+                $delay = helper::diffDate($today, $task->deadline);
+            	if($delay > 0) $task->delay = $delay;            
+	        } 
+	    }
+	    
         /* 判断需求是否变更。*/
         $task->needConfirm = false;
         if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
