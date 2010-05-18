@@ -449,9 +449,9 @@ class bug extends control
         /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
 
-        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
+        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->close;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->bug->activate;
+        $this->view->position[]    = $this->lang->bug->close;
 
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs();
