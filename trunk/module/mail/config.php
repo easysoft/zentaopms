@@ -6,7 +6,7 @@ $config->mail->turnon = false;
 $config->mail->fromAddress    = '';     // 发件人地址。
 $config->mail->fromName       = '';     // 发件人名称。 
 
-/* 设置发信方式，目前支持mail|sendmail|smtp|gmail。*/
+/* 设置发信方式，目前支持phpmail|sendmail|smtp|gmail。*/
 $config->mail->mta            = 'gmail'; 
 
 /* 普通SMTP的配置：*/
