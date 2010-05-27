@@ -374,7 +374,7 @@ class story extends control
                 $ccList   = substr($ccList, $commaPos + 1);
             }
         }
-        elseif($toList = 'closed')
+        elseif($toList == 'closed')
         {
             $toList = $story->openedBy;
         }
