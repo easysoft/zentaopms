@@ -36,7 +36,7 @@ include '../../common/view/tablesorter.html.php';
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->user->realname;?></th>
           <th><?php echo $lang->user->account;?></th>
-          <th><?php echo $lang->user->nickname;?></th>
+          <?php // echo $lang->user->nickname;?>
           <th><?php echo $lang->user->email;?></th>
           <th><?php echo $lang->user->gendar;?></th>
           <th><?php echo $lang->user->phone;?></th>
@@ -51,7 +51,7 @@ include '../../common/view/tablesorter.html.php';
           <td><?php echo $user->id;?></td>
           <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
-          <td><?php echo $user->nickname;?></td>
+          <?php // echo $user->nickname;?>
           <td><?php echo html::mailto($user->email);?></td>
           <td><?php if(isset($lang->user->gendarList->{$user->gendar})) echo $lang->user->gendarList->{$user->gendar};?></td>
           <td><?php echo $user->phone;?></td>
