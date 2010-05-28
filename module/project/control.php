@@ -29,8 +29,11 @@ class project extends control
     public function __construct()
     {
         parent::__construct();
-        $this->projects = $this->project->getPairs();
-        if(!$this->projects and $this->methodName != 'create') $this->locate($this->createLink('project', 'create'));
+        if($this->methodName != 'computeburn')
+        {
+            $this->projects = $this->project->getPairs();
+            if(!$this->projects and $this->methodName != 'create') $this->locate($this->createLink('project', 'create'));
+        }
     }
 
     /* 项目视图首页，*/
@@ -320,7 +323,8 @@ class project extends control
     /* 计算燃烧图数据。*/
     public function computeBurn()
     {
-        $this->project->computeBurn();
+        $this->view->burns = $this->project->computeBurn();
+        $this->display();
     }
 
     /* 团队成员。*/

@@ -397,17 +397,27 @@ class projectModel extends model
     public function computeBurn()
     {
         $today    = helper::today();
-        $projects = $this->dao->select('id')->from(TABLE_PROJECT)
+        $burns    = array();
+
+        $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where("end >= '$today'")
             ->orWhere('end')->eq('0000-00-00')
             ->fetchPairs();
+        if(!$projects) return $burns;
+
         $burns = $this->dao->select("project, '$today' AS date, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
-            ->where('project')->in($projects)
+            ->where('project')->in(array_keys($projects))
             ->andWhere('status')->ne('cancel')
             ->groupBy('project')
             ->fetchAll();
-        foreach($burns as $burn) $this->dao->replace(TABLE_BURN)->data($burn)->exec();
+
+        foreach($burns as $Key => $burn)
+        {
+            $this->dao->replace(TABLE_BURN)->data($burn)->exec();
+            $burn->projectName = $projects[$burn->project];
+        }
+        return $burns;
     }
 
     /* 燃烧图所需要的数据。*/
@@ -422,6 +432,7 @@ class projectModel extends model
         if($burnCounts > $itemCounts)
         {
             $sets = $sql->orderBy('date DESC')->limit($itemCounts)->fetchAll('name');
+            $sets = array_reverse($sets);
         }
         else
         {
