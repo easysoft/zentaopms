@@ -78,8 +78,10 @@ caption       {border:1px solid #b3c8dc; background:#cbd5d9; margin:0; padding:5
 
 .rowhead     {font-weight:bold; text-align:right; width:100px}
 .fixed       {table-layout:fixed}
-.nobr                {overflow:hidden; white-space:nowrap;}
+
+.nobr        {overflow:hidden; white-space:nowrap;}
 .fixed th, .fixed td {overflow:hidden; white-space:nowrap;}
+.nofixed th, .nofixed td  {overflow:visible; white-space:normal}
 
 .odd     {background:#fff;}
 .even    {background:#ebf0f4;}

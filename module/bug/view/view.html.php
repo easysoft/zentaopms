@@ -186,16 +186,16 @@
           <td class='rowhead w-p20'><?php echo $lang->bug->project;?></td>
           <td><?php if($bug->project) echo html::a($this->createLink('project', 'browse', "projectid=$bug->project"), $bug->projectName);?></td>
         </tr>
-        <tr>
+        <tr class='nofixed'>
           <td class='rowhead'><?php echo $lang->bug->story;?></td>
           <td>
             <?php
             if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story"), $bug->storyTitle);
             if($bug->storyStatus == 'active' and $bug->latestStoryVersion > $bug->storyVersion)
             {
-                echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                echo html::a($this->createLink('bug', 'confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin');
-                echo ")";
+                 echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                 echo html::a($this->createLink('bug', 'confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin');
+                 echo ")";
             }
             ?>
           </td>
