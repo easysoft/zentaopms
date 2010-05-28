@@ -340,8 +340,15 @@ EOT;
      * @return void
      */
     private function setCompany()
-    {
-        if(isset($_SESSION['company']) and $_SESSION['company']->pms == $_SERVER['HTTP_HOST'])
+    {        
+        $httphost = $_SERVER['HTTP_HOST'];
+        if(strpos($httphost, ":"))
+        {
+            $httphost = explode(":", $httphost);
+            $httphost = $httphost[0];
+        }
+
+        if(isset($_SESSION['company']) and $_SESSION['company']->pms == $httphost)
         {
             $this->app->company = $_SESSION['company'];
         }
@@ -350,7 +357,7 @@ EOT;
             $company = $this->company->getByDomain();
             if(!$company and isset($this->config->default->domain)) $company = $this->company->getByDomain($this->config->default->domain);
             if(!$company) $company = $this->company->getFirst();
-            if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $_SERVER['HTTP_HOST']), __FILE__, __LINE__, $exit = true);
+            if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $httphost), __FILE__, __LINE__, $exit = true);
             $_SESSION['company'] = $company;
             $this->app->company  = $company;
         }
@@ -456,6 +463,11 @@ EOT;
         global $config;
         $httpType = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on' ? 'https' : 'http';
         $httpHost = $_SERVER['HTTP_HOST'];
+        if(strpos($httpHost, ":"))
+        {
+            $httpHost = explode(":", $httpHost);
+            $httpHost = $httpHost[0];
+        }
         return "$httpType://$httpHost";
     }
 
