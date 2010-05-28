@@ -36,8 +36,8 @@
       <td><?php echo $user->realname;?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->user->nickname;?></th>
-      <td><?php echo $user->nickname;?></td>
+      <?php // echo $lang->user->nickname;?>
+      <?php // echo $user->nickname;?>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->user->email;?></th>
