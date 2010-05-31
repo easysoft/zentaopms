@@ -325,6 +325,7 @@ class project extends control
     {
         $this->view->burns = $this->project->computeBurn();
         $this->display();
+        exit;
     }
 
     /* 团队成员。*/
