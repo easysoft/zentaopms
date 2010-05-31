@@ -408,6 +408,7 @@ class projectModel extends model
         $burns = $this->dao->select("project, '$today' AS date, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq('0')
             ->andWhere('status')->ne('cancel')
             ->groupBy('project')
             ->fetchAll();
