@@ -36,15 +36,18 @@ class todoModel extends model
             ->specialChars('type,name,desc')
             ->cleanInt('date, pri, begin, end, private')
             ->setIF($this->post->type != 'custom', 'name', '')
-            ->setIF($this->post->type == 'bug',  'idvalue', $this->post->bug)
-            ->setIF($this->post->type == 'task', 'idvalue', $this->post->task)
+            ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
+            ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
             ->remove('bug, task')
             ->get();
+
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
+            ->checkIF($todo->type == 'bug'  and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($todo->type == 'task' and $todo->idvalue == 0, 'idvalue', 'notempty')
             ->exec();
         return $this->dao->lastInsertID();
     }

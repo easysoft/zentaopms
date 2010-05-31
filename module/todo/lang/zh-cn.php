@@ -50,6 +50,7 @@ $lang->todo->name        = '名称';
 $lang->todo->status      = '状态';
 $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事务';
+$lang->todo->idvalue     = '任务或Bug';
 
 $lang->todo->week  = '星期';
 $lang->todo->today = '今天';
