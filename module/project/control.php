@@ -138,6 +138,7 @@ class project extends control
         $groupBy     = strtolower(str_replace('`', '', $groupBy));
         $taskLang    = $this->lang->task;
         $groupByList = array();
+        $groupTasks  = array();
         foreach($tasks as $task)
         {
             if($groupBy == 'story')
