@@ -148,7 +148,7 @@ $(function() {
   <div id='titlebar'>
     <div id='main'>
     BUG #<?php echo $bug->id . $lang->colon;?>
-    <?php echo html::input('title', $bug->title, 'class=text-1');?>
+    <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class=text-1');?>
     </div>
     <div><?php echo html::submitButton()?></div>
   </div>
