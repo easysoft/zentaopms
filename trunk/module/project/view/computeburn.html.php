@@ -16,7 +16,7 @@
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
  * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Fu Jia <fujia@cnezsoft.com>
  * @package     project
  * @version     $Id$
  * @link        http://www.zentaoms.com
