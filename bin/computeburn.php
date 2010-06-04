@@ -3,32 +3,33 @@
 include '../lib/snoopy/snoopy.class.php';
 
 /* 用来登录的地址，用户名和密码。*/
-$zentaoRoot  = "http://demo.zentaoms.com/";  //只有管理员能访问，请根据实际的情况进行修改。
-$account     = "demo";
-$password    = "123456";
-$requestType = "PATH_INFO";
+$zentaoRoot  = "http://pms.easysoft.com/";
+$account     = "";              // 只有管理员能访问，请根据实际的情况进行修改。
+$password    = "";
+$requestType = "PATH_INFO";     // 禅道系统访问方式，请根据实际的配置进行修改。
+
+if($account == '' and $password == '') die("Must set account and password.\n");
 
 /* 设置API地址。*/
 if($requestType == 'GET')
 {
     /* API地址，以GET方式为例。*/
-    $loginAPI      = $zentaoRoot . "?m=user&f=login"; 
-    $sessionAPI    = $zentaoRoot . "?m=api&f=getSessionID&t=json";
-    $burnAPI       = $zentaoRoot . "?m=project&f=computeburn"; 
+    $loginAPI   = $zentaoRoot . "?m=user&f=login"; 
+    $sessionAPI = $zentaoRoot . "?m=api&f=getSessionID&t=json";
+    $burnAPI    = $zentaoRoot . "?m=project&f=computeburn"; 
 }
 elseif($requestType == 'PATH_INFO')
 {
     /* API地址，以PATH_INFO方式为例。*/
-    $loginAPI      = $zentaoRoot . "user-login.json?a=1"; 
-    $sessionAPI    = $zentaoRoot . "api-getsessionid.json?a=1";
-    $burnAPI       = $zentaoRoot . "project-computeburn?a=1"; 
+    $loginAPI   = $zentaoRoot . "user-login.json?a=1"; 
+    $sessionAPI = $zentaoRoot . "api-getsessionid.json?a=1";
+    $burnAPI    = $zentaoRoot . "project-computeburn?a=1"; 
 }
 
 /* 获取session. */
 $snoopy = new Snoopy;
 $snoopy->fetch($sessionAPI);
 $session = json_decode($snoopy->results);
-
 
 /*用户登录*/
 $submitVars["account"]  = $account; 
@@ -42,7 +43,7 @@ $burns = $snoopy->results;
 
 if($burns)
 {
-    print_r($burns) . "\n";
+    echo $burns;
 }
 else
 {
