@@ -422,7 +422,7 @@ class projectModel extends model
     }
 
     /* 燃烧图所需要的数据。*/
-    public function getBurnData($projectID = 0, $itemCounts = 21)
+    public function getBurnData($projectID = 0, $itemCounts = 30)
     {
         /* 获得项目的信息，和已经计算过的燃烧图数量。*/
         $project    = $this->getById($projectID);
@@ -442,17 +442,22 @@ class projectModel extends model
             $current = helper::today();
             if($project->end != '0000-00-00')
             {
-                $period = helper::diffDate($project->end, $project->begin);
+                $period = helper::diffDate($project->end, $project->begin) + 1;
                 $counts = $period > $itemCounts ? $itemCounts : $period;
             }
             else
             {
                 $counts = $itemCounts;
             }
-            for($i = 0; $i <= $counts - $burnCounts; $i ++)
+
+            for($i = 0; $i < $counts - $burnCounts; $i ++)
             {
-                $sets[$current]->name = $current;
-                $sets[$current]->value = '';
+                if(helper::diffDate($current, $project->end) > 0) break;
+                if(!isset($sets[$current]))
+                {
+                    $sets[$current]->name = $current;
+                    $sets[$current]->value = '';
+                }
                 $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
                 $current = $nextDay;
             }

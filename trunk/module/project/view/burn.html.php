@@ -23,6 +23,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0 a-center'><?php echo $charts; ?></div>
+<div class='yui-d0 a-center'>
+  <?php
+  echo $charts; 
+  common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
+  ?>
+</div>
 <script language='Javascript'>createChart1();</script>
 <?php include '../../common/view/footer.html.php';?>

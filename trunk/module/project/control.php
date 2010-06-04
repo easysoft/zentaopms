@@ -322,11 +322,11 @@ class project extends control
     }
 
     /* 计算燃烧图数据。*/
-    public function computeBurn()
+    public function computeBurn($reload = 'no')
     {
         $this->view->burns = $this->project->computeBurn();
-        $this->display();
-        exit;
+        if($reload == 'yes') die(js::reload('parent'));
+        die($this->display());
     }
 
     /* 团队成员。*/

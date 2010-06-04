@@ -124,6 +124,7 @@ $lang->resource->project->story          = 'story';
 $lang->resource->project->build          = 'build';
 $lang->resource->project->bug            = 'bug';
 $lang->resource->project->burn           = 'burn';
+$lang->resource->project->computeBurn    = 'computeBurn';
 $lang->resource->project->burnData       = 'burnData';
 $lang->resource->project->team           = 'team';
 $lang->resource->project->manageProducts = 'manageProducts';

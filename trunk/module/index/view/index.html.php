@@ -46,7 +46,8 @@
           <div class='box-content a-center'>
             <?php
             echo $burns[$project->id];
-            echo html::linkButton($lang->project->largeBurnChart, $this->createLink('project', 'burn', "projectID=$project->id"));
+            common::printLink('project', 'burn', "projectID=$project->id", $lang->project->largeBurnChart);
+            common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
             ?>
           </div>
 

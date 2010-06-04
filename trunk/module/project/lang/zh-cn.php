@@ -75,6 +75,7 @@ $lang->project->story          = '需求列表';
 $lang->project->bug            = 'Bug列表';
 $lang->project->build          = 'Build列表';
 $lang->project->burn           = '燃尽图';
+$lang->project->computeBurn    = '更新燃尽图';
 $lang->project->burnData       = '燃尽图数据';
 $lang->project->team           = '团队成员';
 $lang->project->manageProducts = '关联产品';
