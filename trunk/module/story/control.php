@@ -232,9 +232,9 @@ class story extends control
             $this->story->review($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $result = $this->post->result;
-            if(strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
+            if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
-            $this->action->logHistory($actionID);
+            $this->action->logHistory($actionID, array());
             $this->sendMail($storyID, $actionID);
             if($this->post->result == 'reject')
             {
@@ -355,8 +355,11 @@ class story extends control
         if(strtolower($action->action) == 'changed' or strtolower($action->action) == 'reviewed')
         {
             $prjMembers = $this->story->getProjectMembers($storyID);
-            $ccList .= ',' . join(',', $prjMembers);
-            $ccList = ltrim(',', $ccList);
+            if($prjMembers)
+            {
+                $ccList .= ',' . join(',', $prjMembers);
+                $ccList = ltrim(',', $ccList);
+            }
         }
 
         if($toList == '')
