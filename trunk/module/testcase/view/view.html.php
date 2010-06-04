@@ -104,9 +104,9 @@
           ?>
           </td>
         </tr>
-        <tr>
+        <tr class='nofixed'>
           <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-          <td class='nobr'>
+          <td>
             <?php
             if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
             if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
