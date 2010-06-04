@@ -341,14 +341,14 @@ EOT;
      */
     private function setCompany()
     {        
-        $httphost = $_SERVER['HTTP_HOST'];
-        if(strpos($httphost, ":"))
+        $httpHost = $_SERVER['HTTP_HOST'];
+        if(strpos($httpHost, ":"))
         {
-            $httphost = explode(":", $httphost);
-            $httphost = $httphost[0];
+            $httpHost = explode(":", $httpHost);
+            $httpHost = $httpHost[0];
         }
 
-        if(isset($_SESSION['company']) and $_SESSION['company']->pms == $httphost)
+        if(isset($_SESSION['company']) and $_SESSION['company']->pms == $httpHost)
         {
             $this->app->company = $_SESSION['company'];
         }
@@ -357,7 +357,7 @@ EOT;
             $company = $this->company->getByDomain();
             if(!$company and isset($this->config->default->domain)) $company = $this->company->getByDomain($this->config->default->domain);
             if(!$company) $company = $this->company->getFirst();
-            if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $httphost), __FILE__, __LINE__, $exit = true);
+            if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, $exit = true);
             $_SESSION['company'] = $company;
             $this->app->company  = $company;
         }
