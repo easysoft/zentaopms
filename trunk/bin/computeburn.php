@@ -4,7 +4,7 @@ include '../lib/snoopy/snoopy.class.php';
 
 /* 用来登录的地址，用户名和密码。*/
 $zentaoRoot  = "http://pms.easysoft.com/";
-$account     = "";              // 只有管理员能访问，请根据实际的情况进行修改。
+$account     = "";              // 需要设置有更新燃尽图权限的用户名和密码。
 $password    = "";
 $requestType = "PATH_INFO";     // 禅道系统访问方式，请根据实际的配置进行修改。
 
@@ -40,13 +40,19 @@ $snoopy->submit($loginAPI, $submitVars);
 /* 直接调用project模块的burn页面。*/
 $snoopy->fetch($burnAPI . "&$session->sessionName=$session->sessionID");
 $burns = $snoopy->results;
-
 if($burns)
 {
-    echo $burns;
+    if(strpos($burns, 'script') === false)
+    {
+        echo $burns;
+    }
+    else
+    {
+        echo "No priviledge.\n";
+    }
 }
 else
 {
-    echo 'no projects' . "\n";
+    echo "no projects.\n";
 }
 ?>
