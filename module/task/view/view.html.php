@@ -81,7 +81,7 @@
           <th class='rowhead w-p20'><?php echo $lang->task->project;?></th>
           <td><?php if(!common::printLink('project', 'task', "projectID=$task->project", $project->name)) echo $project->name;?></td>
         </tr>  
-        <tr>
+        <tr class='nofixed'>
           <th class='rowhead'><?php echo $lang->task->story;?></th>
           <td>
             <?php 
