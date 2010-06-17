@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoPMS.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright   Copyright: 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright: 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id$
@@ -25,45 +25,45 @@
 error_reporting(0);
 define('IN_SHELL', true);
 
-/* »ñÈ¡ÃüÁî²ÎÊı¡£ */
+/* è·å–å‘½ä»¤å‚æ•°ã€‚ */
 if($argc != 2)
 {
     die('Usage: ' . basename(__FILE__) . " <request>\n");
 }
 
-/* °üº¬±ØĞëµÄÀàÎÄ¼ş¡£*/
+/* åŒ…å«å¿…é¡»çš„ç±»æ–‡ä»¶ã€‚*/
 chdir(dirname(__FILE__));
 include '../framework/router.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
 include '../framework/helper.class.php';
 
-/* ÊµÀı»¯Â·ÓÉ¶ÔÏó£¬²¢¼ÓÔØÅäÖÃ£¬Á¬½Óµ½Êı¾İ¿â¡£*/
+/* å®ä¾‹åŒ–è·¯ç”±å¯¹è±¡ï¼Œå¹¶åŠ è½½é…ç½®ï¼Œè¿æ¥åˆ°æ•°æ®åº“ã€‚*/
 $app    = router::createApp('pms', dirname(dirname(__FILE__)));
 $config = $app->loadConfig('common');
 $app->setDebug();
 $dbh    = $app->connectDB();
 
-/* ½«ÊäÈëµÄ²ÎÊı½âÎö³É¶ÔÓÚµÄ±äÁ¿¡£*/
+/* å°†è¾“å…¥çš„å‚æ•°è§£ææˆå¯¹äºçš„å˜é‡ã€‚*/
 $request = parse_url(trim($argv[1]));
 $_SERVER['HTTP_HOST']   = $request['host'];
 $_SERVER['PATH_INFO']   = str_replace($config->webRoot, '', $request['path']);
 $_SERVER['REQUEST_URI'] = isset($request['query']) ? $request['query'] : '';
 if(isset($request['query'])) parse_str($request['query'], $_GET);
 
-/* ÉèÖÃÊ±Çø¡£*/
+/* è®¾ç½®æ—¶åŒºã€‚*/
 $app->setTimezone();
 
-/* ÉèÖÃÖÕ¶ËÊ¹ÓÃµÄÓïÑÔ£¬²¢¼ÓÔØ¹²ÓÃµÄÄ£¿é¡£*/
+/* è®¾ç½®ç»ˆç«¯ä½¿ç”¨çš„è¯­è¨€ï¼Œå¹¶åŠ è½½å…±ç”¨çš„æ¨¡å—ã€‚*/
 $app->setClientLang('zh-cn');
 $lang   = $app->loadLang('common');
 $common = $app->loadCommon();
 
-/* ¼ÓÔØÏàÓ¦µÄlibÎÄ¼ş£¬²¢ÉèÖÃ³¬È«¾Ö±äÁ¿µÄÒıÓÃ¡£*/
+/* åŠ è½½ç›¸åº”çš„libæ–‡ä»¶ï¼Œå¹¶è®¾ç½®è¶…å…¨å±€å˜é‡çš„å¼•ç”¨ã€‚*/
 $app->loadClass('front',  $static = true);
 $app->loadClass('filter', $static = true);
 $app->setSuperVars();
 
-/* ½âÎöÇëÇó£¬¼ÓÔØÄ£¿é¡£*/
+/* è§£æè¯·æ±‚ï¼ŒåŠ è½½æ¨¡å—ã€‚*/
 $app->parseRequest();
 $app->loadModule();

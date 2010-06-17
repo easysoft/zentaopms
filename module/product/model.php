@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id$
@@ -25,10 +25,10 @@
 <?php
 class productModel extends model
 {
-    /* ÉèÖÃ²Ëµ¥¡£*/
+    /* è®¾ç½®èœå•ã€‚*/
     public function setMenu($products, $productID, $extra = '')
     {
-        /* »ñµÃµ±Ç°µÄÄ£¿éºÍ·½·¨£¬´«µİ¸øswitchProduct·½·¨£¬¹©Ò³ÃæÌø×ªÊ¹ÓÃ¡£*/
+        /* è·å¾—å½“å‰çš„æ¨¡å—å’Œæ–¹æ³•ï¼Œä¼ é€’ç»™switchProductæ–¹æ³•ï¼Œä¾›é¡µé¢è·³è½¬ä½¿ç”¨ã€‚*/
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
@@ -44,19 +44,19 @@ class productModel extends model
         common::setMenuVars($this->lang->product->menu, 'module', $productID);
     }
 
-    /* Í¨¹ıID»ñÈ¡²úÆ·ĞÅÏ¢¡£*/
+    /* é€šè¿‡IDè·å–äº§å“ä¿¡æ¯ã€‚*/
     public function getById($productID)
     {
         return $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
     }
 
-    /* »ñÈ¡²úÆ·ÁĞ±í¡£*/
+    /* è·å–äº§å“åˆ—è¡¨ã€‚*/
     public function getList()
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
     }
 
-    /* »ñÈ¡²úÆ·id=>nameÁĞ±í¡£*/
+    /* è·å–äº§å“id=>nameåˆ—è¡¨ã€‚*/
     public function getPairs()
     {
         $mode = $this->cookie->productMode;
@@ -67,16 +67,16 @@ class productModel extends model
             ->fetchPairs();
     }
 
-    /* »ñÈ¡²úÆ·µÄµÄ×´Ì¬·Ö×é¡£*/
+    /* è·å–äº§å“çš„çš„çŠ¶æ€åˆ†ç»„ã€‚*/
     public function getStatusGroups()
     {
         $products = $this->dao->select('id, name, status')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchGroup('status');
     }
 
-    /* ĞÂÔö²úÆ·¡£*/
+    /* æ–°å¢äº§å“ã€‚*/
     public function create()
     {
-        /* ´¦ÀíÊı¾İ¡£*/
+        /* å¤„ç†æ•°æ®ã€‚*/
         $product = fixer::input('post')
             ->stripTags('name,code')
             ->specialChars('desc')
@@ -91,10 +91,10 @@ class productModel extends model
         return $this->dao->lastInsertID();
     }
 
-    /* ¸üĞÂ²úÆ·¡£*/
+    /* æ›´æ–°äº§å“ã€‚*/
     public function update($productID)
     {
-        /* ´¦ÀíÊı¾İ¡£*/
+        /* å¤„ç†æ•°æ®ã€‚*/
         $productID = (int)$productID;
         $oldProduct = $this->getById($productID);
         $product = fixer::input('post')
@@ -112,7 +112,7 @@ class productModel extends model
         if(!dao::isError()) return common::createChanges($oldProduct, $product);
     }
     
-    /* »ñÈ¡²úÆ·µÄÏîÄ¿id=>valueÁĞ±í¡£*/
+    /* è·å–äº§å“çš„é¡¹ç›®id=>valueåˆ—è¡¨ã€‚*/
     public function getProjectPairs($productID)
     {
         $projects = $this->dao->select('t2.id, t2.name')
@@ -125,7 +125,7 @@ class productModel extends model
         return $projects;
     }
 
-    /* ¼ÆËã²úÆ·Â·ÏßÍ¼¡£*/
+    /* è®¡ç®—äº§å“è·¯çº¿å›¾ã€‚*/
     public function getRoadmap($productID)
     {
         $plans    = $this->loadModel('productplan')->getList($productID);

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
  * @version     $Id$
@@ -25,7 +25,7 @@
  */
 class index extends control
 {
-    /* ¹¹Ôìº¯Êı¡£*/
+    /* æ„é€ å‡½æ•°ã€‚*/
     public function __construct()
     {
         parent::__construct();
@@ -56,7 +56,7 @@ class index extends control
         $this->display();
     }
 
-    /* ²âÊÔÀ©Õ¹»úÖÆ¡£*/
+    /* æµ‹è¯•æ‰©å±•æœºåˆ¶ã€‚*/
     public function testext()
     {
         echo $this->fetch('misc', 'getsid');

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
  * @version     $Id$
@@ -27,38 +27,38 @@ class bugfreeConvertModel extends convertModel
     public $filePath    = '';
     static public $info = array();
 
-    /* ¹¹Ôìº¯Êı£¬Á¬½Óµ½Êı¾İ¿â¡£*/
+    /* æ„é€ å‡½æ•°ï¼Œè¿æ¥åˆ°æ•°æ®åº“ã€‚*/
     public function __construct()
     {
         parent::__construct();
         parent::connectDB();
     }
 
-    /* ¼ì²éTables¡£*/
+    /* æ£€æŸ¥Tablesã€‚*/
     public function checkTables()
     {
         return true;
     }
 
-    /* ¼ì²é°²×°Â·¾¶¡£*/
+    /* æ£€æŸ¥å®‰è£…è·¯å¾„ã€‚*/
     public function checkPath()
     {
         $this->setPath();
         return file_exists($this->filePath);
     }
 
-    /* ÉèÖÃ¸½¼şÂ·¾¶¡£*/
+    /* è®¾ç½®é™„ä»¶è·¯å¾„ã€‚*/
     public function setPath()
     {
         $this->filePath = realpath($this->post->installPath) . $this->app->getPathFix() . 'BugFile' . $this->app->getPathFix();
     }
 
-    /* Ö´ĞĞ×ª»»¡£*/
+    /* æ‰§è¡Œè½¬æ¢ã€‚*/
     public function execute($version)
     {
     }
 
-    /* Çå¿Õµ¼ÈëÖ®ºóµÄÊı¾İ¡£*/
+    /* æ¸…ç©ºå¯¼å…¥ä¹‹åçš„æ•°æ®ã€‚*/
     public function clear()
     {
         foreach($this->session->state as $table => $maxID)

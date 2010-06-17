@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
  * @version     $Id$
@@ -23,42 +23,42 @@
  */
 error_reporting(0);
 
-/* °üº¬±ØĞëµÄÀàÎÄ¼ş¡£*/
+/* åŒ…å«å¿…é¡»çš„ç±»æ–‡ä»¶ã€‚*/
 include '../framework/router.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
 include '../framework/helper.class.php';
 
-/* ÊµÀı»¯Â·ÓÉ¶ÔÏó£¬¼ÓÔØÅäÖÃ£¬Á¬½Óµ½Êı¾İ¿â¡£*/
+/* å®ä¾‹åŒ–è·¯ç”±å¯¹è±¡ï¼ŒåŠ è½½é…ç½®ï¼Œè¿æ¥åˆ°æ•°æ®åº“ã€‚*/
 $app    = router::createApp('pms', dirname(dirname(__FILE__)));
 $config = $app->loadConfig('common');
 
-/* ÖØĞÂÉèÖÃconfig²ÎÊı£¬½øĞĞÉı¼¶¡£*/
+/* é‡æ–°è®¾ç½®configå‚æ•°ï¼Œè¿›è¡Œå‡çº§ã€‚*/
 $config->set('requestType', 'GET');
 $config->set('debug', true);
 $config->set('default.module', 'upgrade');
 $app->setDebug();
 
-/* Á¬½Óµ½Êı¾İ¿â¡£*/
+/* è¿æ¥åˆ°æ•°æ®åº“ã€‚*/
 $dbh = $app->connectDB();
 
-/* ÉèÖÃ¿Í»§¶ËËùÊ¹ÓÃµÄÓïÑÔ¡¢·ç¸ñ¡£*/
+/* è®¾ç½®å®¢æˆ·ç«¯æ‰€ä½¿ç”¨çš„è¯­è¨€ã€é£æ ¼ã€‚*/
 $app->setClientLang();
 $app->setClientTheme();
 
-/* ¼ÓÔØÓïÑÔÎÄ¼ş£¬¼ÓÔØ¹«¹²Ä£¿é¡£*/
+/* åŠ è½½è¯­è¨€æ–‡ä»¶ï¼ŒåŠ è½½å…¬å…±æ¨¡å—ã€‚*/
 $lang   = $app->loadLang('common');
 $common = $app->loadCommon();
 
-/* ¼ÓÔØÏàÓ¦µÄlibÎÄ¼ş£¬²¢ÉèÖÃ³¬È«¾Ö±äÁ¿µÄÒıÓÃ¡£*/
+/* åŠ è½½ç›¸åº”çš„libæ–‡ä»¶ï¼Œå¹¶è®¾ç½®è¶…å…¨å±€å˜é‡çš„å¼•ç”¨ã€‚*/
 $app->loadClass('front',  $static = true);
 $app->loadClass('filter', $static = true);
 $app->setSuperVars();
 
-/* ¼ì²éÊÇ·ñÒÑ¾­ÊÇ×îĞÂµÄ°æ±¾¡£*/
+/* æ£€æŸ¥æ˜¯å¦å·²ç»æ˜¯æœ€æ–°çš„ç‰ˆæœ¬ã€‚*/
 $config->installedVersion = $common->loadModel('setting')->getVersion();
 if(version_compare($config->version, $config->installedVersion) <= 0) die(header('location: index.php'));
 
-/* ´¦ÀíÇëÇó£¬ÑéÖ¤È¨ÏŞ£¬¼ÓÔØÏàÓ¦µÄÄ£¿é¡£*/
+/* å¤„ç†è¯·æ±‚ï¼ŒéªŒè¯æƒé™ï¼ŒåŠ è½½ç›¸åº”çš„æ¨¡å—ã€‚*/
 $app->parseRequest();
 $app->loadModule();
