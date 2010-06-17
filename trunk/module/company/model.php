@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
  * @version     $Id$
@@ -25,29 +25,29 @@
 <?php
 class companyModel extends model
 {
-    /* ÉèÖÃ²Ëµ¥¡£*/
+    /* è®¾ç½®èœå•ã€‚*/
     public function setMenu($dept = 0)
     {
         common::setMenuVars($this->lang->company->menu, 'name', array($this->app->company->name));
         common::setMenuVars($this->lang->company->menu, 'addUser', array($dept));
     }
 
-    /* »ñµÃ¹«Ë¾ÁĞ±í¡£*/
+    /* è·å¾—å…¬å¸åˆ—è¡¨ã€‚*/
     public function getList()
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->fetchAll();
     }
 
-    /* »ñµÃµÚÒ»¸ö¹«Ë¾¡£*/
+    /* è·å¾—ç¬¬ä¸€ä¸ªå…¬å¸ã€‚*/
     public function getFirst()
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->orderBy('id')->limit(1)->fetch();
     }
     
     /**
-     * Í¨¹ıÓòÃû²éÕÒ¹«Ë¾ĞÅÏ¢¡£
+     * é€šè¿‡åŸŸåæŸ¥æ‰¾å…¬å¸ä¿¡æ¯ã€‚
      * 
-     * @param   string  $domain     ·ÃÎÊµÄÓòÃû£¬Èç¹ûÎª¿Õ£¬ÔòÈ¡HTTP_HOST±äÁ¿¡£
+     * @param   string  $domain     è®¿é—®çš„åŸŸåï¼Œå¦‚æœä¸ºç©ºï¼Œåˆ™å–HTTP_HOSTå˜é‡ã€‚
      * @access  public
      * @return  object
      */
@@ -57,13 +57,13 @@ class companyModel extends model
         return $this->dao->findByPMS($domain)->from(TABLE_COMPANY)->fetch();
     }
 
-    /* Í¨¹ıid»ñÈ¡¹«Ë¾ĞÅÏ¢¡£*/
+    /* é€šè¿‡idè·å–å…¬å¸ä¿¡æ¯ã€‚*/
     public function getByID($companyID = '')
     {
         return $this->dao->findById((int)$companyID)->from(TABLE_COMPANY)->fetch();
     }
 
-    /* ĞÂÔöÒ»¸ö¹«Ë¾¡£*/
+    /* æ–°å¢ä¸€ä¸ªå…¬å¸ã€‚*/
     public function create()
     {
         $company = fixer::input('post')->get();
@@ -75,7 +75,7 @@ class companyModel extends model
             ->exec();
     }
 
-    /* ¸üĞÂÒ»¸ö¹«Ë¾ĞÅÏ¢¡£*/
+    /* æ›´æ–°ä¸€ä¸ªå…¬å¸ä¿¡æ¯ã€‚*/
     public function update()
     {
         $company   = fixer::input('post')->get();
@@ -89,7 +89,7 @@ class companyModel extends model
             ->exec();
     }
     
-    /* É¾³ıÒ»¸ö¹«Ë¾¡£*/
+    /* åˆ é™¤ä¸€ä¸ªå…¬å¸ã€‚*/
     public function delete($companyID)
     {
         return $this->dao->delete()->from(TABLE_COMPANY)->where('id')->eq((int)$companyID)->limit(1)->exec();

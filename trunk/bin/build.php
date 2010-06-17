@@ -1,13 +1,13 @@
-1. �޸�zentaophp�е�version number����tag��
-2. �޸�zentaoms�е�version
-    config.php�е�version.
-    install�е�version��
-3. �޸���������(�汾�б���)
-4. ���zentaoms��
-5. �ϲ�Ŀ¼��
-6. �޸�www/index.php�еİ���·����
-7. �����µ����ݿ⡣ grep -v '\-\-' /mnt/c/zentao.sql  |grep -v ^$ |sed "s/DROP/\-\- DROP/" >zentao.sql
-8. zip����
-9. windows����
-10. �ϴ��ļ���
-11. ׫д����������
+1. 修改zentaophp中的version number，打tag。
+2. 修改zentaoms中的version
+    config.php中的version.
+    install中的version。
+3. 修改升级程序。(版本列表。)
+4. 打包zentaoms。
+5. 合并目录。
+6. 修改www/index.php中的包含路径。
+7. 导出新的数据库。 grep -v '\-\-' /mnt/c/zentao.sql  |grep -v ^$ |sed "s/DROP/\-\- DROP/" >zentao.sql
+8. zip包。
+9. windows包。
+10. 上传文件。
+11. 撰写升级声明。

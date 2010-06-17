@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id$
@@ -25,7 +25,7 @@
 <?php
 class userModel extends model
 {
-    /* ÉèÖÃ²Ëµ¥¡£*/
+    /* è®¾ç½®èœå•ã€‚*/
     public function setMenu($users, $account)
     {
         $methodName = $this->app->getMethodName();
@@ -38,13 +38,13 @@ class userModel extends model
         common::setMenuVars($this->lang->user->menu, 'profile', $account);
     }
 
-    /* »ñµÃÄ³Ò»¸ö¹«Ë¾µÄÓÃ»§ÁĞ±í¡£*/
+    /* è·å¾—æŸä¸€ä¸ªå…¬å¸çš„ç”¨æˆ·åˆ—è¡¨ã€‚*/
     public function getList()
     {
         return $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->orderBy('account')->fetchAll();
     }
 
-    /* »ñµÃaccount=>realnameµÄÁĞ±í¡£params: noletter|noempty|noclosed¡£*/
+    /* è·å¾—account=>realnameçš„åˆ—è¡¨ã€‚params: noletter|noempty|noclosedã€‚*/
     public function getPairs($params = '')
     {
         $users = $this->dao->select('account, realname')->from(TABLE_USER)->orderBy('account')->fetchPairs();
@@ -59,7 +59,7 @@ class userModel extends model
         return $users;
     }
 
-    /* »ñµÃÓÃ»§µÄÕæÊµĞÕÃûºÍemailµØÖ·ÁĞ±í¡£*/
+    /* è·å¾—ç”¨æˆ·çš„çœŸå®å§“åå’Œemailåœ°å€åˆ—è¡¨ã€‚*/
     public function getRealNameAndEmails($users)
     {
         $users = $this->dao->select('account, email, realname')->from(TABLE_USER)->where('account')->in($users)->fetchAll('account');
@@ -68,7 +68,7 @@ class userModel extends model
         return $users;
     }
 
-    /* Í¨¹ıid»ñÈ¡Ä³Ò»¸öÓÃ»§µÄĞÅÏ¢¡£*/
+    /* é€šè¿‡idè·å–æŸä¸€ä¸ªç”¨æˆ·çš„ä¿¡æ¯ã€‚*/
     public function getById($userID)
     {
         $user = $this->dao->select('*')->from(TABLE_USER)
@@ -80,10 +80,10 @@ class userModel extends model
         return $user;
     }
 
-    /* ĞÂÔöÒ»¸öÓÃ»§¡£*/
+    /* æ–°å¢ä¸€ä¸ªç”¨æˆ·ã€‚*/
     public function create()
     {
-        /* ÏÈ¼ì²éÃÜÂëÊÇ·ñ·ûºÏ¹æÔò¡£*/
+        /* å…ˆæ£€æŸ¥å¯†ç æ˜¯å¦ç¬¦åˆè§„åˆ™ã€‚*/
         if(!$this->checkPassword()) return;
 
         $user = fixer::input('post')
@@ -102,13 +102,13 @@ class userModel extends model
             ->exec();
     }
 
-    /* ¸üĞÂÒ»¸öÓÃ»§¡£*/
+    /* æ›´æ–°ä¸€ä¸ªç”¨æˆ·ã€‚*/
     public function update($userID)
     {
-        /* ÏÈ¼ì²éÃÜÂëÊÇ·ñ·ûºÏ¹æÔò¡£*/
+        /* å…ˆæ£€æŸ¥å¯†ç æ˜¯å¦ç¬¦åˆè§„åˆ™ã€‚*/
         if(!$this->checkPassword()) return;
 
-        /* ½øĞĞÆäËûµÄ¼ì²é£¬¸üĞÂÊı¾İ¿â¡£*/
+        /* è¿›è¡Œå…¶ä»–çš„æ£€æŸ¥ï¼Œæ›´æ–°æ•°æ®åº“ã€‚*/
         $userID = (int)$userID;
         $user = fixer::input('post')
             ->setIF(isset($_POST['join']) and $this->post->join == '', 'join', '0000-00-00')
@@ -126,7 +126,7 @@ class userModel extends model
             ->exec();
     }
 
-    /* ¼ì²éÃÜÂëÊÇ·ñ·ûºÏÒªÇó¡£*/
+    /* æ£€æŸ¥å¯†ç æ˜¯å¦ç¬¦åˆè¦æ±‚ã€‚*/
     public function checkPassword()
     {
         if($this->post->password1 != false)
@@ -138,10 +138,10 @@ class userModel extends model
     }
     
     /**
-     * ÑéÖ¤ÓÃ»§µÄÉí·İ¡£
+     * éªŒè¯ç”¨æˆ·çš„èº«ä»½ã€‚
      * 
-     * @param   string $account     ÓÃ»§ÕËºÅ
-     * @param   string $password    ÓÃ»§ÃÜÂë
+     * @param   string $account     ç”¨æˆ·è´¦å·
+     * @param   string $password    ç”¨æˆ·å¯†ç 
      * @access  public
      * @return  object
      */
@@ -167,11 +167,11 @@ class userModel extends model
     }
 
     /**
-     * È¡µÃ¶ÔÓÃ»§µÄÊÚÈ¨¡£
+     * å–å¾—å¯¹ç”¨æˆ·çš„æˆæƒã€‚
      * 
-     * @param   string $account   ÓÃ»§ÕËºÅ
+     * @param   string $account   ç”¨æˆ·è´¦å·
      * @access  public
-     * @return  array             °üº¬ÓÃ»§È¨ÏŞµÄÊı×é¡£
+     * @return  array             åŒ…å«ç”¨æˆ·æƒé™çš„æ•°ç»„ã€‚
      */
     public function authorize($account)
     {
@@ -201,7 +201,7 @@ class userModel extends model
 
     /* 
     /**
-     * ÅĞ¶ÏÓÃ»§ÊÇ·ñÔÚÏß¡£
+     * åˆ¤æ–­ç”¨æˆ·æ˜¯å¦åœ¨çº¿ã€‚
      * 
      * @access public
      * @return bool
@@ -211,13 +211,13 @@ class userModel extends model
         return (isset($_SESSION['user']) and !empty($_SESSION['user']) and $_SESSION['user']->account != 'guest');
     }
 
-    /* »ñµÃÓÃ»§ËùÊôµÄ·Ö×é¡£*/
+    /* è·å¾—ç”¨æˆ·æ‰€å±çš„åˆ†ç»„ã€‚*/
     public function getGroups($account)
     {
         return $this->dao->findByAccount($account)->from(TABLE_USERGROUP)->fields('`group`')->fetchPairs();
     }
 
-    /* »ñµÃÓÃ»§²ÎÓëµÄÏîÄ¿ÁĞ±í¡£*/
+    /* è·å¾—ç”¨æˆ·å‚ä¸çš„é¡¹ç›®åˆ—è¡¨ã€‚*/
     public function getProjects($account)
     {
         return $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
@@ -226,7 +226,7 @@ class userModel extends model
             ->fetchAll();
     }
 
-    /* »ñµÃÓÃ»§µÄBugÁĞ±í¡£*/
+    /* è·å¾—ç”¨æˆ·çš„Bugåˆ—è¡¨ã€‚*/
     public function getBugs($account)
     {
         return $this->dao->findByAssignedTo($account)->from(TABLE_BUG)->andWhere('deleted')->eq(0)->fetchAll();

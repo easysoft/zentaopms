@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
  * @version     $Id$
@@ -25,49 +25,49 @@
  */
 error_reporting(0);
 
-/* ¼ÇÂ¼×î¿ªÊ¼µÄÊ±¼ä¡£*/
+/* è®°å½•æœ€å¼€å§‹çš„æ—¶é—´ã€‚*/
 $timeStart = _getTime();
 
-/* °üº¬±ØĞëµÄÀàÎÄ¼ş¡£*/
+/* åŒ…å«å¿…é¡»çš„ç±»æ–‡ä»¶ã€‚*/
 include '../framework/router.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
 include '../framework/helper.class.php';
 
-/* ÊµÀı»¯Â·ÓÉ¶ÔÏó£¬¼ÓÔØÅäÖÃ£¬ÉèÖÃÊ±Çø¡£*/
+/* å®ä¾‹åŒ–è·¯ç”±å¯¹è±¡ï¼ŒåŠ è½½é…ç½®ï¼Œè®¾ç½®æ—¶åŒºã€‚*/
 $app    = router::createApp('pms', dirname(dirname(__FILE__)));
 $config = $app->loadConfig('common');
 $app->setDebug();
 $app->setTimezone();
 
-/* ¼ì²éÊÇ·ñÒÑ¾­°²×°¡£*/
+/* æ£€æŸ¥æ˜¯å¦å·²ç»å®‰è£…ã€‚*/
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
 
-/* Á¬½Óµ½Êı¾İ¿â¡£*/
+/* è¿æ¥åˆ°æ•°æ®åº“ã€‚*/
 $dbh = $app->connectDB();
 
-/* Èç¹ûÊÇdebugÄ£Ê½£¬¼ÇÂ¼sql²éÑ¯¡£*/
+/* å¦‚æœæ˜¯debugæ¨¡å¼ï¼Œè®°å½•sqlæŸ¥è¯¢ã€‚*/
 if($config->debug) register_shutdown_function('_saveSQL');
 
-/* ÉèÖÃ¿Í»§¶ËËùÊ¹ÓÃµÄÓïÑÔ¡¢·ç¸ñ¡£*/
+/* è®¾ç½®å®¢æˆ·ç«¯æ‰€ä½¿ç”¨çš„è¯­è¨€ã€é£æ ¼ã€‚*/
 $app->setClientLang();
 $app->setClientTheme();
 
-/* ¼ÓÔØÓïÑÔÎÄ¼ş£¬¼ÓÔØ¹«¹²Ä£¿é¡£*/
+/* åŠ è½½è¯­è¨€æ–‡ä»¶ï¼ŒåŠ è½½å…¬å…±æ¨¡å—ã€‚*/
 $lang   = $app->loadLang('common');
 $common = $app->loadCommon();
 
-/* ¼ÓÔØÏàÓ¦µÄlibÎÄ¼ş£¬²¢ÉèÖÃ³¬È«¾Ö±äÁ¿µÄÒıÓÃ¡£*/
+/* åŠ è½½ç›¸åº”çš„libæ–‡ä»¶ï¼Œå¹¶è®¾ç½®è¶…å…¨å±€å˜é‡çš„å¼•ç”¨ã€‚*/
 $app->loadClass('front',  $static = true);
 $app->loadClass('filter', $static = true);
 $app->setSuperVars();
 
-/* ´¦ÀíÇëÇó£¬ÑéÖ¤È¨ÏŞ£¬¼ÓÔØÏàÓ¦µÄÄ£¿é¡£*/
+/* å¤„ç†è¯·æ±‚ï¼ŒéªŒè¯æƒé™ï¼ŒåŠ è½½ç›¸åº”çš„æ¨¡å—ã€‚*/
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
 
-/* DebugĞÅÏ¢£¬¼à¿ØÒ³ÃæµÄÖ´ĞĞÊ±¼äºÍÄÚ´æÕ¼ÓÃ¡£*/
+/* Debugä¿¡æ¯ï¼Œç›‘æ§é¡µé¢çš„æ‰§è¡Œæ—¶é—´å’Œå†…å­˜å ç”¨ã€‚*/
 if($config->debug)
 {
     $timeUsed = round(_getTime() - $timeStart, 4) * 1000;
@@ -77,14 +77,14 @@ if($config->debug)
     echo '<style>body{padding-bottom:50px}</style>';
 }
 
-/* »ñÈ¡ÏµÍ³Ê±¼ä£¬Î¢ÃëÎªµ¥Î»¡£*/
+/* è·å–ç³»ç»Ÿæ—¶é—´ï¼Œå¾®ç§’ä¸ºå•ä½ã€‚*/
 function _getTime()
 {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
 }
 
-/* ±£´æquery¼ÇÂ¼¡£*/
+/* ä¿å­˜queryè®°å½•ã€‚*/
 function _saveSQL()
 {
     global $app;
@@ -97,7 +97,7 @@ function _saveSQL()
     fclose($fh);
 }
 
-/* print_r¡£*/
+/* print_rã€‚*/
 function a($var)
 {
     echo "<xmp class='a-left'>";

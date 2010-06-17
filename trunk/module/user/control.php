@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id$
@@ -25,7 +25,7 @@ class user extends control
 {
     private $referer;
 
-    /* ¹¹Ôìº¯Êı¡£*/
+    /* æ„é€ å‡½æ•°ã€‚*/
     public function __construct()
     {
         parent::__construct();
@@ -38,31 +38,31 @@ class user extends control
         $this->locate($this->createLink('user', 'todo', "account=$account"));
     }
 
-    /* ÓÃ»§µÄtodoÁĞ±í¡£*/
+    /* ç”¨æˆ·çš„todoåˆ—è¡¨ã€‚*/
     public function todo($account, $type = 'today', $status = 'all')
     {
-        /* µÇ¼Çsession¡£*/
+        /* ç™»è®°sessionã€‚*/
         $uri = $this->app->getURI(true);
         $this->session->set('todoList', $uri);
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
 
-        /* ¼ÓÔØtodo model¡£*/
+        /* åŠ è½½todo modelã€‚*/
         $this->loadModel('todo');
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
-        /* ÉèÖÃ²Ëµ¥¡£*/
+        /* è®¾ç½®èœå•ã€‚*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
         $todos = $this->todo->getList($type, $account, $status);
         $date  = (int)$type == 0 ? $this->todo->today() : $type;
 
-        /* Éè¶¨headerºÍpositionĞÅÏ¢¡£*/
+        /* è®¾å®šheaderå’Œpositionä¿¡æ¯ã€‚*/
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
         $position[]      = $this->lang->user->todo;
 
-        /* ¸³Öµ¡£*/
+        /* èµ‹å€¼ã€‚*/
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('tabID',    'todo');
@@ -76,24 +76,24 @@ class user extends control
         $this->display();
     }
 
-    /* ÓÃ»§µÄtaskÁĞ±í¡£*/
+    /* ç”¨æˆ·çš„taskåˆ—è¡¨ã€‚*/
     public function task($account)
     {
         $this->session->set('taskList', $this->app->getURI(true));
 
-        /* ¼ÓÔØtask model¡£*/
+        /* åŠ è½½task modelã€‚*/
         $this->loadModel('task');
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
-        /* ÉèÖÃ²Ëµ¥¡£*/
+        /* è®¾ç½®èœå•ã€‚*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
  
-        /* Éè¶¨headerºÍpositionĞÅÏ¢¡£*/
+        /* è®¾å®šheaderå’Œpositionä¿¡æ¯ã€‚*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
         $position[]      = $this->lang->user->task;
 
-        /* ¸³Öµ¡£*/
+        /* èµ‹å€¼ã€‚*/
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('tabID',    'task');
@@ -103,24 +103,24 @@ class user extends control
         $this->display();
     }
 
-    /* ÓÃ»§µÄbugÁĞ±í¡£*/
+    /* ç”¨æˆ·çš„bugåˆ—è¡¨ã€‚*/
     public function bug($account)
     {
         $this->session->set('bugList', $this->app->getURI(true));
 
-        /* ¼ÓÔØbug model¡£*/
+        /* åŠ è½½bug modelã€‚*/
         $this->loadModel('bug');
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
-        /* ÉèÖÃ²Ëµ¥¡£*/
+        /* è®¾ç½®èœå•ã€‚*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
  
-        /* Éè¶¨headerºÍpositionĞÅÏ¢¡£*/
+        /* è®¾å®šheaderå’Œpositionä¿¡æ¯ã€‚*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
         $position[]      = $this->lang->user->bug;
 
-        /* ¸³Öµ¡£*/
+        /* èµ‹å€¼ã€‚*/
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('tabID',    'bug');
@@ -131,22 +131,22 @@ class user extends control
         $this->display();
     }
 
-    /* ÓÃ»§µÄprojectÁĞ±í¡£*/
+    /* ç”¨æˆ·çš„projectåˆ—è¡¨ã€‚*/
     public function project($account)
     {
-        /* ¼ÓÔØproject model¡£*/
+        /* åŠ è½½project modelã€‚*/
         $this->loadModel('project');
         $this->lang->set('menugroup.user', 'company');
         $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
-        /* ÉèÖÃ²Ëµ¥¡£*/
+        /* è®¾ç½®èœå•ã€‚*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
-        /* Éè¶¨headerºÍpositionĞÅÏ¢¡£*/
+        /* è®¾å®šheaderå’Œpositionä¿¡æ¯ã€‚*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
         $position[]      = $this->lang->user->project;
 
-        /* ¸³Öµ¡£*/
+        /* èµ‹å€¼ã€‚*/
         $this->assign('header',   $header);
         $this->assign('position', $position);
         $this->assign('tabID',    'project');
@@ -156,13 +156,13 @@ class user extends control
         $this->display();
     }
 
-    /* ²é¿´¸öÈËµµ°¸¡£*/
+    /* æŸ¥çœ‹ä¸ªäººæ¡£æ¡ˆã€‚*/
     public function profile($account)
     {
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->profile;
         $position[]      = $this->lang->user->profile;
 
-        /* ÉèÖÃ²Ëµ¥¡£*/
+        /* è®¾ç½®èœå•ã€‚*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
         $this->assign('header',   $header);
@@ -172,7 +172,7 @@ class user extends control
         $this->display();
     }
 
-    /* ÉèÖÃrefererĞÅÏ¢¡£*/
+    /* è®¾ç½®refererä¿¡æ¯ã€‚*/
     private function setReferer($referer = 0)
     {
         if(!empty($referer))
@@ -186,7 +186,7 @@ class user extends control
         $this->referer = htmlspecialchars($this->referer);
     }
 
-    /* ´´½¨Ò»¸öÓÃ»§¡£*/
+    /* åˆ›å»ºä¸€ä¸ªç”¨æˆ·ã€‚*/
     public function create($deptID = 0, $from = 'admin')
     {
         $this->lang->set('menugroup.user', $from);
@@ -209,7 +209,7 @@ class user extends control
         $this->display();
     }
 
-    /* ±à¼­Ò»¸öÓÃ»§¡£*/
+    /* ç¼–è¾‘ä¸€ä¸ªç”¨æˆ·ã€‚*/
     public function edit($userID, $from = 'admin')
     {
         $this->lang->set('menugroup.user', $from);
@@ -238,7 +238,7 @@ class user extends control
         $this->display();
     }
 
-    /* É¾³ıÒ»¸öÓÃ»§¡£*/
+    /* åˆ é™¤ä¸€ä¸ªç”¨æˆ·ã€‚*/
     public function delete($userID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -252,7 +252,7 @@ class user extends control
         }
     }
 
-    /* ¼¤»îÒ»¸öÓÃ»§¡£*/
+    /* æ¿€æ´»ä¸€ä¸ªç”¨æˆ·ã€‚*/
     public function activate($userID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -267,7 +267,7 @@ class user extends control
     }
 
     /**
-     * µÇÂ½ÏµÍ³£ºÍê³ÉÓÃ»§Éí·İÑéÖ¤£¬²¢È¡µÃÊÚÈ¨¡£
+     * ç™»é™†ç³»ç»Ÿï¼šå®Œæˆç”¨æˆ·èº«ä»½éªŒè¯ï¼Œå¹¶å–å¾—æˆæƒã€‚
      * 
      * @access public
      * @return void
@@ -279,7 +279,7 @@ class user extends control
         $loginLink = $this->createLink('user', 'login');
         $denyLink  = $this->createLink('user', 'deny');
 
-        /* Èç¹ûÓÃ»§ÒÑ¾­µÇÂ¼£¬·µ»ØÔ­À´µÄÒ³Ãæ¡£*/
+        /* å¦‚æœç”¨æˆ·å·²ç»ç™»å½•ï¼Œè¿”å›åŸæ¥çš„é¡µé¢ã€‚*/
         if($this->user->isLogon())
         {
             if(strpos($this->referer, $loginLink) === false and 
@@ -295,21 +295,21 @@ class user extends control
             }
         }
 
-        /* ÓÃ»§Ìá½»ÁËµÇÂ½ĞÅÏ¢£¬Ôò¼ì²éÓÃ»§µÄÉí·İ¡£*/
+        /* ç”¨æˆ·æäº¤äº†ç™»é™†ä¿¡æ¯ï¼Œåˆ™æ£€æŸ¥ç”¨æˆ·çš„èº«ä»½ã€‚*/
         if(!empty($_POST))
         {
             $user = $this->user->identify($this->post->account, $this->post->password);
             if($user)
             {
-                /* ¶ÔÓÃ»§½øĞĞÊÚÈ¨£¬²¢µÇ¼Çsession¡£*/
+                /* å¯¹ç”¨æˆ·è¿›è¡Œæˆæƒï¼Œå¹¶ç™»è®°sessionã€‚*/
                 $user->rights = $this->user->authorize($this->post->account);
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
 
-                /* ¼ÇÂ¼µÇÂ¼¼ÇÂ¼¡£*/
+                /* è®°å½•ç™»å½•è®°å½•ã€‚*/
                 $this->loadModel('action')->create('user', $user->id, 'login');
 
-                /* POST±äÁ¿ÖĞÉèÖÃÁËrefererĞÅÏ¢£¬ÇÒ·Çuser/login.html, ·Çuser/deny.html£¬²¢ÇÒÀ´×ÔzentaoÏµÍ³¡£*/
+                /* POSTå˜é‡ä¸­è®¾ç½®äº†refererä¿¡æ¯ï¼Œä¸”éuser/login.html, éuser/deny.htmlï¼Œå¹¶ä¸”æ¥è‡ªzentaoç³»ç»Ÿã€‚*/
                 if($this->post->referer != false and 
                    strpos($this->post->referer, $loginLink) === false and 
                    strpos($this->post->referer, $denyLink)  === false and 
@@ -337,7 +337,7 @@ class user extends control
         }
     }
 
-    /* ·ÃÎÊÊÜÏŞÒ³Ãæ¡£*/
+    /* è®¿é—®å—é™é¡µé¢ã€‚*/
     public function deny($module, $method, $refererBeforeDeny = '')
     {
         $this->setReferer();
@@ -345,8 +345,8 @@ class user extends control
         $this->assign('header',   $header);
         $this->assign('module',   $module);
         $this->assign('method',   $method);
-        $this->assign('denyPage', $this->referer);                 // ·ÃÎÊÊÜÏŞµÄÒ³Ãæ¡£
-        $this->assign('refererBeforeDeny', $refererBeforeDeny);    // ÊÜÏŞÒ³ÃæÖ®Ç°µÄrefererÒ³Ãæ¡£
+        $this->assign('denyPage', $this->referer);                 // è®¿é—®å—é™çš„é¡µé¢ã€‚
+        $this->assign('refererBeforeDeny', $refererBeforeDeny);    // å—é™é¡µé¢ä¹‹å‰çš„refereré¡µé¢ã€‚
         $this->app->loadLang($module);
         $this->app->loadLang('index');
         $this->display();
@@ -354,7 +354,7 @@ class user extends control
     }
 
     /**
-     * ÍË³öÏµÍ³¡£
+     * é€€å‡ºç³»ç»Ÿã€‚
      * 
      * @access public
      * @return void

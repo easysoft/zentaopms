@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
  * @version     $Id$
@@ -23,7 +23,7 @@
  */
 class bugfree1ConvertModel extends bugfreeConvertModel
 {
-    /* Ö´ĞĞ×ª»»¡£*/
+    /* æ‰§è¡Œè½¬æ¢ã€‚*/
     public function execute()
     {
         $this->clear();
@@ -38,7 +38,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         return $result;
     }
 
-    /* ×ª»»ÓÃ»§·Ö×é¡£*/
+    /* è½¬æ¢ç”¨æˆ·åˆ†ç»„ã€‚*/
     public function convertGroup()
     {
         $groups = $this->dao->dbh($this->sourceDBH)
@@ -47,16 +47,16 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->fetchAll('id', $autoCompany = false);
         foreach($groups as $groupID => $group)
         {
-            /* ½«·Ö×éÓÃ»§²ğ·Ö³ÉÊı×é¡£*/
+            /* å°†åˆ†ç»„ç”¨æˆ·æ‹†åˆ†æˆæ•°ç»„ã€‚*/
             $groupUsers = explode(',', $group->users);
             unset($group->id);
             unset($group->users);
 
-            /* ²åÈëµ½group±íÖĞ¡£*/
+            /* æ’å…¥åˆ°groupè¡¨ä¸­ã€‚*/
             $this->dao->dbh($this->dbh)->insert(TABLE_GROUP)->data($group)->exec();
             $zentaoGroupID = $this->dao->lastInsertId();
 
-            /* ÉèÖÃÕË»§ºÍgroupµÄ¶ÔÓ¦¹ØÏµ¡£*/
+            /* è®¾ç½®è´¦æˆ·å’Œgroupçš„å¯¹åº”å…³ç³»ã€‚*/
             foreach($groupUsers as $account)
             {
                 if(empty($account)) continue;
@@ -65,10 +65,10 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         }
     }
 
-    /* ×ª»»ÓÃ»§¡£*/
+    /* è½¬æ¢ç”¨æˆ·ã€‚*/
     public function convertUser()
     {
-        /* ²éÑ¯µ±Ç°ÏµÍ³ÖĞ´æÔÚµÄÓÃ»§¡£*/
+        /* æŸ¥è¯¢å½“å‰ç³»ç»Ÿä¸­å­˜åœ¨çš„ç”¨æˆ·ã€‚*/
         $activeUsers = $this->dao
             ->dbh($this->sourceDBH)
             ->select("username AS account, userpassword AS password, realname, email")
@@ -76,10 +76,10 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->orderBy('userID ASC')
             ->fetchAll('account', $autoCompany = false);
 
-        /* ²éÕÒÔø¾­³öÏÖ¹ıµÄÓÃ»§¡£*/
+        /* æŸ¥æ‰¾æ›¾ç»å‡ºç°è¿‡çš„ç”¨æˆ·ã€‚*/
         $allUsers = $this->dao->select("distinct(username) AS account")->from('BugHistory')->fetchPairs('', '', $autoCompany = false);
 
-        /* ºÏ²¢¶şÕß¡£*/
+        /* åˆå¹¶äºŒè€…ã€‚*/
         foreach($allUsers as $key => $account)
         {
             if(isset($activeUsers[$account])) 
@@ -93,7 +93,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         }
         foreach($activeUsers as $account => $user) if(!isset($allUsers[$account])) $allUsers[$account] = $user;
 
-        /* µ¼Èëµ½zentaoÊı¾İ¿âÖĞ¡£*/
+        /* å¯¼å…¥åˆ°zentaoæ•°æ®åº“ä¸­ã€‚*/
         $convertCount = 0;
         foreach($allUsers as $account => $user)
         {
@@ -110,7 +110,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         return $convertCount;
     }
 
-    /* ×ª»»ÏîÄ¿Îª²úÆ·¡£*/
+    /* è½¬æ¢é¡¹ç›®ä¸ºäº§å“ã€‚*/
     public function convertProject()
     {
         $projects = $this->dao->dbh($this->sourceDBH)->select("projectID AS id, projectName AS name")->from('BugProject')->fetchAll('id', $autoCompany = false);
@@ -123,7 +123,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         return count($projects);
     }
 
-    /* ×ª»»Ô­À´µÄÄ£¿éÎªBugÊÓÍ¼Ä£¿é¡£*/
+    /* è½¬æ¢åŸæ¥çš„æ¨¡å—ä¸ºBugè§†å›¾æ¨¡å—ã€‚*/
     public function convertModule()
     {
         $this->map['module'][0] = 0;
@@ -147,7 +147,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             $this->map['module'][$moduleID] = $this->dao->lastInsertID();
         }
 
-        /* ¸üĞÂparent¡£*/
+        /* æ›´æ–°parentã€‚*/
         foreach($modules as $oldModuleID => $module)
         {
             $newModuleID = $this->map['module'][$oldModuleID];
@@ -157,7 +157,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         return count($modules);
     }
 
-    /* ×ª»»Bug¡£*/
+    /* è½¬æ¢Bugã€‚*/
     public function convertBug()
     {
         $bugs = $this->dao
@@ -184,7 +184,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->fetchAll('id', $autoCompany = false);
         foreach($bugs as $bugID => $bug)
         {
-            /* ĞŞÕıBugÊı¾İ¡£*/
+            /* ä¿®æ­£Bugæ•°æ®ã€‚*/
             $bugID = (int)$bugID;
             unset($bug->id);
             if($bug->assignedTo == 'Closed') $bug->assignedTo = 'closed';
@@ -198,7 +198,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             $this->map['bug'][$bugID] = $this->dao->lastInsertID();
         }
 
-        /* ¸üĞÂduplicateBug¡£ */
+        /* æ›´æ–°duplicateBugã€‚ */
         foreach($this->map['bug'] as $oldBugID => $newBugID)
         {
             $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($newBugID)->where('duplicateBug')->eq($oldBugID)->exec();
@@ -206,7 +206,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         return count($bugs);
     }
 
-    /* ×ª»»ÀúÊ·¼ÇÂ¼¡£*/
+    /* è½¬æ¢å†å²è®°å½•ã€‚*/
     public function convertAction()
     {
         $actions = $this->dao
@@ -224,11 +224,11 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         $convertCount = 0;
         foreach($actions as $bugID => $bugActions)
         {
-            /* »ñµÃ×ª»»Ö®ºóµÄbugID¡£*/
+            /* è·å¾—è½¬æ¢ä¹‹åçš„bugIDã€‚*/
             $bugID       = (int)$bugID;
             $zentaoBugID = $this->map['bug'][$bugID];
 
-            /* ´¦Àíaction¡£*/
+            /* å¤„ç†actionã€‚*/
             foreach($bugActions as $key => $action)
             {
                 $action->objectID = $zentaoBugID;
@@ -244,7 +244,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         return $convertCount;
     }
 
-    /* ×ª»»¸½¼ş¡£*/
+    /* è½¬æ¢é™„ä»¶ã€‚*/
     public function convertFile()
     {
         $this->setPath();
@@ -269,7 +269,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             if(strpos($file->size, 'MB')) $file->size = (int)(str_replace('MB', '', $file->size) * 1024 * 1024); 
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
-            /* ¿½±´ÎÄ¼ş¡£*/
+            /* æ‹·è´æ–‡ä»¶ã€‚*/
             $soureFile = $this->filePath . $file->pathname;
             if(!file_exists($soureFile))
             {

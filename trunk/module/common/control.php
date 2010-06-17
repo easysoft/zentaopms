@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     common
  * @version     $Id$
@@ -24,7 +24,7 @@
 class common extends control
 {
     /**
-     * ¹¹Ôìº¯Êı£ºÆô¶¯»á»°£¬¼ÓÔØ¹«Ë¾Ä£¿é£¬²¢ÉèÖÃ¹«Ë¾ĞÅÏ¢¡£
+     * æ„é€ å‡½æ•°ï¼šå¯åŠ¨ä¼šè¯ï¼ŒåŠ è½½å…¬å¸æ¨¡å—ï¼Œå¹¶è®¾ç½®å…¬å¸ä¿¡æ¯ã€‚
      * 
      * @access public
      * @return void
@@ -40,7 +40,7 @@ class common extends control
     }
 
     /**
-     * ¼ì²éÓÃ»§¶Ôµ±Ç°µÄÇëÇóÓĞÃ»ÓĞÈ¨ÏŞ¡£Èç¹ûÃ»ÓĞÈ¨ÏŞ£¬ÔòÌø×ªµ½µÇÂ½½çÃæ¡£
+     * æ£€æŸ¥ç”¨æˆ·å¯¹å½“å‰çš„è¯·æ±‚æœ‰æ²¡æœ‰æƒé™ã€‚å¦‚æœæ²¡æœ‰æƒé™ï¼Œåˆ™è·³è½¬åˆ°ç™»é™†ç•Œé¢ã€‚
      * 
      * @access public
      * @return void
@@ -96,22 +96,22 @@ EOT;
         }
     }
 
-    /* ¼ì²éµ±Ç°ÓÃ»§¶ÔÄ³Ò»¸öÄ£¿éµÄÄ³Ò»¸ö·ÃÎÊÊÇ·ñÓĞÈ¨ÏŞ·ÃÎÊ¡£*/
+    /* æ£€æŸ¥å½“å‰ç”¨æˆ·å¯¹æŸä¸€ä¸ªæ¨¡å—çš„æŸä¸€ä¸ªè®¿é—®æ˜¯å¦æœ‰æƒé™è®¿é—®ã€‚*/
     public static function hasPriv($module, $method)
     {
         global $app;
 
-        /* ¼ì²éÊÇ·ñÊÇ¹ÜÀíÔ±¡£*/
+        /* æ£€æŸ¥æ˜¯å¦æ˜¯ç®¡ç†å‘˜ã€‚*/
         $account = ',' . $app->user->account . ',';
         if(strpos($app->company->admins, $account) !== false) return true; 
 
-        /* ·Ç¹ÜÀíÔ±£¬Ôò¼ì²éÈ¨ÏŞÁĞ±íÖĞÊÇ·ñ´æÔÚ¡£*/
+        /* éç®¡ç†å‘˜ï¼Œåˆ™æ£€æŸ¥æƒé™åˆ—è¡¨ä¸­æ˜¯å¦å­˜åœ¨ã€‚*/
         $rights  = $app->user->rights;
         if(isset($rights[strtolower($module)][strtolower($method)])) return true;
         return false;
     }
 
-    /* ´òÓ¡¶¥²¿µÄÌõĞÎÇøÓò¡£*/
+    /* æ‰“å°é¡¶éƒ¨çš„æ¡å½¢åŒºåŸŸã€‚*/
     public static function printTopBar()
     {
         global $lang, $app;
@@ -130,7 +130,7 @@ EOT;
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
     }
 
-    /* ´òÓ¡Ö÷²Ëµ¥¡£*/
+    /* æ‰“å°ä¸»èœå•ã€‚*/
     public static function printMainmenu($moduleName)
     {
         global $app, $lang;
@@ -138,11 +138,11 @@ EOT;
         echo "<ul>\n";
         echo "<li style='padding:0; height:30px'><a href='http://www.zentaoms.com' target='_blank'><img src='$logo' /></a></li>\n";
 
-        /* Éè¶¨µ±Ç°µÄÖ÷²Ëµ¥Ïî¡£Ä¬ÈÏÏÈÈ¡µ±Ç°µÄÄ£¿éÃû£¬Èç¹ûÓĞ¸ÃÄ£¿éËù¶ÔÓ¦µÄ²Ëµ¥·Ö×é£¬ÔòÈ¡·Ö×éÃû×÷ÎªÖ÷²Ëµ¥Ïî¡£*/
+        /* è®¾å®šå½“å‰çš„ä¸»èœå•é¡¹ã€‚é»˜è®¤å…ˆå–å½“å‰çš„æ¨¡å—åï¼Œå¦‚æœæœ‰è¯¥æ¨¡å—æ‰€å¯¹åº”çš„èœå•åˆ†ç»„ï¼Œåˆ™å–åˆ†ç»„åä½œä¸ºä¸»èœå•é¡¹ã€‚*/
         $mainMenu = $moduleName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
-        /* Ñ­»·´òÓ¡Ö÷²Ëµ¥¡£*/
+        /* å¾ªç¯æ‰“å°ä¸»èœå•ã€‚*/
         foreach($lang->menu as $menuKey => $menu)
         {
             $active = $menuKey == $mainMenu ? 'class=active' : '';
@@ -155,7 +155,7 @@ EOT;
             }
         }
 
-        /* ´òÓ¡ËÑË÷¿ò¡£*/
+        /* æ‰“å°æœç´¢æ¡†ã€‚*/
         $moduleName = $app->getModuleName();
         $methodName = $app->getMethodName();
         $searchObject = $moduleName;
@@ -180,26 +180,26 @@ EOT;
         echo "</ul>\n";
     }
 
-    /* ´òÓ¡Ä£¿éµÄ²Ëµ¥¡£*/
+    /* æ‰“å°æ¨¡å—çš„èœå•ã€‚*/
     public static function printModuleMenu($moduleName)
     {
         global $lang, $app;
 
-        /* Ã»ÓĞÉèÖÃ²Ëµ¥£¬Ö±½ÓÍË³ö¡£*/
+        /* æ²¡æœ‰è®¾ç½®èœå•ï¼Œç›´æ¥é€€å‡ºã€‚*/
         if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
 
-        /* »ñµÃ²Ëµ¥ÉèÖÃ£¬²¢¼ÇÂ¼µ±Ç°µÄÄ£¿éÃûºÍ·½·¨Ãû¡£*/
+        /* è·å¾—èœå•è®¾ç½®ï¼Œå¹¶è®°å½•å½“å‰çš„æ¨¡å—åå’Œæ–¹æ³•åã€‚*/
         $submenus      = $lang->$moduleName->menu;  
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
 
-        /* ²Ëµ¥¿ªÊ¼¡£*/
+        /* èœå•å¼€å§‹ã€‚*/
         echo "<ul>\n";
 
-        /* Ñ­»·´¦ÀíÃ¿Ò»¸ö²Ëµ¥Ïî¡£*/
+        /* å¾ªç¯å¤„ç†æ¯ä¸€ä¸ªèœå•é¡¹ã€‚*/
         foreach($submenus as $submenu)
         {
-            /* ³õÊ¼»¯ÉèÖÃ¡£*/
+            /* åˆå§‹åŒ–è®¾ç½®ã€‚*/
             $link      = $submenu;
             $subModule = '';
             $alias     = '';
@@ -207,10 +207,10 @@ EOT;
             $active    = '';
             $target    = '';
 
-            /* Èç¹û¸Ã²Ëµ¥ÊÇÒÔÊı×éµÄĞÎÊ½ÅäÖÃµÄ£¬Ôò¸²¸ÇÉÏÃæµÄÄ¬ÈÏÉèÖÃ¡£*/
+            /* å¦‚æœè¯¥èœå•æ˜¯ä»¥æ•°ç»„çš„å½¢å¼é…ç½®çš„ï¼Œåˆ™è¦†ç›–ä¸Šé¢çš„é»˜è®¤è®¾ç½®ã€‚*/
             if(is_array($submenu)) extract($submenu);
 
-            /* ´òÓ¡²Ëµ¥¡£*/
+            /* æ‰“å°èœå•ã€‚*/
             if(strpos($link, '|') === false)
             {
                 echo "<li>$link</li>\n";
@@ -224,7 +224,7 @@ EOT;
                 {
                     global $app;
 
-                    /* ÅĞ¶ÏÊÇ·ñÓ¦¸ÃÉèÖÃ¼¤»î¡£*/
+                    /* åˆ¤æ–­æ˜¯å¦åº”è¯¥è®¾ç½®æ¿€æ´»ã€‚*/
                     if($currentModule == $subModule) $active = 'active';
                     if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false)) $active = 'active';
 
@@ -235,7 +235,7 @@ EOT;
         echo "</ul>\n";
     }
 
-    /* ´òÓ¡Ãæ°üĞ¼µ¼º½¡£*/
+    /* æ‰“å°é¢åŒ…å±‘å¯¼èˆªã€‚*/
     public static function printBreadMenu($moduleName, $position)
     {
         global $lang;
@@ -261,7 +261,7 @@ EOT;
         }
     }
 
-    /* ÉèÖÃ²Ëµ¥µÄ²ÎÊı¡£*/
+    /* è®¾ç½®èœå•çš„å‚æ•°ã€‚*/
     public function setMenuVars($menu, $key, $params)
     {
         if(is_array($params))
@@ -292,7 +292,7 @@ EOT;
         }
     }
 
-    /* ´òÓ¡´øÓĞorderbyµÄÁ´½Ó¡£ */
+    /* æ‰“å°å¸¦æœ‰orderbyçš„é“¾æ¥ã€‚ */
     public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
     {
         global $lang, $app;
@@ -320,7 +320,7 @@ EOT;
         echo "<div class='$className'>" . html::a($link, $label) . '</div>';
     }
 
-    /* ´òÓ¡Á´½Ó£¬»á¼ì²éÈ¨ÏŞ*/
+    /* æ‰“å°é“¾æ¥ï¼Œä¼šæ£€æŸ¥æƒé™*/
     public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '')
     {
         if(!common::hasPriv($module, $method)) return false;
@@ -329,12 +329,12 @@ EOT;
     }
 
     /**
-     * ÉèÖÃµ±Ç°·ÃÎÊµÄ¹«Ë¾ĞÅÏ¢¡£
+     * è®¾ç½®å½“å‰è®¿é—®çš„å…¬å¸ä¿¡æ¯ã€‚
      * 
-     * Ê×ÏÈ³¢ÊÔ°´ÕÕµ±Ç°·ÃÎÊµÄÓòÃû²éÕÒ¶ÔÓ¦µÄ¹«Ë¾ĞÅÏ¢£¬
-     * Èç¹ûÎŞ·¨²éµ½£¬ÔÙ°´ÕÕÄ¬ÈÏµÄÓòÃû½øĞĞ²éÕÒ¡£
-     * Èç¹û»¹ÎŞ·¨²éµ½£¬ÔòÈ¡µÚÒ»¸ö¹«Ë¾×÷ÎªÄ¬ÈÏµÄ¹«Ë¾¡£
-     * »ñÈ¡¹«Ë¾ĞÅÏ¢Ö®ºó£¬½«ÆäĞ´Èëµ½$_SESSIONÖĞ¡£
+     * é¦–å…ˆå°è¯•æŒ‰ç…§å½“å‰è®¿é—®çš„åŸŸåæŸ¥æ‰¾å¯¹åº”çš„å…¬å¸ä¿¡æ¯ï¼Œ
+     * å¦‚æœæ— æ³•æŸ¥åˆ°ï¼Œå†æŒ‰ç…§é»˜è®¤çš„åŸŸåè¿›è¡ŒæŸ¥æ‰¾ã€‚
+     * å¦‚æœè¿˜æ— æ³•æŸ¥åˆ°ï¼Œåˆ™å–ç¬¬ä¸€ä¸ªå…¬å¸ä½œä¸ºé»˜è®¤çš„å…¬å¸ã€‚
+     * è·å–å…¬å¸ä¿¡æ¯ä¹‹åï¼Œå°†å…¶å†™å…¥åˆ°$_SESSIONä¸­ã€‚
      *
      * @access public
      * @return void
@@ -364,7 +364,7 @@ EOT;
     }
 
     /**
-     * ÉèÖÃµ±Ç°·ÃÎÊµÄÓÃ»§ĞÅÏ¢¡£
+     * è®¾ç½®å½“å‰è®¿é—®çš„ç”¨æˆ·ä¿¡æ¯ã€‚
      * 
      * @access public
      * @return void
@@ -387,7 +387,7 @@ EOT;
         }
     }
 
-    /* ±£´æ×îºóä¯ÀÀµÄ²úÆ·idµ½session»á»°ÖĞ¡£*/
+    /* ä¿å­˜æœ€åæµè§ˆçš„äº§å“idåˆ°sessionä¼šè¯ä¸­ã€‚*/
     public static function saveProductState($productID, $defaultProductID)
     {
         global $app;
@@ -396,7 +396,7 @@ EOT;
         return $app->session->product;
     }
 
-    /* ±£´æ×îºóä¯ÀÀµÄÏîÄ¿idµ½session»á»°ÖĞ¡£*/
+    /* ä¿å­˜æœ€åæµè§ˆçš„é¡¹ç›®idåˆ°sessionä¼šè¯ä¸­ã€‚*/
     public static function saveProjectState($projectID, $projects)
     {
         global $app;
@@ -407,7 +407,7 @@ EOT;
     }
 
     /**
-     * ·¢ËÍheaderĞÅÏ¢µ½ä¯ÀÀÆ÷¡£
+     * å‘é€headerä¿¡æ¯åˆ°æµè§ˆå™¨ã€‚
      * 
      * @access public
      * @return void
@@ -418,7 +418,7 @@ EOT;
         header("Cache-control: private");
     }
 
-    /* ±È½ÏÁ½¸öÊı×éÔªËØµÄ²»Í¬£¬²úÉúĞŞ¸Ä¼ÇÂ¼¡£*/
+    /* æ¯”è¾ƒä¸¤ä¸ªæ•°ç»„å…ƒç´ çš„ä¸åŒï¼Œäº§ç”Ÿä¿®æ”¹è®°å½•ã€‚*/
     public static function createChanges($old, $new)
     {
         global $config;
@@ -441,7 +441,7 @@ EOT;
         return $changes;
     }
 
-    /* ±È½ÏÁ½¸ö×Ö·û´®µÄ²»Í¬¡£Õª×ÔPHPQAT×Ô¶¯»¯²âÊÔ¿ò¼Ü¡£*/
+    /* æ¯”è¾ƒä¸¤ä¸ªå­—ç¬¦ä¸²çš„ä¸åŒã€‚æ‘˜è‡ªPHPQATè‡ªåŠ¨åŒ–æµ‹è¯•æ¡†æ¶ã€‚*/
     public static function diff($text1, $text2)
     {
         $w  = explode("\n", trim($text1));
@@ -457,7 +457,7 @@ EOT;
         return implode("\n", $diff);
     }
 
-    /* »ñµÃÏµÍ³URLµØÖ·¡£*/
+    /* è·å¾—ç³»ç»ŸURLåœ°å€ã€‚*/
     public function getSysURL()
     {
         global $config;
@@ -471,7 +471,7 @@ EOT;
         return "$httpType://$httpHost";
     }
 
-    /* »ñµÃÏµÍ³Ä¬ÈÏµÄÑùÊ½±í¡£*/
+    /* è·å¾—ç³»ç»Ÿé»˜è®¤çš„æ ·å¼è¡¨ã€‚*/
     public function getDefaultCss()
     {
         global $app;
