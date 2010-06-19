@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 ?????????????????????(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id$
@@ -26,6 +26,29 @@
 <style>
 span {display:block}
 </style>
+<script language='javascript'>
+/*全选*/
+function checkAll()
+{
+     var check_obj = $("input");
+    for(var i=0; i<check_obj.length;i++)
+    {
+        check_obj.get(i).checked = !false; 
+    }
+}
+/*反选*/
+function reverseCheck()
+{
+    var check_obj = $("input");
+    for(var i=0; i<check_obj.length;i++)
+    {
+        check_obj.get(i).checked = ! check_obj.get(i).checked;
+    }
+    return;
+}
+
+</script>
+
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'><?php echo $lang->bug->report->common;?></div>
@@ -38,12 +61,12 @@ span {display:block}
     <div class='box-title'><?php echo $lang->bug->report->select;?></div>
     <div class='box-content'>
       <form method='post'>
-      <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts);?>
+      <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts).'<br>';?>
+        <input type=button value="全选" onClick="checkAll()">
+        <input type=button value="反选" onClick="reverseCheck()">
       <div class='a-center'><?php echo html::submitButton($lang->bug->report->create);?></div>
-      </form>
-    </div>
+     </div>
   </div>
-
   <div class="yui-main">
     <div class="yui-b">
       <table class='table-1'>
