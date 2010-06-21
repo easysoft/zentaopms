@@ -22,6 +22,7 @@
  * @link        http://www.zentaoms.com
  */
 $lang->search->common    = '搜索';
+$lang->search->reset     = '重填';
 $lang->search->more      = '更多';
 $lang->search->lite      = '简洁';
 $lang->search->saveQuery = '保存';

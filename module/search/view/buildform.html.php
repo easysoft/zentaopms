@@ -168,6 +168,7 @@ foreach($fieldParams as $fieldName => $param)
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
       echo html::submitButton($lang->search->common);
+      echo html::resetButton($lang->search->reset);
       //echo html::submitButton($lang->search->saveQuery);
       ?>
       </nobr>
