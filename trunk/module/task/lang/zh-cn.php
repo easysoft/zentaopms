@@ -42,6 +42,7 @@ $lang->task->name         = '任务名称';
 $lang->task->type         = '任务类型';
 $lang->task->pri          = '优先级';
 $lang->task->owner        = '指派给';
+$lang->task->mailto       = '抄送给';
 $lang->task->estimate     = '最初预计';
 $lang->task->estimateAB   = '预计';
 $lang->task->left         = '预计剩余';

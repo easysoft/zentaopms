@@ -24,6 +24,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<script language='Javascript'>
+var userList = "<?php echo join(',', array_keys($users));?>".split(',');
+$(function() {
+    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+})
+</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -82,6 +88,10 @@
         <tr>
           <th class='rowhead'><?php echo $lang->task->pri;?></th>
           <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=select-1');?> 
+        </tr>
+        <tr>
+          <td class='rowhead'><?php echo $lang->task->mailto;?></td>
+          <td><?php echo html::input('mailto', $task->mailto, 'class="text-1"');?></td>
         </tr>
       </table>
     </fieldset>

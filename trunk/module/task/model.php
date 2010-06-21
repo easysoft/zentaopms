@@ -97,6 +97,13 @@ class taskModel extends model
             ->where('t1.id')->eq((int)$taskID)
             ->fetch();
         if(!$task) return false;
+        if($task->mailto)
+        {
+            $task->mailto = ltrim(trim($task->mailto), ',');  // 去掉开始的，。
+            $task->mailto = str_replace(' ', '', $task->mailto);
+            $task->mailto = rtrim($task->mailto, ',') . ',';
+            $task->mailto = str_replace(',', ', ', $task->mailto);
+        }
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
         return $this->processTask($task);
     }

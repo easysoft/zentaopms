@@ -45,7 +45,8 @@ class task extends control
             $taskID = $this->task->create($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
-            $this->action->create('task', $taskID, 'Opened', '');
+            $actionID = $this->action->create('task', $taskID, 'Opened', '');
+            $this->sendmail($taskID, $actionID);
             if($this->post->after == 'continueAdding')
             {
                 echo js::alert($this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding']);
@@ -74,16 +75,17 @@ class task extends control
         $this->assign('stories',  $stories);
         $this->assign('storyID',  $storyID);
         $this->assign('members',  $members);
+        $this->assign('users',    $this->loadModel('user')->getPairs('noletter'));
         $this->display();
     }
 
     /* 公共的操作。*/
     public function commonAction($taskID)
     {
-        $this->view->task    = $this->task->getById($taskID);
+        $this->view->task    = $this->task->getByID($taskID);
         $this->view->project = $this->project->getById($this->view->task->project);
         $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id);
-        $this->view->users   = $this->view->members;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
 
         /* 设置菜单。*/
@@ -112,6 +114,7 @@ class task extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
             }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -144,6 +147,7 @@ class task extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
             }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -207,6 +211,45 @@ class task extends control
         }
     }
 
+    /* 发送邮件。*/
+    private function sendmail($taskID, $actionID)
+    {
+        /* 设定toList和ccList。*/
+        $task   = $this->task->getByID($taskID);
+        $toList = $task->owner;
+        
+        $ccList = trim($task->mailto, ',');
+        if($toList == '')
+        {
+            if($ccList == '') return;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList = substr($ccList, 0, $commaPos);
+                $ccList = substr($ccList, $commaPos + 1);
+            }
+        }
+
+         /* 获得action信息。*/
+        $action          = $this->action->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+
+        /* 赋值，获得邮件内容。*/
+        $this->assign('task', $task);
+        $this->assign('action', $action);
+        $mailContent = $this->parse($this->moduleName, 'sendmail');
+
+        /* 发信。*/
+        $this->loadModel('mail')->send($toList, 'TASK#' . $task->id . $this->lang->colon . $task->name, $mailContent, $ccList);
+        if($this->mail->isError()) echo js::error($this->mail->getError());
+    }
+    
     /* Ajax请求： 返回用户任务的下拉列表框。*/
     public function ajaxGetUserTasks($account = '', $status = 'wait,doing')
     {

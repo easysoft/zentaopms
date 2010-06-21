@@ -32,7 +32,11 @@ function copyStoryTitle()
     storyTitle = storyTitle.substr(storyTitle.lastIndexOf(':')+ 1);
     $('#name').attr('value', storyTitle);
 }
-
+function sendMailTo() 
+{
+    var userList = "<?php echo join(',', array_keys($users));?>".split(',');
+    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+}
 /* 设置预览的链接。*/
 function setPreview()
 {
@@ -83,6 +87,10 @@ $(document).ready(function()
       <tr>
         <th class='rowhead'><?php echo $lang->task->owner;?></th>
         <td><?php echo html::select('owner', $members, '', 'class=select-3');?> 
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->task->mailto;?></th>
+        <td> <?php echo html::input('mailto', '', 'class=text-1');?> </td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->story;?></th>
