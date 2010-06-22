@@ -37,7 +37,7 @@ class deptModel extends model
         $rootDept = $this->getByID($rootDeptID);
         if(!$rootDept) $rootDept->path = '';
         return $this->dao->select('*')->from(TABLE_DEPT)
-            ->onCaseOf($rootDeptID > 0)->where('path')->like($rootDept->path . '%')->endCase()
+            ->beginIF($rootDeptID > 0)->where('path')->like($rootDept->path . '%')->endIF()
             ->orderBy('grade desc, `order`')
             ->get();
     }
@@ -221,7 +221,7 @@ class deptModel extends model
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
-            ->onCaseOf($deptID)->andWhere('dept')->in($deptID)->endCase()
+            ->beginIF($deptID)->andWhere('dept')->in($deptID)->endIF()
             ->orderBy('id')
             ->fetchAll();
     }

@@ -72,7 +72,7 @@ class testcaseModel extends model
     {
         return $this->dao->select('*')->from(TABLE_CASE)
             ->where('product')->eq((int)$productID)
-            ->onCaseOf($moduleIds)->andWhere('module')->in($moduleIds)->endCase()
+            ->beginIF($moduleIds)->andWhere('module')->in($moduleIds)->endIF()
             ->andWhere('deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }

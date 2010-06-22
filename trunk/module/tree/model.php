@@ -45,7 +45,7 @@ class treeModel extends model
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('product')->eq((int)$productID)
             ->andWhere('view')->eq($viewType)
-            ->onCaseOf($rootModulePath)->andWhere('path')->like($rootModulePath)->endCase()
+            ->beginIF($rootModulePath)->andWhere('path')->like($rootModulePath)->endIF()
             ->orderBy('grade desc, `order`')
             ->get();
     }
