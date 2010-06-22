@@ -120,8 +120,8 @@ class taskModel extends model
             ->on('t1.owner = t3.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->endIF()
-            ->beginIF($status != 'all' and $status != 'needConfirm')->andWhere('t1.status')->in($status)->endIF()
+            ->beginIF($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
+            ->beginIF($status != 'all' and $status != 'needConfirm')->andWhere('t1.status')->in($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -139,7 +139,7 @@ class taskModel extends model
             ->on('t1.owner = t2.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->endIF()
+            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->orderBy($orderBy)
             ->query();
         while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->ownerRealName:$task->name";
@@ -157,7 +157,7 @@ class taskModel extends model
             ->on('t1.story = t3.id')
             ->where('t1.owner')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->endIF()
+            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->fetchAll();
         if($tasks) return $this->processTasks($tasks);
         return array();
@@ -189,7 +189,7 @@ class taskModel extends model
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->endIF()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchPairs();
     }
 
@@ -200,7 +200,7 @@ class taskModel extends model
             ->from(TABLE_TASK)
             ->where('story')->in($stories)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->endIF()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->groupBy('story')
             ->fetchPairs();
         foreach($stories as $storyID) if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;

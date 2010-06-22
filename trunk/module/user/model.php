@@ -72,8 +72,8 @@ class userModel extends model
     public function getById($userID)
     {
         $user = $this->dao->select('*')->from(TABLE_USER)
-            ->beginIF(is_numeric($userID))->where('id')->eq((int)$userID)->endIF()
-            ->beginIF(!is_numeric($userID))->where('account')->eq($userID)->endIF()
+            ->beginIF(is_numeric($userID))->where('id')->eq((int)$userID)->fi()
+            ->beginIF(!is_numeric($userID))->where('account')->eq($userID)->fi()
             ->fetch();
         if(!$user) return false;
         $user->last = date(DT_DATETIME1, $user->last);
