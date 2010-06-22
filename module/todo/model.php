@@ -129,8 +129,8 @@ class todoModel extends model
             ->where('account')->eq($account)
             ->andWhere("date >= '$begin'")
             ->andWhere("date <= '$end'")
-            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->endIF()
-            ->beginIF($status == 'undone')->andWhere('status')->ne('done')->endIF()
+            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
             ->orderBy('date, status, begin')
             ->query();
         while($todo = $stmt->fetch())

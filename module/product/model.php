@@ -63,7 +63,7 @@ class productModel extends model
         return $this->dao->select('id,name')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->beginIF($mode == 'noclosed')->andWhere('status')->ne('closed')->endIF()
+            ->beginIF($mode == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->fetchPairs();
     }
 
