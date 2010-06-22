@@ -66,7 +66,7 @@ class bugModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
-            ->onCaseOf(!empty($moduleIds))->andWhere('module')->in($moduleIds)->endCase()
+            ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->endIF()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }

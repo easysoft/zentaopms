@@ -167,7 +167,7 @@ class actionModel extends model
     public function getDynamic($objectType = 'all', $count = 30)
     {
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->onCaseOf($objectType != 'all')->where('objectType')->eq($objectType)->endCase()
+            ->beginIF($objectType != 'all')->where('objectType')->eq($objectType)->endIF()
             ->orderBy('id desc')->limit($count)->fetchAll();
         if(!$actions) return array();
         foreach($actions as $action)

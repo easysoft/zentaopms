@@ -139,7 +139,7 @@ class projectModel extends model
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)
-            ->onCaseOf($mode == 'noclosed')->andWhere('status')->ne('done')->endCase()
+            ->beginIF($mode == 'noclosed')->andWhere('status')->ne('done')->endIF()
             ->orderBy('status, end desc')->fetchAll();
         $pairs = array();
         foreach($projects as $project)
@@ -153,7 +153,7 @@ class projectModel extends model
     public function getList($status = 'all')
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
-            ->onCaseOf($status != 'all')->andWhere('status')->in($status)->endcase()
+            ->beginIF($status != 'all')->andWhere('status')->in($status)->endIF()
             ->andWhere('deleted')->eq(0)
             ->orderBy('status, end DESC')
             ->fetchAll();
