@@ -50,7 +50,7 @@ function changeDate(date)
   <table class='table-1 tablesorter'>
     <thead>
     <tr class='colhead'>
-      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-100px'><?php echo $lang->idAB;?></th>
       <th class='w-date'><?php echo $lang->todo->date;?></th>
       <th class='w-type'><?php echo $lang->todo->type;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
