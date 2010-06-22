@@ -21,56 +21,57 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
+include '../config/config.php';
 
-$moduleRoot   = $argv[1];
 if(!isset($argv[1]))
 {
-    die("Please input the directory path of 'module'!");
+    die("Please input the directory path of 'module'! For example, c:\zentao\home\zentao\module\ \n");
 }
-$i     = 0;
-$fileName = array();
 
-
-$ControlDir     = "control";
-$ModelDir       = "model";
-$ConfigDir      = "config";
-$EnFile         = "en.php";
-$Zh_chFile      = "zh-ch.php";
+$modules    = array();
+$moduleRoot = $argv[1];
 
 if(is_dir($moduleRoot))
 {
     if($dh = opendir($moduleRoot))
     {
-        while($file = readdir($dh))
+        while($module = readdir($dh))
         {
-            $array[$i] = $file; 
-            $i++;
-
+            if(strpos(basename($module), '.') === false) $modules[] = $module;
         }
+        closedir($dh);
     }
 }
-
-for($j=3; $j<$i; $j++) // 各个模块从第三个开始依次排序
-{ 
-    $OptRoot        = $moduleRoot . "\\$fileName[$j]\\opt";     // windows linux 未判断
-    $OptLang        = $OptRoot . "\\lang";
-    $OptView        = $OptRoot . "\\view";
-    $OptControl     = $OptRoot ."\\$ControlDir";
-    $OptModel       = $OptRoot."\\$ModelDir";
-    $OptConfig      = $OptRoot."\\$ConfigDir"; 
-    $OptLangEn      = $OptLang."\\$EnFile";
-    $OptLangZh_ch   = $OptLang."\\$Zh_chFile";
-
-    /* 建立各个扩展目录 */
-    if(!file_exists($OptRoot))      mkdir($OptRoot,0777);
-    if(!file_exists($OptLang))      mkdir($OptLang,0777);
-    if(!file_exists($OptView))      mkdir($OptView,0777);
-    if(!file_exists($OptControl))   touch($OptControl);      
-    if(!file_exists($OptModel))     touch($OptModel);
-    if(!file_exists($OptConfig))    touch($OptConfig);
-    if(!file_exists($OptLangEn))    touch($OptLangEn);
-    if(!file_exists($OptLangZh_ch)) touch($OptLangZh_ch);
+else
+{
+    die("The module you input does not exist. \n");
 }
 
-closedir($dh);
-?>
+foreach($modules as $module)
+{ 
+    /*  设定各个目录。*/
+    $optRoot      = $moduleRoot . DIRECTORY_SEPARATOR. $module . DIRECTORY_SEPARATOR . 'opt';
+    $optControl   = $optRoot . DIRECTORY_SEPARATOR . 'control';
+    $optModel     = $optRoot . DIRECTORY_SEPARATOR . 'model';
+    $optView      = $optRoot . DIRECTORY_SEPARATOR . 'view';
+    $optConfig    = $optRoot . DIRECTORY_SEPARATOR . 'config';
+    $optLang      = $optRoot . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR;
+
+    /* 建立各个扩展目录 */
+    if(!file_exists($optRoot))    mkdir($optRoot,    0777);
+    if(!file_exists($optControl)) mkdir($optControl, 0777);      
+    if(!file_exists($optModel))   mkdir($optModel,   0777);
+    if(!file_exists($optView))    mkdir($optView,    0777);
+    if(!file_exists($optConfig))  mkdir($optConfig,  0777);
+    if(!file_exists($optLang))    mkdir($optLang,    0777);
+
+    /* 创建语言目录。*/
+    $langs = array_keys($config->langs);
+    foreach($langs as $lang)
+    {
+        $langPath = $optLang . $lang;
+        if(!file_exists($langPath)) mkdir($langPath, 0777);
+    }
+
+    echo "init $module ... \n";
+}
