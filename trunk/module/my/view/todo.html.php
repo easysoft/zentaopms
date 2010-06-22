@@ -74,7 +74,7 @@ function changeDate(date)
       <td><?php echo $todo->date;?></td>
       <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
       <td><?php echo $todo->pri;?></td>
-      <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id={$todo->id}"), $todo->name);?></td>
+      <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my"), $todo->name);?></td>
       <td><?php echo $todo->begin;?></td>
       <td><?php echo $todo->end;?></td>
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
