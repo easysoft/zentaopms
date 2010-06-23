@@ -30,31 +30,37 @@ class taskModel extends model
     /* 新增一个任务。*/
     public function create($projectID)
     {
-        $task = fixer::input('post')
-            ->striptags('name')
-            ->specialChars('desc')
-            ->add('project', (int)$projectID)
-            ->setDefault('estimate, left, story', 0)
-            ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
-            ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
-            ->remove('after,files,labels')
-            ->get();
-
-        $this->dao->insert(TABLE_TASK)->data($task)
-            ->autoCheck()
-            ->batchCheck($this->config->task->create->requiredFields, 'notempty')
-            ->checkIF($task->estimate != '', 'estimate', 'float')
-            ->exec();
-        if(!dao::isError())
+        $tasksID = array();
+        foreach($this->post->owner as $owner)
         {
-            $taskID = $this->dao->lastInsertID();
-            if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
-            $this->loadModel('file')->saveUpload('task', $taskID);
-            return $taskID;
+            $task = fixer::input('post')
+                ->striptags('name')
+                ->specialChars('desc')
+                ->add('project', (int)$projectID)
+                ->setDefault('estimate, left, story', 0)
+                ->setDefault('deadline', '0000-00-00')
+                ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
+                ->setForce('owner', $owner)
+                ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+                ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
+                ->remove('after,files,labels')
+                ->get();
+
+            $this->dao->insert(TABLE_TASK)->data($task)
+                ->autoCheck()
+                ->batchCheck($this->config->task->create->requiredFields, 'notempty')
+                ->checkIF($task->estimate != '', 'estimate', 'float')
+                ->exec();
+            if(!dao::isError())
+            {
+                $taskID = $this->dao->lastInsertID();
+                if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
+                $this->loadModel('file')->saveUpload('task', $taskID);
+                $tasksID[$owner] = $taskID;
+            }
+            else return false;
         }
-        return false;
+        return $tasksID;
     }
 
     /* 更新一个任务。*/

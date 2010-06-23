@@ -42,11 +42,14 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $taskID = $this->task->create($projectID);
+            $tasksID = $this->task->create($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
-            $actionID = $this->action->create('task', $taskID, 'Opened', '');
-            $this->sendmail($taskID, $actionID);
+            foreach($tasksID as $taskID)
+            {
+                $actionID = $this->action->create('task', $taskID, 'Opened', '');
+                $this->sendmail($taskID, $actionID);
+            }            
             if($this->post->after == 'continueAdding')
             {
                 echo js::alert($this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding']);
@@ -243,6 +246,7 @@ class task extends control
         /* 赋值，获得邮件内容。*/
         $this->assign('task', $task);
         $this->assign('action', $action);
+        $this->clear();
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* 发信。*/

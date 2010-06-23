@@ -32,6 +32,20 @@ function copyStoryTitle()
     storyTitle = storyTitle.substr(storyTitle.lastIndexOf(':')+ 1);
     $('#name').attr('value', storyTitle);
 }
+/* 设置任务指派给多选。*/
+function setOwners(result)
+{
+    if(result == 'affair')
+    {
+        $('#owner').attr('size', 4);
+        $('#owner').attr('multiple', 'multiple');
+    }
+    else
+    {
+        $('#owner').removeAttr('size');
+        $('#owner').removeAttr('multiple');
+    }
+}
 function sendMailTo() 
 {
     var userList = "<?php echo join(',', array_keys($users));?>".split(',');
@@ -78,7 +92,7 @@ $(document).ready(function()
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->type;?></th>
-        <td><?php echo html::select('type', $lang->task->typeList, '', 'class=select-3');?></td>
+        <td><?php echo html::select('type', $lang->task->typeList, '', 'class=select-3 onchange="setOwners(this.value)"');?></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->status;?></th>
@@ -86,7 +100,7 @@ $(document).ready(function()
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->owner;?></th>
-        <td><?php echo html::select('owner', $members, '', 'class=select-3');?> 
+        <td><?php echo html::select('owner[]', $members, '', 'class=select-3');?></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->mailto;?></th>
