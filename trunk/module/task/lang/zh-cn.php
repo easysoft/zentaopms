@@ -67,6 +67,7 @@ $lang->task->typeList['test']   = '测试';
 $lang->task->typeList['study']  = '研究';
 $lang->task->typeList['discuss']= '讨论';
 $lang->task->typeList['ui']     = '界面';
+$lang->task->typeList['affair'] = '事务';
 $lang->task->typeList['misc']   = '其他';
 
 $lang->task->priList[0] = '';

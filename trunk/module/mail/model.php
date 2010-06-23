@@ -93,6 +93,8 @@ class mailModel extends model
         /* 获得用户的真实姓名和email列表。*/
         $this->loadModel('user');
         $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
+        
+        $this->clear();
 
         try 
         {
@@ -154,7 +156,7 @@ class mailModel extends model
     private function clear()
     {
         $this->mta->clearAddresses();
-        $this->mta->cearAttachments();
+        $this->mta->clearAttachments();
     }
 
     /* 判断是否有错！*/
