@@ -44,10 +44,14 @@ class userModel extends model
         return $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->orderBy('account')->fetchAll();
     }
 
-    /* 获得account=>realname的列表。params: noletter|noempty|noclosed。*/
+    /* 获得account=>realname的列表。params: noletter|noempty|noclosed|nodeleted。*/
     public function getPairs($params = '')
     {
-        $users = $this->dao->select('account, realname')->from(TABLE_USER)->orderBy('account')->fetchPairs();
+        $users = $this->dao->select('account, realname')->from(TABLE_USER)
+            ->beginIF(strpos($params, 'nodeleted') !== false)
+            ->where('deleted')->eq(0)
+            ->fi()
+            ->orderBy('account')->fetchPairs();
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
@@ -56,6 +60,17 @@ class userModel extends model
         }
         if(strpos($params, 'noempty')  === false) $users = array('' => '') + $users;
         if(strpos($params, 'noclosed') === false) $users = $users + array('closed' => 'Closed');
+        return $users;
+    }
+    
+    /* 追加已经删除的用户。*/
+    public function setDeleted($users, $deleteds = '')
+    {
+        $deleteds = explode(',', $deleteds);
+        foreach($deleteds as $deleted)
+        {
+            if(!isset($users[$deleted])) $users[$deleted] = $deleted . $this->lang->user->deleted;
+        }
         return $users;
     }
 

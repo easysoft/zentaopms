@@ -48,7 +48,7 @@ class story extends control
         /* 设置产品相关数据。*/
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
-        $users    = $this->user->getPairs();
+        $users    = $this->user->getPairs('nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'product');
 
         /* 设置菜单。*/
@@ -74,7 +74,7 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
-        $users    = $this->user->getPairs();
+        $users    = $this->user->getPairs('nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'product');
 
         /* 设置菜单。*/
@@ -110,10 +110,12 @@ class story extends control
         }
 
         $this->commonAction($storyID);
-
+        $story = $this->story->getById($storyID);
+  
         /* 赋值到模板。*/
         $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $this->view->story->title;
         $this->view->position[]    = $this->lang->story->edit;
+        $this->view->users         = $this->user->setDeleted($this->user->getPairs('nodeleted'), $story->assignedTo);
         $this->display();
     }
 
@@ -263,7 +265,7 @@ class story extends control
         $this->view->product = $product;
         $this->view->story   = $story;
         $this->view->actions = $this->action->getList('story', $storyID);
-        $this->view->users   = $this->loadModel('user')->getPairs();
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted');
 
         /* 影响范围。*/
         $this->story->getAffectedScope($this->view->story);

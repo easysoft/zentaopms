@@ -42,6 +42,7 @@ $lang->user->relogin         = "重新登录";
 $lang->user->asGuest         = "游客访问";
 $lang->user->goback          = "返回前一页";
 $lang->user->allUsers        = '全部用户';
+$lang->user->deleted         = '(已删除)';
 
 $lang->user->profile     = '用户档案';
 $lang->user->project     = '用户项目';

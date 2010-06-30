@@ -338,12 +338,15 @@ class projectModel extends model
     }
 
    /* 获取团队成员account=>name列表。*/
-    public function getTeamMemberPairs($projectID)
+    public function getTeamMemberPairs($projectID, $params = '')
     {
         $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWHere('t2.company')->eq($this->app->company->id)
+            ->beginIF($params == 'nodeleted')
+            ->andWhere('t2.deleted')->eq(0)
+            ->fi()
             ->fetchPairs();
         if(!$users) return array();
         foreach($users as $account => $realName)
