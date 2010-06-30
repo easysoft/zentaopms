@@ -33,8 +33,9 @@ $snoopy->fetch($sessionAPI);
 $session = json_decode($snoopy->results);
 
 /*用户登录*/
+$authHash = md5(md5($password) . $session->rand);
 $submitVars["account"]  = $account; 
-$submitVars["password"] = $password;
+$submitVars["password"] = $authHash;
 $snoopy->cookies[$session->sessionName] = $session->sessionID;
 $snoopy->submit($loginAPI, $submitVars);
 

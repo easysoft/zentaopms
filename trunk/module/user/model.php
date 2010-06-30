@@ -168,9 +168,14 @@ class userModel extends model
 
         $user = $this->dao->select('*')->from(TABLE_USER)
             ->where('account')->eq($account)
+            ->beginIF(strlen($password) != 32)
             ->andWhere('password')->eq(md5($password))
+            ->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch();
+
+        if(strlen($password) == 32) $user = ($password == md5($user->password . $this->session->rand))?$user:'';
+
         if($user)
         {
             $ip   = $_SERVER['REMOTE_ADDR'];

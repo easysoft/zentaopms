@@ -26,8 +26,10 @@ class api extends control
     /* 获得sessionid。*/
     public function getSessionID()
     {
+        $this->session->set('rand', mt_rand(0, 10000));
         $this->view->sessionName = session_name();
         $this->view->sessionID   = session_id();
+        $this->view->rand        = $this->session->rand;
         $this->display();
     }
 
