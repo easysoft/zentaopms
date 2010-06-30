@@ -66,7 +66,7 @@ class task extends control
         }
 
         $stories = $this->story->getProjectStoryPairs($projectID);
-        $members = $this->project->getTeamMemberPairs($projectID);
+        $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[]      = html::a($browseProjectLink, $project->name);
@@ -78,7 +78,7 @@ class task extends control
         $this->assign('stories',  $stories);
         $this->assign('storyID',  $storyID);
         $this->assign('members',  $members);
-        $this->assign('users',    $this->loadModel('user')->getPairs('noletter'));
+        $this->assign('users',    $this->loadModel('user')->getPairs('noletter, nodeleted'));
         $this->display();
     }
 
@@ -87,8 +87,8 @@ class task extends control
     {
         $this->view->task    = $this->task->getByID($taskID);
         $this->view->project = $this->project->getById($this->view->task->project);
-        $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id ,'nodeleted');
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter, nodeleted'); 
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
 
         /* 设置菜单。*/
@@ -122,10 +122,15 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        $task    = $this->task->getByID($taskID);
+        $project = $this->project->getById($task->project);
+        $members = $this->project->getTeamMemberPairs($project->id ,'nodeleted');
+        
         /* 赋值。*/
         $this->view->header->title = $this->lang->task->edit;
         $this->view->position[]    = $this->lang->task->edit;
         $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
+        $this->view->members       = $this->loadModel('user')->setDeleted($members, $task->owner);        
         
         $this->display();
     }

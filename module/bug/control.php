@@ -261,7 +261,7 @@ class bug extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
         $this->view->stories          = $stories;
-        $this->view->users            = $this->user->getPairs('noclosed');
+        $this->view->users            = $this->user->getPairs('noclosed,nodeleted');
         $this->view->projects         = $this->product->getProjectPairs($productID);
         $this->view->builds           = $builds;
         $this->view->tasks            = $this->loadModel('task')->getProjectTaskPairs($projectID);
@@ -353,7 +353,7 @@ class bug extends control
         $this->view->projects         = $this->product->getProjectPairs($bug->product);
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
-        $this->view->users            = $this->user->getPairs();
+        $this->view->users            = $this->user->setDeleted($this->user->getPairs('nodeleted'), "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy");
         $this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;
         $this->view->actions          = $this->action->getList('bug', $bugID);
@@ -388,7 +388,7 @@ class bug extends control
 
         /* 赋值。*/
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs();
+        $this->view->users   = $this->user->getPairs('nodeleted');
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
@@ -422,7 +422,7 @@ class bug extends control
 
         /* 赋值。*/
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs();
+        $this->view->users   = $this->user->getPairs('nodeleted');
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);
 
