@@ -26,3 +26,4 @@
 class miscModel extends model
 {
 }
+?>
