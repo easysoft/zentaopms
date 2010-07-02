@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /* 包含http客户端类，snoopy。在禅道lib/snoopy里面可以找到。*/
-include '../lib/snoopy/snoopy.class.php';
+include dirname(dirname(__FILE__)) . '/lib/snoopy/snoopy.class.php';
 
 /* 用来登录的地址，用户名和密码。*/
 $zentaoRoot  = "http://pms.easysoft.com/";
