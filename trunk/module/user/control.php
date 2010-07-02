@@ -296,9 +296,17 @@ class user extends control
         }
 
         /* 用户提交了登陆信息，则检查用户的身份。*/
-        if(!empty($_POST))
+        if(!empty($_POST) or !empty($_GET))
         {
-            $user = $this->user->identify($this->post->account, $this->post->password);
+            $account  = '';
+            $password = '';
+            if($this->post->account)  $account  = $this->post->account;
+            if($this->get->account)   $account  = $this->get->account;
+            if($this->post->password) $password = $this->post->password;
+            if($this->get->password)  $password = $this->get->password;
+
+            $user = $this->user->identify($account, $password);
+
             if($user)
             {
                 /* 对用户进行授权，并登记session。*/

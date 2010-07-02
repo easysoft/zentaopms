@@ -174,7 +174,12 @@ class userModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetch();
 
-        if(strlen($password) == 32) $user = ($password == md5($user->password . $this->session->rand))?$user:'';
+        /* 密码长度为32位，改用md5 hash方式验证。*/
+        if(strlen($password) == 32)
+        {
+            $hash = $this->session->rand ? md5($user->password . $this->session->rand) : $user->password;
+            $user = $password == $hash ? $user : '';
+        }
 
         if($user)
         {
