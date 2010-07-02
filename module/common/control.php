@@ -32,6 +32,7 @@ class common extends control
     public function __construct()
     {
         parent::__construct();
+        session_name($this->config->sessionVar);
         session_start();
         $this->sendHeader();
         $this->loadModel('company');

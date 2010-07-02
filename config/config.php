@@ -35,6 +35,7 @@ $config->requestFix  = '-';               // requestType=PATH_INFO: ÇëÇóurlµÄ·Ö¸
 $config->moduleVar   = 'm';               // requestType=GET: Ä£¿é±äÁ¿Ãû¡£
 $config->methodVar   = 'f';               // requestType=GET: ·½·¨±äÁ¿Ãû¡£
 $config->viewVar     = 't';               // requestType=GET: Ä£°å±äÁ¿Ãû¡£
+$config->sessionVar  = 'sid';             // requestType=GET: session±äÁ¿Ãû¡£
 
 /* ÊÓÍ¼ºÍÖ÷Ìâ¡£*/
 $config->views       = ',html,json,csv,'; // Ö§³ÖµÄÊÓÍ¼ÁĞ±í¡£
