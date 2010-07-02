@@ -31,6 +31,7 @@ elseif($requestType == 'PATH_INFO')
 $snoopy = new Snoopy;
 $snoopy->fetch($sessionAPI);
 $session = json_decode($snoopy->results);
+$session = json_decode($session->data);
 
 /*用户登录*/
 $authHash = md5(md5($password) . $session->rand);
