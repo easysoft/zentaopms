@@ -90,6 +90,27 @@ EOT;
                 exit;
             }
         }
+        elseif(isset($_SERVER['PHP_AUTH_USER']) and isset($_SERVER['PHP_AUTH_PW']))
+        {
+            $account  = $_SERVER['PHP_AUTH_USER'];
+            $password = $_SERVER['PHP_AUTH_PW'];
+            $this->loadModel('user');
+            $user = $this->user->identify($account, $password);
+            if($user)
+            {
+                /* 对用户进行授权，并登记session。*/
+                $user->rights = $this->user->authorize($account);
+                $_SESSION['user'] = $user;
+                $this->app->user = $_SESSION['user'];
+
+                /* 记录登录记录。*/
+                $this->loadModel('action')->create('user', $user->id, 'login');
+            }
+            else
+            {
+                die(js::error($this->lang->user->loginFailed));
+            }
+        }
         else
         {
             $referer  = helper::safe64Encode($this->app->getURI(true));
