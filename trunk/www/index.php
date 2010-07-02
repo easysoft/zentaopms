@@ -40,6 +40,9 @@ $config = $app->loadConfig('common');
 $app->setDebug();
 $app->setTimezone();
 
+/* 判断是否有GET变量mode=getconfig。*/
+if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die($app->exportConfig());
+
 /* 检查是否已经安装。*/
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
 
