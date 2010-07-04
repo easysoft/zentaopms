@@ -127,6 +127,12 @@ function switchProduct(productID, module, method, extra)
     location.href=link;
 }
 
+/* 记住最后选择的产品id。*/
+function saveProduct()
+{
+    if($('#productID')) $.cookie('lastProduct', $('#productID').val());
+}
+
 /* 设置项目选择器。*/
 function setProjectSwitcher()
 {
@@ -160,6 +166,12 @@ function switchProject(projectID, module, method)
     }
     link = createLink(module, method, 'projectID=' + projectID);
     location.href=link;
+}
+
+/* 记住最后选择的项目id。*/
+function saveProject()
+{
+    if($('#projectID')) $.cookie('lastProject', $('#projectID').val());
 }
 
 /* 选择用户。*/
@@ -212,6 +224,8 @@ $(document).ready(function()
     setHelpLink();
     setProductSwitcher();
     setProjectSwitcher();
+    saveProduct();
+    saveProject();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
 });
 

@@ -414,6 +414,7 @@ EOT;
     {
         global $app;
         if($productID > 0) $app->session->set('product', (int)$productID);
+        if($productID == 0 and $app->cookie->lastProduct)    $app->session->set('product', (int)$app->cookie->lastProduct);
         if($productID == 0 and $app->session->product == '') $app->session->set('product', $defaultProductID);
         return $app->session->product;
     }
@@ -423,6 +424,7 @@ EOT;
     {
         global $app;
         if($projectID > 0) $app->session->set('project', (int)$projectID);
+        if($projectID == 0 and $app->cookie->lastProject)    $app->session->set('project', (int)$app->cookie->lastProject);
         if($projectID == 0 and $app->session->project == '') $app->session->set('project', $projects[0]);
         if(!in_array($app->session->project, $projects)) $app->session->set('project', $projects[0]);
         return $app->session->project;
