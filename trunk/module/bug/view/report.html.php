@@ -23,30 +23,28 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>
-span {display:block}
-</style>
+<style>span {display:block}</style>
 <script language='javascript'>
-/*全选*/
+/* 全选 */
 function checkAll()
 {
-     var check_obj = $("input");
-    for(var i=0; i<check_obj.length;i++)
+    var checkOBJ = $('input');
+    for(var i = 0; i < checkOBJ.length; i++)
     {
-        check_obj.get(i).checked = !false; 
+        checkOBJ.get(i).checked = true;
     }
 }
-/*反选*/
-function reverseCheck()
+
+/* 反选 */
+function checkReverse()
 {
-    var check_obj = $("input");
-    for(var i=0; i<check_obj.length;i++)
+    var checkOBJ = $('input');
+    for(var i = 0; i < checkOBJ.length; i++)
     {
-        check_obj.get(i).checked = ! check_obj.get(i).checked;
+        checkOBJ.get(i).checked = !checkOBJ.get(i).checked;
     }
     return;
 }
-
 </script>
 
 <div class='yui-d0'>
@@ -61,10 +59,11 @@ function reverseCheck()
     <div class='box-title'><?php echo $lang->bug->report->select;?></div>
     <div class='box-content'>
       <form method='post'>
-      <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts).'<br>';?>
-        <input type=button value="全选" onClick="checkAll()">
-        <input type=button value="反选" onClick="reverseCheck()">
-      <div class='a-center'><?php echo html::submitButton($lang->bug->report->create);?></div>
+      <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts);?>
+      <input type='button' value='<?php echo $lang->bug->report->selectAll;?>'     onclick='checkAll()' />
+      <input type='button' value='<?php echo $lang->bug->report->selectReverse;?>' onclick='checkReverse()' />
+      <br /><br />
+      <?php echo html::submitButton($lang->bug->report->create);?>
      </div>
   </div>
   <div class="yui-main">
