@@ -37,7 +37,7 @@ class bug extends control
         $this->loadModel('task');
         $this->products = $this->product->getPairs();
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
-        $this->assign('products', $this->products);
+        $this->view->products = $this->products;
     }
 
     /* bug首页。*/
@@ -150,18 +150,18 @@ class bug extends control
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->bug->common;
 
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
-        $this->assign('productID',     $productID);
-        $this->assign('productName',   $this->products[$productID]);
-        $this->assign('moduleTree',    $this->tree->getTreeMenu($productID, $viewType = 'bug', $rooteModuleID = 0, array('treeModel', 'createBugLink')));
-        $this->assign('browseType',    $browseType);
-        $this->assign('bugs',          $bugs);
-        $this->assign('users',         $users);
-        $this->assign('pager',         $pager);
-        $this->assign('param',         $param);
-        $this->assign('orderBy',       $orderBy);
-        $this->assign('moduleID',      $moduleID);
+        $this->view->header      = $header;
+        $this->view->position    = $position;
+        $this->view->productID   = $productID;
+        $this->view->productName = $this->products[$productID];
+        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $rooteModuleID = 0, array('treeModel', 'createBugLink'));
+        $this->view->browseType  = $browseType;
+        $this->view->bugs        = $bugs;
+        $this->view->users       = $users;
+        $this->view->pager       = $pager;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
+        $this->view->moduleID    = $moduleID;
 
         $this->display();
     }
@@ -524,8 +524,8 @@ class bug extends control
         if(strtolower($action->action) == 'opened') $action->comment = $bug->steps;
 
         /* 赋值，获得邮件内容。*/
-        $this->assign('bug', $bug);
-        $this->assign('action', $action);
+        $this->view->bug    = $bug;
+        $this->view->action = $action;
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* 发信。*/

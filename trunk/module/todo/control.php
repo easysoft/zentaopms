@@ -48,12 +48,12 @@ class todo extends control
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
         $position[]      = $this->lang->todo->create;
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('dates',    $this->todo->buildDateList(0, 3));
-        $this->assign('date',     $date);
-        $this->assign('times',    $this->todo->buildTimeList());
-        $this->assign('time',     $this->todo->now());
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->dates    = $this->todo->buildDateList(0, 3);
+        $this->view->date     = $date;
+        $this->view->times    = $this->todo->buildTimeList();
+        $this->view->time     = $this->todo->now();
         $this->display();
     }
 
@@ -79,11 +79,11 @@ class todo extends control
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
         $position[]      = $this->lang->todo->edit;
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('dates',    $this->todo->buildDateList());
-        $this->assign('times',    $this->todo->buildTimeList());
-        $this->assign('todo',     $todo);
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->dates    = $this->todo->buildDateList();
+        $this->view->times    = $this->todo->buildTimeList();
+        $this->view->todo     = $todo;
         $this->display();
     }
 

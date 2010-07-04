@@ -27,11 +27,11 @@ class search extends control
     {
         $this->search->initSession($module, $searchFields, $fieldParams);
 
-        $this->assign('module',       $module);
-        $this->assign('groupItems',   $this->config->search->groupItems);
-        $this->assign('searchFields', $searchFields);
-        $this->assign('actionURL',    $actionURL);
-        $this->assign('fieldParams',  $this->search->setDefaultParams($searchFields, $fieldParams));
+        $this->view->module       = $module;
+        $this->view->groupItems   = $this->config->search->groupItems;
+        $this->view->searchFields = $searchFields;
+        $this->view->actionURL    = $actionURL;
+        $this->view->fieldParams  = $this->search->setDefaultParams($searchFields, $fieldParams);
         $this->display();
     }
 

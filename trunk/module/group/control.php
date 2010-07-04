@@ -43,10 +43,10 @@ class group extends control
         $groupUsers = array();
         foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
 
-        $this->assign('header',     $header);
-        $this->assign('position',   $position);
-        $this->assign('groups',     $groups);
-        $this->assign('groupUsers', $groupUsers);
+        $this->view->header     = $header;
+        $this->view->position   = $position;
+        $this->view->groups     = $groups;
+        $this->view->groupUsers = $groupUsers;
 
         $this->display();
     }
@@ -77,9 +77,9 @@ class group extends control
 
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
         $position[]      = $this->lang->group->edit;
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('group',    $this->group->getById($groupID));
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->group    = $this->group->getById($groupID);
 
         $this->display();
     }
@@ -140,11 +140,11 @@ class group extends control
         $header['title'] = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[]      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
 
-        $this->assign('header',     $header);
-        $this->assign('position',   $position);
-        $this->assign('group',      $group);
-        $this->assign('groupUsers', $groupUsers);
-        $this->assign('allUsers',   $allUsers);
+        $this->view->header     = $header;
+        $this->view->position   = $position;
+        $this->view->group      = $group;
+        $this->view->groupUsers = $groupUsers;
+        $this->view->allUsers   = $allUsers;
 
         $this->display();
     }

@@ -197,15 +197,15 @@ class story extends control
         $position[]      = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $position[]      = $this->lang->story->view;
 
-        $this->assign('header',     $header);
-        $this->assign('position',   $position);
-        $this->assign('product',    $product);
-        $this->assign('plan',       $plan);
-        $this->assign('story',      $story);
-        $this->assign('users',      $users);
-        $this->assign('actions',    $this->action->getList('story', $storyID));
-        $this->assign('modulePath', $modulePath);
-        $this->assign('version',    $version == 0 ? $story->version : $version);
+        $this->view->header     = $header;
+        $this->view->position   = $position;
+        $this->view->product    = $product;
+        $this->view->plan       = $plan;
+        $this->view->story      = $story;
+        $this->view->users      = $users;
+        $this->view->actions    = $this->action->getList('story', $storyID);
+        $this->view->modulePath = $modulePath;
+        $this->view->version    = $version == 0 ? $story->version : $version;
         $this->display();
     }
 
@@ -320,7 +320,7 @@ class story extends control
     {
         $this->loadModel('task');
         $tasks = $this->task->getStoryTaskPairs($storyID, $projectID);
-        $this->assign('tasks', $tasks);
+        $this->view->tasks = $tasks;
         $this->display();
         exit;
     }

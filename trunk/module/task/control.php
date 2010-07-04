@@ -72,13 +72,13 @@ class task extends control
         $position[]      = html::a($browseProjectLink, $project->name);
         $position[]      = $this->lang->task->create;
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('project',  $project);
-        $this->assign('stories',  $stories);
-        $this->assign('storyID',  $storyID);
-        $this->assign('members',  $members);
-        $this->assign('users',    $this->loadModel('user')->getPairs('noletter, nodeleted'));
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->project  = $project;
+        $this->view->stories  = $stories;
+        $this->view->storyID  = $storyID;
+        $this->view->members  = $members;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter, nodeleted');
         $this->display();
     }
 
@@ -185,12 +185,12 @@ class task extends control
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
         $position[]      = $this->lang->task->view;
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('project',  $project);
-        $this->assign('task',     $task);
-        $this->assign('actions',  $this->action->getList('task', $taskID));
-        $this->assign('users',    $this->loadModel('user')->getPairs('noletter'));
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->project  = $project;
+        $this->view->task     = $task;
+        $this->view->actions  = $this->action->getList('task', $taskID);
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -249,8 +249,8 @@ class task extends control
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
 
         /* 赋值，获得邮件内容。*/
-        $this->assign('task', $task);
-        $this->assign('action', $action);
+        $this->view->task   = $task;
+        $this->view->action = $action;
         $this->clear();
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 

@@ -39,7 +39,7 @@ class product extends control
         /* 获取所有的产品列表。如果还没有产品，则跳转到产品的添加页面。*/
         $this->products = $this->product->getPairs();
         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
-        $this->assign('products', $this->products);
+        $this->view->products = $this->products;
     }
 
     /* 产品视图首页。*/

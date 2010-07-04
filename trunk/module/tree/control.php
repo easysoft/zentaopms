@@ -84,15 +84,15 @@ class tree extends control
         }
 
         $parentModules = $this->tree->getParents($currentModuleID);
-        $this->assign('header',          $header);
-        $this->assign('position',        $position);
-        $this->assign('productID',       $productID);
-        $this->assign('product',         $product);
-        $this->assign('viewType',        $viewType);
-        $this->assign('modules',         $this->tree->getTreeMenu($productID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink')));
-        $this->assign('sons',            $this->tree->getSons($productID, $currentModuleID, $viewType));
-        $this->assign('currentModuleID', $currentModuleID);
-        $this->assign('parentModules',   $parentModules);
+        $this->view->header          = $header;
+        $this->view->position        = $position;
+        $this->view->productID       = $productID;
+        $this->view->product         = $product;
+        $this->view->viewType        = $viewType;
+        $this->view->modules         = $this->tree->getTreeMenu($productID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
+        $this->view->sons            = $this->tree->getSons($productID, $currentModuleID, $viewType);
+        $this->view->currentModuleID = $currentModuleID;
+        $this->view->parentModules   = $parentModules;
         $this->display();
     }
 

@@ -66,11 +66,11 @@ class project extends control
         $this->project->setMenu($this->projects, $project->id);
 
         /* 将其赋值到模板系统。*/
-        $this->assign('projects',      $this->projects);
-        $this->assign('project',       $project);
-        $this->assign('childProjects', $childProjects);
-        $this->assign('products',      $products);
-        $this->assign('teamMembers',   $teamMembers);
+        $this->view->projects      = $this->projects;
+        $this->view->project       = $project;
+        $this->view->childProjects = $childProjects;
+        $this->view->products      = $products;
+        $this->view->teamMembers   = $teamMembers;
 
         /* 检查是否有访问权限。*/
         if(!$this->project->checkPriv($project))
@@ -219,12 +219,12 @@ class project extends control
         $users      = $this->user->getPairs('noletter');
 
         /* 赋值。*/
-        $this->assign('header',     $header);
-        $this->assign('position',   $position);
-        $this->assign('stories',    $stories);
-        $this->assign('storyTasks', $storyTasks);
-        $this->assign('tabID',      'story');
-        $this->assign('users',      $users);
+        $this->view->header     = $header;
+        $this->view->position   = $position;
+        $this->view->stories    = $stories;
+        $this->view->storyTasks = $storyTasks;
+        $this->view->tabID      = 'story';
+        $this->view->users      = $users;
 
         $this->display();
     }
@@ -256,14 +256,14 @@ class project extends control
         $users = $this->user->getPairs('noletter');
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('bugs',     $bugs);
-        $this->assign('tabID',    'bug');
-        $this->assign('pager',    $pager);
-        $this->assign('orderBy',  $orderBy);
-        $this->assign('users',    $users);
-        $this->assign('productID',$productID);
+        $this->view->header    = $header;
+        $this->view->position  = $position;
+        $this->view->bugs      = $bugs;
+        $this->view->tabID     = 'bug';
+        $this->view->pager     = $pager;
+        $this->view->orderBy   = $orderBy;
+        $this->view->users     = $users;
+        $this->view->productID = $productID;
 
         $this->display();
     }
@@ -305,10 +305,10 @@ class project extends control
         $charts  = $this->report->createJSChart('line', $dataXML, 800);
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'burn');
-        $this->assign('charts',   $charts);
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->tabID    = 'burn';
+        $this->view->charts   = $charts;
 
         $this->display();
     }
@@ -340,8 +340,8 @@ class project extends control
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->team;
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
+        $this->view->header   = $header;
+        $this->view->position = $position;
 
         $this->display();
     }
@@ -398,11 +398,11 @@ class project extends control
         $position[]      = $this->lang->project->edit;
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('projects', $projects);
-        $this->assign('project',  $project);
-        $this->assign('groups',   $this->loadModel('group')->getPairs());
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->projects = $projects;
+        $this->view->project  = $project;
+        $this->view->groups   = $this->loadModel('group')->getPairs();
 
         $this->display();
     }
@@ -472,10 +472,10 @@ class project extends control
         $linkedProducts = join(',', array_keys($linkedProducts));
 
         /* 赋值。*/
-        $this->assign('header',         $header);
-        $this->assign('position',       $position);
-        $this->assign('allProducts',    $allProducts);
-        $this->assign('linkedProducts', $linkedProducts);
+        $this->view->header         = $header;
+        $this->view->position       = $position;
+        $this->view->allProducts    = $allProducts;
+        $this->view->linkedProducts = $linkedProducts;
 
         $this->display();
     }
@@ -507,10 +507,10 @@ class project extends control
         $this->project->setMenu($this->projects, $project->id);
 
         /* 赋值。*/
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
-        $this->assign('projects',      $projects);
-        $this->assign('childProjects', $childProjects);
+        $this->view->header        = $header;
+        $this->view->position      = $position;
+        $this->view->projects      = $projects;
+        $this->view->childProjects = $childProjects;
 
         $this->display();
     }
@@ -537,12 +537,12 @@ class project extends control
         $header['title'] = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->manageMembers;
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
+        $this->view->header   = $header;
+        $this->view->position = $position;
 
-        $this->assign('project', $project);
-        $this->assign('users',   $users);
-        $this->assign('members', $members);
+        $this->view->project  = $project;
+        $this->view->users    = $users;
+        $this->view->members  = $members;
         $this->display();
     }
 
@@ -595,13 +595,13 @@ class project extends control
         $allStories = $this->story->getProductStories(array_keys($products), $moduleID = '0', $status = 'active');
         $prjStories = $this->story->getProjectStoryPairs($projectID);
 
-        $this->assign('header',     $header);
-        $this->assign('position',   $position);
-        $this->assign('project',    $project);
-        $this->assign('products',   $products);
-        $this->assign('allStories', $allStories);
-        $this->assign('prjStories', $prjStories);
-        $this->assign('users',      $this->loadModel('user')->getPairs('noletter'));
+        $this->view->header     = $header;
+        $this->view->position   = $position;
+        $this->view->project    = $project;
+        $this->view->products   = $products;
+        $this->view->allStories = $allStories;
+        $this->view->prjStories = $prjStories;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
