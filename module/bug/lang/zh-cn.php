@@ -206,9 +206,11 @@ $lang->bug->resolutionList['postponed']  = '延期处理';
 $lang->bug->resolutionList['willnotfix'] = "不予解决";
 
 /* 统计报表。*/
-$lang->bug->report->common = '统计报表';
-$lang->bug->report->select = '请选择报表类型';
-$lang->bug->report->create = '生成报表';
+$lang->bug->report->common        = '统计报表';
+$lang->bug->report->select        = '请选择报表类型';
+$lang->bug->report->create        = '生成报表';
+$lang->bug->report->selectAll     = '全选';
+$lang->bug->report->selectReverse = '反选';
 
 $lang->bug->report->charts['bugsPerProject']     = '项目Bug数量';
 $lang->bug->report->charts['bugsPerModule']      = '模块Bug数量';
