@@ -1,4 +1,5 @@
-<p style='margin-bottom:30px'></p>
+<?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
+<p style='margin-bottom:50px'></p>
 <div class='yui-d0' id='hiddenbar'>
   <iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='<?php $config->debug ? print("debugwin") : print('hiddenwin')?>'></iframe>
 </div>
