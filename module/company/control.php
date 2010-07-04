@@ -49,12 +49,12 @@ class company extends control
         $header['title'] = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $position[]      = $this->lang->dept->common;
 
-        $this->assign('header',      $header);
-        $this->assign('position',    $position);
-        $this->assign('users',       $this->dept->getUsers($childDeptIds));
-        $this->assign('deptTree',    $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink')));
-        $this->assign('parentDepts', $this->dept->getParents($deptID));
-        $this->assign('deptID',      $deptID);
+        $this->view->header      = $header;
+        $this->view->position    = $position;
+        $this->view->users       = $this->dept->getUsers($childDeptIds);
+        $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
+        $this->view->parentDepts = $this->dept->getParents($deptID);
+        $this->view->deptID      = $deptID;
 
         $this->display();
     }
@@ -75,8 +75,8 @@ class company extends control
         $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->company->create;
         $position[]      = html::a($this->createLink('admin', 'browsecompany'), $this->lang->admin->company);
         $position[]      = $this->lang->company->create;
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
+        $this->view->header   = $header;
+        $this->view->position = $position;
 
         $this->display();
     }
@@ -93,9 +93,9 @@ class company extends control
 
         $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
         $position[]      = $this->lang->company->edit;
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('company',  $this->company->getById($this->app->company->id));
+        $this->view->header    = $header;
+        $this->view->position  = $position;
+        $this->view->company   = $this->company->getById($this->app->company->id);
 
         $this->display();
     }

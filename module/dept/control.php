@@ -38,12 +38,12 @@ class dept extends control
         $position[]      = $this->lang->dept->manage;
 
         $parentDepts = $this->dept->getParents($deptID);
-        $this->assign('header',     $header);
-        $this->assign('position',   $position);
-        $this->assign('deptID',     $deptID);
-        $this->assign('depts',      $this->dept->getTreeMenu($rooteDeptID = 0, array('deptmodel', 'createManageLink')));
-        $this->assign('parentDepts',$parentDepts);
-        $this->assign('sons',       $this->dept->getSons($deptID));
+        $this->view->header      = $header;
+        $this->view->position    = $position;
+        $this->view->deptID      = $deptID;
+        $this->view->depts       = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptmodel', 'createManageLink'));
+        $this->view->parentDepts = $parentDepts;
+        $this->view->sons        = $this->dept->getSons($deptID);
         $this->display();
     }
 
@@ -57,8 +57,8 @@ class dept extends control
 
         $product = $this->product->getByID($productID);
         $header['title'] = $this->lang->product->edit . $this->lang->colon . $product->name;
-        $this->assign('header',  $header);
-        $this->assign('product', $product);
+        $this->view->header  = $header;
+        $this->view->product = $product;
         $this->display();
     }
 

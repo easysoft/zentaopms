@@ -63,15 +63,15 @@ class user extends control
         $position[]      = $this->lang->user->todo;
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'todo');
-        $this->assign('dates',    $this->todo->buildDateList()); 
-        $this->assign('date',     $date);
-        $this->assign('todos',    $todos);
-        $this->assign('user',     $user);
-        $this->assign('account',  $account);
-        $this->assign('type',     $type);
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->tabID    = 'todo';
+        $this->view->dates    = $this->todo->buildDateList(); 
+        $this->view->date     = $date;
+        $this->view->todos    = $todos;
+        $this->view->user     = $user;
+        $this->view->account  = $account;
+        $this->view->type     = $type;
 
         $this->display();
     }
@@ -94,11 +94,11 @@ class user extends control
         $position[]      = $this->lang->user->task;
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'task');
-        $this->assign('tasks',    $this->task->getUserTasks($account));
-        $this->assign('user',     $this->dao->findByAccount($account)->from(TABLE_USER)->fetch());
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->tabID    = 'task';
+        $this->view->tasks    = $this->task->getUserTasks($account);
+        $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         $this->display();
     }
@@ -121,12 +121,12 @@ class user extends control
         $position[]      = $this->lang->user->bug;
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'bug');
-        $this->assign('bugs',     $this->user->getBugs($account));
-        $this->assign('user',     $this->dao->findByAccount($account)->from(TABLE_USER)->fetch());
-        $this->assign('users',    $this->user->getPairs('noletter'));
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->tabID    = 'bug';
+        $this->view->bugs     = $this->user->getBugs($account);
+        $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->users    = $this->user->getPairs('noletter');
 
         $this->display();
     }
@@ -147,11 +147,11 @@ class user extends control
         $position[]      = $this->lang->user->project;
 
         /* 赋值。*/
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('tabID',    'project');
-        $this->assign('projects', $this->user->getProjects($account));
-        $this->assign('user',     $this->dao->findByAccount($account)->from(TABLE_USER)->fetch());
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->tabID    = 'project';
+        $this->view->projects = $this->user->getProjects($account);
+        $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         $this->display();
     }
@@ -165,9 +165,9 @@ class user extends control
         /* 设置菜单。*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('user',     $this->user->getById($account));
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->user     = $this->user->getById($account);
 
         $this->display();
     }
@@ -201,10 +201,10 @@ class user extends control
 
         $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->create;
         $position[]      = $this->lang->user->create;
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('depts',    $this->dept->getOptionMenu());
-        $this->assign('deptID',   $deptID);
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->depts    = $this->dept->getOptionMenu();
+        $this->view->deptID   = $deptID;
 
         $this->display();
     }
@@ -230,10 +230,10 @@ class user extends control
 
         $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[]      = $this->lang->user->edit;
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('user',     $this->user->getById($userID));
-        $this->assign('depts',    $this->dept->getOptionMenu());
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->user     = $this->user->getById($userID);
+        $this->view->depts    = $this->dept->getOptionMenu();
 
         $this->display();
     }
@@ -339,8 +339,8 @@ class user extends control
         else
         {
             $header['title'] = $this->lang->user->login;
-            $this->assign('header',  $header);
-            $this->assign('referer', $this->referer);
+            $this->view->header  = $header;
+            $this->view->referer = $this->referer;
             $this->display();
         }
     }
@@ -350,11 +350,11 @@ class user extends control
     {
         $this->setReferer();
         $header['title'] = $this->lang->user->deny;
-        $this->assign('header',   $header);
-        $this->assign('module',   $module);
-        $this->assign('method',   $method);
-        $this->assign('denyPage', $this->referer);                 // 访问受限的页面。
-        $this->assign('refererBeforeDeny', $refererBeforeDeny);    // 受限页面之前的referer页面。
+        $this->view->header            = $header;
+        $this->view->module            = $module;
+        $this->view->method            = $method;
+        $this->view->denyPage          = $this->referer;        // 访问受限的页面。
+        $this->view->refererBeforeDeny = $refererBeforeDeny;    // 受限页面之前的referer页面。
         $this->app->loadLang($module);
         $this->app->loadLang('index');
         $this->display();

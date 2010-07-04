@@ -46,7 +46,7 @@ class testcase extends control
     {
         /* 构造搜索表单。*/
         $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch");
-        $this->assign('searchForm', $this->fetch('search', 'buildForm', $this->config->testcase->search));
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
 
         /* 设置浏览模式，产品ID和模块ID。 */
         $browseType = strtolower($browseType);
@@ -127,14 +127,14 @@ class testcase extends control
         $position[]      = $this->lang->testcase->create;
 
         $users = $this->user->getPairs();
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
-        $this->assign('productID',     $productID);
-        $this->assign('users',         $users);           
-        $this->assign('productName',   $this->products[$productID]);
-        $this->assign('moduleOptionMenu',  $this->tree->getOptionMenu($productID, $viewType = 'case', $rooteModuleID = 0));
-        $this->assign('currentModuleID',   $currentModuleID);
-        $this->assign('stories',       $this->story->getProductStoryPairs($productID));
+        $this->view->header           = $header;
+        $this->view->position         = $position;
+        $this->view->productID        = $productID;
+        $this->view->users            = $users;           
+        $this->view->productName      = $this->products[$productID];
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $rooteModuleID = 0);
+        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->stories          = $this->story->getProductStoryPairs($productID);
 
         $this->display();
     }
@@ -202,19 +202,19 @@ class testcase extends control
         $this->testcase->setMenu($this->products, $productID);
 
         $users = $this->user->getPairs();
-        $this->assign('header',        $header);
-        $this->assign('position',      $position);
-        $this->assign('productID',     $productID);
-        $this->assign('productName',   $this->products[$productID]);
-        $this->assign('moduleOptionMenu',  $this->tree->getOptionMenu($productID, $viewType = 'case', $rooteModuleID = 0));
-        $this->assign('currentModuleID',   $currentModuleID);
-        $this->assign('users',   $users);           
-        $this->assign('stories', $this->story->getProductStoryPairs($productID));
+        $this->view->header           = $header;
+        $this->view->position         = $position;
+        $this->view->productID        = $productID;
+        $this->view->productName      = $this->products[$productID];
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $rooteModuleID = 0);
+        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->users            = $users;
+        $this->view->stories          = $this->story->getProductStoryPairs($productID);
 
-        $this->assign('header',   $header);
-        $this->assign('position', $position);
-        $this->assign('case',      $case);
-        $this->view->actions     = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->case     = $case;
+        $this->view->actions  = $this->loadModel('action')->getList('case', $caseID);
 
         $this->display();
     }
