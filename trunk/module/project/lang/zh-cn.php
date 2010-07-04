@@ -88,7 +88,7 @@ $lang->project->edit           = "编辑项目";
 $lang->project->manageMembers  = '团队管理';
 $lang->project->unlinkMember   = '移除成员';
 $lang->project->unlinkStory    = '移除需求';
-$lang->project->importTask     = '导入任务';
+$lang->project->importTask     = '导入之前未完';
 
 /* 分组浏览。*/
 $lang->project->listTask            = '列表方式';
@@ -96,11 +96,11 @@ $lang->project->groupTaskByStory    = '需求分组';
 $lang->project->groupTaskByStatus   = '状态分组';
 $lang->project->groupTaskByPri      = '优先级分组';
 $lang->project->groupTaskByOwner    = '指派给分组';
-$lang->project->groupTaskByEstimate = '预计工时分组';
+$lang->project->groupTaskByEstimate = '预计分组';
 $lang->project->groupTaskByConsumed = '已消耗分组';
-$lang->project->groupTaskByLeft     = '剩余工时分组';
-$lang->project->groupTaskByType     = '任务类型分组';
-$lang->project->groupTaskByDeadline = '截止日期分组';
+$lang->project->groupTaskByLeft     = '剩余分组';
+$lang->project->groupTaskByType     = '类型分组';
+$lang->project->groupTaskByDeadline = '截止分组';
 $lang->project->listTaskNeedConfrim = '需求变动';
 
 /* 页面提示。*/
