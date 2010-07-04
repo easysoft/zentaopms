@@ -1,3 +1,4 @@
+<?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php if(isset($users[$action->actor])) $action->actor = $users[$action->actor];?>
 <span><?php $this->action->printAction($action);?>
 <?php if(!empty($action->comment) or !empty($action->history)):?>
