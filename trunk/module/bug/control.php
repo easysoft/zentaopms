@@ -53,15 +53,7 @@ class bug extends control
         $browseType = strtolower($browseType);
         $productID  = common::saveProductState($productID, key($this->products));
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
-
-        /* 设置搜索表单。*/
-        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch");
-        $this->config->bug->search['params']['product']['values']       = array($productID => $this->products[$productID], 'all' => $this->lang->bug->allProduct);
-        $this->config->bug->search['params']['module']['values']        = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
-        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID);
-        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* 设置菜单，登记session。*/
         $this->bug->setMenu($this->products, $productID);
@@ -129,7 +121,24 @@ class bug extends control
         }
         elseif($browseType == 'bysearch')
         {
-            if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
+            if((int)$param)
+            {
+                $queryID = $param;
+                $query   = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('bugQuery', $query->sql);
+                    $this->session->set('bugForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('bugQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
+            }
             $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // 如果指定了搜索所有的产品，去掉这个查询条件。
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
                 ->andWhere('deleted')->eq(0)
@@ -143,6 +152,16 @@ class bug extends control
             $sql = explode('ORDER', $sql[1]);
             $this->session->set('bugReportCondition', $sql[0]);
         }
+
+        /* 设置搜索表单。*/
+        $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch&queryID=queryID");
+        $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['params']['product']['values']       = array($productID => $this->products[$productID], 'all' => $this->lang->bug->allProduct);
+        $this->config->bug->search['params']['module']['values']        = $this->tree->getOptionMenu($productID, $viewType = 'bug', $rooteModuleID = 0);
+        $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID);
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
 
         $users = $this->user->getPairs('noletter');
         
