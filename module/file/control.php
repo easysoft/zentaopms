@@ -41,15 +41,30 @@ class file extends control
     /* 导出csv格式的文件。*/
     public function export2csv($agent)
     {
-        $fileName = $this->post->fileName;
+        $fileName   = $this->post->fileName;
+        $csvData    = stripslashes($this->post->csvData);
+
+        /* 如果是中文，尝试将编码转为gbk. */
+        $clientLang = $this->app->getClientLang();
+        if($clientLang == 'zh-cn' or $clientLang == 'zh-tw')
+        {
+            if(function_exists('mb_convert_encoding'))
+            {
+                $csvData = @mb_convert_encoding($csvData, 'gbk', 'utf-8');
+            }
+            elseif(function_exists('iconv'))
+            {
+                $csvData = @iconv('utf-8', 'gbk', $csvData);
+            }
+        }
+
         if(strpos($fileName, '.csv') === false) $fileName .= '.csv';
         if($agent == 'ie') $fileName = urlencode($fileName);
         header('Content-type: application/csv');
         header("Content-Disposition: attachment; filename=$fileName");
         header("Pragma: no-cache");
         header("Expires: 0");
-        echo chr(0xEF) . chr(0xBB) . chr(0xBF);
-        echo stripslashes($this->post->csvData);
+        echo $csvData;
         die();
     }
 }
