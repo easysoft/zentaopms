@@ -22,10 +22,18 @@
  * @link        http://www.zentaoms.com
  */
 ?>
-<style>.helplink{display:none}</style>
+<style>
+.helplink {display:none}
+.button-s, .button-r, .button-c {padding:3px} 
+.select-1 {width:80%}
+</style>
 <script language='Javascript'>
-var params     = <?php echo json_encode($fieldParams);?>;
-var groupItems = <?php echo $config->search->groupItems;?>;
+
+var params        = <?php echo json_encode($fieldParams);?>;
+var groupItems    = <?php echo $config->search->groupItems;?>;
+var setQueryTitle = '<?php echo $lang->search->setQueryTitle;?>';
+var module        = '<?php echo $module;?>';
+var actionURL     = '<?php echo $actionURL;?>';
 
 /* 根据字段的参数，重新设置它对应的操作符和值。*/
 function setField(fieldName, fieldNO)
@@ -33,6 +41,15 @@ function setField(fieldName, fieldNO)
     $('#operator' + fieldNO).val(params[fieldName]['operator']);
     htmlString = $('#box' + fieldName).html().replace(fieldName, 'value' + fieldNO).replace(fieldName, 'value' + fieldNO);
     $('#valueBox' + fieldNO).html(htmlString);
+}
+
+/* 重置表单。*/
+function resetForm()
+{
+    for(i = 1; i <= groupItems * 2; i ++)
+    {
+        $('#value' + i).val('');
+    }
 }
 
 /* 显示更多的搜索选项。*/
@@ -48,9 +65,7 @@ function showmore()
 
     $('#searchmore').addClass('hidden');
     $('#searchlite').removeClass('hidden');
-    $('#searchgroup1').removeClass('hidden');
-    $('#searchgroup2').removeClass('hidden');
-    $('#searchType').val('more');
+    $('#formType').val('more');
 }
 
 /* 显示简洁的搜索选项。*/
@@ -66,10 +81,38 @@ function showlite()
     }
     $('#searchmore').removeClass('hidden');
     $('#searchlite').addClass('hidden');
-    $('#searchgroup1').addClass('hidden');
-    $('#searchgroup2').addClass('hidden');
-    $('#searchType').val('lite');
+    $('#formType').val('lite');
 }
+
+/* 保存用户设定的查询条件。*/
+function saveQuery()
+{
+    jPrompt(setQueryTitle, '', '', function(r) 
+    {
+        if(!r) return;
+        saveQueryLink = createLink('search', 'saveQuery');
+        $.post(saveQueryLink, {title: r, module: module}, function(data)
+        {
+            if(data == 'success') location.reload();
+        });
+    });
+}
+
+/* 执行用户选中的query。*/
+function executeQuery(queryID)
+{
+    if(!queryID) return;
+    location.href = actionURL.replace('queryID', queryID);
+}
+
+/* 删除Query。*/
+function deleteQuery()
+{
+    queryID = $('#queryID').val();
+    if(!queryID) return;
+    hiddenwin.location.href = createLink('search', 'deleteQuery', 'queryID=' + queryID);
+}
+
 </script>
 
 <div class='hidden'>
@@ -88,7 +131,7 @@ foreach($fieldParams as $fieldName => $param)
 <table class='table-1'>
   <tr valign='middle'>
     <th width='10' class='bg-gray'><?php echo $lang->search->common;?></th>
-    <td class='a-right' width='200px'>
+    <td class='a-right'>
       <nobr>
       <?php
       $formSessionName = $module . 'Form';
@@ -105,7 +148,7 @@ foreach($fieldParams as $fieldName => $param)
           $param        = $fieldParams[$currentField];
 
           /* 打印and or。*/
-          if($i == 1) echo "<span id='searchgroup1' class='hidden'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
+          if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
           if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
           /* 打印字段。*/
@@ -126,8 +169,8 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </nobr>
     </td>
-    <td class='a-center' width='20'><nobr><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'])?></nobr></td>
-    <td class='a-right' width='200'>
+    <td class='a-center' width='60'><nobr><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'])?></nobr></td>
+    <td class='a-right'>
       <nobr>
       <?php
       for($i = 1; $i <= $groupItems; $i ++)
@@ -140,7 +183,7 @@ foreach($fieldParams as $fieldName => $param)
           $param        = $fieldParams[$currentField];
 
           /* 打印and or。*/
-          if($i == 1) echo "<span id='searchgroup2' class='hidden'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
+          if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
           if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
           /* 打印字段。*/
@@ -168,22 +211,25 @@ foreach($fieldParams as $fieldName => $param)
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
       echo html::submitButton($lang->search->common);
-      echo html::resetButton($lang->search->reset);
-      //echo html::submitButton($lang->search->saveQuery);
+      echo html::commonButton($lang->search->reset, 'onclick=resetForm();');
+      echo html::commonButton($lang->search->saveQuery, 'onclick=saveQuery()');
       ?>
       </nobr>
+    </td>
+    <td width='250' class='a-center'>
+      <?php
+      echo html::select('queryID', $queries, $queryID, 'class=select-1 onchange=executeQuery(this.value)');
+      if(common::hasPriv('search', 'deleteQuery')) echo html::commonButton(' x ', 'onclick=deleteQuery();');
+      ?>
     </td>
     <th width='10' class='bg-gray' style='cursor:pointer; padding:0'>
       <span id='searchmore' onclick='showmore()' style='width:100%; height:100%'><?php echo $lang->search->more;?></span>
       <span id='searchlite' onclick='showlite()' style='width:100%; height:100%' class='hidden'><?php echo $lang->search->lite;?></span>
-      <?php echo html::hidden('searchType', 'lite');?>
+      <?php echo html::hidden('formType', 'lite');?>
     </th>
-    <!--<td><?php echo $lang->search->myQuery; ?></td>-->
   </tr>
 </table>
 </form>
 <script language='Javascript'>
-<?php
-if(isset($formSession['searchType'])) echo "show{$formSession['searchType']}()";
-?>
+<?php if(isset($formSession['formType'])) echo "show{$formSession['formType']}()";?>
 </script>
