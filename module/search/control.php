@@ -23,7 +23,7 @@
  */
 class search extends control
 {
-    public function buildForm($module, $searchFields, $fieldParams, $actionURL)
+    public function buildForm($module, $searchFields, $fieldParams, $actionURL, $queryID = 0)
     {
         $this->search->initSession($module, $searchFields, $fieldParams);
 
@@ -32,6 +32,8 @@ class search extends control
         $this->view->searchFields = $searchFields;
         $this->view->actionURL    = $actionURL;
         $this->view->fieldParams  = $this->search->setDefaultParams($searchFields, $fieldParams);
+        $this->view->queries      = $this->search->getQueryPairs($module);
+        $this->view->queryID      = $queryID;
         $this->display();
     }
 
@@ -39,5 +41,18 @@ class search extends control
     {
         $this->search->buildQuery();
         die(js::locate($this->post->actionURL, 'parent'));
+    }
+
+    public function saveQuery()
+    {
+        $this->search->saveQuery();
+        if(dao::isError()) die(js::error(dao::getError()));
+        die('success');
+    }
+
+    public function deleteQuery($queryID)
+    {
+        $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
+        die(js::reload('parent'));
     }
 }

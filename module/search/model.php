@@ -125,4 +125,47 @@ class searchModel extends model
         }
         return $params;
     }
+
+    /* 获得某一个查询。*/
+    public function getQuery($queryID)
+    {
+        $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
+        if(!$query) return false;
+        $query->form = unserialize($query->form);
+        return $query;
+    }
+
+    /* 保存查询。*/
+    public function saveQuery()
+    {
+        $sqlVar  = $this->post->module  . 'Query';
+        $formVar = $this->post->module  . 'Form';
+        $query = fixer::input('post')
+            ->specialChars('title')
+            ->add('account', $this->app->user->account)
+            ->add('form', serialize($this->session->$formVar))
+            ->add('sql',  $this->session->$sqlVar)
+            ->get();
+        $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
+    }
+
+    /* 获得用户查询对。*/
+    public function getQueryPairs($module)
+    {
+        $queries = $this->dao->select('id, title')
+            ->from(TABLE_USERQUERY)
+            ->where('account')->eq($this->app->user->account)
+            ->andWhere('module')->eq($module)
+            ->orderBy('id_asc')
+            ->fetchPairs();
+        if(!$queries) return array('' => $this->lang->search->myQuery);
+        $i = ord('A');
+        foreach($queries as $key => $value)
+        {
+            $queries[$key] = chr($i) . ': ' . $value;
+            $i ++;
+        }
+        $queries = array('' => $this->lang->search->myQuery) + $queries;
+        return $queries;
+    }
 }
