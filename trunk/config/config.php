@@ -22,7 +22,7 @@
  * @link        http://www.zentaoms.com
  */
 /* 基本参数设定。*/
-$config->version     = '1.0.1';           // 版本号，切勿修改。
+$config->version     = '1.1';             // 版本号，切勿修改。
 $config->encoding    = 'UTF-8';           // 网站的编码。
 $config->cookiePath  = '/';               // cookie的有效路径。
 $config->cookieLife  = time() + 2592000;  // cookie的生命周期。
