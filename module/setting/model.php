@@ -43,4 +43,62 @@ class settingModel extends model
             ->andWhere('`key`')->eq($key)
             ->fetch('value', $autoCompany = false);
     }
+
+    /* 计算当前系统的序列号。*/
+    public function computeSN()
+    {
+        $seed = $this->server->SERVER_ADDR . $this->server->SERVER_SOFTWARE;
+        $sn   = md5(str_shuffle(md5($seed . mt_rand(0, 99999999) . microtime())) . microtime());
+        return $sn;
+    }
+
+    /* 设置当前系统的序列号。*/
+    public function setSN()
+    {
+        $item->company = 0;
+        $item->owner   = 'system';
+        $item->section = 'global';
+        $item->key     = 'sn';
+        $item->value   =  $this->computeSN();
+
+        $configID = $this->dao->select('id')->from(TABLE_CONFIG)
+            ->where('company')->eq(0)
+            ->andWhere('owner')->eq('system')
+            ->andWhere('section')->eq('global')
+            ->andWhere('`key`')->eq('sn')
+            ->fetch('id', $autoComapny = false);
+        if($configID > 0)
+        {
+            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($configID)->exec($autoCompany = false);
+        }
+        else
+        {
+            $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
+        }
+    }
+
+    /* 更新PMS的版本设置。*/
+    public function updateVersion($version)
+    {
+        $item->company = 0;
+        $item->owner   = 'system';
+        $item->section = 'global';
+        $item->key     = 'version';
+        $item->value   =  $version;
+
+        $configID = $this->dao->select('id')->from(TABLE_CONFIG)
+            ->where('company')->eq(0)
+            ->andWhere('owner')->eq('system')
+            ->andWhere('section')->eq('global')
+            ->andWhere('`key`')->eq('version')
+            ->fetch('id', $autoComapny = false);
+        if($configID > 0)
+        {
+            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($configID)->exec($autoCompany = false);
+        }
+        else
+        {
+            $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
+        }
+    }
 }
