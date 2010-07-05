@@ -12,7 +12,7 @@ $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['module']         = $lang->bug->module;
 $config->bug->search['fields']['project']        = $lang->bug->project;
 $config->bug->search['fields']['closedBy']       = $lang->bug->closedBy;
-$config->bug->search['fields']['lastEditedBy']   = $lang->bug->lastEditedBy;
+$config->bug->search['fields']['lastEditedBy']   = $lang->bug->lastEditedByAB;
 $config->bug->search['fields']['status']         = $lang->bug->status;
 $config->bug->search['fields']['severity']       = $lang->bug->severity;
 $config->bug->search['fields']['pri']            = $lang->bug->pri;
@@ -27,7 +27,7 @@ $config->bug->search['fields']['resolvedBuild']  = $lang->bug->resolvedBuild;
 $config->bug->search['fields']['resolvedDate']   = $lang->bug->resolvedDate;
 $config->bug->search['fields']['assignedDate']   = $lang->bug->assignedDate;
 $config->bug->search['fields']['closedDate']     = $lang->bug->closedDate;
-$config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDate;
+$config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDateAB;
 
 $config->bug->search['params']['title']         = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->bug->search['params']['keywords']      = array('operator' => 'include', 'control' => 'input',  'values' => '');

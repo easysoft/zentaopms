@@ -63,6 +63,8 @@ $lang->bug->linkBug        = '相关Bug';
 $lang->bug->case           = '相关用例';
 $lang->bug->files          = '附件';
 $lang->bug->keywords       = '关键词';
+$lang->bug->lastEditedByAB   = '修改者';
+$lang->bug->lastEditedDateAB = '修改日期';
 
 /* 方法列表。*/
 $lang->bug->index          = '首页';
