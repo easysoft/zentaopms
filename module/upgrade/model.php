@@ -39,6 +39,8 @@ class upgradeModel extends model
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
             $this->upgradeFrom1_0rc2To1_0stable();
+            $this->upgradeFrom1_0stableTo1_0_1();
+            $this->upgradeFrom1_0_1To1_1();
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -48,6 +50,8 @@ class upgradeModel extends model
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
             $this->upgradeFrom1_0rc2To1_0stable();
+            $this->upgradeFrom1_0stableTo1_0_1();
+            $this->upgradeFrom1_0_1To1_1();
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -56,6 +60,8 @@ class upgradeModel extends model
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
             $this->upgradeFrom1_0rc2To1_0stable();
+            $this->upgradeFrom1_0stableTo1_0_1();
+            $this->upgradeFrom1_0_1To1_1();
         }
         elseif($fromVersion == '0_6beta')
         {
@@ -63,21 +69,38 @@ class upgradeModel extends model
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
             $this->upgradeFrom1_0rc2To1_0stable();
+            $this->upgradeFrom1_0stableTo1_0_1();
+            $this->upgradeFrom1_0_1To1_1();
         }
         elseif($fromVersion == '1_0beta')
         {
             $this->upgradeFrom1_0betaTo1_0rc1();
             $this->upgradeFrom1_0rc1To1_0rc2();
             $this->upgradeFrom1_0rc2To1_0stable();
+            $this->upgradeFrom1_0stableTo1_0_1();
+            $this->upgradeFrom1_0_1To1_1();
         }
         elseif($fromVersion == '1_0rc1')
         {
             $this->upgradeFrom1_0rc1To1_0rc2();
             $this->upgradeFrom1_0rc2To1_0stable();
+            $this->upgradeFrom1_0stableTo1_0_1();
+            $this->upgradeFrom1_0_1To1_1();
         }
         elseif($fromVersion == '1_0rc2')
         {
             $this->upgradeFrom1_0rc2To1_0stable();
+            $this->upgradeFrom1_0stableTo1_0_1();
+            $this->upgradeFrom1_0_1To1_1();
+        }
+         elseif($fromVersion == '1_0stable')
+        {
+            $this->upgradeFrom1_0stableTo1_0_1();
+            $this->upgradeFrom1_0_1To1_1();
+        }
+          elseif($fromVersion == '1_0_1')
+        {
+            $this->upgradeFrom1_0_1To1_1();
         }
     }
 
@@ -93,6 +116,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -101,6 +125,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -108,23 +133,31 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
         elseif($fromVersion == '0_6beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('0.6'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
         elseif($fromVersion == '1_0beta')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.beta'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
         elseif($fromVersion == '1_0rc1')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
-
+        elseif($fromVersion == '1_0stable' || $fromVersion == '1_0_1')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
+        }
+        
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
 
@@ -178,6 +211,19 @@ class upgradeModel extends model
         $this->updateVersion('1.0');
     }
 
+    /* 从1.0stable版本升级到1.0.1版本。*/
+    private function upgradeFrom1_0stableTo1_0_1()
+    {
+        $this->updateVersion('1.0');
+    }
+
+    /* 从1.0.1版本升级到1.1版本。*/
+    private function upgradeFrom1_0_1To1_1()
+    {
+        $this->execSQL($this->getUpgradeFile('1.0.1'));
+        if(!$this->isError()) $this->updateVersion('1.1');
+    }
+   
     /* 更新每个表的company字段。*/
     private function updateCompany()
     {
