@@ -27,6 +27,12 @@ class upgradeModel extends model
 {
     static $errors = array();
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadModel('setting');
+    }
+
     /* 统一的升级入口，根据升级版本的不同，调用不同的升级步骤程序。*/
     public function execute($fromVersion)
     {
@@ -93,15 +99,17 @@ class upgradeModel extends model
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
         }
-         elseif($fromVersion == '1_0stable')
+        elseif($fromVersion == '1_0stable')
         {
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
         }
-          elseif($fromVersion == '1_0_1')
+        elseif($fromVersion == '1_0_1')
         {
             $this->upgradeFrom1_0_1To1_1();
         }
+
+        $this->setting->setSN();
     }
 
     /* 确认。*/
@@ -161,33 +169,32 @@ class upgradeModel extends model
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
 
-
     /* 从0.3版本升级到0.4版本。*/
     private function upgradeFrom0_3To0_4()
     {
         $this->execSQL($this->getUpgradeFile('0.3'));
-        if(!$this->isError()) $this->updateVersion('0.4 beta');
+        if(!$this->isError()) $this->setting->updateVersion('0.4 beta');
     }
 
     /* 从0.4版本升级到0.5版本。*/
     private function upgradeFrom0_4To0_5()
     {
         $this->execSQL($this->getUpgradeFile('0.4'));
-        if(!$this->isError()) $this->updateVersion('0.5 beta');
+        if(!$this->isError()) $this->setting->updateVersion('0.5 beta');
     }
 
     /* 从0.5版本升级到0.6版本。*/
     private function upgradeFrom0_5To0_6()
     {
         $this->execSQL($this->getUpgradeFile('0.5'));
-        if(!$this->isError()) $this->updateVersion('0.6 beta');
+        if(!$this->isError()) $this->setting->updateVersion('0.6 beta');
     }
 
     /* 从0.6版本升级到1.0 beta版本。*/
     private function upgradeFrom0_6To1_0_B()
     {
         $this->execSQL($this->getUpgradeFile('0.6'));
-        if(!$this->isError()) $this->updateVersion('1.0beta');
+        if(!$this->isError()) $this->setting->updateVersion('1.0beta');
     }
 
     /* 从1.0beta版本升级到1.0rc1版本。*/
@@ -195,33 +202,33 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('1.0.beta'));
         $this->updateCompany();
-        if(!$this->isError()) $this->updateVersion('1.0rc1');
+        if(!$this->isError()) $this->setting->updateVersion('1.0rc1');
     }
 
     /* 从1.0rc1版本升级到1.0rc2版本。*/
     private function upgradeFrom1_0rc1To1_0rc2()
     {
         $this->execSQL($this->getUpgradeFile('1.0.rc1'));
-        if(!$this->isError()) $this->updateVersion('1.0rc2');
+        if(!$this->isError()) $this->setting->updateVersion('1.0rc2');
     }
 
     /* 从1.0rc2版本升级到1.0stable版本。*/
     private function upgradeFrom1_0rc2To1_0stable()
     {
-        $this->updateVersion('1.0');
+        $this->setting->updateVersion('1.0');
     }
 
     /* 从1.0stable版本升级到1.0.1版本。*/
     private function upgradeFrom1_0stableTo1_0_1()
     {
-        $this->updateVersion('1.0');
+        $this->setting->updateVersion('1.0.1');
     }
 
     /* 从1.0.1版本升级到1.1版本。*/
     private function upgradeFrom1_0_1To1_1()
     {
         $this->execSQL($this->getUpgradeFile('1.0.1'));
-        if(!$this->isError()) $this->updateVersion('1.1');
+        if(!$this->isError()) $this->setting->updateVersion('1.1');
     }
    
     /* 更新每个表的company字段。*/
@@ -236,31 +243,6 @@ class upgradeModel extends model
             if(strpos($key, 'TABLE') === false) continue;
             if($key == 'TABLE_COMPANY' or $key == 'TABLE_CONFIG') continue;
             $this->dbh->query("UPDATE $value SET company = '{$this->app->company->id}'");
-        }
-    }
-
-    /* 更新PMS的版本设置。*/
-    public function updateVersion($version)
-    {
-        $item->company = 0;
-        $item->owner   = 'system';
-        $item->section = 'global';
-        $item->key     = 'version';
-        $item->value   =  $version;
-
-        $configID = $this->dao->select('id')->from(TABLE_CONFIG)
-            ->where('company')->eq(0)
-            ->andWhere('owner')->eq('system')
-            ->andWhere('section')->eq('global')
-            ->andWhere('`key`')->eq('version')
-            ->fetch('id', $autoComapny = false);
-        if($configID > 0)
-        {
-            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($configID)->exec($autoCompany = false);
-        }
-        else
-        {
-            $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
         }
     }
 

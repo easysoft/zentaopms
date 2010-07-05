@@ -109,7 +109,7 @@ class install extends control
         {
             $this->install->grantPriv();
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->loadModel('upgrade')->updateVersion($this->config->version);
+            $this->loadModel('setting')->updateVersion($this->config->version);
             echo (js::alert($this->lang->install->success));
             unset($_SESSION['installing']);
             session_destroy();
