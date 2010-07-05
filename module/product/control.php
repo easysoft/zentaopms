@@ -51,11 +51,6 @@ class product extends control
     /* 浏览某一个产品。*/
     public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 设置搜索条件。*/
-        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch");
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
-        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);
-
         /* 设置查询格式。*/
         $browseType = strtolower($browseType);
 
@@ -64,6 +59,7 @@ class product extends control
         $this->session->set('productList', $this->app->getURI(true));
         $productID = common::saveProductState($productID, key($this->products));
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
@@ -88,9 +84,32 @@ class product extends control
         }
         elseif($browseType == 'bysearch')
         {
-            if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('storyQuery', $query->sql);
+                    $this->session->set('storyForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('storyQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
+            }
+
             $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy, $pager);
         }
+
+        /* 设置搜索条件。*/
+        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=queryID");
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);
 
         $this->view->productID     = $productID;
         $this->view->productName   = $this->products[$productID];

@@ -44,14 +44,11 @@ class testcase extends control
     /* 浏览一个产品下面的case。*/
     public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 构造搜索表单。*/
-        $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch");
-        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
-
         /* 设置浏览模式，产品ID和模块ID。 */
         $browseType = strtolower($browseType);
         $productID = common::saveProductState($productID, key($this->products));
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* 设置菜单，登记session。*/
         $this->testcase->setMenu($this->products, $productID);
@@ -78,12 +75,34 @@ class testcase extends control
         }
         elseif($browseType == 'bysearch')
         {
-            if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('testcaseQuery', $query->sql);
+                    $this->session->set('testcaseForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('testcaseQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+            }
+
             $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)
                 ->andWhere('product')->eq($productID)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
+
+        /* 构造搜索表单。*/
+        $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch&queryID=queryID");
+        $this->config->testcase->search['queryID']   = $queryID;
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
 
         /* 赋值。*/
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;

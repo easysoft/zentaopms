@@ -121,10 +121,9 @@ class bug extends control
         }
         elseif($browseType == 'bysearch')
         {
-            if((int)$param)
+            if($queryID)
             {
-                $queryID = $param;
-                $query   = $this->loadModel('search')->getQuery($queryID);
+                $query = $this->loadModel('search')->getQuery($queryID);
                 if($query)
                 {
                     $this->session->set('bugQuery', $query->sql);
