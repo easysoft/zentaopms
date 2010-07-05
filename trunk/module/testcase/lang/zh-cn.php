@@ -48,6 +48,8 @@ $lang->testcase->scriptedStatus = '脚本状态';
 $lang->testcase->scriptedLocation = '脚本位置';
 $lang->testcase->linkCase         = '相关用例';
 $lang->testcase->stage            = '适用阶段';
+$lang->testcase->lastEditedByAB   = '修改者';
+$lang->testcase->lastEditedDateAB = '修改日期';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID     = '编号';

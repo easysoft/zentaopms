@@ -5,13 +5,13 @@ $config->testcase->search['fields']['title']          = $lang->testcase->title;
 $config->testcase->search['fields']['id']             = $lang->testcase->id;
 $config->testcase->search['fields']['keywords']       = $lang->testcase->keywords;
 $config->testcase->search['fields']['openedBy']       = $lang->testcase->openedBy;
-$config->testcase->search['fields']['lastEditedBy']   = $lang->testcase->lastEditedBy;
+$config->testcase->search['fields']['lastEditedBy']   = $lang->testcase->lastEditedByAB;
 $config->testcase->search['fields']['status']         = $lang->testcase->status;
 $config->testcase->search['fields']['pri']            = $lang->testcase->pri;
 $config->testcase->search['fields']['type']           = $lang->testcase->type;
 $config->testcase->search['fields']['stage']          = $lang->testcase->stage;
 $config->testcase->search['fields']['openedDate']     = $lang->testcase->openedDate;
-$config->testcase->search['fields']['lastEditedDate'] = $lang->testcase->lastEditedDate;
+$config->testcase->search['fields']['lastEditedDate'] = $lang->testcase->lastEditedDateAB;
 
 $config->testcase->search['params']['title']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->testcase->search['params']['keywords']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
