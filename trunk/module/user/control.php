@@ -296,7 +296,7 @@ class user extends control
         }
 
         /* 用户提交了登陆信息，则检查用户的身份。*/
-        if(!empty($_POST) or !empty($_GET))
+        if(!empty($_POST) or (isset($_GET['account']) and isset($_GET['password'])))
         {
             $account  = '';
             $password = '';
