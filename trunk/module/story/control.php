@@ -110,12 +110,11 @@ class story extends control
         }
 
         $this->commonAction($storyID);
-        $story = $this->story->getById($storyID);
   
         /* 赋值到模板。*/
         $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $this->view->story->title;
         $this->view->position[]    = $this->lang->story->edit;
-        $this->view->users         = $this->user->setDeleted($this->user->getPairs('nodeleted'), $story->assignedTo);
+        $this->view->users         = $this->user->setDeleted($this->user->getPairs('nodeleted'), $this->view->story->assignedTo);
         $this->display();
     }
 
@@ -319,8 +318,7 @@ class story extends control
     public function tasks($storyID, $projectID = 0)
     {
         $this->loadModel('task');
-        $tasks = $this->task->getStoryTaskPairs($storyID, $projectID);
-        $this->view->tasks = $tasks;
+        $this->view->tasks = $this->task->getStoryTaskPairs($storyID, $projectID);
         $this->display();
         exit;
     }
