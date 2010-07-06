@@ -67,7 +67,7 @@ $(document).ready(function(){
     <div class='yui-d0' id='debugbar'><iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hidden'></iframe></div>
     <div id='poweredby'>
     powered by <a href='http://www.zentaoms.com' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>). <br />
-    <script src='http://www.zentaoms.com/check.php?v=<?php echo $config->version;?>'></script>
+    <script src='http://www.zentaoms.com/check.php?v=<?php echo $config->version;?>&s=<?php echo $s;?>'></script>
     </div>
   </form>
 </div>  
