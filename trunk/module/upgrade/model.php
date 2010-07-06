@@ -99,7 +99,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
         }
-        elseif($fromVersion == '1_0stable')
+        elseif($fromVersion == '1_0')
         {
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
@@ -161,7 +161,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
-        elseif($fromVersion == '1_0stable' || $fromVersion == '1_0_1')
+        elseif($fromVersion == '1_0' || $fromVersion == '1_0_1')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
