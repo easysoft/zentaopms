@@ -1,0 +1,300 @@
+/**
+* The css file of ZenTaoMS.
+*
+* ZenTaoMS is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* ZenTaoMS is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+* 
+* You should have received a copy of the GNU Lesser General Public License
+* along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.
+*
+* @copyright   Copyright: 2009 Chunsheng Wang
+* @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+* @package     ZenTaoMS
+* @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
+* @link        http://www.zentaoms.com
+*/
+/*-----------------------GLOBAL SETTING----------------------------*/
+body{padding-bottom:50px; color:#000; background:url(images/main/bgmain.png) repeat-x 0 -35px;}
+
+/*-----------------------FIELDSET SETTING----------------------------*/
+fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
+legend   {font-weight:bold;}
+fieldset .table-1 {margin:0;}
+fieldset .bd-1px, fieldset .bd-1px td, fieldset .bd-1px th {border:1px solid #b3c8dc; padding:2px}
+fieldset tr, fieldset td, fieldset th {border:none; padding:2px}
+del{background:#fcc;}
+ins{background:#cfc; text-decoration:none}
+
+/*-----------------------FORM SETTING----------------------------*/
+.text-1 {width: 90%}
+.text-2 {width: 120px}
+.text-3 {width: 240px}
+.text-4 {width: 360px}
+.text-5 {width: 480px}
+
+.select-1 {width: 90%}
+.select-2 {width: 125px}
+.select-3 {width: 245px} 
+.select-4 {width: 360px}
+.select-5 {width: 480px}
+
+.area-1{width: 90%;}
+.area-2{width: 120px}
+.area-3{width: 240px}
+.area-4{width: 360px}
+.area-5{width: 480px}
+
+.button-s{padding:3px 20px 3px 20px}
+.button-r{padding:3px 20px 3px 20px}
+.button-c{padding:3px 20px 3px 20px}
+
+/*-----------------------TABLE SETTING----------------------------*/
+table, th, td {border-color:#b3c8dc;}
+tr, th, td    {padding:2px 3px 2px 3px}
+caption       {border:1px solid #b3c8dc; background:#cbd5d9; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
+.caption-tr {caption-side:top; text-align:right; border:none; background:none;}
+.caption-tl {caption-side:top; text-align:left;  border:none; background:none;}
+.table-1 {width:100%; margin-bottom:10px}
+
+/*--------------------------------------------------------*/
+.table-2 {width:240px;margin-bottom:10px}
+.table-3 {width:360px;margin-bottom:10px}
+.table-4 {width:480px;margin-bottom:10px}
+.table-5 {width:600px;margin-bottom:10px}
+.table-6 {width:800px;margin-bottom:10px}
+
+.colhead td  {text-align:center; background-color:#cbd5d9;}
+.colhead th  {text-align:center; background-color:#cbd5d9; font-size:14px}
+.colhead a   {text-decoration:none; display:block;}
+.colhead th a{color:#333; font-size:14px;}
+.colhead th a:hover{color:#F30;}
+
+.rowhead     {font-weight:bold; text-align:right; width:100px}
+.fixed       {table-layout:fixed}
+
+.nobr        {overflow:hidden; white-space:nowrap;}
+.fixed th, .fixed td {overflow:hidden; white-space:nowrap;}
+.nofixed th, .nofixed td  {overflow:visible; white-space:normal}
+
+.odd     {background:#fff;}
+.even    {background:#ebf0f4;}
+.hoover  {background:#d0dee3;}
+.clicked {background:#fce6a2;}
+
+/* copyed from tablesorter plugin. */
+table.tablesorter thead tr div{padding:0; margin:0} 
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {color:red; background:#BCD4EC}
+table.tablesorter thead tr .headerSortDown a, table.tablesorter thead tr .headerSortUp a {color:red}
+table.tablesorter thead tr .header         {background-image: url(./images/tablesorter/bg.gif);   background-repeat: no-repeat; background-position: center right; cursor: pointer;}
+table.tablesorter thead tr .headerSortUp   {background-image: url(./images/tablesorter/asc.gif);  background-repeat: no-repeat; background-position: center right; cursor: pointer;}
+table.tablesorter thead tr .headerSortDown {background-image: url(./images/tablesorter/desc.gif); background-repeat: no-repeat; background-position: center right; cursor: pointer;}
+
+/*-----------------------LAYOUT SETTING----------------------------*/
+.f-left   {float:left;  padding-left: 5px}
+.f-right  {float:right; padding-right:5px}
+.c-none   {clear:none;}
+.c-left   {clear:left;}
+.c-right  {clear:right;}
+.c-both   {clear:both;}
+.a-center {text-align: center;}
+.a-right  {text-align: right;}
+.a-left   {text-align: left;}
+
+.half-left  {float:left;  width:48%; text-align:left;  clear:left}
+.half-right {float:right; width:48%; text-align:right; clear:right}
+
+.hidden {display:none}
+.block  {display:block}
+.inline {display:inline}
+
+.w-p5  {width: 5%}
+.w-p10 {width: 10%}
+.w-p15 {width: 15%}
+.w-p20 {width: 20%}
+.w-p25 {width: 25%}
+.w-p30 {width: 30%}
+.w-p35 {width: 35%}
+.w-p40 {width: 40%}
+.w-p45 {width: 45%}
+.w-p50 {width: 50%}
+.w-p55 {width: 55%}
+.w-p60 {width: 60%}
+.w-p65 {width: 65%}
+.w-p70 {width: 70%}
+.w-p75 {width: 75%}
+.w-p80 {width: 80%}
+.w-p85 {width: 85%}
+.w-p90 {width: 90%}
+.w-p100 {width: 100%}
+
+.w-20px {width:20px}
+.w-30px {width:30px}
+.w-40px {width:40px}
+.w-45px {width:45px}
+.w-50px {width:50px}
+.w-60px {width:60px}
+.w-70px {width:70px}
+.w-80px  {width:80px}
+.w-100px {width:100px}
+.w-120px {width:120px}
+.w-130px {width:130px}
+.w-140px {width:140px}
+.w-150px {width:150px}
+.w-200px {width:200px}
+
+.w-id       {width:45px;}
+.w-pri      {width:30px;}
+.w-severity {width:40px;}
+.w-hour     {width:40px;}
+.w-date     {width:70px;}
+.w-user     {width:60px;}
+.w-status   {width:50px}
+.w-type     {width:80px}
+.w-resolution{width:60px}
+
+.margin-10px {margin:    10px}
+.margin-15px {margin:    15px}
+.margin-20px {margin:    20px}
+.padding-10px{padding:   10px}
+.padding-5px {padding:   5px}
+
+.mt-10px {margin-top:    10px}
+.mr-10px {margin-right:  10px}
+.mb-10px {margin-bottom: 10px}
+.ml-10px {margin-left:   10px}
+.pt-10px {padding-top:   10px}
+.pr-10px {padding-right: 10px}
+.pb-10px {padding-bottom:10px}
+.pl-10px {padding-left:  10px}
+.ph-10px {padding-left:10px; padding-right:10px}
+.pv-10px {padding-top: 10px; padding-bottom:10px}
+
+.f-12px  {font-size:12px}
+.f-14px  {font-size:14px}
+.f-16px  {font-size:16px}
+
+.box-title   {border:1px solid #b3c8dc; background-color:#cbd5d9; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
+.box-content {border:1px solid #b3c8dc; padding:5px}
+
+/*-----------------------BORDER SETTING--------------------------*/
+.bd-1px    {border:1px        solid}
+.bt-1px    {border-top:1px    solid}
+.bl-1px    {border-left:1px   solid}
+.bb-1px    {border-bottom:1px solid}
+.br-1px    {border-right:1px  solid}
+.bd-none   {border:none}
+.bd-green  {border-color:#58CB64}
+.bd-yellow {border-color:#F4BF20}
+.bd-blue   {border-color:#64B7D7}
+.bd-gray   {border-color:#bcbcbc;}
+
+/*-----------------------BACKGROUND SETTING----------------------------*/
+.bg-green  {background-color:#DDF1D8;}
+.bg-blue   {background-color:#DEEEF4}
+.bg-yellow {background-color:#FBF5C6;}
+.bg-gray   {background-color:#efefef;}
+.bg-white  {background-color:white;}
+
+/*-----------------------COLOR SETTING----------------------------*/
+.red     {color:red;}
+.blue    {color:blue}
+.yellow  {color:yellow;}
+.gray    {color:gray;}
+.green   {color:green;}
+.star    {color:red; font-size:18px; font-weight:bold;}
+.warning {background:yellow; color:red; font-weight:bold}
+
+/*-----------------------SPECIAL PART SETTING--------------------*/
+
+/* 最顶部的导航条。*/
+#topbar  {padding:3px; color:#fff}
+#topbar .yui-b, #topbar a {color:white}
+
+/* 导航条通用设置。*/
+#navbar ul {margin:0; padding:0;} 
+#navbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none;}
+#navbar a  {text-decoration:none;}
+#navbar a:hover {color:#ff3600;}
+
+/* 一级菜单。*/
+#mainmenu ul {background-color:#16528b; height:30px; line-height:30px}
+#mainmenu li {padding:0 8px 0 8px; border-right:3px solid #002242; color:white; font-size:14px;}
+#mainmenu a  {color:white; font-weight:normal;}
+#mainmenu .active   {background-color:#cfe5f9;}
+#mainmenu .active a {color:#333; font-weight:bold;}
+
+#mainmenu #searchbox{float:right; border:none;}
+#mainmenu .button-s{border:none; padding:2px}
+
+/* 模块的菜单。*/
+#modulemenu    {color:#F30; margin-bottom:5px; font-size:14px;}
+#modulemenu ul {background-color:#cfe5f9; height:28px; line-height:28px;}
+#modulemenu li {padding:0 5px 0 5px;}
+#modulemenu a  {color:#111; font-weight:normal; font-size:14px;}
+#modulemenu .active a {color:#002f75; font-weight:bold;}
+#modulemenu .right    {float:right; font-weight:bold;}
+#modulemenu .right  a {color:red; font-weight:bold}
+
+/* 功能菜单。*/
+#featurebar {margin: 0 0 5px 0; background-color:#b8cdf0; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}
+#featurebar a              {text-decoration:none; color:#333; margin-right:3px; font-size:12px; background-color:#eee; border:1px solid #9b9b9b; padding:2px 3px 2px 3px;}
+#featurebar a:hover        {color:#ff3600; border-color:#F30;}
+#featurebar .f-right a     {color:#ff3600; font-weight:bold;}
+#featurebar #bysearchTab a {padding-left:10px; padding-right:10px}
+#featurebar select         {font-size:12px; height:22px; margin-top:3px;}
+
+#featurebar .active a       {color:#03F; font-weight:bold; background-color:#c6e2fa; border:1px solid #66a9e7;}
+#featurebar .active select  {border:1px solid #0000ff;}
+
+/* TreeMenu设置。*/
+#tree li      {list-style-type:none;}
+#tree .active {color:blue; font-weight:bold}
+
+/* 标题。*/
+#titlebar{font-size:14px; font-weight:bold; background-color:#b8cdf0; padding:0px 5px; margin:10px 0; height:30px; line-height:30px; border:1px solid #a5cbf3;}
+#titlebar #main {float:left;  width:70%; clear:none; text-align:left}
+#titlebar div   {float:right; width:30%; clear:none; text-align:right}
+#titlebar #main input {font-size:14px}
+#titlebar .text-1 {width:80%}
+
+/* 产品，项目切换的选择器。*/
+#switcher {color:white; font-style:bold; background:red; cursor:pointer;}
+
+/* 页面其他元素。*/
+.history {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}
+.content {font-size:14px; padding:10px}
+.roadmap {width:200px; margin:10px auto 10px auto; padding:10px; border:1px solid gray;}
+.roadmap a{color:white;}
+.release {background:darkgreen; color:white}
+.plan    {background:#9F9F5F;}
+
+/* 页脚。*/
+#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background-color:#CEE7F3; border-top:1px solid #59AED7;}
+#crumbs    {padding:5px 0 5px 10px;}
+#poweredby {padding-right:12px; margin-top:5px; display:block;}
+
+/* debug使用的设置。*/
+#debugbar  {width:100%; position:fixed; bottom:27px; left:0; margin:0; background-color:#CEE7F3} 
+#hiddenbar {width:100%; position:fixed; bottom:35px; left:0; margin:0; background-color:#CEE7F3}
+.hiddenwin {display:none}
+.debugwin  {display:block; width:100%; height:20px;}
+
+/*-----------------------OTHERS SETTINGS --------------------*/
+.done      {color:#078F0E;}
+.wait      {color:#888;}
+.doing     {color:#F30;}
+.delayed   {background:#93D5F9;}
+.pass      {color:#078F0E;}
+.blocked   {color:yellow;}
+.fail      {color:red}
+.hand      {cursor:pointer}
+.strong    {font-weight:bold}
+.deleted   {text-decoration:line-through}
+.linkbox a {display:block}
