@@ -172,7 +172,7 @@
            {
                foreach($projectTasks as $task)
                {
-                   $projectName = $story->projects[$task->project]->name;
+                   @$projectName = $story->projects[$task->project]->name;
                    echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName);
                    echo '<span class="nobr">' . html::a($this->createLink('task', 'view', "taskID=$task->id"), "#$task->id $task->name") . '</span><br />';
                }
