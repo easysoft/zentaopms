@@ -233,6 +233,8 @@ $lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
 /* 搜索*/
 $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
+$lang->resource->search->saveQuery    = 'saveQuery';
+$lang->resource->search->deleteQuery  = 'deleteQuery';
 
 /* 后台管理。*/
 $lang->resource->admin->index         = 'index';
