@@ -122,15 +122,11 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $task    = $this->task->getByID($taskID);
-        $project = $this->project->getById($task->project);
-        $members = $this->project->getTeamMemberPairs($project->id ,'nodeleted');
-        
         /* 赋值。*/
         $this->view->header->title = $this->lang->task->edit;
         $this->view->position[]    = $this->lang->task->edit;
         $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->members       = $this->loadModel('user')->setDeleted($members, $task->owner);        
+        $this->view->members       = $this->loadModel('user')->setDeleted($this->view->members, $this->view->task->owner);        
         
         $this->display();
     }

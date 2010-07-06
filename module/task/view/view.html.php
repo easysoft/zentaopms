@@ -112,7 +112,7 @@
           <td><?php $lang->show($lang->task->priList, $task->pri);?></td>
         </tr>
         <tr>
-          <td class='rowhead w-p20'><?php echo $lang->task->mailto;?></td>
+          <td class='rowhead'><?php echo $lang->task->mailto;?></td>
           <td><?php $mailto = explode(',', str_replace(' ', '', $task->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
         </tr>
       </table>

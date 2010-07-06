@@ -162,12 +162,6 @@ class searchModel extends model
             ->orderBy('id_asc')
             ->fetchPairs();
         if(!$queries) return array('' => $this->lang->search->myQuery);
-        $i = ord('A');
-        foreach($queries as $key => $value)
-        {
-            $queries[$key] = chr($i) . ': ' . $value;
-            $i ++;
-        }
         $queries = array('' => $this->lang->search->myQuery) + $queries;
         return $queries;
     }

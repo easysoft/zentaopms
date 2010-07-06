@@ -548,7 +548,6 @@ CREATE TABLE IF NOT EXISTS `zt_userQuery` (
   `title` varchar(90) NOT NULL,
   `form` text NOT NULL,
   `sql` text NOT NULL,
-  `mode` varchar(10) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `company` (`company`),
   KEY `account` (`account`),
