@@ -140,11 +140,14 @@ class searchModel extends model
     {
         $sqlVar  = $this->post->module  . 'Query';
         $formVar = $this->post->module  . 'Form';
+        $sql     = $this->session->$sqlVar;
+        if(!$sql) $sql = ' 1 = 1 ';
+
         $query = fixer::input('post')
             ->specialChars('title')
             ->add('account', $this->app->user->account)
             ->add('form', serialize($this->session->$formVar))
-            ->add('sql',  $this->session->$sqlVar)
+            ->add('sql',  $sql)
             ->get();
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
     }
