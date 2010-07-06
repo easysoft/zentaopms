@@ -18,6 +18,11 @@ tgz:
 	cp -fr www zentaopms/
 	cp -fr module zentaopms/
 	cp bin/ztc* zentaopms/bin
+	cp bin/computeburn.php zentaopms/bin
+	cp bin/getbugs.php zentaopms/bin
+	cp bin/initopt.php zentaopms/bin
+	cp bin/todo.php zentaopms/bin
+	chmod a+rx zentaopms/bin
 	cp -fr framework zentaopms/
 	cp -fr lib/* zentaopms/lib/
 	find zentaopms -name .svn |xargs rm -fr
