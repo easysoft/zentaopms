@@ -61,7 +61,7 @@ class project extends control
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);
         $teamMembers   = $this->project->getTeamMembers($project->id);
-        
+
         /* 设置菜单。*/
         $this->project->setMenu($this->projects, $project->id);
 
@@ -527,9 +527,15 @@ class project extends control
         $this->loadModel('user');
 
         $project = $this->project->getById($projectID);
-        $users   = $this->user->getPairs('noclosed');
+        $users   = $this->user->getPairs('noclosed, nodeleted');
         $users   = array('' => '') + $users;
         $members = $this->project->getTeamMembers($projectID);
+
+        /* 设置已删除的团队成员。*/
+        foreach($members as $member)
+        {
+            if(!@$users[$member->account]) $member->account .= $this->lang->user->deleted;
+        }
 
         /* 设置菜单。*/
         $this->project->setMenu($this->projects, $project->id);
