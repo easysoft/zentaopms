@@ -67,14 +67,7 @@ class settingModel extends model
             ->andWhere('section')->eq('global')
             ->andWhere('`key`')->eq('sn')
             ->fetch('id', $autoComapny = false);
-        if($configID > 0)
-        {
-            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($configID)->exec($autoCompany = false);
-        }
-        else
-        {
-            $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
-        }
+        if(!$configID) $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
     }
 
     /* 更新PMS的版本设置。*/
