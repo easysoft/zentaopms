@@ -212,7 +212,7 @@ foreach($fieldParams as $fieldName => $param)
       echo html::hidden('groupItems', $groupItems);
       echo html::submitButton($lang->search->common);
       echo html::commonButton($lang->search->reset, 'onclick=resetForm();');
-      echo html::commonButton($lang->search->saveQuery, 'onclick=saveQuery()');
+      echo html::commonButton($lang->save, 'onclick=saveQuery()');
       ?>
       </nobr>
     </td>
