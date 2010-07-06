@@ -106,7 +106,7 @@ class product extends control
         }
 
         /* 设置搜索条件。*/
-        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=queryID");
+        $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);

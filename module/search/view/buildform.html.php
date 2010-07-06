@@ -102,7 +102,7 @@ function saveQuery()
 function executeQuery(queryID)
 {
     if(!queryID) return;
-    location.href = actionURL.replace('queryID', queryID);
+    location.href = actionURL.replace('myQueryID', queryID);
 }
 
 /* 删除Query。*/

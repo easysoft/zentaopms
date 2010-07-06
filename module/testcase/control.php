@@ -100,7 +100,7 @@ class testcase extends control
         }
 
         /* 构造搜索表单。*/
-        $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch&queryID=queryID");
+        $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['queryID']   = $queryID;
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
 

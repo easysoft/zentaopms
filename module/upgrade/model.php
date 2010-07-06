@@ -161,7 +161,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
-        elseif($fromVersion == '1_0' || $fromVersion == '1_0_1')
+        elseif($fromVersion == '1_0rc2' || $fromVersion == '1_0' || $fromVersion == '1_0_1')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
         }
@@ -241,7 +241,7 @@ class upgradeModel extends model
         foreach($userConstants as $key => $value)
         {
             if(strpos($key, 'TABLE') === false) continue;
-            if($key == 'TABLE_COMPANY' or $key == 'TABLE_CONFIG') continue;
+            if($key == 'TABLE_COMPANY' or $key == 'TABLE_CONFIG' or $key == 'TABLE_USERQUERY') continue;
             $this->dbh->query("UPDATE $value SET company = '{$this->app->company->id}'");
         }
     }
