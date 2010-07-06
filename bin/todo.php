@@ -17,14 +17,14 @@ if($requestType == 'GET')
     /* API地址，以GET方式为例。*/
     $loginAPI   = $zentaoRoot . "?m=user&f=login"; 
     $sessionAPI = $zentaoRoot . "?m=api&f=getSessionID&t=json";
-    $myTodoAPI    = $zentaoRoot . "?m=my&f=todo&t=json"; 
+    $myTodoAPI  = $zentaoRoot . "?m=my&f=todo&t=json"; 
 }
 elseif($requestType == 'PATH_INFO')
 {
     /* API地址，以PATH_INFO方式为例。*/
     $loginAPI   = $zentaoRoot . "user-login.json?a=1"; 
     $sessionAPI = $zentaoRoot . "api-getsessionid.json?a=1";
-    $myTodoAPI    = $zentaoRoot . "my-todo.json?a=1"; 
+    $myTodoAPI  = $zentaoRoot . "my-todo.json?a=1"; 
 }
 
 /* 获取session。 */
@@ -46,7 +46,7 @@ $result = json_decode($snoopy->results);
 
 if($result->status == 'success' && md5($result->data) == $result->md5)
 {
-    $todos = json_decode($result->data, false, 512)->todos;
+    $todos = json_decode($result->data)->todos;
 }
 else
 {
@@ -57,11 +57,13 @@ else
 if($todos)
 {
     foreach($todos as $todo)
-        echo $todo->id . "\t" .
-        $todo->type . "\t" .
-        $todo->pri . "\t" .
-        $todo->name . "\t" .
-        $todo->status . "\n";
+    {
+        echo $todo->id     . "\t" .
+             $todo->type   . "\t" .
+             $todo->pri    . "\t" .
+             $todo->name   . "\t" .
+             $todo->status . "\n";
+    }
 }
 else
 {
