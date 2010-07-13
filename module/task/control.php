@@ -78,7 +78,7 @@ class task extends control
         $this->view->stories  = $stories;
         $this->view->storyID  = $storyID;
         $this->view->members  = $members;
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter, nodeleted');
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter, noclosed, nodeleted');
         $this->display();
     }
 
@@ -88,7 +88,7 @@ class task extends control
         $this->view->task    = $this->task->getByID($taskID);
         $this->view->project = $this->project->getById($this->view->task->project);
         $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id ,'nodeleted');
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter, nodeleted'); 
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter, noclosed, nodeleted'); 
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
 
         /* 设置菜单。*/

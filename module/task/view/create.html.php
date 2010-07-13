@@ -24,6 +24,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php include '../../common/view/autocomplete.html.php';?>
 <script language='javascript'>
 /* 拷贝需求标题为任务标题。*/
 function copyStoryTitle()
@@ -46,11 +47,6 @@ function setOwners(result)
         $('#owner').removeAttr('multiple');
     }
 }
-function sendMailTo() 
-{
-    var userList = "<?php echo join(',', array_keys($users));?>".split(',');
-    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
-}
 /* 设置预览的链接。*/
 function setPreview()
 {
@@ -65,9 +61,11 @@ function setPreview()
         $('#preview').attr('href', storyLink);
     }
 }
+var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(document).ready(function()
 {
     setPreview();
+    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
 });
 </script>
 <div class='yui-d0'>

@@ -24,6 +24,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php include '../../common/view/autocomplete.html.php';?>
 <script language='Javascript'>
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
