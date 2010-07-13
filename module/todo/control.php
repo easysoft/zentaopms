@@ -50,7 +50,7 @@ class todo extends control
 
         $this->view->header   = $header;
         $this->view->position = $position;
-        $this->view->dates    = $this->todo->buildDateList(0, 3);
+        $this->view->dates    = $this->todo->buildDateList(0, $this->config->todo->dates->end);
         $this->view->date     = $date;
         $this->view->times    = $this->todo->buildTimeList();
         $this->view->time     = $this->todo->now();
