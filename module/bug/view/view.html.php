@@ -30,13 +30,15 @@
     <div>
       <?php
       $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
-      $params = "bugID=$bug->id";
+      $params     = "bugID=$bug->id";
+      $copyParams = "productID=$productID&extra=bugID=$bug->id";
       if(!$bug->deleted)
       {
           common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
           if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
           if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
           if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+          common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
           common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
       }
       echo html::a($browseLink, $lang->goback);
@@ -65,6 +67,7 @@
           if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
           if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
           if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+          common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
           common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
       }
       echo html::a($browseLink, $lang->goback);

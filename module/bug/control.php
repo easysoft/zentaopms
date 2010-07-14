@@ -240,15 +240,20 @@ class bug extends control
         unset($this->lang->bug->typeList['trackthings']);
 
         /* 初始化变量。*/
-        $moduleID  = 0;
-        $projectID = 0;
-        $taskID    = 0;
-        $storyID   = 0;
-        $buildID   = 0;
-        $caseID    = 0;
-        $runID     = 0;
-        $title     = '';
-        $steps     = '';
+        $moduleID   = 0;
+        $projectID  = 0;
+        $taskID     = 0;
+        $storyID    = 0;
+        $buildID    = 0;
+        $caseID     = 0;
+        $runID      = 0;
+        $title      = '';
+        $steps      = '';
+        $os         = '';
+        $browser    = '';
+        $assignedTo = '';
+        $mailto     = '';
+        $keywords   = '';
 
         /* 解析extra参数。*/
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
@@ -257,11 +262,21 @@ class bug extends control
         /* 如果设置了runID，获得最后一次的resultID。*/
         if($runID > 0) $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->limit(1)->fetch('id');
         if(isset($resultID) and $resultID > 0) extract($this->bug->getBugInfoFromResult($resultID));
+        if(isset($bugID)) 
+        {
+            $bug = $this->bug->getById($bugID);
+            extract((array)$bug);
+            $projectID = $bug->project;
+            $moduleID  = $bug->module;
+            $taskID    = $bug->task;
+            $storyID   = $bug->story;
+            $buildID   = $bug->openedBuild;
+        }
 
         /* 如果指定了项目，则查找项目范围内的build和story。*/
         if($projectID)
         {
-            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, 'noempty');
+            $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
             $stories = $this->story->getProjectStoryPairs($projectID);
         }
         else
@@ -291,6 +306,12 @@ class bug extends control
         $this->view->caseID           = $caseID;
         $this->view->title            = $title;
         $this->view->steps            = $steps;
+        $this->view->os               = $os;
+        $this->view->browser          = $browser;
+        $this->view->assignedTo       = $assignedTo;
+        $this->view->mailto           = $mailto;
+        $this->view->keywords         = $keywords;
+
         $this->display();
     }
 
@@ -313,6 +334,7 @@ class bug extends control
         $this->view->position[]    = $this->lang->bug->view;
 
         /* 赋值。*/
+        $this->view->productID   = $productID;
         $this->view->productName = $productName;
         $this->view->modulePath  = $this->tree->getParents($bug->module);
         $this->view->bug         = $bug;
