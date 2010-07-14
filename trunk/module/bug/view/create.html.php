@@ -153,17 +153,17 @@ $(function() {
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->bug->lblSystemBrowserAndHardware;?></nobr></th>
         <td>
-          <?php echo html::select('os', $lang->bug->osList, '', 'class=select-2');?>
-          <?php echo html::select('browser', $lang->bug->browserList, '', 'class=select-2');?>
+          <?php echo html::select('os', $lang->bug->osList, $os, 'class=select-2');?>
+          <?php echo html::select('browser', $lang->bug->browserList, $browser, 'class=select-2');?>
         </td>
       </tr>
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-        <td> <?php echo html::select('assignedTo', $users, '', 'class=select-3');?></td>
+        <td> <?php echo html::select('assignedTo', $users, $assignedTo, 'class=select-3');?></td>
       </tr>
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->bug->lblMailto;?></nobr></th>
-        <td> <?php echo html::input('mailto', '', 'class=text-1');?> </td>
+        <td> <?php echo html::input('mailto', $mailto, 'class=text-1');?> </td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->bug->title;?></th>
@@ -175,7 +175,7 @@ $(function() {
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->keywords;?></th>
-        <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
+        <td><?php echo html::input('keywords', $keywords, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->files;?></th>

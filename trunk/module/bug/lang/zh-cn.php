@@ -121,6 +121,7 @@ $lang->bug->legendLife        = 'BUG的一生';
 $lang->bug->legendMisc        = '其相关他';
 
 /* 功能按钮。*/
+$lang->bug->buttonCopy     = '复制';
 $lang->bug->buttonEdit     = '编辑';
 $lang->bug->buttonActivate = '激活';
 $lang->bug->buttonResolve  = '解决';

@@ -51,7 +51,7 @@ class buildModel extends model
     }
 
     /* 查找项目中的build列表。params='noempty|notrunk' */
-    public function getProjectBuildPairs($projectID, $params = '')
+    public function getProjectBuildPairs($projectID, $productID, $params = '')
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
@@ -59,6 +59,7 @@ class buildModel extends model
 
         $builds = $this->dao->select('id,name')->from(TABLE_BUILD)
             ->where('project')->eq((int)$projectID)
+            ->andWhere('product')->eq((int)$productID)
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
