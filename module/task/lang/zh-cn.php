@@ -28,6 +28,8 @@ $lang->task->edit      = "更新任务";
 $lang->task->delete    = "删除任务";
 $lang->task->view      = "查看任务";
 $lang->task->logEfforts= "记录工时";
+$lang->task->start     = "开始任务";
+$lang->task->complete  = "完成任务";
 $lang->task->close     = "关闭任务";
 $lang->task->cancel    = "取消任务";
 $lang->task->activate  = "激活任务";
@@ -87,6 +89,8 @@ $lang->task->buttonActivate   = '激活';
 $lang->task->buttonLogEfforts = '记录工时';
 $lang->task->buttonDelete     = '删除';
 $lang->task->buttonBackToList = '返回';
+$lang->task->buttonStart      = '开始';
+$lang->task->buttonDone       = '完成';
 
 $lang->task->legendBasic  = '基本信息';
 $lang->task->legendEffort = '工时信息';

@@ -199,6 +199,96 @@ class task extends control
         die(js::reload('parent'));
     }
 
+    /* 开始一个任务。*/
+    public function start($taskID)
+    {
+        /* 执行公共的操作。*/
+        $this->commonAction($taskID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->task->changeStatus($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        /* 赋值。*/
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
+        $this->view->position[]    = $this->lang->task->start;
+        $this->view->members       = $this->loadModel('user')->setDeleted($this->view->members, $this->view->task->owner);        
+        
+        $this->display();
+    }
+    
+    /* 完成一个任务。*/
+    public function complete($taskID)
+    {
+        /* 执行公共的操作。*/
+        $this->commonAction($taskID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->task->changeStatus($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        /* 赋值。*/
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->complete;
+        $this->view->position[]    = $this->lang->task->complete;
+        $this->view->members       = $this->loadModel('user')->setDeleted($this->view->members, $this->view->task->owner);        
+        
+        $this->display();
+    }
+
+    /* 取消一个任务。*/
+    public function cancel($taskID)
+    {
+        /* 执行公共的操作。*/
+        $this->commonAction($taskID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->task->changeStatus($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        /* 赋值。*/
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->cancel;
+        $this->view->position[]    = $this->lang->task->cancel;
+        $this->view->members       = $this->loadModel('user')->setDeleted($this->view->members, $this->view->task->owner);        
+        
+        $this->display();
+    }
+
     /* 删除一个任务。*/
     public function delete($projectID, $taskID, $confirm = 'no')
     {

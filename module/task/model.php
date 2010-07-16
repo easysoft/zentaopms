@@ -67,7 +67,7 @@ class taskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
-         $task = fixer::input('post')
+        $task = fixer::input('post')
             ->striptags('name')
             ->specialChars('desc')
             ->setDefault('story, estimate, left, consumed', 0)
@@ -91,6 +91,28 @@ class taskModel extends model
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
     
+    /* 改变一个任务的状态。*/
+    public function changeStatus($taskID)
+    {
+        $oldTask = $this->getById($taskID);
+        $task = fixer::input('post')
+            ->setDefault('estimate, left, consumed', 0)
+            ->setIF($this->post->consumed > 0 and $this->post->left > 0 and $this->post->status == 'wait', 'status', 'doing')
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_TASK)->data($task)
+            ->autoCheck()
+            ->batchCheckIF($task->status != 'cancel', $this->config->task->start->requiredFields, 'notempty')
+            ->checkIF($task->estimate != false, 'estimate', 'float')
+            ->checkIF($task->left     != false, 'left',     'float')
+            ->checkIF($task->consumed != false, 'consumed', 'float')
+            ->checkIF($task->status == 'done', 'consumed', 'notempty')
+            ->checkIF($task->left == 0 and $task->status != 'cancel', 'status', 'equal', 'done')
+            ->where('id')->eq((int)$taskID)->exec();
+        if(!dao::isError()) return common::createChanges($oldTask, $task);
+    }
+
     /* 通过id获取一个任务信息。*/
     public function getById($taskID)
     {
