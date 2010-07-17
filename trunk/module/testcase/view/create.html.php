@@ -24,7 +24,7 @@
 ?>
 <?php include './header.html.php';?>
 <div class='yui-d0'>
-  <form method='post' target='hiddenwin'>
+  <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table class='table-1'> 
       <caption><?php echo $lang->testcase->create;?></caption>
       <tr>
@@ -86,7 +86,10 @@
         <th class='rowhead'><?php echo $lang->testcase->keywords;?></th>
         <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
       </tr>  
-     
+       <tr>
+        <th class='rowhead'><?php echo $lang->testcase->files;?></th>
+        <td><?php echo $this->fetch('file', 'buildform');?></td>
+      </tr>  
       <tr>
         <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?> </td>
       </tr>

@@ -74,7 +74,7 @@ class taskModel extends model
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF($this->post->status == 'done', 'left', 0)
             ->setIF($this->post->consumed > 0 and $this->post->left > 0 and $this->post->status == 'wait', 'status', 'doing')
-            ->remove('comment,fiels,labels')
+            ->remove('comment,files,labels')
             ->get();
         $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
 

@@ -104,7 +104,7 @@ class bugModel extends model
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,story,task')
             ->specialChars('title,steps,keyword')
-            ->remove('comment,fiels,labels')
+            ->remove('comment,files,labels')
             ->setDefault('project,module,project,story,task,duplicateBug', 0)
             ->setDefault('openedBuild', '')
             ->add('lastEditedBy',   $this->app->user->account)

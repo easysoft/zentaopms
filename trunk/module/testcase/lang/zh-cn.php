@@ -41,6 +41,7 @@ $lang->testcase->version        = '用例版本';
 $lang->testcase->result         = '测试结果';
 $lang->testcase->real           = '实际情况';
 $lang->testcase->keywords       = '关键词';
+$lang->testcase->files          = '附件';
 $lang->testcase->howRun         = '执行方式';
 $lang->testcase->scriptedBy     = '由谁编写';
 $lang->testcase->scriptedDate   = '编写日期';

@@ -183,7 +183,7 @@ class testcase extends control
         $this->display();
     }
 
-    /* 编辑一个Bug。*/
+    /* 编辑一个case。*/
     public function edit($caseID)
     {
         $this->loadModel('story');
@@ -193,11 +193,14 @@ class testcase extends control
         {
             $changes = $this->testcase->update($caseID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($this->post->comment != '' or !empty($changes))
+            $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
+            if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $this->loadModel('action');
                 $action = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('case', $caseID, $action, $this->post->comment);
+                $fileAction = '';
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+                $actionID = $this->action->create('case', $caseID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
