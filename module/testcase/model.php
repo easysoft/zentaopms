@@ -45,7 +45,7 @@ class testcaseModel extends model
             ->add('status', 'normal')
             ->add('version', 1)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->remove('steps,expects')
+            ->remove('steps,expects,files,labels')
             ->setDefault('story', 0)
             ->specialChars('title')
             ->join('stage', ',')
@@ -54,6 +54,7 @@ class testcaseModel extends model
         if(!$this->dao->isError())
         {
             $caseID = $this->dao->lastInsertID();
+            $this->loadModel('file')->saveUpload('testcase', $caseID);
             foreach($this->post->steps as $stepID => $stepDesc)
             {
                 if(empty($stepDesc)) continue;
@@ -93,7 +94,7 @@ class testcaseModel extends model
         if($case->linkCase) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->fetchPairs();
         if($version == 0) $version = $case->version;
         $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->fetchAll();
-        $case->files = $this->loadModel('file')->getByObject('case', $caseID);
+        $case->files = $this->loadModel('file')->getByObject('testcase', $caseID);
         return $case;
     }
 
@@ -140,7 +141,7 @@ class testcaseModel extends model
             ->setDefault('story', 0)
             ->specialChars('title')
             ->join('stage', ',')
-            ->remove('comment,steps,expects')
+            ->remove('comment,steps,expects,files,labels')
             ->get();
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())

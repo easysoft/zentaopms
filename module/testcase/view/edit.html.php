@@ -24,7 +24,7 @@
 ?>
 <?php include './header.html.php';?>
 <style>#module{width:90%}</style>
-<form method='post' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>
     <div id='main'>
@@ -72,12 +72,10 @@
         <legend><?php echo $lang->testcase->legendComment;?></legend>
         <textarea name='comment' rows='6' class='w-p100'></textarea>
       </fieldset>
-      <!--
       <fieldset>
         <legend><?php echo $lang->testcase->legendAttatch;?></legend>
         <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
       </fieldset>
-      -->
 
       <div class='a-center'>
        <?php echo html::submitButton();?>
