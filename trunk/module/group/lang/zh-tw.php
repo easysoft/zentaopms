@@ -1,6 +1,6 @@
 <?php
 /**
- * The group module english file of ZenTaoMS.
+ * The group module zh-tw file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,44 +15,44 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id$
+ * @version     $Id: zh-tw.php 918 2010-07-06 01:51:26Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->group->common       = '权限分组';
-$lang->group->browse       = '浏览分组';
-$lang->group->create       = '新增分组';
-$lang->group->edit         = '编辑分组';
-$lang->group->copy         = '复制分组';
-$lang->group->delete       = '删除分组';
-$lang->group->managePriv   = '权限维护';
-$lang->group->manageMember = '成员维护';
-$lang->group->linkMember   = '关联用户';
-$lang->group->unlinkMember = '移除用户';
-$lang->group->confirmDelete= '您确定删除该用户分组吗？';
+$lang->group->common       = '權限分組';
+$lang->group->browse       = '瀏覽分組';
+$lang->group->create       = '新增分組';
+$lang->group->edit         = '編輯分組';
+$lang->group->copy         = '複製分組';
+$lang->group->delete       = '刪除分組';
+$lang->group->managePriv   = '權限維護';
+$lang->group->manageMember = '成員維護';
+$lang->group->linkMember   = '關聯用戶';
+$lang->group->unlinkMember = '移除用戶';
+$lang->group->confirmDelete= '您確定刪除該用戶分組嗎？';
 $lang->group->successSaved = '成功保存';
 
-$lang->group->id       = '编号';
-$lang->group->name     = '分组名称';
-$lang->group->desc     = '分组描述';
-$lang->group->users    = '用户列表';
-$lang->group->module   = '模块';
+$lang->group->id       = '編號';
+$lang->group->name     = '分組名稱';
+$lang->group->desc     = '分組描述';
+$lang->group->users    = '用戶列表';
+$lang->group->module   = '模組';
 $lang->group->method   = '方法';
-$lang->group->priv     = '权限';
-$lang->group->checkall = '全选';
-$lang->group->option   = '选项';
+$lang->group->priv     = '權限';
+$lang->group->checkall = '全選';
+$lang->group->option   = '選項';
 
-$lang->group->copyOptions['copyPriv'] = '复制权限';
-$lang->group->copyOptions['copyUser'] = '复制用户';
+$lang->group->copyOptions['copyPriv'] = '複製權限';
+$lang->group->copyOptions['copyUser'] = '複製用戶';
 
 //---------------------------- 所有resource列表-------------------------*/
 
-/* 首页。*/
+/* 首頁。*/
 $lang->resource->index->index = 'index';
 
-/* 我的地盘。*/
+/* 我的地盤。*/
 $lang->resource->my->index       = 'index';
 $lang->resource->my->todo        = 'todo';
 $lang->resource->my->task        = 'task';
@@ -70,7 +70,7 @@ $lang->resource->todo->delete    = 'delete';
 $lang->resource->todo->mark      = 'mark';
 $lang->resource->todo->import2Today = 'import2Today';
 
-/* 产品视图。*/
+/* 產品視圖。*/
 $lang->resource->product->index  = 'index';
 $lang->resource->product->browse = 'browse';
 $lang->resource->product->create = 'create';
@@ -94,7 +94,7 @@ $lang->resource->story->tasks   = 'tasks';
 $lang->resource->story->ajaxGetProjectStories = 'ajaxGetProjectStories';
 $lang->resource->story->ajaxGetProductStories = 'ajaxGetProductStories';
 
-/* 产品计划。*/
+/* 產品計劃。*/
 $lang->resource->productplan->browse      = 'browse';
 $lang->resource->productplan->create      = 'create';
 $lang->resource->productplan->edit        = 'edit';
@@ -103,14 +103,14 @@ $lang->resource->productplan->view        = 'view';
 $lang->resource->productplan->linkStory   = 'linkStory';
 $lang->resource->productplan->unlinkStory = 'unlinkStory';
 
-/* 发布。*/
+/* 發佈。*/
 $lang->resource->release->browse = 'browse';
 $lang->resource->release->create = 'create';
 $lang->resource->release->edit   = 'edit';
 $lang->resource->release->delete = 'delete';
 $lang->resource->release->view   = 'view';
 
-/* 项目视图。*/
+/* 項目視圖。*/
 $lang->resource->project->index          = 'index';
 $lang->resource->project->view           = 'view';
 $lang->resource->project->browse         = 'browse';
@@ -134,7 +134,7 @@ $lang->resource->project->unlinkMember   = 'unlinkMember';
 $lang->resource->project->linkStory      = 'linkStory';
 $lang->resource->project->unlinkStory    = 'unlinkStory';
 
-/* 任务。*/
+/* 任務。*/
 $lang->resource->task->create              = 'create';
 $lang->resource->task->edit                = 'edit';
 $lang->resource->task->delete              = 'delete';
@@ -151,7 +151,7 @@ $lang->resource->build->view                 = 'view';
 $lang->resource->build->ajaxGetProductBuilds = 'ajaxGetProductBuilds';
 $lang->resource->build->ajaxGetProjectBuilds = 'ajaxGetProjectBuilds';
 
-/* QA视图。*/
+/* QA視圖。*/
 $lang->resource->qa->index = 'index';
 
 /* Bug。*/
@@ -168,7 +168,7 @@ $lang->resource->bug->confirmStoryChange  = 'confirmStoryChange';
 $lang->resource->bug->delete              = 'delete';
 $lang->resource->bug->ajaxGetUserBugs     = 'ajaxGetUserBugs';
 
-/* 测试用例。*/
+/* 測試用例。*/
 $lang->resource->testcase->index              = 'index';
 $lang->resource->testcase->browse             = 'browse';
 $lang->resource->testcase->create             = 'create';
@@ -177,7 +177,7 @@ $lang->resource->testcase->edit               = 'edit';
 $lang->resource->testcase->delete             = 'delete';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 
-/* 测试任务。*/
+/* 測試任務。*/
 $lang->resource->testtask->index       = 'index';
 $lang->resource->testtask->create      = 'create';
 $lang->resource->testtask->browse      = 'browse';
@@ -191,18 +191,18 @@ $lang->resource->testtask->unlinkcase  = 'lblUnlinkCase';
 $lang->resource->testtask->runcase     = 'lblRunCase';
 $lang->resource->testtask->results     = 'lblResults';
 
-/* 组织视图。*/
+/* 組織視圖。*/
 $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
 $lang->resource->company->edit   = 'edit';
 
-/* 部门。*/
+/* 部門。*/
 $lang->resource->dept->browse      = 'browse';
 $lang->resource->dept->updateOrder = 'updateOrder';
 $lang->resource->dept->manageChild = 'manageChild';
 $lang->resource->dept->delete      = 'delete';
 
-/* 分组。*/
+/* 分組。*/
 $lang->resource->group->browse       = 'browse';
 $lang->resource->group->create       = 'create';
 $lang->resource->group->edit         = 'edit';
@@ -211,7 +211,7 @@ $lang->resource->group->delete       = 'delete';
 $lang->resource->group->managePriv   = 'managePriv';
 $lang->resource->group->manageMember = 'manageMember';
 
-/* 用户。*/
+/* 用戶。*/
 $lang->resource->user->create = 'create';
 $lang->resource->user->view   = 'view';
 $lang->resource->user->edit   = 'edit';
@@ -222,7 +222,7 @@ $lang->resource->user->bug    = 'bug';
 $lang->resource->user->project= 'project';
 $lang->resource->user->profile= 'profile';
 
-/* 模块维护。*/
+/* 模組維護。*/
 $lang->resource->tree->browse            = 'browse';
 $lang->resource->tree->updateOrder       = 'updateOrder';
 $lang->resource->tree->manageChild       = 'manageChild';
@@ -236,10 +236,10 @@ $lang->resource->search->buildQuery   = 'buildQuery';
 $lang->resource->search->saveQuery    = 'saveQuery';
 $lang->resource->search->deleteQuery  = 'deleteQuery';
 
-/* 后台管理。*/
+/* 後台管理。*/
 $lang->resource->admin->index         = 'index';
 
-/* 其他的一些杂项。*/
+/* 其他的一些雜項。*/
 $lang->resource->api->getModel    = 'getModel';
 $lang->resource->file->download   = 'download';
 $lang->resource->file->export2CSV = 'export2CSV';

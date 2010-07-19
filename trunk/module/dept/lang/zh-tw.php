@@ -1,6 +1,6 @@
 <?php
 /**
- * The admin module english file of ZenTaoMS.
+ * The dept module zh-tw file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,17 +15,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     admin
- * @version     $Id$
+ * @package     dept
+ * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->admin->common  = '后台管理';
-$lang->admin->index   = '后台管理首页';
-$lang->admin->company = '公司管理';
-$lang->admin->user    = '用户管理';
-$lang->admin->group   = '分组管理';
-$lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
+$lang->dept->common      = '部門結構';
+$lang->dept->add         = "添加";
+$lang->dept->addChild    = "添加下級部門";
+$lang->dept->manageChild = "下級部門";
+$lang->dept->delete      = "刪除部門";
+$lang->dept->browse      = "部門維護";
+$lang->dept->manage      = "維護部門結構";
+$lang->dept->updateOrder = "更新排序";
+$lang->dept->users       = "成員列表";
 
-$lang->admin->browseCompany = '浏览公司';
+$lang->dept->saveButton    = " 保存 (S) ";
+$lang->dept->confirmDelete = " 您確定刪除該部門嗎？";

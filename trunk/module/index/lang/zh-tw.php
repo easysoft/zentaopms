@@ -17,14 +17,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
- * @version     $Id$
+ * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->index->common = '首页';
-$lang->index->index  = '首页';
-$lang->index->ping   = '接口:同步session';
-$lang->index->latest = '最新动态';
+$lang->index->common = '首頁';
+$lang->index->index  = '首頁';
+$lang->index->ping   = '介面:同步session';
+$lang->index->latest = '最新動態';
 $lang->index->action = '%s, %s <i>%s</i> %s <strong>%s</strong>。';

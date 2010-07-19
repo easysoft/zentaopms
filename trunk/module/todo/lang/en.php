@@ -26,6 +26,7 @@ $lang->todo->index     = "todo一览";
 $lang->todo->create    = "新增TODO";
 $lang->todo->edit      = "更新TODO";
 $lang->todo->view      = "TODO详情";
+$lang->todo->viewAB    = "详情";
 $lang->todo->markDone  = "未完成";
 $lang->todo->markWait  = "已完成";
 $lang->todo->markDoing = "已完成";
@@ -36,9 +37,12 @@ $lang->todo->import2Today = "导入到今天";
 $lang->todo->changeStatus = "更改";
 
 $lang->todo->id          = '编号';
+$lang->todo->account     = '所有者';
 $lang->todo->date        = '日期';
 $lang->todo->begin       = '开始时间';
+$lang->todo->beginAB     = '开始';
 $lang->todo->end         = '结束时间';
+$lang->todo->endAB       = '结束';
 $lang->todo->beginAndEnd = '起止时间';
 $lang->todo->type        = '类型';
 $lang->todo->pri         = '优先级';
@@ -46,11 +50,14 @@ $lang->todo->name        = '名称';
 $lang->todo->status      = '状态';
 $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事务';
+$lang->todo->idvalue     = '任务或Bug';
 
 $lang->todo->week  = '星期';
 $lang->todo->today = '今天';
 $lang->todo->weekDateList = '一,二,三,四,五,六,天';
 $lang->todo->dayInFeature = '暂不指定';
+$lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';
+$lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
 
 $lang->todo->statusList['wait']     = '未开始';
 $lang->todo->statusList['doing']    = '进行中';
@@ -77,3 +84,5 @@ $lang->todo->lastWeekTodos = '上周总结';
 $lang->todo->allDaysTodos  = '所有TODO';
 $lang->todo->allUndone     = '之前未完';
 $lang->todo->todayTodos    = '今日安排';
+
+$lang->todo->action->marked = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);

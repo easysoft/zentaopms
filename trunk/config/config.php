@@ -43,6 +43,7 @@ $config->themes      = 'default,blue';    // 支持的主题列表。
 
 /* 支持的语言列表。*/
 $config->langs['zh-cn'] = 'Chinese Simplified';
+$config->langs['zh-tw'] = 'Chinese Traditional';
 
 /* 默认参数设定。*/
 $config->default->view   = 'html';             // 默认的视图格式。

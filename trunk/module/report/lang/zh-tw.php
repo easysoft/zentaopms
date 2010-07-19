@@ -1,6 +1,6 @@
 <?php
 /**
- * The report module english file of ZenTaoMS.
+ * The report module zh-tw file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,17 +15,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id$
+ * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->report->common     = '报表';
-$lang->report->item       = '条目';
+$lang->report->common     = '報表';
+$lang->report->item       = '條目';
 $lang->report->value      = '值';
 $lang->report->percent    = '百分比';
-$lang->report->undefined  = '未设定';
+$lang->report->undefined  = '未設定';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
