@@ -32,7 +32,8 @@ $lang->company->browse   = "用户列表";
 $lang->company->depts    = "部门列表";
 $lang->company->orgView  = '组织视图';
 
-$lang->company->confirmDelete  = "您确定删除该公司吗？";
+$lang->company->confirmDelete = "您确定删除该公司吗？";
+$lang->company->successSaved  = "成功保存";
 
 $lang->company->id       = '编号';
 $lang->company->name     = '公司名称';
@@ -41,7 +42,7 @@ $lang->company->fax      = '传真';
 $lang->company->address  = '通讯地址';
 $lang->company->zipcode  = '邮政编码';
 $lang->company->website  = '公司网站';
-$lang->company->backyard = '内网网址';
+$lang->company->backyard = '公司内网';
 $lang->company->pms      = 'PMS网站';
 $lang->company->guest    = '匿名登录';
 

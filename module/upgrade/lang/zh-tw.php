@@ -1,6 +1,6 @@
 <?php
 /**
- * The upgrade module english file of ZenTaoMS.
+ * The upgrade module zh-tw file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,33 +15,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
- * @version     $Id$
+ * @version     $Id: zh-tw.php 923 2010-07-06 02:24:09Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->upgrade->common  = '升级';
-$lang->upgrade->result  = '升级结果';
-$lang->upgrade->fail    = '升级失败';
-$lang->upgrade->success = '升级成功';
-$lang->upgrade->tohome  = '返回首页';
+$lang->upgrade->common  = '升級';
+$lang->upgrade->result  = '升級結果';
+$lang->upgrade->fail    = '升級失敗';
+$lang->upgrade->success = '升級成功';
+$lang->upgrade->tohome  = '返迴首頁';
 $lang->upgrade->warnning= '警告';
 $lang->upgrade->warnningContent = <<<EOT
-警告！升级有危险，请先备份数据库，以防万一。<br />
-备份方法：<br />
-1. 可以通过phpMyAdmin进行备份。<br />
+警告！升級有危險，請先備份資料庫，以防萬一。<br />
+備份方法：<br />
+1. 可以通過phpMyAdmin進行備份。<br />
 2. 使用mysql命令行的工具。<br />
    # mysqldump -u <span class='red'>username</span> -p <span class='red'>dbname</span> > <span class='red'>filename</span> <br />
-   要将上面红色的部分分别替换成对应的用户名和禅道系统的数据库名。<br />
+   要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。<br />
    比如： mysqldump -u root -p zentao >zentao.bak
 EOT;
-$lang->upgrade->selectVersion = '选择版本';
-$lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
-$lang->upgrade->fromVersion   = '原来的版本';
-$lang->upgrade->toVersion     = '升级到';
-$lang->upgrade->confirm       = '确认要执行的SQL语句';
-$lang->upgrade->sureExecute   = '确认执行';
+$lang->upgrade->selectVersion = '選擇版本';
+$lang->upgrade->noteVersion   = "務必選擇正確的版本，否則會造成數據丟失。";
+$lang->upgrade->fromVersion   = '原來的版本';
+$lang->upgrade->toVersion     = '升級到';
+$lang->upgrade->confirm       = '確認要執行的SQL語句';
+$lang->upgrade->sureExecute   = '確認執行';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';

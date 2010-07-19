@@ -27,14 +27,24 @@ $lang->install->pre     = '返回';
 $lang->install->reload  = '刷新';
 $lang->install->error   = '错误 ';
 
-$lang->install->start   = '开始安装';
-$lang->install->welcome = '欢迎使用禅道项目管理软件！';
-$lang->install->desc    = <<<EOT
+$lang->install->start            = '开始安装';
+$lang->install->keepInstalling   = '继续安装当前版本';
+$lang->install->seeLatestRelease = '看看最新的版本';
+$lang->install->welcome          = '欢迎使用禅道项目管理软件！';
+$lang->install->desc             = <<<EOT
 禅道项目管理软件(ZenTaoPMS)是一款国产的，基于LGPL协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
 
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
+
+禅道项目管理软件由<strong class='red'><a href='http://www.cnezsoft.com' target='_blank'>青岛易软天创网络科技有限公司开发</a></strong>。
+禅道项目管理软件的官方支持网站：<a href='http://www.zentaoms.com' target='_blank'>http://www.zentaoms.com</a>
+官方技术支持QQ群：41408140
+
+您现在正在安装的版本是 <strong class='red'>%s</strong>。
 EOT;
 
+$lang->install->newReleased= "<strong class='red'>提示</strong>：官网网站已有最新版本，为<strong class='red'>%s</strong>, 发布日期于 %s。";
+$lang->install->choice     = '您可以选择：';
 $lang->install->checking   = '系统检查';
 $lang->install->ok         = '检查通过(√)';
 $lang->install->fail       = '检查失败(×)';
@@ -68,6 +78,7 @@ $lang->install->requestType  = 'URL方式';
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
 $lang->install->dbHost     = '数据库服务器';
+$lang->install->dbHostNote = '如果localhost无法访问，尝试使用127.0.0.1';
 $lang->install->dbPort     = '服务器端口';
 $lang->install->dbUser     = '数据库用户名';
 $lang->install->dbPassword = '数据库密码';
@@ -84,7 +95,8 @@ $lang->install->setConfig  = '生成配置文件';
 $lang->install->key        = '配置项';
 $lang->install->value      = '值';
 $lang->install->saveConfig = '保存配置文件';
-$lang->install->save2File  = '拷贝上面文本框中的内容，将其保存到 " %s "中。';
+$lang->install->save2File  = '<div class="a-center"><span class="fail">尝试写入配置文件，失败！</span></div>拷贝上面文本框中的内容，将其保存到 "<strong> %s </strong>"中。您以后还可继续修改此配置文件。';
+$lang->install->saved2File = '配置信息已经成功保存到" <strong>%s</strong> "中。您后面还可继续修改此文件。';
 $lang->install->errorNotSaveConfig = '还没有保存配置文件';
 
 $lang->install->getPriv  = '设置帐号';

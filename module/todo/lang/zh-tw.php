@@ -1,0 +1,88 @@
+<?php
+/**
+ * The todo module zh-tw file of ZenTaoMS.
+ *
+ * ZenTaoMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *                                                                             
+ * ZenTaoMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
+ *
+ * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     todo
+ * @version     $Id: zh-tw.php 849 2010-05-31 03:40:44Z yuren_@126.com $
+ * @link        http://www.zentaoms.com
+ */
+$lang->todo->common    = 'TODO';
+$lang->todo->index     = "todo一覽";
+$lang->todo->create    = "新增TODO";
+$lang->todo->edit      = "更新TODO";
+$lang->todo->view      = "TODO詳情";
+$lang->todo->viewAB    = "詳情";
+$lang->todo->markDone  = "未完成";
+$lang->todo->markWait  = "已完成";
+$lang->todo->markDoing = "已完成";
+$lang->todo->mark      = "更改狀態";
+$lang->todo->delete    = "刪除TODO";
+$lang->todo->browse    = "瀏覽TODO";
+$lang->todo->import2Today = "導入到今天";
+$lang->todo->changeStatus = "更改";
+
+$lang->todo->id          = '編號';
+$lang->todo->account     = '所有者';
+$lang->todo->date        = '日期';
+$lang->todo->begin       = '開始時間';
+$lang->todo->beginAB     = '開始';
+$lang->todo->end         = '結束時間';
+$lang->todo->endAB       = '結束';
+$lang->todo->beginAndEnd = '起止時間';
+$lang->todo->type        = '類型';
+$lang->todo->pri         = '優先順序';
+$lang->todo->name        = '名稱';
+$lang->todo->status      = '狀態';
+$lang->todo->desc        = '描述';
+$lang->todo->private     = '私人事務';
+$lang->todo->idvalue     = '任務或Bug';
+
+$lang->todo->week  = '星期';
+$lang->todo->today = '今天';
+$lang->todo->weekDateList = '一,二,三,四,五,六,天';
+$lang->todo->dayInFeature = '暫不指定';
+$lang->todo->confirmBug   = '該Todo關聯的是Bug #%s，需要修改它嗎？';
+$lang->todo->confirmTask  = '該Todo關聯的是Task #%s，需要修改它嗎？';
+
+$lang->todo->statusList['wait']     = '未開始';
+$lang->todo->statusList['doing']    = '進行中';
+$lang->todo->statusList['done']     = '已完成';
+//$lang->todo->statusList['cancel']   = '已取消';
+//$lang->todo->statusList['postpone'] = '已延期';
+
+$lang->todo->priList[3] = '一般';
+$lang->todo->priList[1] = '最高';
+$lang->todo->priList[2] = '較高';
+$lang->todo->priList[4] = '最低';
+
+$lang->todo->typeList->custom = '自定義';
+$lang->todo->typeList->bug    = 'Bug';
+$lang->todo->typeList->task   = '項目任務';
+
+$lang->todo->confirmDelete  = "您確定要刪除這個todo嗎？";
+$lang->todo->successMarked  = "成功切換狀態！";
+$lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
+$lang->todo->lblDisableDate = '暫時不設定時間';
+
+$lang->todo->thisWeekTodos = '本週計劃';
+$lang->todo->lastWeekTodos = '上周總結';
+$lang->todo->allDaysTodos  = '所有TODO';
+$lang->todo->allUndone     = '之前未完';
+$lang->todo->todayTodos    = '今日安排';
+
+$lang->todo->action->marked = array('main' => '$date, 由 <strong>$actor</strong> 標記為<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);

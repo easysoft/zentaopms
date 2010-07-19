@@ -24,6 +24,7 @@
 $lang->product->common = '产品视图';
 $lang->product->index  = "产品首页";
 $lang->product->browse = "浏览产品";
+$lang->product->view   = "产品信息";
 $lang->product->edit   = "编辑产品";
 $lang->product->create = "新增产品";
 $lang->product->read   = "产品详情";
@@ -35,8 +36,8 @@ $lang->product->roadmap   = '路线图';
 $lang->product->selectProduct   = "请选择产品";
 $lang->product->saveButton      = " 保存 (S) ";
 $lang->product->confirmDelete   = " 您确定删除该产品吗？";
-$lang->product->ajaxGetProjects = "接口:获得项目列表";
-$lang->product->ajaxGetPlans    = "接口:获得计划列表";
+$lang->product->ajaxGetProjects = "接口:项目列表";
+$lang->product->ajaxGetPlans    = "接口:计划列表";
 
 $lang->product->errorFormat    = '产品数据格式不正确';
 $lang->product->errorEmptyName = '产品名称不能为空';
@@ -53,3 +54,7 @@ $lang->product->desc    = '产品描述';
 $lang->product->moduleStory = '按模块浏览';
 $lang->product->searchStory = '搜索';
 $lang->product->allStory    = '全部需求';
+
+$lang->product->statusList['']       = '';
+$lang->product->statusList['normal'] = '正常';
+$lang->product->statusList['closed'] = '结束';
