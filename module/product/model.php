@@ -34,14 +34,17 @@ class productModel extends model
 
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, '$currentModule', '$currentMethod', '$extra');\"");
         common::setMenuVars($this->lang->product->menu, 'list',   $selectHtml . $this->lang->arrow);
-        common::setMenuVars($this->lang->product->menu, 'story',  $productID);
-        common::setMenuVars($this->lang->product->menu, 'plan',   $productID);
-        common::setMenuVars($this->lang->product->menu, 'roadmap',$productID);
-        common::setMenuVars($this->lang->product->menu, 'release',$productID);
-        common::setMenuVars($this->lang->product->menu, 'view',   $productID);
-        common::setMenuVars($this->lang->product->menu, 'edit',   $productID);
-        common::setMenuVars($this->lang->product->menu, 'delete', $productID);
-        common::setMenuVars($this->lang->product->menu, 'module', $productID);
+        foreach($this->lang->product->menu as $key => $menu)
+        {
+            if($key == 'list')
+            {
+                common::setMenuVars($this->lang->product->menu, 'list', $productID);
+            }
+            else
+            {
+                common::setMenuVars($this->lang->product->menu, $key, $productID);
+            }
+        }
     }
 
     /* 通过ID获取产品信息。*/
