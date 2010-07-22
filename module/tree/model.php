@@ -32,29 +32,29 @@ class treeModel extends model
     }
 
     /* 生成查询的sql语句。*/
-    private function buildMenuQuery($productID, $viewType, $rootModuleID)
+    private function buildMenuQuery($rootID, $type, $startModule)
     {
-        /* 查找rootModule。*/
-        $rootModulePath = '';
-        if($rootModuleID > 0)
+        /* 查找startModule。*/
+        $startModulePath = '';
+        if($startModule > 0)
         {
-            $rootModule = $this->getById($rootModuleID);
-            if($rootModule) $rootModulePath = $rootModule->path . '%';
+            $startModule = $this->getById($startModule);
+            if($startModule) $startModulePath = $startModule->path . '%';
         }
 
         return $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('product')->eq((int)$productID)
-            ->andWhere('view')->eq($viewType)
-            ->beginIF($rootModulePath)->andWhere('path')->like($rootModulePath)->fi()
+            ->where('root')->eq((int)$rootID)
+            ->andWhere('type')->eq($type)
+            ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->orderBy('grade desc, `order`')
             ->get();
     }
 
     /* 获取模块的下类列表，用于生成select控件。*/
-    public function getOptionMenu($productID, $viewType = 'product', $rootModuleID = 0)
+    public function getOptionMenu($rootID, $type = 'story', $startModule = 0)
     {
         $treeMenu = array();
-        $stmt = $this->dbh->query($this->buildMenuQuery($productID, $viewType, $rootModuleID));
+        $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule));
         $modules = array();
         while($module = $stmt->fetch()) $modules[$module->id] = $module;
 
@@ -108,10 +108,10 @@ class treeModel extends model
     }
 
     /* 获取树状的模块列表。*/
-    public function getTreeMenu($productID, $viewType = 'product', $rootModuleID = 0, $userFunc)
+    public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc)
     {
         $treeMenu = array();
-        $stmt = $this->dbh->query($this->buildMenuQuery($productID, $viewType, $rootModuleID));
+        $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule));
         while($module = $stmt->fetch())
         {
             $linkHtml = call_user_func($userFunc, $module);
@@ -143,7 +143,7 @@ class treeModel extends model
     /* 生成需求链接。*/
     private function createStoryLink($module)
     {
-        $linkHtml = html::a(helper::createLink('product', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        $linkHtml = html::a(helper::createLink('product', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
@@ -152,8 +152,8 @@ class treeModel extends model
     {
         $linkHtml  = $module->name;
         if(common::hasPriv('tree', 'edit'))        $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "module={$module->id}"), $this->lang->tree->edit, '', 'class="iframe"');
-        if(common::hasPriv('tree', 'browse'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "product={$module->product}&viewType={$module->view}&module={$module->id}"), $this->lang->tree->child);
-        if(common::hasPriv('tree', 'delete'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "product={$module->product}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
+        if(common::hasPriv('tree', 'browse'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "root={$module->root}&type={$module->type}&module={$module->id}"), $this->lang->tree->child);
+        if(common::hasPriv('tree', 'delete'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "root={$module->root}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
         if(common::hasPriv('tree', 'updateorder')) $linkHtml .= ' ' . html::input("orders[$module->id]", $module->order, 'style="width:30px;text-align:center"');
         return $linkHtml;
     }
@@ -161,24 +161,24 @@ class treeModel extends model
     /* 生成Bug链接。*/
     private function createBugLink($module)
     {
-        $linkHtml = html::a(helper::createLink('bug', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        $linkHtml = html::a(helper::createLink('bug', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
     /* 生成case链接。*/
     private function createCaseLink($module)
     {
-        $linkHtml = html::a(helper::createLink('testcase', 'browse', "product={$module->product}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        $linkHtml = html::a(helper::createLink('testcase', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
     /* 获得某一个模块的直接下级模块。*/
-    public function getSons($productID, $moduleID, $viewType = 'product')
+    public function getSons($rootID, $moduleID, $type = 'root')
     {
         return $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('product')->eq((int)$productID)
+            ->where('root')->eq((int)$rootID)
             ->andWhere('parent')->eq((int)$moduleID)
-            ->andWhere('view')->eq($viewType)
+            ->andWhere('type')->eq($type)
             ->orderBy('`order`')
             ->fetchAll();
     }
@@ -211,7 +211,7 @@ class treeModel extends model
     }
 
     /* 更新某一个模块的子模块。*/
-    public function manageChild($productID, $viewType, $parentModuleID, $childs)
+    public function manageChild($rootID, $type, $parentModuleID, $childs)
     {
         $parentModule = $this->getByID($parentModuleID);
         if($parentModule)
@@ -232,11 +232,11 @@ class treeModel extends model
             /* 新增模块。*/
             if(is_numeric($moduleID))
             {
-                $module->product = $productID;
+                $module->root = $rootID;
                 $module->name    = $moduleName;
                 $module->parent  = $parentModuleID;
                 $module->grade   = $grade;
-                $module->view    = $viewType;
+                $module->type    = $type;
                 $module->order   = $this->post->maxOrder + $i * 10;
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 $moduleID  = $this->dao->lastInsertID();
@@ -275,9 +275,9 @@ class treeModel extends model
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->eq($moduleID)->exec();                                 // 删除自己。
         $this->fixModulePath();
 
-        if($module->view == 'product') $this->dao->update(TABLE_STORY)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
-        if($module->view == 'bug')     $this->dao->update(TABLE_BUG)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
-        if($module->view == 'case')    $this->dao->update(TABLE_CASE)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
+        if($module->type == 'story') $this->dao->update(TABLE_STORY)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
+        if($module->type == 'bug')   $this->dao->update(TABLE_BUG)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
+        if($module->type == 'case')  $this->dao->update(TABLE_CASE)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
     }
 
     /* 修正modulePath字段。*/

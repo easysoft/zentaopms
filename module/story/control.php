@@ -49,7 +49,7 @@ class story extends control
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
         $users    = $this->user->getPairs('nodeleted');
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'product');
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
 
         /* 设置菜单。*/
         $this->product->setMenu($products, $product->id);
@@ -75,7 +75,7 @@ class story extends control
         $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
         $users    = $this->user->getPairs('nodeleted');
-        $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'product');
+        $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story');
 
         /* 设置菜单。*/
         $this->product->setMenu($products, $product->id);

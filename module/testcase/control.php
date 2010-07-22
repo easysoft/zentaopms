@@ -110,7 +110,7 @@ class testcase extends control
         $this->view->position[]    = $this->lang->testcase->common;
         $this->view->productID     = $productID;
         $this->view->productName   = $this->products[$productID];
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $rooteModuleID = 0, array('treeModel', 'createCaseLink'));
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'));
         $this->view->moduleID      = $moduleID;
         $this->view->pager         = $pager;
         $this->view->users         = $this->user->getPairs('noletter');
@@ -151,7 +151,7 @@ class testcase extends control
         $this->view->productID        = $productID;
         $this->view->users            = $users;           
         $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $rooteModuleID = 0);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->stories          = $this->story->getProductStoryPairs($productID);
 
@@ -228,7 +228,7 @@ class testcase extends control
         $this->view->position         = $position;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $rooteModuleID = 0);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->users            = $users;
         $this->view->stories          = $this->story->getProductStoryPairs($productID);
