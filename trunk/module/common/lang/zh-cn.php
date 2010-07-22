@@ -85,6 +85,8 @@ $lang->menu->my      = '我的地盘|my|index';
 $lang->menu->product = '产品视图|product|index';
 $lang->menu->project = '项目视图|project|index';
 $lang->menu->qa      = 'QA视图|qa|index';
+$lang->menu->doc     = '文档视图|doc|index';
+$lang->menu->forum   = '讨论视图|doc|index';
 $lang->menu->company = '组织视图|company|index';
 $lang->menu->admin   = '后台管理|admin|index';
 
