@@ -24,11 +24,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
+<?php include '../../common/view/alert.html.php';?>
 <style>
 #project, #product  {width:200px}
 #module, #task      {width:400px}
 #severity, #browser {width:113px}
 #story{width:605px}
+.text-1 {width: 85%}
 </style>
 <script language='Javascript'>
 /* 当选择产品时，触发这个方法。*/
@@ -171,7 +173,14 @@ $(function() {
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->steps;?></th>
-        <td><?php echo html::textarea('steps', $steps, "class='area-1' rows='6'");?></td>
+        <td>
+          <table class='w-p100 bd-none'>
+            <tr class='bd-none' valign='top'>
+              <td class='w-p85 bd-none padding-zero'><?php echo html::textarea('steps', $steps, "class='w-p100' rows='6'");?></td>
+              <td class='bd-none pl-10px' id='tplBox'><?php echo $this->fetch('bug', 'createTPLS');?></td>
+            </tr>
+          </table>
+        </td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->keywords;?></th>
@@ -179,7 +188,7 @@ $(function() {
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->bug->files;?></th>
-        <td><?php echo $this->fetch('file', 'buildform');?></td>
+        <td><?php echo $this->fetch('file', 'buildform', 'fileCount=2&percent=0.85');?></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'>

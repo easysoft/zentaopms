@@ -5,12 +5,12 @@
 <?php endfor;?>
 </div>
 <script language='javascript'>
-function setFileFormWidth()
+function setFileFormWidth(percent)
 {
-    totalWidth = Math.round($('#fileform').parent().width() * 0.9);
+    totalWidth = Math.round($('#fileform').parent().width() * percent);
     titleWidth = totalWidth - $('#file0').width() - $('#label0').width();
     if(!$.browser.mozilla) titleWidth -= 10;
     $('#fileform .text-3').css('width', titleWidth + 'px');
 };
-$(function(){setFileFormWidth()});
+$(function(){setFileFormWidth(<?php echo $percent;?>)});
 </script>

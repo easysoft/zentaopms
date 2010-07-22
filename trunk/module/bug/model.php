@@ -438,4 +438,26 @@ class bugModel extends model
         /* 合并配置。*/
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
     }
+
+    /* 获得用户的Bug模板列表。*/
+    public function getUserBugTemplates($account)
+    {
+        $templates = $this->dao->select('id, title, content')
+            ->from(TABLE_USERTPL)
+            ->where('account')->eq($account)
+            ->orderBy('id')
+            ->fetchAll();
+        return $templates;
+    }
+
+    /* 保存用户的BUG模板。*/
+    public function saveUserBugTemplate()
+    {
+        $template = fixer::input('post')
+            ->specialChars('title, content')
+            ->add('account', $this->app->user->account)
+            ->add('type', 'bug')
+            ->get();
+        $this->dao->insert(TABLE_USERTPL)->data($template)->autoCheck('title, content', 'notempty')->check('title', 'unique')->exec();
+    }
 }
