@@ -46,7 +46,7 @@ class tree extends control
     {
         $product = $this->product->getById($productID);
 
-        if($viewType == 'product')
+        if($viewType == 'story')
         {
             /* 设置菜单。*/
             $this->product->setMenu($this->product->getPairs(), $productID, 'product');
@@ -106,7 +106,7 @@ class tree extends control
             die(js::reload('parent'));
         }
         $this->view->module     = $this->tree->getById($moduleID);
-        $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->product, $this->view->module->view);
+        $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->root, $this->view->module->type);
 
         /* 去掉自己和child。*/
         $childs = $this->tree->getAllChildId($moduleID);
@@ -133,7 +133,6 @@ class tree extends control
             $this->tree->manageChild($productID, $viewType, $_POST['parentModuleID'], $_POST['modules']);
             die(js::reload('parent'));
         }
-
     }
 
     /* 删除某一个模块。*/
