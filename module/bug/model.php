@@ -29,10 +29,17 @@ class bugModel extends model
     public function setMenu($products, $productID)
     {
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'bug', 'browse');\"");
-        common::setMenuVars($this->lang->bug->menu, 'product',  $selectHtml . $this->lang->arrow);
-        common::setMenuVars($this->lang->bug->menu, 'bug',      $productID);
-        common::setMenuVars($this->lang->bug->menu, 'testcase', $productID);
-        common::setMenuVars($this->lang->bug->menu, 'testtask', $productID);
+        foreach($this->lang->bug->menu as $key => $menu)
+        {
+            if($key == 'product')
+            {
+                common::setMenuVars($this->lang->bug->menu, 'product',  $selectHtml . $this->lang->arrow);
+            }
+            else
+            {
+                common::setMenuVars($this->lang->bug->menu, $key, $productID);
+            }
+        }
     }
 
     /* 创建一个Bug。*/
