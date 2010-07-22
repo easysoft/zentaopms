@@ -24,9 +24,10 @@
 class file extends control
 {
     /* 生成文件上传的表单。*/
-    public function buildForm($fileCount = 2)
+    public function buildForm($fileCount = 2, $percent = 0.9)
     {
         $this->view->fileCount = $fileCount;
+        $this->view->percent   = $percent;
         $this->display();
     }
 

@@ -88,6 +88,7 @@ define('TABLE_CASESTEP',       $config->db->prefix . 'caseStep');
 define('TABLE_TESTTASK',       $config->db->prefix . 'testTask');
 define('TABLE_TESTRUN',        $config->db->prefix . 'testRun');
 define('TABLE_TESTRESULT',     $config->db->prefix . 'testResult');
+define('TABLE_USERTPL',        $config->db->prefix . 'userTPL');
 
 define('TABLE_PRODUCT',        $config->db->prefix . 'product');
 define('TABLE_STORY',          $config->db->prefix . 'story');

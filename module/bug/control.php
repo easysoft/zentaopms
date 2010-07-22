@@ -397,6 +397,7 @@ class bug extends control
         $this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;
         $this->view->actions          = $this->action->getList('bug', $bugID);
+        $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
 
         $this->display();
     }
@@ -528,6 +529,26 @@ class bug extends control
         if($account == '') $account = $this->app->user->account;
         $bugs = $this->bug->getUserBugPairs($account);
         die(html::select('bug', $bugs, '', 'class=select-1'));
+    }
+
+    public function saveTemplate()
+    {
+        $this->bug->saveUserBugTemplate();
+        if(dao::isError()) die(js::error(dao::getError()));
+        die($this->fetch('bug', 'createTPLS'));
+    }
+
+    public function createTPLS()
+    {
+        $this->view->templates = $this->bug->getUserBugTemplates($this->app->user->account);
+        $this->display('bug', 'createTPLS');
+    }
+
+    /* 删除一个bug模板。*/
+    public function deleteTemplate($templateID)
+    {
+        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
+        die();
     }
 
     /* 发送邮件。*/

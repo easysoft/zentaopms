@@ -131,6 +131,7 @@ $lang->bug->buttonToList   = '返回';
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';
 $lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
+$lang->bug->setTemplateTitle     = '请输入bug模板标题（保存之前请先填写bug重现步骤）：';
 
 /* 模板。*/
 $lang->bug->tblStep        = "[步骤]\n";

@@ -159,9 +159,11 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .w-type     {width:80px}
 .w-resolution{width:60px}
 
+.margin-zero {margin:    0}
 .margin-10px {margin:    10px}
 .margin-15px {margin:    15px}
 .margin-20px {margin:    20px}
+.padding-zero{padding:   0}
 .padding-10px{padding:   10px}
 .padding-5px {padding:   5px}
 
