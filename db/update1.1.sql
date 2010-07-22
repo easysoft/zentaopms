@@ -25,5 +25,6 @@ CREATE TABLE IF NOT EXISTS `zt_docLib` (
     KEY `site` (`company`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- module
-ALTER TABLE `zt_module` ADD `treeType` VARCHAR( 30 ) NOT NULL DEFAULT 'product' AFTER `company` ;
-ALTER TABLE `zt_module` CHANGE `product` `treeID` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `zt_module` CHANGE `product` `root` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `zt_module` CHANGE `view` `type` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+update zt_module set `type` = 'story' where `type` = 'product';
