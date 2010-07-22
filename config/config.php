@@ -15,63 +15,63 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 ÇàµºÒ×ÈíÌì´´ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 é’å²›æ˜“è½¯å¤©åˆ›ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-/* »ù±¾²ÎÊıÉè¶¨¡£*/
-$config->version     = '1.1';             // °æ±¾ºÅ£¬ÇĞÎğĞŞ¸Ä¡£
-$config->encoding    = 'UTF-8';           // ÍøÕ¾µÄ±àÂë¡£
-$config->cookiePath  = '/';               // cookieµÄÓĞĞ§Â·¾¶¡£
-$config->cookieLife  = time() + 2592000;  // cookieµÄÉúÃüÖÜÆÚ¡£
-$config->timezone    = 'Asia/Shanghai';   // Ê±ÇøÉèÖÃ£¬ÏêÏ¸µÄÁĞ±í£¬Çë·ÃÎÊ http://www.php.net/manual/en/timezones.php
+/* åŸºæœ¬å‚æ•°è®¾å®šã€‚*/
+$config->version     = '1.2';             // ç‰ˆæœ¬å·ï¼Œåˆ‡å‹¿ä¿®æ”¹ã€‚
+$config->encoding    = 'UTF-8';           // ç½‘ç«™çš„ç¼–ç ã€‚
+$config->cookiePath  = '/';               // cookieçš„æœ‰æ•ˆè·¯å¾„ã€‚
+$config->cookieLife  = time() + 2592000;  // cookieçš„ç”Ÿå‘½å‘¨æœŸã€‚
+$config->timezone    = 'Asia/Shanghai';   // æ—¶åŒºè®¾ç½®ï¼Œè¯¦ç»†çš„åˆ—è¡¨ï¼Œè¯·è®¿é—® http://www.php.net/manual/en/timezones.php
 
-/* ÇëÇó·½Ê½ÉèÖÃ¡£*/
-$config->requestType = 'PATH_INFO';       // ÈçºÎ»ñÈ¡µ±Ç°ÇëÇóµÄĞÅÏ¢£¬¿ÉÑ¡Öµ£ºPATH_INFO|GET
-$config->pathType    = 'clean';           // requestType=PATH_INFO: ÇëÇóurlµÄ¸ñÊ½£¬¿ÉÑ¡ÖµÎªfull|clean£¬full¸ñÊ½»á´øÓĞ²ÎÊıÃû³Æ£¬cleanÔòÖ»ÓĞÈ¡Öµ¡£
-$config->requestFix  = '-';               // requestType=PATH_INFO: ÇëÇóurlµÄ·Ö¸ô·û£¬¿ÉÑ¡ÖµÎªĞ±Ïß¡¢¼õºÅ¡£ºóÃæÁ½ÖÖĞÎÊ½ÓĞÖúÓÚSEO¡£
-$config->moduleVar   = 'm';               // requestType=GET: Ä£¿é±äÁ¿Ãû¡£
-$config->methodVar   = 'f';               // requestType=GET: ·½·¨±äÁ¿Ãû¡£
-$config->viewVar     = 't';               // requestType=GET: Ä£°å±äÁ¿Ãû¡£
-$config->sessionVar  = 'sid';             // requestType=GET: session±äÁ¿Ãû¡£
+/* è¯·æ±‚æ–¹å¼è®¾ç½®ã€‚*/
+$config->requestType = 'PATH_INFO';       // å¦‚ä½•è·å–å½“å‰è¯·æ±‚çš„ä¿¡æ¯ï¼Œå¯é€‰å€¼ï¼šPATH_INFO|GET
+$config->pathType    = 'clean';           // requestType=PATH_INFO: è¯·æ±‚urlçš„æ ¼å¼ï¼Œå¯é€‰å€¼ä¸ºfull|cleanï¼Œfullæ ¼å¼ä¼šå¸¦æœ‰å‚æ•°åç§°ï¼Œcleanåˆ™åªæœ‰å–å€¼ã€‚
+$config->requestFix  = '-';               // requestType=PATH_INFO: è¯·æ±‚urlçš„åˆ†éš”ç¬¦ï¼Œå¯é€‰å€¼ä¸ºæ–œçº¿ã€å‡å·ã€‚åé¢ä¸¤ç§å½¢å¼æœ‰åŠ©äºSEOã€‚
+$config->moduleVar   = 'm';               // requestType=GET: æ¨¡å—å˜é‡åã€‚
+$config->methodVar   = 'f';               // requestType=GET: æ–¹æ³•å˜é‡åã€‚
+$config->viewVar     = 't';               // requestType=GET: æ¨¡æ¿å˜é‡åã€‚
+$config->sessionVar  = 'sid';             // requestType=GET: sessionå˜é‡åã€‚
 
-/* ÊÓÍ¼ºÍÖ÷Ìâ¡£*/
-$config->views       = ',html,json,csv,'; // Ö§³ÖµÄÊÓÍ¼ÁĞ±í¡£
-$config->themes      = 'default,blue';    // Ö§³ÖµÄÖ÷ÌâÁĞ±í¡£
+/* è§†å›¾å’Œä¸»é¢˜ã€‚*/
+$config->views       = ',html,json,csv,'; // æ”¯æŒçš„è§†å›¾åˆ—è¡¨ã€‚
+$config->themes      = 'default,blue';    // æ”¯æŒçš„ä¸»é¢˜åˆ—è¡¨ã€‚
 
-/* Ö§³ÖµÄÓïÑÔÁĞ±í¡£*/
+/* æ”¯æŒçš„è¯­è¨€åˆ—è¡¨ã€‚*/
 $config->langs['zh-cn'] = 'Chinese Simplified';
 $config->langs['zh-tw'] = 'Chinese Traditional';
 
-/* Ä¬ÈÏ²ÎÊıÉè¶¨¡£*/
-$config->default->view   = 'html';             // Ä¬ÈÏµÄÊÓÍ¼¸ñÊ½¡£
-$config->default->lang   = 'zh-cn';            // Ä¬ÈÏµÄÓïÑÔ¡£
-$config->default->theme  = 'default';          // Ä¬ÈÏµÄÖ÷Ìâ¡£
-$config->default->module = 'index';            // Ä¬ÈÏµÄÄ£¿é¡£µ±ÇëÇóÖĞÃ»ÓĞÖ¸¶¨Ä£¿éÊ±£¬¼ÓÔØ¸ÃÄ£¿é¡£
-$config->default->method = 'index';            // Ä¬ÈÏµÄ·½·¨¡£µ±ÇëÇóÖĞÃ»ÓĞÖ¸¶¨·½·¨»òÕßÖ¸¶¨µÄ·½·¨²»´æÔÚÊ±£¬µ÷ÓÃ¸Ã·½·¨¡£
+/* é»˜è®¤å‚æ•°è®¾å®šã€‚*/
+$config->default->view   = 'html';             // é»˜è®¤çš„è§†å›¾æ ¼å¼ã€‚
+$config->default->lang   = 'zh-cn';            // é»˜è®¤çš„è¯­è¨€ã€‚
+$config->default->theme  = 'default';          // é»˜è®¤çš„ä¸»é¢˜ã€‚
+$config->default->module = 'index';            // é»˜è®¤çš„æ¨¡å—ã€‚å½“è¯·æ±‚ä¸­æ²¡æœ‰æŒ‡å®šæ¨¡å—æ—¶ï¼ŒåŠ è½½è¯¥æ¨¡å—ã€‚
+$config->default->method = 'index';            // é»˜è®¤çš„æ–¹æ³•ã€‚å½“è¯·æ±‚ä¸­æ²¡æœ‰æŒ‡å®šæ–¹æ³•æˆ–è€…æŒ‡å®šçš„æ–¹æ³•ä¸å­˜åœ¨æ—¶ï¼Œè°ƒç”¨è¯¥æ–¹æ³•ã€‚
 
-/* ÉÏ´«¸½¼ş²ÎÊıÉè¶¨¡£*/
-$config->file->dangers = 'php,jsp,py,rb,asp,'; // ²»ÔÊĞíÉÏ´«µÄÎÄ¼şÀàĞÍÁĞ±í¡£
-$config->file->maxSize = 1024 * 1024;          // ÔÊĞíÉÏ´«µÄÎÄ¼ş´óĞ¡£¬µ¥Î»Îª×Ö½Ú¡£
+/* ä¸Šä¼ é™„ä»¶å‚æ•°è®¾å®šã€‚*/
+$config->file->dangers = 'php,jsp,py,rb,asp,'; // ä¸å…è®¸ä¸Šä¼ çš„æ–‡ä»¶ç±»å‹åˆ—è¡¨ã€‚
+$config->file->maxSize = 1024 * 1024;          // å…è®¸ä¸Šä¼ çš„æ–‡ä»¶å¤§å°ï¼Œå•ä½ä¸ºå­—èŠ‚ã€‚
 
-/* Êı¾İ¿â²ÎÊıÉè¶¨¡£*/
-$config->db->persistant = false;               // ÊÇ·ñ´ò¿ª³Ö¾ÃÁ¬½Ó¡£
-$config->db->driver     = 'mysql';             // pdoµÄÇı¶¯ÀàĞÍ£¬Ä¿Ç°ÔİÊ±Ö»Ö§³Ömysql¡£
-$config->db->dao        = true;                // ÊÇ·ñÊ¹ÓÃDAO¡£
-$config->db->encoding   = 'UTF8';              // Êı¾İ¿âµÄ±àÂë¡£
-$config->db->strictMode = false;               // ¹Ø±ÕMySQLµÄÑÏ¸ñÄ£Ê½¡£
+/* æ•°æ®åº“å‚æ•°è®¾å®šã€‚*/
+$config->db->persistant = false;               // æ˜¯å¦æ‰“å¼€æŒä¹…è¿æ¥ã€‚
+$config->db->driver     = 'mysql';             // pdoçš„é©±åŠ¨ç±»å‹ï¼Œç›®å‰æš‚æ—¶åªæ”¯æŒmysqlã€‚
+$config->db->dao        = true;                // æ˜¯å¦ä½¿ç”¨DAOã€‚
+$config->db->encoding   = 'UTF8';              // æ•°æ®åº“çš„ç¼–ç ã€‚
+$config->db->strictMode = false;               // å…³é—­MySQLçš„ä¸¥æ ¼æ¨¡å¼ã€‚
 
-/* Í¨¹ı¶ÔÏóÒıÓÃÈ«¾Ö±äÁ¿¡£*/
+/* é€šè¿‡å¯¹è±¡å¼•ç”¨å…¨å±€å˜é‡ã€‚*/
 $config->super2OBJ = true;
 
-/* °üº¬×Ô¶¨ÒåÅäÖÃÎÄ¼ş¡£*/
+/* åŒ…å«è‡ªå®šä¹‰é…ç½®æ–‡ä»¶ã€‚*/
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
 if(file_exists($myConfig)) include $myConfig;
 if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
-/* Êı¾İ±íµÄ¶¨Òå¡£*/
+/* æ•°æ®è¡¨çš„å®šä¹‰ã€‚*/
 define('TABLE_COMPANY',        $config->db->prefix . 'company');
 define('TABLE_DEPT',           $config->db->prefix . 'dept');
 define('TABLE_CONFIG',         $config->db->prefix . 'config');
@@ -104,6 +104,9 @@ define('TABLE_TASKESTIMATE',   $config->db->prefix . 'taskEstimate');
 define('TABLE_EFFORT',         $config->db->prefix . 'effort');
 define('TABLE_BURN',           $config->db->prefix . 'burn');
 define('TABLE_BUILD',          $config->db->prefix . 'build');
+
+define('TABLE_DOCLIB',         $config->db->prefix . 'docLib');
+define('TABLE_DOC',            $config->db->prefix . 'doc');
 
 define('TABLE_MODULE',         $config->db->prefix . 'module');
 define('TABLE_ACTION',         $config->db->prefix . 'action');
