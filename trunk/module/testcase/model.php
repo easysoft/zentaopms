@@ -29,10 +29,17 @@ class testcaseModel extends model
     public function setMenu($products, $productID)
     {
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testcase', 'browse');\"");
-        common::setMenuVars($this->lang->testcase->menu, 'product',  $selectHtml . $this->lang->arrow);
-        common::setMenuVars($this->lang->testcase->menu, 'bug',      $productID);
-        common::setMenuVars($this->lang->testcase->menu, 'testcase', $productID);
-        common::setMenuVars($this->lang->testcase->menu, 'testtask', $productID);
+        foreach($this->lang->testcase->menu as $key => $menu)
+        {
+            if($key == 'product')
+            {
+                common::setMenuVars($this->lang->testcase->menu, 'product',  $selectHtml . $this->lang->arrow);
+            }
+            else
+            {
+                common::setMenuVars($this->lang->testcase->menu, $key, $productID);
+            }
+        }
     }
 
     /* 创建一个Case。*/
