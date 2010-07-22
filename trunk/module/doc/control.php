@@ -23,4 +23,7 @@
  */
 class doc extends control
 {
+    public function index()
+    {
+    }
 }

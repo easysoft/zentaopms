@@ -167,6 +167,13 @@ $lang->testtask->menu->bug      = array('link' => '缺陷管理|bug|browse|produ
 $lang->testtask->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s');
 $lang->testtask->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
+/* 文档视图菜单设置。*/
+$lang->doc->menu->lib     = '%s';
+$lang->doc->menu->browse  = array('link' => '文档列表|doc|browse|libID=%s');
+$lang->doc->menu->edit    = '编辑文档库|doc|editLib|libID=%s';
+$lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
+$lang->doc->menu->create  = array('link' => '新增文档库|doc|create', 'float' => 'right');
+
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;
 $lang->company->menu->browseUser  = array('link' => '用户列表|company|browse', 'subModule' => 'user');
