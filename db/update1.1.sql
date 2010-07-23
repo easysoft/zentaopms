@@ -28,3 +28,15 @@ CREATE TABLE IF NOT EXISTS `zt_docLib` (
 ALTER TABLE `zt_module` CHANGE `product` `root` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `zt_module` CHANGE `view` `type` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 update zt_module set `type` = 'story' where `type` = 'product';
+-- tpl
+CREATE TABLE IF NOT EXISTS `zt_userTPL` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `company` mediumint(8) unsigned NOT NULL,
+  `account` char(30) NOT NULL,
+  `type` char(30) NOT NULL,
+  `title` varchar(150) NOT NULL,
+  `content` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `company` (`company`),
+  KEY `account` (`account`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
