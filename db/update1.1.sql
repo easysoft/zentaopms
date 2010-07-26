@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `zt_docLib` (
 -- module
 ALTER TABLE `zt_module` CHANGE `product` `root` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `zt_module` CHANGE `view` `type` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_module` ADD `owner` VARCHAR( 30 ) NOT NULL ;
 update zt_module set `type` = 'story' where `type` = 'product';
 -- tpl
 CREATE TABLE IF NOT EXISTS `zt_userTPL` (
@@ -40,3 +41,11 @@ CREATE TABLE IF NOT EXISTS `zt_userTPL` (
   KEY `company` (`company`),
   KEY `account` (`account`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+-- product acl
+ALTER TABLE `zt_product` ADD `acl` ENUM( 'open', 'private', 'custom' ) NOT NULL DEFAULT 'open' AFTER `desc` ,
+ADD `whitelist` VARCHAR( 255 ) NOT NULL AFTER `acl` ;
+
+-- product owner.
+ALTER TABLE `zt_product` ADD `productOwner` VARCHAR( 30 ) NOT NULL AFTER `desc` ,
+ADD `bugOwner` VARCHAR( 30 ) NOT NULL AFTER `productOwner` ;
+
