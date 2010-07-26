@@ -35,12 +35,29 @@
       <td><?php echo $product->code;?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->product->bugOwner;?></th>
+      <td><?php echo $users[$product->bugOwner];?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->product->status;?></th>
       <td><?php echo $lang->product->statusList[$product->status];?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->desc;?></th>
       <td><?php echo nl2br($product->desc);?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->product->acl;?></th>
+      <td><?php echo $lang->product->aclList[$product->acl];?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->product->whitelist;?></th>
+      <td>
+        <?php
+        $whitelist = explode(',', $product->whitelist);
+        foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
+        ?>
+      </td>
     </tr>  
   </table>
   <div class='a-center f-16px strong'>

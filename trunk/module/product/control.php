@@ -61,6 +61,13 @@ class product extends control
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
+        /* 检查是否有访问权限。*/
+        if(!$this->product->checkPriv($this->product->getById($productID)))
+        {
+            echo(js::alert($this->lang->product->accessDenied));
+            die(js::locate('back'));
+        }
+
         /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
 
@@ -142,6 +149,8 @@ class product extends control
 
         $this->view->header->title = $this->lang->product->create;
         $this->view->position[]    = $this->view->header->title;
+        $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs();
         $this->display();
     }
 
@@ -168,6 +177,8 @@ class product extends control
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[]    = $this->lang->product->edit;
         $this->view->product       = $product;
+        $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs();
 
         $this->display();
     }
@@ -187,6 +198,7 @@ class product extends control
         $this->view->product       = $product;
         $this->view->actions       = $this->loadModel('action')->getList('product', $productID);
         $this->view->users         = $this->user->getPairs();
+        $this->view->groups        = $this->loadModel('group')->getPairs();
 
         $this->display();
     }

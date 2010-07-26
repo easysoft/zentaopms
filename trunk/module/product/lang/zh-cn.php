@@ -42,14 +42,18 @@ $lang->product->ajaxGetPlans    = "接口:计划列表";
 $lang->product->errorFormat    = '产品数据格式不正确';
 $lang->product->errorEmptyName = '产品名称不能为空';
 $lang->product->errorEmptyCode = '产品代号不能为空';
+$lang->product->accessDenied   = '您无权访问该产品';
 
-$lang->product->id      = '编号';
-$lang->product->company = '所属公司';
-$lang->product->name    = '产品名称';
-$lang->product->code    = '产品代号';
-$lang->product->order   = '排序';
-$lang->product->status  = '状态';
-$lang->product->desc    = '产品描述';
+$lang->product->id        = '编号';
+$lang->product->company   = '所属公司';
+$lang->product->name      = '产品名称';
+$lang->product->code      = '产品代号';
+$lang->product->order     = '排序';
+$lang->product->status    = '状态';
+$lang->product->desc      = '产品描述';
+$lang->product->bugOwner  = 'Bug负责人';
+$lang->product->acl       = '访问控制';
+$lang->product->whitelist = '分组白名单';
 
 $lang->product->moduleStory = '按模块浏览';
 $lang->product->searchStory = '搜索';
@@ -58,3 +62,7 @@ $lang->product->allStory    = '全部需求';
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '结束';
+
+$lang->product->aclList['open']    = '默认设置(有产品视图权限，即可访问)';
+$lang->product->aclList['private'] = '私有项目(只有项目团队成员才能访问)';
+$lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
