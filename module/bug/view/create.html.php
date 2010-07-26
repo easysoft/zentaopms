@@ -177,7 +177,7 @@ $(function() {
           <table class='w-p100 bd-none'>
             <tr class='bd-none' valign='top'>
               <td class='w-p85 bd-none padding-zero'><?php echo html::textarea('steps', $steps, "class='w-p100' rows='6'");?></td>
-              <td class='bd-none pl-10px' id='tplBox'><?php echo $this->fetch('bug', 'createTPLS');?></td>
+              <td class='bd-none pl-10px' id='tplBox'><?php echo $this->fetch('bug', 'buildTemplates');?></td>
             </tr>
           </table>
         </td>
