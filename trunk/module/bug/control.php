@@ -523,25 +523,19 @@ class bug extends control
         }
     }
 
-    /* 获得用户的bug列表。*/
-    public function ajaxGetUserBugs($account = '')
-    {
-        if($account == '') $account = $this->app->user->account;
-        $bugs = $this->bug->getUserBugPairs($account);
-        die(html::select('bug', $bugs, '', 'class=select-1'));
-    }
-
+    /* 保存模板。*/
     public function saveTemplate()
     {
         $this->bug->saveUserBugTemplate();
         if(dao::isError()) die(js::error(dao::getError()));
-        die($this->fetch('bug', 'createTPLS'));
+        die($this->fetch('bug', 'buildTemplates'));
     }
 
-    public function createTPLS()
+    /* 生成模板选择页面。*/
+    public function buildTemplates()
     {
         $this->view->templates = $this->bug->getUserBugTemplates($this->app->user->account);
-        $this->display('bug', 'createTPLS');
+        $this->display('bug', 'buildTemplates');
     }
 
     /* 删除一个bug模板。*/
@@ -549,6 +543,14 @@ class bug extends control
     {
         $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
         die();
+    }
+
+    /* 获得用户的bug列表。*/
+    public function ajaxGetUserBugs($account = '')
+    {
+        if($account == '') $account = $this->app->user->account;
+        $bugs = $this->bug->getUserBugPairs($account);
+        die(html::select('bug', $bugs, '', 'class=select-1'));
     }
 
     /* 发送邮件。*/
