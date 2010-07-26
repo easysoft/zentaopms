@@ -47,6 +47,39 @@ class productModel extends model
         }
     }
 
+    /* 检查权限。*/
+    public function checkPriv($product)
+    {
+        /* 检查是否是管理员。*/
+        $account = ',' . $this->app->user->account . ',';
+        if(strpos($this->app->company->admins, $account) !== false) return true; 
+
+        /* 访问级别为open，不做任何处理。*/
+        if($product->acl == 'open') return true;
+
+        /* 获得团队的成员列表，供后面判断。*/
+        $teamMembers = $this->getTeamMemberPairs($product->id);
+
+        /* 级别为private。*/
+        if($product->acl == 'private')
+        {
+            return isset($teamMembers[$this->app->user->account]);
+        }
+
+        /* 级别为custom。*/
+        if($product->acl == 'custom')
+        {
+            if(isset($teamMembers[$this->app->user->account])) return true;
+            $userGroups    = $this->loadModel('user')->getGroups($this->app->user->account);
+            $productGroups = explode(',', $product->whitelist);
+            foreach($userGroups as $groupID)
+            {
+                if(in_array($groupID, $productGroups)) return true;
+            }
+            return false;
+        }
+    }
+
     /* 通过ID获取产品信息。*/
     public function getById($productID)
     {
@@ -63,11 +96,17 @@ class productModel extends model
     public function getPairs()
     {
         $mode = $this->cookie->productMode;
-        return $this->dao->select('id,name')
+        $products = $this->dao->select('*')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->beginIF($mode == 'noclosed')->andWhere('status')->ne('closed')->fi()
-            ->fetchPairs();
+            ->fetchAll();
+        $pairs = array();
+        foreach($products as $product)
+        {
+            if($this->checkPriv($product)) $pairs[$product->id] = $product->name;
+        }
+        return $pairs;
     }
 
     /* 获取产品的的状态分组。*/
@@ -83,6 +122,8 @@ class productModel extends model
         $product = fixer::input('post')
             ->stripTags('name,code')
             ->specialChars('desc')
+             ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->join('whitelist', ',')
             ->get();
         $this->dao->insert(TABLE_PRODUCT)
             ->data($product)
@@ -103,6 +144,8 @@ class productModel extends model
         $product = fixer::input('post')
             ->stripTags('name,code')
             ->specialChars('desc')
+            ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->join('whitelist', ',')
             ->get();
         $this->dao->update(TABLE_PRODUCT)
             ->data($product)
@@ -148,5 +191,13 @@ class productModel extends model
         }
         arsort($roadmap);
         return $roadmap;
+    }
+
+    /* 获取团队成员。*/
+    public function getTeamMemberPairs($productID)
+    {
+        $projects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
+        if(!$projects) return array();
+        return $this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs();
     }
 }
