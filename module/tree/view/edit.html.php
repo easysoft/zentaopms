@@ -30,11 +30,15 @@
       <caption><?php echo $lang->tree->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->tree->parent;?></th>
-        <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='text-1'");?></td>
+        <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='select-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->tree->name;?></th>
         <td><?php echo html::input('name', $module->name, "class='text-1'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->tree->owner;?></th>
+        <td><?php echo html::select('owner', $users, $module->owner, "class='select-1'");?></td>
       </tr>  
       <tr>
         <td colspan='2' class='a-center'>

@@ -150,7 +150,10 @@ class treeModel extends model
     /* 生成模块编辑链接。*/
     private function createManageLink($module)
     {
+        static $users;
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
         $linkHtml  = $module->name;
+        if($module->type == 'bug' and $module->owner) $linkHtml .= '<span class="owner">[' . $users[$module->owner] . ']</span>';
         if(common::hasPriv('tree', 'edit'))        $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "module={$module->id}"), $this->lang->tree->edit, '', 'class="iframe"');
         if(common::hasPriv('tree', 'browse'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "root={$module->root}&type={$module->type}&module={$module->id}"), $this->lang->tree->child);
         if(common::hasPriv('tree', 'delete'))      $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "root={$module->root}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
@@ -256,11 +259,14 @@ class treeModel extends model
     public function update($moduleID)
     {
         $module = fixer::input('post')->specialChars('name')->get();
+        $self   = $this->getById($moduleID);
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);
         $module->grade = $parent ? $parent->grade + 1 : 1;
         $this->dao->update(TABLE_MODULE)->data($module)->autoCheck()->check('name', 'notempty')->where('id')->eq($moduleID)->exec();
         $this->dao->update(TABLE_MODULE)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($moduleID)->exec();
+        $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
+        $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
         $this->fixModulePath();
     }
 

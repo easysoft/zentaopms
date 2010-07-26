@@ -35,6 +35,7 @@ $lang->tree->manageCase   = "维护用例视图模块";
 $lang->tree->updateOrder  = "更新排序";
 $lang->tree->manageChild  = "维护子模块";
 $lang->tree->child        = "子模块";
+$lang->tree->owner        = "负责人";
 $lang->tree->ajaxGetOptionMenu = "接口:获取下拉列表";
 
 $lang->tree->confirmDelete = "您确定删除该模块吗？";

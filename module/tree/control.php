@@ -107,12 +107,13 @@ class tree extends control
         }
         $this->view->module     = $this->tree->getById($moduleID);
         $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->root, $this->view->module->type);
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
         /* 去掉自己和child。*/
         $childs = $this->tree->getAllChildId($moduleID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
 
-        $this->display();
+        die($this->display());
     }
 
     /* 更新排序。*/
@@ -154,6 +155,6 @@ class tree extends control
     public function ajaxGetOptionMenu($productID, $viewType = 'product', $rootModuleID = 0)
     {
         $optionMenu = $this->tree->getOptionMenu($productID, $viewType, $rootModuleID);
-        die( html::select("module", $optionMenu));
+        die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));
     }
 }

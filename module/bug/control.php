@@ -553,6 +553,13 @@ class bug extends control
         die(html::select('bug', $bugs, '', 'class=select-1'));
     }
 
+    /* 获得模块的默认指派人。*/
+    public function ajaxGetModuleOwner($moduleID, $productID = 0)
+    {
+        if($moduleID) die($this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch('owner'));
+        die($this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('bugOwner'));
+    }
+
     /* 发送邮件。*/
     private function sendmail($bugID, $actionID)
     {

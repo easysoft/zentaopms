@@ -41,6 +41,7 @@ function loadAll(productID)
     loadProductStories(productID);          // 加载产品的需求列表。
     loadProductProjects(productID);         // 加载项目列表。
     loadProductBuilds(productID);           // 加载build列表。
+    setAssignedTo();                        // 设置默认指派人。
 }
 
 /* 加载模块列表。*/
@@ -103,6 +104,18 @@ function loadProjectStories(projectID)
     $('#storyIdBox').load(link);
 }
 
+/* 设置默认指派者。*/
+function setAssignedTo()
+{
+    productID = $('#product').val();
+    moduleID  = $('#module').val();
+    link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
+    $.get(link, function(owner)
+    {
+        $('#assignedTo').val(owner);
+    });
+}
+
 /* 加载项目的build列表。*/
 function loadProjectBuilds(projectID)
 {
@@ -123,7 +136,7 @@ $(function() {
         <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
         <td>
           <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
-          <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, 'class=select-3');?></span>
+          <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, 'onchange=setAssignedTo();class=select-3');?></span>
         </td>
       </tr>  
       <tr>
