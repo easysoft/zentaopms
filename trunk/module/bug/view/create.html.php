@@ -107,9 +107,7 @@ function loadProjectStories(projectID)
 /* 设置默认指派者。*/
 function setAssignedTo()
 {
-    productID = $('#product').val();
-    moduleID  = $('#module').val();
-    link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
+    link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + $('#module').val() + '&productID=' + $('#product').val());
     $.get(link, function(owner)
     {
         $('#assignedTo').val(owner);
@@ -125,8 +123,8 @@ function loadProjectBuilds(projectID)
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    setAssignedTo();
 })
-</script>
 </script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -135,8 +133,8 @@ $(function() {
       <tr>
         <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
         <td>
-          <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-2'");?>
-          <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, 'onchange=setAssignedTo();class=select-3');?></span>
+          <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='select-2'");?>
+          <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='setAssignedTo()' class='select-3'");?></span>
         </td>
       </tr>  
       <tr>
