@@ -90,6 +90,7 @@ class tree extends control
         $this->view->product         = $product;
         $this->view->viewType        = $viewType;
         $this->view->modules         = $this->tree->getTreeMenu($productID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
+        $this->view->productModules  = $this->tree->getOptionMenu($productID, 'story');
         $this->view->sons            = $this->tree->getSons($productID, $currentModuleID, $viewType);
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
@@ -156,5 +157,17 @@ class tree extends control
     {
         $optionMenu = $this->tree->getOptionMenu($productID, $viewType, $rootModuleID);
         die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));
+    }
+
+    /* ajax请求： 返回某一个模块的son模块.*/
+    public function ajaxGetSonModules($moduleID, $productID = 0)
+    {
+        if($moduleID) die(json_encode($this->dao->findByParent($moduleID)->from(TABLE_MODULE)->fetchPairs('id', 'name')));
+        $modules = $this->dao->select('id, name')->from(TABLE_MODULE)
+            ->where('root')->eq($productID)
+            ->andWhere('parent')->eq('0')
+            ->andWhere('type')->eq('story')
+            ->fetchPairs();
+        die(json_encode($modules));
     }
 }
