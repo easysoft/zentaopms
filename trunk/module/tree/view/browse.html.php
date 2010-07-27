@@ -25,6 +25,28 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <script language='javascript'>
+var productID = <?php echo $productID;?>;
+function syncModule()
+{
+    link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + $('#productModule').val() + '&productID=' + productID);
+    $.getJSON(link, function(modules)
+    {
+        $('.helplink').addClass('hidden');
+        $.each(modules, function(key, value)
+        {   
+            moduleName = value;
+            $('.text-3').each(function()
+            {
+                if(this.value == moduleName) modules[key] = null;
+                if(!this.value) $(this).parent().addClass('hidden');
+            })
+        });  
+        $.each(modules, function(key, value)
+        {   
+            if(value) $('#moduleBox').append("<span><input name=modules[] value=" + value + " style=margin-bottom:5px class=text-3 /><br /><span>");
+        })
+    })
+}
 $(document).ready(function()
 {
     $("a.iframe").colorbox({width:480, height:320, iframe:true, transition:'none'});
@@ -50,20 +72,26 @@ $(document).ready(function()
             ?>
             </nobr>
           </td>
-          <td> 
+          <td id='moduleBox'> 
             <?php
+            if($viewType != 'story')
+            {
+                echo html::select('productModule', $productModules, '', 'class=select-3');
+                echo html::commonButton($lang->tree->syncFromProduct, 'onclick=syncModule()');
+                echo '<br />';
+            }
             $maxOrder = 0;
             foreach($sons as $sonModule)
             {
                 if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
-                echo html::input("modules[id$sonModule->id]", $sonModule->name, 'style="margin-bottom:5px"') . '<br />';
+                echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
             }
-            for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo html::input("modules[]", '', 'style="margin-bottom:5px"') . '<br />';
-           ?>
+            for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
+            ?>
           </td>
-        </tr>
+                </tr>
         <tr>
-          <td class='a-center' colspan='2'>
+          <td class='a-center' colspan='3'>
             <?php 
             echo html::submitButton() . html::resetButton();
             echo html::hidden('parentModuleID', $currentModuleID);

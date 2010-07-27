@@ -21,25 +21,26 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->tree->common      = '模块维护';
-$lang->tree->add         = "添加";
-$lang->tree->edit        = "编辑";
-$lang->tree->addChild    = "添加子模块";
-$lang->tree->delete      = "删除模块";
-$lang->tree->browse      = "模块维护";
-$lang->tree->manage      = "维护模块";
-$lang->tree->manageProduct= "维护产品视图模块";
-$lang->tree->manageProject= "维护项目视图模块";
-$lang->tree->manageBug    = "维护QA视图模块";
-$lang->tree->manageCase   = "维护用例视图模块";
-$lang->tree->updateOrder  = "更新排序";
-$lang->tree->manageChild  = "维护子模块";
-$lang->tree->child        = "子模块";
-$lang->tree->owner        = "负责人";
-$lang->tree->ajaxGetOptionMenu = "接口:获取下拉列表";
+$lang->tree->common            = '模块维护';
+$lang->tree->add               = '添加';
+$lang->tree->edit              = '编辑';
+$lang->tree->addChild          = '添加子模块';
+$lang->tree->delete            = '删除模块';
+$lang->tree->browse            = '模块维护';
+$lang->tree->manage            = '维护模块';
+$lang->tree->manageProduct     = '维护产品视图模块';
+$lang->tree->manageProject     = '维护项目视图模块';
+$lang->tree->manageBug         = '维护QA视图模块';
+$lang->tree->manageCase        = '维护用例视图模块';
+$lang->tree->updateOrder       = '更新排序';
+$lang->tree->manageChild       = '维护子模块';
+$lang->tree->syncFromProduct   = '复制产品视图模块';
+$lang->tree->ajaxGetOptionMenu = '接口:获取下拉列表';
 
-$lang->tree->confirmDelete = "您确定删除该模块吗？";
-$lang->tree->successSave   = "成功保存";
+$lang->tree->confirmDelete = '您确定删除该模块吗？';
+$lang->tree->successSave   = '成功保存';
 
 $lang->tree->name   = '模块名称';
 $lang->tree->parent = '上级模块';
+$lang->tree->child  = '子模块';
+$lang->tree->owner  = '负责人';
