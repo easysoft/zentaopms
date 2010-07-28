@@ -25,6 +25,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
+<?php include '../../common/view/xheditor.html.php';?>
 <style>
 #project, #product  {width:200px}
 #module, #task      {width:400px}
@@ -153,7 +154,7 @@ $(function() {
       <tr>
         <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
         <td>
-          <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, 'size=4 multiple=multiple class=select-3');?></span>
+          <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3');?></span>
         </td>
       </tr>
       <tr>
@@ -187,7 +188,7 @@ $(function() {
         <td>
           <table class='w-p100 bd-none'>
             <tr class='bd-none' valign='top'>
-              <td class='w-p85 bd-none padding-zero'><?php echo html::textarea('steps', $steps, "class='w-p100' rows='6'");?></td>
+              <td class='w-p85 bd-none padding-zero'><?php echo html::textarea('steps', $steps, "class='xhe' rows='9'");?></td>
               <td class='bd-none pl-10px' id='tplBox'><?php echo $this->fetch('bug', 'buildTemplates');?></td>
             </tr>
           </table>

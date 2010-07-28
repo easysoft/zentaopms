@@ -24,6 +24,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
+<?php include '../../common/view/alert.html.php';?>
+<?php include '../../common/view/xheditor.html.php';?>
 <style>
 #product, #module, #project, #story, #task, #resolvedBuild{width:230px}
 .select-3 {width:230px}
@@ -161,7 +163,7 @@ $(function() {
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
           <legend><?php echo $lang->bug->legendSteps;?></legend>
-            <?php echo html::textarea('steps', $bug->steps, "rows='8' class='area-1'");?>
+            <legend class='w-p90'><?php echo html::textarea('steps', $bug->steps, "rows='8' class='xhe'");?></legend>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendComment;?></legend>
