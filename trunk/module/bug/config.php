@@ -59,3 +59,16 @@ $config->bug->search['params']['assignedDate']  = array('operator' => '>=',     
 $config->bug->create->requiredFields  = 'title,openedBuild';
 $config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
 $config->bug->resolve->requiredFields = 'resolution';
+
+$config->bug->list->allFields = 'id, module, project, story, task, 
+    title, keywords, severity, pri, type, os, browser, hardware,
+    found, steps, status, mailto,
+    openedBy, openedDate, openedBuild, 
+    assignedTo, assignedDate,
+    resolvedBy, resolution, resolvedBuild, resolvedDate,
+    closedBy, closedDate, 
+    duplicateBug, linkBug, 
+    case,
+    lastEditedBy,
+    lastEditedDate';
+$config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';

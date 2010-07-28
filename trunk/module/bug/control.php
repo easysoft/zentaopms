@@ -163,6 +163,10 @@ class bug extends control
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
 
         $users = $this->user->getPairs('noletter');
+
+        /* 设置自定义字段。*/
+        $customFields = $this->cookie->bugFields != false ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
+        $customed     = !($customFields == $this->config->bug->list->defaultFields);
         
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -180,6 +184,8 @@ class bug extends control
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
         $this->view->moduleID    = $moduleID;
+        $this->view->customed    = $customed;
+        $this->view->customFields= explode(',', str_replace(' ', '', trim($customFields)));
 
         $this->display();
     }
@@ -543,6 +549,25 @@ class bug extends control
     {
         $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
         die();
+    }
+
+    /* 自定义显示字段。*/
+    public function customFields()
+    {
+        if($_POST)
+        {
+            $customFields = $this->post->customFields;
+            $customFields = join(',', $customFields);
+            setcookie('bugFields', $customFields);
+            die(js::reload('parent'));
+        }
+        /* 设定自定义字段列表。*/
+        $customFields = $this->cookie->bugFields ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
+
+        $this->view->allFields     = $this->bug->getFieldPairs($this->config->bug->list->allFields);
+        $this->view->customFields  = $this->bug->getFieldPairs($customFields);
+        $this->view->defaultFields = $this->bug->getFieldPairs($this->config->bug->list->defaultFields);
+        die($this->display());
     }
 
     /* 获得用户的bug列表。*/

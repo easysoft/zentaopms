@@ -460,4 +460,17 @@ class bugModel extends model
             ->get();
         $this->dao->insert(TABLE_USERTPL)->data($template)->autoCheck('title, content', 'notempty')->check('title', 'unique')->exec();
     }
+
+    /* 给一个字段的列表，返回字段和相应语言解释的键值对。*/
+    public function getFieldPairs($fields)
+    {
+        $fields = explode(',', $fields);
+        foreach($fields as $key => $field)
+        {
+            $field = trim($field);
+            $fields[$field] = $this->lang->bug->$field;
+            unset($fields[$key]);
+        }
+        return $fields;
+    }
 }
