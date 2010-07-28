@@ -37,6 +37,7 @@ $lang->bug->severityAB     = '级别';
 $lang->bug->pri            = '优先级';
 $lang->bug->type           = 'Bug类型';
 $lang->bug->os             = '操作系统';
+$lang->bug->hardware       = '硬件平台';
 $lang->bug->browser        = '浏览器';
 $lang->bug->machine        = '机器硬件';
 $lang->bug->found          = '如何发现';
@@ -77,6 +78,8 @@ $lang->bug->close          = '关闭Bug';
 $lang->bug->activate       = '激活Bug';
 $lang->bug->reportChart    = '报表统计';
 $lang->bug->delete         = '删除Bug';
+$lang->bug->customFields   = '自定义字段';
+$lang->bug->restoreDefault = '恢复默认';
 $lang->bug->ajaxGetUserBugs    = '接口:我的Bug';
 $lang->bug->confirmStoryChange = '确认需求变动';
 
@@ -105,6 +108,8 @@ $lang->bug->lblAssignedTo               = '当前指派';
 $lang->bug->lblMailto                   = '抄送给';
 $lang->bug->lblLastEdited               = '最后修改';
 $lang->bug->lblResolved                 = '由谁解决';
+$lang->bug->lblAllFields                = '所有字段';
+$lang->bug->lblCustomFields             = '自定义字段';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo   = '基本信息';

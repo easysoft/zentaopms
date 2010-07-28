@@ -47,6 +47,10 @@ function browseBySearch(active)
     $('#bysearchTab').addClass('active');
 }
 
+$(document).ready(function()
+{
+    $("a.iframe").colorbox({width:640, height:420, iframe:true, transition:'none'});
+});
 </script>
 
 <div class='yui-d0'>
@@ -66,6 +70,7 @@ function browseBySearch(active)
       ?>
     </div>
     <div class='f-right'>
+      <?php common::printLink('bug', 'customFields', '', $lang->bug->customFields, '', "class='iframe'"); ?>
       <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
       <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->bug->report->common); ?>
       <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", $lang->bug->create); ?>
@@ -74,6 +79,7 @@ function browseBySearch(active)
   <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 </div>
 
+<?php if($customed){include 'browse.custom.html.php'; exit;}?>
 <div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
 
   <div class="yui-main">
