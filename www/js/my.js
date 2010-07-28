@@ -12,7 +12,7 @@ function loadFixedCSS()
     }
     if(cssFile != '')
     {
-        document.write("<link rel='stylesheet' href='" + cssFile + "' type='text/css' media='screen' />");
+        document.write("<link rel='stylesheet' id='browsecss' href='" + cssFile + "' type='text/css' media='screen' />");
     }
 
     /* 解决safari和chrome的caption问题。*/
@@ -212,6 +212,103 @@ function setHelpLink()
         }
     );
 }
+
+/* add one option of a select to another select. */
+function addItem(SelectID,TargetID)
+{
+    ItemList = document.getElementById(SelectID);
+    Target   = document.getElementById(TargetID);
+    for(var x = 0; x < ItemList.length; x++)
+    {
+        var opt = ItemList.options[x];
+        if (opt.selected)
+        {
+            flag = true;
+            for (var y=0;y<Target.length;y++)
+            {
+                var myopt = Target.options[y];
+                if (myopt.value == opt.value)
+                {
+                    flag = false;
+                }
+            }
+            if(flag)
+            {
+                Target.options[Target.options.length] = new Option(opt.text, opt.value, 0, 0);
+            }
+        }
+    }
+}
+
+/* move one selected option from a select. */
+function delItem(SelectID)
+{
+    ItemList = document.getElementById(SelectID);
+    for(var x=ItemList.length-1;x>=0;x--)
+    {
+        var opt = ItemList.options[x];
+        if (opt.selected)
+        {
+            ItemList.options[x] = null;
+        }
+    }
+}
+
+/* move one selected option up from a select. */
+function upItem(SelectID)
+{
+    ItemList = document.getElementById(SelectID);
+    for(var x=1;x<ItemList.length;x++)
+    {
+        var opt = ItemList.options[x];
+        if(opt.selected)
+        {
+            tmpUpValue = ItemList.options[x-1].value;
+            tmpUpText  = ItemList.options[x-1].text;
+            ItemList.options[x-1].value = opt.value;
+            ItemList.options[x-1].text  = opt.text;
+            ItemList.options[x].value = tmpUpValue;
+            ItemList.options[x].text  = tmpUpText;
+            ItemList.options[x-1].selected = true;
+            ItemList.options[x].selected = false;
+            break;
+        }
+    }
+}
+
+/* move one selected option down from a select. */
+function downItem(SelectID)
+{
+    ItemList = document.getElementById(SelectID);
+    for(var x=0;x<ItemList.length;x++)
+    {
+        var opt = ItemList.options[x];
+        if(opt.selected)
+        {
+            tmpUpValue = ItemList.options[x+1].value;
+            tmpUpText  = ItemList.options[x+1].text;
+            ItemList.options[x+1].value = opt.value;
+            ItemList.options[x+1].text  = opt.text;
+            ItemList.options[x].value = tmpUpValue;
+            ItemList.options[x].text  = tmpUpText;
+            ItemList.options[x+1].selected = true;
+            ItemList.options[x].selected = false;
+            break;
+        }
+    }
+}
+
+/* select all items of a select. */
+function selectItem(SelectID)
+{
+    ItemList = document.getElementById(SelectID);
+    for(var x=ItemList.length-1;x>=0;x--)
+    {
+        var opt = ItemList.options[x];
+        opt.selected = true;
+    }
+}
+
 
 /* 需要不需要ping，已保证session不过期。 */
 needPing = true;
