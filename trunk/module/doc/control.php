@@ -35,9 +35,8 @@ class doc extends control
     }
 
     /* 浏览某一个产品。*/
-    public function browse($libID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($libID = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if($libID == 0) $libID = key($this->libs);
         $this->doc->setMenu($this->libs, $libID);
         $this->display();
     }

@@ -127,6 +127,21 @@ function switchProduct(productID, module, method, extra)
     location.href=link;
 }
 
+/* 选择文档库*/
+function switchDocLib(libID, module, method, extra)
+{
+    if(module == 'doc')
+    {
+        link = createLink(module, method, "rootID=" + libID);
+    }
+    /* tree，需要单独传递参数。*/
+    else if(module == 'tree')
+    {
+        link = createLink(module, method, "rootID=" + libID + '&type=' + extra);
+    }
+    location.href=link;
+}
+
 /* 记住最后选择的产品id。*/
 function saveProduct()
 {
