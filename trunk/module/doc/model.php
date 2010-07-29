@@ -25,4 +25,24 @@
 <?php
 class docModel extends model
 {
+    /* 设置菜单。*/
+    public function setMenu($libs, $libID, $extra = '')
+    {
+        /* 获得当前的模块和方法，传递给switchDocLib方法，供页面跳转使用。*/
+        $currentModule = $this->app->getModuleName();
+        $currentMethod = $this->app->getMethodName();
+
+        $selectHtml = html::select('libID', $libs, $libID, "onchange=\"switchDocLib(this.value, '$currentModule', '$currentMethod', '$extra');\"");
+        common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml . $this->lang->arrow);
+        foreach($this->lang->doc->menu as $key => $menu)
+        {
+            if($key != 'list') common::setMenuVars($this->lang->doc->menu, $key, $libID);
+        }
+    }
+
+    public function getLibs()
+    {
+        $libs = $this->dao->select('id, name')->from(TABLE_DOCLIB)->fetchPairs();
+        return $this->lang->doc->systemLibs + $libs;
+    }
 }

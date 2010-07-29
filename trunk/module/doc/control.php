@@ -23,7 +23,27 @@
  */
 class doc extends control
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->libs = $this->doc->getLibs();
+    }
+
     public function index()
+    {
+        $this->locate(inlink('browse'));
+    }
+
+    /* 浏览某一个产品。*/
+    public function browse($libID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        if($libID == 0) $libID = key($this->libs);
+        $this->doc->setMenu($this->libs, $libID);
+        $this->display();
+    }
+
+    /* 维护文档库模块。*/
+    public function manageModule($libID)
     {
     }
 }
