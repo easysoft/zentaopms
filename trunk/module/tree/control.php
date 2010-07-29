@@ -23,75 +23,77 @@
  */
 class tree extends control
 {
-    protected $product;
     const NEW_CHILD_COUNT = 5;
 
-    /* 构造函数，加载产品模块。*/
-    public function __construct()
-    {
-        parent::__construct();
-        $this->loadModel('product');
-        $this->loadModel('bug');
-        $this->loadModel('testcase');
-    }
-
-    /* 设置当前的产品。*/
-    private function setProduct($productID)
-    {
-        $this->product = $this->product->getById($productID);
-    }
-
     /* 模块列表。*/
-    public function browse($productID, $viewType, $currentModuleID = 0)
+    public function browse($rootID, $viewType, $currentModuleID = 0)
     {
-        $product = $this->product->getById($productID);
+        /* 根据视图的不同，获得相应的产品或者文档库。*/
+        if(strpos('story|bug|case', $viewType) !== false)
+        {
+            $product = $this->loadModel('product')->getById($rootID);
+            $this->view->root = $product;
+            $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
+        }
+        elseif($viewType == 'customdoc')
+        {
+            $lib = $this->loadModel('doc')->getLibById($rootID);
+            $this->view->root = $lib;
+        }
 
         if($viewType == 'story')
         {
             /* 设置菜单。*/
-            $this->product->setMenu($this->product->getPairs(), $productID, 'product');
+            $this->product->setMenu($this->product->getPairs(), $rootID, 'product');
             $this->lang->tree->menu = $this->lang->product->menu;
             $this->lang->set('menugroup.tree', 'product');
 
             /* 设置导航。*/
             $header['title'] = $this->lang->tree->manageProduct . $this->lang->colon . $product->name;
-            $position[]      = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
+            $position[]      = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
             $position[]      = $this->lang->tree->manageProduct;
         }
         elseif($viewType == 'bug')
         {
             /* 设置菜单。*/
-            $this->bug->setMenu($this->product->getPairs(), $productID);
+            $this->loadModel('bug')->setMenu($this->product->getPairs(), $rootID);
             $this->lang->tree->menu = $this->lang->bug->menu;
             $this->lang->set('menugroup.tree', 'qa');
 
             $header['title'] = $this->lang->tree->manageBug . $this->lang->colon . $product->name;
-            $position[]      = html::a($this->createLink('bug', 'browse', "product=$productID"), $product->name);
+            $position[]      = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
             $position[]      = $this->lang->tree->manageBug;
-            $this->lang->set('menugroup.tree', 'qa');
         }
         elseif($viewType == 'case')
         {
             /* 设置菜单。*/
-            $this->testcase->setMenu($this->product->getPairs(), $productID);
+            $this->loadModel('testcase')->setMenu($this->product->getPairs(), $rootID);
             $this->lang->tree->menu = $this->lang->testcase->menu;
             $this->lang->set('menugroup.tree', 'qa');
 
             $header['title'] = $this->lang->tree->manageCase . $this->lang->colon . $product->name;
-            $position[]      = html::a($this->createLink('testcase', 'browse', "product=$productID"), $product->name);
+            $position[]      = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
             $position[]      = $this->lang->tree->manageCase;
-            $this->lang->set('menugroup.tree', 'qa');
+        }
+        elseif($viewType == 'customdoc')
+        {
+            /* 设置菜单。*/
+            $this->doc->setMenu($this->doc->getLibs(), $rootID);
+            $this->lang->tree->menu = $this->lang->doc->menu;
+            $this->lang->set('menugroup.tree', 'doc');
+
+            $header['title'] = $this->lang->tree->manageCustomDoc . $this->lang->colon . $lib->name;
+            $position[]      = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
+            $position[]      = $this->lang->tree->manageCustomDoc;
         }
 
         $parentModules = $this->tree->getParents($currentModuleID);
         $this->view->header          = $header;
         $this->view->position        = $position;
-        $this->view->productID       = $productID;
-        $this->view->product         = $product;
+        $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
-        $this->view->modules         = $this->tree->getTreeMenu($productID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
-        $this->view->productModules  = $this->tree->getOptionMenu($productID, 'story');
-        $this->view->sons            = $this->tree->getSons($productID, $currentModuleID, $viewType);
+        $this->view->modules         = $this->tree->getTreeMenu($rootID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
+        $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType);
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
         $this->display();
@@ -128,21 +130,21 @@ class tree extends control
     }
 
     /* 维护子菜单。*/
-    public function manageChild($productID, $viewType)
+    public function manageChild($rootID, $viewType)
     {
         if(!empty($_POST))
         {
-            $this->tree->manageChild($productID, $viewType, $_POST['parentModuleID'], $_POST['modules']);
+            $this->tree->manageChild($rootID, $viewType, $_POST['parentModuleID'], $_POST['modules']);
             die(js::reload('parent'));
         }
     }
 
     /* 删除某一个模块。*/
-    public function delete($productID, $moduleID, $confirm = 'no')
+    public function delete($rootID, $moduleID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->tree->confirmDelete, $this->createLink('tree', 'delete', "productID=$productID&moduleID=$moduleID&confirm=yes"));
+            echo js::confirm($this->lang->tree->confirmDelete, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes"));
             exit;
         }
         else
@@ -153,18 +155,18 @@ class tree extends control
     }
 
     /* ajax请求： 返回某一个产品的模块列表。*/
-    public function ajaxGetOptionMenu($productID, $viewType = 'product', $rootModuleID = 0)
+    public function ajaxGetOptionMenu($rootID, $viewType = 'product', $rootModuleID = 0)
     {
-        $optionMenu = $this->tree->getOptionMenu($productID, $viewType, $rootModuleID);
+        $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
         die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));
     }
 
     /* ajax请求： 返回某一个模块的son模块.*/
-    public function ajaxGetSonModules($moduleID, $productID = 0)
+    public function ajaxGetSonModules($moduleID, $rootID = 0)
     {
         if($moduleID) die(json_encode($this->dao->findByParent($moduleID)->from(TABLE_MODULE)->fetchPairs('id', 'name')));
         $modules = $this->dao->select('id, name')->from(TABLE_MODULE)
-            ->where('root')->eq($productID)
+            ->where('root')->eq($rootID)
             ->andWhere('parent')->eq('0')
             ->andWhere('type')->eq('story')
             ->fetchPairs();

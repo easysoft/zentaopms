@@ -25,10 +25,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <script language='javascript'>
-var productID = <?php echo $productID;?>;
+var rootID = <?php echo $rootID;?>;
 function syncModule()
 {
-    link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + $('#productModule').val() + '&productID=' + productID);
+    link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + $('#productModule').val() + '&rootID=' + rootID);
     $.getJSON(link, function(modules)
     {
         $('.helplink').addClass('hidden');
@@ -55,18 +55,18 @@ $(document).ready(function()
 <div class="yui-d0 yui-t3">
   <div class="yui-main">
     <div class="yui-b">
-    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "product={$product->id}&viewType=$viewType");?>'>
+    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=$viewType");?>'>
       <table align='center' class='table-1'>
         <caption><?php echo $lang->tree->manageChild;?></caption>
         <tr>
           <td width='10%'>
             <nobr>
             <?php
-            echo html::a($this->createLink('tree', 'browse', "product={$product->id}&viewType=$viewType"), $product->name);
+            echo html::a($this->createLink('tree', 'browse', "root={$root->id}&viewType=$viewType"), $root->name);
             echo $lang->arrow;
             foreach($parentModules as $module)
             {
-                echo html::a($this->createLink('tree', 'browse', "product={$product->id}&viewType=$viewType&moduleID=$module->id"), $module->name);
+                echo html::a($this->createLink('tree', 'browse', "root={$root->id}&viewType=$viewType&moduleID=$module->id"), $module->name);
                 echo $lang->arrow;
             }
             ?>
@@ -74,7 +74,7 @@ $(document).ready(function()
           </td>
           <td id='moduleBox'> 
             <?php
-            if($viewType != 'story')
+            if($viewType != 'story' and $viewType != 'customdoc')
             {
                 echo html::select('productModule', $productModules, '', 'class=select-3');
                 echo html::commonButton($lang->tree->syncFromProduct, 'onclick=syncModule()');
@@ -89,7 +89,7 @@ $(document).ready(function()
             for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
             ?>
           </td>
-                </tr>
+        </tr>
         <tr>
           <td class='a-center' colspan='3'>
             <?php 
@@ -106,7 +106,7 @@ $(document).ready(function()
   </div>
 
   <div class="yui-b">
-    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "product={$product->id}&viewType=$viewType");?>'>
+    <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "root={$root->id}&viewType=$viewType");?>'>
     <table class='table-1'>
       <caption><?php echo $header->title;?></caption>
       <tr>
