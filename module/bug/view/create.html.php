@@ -26,6 +26,7 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/xheditor.html.php';?>
+
 <style>
 #project, #product  {width:200px}
 #module, #task      {width:400px}
@@ -122,6 +123,8 @@ function loadProjectBuilds(projectID)
     $('#buildBox').load(link);
 }
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
+var saveTool    = ",Separator,Save";
+tools = simpleTools + saveTool;
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     setAssignedTo();

@@ -141,6 +141,7 @@ function setDuplicate(resolution)
     }
 }
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
+tools = simpleTools;
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
 })

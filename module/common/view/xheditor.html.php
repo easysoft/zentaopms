@@ -1,5 +1,4 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<link rel='stylesheet' href='<?php echo $clientTheme;?>xheditor.css' />
 <style>
 .saveTemplate {
     background: transparent url(theme/default/images/xheditor/save.gif) no-repeat;
@@ -12,7 +11,9 @@
 var smiles = <?php echo json_encode($lang->smilies);?>;
 var save   = '<?php echo $lang->save;?>';
 var setTemplateTitle = '<?php echo $lang->bug->setTemplateTitle;?>';
-var simpleTools = "Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,Removeformat,Separator,Align,List,Outdent,Indent,Separator,Link,Img,Emot,Source,Fullscreen,About,Separator,Save";
+var simpleTools = "Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,Removeformat,Separator,Align,List,Outdent,Indent,Separator,Link,Img,Emot,Source,Fullscreen,About";
+var tools;
+
 $(function() {
     var allPlugin={
         Save:{
@@ -35,7 +36,7 @@ $(function() {
     
     $('.xhe').xheditor({
             plugins:allPlugin,
-            tools:simpleTools,
+            tools:tools,
             skin:'default', 
             width:'100%', 
             forcePtag:false,
@@ -49,6 +50,5 @@ $(function() {
 
 $('.saveTemplate').css({width:'58px'});
 $('.saveTemplate').parent().css({width:'58px'});
-
 });
 </script>
