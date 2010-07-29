@@ -2,6 +2,8 @@
 CREATE TABLE IF NOT EXISTS `zt_doc` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `company` smallint(5) unsigned NOT NULL,
+  `product` mediumint(8) unsigned NOT NULL,
+  `project` mediumint(8) unsigned NOT NULL,
   `lib` varchar(30) NOT NULL,
   `module` varchar(30) NOT NULL,
   `title` varchar(120) NOT NULL,
@@ -15,7 +17,8 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 -- doc lib
 CREATE TABLE IF NOT EXISTS `zt_docLib` (
     `id` smallint(5) unsigned NOT NULL auto_increment,
