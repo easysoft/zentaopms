@@ -45,5 +45,10 @@ class doc extends control
     /* 维护文档库模块。*/
     public function manageModule($libID)
     {
+        /* 如果是自定义的文档库，则跳转到tree模块。*/
+        if($libID != 'product' and $libID != 'project')
+        {
+            $this->locate($this->createLink('tree', 'browse', "rootID=$libID&type=customdoc"));
+        }
     }
 }

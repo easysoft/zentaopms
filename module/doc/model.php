@@ -45,4 +45,9 @@ class docModel extends model
         $libs = $this->dao->select('id, name')->from(TABLE_DOCLIB)->fetchPairs();
         return $this->lang->doc->systemLibs + $libs;
     }
+
+    public function getLibById($libID)
+    {
+        return $this->dao->select('*')->from(TABLE_DOCLIB)->fetch();
+    }
 }

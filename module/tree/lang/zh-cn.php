@@ -32,6 +32,7 @@ $lang->tree->manageProduct     = '维护产品视图模块';
 $lang->tree->manageProject     = '维护项目视图模块';
 $lang->tree->manageBug         = '维护QA视图模块';
 $lang->tree->manageCase        = '维护用例视图模块';
+$lang->tree->manageCustomDoc   = '维护文档库模块';
 $lang->tree->updateOrder       = '更新排序';
 $lang->tree->manageChild       = '维护子模块';
 $lang->tree->syncFromProduct   = '复制产品视图模块';
