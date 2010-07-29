@@ -33,17 +33,10 @@ class productModel extends model
         $currentMethod = $this->app->getMethodName();
 
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, '$currentModule', '$currentMethod', '$extra');\"");
-        common::setMenuVars($this->lang->product->menu, 'list',   $selectHtml . $this->lang->arrow);
+        common::setMenuVars($this->lang->product->menu, 'list', $selectHtml . $this->lang->arrow);
         foreach($this->lang->product->menu as $key => $menu)
         {
-            if($key == 'list')
-            {
-                common::setMenuVars($this->lang->product->menu, 'list', $productID);
-            }
-            else
-            {
-                common::setMenuVars($this->lang->product->menu, $key, $productID);
-            }
+            if($key != 'list') common::setMenuVars($this->lang->product->menu, $key, $productID);
         }
     }
 
