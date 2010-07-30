@@ -150,6 +150,7 @@ EOT;
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
+        echo html::select('', $app->config->langs, $app->cookie->lang, 'class=switcher onchange=selectLang(this.value)');
     }
 
     /* 打印主菜单。*/

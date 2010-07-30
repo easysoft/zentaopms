@@ -228,6 +228,13 @@ function setHelpLink()
     );
 }
 
+/* select the language. */
+function selectLang(lang)
+{
+    $.cookie('lang', lang);
+    location.href = location.href;
+}
+
 /* add one option of a select to another select. */
 function addItem(SelectID,TargetID)
 {
