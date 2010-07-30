@@ -40,14 +40,47 @@ class docModel extends model
         }
     }
 
+    /* 通过ID获取文档库信息。*/
+    public function getLibById($libID)
+    {
+        return $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch();
+    }
+
+    /* 获取文档库列表。*/
     public function getLibs()
     {
-        $libs = $this->dao->select('id, name')->from(TABLE_DOCLIB)->fetchPairs();
+        $libs = $this->dao->select('id, name')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->fetchPairs();
         return $this->lang->doc->systemLibs + $libs;
     }
 
-    public function getLibById($libID)
+    /* 新增文档库。*/
+    public function createLib()
     {
-        return $this->dao->select('*')->from(TABLE_DOCLIB)->fetch();
+        /* 处理数据。*/
+        $lib = fixer::input('post')->stripTags('name')->get();
+        $this->dao->insert(TABLE_DOCLIB)
+            ->data($lib)
+            ->autoCheck()
+            ->batchCheck('name', 'notempty')
+            ->check('name', 'unique')
+            ->exec();
+        return $this->dao->lastInsertID();
+    }
+
+    /* 编辑文档库。*/
+    public function updateLib($libID)
+    {
+        /* 处理数据。*/
+        $libID  = (int)$libID;
+        $oldLib = $this->getLibById($libID);
+        $lib = fixer::input('post')->stripTags('name')->get();
+        $this->dao->update(TABLE_DOCLIB)
+            ->data($lib)
+            ->autoCheck()
+            ->batchCheck('name', 'notempty')
+            ->check('name', 'unique', "id != $libID")
+            ->where('id')->eq($libID)
+            ->exec();
+        if(!dao::isError()) return common::createChanges($oldLib, $lib);
     }
 }

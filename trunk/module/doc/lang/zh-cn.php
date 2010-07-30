@@ -51,5 +51,11 @@ $lang->doc->view           = '文档详情';
 $lang->doc->manageModule   = '维护模块';
 $lang->doc->manageModule   = '维护模块';
 
+$lang->doc->createLib      = '创建';
+$lang->doc->editLib        = '编辑';
+$lang->doc->libName        = '文档库名称';
+
 $lang->doc->systemLibs['product'] = '产品文档库';
 $lang->doc->systemLibs['project'] = '项目文档库';
+
+$lang->doc->confirmDeleteLib      = " 您确定删除该文档库吗？";

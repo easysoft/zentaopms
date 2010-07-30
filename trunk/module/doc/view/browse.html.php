@@ -1,6 +1,6 @@
 <?php
 /**
- * The browse view file of product module of ZenTaoMS.
+ * The browse view file of doc module of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +46,11 @@ function search(active)
     $('#' + active + 'Tab').removeClass('active');
     $('#bysearchTab').addClass('active');
 }
-
+$(document).ready(function()
+{
+    $(".right a").colorbox({width:500, height:200, iframe:true, transition:'none'});
+    $("#modulemenu a:contains('<?php echo $lang->doc->editLib;?>')").colorbox({width:500, height:200, iframe:true, transition:'none'});
+});
 </script>
 
 <div class='yui-d0'>
