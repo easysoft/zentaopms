@@ -39,15 +39,17 @@ $lang->doc->addedDate      = '添加时间';
 $lang->doc->editedBy       = '由谁编辑';
 $lang->doc->editedDate     = '编辑时间';
 
+$lang->doc->moduleName     = '模块名称';
+$lang->doc->moduleOrder    = '模块排序';
+
 /* 方法列表。*/
 $lang->doc->index          = '首页';
 $lang->doc->create         = '创建文档';
 $lang->doc->edit           = '编辑文档';
 $lang->doc->browse         = '文档列表';
 $lang->doc->view           = '文档详情';
-$lang->doc->resolve        = '解决文档';
-$lang->doc->close          = '关闭文档';
-$lang->doc->activate       = '激活文档';
+$lang->doc->manageModule   = '维护模块';
+$lang->doc->manageModule   = '维护模块';
 
 $lang->doc->systemLibs['product'] = '产品文档库';
 $lang->doc->systemLibs['project'] = '项目文档库';

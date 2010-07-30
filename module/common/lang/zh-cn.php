@@ -171,7 +171,7 @@ $lang->testtask->menu->testtask = array('link' => '测试任务|testtask|browse|
 $lang->doc->menu->list    = '%s';
 $lang->doc->menu->browse  = array('link' => '文档列表|doc|browse|libID=%s');
 $lang->doc->menu->edit    = '编辑文档库|doc|editLib|libID=%s';
-$lang->doc->menu->module  = '维护模块|doc|manageModule|libID=%s';
+$lang->doc->menu->module  = '维护模块|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
 $lang->doc->menu->create  = array('link' => '新增文档库|doc|createLib', 'float' => 'right');
 

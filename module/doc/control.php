@@ -37,17 +37,7 @@ class doc extends control
     /* 浏览某一个产品。*/
     public function browse($libID = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->doc->setMenu($this->libs, $libID);
+        $this->doc->setMenu($this->libs, $libID, 'doc');
         $this->display();
-    }
-
-    /* 维护文档库模块。*/
-    public function manageModule($libID)
-    {
-        /* 如果是自定义的文档库，则跳转到tree模块。*/
-        if($libID != 'product' and $libID != 'project')
-        {
-            $this->locate($this->createLink('tree', 'browse', "rootID=$libID&type=customdoc"));
-        }
     }
 }
