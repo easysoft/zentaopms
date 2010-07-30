@@ -36,10 +36,12 @@
         <th class='rowhead'><?php echo $lang->tree->name;?></th>
         <td><?php echo html::input('name', $module->name, "class='text-1'");?></td>
       </tr>  
+      <?php if($module->type == 'bug'):?>
       <tr>
         <th class='rowhead'><?php echo $lang->tree->owner;?></th>
         <td><?php echo html::select('owner', $users, $module->owner, "class='select-1'");?></td>
       </tr>  
+      <?php endif;?>
       <tr>
         <td colspan='2' class='a-center'>
         <?php echo html::submitButton();?>
