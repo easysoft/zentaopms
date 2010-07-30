@@ -28,6 +28,7 @@ body{background-image:url(theme/default/images/main/loginbg.png); background-pos
 table, tr, td, th, input{ border:none;}
 .rowhead{width:280px; font-weight:normal; font-size:14px; text-align:right; color:#fff;}
 .text-2 {width:160px; height:22px; background-color:#a4c5e0; border:1px solid #035793; font-size:16px; font-weight:bold}
+.select-2 {width:160px}
 .pt-20px {padding-top:20px}
 .pt-200px{padding-top:200px}
 .pt-25px {padding-top:25px}
@@ -53,6 +54,10 @@ $(document).ready(function(){
       <tr>
         <td class='rowhead'><?php echo $lang->user->password;?>：</td>  
         <td><input class='text-2' type='password' name='password' /></td>
+      </tr>
+      <tr>
+        <td class='rowhead'>Language:</td>  
+        <td><?php echo html::select('lang', $config->langs, $this->cookie->lang, 'class=select-2 onchange=selectLang(this.value)');?></td>
       </tr>
       <tr>
         <td colspan='2' class='a-center pt-20px'>
