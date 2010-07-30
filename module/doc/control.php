@@ -40,4 +40,56 @@ class doc extends control
         $this->doc->setMenu($this->libs, $libID, 'doc');
         $this->display();
     }
+
+    /* 新增文档库。*/
+    public function createLib()
+    {
+        if(!empty($_POST))
+        {
+            $libID = $this->doc->createLib();
+            if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('docLib', $libID, 'Created');
+            die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent'));
+        }
+        die($this->display());
+    }
+
+    /* 编辑文档库。*/
+    public function editLib($libID)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->doc->updateLib($libID); 
+            if(dao::isError()) die(js::error(dao::getError()));
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('docLib', $libID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent'));
+            //die(js::locate(inlink('view', "libID=$libID"), 'parent'));
+        }
+        
+        $lib = $this->doc->getLibByID($libID);
+        $this->view->libName = empty($lib) ? $libID : $lib->name;
+        
+        die($this->display());
+    }
+
+    /* 删除文档库。*/
+    public function deleteLib($libID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->doc->confirmDeleteLib, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
+        }
+        else
+        {
+            $this->doc->delete(TABLE_DOCLIB, $libID);
+            //$this->session->set('doc', '');     // 清除session。
+            die(js::locate($this->createLink('doc', 'browse'), 'parent'));
+        }
+
+    }
+
 }
