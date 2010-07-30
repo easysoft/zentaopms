@@ -25,7 +25,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <script language='javascript'>
-var rootID = <?php echo $rootID;?>;
+var rootID = '<?php echo $rootID;?>';
 function syncModule()
 {
     link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + $('#productModule').val() + '&rootID=' + rootID);
@@ -74,7 +74,7 @@ $(document).ready(function()
           </td>
           <td id='moduleBox'> 
             <?php
-            if($viewType != 'story' and $viewType != 'customdoc')
+            if($viewType != 'story' and strpos($viewType, 'doc') === false)
             {
                 echo html::select('productModule', $productModules, '', 'class=select-3');
                 echo html::commonButton($lang->tree->syncFromProduct, 'onclick=syncModule()');

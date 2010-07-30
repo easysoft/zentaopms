@@ -35,16 +35,28 @@ class tree extends control
             $this->view->root = $product;
             $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         }
-        elseif($viewType == 'customdoc')
+        elseif(strpos($viewType, 'doc') !== false)
         {
-            $lib = $this->loadModel('doc')->getLibById($rootID);
-            $this->view->root = $lib;
+            $this->loadModel('doc');
+            if($rootID == 'product' or $rootID == 'project')
+            {
+                $viewType  = $rootID . 'doc';
+                $lib->id   = $rootID;
+                $lib->name = $this->lang->doc->systemLibs[$rootID];
+                $this->view->root = $lib;
+            }
+            else
+            {
+                $viewType = 'customdoc';
+                $lib = $this->loadModel('doc')->getLibById($rootID);
+                $this->view->root = $lib;
+            }
         }
 
         if($viewType == 'story')
         {
             /* 设置菜单。*/
-            $this->product->setMenu($this->product->getPairs(), $rootID, 'product');
+            $this->product->setMenu($this->product->getPairs(), $rootID, 'story');
             $this->lang->tree->menu = $this->lang->product->menu;
             $this->lang->set('menugroup.tree', 'product');
 
@@ -75,10 +87,10 @@ class tree extends control
             $position[]      = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
             $position[]      = $this->lang->tree->manageCase;
         }
-        elseif($viewType == 'customdoc')
+        elseif(strpos($viewType, 'doc') !== false)
         {
             /* 设置菜单。*/
-            $this->doc->setMenu($this->doc->getLibs(), $rootID);
+            $this->doc->setMenu($this->doc->getLibs(), $rootID, 'doc');
             $this->lang->tree->menu = $this->lang->doc->menu;
             $this->lang->set('menugroup.tree', 'doc');
 
