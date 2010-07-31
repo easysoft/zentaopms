@@ -218,6 +218,24 @@ class product extends control
         }
     }
 
+    /* 文档列表。*/
+    public function doc($productID)
+    {
+        $this->product->setMenu($this->products, $productID);
+        $this->session->set('docList', $this->app->getURI(true));
+
+        /* 赋值。*/
+        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $this->view->header->title = $this->lang->product->doc;
+        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[]    = $this->lang->product->doc;
+        $this->view->product       = $product;
+        $this->view->docs          = $this->loadModel('doc')->getProductDocs($productID);
+        $this->view->modules       = $this->doc->getProductModulePairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
     /* 产品路线图。*/
     public function roadmap($productID)
     {

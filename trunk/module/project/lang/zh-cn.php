@@ -78,6 +78,7 @@ $lang->project->burn           = '燃尽图';
 $lang->project->computeBurn    = '更新燃尽图';
 $lang->project->burnData       = '燃尽图数据';
 $lang->project->team           = '团队成员';
+$lang->project->doc            = '文档列表';
 $lang->project->manageProducts = '关联产品';
 $lang->project->linkStory      = '关联需求';
 $lang->project->view           = "基本信息";

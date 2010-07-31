@@ -24,7 +24,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div class='yui-d0'>
-  <table class='table-1'>
+  <table class='table-6' align='center'>
     <caption><?php echo $lang->product->roadmap;?></caption>
     <?php 
     $years = array_keys($roadmaps);
