@@ -85,11 +85,17 @@ class docModel extends model
     }
 
     /* 获得文档列表。*/
-    public function getDocs($lib, $module, $orderBy, $pager)
+    public function getDocs($libID, $productID, $projectID, $module, $orderBy, $pager)
     {
         return $this->dao->select('*')->from(TABLE_DOC)
-            ->where('lib')->eq($lib)
-            ->andWhere('module')->eq($module)
+            ->where('deleted')->eq(0)
+            ->beginIF(is_numeric($libID))->andWhere('lib')->eq($libID)->fi()
+            ->beginIF($libID == 'product')->andWhere('product')->gt(0)->fi()
+            ->beginIF($libID == 'project')->andWhere('project')->gt(0)->fi()
+            ->beginIF($productID > 0)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($projectID > 0)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF((string)$projectID == 'int')->andWhere('project')->gt(0)->fi()
+            ->beginIF($module)->andWhere('module')->in($module)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

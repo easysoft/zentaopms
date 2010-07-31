@@ -35,8 +35,9 @@ class doc extends control
     }
 
     /* 浏览某一个产品。*/
-    public function browse($libID = 'product', $moduleID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($libID = 'product', $moduleID = 0, $productID = 0, $projectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('tree');
         $this->doc->setMenu($this->libs, $libID, 'doc');
         $this->session->set('docList',   $this->app->getURI(true));
 
@@ -47,16 +48,17 @@ class doc extends control
         /* 加载分页类，并查询docs列表。*/
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $docs = $this->doc->getDocs($libID, $moduleID, $orderBy, $pager);
+        if($moduleID) $moduleID = $this->tree->getAllChildID($moduleID);
+        $docs = $this->doc->getDocs($libID, $productID, $projectID, $moduleID, $orderBy, $pager);
 
         /* 获得树状列表。*/
         if($libID == 'product' or $libID == 'project')
         {
-            $moduleTree = $this->loadModel('tree')->getSystemDocTreeMenu($libID);
+            $moduleTree = $this->tree->getSystemDocTreeMenu($libID);
         }
         else
         {
-            $moduleTree = $this->loadModel('tree')->getTreeMenu($libID, $viewType = 'customdoc', $startModuleID = 0, array('treeModel', 'createDocLink'));
+            $moduleTree = $this->tree->getTreeMenu($libID, $viewType = 'customdoc', $startModuleID = 0, array('treeModel', 'createDocLink'));
         }
 
         $this->view->libID         = $libID;

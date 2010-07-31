@@ -64,20 +64,14 @@ $(document).ready(function()
           ?>
           <tr class='a-center'>
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
-            <td><?php echo $doc->pri;?></td>
             <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
-            <td class='nobr'><?php echo $doc->planTitle;?></td>
-            <td><?php echo $users[$doc->openedBy];?></td>
-            <td><?php echo $users[$doc->assignedTo];?></td>
-            <td><?php echo $doc->estimate;?></td>
-            <td class='<?php echo $doc->status;?>'><?php echo $lang->doc->statusList[$doc->status];?></td>
-            <td><?php echo $lang->doc->stageList[$doc->stage];?></td>
+            <td><?php echo $users[$doc->addedBy];?></td>
+            <td><?php echo $doc->addedDate;?></td>
             <td>
               <?php 
               $vars = "doc={$doc->id}";
-              if(!($doc->status != 'closed' and common::printLink('doc', 'change', $vars, $lang->doc->change))) echo $lang->doc->change . ' ';
-              if(!(($doc->status == 'draft' or $doc->status == 'changed') and common::printLink('doc', 'review', $vars, $lang->doc->review))) echo $lang->doc->review . ' ';
               if(!common::printLink('doc', 'edit',   $vars, $lang->edit)) echo $lang->edit;
+              if(!common::printLink('doc', 'delete', $vars, $lang->delete)) echo $lang->delete;
               ?>
             </td>
           </tr>
