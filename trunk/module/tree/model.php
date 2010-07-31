@@ -140,10 +140,83 @@ class treeModel extends model
         return $lastMenu; 
     }
 
+    /* 获得系统文档库的树状列表。*/
+    public function getSystemDocTreeMenu($libID)
+    {
+        $menu = "<ul id='tree'>";
+        if($libID == 'product')
+        {
+            $products = $this->loadModel('product')->getPairs();
+            $modules  = $this->dao->findByType('productdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+            $projectModules = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+            
+            foreach($products as $productID =>$productName)
+            {
+                $menu .= '<li>';
+                $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID"), $productName);
+                if($modules)
+                {
+                    $menu .= '<ul>';
+                    foreach($modules as $module)
+                    {
+                        $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=product&module=$module->id&productID=$productID"), $module->name) . '</li>';
+                    }
+
+                    /* 如果项目文档模块不为空，则追加项目文档列表。*/
+                    if($projectModules)
+                    {
+                        $menu .= '<li>';
+                        $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID&projectID=all"), $this->lang->tree->projectDoc);
+                        $menu .= '<ul>';
+                        foreach($projectModules as $module)
+                        {
+                            $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=product&module=$module->id&productID=$productID"), $module->name) . '</li>';
+                        }
+                        $menu .= '</ul></li>';
+                    }
+
+                    $menu .= '</ul>';
+                }
+                $menu .= '</li>';
+            }
+        }
+        elseif($libID == 'project')
+        {
+            $projects = $this->loadModel('project')->getPairs();
+            $modules  = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+            
+            foreach($projects as $projectID =>$projectName)
+            {
+                $menu .= '<li>';
+                $menu .= html::a(helper::createLink('doc', 'browse', "libID=project&moduleID=0&projectID=$projectID"), $projectName);
+                if($modules)
+                {
+                    $menu .= '<ul>';
+                    foreach($modules as $module)
+                    {
+                        $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=project&module=$module->id&projectID=$projectID"), $module->name) . '</li>';
+                    }
+                    $menu .= '</ul>';
+                }
+                $menu .= '</li>';
+            }
+        }
+ 
+        $menu .= '</ul>';
+        return $menu;
+    }
+
     /* 生成需求链接。*/
     private function createStoryLink($module)
     {
         $linkHtml = html::a(helper::createLink('product', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return $linkHtml;
+    }
+
+    /* 生成文档链接。*/
+    private function createDocLink($module)
+    {
+        $linkHtml = html::a(helper::createLink('doc', 'browse', "libID={$module->root}&&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
