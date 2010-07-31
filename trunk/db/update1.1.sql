@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `zt_docLib` (
     `id` smallint(5) unsigned NOT NULL auto_increment,
     `company` smallint(5) unsigned NOT NULL,
     `name` varchar(60) NOT NULL,
+    `deleted` enum('0','1') NOT NULL DEFAULT '0',
     PRIMARY KEY  (`id`),
     KEY `site` (`company`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
