@@ -46,3 +46,4 @@ $lang->tree->parent = '上级模块';
 $lang->tree->child  = '子模块';
 $lang->tree->owner  = '负责人';
 $lang->tree->order  = '排序';
+$lang->tree->projectDoc = '项目文档';

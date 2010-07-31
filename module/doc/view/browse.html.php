@@ -17,7 +17,7 @@
  *
  * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     product
+ * @package     lib
  * @version     $Id: browse.html.php 958 2010-07-22 08:09:42Z wwccss $
  * @link        http://www.zentaoms.com
  */
@@ -25,27 +25,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
-/* 切换浏览方式。*/
-function browseByModule()
-{
-    $('#mainbox').addClass('yui-t1');
-    $('#treebox').removeClass('hidden');
-    $('#bymoduleTab').addClass('active');
-    $('#allTab').removeClass('active');
-    $('#bysearchTab').removeClass('active');
-    $('#querybox').addClass('hidden');
-}
-function search(active)
-{
-    $('#mainbox').removeClass('yui-t1');
-    $('#treebox').addClass('hidden');
-    $('#querybox').removeClass('hidden');
-    $('#bymoduleTab').removeClass('active');
-    $('#' + active + 'Tab').removeClass('active');
-    $('#bysearchTab').addClass('active');
-}
 $(document).ready(function()
 {
     $(".right a").colorbox({width:500, height:200, iframe:true, transition:'none'});
@@ -55,61 +35,49 @@ $(document).ready(function()
 
 <div class='yui-d0'>
   <div id='featurebar'>
-    <div class='f-left'>
-      <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>
-      <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><a href='#'><?php echo $lang->product->searchStory;?></a></span>
-      <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->product->allStory);?></span>
-    </div>
     <div class='f-right'>
-      <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
-      <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
+      <?php if(common::hasPriv('doc', 'create')) echo html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID"), $lang->doc->create); ?>
     </div>
   </div>
-    <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 </div>
 
-<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
+<div class='yui-d0 yui-t1' id='mainbox'>
 
   <div class="yui-main">
     <div class="yui-b">
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
           <tr class='colhead'>
-            <?php $vars = "productID=$productID&browseType=$browseType&param=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <?php $vars = "libID=$libID&module=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
-            <th class='w-pri'><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
-            <th class='w-p30'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
-            <th><?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
-            <th><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-            <th><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-            <th class='w-hour'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
-            <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-            <th><?php common::printOrderLink('stage',  $orderBy, $vars, $lang->story->stageAB);?></th>
+            <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
+            <th class='w-100px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?></th>
+            <th class='w-100px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
             <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
-          <?php foreach($stories as $key => $story):?>
+          <?php foreach($docs as $key => $doc):?>
           <?php
-          $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
-          $canView  = common::hasPriv('story', 'view');
+          $viewLink = $this->createLink('doc', 'view', "docID=$doc->id");
+          $canView  = common::hasPriv('doc', 'view');
           ?>
           <tr class='a-center'>
-            <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
-            <td><?php echo $story->pri;?></td>
-            <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $story->title);?></nobr></td>
-            <td class='nobr'><?php echo $story->planTitle;?></td>
-            <td><?php echo $users[$story->openedBy];?></td>
-            <td><?php echo $users[$story->assignedTo];?></td>
-            <td><?php echo $story->estimate;?></td>
-            <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
-            <td><?php echo $lang->story->stageList[$story->stage];?></td>
+            <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
+            <td><?php echo $doc->pri;?></td>
+            <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
+            <td class='nobr'><?php echo $doc->planTitle;?></td>
+            <td><?php echo $users[$doc->openedBy];?></td>
+            <td><?php echo $users[$doc->assignedTo];?></td>
+            <td><?php echo $doc->estimate;?></td>
+            <td class='<?php echo $doc->status;?>'><?php echo $lang->doc->statusList[$doc->status];?></td>
+            <td><?php echo $lang->doc->stageList[$doc->stage];?></td>
             <td>
               <?php 
-              $vars = "story={$story->id}";
-              if(!($story->status != 'closed' and common::printLink('story', 'change', $vars, $lang->story->change))) echo $lang->story->change . ' ';
-              if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', $vars, $lang->story->review))) echo $lang->story->review . ' ';
-              if(!common::printLink('story', 'edit',   $vars, $lang->edit)) echo $lang->edit;
+              $vars = "doc={$doc->id}";
+              if(!($doc->status != 'closed' and common::printLink('doc', 'change', $vars, $lang->doc->change))) echo $lang->doc->change . ' ';
+              if(!(($doc->status == 'draft' or $doc->status == 'changed') and common::printLink('doc', 'review', $vars, $lang->doc->review))) echo $lang->doc->review . ' ';
+              if(!common::printLink('doc', 'edit',   $vars, $lang->edit)) echo $lang->edit;
               ?>
             </td>
           </tr>
@@ -120,14 +88,12 @@ $(document).ready(function()
     </div>
   </div>
 
-  <div class='yui-b <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
-    <div class='box-title'><?php echo $productName;?></div>
+  <div class='yui-b' id='treebox'>
+    <div class='box-title'><?php echo $libName;?></div>
     <div class='box-content'>
       <?php echo $moduleTree;?>
       <div class='a-right'>
-        <?php if(common::hasPriv('product', 'edit'))   echo html::a($this->createLink('product', 'edit',   "productID=$productID"), $lang->edit);?>
-        <?php if(common::hasPriv('product', 'delete')) echo html::a($this->createLink('product', 'delete', "productID=$productID&confirm=no"),   $lang->delete, 'hiddenwin');?>
-        <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "rootID=$productID&view=story"), $lang->tree->manage);?>
+        <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->tree->manage);?>
       </div>
     </div>
   </div>

@@ -83,4 +83,15 @@ class docModel extends model
             ->exec();
         if(!dao::isError()) return common::createChanges($oldLib, $lib);
     }
+
+    /* 获得文档列表。*/
+    public function getDocs($lib, $module, $orderBy, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('lib')->eq($lib)
+            ->andWhere('module')->eq($module)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
 }
