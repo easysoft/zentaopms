@@ -48,8 +48,11 @@ class doc extends control
         /* 加载分页类，并查询docs列表。*/
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        if($moduleID) $moduleID = $this->tree->getAllChildID($moduleID);
-        $docs = $this->doc->getDocs($libID, $productID, $projectID, $moduleID, $orderBy, $pager);
+
+        /* 查找文档列表。*/
+        $modules = 0;
+        if($moduleID) $modules = $this->tree->getAllChildID($moduleID);
+        $docs = $this->doc->getDocs($libID, $productID, $projectID, $modules, $orderBy, $pager);
 
         /* 获得树状列表。*/
         if($libID == 'product' or $libID == 'project')

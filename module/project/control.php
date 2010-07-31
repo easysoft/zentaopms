@@ -346,6 +346,25 @@ class project extends control
         $this->display();
     }
 
+    /* 文档列表。*/
+    public function doc($projectID)
+    {
+        $this->project->setMenu($this->projects, $projectID);
+        $this->session->set('docList', $this->app->getURI(true));
+
+        /* 赋值。*/
+        $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+        $this->view->header->title = $this->lang->project->doc;
+        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $project->name);
+        $this->view->position[]    = $this->lang->project->doc;
+        $this->view->project       = $project;
+        $this->view->docs          = $this->loadModel('doc')->getProjectDocs($projectID);
+        $this->view->modules       = $this->doc->getProjectModulePairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+
     /* 创建一个项目。*/
     public function create()
     {

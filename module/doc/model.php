@@ -100,4 +100,28 @@ class docModel extends model
             ->page($pager)
             ->fetchAll();
     }
+
+    /* 获得某一个产品的文档列表。*/
+    public function getProductDocs($productID)
+    {
+        return $this->dao->findByProduct($productID)->from(TABLE_DOC)->fetchAll();
+    }
+
+    /* 获得某一个项目的文档列表。*/
+    public function getProjectDocs($projectID)
+    {
+        return $this->dao->findByProject($projectID)->from(TABLE_DOC)->fetchAll();
+    }
+
+    /* 获得产品的文档模块列表*/
+    public function getProductModulePairs()
+    {
+        return $this->dao->findByType('productdoc')->from(TABLE_MODULE)->fetchPairs('id', 'name');
+    }
+
+    /* 获得项目的文档模块列表。*/
+    public function getProjectModulePairs()
+    {
+        return $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->andWhere('type')->eq('projectdoc')->fetchPairs('id', 'name');
+    }
 }

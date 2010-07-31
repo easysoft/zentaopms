@@ -32,6 +32,7 @@ $lang->product->edit   = "编辑产品";
 $lang->product->delete = "删除产品";
 
 $lang->product->roadmap   = '路线图';
+$lang->product->doc       = '文档列表';
 
 $lang->product->selectProduct   = "请选择产品";
 $lang->product->saveButton      = " 保存 (S) ";

@@ -48,11 +48,8 @@ $lang->doc->create         = '创建文档';
 $lang->doc->edit           = '编辑文档';
 $lang->doc->browse         = '文档列表';
 $lang->doc->view           = '文档详情';
-$lang->doc->manageModule   = '维护模块';
-$lang->doc->manageModule   = '维护模块';
-
-$lang->doc->createLib      = '创建';
-$lang->doc->editLib        = '编辑';
+$lang->doc->createLib      = '创建文档库';
+$lang->doc->editLib        = '编辑文档库';
 $lang->doc->libName        = '文档库名称';
 
 $lang->doc->systemLibs['product'] = '产品文档库';
