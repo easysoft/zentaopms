@@ -166,7 +166,7 @@ class treeModel extends model
                     if($projectModules)
                     {
                         $menu .= '<li>';
-                        $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID&projectID=all"), $this->lang->tree->projectDoc);
+                        $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID&projectID=int"), $this->lang->tree->projectDoc);
                         $menu .= '<ul>';
                         foreach($projectModules as $module)
                         {
@@ -188,13 +188,13 @@ class treeModel extends model
             foreach($projects as $projectID =>$projectName)
             {
                 $menu .= '<li>';
-                $menu .= html::a(helper::createLink('doc', 'browse', "libID=project&moduleID=0&projectID=$projectID"), $projectName);
+                $menu .= html::a(helper::createLink('doc', 'browse', "libID=project&moduleID=0&productID=0&projectID=$projectID"), $projectName);
                 if($modules)
                 {
                     $menu .= '<ul>';
                     foreach($modules as $module)
                     {
-                        $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=project&module=$module->id&projectID=$projectID"), $module->name) . '</li>';
+                        $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=project&module=$module->id&productID=0&projectID=$projectID"), $module->name) . '</li>';
                     }
                     $menu .= '</ul>';
                 }
