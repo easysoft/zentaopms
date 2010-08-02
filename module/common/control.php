@@ -488,11 +488,6 @@ EOT;
         global $config;
         $httpType = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on' ? 'https' : 'http';
         $httpHost = $_SERVER['HTTP_HOST'];
-        if(strpos($httpHost, ":"))
-        {
-            $httpHost = explode(":", $httpHost);
-            $httpHost = $httpHost[0];
-        }
         return "$httpType://$httpHost";
     }
 
