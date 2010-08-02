@@ -165,7 +165,14 @@ class todoModel extends model
             }
             else
             {
-                $label .= str_replace($weekList, $weekDateList, date(" ({$this->lang->todo->week}N)", $time));
+                if($this->cookie->lang == 'zh-cn' or $this->cookie->lang == 'zh-tw')
+                {
+                    $label .= str_replace($weekList, $weekDateList, date(" ({$this->lang->todo->week}N)", $time));
+                }
+                else
+                {
+                    $label .= date($this->lang->todo->week, $time);
+                }
             }
             $date   = date(DT_DATE2, $time);
             $dates[$date] = $label;
