@@ -23,8 +23,8 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->index->common = '首页';
-$lang->index->index  = '首页';
-$lang->index->ping   = '接口:同步session';
-$lang->index->latest = '最新动态';
+$lang->index->common = 'Index';
+$lang->index->index  = 'Index';
+$lang->index->ping   = 'API: update session';
+$lang->index->latest = 'Latest actions:';
 $lang->index->action = '%s, %s <i>%s</i> %s <strong>%s</strong>。';

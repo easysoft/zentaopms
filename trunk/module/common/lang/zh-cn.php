@@ -53,6 +53,7 @@ $lang->confirm      = '确认';
 $lang->preview      = '预览';
 $lang->goback       = '返回';
 $lang->showHelp     = '显示帮助';
+$lang->closeHelp    = '关闭帮助';
 $lang->go           = 'GO!';
 
 $lang->actions      = '操作';
@@ -275,7 +276,7 @@ $lang->smilies->angry       = '愤怒';
 $lang->smilies->cool        = '耍酷';
 $lang->smilies->indifferent = '冷漠';
 $lang->smilies->sick        = '病中';
-$lang->smilies->blush       = '尴尬';
+$lang->smilies->blush       = '脸红';
 $lang->smilies->angel       = '天使';
 $lang->smilies->confused    = '困惑';
 $lang->smilies->cry         = '大哭';

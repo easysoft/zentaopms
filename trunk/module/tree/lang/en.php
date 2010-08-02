@@ -1,6 +1,6 @@
 <?php
 /**
- * The tree module english file of ZenTaoMS.
+ * The tree module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,24 +21,29 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->tree->common      = '模块维护';
-$lang->tree->add         = "添加";
-$lang->tree->edit        = "编辑";
-$lang->tree->addChild    = "添加子模块";
-$lang->tree->delete      = "删除模块";
-$lang->tree->browse      = "模块维护";
-$lang->tree->manage      = "维护模块";
-$lang->tree->manageProduct= "维护产品视图模块";
-$lang->tree->manageProject= "维护项目视图模块";
-$lang->tree->manageBug    = "维护QA视图模块";
-$lang->tree->manageCase   = "维护用例视图模块";
-$lang->tree->updateOrder  = "更新排序";
-$lang->tree->manageChild  = "维护子模块";
-$lang->tree->child        = "子模块";
-$lang->tree->ajaxGetOptionMenu = "接口:获取下拉列表";
+$lang->tree->common            = 'Module manage';
+$lang->tree->add               = 'Add';
+$lang->tree->edit              = 'Edit';
+$lang->tree->addChild          = 'Add child';
+$lang->tree->delete            = 'Delete';
+$lang->tree->browse            = 'Module manage';
+$lang->tree->manage            = 'Manage';
+$lang->tree->manageProduct     = 'Mange product module';
+$lang->tree->manageProject     = 'Manage project mdoule';
+$lang->tree->manageBug         = 'Manage bug module';
+$lang->tree->manageCase        = 'Manage case module';
+$lang->tree->manageCustomDoc   = 'Manage doc library module';
+$lang->tree->updateOrder       = 'Update order';
+$lang->tree->manageChild       = 'Manage child';
+$lang->tree->syncFromProduct   = 'Copy from product module';
+$lang->tree->ajaxGetOptionMenu = 'API: Get select menu';
 
-$lang->tree->confirmDelete = "您确定删除该模块吗？";
-$lang->tree->successSave   = "成功保存";
+$lang->tree->confirmDelete = 'Are you sure to delete this module?';
+$lang->tree->successSave   = 'Success saved';
 
-$lang->tree->name   = '模块名称';
-$lang->tree->parent = '上级模块';
+$lang->tree->name   = 'Name';
+$lang->tree->parent = 'Parent';
+$lang->tree->child  = 'Child';
+$lang->tree->owner  = 'Owner';
+$lang->tree->order  = 'Order';
+$lang->tree->projectDoc = 'Project doc';

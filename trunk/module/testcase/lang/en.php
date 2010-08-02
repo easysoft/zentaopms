@@ -1,6 +1,6 @@
 <?php
 /**
- * The testcase module english file of ZenTaoMS.
+ * The testcase module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,88 +21,88 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->testcase->id             = '用例编号';
-$lang->testcase->product        = '所属产品';
-$lang->testcase->module         = '所属模块';
-$lang->testcase->story          = '相关需求';
-$lang->testcase->storyVersion   = '需求版本';
-$lang->testcase->title          = '用例标题';
-$lang->testcase->pri            = '优先级';
-$lang->testcase->type           = '用例类型';
-$lang->testcase->status         = '用例状态';
-$lang->testcase->steps          = '用例步骤';
-$lang->testcase->frequency      = '执行频率';
-$lang->testcase->order          = '排序';
-$lang->testcase->openedBy       = '由谁创建 ';
-$lang->testcase->openedDate     = '创建日期';
-$lang->testcase->lastEditedBy   = '最后修改者';
-$lang->testcase->lastEditedDate = '最后修改日期';
-$lang->testcase->version        = '用例版本';
-$lang->testcase->result         = '测试结果';
-$lang->testcase->real           = '实际情况';
-$lang->testcase->keywords       = '关键词';
-$lang->testcase->files          = '附件';
-$lang->testcase->howRun         = '执行方式';
-$lang->testcase->scriptedBy     = '由谁编写';
-$lang->testcase->scriptedDate   = '编写日期';
-$lang->testcase->scriptedStatus = '脚本状态';
-$lang->testcase->scriptedLocation = '脚本位置';
-$lang->testcase->linkCase         = '相关用例';
-$lang->testcase->stage            = '适用阶段';
-$lang->testcase->lastEditedByAB   = '修改者';
-$lang->testcase->lastEditedDateAB = '修改日期';
+$lang->testcase->id             = 'ID';
+$lang->testcase->product        = 'Product';
+$lang->testcase->module         = 'Module';
+$lang->testcase->story          = 'Story';
+$lang->testcase->storyVersion   = 'Story version';
+$lang->testcase->title          = 'Title';
+$lang->testcase->pri            = 'Priority';
+$lang->testcase->type           = 'Type';
+$lang->testcase->status         = 'Status';
+$lang->testcase->steps          = 'Steps';
+$lang->testcase->frequency      = 'Frequency';
+$lang->testcase->order          = 'Order';
+$lang->testcase->openedBy       = 'Opened by ';
+$lang->testcase->openedDate     = 'Opened date';
+$lang->testcase->lastEditedBy   = 'Last edited by';
+$lang->testcase->lastEditedDate = 'Last edited date';
+$lang->testcase->version        = 'Version';
+$lang->testcase->result         = 'Result';
+$lang->testcase->real           = 'Real';
+$lang->testcase->keywords       = 'Keywords';
+$lang->testcase->files          = 'Files';
+$lang->testcase->howRun         = 'How run';
+$lang->testcase->scriptedBy     = 'Scripted by';
+$lang->testcase->scriptedDate   = 'Scripted date';
+$lang->testcase->scriptedStatus = 'Scripted status';
+$lang->testcase->scriptedLocation = 'Script loction';
+$lang->testcase->linkCase         = 'Related cases';
+$lang->testcase->stage            = 'Stage';
+$lang->testcase->lastEditedByAB   = 'Last edited by';
+$lang->testcase->lastEditedDateAB = 'Last edited date';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
-$lang->testcase->stepID     = '编号';
-$lang->testcase->stepDesc   = '步骤';
-$lang->testcase->stepExpect = '预期';
+$lang->testcase->stepID     = 'ID';
+$lang->testcase->stepDesc   = 'Step';
+$lang->testcase->stepExpect = 'Expect';
 
-$lang->testcase->common         = '用例管理';
-$lang->testcase->index          = "用例管理首页";
-$lang->testcase->create         = "创建用例";
-$lang->testcase->delete         = "删除用例";
-$lang->testcase->view           = "用例详情";
-$lang->testcase->edit           = "编辑用例";
-$lang->testcase->delete         = "删除用例";
-$lang->testcase->browse         = "用例列表";
-$lang->testcase->confirmStoryChange = '确认需求变动';
+$lang->testcase->common         = 'Case';
+$lang->testcase->index          = "Index";
+$lang->testcase->create         = "Create";
+$lang->testcase->delete         = "Delete";
+$lang->testcase->view           = "Info";
+$lang->testcase->edit           = "Edit";
+$lang->testcase->delete         = "Delete";
+$lang->testcase->browse         = "Browse";
+$lang->testcase->confirmStoryChange = 'Confirm story change';
 
 $lang->testcase->deleteStep     = 'ｘ';
 $lang->testcase->insertBefore   = '＋↑';
 $lang->testcase->insertAfter    = '＋↓';
 
-$lang->testcase->selectProduct  = '请选择产品';
-$lang->testcase->byModule       = '按模块';
-$lang->testcase->assignToMe     = '指派给我';
-$lang->testcase->openedByMe     = '由我创建';
-$lang->testcase->allCases       = '所有Case';
-$lang->testcase->needConfirm    = '需求有变动的用例';
-$lang->testcase->moduleCases    = '按模块浏览';
-$lang->testcase->bySearch       = '搜索';
+$lang->testcase->selectProduct  = 'Select product';
+$lang->testcase->byModule       = 'By module';
+$lang->testcase->assignToMe     = 'Assgined to my';
+$lang->testcase->openedByMe     = 'Opened by me';
+$lang->testcase->allCases       = 'All case';
+$lang->testcase->needConfirm    = 'Story changed';
+$lang->testcase->moduleCases    = 'By module';
+$lang->testcase->bySearch       = 'By search';
 
-$lang->testcase->lblProductAndModule         = '产品模块';
-$lang->testcase->lblTypeAndPri               = '类型&优先级';
-$lang->testcase->lblSystemBrowserAndHardware = '系统::浏览器';
-$lang->testcase->lblAssignAndMail            = '指派给::抄送给';
-$lang->testcase->lblStory                    = '相关需求';
-$lang->testcase->lblLastEdited               = '最后编辑';
+$lang->testcase->lblProductAndModule         = 'Product & module';
+$lang->testcase->lblTypeAndPri               = 'Type & priority';
+$lang->testcase->lblSystemBrowserAndHardware = 'OS & browser';
+$lang->testcase->lblAssignAndMail            = 'Assigned & mailto';
+$lang->testcase->lblStory                    = 'Story';
+$lang->testcase->lblLastEdited               = 'Last edited';
 
-$lang->testcase->legendRelated     = '相关信息';
-$lang->testcase->legendBasicInfo   = '基本信息';
-$lang->testcase->legendMailto      = '抄送给';
-$lang->testcase->legendAttatch     = '附件';
-$lang->testcase->legendLinkBugs    = '相关Bug';
-$lang->testcase->legendOpenAndEdit = '创建编辑';
-$lang->testcase->legendStoryAndTask= '需求::任务';
-$lang->testcase->legendCases       = '相关用例';
-$lang->testcase->legendSteps       = '用例步骤';
-$lang->testcase->legendAction      = '操作';
-$lang->testcase->legendHistory     = '历史记录';
-$lang->testcase->legendComment     = '备注';
-$lang->testcase->legendProduct     = '产品模块';
-$lang->testcase->legendVersion     = '版本历史';
+$lang->testcase->legendRelated     = 'Related info';
+$lang->testcase->legendBasicInfo   = 'Basic info';
+$lang->testcase->legendMailto      = 'Mailto';
+$lang->testcase->legendAttatch     = 'Files';
+$lang->testcase->legendLinkBugs    = 'Bug';
+$lang->testcase->legendOpenAndEdit = 'Open & edit';
+$lang->testcase->legendStoryAndTask= 'Story';
+$lang->testcase->legendCases       = 'Related cases';
+$lang->testcase->legendSteps       = 'Steps';
+$lang->testcase->legendAction      = 'Action';
+$lang->testcase->legendHistory     = 'History';
+$lang->testcase->legendComment     = 'Comment';
+$lang->testcase->legendProduct     = 'Product & module';
+$lang->testcase->legendVersion     = 'Versions';
 
-$lang->testcase->confirmDelete     = '您确认要删除该测试用例吗？';
+$lang->testcase->confirmDelete     = 'Are you sure to delete this case?';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
@@ -111,30 +111,30 @@ $lang->testcase->priList[4] = 4;
 
 /* Define the types. */
 $lang->testcase->typeList['']            = '';
-$lang->testcase->typeList['feature']     = '功能测试';
-$lang->testcase->typeList['performance'] = '性能测试';
-$lang->testcase->typeList['config']      = '配置相关';
-$lang->testcase->typeList['install']     = '安装部署';
-$lang->testcase->typeList['security']    = '安全相关';
-$lang->testcase->typeList['other']       = '其他';
+$lang->testcase->typeList['feature']     = 'Feature';
+$lang->testcase->typeList['performance'] = 'Performance';
+$lang->testcase->typeList['config']      = 'Config';
+$lang->testcase->typeList['install']     = 'Install';
+$lang->testcase->typeList['security']    = 'Security';
+$lang->testcase->typeList['other']       = 'Other';
 
 $lang->testcase->stageList['']            = '';
-$lang->testcase->stageList['unittest']    = '单元测试阶段';
-$lang->testcase->stageList['feature']     = '功能测试阶段';
-$lang->testcase->stageList['intergrate']  = '集成测试阶段';
-$lang->testcase->stageList['system']      = '系统测试阶段';
-$lang->testcase->stageList['smoke']       = '冒烟测试阶段';
-$lang->testcase->stageList['bvt']         = '版本验证阶段';
+$lang->testcase->stageList['unittest']    = 'Unit testing';
+$lang->testcase->stageList['feature']     = 'Feature testing';
+$lang->testcase->stageList['intergrate']  = 'Integrate testing';
+$lang->testcase->stageList['system']      = 'System testing';
+$lang->testcase->stageList['smoke']       = 'Smoking testing';
+$lang->testcase->stageList['bvt']         = 'BVT testing';
 
 $lang->testcase->statusList['']            = '';
-$lang->testcase->statusList['normal']      = '正常';
-$lang->testcase->statusList['blocked']     = '被阻塞';
-$lang->testcase->statusList['investigate'] = '研究中';
+$lang->testcase->statusList['normal']      = 'Normal';
+$lang->testcase->statusList['blocked']     = 'Blocked';
+$lang->testcase->statusList['investigate'] = 'Inverstigate';
 
 $lang->testcase->resultList['n/a']     = 'N/A';
-$lang->testcase->resultList['pass']    = '通过';
-$lang->testcase->resultList['fail']    = '失败';
-$lang->testcase->resultList['blocked'] = '阻塞';
+$lang->testcase->resultList['pass']    = 'Pass';
+$lang->testcase->resultList['fail']    = 'Fail';
+$lang->testcase->resultList['blocked'] = 'Blocked';
 
-$lang->testcase->buttonEdit     = '编辑';
-$lang->testcase->buttonToList   = '返回';
+$lang->testcase->buttonEdit     = 'Edit';
+$lang->testcase->buttonToList   = 'Back';

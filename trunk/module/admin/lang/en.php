@@ -1,6 +1,6 @@
 <?php
 /**
- * The admin module english file of ZenTaoMS.
+ * The admin module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,11 +21,11 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->admin->common  = '后台管理';
-$lang->admin->index   = '后台管理首页';
-$lang->admin->company = '公司管理';
-$lang->admin->user    = '用户管理';
-$lang->admin->group   = '分组管理';
-$lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
+$lang->admin->common  = 'Admin';
+$lang->admin->index   = 'Index';
+$lang->admin->company = 'Company';
+$lang->admin->user    = 'User';
+$lang->admin->group   = 'Group';
+$lang->admin->welcome = 'Welcome to ZenTaoPMS.';
 
-$lang->admin->browseCompany = '浏览公司';
+$lang->admin->browseCompany = 'Browse Company';

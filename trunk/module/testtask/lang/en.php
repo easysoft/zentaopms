@@ -1,6 +1,6 @@
 <?php
 /**
- * The testtask module english file of ZenTaoMS.
+ * The testtask module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,48 +21,48 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->testtask->index          = "测试任务首页";
-$lang->testtask->create         = "创建测试任务";
-$lang->testtask->delete         = "删除测试任务";
-$lang->testtask->view           = "测试任务详情";
-$lang->testtask->edit           = "编辑测试任务";
-$lang->testtask->browse         = "测试任务列表";
-$lang->testtask->linkCase       = "关联用例";
-$lang->testtask->linkCaseAB     = "关联";
-$lang->testtask->unlinkCase     = "移除";
-$lang->testtask->batchAssign    = "批量指派";
-$lang->testtask->runCase        = "执行";
-$lang->testtask->results        = "结果";
-$lang->testtask->createBug      = "创建Bug";
-$lang->testtask->assign         = '指派';
-$lang->testtask->cases          = '用例';
+$lang->testtask->index          = "Index";
+$lang->testtask->create         = "Create";
+$lang->testtask->delete         = "Delete";
+$lang->testtask->view           = "Info";
+$lang->testtask->edit           = "Edit";
+$lang->testtask->browse         = "Browse";
+$lang->testtask->linkCase       = "Link case";
+$lang->testtask->linkCaseAB     = "Link";
+$lang->testtask->unlinkCase     = "Remove";
+$lang->testtask->batchAssign    = "Batch Assign";
+$lang->testtask->runCase        = "Run";
+$lang->testtask->results        = "Result";
+$lang->testtask->createBug      = "Create bug";
+$lang->testtask->assign         = 'Assgin';
+$lang->testtask->cases          = 'Cases';
 
-$lang->testtask->common         = '测试任务';
-$lang->testtask->id             = '任务编号';
-$lang->testtask->product        = '所属产品';
-$lang->testtask->project        = '所属项目';
+$lang->testtask->common         = 'Test task';
+$lang->testtask->id             = 'ID';
+$lang->testtask->product        = 'Product';
+$lang->testtask->project        = 'Project';
 $lang->testtask->build          = 'Build';
-$lang->testtask->name           = '任务名称';
-$lang->testtask->begin          = '开始日期';
-$lang->testtask->end            = '结束日期';
-$lang->testtask->desc           = '任务描述';
-$lang->testtask->status         = '当前状态';
-$lang->testtask->assignedTo     = '指派给';
-$lang->testtask->linkVersion    = '关联(版本)';
-$lang->testtask->lastRun        = '最后执行';
-$lang->testtask->lastResult     = '最终结果';
+$lang->testtask->name           = 'Name';
+$lang->testtask->begin          = 'Begin';
+$lang->testtask->end            = 'End';
+$lang->testtask->desc           = 'Desc';
+$lang->testtask->status         = 'Status';
+$lang->testtask->assignedTo     = 'Assigned to';
+$lang->testtask->linkVersion    = 'Link(version)';
+$lang->testtask->lastRun        = 'Last run';
+$lang->testtask->lastResult     = 'Last result';
 
-$lang->testtask->statusList['wait']    = '未开始';
-$lang->testtask->statusList['doing']   = '进行中';
-$lang->testtask->statusList['done']    = '已完成';
-$lang->testtask->statusList['blocked'] = '被阻塞';
+$lang->testtask->statusList['wait']    = 'Waiting';
+$lang->testtask->statusList['doing']   = 'Doing';
+$lang->testtask->statusList['done']    = 'Done';
+$lang->testtask->statusList['blocked'] = 'Blocked';
 
-$lang->testtask->unlinkedCases = '未关联用例列表';
-$lang->testtask->linkedCases   = '已关联用例列表';
-$lang->testtask->confirmDelete = '您确认要删除该测试任务吗？';
-$lang->testtask->passAll       = '全部通过';
+$lang->testtask->unlinkedCases = 'Unlinked cases';
+$lang->testtask->linkedCases   = 'Linked cases';
+$lang->testtask->confirmDelete = 'Are you sure to delete this test task?';
+$lang->testtask->passAll       = 'Pass all';
 
-$lang->testtask->lblCases      = '用例列表';
-$lang->testtask->lblUnlinkCase = '移除用例';
-$lang->testtask->lblRunCase    = '执行用例';
-$lang->testtask->lblResults    = '执行结果';
+$lang->testtask->lblCases      = 'Case list';
+$lang->testtask->lblUnlinkCase = 'Remove case';
+$lang->testtask->lblRunCase    = 'Run';
+$lang->testtask->lblResults    = 'Result';

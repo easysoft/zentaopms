@@ -1,6 +1,6 @@
 <?php
 /**
- * The file module english file of ZenTaoMS.
+ * The file module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,7 +21,7 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->file->common     = '附件';
-$lang->file->download   = '下载附件';
-$lang->file->export2CSV = '导出CSV';
-$lang->file->label    = '标题：';
+$lang->file->common     = 'File';
+$lang->file->download   = 'Download';
+$lang->file->export2CSV = 'Export CSV';
+$lang->file->label    = 'Title: ';

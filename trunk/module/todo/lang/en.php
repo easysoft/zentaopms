@@ -1,6 +1,6 @@
 <?php
 /**
- * The todo module english file of ZenTaoMS.
+ * The todo module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,67 +22,67 @@
  * @link        http://www.zentaoms.com
  */
 $lang->todo->common    = 'TODO';
-$lang->todo->index     = "todo一览";
-$lang->todo->create    = "新增TODO";
-$lang->todo->edit      = "更新TODO";
-$lang->todo->view      = "TODO详情";
-$lang->todo->viewAB    = "详情";
-$lang->todo->markDone  = "未完成";
-$lang->todo->markWait  = "已完成";
-$lang->todo->markDoing = "已完成";
-$lang->todo->mark      = "更改状态";
-$lang->todo->delete    = "删除TODO";
-$lang->todo->browse    = "浏览TODO";
-$lang->todo->import2Today = "导入到今天";
-$lang->todo->changeStatus = "更改";
+$lang->todo->index     = "Index";
+$lang->todo->create    = "Create";
+$lang->todo->edit      = "Edit";
+$lang->todo->view      = "Info";
+$lang->todo->viewAB    = "Info";
+$lang->todo->markDone  = "Undone";
+$lang->todo->markWait  = "Done";
+$lang->todo->markDoing = "Doing";
+$lang->todo->mark      = "Change status";
+$lang->todo->delete    = "Delete";
+$lang->todo->browse    = "Browse";
+$lang->todo->import2Today = "Import to today";
+$lang->todo->changeStatus = "Change";
 
-$lang->todo->id          = '编号';
-$lang->todo->account     = '所有者';
-$lang->todo->date        = '日期';
-$lang->todo->begin       = '开始时间';
-$lang->todo->beginAB     = '开始';
-$lang->todo->end         = '结束时间';
-$lang->todo->endAB       = '结束';
-$lang->todo->beginAndEnd = '起止时间';
-$lang->todo->type        = '类型';
-$lang->todo->pri         = '优先级';
-$lang->todo->name        = '名称';
-$lang->todo->status      = '状态';
-$lang->todo->desc        = '描述';
-$lang->todo->private     = '私人事务';
-$lang->todo->idvalue     = '任务或Bug';
+$lang->todo->id          = 'ID';
+$lang->todo->account     = 'Owner';
+$lang->todo->date        = 'Date';
+$lang->todo->begin       = 'Begin time';
+$lang->todo->beginAB     = 'Begin';
+$lang->todo->end         = 'End time';
+$lang->todo->endAB       = 'End';
+$lang->todo->beginAndEnd = 'Begin and End';
+$lang->todo->type        = 'Type';
+$lang->todo->pri         = 'Priority';
+$lang->todo->name        = 'Name';
+$lang->todo->status      = 'Status';
+$lang->todo->desc        = 'Desc';
+$lang->todo->private     = 'Private';
+$lang->todo->idvalue     = 'Task or bug';
 
-$lang->todo->week  = '星期';
-$lang->todo->today = '今天';
-$lang->todo->weekDateList = '一,二,三,四,五,六,天';
-$lang->todo->dayInFeature = '暂不指定';
-$lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';
-$lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
+$lang->todo->week  = 'Week';
+$lang->todo->today = 'Today';
+$lang->todo->weekDateList = '';
+$lang->todo->dayInFeature = 'Feature';
+$lang->todo->confirmBug   = 'This todo linked to bug #%s，chang it also?';
+$lang->todo->confirmTask  = 'This todo linked to task #%s，chang it also?';
 
-$lang->todo->statusList['wait']     = '未开始';
-$lang->todo->statusList['doing']    = '进行中';
-$lang->todo->statusList['done']     = '已完成';
+$lang->todo->statusList['wait']     = 'Waiting';
+$lang->todo->statusList['doing']    = 'Doing';
+$lang->todo->statusList['done']     = 'Done';
 //$lang->todo->statusList['cancel']   = '已取消';
 //$lang->todo->statusList['postpone'] = '已延期';
 
-$lang->todo->priList[3] = '一般';
-$lang->todo->priList[1] = '最高';
-$lang->todo->priList[2] = '较高';
-$lang->todo->priList[4] = '最低';
+$lang->todo->priList[3] = '3';
+$lang->todo->priList[1] = '1';
+$lang->todo->priList[2] = '2';
+$lang->todo->priList[4] = '4';
 
-$lang->todo->typeList->custom = '自定义';
+$lang->todo->typeList->custom = 'Custom';
 $lang->todo->typeList->bug    = 'Bug';
-$lang->todo->typeList->task   = '项目任务';
+$lang->todo->typeList->task   = 'Task';
 
-$lang->todo->confirmDelete  = "您确定要删除这个todo吗？";
-$lang->todo->successMarked  = "成功切换状态！";
-$lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
-$lang->todo->lblDisableDate = '暂时不设定时间';
+$lang->todo->confirmDelete  = "Are you sure to delete this todo?";
+$lang->todo->successMarked  = "Successfully changed status";;
+$lang->todo->thisIsPrivate  = 'This is a private todo。:)';
+$lang->todo->lblDisableDate = 'Set time lately';
 
-$lang->todo->thisWeekTodos = '本周计划';
-$lang->todo->lastWeekTodos = '上周总结';
-$lang->todo->allDaysTodos  = '所有TODO';
-$lang->todo->allUndone     = '之前未完';
-$lang->todo->todayTodos    = '今日安排';
+$lang->todo->thisWeekTodos = 'This week';
+$lang->todo->lastWeekTodos = 'Last week';
+$lang->todo->allDaysTodos  = 'All todo';
+$lang->todo->allUndone     = 'Undone';
+$lang->todo->todayTodos    = 'Today';
 
-$lang->todo->action->marked = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);
+$lang->todo->action->marked = array('main' => '$date, Change status to <stong>$extra</strong> by <strong>$actor</strong>。', 'extra' => $lang->todo->statusList);

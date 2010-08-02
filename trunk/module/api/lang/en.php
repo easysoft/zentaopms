@@ -1,6 +1,6 @@
 <?php
 /**
- * The api module english file of ZenTaoMS.
+ * The api module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,8 +18,8 @@
  * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
- * @version     $Id: english.php 824 2010-05-02 15:32:06Z wwccss $
+ * @version     $Id: English.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->api->common   = 'API接口';
-$lang->api->getModel = '超级model调用接口';
+$lang->api->common   = 'API';
+$lang->api->getModel = 'Super Model API';

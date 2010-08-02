@@ -42,8 +42,9 @@ $config->views       = ',html,json,csv,'; // 支持的视图列表。
 $config->themes      = 'default,blue';    // 支持的主题列表。
 
 /* 支持的语言列表。*/
-$config->langs['zh-cn'] = 'Chinese Simplified';
-$config->langs['zh-tw'] = 'Chinese Traditional';
+$config->langs['zh-cn'] = '中文简体';
+$config->langs['zh-tw'] = '中文繁體';
+$config->langs['en']    = 'English';
 
 /* 默认参数设定。*/
 $config->default->view   = 'html';             // 默认的视图格式。

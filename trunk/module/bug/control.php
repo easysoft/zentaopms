@@ -254,7 +254,7 @@ class bug extends control
         $caseID     = 0;
         $runID      = 0;
         $title      = '';
-        $steps      = '';
+        $steps      = $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect;
         $os         = '';
         $browser    = '';
         $assignedTo = '';

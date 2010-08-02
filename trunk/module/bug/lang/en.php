@@ -1,6 +1,6 @@
 <?php
 /**
- * The bug module english file of ZenTaoMS.
+ * The bug module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,120 +22,126 @@
  * @link        http://www.zentaoms.com
  */
 /* 字段列表。*/
-$lang->bug->common         = '缺陷管理';
-$lang->bug->id             = 'Bug编号';
-$lang->bug->product        = '所属产品';
-$lang->bug->module         = '所属模块';
-$lang->bug->path           = '模块路径';
-$lang->bug->project        = '所属项目';
-$lang->bug->story          = '相关需求';
-$lang->bug->storyVersion   = '需求版本';
-$lang->bug->task           = '相关任务';
-$lang->bug->title          = 'Bug标题';
-$lang->bug->severity       = '严重程度';
-$lang->bug->severityAB     = '级别';
-$lang->bug->pri            = '优先级';
-$lang->bug->type           = 'Bug类型';
-$lang->bug->os             = '操作系统';
-$lang->bug->browser        = '浏览器';
-$lang->bug->machine        = '机器硬件';
-$lang->bug->found          = '如何发现';
-$lang->bug->steps          = '重现步骤';
-$lang->bug->status         = 'Bug状态';
-$lang->bug->mailto         = '抄送给';
-$lang->bug->openedBy       = '由谁创建';
-$lang->bug->openedByAB     = '创建';
-$lang->bug->openedDate     = '创建日期';
-$lang->bug->openedBuild    = '影响版本';
-$lang->bug->assignedTo     = '指派给';
-$lang->bug->assignedDate   = '指派日期';
-$lang->bug->resolvedBy     = '解决者';
-$lang->bug->resolution     = '解决方案';
-$lang->bug->resolutionAB   = '方案';
-$lang->bug->resolvedBuild  = '解决版本';
-$lang->bug->resolvedDate   = '解决日期';
-$lang->bug->closedBy       = '由谁关闭';
-$lang->bug->closedDate     = '关闭日期';
-$lang->bug->duplicateBug   = '重复Bug';
-$lang->bug->lastEditedBy   = '最后修改者';
-$lang->bug->lastEditedDate = '最后修改日期';
-$lang->bug->linkBug        = '相关Bug';
-$lang->bug->case           = '相关用例';
-$lang->bug->files          = '附件';
-$lang->bug->keywords       = '关键词';
-$lang->bug->lastEditedByAB   = '修改者';
-$lang->bug->lastEditedDateAB = '修改日期';
+$lang->bug->common         = 'Bug';
+$lang->bug->id             = 'ID';
+$lang->bug->product        = 'Product';
+$lang->bug->module         = 'Module';
+$lang->bug->path           = 'Path';
+$lang->bug->project        = 'Project';
+$lang->bug->story          = 'Story';
+$lang->bug->storyVersion   = 'Story Version';
+$lang->bug->task           = 'Task';
+$lang->bug->title          = 'Title';
+$lang->bug->severity       = 'Severity';
+$lang->bug->severityAB     = 'S';
+$lang->bug->pri            = 'Priority';
+$lang->bug->type           = 'Type';
+$lang->bug->os             = 'OS';
+$lang->bug->hardware       = 'Hardware';
+$lang->bug->browser        = 'Browser';
+$lang->bug->machine        = 'Machine';
+$lang->bug->found          = 'How found';
+$lang->bug->steps          = 'Steps';
+$lang->bug->status         = 'Status';
+$lang->bug->mailto         = 'Mailto';
+$lang->bug->openedBy       = 'Opened By';
+$lang->bug->openedByAB     = 'Opened';
+$lang->bug->openedDate     = 'Opened date';
+$lang->bug->openedBuild    = 'Opened Build';
+$lang->bug->assignedTo     = 'Assigned';
+$lang->bug->assignedDate   = 'Assigned Date';
+$lang->bug->resolvedBy     = 'Resolved By';
+$lang->bug->resolution     = 'Resolution';
+$lang->bug->resolutionAB   = 'Resolution';
+$lang->bug->resolvedBuild  = 'Resolved Build';
+$lang->bug->resolvedDate   = 'Resolved Date';
+$lang->bug->closedBy       = 'Closed By';
+$lang->bug->closedDate     = 'Closed Date';
+$lang->bug->duplicateBug   = 'Duplicate';
+$lang->bug->lastEditedBy   = 'Last Edited By';
+$lang->bug->lastEditedDate = 'Last Edited Date';
+$lang->bug->linkBug        = 'Related';
+$lang->bug->case           = 'Case';
+$lang->bug->files          = 'Files';
+$lang->bug->keywords       = 'Keywords';
+$lang->bug->lastEditedByAB   = 'Edited';
+$lang->bug->lastEditedDateAB = 'Edited Date';
 
 /* 方法列表。*/
-$lang->bug->index          = '首页';
-$lang->bug->create         = '创建Bug';
-$lang->bug->edit           = '编辑Bug';
-$lang->bug->browse         = 'Bug列表';
-$lang->bug->view           = 'Bug详情';
-$lang->bug->resolve        = '解决Bug';
-$lang->bug->close          = '关闭Bug';
-$lang->bug->activate       = '激活Bug';
-$lang->bug->reportChart    = '报表统计';
-$lang->bug->delete         = '删除Bug';
-$lang->bug->ajaxGetUserBugs    = '接口:我的Bug';
-$lang->bug->confirmStoryChange = '确认需求变动';
+$lang->bug->index          = 'Index';
+$lang->bug->create         = 'Create Bug';
+$lang->bug->edit           = 'Edite Bug';
+$lang->bug->browse         = 'Browse Bug';
+$lang->bug->view           = 'Bug Info';
+$lang->bug->resolve        = 'Resolve Bug';
+$lang->bug->close          = 'Close Bug';
+$lang->bug->activate       = 'Activate Bug';
+$lang->bug->reportChart    = 'Report';
+$lang->bug->delete         = 'Delete Bug';
+$lang->bug->customFields   = 'Custom Fields';
+$lang->bug->restoreDefault = 'Default';
+$lang->bug->ajaxGetUserBugs    = 'API: My Bugs';
+$lang->bug->confirmStoryChange = 'Confirm Story Change';
 
 /* 查询条件列表。*/
-$lang->bug->selectProduct  = '请选择产品';
-$lang->bug->byModule       = '按模块';
-$lang->bug->assignToMe     = '指派给我';
-$lang->bug->openedByMe     = '由我创建';
-$lang->bug->resolvedByMe   = '由我解决';
-$lang->bug->assignToNull   = '未指派';
-$lang->bug->longLifeBugs   = '久未处理';
-$lang->bug->postponedBugs  = '被延期';
-$lang->bug->allBugs        = '所有Bug';
-$lang->bug->moduleBugs     = '按模块浏览';
-$lang->bug->byQuery        = '搜索';
-$lang->bug->needConfirm    = '需求有变动的Bug';
-$lang->bug->allProduct     = '所有产品';
+$lang->bug->selectProduct  = 'Select product';
+$lang->bug->byModule       = 'By Module';
+$lang->bug->assignToMe     = 'Assgined to me';
+$lang->bug->openedByMe     = 'My Opened';
+$lang->bug->resolvedByMe   = 'My Resolved';
+$lang->bug->assignToNull   = 'Assgined empty';
+$lang->bug->longLifeBugs   = 'Long life';
+$lang->bug->postponedBugs  = 'Postponed';
+$lang->bug->allBugs        = 'All bug';
+$lang->bug->moduleBugs     = 'By module';
+$lang->bug->byQuery        = 'Search';
+$lang->bug->needConfirm    = 'Story changed';
+$lang->bug->allProduct     = 'All products';
 
 /* 页面标签。*/
-$lang->bug->lblProductAndModule         = '产品模块';
-$lang->bug->lblProjectAndTask           = '项目任务';
-$lang->bug->lblStory                    = '相关需求';
-$lang->bug->lblTypeAndSeverity          = '类型/严重程度';
-$lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
-$lang->bug->lblAssignedTo               = '当前指派';
-$lang->bug->lblMailto                   = '抄送给';
-$lang->bug->lblLastEdited               = '最后修改';
-$lang->bug->lblResolved                 = '由谁解决';
+$lang->bug->lblProductAndModule         = 'Product&Module';
+$lang->bug->lblProjectAndTask           = 'Project&Task';
+$lang->bug->lblStory                    = 'Story';
+$lang->bug->lblTypeAndSeverity          = 'Type&Severity';
+$lang->bug->lblSystemBrowserAndHardware = 'OS&Browser';
+$lang->bug->lblAssignedTo               = 'Assigned to';
+$lang->bug->lblMailto                   = 'Mailto';
+$lang->bug->lblLastEdited               = 'Last edited';
+$lang->bug->lblResolved                 = 'Resoved';
+$lang->bug->lblAllFields                = 'All Fields';
+$lang->bug->lblCustomFields             = 'Custom Fields';
 
 /* legend列表。*/
-$lang->bug->legendBasicInfo   = '基本信息';
-$lang->bug->legendMailto      = '抄送给';
-$lang->bug->legendAttatch     = '附件';
-$lang->bug->legendLinkBugs    = '相关Bug';
-$lang->bug->legendPrjStoryTask= '项目/需求/任务';
-$lang->bug->legendCases       = '相关用例';
-$lang->bug->legendSteps       = '重现步骤';
-$lang->bug->legendAction      = '操作';
-$lang->bug->legendHistory     = '历史记录';
-$lang->bug->legendComment     = '备注';
-$lang->bug->legendLife        = 'BUG的一生';
-$lang->bug->legendMisc        = '其相关他';
+$lang->bug->legendBasicInfo   = 'Basic info';
+$lang->bug->legendMailto      = 'Mailto';
+$lang->bug->legendAttatch     = 'Files';
+$lang->bug->legendLinkBugs    = 'Related bug';
+$lang->bug->legendPrjStoryTask= 'Project, story & task';
+$lang->bug->legendCases       = 'Related case';
+$lang->bug->legendSteps       = 'Steps';
+$lang->bug->legendAction      = 'Action';
+$lang->bug->legendHistory     = 'History';
+$lang->bug->legendComment     = 'Comment';
+$lang->bug->legendLife        = 'Lifetime';
+$lang->bug->legendMisc        = 'Misc';
 
 /* 功能按钮。*/
-$lang->bug->buttonCopy     = '复制';
-$lang->bug->buttonEdit     = '编辑';
-$lang->bug->buttonActivate = '激活';
-$lang->bug->buttonResolve  = '解决';
-$lang->bug->buttonClose    = '关闭';
-$lang->bug->buttonToList   = '返回';
+$lang->bug->buttonCopy     = 'Copy';
+$lang->bug->buttonEdit     = 'Edit';
+$lang->bug->buttonActivate = 'Activate';
+$lang->bug->buttonResolve  = 'Resolve';
+$lang->bug->buttonClose    = 'Close';
+$lang->bug->buttonToList   = 'Back';
 
 /* 交互提示。*/
-$lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';
-$lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
+$lang->bug->confirmChangeProduct = 'Change product will change project, task and story also, are you sure?';
+$lang->bug->confirmDelete        = 'Are you sure to delete this bug?';
+$lang->bug->setTemplateTitle     = 'Please input the template title:';
 
 /* 模板。*/
-$lang->bug->tblStep        = "[步骤]\n";
-$lang->bug->tblResult      = "[结果]\n";
-$lang->bug->tblExpect      = "[期望]\n";
+$lang->bug->tplStep        = "[b][Steps][/b]\n\n";
+$lang->bug->tplResult      = "[b][Result][/b]\n\n";
+$lang->bug->tplExpect      = "[b][Expect][/b]\n\n";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[3] = '3';
@@ -150,7 +156,7 @@ $lang->bug->priList[2] = '2';
 $lang->bug->priList[4] = '4';
 
 $lang->bug->osList['']        = '';
-$lang->bug->osList['all']     = '全部';
+$lang->bug->osList['all']     = 'All';
 $lang->bug->osList['windows'] = 'Windows';
 $lang->bug->osList['winxp']   = 'Windows XP';
 $lang->bug->osList['win7']    = 'Windows 7';
@@ -164,69 +170,69 @@ $lang->bug->osList['unix']    = 'Unix';
 $lang->bug->osList['others']  = '其他';
 
 $lang->bug->browserList['']         = '';
-$lang->bug->browserList['all']      = '全部';
-$lang->bug->browserList['ie']       = 'IE系列';
+$lang->bug->browserList['all']      = 'All';
+$lang->bug->browserList['ie']       = 'IE';
 $lang->bug->browserList['ie6']      = 'IE6';
 $lang->bug->browserList['ie7']      = 'IE7';
 $lang->bug->browserList['ie8']      = 'IE8';
-$lang->bug->browserList['firefox']  = 'firefox系列';
-$lang->bug->browserList['firefox2'] = 'firefox2';
-$lang->bug->browserList['firefx3']  = 'firefox3';
-$lang->bug->browserList['opera']    = 'opera系列';
+$lang->bug->browserList['firefox']  = 'Firefox';
+$lang->bug->browserList['firefox2'] = 'Firefox2';
+$lang->bug->browserList['firefx3']  = 'Firefox3';
+$lang->bug->browserList['opera']    = 'opera';
 $lang->bug->browserList['opera9']   = 'opera9';
 $lang->bug->browserList['oprea10']  = 'opera10';
 $lang->bug->browserList['safari']   = 'safari';
 $lang->bug->browserList['chrome']   = 'chrome';
-$lang->bug->browserList['other']    = '其他';
+$lang->bug->browserList['other']    = 'Others';
 
 $lang->bug->typeList['']             = '';
-$lang->bug->typeList['codeerror']    = '代码错误';
-$lang->bug->typeList['interface']    = '界面优化';
-$lang->bug->typeList['designchange'] = '设计变更';
-$lang->bug->typeList['newfeature']   = '新增需求';
-$lang->bug->typeList['designdefect'] = '设计缺陷';
-$lang->bug->typeList['config']       = '配置相关';
-$lang->bug->typeList['install']      = '安装部署';
-$lang->bug->typeList['security']     = '安全相关';
-$lang->bug->typeList['performance']  = '性能问题';
-$lang->bug->typeList['standard']     = '标准规范';
-$lang->bug->typeList['automation']   = '测试脚本';
-$lang->bug->typeList['trackthings']  = '事务跟踪';
-$lang->bug->typeList['Others']       = '其他';
+$lang->bug->typeList['codeerror']    = 'Code error';
+$lang->bug->typeList['interface']    = 'Interface';
+$lang->bug->typeList['designchange'] = 'Design change';
+$lang->bug->typeList['newfeature']   = 'New feature';
+$lang->bug->typeList['designdefect'] = 'Design defect';
+$lang->bug->typeList['config']       = 'Config';
+$lang->bug->typeList['install']      = 'Install';
+$lang->bug->typeList['security']     = 'Security';
+$lang->bug->typeList['performance']  = 'Performance';
+$lang->bug->typeList['standard']     = 'Standard';
+$lang->bug->typeList['automation']   = 'Automation';
+$lang->bug->typeList['trackthings']  = 'Tracking';
+$lang->bug->typeList['Others']       = 'Others';
 
 $lang->bug->statusList['']         = '';
-$lang->bug->statusList['active']   = '激活';
-$lang->bug->statusList['resolved'] = '已解决';
-$lang->bug->statusList['closed']   = '已关闭';
+$lang->bug->statusList['active']   = 'Active';
+$lang->bug->statusList['resolved'] = 'Resolved';
+$lang->bug->statusList['closed']   = 'Closed';
 
 $lang->bug->resolutionList['']           = '';
-$lang->bug->resolutionList['bydesign']   = '设计如此';
-$lang->bug->resolutionList['duplicate']  = '重复Bug';
-$lang->bug->resolutionList['external']   = '外部原因';
-$lang->bug->resolutionList['fixed']      = '已解决';
-$lang->bug->resolutionList['notrepro']   = '无法重现';
-$lang->bug->resolutionList['postponed']  = '延期处理';
-$lang->bug->resolutionList['willnotfix'] = "不予解决";
+$lang->bug->resolutionList['bydesign']   = 'By defisn';
+$lang->bug->resolutionList['duplicate']  = 'Duplicate';
+$lang->bug->resolutionList['external']   = 'External';
+$lang->bug->resolutionList['fixed']      = 'Fixed';
+$lang->bug->resolutionList['notrepro']   = 'Not reproduct';
+$lang->bug->resolutionList['postponed']  = 'Postponed';
+$lang->bug->resolutionList['willnotfix'] = "Won't fix";
 
 /* 统计报表。*/
-$lang->bug->report->common        = '统计报表';
-$lang->bug->report->select        = '请选择报表类型';
-$lang->bug->report->create        = '生成报表';
-$lang->bug->report->selectAll     = '全选';
-$lang->bug->report->selectReverse = '反选';
+$lang->bug->report->common        = 'Report';
+$lang->bug->report->select        = 'Select';
+$lang->bug->report->create        = 'Create';
+$lang->bug->report->selectAll     = 'All';
+$lang->bug->report->selectReverse = 'Reverse';
 
-$lang->bug->report->charts['bugsPerProject']     = '项目Bug数量';
-$lang->bug->report->charts['bugsPerModule']      = '模块Bug数量';
-$lang->bug->report->charts['openedBugsPerDay']   = '每天新增Bug数';
-$lang->bug->report->charts['resolvedBugsPerDay'] = '每天解决Bug数';
-$lang->bug->report->charts['closedBugsPerDay']   = '每天关闭的Bug数';
-$lang->bug->report->charts['openedBugsPerUser']  = '每人提交的Bug数';
-$lang->bug->report->charts['resolvedBugsPerUser']= '每人解决的Bug数';
-$lang->bug->report->charts['closedBugsPerUser']  = '每人关闭的Bug数';
-$lang->bug->report->charts['bugsPerSeverity']    = 'Bug严重程度统计';
-$lang->bug->report->charts['bugsPerResolution']  = 'Bug解决方案统计';
-$lang->bug->report->charts['bugsPerStatus']      = 'Bug状态统计';
-$lang->bug->report->charts['bugsPerType']        = 'Bug类型统计';
+$lang->bug->report->charts['bugsPerProject']     = 'Project bugs';
+$lang->bug->report->charts['bugsPerModule']      = 'Module bugs';
+$lang->bug->report->charts['openedBugsPerDay']   = 'Opened bugs per day';
+$lang->bug->report->charts['resolvedBugsPerDay'] = 'Resolved bugs per day';
+$lang->bug->report->charts['closedBugsPerDay']   = 'Closed bugs per day';
+$lang->bug->report->charts['openedBugsPerUser']  = 'Opened bugs per user';
+$lang->bug->report->charts['resolvedBugsPerUser']= 'Resoved bugs per user';
+$lang->bug->report->charts['closedBugsPerUser']  = 'Closed bugs per user';
+$lang->bug->report->charts['bugsPerSeverity']    = 'Severigy';
+$lang->bug->report->charts['bugsPerResolution']  = 'Resolution';
+$lang->bug->report->charts['bugsPerStatus']      = 'Status';
+$lang->bug->report->charts['bugsPerType']        = 'Type';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug处理时间统计';
 //$lang->bug->report->charts['bugHistories']       = 'Bug处理步骤统计';
 
@@ -243,34 +249,34 @@ $lang->bug->report->options->graph->yAxisName        = 'COUNT';
 $lang->bug->report->options->graph->pieRadius        = 100; // 饼图直径。
 $lang->bug->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
 
-$lang->bug->report->bugsPerProject->graph->xAxisName     = '项目';
-$lang->bug->report->bugsPerModule->graph->xAxisName      = '模块';
+$lang->bug->report->bugsPerProject->graph->xAxisName     = 'Project';
+$lang->bug->report->bugsPerModule->graph->xAxisName      = 'Module';
 
 $lang->bug->report->openedBugsPerDay->swf                = 'column2d';
 $lang->bug->report->openedBugsPerDay->height             = 400;
-$lang->bug->report->openedBugsPerDay->graph->xAxisName   = '日期';
+$lang->bug->report->openedBugsPerDay->graph->xAxisName   = 'Date';
 $lang->bug->report->openedBugsPerDay->graph->rotateNames = 1;
 
 $lang->bug->report->resolvedBugsPerDay->swf              = 'column2d';
 $lang->bug->report->resolvedBugsPerDay->height           = 400;
-$lang->bug->report->resolvedBugsPerDay->graph->xAxisName = '日期';
+$lang->bug->report->resolvedBugsPerDay->graph->xAxisName = 'Date';
 $lang->bug->report->resolvedBugsPerDay->graph->rotateNames = 1;
 
 $lang->bug->report->closedBugsPerDay->swf                = 'column2d';
 $lang->bug->report->closedBugsPerDay->height             = 400;
-$lang->bug->report->closedBugsPerDay->graph->xAxisName   = '日期';
+$lang->bug->report->closedBugsPerDay->graph->xAxisName   = 'Date';
 $lang->bug->report->closedBugsPerDay->graph->rotateNames = 1;
 
-$lang->bug->report->openedBugsPerUser->graph->xAxisName  = '用户';
-$lang->bug->report->resolvedBugsPerUser->graph->xAxisName= '用户';
-$lang->bug->report->closedBugsPerUser->graph->xAxisName  = '用户';
+$lang->bug->report->openedBugsPerUser->graph->xAxisName  = 'User';
+$lang->bug->report->resolvedBugsPerUser->graph->xAxisName= 'User';
+$lang->bug->report->closedBugsPerUser->graph->xAxisName  = 'User';
 
-$lang->bug->report->bugsPerSeverity->graph->xAxisName    = '严重程度';
-$lang->bug->report->bugsPerResolution->graph->xAxisName  = '解决方案';
-$lang->bug->report->bugsPerStatus->graph->xAxisName      = '状态';
-$lang->bug->report->bugsPerType->graph->xAxisName        = '类型';
-$lang->bug->report->bugLiveDays->graph->xAxisName        = '处理时间';
-$lang->bug->report->bugHistories->graph->xAxisName       = '处理步骤';
+$lang->bug->report->bugsPerSeverity->graph->xAxisName    = 'Severity';
+$lang->bug->report->bugsPerResolution->graph->xAxisName  = 'Resolution';
+$lang->bug->report->bugsPerStatus->graph->xAxisName      = 'Status';
+$lang->bug->report->bugsPerType->graph->xAxisName        = 'Type';
+$lang->bug->report->bugLiveDays->graph->xAxisName        = 'Live days';
+$lang->bug->report->bugHistories->graph->xAxisName       = 'Histories';
 
 /* 操作记录。*/
-$lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
+$lang->bug->action->resolved = array('main' => '$date, Resolved by <strong>$actor</strong>, resolution is <strong>$extra</strong>.', 'extra' => $lang->bug->resolutionList);

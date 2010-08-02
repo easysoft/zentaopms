@@ -1,6 +1,6 @@
 <?php
 /**
- * The report module english file of ZenTaoMS.
+ * The report module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,11 +21,11 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->report->common     = '报表';
-$lang->report->item       = '条目';
-$lang->report->value      = '值';
-$lang->report->percent    = '百分比';
-$lang->report->undefined  = '未设定';
+$lang->report->common     = 'Report';
+$lang->report->item       = 'Item';
+$lang->report->value      = 'Value';
+$lang->report->percent    = 'Percent';
+$lang->report->undefined  = 'Undefined';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
