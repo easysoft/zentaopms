@@ -1,6 +1,6 @@
 <?php
 /**
- * The dept module english file of ZenTaoMS.
+ * The dept module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,15 +21,15 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->dept->common      = '部门结构';
-$lang->dept->add         = "添加";
-$lang->dept->addChild    = "添加下级部门";
-$lang->dept->manageChild = "下级部门";
-$lang->dept->delete      = "删除部门";
-$lang->dept->browse      = "部门维护";
-$lang->dept->manage      = "维护部门结构";
-$lang->dept->updateOrder = "更新排序";
-$lang->dept->users       = "成员列表";
+$lang->dept->common      = 'Department';
+$lang->dept->add         = "Add";
+$lang->dept->addChild    = "Add child department";
+$lang->dept->manageChild = "Child deprtment";
+$lang->dept->delete      = "Delete";
+$lang->dept->browse      = "Manage";
+$lang->dept->manage      = "Manage";
+$lang->dept->updateOrder = "Update order";
+$lang->dept->users       = "Users";
 
-$lang->dept->saveButton    = " 保存 (S) ";
-$lang->dept->confirmDelete = " 您确定删除该部门吗？";
+$lang->dept->saveButton    = " Save (S) ";
+$lang->dept->confirmDelete = "Are you sure to delete this department?"; 

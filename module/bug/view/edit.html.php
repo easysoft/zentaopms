@@ -27,9 +27,9 @@
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/xheditor.html.php';?>
 <style>
-#product, #module, #project, #story, #task, #resolvedBuild{width:230px}
-.select-3 {width:230px}
-.text-3   {width:225px}
+#product, #module, #project, #story, #task, #resolvedBuild{width:220px}
+.select-3 {width:220px}
+.text-3   {width:215px}
 </style>
 <script language='Javascript'>
 changeProductConfirmed = false;
@@ -192,7 +192,7 @@ $(function() {
       <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
       <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
         <tr>
-          <td class='rowhead'><?php echo $lang->bug->product;?></td>
+          <td class='rowhead w-p20'><?php echo $lang->bug->product;?></td>
           <td>
             <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value);");?>
           </td>
@@ -243,7 +243,7 @@ $(function() {
       <legend><?php echo $lang->bug->legendPrjStoryTask;?></legend>
       <table class='table-1 a-left'>
         <tr>
-          <td class='rowhead'><?php echo $lang->bug->project;?></td>
+          <td class='rowhead w-p20'><?php echo $lang->bug->project;?></td>
           <td><span id='projectIdBox'><?php echo html::select('project', $projects, $bug->project, 'class=select-3 onchange=loadProjectRelated(this.value)');?></span></td>
         </tr>
         <tr>
@@ -261,7 +261,7 @@ $(function() {
       <legend><?php echo $lang->bug->legendLife;?></legend>
       <table class='table-1 a-left'>
         <tr>
-          <td class='rowhead'><?php echo $lang->bug->openedBy;?></td>
+          <td class='rowhead w-p20'><?php echo $lang->bug->openedBy;?></td>
           <td><?php echo $users[$bug->openedBy];?></td>
         </tr>
         <tr>
@@ -269,7 +269,7 @@ $(function() {
           <td><span id='openedBuildBox'><?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class=select-3');?></span></td>
         </tr>
         <tr>
-          <td width='40%' class='rowhead'><?php echo $lang->bug->resolvedBy;?></td>
+          <td class='rowhead'><?php echo $lang->bug->resolvedBy;?></td>
           <td><?php echo html::select('resolvedBy', $users, $bug->resolvedBy, 'class=select-3');?></td>
         </tr>
         <tr>
@@ -289,7 +289,7 @@ $(function() {
           <td><?php echo html::input('duplicateBug', $bug->duplicateBug, 'class=text-3');?></td>
         </tr>
         <tr>
-          <td width='40%' class='rowhead'><?php echo $lang->bug->closedBy;?></td>
+          <td class='rowhead'><?php echo $lang->bug->closedBy;?></td>
           <td><?php echo html::select('closedBy', $users, $bug->closedBy, 'class=select-3');?></td>
         </tr>
         <tr>
@@ -302,7 +302,7 @@ $(function() {
       <legend><?php echo $lang->bug->legendMisc;?></legend>
       <table class='table-1 a-left'>
         <tr>
-          <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
+          <td class='rowhead w-p20'><?php echo $lang->bug->mailto;?></td>
           <td><?php echo html::input('mailto', $bug->mailto, 'class="text-3"');?></td>
         </tr>
         <tr>

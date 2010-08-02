@@ -1,6 +1,6 @@
 <?php
 /**
- * The search module english file of ZenTaoMS.
+ * The search module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,19 +21,19 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->search->common        = '搜索';
-$lang->search->reset         = '重置';
-$lang->search->more          = '更多';
-$lang->search->lite          = '简洁';
-$lang->search->saveQuery     = '保存';
-$lang->search->myQuery       = '我的查询';
-$lang->search->group1        = '第一组';
-$lang->search->group2        = '第二组';
-$lang->search->buildForm     = '搜索表单';
-$lang->search->buildQuery    = '执行搜索';
-$lang->search->saveQuery     = '保存查询';
-$lang->search->deleteQuery   = '删除查询';
-$lang->search->setQueryTitle = '请输入查询标题（保存之前请先查询）：';
+$lang->search->common        = 'Search';
+$lang->search->reset         = 'Reset';
+$lang->search->more          = 'More';
+$lang->search->lite          = 'Lite';
+$lang->search->saveQuery     = 'Save';
+$lang->search->myQuery       = 'My queries';
+$lang->search->group1        = '1';
+$lang->search->group2        = '2';
+$lang->search->buildForm     = 'Search form';
+$lang->search->buildQuery    = 'Execut query';
+$lang->search->saveQuery     = 'Save query';
+$lang->search->deleteQuery   = 'Delete query';
+$lang->search->setQueryTitle = 'Please input the title（execute searching before save）：';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';
@@ -41,14 +41,14 @@ $lang->search->operators['>']       = '>';
 $lang->search->operators['>=']      = '>=';
 $lang->search->operators['<']       = '<';
 $lang->search->operators['<=']      = '<=';
-$lang->search->operators['include'] = '包含';
+$lang->search->operators['include'] = 'include';
 
-$lang->search->andor['and']         = '并且';
-$lang->search->andor['or']          = '或者';
+$lang->search->andor['and']         = 'And';
+$lang->search->andor['or']          = 'Or';
 
-$lang->search->null = '空';
+$lang->search->null = 'Null';
 
-$lang->userquery->title     = '查询标题';
-$lang->userquery->myQueries = '我的查询';
-$lang->userquery->execut    = '执行';
-$lang->userquery->delete    = '删除';
+$lang->userquery->title     = 'Title';
+$lang->userquery->myQueries = 'My queries';
+$lang->userquery->execut    = 'Execute';
+$lang->userquery->delete    = 'Delete';

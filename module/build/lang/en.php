@@ -1,6 +1,6 @@
 <?php
 /**
- * The build module english file of ZenTaoMS.
+ * The build module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,21 +22,21 @@
  * @link        http://www.zentaoms.com
  */
 $lang->build->common    = 'Build';
-$lang->build->create    = "创建Build";
-$lang->build->edit      = "编辑Build";
-$lang->build->delete    = "删除Build";
-$lang->build->view      = "Build详情";
-$lang->build->ajaxGetProductBuilds = '接口:产品Build列表';
-$lang->build->ajaxGetProjectBuilds = '接口:项目Build列表';
+$lang->build->create    = "Create";
+$lang->build->edit      = "Edit";
+$lang->build->delete    = "Delete";
+$lang->build->view      = "Info";
+$lang->build->ajaxGetProductBuilds = 'API:Product builds';
+$lang->build->ajaxGetProjectBuilds = 'API:Project builds';
 
-$lang->build->confirmDelete = "您确认删除该build吗？";
+$lang->build->confirmDelete = "Are sure to delete this build?";
 
 $lang->build->id        = 'ID';
-$lang->build->product   = '产品';
-$lang->build->project   = '项目';
-$lang->build->name      = '名称编号';
-$lang->build->date      = 'Build日期';
-$lang->build->builder   = '构建者';
-$lang->build->scmPath   = '源代码地址';
-$lang->build->filePath  = '存储地址';
-$lang->build->desc      = '描述';
+$lang->build->product   = 'Product';
+$lang->build->project   = 'Project';
+$lang->build->name      = 'Name';
+$lang->build->date      = 'Build date';
+$lang->build->builder   = 'Builder';
+$lang->build->scmPath   = 'Source code path';
+$lang->build->filePath  = 'Pacage file path';
+$lang->build->desc      = 'Desc';

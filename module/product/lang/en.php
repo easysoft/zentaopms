@@ -1,6 +1,6 @@
 <?php
 /**
- * The product module english file of ZenTaoMS.
+ * The product module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,40 +21,47 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->product->common = '产品视图';
-$lang->product->index  = "产品首页";
-$lang->product->browse = "浏览产品";
-$lang->product->view   = "产品信息";
-$lang->product->edit   = "编辑产品";
-$lang->product->create = "新增产品";
-$lang->product->read   = "产品详情";
-$lang->product->edit   = "编辑产品";
-$lang->product->delete = "删除产品";
+$lang->product->common = 'Product';
+$lang->product->index  = "Index";
+$lang->product->browse = "Browse";
+$lang->product->view   = "Info";
+$lang->product->edit   = "Edit";
+$lang->product->create = "Create";
+$lang->product->delete = "Delete";
 
-$lang->product->roadmap   = '路线图';
+$lang->product->roadmap   = 'Roadmap';
+$lang->product->doc       = 'Coc';
 
-$lang->product->selectProduct   = "请选择产品";
-$lang->product->saveButton      = " 保存 (S) ";
-$lang->product->confirmDelete   = " 您确定删除该产品吗？";
-$lang->product->ajaxGetProjects = "接口:项目列表";
-$lang->product->ajaxGetPlans    = "接口:计划列表";
+$lang->product->selectProduct   = "Select product";
+$lang->product->saveButton      = " Save (S) ";
+$lang->product->confirmDelete   = " Are you sure to delete this product?";
+$lang->product->ajaxGetProjects = "API: projects of product";
+$lang->product->ajaxGetPlans    = "API: plans of product";
 
-$lang->product->errorFormat    = '产品数据格式不正确';
-$lang->product->errorEmptyName = '产品名称不能为空';
-$lang->product->errorEmptyCode = '产品代号不能为空';
+$lang->product->errorFormat    = 'Error format.';
+$lang->product->errorEmptyName = 'Name can not be empty.';
+$lang->product->errorEmptyCode = 'Code can not be empty';
+$lang->product->accessDenied   = 'Access to this product denined.';
 
-$lang->product->id      = '编号';
-$lang->product->company = '所属公司';
-$lang->product->name    = '产品名称';
-$lang->product->code    = '产品代号';
-$lang->product->order   = '排序';
-$lang->product->status  = '状态';
-$lang->product->desc    = '产品描述';
+$lang->product->id        = 'ID';
+$lang->product->company   = 'Company';
+$lang->product->name      = 'Name';
+$lang->product->code      = 'Code';
+$lang->product->order     = 'Order';
+$lang->product->status    = 'Status';
+$lang->product->desc      = 'Desc';
+$lang->product->bugOwner  = 'Bug Owner';
+$lang->product->acl       = 'Access limitation';
+$lang->product->whitelist = 'Whitelist';
 
-$lang->product->moduleStory = '按模块浏览';
-$lang->product->searchStory = '搜索';
-$lang->product->allStory    = '全部需求';
+$lang->product->moduleStory = 'By module';
+$lang->product->searchStory = 'By search';
+$lang->product->allStory    = 'All story';
 
 $lang->product->statusList['']       = '';
-$lang->product->statusList['normal'] = '正常';
-$lang->product->statusList['closed'] = '结束';
+$lang->product->statusList['normal'] = 'Normal';
+$lang->product->statusList['closed'] = 'Closed';
+
+$lang->product->aclList['open']    = 'Default(Having product module prividge, can visit this product)';
+$lang->product->aclList['private'] = 'Private(Only project team members can visit)';
+$lang->product->aclList['custom']  = 'Whitelist(Project team members and who belongs to the whilelist groups can visit)';

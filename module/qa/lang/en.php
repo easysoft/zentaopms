@@ -1,6 +1,6 @@
 <?php
 /**
- * The qa module english file of ZenTaoMS.
+ * The qa module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,5 +21,5 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->qa->common  = 'QA视图';
-$lang->qa->index   = "QA首页";
+$lang->qa->common  = 'QA';
+$lang->qa->index   = "Index";

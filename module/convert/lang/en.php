@@ -1,6 +1,6 @@
 <?php
 /**
- * The convert module english file of ZenTaoMS.
+ * The convert module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,59 +21,60 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->convert->common  = '从其他系统导入';
-$lang->convert->next    = '下一步';
-$lang->convert->pre     = '返回';
-$lang->convert->reload  = '刷新';
-$lang->convert->error   = '错误 ';
+$lang->convert->common  = 'Import';
+$lang->convert->next    = 'Next';
+$lang->convert->pre     = 'Back';
+$lang->convert->reload  = 'Reload';
+$lang->convert->error   = 'Eror ';
 
-$lang->convert->start   = '开始转换';
+$lang->convert->start   = 'Begin import';
+
 $lang->convert->desc    = <<<EOT
-<p>欢迎使用系统转换向导，本程序会帮助您将其他系统的数据转换到禅道项目管理系统中。</p>
-<strong>转换存在一定的风险，转换之前，我们强烈建议您备份数据库及相应的数据文件，并保证转换的时候，没有其他人进行操作。</strong>
+<p>Welcome to use this convert wizard which will help you to import other system data to ZenTaoPMS.</p>
+<strong>Importing is dangerous. Be sure to backup your database and other data files and sure nobody is using pms when importing.</strong>
 EOT;
 
-$lang->convert->selectSource     = '选择来源系统及版本';
-$lang->convert->source           = '来源系统';
-$lang->convert->version          = '版本';
-$lang->convert->mustSelectSource = "必须选择一个来源。";
+$lang->convert->selectSource     = 'Select source system and version';
+$lang->convert->source           = 'Source system';
+$lang->convert->version          = 'Version';
+$lang->convert->mustSelectSource = "Must select a source system";
 
 $lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x', 'bugfree_2' => '2.x');
 
-$lang->convert->setting     = '设置';
-$lang->convert->checkConfig = '检查配置';
+$lang->convert->setting     = 'Setting';
+$lang->convert->checkConfig = 'Check setting';
 
-$lang->convert->ok         = '检查通过(√)';
-$lang->convert->fail       = '检查失败(×)';
+$lang->convert->ok         = 'Check passed(√)';
+$lang->convert->fail       = 'Check failed(×)';
 
-$lang->convert->settingDB  = '设置数据库';
-$lang->convert->dbHost     = '数据库服务器';
-$lang->convert->dbPort     = '服务器端口';
-$lang->convert->dbUser     = '数据库用户名';
-$lang->convert->dbPassword = '数据库密码';
-$lang->convert->dbName     = '%s使用的库';
-$lang->convert->dbPrefix   = '%s表前缀';
-$lang->convert->installPath= '%s安装的根目录';
+$lang->convert->settingDB  = 'Set database';
+$lang->convert->dbHost     = 'Database server';
+$lang->convert->dbPort     = 'Server port';
+$lang->convert->dbUser     = 'Database user';
+$lang->convert->dbPassword = 'Database password';
+$lang->convert->dbName     = '%s database';
+$lang->convert->dbPrefix   = '%s table prefix';
+$lang->convert->installPath= '%s installed path';
 
-$lang->convert->checkDB    = '数据库';
-$lang->convert->checkTable = '表';
-$lang->convert->checkPath  = '安装路径';
+$lang->convert->checkDB    = 'Database';
+$lang->convert->checkTable = 'Table';
+$lang->convert->checkPath  = 'Installed path';
 
-$lang->convert->execute    = '执行转换';
-$lang->convert->item       = '转换项';
-$lang->convert->count      = '转换数量';
-$lang->convert->info       = '转换信息';
+$lang->convert->execute    = 'Execute import';
+$lang->convert->item       = 'Imported items';
+$lang->convert->count      = 'Count';
+$lang->convert->info       = 'Info';
 
-$lang->convert->bugfree->users    = '用户';
-$lang->convert->bugfree->projects = '项目';
-$lang->convert->bugfree->modules  = '模块';
+$lang->convert->bugfree->users    = 'User';
+$lang->convert->bugfree->projects = 'Project';
+$lang->convert->bugfree->modules  = 'Module';
 $lang->convert->bugfree->bugs     = 'Bug';
-$lang->convert->bugfree->cases    = '测试用例';
-$lang->convert->bugfree->results  = '测试结果';
-$lang->convert->bugfree->actions  = '历史记录';
-$lang->convert->bugfree->files    = '附件';
+$lang->convert->bugfree->cases    = 'Case';
+$lang->convert->bugfree->results  = 'Result';
+$lang->convert->bugfree->actions  = 'History';
+$lang->convert->bugfree->files    = 'File';
 
-$lang->convert->errorConnectDB     = '数据库连接失败 ';
-$lang->convert->errorFileNotExits  = '文件 %s 不存在';
-$lang->convert->errorUserExists    = '用户 %s 已存在';
-$lang->convert->errorCopyFailed    = '文件 %s 拷贝失败';
+$lang->convert->errorConnectDB     = 'Connect to database server failed.';
+$lang->convert->errorFileNotExits  = 'File %s not exits.';
+$lang->convert->errorUserExists    = 'User %s exits already.';
+$lang->convert->errorCopyFailed    = 'file %s copy failed.';

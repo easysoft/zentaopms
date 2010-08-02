@@ -81,7 +81,7 @@
       <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
       <table class='table-1 a-left'>
         <tr valign='middle'>
-          <th class='w-p20 rowhead'><?php echo $lang->bug->product;?></th>
+          <th class='rowhead'><?php echo $lang->bug->product;?></th>
           <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?>
         </tr>
         <tr>
@@ -135,7 +135,7 @@
       <legend><?php echo $lang->bug->legendLife;?></legend>
       <table class='table-1 a-left fixed'>
         <tr>
-          <th class='rowhead w-p20'><?php echo $lang->bug->openedBy;?></th>
+          <th class='rowhead'><?php echo $lang->bug->openedBy;?></th>
           <td> <?php echo $users[$bug->openedBy] . $lang->at . $bug->openedDate;?></td>
         </tr>
         <tr>
@@ -186,7 +186,7 @@
       <legend><?php echo $lang->bug->legendPrjStoryTask;?></legend>
       <table class='table-1 a-left fixed'>
         <tr>
-          <td class='rowhead w-p20'><?php echo $lang->bug->project;?></td>
+          <td class='rowhead'><?php echo $lang->bug->project;?></td>
           <td><?php if($bug->project) echo html::a($this->createLink('project', 'browse', "projectid=$bug->project"), $bug->projectName);?></td>
         </tr>
         <tr class='nofixed'>
@@ -213,7 +213,7 @@
       <legend><?php echo $lang->bug->legendMisc;?></legend>
       <table class='table-1 a-left fixed'>
         <tr>
-          <td class='rowhead w-p20'><?php echo $lang->bug->mailto;?></td>
+          <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
           <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
         </tr>
         <tr>

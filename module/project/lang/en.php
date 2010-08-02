@@ -1,6 +1,6 @@
 <?php
 /**
- * The project module english file of ZenTaoMS.
+ * The project module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,108 +21,109 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-/* 字段列表。*/
-$lang->project->common       = '项目视图';
-$lang->project->id           = '项目编号';
-$lang->project->company      = '所属公司';
-$lang->project->iscat        = '作为目录';
-$lang->project->type         = '项目类型';
-$lang->project->parent       = '上级项目';
-$lang->project->name         = '项目名称';
-$lang->project->code         = '项目代号';
-$lang->project->begin        = '开始日期';
-$lang->project->end          = '结束日期';
-$lang->project->status       = '项目状态';
-$lang->project->statge       = '所处阶段';
-$lang->project->pri          = '优先级';
-$lang->project->desc         = '项目描述';
-$lang->project->goal         = '项目目标';
-$lang->project->openedBy     = '由谁创建';
-$lang->project->openedDate   = '创建日期';
-$lang->project->closedBy     = '由谁关闭';
-$lang->project->closedDate   = '关闭日期';
-$lang->project->canceledBy   = '由谁取消';
-$lang->project->canceledDate = '取消日期';
-$lang->project->PO           = '产品负责人';
-$lang->project->PM           = '项目负责人';
-$lang->project->QM           = '测试负责人';
-$lang->project->acl          = '访问控制';
-$lang->project->teamname     = '团队名称';
-$lang->project->products     = '相关产品';
-$lang->project->childProjects= '子项目';
-$lang->project->whitelist    = '分组白名单';
+/* 字段列表.*/
+$lang->project->common       = 'Project';
+$lang->project->id           = 'ID';
+$lang->project->company      = 'Company';
+$lang->project->iscat        = 'Is category';
+$lang->project->type         = 'Type';
+$lang->project->parent       = 'Parent';
+$lang->project->name         = 'Name';
+$lang->project->code         = 'Code';
+$lang->project->begin        = 'Begin';
+$lang->project->end          = 'End';
+$lang->project->status       = 'Status';
+$lang->project->statge       = 'Statge';
+$lang->project->pri          = 'Priority';
+$lang->project->desc         = 'Desc';
+$lang->project->goal         = 'Goal';
+$lang->project->openedBy     = 'Opened by';
+$lang->project->openedDate   = 'Opened date';
+$lang->project->closedBy     = 'Closed by';
+$lang->project->closedDate   = 'Closed date';
+$lang->project->canceledBy   = 'Canceled by';
+$lang->project->canceledDate = 'Canceled date';
+$lang->project->PO           = 'Product owner';
+$lang->project->PM           = 'Project manager';
+$lang->project->QM           = 'QA manager';
+$lang->project->acl          = 'Access limitation';
+$lang->project->teamname     = 'Team name';
+$lang->project->products     = 'Products';
+$lang->project->childProjects= 'Child projects';
+$lang->project->whitelist    = 'Whitelist';
 
-$lang->team->account     = '用户';
-$lang->team->role        = '角色';
-$lang->team->joinDate    = '加盟日';
-$lang->team->workingHour = '工时/天';
+$lang->team->account     = 'Account';
+$lang->team->role        = 'Role';
+$lang->team->joinDate    = 'Join date';
+$lang->team->workingHour = 'Wokring/Day';
 
-/* 字段取值列表。*/
+/* 字段取值列表.*/
 $lang->project->statusList['']      = '';
-$lang->project->statusList['wait']  = '未开始';
-$lang->project->statusList['doing'] = '进行中';
-$lang->project->statusList['done']  = '已完成';
+$lang->project->statusList['wait']  = 'Waitting';
+$lang->project->statusList['doing'] = 'Doing';
+$lang->project->statusList['done']  = 'Done';
 
-$lang->project->aclList['open']    = '默认设置(有项目视图权限，即可访问)';
-$lang->project->aclList['private'] = '私有项目(只有项目团队成员才能访问)';
-$lang->project->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
+$lang->project->aclList['open']    = 'Default(Having the priviledge of project module can visit this project)';
+$lang->project->aclList['private'] = 'Private(Only team members can visit)';
+$lang->project->aclList['custom']  = 'Whitelist(Team members and who belongs to the whielist grups can visit)';
 
-/* 方法列表。*/
-$lang->project->index          = "项目首页";
-$lang->project->task           = '任务列表';
-$lang->project->groupTask      = '分组浏览任务';
-$lang->project->story          = '需求列表';
-$lang->project->bug            = 'Bug列表';
-$lang->project->build          = 'Build列表';
-$lang->project->burn           = '燃尽图';
-$lang->project->computeBurn    = '更新燃尽图';
-$lang->project->burnData       = '燃尽图数据';
-$lang->project->team           = '团队成员';
-$lang->project->manageProducts = '关联产品';
-$lang->project->linkStory      = '关联需求';
-$lang->project->view           = "基本信息";
-$lang->project->create         = "添加项目";
-$lang->project->delete         = "删除项目";
-$lang->project->browse         = "浏览项目";
-$lang->project->edit           = "编辑项目";
-$lang->project->manageMembers  = '团队管理';
-$lang->project->unlinkMember   = '移除成员';
-$lang->project->unlinkStory    = '移除需求';
-$lang->project->importTask     = '导入之前未完';
+/* 方法列表.*/
+$lang->project->index          = "Index";
+$lang->project->task           = 'Task';
+$lang->project->groupTask      = 'View task by group';
+$lang->project->story          = 'Story';
+$lang->project->bug            = 'Bug';
+$lang->project->build          = 'Build';
+$lang->project->burn           = 'Burndown chart';
+$lang->project->computeBurn    = 'Update burndown';
+$lang->project->burnData       = 'Burndown data';
+$lang->project->team           = 'Team';
+$lang->project->doc            = 'Doc';
+$lang->project->manageProducts = 'Link product';
+$lang->project->linkStory      = 'Link story';
+$lang->project->view           = "Info";
+$lang->project->create         = "Add";
+$lang->project->delete         = "Delete";
+$lang->project->browse         = "Browse";
+$lang->project->edit           = "Edit";
+$lang->project->manageMembers  = 'Manage team members';
+$lang->project->unlinkMember   = 'Remove member';
+$lang->project->unlinkStory    = 'Remove story';
+$lang->project->importTask     = 'Import tasks undone';
 
-/* 分组浏览。*/
-$lang->project->listTask            = '列表方式';
-$lang->project->groupTaskByStory    = '需求分组';
-$lang->project->groupTaskByStatus   = '状态分组';
-$lang->project->groupTaskByPri      = '优先级分组';
-$lang->project->groupTaskByOwner    = '指派给分组';
-$lang->project->groupTaskByEstimate = '预计分组';
-$lang->project->groupTaskByConsumed = '已消耗分组';
-$lang->project->groupTaskByLeft     = '剩余分组';
-$lang->project->groupTaskByType     = '类型分组';
-$lang->project->groupTaskByDeadline = '截止分组';
-$lang->project->listTaskNeedConfrim = '需求变动';
+/* 分组浏览.*/
+$lang->project->listTask            = 'List';
+$lang->project->groupTaskByStory    = 'By story';
+$lang->project->groupTaskByStatus   = 'By status';
+$lang->project->groupTaskByPri      = 'By priority';
+$lang->project->groupTaskByOwner    = 'By owner';
+$lang->project->groupTaskByEstimate = 'By estimate';
+$lang->project->groupTaskByConsumed = 'By consumed';
+$lang->project->groupTaskByLeft     = 'By left';
+$lang->project->groupTaskByType     = 'By type';
+$lang->project->groupTaskByDeadline = 'BY deadline';
+$lang->project->listTaskNeedConfrim = 'Story changed';
 
-/* 页面提示。*/
-$lang->project->selectProject  = "请选择项目";
-$lang->project->beginAndEnd    = '起止时间';
-$lang->project->lblStats       = '工时统计';
-$lang->project->stats          = '总共预计『%s』工时<br />已经消耗『%s』工时<br />预计剩余『%s』工时';
-$lang->project->oneLineStats   = "项目『%s』, 代号为『%s』, 相关产品为『%s』，『%s』开始，『%s』结束，总预计『%s』工时，已消耗『%s』工时，预计剩余『%s』工时。";
-$lang->project->storySummary   = "共『%s』个需求，预计『%s』个工时。";
-$lang->project->wbs            = "分解任务";
-$lang->project->largeBurnChart = '点击查看大图';
+/* 页面提示.*/
+$lang->project->selectProject  = "Select project";
+$lang->project->beginAndEnd    = 'Begian and end';
+$lang->project->lblStats       = 'Stats';
+$lang->project->stats          = 'Total estimate is『%s』hours,<br />confused『%s』hours<br />left『%s』hours';
+$lang->project->oneLineStats   = "Project『%s』, code is『%s』, products is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
+$lang->project->storySummary   = "Total 『%s』stories, estimate『%s』hours.";
+$lang->project->wbs            = "WBS";
+$lang->project->largeBurnChart = 'View large';
 
-/* 交互提示。*/
-$lang->project->confirmDelete         = '您确定删除项目[%s]吗？';
-$lang->project->confirmUnlinkMember   = '您确定从该项目中移除该用户吗？';
-$lang->project->confirmUnlinkStory    = '您确定从该项目中移除该需求吗？';
-$lang->project->errorNoLinkedProducts = '该项目没有关联的产品，系统将转到产品关联页面';
-$lang->project->accessDenied          = '您无权访问该项目！';
+/* 交互提示.*/
+$lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';
+$lang->project->confirmUnlinkMember   = 'Are you sure to remove this user from this project?';
+$lang->project->confirmUnlinkStory    = 'Are you sure to remove the story from this project?';
+$lang->project->errorNoLinkedProducts = 'Thers is no linked products, go to the link page.';
+$lang->project->accessDenied          = 'Access to this project denied.';
 
-/* 统计。*/
-$lang->project->charts->burn->graph->caption      = "燃尽图";
-$lang->project->charts->burn->graph->xAxisName    = "日期";
+/* 统计.*/
+$lang->project->charts->burn->graph->caption      = "Burndown chart";
+$lang->project->charts->burn->graph->xAxisName    = "Date";
 $lang->project->charts->burn->graph->yAxisName    = "HOUR";
 $lang->project->charts->burn->graph->baseFontSize = 12;
 $lang->project->charts->burn->graph->formatNumber = 0;

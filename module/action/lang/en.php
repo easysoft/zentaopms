@@ -1,6 +1,6 @@
 <?php
 /**
- * The action module english file of ZenTaoMS.
+ * The action module English file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,79 +21,79 @@
  * @version     $Id$
  * @link        http://www.zentaoms.com
  */
-$lang->action->common   = '系统日志';
-$lang->action->trash    = '回收站';
-$lang->action->undelete = '还原';
+$lang->action->common   = 'Logs';
+$lang->action->trash    = 'Trash';
+$lang->action->undelete = 'Restore';
 
-$lang->action->objectType = '对象类型';
-$lang->action->objectID   = '对象ID';
-$lang->action->objectName = '对象名称';
-$lang->action->actor      = '操作者';
-$lang->action->date       = '日期';
+$lang->action->objectType = 'Object';
+$lang->action->objectID   = 'ID';
+$lang->action->objectName = 'Name';
+$lang->action->actor      = 'Actor';
+$lang->action->date       = 'Date';
 
-$lang->action->objectTypes['product']     = '产品';
-$lang->action->objectTypes['story']       = '需求';
-$lang->action->objectTypes['productplan'] = '产品计划';
-$lang->action->objectTypes['release']     = '发布';
-$lang->action->objectTypes['project']     = '项目';
-$lang->action->objectTypes['task']        = '任务';
+$lang->action->objectTypes['product']     = 'PRODUCT';
+$lang->action->objectTypes['story']       = 'STORY';
+$lang->action->objectTypes['productplan'] = 'PLAN';
+$lang->action->objectTypes['release']     = 'RELEASE';
+$lang->action->objectTypes['project']     = 'PROJECT';
+$lang->action->objectTypes['task']        = 'TASK';
 $lang->action->objectTypes['build']       = 'Build';
 $lang->action->objectTypes['bug']         = 'Bug';
-$lang->action->objectTypes['case']        = '用例';
-$lang->action->objectTypes['testtask']    = '测试任务';
-$lang->action->objectTypes['user']        = '用户';
+$lang->action->objectTypes['case']        = 'Case';
+$lang->action->objectTypes['testtask']    = 'Test Task';
+$lang->action->objectTypes['user']        = 'User';
 
-/* 用来描述操作历史记录。*/
+/* 用来描述操作历史记录.*/
 $lang->action->desc->common    = '$date, <strong>$action</strong> by <strong>$actor</strong>';
 $lang->action->desc->extra     = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
-$lang->action->desc->opened    = '$date, 由 <strong>$actor</strong> 创建。';
-$lang->action->desc->changed   = '$date, 由 <strong>$actor</strong> 变更。';
-$lang->action->desc->edited    = '$date, 由 <strong>$actor</strong> 编辑。';
-$lang->action->desc->closed    = '$date, 由 <strong>$actor</strong> 关闭。';
-$lang->action->desc->deleted   = '$date, 由 <strong>$actor</strong> 删除。';
-$lang->action->desc->erased    = '$date, 由 <strong>$actor</strong> 删除。';
-$lang->action->desc->undeleted = '$date, 由 <strong>$actor</strong> 还原。';
-$lang->action->desc->commented = '$date, 由 <strong>$actor</strong> 发表评论。';
-$lang->action->desc->activated = '$date, 由 <strong>$actor</strong> 激活。';
-$lang->action->desc->moved     = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"';
-$lang->action->desc->confirmed = '$date, 由 <strong>$actor</strong> 确认需求变动，最新版本为<strong>#$extra</strong>';
-$lang->action->desc->diff1     = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />';
-$lang->action->desc->diff2     = '修改了 <strong><i>%s</i></strong>，区别为：<blockquote>%s</blockquote>';
+$lang->action->desc->opened    = '$date, Opened by <strong>$actor</strong>.';
+$lang->action->desc->changed   = '$date, Changed by <strong>$actor</strong>.';
+$lang->action->desc->edited    = '$date, Edited by <strong>$actor</strong>.';
+$lang->action->desc->closed    = '$date, Closed by <strong>$actor</strong>.';
+$lang->action->desc->deleted   = '$date, Deleted by <strong>$actor</strong>.';
+$lang->action->desc->erased    = '$date, Erased by <strong>$actor</strong>.';
+$lang->action->desc->undeleted = '$date, Restored by <strong>$actor</strong>.';
+$lang->action->desc->commented = '$date, Commented by <strong>$actor</strong>.';
+$lang->action->desc->activated = '$date, Activated by <strong>$actor</strong>.';
+$lang->action->desc->moved     = '$date, Moved by <strong>$actor</strong>, previouse is "$extra"';
+$lang->action->desc->confirmed = '$date, Confirmed by <strong>$actor</strong>, version is<strong>#$extra</strong>';
+$lang->action->desc->diff1     = 'Changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
+$lang->action->desc->diff2     = 'Changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>';
 
-/* 用来显示动态信息。*/
-$lang->action->label->opened              = '创建了';
-$lang->action->label->changed             = '变更了';
-$lang->action->label->edited              = '编辑了';
-$lang->action->label->closed              = '关闭了';
-$lang->action->label->deleted             = '删除了';
-$lang->action->label->erased              = '删除了';
-$lang->action->label->undeleted           = '还原了';
-$lang->action->label->commented           = '评论了';
-$lang->action->label->activated           = '激活了';
-$lang->action->label->resolved            = '解决了';
-$lang->action->label->reviewed            = '评审了';
-$lang->action->label->moved               = '移动了';
-$lang->action->label->confirmed           = '确认了需求，';
-$lang->action->label->linked2plan         = '关联计划';
-$lang->action->label->unlinkedfromplan    = '移除计划';
-$lang->action->label->linked2project      = '关联项目';
-$lang->action->label->unlinkedfromproject = '移除项目';
-$lang->action->label->marked              = '编辑了';
-$lang->action->label->login               = '登录系统';
-$lang->action->label->logout              = "退出登录";
+/* 用来显示动态信息.*/
+$lang->action->label->opened              = 'opened';
+$lang->action->label->changed             = 'changed';
+$lang->action->label->edited              = 'edited';
+$lang->action->label->closed              = 'closed';
+$lang->action->label->deleted             = 'deleted';
+$lang->action->label->erased              = 'deleted';
+$lang->action->label->undeleted           = 'restore';
+$lang->action->label->commented           = 'commented';
+$lang->action->label->activated           = 'activated';
+$lang->action->label->resolved            = 'resoved';
+$lang->action->label->reviewed            = 'reviewed';
+$lang->action->label->moved               = 'moded';
+$lang->action->label->confirmed           = 'confirmed,';
+$lang->action->label->linked2plan         = 'link to plan';
+$lang->action->label->unlinkedfromplan    = 'unlink from plan';
+$lang->action->label->linked2project      = 'link to project';
+$lang->action->label->unlinkedfromproject = 'unlik from project';
+$lang->action->label->marked              = 'edited';
+$lang->action->label->login               = 'login';
+$lang->action->label->logout              = "logout";
 
-/* 用来生成相应对象的链接。*/
-$lang->action->label->product     = '产品|product|view|productID=%s';
-$lang->action->label->productplan = '计划|productplan|view|productID=%s';
-$lang->action->label->release     = '发布|release|view|productID=%s';
-$lang->action->label->story       = '需求|story|view|storyID=%s';
-$lang->action->label->project     = '项目|project|view|projectID=%s';
-$lang->action->label->task        = '任务|task|view|taskID=%s';
-$lang->action->label->build       = 'Build|build|view|buildID=%s';
-$lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
-$lang->action->label->case        = '用例|testcase|view|caseID=%s';
-$lang->action->label->testtask    = '测试任务|testtask|view|caseID=%s';
+/* 用来生成相应对象的链接.*/
+$lang->action->label->product     = 'product|product|view|productID=%s';
+$lang->action->label->productplan = 'plan|productplan|view|productID=%s';
+$lang->action->label->release     = 'release|release|view|productID=%s';
+$lang->action->label->story       = 'story|story|view|storyID=%s';
+$lang->action->label->project     = 'project|project|view|projectID=%s';
+$lang->action->label->task        = 'task|task|view|taskID=%s';
+$lang->action->label->build       = 'build|build|view|buildID=%s';
+$lang->action->label->bug         = 'bug|bug|view|bugID=%s';
+$lang->action->label->case        = 'case|testcase|view|caseID=%s';
+$lang->action->label->testtask    = 'test task|testtask|view|caseID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
-$lang->action->label->user        = '用户';
+$lang->action->label->user        = 'user';
 
 $lang->action->label->space     = '　';
