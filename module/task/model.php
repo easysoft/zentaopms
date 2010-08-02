@@ -100,6 +100,7 @@ class taskModel extends model
             ->setIF($this->post->consumed > 0 and $this->post->left > 0 and $this->post->status == 'wait', 'status', 'doing')
             ->remove('comment')
             ->get();
+        $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()

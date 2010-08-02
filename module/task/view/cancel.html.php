@@ -29,12 +29,16 @@
     <caption><?php echo $task->name;?></caption>
     <tr>
       <td class='rowhead'><?php echo $lang->task->estimate;?></td>
-      <td><?php echo $task->estimate;?></td>
+      <td><?php echo html::input('estimate', $task->estimate, "class='text-3'");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-      <td><?php echo $task->consumed;?></td>
+      <td><?php echo html::input('consumed', $task->consumed, "class='text-3'");?></td>
     </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->task->left;?></th>
+      <td><?php echo html::input('left', $task->left, "class='text-3'");?></td>
+    </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
@@ -42,8 +46,8 @@
     <tr>
       <td colspan='2' class='a-center'>
         <?php 
-            echo html::submitButton();
-            echo html::hidden('status', 'cancel');
+        echo html::submitButton();
+        echo html::hidden('status', 'cancel');
         ?>
         <input type='button' value='<?php echo $lang->task->buttonBackToList;?>' class='button-s' 
          onclick='location.href="<?php echo $this->session->taskList;?>"' />
