@@ -20,7 +20,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
- * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
+ * @version     $Id: zh-tw.php 988 2010-07-31 07:14:46Z wwccss $
  * @link        http://www.zentaoms.com
  */
 $lang->arrow        = ' » ';
@@ -85,6 +85,8 @@ $lang->menu->my      = '我的地盤|my|index';
 $lang->menu->product = '產品視圖|product|index';
 $lang->menu->project = '項目視圖|project|index';
 $lang->menu->qa      = 'QA視圖|qa|index';
+$lang->menu->doc     = '文檔視圖|doc|index';
+//$lang->menu->forum   = '討論視圖|doc|index';
 $lang->menu->company = '組織視圖|company|index';
 $lang->menu->admin   = '後台管理|admin|index';
 
@@ -122,9 +124,10 @@ $lang->product->menu->story  = array('link' => '需求列表|product|browse|prod
 $lang->product->menu->plan   = array('link' => '計劃列表|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release= array('link' => '發佈列表|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap= '路線圖|product|roadmap|productID=%s';
+$lang->product->menu->doc    = '文檔列表|product|doc|productID=%s';
 $lang->product->menu->view   = '基本信息|product|view|productID=%s';
 $lang->product->menu->edit   = '編輯產品|product|edit|productID=%s';
-$lang->product->menu->module = '維護模組|tree|browse|productID=%s&view=product';
+$lang->product->menu->module = '維護模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->delete = array('link' => '刪除產品|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->create = array('link' => '新增產品|product|create', 'float' => 'right');
 $lang->story->menu           = $lang->product->menu;
@@ -139,6 +142,7 @@ $lang->project->menu->bug       = 'Bug列表|project|bug|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->burn      = '燃盡圖|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊成員|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->doc       = '文檔列表|project|doc|porjectID=%s';
 $lang->project->menu->product   = '關聯產品|project|manageproducts|projectID=%s';
 $lang->project->menu->linkstory = array('link' => '關聯需求|project|linkstory|projectID=%s');
 $lang->project->menu->view      = '基本信息|project|view|projectID=%s';
@@ -164,6 +168,14 @@ $lang->testtask->menu->product  = '%s';
 $lang->testtask->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
 $lang->testtask->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s');
 $lang->testtask->menu->testtask = array('link' => '測試任務|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
+
+/* 文檔視圖菜單設置。*/
+$lang->doc->menu->list    = '%s';
+$lang->doc->menu->browse  = array('link' => '文檔列表|doc|browse|libID=%s');
+$lang->doc->menu->edit    = '編輯文檔庫|doc|editLib|libID=%s';
+$lang->doc->menu->module  = '維護模組|tree|browse|libID=%s&viewType=doc';
+$lang->doc->menu->delete  = array('link' => '刪除文檔庫|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
+$lang->doc->menu->create  = array('link' => '新增文檔庫|doc|createLib', 'float' => 'right');
 
 /* 組織結構視圖菜單設置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;
@@ -251,3 +263,37 @@ define('DT_DATE2',     'Ymd');
 define('DT_DATE3',     'Y年m月d日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
+
+/* 表情。*/
+$lang->smilies->smile       = '微笑';
+$lang->smilies->sad         = '悲傷';
+$lang->smilies->wink        = '眨眼';
+$lang->smilies->tongue      = '吐舌頭';
+$lang->smilies->shocked     = '驚訝';
+$lang->smilies->eyesdown    = '失望';
+$lang->smilies->angry       = '憤怒';
+$lang->smilies->cool        = '耍酷';
+$lang->smilies->indifferent = '冷漠';
+$lang->smilies->sick        = '病中';
+$lang->smilies->blush       = '尷尬';
+$lang->smilies->angel       = '天使';
+$lang->smilies->confused    = '困惑';
+$lang->smilies->cry         = '大哭';
+$lang->smilies->footinmouth = '保密';
+$lang->smilies->biggrin     = '大笑';
+$lang->smilies->nerd        = '書獃子';
+$lang->smilies->tired       = '好累';
+$lang->smilies->rose        = '玫瑰';
+$lang->smilies->kiss        = '吻';
+$lang->smilies->heart       = '心';
+$lang->smilies->hug         = '擁抱';
+$lang->smilies->dog         = '狗狗';
+$lang->smilies->deadrose    = '殘花';
+$lang->smilies->clock       = '時鐘';
+$lang->smilies->brokenheart = '傷心';
+$lang->smilies->coffee      = '咖啡';
+$lang->smilies->computer    = '計算機';
+$lang->smilies->devil       = '魔鬼';
+$lang->smilies->thumbsup    = '贊同';
+$lang->smilies->thumbsdown  = '反對';
+$lang->smilies->mail        = '郵件';

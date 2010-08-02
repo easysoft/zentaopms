@@ -101,6 +101,33 @@ class docModel extends model
             ->fetchAll();
     }
 
+    /* 创建一个文档。*/
+    public function create()
+    {
+        $now = helper::now();
+        $doc = fixer::input('post')
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', $now)
+            ->setDefault('product, project', 0)
+            ->specialChars('title, module')    //type, digest, content, keyword
+            ->cleanInt('product, project')
+            ->remove('files, labels')
+            ->get();
+        $this->dao->insert(TABLE_DOC)
+            ->data($doc)
+            ->autoCheck()
+            ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
+            ->check('title', 'unique')
+            ->exec();
+        if(!dao::isError())
+        {
+            $docID = $this->dao->lastInsertID();
+            $this->loadModel('file')->saveUpload('doc', $docID);
+            return $docID;
+        }
+        return false;
+    }
+
     /* 获得某一个产品的文档列表。*/
     public function getProductDocs($productID)
     {

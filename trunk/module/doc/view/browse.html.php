@@ -36,7 +36,12 @@ $(document).ready(function()
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-right'>
-      <?php if(common::hasPriv('doc', 'create')) echo html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID"), $lang->doc->create); ?>
+      <?php if(common::hasPriv('doc', 'create'))
+        $extra  = ($productID > 0) ? "&productID=$productID" : '';
+        $extra .= ($projectID > 0) ? "&projectID=$projectID" : '';
+        $link   = "libID=$libID&moduleID=$moduleID" . $extra;
+        echo html::a($this->createLink('doc', 'create', $link), $lang->doc->create);
+      ?>
     </div>
   </div>
 </div>
