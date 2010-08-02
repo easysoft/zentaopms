@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 902 2010-07-04 06:25:03Z wwccss $
+ * @version     $Id: zh-tw.php 988 2010-07-31 07:14:46Z wwccss $
  * @link        http://www.zentaoms.com
  */
 /* 欄位列表。*/
@@ -78,6 +78,7 @@ $lang->project->burn           = '燃盡圖';
 $lang->project->computeBurn    = '更新燃盡圖';
 $lang->project->burnData       = '燃盡圖數據';
 $lang->project->team           = '團隊成員';
+$lang->project->doc            = '文檔列表';
 $lang->project->manageProducts = '關聯產品';
 $lang->project->linkStory      = '關聯需求';
 $lang->project->view           = "基本信息";

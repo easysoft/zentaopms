@@ -26,6 +26,9 @@ class doc extends control
     public function __construct()
     {
         parent::__construct();
+        $this->loadModel('user');
+        $this->loadModel('tree');
+        $this->loadModel('action');
         $this->libs = $this->doc->getLibs();
     }
 
@@ -37,7 +40,6 @@ class doc extends control
     /* 浏览某一个产品。*/
     public function browse($libID = 'product', $moduleID = 0, $productID = 0, $projectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('tree');
         $this->doc->setMenu($this->libs, $libID, 'doc');
         $this->session->set('docList',   $this->app->getURI(true));
 
@@ -73,6 +75,8 @@ class doc extends control
         $this->view->pager         = $pager;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy       = $orderBy;
+        $this->view->productID     = $productID;
+        $this->view->projectID     = $projectID;
 
         $this->display();
     }
@@ -125,7 +129,66 @@ class doc extends control
             //$this->session->set('doc', '');     // 清除session。
             die(js::locate($this->createLink('doc', 'browse'), 'parent'));
         }
+    }
+    
+    /* 创建文档。extras是其他的参数，key和value之间使用=连接，多个键值对之间使用,隔开。*/
+    public function create($libID, $moduleID = 0, $productID = 0, $projectID = 0)
+    {
+        //if(empty($this->libs)) $this->locate($this->createLink('doc', 'createLib'));
 
+        if(!empty($_POST))
+        {
+            $docID = $this->doc->create();
+            if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->action->create('doc', $docID, 'Created');
+            $extra    = ($productID > 0) ? "&productID=$productID" : ''; 
+            $extra   .= ($projectID > 0) ? "&projectID=$projectID" : '';
+            $link     = "libID=$libID&module=$moduleID" . $extra;
+            die(js::locate($this->createLink('doc', 'browse', $link), 'parent'));
+        }
+
+        /* 设置当前的文档库，设置菜单。*/
+        //$docID = common::saveDocState($docID, key($this->libs));
+        $this->doc->setMenu($this->libs, $libID, 'doc');
+
+        /* 初始化变量。*/
+        $title     = '';
+        //$type      = '';
+        //$digest    = '';
+        //$content   = '';
+        //$keywords  = '';
+        //$url       = 'http://';
+        //views      = '';
+
+        /* 获得子模块列表。*/
+        if($libID == 'product' or $libID == 'project')
+        {
+            $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
+        }
+        else
+        {
+            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
+        }
+
+        /* 位置信息。*/
+        $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
+        $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
+        $this->view->position[]    = $this->lang->doc->create;
+
+        $this->view->libID            = $libID;
+        $this->view->users            = $this->user->getPairs('noclosed,nodeleted');
+        $this->view->title            = $title;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->moduleID         = $moduleID;
+        $this->view->productID        = $productID;
+        $this->view->projectID        = $projectID;
+        //$this->view->type      = $type;
+        //$this->view->digest    = $digest;
+        //$this->view->content   = $content;
+        //$this->view->keywords  = $keywords;
+        //$this->view->url       = $url;
+        //$this->view->views     = $views;
+        $this->display();
     }
 
 }

@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 947 2010-07-14 10:09:33Z yuren_@126.com $
+ * @version     $Id: zh-tw.php 972 2010-07-28 06:14:58Z wwccss $
  * @link        http://www.zentaoms.com
  */
 /* 欄位列表。*/
@@ -37,6 +37,7 @@ $lang->bug->severityAB     = '級別';
 $lang->bug->pri            = '優先順序';
 $lang->bug->type           = 'Bug類型';
 $lang->bug->os             = '操作系統';
+$lang->bug->hardware       = '硬件平台';
 $lang->bug->browser        = '瀏覽器';
 $lang->bug->machine        = '機器硬件';
 $lang->bug->found          = '如何發現';
@@ -77,6 +78,8 @@ $lang->bug->close          = '關閉Bug';
 $lang->bug->activate       = '激活Bug';
 $lang->bug->reportChart    = '報表統計';
 $lang->bug->delete         = '刪除Bug';
+$lang->bug->customFields   = '自定義欄位';
+$lang->bug->restoreDefault = '恢復預設';
 $lang->bug->ajaxGetUserBugs    = '介面:我的Bug';
 $lang->bug->confirmStoryChange = '確認需求變動';
 
@@ -105,6 +108,8 @@ $lang->bug->lblAssignedTo               = '當前指派';
 $lang->bug->lblMailto                   = '抄送給';
 $lang->bug->lblLastEdited               = '最後修改';
 $lang->bug->lblResolved                 = '由誰解決';
+$lang->bug->lblAllFields                = '所有欄位';
+$lang->bug->lblCustomFields             = '自定義欄位';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo   = '基本信息';
@@ -131,6 +136,7 @@ $lang->bug->buttonToList   = '返回';
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改產品會導致相應的項目、需求和任務發生變化，確定嗎？';
 $lang->bug->confirmDelete        = '您確認要刪除該Bug嗎？';
+$lang->bug->setTemplateTitle     = '請輸入bug模板標題（保存之前請先填寫bug重現步驟）：';
 
 /* 模板。*/
 $lang->bug->tblStep        = "[步驟]\n";
