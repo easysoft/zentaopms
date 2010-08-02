@@ -156,14 +156,12 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-
         /* 导航信息。*/
         $this->view->header->title = $this->lang->task->logEfforts;
         $this->view->position[]    = $this->lang->task->logEfforts;
 
         $this->display();
     }
-
 
     /* 查看任务。*/
     public function view($taskID)
@@ -213,7 +211,7 @@ class task extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action = !empty($changes) ? 'Started' : 'Commented';
                 $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
@@ -243,7 +241,7 @@ class task extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action = !empty($changes) ? 'Finished' : 'Commented';
                 $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
@@ -273,7 +271,7 @@ class task extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $action = !empty($changes) ? 'Canceled' : 'Commented';
                 $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);

@@ -57,11 +57,15 @@ $lang->action->desc->commented = '$date, Commented by <strong>$actor</strong>.';
 $lang->action->desc->activated = '$date, Activated by <strong>$actor</strong>.';
 $lang->action->desc->moved     = '$date, Moved by <strong>$actor</strong>, previouse is "$extra"';
 $lang->action->desc->confirmed = '$date, Confirmed by <strong>$actor</strong>, version is<strong>#$extra</strong>';
+$lang->action->desc->started   = '$date, Started by <strong>$actor</strong>.';
+$lang->action->desc->canceled  = '$date, Canceled by <strong>$actor</strong>.';
+$lang->action->desc->finished  = '$date, Finished by <strong>$actor</strong>.';
 $lang->action->desc->diff1     = 'Changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
 $lang->action->desc->diff2     = 'Changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>';
 
 /* 用来显示动态信息.*/
 $lang->action->label->opened              = 'opened';
+$lang->action->label->created             = 'created';
 $lang->action->label->changed             = 'changed';
 $lang->action->label->edited              = 'edited';
 $lang->action->label->closed              = 'closed';
@@ -79,6 +83,9 @@ $lang->action->label->unlinkedfromplan    = 'unlink from plan';
 $lang->action->label->linked2project      = 'link to project';
 $lang->action->label->unlinkedfromproject = 'unlik from project';
 $lang->action->label->marked              = 'edited';
+$lang->action->label->started             = 'started';
+$lang->action->label->canceled            = 'ccanceled';
+$lang->action->label->finished            = 'finished';
 $lang->action->label->login               = 'login';
 $lang->action->label->logout              = "logout";
 
@@ -94,6 +101,8 @@ $lang->action->label->bug         = 'bug|bug|view|bugID=%s';
 $lang->action->label->case        = 'case|testcase|view|caseID=%s';
 $lang->action->label->testtask    = 'test task|testtask|view|caseID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
+$lang->action->label->doclib      = 'doc library|doc|browse|libID=%s';
+$lang->action->label->doc         = 'doc|doc|view|docID=%s';
 $lang->action->label->user        = 'user';
 
-$lang->action->label->space     = '　';
+$lang->action->label->space     = ' ';

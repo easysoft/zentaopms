@@ -57,11 +57,15 @@ $lang->action->desc->commented = '$date, 由 <strong>$actor</strong> 发表评�
 $lang->action->desc->activated = '$date, 由 <strong>$actor</strong> 激活。';
 $lang->action->desc->moved     = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"';
 $lang->action->desc->confirmed = '$date, 由 <strong>$actor</strong> 确认需求变动，最新版本为<strong>#$extra</strong>';
+$lang->action->desc->started   = '$date, 由 <strong>$actor</strong> 启动。';
+$lang->action->desc->canceled  = '$date, 由 <strong>$actor</strong> 取消。';
+$lang->action->desc->finished  = '$date, 由 <strong>$actor</strong> 完成。';
 $lang->action->desc->diff1     = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />';
 $lang->action->desc->diff2     = '修改了 <strong><i>%s</i></strong>，区别为：<blockquote>%s</blockquote>';
 
 /* 用来显示动态信息。*/
 $lang->action->label->opened              = '创建了';
+$lang->action->label->created             = '创建了';
 $lang->action->label->changed             = '变更了';
 $lang->action->label->edited              = '编辑了';
 $lang->action->label->closed              = '关闭了';
@@ -79,6 +83,9 @@ $lang->action->label->unlinkedfromplan    = '移除计划';
 $lang->action->label->linked2project      = '关联项目';
 $lang->action->label->unlinkedfromproject = '移除项目';
 $lang->action->label->marked              = '编辑了';
+$lang->action->label->started             = '开始了';
+$lang->action->label->canceled            = '取消了';
+$lang->action->label->finished            = '完成了';
 $lang->action->label->login               = '登录系统';
 $lang->action->label->logout              = "退出登录";
 
@@ -94,6 +101,8 @@ $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = '用例|testcase|view|caseID=%s';
 $lang->action->label->testtask    = '测试任务|testtask|view|caseID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
+$lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
+$lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户';
 
 $lang->action->label->space     = '　';
