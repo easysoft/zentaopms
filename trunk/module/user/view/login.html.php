@@ -57,7 +57,7 @@ $(document).ready(function(){
       </tr>
       <tr>
         <td class='rowhead'>Language:</td>  
-        <td><?php echo html::select('lang', $config->langs, $this->cookie->lang, 'class=select-2 onchange=selectLang(this.value)');?></td>
+        <td><?php echo html::select('lang', $config->langs, $this->app->getClientLang(), 'class=select-2 onchange=selectLang(this.value)');?></td>
       </tr>
       <tr>
         <td colspan='2' class='a-center pt-20px'>
