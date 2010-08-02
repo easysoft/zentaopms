@@ -48,8 +48,8 @@ $(document).ready(function(){
     <table align='center' class='table-4'> 
       <caption id='welcome'><?php printf($lang->welcome, $app->company->name);?></caption>
       <tr>
-        <td class='rowhead pt-25px'><?php echo $lang->user->account;?>：</td>  
-        <td class='pt-25px'><input class='text-2' type='text' name='account' id='account' /></td>
+        <td class='rowhead pt-10px'><?php echo $lang->user->account;?>：</td>  
+        <td class='pt-10px'><input class='text-2' type='text' name='account' id='account' /></td>
       </tr>  
       <tr>
         <td class='rowhead'><?php echo $lang->user->password;?>：</td>  
