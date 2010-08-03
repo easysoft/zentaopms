@@ -53,7 +53,7 @@ $lang->user->story       = 'Story';
 $lang->user->team        = 'Team';
 $lang->user->editProfile = 'Edit profile';
 
-$lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b>』module's『<b>%s</b>』feature";
+$lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
 $lang->user->loginFailed = "Login failed, please check you account and password.";
 
 $lang->user->gendarList->m = 'Male';

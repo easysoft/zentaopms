@@ -78,6 +78,7 @@ $lang->resource->product->view   = 'view';
 $lang->resource->product->edit   = 'edit';
 $lang->resource->product->delete = 'delete';
 $lang->resource->product->roadmap= 'roadmap';
+$lang->resource->product->doc    = 'doc';
 $lang->resource->product->ajaxGetProjects = 'ajaxGetProjects';
 $lang->resource->product->ajaxGetPlans    = 'ajaxGetPlans';
 
@@ -127,6 +128,7 @@ $lang->resource->project->burn           = 'burn';
 $lang->resource->project->computeBurn    = 'computeBurn';
 $lang->resource->project->burnData       = 'burnData';
 $lang->resource->project->team           = 'team';
+$lang->resource->project->doc            = 'doc';
 $lang->resource->project->manageProducts = 'manageProducts';
 //$lang->resource->project->manageChilds   = 'manageChilds';
 $lang->resource->project->manageMembers  = 'manageMembers';
@@ -166,7 +168,11 @@ $lang->resource->bug->close               = 'close';
 $lang->resource->bug->report              = 'reportChart';
 $lang->resource->bug->confirmStoryChange  = 'confirmStoryChange';
 $lang->resource->bug->delete              = 'delete';
+$lang->resource->bug->saveTemplate        = 'saveTemplate';
+$lang->resource->bug->deleteTemplate      = 'deleteTemplate';
+$lang->resource->bug->customFields        = 'customFields';
 $lang->resource->bug->ajaxGetUserBugs     = 'ajaxGetUserBugs';
+$lang->resource->bug->ajaxGetModuleOwner  = 'ajaxGetModuleOwner';
 
 /* 测试用例。*/
 $lang->resource->testcase->index              = 'index';
@@ -203,6 +209,7 @@ $lang->resource->doc->create    = 'create';
 $lang->resource->doc->view      = 'view';
 $lang->resource->doc->edit      = 'edit';
 $lang->resource->doc->delete    = 'delete';
+$lang->resource->doc->deleteFile= 'deleteFile';
 
 /* 组织视图。*/
 $lang->resource->company->index  = 'index';

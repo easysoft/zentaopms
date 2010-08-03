@@ -78,9 +78,12 @@ $lang->bug->close          = 'Close Bug';
 $lang->bug->activate       = 'Activate Bug';
 $lang->bug->reportChart    = 'Report';
 $lang->bug->delete         = 'Delete Bug';
+$lang->bug->saveTemplate   = 'Save template';
+$lang->bug->deleteTemplate = 'Delete template';
 $lang->bug->customFields   = 'Custom Fields';
 $lang->bug->restoreDefault = 'Default';
 $lang->bug->ajaxGetUserBugs    = 'API: My Bugs';
+$lang->bug->ajaxGetModuleOwner = 'API: Get module default owner';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
 
 /* 查询条件列表。*/
