@@ -454,6 +454,8 @@ EOT;
             if(strtolower($key) == 'lastediteddate') continue;
             if(strtolower($key) == 'lasteditedby')   continue;
             if(strtolower($key) == 'assigneddate')   continue;
+            if(strtolower($key) == 'editedby')       continue;
+            if(strtolower($key) == 'editeddate')     continue;
 
             if($magicQuote) $value = stripslashes($value);
             if($value != $old->$key)
