@@ -132,7 +132,7 @@ function switchDocLib(libID, module, method, extra)
 {
     if(module == 'doc')
     {
-        if(method != 'view')
+        if(method != 'view' && method != 'edit')
         {
             link = createLink(module, method, "rootID=" + libID);
         }
