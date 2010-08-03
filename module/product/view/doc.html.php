@@ -28,7 +28,7 @@
 <div class='yui-d0'>
 
   <table class='table-1 fixed colored tablesorter' align='center'>
-    <caption class='caption-tr'><?php common::printLink('doc', 'create', "libID=product&productID={$product->id}", $lang->doc->create);?></caption>
+    <caption class='caption-tr'><?php common::printLink('doc', 'create', "libID=product&moduleID=0&productID={$product->id}&projectID=0&from=product", $lang->doc->create);?></caption>
     <thead>
       <tr class='colhead'>
         <th class='w-id'><?php echo $lang->idAB;?></th>
