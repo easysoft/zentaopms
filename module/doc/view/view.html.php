@@ -30,11 +30,6 @@ function deleteFile(fileID)
     if(!fileID) return;
     hiddenwin.location.href =createLink('doc', 'deleteFile', 'fileID=' + fileID);
 }
-$(document).ready(function()
-{
-    $(".right a").colorbox({width:500, height:200, iframe:true, transition:'none'});
-    $("#modulemenu a:contains('<?php echo $lang->doc->editLib;?>')").colorbox({width:500, height:200, iframe:true, transition:'none'});
-});
 </script>
 <div class='yui-d0'>
   <table class='table-1'>
@@ -49,13 +44,14 @@ $(document).ready(function()
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->files;?></th>
-      <td><?php 
-            foreach($doc->files as $file)
-            {
-                echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank');
-                echo html::commonButton('x', "onclick=deleteFile($file->id)");
-            }
-          ?>
+      <td>
+        <?php 
+        foreach($doc->files as $file)
+        {
+            echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank');
+            echo html::commonButton('x', "onclick=deleteFile($file->id)");
+        }
+        ?>
       </td>
     </tr>
   </table>
@@ -71,4 +67,4 @@ $(document).ready(function()
     ?>
   </div>
 <?php include '../../common/view/action.html.php';?>
-<?php include '../../common/view/footer.html.php';?>
+<?php include './footer.html.php';?>
