@@ -187,6 +187,8 @@ class doc extends control
         $this->view->moduleID         = $moduleID;
         $this->view->productID        = $productID;
         $this->view->projectID        = $projectID;
+        $this->view->products         = $this->loadModel('product')->getPairs();
+        $this->view->projects         = $this->loadModel('project')->getPairs();
         //$this->view->type      = $type;
         //$this->view->digest    = $digest;
         //$this->view->content   = $content;
