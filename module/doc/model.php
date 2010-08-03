@@ -110,6 +110,15 @@ class docModel extends model
             ->fetch();
         if(!$doc) return false;
         $doc->files = $this->loadModel('file')->getByObject('doc', $docID);
+
+        $doc->libName     = '';
+        $doc->productName = '';
+        $doc->projectName = '';
+        $doc->moduleName  = '';
+        if($doc->lib)     $doc->libName     = $this->dao->findByID($doc->lib)->from(TABLE_DOCLIB)->fetch('name');
+        if($doc->product) $doc->productName = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
+        if($doc->project) $doc->projectName = $this->dao->findByID($doc->project)->from(TABLE_PROJECT)->fetch('name');
+        if($doc->module)  $doc->moduleName  = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
         return $doc;
     }
 
@@ -166,13 +175,13 @@ class docModel extends model
     /* 获得某一个产品的文档列表。*/
     public function getProductDocs($productID)
     {
-        return $this->dao->findByProduct($productID)->from(TABLE_DOC)->fetchAll();
+        return $this->dao->findByProduct($productID)->from(TABLE_DOC)->andWhere('deleted')->eq(0)->fetchAll();
     }
 
     /* 获得某一个项目的文档列表。*/
     public function getProjectDocs($projectID)
     {
-        return $this->dao->findByProject($projectID)->from(TABLE_DOC)->fetchAll();
+        return $this->dao->findByProject($projectID)->from(TABLE_DOC)->andWhere('deleted')->eq(0)->fetchAll();
     }
 
     /* 获得产品的文档模块列表*/

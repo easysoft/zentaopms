@@ -28,12 +28,7 @@
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-right'>
-      <?php if(common::hasPriv('doc', 'create'))
-        $extra  = ($productID > 0) ? "&productID=$productID" : '';
-        $extra .= ($projectID > 0) ? "&projectID=$projectID" : '';
-        $link   = "libID=$libID&moduleID=$moduleID" . $extra;
-        echo html::a($this->createLink('doc', 'create', $link), $lang->doc->create);
-      ?>
+      <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>
     </div>
   </div>
 </div>

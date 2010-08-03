@@ -23,6 +23,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<script language='Javascript'>
+function loadProducts(project)
+{
+    link = createLink('project', 'ajaxGetProducts', 'projectID=' + project);
+    $('#productBox').load(link);
+}
+</script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table class='table-1'> 
@@ -35,7 +42,11 @@
       <?php elseif($libID == 'project'):?>
       <tr>
         <th class='rowhead'><?php echo $lang->doc->project;?></th>
-        <td><?php echo html::select('project', $projects, $projectID, "class='select-3'");?></td>
+        <td><?php echo html::select('project', $projects, $projectID, "class='select-3' onchange=loadProducts(this.value);");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->doc->product;?></th>
+        <td><span id='productBox'><?php echo html::select('product', $products, '', "class='select-3'");?></span></td>
       </tr>  
       <?php endif;?>
       <tr>
@@ -44,17 +55,14 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->doc->title;?></th>
-        <td><?php echo html::input('title', $title, "class='text-1'");?></td>
+        <td><?php echo html::input('title', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->doc->files;?></th>
         <td><?php echo $this->fetch('file', 'buildform', 'fileCount=2');?></td>
       </tr>  
       <tr>
-        <td colspan='2' class='a-center'>
-          <?php echo html::submitButton() . html::resetButton() . html::hidden('lib', $libID);?>
-          <?php echo html::hidden('product', $productID) . html::hidden('project', $projectID);?>
-        </td>
+        <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton() . html::hidden('lib', $libID);?></td>
       </tr>
     </table>
   </form>
