@@ -23,6 +23,7 @@
  */
 class doc extends control
 {
+    /* 构造函数，加载公用的模块。*/
     public function __construct()
     {
         parent::__construct();
@@ -32,12 +33,13 @@ class doc extends control
         $this->libs = $this->doc->getLibs();
     }
 
+    /* 首页，跳转到浏览页面。*/
     public function index()
     {
         $this->locate(inlink('browse'));
     }
 
-    /* 浏览某一个产品。*/
+    /* 浏览文档。*/
     public function browse($libID = 'product', $moduleID = 0, $productID = 0, $projectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->doc->setMenu($this->libs, $libID, 'doc');
@@ -113,11 +115,11 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
             die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent'));
-            //die(js::locate(inlink('view', "libID=$libID"), 'parent'));
         }
         
         $lib = $this->doc->getLibByID($libID);
         $this->view->libName = empty($lib) ? $libID : $lib->name;
+        $this->view->libID   = $libID;
         
         die($this->display());
     }
@@ -125,6 +127,7 @@ class doc extends control
     /* 删除文档库。*/
     public function deleteLib($libID, $confirm = 'no')
     {
+        if($libID == 'product' or $libID == 'project') die();
         if($confirm == 'no')
         {
             die(js::confirm($this->lang->doc->confirmDeleteLib, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
@@ -137,33 +140,47 @@ class doc extends control
     }
     
     /* 创建文档。*/
-    public function create($libID, $moduleID = 0, $productID = 0, $projectID = 0)
+    public function create($libID, $moduleID = 0, $productID = 0, $projectID = 0, $from = 'doc')
     {
-        //if(empty($this->libs)) $this->locate($this->createLink('doc', 'createLib'));
-
+        $projectID = (int)$projectID;
         if(!empty($_POST))
         {
             $docID = $this->doc->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->action->create('doc', $docID, 'Created');
-            $extra    = ($productID > 0) ? "&productID=$productID" : ''; 
-            $extra   .= ($projectID > 0) ? "&projectID=$projectID" : '';
-            $link     = "libID=$libID&module=$moduleID" . $extra;
-            die(js::locate($this->createLink('doc', 'browse', $link), 'parent'));
+            $this->action->create('doc', $docID, 'Created');
+
+            if($from == 'product') $link = $this->createLink('product', 'doc', "productID={$this->post->product}");
+            if($from == 'project') $link = $this->createLink('project', 'doc', "projectID={$this->post->project}");
+            if($from == 'doc')
+            {
+                $productID = intval($this->post->product);
+                $projectID = intval($this->post->project);
+                $vars = "libID=$libID&moduleID={$this->post->module}&productID=$productID&projectID=$projectID";
+                $link = $this->createLink('doc', 'browse', $vars);
+            }
+            die(js::locate($link, 'parent'));
         }
 
-        /* 设置当前的文档库，设置菜单。*/
-        //$docID = common::saveDocState($docID, key($this->libs));
-        $this->doc->setMenu($this->libs, $libID, 'doc');
+        $this->loadModel('product');
+        $this->loadModel('project');
 
-        /* 初始化变量。*/
-        $title     = '';
-        //$type      = '';
-        //$digest    = '';
-        //$content   = '';
-        //$keywords  = '';
-        //$url       = 'http://';
-        //views      = '';
+        /* 设置当前的文档库，设置菜单。*/
+        if($from == 'product')
+        {
+            $this->lang->doc->menu = $this->lang->product->menu;
+            $this->product->setMenu($this->product->getPairs(), $productID);
+            $this->lang->set('menugroup.doc', 'product');
+        }
+        elseif($from == 'project')
+        {
+            $this->lang->doc->menu = $this->lang->project->menu;
+            $this->project->setMenu($this->project->getPairs(), $projectID);
+            $this->lang->set('menugroup.doc', 'project');
+        }
+        else
+        {
+            $this->doc->setMenu($this->libs, $libID);
+        }
 
         /* 获得子模块列表。*/
         if($libID == 'product' or $libID == 'project')
@@ -181,20 +198,12 @@ class doc extends control
         $this->view->position[]    = $this->lang->doc->create;
 
         $this->view->libID            = $libID;
-        $this->view->users            = $this->user->getPairs('noclosed,nodeleted');
-        $this->view->title            = $title;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->moduleID         = $moduleID;
         $this->view->productID        = $productID;
         $this->view->projectID        = $projectID;
-        $this->view->products         = $this->loadModel('product')->getPairs();
+        $this->view->products         = $projectID == 0 ? $this->product->getPairs() : $this->project->getProducts($projectID);
         $this->view->projects         = $this->loadModel('project')->getPairs();
-        //$this->view->type      = $type;
-        //$this->view->digest    = $digest;
-        //$this->view->content   = $content;
-        //$this->view->keywords  = $keywords;
-        //$this->view->url       = $url;
-        //$this->view->views     = $views;
 
         $this->display();
     }
@@ -248,13 +257,6 @@ class doc extends control
         $this->view->moduleID         = $doc->module;
         $this->view->productID        = $doc->product;
         $this->view->projectID        = $doc->project;
-        //$this->view->type      = $type;
-        //$this->view->digest    = $digest;
-        //$this->view->content   = $content;
-        //$this->view->keywords  = $keywords;
-        //$this->view->url       = $url;
-        //$this->view->views     = $views;
-
         $this->display();
     }
 
@@ -266,28 +268,16 @@ class doc extends control
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
         
         /* 设置菜单。*/
-        $libID = $doc->lib;
         $this->doc->setMenu($this->libs, $doc->lib);
 
         /* 位置信息。*/
-        $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
-        $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
+        $this->view->header->title = $this->libs[$doc->lib] . $this->lang->colon . $this->lang->doc->create;
+        $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
         $this->view->position[]    = $this->lang->doc->create;
 
-        $this->view->doc       = $doc; 
-        $this->view->libID     = $libID;
-        $this->view->actions   = $this->loadModel('action')->getList('doc', $docID);
-        $this->view->users     = $this->user->getPairs('noclosed,nodeleted');
-        $this->view->title     = $doc->title;
-        $this->view->moduleID  = $doc->module;
-        $this->view->productID = $doc->product;
-        $this->view->projectID = $doc->project;
-        //$this->view->type      = $type;
-        //$this->view->digest    = $digest;
-        //$this->view->content   = $content;
-        //$this->view->keywords  = $keywords;
-        //$this->view->url       = $url;
-        //$this->view->views     = $views;
+        $this->view->doc     = $doc; 
+        $this->view->actions = $this->loadModel('action')->getList('doc', $docID);
+        $this->view->users   = $this->user->getPairs('noclosed,nodeleted');
 
         $this->display();
     }

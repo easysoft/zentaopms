@@ -39,8 +39,20 @@ function deleteFile(fileID)
       <td <?php if($doc->deleted) echo "class='deleted'";?>><?php echo $doc->title;?></td>
     </tr>
     <tr>
+      <th class='rowhead'><?php echo $lang->doc->lib;?></th>
+      <td><?php echo $doc->libName;?></td>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->doc->product;?></th>
-      <td><?php echo $doc->product;?></td>
+      <td><?php echo $doc->productName;?></td>
+    </tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->doc->project;?></th>
+      <td><?php echo $doc->projectName;?></td>
+    </tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->doc->module;?></th>
+      <td><?php echo $doc->moduleName;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->files;?></th>
