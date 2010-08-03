@@ -47,7 +47,7 @@
       ?>
       <tr class='a-center'>
         <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
-        <td><?php echo $modules[$doc->module];?></td>
+        <td><?php @print($modules[$doc->module]);?></td>
         <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
         <td><?php echo $users[$doc->addedBy];?></td>
         <td><?php echo $doc->addedDate;?></td>
@@ -55,7 +55,7 @@
           <?php 
           $vars = "doc={$doc->id}";
           if(!common::printLink('doc', 'edit',   $vars, $lang->edit)) echo $lang->edit;
-          if(!common::printLink('doc', 'delete', $vars, $lang->delete)) echo $lang->delete;
+          if(!common::printLink('doc', 'delete', $vars, $lang->delete, 'hiddenwin')) echo $lang->delete;
           ?>
         </td>
       </tr>
