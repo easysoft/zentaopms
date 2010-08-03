@@ -22,11 +22,11 @@
  * @link        http://www.zentaoms.com
  */
 /* 字段列表。*/
-$lang->doc->common         = 'DOC';
-$lang->doc->id             = 'DocID';
+$lang->doc->common         = 'Doc';
+$lang->doc->id             = 'ID';
 $lang->doc->product        = 'Product';
 $lang->doc->project        = 'Project';
-$lang->doc->lib            = 'DocLib';
+$lang->doc->lib            = 'Library';
 $lang->doc->module         = 'Module';
 $lang->doc->title          = 'Title';
 $lang->doc->digest         = 'Digest';
@@ -36,28 +36,28 @@ $lang->doc->keywords       = 'Keywords';
 $lang->doc->url            = 'URL';
 $lang->doc->files          = 'File';
 $lang->doc->views          = 'Views';
-$lang->doc->addedBy        = 'AddedBy';
-$lang->doc->addedDate      = 'AddedDate';
-$lang->doc->editedBy       = 'EditedBy';
-$lang->doc->editedDate     = 'EditedDate';
+$lang->doc->addedBy        = 'Added by';
+$lang->doc->addedDate      = 'Added date';
+$lang->doc->editedBy       = 'Edited by';
+$lang->doc->editedDate     = 'Edited date';
 
-$lang->doc->moduleName     = 'ModuleName';
-$lang->doc->moduleOrder    = 'ModuleOrder';
+$lang->doc->moduleName     = 'Module name';
+$lang->doc->moduleOrder    = 'Module order';
 
 /* 方法列表。*/
 $lang->doc->index          = 'Index';
-$lang->doc->create         = 'Create';
-$lang->doc->edit           = 'Edit';
-$lang->doc->delete         = 'Delete';
-$lang->doc->browse         = 'Browse';
-$lang->doc->view           = 'View';
-$lang->doc->createLib      = 'CreateLib';
-$lang->doc->editLib        = 'EditLib';
-$lang->doc->deleteLib      = 'DeleteLib';
-$lang->doc->libName        = 'LibName';
+$lang->doc->create         = 'Create doc';
+$lang->doc->edit           = 'Edit doc';
+$lang->doc->delete         = 'Delete doc';
+$lang->doc->browse         = 'Browse doc';
+$lang->doc->view           = 'View doc';
+$lang->doc->createLib      = 'Create library';
+$lang->doc->editLib        = 'Edit library';
+$lang->doc->deleteLib      = 'Delete library';
+$lang->doc->libName        = 'Library name';
 
-$lang->doc->systemLibs['product'] = 'ProductDoc';
-$lang->doc->systemLibs['project'] = 'ProjectDoc';
+$lang->doc->systemLibs['product'] = 'Product doc';
+$lang->doc->systemLibs['project'] = 'Project doc';
 
-$lang->doc->confirmDeleteLib = " Are you sure to delete this docLib？";
-$lang->doc->confirmDelete    = " Are you sure to delete this doc？";
+$lang->doc->confirmDeleteLib = " Are you sure to delete this doc library?";
+$lang->doc->confirmDelete    = " Are you sure to delete this doc?";
