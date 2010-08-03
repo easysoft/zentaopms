@@ -47,7 +47,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0rc2To1_0stable();
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -59,7 +59,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0rc2To1_0stable();
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -70,7 +70,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0rc2To1_0stable();
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
         }
         elseif($fromVersion == '0_6beta')
         {
@@ -80,7 +80,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0rc2To1_0stable();
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
         }
         elseif($fromVersion == '1_0beta')
         {
@@ -89,7 +89,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0rc2To1_0stable();
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
         }
         elseif($fromVersion == '1_0rc1')
         {
@@ -97,25 +97,29 @@ class upgradeModel extends model
             $this->upgradeFrom1_0rc2To1_0stable();
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
         }
         elseif($fromVersion == '1_0rc2')
         {
             $this->upgradeFrom1_0rc2To1_0stable();
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
         }
         elseif($fromVersion == '1_0')
         {
             $this->upgradeFrom1_0stableTo1_0_1();
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
         }
         elseif($fromVersion == '1_0_1')
         {
             $this->upgradeFrom1_0_1To1_1();
-            $this->upgradeFrom1_1_1To1_2();
+            $this->upgradeFrom1_1To1_2();
+        }
+        elseif($fromVersion == '1_1')
+        {
+            $this->upgradeFrom1_1To1_2();
         }
 
         $this->setting->setSN();
@@ -179,6 +183,10 @@ class upgradeModel extends model
         elseif($fromVersion == '1_0rc2' || $fromVersion == '1_0' || $fromVersion == '1_0_1')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
+        }
+        elseif($fromVersion == '1_1')
+        {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
         }
         
@@ -264,7 +272,13 @@ class upgradeModel extends model
         foreach($userConstants as $key => $value)
         {
             if(strpos($key, 'TABLE') === false) continue;
-            if($key == 'TABLE_COMPANY' or $key == 'TABLE_CONFIG' or $key == 'TABLE_USERQUERY') continue;
+            if($key == 'TABLE_COMPANY' or 
+                $key == 'TABLE_CONFIG' or 
+                $key == 'TABLE_USERQUERY' or
+                $key == 'TABLE_DOCLIB' or
+                $key == 'TABLE_DOC' or
+                $key == 'TABLE_USERTPL'
+            ) continue;
             $this->dbh->query("UPDATE $value SET company = '{$this->app->company->id}'");
         }
     }
