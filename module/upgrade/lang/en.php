@@ -46,3 +46,4 @@ $lang->upgrade->fromVersions['1_0rc1']    = '1.0 RC1';
 $lang->upgrade->fromVersions['1_0rc2']    = '1.0 RC2';
 $lang->upgrade->fromVersions['1_0']       = '1.0 STABLE';
 $lang->upgrade->fromVersions['1_0_1']     = '1.0.1';
+$lang->upgrade->fromVersions['1_1']       = '1.1';
