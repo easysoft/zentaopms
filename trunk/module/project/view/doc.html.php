@@ -27,7 +27,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <div class='yui-d0'>
 
-  <table class='table-6 fixed colored tablesorter' align='center'>
+  <table class='table-1 fixed colored tablesorter' align='center'>
     <caption class='caption-tr'><?php common::printLink('doc', 'create', "libID=project&projectID=$project->id", $lang->doc->create);?></caption>
     <thead>
       <tr class='colhead'>
