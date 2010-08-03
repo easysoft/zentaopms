@@ -170,7 +170,7 @@ $lang->bug->osList['win98']   = 'Windows 98';
 $lang->bug->osList['linux']   = 'Linux';
 $lang->bug->osList['freebsd'] = 'FreeBSD';
 $lang->bug->osList['unix']    = 'Unix';
-$lang->bug->osList['others']  = '其他';
+$lang->bug->osList['others']  = 'Others';
 
 $lang->bug->browserList['']         = '';
 $lang->bug->browserList['all']      = 'All';
