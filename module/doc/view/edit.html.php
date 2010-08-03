@@ -45,22 +45,22 @@ $(document).ready(function()
     <!--
       <tr>
         <th class='rowhead'><?php echo $lang->doc->type;?></th>
-        <td><?php echo html::input('type', $type, "class='text-1'");?></td>
+        <td><?php //echo html::input('type', $type, "class='text-1'");?></td>
       </tr>  
         <th class='rowhead'><?php echo $lang->doc->digest;?></th>
-        <td><?php echo html::input('digest', $digest, "class='text-1'");?></td>
+        <td><?php //echo html::input('digest', $digest, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->doc->content;?></th>
-        <td><?php echo html::textarea('content', $content, "rows='6' class='area-1'");?></td>
+        <td><?php //echo html::textarea('content', $content, "rows='6' class='area-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
-        <td><?php echo html::input('keywords', $keywords, "class='text-1'");?></td>
+        <td><?php //echo html::input('keywords', $keywords, "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->doc->url;?></th>
-        <td><?php echo html::input('url', $url, "class='text-1'");?></td>
+        <td><?php //echo html::input('url', $url, "class='text-1'");?></td>
       </tr>  
     -->
       <tr>
