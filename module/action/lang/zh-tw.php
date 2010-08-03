@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
+ * @version     $Id: zh-tw.php 1000 2010-08-03 01:49:25Z yuren_@126.com $
  * @link        http://www.zentaoms.com
  */
 $lang->action->common   = '系統日誌';
@@ -60,6 +60,9 @@ $lang->action->desc->commented = '$date, 由 <strong>$actor</strong> 發表評�
 $lang->action->desc->activated = '$date, 由 <strong>$actor</strong> 激活。';
 $lang->action->desc->moved     = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"';
 $lang->action->desc->confirmed = '$date, 由 <strong>$actor</strong> 確認需求變動，最新版本為<strong>#$extra</strong>';
+$lang->action->desc->started   = '$date, 由 <strong>$actor</strong> 啟動。';
+$lang->action->desc->canceled  = '$date, 由 <strong>$actor</strong> 取消。';
+$lang->action->desc->finished  = '$date, 由 <strong>$actor</strong> 完成。';
 $lang->action->desc->diff1     = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />';
 $lang->action->desc->diff2     = '修改了 <strong><i>%s</i></strong>，區別為：<blockquote>%s</blockquote>';
 
@@ -83,6 +86,9 @@ $lang->action->label->unlinkedfromplan    = '移除計劃';
 $lang->action->label->linked2project      = '關聯項目';
 $lang->action->label->unlinkedfromproject = '移除項目';
 $lang->action->label->marked              = '編輯了';
+$lang->action->label->started             = '開始了';
+$lang->action->label->canceled            = '取消了';
+$lang->action->label->finished            = '完成了';
 $lang->action->label->login               = '登錄系統';
 $lang->action->label->logout              = "退出登錄";
 
@@ -98,7 +104,8 @@ $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = '用例|testcase|view|caseID=%s';
 $lang->action->label->testtask    = '測試任務|testtask|view|caseID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
-$lang->action->label->user        = '用戶';
+$lang->action->label->doclib      = '文檔庫|doc|browse|libID=%s';
 $lang->action->label->doc         = '文檔|doc|view|docID=%s';
+$lang->action->label->user        = '用戶';
 
 $lang->action->label->space     = '　';

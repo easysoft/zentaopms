@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 918 2010-07-06 01:51:26Z wwccss $
+ * @version     $Id: zh-tw.php 999 2010-08-03 01:27:04Z yuren_@126.com $
  * @link        http://www.zentaoms.com
  */
 $lang->group->common       = '權限分組';
