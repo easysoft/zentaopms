@@ -645,4 +645,11 @@ class project extends control
             exit;
         }
     }
+
+    /* 获得某一项目所对应的产品。*/
+    public function ajaxGetProducts($projectID)
+    {
+        $products = $this->project->getProducts($projectID);
+        die(html::select('product', $products, '', 'class="select-3"'));
+    }
 }

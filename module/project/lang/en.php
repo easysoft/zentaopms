@@ -90,6 +90,7 @@ $lang->project->manageMembers  = 'Manage team members';
 $lang->project->unlinkMember   = 'Remove member';
 $lang->project->unlinkStory    = 'Remove story';
 $lang->project->importTask     = 'Import tasks undone';
+$lang->project->ajaxGetProducts= "API: get project's products";
 
 /* 分组浏览.*/
 $lang->project->listTask            = 'List';

@@ -90,6 +90,7 @@ $lang->project->manageMembers  = '團隊管理';
 $lang->project->unlinkMember   = '移除成員';
 $lang->project->unlinkStory    = '移除需求';
 $lang->project->importTask     = '導入之前未完';
+$lang->project->ajaxGetProducts= "介面：獲得項目產品列表";
 
 /* 分組瀏覽。*/
 $lang->project->listTask            = '列表方式';
