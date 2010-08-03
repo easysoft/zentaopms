@@ -42,11 +42,14 @@ $lang->action->objectTypes['bug']         = 'Bug';
 $lang->action->objectTypes['case']        = 'Case';
 $lang->action->objectTypes['testtask']    = 'Test Task';
 $lang->action->objectTypes['user']        = 'User';
+$lang->action->objectTypes['doc']         = 'DOC';
+$lang->action->objectTypes['doclib']      = 'DocLib';
 
 /* 用来描述操作历史记录.*/
 $lang->action->desc->common    = '$date, <strong>$action</strong> by <strong>$actor</strong>';
 $lang->action->desc->extra     = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->opened    = '$date, Opened by <strong>$actor</strong>.';
+$lang->action->desc->created   = '$date, Created by <strong>$actor</strong>.';
 $lang->action->desc->changed   = '$date, Changed by <strong>$actor</strong>.';
 $lang->action->desc->edited    = '$date, Edited by <strong>$actor</strong>.';
 $lang->action->desc->closed    = '$date, Closed by <strong>$actor</strong>.';

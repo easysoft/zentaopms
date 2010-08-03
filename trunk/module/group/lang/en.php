@@ -191,6 +191,19 @@ $lang->resource->testtask->unlinkcase  = 'lblUnlinkCase';
 $lang->resource->testtask->runcase     = 'lblRunCase';
 $lang->resource->testtask->results     = 'lblResults';
 
+/* 文档视图。*/
+$lang->resource->doc->index = 'index';
+
+/* 文档。*/
+$lang->resource->doc->browse    = 'browse';
+$lang->resource->doc->createLib = 'createLib';
+$lang->resource->doc->editLib   = 'editLib';
+$lang->resource->doc->deleteLib = 'deleteLib';
+$lang->resource->doc->create    = 'create';
+$lang->resource->doc->view      = 'view';
+$lang->resource->doc->edit      = 'edit';
+$lang->resource->doc->delete    = 'delete';
+
 /* 组织视图。*/
 $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
