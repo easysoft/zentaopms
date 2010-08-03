@@ -201,6 +201,7 @@ $lang->resource->testtask->results     = 'lblResults';
 $lang->resource->doc->index = 'index';
 
 /* 文檔。*/
+$lang->resource->doc->index     = 'index';
 $lang->resource->doc->browse    = 'browse';
 $lang->resource->doc->createLib = 'createLib';
 $lang->resource->doc->editLib   = 'editLib';
