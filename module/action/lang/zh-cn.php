@@ -69,7 +69,6 @@ $lang->action->desc->diff2     = '修改了 <strong><i>%s</i></strong>，区别�
 /* 用来显示动态信息。*/
 $lang->action->label->created             = '创建了';
 $lang->action->label->opened              = '创建了';
-$lang->action->label->created             = '创建了';
 $lang->action->label->changed             = '变更了';
 $lang->action->label->edited              = '编辑了';
 $lang->action->label->closed              = '关闭了';
@@ -108,6 +107,5 @@ $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户';
-$lang->action->label->doc         = '文档|doc|view|docID=%s';
 
 $lang->action->label->space     = '　';
