@@ -16,18 +16,19 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `addedDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
-  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- doc lib
 CREATE TABLE IF NOT EXISTS `zt_docLib` (
-    `id` smallint(5) unsigned NOT NULL auto_increment,
-    `company` smallint(5) unsigned NOT NULL,
-    `name` varchar(60) NOT NULL,
-    `deleted` enum('0','1') NOT NULL DEFAULT '0',
-    PRIMARY KEY  (`id`),
-    KEY `site` (`company`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `id` smallint(5) unsigned NOT NULL auto_increment,
+  `company` smallint(5) unsigned NOT NULL,
+  `name` varchar(60) NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY  (`id`),
+  KEY `company` (`company`)
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- module
 ALTER TABLE `zt_module` CHANGE `product` `root` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `zt_module` CHANGE `view` `type` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
@@ -52,4 +53,3 @@ ADD `whitelist` VARCHAR( 255 ) NOT NULL AFTER `acl` ;
 -- product owner.
 ALTER TABLE `zt_product` ADD `productOwner` VARCHAR( 30 ) NOT NULL AFTER `desc` ,
 ADD `bugOwner` VARCHAR( 30 ) NOT NULL AFTER `productOwner` ;
-
