@@ -87,9 +87,15 @@ class doc extends control
         if(!empty($_POST))
         {
             $libID = $this->doc->createLib();
-            if(dao::isError()) die(js::error(dao::getError()));
-            $this->loadModel('action')->create('docLib', $libID, 'Created');
-            die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent'));
+            if(!dao::isError())
+            {
+                $this->loadModel('action')->create('docLib', $libID, 'Created');
+                die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent'));
+            }
+            else
+            {
+                echo js::error(dao::getError());
+            }
         }
         die($this->display());
     }
