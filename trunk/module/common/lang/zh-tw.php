@@ -125,7 +125,7 @@ $lang->product->menu->story  = array('link' => '需求列表|product|browse|prod
 $lang->product->menu->plan   = array('link' => '計劃列表|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release= array('link' => '發佈列表|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap= '路線圖|product|roadmap|productID=%s';
-$lang->product->menu->doc    = '文檔列表|product|doc|productID=%s';
+$lang->product->menu->doc    = array('link' => '文檔列表|product|doc|productID=%s', 'subModule' => 'doc');
 $lang->product->menu->view   = '基本信息|product|view|productID=%s';
 $lang->product->menu->edit   = '編輯產品|product|edit|productID=%s';
 $lang->product->menu->module = '維護模組|tree|browse|productID=%s&view=story';
@@ -143,7 +143,7 @@ $lang->project->menu->bug       = 'Bug列表|project|bug|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->burn      = '燃盡圖|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊成員|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->doc       = '文檔列表|project|doc|porjectID=%s';
+$lang->project->menu->doc       = array('link' => '文檔列表|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '關聯產品|project|manageproducts|projectID=%s';
 $lang->project->menu->linkstory = array('link' => '關聯需求|project|linkstory|projectID=%s');
 $lang->project->menu->view      = '基本信息|project|view|projectID=%s';
