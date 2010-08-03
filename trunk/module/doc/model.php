@@ -175,13 +175,13 @@ class docModel extends model
     /* 获得某一个产品的文档列表。*/
     public function getProductDocs($productID)
     {
-        return $this->dao->findByProduct($productID)->from(TABLE_DOC)->andWhere('deleted')->eq(0)->fetchAll();
+        return $this->dao->findByProduct($productID)->from(TABLE_DOC)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchAll();
     }
 
     /* 获得某一个项目的文档列表。*/
     public function getProjectDocs($projectID)
     {
-        return $this->dao->findByProject($projectID)->from(TABLE_DOC)->andWhere('deleted')->eq(0)->fetchAll();
+        return $this->dao->findByProject($projectID)->from(TABLE_DOC)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchAll();
     }
 
     /* 获得产品的文档模块列表*/
