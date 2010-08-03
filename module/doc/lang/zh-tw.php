@@ -22,7 +22,7 @@
  * @link        http://www.zentaoms.com
  */
 /* 欄位列表。*/
-$lang->doc->common         = '缺陷管理';
+$lang->doc->common         = '文檔視圖';
 $lang->doc->id             = '文檔編號';
 $lang->doc->product        = '所屬產品';
 $lang->doc->product        = '所屬項目';
@@ -48,13 +48,16 @@ $lang->doc->moduleOrder    = '模組排序';
 $lang->doc->index          = '首頁';
 $lang->doc->create         = '創建文檔';
 $lang->doc->edit           = '編輯文檔';
+$lang->doc->delete         = '刪除文檔';
 $lang->doc->browse         = '文檔列表';
 $lang->doc->view           = '文檔詳情';
 $lang->doc->createLib      = '創建文檔庫';
 $lang->doc->editLib        = '編輯文檔庫';
+$lang->doc->deleteLib      = '刪除文檔庫';
 $lang->doc->libName        = '文檔庫名稱';
 
 $lang->doc->systemLibs['product'] = '產品文檔庫';
 $lang->doc->systemLibs['project'] = '項目文檔庫';
 
-$lang->doc->confirmDeleteLib      = " 您確定刪除該文檔庫嗎？";
+$lang->doc->confirmDeleteLib = " 您確定刪除該文檔庫嗎？";
+$lang->doc->confirmDelete    = " 您確定刪除該文檔嗎？";

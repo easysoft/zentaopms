@@ -126,12 +126,11 @@ class doc extends control
         else
         {
             $this->doc->delete(TABLE_DOCLIB, $libID);
-            //$this->session->set('doc', '');     // 清除session。
             die(js::locate($this->createLink('doc', 'browse'), 'parent'));
         }
     }
     
-    /* 创建文档。extras是其他的参数，key和value之间使用=连接，多个键值对之间使用,隔开。*/
+    /* 创建文档。*/
     public function create($libID, $moduleID = 0, $productID = 0, $projectID = 0)
     {
         //if(empty($this->libs)) $this->locate($this->createLink('doc', 'createLib'));
@@ -188,7 +187,121 @@ class doc extends control
         //$this->view->keywords  = $keywords;
         //$this->view->url       = $url;
         //$this->view->views     = $views;
+
         $this->display();
     }
 
+    /* 编辑文档。*/
+    public function edit($docID)
+    {
+        /* 更新文档信息。*/
+        if(!empty($_POST))
+        {
+            $changes  = $this->doc->update($docID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $files = $this->loadModel('file')->saveUpload('doc', $docID);
+            if(!empty($changes) or !empty($files))
+            {
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $fileAction = '';
+                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+                $actionID = $this->action->create('doc', $docID, $action, $fileAction);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
+        }
+
+        /* 查找当前文档信息。*/
+        $doc = $this->doc->getById($docID);
+
+        /* 设置菜单。*/
+        $libID = $doc->lib;
+        $this->doc->setMenu($this->libs, $libID);
+
+        /* 获得子模块列表。*/
+        if($libID == 'product' or $libID == 'project')
+        {
+            $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
+        }
+        else
+        {
+            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
+        }
+
+        /* 位置信息。*/
+        $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
+        $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
+        $this->view->position[]    = $this->lang->doc->create;
+
+        $this->view->libID            = $libID;
+        $this->view->users            = $this->user->getPairs('noclosed,nodeleted');
+        $this->view->title            = $doc->title;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->moduleID         = $doc->module;
+        $this->view->productID        = $doc->product;
+        $this->view->projectID        = $doc->project;
+        //$this->view->type      = $type;
+        //$this->view->digest    = $digest;
+        //$this->view->content   = $content;
+        //$this->view->keywords  = $keywords;
+        //$this->view->url       = $url;
+        //$this->view->views     = $views;
+
+        $this->display();
+    }
+
+    /* 查看一个文档。*/
+    public function view($docID)
+    {
+        /* 查找文档信息。*/
+        $doc = $this->doc->getById($docID);
+        if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
+        
+        /* 设置菜单。*/
+        $libID = $doc->lib;
+        $this->doc->setMenu($this->libs, $doc->lib);
+
+        /* 位置信息。*/
+        $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
+        $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
+        $this->view->position[]    = $this->lang->doc->create;
+
+        $this->view->doc       = $doc; 
+        $this->view->libID     = $libID;
+        $this->view->actions   = $this->loadModel('action')->getList('doc', $docID);
+        $this->view->users     = $this->user->getPairs('noclosed,nodeleted');
+        $this->view->title     = $doc->title;
+        $this->view->moduleID  = $doc->module;
+        $this->view->productID = $doc->product;
+        $this->view->projectID = $doc->project;
+        //$this->view->type      = $type;
+        //$this->view->digest    = $digest;
+        //$this->view->content   = $content;
+        //$this->view->keywords  = $keywords;
+        //$this->view->url       = $url;
+        //$this->view->views     = $views;
+
+        $this->display();
+    }
+
+    /* 删除文档。*/
+    public function delete($docID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->doc->confirmDelete, inlink('delete', "docID=$docID&confirm=yes")));
+        }
+        else
+        {
+            $this->doc->delete(TABLE_DOC, $docID);
+            die(js::locate($this->session->docList, 'parent'));
+        }
+    }
+
+    /* 删除一个文件。*/
+    public function deleteFile($fileID)
+    {
+        $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+        die(js::reload('parent'));
+    }
 }

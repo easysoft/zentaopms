@@ -22,7 +22,7 @@
  * @link        http://www.zentaoms.com
  */
 /* 字段列表。*/
-$lang->doc->common         = '缺陷管理';
+$lang->doc->common         = '文档视图';
 $lang->doc->id             = '文档编号';
 $lang->doc->product        = '所属产品';
 $lang->doc->product        = '所属项目';
@@ -48,13 +48,16 @@ $lang->doc->moduleOrder    = '模块排序';
 $lang->doc->index          = '首页';
 $lang->doc->create         = '创建文档';
 $lang->doc->edit           = '编辑文档';
+$lang->doc->delete         = '删除文档';
 $lang->doc->browse         = '文档列表';
 $lang->doc->view           = '文档详情';
 $lang->doc->createLib      = '创建文档库';
 $lang->doc->editLib        = '编辑文档库';
+$lang->doc->deleteLib      = '删除文档库';
 $lang->doc->libName        = '文档库名称';
 
 $lang->doc->systemLibs['product'] = '产品文档库';
 $lang->doc->systemLibs['project'] = '项目文档库';
 
-$lang->doc->confirmDeleteLib      = " 您确定删除该文档库吗？";
+$lang->doc->confirmDeleteLib = " 您确定删除该文档库吗？";
+$lang->doc->confirmDelete    = " 您确定删除该文档吗？";

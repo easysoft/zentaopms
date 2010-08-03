@@ -20,7 +20,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
- * @version     $Id: zh-tw.php 988 2010-07-31 07:14:46Z wwccss $
+ * @version     $Id: zh-tw.php 993 2010-08-02 10:20:01Z wwccss $
  * @link        http://www.zentaoms.com
  */
 $lang->arrow        = ' » ';
@@ -53,6 +53,7 @@ $lang->confirm      = '確認';
 $lang->preview      = '預覽';
 $lang->goback       = '返回';
 $lang->showHelp     = '顯示幫助';
+$lang->closeHelp    = '關閉幫助';
 $lang->go           = 'GO!';
 
 $lang->actions      = '操作';
@@ -275,7 +276,7 @@ $lang->smilies->angry       = '憤怒';
 $lang->smilies->cool        = '耍酷';
 $lang->smilies->indifferent = '冷漠';
 $lang->smilies->sick        = '病中';
-$lang->smilies->blush       = '尷尬';
+$lang->smilies->blush       = '臉紅';
 $lang->smilies->angel       = '天使';
 $lang->smilies->confused    = '困惑';
 $lang->smilies->cry         = '大哭';

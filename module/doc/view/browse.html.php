@@ -76,7 +76,7 @@ $(document).ready(function()
               <?php 
               $vars = "doc={$doc->id}";
               if(!common::printLink('doc', 'edit',   $vars, $lang->edit)) echo $lang->edit;
-              if(!common::printLink('doc', 'delete', $vars, $lang->delete)) echo $lang->delete;
+              if(!common::printLink('doc', 'delete', $vars, $lang->delete, 'hiddenwin')) echo $lang->delete;
               ?>
             </td>
           </tr>

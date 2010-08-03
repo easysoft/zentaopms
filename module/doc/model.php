@@ -101,6 +101,18 @@ class docModel extends model
             ->fetchAll();
     }
 
+    /* 获取一个文档的详细信息。*/
+    public function getById($docID)
+    {
+        $doc = $this->dao->select('*')
+            ->from(TABLE_DOC)
+            ->where('id')->eq((int)$docID)
+            ->fetch();
+        if(!$doc) return false;
+        $doc->files = $this->loadModel('file')->getByObject('doc', $docID);
+        return $doc;
+    }
+
     /* 创建一个文档。*/
     public function create()
     {
@@ -108,9 +120,9 @@ class docModel extends model
         $doc = fixer::input('post')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
-            ->setDefault('product, project', 0)
-            ->specialChars('title, module')    //type, digest, content, keyword
-            ->cleanInt('product, project')
+            ->setDefault('product, project, module', 0)
+            ->specialChars('title')    //type, digest, content, keyword
+            ->cleanInt('product, project, module')
             ->remove('files, labels')
             ->get();
         $this->dao->insert(TABLE_DOC)
@@ -128,6 +140,29 @@ class docModel extends model
         return false;
     }
 
+    /* 更新文档信息。*/
+    public function update($docID)
+    {
+        $oldDoc = $this->getById($docID);
+        $now = helper::now();
+        $doc = fixer::input('post')
+            ->cleanInt('product, project, module')
+            ->specialChars('title')
+            ->remove('files, labels')
+            ->setDefault('project,project, module', 0)
+            ->add('editedBy',   $this->app->user->account)
+            ->add('editedDate', $now)
+            ->get();
+
+        $this->dao->update(TABLE_DOC)->data($doc)
+            ->autoCheck()
+            ->batchCheck($this->config->doc->edit->requiredFields, 'notempty')
+            ->check('title', 'unique', "id != $docID")
+            ->where('id')->eq((int)$docID)
+            ->exec();
+        if(!dao::isError()) return common::createChanges($oldDoc, $doc);
+    }
+ 
     /* 获得某一个产品的文档列表。*/
     public function getProductDocs($productID)
     {
