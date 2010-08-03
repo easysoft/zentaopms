@@ -31,9 +31,20 @@ $(document).ready(function()
 });
 </script>
 <div class='yui-d0'>
-  <form method='post' enctype='multipart/form-data' target='hiddenwin2'>
+  <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table class='table-1'> 
       <caption><?php echo $lang->doc->create;?></caption>
+      <?php if($libID == 'product'):?>
+      <tr>
+        <th class='rowhead'><?php echo $lang->doc->product;?></th>
+        <td><?php echo html::select('product', $products, $productID, "class='select-3'");?></td>
+      </tr>  
+      <?php elseif($libID == 'project'):?>
+      <tr>
+        <th class='rowhead'><?php echo $lang->doc->project;?></th>
+        <td><?php echo html::select('project', $projects, $projectID, "class='select-3'");?></td>
+      </tr>  
+      <?php endif;?>
       <tr>
         <th class='rowhead'><?php echo $lang->doc->module;?></th>
         <td><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='select-3'");?></td>

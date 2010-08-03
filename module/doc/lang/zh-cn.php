@@ -25,7 +25,7 @@
 $lang->doc->common         = '文档视图';
 $lang->doc->id             = '文档编号';
 $lang->doc->product        = '所属产品';
-$lang->doc->product        = '所属项目';
+$lang->doc->project        = '所属项目';
 $lang->doc->lib            = '所属文档库';
 $lang->doc->module         = '所属分类';
 $lang->doc->title          = '文档标题';

@@ -33,7 +33,7 @@ $(document).ready(function()
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table class='table-1'> 
-      <caption><?php echo $lang->doc->create;?></caption>
+      <caption><?php echo $lang->doc->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->doc->module;?></th>
         <td><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='select-3'");?></td>

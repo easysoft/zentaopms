@@ -25,7 +25,7 @@
 $lang->doc->common         = '文檔視圖';
 $lang->doc->id             = '文檔編號';
 $lang->doc->product        = '所屬產品';
-$lang->doc->product        = '所屬項目';
+$lang->doc->project        = '所屬項目';
 $lang->doc->lib            = '所屬文檔庫';
 $lang->doc->module         = '所屬分類';
 $lang->doc->title          = '文檔標題';
