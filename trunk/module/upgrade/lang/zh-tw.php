@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
- * @version     $Id: zh-tw.php 923 2010-07-06 02:24:09Z wwccss $
+ * @version     $Id: zh-tw.php 998 2010-08-03 01:26:10Z wwccss $
  * @link        http://www.zentaoms.com
  */
 $lang->upgrade->common  = '升級';
@@ -52,3 +52,4 @@ $lang->upgrade->fromVersions['1_0rc1']    = '1.0 RC1';
 $lang->upgrade->fromVersions['1_0rc2']    = '1.0 RC2';
 $lang->upgrade->fromVersions['1_0']       = '1.0 STABLE';
 $lang->upgrade->fromVersions['1_0_1']     = '1.0.1';
+$lang->upgrade->fromVersions['1_1']       = '1.1';
