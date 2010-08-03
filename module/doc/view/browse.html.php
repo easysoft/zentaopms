@@ -25,13 +25,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<script language='Javascript'>
-$(document).ready(function()
-{
-    $(".right a").colorbox({width:500, height:200, iframe:true, transition:'none'});
-    $("#modulemenu a:contains('<?php echo $lang->doc->editLib;?>')").colorbox({width:500, height:200, iframe:true, transition:'none'});
-});
-</script>
 
 <div class='yui-d0'>
   <div id='featurebar'>
@@ -53,7 +46,7 @@ $(document).ready(function()
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
           <tr class='colhead'>
-            <?php $vars = "libID=$libID&module=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
             <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
             <th class='w-100px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?></th>
