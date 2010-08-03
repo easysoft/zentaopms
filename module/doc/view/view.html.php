@@ -57,7 +57,7 @@ function deleteFile(fileID)
   </table>
   <div class='a-center f-16px strong'>
     <?php
-    $browseLink = $this->session->docList ? $this->session->docList : inlink('browse', "docID=$doc->id");
+    $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');
     if(!$doc->deleted)
     {
         common::printLink('doc', 'edit',   "docID=$doc->id", $lang->edit);
