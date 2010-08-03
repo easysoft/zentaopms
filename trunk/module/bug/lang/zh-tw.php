@@ -78,9 +78,12 @@ $lang->bug->close          = '關閉Bug';
 $lang->bug->activate       = '激活Bug';
 $lang->bug->reportChart    = '報表統計';
 $lang->bug->delete         = '刪除Bug';
+$lang->bug->saveTemplate   = '保存模板';
+$lang->bug->deleteTemplate = '刪除模板';
 $lang->bug->customFields   = '自定義欄位';
 $lang->bug->restoreDefault = '恢復預設';
 $lang->bug->ajaxGetUserBugs    = '介面:我的Bug';
+$lang->bug->ajaxGetModuleOwner = '介面:獲得模塊的默認指派人';
 $lang->bug->confirmStoryChange = '確認需求變動';
 
 /* 查詢條件列表。*/

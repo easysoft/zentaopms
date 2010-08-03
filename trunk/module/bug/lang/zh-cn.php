@@ -78,9 +78,12 @@ $lang->bug->close          = '关闭Bug';
 $lang->bug->activate       = '激活Bug';
 $lang->bug->reportChart    = '报表统计';
 $lang->bug->delete         = '删除Bug';
+$lang->bug->saveTemplate   = '保存模板';
+$lang->bug->deleteTemplate = '删除模板';
 $lang->bug->customFields   = '自定义字段';
 $lang->bug->restoreDefault = '恢复默认';
 $lang->bug->ajaxGetUserBugs    = '接口:我的Bug';
+$lang->bug->ajaxGetModuleOwner = '接口:获得模块的默认指派人';
 $lang->bug->confirmStoryChange = '确认需求变动';
 
 /* 查询条件列表。*/

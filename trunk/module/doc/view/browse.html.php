@@ -100,6 +100,5 @@ $(document).ready(function()
 </div>  
 <script language='javascript'>
 $('#module<?php echo $moduleID;?>').addClass('active')
-$('#<?php echo $browseType;?>Tab').addClass('active')
 </script>
 <?php include '../../common/view/footer.html.php';?>
