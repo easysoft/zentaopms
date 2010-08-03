@@ -163,8 +163,8 @@ $(function() {
       <table class='table-1 bd-none'>
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
-          <legend><?php echo $lang->bug->legendSteps;?></legend>
-            <legend class='w-p90'><?php echo html::textarea('steps', $bug->steps, "rows='8' class='xhe'");?></legend>
+            <legend><?php echo $lang->bug->legendSteps;?></legend>
+            <div class='w-p90'><?php echo html::textarea('steps', $bug->steps, "rows='8' class='xhe'");?></div>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendComment;?></legend>
