@@ -125,7 +125,7 @@ $lang->product->menu->story  = array('link' => 'Story|product|browse|productID=%
 $lang->product->menu->plan   = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release= array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap= 'Roadmap|product|roadmap|productID=%s';
-$lang->product->menu->doc    = 'Doc|product|doc|productID=%s';
+$lang->product->menu->doc    = array('link' => 'Doc|product|doc|productID=%s', 'subModule' => 'doc');
 $lang->product->menu->view   = 'Info|product|view|productID=%s';
 $lang->product->menu->edit   = 'Edit|product|edit|productID=%s';
 $lang->product->menu->module = 'Modules|tree|browse|productID=%s&view=story';
@@ -143,7 +143,7 @@ $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->burn      = 'Burn|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->doc       = 'Doc|project|doc|porjectID=%s';
+$lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = 'Link Product|project|manageproducts|projectID=%s';
 $lang->project->menu->linkstory = array('link' => 'Link Story|project|linkstory|projectID=%s');
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
