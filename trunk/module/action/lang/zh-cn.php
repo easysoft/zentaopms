@@ -42,11 +42,14 @@ $lang->action->objectTypes['bug']         = 'Bug';
 $lang->action->objectTypes['case']        = '用例';
 $lang->action->objectTypes['testtask']    = '测试任务';
 $lang->action->objectTypes['user']        = '用户';
+$lang->action->objectTypes['doc']         = '文档';
+$lang->action->objectTypes['doclib']      = '文档库';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc->common    = '$date, <strong>$action</strong> by <strong>$actor</strong>';
 $lang->action->desc->extra     = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->opened    = '$date, 由 <strong>$actor</strong> 创建。';
+$lang->action->desc->created   = '$date, 由 <strong>$actor</strong> 创建。';
 $lang->action->desc->changed   = '$date, 由 <strong>$actor</strong> 变更。';
 $lang->action->desc->edited    = '$date, 由 <strong>$actor</strong> 编辑。';
 $lang->action->desc->closed    = '$date, 由 <strong>$actor</strong> 关闭。';
@@ -64,6 +67,7 @@ $lang->action->desc->diff1     = '修改了 <strong><i>%s</i></strong>，旧值�
 $lang->action->desc->diff2     = '修改了 <strong><i>%s</i></strong>，区别为：<blockquote>%s</blockquote>';
 
 /* 用来显示动态信息。*/
+$lang->action->label->created             = '创建了';
 $lang->action->label->opened              = '创建了';
 $lang->action->label->created             = '创建了';
 $lang->action->label->changed             = '变更了';
@@ -104,5 +108,6 @@ $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户';
+$lang->action->label->doc         = '文档|doc|view|docID=%s';
 
 $lang->action->label->space     = '　';

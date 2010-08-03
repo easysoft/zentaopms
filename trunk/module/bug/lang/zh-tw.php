@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 972 2010-07-28 06:14:58Z wwccss $
+ * @version     $Id: zh-tw.php 993 2010-08-02 10:20:01Z wwccss $
  * @link        http://www.zentaoms.com
  */
 /* 欄位列表。*/
@@ -139,9 +139,9 @@ $lang->bug->confirmDelete        = '您確認要刪除該Bug嗎？';
 $lang->bug->setTemplateTitle     = '請輸入bug模板標題（保存之前請先填寫bug重現步驟）：';
 
 /* 模板。*/
-$lang->bug->tblStep        = "[步驟]\n";
-$lang->bug->tblResult      = "[結果]\n";
-$lang->bug->tblExpect      = "[期望]\n";
+$lang->bug->tplStep        = "[b][步驟][/b]\n\n";
+$lang->bug->tplResult      = "[b][結果][/b]\n\n";
+$lang->bug->tplExpect      = "[b][期望][/b]\n\n";
 
 /* 各個欄位取值列表。*/
 $lang->bug->severityList[3] = '3';
