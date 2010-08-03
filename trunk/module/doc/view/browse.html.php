@@ -25,7 +25,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-right'>
@@ -91,7 +90,4 @@
   </div>
 
 </div>  
-<script language='javascript'>
-$('#module<?php echo $moduleID;?>').addClass('active')
-</script>
-<?php include '../../common/view/footer.html.php';?>
+<?php include './footer.html.php';?>
