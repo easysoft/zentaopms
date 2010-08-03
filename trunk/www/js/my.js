@@ -132,7 +132,14 @@ function switchDocLib(libID, module, method, extra)
 {
     if(module == 'doc')
     {
-        link = createLink(module, method, "rootID=" + libID);
+        if(method != 'view')
+        {
+            link = createLink(module, method, "rootID=" + libID);
+        }
+        else
+        {
+            link = createLink('doc', 'browse');
+        }
     }
     /* tree，需要单独传递参数。*/
     else if(module == 'tree')
