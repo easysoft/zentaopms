@@ -122,9 +122,10 @@ function loadProjectStories(projectID)
 /* 加载项目的build列表。*/
 function loadProjectBuilds(projectID)
 {
-    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&varName=openedBuild&build=' + oldOpenedBuild);
+    productID = $('#product').val();
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
     $('#openedBuildBox').load(link);
-    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
     $('#resolvedBuildBox').load(link);
 }
 

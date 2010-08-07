@@ -114,9 +114,9 @@ class build extends control
     }
 
     /* AJAX接口：获得项目的build列表。*/
-    public function ajaxGetProjectBuilds($projectID, $varName, $build = '')
+    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '')
     {
-        if($varName == 'openedBuild')   die(html::select($varName . '[]', $this->build->getProjectBuildPairs($projectID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
-        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, 'noempty'), $build, 'class=select-3'));
+        if($varName == 'openedBuild')   die(html::select($varName . '[]', $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
+        if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'class=select-3'));
     }
 }

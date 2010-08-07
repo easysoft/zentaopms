@@ -119,7 +119,7 @@ function setAssignedTo()
 /* 加载项目的build列表。*/
 function loadProjectBuilds(projectID)
 {
-    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&varName=openedBuild');
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=openedBuild');
     $('#buildBox').load(link);
 }
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');

@@ -280,15 +280,15 @@ class bugModel extends model
             $title       = $run->case->title;
             $caseSteps   = $run->case->steps;
             $stepResults = unserialize($result->stepResults);
-            $bugSteps = $this->lang->bug->tblStep;
+            $bugSteps = $this->lang->bug->tplStep;
             foreach($caseSteps as $key => $step)
             {
                 $bugSteps .= ($key + 1) . '. '  .$step->desc . "\n";
                 if($stepResults[$step->id]['result'] == 'fail')
                 {
-                    $bugSteps .= $this->lang->bug->tblResult;
+                    $bugSteps .= $this->lang->bug->tplResult;
                     $bugSteps .= $stepResults[$step->id]['real'] . "\n";
-                    $bugSteps .= $this->lang->bug->tblExpect;
+                    $bugSteps .= $this->lang->bug->tplExpect;
                     $bugSteps .= $step->expect;
                     break;
                 }

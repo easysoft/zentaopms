@@ -142,9 +142,9 @@ $lang->bug->confirmDelete        = 'Are you sure to delete this bug?';
 $lang->bug->setTemplateTitle     = 'Please input the template title:';
 
 /* 模板。*/
-$lang->bug->tplStep        = "[b][Steps][/b]\n\n";
-$lang->bug->tplResult      = "[b][Result][/b]\n\n";
-$lang->bug->tplExpect      = "[b][Expect][/b]\n\n";
+$lang->bug->tplStep        = "[Steps]\n\n";
+$lang->bug->tplResult      = "[Result]\n\n";
+$lang->bug->tplExpect      = "[Expect]\n\n";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[3] = '3';

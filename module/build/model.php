@@ -59,7 +59,7 @@ class buildModel extends model
 
         $builds = $this->dao->select('id,name')->from(TABLE_BUILD)
             ->where('project')->eq((int)$projectID)
-            ->andWhere('product')->eq((int)$productID)
+            ->beginIF($productID)->andWhere('product')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;

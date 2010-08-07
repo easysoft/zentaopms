@@ -142,9 +142,9 @@ $lang->bug->confirmDelete        = '您確認要刪除該Bug嗎？';
 $lang->bug->setTemplateTitle     = '請輸入bug模板標題（保存之前請先填寫bug重現步驟）：';
 
 /* 模板。*/
-$lang->bug->tplStep        = "[b][步驟][/b]\n\n";
-$lang->bug->tplResult      = "[b][結果][/b]\n\n";
-$lang->bug->tplExpect      = "[b][期望][/b]\n\n";
+$lang->bug->tplStep        = "[步驟]\n\n";
+$lang->bug->tplResult      = "[結果]\n\n";
+$lang->bug->tplExpect      = "[期望]\n\n";
 
 /* 各個欄位取值列表。*/
 $lang->bug->severityList[3] = '3';
