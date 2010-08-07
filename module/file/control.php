@@ -47,7 +47,7 @@ class file extends control
 
         /* 如果是中文，尝试将编码转为gbk. */
         $clientLang = $this->app->getClientLang();
-        if($clientLang == 'zh-cn' or $clientLang == 'zh-tw')
+        if($clientLang == 'zh-cn')
         {
             if(function_exists('mb_convert_encoding'))
             {
