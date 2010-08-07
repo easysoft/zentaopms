@@ -43,7 +43,7 @@ $lang->install->desc             = <<<EOT
 您現在正在安裝的版本是 <strong class='red'>%s</strong>。
 EOT;
 
-$lang->install->newReleased= "<strong class='red'>提示</strong>：官網網站已有最新版本，為<strong class='red'>%s</strong>, 發佈日期于 %s。";
+$lang->install->newReleased= "<strong class='red'>提示</strong>：官網網站已有最新版本<strong class='red'>%s</strong>, 發佈日期于 %s。";
 $lang->install->choice     = '您可以選擇：';
 $lang->install->checking   = '系統檢查';
 $lang->install->ok         = '檢查通過(√)';
