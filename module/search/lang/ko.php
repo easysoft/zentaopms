@@ -1,6 +1,6 @@
 <?php
 /**
- * The search module English file of ZenTaoMS.
+ * The search module Korean file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,37 +18,37 @@
  * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id$
+ * @version     $Id: en.php 993 2010-08-02 10:20:01Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->search->common        = 'Search';
-$lang->search->reset         = 'Reset';
-$lang->search->more          = 'More';
-$lang->search->lite          = 'Lite';
-$lang->search->saveQuery     = 'Save';
-$lang->search->myQuery       = 'My queries';
+$lang->search->common        = '수색';
+$lang->search->reset         = '재설정';
+$lang->search->more          = '더';
+$lang->search->lite          = '라이트';
+$lang->search->saveQuery     = '저장';
+$lang->search->myQuery       = '내 검색어';
 $lang->search->group1        = '1';
 $lang->search->group2        = '2';
-$lang->search->buildForm     = 'Search form';
-$lang->search->buildQuery    = 'Execute query';
-$lang->search->saveQuery     = 'Save query';
-$lang->search->deleteQuery   = 'Delete query';
-$lang->search->setQueryTitle = 'Please input the title（execute searching before save）：';
+$lang->search->buildForm     = '검색 양식';
+$lang->search->buildQuery    = '실행 쿼리';
+$lang->search->saveQuery     = '저장 검색어';
+$lang->search->deleteQuery   = '삭제 쿼리';
+$lang->search->setQueryTitle = '제발 입력은 제목 (이전에 저장) 검색을 실행합니다 :';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';
-$lang->search->operators['>']       = '>';
+$lang->search->operators['>']       = '&gt;';
 $lang->search->operators['>=']      = '>=';
-$lang->search->operators['<']       = '<';
+$lang->search->operators['<']       = '&lt;';
 $lang->search->operators['<=']      = '<=';
-$lang->search->operators['include'] = 'include';
+$lang->search->operators['include'] = '포함';
 
-$lang->search->andor['and']         = 'And';
-$lang->search->andor['or']          = 'Or';
+$lang->search->andor['and']         = '과';
+$lang->search->andor['or']          = '또는';
 
-$lang->search->null = 'Null';
+$lang->search->null = '널';
 
-$lang->userquery->title     = 'Title';
-$lang->userquery->myQueries = 'My queries';
-$lang->userquery->execut    = 'Execute';
-$lang->userquery->delete    = 'Delete';
+$lang->userquery->title     = '제목';
+$lang->userquery->myQueries = '내 검색어';
+$lang->userquery->execut    = '실행';
+$lang->userquery->delete    = '삭제';

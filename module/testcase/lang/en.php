@@ -46,7 +46,7 @@ $lang->testcase->howRun         = 'How run';
 $lang->testcase->scriptedBy     = 'Scripted by';
 $lang->testcase->scriptedDate   = 'Scripted date';
 $lang->testcase->scriptedStatus = 'Scripted status';
-$lang->testcase->scriptedLocation = 'Script loction';
+$lang->testcase->scriptedLocation = 'Script location';
 $lang->testcase->linkCase         = 'Related cases';
 $lang->testcase->stage            = 'Stage';
 $lang->testcase->lastEditedByAB   = 'Last edited by';
@@ -73,7 +73,7 @@ $lang->testcase->insertAfter    = '＋↓';
 
 $lang->testcase->selectProduct  = 'Select product';
 $lang->testcase->byModule       = 'By module';
-$lang->testcase->assignToMe     = 'Assgined to my';
+$lang->testcase->assignToMe     = 'Assigned to me';
 $lang->testcase->openedByMe     = 'Opened by me';
 $lang->testcase->allCases       = 'All case';
 $lang->testcase->needConfirm    = 'Story changed';
@@ -129,7 +129,7 @@ $lang->testcase->stageList['bvt']         = 'BVT testing';
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = 'Normal';
 $lang->testcase->statusList['blocked']     = 'Blocked';
-$lang->testcase->statusList['investigate'] = 'Inverstigate';
+$lang->testcase->statusList['investigate'] = 'Investigate';
 
 $lang->testcase->resultList['n/a']     = 'N/A';
 $lang->testcase->resultList['pass']    = 'Pass';

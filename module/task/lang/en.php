@@ -67,7 +67,7 @@ $lang->task->typeList['design'] = 'Design';
 $lang->task->typeList['devel']  = 'Devel';
 $lang->task->typeList['test']   = 'Test';
 $lang->task->typeList['study']  = 'Study';
-$lang->task->typeList['discuss']= 'Disuss';
+$lang->task->typeList['discuss']= 'Discuss';
 $lang->task->typeList['ui']     = 'UI';
 $lang->task->typeList['affair'] = 'Affair';
 $lang->task->typeList['misc']   = 'Misc';
@@ -86,14 +86,14 @@ $lang->task->buttonEdit       = 'Edit';
 $lang->task->buttonClose      = 'Close';
 $lang->task->buttonCancel     = 'Cancel';
 $lang->task->buttonActivate   = 'Activate';
-$lang->task->buttonLogEfforts = 'Errorts';
+$lang->task->buttonLogEfforts = 'Efforts';
 $lang->task->buttonDelete     = 'Delete';
 $lang->task->buttonBackToList = 'Back';
 $lang->task->buttonStart      = 'Start';
 $lang->task->buttonDone       = 'Done';
 
 $lang->task->legendBasic  = 'Basic info';
-$lang->task->legendEffort = 'Errort';
+$lang->task->legendEffort = 'Effort';
 $lang->task->legendDesc   = 'Desc';
 $lang->task->legendAction = 'Action';
 

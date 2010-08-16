@@ -70,7 +70,7 @@ $lang->bug->lastEditedDateAB = 'Edited Date';
 /* 方法列表。*/
 $lang->bug->index          = 'Index';
 $lang->bug->create         = 'Create Bug';
-$lang->bug->edit           = 'Edite Bug';
+$lang->bug->edit           = 'Edit Bug';
 $lang->bug->browse         = 'Browse Bug';
 $lang->bug->view           = 'Bug Info';
 $lang->bug->resolve        = 'Resolve Bug';
@@ -89,10 +89,10 @@ $lang->bug->confirmStoryChange = 'Confirm Story Change';
 /* 查询条件列表。*/
 $lang->bug->selectProduct  = 'Select product';
 $lang->bug->byModule       = 'By Module';
-$lang->bug->assignToMe     = 'Assgined to me';
+$lang->bug->assignToMe     = 'Assigned to me';
 $lang->bug->openedByMe     = 'My Opened';
 $lang->bug->resolvedByMe   = 'My Resolved';
-$lang->bug->assignToNull   = 'Assgined empty';
+$lang->bug->assignToNull   = 'Assigned empty';
 $lang->bug->longLifeBugs   = 'Long life';
 $lang->bug->postponedBugs  = 'Postponed';
 $lang->bug->allBugs        = 'All bug';
@@ -110,7 +110,7 @@ $lang->bug->lblSystemBrowserAndHardware = 'OS&Browser';
 $lang->bug->lblAssignedTo               = 'Assigned to';
 $lang->bug->lblMailto                   = 'Mailto';
 $lang->bug->lblLastEdited               = 'Last edited';
-$lang->bug->lblResolved                 = 'Resoved';
+$lang->bug->lblResolved                 = 'Resolved';
 $lang->bug->lblAllFields                = 'All Fields';
 $lang->bug->lblCustomFields             = 'Custom Fields';
 
@@ -209,11 +209,11 @@ $lang->bug->statusList['resolved'] = 'Resolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
 $lang->bug->resolutionList['']           = '';
-$lang->bug->resolutionList['bydesign']   = 'By defisn';
+$lang->bug->resolutionList['bydesign']   = 'By design';
 $lang->bug->resolutionList['duplicate']  = 'Duplicate';
 $lang->bug->resolutionList['external']   = 'External';
 $lang->bug->resolutionList['fixed']      = 'Fixed';
-$lang->bug->resolutionList['notrepro']   = 'Not reproduct';
+$lang->bug->resolutionList['notrepro']   = 'Not reproduce';
 $lang->bug->resolutionList['postponed']  = 'Postponed';
 $lang->bug->resolutionList['willnotfix'] = "Won't fix";
 
@@ -230,9 +230,9 @@ $lang->bug->report->charts['openedBugsPerDay']   = 'Opened bugs per day';
 $lang->bug->report->charts['resolvedBugsPerDay'] = 'Resolved bugs per day';
 $lang->bug->report->charts['closedBugsPerDay']   = 'Closed bugs per day';
 $lang->bug->report->charts['openedBugsPerUser']  = 'Opened bugs per user';
-$lang->bug->report->charts['resolvedBugsPerUser']= 'Resoved bugs per user';
+$lang->bug->report->charts['resolvedBugsPerUser']= 'Resolved bugs per user';
 $lang->bug->report->charts['closedBugsPerUser']  = 'Closed bugs per user';
-$lang->bug->report->charts['bugsPerSeverity']    = 'Severigy';
+$lang->bug->report->charts['bugsPerSeverity']    = 'Severity';
 $lang->bug->report->charts['bugsPerResolution']  = 'Resolution';
 $lang->bug->report->charts['bugsPerStatus']      = 'Status';
 $lang->bug->report->charts['bugsPerType']        = 'Type';

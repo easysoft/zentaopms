@@ -71,7 +71,7 @@ $lang->install->dataRoot     = 'Upload directory.';
 $lang->install->mkdir        = '<p>Should creat the directory %s。<br /> Under linux, can try<br /> mkdir -p %s</p>';
 $lang->install->chmod        = 'Should change the permission of "%s".<br />Under linux, can try<br />chmod o=rwx -R %s';
 
-$lang->install->settingDB    = 'Set databse';
+$lang->install->settingDB    = 'Set database';
 $lang->install->webRoot      = 'ZenTaoPMS path';
 $lang->install->requestType  = 'URL type';
 $lang->install->requestTypes['GET']       = 'GET';

@@ -1,0 +1,69 @@
+<?php
+/**
+ * The misc module Korean file of ZenTaoMS.
+ *
+ * ZenTaoMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ZenTaoMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
+ *
+ * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     misc
+ * @version     $Id: Korean.php 824 2010-05-02 15:32:06Z wwccss $
+ * @link        http://www.zentaoms.com
+ */
+$lang->misc->common  = '기타';
+$lang->misc->ping    = '세션을 유지';
+
+$lang->misc->zentao->version           = 'Version %s';
+$lang->misc->zentao->labels['about']   = '약';
+$lang->misc->zentao->labels['support'] = '고객 지원';
+$lang->misc->zentao->labels['cowin']   = '도와주세요';
+$lang->misc->zentao->labels['service'] = '서비스';
+
+$lang->misc->zentao->about['official']     = "공식 사이트";
+$lang->misc->zentao->about['project']      = "프로젝트";
+$lang->misc->zentao->about['preview']      = "데모";
+$lang->misc->zentao->about['changelog']    = "변경 로그";
+$lang->misc->zentao->about['license']      = "라이센스";
+$lang->misc->zentao->about['contributors'] = "참여자";
+$lang->misc->zentao->about['thirdparty']   = "Thirdparty";
+$lang->misc->zentao->about['sourcecode']   = "소스 코드";
+
+$lang->misc->zentao->support['manual']     = "수동";
+$lang->misc->zentao->support['faq']        = "자주 묻는 질문";
+$lang->misc->zentao->support['forum']      = "포럼";
+$lang->misc->zentao->support['qqgroup']    = "QQ Grup";
+$lang->misc->zentao->support['howask']     = "어떻게 물어";
+$lang->misc->zentao->support['vip']        = "사업";
+
+$lang->misc->zentao->cowin['reportbug']    = "버그 신고";
+$lang->misc->zentao->cowin['feedback']     = "피드백 기능";
+$lang->misc->zentao->cowin['devcode']      = "커밋 코드";
+$lang->misc->zentao->cowin['doc']          = "쓰기 박사";
+$lang->misc->zentao->cowin['recommend']    = "추천";
+$lang->misc->zentao->cowin['addlink']      = "링크 추가";
+$lang->misc->zentao->cowin['shop']         = "가게";
+$lang->misc->zentao->cowin['donate']       = "기부";
+$lang->misc->zentao->cowin['cowinmore']    = "기타 ...";
+
+$lang->misc->zentao->service['install']    = '설치 서비스';
+$lang->misc->zentao->service['fixissue']   = '이슈 지원';
+$lang->misc->zentao->service['zentaotrain']= 'ZenTao 훈련';
+$lang->misc->zentao->service['idc']        = 'ZenTao 온라인';
+$lang->misc->zentao->service['custom']     = '사용자 정의 개발';
+$lang->misc->zentao->service['review']     = 'ZenTao 리뷰';
+$lang->misc->zentao->service['scrumtrain'] = '스크럼 훈련';
+$lang->misc->zentao->service['fwtrain']    = 'ZenTaoPHP 훈련';
+$lang->misc->zentao->service['servicemore']= '기타 ...';
+
+$lang->misc->copyright = "저작권 및 경찰y;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a>";

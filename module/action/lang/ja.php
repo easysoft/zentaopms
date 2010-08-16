@@ -1,6 +1,6 @@
 <?php
 /**
- * The action module English file of ZenTaoMS.
+ * The action module Japanese file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,31 +18,31 @@
  * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id$
+ * @version     $Id: en.php 1000 2010-08-03 01:49:25Z yuren_@126.com $
  * @link        http://www.zentaoms.com
  */
-$lang->action->common   = 'Logs';
-$lang->action->trash    = 'Trash';
-$lang->action->undelete = 'Restore';
+$lang->action->common   = 'ログ';
+$lang->action->trash    = 'ごみ';
+$lang->action->undelete = '復元';
 
-$lang->action->objectType = 'Object';
-$lang->action->objectID   = 'ID';
-$lang->action->objectName = 'Name';
-$lang->action->actor      = 'Actor';
-$lang->action->date       = 'Date';
+$lang->action->objectType = 'オブジェクト';
+$lang->action->objectID   = 'IDは';
+$lang->action->objectName = '名';
+$lang->action->actor      = '俳優';
+$lang->action->date       = '日付';
 
-$lang->action->objectTypes['product']     = 'PRODUCT';
-$lang->action->objectTypes['story']       = 'STORY';
-$lang->action->objectTypes['productplan'] = 'PLAN';
-$lang->action->objectTypes['release']     = 'RELEASE';
-$lang->action->objectTypes['project']     = 'PROJECT';
-$lang->action->objectTypes['task']        = 'TASK';
-$lang->action->objectTypes['build']       = 'Build';
-$lang->action->objectTypes['bug']         = 'Bug';
-$lang->action->objectTypes['case']        = 'Case';
-$lang->action->objectTypes['testtask']    = 'Test Task';
-$lang->action->objectTypes['user']        = 'User';
-$lang->action->objectTypes['doc']         = 'DOC';
+$lang->action->objectTypes['product']     = '製品';
+$lang->action->objectTypes['story']       = '話';
+$lang->action->objectTypes['productplan'] = 'プラン';
+$lang->action->objectTypes['release']     = 'リリース';
+$lang->action->objectTypes['project']     = 'プロジェクト';
+$lang->action->objectTypes['task']        = 'TASKを';
+$lang->action->objectTypes['build']       = 'ビルド';
+$lang->action->objectTypes['bug']         = 'バグ';
+$lang->action->objectTypes['case']        = 'ケース';
+$lang->action->objectTypes['testtask']    = 'テストタスク';
+$lang->action->objectTypes['user']        = 'ユーザー';
+$lang->action->objectTypes['doc']         = 'ドキュメント';
 $lang->action->objectTypes['doclib']      = 'DocLib';
 
 /* 用来描述操作历史记录.*/
@@ -67,30 +67,30 @@ $lang->action->desc->diff1     = 'Changed <strong><i>%s</i></strong>, old is "%s
 $lang->action->desc->diff2     = 'Changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>';
 
 /* 用来显示动态信息.*/
-$lang->action->label->opened              = 'opened';
-$lang->action->label->created             = 'created';
-$lang->action->label->changed             = 'changed';
-$lang->action->label->edited              = 'edited';
-$lang->action->label->closed              = 'closed';
-$lang->action->label->deleted             = 'deleted';
-$lang->action->label->erased              = 'deleted';
-$lang->action->label->undeleted           = 'restore';
-$lang->action->label->commented           = 'commented';
-$lang->action->label->activated           = 'activated';
-$lang->action->label->resolved            = 'resolved';
-$lang->action->label->reviewed            = 'reviewed';
-$lang->action->label->moved               = 'moded';
-$lang->action->label->confirmed           = 'confirmed,';
-$lang->action->label->linked2plan         = 'link to plan';
-$lang->action->label->unlinkedfromplan    = 'unlink from plan';
-$lang->action->label->linked2project      = 'link to project';
-$lang->action->label->unlinkedfromproject = 'unlik from project';
-$lang->action->label->marked              = 'edited';
-$lang->action->label->started             = 'started';
-$lang->action->label->canceled            = 'canceled';
-$lang->action->label->finished            = 'finished';
-$lang->action->label->login               = 'login';
-$lang->action->label->logout              = "logout";
+$lang->action->label->opened              = 'オープン';
+$lang->action->label->created             = '作成';
+$lang->action->label->changed             = '変更';
+$lang->action->label->edited              = '編集';
+$lang->action->label->closed              = '閉じた';
+$lang->action->label->deleted             = '削除された';
+$lang->action->label->erased              = '削除された';
+$lang->action->label->undeleted           = '復元する';
+$lang->action->label->commented           = 'コメント';
+$lang->action->label->activated           = '活性化';
+$lang->action->label->resolved            = '解決';
+$lang->action->label->reviewed            = '見直し';
+$lang->action->label->moved               = '恥ずかしい';
+$lang->action->label->confirmed           = '、確認';
+$lang->action->label->linked2plan         = 'リンクを計画する';
+$lang->action->label->unlinkedfromplan    = 'プランからリンク解除';
+$lang->action->label->linked2project      = 'リンクがプロジェクトに';
+$lang->action->label->unlinkedfromproject = 'プロジェクトからunlik';
+$lang->action->label->marked              = '編集';
+$lang->action->label->started             = '開始';
+$lang->action->label->canceled            = 'キャンセル';
+$lang->action->label->finished            = '終えた';
+$lang->action->label->login               = 'ログイン';
+$lang->action->label->logout              = "ログアウト";
 
 /* 用来生成相应对象的链接.*/
 $lang->action->label->product     = 'product|product|view|productID=%s';
@@ -106,6 +106,6 @@ $lang->action->label->testtask    = 'test task|testtask|view|caseID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = 'doc library|doc|browse|libID=%s';
 $lang->action->label->doc         = 'doc|doc|view|docID=%s';
-$lang->action->label->user        = 'user';
+$lang->action->label->user        = 'ユーザー';
 
-$lang->action->label->space     = ' ';
+$lang->action->label->space     ='';

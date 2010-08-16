@@ -1,6 +1,6 @@
 <?php
 /**
- * The build module English file of ZenTaoMS.
+ * The release module Korean file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,26 +17,22 @@
  *
  * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     build
- * @version     $Id$
+ * @package     release
+ * @version     $Id: en.php 993 2010-08-02 10:20:01Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->build->common    = 'Build';
-$lang->build->create    = "Create";
-$lang->build->edit      = "Edit";
-$lang->build->delete    = "Delete";
-$lang->build->view      = "Info";
-$lang->build->ajaxGetProductBuilds = 'API:Product builds';
-$lang->build->ajaxGetProjectBuilds = 'API:Project builds';
+$lang->release->common    = '공개';
+$lang->release->create    = "만들기";
+$lang->release->edit      = "편집";
+$lang->release->delete    = "삭제";
+$lang->release->view      = "정보";
+$lang->release->browse    = "찾아보기";
 
-$lang->build->confirmDelete = "Are sure to delete this build?";
+$lang->release->confirmDelete = "이 릴리스를 삭제하시겠습니까?";
 
-$lang->build->id        = 'ID';
-$lang->build->product   = 'Product';
-$lang->build->project   = 'Project';
-$lang->build->name      = 'Name';
-$lang->build->date      = 'Build date';
-$lang->build->builder   = 'Builder';
-$lang->build->scmPath   = 'Source code path';
-$lang->build->filePath  = 'Package file path';
-$lang->build->desc      = 'Desc';
+$lang->release->id        = '신분증';
+$lang->release->product   = '제품';
+$lang->release->build     = '빌드';
+$lang->release->name      = '이름';
+$lang->release->date      = '날짜';
+$lang->release->desc      = '내림차순';

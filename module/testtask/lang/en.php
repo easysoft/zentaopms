@@ -34,7 +34,7 @@ $lang->testtask->batchAssign    = "Batch Assign";
 $lang->testtask->runCase        = "Run";
 $lang->testtask->results        = "Result";
 $lang->testtask->createBug      = "Create bug";
-$lang->testtask->assign         = 'Assgin';
+$lang->testtask->assign         = 'Assign';
 $lang->testtask->cases          = 'Cases';
 
 $lang->testtask->common         = 'Test task';

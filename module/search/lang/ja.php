@@ -1,6 +1,6 @@
 <?php
 /**
- * The search module English file of ZenTaoMS.
+ * The search module Japanese file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,22 +18,22 @@
  * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id$
+ * @version     $Id: en.php 993 2010-08-02 10:20:01Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->search->common        = 'Search';
-$lang->search->reset         = 'Reset';
-$lang->search->more          = 'More';
-$lang->search->lite          = 'Lite';
-$lang->search->saveQuery     = 'Save';
-$lang->search->myQuery       = 'My queries';
+$lang->search->common        = '検索';
+$lang->search->reset         = 'リセット';
+$lang->search->more          = 'もっと';
+$lang->search->lite          = 'ライト';
+$lang->search->saveQuery     = '保存';
+$lang->search->myQuery       = '私のクエリ';
 $lang->search->group1        = '1';
 $lang->search->group2        = '2';
-$lang->search->buildForm     = 'Search form';
-$lang->search->buildQuery    = 'Execute query';
-$lang->search->saveQuery     = 'Save query';
-$lang->search->deleteQuery   = 'Delete query';
-$lang->search->setQueryTitle = 'Please input the title（execute searching before save）：';
+$lang->search->buildForm     = '検索フォーム';
+$lang->search->buildQuery    = '実行クエリ';
+$lang->search->saveQuery     = '保存クエリ';
+$lang->search->deleteQuery   = '削除クエリ';
+$lang->search->setQueryTitle = '入力してください、タイトル（前に保存）検索実行：';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';
@@ -41,14 +41,14 @@ $lang->search->operators['>']       = '>';
 $lang->search->operators['>=']      = '>=';
 $lang->search->operators['<']       = '<';
 $lang->search->operators['<=']      = '<=';
-$lang->search->operators['include'] = 'include';
+$lang->search->operators['include'] = '含める';
 
-$lang->search->andor['and']         = 'And';
-$lang->search->andor['or']          = 'Or';
+$lang->search->andor['and']         = 'と';
+$lang->search->andor['or']          = 'または';
 
-$lang->search->null = 'Null';
+$lang->search->null = 'ヌル';
 
-$lang->userquery->title     = 'Title';
-$lang->userquery->myQueries = 'My queries';
-$lang->userquery->execut    = 'Execute';
-$lang->userquery->delete    = 'Delete';
+$lang->userquery->title     = 'タイトル';
+$lang->userquery->myQueries = '私のクエリ';
+$lang->userquery->execut    = '実行';
+$lang->userquery->delete    = '削除';

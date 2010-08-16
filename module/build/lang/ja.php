@@ -1,6 +1,6 @@
 <?php
 /**
- * The build module English file of ZenTaoMS.
+ * The build module Japanese file of ZenTaoMS.
  *
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,25 +18,25 @@
  * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
- * @version     $Id$
+ * @version     $Id: en.php 993 2010-08-02 10:20:01Z wwccss $
  * @link        http://www.zentaoms.com
  */
-$lang->build->common    = 'Build';
-$lang->build->create    = "Create";
-$lang->build->edit      = "Edit";
-$lang->build->delete    = "Delete";
-$lang->build->view      = "Info";
-$lang->build->ajaxGetProductBuilds = 'API:Product builds';
-$lang->build->ajaxGetProjectBuilds = 'API:Project builds';
+$lang->build->common    = 'ビルド';
+$lang->build->create    = "作成";
+$lang->build->edit      = "[編集]";
+$lang->build->delete    = "削除";
+$lang->build->view      = "情報";
+$lang->build->ajaxGetProductBuilds = 'APIは：製品のビルド';
+$lang->build->ajaxGetProjectBuilds = 'APIは：プロジェクトのビルド';
 
-$lang->build->confirmDelete = "Are sure to delete this build?";
+$lang->build->confirmDelete = "よろしいですか、このビルドを削除するには？";
 
-$lang->build->id        = 'ID';
-$lang->build->product   = 'Product';
-$lang->build->project   = 'Project';
-$lang->build->name      = 'Name';
-$lang->build->date      = 'Build date';
-$lang->build->builder   = 'Builder';
-$lang->build->scmPath   = 'Source code path';
-$lang->build->filePath  = 'Package file path';
-$lang->build->desc      = 'Desc';
+$lang->build->id        = 'IDは';
+$lang->build->product   = '製品';
+$lang->build->project   = 'プロジェクト';
+$lang->build->name      = '名';
+$lang->build->date      = 'ビルド日';
+$lang->build->builder   = 'ビルダー';
+$lang->build->scmPath   = 'ソースコードのパス';
+$lang->build->filePath  = 'パッケージファイルのパス';
+$lang->build->desc      = '降順';

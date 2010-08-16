@@ -25,7 +25,7 @@ $lang->convert->common  = 'Import';
 $lang->convert->next    = 'Next';
 $lang->convert->pre     = 'Back';
 $lang->convert->reload  = 'Reload';
-$lang->convert->error   = 'Eror ';
+$lang->convert->error   = 'Error ';
 
 $lang->convert->start   = 'Begin import';
 

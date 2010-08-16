@@ -33,7 +33,7 @@ $lang->project->code         = 'Code';
 $lang->project->begin        = 'Begin';
 $lang->project->end          = 'End';
 $lang->project->status       = 'Status';
-$lang->project->statge       = 'Statge';
+$lang->project->statge       = 'Stage';
 $lang->project->pri          = 'Priority';
 $lang->project->desc         = 'Desc';
 $lang->project->goal         = 'Goal';
@@ -55,7 +55,7 @@ $lang->project->whitelist    = 'Whitelist';
 $lang->team->account     = 'Account';
 $lang->team->role        = 'Role';
 $lang->team->joinDate    = 'Join date';
-$lang->team->workingHour = 'Wokring/Day';
+$lang->team->workingHour = 'Working/Day';
 
 /* 字段取值列表.*/
 $lang->project->statusList['']      = '';
@@ -65,7 +65,7 @@ $lang->project->statusList['done']  = 'Done';
 
 $lang->project->aclList['open']    = 'Default(Having the priviledge of project module can visit this project)';
 $lang->project->aclList['private'] = 'Private(Only team members can visit)';
-$lang->project->aclList['custom']  = 'Whitelist(Team members and who belongs to the whielist grups can visit)';
+$lang->project->aclList['custom']  = 'Whitelist(Team members and who belongs to the whitelist grups can visit)';
 
 /* 方法列表.*/
 $lang->project->index          = "Index";
@@ -107,7 +107,7 @@ $lang->project->listTaskNeedConfrim = 'Story changed';
 
 /* 页面提示.*/
 $lang->project->selectProject  = "Select project";
-$lang->project->beginAndEnd    = 'Begian and end';
+$lang->project->beginAndEnd    = 'Begin and end';
 $lang->project->lblStats       = 'Stats';
 $lang->project->stats          = 'Total estimate is『%s』hours,<br />confused『%s』hours<br />left『%s』hours';
 $lang->project->oneLineStats   = "Project『%s』, code is『%s』, products is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
@@ -119,7 +119,7 @@ $lang->project->largeBurnChart = 'View large';
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';
 $lang->project->confirmUnlinkMember   = 'Are you sure to remove this user from this project?';
 $lang->project->confirmUnlinkStory    = 'Are you sure to remove the story from this project?';
-$lang->project->errorNoLinkedProducts = 'Thers is no linked products, go to the link page.';
+$lang->project->errorNoLinkedProducts = 'There is no linked products, go to the link page.';
 $lang->project->accessDenied          = 'Access to this project denied.';
 
 /* 统计.*/
