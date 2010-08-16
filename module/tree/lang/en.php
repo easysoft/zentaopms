@@ -37,6 +37,7 @@ $lang->tree->updateOrder       = 'Update order';
 $lang->tree->manageChild       = 'Manage child';
 $lang->tree->syncFromProduct   = 'Copy from product module';
 $lang->tree->ajaxGetOptionMenu = 'API: Get select menu';
+$lang->tree->ajaxGetSonModules = 'API: Get son modules';
 
 $lang->tree->confirmDelete = 'Are you sure to delete this module?';
 $lang->tree->successSave   = 'Success saved';

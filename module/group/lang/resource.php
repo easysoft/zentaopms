@@ -114,6 +114,9 @@ $lang->resource->project->ajaxGetProducts= 'ajaxGetProducts';
 /* 任务。*/
 $lang->resource->task->create              = 'create';
 $lang->resource->task->edit                = 'edit';
+$lang->resource->task->start               = 'start';
+$lang->resource->task->complete            = 'complete';
+$lang->resource->task->cancel              = 'complete';
 $lang->resource->task->delete              = 'delete';
 $lang->resource->task->view                = 'view';
 $lang->resource->task->confirmStoryChange  = 'confirmStoryChange';
@@ -225,6 +228,7 @@ $lang->resource->tree->manageChild       = 'manageChild';
 $lang->resource->tree->edit              = 'edit';
 $lang->resource->tree->delete            = 'delete';
 $lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
+$lang->resource->tree->ajaxGetSonModules = 'ajaxGetSonModules';
 
 /* 搜索*/
 $lang->resource->search->buildForm    = 'buildForm';
