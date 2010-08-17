@@ -22,7 +22,7 @@
  * @link        http://www.zentaoms.com
  */
 /* 基本参数设定。*/
-$config->version     = '1.2';             // 版本号，切勿修改。
+$config->version     = '1.3';             // 版本号，切勿修改。
 $config->encoding    = 'UTF-8';           // 网站的编码。
 $config->cookiePath  = '/';               // cookie的有效路径。
 $config->cookieLife  = time() + 2592000;  // cookie的生命周期。
@@ -45,7 +45,7 @@ $config->themes      = 'default,blue';    // 支持的主题列表。
 $config->langs['zh-cn'] = '中文简体';
 $config->langs['zh-tw'] = '中文繁體';
 $config->langs['en']    = 'English';
-$config->langs['ja']    = 'Japaness';
+$config->langs['ja']    = 'Japanese';
 $config->langs['ko']    = 'Korean';
 
 /* 默认参数设定。*/
