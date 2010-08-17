@@ -53,6 +53,7 @@ $lang->convert->dbPort     = 'Server port';
 $lang->convert->dbUser     = 'Database user';
 $lang->convert->dbPassword = 'Database password';
 $lang->convert->dbName     = '%s database';
+$lang->convert->dbCharset  = '%s charset';
 $lang->convert->dbPrefix   = '%s table prefix';
 $lang->convert->installPath= '%s installed path';
 

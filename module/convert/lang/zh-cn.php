@@ -52,6 +52,7 @@ $lang->convert->dbPort     = '服务器端口';
 $lang->convert->dbUser     = '数据库用户名';
 $lang->convert->dbPassword = '数据库密码';
 $lang->convert->dbName     = '%s使用的库';
+$lang->convert->dbCharset  = '%s数据库编码';
 $lang->convert->dbPrefix   = '%s表前缀';
 $lang->convert->installPath= '%s安装的根目录';
 

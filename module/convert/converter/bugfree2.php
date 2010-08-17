@@ -37,6 +37,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         $result['results']  = $this->convertResult();
         $result['actions']  = $this->convertAction();
         $result['files']    = $this->convertFile();
+        $this->dao->dbh($this->dbh);
         $this->loadModel('tree')->fixModulePath();
         return $result;
     }
@@ -140,8 +141,8 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->dbh($this->sourceDBH)
             ->select(
                 'moduleID AS id, 
-                moduleType as view,
-                projectID AS product, 
+                moduleType as type,
+                projectID AS root, 
                 moduleName AS name, 
                 moduleGrade AS grade, 
                 parentID AS parent, 
@@ -151,8 +152,8 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->fetchAll('id', $autoCompany = false);
         foreach($modules as $moduleID => $module)
         {
-            $module->product = $this->map['product'][$module->product];
-            $module->view    = strtolower($module->view);
+            $module->root = $this->map['product'][$module->root];
+            $module->type = strtolower($module->type);
             unset($module->id);
             $this->dao->dbh($this->dbh)->insert(TABLE_MODULE)->data($module)->exec();
             $this->map['module'][$moduleID] = $this->dao->lastInsertID();

@@ -62,6 +62,7 @@ class convert extends control
         $this->view->version     = $version;
         $this->view->tablePrefix = $version > 1 ? 'bf_' : '';
         $this->view->dbName      = $version > 1 ? 'bugfree2' : 'BugFree';
+        $this->view->dbCharset   = 'utf8';
         $this->display();
     }
 

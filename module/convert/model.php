@@ -34,7 +34,7 @@ class convertModel extends model
             $dbh = new PDO($dsn, $this->post->dbUser, $this->post->dbPassword);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->exec("SET NAMES UTF8");
+            $dbh->exec("SET NAMES {$this->post->dbCharset}");
             $this->sourceDBH = $dbh;
             return $dbh;
         }

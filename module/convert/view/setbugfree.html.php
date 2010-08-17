@@ -18,6 +18,10 @@
   <th class='rowhead'><?php printf($lang->convert->dbName, $source);?></th>
   <td><?php echo html::input('dbName', $dbName, "class='text-3'");?></td>
 </tr>
+<tr>
+  <th class='rowhead'><?php printf($lang->convert->dbCharset, $source);?></th>
+  <td><?php echo html::input('dbCharset', $dbCharset, "class='text-3'");?></td>
+</tr>
 <?php if($version > 1):?>
 <tr>
   <th class='rowhead'><?php printf($lang->convert->dbPrefix, $source);?></th>

@@ -131,17 +131,17 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->dbh($this->sourceDBH)
             ->select(
                 'moduleID AS id, 
-                projectID AS product, 
+                projectID AS root, 
                 moduleName AS name, 
                 moduleGrade AS grade, 
                 parentID AS parent, 
-                "bug" AS view')
+                "bug" AS type')
             ->from('BugModule')
             ->orderBy('id ASC')
             ->fetchAll('id', $autoCompany = false);
         foreach($modules as $moduleID => $module)
         {
-            $module->product = $this->map['product'][$module->product];
+            $module->root = $this->map['product'][$module->root];
             unset($module->id);
             $this->dao->dbh($this->dbh)->insert(TABLE_MODULE)->data($module)->exec();
             $this->map['module'][$moduleID] = $this->dao->lastInsertID();
