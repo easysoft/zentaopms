@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../file/view/download.html.php';?>
 
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -54,7 +55,15 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->legendAttatch;?></legend>
-        <div><?php foreach($story->files as $file) echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank');?></div>
+        <div>
+        <?php 
+        foreach($story->files as $file)
+        {
+            echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank', "onclick='return downloadFile($file->id)'");
+            echo html::commonButton('x', "onclick=deleteFile($file->id)");
+        }
+        ?>
+        </div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>

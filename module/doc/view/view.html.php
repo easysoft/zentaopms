@@ -23,14 +23,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<script language='Javascript'>
-/* 删除文件。*/
-function deleteFile(fileID)
-{
-    if(!fileID) return;
-    hiddenwin.location.href =createLink('doc', 'deleteFile', 'fileID=' + fileID);
-}
-</script>
+<?php include '../../file/view/download.html.php';?>
+</style>
 <div class='yui-d0'>
   <table class='table-1'>
   <caption><?php echo $doc->title . $lang->colon . $lang->doc->view;?></caption>
@@ -57,13 +51,13 @@ function deleteFile(fileID)
     <tr>
       <th class='rowhead'><?php echo $lang->files;?></th>
       <td>
-        <?php 
-        foreach($doc->files as $file)
-        {
-            echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank');
-            echo html::commonButton('x', "onclick=deleteFile($file->id)");
-        }
-        ?>
+      <?php 
+      foreach($doc->files as $file)
+      {
+          echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank', "onclick='return downloadFile($file->id)'");
+          echo html::commonButton('x', "onclick=deleteFile($file->id)");
+      }
+      ?>
       </td>
     </tr>
   </table>

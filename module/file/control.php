@@ -32,11 +32,35 @@ class file extends control
     }
 
     /* 下载一个文件。*/
-    public function download($fileID)
+    public function download($fileID, $mouse = '')
     {
         $file = $this->file->getById($fileID);
-        if(file_exists($file->realPath))$this->locate($file->webPath);
-        $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+        $fileTypes = array('txt', 'jpg', 'jpeg', 'gif', 'png', 'bmp', 'xml', 'html');
+        foreach($fileTypes as $fileType)
+        {
+            if($file->extension == $fileType)
+            {
+                $download = 'false';
+                break;
+            }
+        }
+        if(isset($download) && $mouse == 'left')
+        {
+            if(file_exists($file->realPath))$this->locate($file->webPath);
+            $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+        }
+        else
+        {
+            if(file_exists($file->realPath))
+            {
+                $fileName = $file->title . '.' . $file->extension;
+                header('Content-type: application/octet-stream');
+                header("Content-Disposition: attachment; filename=$fileName");
+                $fileData = file_get_contents($file->realPath);
+                echo $fileData;
+            }
+            $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+        }
     }
 
     /* 导出csv格式的文件。*/

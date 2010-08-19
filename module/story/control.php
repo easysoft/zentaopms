@@ -223,6 +223,13 @@ class story extends control
         }
     }
 
+     /* 删除一个文件。*/
+    public function deleteFile($fileID)
+    {
+        $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+        die(js::reload('parent'));
+    }
+   
     /* 评审一条需求。*/
     public function review($storyID)
     {

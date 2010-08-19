@@ -529,6 +529,13 @@ class bug extends control
         }
     }
 
+    /* 删除一个文件。*/
+    public function deleteFile($fileID)
+    {
+        $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+        die(js::reload('parent'));
+    }
+
     /* 保存模板。*/
     public function saveTemplate()
     {
