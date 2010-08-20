@@ -172,6 +172,12 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .mr-10px {margin-right:  10px}
 .mb-10px {margin-bottom: 10px}
 .ml-10px {margin-left:   10px}
+
+.mt-zero {margin-top:    0}
+.mr-zero {margin-right:  0}
+.mb-zero {margin-bottom: 0}
+.ml-zero {margin-left:   0}
+
 .pt-10px {padding-top:   10px}
 .pr-10px {padding-right: 10px}
 .pb-10px {padding-bottom:10px}
