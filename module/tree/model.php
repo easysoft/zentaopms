@@ -108,13 +108,13 @@ class treeModel extends model
     }
 
     /* 获取树状的模块列表。*/
-    public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc)
+    public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '')
     {
         $treeMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule));
         while($module = $stmt->fetch())
         {
-            $linkHtml = call_user_func($userFunc, $module);
+            $linkHtml = call_user_func($userFunc, $module, $extra);
 
             if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
             {
@@ -245,6 +245,13 @@ class treeModel extends model
     private function createCaseLink($module)
     {
         $linkHtml = html::a(helper::createLink('testcase', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return $linkHtml;
+    }
+
+    /* 生成测试任务的链接。*/
+    private function createTestTaskLink($module, $extra)
+    {
+        $linkHtml = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
