@@ -101,11 +101,22 @@ class testtaskModel extends model
     }
 
     /* 获得任务的执行用例列表。*/
-    public function getRuns($taskID)
+    public function getRuns($taskID, $moduleID)
     {
         return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq((int)$taskID)
+            ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
+            ->fetchAll();
+    }
+
+    /* 获得需要用户执行的用例列表。*/
+    public function getUserRuns($taskID, $user)
+    {
+        return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.task')->eq((int)$taskID)
+            ->andWhere('t1.assignedTo')->eq($user)
             ->fetchAll();
     }
 

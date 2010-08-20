@@ -116,10 +116,14 @@ class testtask extends control
     }
 
     /* 查看任务的用例列表。*/
-    public function cases($taskID)
+    public function cases($taskID, $browseType = 'byModule', $param = 0)
     {
         $this->app->loadLang('testcase');
         $this->session->set('caseList', $this->app->getURI(true));
+
+        /* 设置浏览模式，产品ID和模块ID。 */
+        $browseType = strtolower($browseType);
+        $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
 
         /* 获取task和产品信息，并设置菜单。*/
         $task = $this->testtask->getById($taskID);
@@ -127,20 +131,35 @@ class testtask extends control
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID);
 
+        /* 如果是按照模块查找，或者列出所有。*/
+        if($browseType == 'bymodule' or $browseType == 'all')
+        {
+            $modules = '';
+            if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
+            $this->view->runs      = $this->testtask->getRuns($taskID, $modules);
+        }
+        elseif($browseType == 'assignedtome')
+        {
+            $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account);
+        }
+
         /* 导航信息。*/
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->cases;
 
         /* 赋值。*/
-        $this->view->productID = $productID;
-        $this->view->task      = $task;
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->runs      = $this->testtask->getRuns($taskID);
+        $this->view->productID   = $productID;
+        $this->view->productName = $this->products[$productID];
+        $this->view->task        = $task;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->moduleTree  = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
+        $this->view->browseType  = $browseType;
+        $this->view->taskID      = $taskID;
+        $this->view->moduleID    = $moduleID;
 
         $this->display();
     }
-
 
     /* 编辑一个Bug。*/
     public function edit($taskID)
@@ -209,6 +228,7 @@ class testtask extends control
 
         /* 构造搜索表单。*/
         $this->loadModel('testcase');
+        $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID");
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
@@ -223,8 +243,9 @@ class testtask extends control
 
         /* 获得用例列表。*/
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+        $query = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // 如果指定了搜索所有的产品，去掉这个查询条件。
         $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
-        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)
+        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
             ->andWhere('product')->eq($productID)
             ->andWhere('id')->notIN($linkedCases)
             ->andWhere('deleted')->eq(0)

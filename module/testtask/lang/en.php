@@ -62,6 +62,10 @@ $lang->testtask->linkedCases   = 'Linked cases';
 $lang->testtask->confirmDelete = 'Are you sure to delete this test task?';
 $lang->testtask->passAll       = 'Pass all';
 
+$lang->testtask->byModule      = 'By module';
+$lang->testtask->assignedToMe  = 'Assgined to me';
+$lang->testtask->allCases      = 'All Cases';
+
 $lang->testtask->lblCases      = 'Case list';
 $lang->testtask->lblUnlinkCase = 'Remove case';
 $lang->testtask->lblRunCase    = 'Run';
