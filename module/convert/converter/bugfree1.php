@@ -34,6 +34,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         $result['bugs']     = $this->convertBug();
         $result['actions']  = $this->convertAction();
         $result['files']    = $this->convertFile();
+        $this->dao->dbh($this->dbh);
         $this->loadModel('tree')->fixModulePath();
         return $result;
     }
