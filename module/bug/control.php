@@ -102,6 +102,7 @@ class bug extends control
         elseif($browseType == 'longlifebugs')
         {
             $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('openedDate')->lt(date(DT_DATE1,strtotime('-7 days')))
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
         }
