@@ -297,9 +297,16 @@ class doc extends control
     }
 
     /* 删除一个文件。*/
-    public function deleteFile($fileID)
+    public function deleteFile($fileID, $confirm = 'no')
     {
-        $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
-        die(js::reload('parent'));
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->doc->confirmDelete, inlink('deleteFile', "fileID=$fileID&confirm=yes")));
+        }
+        else
+        {
+            $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+            die(js::reload('parent'));
+        }
     }
 }
