@@ -47,7 +47,7 @@
       ?>
       <tr class='a-center'>
         <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
-        <td><?php @print($modules[$doc->module]);?></td>
+        <td><?php echo $doc->name;?></td>
         <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
         <td><?php echo $users[$doc->addedBy];?></td>
         <td><?php echo $doc->addedDate;?></td>
