@@ -182,6 +182,7 @@ class tree extends control
             ->andWhere('parent')->eq('0')
             ->andWhere('type')->eq('story')
             ->fetchPairs();
+        foreach($modules as $key => $name) $modules[$key] = str_replace(" ","&nbsp;","$name");
         die(json_encode($modules));
     }
 }
