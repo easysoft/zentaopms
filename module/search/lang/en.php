@@ -34,6 +34,9 @@ $lang->search->buildQuery    = 'Execute query';
 $lang->search->saveQuery     = 'Save query';
 $lang->search->deleteQuery   = 'Delete query';
 $lang->search->setQueryTitle = 'Please input the title（execute searching before save）：';
+$lang->search->storyTitle    = 'Story title';
+$lang->search->taskTitle     = 'Task title';
+$lang->search->select        = 'Select';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';

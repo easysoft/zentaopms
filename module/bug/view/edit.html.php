@@ -145,7 +145,9 @@ var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 tools = simpleTools;
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
-})
+    $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
+    $("#searchTasks").colorbox({width:680, height:400, iframe:true, transition:'none'});
+});
 </script>
 <form method='post' target='hiddenwin' enctype='multipart/form-data'>
 <div class='yui-d0'>
@@ -249,11 +251,15 @@ $(function() {
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->story;?></td>
-          <td><span id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, 'class=select-3');?></span></td>
+          <td><span id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, "class=select-3");?></span>
+          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=$bug->project&module=story&storyID=$bug->story"), $lang->go, "_blank", "id='searchStories'");?>
+          </td>
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->task;?></td>
-          <td><span id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></td>
+          <td><span id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></span>
+          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=$bug->project&module=task&taskID=$bug->task"), $lang->go, "_blank", "id='searchTasks'");?>
+          </td>
         </tr>
       </table>
     </fieldset>

@@ -34,6 +34,9 @@ $lang->search->buildQuery    = '执行搜索';
 $lang->search->saveQuery     = '保存查询';
 $lang->search->deleteQuery   = '删除查询';
 $lang->search->setQueryTitle = '请输入查询标题（保存之前请先查询）：';
+$lang->search->storyTitle    = '需求名称';
+$lang->search->taskTitle     = '任务名称';
+$lang->search->select        = '选择';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';

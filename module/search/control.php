@@ -55,4 +55,34 @@ class search extends control
         $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
         die(js::reload('parent'));
     }
+
+    public function select($productID, $projectID, $module, $moduleID)
+    {
+        $this->loadModel('product');
+        $this->loadModel('task');
+
+        if($module == 'story')
+        {
+            $fieldParams  = $this->config->product->search;
+            $moduleTitles = $projectID ? $this->loadModel('story')->getProjectStoryPairs($projectID) : $this->loadModel('story')->getProductStoryPairs($productID);
+        }
+        else if($module == 'task')
+        {
+            $fieldParams  = $this->config->task->search;
+            $moduleTitles = $this->loadModel('task')->getProjectTaskPairs($projectID);
+        }
+        $searchFields = $fieldParams['fields'];
+        $fieldParams  = $fieldParams['params'];
+        $this->search->initSession($module, $searchFields, $fieldParams);
+        
+        if(!empty($_POST['value1'])) $moduleTitles = $this->search->getBySelect($module, array_keys($moduleTitles), $_POST);
+        
+        $this->view->module       = $module;
+        $this->view->moduleID     = $moduleID;
+        $this->view->moduleTitles = $moduleTitles;
+        $this->view->searchFields = $searchFields;
+        $this->view->fieldParams  = $this->search->setDefaultParams($searchFields, $fieldParams);
+        
+        die($this->display());
+    }
 }

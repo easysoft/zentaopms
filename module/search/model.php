@@ -165,4 +165,56 @@ class searchModel extends model
         $queries = array('' => $this->lang->search->myQuery) + $queries;
         return $queries;
     }
+
+    /* 按照某一个查询条件获取列表。*/
+    public function getBySelect($module, $moduleIds, $conditions)
+    {
+        if($module == 'story')
+        {
+            $pairs = 'id,title';
+            $table = 'zt_story';
+        }
+        else if($module == 'task')
+        {
+            $pairs = 'id,name';
+            $table = 'zt_task';
+        }
+        $query    = '`' . $conditions['field1'] . '`';
+        $operator = $conditions['operator1'];
+        $value    = $conditions['value1'];
+        
+        if(!isset($this->lang->search->operators[$operator])) $operator = '=';
+        if($operator == "include")
+        {
+            $query .= ' LIKE ' . $this->dbh->quote("%$value%");
+        }
+        else
+        {
+            $query .= $operator . ' ' . $this->dbh->quote($value) . ' ';
+        }
+        
+        foreach($moduleIds as $id)
+        {
+            if(!$id) continue;
+            $title = $this->dao->select($pairs)
+                ->from($table)
+                ->where('id')->eq((int)$id)
+                ->andWhere($query)
+                ->fetch();
+            if($title) $results[$id] = $title;
+        }
+        if(!isset($results)) return array();
+        return $this->formatResults($results, $module);
+    }
+
+    /* 格式化需求显示。*/
+    private function formatResults($results, $module)
+    {
+        /* 重新组织每一个title的展示方式。*/
+        $title = ($module == 'story') ? 'title' : 'name';
+        $resultPairs = array('' => '');
+        foreach($results as $result) $resultPairs[$result->id] = $result->id . ':' . $result->$title;
+        return $resultPairs;
+    }
+
 }

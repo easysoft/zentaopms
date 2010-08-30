@@ -24,6 +24,12 @@
 ?>
 <?php include './header.html.php';?>
 <style>#module{width:90%}</style>
+<script language='javascript'>
+$(document).ready(function()
+{
+    $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
+});
+</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>
@@ -101,7 +107,9 @@
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-          <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></span></td>
+          <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></span>
+          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=0&module=story&storyID=$case->story"), $lang->go, "_blank", "id='searchStories'");?>
+          </td>       
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->testcase->type;?></td>

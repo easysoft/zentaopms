@@ -29,6 +29,7 @@
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
 })
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -73,6 +74,8 @@ $(function() {
         <tr>
           <th class='rowhead'><?php echo $lang->task->story;?></th>
           <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?> 
+          <?php echo html::a($this->createLink('search', 'select', "productID=0&projectID=$project->id&module=story&storyID=$task->story"), $lang->go, "_blank", "id='searchStories'");?>
+          </td>
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->owner;?></th>

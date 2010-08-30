@@ -34,6 +34,9 @@ $lang->search->buildQuery    = '執行搜索';
 $lang->search->saveQuery     = '保存查詢';
 $lang->search->deleteQuery   = '刪除查詢';
 $lang->search->setQueryTitle = '請輸入查詢標題（保存之前請先查詢）：';
+$lang->search->storyTitle    = '需求名稱';
+$lang->search->taskTitle     = '任務名稱';
+$lang->search->select        = '選擇';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';
