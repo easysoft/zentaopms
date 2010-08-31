@@ -60,6 +60,10 @@ $lang->doc->deleteFile     = '刪除文件';
 $lang->doc->systemLibs['product'] = '產品文檔庫';
 $lang->doc->systemLibs['project'] = '項目文檔庫';
 
+$lang->doc->types['file'] = 'file';
+$lang->doc->types['url']  = 'url';
+$lang->doc->types['text'] = 'text';
+
 $lang->doc->confirmDeleteLib   = " 您確定刪除該文檔庫嗎？";
 $lang->doc->confirmDelete      = " 您確定刪除該文檔嗎？";
 $lang->doc->errorEditSystemDoc = "系统文档库不需要修改";

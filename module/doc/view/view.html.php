@@ -24,7 +24,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../file/view/download.html.php';?>
-</style>
+<script language='javascript'>
+var type = '<?php echo $doc->type;?>';
+$(document).ready(function()
+{
+    /* 判断文档类型。*/
+    if(type == 'url') $('#urlBox').show();
+    else if(type == 'text') $('#contentBox').show();
+    else $('#fileBox').show();
+});
+</script>
 <div class='yui-d0'>
   <table class='table-1'>
   <caption><?php echo $doc->title . $lang->colon . $lang->doc->view;?></caption>
@@ -34,21 +43,36 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->doc->lib;?></th>
-      <td><?php echo $doc->libName;?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->doc->product;?></th>
-      <td><?php echo $doc->productName;?></td>
-    </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->doc->project;?></th>
-      <td><?php echo $doc->projectName;?></td>
+      <td><?php echo $lib;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->doc->module;?></th>
       <td><?php echo $doc->moduleName;?></td>
     </tr>
     <tr>
+      <th class='rowhead'><?php echo $lang->doc->type;?></th>
+      <td><?php echo $doc->type;?></td>
+    </tr>  
+      <th class='rowhead'><?php echo $lang->doc->title;?></th>
+      <td><?php echo $doc->title;?></td>
+    </tr> 
+    <tr id='urlBox' class='hidden'>
+      <th class='rowhead'><?php echo $lang->doc->url;?></th>
+      <td><?php echo html::a(urldecode($doc->url));?></td>
+    </tr>  
+    <tr id='contentBox' class='hidden'>
+      <th class='rowhead'><?php echo $lang->doc->content;?></th>
+      <td><?php echo nl2br($doc->content);?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
+      <td><?php echo $doc->keywords;?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->doc->digest;?></th>
+      <td><?php echo $doc->digest;?></td>
+    </tr>  
+    <tr id='fileBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->files;?></th>
       <td>
       <?php 

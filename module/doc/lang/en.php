@@ -60,6 +60,10 @@ $lang->doc->deleteFile     = 'Delete file';
 $lang->doc->systemLibs['product'] = 'Product doc';
 $lang->doc->systemLibs['project'] = 'Project doc';
 
+$lang->doc->types['file'] = 'file';
+$lang->doc->types['url']  = 'url';
+$lang->doc->types['text'] = 'text';
+
 $lang->doc->confirmDeleteLib   = " Are you sure to delete this doc library?";
 $lang->doc->confirmDelete      = " Are you sure to delete this doc?";
 $lang->doc->errorEditSystemDoc = "System doc library needn't edit";

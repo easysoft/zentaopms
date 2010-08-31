@@ -43,6 +43,7 @@
             <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
             <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
+            <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->doc->type);?></th>
             <th class='w-100px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?></th>
             <th class='w-120px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
             <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
@@ -57,8 +58,9 @@
           <tr class='a-center'>
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
             <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
+            <td><?php echo $doc->type;?></td>
             <td><?php echo $users[$doc->addedBy];?></td>
-            <td><?php echo $doc->addedDate;?></td>
+            <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
             <td>
               <?php 
               $vars = "doc={$doc->id}";

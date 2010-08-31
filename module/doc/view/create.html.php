@@ -29,6 +29,25 @@ function loadProducts(project)
     link = createLink('project', 'ajaxGetProducts', 'projectID=' + project);
     $('#productBox').load(link);
 }
+/* 设置文档类型。*/
+function setType(type)
+{
+    if(type == 'url'){
+        $('#urlBox').show();
+        $('#fileBox').hide();
+        $('#contentBox').hide();
+    }
+    else if(type == 'text'){
+        $('#urlBox').hide();
+        $('#fileBox').hide();
+        $('#contentBox').show();
+    }
+    else{
+        $('#urlBox').hide();
+        $('#fileBox').show();
+        $('#contentBox').hide();
+    }
+}
 </script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -54,10 +73,30 @@ function loadProducts(project)
         <td><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='select-3'");?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->doc->title;?></th>
-        <td><?php echo html::input('title', '', "class='text-1'");?></td>
+        <th class='rowhead'><?php echo $lang->doc->type;?></th>
+        <td><?php echo html::radio('type', $lang->doc->types, 'file', "onclick=setType(this.value)");?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->doc->title;?></th>
+        <td><?php echo html::input('title', '', "class='text-1'");?></td>
+      </tr> 
+      <tr id='urlBox' class='hidden'>
+        <th class='rowhead'><?php echo $lang->doc->url;?></th>
+        <td><?php echo html::input('url', '', "class='text-1'");?></td>
+      </tr>  
+      <tr id='contentBox' class='hidden'>
+        <th class='rowhead'><?php echo $lang->doc->content;?></th>
+        <td><?php echo html::textarea('content', '', "class='text-1' rows='8'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
+        <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->doc->digest;?></th>
+        <td><?php echo html::input('digest', '', "class='text-1'");?></td>
+      </tr>  
+      <tr id='fileBox'>
         <th class='rowhead'><?php echo $lang->doc->files;?></th>
         <td><?php echo $this->fetch('file', 'buildform', 'fileCount=2');?></td>
       </tr>  

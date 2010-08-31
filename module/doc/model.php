@@ -130,7 +130,8 @@ class docModel extends model
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
             ->setDefault('product, project, module', 0)
-            ->specialChars('title')    //type, digest, content, keyword
+            ->specialChars('title, digest, content, keywords')
+            ->encodeURL('url')
             ->cleanInt('product, project, module')
             ->remove('files, labels')
             ->get();
@@ -155,10 +156,11 @@ class docModel extends model
         $oldDoc = $this->getById($docID);
         $now = helper::now();
         $doc = fixer::input('post')
-            ->cleanInt('product, project, module')
-            ->specialChars('title')
+            ->cleanInt('module')
+            ->setDefault('module', 0)
+            ->specialChars('title, digest, content, keywords')
+            ->encodeURL('url')
             ->remove('files, labels')
-            ->setDefault('project,project, module', 0)
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
             ->get();

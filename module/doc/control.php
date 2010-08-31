@@ -250,13 +250,10 @@ class doc extends control
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
         $this->view->position[]    = $this->lang->doc->create;
 
+        $this->view->doc              = $doc;
         $this->view->libID            = $libID;
         $this->view->users            = $this->user->getPairs('noclosed,nodeleted');
-        $this->view->title            = $doc->title;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->moduleID         = $doc->module;
-        $this->view->productID        = $doc->product;
-        $this->view->projectID        = $doc->project;
         $this->display();
     }
 
@@ -267,6 +264,11 @@ class doc extends control
         $doc = $this->doc->getById($docID);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
         
+        /* 文档库名称。*/
+        if($doc->lib == 'product') $lib = $doc->productName;
+        else if($doc->lib == 'project') $lib = $doc->productName . '/' . $doc->projectName;
+        else $lib = $doc->libName;
+
         /* 设置菜单。*/
         $this->doc->setMenu($this->libs, $doc->lib);
 
@@ -275,7 +277,8 @@ class doc extends control
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
         $this->view->position[]    = $this->lang->doc->create;
 
-        $this->view->doc     = $doc; 
+        $this->view->doc     = $doc;
+        $this->view->lib     = $lib;
         $this->view->actions = $this->loadModel('action')->getList('doc', $docID);
         $this->view->users   = $this->user->getPairs('noclosed,nodeleted');
 
