@@ -103,6 +103,7 @@ class mailModel extends model
             $this->setTO($toList, $emails);
             $this->setCC($ccList, $emails);
             $this->setBody($body);
+            $this->setErrorLang();
             $this->mta->send();
         }
         catch (phpmailerException $e) 
@@ -152,6 +153,12 @@ class mailModel extends model
         $this->mta->msgHtml("$body");
     }
 
+     /* 设置错误提示语言。*/
+    private function setErrorLang()
+    {
+        $this->mta->SetLanguage($this->app->getClientLang());
+    }
+   
     /* 清楚地址和附件。*/
     private function clear()
     {
