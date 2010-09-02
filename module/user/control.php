@@ -324,15 +324,18 @@ class user extends control
                    $from == 'zentao'
                 )
                 {
+                    if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'success')));
                     die(js::locate($_POST['referer'], 'parent'));
                 }
                 else
                 {
+                    if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'success')));
                     die(js::locate($this->createLink($this->config->default->module), 'parent'));
                 }
             }
             else
             {
+                if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'failed')));
                 die(js::error($this->lang->user->loginFailed));
             }
         }

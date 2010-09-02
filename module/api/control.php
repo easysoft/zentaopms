@@ -40,6 +40,10 @@ class api extends control
         $module = $this->loadModel($moduleName);
         $result = call_user_func_array(array(&$module, $methodName), $params);
         if(dao::isError()) die(json_encode(dao::getError()));
-        die(json_encode($result));
+        $output['status'] = $result ? 'success' : 'fail';
+        $output['data']   = json_encode($result);
+        $output['md5']    = md5($output['data']);
+        $this->output     = json_encode($output);
+        die($this->output);
     }
 }
