@@ -33,6 +33,7 @@ class common extends control
     {
         parent::__construct();
         session_name($this->config->sessionVar);
+        if(isset($_GET[$this->config->sessionVar])) session_id($_GET[$this->config->sessionVar]);
         session_start();
         $this->sendHeader();
         $this->loadModel('company');
