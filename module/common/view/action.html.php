@@ -4,10 +4,16 @@
 <?php if($actionTheme == 'fieldset'):?>
 <div>
 <fieldset>
-  <legend onclick='$("#historyItem li").reverseOrder();' class='hand'><?php echo $lang->history . $lang->reverse;?></legend>
+  <legend>
+    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . $lang->reverse;?></span>
+    <span onclick='$(".changes").toggle();' class='hand'><?php echo $lang->switchDisplay;?></span>
+  </legend>
 <?php else:?>
 <table class='table-1'>
-  <caption onclick='$("#historyItem li").reverseOrder();' class='hand'><?php echo $lang->history . $lang->reverse;?></caption>
+  <caption>
+    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . $lang->reverse;?></span>
+    <span onclick='$(".changes").toggle();' class='hand'><?php echo $lang->switchDisplay;?></span>
+  </caption>
   <tr><td>
 <?php endif;?>
 
@@ -21,10 +27,10 @@
       ?>
       <span><?php $this->action->printAction($action);?>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
-      <div class='history'>
-        <div id='changes'><?php echo $this->action->printChanges($action->objectType, $action->history);?></div>
+      <?php if(!empty($action->comment)) echo "<div class='history'>";?>
+        <div class='changes'><?php echo $this->action->printChanges($action->objectType, $action->history);?></div>
         <?php if($action->comment and $action->history) echo '<br />'; echo nl2br($action->comment);?>
-      </div>
+      <?php if(!empty($action->comment)) echo "</div>";?>
       <?php endif;?>
     </li>
     <?php endforeach;?>

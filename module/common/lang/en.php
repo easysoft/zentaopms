@@ -60,7 +60,8 @@ $lang->actions      = 'Actions';
 $lang->comment      = 'Comment';
 $lang->history      = 'History';
 $lang->attatch      = 'Attatch';
-$lang->reverse      = '(Reverse)';
+$lang->reverse      = '[Reverse]';
+$lang->switchDisplay= '[Toggle Show]';
 $lang->addFiles     = 'Add Files';
 $lang->files        = 'Files ';
 
