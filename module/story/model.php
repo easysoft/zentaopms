@@ -117,7 +117,7 @@ class storyModel extends model
             $data->story   = $storyID;
             $data->version = 1;
             $data->title   = $story->title;
-            $data->spec    = htmlspecialchars($this->post->spec);
+            $data->spec    = $this->post->spec;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
             return $storyID;
         }
@@ -160,7 +160,7 @@ class storyModel extends model
                 $data->story   = $storyID;
                 $data->version = $oldStory->version + 1;
                 $data->title   = $story->title;
-                $data->spec    = htmlspecialchars($this->post->spec);
+                $data->spec    = $this->post->spec;
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
                 $story->spec   = $this->post->spec;
             }

@@ -23,6 +23,14 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
+<script language='javascript'>
+/* 富文本编辑器。*/
+KE.show({
+    id:'spec',
+    items:simpleTools
+});
+</script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'>
@@ -37,7 +45,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->spec;?></th>
-      <td><?php echo html::textarea('spec', $story->spec, 'rows=5 class="area-1"');?><br /> <?php echo $lang->story->specTemplate;?></td>
+      <td><?php echo html::textarea('spec', $story->spec, 'rows=8 class="area-1"');?><br /> <?php echo $lang->story->specTemplate;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>

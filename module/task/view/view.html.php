@@ -54,7 +54,7 @@
     <div class='yui-b'>
       <fieldset>
         <legend><?php echo $lang->task->legendDesc;?></legend>
-        <div><?php echo nl2br($task->desc);?></div>
+        <div><?php echo $task->desc;?></div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->files;?></legend>

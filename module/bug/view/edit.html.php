@@ -25,9 +25,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
-<?php include '../../common/view/xheditor.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <style>
 #product, #module, #project, #story, #task, #resolvedBuild{width:220px}
+#steps {width:100%}
 .select-3 {width:220px}
 .text-3   {width:215px}
 </style>
@@ -141,8 +142,13 @@ function setDuplicate(resolution)
         $('#duplicateBugBox').hide();
     }
 }
+
+/* 富文本编辑器。*/
+KE.show({
+    id:'steps',
+    items:bugTools
+});
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
-tools = simpleTools;
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
@@ -167,7 +173,7 @@ $(function() {
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->bug->legendSteps;?></legend>
-            <div class='w-p90'><?php echo html::textarea('steps', $bug->steps, "rows='8' class='xhe'");?></div>
+            <div class='w-p90'><?php echo html::textarea('steps', $bug->steps, "id='kindeditor' rows='12'");?></div>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendComment;?></legend>

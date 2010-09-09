@@ -24,7 +24,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../file/view/download.html.php';?>
-
 <div class='yui-d0'>
   <div id='titlebar'>
     <div id='main' <?php if($bug->deleted) echo "class='deleted'";?>>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
@@ -53,7 +52,7 @@
     <div class='yui-b'>
       <fieldset>
         <legend><?php echo $lang->bug->legendSteps;?></legend>
-        <div class='steps'><?php echo html::parseUBB($bug->steps);?></div>
+        <div class='content'><?php echo $bug->steps;?></div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->bug->legendAttatch;?></legend>

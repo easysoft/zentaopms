@@ -25,15 +25,17 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
-<?php include '../../common/view/xheditor.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 
 <style>
 #project, #product  {width:200px}
 #module, #task      {width:400px}
 #severity, #browser {width:113px}
 #story{width:605px}
+#steps{width:100%}
 .text-1 {width: 85%}
 </style>
+</script>
 <script language='Javascript'>
 /* 当选择产品时，触发这个方法。*/
 function loadAll(productID)
@@ -122,13 +124,18 @@ function loadProjectBuilds(projectID)
     link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=openedBuild');
     $('#buildBox').load(link);
 }
+
+/* 富文本编辑器。*/
+KE.show({
+    id:'steps',
+    items:bugTools
+});
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
-var saveTool    = ",Separator,Save";
-tools = simpleTools + saveTool;
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     setAssignedTo();
 })
+
 </script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -191,7 +198,7 @@ $(function() {
         <td>
           <table class='w-p100 bd-none'>
             <tr class='bd-none' valign='top'>
-              <td class='w-p85 bd-none padding-zero'><?php echo html::textarea('steps', $steps, "class='xhe' rows='9'");?></td>
+              <td class='w-p85 bd-none padding-zero'><?php echo html::textarea('steps', $steps, "rows='10'");?></td>
               <td class='bd-none pl-10px' id='tplBox'><?php echo $this->fetch('bug', 'buildTemplates');?></td>
             </tr>
           </table>

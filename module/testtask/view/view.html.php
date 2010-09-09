@@ -53,7 +53,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->desc;?></th>
-      <td><?php echo nl2br($task->desc);?>
+      <td><?php echo $task->desc;?>
     </tr>  
   </table>
   <div class='a-center f-16px strong'>

@@ -25,7 +25,13 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <script language='Javascript'>
+/* 富文本编辑器。*/
+KE.show({
+    id:'desc',
+    items:simpleTools
+});
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
@@ -47,7 +53,7 @@ $(function() {
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->task->desc;?></legend>
-            <?php echo html::textarea('desc', $task->desc, "rows='4' class='area-1'");?>
+            <?php echo html::textarea('desc', $task->desc, "rows='8' class='area-1'");?>
           </fieldset>
           <fieldset>
             <legend><?php echo $lang->comment;?></legend>

@@ -41,7 +41,6 @@ class testtaskModel extends model
         $task = fixer::input('post')
             ->add('product', $productID)
             ->stripTags('name')
-            ->specialChars('desc')
             ->get();
         $this->dao->insert(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck($this->config->testtask->create->requiredFields, 'notempty')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
@@ -79,7 +78,6 @@ class testtaskModel extends model
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
             ->stripTags('name')
-            ->specialChars('desc')
             ->get();
         $this->dao->update(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')->where('id')->eq($taskID)->exec();
         if(!dao::isError()) return common::createChanges($oldTask, $task);

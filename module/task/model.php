@@ -35,7 +35,6 @@ class taskModel extends model
         {
             $task = fixer::input('post')
                 ->striptags('name')
-                ->specialChars('desc')
                 ->add('project', (int)$projectID)
                 ->setDefault('estimate, left, story', 0)
                 ->setDefault('deadline', '0000-00-00')
@@ -69,7 +68,6 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
             ->striptags('name')
-            ->specialChars('desc')
             ->setDefault('story, estimate, left, consumed', 0)
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF($this->post->status == 'done', 'left', 0)

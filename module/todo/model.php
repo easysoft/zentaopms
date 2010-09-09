@@ -33,7 +33,7 @@ class todoModel extends model
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->add('idvalue', 0)
-            ->specialChars('type,name,desc')
+            ->specialChars('type,name')
             ->cleanInt('date, pri, begin, end, private')
             ->setIF($this->post->type != 'custom', 'name', '')
             ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
@@ -59,7 +59,7 @@ class todoModel extends model
         if($oldTodo->type != 'custom') $oldTodo->name = '';
         $todo = fixer::input('post')
             ->cleanInt('date, pri, begin, end, private')
-            ->specialChars('type,name,desc')
+            ->specialChars('type,name')
             ->setIF($this->post->type != 'custom', 'name',  '')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')

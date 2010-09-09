@@ -23,7 +23,14 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-
+<?php include '../../common/view/kindeditor.html.php';?>
+<script language='javascript'>
+/* 富文本编辑器。*/
+KE.show({
+    id:'desc',
+    items:simpleTools
+});
+</script>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
@@ -46,7 +53,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-        <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></textarea>
+        <td><?php echo html::textarea('desc', '', "rows='8' class='area-1'");?></textarea>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->status;?></th>

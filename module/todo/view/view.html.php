@@ -58,7 +58,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-      <td><?php echo nl2br($todo->desc);?></td>
+      <td><?php echo $todo->desc;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->status;?></th>
