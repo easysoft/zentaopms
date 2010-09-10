@@ -286,6 +286,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .plan    {background:#9F9F5F;}
 .steps   {line-height:22px; font-size:14px}
 
+.tabs a{display:block; width:80%; margin:auto auto 10px auto; padding:5px; border:1px solid blue; text-decoration:none; overflow:hidden; white-space:nowrap; text-align:center}
+.tabs a.current {background:green; color:white}
+
 /* Ò³½Å¡£*/
 #footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background-color:#CEE7F3; border-top:1px solid #59AED7;}
 #crumbs    {padding:5px 0 5px 10px;}
