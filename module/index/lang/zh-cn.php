@@ -28,3 +28,16 @@ $lang->index->index  = '首页';
 $lang->index->ping   = '接口:同步session';
 $lang->index->latest = '最新动态';
 $lang->index->action = '%s, %s <i>%s</i> %s <strong>%s</strong>。';
+
+$lang->index->projects = '项目';
+$lang->index->stats    = '统计信息';
+$lang->index->my       = '我的地盘';
+$lang->index->products = '产品';
+$lang->index->stories  = '需求';
+$lang->index->tasks    = '任务';
+$lang->index->bugs     = 'Bug';
+$lang->index->todos    = 'Todo';
+$lang->index->total    = '共 <strong>%s</strong> 个,';
+$lang->index->myTodo   = '我的Todo';
+$lang->index->myTask   = '我的任务';
+$lang->index->myBug    = '我的Bug';
