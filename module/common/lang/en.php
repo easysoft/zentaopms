@@ -25,6 +25,8 @@
  */
 $lang->arrow        = ' » ';
 $lang->colon        = '::';
+$lang->comma        = ',';
+$lang->dot          = '.';
 $lang->at           = ' at ';
 $lang->downArrow    = '↓';
 
@@ -55,6 +57,7 @@ $lang->goback       = 'Back';
 $lang->showHelp     = 'Help On';
 $lang->closeHelp    = 'Help Off';
 $lang->go           = 'GO!';
+$lang->more         = 'More';
 
 $lang->actions      = 'Actions';
 $lang->comment      = 'Comment';
