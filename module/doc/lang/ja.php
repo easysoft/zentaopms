@@ -60,9 +60,9 @@ $lang->doc->deleteFile     = 'ファイルを削除';
 $lang->doc->systemLibs['product'] = '製品ドキュメント';
 $lang->doc->systemLibs['project'] = 'プロジェクトドキュメント';
 
-$lang->doc->types['file'] = 'file';
-$lang->doc->types['url']  = 'url';
-$lang->doc->types['text'] = 'text';
+$lang->doc->types['file'] = 'ファイル';
+$lang->doc->types['url']  = 'リンク';
+$lang->doc->types['text'] = 'HTML形式';
 
 $lang->doc->confirmDeleteLib   = "あなたは、このドキュメントライブラリを削除しますか？";
 $lang->doc->confirmDelete      = "あなたはこのドキュメントを削除しますか？";

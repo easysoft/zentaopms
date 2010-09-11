@@ -60,9 +60,9 @@ $lang->doc->deleteFile     = '삭제 파일';
 $lang->doc->systemLibs['product'] = '제품 박사님';
 $lang->doc->systemLibs['project'] = '프로젝트 의사';
 
-$lang->doc->types['file'] = 'file';
-$lang->doc->types['url']  = 'url';
-$lang->doc->types['text'] = 'text';
+$lang->doc->types['file'] = '파일';
+$lang->doc->types['url']  = '링크';
+$lang->doc->types['text'] = 'html로';
 
 $lang->doc->confirmDeleteLib   = "당신이 의사 라이브러리를 삭제하시겠습니까?";
 $lang->doc->confirmDelete      = "당신이 의사를 삭제하시겠습니까?";
