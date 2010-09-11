@@ -36,7 +36,11 @@ class bug extends control
         $this->loadModel('story');
         $this->loadModel('task');
         $this->products = $this->product->getPairs();
-        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products))
+        {
+            echo js::alert($this->lang->product->errorNoProduct);
+            die(js::locate($this->createLink('product', 'create')));
+        }
         $this->view->products = $this->products;
     }
 

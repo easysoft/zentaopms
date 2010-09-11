@@ -43,6 +43,7 @@ $lang->product->ajaxGetPlans    = "接口:计划列表";
 $lang->product->errorFormat    = '产品数据格式不正确';
 $lang->product->errorEmptyName = '产品名称不能为空';
 $lang->product->errorEmptyCode = '产品代号不能为空';
+$lang->product->errorNoProduct = '还没有创建产品！';
 $lang->product->accessDenied   = '您无权访问该产品';
 
 $lang->product->id        = '编号';

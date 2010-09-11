@@ -41,6 +41,7 @@ $lang->product->ajaxGetPlans    = "API: plans of product";
 $lang->product->errorFormat    = 'Error format.';
 $lang->product->errorEmptyName = 'Name can not be empty.';
 $lang->product->errorEmptyCode = 'Code can not be empty';
+$lang->product->errorNoProduct = 'No product in system yet.';
 $lang->product->accessDenied   = 'Access to this product denined.';
 
 $lang->product->id        = 'ID';
