@@ -135,16 +135,12 @@ class docModel extends model
             ->cleanInt('product, project, module')
             ->remove('files, labels')
             ->get();
-        $title = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('lib')->eq($doc->lib)
-            ->andWhere('module')->eq($doc->module)
-            ->andWhere('title')->eq($doc->title)
-            ->fetch();
+        $condition = "lib = '$doc->lib' AND module = $doc->module";
         $this->dao->insert(TABLE_DOC)
             ->data($doc)
             ->autoCheck()
             ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
-            ->checkIF($title, 'title', 'unique')
+            ->check('title', 'unique', $condition)
             ->exec();
         if(!dao::isError())
         {
@@ -169,17 +165,12 @@ class docModel extends model
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
             ->get();
-        $title = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('lib')->eq($doc->lib)
-            ->andWhere('module')->eq($doc->module)
-            ->andWhere('title')->eq($doc->title)
-            ->andWhere('id')->ne($docID)
-            ->fetch();
 
+        $condition = "lib = '$doc->lib' AND module = $doc->module AND id != $docID";
         $this->dao->update(TABLE_DOC)->data($doc)
             ->autoCheck()
             ->batchCheck($this->config->doc->edit->requiredFields, 'notempty')
-            ->checkIF($title, 'title', 'unique', "id != $docID")
+            ->check('title', 'unique', $condition)
             ->where('id')->eq((int)$docID)
             ->exec();
         if(!dao::isError()) return common::createChanges($oldDoc, $doc);
