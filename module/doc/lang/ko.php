@@ -65,5 +65,4 @@ $lang->doc->types['url']  = '링크';
 $lang->doc->types['text'] = 'html로';
 
 $lang->doc->confirmDeleteLib   = "당신이 의사 라이브러리를 삭제하시겠습니까?";
-$lang->doc->confirmDelete      = "당신이 의사를 삭제하시겠습니까?";
 $lang->doc->errorEditSystemDoc = "시스템 의사 도서관은 필요 없어 편집";

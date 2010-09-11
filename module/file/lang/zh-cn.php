@@ -24,4 +24,6 @@
 $lang->file->common     = '附件';
 $lang->file->download   = '下载附件';
 $lang->file->export2CSV = '导出CSV';
-$lang->file->label    = '标题：';
+$lang->file->label      = '标题：';
+
+$lang->file->confirmDelete = " 您确定删除该附件吗？";

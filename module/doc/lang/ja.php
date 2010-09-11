@@ -65,5 +65,4 @@ $lang->doc->types['url']  = 'リンク';
 $lang->doc->types['text'] = 'HTML形式';
 
 $lang->doc->confirmDeleteLib   = "あなたは、このドキュメントライブラリを削除しますか？";
-$lang->doc->confirmDelete      = "あなたはこのドキュメントを削除しますか？";
 $lang->doc->errorEditSystemDoc = "システムドキュメントライブラリは必要はない編集";

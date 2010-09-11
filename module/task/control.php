@@ -303,13 +303,6 @@ class task extends control
         }
     }
 
-    /* 删除一个文件。*/
-    public function deleteFile($fileID)
-    {
-        $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
-        die(js::reload('parent'));
-    }
-
     /* 发送邮件。*/
     private function sendmail($taskID, $actionID)
     {

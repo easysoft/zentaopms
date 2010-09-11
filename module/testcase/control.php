@@ -255,13 +255,6 @@ class testcase extends control
         }
     }
 
-    /* 删除一个文件。*/
-    public function deleteFile($fileID)
-    {
-        $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
-        die(js::reload('parent'));
-    }
-
     /* 确认需求变动。*/
     public function confirmStoryChange($caseID)
     {

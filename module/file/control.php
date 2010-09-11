@@ -92,4 +92,18 @@ class file extends control
         echo $csvData;
         die();
     }
+
+    /* 删除一个文件。*/
+    public function deleteFile($fileID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->file->confirmDelete, inlink('deleteFile', "fileID=$fileID&confirm=yes")));
+        }
+        else
+        {
+            $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+            die(js::reload('parent'));
+        }
+    }
 }

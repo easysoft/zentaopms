@@ -6,7 +6,7 @@
 function deleteFile(fileID)
 {
     if(!fileID) return;
-    hiddenwin.location.href =createLink('doc', 'deleteFile', 'fileID=' + fileID);
+    hiddenwin.location.href =createLink('file', 'deleteFile', 'fileID=' + fileID);
 }
 /* 下载文件。*/
 function downloadFile(fileID){

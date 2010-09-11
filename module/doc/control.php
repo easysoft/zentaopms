@@ -298,18 +298,4 @@ class doc extends control
             die(js::locate($this->session->docList, 'parent'));
         }
     }
-
-    /* 删除一个文件。*/
-    public function deleteFile($fileID, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->doc->confirmDelete, inlink('deleteFile', "fileID=$fileID&confirm=yes")));
-        }
-        else
-        {
-            $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
-            die(js::reload('parent'));
-        }
-    }
 }
