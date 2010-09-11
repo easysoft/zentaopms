@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
  * @version     $Id: en.php 993 2010-08-02 10:20:01Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->company->common   = '会社';
 $lang->company->index    = "インデックス";

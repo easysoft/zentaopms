@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
  * @version     $Id: en.php 1000 2010-08-03 01:49:25Z yuren_@126.com $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->action->common   = 'ログ';
 $lang->action->trash    = 'ごみ';

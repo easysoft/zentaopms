@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id$
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';

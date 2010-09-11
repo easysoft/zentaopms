@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->release->common    = '發佈';
 $lang->release->create    = "創建發佈";

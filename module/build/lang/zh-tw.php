@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
  * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->build->common    = 'Build';
 $lang->build->create    = "創建Build";

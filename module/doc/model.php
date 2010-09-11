@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     doc
  * @version     $Id: model.php 881 2010-06-22 06:50:32Z chencongzhi520 $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 ?>
 <?php

@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
 $lang->testtask->create         = "創建測試任務";

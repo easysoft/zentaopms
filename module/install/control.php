@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id$
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 class install extends control
 {
@@ -39,7 +39,7 @@ class install extends control
 
         /* 获得官方网站最新的版本。*/
         $snoopy = $this->app->loadClass('snoopy');
-        if(@$snoopy->fetchText('http://www.zentaoms.com/misc-getlatestrelease.json'))
+        if(@$snoopy->fetchText('http://www.zentao.net/misc-getlatestrelease.json'))
         {
             $result = json_decode($snoopy->results);
             if(isset($result->release) and $this->config->version != $result->release->version)

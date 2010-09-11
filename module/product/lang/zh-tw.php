@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: zh-tw.php 988 2010-07-31 07:14:46Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->product->common = '產品視圖';
 $lang->product->index  = "產品首頁";

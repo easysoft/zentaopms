@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: zh-tw.php 998 2010-08-03 01:26:10Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->upgrade->common  = '升級';
 $lang->upgrade->result  = '升級結果';

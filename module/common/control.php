@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     common
  * @version     $Id$
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 class common extends control
 {
@@ -160,7 +160,7 @@ EOT;
         global $app, $lang;
         $logo = $app->getWebRoot() . 'theme/default/images/main/logo.png';
         echo "<ul>\n";
-        echo "<li style='padding:0; height:30px'><a href='http://www.zentaoms.com' target='_blank'><img src='$logo' /></a></li>\n";
+        echo "<li style='padding:0; height:30px'><a href='http://www.zentao.net' target='_blank'><img src='$logo' /></a></li>\n";
 
         /* 设定当前的主菜单项。默认先取当前的模块名，如果有该模块所对应的菜单分组，则取分组名作为主菜单项。*/
         $mainMenu = $moduleName;

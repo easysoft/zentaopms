@@ -19,7 +19,7 @@
  * @author      Chen congzhi <congzhi@cnezsoft.com>
  * @package     common
  * @version     $Id$
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 include '../config/config.php';
 

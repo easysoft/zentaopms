@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
  * @version     $Id: zh-tw.php 949 2010-07-17 05:39:30Z yuren_@126.com $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->testcase->id             = '用例編號';
 $lang->testcase->product        = '所屬產品';

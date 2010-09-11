@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id: Korean.php 824 2010-05-02 15:32:06Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->api->common   = 'API를';
 $lang->api->getModel = '슈퍼 모델 API를';

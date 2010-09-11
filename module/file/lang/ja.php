@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
  * @version     $Id: en.php 993 2010-08-02 10:20:01Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->file->common     = 'ファイル';
 $lang->file->download   = 'ダウンロード';

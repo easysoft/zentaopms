@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id: zh-tw.php 988 2010-07-31 07:14:46Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
 $lang->project->common       = '項目視圖';

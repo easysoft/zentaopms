@@ -20,7 +20,7 @@
       <td>
         <ul>
           <?php foreach($groupItems as $item => $label):?>
-          <li><?php echo html::a("http://www.zentaoms.com/goto.php?item=$item", $label, '_blank');;?></li>
+          <li><?php echo html::a("http://www.zentao.net/goto.php?item=$item", $label, '_blank');;?></li>
           <?php endforeach;?>
         </ul>
       </td>

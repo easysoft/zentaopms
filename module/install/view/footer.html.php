@@ -8,7 +8,7 @@
     <div class='yui-g'>
       <div class='yui-u first'> </div>
       <div class='yui-u a-right'>
-        <span id='poweredby'>powered by <a href='http://www.zentaoms.com' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span>
+        <span id='poweredby'>powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span>
       </div>
     </div>
   </div>

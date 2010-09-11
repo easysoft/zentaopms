@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: en.php 993 2010-08-02 10:20:01Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->install->common  = 'インストール';
 $lang->install->next    = '次の';
@@ -37,7 +37,7 @@ ZenTaoPMS is an opensource project management software licensed under LGPL. It h
 ZenTaoPMS is developped by PHH and mysql under the zentaophp framework developped by the same team. Through the framework, ZenTaoPMS can be customed and extended very easily.
 
 ZenTaoPMS is developped by <strong class='red'><a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a></strong>。
-The official website of ZenTaoPMS is <a href='http://www.zentaoms.com' target='_blank'>http://www.zentaoms.com</a>
+The official website of ZenTaoPMS is <a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
 
 The version of current release is <strong class='red'>%s</strong>。
 EOT;

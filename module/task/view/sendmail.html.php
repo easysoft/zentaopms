@@ -19,7 +19,7 @@
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     task
  * @version     $Id: sendmail.html.php 867 2010-06-17 09:32:58Z yuren_@126.com $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 ?>
 <table width='98%' align='center'>

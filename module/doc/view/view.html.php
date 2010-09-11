@@ -19,7 +19,7 @@
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
  * @version     $Id: view.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>

@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: zh-tw.php 986 2010-07-31 02:53:32Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->tree->common            = '模組維護';
 $lang->tree->add               = '添加';

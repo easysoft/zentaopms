@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: zh-tw.php 885 2010-06-30 02:19:11Z yuren_@126.com $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->user->common        = '用戶';
 $lang->user->index         = "用戶視圖首頁";

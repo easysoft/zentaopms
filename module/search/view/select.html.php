@@ -19,7 +19,7 @@
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     search
  * @version     $Id: select.html.php 942 2010-07-06 10:03:51Z jajacn@126.com $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

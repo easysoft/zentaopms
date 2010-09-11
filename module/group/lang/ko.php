@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
  * @version     $Id: en.php 1016 2010-08-03 05:51:37Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->group->common       = '그룹';
 $lang->group->browse       = '찾아보기';

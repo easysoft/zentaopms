@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: en.php 1005 2010-08-03 03:10:13Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->user->common        = 'ユーザー';
 $lang->user->index         = "インデックス";

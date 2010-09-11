@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: zh-tw.php 849 2010-05-31 03:40:44Z yuren_@126.com $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->todo->common    = 'TODO';
 $lang->todo->index     = "todo一覽";

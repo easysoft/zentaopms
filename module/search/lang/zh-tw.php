@@ -19,7 +19,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: zh-tw.php 917 2010-07-06 01:50:33Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';
 $lang->search->reset         = '重置';

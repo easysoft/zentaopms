@@ -21,7 +21,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
  * @version     $Id: en.php 1015 2010-08-03 05:50:35Z wwccss $
- * @link        http://www.zentaoms.com
+ * @link        http://www.zentao.net
  */
 $lang->arrow        = '»';
 $lang->colon        = ': :';
