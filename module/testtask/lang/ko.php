@@ -62,6 +62,10 @@ $lang->testtask->linkedCases   = '링크된 케이스';
 $lang->testtask->confirmDelete = '이 테스트 작업을 삭제하시겠습니까?';
 $lang->testtask->passAll       = '모든 패스';
 
+$lang->testtask->byModule      = 'By module';
+$lang->testtask->assignedToMe  = 'Assgined to me';
+$lang->testtask->allCases      = 'All Cases';
+
 $lang->testtask->lblCases      = '사례 목록';
 $lang->testtask->lblUnlinkCase = '제거 케이스';
 $lang->testtask->lblRunCase    = '실행';

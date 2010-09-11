@@ -37,6 +37,7 @@ $lang->tree->updateOrder       = '更新順';
 $lang->tree->manageChild       = '管理子';
 $lang->tree->syncFromProduct   = 'コピー製品のモジュールから';
 $lang->tree->ajaxGetOptionMenu = 'APIは：選択してメニューを取得する';
+$lang->tree->ajaxGetSonModules = 'API: Get son modules';
 
 $lang->tree->confirmDelete = 'あなたがこのモジュールを削除してよろしいですか？';
 $lang->tree->successSave   = '成功を保存';

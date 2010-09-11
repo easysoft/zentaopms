@@ -27,6 +27,7 @@ $lang->product->browse = "Browse";
 $lang->product->view   = "Info";
 $lang->product->edit   = "Edit";
 $lang->product->create = "Create";
+$lang->product->read   = "Info";
 $lang->product->delete = "Delete";
 
 $lang->product->roadmap   = 'Roadmap';

@@ -37,6 +37,7 @@ $lang->tree->updateOrder       = '업데이트 순서';
 $lang->tree->manageChild       = '관리 아이';
 $lang->tree->syncFromProduct   = '복사 제품 모듈에서';
 $lang->tree->ajaxGetOptionMenu = 'API가 : 선택 메뉴에서 가져오기';
+$lang->tree->ajaxGetSonModules = 'API: Get son modules';
 
 $lang->tree->confirmDelete = '이 모듈을 삭제하시겠습니까?';
 $lang->tree->successSave   = '성공 저장';

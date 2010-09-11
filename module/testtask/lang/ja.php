@@ -62,6 +62,10 @@ $lang->testtask->linkedCases   = 'リンクの例';
 $lang->testtask->confirmDelete = 'あなたがこのテストのタスクを削除しますか？';
 $lang->testtask->passAll       = 'パスのすべての';
 
+$lang->testtask->byModule      = 'By module';
+$lang->testtask->assignedToMe  = 'Assgined to me';
+$lang->testtask->allCases      = 'All Cases';
+
 $lang->testtask->lblCases      = 'ケース一覧';
 $lang->testtask->lblUnlinkCase = '削除の場合';
 $lang->testtask->lblRunCase    = 'ラン';

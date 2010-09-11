@@ -51,6 +51,7 @@ $lang->testcase->linkCase         = '관련 사례';
 $lang->testcase->stage            = '무대';
 $lang->testcase->lastEditedByAB   = '편집하여 최종';
 $lang->testcase->lastEditedDateAB = '마지막으로 편집한 날짜';
+$lang->testcase->allProduct       = 'All product';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID     = '신분증';

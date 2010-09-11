@@ -27,6 +27,7 @@ $lang->product->browse = "찾아보기";
 $lang->product->view   = "정보";
 $lang->product->edit   = "편집";
 $lang->product->create = "만들기";
+$lang->product->read   = "Info";
 $lang->product->delete = "삭제";
 
 $lang->product->roadmap   = '로드맵';
@@ -41,6 +42,7 @@ $lang->product->ajaxGetPlans    = "API가 : 제품의 계획";
 $lang->product->errorFormat    = '오류 형식입니다.';
 $lang->product->errorEmptyName = '이름은 비워둘 수 없습니다.';
 $lang->product->errorEmptyCode = '코드 비워둘 수 없습니다';
+$lang->product->errorNoProduct = 'No product in system yet.';
 $lang->product->accessDenied   = '교통이 제품에 denined.';
 
 $lang->product->id        = '신분증';

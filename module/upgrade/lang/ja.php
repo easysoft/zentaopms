@@ -30,6 +30,12 @@ $lang->upgrade->warnning= '警告';
 $lang->upgrade->warnningContent = <<<EOT
 Warning! Upgradinng is dangeous, backup your database first.<br />
 EOT;
+
+
+
+
+
+
 $lang->upgrade->selectVersion = '選択してバージョン';
 $lang->upgrade->noteVersion   = "正しいバージョンを選択してください";
 $lang->upgrade->fromVersion   = 'バージョンから';

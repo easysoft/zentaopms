@@ -42,6 +42,7 @@ The official website of ZenTaoPMS is <a href='http://www.zentao.net' target='_bl
 The version of current release is <strong class='red'>%s</strong>。
 EOT;
 
+
 $lang->install->newReleased= "<strong class='red'>Notice</strong>：There is a new version <strong class='red'>%s</strong>, released on %s。";
 $lang->install->choice     = 'することができます';
 $lang->install->checking   = 'システム点検';

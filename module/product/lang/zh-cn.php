@@ -28,7 +28,6 @@ $lang->product->view   = "产品信息";
 $lang->product->edit   = "编辑产品";
 $lang->product->create = "新增产品";
 $lang->product->read   = "产品详情";
-$lang->product->edit   = "编辑产品";
 $lang->product->delete = "删除产品";
 
 $lang->product->roadmap   = '路线图';

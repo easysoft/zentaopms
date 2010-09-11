@@ -28,3 +28,16 @@ $lang->index->index  = 'インデックス';
 $lang->index->ping   = 'APIの：アップデートセッション';
 $lang->index->latest = '最新のアクション：';
 $lang->index->action = '%s, %s <i>%s</i> %s <strong>%s</strong>。';
+
+$lang->index->projects = 'Project';
+$lang->index->stats    = 'Stats';
+$lang->index->my       = 'Dashboard';
+$lang->index->products = 'Product';
+$lang->index->stories  = 'Story';
+$lang->index->tasks    = 'Task';
+$lang->index->bugs     = 'Bug';
+$lang->index->todos    = 'Todo';
+$lang->index->total    = 'Total <strong>%s</strong>, ';
+$lang->index->myTodo   = 'My Todo';
+$lang->index->myTask   = 'My Task';
+$lang->index->myBug    = 'My Bug';

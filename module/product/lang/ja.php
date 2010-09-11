@@ -25,8 +25,9 @@ $lang->product->common = '製品';
 $lang->product->index  = "インデックス";
 $lang->product->browse = "ブラウズ";
 $lang->product->view   = "情報";
-$lang->product->edit   = "[編集]";
+$lang->product->edit   = "Edit";
 $lang->product->create = "作成";
+$lang->product->read   = "Info";
 $lang->product->delete = "削除";
 
 $lang->product->roadmap   = 'ロードマップ';
@@ -41,6 +42,7 @@ $lang->product->ajaxGetPlans    = "APIの：製品の計画";
 $lang->product->errorFormat    = 'エラーの形式です。';
 $lang->product->errorEmptyName = '名は空にすることはできません。';
 $lang->product->errorEmptyCode = 'コードを空にすることはできません';
+$lang->product->errorNoProduct = 'No product in system yet.';
 $lang->product->accessDenied   = 'アクセスは、この製品にdenined。';
 
 $lang->product->id        = 'IDは';
