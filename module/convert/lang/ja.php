@@ -28,7 +28,6 @@ $lang->convert->reload  = 'リロード';
 $lang->convert->error   = 'エラー';
 
 $lang->convert->start   = '開始のインポート';
-
 $lang->convert->desc    = <<<EOT
 <p>Welcome to use this convert wizard which will help you to import other system data to ZenTaoPMS.</p>
 <strong>Importing is dangerous. Be sure to backup your database and other data files and sure nobody is using pms when importing.</strong>
@@ -53,6 +52,7 @@ $lang->convert->dbPort     = 'サーバーのポート';
 $lang->convert->dbUser     = 'データベースユーザー';
 $lang->convert->dbPassword = 'データベースのパスワード';
 $lang->convert->dbName     = '%s database';
+$lang->convert->dbCharset  = '%s データベースコード ';
 $lang->convert->dbPrefix   = '%s table prefix';
 $lang->convert->installPath= '%s installed path';
 

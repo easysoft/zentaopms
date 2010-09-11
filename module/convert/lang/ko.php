@@ -28,7 +28,6 @@ $lang->convert->reload  = '새로고침';
 $lang->convert->error   = '오류';
 
 $lang->convert->start   = '시작 가져오기';
-
 $lang->convert->desc    = <<<EOT
 <p>Welcome to use this convert wizard which will help you to import other system data to ZenTaoPMS.</p>
 <strong>Importing is dangerous. Be sure to backup your database and other data files and sure nobody is using pms when importing.</strong>
@@ -53,6 +52,7 @@ $lang->convert->dbPort     = '서버 포트';
 $lang->convert->dbUser     = '데이터베이스 사용자';
 $lang->convert->dbPassword = '데이터베이스 암호';
 $lang->convert->dbName     = '%s database';
+$lang->convert->dbCharset  = '%s 데이터베이스 코드';
 $lang->convert->dbPrefix   = '%s table prefix';
 $lang->convert->installPath= '%s installed path';
 

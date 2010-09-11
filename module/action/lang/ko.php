@@ -67,8 +67,8 @@ $lang->action->desc->diff1     = 'Changed <strong><i>%s</i></strong>, old is "%s
 $lang->action->desc->diff2     = 'Changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>';
 
 /* 用来显示动态信息.*/
-$lang->action->label->opened              = '오픈';
 $lang->action->label->created             = '생성';
+$lang->action->label->opened              = '오픈';
 $lang->action->label->changed             = '변경됨';
 $lang->action->label->edited              = '편집';
 $lang->action->label->closed              = '폐쇄';

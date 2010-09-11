@@ -25,6 +25,8 @@
  */
 $lang->arrow        = ' » ';
 $lang->colon        = '::';
+$lang->comma        = '，';
+$lang->dot          = '。';
 $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 
@@ -55,6 +57,7 @@ $lang->goback       = '返回';
 $lang->showHelp     = '顯示幫助';
 $lang->closeHelp    = '關閉幫助';
 $lang->go           = 'GO!';
+$lang->more         = '更多!';
 
 $lang->actions      = '操作';
 $lang->comment      = '備註';

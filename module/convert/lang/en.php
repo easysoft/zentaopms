@@ -28,7 +28,6 @@ $lang->convert->reload  = 'Reload';
 $lang->convert->error   = 'Error ';
 
 $lang->convert->start   = 'Begin import';
-
 $lang->convert->desc    = <<<EOT
 <p>Welcome to use this convert wizard which will help you to import other system data to ZenTaoPMS.</p>
 <strong>Importing is dangerous. Be sure to backup your database and other data files and sure nobody is using pms when importing.</strong>

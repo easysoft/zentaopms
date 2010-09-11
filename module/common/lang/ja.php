@@ -25,6 +25,8 @@
  */
 $lang->arrow        = '»';
 $lang->colon        = '：：';
+$lang->comma        = '，';
+$lang->dot          = '。';
 $lang->at           = 'に';
 $lang->downArrow    = '↓';
 
@@ -55,12 +57,14 @@ $lang->goback       = 'バック';
 $lang->showHelp     = 'のヘルプ';
 $lang->closeHelp    = 'オフヘルプ';
 $lang->go           = 'でGO！';
+$lang->more         = 'もっと';
 
 $lang->actions      = 'アクション';
 $lang->comment      = 'コメント';
 $lang->history      = '歴史';
 $lang->attatch      = 'Attatch';
 $lang->reverse      = '（逆）';
+$lang->switchDisplay= '[switch display]';
 $lang->addFiles     = 'ファイルを追加する';
 $lang->files        = 'ファイル';
 
@@ -251,6 +255,8 @@ $lang->zentaoSite     = "公式サイト";
 $lang->sponser        = "<a href='http://www.pujia.com' target='_blank'>PuJia Sponsed</a>";
 $lang->zentaoKeywords = "オープンソースのプロジェクト管理システム";
 $lang->zentaoDESC     = "ZenTaoPMSは、オープンソースのプロジェクト管理システムです。"; 
+
+
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');

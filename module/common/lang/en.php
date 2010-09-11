@@ -256,6 +256,8 @@ $lang->sponser        = "<a href='http://www.pujia.com' target='_blank'>PuJia Sp
 $lang->zentaoKeywords = "Open Source Project Management System";
 $lang->zentaoDESC     = "ZenTaoPMS is an open sourced project management system."; 
 
+
+
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
 define('DT_DATETIME2',  'y-m-d H:i');
