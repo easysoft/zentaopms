@@ -142,9 +142,9 @@ $lang->bug->confirmDelete        = '이 버그를? 삭제하시겠습니까';
 $lang->bug->setTemplateTitle     = '제목 입력하십시오 템플릿을 :';
 
 /* 模板。*/
-$lang->bug->tplStep        = "[단계는 \ n을 \ n]";
-$lang->bug->tplResult      = "[결과는 \ n을 \ n]";
-$lang->bug->tplExpect      = "[가] \ n \ n을 기대";
+$lang->bug->tplStep        = "<p>[단계]</p>";
+$lang->bug->tplResult      = "<p>[결과]</p>";
+$lang->bug->tplExpect      = "<p>[기대]</p>";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[3] = '3';

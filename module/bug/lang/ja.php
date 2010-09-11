@@ -142,9 +142,9 @@ $lang->bug->confirmDelete        = 'あなたはこのバグを？削除しま�
 $lang->bug->setTemplateTitle     = '入力してくださいタイトルテンプレート：';
 
 /* 模板。*/
-$lang->bug->tplStep        = "[手順]\n\n";
-$lang->bug->tplResult      = "[結果]\n\n";
-$lang->bug->tplExpect      = "[期待]\n\n";
+$lang->bug->tplStep        = "<p>[手順]</p>";
+$lang->bug->tplResult      = "<p>[結果]</p>";
+$lang->bug->tplExpect      = "<p>[期待]</p>";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[3] = '3';
