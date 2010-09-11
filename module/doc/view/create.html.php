@@ -80,6 +80,10 @@ function setType(type)
         <th class='rowhead'><?php echo $lang->doc->title;?></th>
         <td><?php echo html::input('title', '', "class='text-1'");?></td>
       </tr> 
+      <tr>
+        <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
+        <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
+      </tr>  
       <tr id='urlBox' class='hidden'>
         <th class='rowhead'><?php echo $lang->doc->url;?></th>
         <td><?php echo html::input('url', '', "class='text-1'");?></td>
@@ -89,12 +93,8 @@ function setType(type)
         <td><?php echo html::textarea('content', '', "class='text-1' rows='8'");?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
-        <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
-      </tr>  
-      <tr>
         <th class='rowhead'><?php echo $lang->doc->digest;?></th>
-        <td><?php echo html::input('digest', '', "class='text-1'");?></td>
+        <td><?php echo html::textarea('digest', '', "class='text-1' rows=3");?></td>
       </tr>  
       <tr id='fileBox'>
         <th class='rowhead'><?php echo $lang->doc->files;?></th>

@@ -51,11 +51,15 @@ $(document).ready(function()
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->doc->type;?></th>
-      <td><?php echo $doc->type;?></td>
+      <td><?php echo $lang->doc->types[$doc->type];?></td>
     </tr>  
       <th class='rowhead'><?php echo $lang->doc->title;?></th>
       <td><?php echo $doc->title;?></td>
     </tr> 
+    <tr>
+      <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
+      <td><?php echo $doc->keywords;?></td>
+    </tr>  
     <tr id='urlBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->doc->url;?></th>
       <td><?php echo html::a(urldecode($doc->url));?></td>
@@ -65,12 +69,8 @@ $(document).ready(function()
       <td><?php echo nl2br($doc->content);?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
-      <td><?php echo $doc->keywords;?></td>
-    </tr>  
-    <tr>
       <th class='rowhead'><?php echo $lang->doc->digest;?></th>
-      <td><?php echo $doc->digest;?></td>
+      <td><?php echo nl2br($doc->digest);?></td>
     </tr>  
     <tr id='fileBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->files;?></th>
