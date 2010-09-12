@@ -61,13 +61,20 @@ class settingModel extends model
         $item->key     = 'sn';
         $item->value   =  $this->computeSN();
 
-        $configID = $this->dao->select('id')->from(TABLE_CONFIG)
+        $config = $this->dao->select('id, value')->from(TABLE_CONFIG)
             ->where('company')->eq(0)
             ->andWhere('owner')->eq('system')
             ->andWhere('section')->eq('global')
             ->andWhere('`key`')->eq('sn')
-            ->fetch('id', $autoComapny = false);
-        if(!$configID) $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
+            ->fetch('', $autoComapny = false);
+        if(!$config)
+        {
+            $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
+        }
+        elseif($config->value == '281602d8ff5ee7533eeafd26eda4e776' or $config->value == '9bed3108092c94a0db2b934a46268b4a')
+        {
+            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($config->id)->exec($autoCompany = false);
+        }
     }
 
     /* 更新PMS的版本设置。*/

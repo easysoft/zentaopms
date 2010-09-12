@@ -26,6 +26,7 @@ class misc extends control
     /* 通过隐藏的iframe定时刷新此页面，保证session不过期。*/
     public function ping()
     {
+        if(mt_rand(0, 10) == 5) $this->loadModel('setting')->setSN();
         die("<html><head><meta http-equiv='refresh' content='300' /></head><body></body></html>");
     }
 
