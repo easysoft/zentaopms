@@ -143,16 +143,13 @@ function setDuplicate(resolution)
     }
 }
 
-/* 富文本编辑器。*/
-KE.show({
-    id:'steps',
-    items:bugTools
-});
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
     $("#searchTasks").colorbox({width:680, height:400, iframe:true, transition:'none'});
+    KE.show({id:'steps', items:simpleTools});
+
 });
 </script>
 <form method='post' target='hiddenwin' enctype='multipart/form-data'>

@@ -23,9 +23,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<style>
-#module, #plan {width:90%}
-</style>
+<style>#module, #plan {width:90%}</style>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='yui-d0'>
   <div id='titlebar'>

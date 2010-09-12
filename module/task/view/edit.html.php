@@ -33,15 +33,12 @@
 </style>
 
 <script language='Javascript'>
-/* 富文本编辑器。*/
-KE.show({
-    id:'desc',
-    items:simpleTools
-});
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
+    KE.show({ id:'desc', items:simpleTools });   // 富文本编辑器。
+
 })
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>

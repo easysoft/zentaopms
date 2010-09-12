@@ -124,15 +124,11 @@ function loadProjectBuilds(projectID)
     $('#buildBox').load(link);
 }
 
-/* 富文本编辑器。*/
-KE.show({
-    id:'steps',
-    items:bugTools
-});
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     setAssignedTo();
+    KE.show({id:'steps',items:bugTools});
 })
 
 </script>
