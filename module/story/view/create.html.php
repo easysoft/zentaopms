@@ -65,7 +65,7 @@ KE.show({
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->story->spec;?></th>
-        <td><?php echo html::textarea('spec', '', "rows='10' class='text-1'");?><br /><?php echo $lang->story->specTemplate;?></td>
+        <td><?php echo html::textarea('spec', '', "rows='9' class='text-1'");?><br /><?php echo $lang->story->specTemplate;?></td>
       </tr>  
       <tr>
         <th class='rowhead'><nobr><?php echo $lang->story->keywords;?></nobr></th>
