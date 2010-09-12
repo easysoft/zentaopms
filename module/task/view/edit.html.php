@@ -26,6 +26,12 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<style>
+#story    {width:220px}
+.select-1 {width:220px}
+.text-1   {width:215px}
+</style>
+
 <script language='Javascript'>
 /* 富文本编辑器。*/
 KE.show({
@@ -80,7 +86,7 @@ $(function() {
         <tr>
           <th class='rowhead'><?php echo $lang->task->story;?></th>
           <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?> 
-          <?php echo html::a($this->createLink('search', 'select', "productID=0&projectID=$project->id&module=story&storyID=$task->story"), $lang->go, "_blank", "id='searchStories'");?>
+          <?php echo html::a($this->createLink('search', 'select', "productID=0&projectID=$project->id&module=story&storyID=$task->story"), $lang->go, "_blank", "class='search' id='searchStories'");?>
           </td>
         </tr>  
         <tr>

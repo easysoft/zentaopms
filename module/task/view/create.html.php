@@ -26,6 +26,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<style>.button-c {padding:2px} </style>
 <script language='javascript'>
 /* 拷贝需求标题为任务标题。*/
 function copyStoryTitle()
@@ -128,7 +129,7 @@ $(document).ready(function()
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->task->desc;?></th>
-        <td><?php echo html::textarea('desc', '', "rows='8' class='area-1'");?></td>
+        <td><?php echo html::textarea('desc', '', "rows='7' class='area-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->files;?></th>
