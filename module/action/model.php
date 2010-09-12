@@ -225,7 +225,11 @@ class actionModel extends model
             $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
             if($history->diff != '')
             {
-                printf($this->lang->action->desc->diff2, $history->fieldLabel, nl2br($history->diff));
+                $history->diff = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
+                $history->diff = htmlspecialchars($history->diff);
+                $history->diff = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
+                $history->diff = nl2br($history->diff);
+                printf($this->lang->action->desc->diff2, $history->fieldLabel, $history->diff);
             }
             else
             {
