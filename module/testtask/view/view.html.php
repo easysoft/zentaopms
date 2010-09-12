@@ -41,19 +41,19 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
-      <td><?php echo $task->begin;?>
+      <td><?php echo $task->begin;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->end;?></th>
-      <td><?php echo $task->end;?>
+      <td><?php echo $task->end;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->status;?></th>
-      <td><?php echo $lang->testtask->statusList[$task->status];?>
+      <td><?php echo $lang->testtask->statusList[$task->status];?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->desc;?></th>
-      <td><?php echo $task->desc;?>
+      <td class='content'><?php echo $task->desc;?></td>
     </tr>  
   </table>
   <div class='a-center f-16px strong'>
