@@ -35,22 +35,21 @@ class file extends control
     public function download($fileID, $mouse = '')
     {
         $file = $this->file->getById($fileID);
-        $fileTypes = array('txt', 'jpg', 'jpeg', 'gif', 'png', 'bmp', 'xml', 'html');
-        foreach($fileTypes as $fileType)
-        {
-            if($file->extension == $fileType)
-            {
-                $download = 'false';
-                break;
-            }
-        }
-        if(isset($download) && $mouse == 'left')
+
+        /* 判断是下载还是打开。*/
+        $mode  = 'down';
+        $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
+        if(strpos($fileTypes, $file->extension) !== false and $mouse == 'left') $mode = 'open';
+
+        /* 模式为open，直接在浏览器打开。*/
+        if($mode == 'open')
         {
             if(file_exists($file->realPath))$this->locate($file->webPath);
             $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
         }
         else
         {
+            /* 下载文件。*/
             if(file_exists($file->realPath))
             {
                 $fileName = $file->title . '.' . $file->extension;
