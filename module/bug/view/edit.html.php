@@ -173,7 +173,7 @@ $(function() {
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->bug->legendSteps;?></legend>
-            <div class='w-p90'><?php echo html::textarea('steps', $bug->steps, "id='kindeditor' rows='12'");?></div>
+            <div class='w-p90'><?php echo html::textarea('steps', $bug->steps, "rows='12'");?></div>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendComment;?></legend>

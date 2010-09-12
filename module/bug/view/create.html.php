@@ -35,7 +35,6 @@
 #steps{width:100%}
 .text-1 {width: 85%}
 </style>
-</script>
 <script language='Javascript'>
 /* 当选择产品时，触发这个方法。*/
 function loadAll(productID)
