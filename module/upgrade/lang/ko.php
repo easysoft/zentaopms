@@ -53,3 +53,4 @@ $lang->upgrade->fromVersions['1_0rc2']    = '1.0 RC2에서';
 $lang->upgrade->fromVersions['1_0']       = '1.0 안정';
 $lang->upgrade->fromVersions['1_0_1']     = '1.0.1';
 $lang->upgrade->fromVersions['1_1']       = '1.1';
+$lang->upgrade->fromVersions['1_2']       = '1.2';
