@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 948 2010-07-16 09:02:20Z yuren_@126.com $
+ * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->task->index     = "任務一覽";

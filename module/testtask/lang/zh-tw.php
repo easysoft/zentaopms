@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
+ * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -61,6 +61,10 @@ $lang->testtask->unlinkedCases = '未關聯用例列表';
 $lang->testtask->linkedCases   = '已關聯用例列表';
 $lang->testtask->confirmDelete = '您確認要刪除該測試任務嗎？';
 $lang->testtask->passAll       = '全部通過';
+
+$lang->testtask->byModule      = '按模組';
+$lang->testtask->assignedToMe  = '指派給我';
+$lang->testtask->allCases      = '所有Case';
 
 $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';

@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 993 2010-08-02 10:20:01Z wwccss $
+ * @version     $Id: zh-tw.php 1069 2010-09-11 07:26:25Z yuren_@126.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -83,7 +83,7 @@ $lang->bug->deleteTemplate = '刪除模板';
 $lang->bug->customFields   = '自定義欄位';
 $lang->bug->restoreDefault = '恢復預設';
 $lang->bug->ajaxGetUserBugs    = '介面:我的Bug';
-$lang->bug->ajaxGetModuleOwner = '介面:獲得模塊的默認指派人';
+$lang->bug->ajaxGetModuleOwner = '介面:獲得模組的預設指派人';
 $lang->bug->confirmStoryChange = '確認需求變動';
 
 /* 查詢條件列表。*/

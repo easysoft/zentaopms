@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 929 2010-07-06 03:08:45Z wwccss $
+ * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';

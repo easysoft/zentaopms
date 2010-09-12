@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id: zh-tw.php 917 2010-07-06 01:50:33Z wwccss $
+ * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';
@@ -36,7 +36,7 @@ $lang->search->deleteQuery   = '刪除查詢';
 $lang->search->setQueryTitle = '請輸入查詢標題（保存之前請先查詢）：';
 $lang->search->storyTitle    = '需求名稱';
 $lang->search->taskTitle     = '任務名稱';
-$lang->search->select        = '選擇';
+$lang->search->select        = '需求/任務篩選';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';

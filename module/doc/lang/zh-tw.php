@@ -55,14 +55,14 @@ $lang->doc->createLib      = '創建文檔庫';
 $lang->doc->editLib        = '編輯文檔庫';
 $lang->doc->deleteLib      = '刪除文檔庫';
 $lang->doc->libName        = '文檔庫名稱';
-$lang->doc->deleteFile     = '刪除文件';
+$lang->doc->deleteFile     = '刪除檔案';
 
 $lang->doc->systemLibs['product'] = '產品文檔庫';
 $lang->doc->systemLibs['project'] = '項目文檔庫';
 
-$lang->doc->types['file'] = '文件';
-$lang->doc->types['url']  = '鏈接';
+$lang->doc->types['file'] = '檔案';
+$lang->doc->types['url']  = '連結';
 $lang->doc->types['text'] = '網頁';
 
 $lang->doc->confirmDeleteLib   = " 您確定刪除該文檔庫嗎？";
-$lang->doc->errorEditSystemDoc = "系统文档库不需要修改";
+$lang->doc->errorEditSystemDoc = "系統文檔庫無需修改。";

@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 988 2010-07-31 07:14:46Z wwccss $
+ * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -90,7 +90,7 @@ $lang->project->manageMembers  = '團隊管理';
 $lang->project->unlinkMember   = '移除成員';
 $lang->project->unlinkStory    = '移除需求';
 $lang->project->importTask     = '導入之前未完';
-$lang->project->ajaxGetProducts= "介面：獲得項目產品列表";
+$lang->project->ajaxGetProducts= '介面：獲得項目產品列表';
 
 /* 分組瀏覽。*/
 $lang->project->listTask            = '列表方式';

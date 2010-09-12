@@ -20,7 +20,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
- * @version     $Id: zh-tw.php 993 2010-08-02 10:20:01Z wwccss $
+ * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -57,13 +57,14 @@ $lang->goback       = '返回';
 $lang->showHelp     = '顯示幫助';
 $lang->closeHelp    = '關閉幫助';
 $lang->go           = 'GO!';
-$lang->more         = '更多!';
+$lang->more         = '更多';
 
 $lang->actions      = '操作';
 $lang->comment      = '備註';
 $lang->history      = '歷史記錄';
 $lang->attatch      = '附件';
-$lang->reverse      = '（切換順序）';
+$lang->reverse      = '[切換順序]';
+$lang->switchDisplay= '[切換顯示]';
 $lang->addFiles     = '上傳了附件 ';
 $lang->files        = '附件 ';
 

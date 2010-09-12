@@ -36,7 +36,7 @@ $lang->search->deleteQuery   = 'Delete query';
 $lang->search->setQueryTitle = 'Please input the title（execute searching before save）：';
 $lang->search->storyTitle    = 'Story title';
 $lang->search->taskTitle     = 'Task title';
-$lang->search->select        = 'Select';
+$lang->search->select        = 'Stories/Tasks filter';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';

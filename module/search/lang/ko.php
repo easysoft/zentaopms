@@ -36,7 +36,7 @@ $lang->search->deleteQuery   = '삭제 쿼리';
 $lang->search->setQueryTitle = '제발 입력은 제목 (이전에 저장) 검색을 실행합니다 :';
 $lang->search->storyTitle    = '수요 이름';
 $lang->search->taskTitle     = '작업 이름';
-$lang->search->select        = '선택';
+$lang->search->select        = '기사 / 작업 필터';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';

@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
- * @version     $Id: zh-tw.php 986 2010-07-31 02:53:32Z wwccss $
+ * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->tree->common            = '模組維護';
@@ -37,6 +37,7 @@ $lang->tree->updateOrder       = '更新排序';
 $lang->tree->manageChild       = '維護子模組';
 $lang->tree->syncFromProduct   = '複製產品視圖模組';
 $lang->tree->ajaxGetOptionMenu = '介面:獲取下拉列表';
+$lang->tree->ajaxGetSonModules = '介面:獲得子菜單列表';
 
 $lang->tree->confirmDelete = '您確定刪除該模組嗎？';
 $lang->tree->successSave   = '成功保存';

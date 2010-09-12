@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 949 2010-07-17 05:39:30Z yuren_@126.com $
+ * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id             = '用例編號';
@@ -51,6 +51,7 @@ $lang->testcase->linkCase         = '相關用例';
 $lang->testcase->stage            = '適用階段';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
+$lang->testcase->allProduct       = '所有產品';
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 
 $lang->testcase->stepID     = '編號';

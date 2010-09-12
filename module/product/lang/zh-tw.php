@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: zh-tw.php 988 2010-07-31 07:14:46Z wwccss $
+ * @version     $Id: zh-tw.php 1074 2010-09-11 13:02:56Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->product->common = '產品視圖';
@@ -42,6 +42,7 @@ $lang->product->ajaxGetPlans    = "介面:計劃列表";
 $lang->product->errorFormat    = '產品數據格式不正確';
 $lang->product->errorEmptyName = '產品名稱不能為空';
 $lang->product->errorEmptyCode = '產品代號不能為空';
+$lang->product->errorNoProduct = '還沒有創建產品！';
 $lang->product->accessDenied   = '您無權訪問該產品';
 
 $lang->product->id        = '編號';

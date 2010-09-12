@@ -36,7 +36,7 @@ $lang->search->deleteQuery   = '削除クエリ';
 $lang->search->setQueryTitle = '入力してください、タイトル（前に保存）検索実行：';
 $lang->search->storyTitle    = 'オンデマンド名';
 $lang->search->taskTitle     = 'タスク名';
-$lang->search->select        = '選択';
+$lang->search->select        = 'ストーリー/タスクフィルタ';
 
 $lang->search->operators['=']       = '=';
 $lang->search->operators['!=']      = '!=';

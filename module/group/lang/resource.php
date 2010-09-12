@@ -235,6 +235,7 @@ $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
 $lang->resource->search->saveQuery    = 'saveQuery';
 $lang->resource->search->deleteQuery  = 'deleteQuery';
+$lang->resource->search->select       = 'select';
 
 /* 后台管理。*/
 $lang->resource->admin->index         = 'index';
