@@ -258,13 +258,13 @@ $(function() {
         <tr>
           <td class='rowhead'><?php echo $lang->bug->story;?></td>
           <td><span id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, "class=select-3");?></span>
-          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=$bug->project&module=story&storyID=$bug->story"), $lang->go, "_blank", "id='searchStories'");?>
+          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=$bug->project&module=story&storyID=$bug->story"), $lang->go, "_blank", "class='search' id='searchStories'");?>
           </td>
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->task;?></td>
           <td><span id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></span>
-          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=$bug->project&module=task&taskID=$bug->task"), $lang->go, "_blank", "id='searchTasks'");?>
+          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=$bug->project&module=task&taskID=$bug->task"), $lang->go, "_blank", "class='search' id='searchTasks'");?>
           </td>
         </tr>
       </table>
