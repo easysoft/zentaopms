@@ -1,3 +1,16 @@
+a.dp-choose-date {
+  float:left;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  display: block;
+  text-indent: -2000px;
+  overflow: hidden;
+  background: url(images/datepicker/calendar.png) no-repeat; 
+}
+input.dp-applied {float:left;}
+
 table.jCalendar {
   border: 1px solid #000;
   background: #aaa;
