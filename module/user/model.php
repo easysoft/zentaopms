@@ -248,6 +248,7 @@ class userModel extends model
         return $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.account')->eq($account)
+            ->andWhere('t2.deleted')->eq(0)
             ->fetchAll();
     }
 
