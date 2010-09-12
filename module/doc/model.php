@@ -179,10 +179,9 @@ class docModel extends model
     /* 获得某一个产品的文档列表。*/
     public function getProductDocs($productID)
     {
-        return $this->dao->select('t1.*, t2.name')
+        return $this->dao->select('t1.*, t2.name as module')
             ->from(TABLE_DOC)->alias('t1')
-            ->leftjoin(TABLE_MODULE)->alias('t2')
-            ->on('t1.module = t2.id')
+            ->leftjoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.id_desc')

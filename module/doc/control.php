@@ -265,9 +265,9 @@ class doc extends control
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
         
         /* 文档库名称。*/
+        $lib = $doc->libName;
         if($doc->lib == 'product') $lib = $doc->productName;
-        else if($doc->lib == 'project') $lib = $doc->productName . '/' . $doc->projectName;
-        else $lib = $doc->libName;
+        if($doc->lib == 'project') $lib = $doc->productName . $this->lang->arrow . $doc->projectName;
 
         /* 设置菜单。*/
         $this->doc->setMenu($this->libs, $doc->lib);
