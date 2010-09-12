@@ -58,7 +58,7 @@
           <tr class='a-center'>
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
             <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
-            <td><?php echo $doc->type;?></td>
+            <td><?php echo $lang->doc->types[$doc->type];?></td>
             <td><?php echo $users[$doc->addedBy];?></td>
             <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
             <td>
