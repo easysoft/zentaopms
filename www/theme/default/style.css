@@ -285,7 +285,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .roadmap a{color:white;}
 .release {background:darkgreen; color:white}
 .plan    {background:#9F9F5F;}
-.search  {display:block; float:right; width:16px; height:16px; padding:0; margin:0; text-indent:-2000px; overflow:hidden; background: url(images/main/search.gif) no-repeat;} 
+.search  {display:none; float:left; clear:none; width:16px; height:16px; padding:0; margin:0 0 0 2px; text-indent:-2000px; overflow:hidden; background: url(images/main/search.gif) no-repeat;} 
+.searchleft{display:block; float:left; clear:none;} 
+.helplink {font-size:9px}
 
 .tabs a{display:block; width:80%; margin:auto auto 10px auto; padding:5px; border:1px solid blue; text-decoration:none; overflow:hidden; white-space:nowrap; text-align:center}
 .tabs a.current {background:green; color:white}

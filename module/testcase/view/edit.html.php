@@ -107,8 +107,8 @@ $(document).ready(function()
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-          <td class='a-left'><span id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></span>
-          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=0&module=story&storyID=$case->story"), $lang->go, "_blank", "id='searchStories'");?>
+          <td class='a-left'><div id='storyIdBox' class='searchleft'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
+          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=0&module=story&storyID=$case->story"), $lang->go, "_blank", "class='search' id='searchStories'");?>
           </td>       
         </tr>
         <tr>
