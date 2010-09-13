@@ -100,6 +100,8 @@ class testcase extends control
         }
 
         /* 构造搜索表单。*/
+        $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['queryID']   = $queryID;
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
