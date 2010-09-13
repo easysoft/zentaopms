@@ -74,15 +74,7 @@ $(document).ready(function()
     </tr>  
     <tr id='fileBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->files;?></th>
-      <td>
-      <?php 
-      foreach($doc->files as $file)
-      {
-          echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank', "onclick='return downloadFile($file->id)'");
-          echo html::commonButton('x', "onclick=deleteFile($file->id)");
-      }
-      ?>
-      </td>
+      <td><?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'false'));?></td>
     </tr>
   </table>
   <div class='a-center f-16px strong'>

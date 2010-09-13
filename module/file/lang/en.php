@@ -23,5 +23,6 @@
  */
 $lang->file->common     = 'File';
 $lang->file->download   = 'Download';
+$lang->file->delete     = 'Delete';
 $lang->file->export2CSV = 'Export CSV';
 $lang->file->label    = 'Title: ';

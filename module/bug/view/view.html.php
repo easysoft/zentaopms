@@ -54,18 +54,7 @@
         <legend><?php echo $lang->bug->legendSteps;?></legend>
         <div class='content'><?php echo $bug->steps;?></div>
       </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->bug->legendAttatch;?></legend>
-        <div>
-        <?php
-        foreach($bug->files as $file)
-        {
-            echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank', "onclick='return downloadFile($file->id)'");
-            echo html::commonButton('x', "onclick=deleteFile($file->id)");
-        }
-        ?>
-        </div>
-      </fieldset>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>
       <?php

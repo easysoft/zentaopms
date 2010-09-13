@@ -56,18 +56,7 @@
         <legend><?php echo $lang->task->legendDesc;?></legend>
         <div><?php echo $task->desc;?></div>
       </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->files;?></legend>
-        <div>
-        <?php
-        foreach($task->files as $file)
-        {
-            echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank', "onclick='return downloadFile($file->id)'");
-            echo html::commonButton('x', "onclick=deleteFile($file->id)");
-        }
-        ?>
-        </div>
-      </fieldset>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center f-16px strong'>
         <?php

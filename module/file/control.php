@@ -93,16 +93,24 @@ class file extends control
     }
 
     /* 删除一个文件。*/
-    public function deleteFile($fileID, $confirm = 'no')
+    public function delete($fileID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->file->confirmDelete, inlink('deleteFile', "fileID=$fileID&confirm=yes")));
+            die(js::confirm($this->lang->file->confirmDelete, inlink('delete', "fileID=$fileID&confirm=yes")));
         }
         else
         {
             $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
             die(js::reload('parent'));
         }
+    }
+
+    /* 显示下载及删除链接。*/
+    public function printFiles($files, $fieldset)
+    {
+        $this->view->files    = $files;
+        $this->view->fieldset = $fieldset;
+        $this->display();
     }
 }

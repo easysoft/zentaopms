@@ -23,5 +23,6 @@
  */
 $lang->file->common     = 'ファイル';
 $lang->file->download   = 'ダウンロード';
+$lang->file->delete     = '削除';
 $lang->file->export2CSV = 'エクスポートCSV形式';
 $lang->file->label    = 'タイトル：';

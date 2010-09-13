@@ -23,6 +23,7 @@
  */
 $lang->file->common     = '附件';
 $lang->file->download   = '下載附件';
+$lang->file->delete     = '刪除附件';
 $lang->file->export2CSV = '導出CSV';
 $lang->file->label      = '標題：';
 
