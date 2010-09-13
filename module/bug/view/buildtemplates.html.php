@@ -30,7 +30,7 @@ KE.plugin.savetemplate = {
 function setTemplate(templateID)
 {
     $('#tplTitleBox' + templateID).attr('style', 'text-decoration:underline; color:#8B008B');
-    steps = $('#template' + templateID).text();
+    steps = $('#template' + templateID).html();
     KE.html('steps', steps);
 }
 

@@ -293,6 +293,7 @@ class upgradeModel extends model
     private function upgradeFrom1_2To1_3()
     {
         $this->execSQL($this->getUpgradeFile('1.2'));
+        $this->updateUbb();
         if(!$this->isError()) $this->setting->updateVersion('1.3');
     }
 
@@ -314,6 +315,24 @@ class upgradeModel extends model
                 $key == 'TABLE_USERTPL'
             ) continue;
             $this->dbh->query("UPDATE $value SET company = '{$this->app->company->id}'");
+        }
+    }
+
+    /* 更新bug表的steps字段和userTPL表的content字段。*/
+    private function updateUbb()
+    {
+        $bugs = $this->dao->select('id, steps')->from(TABLE_BUG)->fetchAll();
+        $userTemplates = $this->dao->select('id, content')->from(TABLE_USERTPL)->fetchAll();
+        
+        foreach($bugs as $id => $bug)
+        {
+            $bug->steps = html::parseUBB($bug->steps);
+            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
+        }
+        foreach($userTemplates as $template)
+        {
+            $template->content = html::parseUBB($template->content);
+            $this->dao->update(TABLE_USERTPL)->data($template)->where('id')->eq($template->id)->exec();
         }
     }
 

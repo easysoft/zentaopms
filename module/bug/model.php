@@ -454,7 +454,7 @@ class bugModel extends model
     public function saveUserBugTemplate()
     {
         $template = fixer::input('post')
-            ->specialChars('title, content')
+            ->specialChars('title')
             ->add('account', $this->app->user->account)
             ->add('type', 'bug')
             ->get();
