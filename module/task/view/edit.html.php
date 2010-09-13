@@ -37,7 +37,7 @@ var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
-    KE.show({ id:'desc', items:simpleTools });   // 富文本编辑器。
+    KE.show({ id:'desc', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')}); 
 
 })
 </script>
@@ -56,7 +56,7 @@ $(function() {
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->task->desc;?></legend>
-            <?php echo html::textarea('desc', $task->desc, "rows='8' class='area-1'");?>
+            <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='8' class='area-1'");?>
           </fieldset>
           <fieldset>
             <legend><?php echo $lang->comment;?></legend>

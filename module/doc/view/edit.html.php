@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <script language='javascript'>
 /* 设置文档类型。*/
 var type = '<?php echo $doc->type;?>';
@@ -43,6 +44,8 @@ $(document).ready(function()
         $('#contentBox').hide();
         $('#fileBox').show();
     }
+
+$(function() {KE.show({id:'content', items:tools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});});
 });
 </script>
 <div class='yui-d0'>
@@ -55,7 +58,7 @@ $(document).ready(function()
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->doc->type;?></th>
-        <td><?php echo $doc->type;?></td>
+        <td><?php echo $lang->doc->types[$doc->type];?></td>
       </tr>  
         <th class='rowhead'><?php echo $lang->doc->title;?></th>
         <td><?php echo html::input('title', $doc->title, "class='text-1'");?></td>
@@ -70,7 +73,7 @@ $(document).ready(function()
       </tr>  
       <tr id='contentBox' class='hidden'>
         <th class='rowhead'><?php echo $lang->doc->content;?></th>
-        <td><?php echo html::textarea('content', $doc->content, "class='text-1' rows='8'");?></td>
+        <td><?php echo html::textarea('content', htmlspecialchars($doc->content), "class='text-1' rows='8' style='width:90%; height:200px'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->doc->digest;?></th>

@@ -25,4 +25,7 @@ $lang->file->common     = 'ファイル';
 $lang->file->download   = 'ダウンロード';
 $lang->file->delete     = '削除';
 $lang->file->export2CSV = 'エクスポートCSV形式';
+$lang->file->ajaxUpload = 'AJAX: upload file from editor';
 $lang->file->label    = 'タイトル：';
+
+$lang->file->confirmDelete = " Are you sure to delete this file?";

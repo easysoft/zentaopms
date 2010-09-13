@@ -128,7 +128,7 @@ var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     setAssignedTo();
-    KE.show({id:'steps',items:bugTools});
+    KE.show({id:'steps',items:bugTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});
 })
 
 </script>

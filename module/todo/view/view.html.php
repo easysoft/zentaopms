@@ -58,7 +58,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-      <td><?php echo $todo->desc;?></td>
+      <td class='content'><?php echo $todo->desc;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->status;?></th>

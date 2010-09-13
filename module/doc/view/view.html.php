@@ -62,11 +62,11 @@ $(document).ready(function()
     </tr>  
     <tr id='urlBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->doc->url;?></th>
-      <td><?php echo html::a(urldecode($doc->url));?></td>
+      <td><?php echo html::a(urldecode($doc->url), '', '_blank');?></td>
     </tr>  
     <tr id='contentBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->doc->content;?></th>
-      <td><?php echo nl2br($doc->content);?></td>
+      <td class='content'><?php echo $doc->content;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->doc->digest;?></th>

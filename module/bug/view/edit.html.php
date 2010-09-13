@@ -148,7 +148,7 @@ $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
     $("#searchTasks").colorbox({width:680, height:400, iframe:true, transition:'none'});
-    KE.show({id:'steps', items:simpleTools});
+    KE.show({id:'steps', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});
 
 });
 </script>
@@ -170,7 +170,7 @@ $(function() {
         <tr class='bd-none'><td class='bd-none'>
           <fieldset>
             <legend><?php echo $lang->bug->legendSteps;?></legend>
-            <div class='w-p90'><?php echo html::textarea('steps', $bug->steps, "rows='12'");?></div>
+            <div class='w-p90'><?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12'");?></div>
           </fieldset>
           <fieldset>
           <legend><?php echo $lang->bug->legendComment;?></legend>

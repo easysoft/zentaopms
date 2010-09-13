@@ -24,7 +24,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script language='javascript'>KE.show({id:'spec', items:simpleTools});</script>
+<script language='javascript'>KE.show({id:'spec', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});</script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'>
@@ -39,7 +39,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->spec;?></th>
-      <td><?php echo html::textarea('spec', $story->spec, 'rows=8 class="area-1"');?><br /> <?php echo $lang->story->specTemplate;?></td>
+      <td><?php echo html::textarea('spec', htmlspecialchars($story->spec), 'rows=8 class="area-1"');?><br /> <?php echo $lang->story->specTemplate;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>

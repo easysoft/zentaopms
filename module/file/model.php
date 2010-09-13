@@ -82,7 +82,7 @@ class fileModel extends model
     }
 
     /* 获取上传的文件信息。*/
-    private function getUpload($htmlTagName = 'files')
+    public function getUpload($htmlTagName = 'files')
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
@@ -108,7 +108,7 @@ class fileModel extends model
             extract($_FILES[$htmlTagName]);
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = !empty($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : pathinfo($filename, PATHINFO_FILENAME);
+            $file['title']     = !empty($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : pathinfo($name, PATHINFO_FILENAME);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
             return array($file);
@@ -142,7 +142,7 @@ class fileModel extends model
     }
     
     /* 设置web访问路径。*/
-    private function setWebPath()
+    public function setWebPath()
     {
         $this->webPath = $this->app->getWebRoot() . "data/upload/{$this->app->company->id}/";
     }

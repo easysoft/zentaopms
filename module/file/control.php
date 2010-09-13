@@ -31,6 +31,19 @@ class file extends control
         $this->display();
     }
 
+    /* ajax接口，用于接收编辑器附件上传。*/
+    public function ajaxUpload()
+    {
+        $file = $this->file->getUpload('imgFile');
+        $file = $file[0];
+        if($file)
+        {
+            move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']);
+            $url =  $this->file->webPath . $file['pathname'];
+            die(json_encode(array('error' => 0, 'url' => $url)));
+        }
+    }
+
     /* 下载一个文件。*/
     public function download($fileID, $mouse = '')
     {

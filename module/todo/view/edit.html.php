@@ -5,7 +5,6 @@
  * ZenTaoMS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
  *                                                                             
  * ZenTaoMS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,13 +23,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script language='javascript'>
-/* 富文本编辑器。*/
-KE.show({
-    id:'desc',
-    items:simpleTools
-});
-</script>
+<script language='javascript'>KE.show({id:'desc', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});</script>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1 a-left'> 
@@ -59,7 +52,7 @@ KE.show({
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->desc;?></th>
-        <td><?php echo html::textarea('desc', $todo->desc, "rows=8 class=area-1");?></td>
+        <td><?php echo html::textarea('desc', htmlspecialchars($todo->desc), "rows=8 class=area-1");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->todo->status;?></th>

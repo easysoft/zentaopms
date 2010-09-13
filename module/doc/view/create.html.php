@@ -23,6 +23,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <script language='Javascript'>
 function loadProducts(project)
 {
@@ -48,6 +49,7 @@ function setType(type)
         $('#contentBox').hide();
     }
 }
+$(function() {KE.show({id:'content', items:tools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});});
 </script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -80,17 +82,17 @@ function setType(type)
         <th class='rowhead'><?php echo $lang->doc->title;?></th>
         <td><?php echo html::input('title', '', "class='text-1'");?></td>
       </tr> 
-      <tr>
-        <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
-        <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
-      </tr>  
       <tr id='urlBox' class='hidden'>
         <th class='rowhead'><?php echo $lang->doc->url;?></th>
         <td><?php echo html::input('url', '', "class='text-1'");?></td>
       </tr>  
       <tr id='contentBox' class='hidden'>
         <th class='rowhead'><?php echo $lang->doc->content;?></th>
-        <td><?php echo html::textarea('content', '', "class='text-1' rows='8'");?></td>
+        <td><?php echo html::textarea('content', '', "class='area-1' style='width:90%; height:200px'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
+        <td><?php echo html::input('keywords', '', "class='text-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->doc->digest;?></th>

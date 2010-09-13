@@ -67,7 +67,7 @@ function setPreview()
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(document).ready(function()
 {
-    KE.show({id:'desc', items:simpleTools}); //富文本编辑器。
+    KE.show({id:'desc', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')}); //富文本编辑器。
     setPreview();
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
 });

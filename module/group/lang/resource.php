@@ -245,6 +245,7 @@ $lang->resource->api->getModel    = 'getModel';
 $lang->resource->file->download   = 'download';
 $lang->resource->file->delete     = 'delete';
 $lang->resource->file->export2CSV = 'export2CSV';
+$lang->resource->file->ajaxUpload = 'ajaxUpload';
 $lang->resource->misc->ping       = 'ping';
 $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undelete';
