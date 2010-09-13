@@ -93,7 +93,8 @@ class testcase extends control
                 if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
             }
 
-            $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQuery)
+            $caseQuery = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // 如果指定了搜索所有的产品，去掉这个查询条件。
+            $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->andWhere('product')->eq($productID)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
