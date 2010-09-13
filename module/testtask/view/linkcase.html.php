@@ -72,7 +72,7 @@ function checkall(checker)
       <td><?php echo $lang->testcase->statusList[$case->status];?></td>
       <td class='a-left'><nobr>
         <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
-        <?php echo html::select('versions[]', array_combine(range($case->version, 1), range($case->version, 1)), '', 'style=width:50px');?></nobr>
+        <?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'style=width:50px');?></nobr>
       </td>
     </tr>
     </tbody>

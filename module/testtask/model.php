@@ -87,11 +87,11 @@ class testtaskModel extends model
     public function linkCase($taskID)
     {
         if($this->post->cases == false) return;
-        foreach($this->post->cases as $key => $caseID)
+        foreach($this->post->cases as $caseID)
         {
             $row->task       = $taskID;
             $row->case       = $caseID;
-            $row->version    = $this->post->versions[$key];
+            $row->version    = $this->post->versions[$caseID];
             $row->assignedTo = '';
             $row->status     = 'wait';
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
