@@ -54,8 +54,6 @@ $lang->save         = '保存';
 $lang->confirm      = '确认';
 $lang->preview      = '预览';
 $lang->goback       = '返回';
-$lang->showHelp     = '显示帮助';
-$lang->closeHelp    = '关闭帮助';
 $lang->go           = 'GO!';
 $lang->more         = '更多';
 
@@ -65,6 +63,7 @@ $lang->history      = '历史记录';
 $lang->attatch      = '附件';
 $lang->reverse      = '[切换顺序]';
 $lang->switchDisplay= '[切换显示]';
+$lang->switchHelp   = '切换帮助';
 $lang->addFiles     = '上传了附件 ';
 $lang->files        = '附件 ';
 

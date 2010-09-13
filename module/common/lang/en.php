@@ -54,8 +54,6 @@ $lang->save         = 'Save';
 $lang->confirm      = 'Confirm';
 $lang->preview      = 'Preview';
 $lang->goback       = 'Back';
-$lang->showHelp     = 'Help On';
-$lang->closeHelp    = 'Help Off';
 $lang->go           = 'GO!';
 $lang->more         = 'More';
 
@@ -65,6 +63,7 @@ $lang->history      = 'History';
 $lang->attatch      = 'Attatch';
 $lang->reverse      = '[Reverse]';
 $lang->switchDisplay= '[Toggle Show]';
+$lang->switchHelp   = 'Toggle Help';
 $lang->addFiles     = 'Add Files';
 $lang->files        = 'Files ';
 

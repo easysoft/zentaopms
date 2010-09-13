@@ -220,9 +220,20 @@ function setRequiredFields()
     }
 }
 
+/* 控制帮助链接的显示。*/
+function toggleHelpLink()
+{
+    $('.helplink').toggle();
+    if($.cookie('help') == 'off') return $.cookie('help', 'on');
+    if($.cookie('help') == 'on')  return $.cookie('help', 'off');
+}
+
 /* 设置帮助链接。*/
 function setHelpLink()
 {
+    if(!$.cookie('help'))$.cookie('help', 'on');
+    className = $.cookie('help') == 'off' ? 'hidden' : '';
+
     $('form input[id], form select[id], form textarea[id]').each(function()
         {
             if($(this).attr('type') == 'hidden' || $(this).attr('type') == 'file') return;
@@ -230,7 +241,7 @@ function setHelpLink()
             if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
             if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
             currentFieldName = currentFieldName.toLowerCase();
-            $(this).after(' <a class="helplink" href=http://www.zentaoms.com/goto.php?item=fieldref&extra=lang=' + clientLang + ',module=' + currentModule + ',method=' + currentMethod + ',field=' + currentFieldName + ' target="_blank">?</a> ');
+            $(this).after(' <a class="helplink ' + className + '" href=http://www.zentaoms.com/goto.php?item=fieldref&extra=lang=' + clientLang + ',module=' + currentModule + ',method=' + currentMethod + ',field=' + currentFieldName + ' target="_blank">?</a> ');
         }
     );
 }

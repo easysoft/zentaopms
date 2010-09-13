@@ -54,8 +54,6 @@ $lang->save         = '保存';
 $lang->confirm      = '確認';
 $lang->preview      = 'プレビュー';
 $lang->goback       = 'バック';
-$lang->showHelp     = 'のヘルプ';
-$lang->closeHelp    = 'オフヘルプ';
 $lang->go           = 'でGO！';
 $lang->more         = 'もっと';
 
@@ -65,6 +63,7 @@ $lang->history      = '歴史';
 $lang->attatch      = 'Attatch';
 $lang->reverse      = '（逆）';
 $lang->switchDisplay= '[switch display]';
+$lang->switchHelp   = 'Toggle Help';
 $lang->addFiles     = 'ファイルを追加する';
 $lang->files        = 'ファイル';
 

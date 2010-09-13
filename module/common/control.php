@@ -150,6 +150,7 @@ EOT;
         {
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
+        echo html::a('#', $lang->switchHelp, '', "onclick='toggleHelpLink();'");
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
         echo html::select('', $app->config->langs, $app->getClientLang(), 'class=switcher onchange="selectLang(this.value)"');
     }

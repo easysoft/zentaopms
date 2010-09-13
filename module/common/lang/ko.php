@@ -54,8 +54,6 @@ $lang->save         = '저장';
 $lang->confirm      = '확인';
 $lang->preview      = '미리보기';
 $lang->goback       = '뒤로';
-$lang->showHelp     = '에 대한 도움말';
-$lang->closeHelp    = '끄기 도움말';
 $lang->go           = '어서!';
 $lang->more         = '더';
 
@@ -65,6 +63,7 @@ $lang->history      = '역사';
 $lang->attatch      = 'Attatch';
 $lang->reverse      = '(역방향)';
 $lang->switchDisplay= '[Switch display]';
+$lang->switchHelp   = 'Toggle Help';
 $lang->addFiles     = '파일 추가';
 $lang->files        = '파일';
 
