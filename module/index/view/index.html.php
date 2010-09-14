@@ -106,7 +106,7 @@ $(function()
                 <?php echo html::a('#', $lang->index->myTask);?>
                 <?php echo html::a('#', $lang->index->myBug);?>
               </td>
-              <td class='panes' valign='top'>
+              <td class='panes' valign='top' style='border-right:none'>
                 <div class='mr-10px'>
                   <?php 
                   foreach($my['todos'] as $todo)
@@ -135,6 +135,7 @@ $(function()
                   ?>
                 </div>
               </td>
+              <td width='10' style='border-left:none'></td>
             </tr>
           </table>
         </div>
