@@ -114,7 +114,10 @@ class file extends control
         }
         else
         {
+            $file = $this->file->getById($fileID);
             $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+            $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
+            @unlink($file->realPath);
             die(js::reload('parent'));
         }
     }
