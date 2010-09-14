@@ -55,7 +55,6 @@ $lang->doc->createLib      = '라이브러리 만들기';
 $lang->doc->editLib        = '수정 도서관';
 $lang->doc->deleteLib      = '도서관 삭제';
 $lang->doc->libName        = '도서관 이름';
-$lang->doc->deleteFile     = '삭제 파일';
 
 $lang->doc->systemLibs['product'] = '제품 박사님';
 $lang->doc->systemLibs['project'] = '프로젝트 의사';

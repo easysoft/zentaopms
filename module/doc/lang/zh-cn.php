@@ -55,7 +55,6 @@ $lang->doc->createLib      = '创建文档库';
 $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
 $lang->doc->libName        = '文档库名称';
-$lang->doc->deleteFile     = '刪除文件';
 
 $lang->doc->systemLibs['product'] = '产品文档库';
 $lang->doc->systemLibs['project'] = '项目文档库';

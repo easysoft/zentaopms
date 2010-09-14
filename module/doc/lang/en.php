@@ -55,7 +55,6 @@ $lang->doc->createLib      = 'Create library';
 $lang->doc->editLib        = 'Edit library';
 $lang->doc->deleteLib      = 'Delete library';
 $lang->doc->libName        = 'Library name';
-$lang->doc->deleteFile     = 'Delete file';
 
 $lang->doc->systemLibs['product'] = 'Product doc';
 $lang->doc->systemLibs['project'] = 'Project doc';

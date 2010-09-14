@@ -188,7 +188,6 @@ $lang->resource->doc->create    = 'create';
 $lang->resource->doc->view      = 'view';
 $lang->resource->doc->edit      = 'edit';
 $lang->resource->doc->delete    = 'delete';
-$lang->resource->doc->deleteFile= 'deleteFile';
 
 /* 组织视图。*/
 $lang->resource->company->index  = 'index';

@@ -55,7 +55,6 @@ $lang->doc->createLib      = '作成ライブラリ';
 $lang->doc->editLib        = '[編集]ライブラリ';
 $lang->doc->deleteLib      = '削除ライブラリ';
 $lang->doc->libName        = 'ライブラリ名';
-$lang->doc->deleteFile     = 'ファイルを削除';
 
 $lang->doc->systemLibs['product'] = '製品ドキュメント';
 $lang->doc->systemLibs['project'] = 'プロジェクトドキュメント';
