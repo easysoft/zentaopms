@@ -18,7 +18,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1082 2010-09-12 06:09:29Z yuren_@126.com $
  * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';

@@ -20,7 +20,7 @@
  * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoMS
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1103 2010-09-13 11:02:40Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -54,8 +54,6 @@ $lang->save         = '保存';
 $lang->confirm      = '確認';
 $lang->preview      = '預覽';
 $lang->goback       = '返回';
-$lang->showHelp     = '顯示幫助';
-$lang->closeHelp    = '關閉幫助';
 $lang->go           = 'GO!';
 $lang->more         = '更多';
 
@@ -65,6 +63,7 @@ $lang->history      = '歷史記錄';
 $lang->attatch      = '附件';
 $lang->reverse      = '[切換順序]';
 $lang->switchDisplay= '[切換顯示]';
+$lang->switchHelp   = '切換幫助';
 $lang->addFiles     = '上傳了附件 ';
 $lang->files        = '附件 ';
 
@@ -141,13 +140,13 @@ $lang->release->menu         = $lang->product->menu;
 
 /* 項目視圖菜單設置。*/
 $lang->project->menu->list      = '%s';
-$lang->project->menu->task      = array('link' => '任務列表|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
-$lang->project->menu->story     = array('link' => '需求列表|project|story|projectID=%s');
-$lang->project->menu->bug       = 'Bug列表|project|bug|projectID=%s';
-$lang->project->menu->build     = array('link' => 'Build列表|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
+$lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s');
+$lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
+$lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->burn      = '燃盡圖|project|burn|projectID=%s';
-$lang->project->menu->team      = array('link' => '團隊成員|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->doc       = array('link' => '文檔列表|project|doc|porjectID=%s', 'subModule' => 'doc');
+$lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '關聯產品|project|manageproducts|projectID=%s';
 $lang->project->menu->linkstory = array('link' => '關聯需求|project|linkstory|projectID=%s');
 $lang->project->menu->view      = '基本信息|project|view|projectID=%s';
