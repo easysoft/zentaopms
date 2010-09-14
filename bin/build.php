@@ -1,3 +1,5 @@
+<?php
+/**
 1. 修改zentaophp中的version number，打tag。
 2. 修改zentaoms中的version
     config.php中的version.
@@ -11,3 +13,33 @@
 9. windows包。
 10. 上传文件。
 11. 撰写升级声明。
+ */
+
+$phpURL = 'http://zentaophp.googlecode.com/svn/tags/';
+$pmsURL = 'http://zentaoms.googlecode.com/svn/tags/';
+
+$phpTag = getLatestTag($phpURL);
+$pmsTag = getLatestTag($pmsURL);
+
+$phpTagURL = $phpURL . $phpTag;
+$pmsTagURL = $pmsURL . $pmsTag;
+
+echo $phpTag . "'\t" . $pmsTag . "\n";
+
+chdir('../release/');
+echo `svn export $phpTagURL`;
+echo `svn export $pmsTagURL`;
+
+/* Get the latest tag under a url. */
+function getLatestTag($url)
+{
+    $lines = file($url);
+    $latestTag = '';
+    foreach($lines as $line)
+    {
+        if(strpos($line, '<li>') !== false) $latestTag = $line;
+    }
+    $latestTag = explode('"', $latestTag);
+    $latestTag = $latestTag[1];
+    return $latestTag;
+}
