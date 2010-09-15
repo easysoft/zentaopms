@@ -72,6 +72,8 @@ class file extends control
             if(file_exists($file->realPath))
             {
                 $fileName = $file->title . '.' . $file->extension;
+                if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) $fileName = urlencode($fileName);
+                header('Content-Description: File Transfer');
                 header('Content-type: application/octet-stream');
                 header("Content-Disposition: attachment; filename=$fileName");
                 $fileData = file_get_contents($file->realPath);

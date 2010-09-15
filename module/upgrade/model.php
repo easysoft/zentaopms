@@ -293,7 +293,8 @@ class upgradeModel extends model
     private function upgradeFrom1_2To1_3()
     {
         $this->execSQL($this->getUpgradeFile('1.2'));
-        $this->updateUbb();
+        $this->updateUBB();
+        $this->updateNL();
         if(!$this->isError()) $this->setting->updateVersion('1.3');
     }
 
@@ -319,11 +320,11 @@ class upgradeModel extends model
     }
 
     /* 更新bug表的steps字段和userTPL表的content字段。*/
-    private function updateUbb()
+    private function updateUBB()
     {
         $bugs = $this->dao->select('id, steps')->from(TABLE_BUG)->fetchAll();
         $userTemplates = $this->dao->select('id, content')->from(TABLE_USERTPL)->fetchAll();
-        
+            
         foreach($bugs as $id => $bug)
         {
             $bug->steps = html::parseUBB($bug->steps);
@@ -333,6 +334,37 @@ class upgradeModel extends model
         {
             $template->content = html::parseUBB($template->content);
             $this->dao->update(TABLE_USERTPL)->data($template)->where('id')->eq($template->id)->exec();
+        }
+    }
+
+    public function updateNL()
+    {
+        $tasks     = $this->dao->select('id, `desc`')->from(TABLE_TASK)->fetchAll();
+        $stories   = $this->dao->select('story, version, spec')->from(TABLE_STORYSPEC)->fetchAll();
+        $todos     = $this->dao->select('id, `desc`')->from(TABLE_TODO)->fetchAll();
+        $testTasks = $this->dao->select('id, `desc`')->from(TABLE_TESTTASK)->fetchAll();
+
+        foreach($tasks as $task)
+        {
+            $task->desc = nl2br($task->desc);
+            $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($task->id)->exec();
+        }
+        foreach($stories as $story)
+        {
+            $story->spec = nl2br($story->spec);
+            $this->dao->update(TABLE_STORYSPEC)->data($story)->where('story')->eq($story->story)->andWhere('version')->eq($story->version)->exec();
+        }
+
+        foreach($todos as $todo)
+        {
+            $todo->desc = nl2br($todo->desc);
+            $this->dao->update(TABLE_TODO)->data($todo)->where('id')->eq($todo->id)->exec();
+        }
+
+        foreach($testTasks as $testtask)
+        {
+            $testtask->desc = nl2br($testtask->desc);
+            $this->dao->update(TABLE_TESTTASK)->data($testtask)->where('id')->eq($testtask->id)->exec();
         }
     }
 

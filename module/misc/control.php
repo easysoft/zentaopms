@@ -42,4 +42,9 @@ class misc extends control
         $this->display();
         exit;
     }
+
+    public function updateNL()
+    {
+        $this->loadModel('upgrade')->updateNL();
+    }
 }
