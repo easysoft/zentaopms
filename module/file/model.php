@@ -108,7 +108,7 @@ class fileModel extends model
             extract($_FILES[$htmlTagName]);
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = !empty($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : pathinfo($name, PATHINFO_FILENAME);
+            $file['title']     = !empty($_POST['labels'][0]) ? htmlspecialchars($_POST['labels'][0]) : substr($name, 0, strpos($name, $file['extension']) - 1);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
             return array($file);

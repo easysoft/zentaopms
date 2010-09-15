@@ -40,6 +40,12 @@ class file extends control
         {
             move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']);
             $url =  $this->file->webPath . $file['pathname'];
+
+            $file['addedBy']    = $this->app->user->account;
+            $file['addedDate']  = helper::today();
+            unset($file['tmpname']);
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
             die(json_encode(array('error' => 0, 'url' => $url)));
         }
     }
