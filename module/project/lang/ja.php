@@ -89,7 +89,7 @@ $lang->project->edit           = "";
 $lang->project->manageMembers  = '管理チームのメンバー';
 $lang->project->unlinkMember   = 'メンバーの削除';
 $lang->project->unlinkStory    = '削除の話';
-$lang->project->importTask     = 'インポートタスクが元に戻す';
+$lang->project->importTask     = 'Import';
 $lang->project->ajaxGetProducts= "APIは：プロジェクトの製品を購入する";
 
 /* 分组浏览.*/
@@ -97,13 +97,13 @@ $lang->project->listTask            = 'リスト';
 $lang->project->groupTaskByStory    = '物語では';
 $lang->project->groupTaskByStatus   = '状態で';
 $lang->project->groupTaskByPri      = '優先順位で';
-$lang->project->groupTaskByOwner    = '所有者によって';
+$lang->project->groupTaskByOwner    = 'Owner';
 $lang->project->groupTaskByEstimate = '見積もりでは';
-$lang->project->groupTaskByConsumed = 'によって消費される';
+$lang->project->groupTaskByConsumed = 'Consumed';
 $lang->project->groupTaskByLeft     = '左に';
 $lang->project->groupTaskByType     = '種類別';
 $lang->project->groupTaskByDeadline = 'BYの期限';
-$lang->project->listTaskNeedConfrim = 'ストーリーが変更されました';
+$lang->project->listTaskNeedConfrim = '変更';
 
 /* 页面提示.*/
 $lang->project->selectProject  = "選択してプロジェクト";

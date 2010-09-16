@@ -39,7 +39,7 @@
       <th class='w-80px'><?php echo $lang->testtask->begin;?></th>
       <th class='w-80px'><?php echo $lang->testtask->end;?></th>
       <th class='w-50px'><?php echo $lang->statusAB;?></th>
-      <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-130px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

@@ -51,6 +51,7 @@ $lang->bug->openedBuild    = 'オープンビルド';
 $lang->bug->assignedTo     = '割り当て';
 $lang->bug->assignedDate   = '割り当て日';
 $lang->bug->resolvedBy     = '解決で';
+$lang->bug->resolvedByAB   = '解決で';
 $lang->bug->resolution     = '解像度';
 $lang->bug->resolutionAB   = '解像度';
 $lang->bug->resolvedBuild  = '解決ビルド';
@@ -80,7 +81,7 @@ $lang->bug->reportChart    = 'レポート';
 $lang->bug->delete         = '削除バグ';
 $lang->bug->saveTemplate   = '保存テンプレートを';
 $lang->bug->deleteTemplate = '削除テンプレートを';
-$lang->bug->customFields   = 'カスタムフィールド';
+$lang->bug->customFields   = 'Custome';
 $lang->bug->restoreDefault = 'デフォルト';
 $lang->bug->ajaxGetUserBugs    = 'APIは：私のバグ';
 $lang->bug->ajaxGetModuleOwner = 'APIは：モジュールのデフォルトの所有者を取得する';
@@ -98,7 +99,7 @@ $lang->bug->postponedBugs  = '延期';
 $lang->bug->allBugs        = 'すべてのバグ';
 $lang->bug->moduleBugs     = 'モジュールで';
 $lang->bug->byQuery        = '検索';
-$lang->bug->needConfirm    = 'ストーリーが変更されました';
+$lang->bug->needConfirm    = '変更';
 $lang->bug->allProduct     = 'すべての製品';
 
 /* 页面标签。*/

@@ -46,10 +46,10 @@ function checkall(checker)
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->testcase->title;?></th>
-      <th class='w-80px'><?php echo $lang->testcase->type;?></th>
-      <th class='w-50px'><?php echo $lang->openedByAB;?></th>
-      <th class='w-50px'><?php echo $lang->statusAB;?></th>
-      <th class='w-80px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
+      <th class='w-type'><?php echo $lang->testcase->type;?></th>
+      <th class='w-user'><?php echo $lang->openedByAB;?></th>
+      <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <th class='w-100px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
     </tr>
     </thead>
     <tbody>

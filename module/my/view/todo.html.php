@@ -50,7 +50,7 @@ function changeDate(date)
   <table class='table-1 tablesorter'>
     <thead>
     <tr class='colhead'>
-      <th class='w-100px'><?php echo $lang->idAB;?></th>
+      <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-date'><?php echo $lang->todo->date;?></th>
       <th class='w-type'><?php echo $lang->todo->type;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
@@ -58,7 +58,7 @@ function changeDate(date)
       <th class='w-hour'><?php echo $lang->todo->beginAB;?></th>
       <th class='w-hour'><?php echo $lang->todo->endAB;?></th>
       <th class='w-status'><?php echo $lang->todo->status;?></th>
-      <th class='w-130px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
 

@@ -55,7 +55,7 @@ $lang->project->whitelist    = 'Whitelist';
 $lang->team->account     = 'Account';
 $lang->team->role        = 'Role';
 $lang->team->joinDate    = 'Join date';
-$lang->team->workingHour = 'Working/Day';
+$lang->team->workingHour = 'Hour/Day';
 
 /* 字段取值列表.*/
 $lang->project->statusList['']      = '';

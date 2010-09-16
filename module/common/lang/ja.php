@@ -47,7 +47,7 @@ $lang->close        = 'クローズ';
 $lang->link         = 'リンク';
 $lang->unlink       = '解除';
 $lang->import       = 'インポート';
-$lang->exportCSV    = 'エクスポートCSV形式';
+$lang->exportCSV    = 'CSV';
 $lang->setFileName  = '入力してくださいファイル名を：';
 $lang->activate     = 'アクティブ';
 $lang->save         = '保存';
@@ -86,13 +86,13 @@ $lang->typeAB       = 'タイプ';
 /* 主导航菜单。*/
 $lang->menu->index   = 'インデックス|index|index';
 $lang->menu->my      = 'ダッシュボード|my|index';
-$lang->menu->product = '製品紹介|product|index';
+$lang->menu->product = '製品|product|index';
 $lang->menu->project = 'プロジェクト|project|index';
 $lang->menu->qa      = '品質保証|qa|index';
 $lang->menu->doc     = 'ドック|doc|index';
 //$lang->menu->forum   = '讨论视图|doc|index';
-$lang->menu->company = '会社概要|company|index';
-$lang->menu->admin   = '管理者|admin|index';
+$lang->menu->company = '会社|company|index';
+$lang->menu->admin   = '管理|admin|index';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'バグ';

@@ -51,6 +51,7 @@ $lang->bug->openedBuild    = '오픈 빌드';
 $lang->bug->assignedTo     = '할당';
 $lang->bug->assignedDate   = '지정된 날짜';
 $lang->bug->resolvedBy     = '해결된으로';
+$lang->bug->resolvedByAB   = 'Resolve';
 $lang->bug->resolution     = '해결';
 $lang->bug->resolutionAB   = '해결';
 $lang->bug->resolvedBuild  = '해결된 빌드';

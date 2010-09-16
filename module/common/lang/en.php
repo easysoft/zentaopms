@@ -161,17 +161,17 @@ $lang->build->menu           = $lang->project->menu;
 $lang->bug->menu->product  = '%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
-$lang->bug->menu->testtask = array('link' => 'Task|testtask|browse|productID=%s');
+$lang->bug->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s');
 
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => 'Task|testtask|browse|productID=%s');
+$lang->testcase->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s');
 
 $lang->testtask->menu->product  = '%s';
 $lang->testtask->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testtask->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
-$lang->testtask->menu->testtask = array('link' => 'Task|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
+$lang->testtask->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
 /* 文档视图菜单设置。*/
 $lang->doc->menu->list    = '%s';

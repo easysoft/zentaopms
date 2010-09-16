@@ -37,7 +37,7 @@
       <th class='w-100px'><?php echo $lang->productplan->end;?></th>
       <th><?php echo $lang->productplan->title;?></th>
       <th class='w-p50'><?php echo $lang->productplan->desc;?></th>
-      <th class="w-120px {sorter: false}"><?php echo $lang->actions;?></th>
+      <th class="w-130px {sorter: false}"><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

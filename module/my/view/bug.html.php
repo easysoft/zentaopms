@@ -34,9 +34,9 @@
       <th class='w-type'><?php echo $lang->typeAB;?></th>
       <th><?php echo $lang->bug->title;?></th>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
-      <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
+      <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
       <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
-      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-130px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>

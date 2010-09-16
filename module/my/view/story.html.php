@@ -37,7 +37,7 @@
         <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
         <th class='w-status'><?php echo $lang->statusAB;?></th>
         <th class='w-stage'><?php echo $lang->story->stageAB;?></th>
-        <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+        <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -58,7 +58,6 @@
           if(!($story->status != 'closed' and common::printLink('story', 'change', "storyID=$story->id", $lang->story->change))) echo $lang->story->change . ' ';
           if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
           if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
-          if(!common::printLink('story', 'edit', "storyID=$story->id", $lang->edit)) echo $lang->edit . ' ';
           ?>
         </td>
       </tr>

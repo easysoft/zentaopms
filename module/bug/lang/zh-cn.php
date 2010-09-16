@@ -51,6 +51,7 @@ $lang->bug->openedBuild    = '影响版本';
 $lang->bug->assignedTo     = '指派给';
 $lang->bug->assignedDate   = '指派日期';
 $lang->bug->resolvedBy     = '解决者';
+$lang->bug->resolvedByAB   = '解决';
 $lang->bug->resolution     = '解决方案';
 $lang->bug->resolutionAB   = '方案';
 $lang->bug->resolvedBuild  = '解决版本';

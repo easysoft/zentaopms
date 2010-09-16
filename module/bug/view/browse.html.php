@@ -98,7 +98,7 @@ $(document).ready(function()
           <?php else:?>
           <th class='w-user'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='w-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-          <th class='w-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
+          <th class='w-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>

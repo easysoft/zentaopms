@@ -71,18 +71,18 @@ function browseByModule(active)
   <div class='yui-main'>
     <div class='yui-b'>
       <form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'>
-      <table class='table-1 tablesorter datatable mb-zero'>
+      <table class='table-1 tablesorter datatable mb-zero fixed'>
         <thead>
           <tr class='colhead'>
             <th class='w-id'><nobr><?php echo $lang->idAB;?></nobr></th>
             <th class='w-pri'><?php echo $lang->priAB;?></th>
-            <th class='w-p30'><?php echo $lang->testcase->title;?></th>
+            <th><?php echo $lang->testcase->title;?></th>
             <th><?php echo $lang->testcase->type;?></th>
             <th><?php echo $lang->testtask->assignedTo;?></th>
-            <th class='w-80px'><?php echo $lang->testtask->lastRun;?></th>
+            <th class='w-user'><?php echo $lang->testtask->lastRun;?></th>
             <th class='w-80px'><?php echo $lang->testtask->lastResult;?></th>
-            <th><?php echo $lang->statusAB;?></th>
-            <th class='w-150px {sorter: false}'><?php echo $lang->actions;?></th>
+            <th class='w-status'><?php echo $lang->statusAB;?></th>
+            <th class='w-160px {sorter: false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
