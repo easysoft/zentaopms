@@ -45,8 +45,8 @@ $config->themes      = 'default,blue';    // 支持的主题列表。
 $config->langs['zh-cn'] = '中文简体';
 $config->langs['zh-tw'] = '中文繁體';
 $config->langs['en']    = 'English';
-//$config->langs['ja']    = 'Japanese';
-//$config->langs['ko']    = 'Korean';
+$config->langs['ja']    = 'Japanese';
+$config->langs['ko']    = 'Korean';
 
 /* 默认参数设定。*/
 $config->default->view   = 'html';             // 默认的视图格式。
