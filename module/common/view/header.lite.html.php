@@ -24,6 +24,7 @@ $clientTheme  = $this->app->getClientTheme();
 <script src="<?php echo $jsRoot;?>my.js"         type="text/javascript"></script>
 <link rel='stylesheet' href='<?php echo $defaultTheme . 'yui.css';?>'   type='text/css' media='screen' />
 <link rel='stylesheet' href='<?php echo $defaultTheme . 'style.css';?>' type='text/css' media='screen' />
+<link rel='stylesheet' href='<?php echo $themeRoot . 'lang/' . $app->getClientLang() . '.css';?>' type='text/css' media='screen' />
 <?php if(strpos($clientTheme, 'default') === false):?>
 <link rel='stylesheet' href='<?php echo $clientTheme . 'style.css';?>'  type='text/css' media='screen' />
 <?php endif;?>
