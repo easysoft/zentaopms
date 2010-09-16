@@ -26,9 +26,9 @@ include '../../common/view/header.lite.html.php';
 html{background-color:#06294e;}
 body{background-image:url(theme/default/images/main/loginbg.png); background-position:center top; background-repeat:no-repeat;}
 table, tr, td, th, input{ border:none;}
-.rowhead{width:280px; font-weight:normal; font-size:14px; text-align:right; color:#fff;}
-.text-2 {width:160px; height:22px; background-color:#a4c5e0; border:1px solid #035793; font-size:16px; font-weight:bold}
-.select-2 {width:160px}
+.rowhead{width:300px; font-weight:normal; font-size:14px; text-align:right; color:#fff;}
+.text-2 {width:150px; height:22px; background-color:#a4c5e0; border:1px solid #035793; font-size:16px; font-weight:bold}
+.select-2 {width:150px}
 .pt-20px {padding-top:20px}
 .pt-200px{padding-top:200px}
 .pt-25px {padding-top:25px}
