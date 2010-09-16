@@ -1,1 +1,45 @@
-安装，请访问 http://www.zentaoms.com/node78950.html
+1. system required
+
+zentao needs apache, php(>5.2) and mysql.
+
+2. how to install on windows
+
+  2.1  use uniserver package on windows.
+
+    uniserver is a very good AMP package. please see http://www.uniformserver.com/
+
+    We have bind zentao to uniserver, so you can only download our .exe package, unpack it, then you can use zentao now.
+
+    2.1.1  download our .exe package. 
+    2.1.2  unpack it.
+
+      after download the package, save it to a path(no space), for example c:\
+      then double click the exe file, it will be extracted to c:\zentao
+
+    2.1.3 start zentao
+
+      cd c:\zentao, there'is a start.exe. double click it, it will stay on the tray menu at the bottom of the window.
+
+      click on the blue one icon, then the menu will show, you can choose the "start apache and mysql", waiting for a moment.
+      Then you can visit zentao through http://localhost/zentao/
+
+  2.1.4 the admin account and password.
+
+    the default admin account is 'admin' and password is '123456'. the root password of mysql is 'root';
+
+  2.2  install from the sourcecode on windows, linux or freebsd.
+
+    2.2.1 install one AMP package. 
+      you can install other AMP package. Make sure the version of apache, php and mysql meets the needs of zetnao.
+
+    2.2.2 download our zip package.
+
+    2.2.3 unpack it.
+
+      after download our zip package, save it to the apache's htdocs path and unpack it to zentaopms. make sure the zentaopms path can be
+      visited through browse.
+
+   2.2.4  start the installation
+
+    open your browser and visit the zentaopms path, for example http://192.168.1.1/zentaopms/, then the install wizard will launch, you can install it
+    step by step.
