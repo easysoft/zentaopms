@@ -31,60 +31,19 @@ class ztclient
     /* The construce function. */
     public function __construct($zentaoRoot = '', $account = '', $password = '')
     {
-        $this->setLocalConfig();
         $this->agent = new snoopy();
 
-        if($zentaoRoot and $account and $password)
-        {
-            /* Assign to $this->zentao. */
-            $this->zentao->root     = rtrim($zentaoRoot, '/') . '/';
-            $this->zentao->account  = $account;
-            $this->zentao->password = md5($password);
+        /* Assign to $this->zentao. */
+        $this->zentao->root     = rtrim($zentaoRoot, '/') . '/';
+        $this->zentao->account  = $account;
+        $this->zentao->password = md5($password);
 
-            /* Load the remote settings. */
-            $config = $this->getRemoteConfig();
-            foreach($config as $key => $value) $this->zentao->$key = $value;
-
-            /* Save to the local config fiel. */
-            $this->save2LocalConfig();
-        }
-        else
-        {
-            if(!$this->loadLocalConfig())
-            {
-                die("The sytem init failed, please set the zentaoRoot, account and password. \n");
-            }
-        }
+        /* Load the remote settings. */
+        $config = $this->getRemoteConfig();
+        foreach($config as $key => $value) $this->zentao->$key = $value;
 
         $this->startSession();
         $this->login();
-    }
-
-    /* Set the path of local config file. */
-    private function setLocalConfig()
-    {
-        $this->configFile = dirname(__FILE__) . '/.ztini';
-        if(!file_exists($this->configFile))
-        {
-            @file_put_contents($this->configFile, '');
-            if(!file_exists($this->configFile)) die("The config file $this->configFile init failed. Please check the write permission. \n");
-        }
-    }
-
-    /* Save the config to local config file. */
-    private function save2LocalConfig()
-    {
-        $config = "<?php \n";
-        foreach($this->zentao as $key => $value) $config .= "\$zentao->$key = '$value';\n";
-        file_put_contents($this->configFile, $config);
-    }
-
-    /* Load config from local config file. */
-    private function loadLocalConfig()
-    {
-        include $this->configFile;
-        $this->zentao = $zentao;
-        return true;
     }
 
     /* Get the settings through getconfig api from remote. */
@@ -131,7 +90,7 @@ class ztclient
     }
 
     /* Set the method api. */
-    private function setModelAPI($module, $method, $vars)
+    private function setModelAPI($module, $method, $vars = '')
     {
         $vars = str_replace('&', ',', $vars);
         if($this->zentao->requestType == 'GET')
@@ -154,6 +113,7 @@ class ztclient
     /* 启动session. */
     public function startSession()
     {
+        $this->session = null;
         $this->session = $this->httpGet($this->setSessionAPI());
     }
 
@@ -173,7 +133,7 @@ class ztclient
     }
 
     /* Fetch one method of a module's model. */
-    public function fetchModel($module, $method, $vars)
+    public function fetchModel($module, $method, $vars = '')
     {
         return $this->httpGet($this->setModelAPI($module, $method, $vars));
     }
@@ -183,9 +143,10 @@ class ztclient
     {
         $this->agent->fetch($url);
         $result = json_decode($this->agent->results);
-        if($result->status != 'success') die($result->status . "\n");
-        if(isset($result->data) and md5($result->data) != $result->md5) die("Hash check failed\n");
-        return json_decode($result->data);
+        if($result->status != 'success') return false;
+        if(isset($result->data) and md5($result->data) != $result->md5) return false;
+        if(isset($result->data)) return json_decode($result->data);
+        return true;
     }
 
     private function appendSession($url)
