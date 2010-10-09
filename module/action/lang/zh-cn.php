@@ -46,26 +46,26 @@ $lang->action->objectTypes['doc']         = '文档';
 $lang->action->objectTypes['doclib']      = '文档库';
 
 /* 用来描述操作历史记录。*/
-$lang->action->desc->common      = '$date, <strong>$action</strong> by <strong>$actor</strong>';
-$lang->action->desc->extra       = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
-$lang->action->desc->opened      = '$date, 由 <strong>$actor</strong> 创建。';
-$lang->action->desc->created     = '$date, 由 <strong>$actor</strong> 创建。';
-$lang->action->desc->changed     = '$date, 由 <strong>$actor</strong> 变更。';
-$lang->action->desc->edited      = '$date, 由 <strong>$actor</strong> 编辑。';
-$lang->action->desc->closed      = '$date, 由 <strong>$actor</strong> 关闭。';
-$lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 删除。';
-$lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 删除了附件：<strong><i>$extra</i></strong>';
-$lang->action->desc->erased      = '$date, 由 <strong>$actor</strong> 删除。';
-$lang->action->desc->undeleted   = '$date, 由 <strong>$actor</strong> 还原。';
-$lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 发表评论。';
-$lang->action->desc->activated   = '$date, 由 <strong>$actor</strong> 激活。';
-$lang->action->desc->moved       = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"';
-$lang->action->desc->confirmed   = '$date, 由 <strong>$actor</strong> 确认需求变动，最新版本为<strong>#$extra</strong>';
-$lang->action->desc->started     = '$date, 由 <strong>$actor</strong> 启动。';
-$lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。';
-$lang->action->desc->finished    = '$date, 由 <strong>$actor</strong> 完成。';
-$lang->action->desc->diff1       = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />';
-$lang->action->desc->diff2       = '修改了 <strong><i>%s</i></strong>，区别为：<blockquote>%s</blockquote>';
+$lang->action->desc->common      = '$date, <strong>$action</strong> by <strong>$actor</strong>' . "\n";
+$lang->action->desc->extra       = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>' . "\n";
+$lang->action->desc->opened      = '$date, 由 <strong>$actor</strong> 创建。' . "\n";
+$lang->action->desc->created     = '$date, 由 <strong>$actor</strong> 创建。' . "\n";
+$lang->action->desc->changed     = '$date, 由 <strong>$actor</strong> 变更。' . "\n";
+$lang->action->desc->edited      = '$date, 由 <strong>$actor</strong> 编辑。' . "\n";
+$lang->action->desc->closed      = '$date, 由 <strong>$actor</strong> 关闭。' . "\n";
+$lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 删除。' . "\n";
+$lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 删除了附件：<strong><i>$extra</i></strong>' . "\n";
+$lang->action->desc->erased      = '$date, 由 <strong>$actor</strong> 删除。' . "\n";
+$lang->action->desc->undeleted   = '$date, 由 <strong>$actor</strong> 还原。' . "\n";
+$lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 发表评论。' . "\n";
+$lang->action->desc->activated   = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
+$lang->action->desc->moved       = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"' . "\n";
+$lang->action->desc->confirmed   = '$date, 由 <strong>$actor</strong> 确认需求变动，最新版本为<strong>#$extra</strong>' . "\n";
+$lang->action->desc->started     = '$date, 由 <strong>$actor</strong> 启动。' . "\n";
+$lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。' . "\n";
+$lang->action->desc->finished    = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
+$lang->action->desc->diff1       = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
+$lang->action->desc->diff2       = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . '<blockquote>%s</blockquote>' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label->created             = '创建了';
