@@ -310,7 +310,7 @@ class user extends control
             if($user)
             {
                 /* 对用户进行授权，并登记session。*/
-                $user->rights = $this->user->authorize($this->post->account);
+                $user->rights = $this->user->authorize($account);
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
 
