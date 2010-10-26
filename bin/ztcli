@@ -37,13 +37,21 @@ include '../framework/router.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
 include '../framework/helper.class.php';
+include '../config/config.php';
 
 /* 将输入的参数解析成对于的变量。*/
 $request = parse_url(trim($argv[1]));
-$_SERVER['HTTP_HOST']   = $request['host'];
-$_SERVER['PATH_INFO']   = str_replace($config->webRoot, '', $request['path']);
-$_SERVER['REQUEST_URI'] = isset($request['query']) ? $request['query'] : '';
-if(isset($request['query'])) parse_str($request['query'], $_GET);
+$_SERVER['HTTP_HOST'] = $request['host'];
+if($config->requestType == 'PATH_INFO')
+{
+    $_SERVER['PATH_INFO'] = str_replace($config->webRoot, '', $request['path']);
+}
+else
+{
+    parse_str($request['query'], $_GET);
+    $_SERVER['SCRIPT_NAME'] = $_SERVER['PATH_INFO'] . 'index.php';
+    $_SERVER['REQUEST_URI'] = isset($request['query']) ? $request['query'] : '';
+}
 
 /* 实例化路由对象，并加载配置，连接到数据库。*/
 $app    = router::createApp('pms', dirname(dirname(__FILE__)));
