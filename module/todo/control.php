@@ -105,6 +105,7 @@ class todo extends control
         $this->view->position[]    = $this->lang->todo->view;
         $this->view->todo          = $todo;
         $this->view->times         = $this->todo->buildTimeList();
+        $this->view->users         = $this->user->getPairs('noletter');
         $this->view->actions       = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from          = $from;
 
