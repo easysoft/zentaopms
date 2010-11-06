@@ -182,7 +182,7 @@ class todoModel extends model
     }
 
     /* 生成时钟列表。*/
-    public function buildTimeList($begin = 9, $end = 22, $delta = 15)
+    public function buildTimeList($begin, $end, $delta)
     {
         $times = array();
         for($hour = $begin; $hour <= $end; $hour ++)
