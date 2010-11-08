@@ -46,5 +46,5 @@ $lang->company->backyard = 'Internal Site';
 $lang->company->pms      = 'ZenTaoPMS Site';
 $lang->company->guest    = 'Guest visit';
 
-$lang->company->guestList[0] = 'Allow';
-$lang->company->guestList[1] = 'Deny';
+$lang->company->guestList[0] = 'Deny';
+$lang->company->guestList[1] = 'Allow';
