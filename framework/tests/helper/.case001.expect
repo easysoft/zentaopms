@@ -1,0 +1,37 @@
+stdClass Object
+(
+    [a1] => 1
+    [a2] => 2
+    [a3] => stdClass Object
+        (
+            [b1] => 3
+            [b2] => 4
+        )
+
+    [a4] => stdClass Object
+        (
+            [b3] => stdClass Object
+                (
+                    [c1] => 5
+                )
+
+        )
+
+    [a5] => 6
+    [a6] => stdClass Object
+        (
+            [b4] => 7
+        )
+
+    [a7] => stdClass Object
+        (
+            [b5] => stdClass Object
+                (
+                    [c2] => 8
+                )
+
+        )
+
+)
+3
+10
