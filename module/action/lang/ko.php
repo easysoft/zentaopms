@@ -3,6 +3,7 @@
  * The action module Korean file of ZenTaoMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
  * @version     $Id: en.php 1000 2010-08-03 01:49:25Z yuren_@126.com $

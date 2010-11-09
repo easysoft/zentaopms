@@ -3,6 +3,7 @@
  * The bug module zh-tw file of ZenTaoMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: zh-tw.php 1069 2010-09-11 07:26:25Z yuren_@126.com $

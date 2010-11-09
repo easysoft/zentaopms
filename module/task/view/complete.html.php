@@ -3,6 +3,7 @@
  * The complete file of task module of ZenTaoMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     task
  * @version     $Id: complete.html.php 935 2010-07-06 07:49:24Z jajacn@126.com $

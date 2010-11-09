@@ -3,6 +3,7 @@
  * The model class file of ZenTaoPHP.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPHP
  * @version     $Id: model.class.php 135 2010-09-14 03:23:35Z yuren_@126.com $

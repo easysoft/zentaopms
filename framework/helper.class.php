@@ -3,6 +3,7 @@
  * The helper class file of ZenTaoPHP.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPHP
  * @version     $Id: helper.class.php 138 2010-10-08 03:40:48Z wwccss $

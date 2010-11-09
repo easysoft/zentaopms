@@ -3,6 +3,7 @@
  * The select view of search module of ZenTaoMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     search
  * @version     $Id: select.html.php 942 2010-07-06 10:03:51Z jajacn@126.com $
