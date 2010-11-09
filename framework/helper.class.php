@@ -1,33 +1,32 @@
 <?php
 /**
- * The helper class file of ZenTaoPHP.
+ * The helper class file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoPHP
- * @version     $Id: helper.class.php 138 2010-10-08 03:40:48Z wwccss $
+ * @package     ZenTaoCMS
+ * @version     $Id: helper.class.php 111 2010-05-11 08:17:32Z wwccss $
  * @link        http://www.zentao.net
  */
 /**
- * 工具类对象，存放着各种杂项的工具方法。
+ * The helper class, contains the tool functions.
  *
- * @package ZenTaoPHP
+ * @package ZenTaoCMS
  */
 class helper
 {
     /**
-     * 为一个对象设置某一个属性，其中key可以是“father.child”的形式。
-     * 
+     * Set the member's value of one object.
      * <code>
      * <?php
      * $lang->db->user = 'wwccss';
      * helper::setMember('lang', 'db.user', 'chunsheng.wang');
      * ?>
      * </code>
-     * @param string    $objName    对象变量名。
-     * @param string    $key        要设置的属性，可以是father.child的形式。
-     * @param mixed     $value      要设置的值。
+     * @param string    $objName    the var name of the object.
+     * @param string    $key        the key of the member, can be parent.child.
+     * @param mixed     $value      the value to be set.
      * @static
      * @access public
      * @return void
@@ -43,19 +42,19 @@ class helper
     }
 
     /**
-     * 生成某一个模块某个方法的链接。
+     * Create a link to a module's method.
      * 
-     * 在control类中对此方法进行了封装，可以在control对象中直接调用createLink方法。
+     * This method also mapped in control class to call conveniently.
      * <code>
      * <?php
      * helper::createLink('hello', 'index', 'var1=value1&var2=value2');
      * helper::createLink('hello', 'index', array('var1' => 'value1', 'var2' => 'value2');
      * ?>
      * </code>
-     * @param string    $moduleName     模块名。
-     * @param string    $methodName     方法名。
-     * @param mixed     $vars           要传递给method方法的各个参数，可以是数组，也可以是var1=value2&var2=value2的形式。
-     * @param string    $viewType       扩展名方式。
+     * @param string    $moduleName     module name
+     * @param string    $methodName     method name
+     * @param mixed     $vars           the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2) or key1=value1&key2=value2
+     * @param string    $viewType       the view type
      * @static
      * @access public
      * @return string
@@ -73,24 +72,39 @@ class helper
             }
         }
 
+        /* Set the view type and vars. */
         if(empty($viewType)) $viewType = $app->getViewType();
-
-        /* 如果传递进来的vars不是数组，尝试将其解析成数组格式。*/
         if(!is_array($vars)) parse_str($vars, $vars);
+
+        /* The PATH_INFO type. */
         if($config->requestType == 'PATH_INFO')
         {
-            $link .= "$moduleName{$config->requestFix}$methodName";
-            if($config->pathType == 'full')
+            /* If the method equal the default method defined in the config file and the vars is empty, convert the link. */
+            if($methodName == $config->default->method and empty($vars))
             {
-                foreach($vars as $key => $value) $link .= "{$config->requestFix}$key{$config->requestFix}$value";
+                /* If the module also equal the default module, change index-index to index.html. */
+                if($moduleName == $config->default->module)
+                {
+                    $link .= 'index.' . $viewType;
+                }
+                else
+                {
+                    $link .= $moduleName . '/';
+                }
             }
             else
             {
-                foreach($vars as $value) $link .= "{$config->requestFix}$value";
-            }    
-            /* 如果访问的是/index/index.html，简化为/index.html。*/
-            if($moduleName == $config->default->module and $methodName == $config->default->method) $link = $config->webRoot . 'index';
-            $link .= '.' . $viewType;
+                $link .= "$moduleName{$config->requestFix}$methodName";
+                if($config->pathType == 'full')
+                {
+                    foreach($vars as $key => $value) $link .= "{$config->requestFix}$key{$config->requestFix}$value";
+                }
+                else
+                {
+                    foreach($vars as $value) $link .= "{$config->requestFix}$value";
+                }    
+                $link .= '.' . $viewType;
+            }
         }
         elseif($config->requestType == 'GET')
         {
@@ -102,56 +116,12 @@ class helper
     }
 
     /**
-     * 将一个数组转成对象格式。此函数只是返回语句，需要eval。
+     * Import a file instend of include or requie.
      * 
-     * <code>
-     * <?php
-     * $config['user'] = 'wwccss';
-     * eval(helper::array2Object($config, 'configobj');
-     * print_r($configobj);
-     * ?>
-     * </code>
-     * @param array     $array          要转换的数组。
-     * @param string    $objName        要转换成的对象的名字。
-     * @param string    $memberPath     成员变量路径，最开始为空，从根开始。
-     * @param bool      $firstRun       是否是第一次运行。
+     * @param string    $file   the file to be imported.
      * @static
      * @access public
-     * @return void
-     */
-    static public function array2Object($array, $objName, $memberPath = '', $firstRun = true)
-    {
-        if($firstRun)
-        {
-            if(!is_array($array) or empty($array)) return false;
-        }    
-        static $code = '';
-        $keys = array_keys($array);
-        foreach($keys as $keyNO => $key)
-        {
-            $value = $array[$key];
-            if(is_int($key)) $key = 'item' . $key;
-            $memberID = $memberPath . '->' . $key;
-            if(!is_array($value))
-            {
-                $value = addslashes($value);
-                $code .= "\$$objName$memberID='$value';\n";
-            }
-            else
-            {
-                helper::array2object($value, $objName, $memberID, $firstRun = false);
-            }
-        }
-        return $code;
-    }
-
-    /**
-     * 包含一个文件。router.class.php和control.class.php中包含文件都通过此函数来调用，这样保证文件不会重复加载。
-     * 
-     * @param string    $file   要包含的文件的路径。 
-     * @static
-     * @access public
-     * @return void
+     * @return bool
      */
     static public function import($file)
     {
@@ -167,85 +137,62 @@ class helper
     }
 
     /**
-     * 设置model文件。
+     * Set the model file of one module. If there's an extension file, merge it with the main model file.
      * 
-     * @param   string      $moduleName     模块名字。
-     * @access  private
-     * @return void
+     * @param   string      $moduleName     the module name
+     * @static
+     * @access  public
+     * @return  string      the model file
      */
     static public function setModelFile($moduleName)
     {
         global $app;
 
-        /* 设定主model文件和扩展路径，并获得所有的扩展文件。*/
+        /* Set the main model file and extension path and files. */
         $mainModelFile = $app->getModulePath($moduleName) . 'model.php';
         $modelExtPath  = $app->getModuleExtPath($moduleName, 'model');
         $extFiles      = helper::ls($modelExtPath, '.php');
 
-        /* 不存在扩展文件，返回主配置文件。*/
+        /* If no extension file, return the main file directly. */
         if(empty($extFiles)) return $mainModelFile;
 
-        /* 存在扩展文件，判断是否需要更新。*/
-        $mergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . $moduleName . '.php';
+        /* Else, judge whether needed update or not .*/
+        $mergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . $app->site->code . '.' . $moduleName . '.php';
         $needUpdate      = false;
         $lastTime        = file_exists($mergedModelFile) ? filemtime($mergedModelFile) : 0;
-        
-        if(filemtime($mainModelFile) > $lastTime)
+        foreach($extFiles as $extFile)
         {
-            $needUpdate = true;
-        }
-        else
-        {
-            foreach($extFiles as $extFile)
+            if(filemtime($extFile) > $lastTime)
             {
-                if(filemtime($extFile) > $lastTime)
-                {
-                    $needUpdate = true;
-                    break;
-                }
+                $needUpdate = true;
+                break;
             }
         }
+        if(filemtime($mainModelFile) > $lastTime) $needUpdate = true;
 
-        /* 如果不需要更新，则直接返回合并之后的model文件。*/
+        /* If need'nt update, return the cache file. */
         if(!$needUpdate) return $mergedModelFile;
 
+        /* Update the cache file. */
         if($needUpdate)
         {
-            /* 加载主的model文件，并获得其方法列表。*/
-            helper::import($mainModelFile);
-            $modelMethods = get_class_methods($moduleName . 'model');
-            foreach($modelMethods as $key => $modelMethod) $modelMethods[$key] = strtolower($modelMethod);
+            $modelClass    = $moduleName . 'Model';
+            $extModelClass = 'ext' . $modelClass;
+            $modelLines    = trim(file_get_contents($mainModelFile));
+            $modelLines    = rtrim($modelLines, '?>');     // To make sure the last end tag is removed.
+            $modelLines   .= "class $extModelClass extends $modelClass {\n";
 
-            /* 将主model文件读入数组。*/
-            $modelLines = rtrim(file_get_contents($mainModelFile));
-            $modelLines = rtrim($modelLines, '?>');
-            $modelLines = rtrim($modelLines);
-            $modelLines = explode("\n", $modelLines);
-            $lines2Delete = array(count($modelLines) - 1);
-            $lines2Append = array();
-
-            /* 循环处理每个扩展方法文件。*/
+            /* Cycle all the extension files. */
             foreach($extFiles as $extFile)
             {
-                $methodName = strtolower(basename($extFile, '.php'));
-                if(in_array($methodName, $modelMethods))
-                {
-                    $method       = new ReflectionMethod($moduleName . 'model', $methodName);
-                    $startLine    = $method->getStartLine() - 1;
-                    $endLine      = $method->getEndLine() - 1;
-                    $lines2Delete = array_merge($lines2Delete, range($startLine, $endLine));
-                }
-                $extLines     = explode("\n", ltrim(trim(file_get_contents($extFile)), '<?php'));
-                $lines2Append = array_merge($lines2Append, $extLines);
+                $extLines = trim(file_get_contents($extFile));
+                $extLines = ltrim($extLines, '<?php');
+                $extLines = rtrim($extLines, '?>');
+                $modelLines .= $extLines . "\n";
             }
 
-            /* 生成新的model文件。*/
-            $lines2Append[] = '}';
-            foreach($lines2Delete as $lineNO) unset($modelLines[$lineNO]);
-            $modelLines = array_merge($modelLines, $lines2Append);
-            if(!is_dir(dirname($mergedModelFile))) mkdir(dirname($mergedModelFile));
-            $modelLines = join("\n", $modelLines);
-            $modelLines = str_ireplace($moduleName . 'model', 'ext' . $moduleName . 'model', $modelLines); // 类名修改。
+            /* Create the merged model file. */
+            $modelLines .= "}";
             file_put_contents($mergedModelFile, $modelLines);
 
             return $mergedModelFile;
@@ -253,9 +200,9 @@ class helper
     }
 
     /**
-     * 生成SQL查询中的IN(a,b,c)部分代码。
+     * Create the in('a', 'b') string.
      * 
-     * @param   misc    $ids   id列表，可以是数组，也可以是使用逗号隔开的字符串。 
+     * @param   misc    $ids   the id lists, can be a array or a string with ids joined with comma.
      * @static
      * @access  public
      * @return  string
@@ -267,9 +214,9 @@ class helper
     }
 
     /**
-     * 生成对框架安全的base64encode串。
+     * Create safe base64 encoded string for the framework.
      * 
-     * @param   string  $string   要编码的字符串列表。
+     * @param   string  $string   the string to encode.
      * @static
      * @access  public
      * @return  string
@@ -280,9 +227,9 @@ class helper
     }
 
     /**
-     * 解码。
+     * Decode the string encoded by safe64Encode.
      * 
-     * @param   string  $string   要解码的字符串列表。
+     * @param   string  $string   the string to decode
      * @static
      * @access  public
      * @return  string
@@ -293,37 +240,57 @@ class helper
     }
 
     /**
-     *  计算两个日期的差。
+     *  Compute the diff days of two date.
      * 
-     * @param   date  $date1   第一个时间
-     * @param   date  $date2   第二个时间
+     * @param   date  $date1   the first date.
+     * @param   date  $date2   the sencode date.
      * @access  public
-     * @return  string
+     * @return  string  the diff of the two days.
      */
     static public function diffDate($date1, $date2)
     {
         return round((strtotime($date1) - strtotime($date2)) / 86400, 0);
     }
 
-    /* 获得当前的时间。*/
+    /**
+     *  Get now time use the DT_DATETIME1 constant defined in the lang file.
+     * 
+     * @access  public
+     * @return  datetime  now
+     */
     static public function now()
     {
         return date(DT_DATETIME1);
     }
 
-    /* 获得今天的日期。*/
+    /**
+     *  Get today according to the  DT_DATE1 constant defined in the lang file.
+     * 
+     * @access  public
+     * @return  date  today
+     */
     static public function today()
     {
         return date(DT_DATE1);
     }
 
-    /* 判断是否0000-00-00格式的日期。*/
+    /**
+     *  Judge a date is zero or not.
+     * 
+     * @access  public
+     * @return  date  today
+     */
     static public function isZeroDate($date)
     {
         return substr($date, 0, 4) == '0000';
     }
 
-    /* 获得某一个目录下面含有某个特征字符串的所有文件。*/
+    /**
+     *  Get files match the pattern under one directory.
+     * 
+     * @access  public
+     * @return  array   the files match the pattern
+     */
     static public function ls($dir, $pattern = '')
     {
         $files = array();
@@ -341,35 +308,77 @@ class helper
         }
         return $files;
     }
-
-    /* 切换目录。*/
-    static function cd($path = '')
-    {
-        static $cwd = '';
-        if($path)
-        {
-            $cwd = getcwd();
-            chdir($path);
-        }
-        else
-        {
-            chdir($cwd);
-        }
-    }
 }
 
-/* 别名函数，生成对内部方法的链接。 */
+/**
+ *  The short alias of helper::createLink() method. 
+ *
+ * @param string $methodName  the method name
+ * @param mixed  $vars        the vars to passed
+ * @param string $viewType    
+ * @return string
+ */
 function inLink($methodName = 'index', $vars = '', $viewType = '')
 {
     global $app;
     return helper::createLink($app->getModuleName(), $methodName, $vars, $viewType);
 }
 
-/* 循环一个数组。*/
+/**
+ *  Static cycle a array 
+ *
+ * @param array  $items     the array to be cycled.
+ * @return mixed
+ */
 function cycle($items)
 {
     static $i = 0;
     if(!is_array($items)) $items = explode(',', $items);
     if(!isset($items[$i])) $i = 0;
     return $items[$i++];
+}
+
+/**
+ * Get current microtime.
+ * 
+ * @access protected
+ * @return float        current time.
+ */
+function getTime()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}
+
+/**
+ * Save the sql.
+ * 
+ * @access protected
+ * @return void
+ */
+function saveSQL()
+{
+    if(!class_exists('dao')) return;
+    global $app;
+    $sqlLog = $app->getLogRoot() . 'sql.' . date('Ymd') . '.log';
+    $fh = @fopen($sqlLog, 'a');
+    if(!$fh) return false;
+    fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+    foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
+    fwrite($fh, "\n");
+    fclose($fh);
+}
+
+/**
+ * dump a var.
+ * 
+ * @param mixed $var 
+ * @access public
+ * @return void
+ */
+function a($var)
+{
+    echo "<xmp class='a-left'>";
+    print_r($var);
+    echo "</xmp>";
 }
