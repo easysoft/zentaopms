@@ -89,7 +89,7 @@ if($information == 8){
 
 //=== Display ZenTao site browser =================================
 if($information == 9){
- $command = "start http://www.zentaoms.com/"; //
+ $command = "start http://www.ZenTaoPMS.com/"; //
  exec($command,$dummy,$return);                           // run command 
  exit;
 }

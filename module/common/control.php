@@ -1,6 +1,6 @@
 <?php
 /**
- * The control file of common module of ZenTaoMS.
+ * The control file of common module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
@@ -255,7 +255,7 @@ EOT;
         $mainMenu = $moduleName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
         list($menuLabel, $module, $method) = explode('|', $lang->menu->index);
-        echo html::a(helper::createLink($module, $method), $lang->zentaoMS) . $lang->arrow;
+        echo html::a(helper::createLink($module, $method), $lang->ZenTaoPMS) . $lang->arrow;
         if($moduleName != 'index')
         {
             list($menuLabel, $module, $method) = explode('|', $lang->menu->$mainMenu);

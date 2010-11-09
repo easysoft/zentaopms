@@ -8,7 +8,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id$
- * @link        http://www.zentaoms.com
+ * @link        http://www.ZenTaoPMS.com
  */
 error_reporting(0);
 define('IN_SHELL', true);

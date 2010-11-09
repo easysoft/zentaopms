@@ -12,10 +12,10 @@ $clientTheme  = $this->app->getClientTheme();
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   <?php
   $header = isset($header) ? (object)$header : new stdclass();
-  if(!isset($header->title))    $header->title = $lang->zentaoMS;
+  if(!isset($header->title))    $header->title = $lang->ZenTaoPMS;
   if(!isset($header->keywords)) $header->keywords = $lang->zentaoKeywords;
   if(!isset($header->desc))     $header->desc     = $lang->zentaoDESC;
-  echo "<title>$header->title - $lang->zentaoMS</title>\n";
+  echo "<title>$header->title - $lang->ZenTaoPMS</title>\n";
   echo "<meta name='keywords' content='$header->keywords'>\n";
   echo "<meta name='description' content='$header->desc'>\n";
   ?>

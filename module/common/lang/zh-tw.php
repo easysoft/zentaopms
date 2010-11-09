@@ -1,11 +1,11 @@
 <?php
 /**
- * The common simplified chinese file of ZenTaoMS.
+ * The common simplified chinese file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoMS
+ * @package     ZenTaoPMS
  * @version     $Id: zh-tw.php 1103 2010-09-13 11:02:40Z wwccss $
  * @link        http://www.zentao.net
  */
@@ -16,8 +16,8 @@ $lang->dot          = '。';
 $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 
-$lang->zentaoMS     = '禪道管理';
-$lang->welcome      = "歡迎使用『%s』{$lang->colon} {$lang->zentaoMS}";
+$lang->ZenTaoPMS     = '禪道管理';
+$lang->welcome      = "歡迎使用『%s』{$lang->colon} {$lang->ZenTaoPMS}";
 $lang->myControl    = "我的地盤";
 $lang->currentPos   = '當前位置：';
 $lang->logout       = '退出系統';

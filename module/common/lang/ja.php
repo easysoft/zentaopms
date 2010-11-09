@@ -1,11 +1,11 @@
 <?php
 /**
- * The common simplified chinese file of ZenTaoMS.
+ * The common simplified chinese file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoMS
+ * @package     ZenTaoPMS
  * @version     $Id: en.php 1015 2010-08-03 05:50:35Z wwccss $
  * @link        http://www.zentao.net
  */
@@ -16,8 +16,8 @@ $lang->dot          = '。';
 $lang->at           = 'に';
 $lang->downArrow    = '↓';
 
-$lang->zentaoMS     = 'ZenTaoPMS';
-$lang->welcome      = "Welcome to『%s』{$lang->colon} {$lang->zentaoMS}";
+$lang->ZenTaoPMS     = 'ZenTaoPMS';
+$lang->welcome      = "Welcome to『%s』{$lang->colon} {$lang->ZenTaoPMS}";
 $lang->myControl    = "ダッシュボード";
 $lang->currentPos   = '現在の';
 $lang->logout       = 'ログアウト';

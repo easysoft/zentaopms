@@ -4,7 +4,7 @@
 include dirname(dirname(__FILE__)) . '/lib/snoopy/snoopy.class.php';
 
 /* 用来登录的地址，用户名和密码。*/
-$zentaoRoot  = "http://demo.zentaoms.com/";  // 请根据实际的情况进行修改。
+$zentaoRoot  = "http://demo.ZenTaoPMS.com/";  // 请根据实际的情况进行修改。
 $account     = "demo";
 $password    = "123456";
 $requestType = 'PATH_INFO';       // 可选值： GET|PATH_INFO。

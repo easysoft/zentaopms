@@ -241,7 +241,7 @@ function setHelpLink()
             if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
             if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
             currentFieldName = currentFieldName.toLowerCase();
-            $(this).after(' <a class="helplink ' + className + '" href=http://www.zentaoms.com/goto.php?item=fieldref&extra=lang=' + clientLang + ',module=' + currentModule + ',method=' + currentMethod + ',field=' + currentFieldName + ' target="_blank">?</a> ');
+            $(this).after(' <a class="helplink ' + className + '" href=http://www.ZenTaoPMS.com/goto.php?item=fieldref&extra=lang=' + clientLang + ',module=' + currentModule + ',method=' + currentMethod + ',field=' + currentFieldName + ' target="_blank">?</a> ');
         }
     );
 }

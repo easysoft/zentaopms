@@ -1,6 +1,6 @@
 <?php
 /**
- * The project view file of dashboard module of ZenTaoMS.
+ * The project view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
