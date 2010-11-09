@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 青島易軟天創網絡科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
@@ -36,7 +36,7 @@ $lang->install->desc             = <<<EOT
 
 禪道項目管理軟件使用PHP + MySQL開發，基于自主的PHP開發框架──ZenTaoPHP而成。第三方開發者或者企業可以非常方便的開發插件或者進行定製。
 
-禪道項目管理軟件由<strong class='red'><a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司開發</a></strong>。
+禪道項目管理軟件由<strong class='red'><a href='http://www.cnezsoft.com' target='_blank'>QingDao Nature Easy Soft Network Technology Co,LTD 開發</a></strong>。
 禪道項目管理軟件的官方支持網站：<a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
 官方技術支持QQ群：41408140
 

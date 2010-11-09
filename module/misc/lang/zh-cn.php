@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
  *
- * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
  * @version     $Id$
@@ -66,4 +66,4 @@ $lang->misc->zentao->service['scrumtrain'] = 'scrum培训';
 $lang->misc->zentao->service['fwtrain']    = '禅道PHP框架培训';
 $lang->misc->zentao->service['servicemore']= '更多服务...';
 
-$lang->misc->copyright = "版权所有 &copy;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>青岛易软天创网络科技有限公司</a>";
+$lang->misc->copyright = "版权所有 &copy;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>QingDao Nature Easy Soft Network Technology Co,LTD </a>";
