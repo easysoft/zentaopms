@@ -1,24 +1,24 @@
 <?php
 /**
- * The control class file of ZenTaoPHP.
+ * The control class file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoPHP
- * @version     $Id: control.class.php 133 2010-09-11 07:22:48Z wwccss $
+ * @package     ZenTaoPMS
+ * @version     $Id: control.class.php 109 2010-05-02 15:42:08Z wwccss $
  * @link        http://www.zentao.net
  */
 
 /**
- * 控制器基类。
+ * The base class of control.
  * 
- * @package ZenTaoPHP
+ * @package ZenTaoPMS
  */
 class control
 {
     /**
-     * 全局的$app对象。
+     * The global $app object.
      * 
      * @var object
      * @access protected
@@ -26,7 +26,7 @@ class control
     protected $app;
 
     /**
-     * 全局的$config对象。 
+     * The global $config object.
      * 
      * @var object
      * @access protected
@@ -34,7 +34,7 @@ class control
     protected $config;
 
     /**
-     * 全局的$lang对象。
+     * The global $lang object.
      * 
      * @var object
      * @access protected
@@ -42,7 +42,7 @@ class control
     protected $lang;
 
     /**
-     * 全局的$dbh（数据库访问句柄）对象。
+     * The global $dbh object, the database connection handler.
      * 
      * @var object
      * @access protected
@@ -50,7 +50,7 @@ class control
     protected $dbh;
 
     /**
-     * dao对象。
+     * The $dao object, used to access or update database.
      * 
      * @var object
      * @access protected
@@ -58,7 +58,7 @@ class control
     public $dao;
 
     /**
-     * POST对象。
+     * The $post object, used to access the $_POST var.
      * 
      * @var ojbect
      * @access public
@@ -66,7 +66,7 @@ class control
     public $post;
 
     /**
-     * get对象。
+     * The $get object, used to access the $_GET var.
      * 
      * @var ojbect
      * @access public
@@ -74,7 +74,7 @@ class control
     public $get;
 
     /**
-     * session对象。
+     * The $session object, used to access the $_SESSION var.
      * 
      * @var ojbect
      * @access public
@@ -82,7 +82,7 @@ class control
     public $session;
 
     /**
-     * server对象。
+     * The $server object, used to access the $_SERVER var.
      * 
      * @var ojbect
      * @access public
@@ -90,7 +90,7 @@ class control
     public $server;
 
     /**
-     * cookie对象。
+     * The $cookie object, used to access the $_COOKIE var.
      * 
      * @var ojbect
      * @access public
@@ -98,7 +98,7 @@ class control
     public $cookie;
 
     /**
-     * global对象。
+     * The $global object, used to access the $_GLOBAL var.
      * 
      * @var ojbect
      * @access public
@@ -106,7 +106,7 @@ class control
     public $global;
 
     /**
-     * 所属模块的名字。
+     * The name of current module.
      * 
      * @var string
      * @access protected
@@ -114,7 +114,7 @@ class control
     protected $moduleName;
 
     /**
-     * 记录赋值到view的所有变量。
+     * The vars assigned to the view page.
      * 
      * @var object
      * @access public
@@ -122,7 +122,7 @@ class control
     public $view; 
 
     /**
-     * 视图类型
+     * The type of the view, such html, json.
      * 
      * @var string
      * @access private
@@ -130,7 +130,7 @@ class control
     private $viewType;
 
     /**
-     * 要输出的内容。
+     * The content to display.
      * 
      * @var string
      * @access private
@@ -138,7 +138,7 @@ class control
     private $output;
 
     /**
-     * 路径分隔符。
+     * The directory seperator.
      * 
      * @var string
      * @access protected
@@ -146,18 +146,18 @@ class control
     protected $pathFix;
 
     /**
-     * 构造函数：
+     * The construct function.
      *
-     * 1. 引用全局对象，使之可以通过成员变量访问。
-     * 2. 设置模块相应的路径信息，并加载对应的model文件。
-     * 3. 自动将$lang和$config赋值到模板。
+     * 1. global the global vars, refer them by the class member such as $this->app.
+     * 2. set the pathes of current module, and load it's mode class.
+     * 3. auto assign the $lang and $config to the view.
      * 
      * @access public
      * @return void
      */
     public function __construct($moduleName = '', $methodName = '')
     {
-        /* 引用全局对象，并赋值。*/
+        /* Global the globals, and refer them to the class member. */
         global $app, $config, $lang, $dbh;
         $this->app        = $app;
         $this->config     = $config;
@@ -169,56 +169,73 @@ class control
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
 
-        /* 自动加载当前模块的model文件。*/
+        /* Load the model file auto. */
         $this->loadModel();
 
-        /* 自动将$app, $config和$lang赋值到模板中。*/
+        /* Assign them to the view. */
         $this->assign('app',    $app);
         $this->assign('lang',   $lang);
         $this->assign('config', $config);
 
-        if(isset($config->super2OBJ) and $config->super2OBJ) $this->setSuperVars();
+        $this->setSuperVars();
     }
 
-    //-------------------- model相关的方法。--------------------//
-    //
-    /* 设置模块名。*/
+    //-------------------- Model related methods --------------------//
+
+    /* Set the module name. 
+     * 
+     * @param   string  $moduleName     The module name, if empty, get it from $app.
+     * @access  private
+     * @return  void
+     */
     private function setModuleName($moduleName = '')
     {
         $this->moduleName = $moduleName ? strtolower($moduleName) : $this->app->getModuleName();
     }
 
-    /* 设置方法名。*/
+    /* Set the method name. 
+     * 
+     * @param   string  $methodName    The method name, if empty, get it from $app.
+     * @access  private
+     * @return  void
+     */
     private function setMethodName($methodName = '')
     {
         $this->methodName = $methodName ? strtolower($methodName) : $this->app->getMethodName();
     }
 
     /**
-     * 加载某一个模块的model文件。
+     * Load the model file of one module.
      * 
-     * @param   string  $moduleName     模块名字，如果为空，则取当前的模块名作为model名。
+     * @param   string  $methodName    The method name, if empty, use current module's name.
      * @access  public
      * @return  void
      */
     public function loadModel($moduleName = '')
     {
-        /* 如果没有指定module名，则取当前加载的模块的名作为model名。*/
         if(empty($moduleName)) $moduleName = $this->moduleName;
         $modelFile = helper::setModelFile($moduleName);
-        if(!file_exists($modelFile)) return false;
+
+        /* If no model file, try load config. */
+        if(!file_exists($modelFile)) 
+        {
+            $this->app->loadConfig($moduleName, false);
+            $this->app->loadLang($moduleName);
+            $this->dao = new dao();
+            return false;
+        }
 
         helper::import($modelFile);
         $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
         if(!class_exists($modelClass)) $this->app->error(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
 
         $this->$moduleName = new $modelClass();
-        if(isset($this->config->db->dao) and $this->config->db->dao) $this->dao = $this->$moduleName->dao;
+        $this->dao = $this->$moduleName->dao;
         return $this->$moduleName;
     }
 
     /**
-     * 设置超全局变量。
+     * Set the super vars.
      * 
      * @access protected
      * @return void
@@ -233,16 +250,15 @@ class control
         $this->global  = $this->app->global;
     }
 
-    //-------------------- 加载view相关的方法。--------------------//
+    //-------------------- View related methods --------------------//
+    
     /**
-     * 设置视图文件。
+     * Set the view file, thus can use fetch other module's page.
      * 
-     * 某一个module的控制器可以加载另外一个module的视图文件。
-     *
-     * @param string $moduleName    模块名。
-     * @param string $methodName    方法名。
+     * @param string $moduleName    module name
+     * @param string $methodName    method name
      * @access private
-     * @return string               对应的视图文件。
+     * @return string               the view file
      */
     private function setViewFile($moduleName, $methodName)
     {
@@ -252,7 +268,7 @@ class control
         $modulePath  = $this->app->getModulePath($moduleName);
         $viewExtPath = $this->app->getModuleExtPath($moduleName, 'view');
 
-        /* 主视图文件，扩展视图文件和扩展钩子文件。*/
+        /* The main view file, extension view file and hook file. */
         $mainViewFile = $modulePath . 'view' . $this->pathFix . $methodName . '.' . $this->viewType . '.php';
         $extViewFile  = $viewExtPath . $methodName . ".{$this->viewType}.php";
         $extHookFile  = $viewExtPath . $methodName . ".{$this->viewType}.hook.php";
@@ -263,7 +279,13 @@ class control
         return $viewFile;
     }
 
-    /* 加载某一个视图文件所对应的扩展视图文件。*/
+    /**
+     * Get the extension file of an view.
+     * 
+     * @param  string $viewFile 
+     * @access public
+     * @return string
+     */
     public function getExtViewFile($viewFile)
     {
         $extPath     = dirname(dirname(realpath($viewFile))) . '/opt/view/';
@@ -276,10 +298,10 @@ class control
     }
 
     /**
-     * 赋值一个变量到view视图。
+     * Assign one var to the view vars.
      * 
-     * @param   string  $name       赋值到视图文件中的变量名。
-     * @param   mixed   $value      所对应的值。
+     * @param   string  $name       the name.
+     * @param   mixed   $value      the value.
      * @access  public
      * @return  void
      */
@@ -289,7 +311,7 @@ class control
     }
 
     /**
-     * 重置output内容。
+     * Clear the output.
      * 
      * @access public
      * @return void
@@ -300,14 +322,12 @@ class control
     }
 
     /**
-     * 解析视图文件。
+     * Parse view file. 
      *
-     * 如果没有指定模块名和方法名，则取当前模块的当前方法。
-     *
-     * @param string $moduleName    模块名。
-     * @param string $methodName    方法名。
+     * @param string $moduleName    module name, if empty, use current module.
+     * @param string $methodName    method name, if empty, use current method.
      * @access public
-     * @return void
+     * @return the parsed result.
      */
     public function parse($moduleName = '', $methodName = '')
     {
@@ -325,7 +345,14 @@ class control
         return $this->output;
     }
 
-    /* 解析JSON格式的输出。*/
+    /**
+     * Parse json format.
+     *
+     * @param string $moduleName    module name
+     * @param string $methodName    method name
+     * @access private
+     * @return void
+     */
     private function parseJSON($moduleName, $methodName)
     {
         unset($this->view->app);
@@ -342,14 +369,21 @@ class control
         $this->output     = json_encode($output);
     }
 
-    /* 默认的输出。*/
+    /**
+     * Parse default html format.
+     *
+     * @param string $moduleName    module name
+     * @param string $methodName    method name
+     * @access private
+     * @return void
+     */
     private function parseDefault($moduleName, $methodName)
     {
-        /* 设置视图文件。*/
+        /* Set the view file. */
         $viewFile = $this->setViewFile($moduleName, $methodName);
         if(is_array($viewFile)) extract($viewFile);
 
-        /* 切换到视图文件所在的目录，以保证视图文件中的包含路径有效。*/
+        /* Change the dir to the view file to keep the relative pathes work. */
         $currentPWD = getcwd();
         chdir(dirname($viewFile));
 
@@ -360,18 +394,18 @@ class control
         $this->output .= ob_get_contents();
         ob_end_clean();
 
-        /* 最后还要切换到原来的目录。*/
+        /* At the end, chang the dir to the previous. */
         chdir($currentPWD);
     }
 
     /**
-     * 获取某一个模块的某一个方法的内容。
+     * Get the output of one module's one method as a string, thus in one module's method, can fetch other module's content.
      * 
-     * 如果没有指定模块名，则取当前模块当前方法的视图。如果指定了模块和方法，则调用对应的模块方法的视图内容。
+     * If the module name is empty, then use the current module and method. If set, use the user defined module and method.
      *
-     * @param   string  $moduleName    模块名。
-     * @param   string  $methodName    方法名。
-     * @param   array   $params        方法参数。
+     * @param   string  $moduleName    module name.
+     * @param   string  $methodName    method name.
+     * @param   array   $params        params.
      * @access  public
      * @return  string
      */
@@ -385,42 +419,43 @@ class control
             return $this->output;
         }
 
-        /* 设置被调用的模块的路径及相应的文件。*/
+        /* Set the pathes and files to included. */
         $modulePath        = $this->app->getModulePath($moduleName);
         $moduleControlFile = $modulePath . 'control.php';
         $actionExtFile     = $this->app->getModuleExtPath($moduleName, 'control') . strtolower($methodName) . '.php';
         $file2Included     = file_exists($actionExtFile) ? $actionExtFile : $moduleControlFile;
 
-        /* 加载控制文件。*/
+        /* Load the control file. */
         if(!file_exists($file2Included)) $this->app->error("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
         $currentPWD = getcwd();
         chdir(dirname($file2Included));
         if($moduleName != $this->moduleName) helper::import($file2Included);
         
-        /* 设置要调用的类的名称。*/
+        /* Set the name of the class to be called. */
         $className = class_exists("ext$moduleName") ? "ext$moduleName" : $moduleName;
         if(!class_exists($className)) $this->app->error(" The class $className not found", __FILE__, __LINE__, $exit = true);
 
-        /* 处理参数，生成对象。*/
+        /* Parse the params, create the $module control object. */
         if(!is_array($params)) parse_str($params, $params);
         $module = new $className($moduleName, $methodName);
 
-        /* 调用方法，获得输出。*/
+        /* Call the method and use ob function to get the output. */
         ob_start();
         call_user_func_array(array($module, $methodName), $params);
         $output = ob_get_contents();
         ob_end_clean();
 
+        /* Return the content. */
         unset($module);
         chdir($currentPWD);
         return $output;
     }
 
     /**
-     * 显示视图内容。 
+     * Print the content of the view. 
      * 
-     * @param   string  $moduleName    模块名。
-     * @param   string  $methodName    方法名。
+     * @param   string  $moduleName    module name
+     * @param   string  $methodName    method name
      * @access  public
      * @return  void
      */
@@ -432,12 +467,12 @@ class control
     }
 
     /**
-     * 生成某一个模块某个方法的链接。
+     * Create a link to one method of one module.
      * 
-     * @param   string  $moduleName    模块名。
-     * @param   string  $methodName    方法名。
-     * @param   mixed   $vars          要传递的参数，可以是数组，array('var1'=>'value1')。也可以是var1=value1&var2=value2的形式。
-     * @param   string  $viewType      视图格式。
+     * @param   string  $moduleName    module name
+     * @param   string  $methodName    method name
+     * @param   mixed   $vars          the params passwd, can be array(key=>value) or key1=value1&key2=value2
+     * @param   string  $viewType      the view type
      * @access  public
      * @return  string
      */
@@ -448,11 +483,11 @@ class control
     }
 
     /**
-     * 生成对本模块某个方法的链接。
+     * Create a link to the inner method of current module.
      * 
-     * @param   string  $methodName    方法名。
-     * @param   mixed   $vars          要传递的参数，可以是数组，array('var1'=>'value1')。也可以是var1=value1&var2=value2的形式。
-     * @param   string  $viewType      视图格式。
+     * @param   string  $methodName    method name
+     * @param   mixed   $vars          the params passwd, can be array(key=>value) or key1=value1&key2=value2
+     * @param   string  $viewType      the view type
      * @access  public
      * @return  string
      */
@@ -462,9 +497,9 @@ class control
     }
 
     /**
-     * 跳转到另外一个页面。
+     * Location to another page.
      * 
-     * @param   string   $url   要跳转的url地址。
+     * @param   string   $url   the target url.
      * @access  public
      * @return  void
      */
