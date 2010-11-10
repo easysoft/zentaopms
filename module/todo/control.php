@@ -70,7 +70,7 @@ class todo extends control
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->dates    = $this->todo->buildDateList();
-        $this->view->times    = $this->todo->buildTimeList();
+        $this->view->times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->todo     = $todo;
         $this->display();
     }
@@ -92,7 +92,7 @@ class todo extends control
         $this->view->header->title = $this->lang->todo->view;
         $this->view->position[]    = $this->lang->todo->view;
         $this->view->todo          = $todo;
-        $this->view->times         = $this->todo->buildTimeList();
+        $this->view->times         = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->actions       = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from          = $from;
