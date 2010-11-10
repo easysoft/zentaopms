@@ -297,6 +297,8 @@ class router
         $this->loadConfig('common');
         $this->setDebug();
 
+        $this->connectDB();
+
         $this->setTimezone();
         $this->setClientLang();
         $this->loadLang('common');
@@ -1373,12 +1375,30 @@ class router
             $loadedConfigs[] = $configFile;
         }
 
-        /* Set the code of the site. */
         $this->config = $config;
 
         return $config;
     }
 
+    /**
+     * Export the config params to the client, thus the client can adjust it's logic according the config.
+     * 
+     * @access public
+     * @return void
+     */
+    public function exportConfig()
+    {
+        $view->version     = $this->config->version;
+        $view->requestType = $this->config->requestType;
+        $view->pathType    = $this->config->pathType;
+        $view->requestFix  = $this->config->requestFix;
+        $view->moduleVar   = $this->config->moduleVar;
+        $view->methodVar   = $this->config->methodVar;
+        $view->viewVar     = $this->config->viewVar;
+        $view->sessionVar  = $this->config->sessionVar;
+        echo json_encode($view);
+    }
+    
     /**
      * Load lang and return it as the global lang object.
      * 
@@ -1429,6 +1449,7 @@ class router
     {
         global $config, $dbh;
         if(!isset($config->db->driver)) self::error('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
+        if(!isset($config->db->user)) return;
         if($config->db->driver == 'mysql')
         {
             $dsn = "mysql:host={$config->db->host}; port={$config->db->port}; dbname={$config->db->name}";
