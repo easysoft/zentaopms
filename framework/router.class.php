@@ -304,6 +304,7 @@ class router
 
         $this->loadClass('front',  $static = true);
         $this->loadClass('filter', $static = true);
+        $this->loadClass('dao',    $static = true);
     }
 
     /**

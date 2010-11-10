@@ -157,7 +157,7 @@ class helper
         if(empty($extFiles)) return $mainModelFile;
 
         /* Else, judge whether needed update or not .*/
-        $mergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . $app->site->code . '.' . $moduleName . '.php';
+        $mergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . $moduleName . '.php';
         $needUpdate      = false;
         $lastTime        = file_exists($mergedModelFile) ? filemtime($mergedModelFile) : 0;
         foreach($extFiles as $extFile)
@@ -186,8 +186,8 @@ class helper
             foreach($extFiles as $extFile)
             {
                 $extLines = trim(file_get_contents($extFile));
-                $extLines = ltrim($extLines, '<?php');
-                $extLines = rtrim($extLines, '?>');
+                if(strpos($extLines, '<?php') !== false) $extLines = ltrim($extLines, '<?php');
+                if(strpos($extLines, '?>')    !== false) $extLines = rtrim($extLines, '?>');
                 $modelLines .= $extLines . "\n";
             }
 
