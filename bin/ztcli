@@ -1,25 +1,22 @@
 #!/usr/bin/env php
 <?php
 /**
- * The command router file of zentaopms.
+ * The cli router file of zentaopms.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoPMS
+ * @package     bin
  * @version     $Id$
  * @link        http://www.ZenTaoPMS.com
  */
 error_reporting(0);
 define('IN_SHELL', true);
 
-/* 获取命令参数。 */
-if($argc != 2)
-{
-    die('Usage: ' . basename(__FILE__) . " <request>\n");
-}
+/* Judge the args. */
+if($argc != 2) die('Usage: ' . basename(__FILE__) . " <request>\n");
 
-/* 包含必须的类文件。*/
+/* Load the framework. */
 chdir(dirname(__FILE__));
 include '../framework/router.class.php';
 include '../framework/control.class.php';
@@ -27,7 +24,7 @@ include '../framework/model.class.php';
 include '../framework/helper.class.php';
 include '../config/config.php';
 
-/* 将输入的参数解析成对于的变量。*/
+/* Parse the request into params. */
 $request = parse_url(trim($argv[1]));
 $_SERVER['HTTP_HOST'] = $request['host'];
 if($config->requestType == 'PATH_INFO')
@@ -41,25 +38,8 @@ else
     $_SERVER['REQUEST_URI'] = isset($request['query']) ? $request['query'] : '';
 }
 
-/* 实例化路由对象，并加载配置，连接到数据库。*/
+/* Instance the app and run it. */
 $app    = router::createApp('pms', dirname(dirname(__FILE__)));
-$config = $app->loadConfig('common');
-$app->setDebug();
-$dbh    = $app->connectDB();
-
-/* 设置时区。*/
-$app->setTimezone();
-
-/* 设置终端使用的语言，并加载共用的模块。*/
-$app->setClientLang('zh-cn');
-$lang   = $app->loadLang('common');
 $common = $app->loadCommon();
-
-/* 加载相应的lib文件，并设置超全局变量的引用。*/
-$app->loadClass('front',  $static = true);
-$app->loadClass('filter', $static = true);
-$app->setSuperVars();
-
-/* 解析请求，加载模块。*/
 $app->parseRequest();
 $app->loadModule();
