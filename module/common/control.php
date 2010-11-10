@@ -12,7 +12,7 @@
 class common extends control
 {
     /**
-     * 构造函数：启动会话，加载公司模块，并设置公司信息。
+     * The construc method, to do some auto things.
      * 
      * @access public
      * @return void
@@ -20,13 +20,10 @@ class common extends control
     public function __construct()
     {
         parent::__construct();
-        session_name($this->config->sessionVar);
-        if(isset($_GET[$this->config->sessionVar])) session_id($_GET[$this->config->sessionVar]);
-        session_start();
-        $this->sendHeader();
-        $this->loadModel('company');
-        $this->setCompany();
-        $this->setUser();
+        $this->common->startSession();
+        $this->common->sendHeader();
+        $this->common->setCompany();
+        $this->common->setUser();
     }
 
     /**
@@ -341,65 +338,6 @@ EOT;
         return true;
     }
 
-    /**
-     * 设置当前访问的公司信息。
-     * 
-     * 首先尝试按照当前访问的域名查找对应的公司信息，
-     * 如果无法查到，再按照默认的域名进行查找。
-     * 如果还无法查到，则取第一个公司作为默认的公司。
-     * 获取公司信息之后，将其写入到$_SESSION中。
-     *
-     * @access public
-     * @return void
-     */
-    private function setCompany()
-    {        
-        $httpHost = $_SERVER['HTTP_HOST'];
-        if(strpos($httpHost, ":"))
-        {
-            $httpHost = explode(":", $httpHost);
-            $httpHost = $httpHost[0];
-        }
-
-        if(isset($_SESSION['company']) and $_SESSION['company']->pms == $httpHost)
-        {
-            $this->app->company = $_SESSION['company'];
-        }
-        else
-        {
-            $company = $this->company->getByDomain();
-            if(!$company and isset($this->config->default->domain)) $company = $this->company->getByDomain($this->config->default->domain);
-            if(!$company) $company = $this->company->getFirst();
-            if(!$company) $this->app->error(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, $exit = true);
-            $_SESSION['company'] = $company;
-            $this->app->company  = $company;
-        }
-    }
-
-    /**
-     * 设置当前访问的用户信息。
-     * 
-     * @access public
-     * @return void
-     */
-    private function setUser()
-    {
-        if(isset($_SESSION['user']))
-        {
-            $this->app->user = $_SESSION['user'];
-        }
-        elseif($this->app->company->guest)
-        {
-            $user             = new stdClass();
-            $user->id         = 0;
-            $user->account    = 'guest';
-            $user->realname   = 'guest';
-            $user->rights     = $this->loadModel('user')->authorize('guest');
-            $_SESSION['user'] = $user;
-            $this->app->user = $_SESSION['user'];
-        }
-    }
-
     /* 保存最后浏览的产品id到session会话中。*/
     public static function saveProductState($productID, $defaultProductID)
     {
@@ -422,18 +360,14 @@ EOT;
     }
 
     /**
-     * 发送header信息到浏览器。
+     * Create changes of one object.
      * 
+     * @param mixed $old    the old object
+     * @param mixed $new    the new object
+     * @static
      * @access public
-     * @return void
+     * @return array
      */
-    public function sendHeader()
-    {
-        header("Content-Type: text/html; Language={$this->config->encoding}");
-        header("Cache-control: private");
-    }
-
-    /* 比较两个数组元素的不同，产生修改记录。*/
     public static function createChanges($old, $new)
     {
         global $config;
@@ -451,30 +385,19 @@ EOT;
             if($value != $old->$key)
             { 
                 $diff = '';
-                if(substr_count($value, "\n") > 1 or substr_count($old->$key, "\n") > 1 or strpos('name,title,desc,spec,steps,content,digest', strtolower($key)) !== false) $diff = self::diff($old->$key, $value);
+                if(substr_count($value, "\n") > 1 or substr_count($old->$key, "\n") > 1 or strpos('name,title,desc,spec,steps,content,digest', strtolower($key)) !== false) $diff = commonModel::diff($old->$key, $value);
                 $changes[] = array('field' => $key, 'old' => $old->$key, 'new' => $value, 'diff' => $diff);
             }
         }
         return $changes;
     }
 
-    /* 比较两个字符串的不同。摘自PHPQAT自动化测试框架。*/
-    public static function diff($text1, $text2)
-    {
-        $w  = explode("\n", trim($text1));
-        $o  = explode("\n", trim($text2));
-        $w1 = array_diff_assoc($w,$o);
-        $o1 = array_diff_assoc($o,$w);
-        $w2 = array();
-        $o2 = array();
-        foreach($w1 as $idx => $val) $w2[sprintf("%03d<",$idx)] = sprintf("%03d- ", $idx+1) . "<del>" . trim($val) . "</del>";
-        foreach($o1 as $idx => $val) $o2[sprintf("%03d>",$idx)] = sprintf("%03d+ ", $idx+1) . "<ins>" . trim($val) . "</ins>";
-        $diff = array_merge($w2, $o2);
-        ksort($diff);
-        return implode("\n", $diff);
-    }
-
-    /* 获得系统URL地址。*/
+    /**
+     * Get the full url of the system.
+     * 
+     * @access public
+     * @return string
+     */
     public function getSysURL()
     {
         global $config;
@@ -483,14 +406,15 @@ EOT;
         return "$httpType://$httpHost";
     }
 
-    /* 获得系统默认的样式表。*/
-    public function getDefaultCss()
+    /**
+     * Print the run info.
+     * 
+     * @param mixed $startTime  the start time.
+     * @access public
+     * @return void
+     */
+    public function printRunInfo($startTime)
     {
-        global $app;
-        $pathFix = $app->getPathFix();
-        $cssFile = $app->getAppRoot() . "www{$pathFix}theme{$pathFix}default{$pathFix}style.css";
-        $cssContent = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!','', file_get_contents($cssFile));
-        $cssContent = str_replace(array(" {", "} ", '  ', "\r\n", "\r", "\n", "\t"), array("{", '}', ' ', ''), $cssContent);
-        return $cssContent;
+        vprintf($this->lang->runInfo, $this->common->getRunInfo($startTime));
     }
 }

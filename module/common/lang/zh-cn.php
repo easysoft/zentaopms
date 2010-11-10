@@ -24,6 +24,7 @@ $lang->logout       = '退出系统';
 $lang->login        = '登录';
 $lang->aboutZenTao  = '关于禅道';
 $lang->todayIs      = '今天是%s，';
+$lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 
 $lang->reset        = '重填';
 $lang->edit         = '编辑';
