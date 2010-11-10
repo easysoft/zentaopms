@@ -1,9 +1,21 @@
 <?php
 /**
- * The project module zh-cn file of ZenTaoPMS.
+ * The project module zh-cn file of ZenTaoMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * ZenTaoMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ZenTaoMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
+ *
+ * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id$
@@ -109,6 +121,12 @@ $lang->project->confirmUnlinkMember   = '您确定从该项目中移除该用户
 $lang->project->confirmUnlinkStory    = '您确定从该项目中移除该需求吗？';
 $lang->project->errorNoLinkedProducts = '该项目没有关联的产品，系统将转到产品关联页面';
 $lang->project->accessDenied          = '您无权访问该项目！';
+$lang->project->tips                  = '提示';
+$lang->project->afterInfo             = '项目添加成功，您现在可以进行以下操作：';
+$lang->project->setTeam               = '设置团队';
+$lang->project->linkStory             = '关联需求';
+$lang->project->createTask            = '添加任务';
+$lang->project->goback                = '返回项目首页(3秒后将自动跳转)';
 
 /* 统计。*/
 $lang->project->charts->burn->graph->caption      = "燃尽图";

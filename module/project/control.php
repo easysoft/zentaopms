@@ -1,9 +1,21 @@
 <?php
 /**
- * The control file of project module of ZenTaoPMS.
+ * The control file of project module of ZenTaoMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * ZenTaoMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ZenTaoMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
+ *
+ * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id$
@@ -361,7 +373,7 @@ class project extends control
             $projectID = $this->project->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('project', $projectID, 'opened');
-            die(js::locate($this->createLink('project', 'browse', "projectID=$projectID"), 'parent'));
+            die(js::locate($this->createLink('project', 'tips', "projectID=$projectID"), 'parent'));
         }
 
         /* 设置菜单。*/
@@ -639,5 +651,17 @@ class project extends control
     {
         $products = $this->project->getProducts($projectID);
         die(html::select('product', $products, '', 'class="select-3"'));
+    }
+    
+    /* 添加完项目之后，提示用户该如何处理。*/
+    public function tips($projectID)
+    {
+        $url = $this->createLink('project', 'task', "projectID=$projectID");       
+        $header['title']        = $this->lang->project->tips;
+        $this->view->header    = $header;
+        $this->view->projectID = $projectID;        
+        $this->display();
+        die("<html><head><meta http-equiv='refresh' content='3; url=$url' /></head><body></body></html>");
+        exit;
     }
 }
