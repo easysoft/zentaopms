@@ -12,7 +12,6 @@
 /* 基本参数设定。*/
 $config->version     = '1.3';             // 版本号，切勿修改。
 $config->encoding    = 'UTF-8';           // 网站的编码。
-$config->cookiePath  = '/';               // cookie的有效路径。
 $config->cookieLife  = time() + 2592000;  // cookie的生命周期。
 $config->timezone    = 'Asia/Shanghai';   // 时区设置，详细的列表，请访问 http://www.php.net/manual/en/timezones.php
 
