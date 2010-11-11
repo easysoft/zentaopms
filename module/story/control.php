@@ -51,7 +51,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
         $this->display();
     }
 

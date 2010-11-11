@@ -28,11 +28,15 @@ class productplanModel extends model
     }
 
     /* 获取name=>value的键值对。*/
-    public function getPairs($product = 0)
+    public function getPairs($product = 0, $expired = '')
     {
+        $date = date('Y-m-d');
         return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq((int)$product)
             ->andWhere('deleted')->eq(0)
+            ->beginIF($expired = 'unexpired')
+            ->andWhere('end')->gt($date)
+            ->fi()
             ->orderBy('begin')->fetchPairs();
     }
 
