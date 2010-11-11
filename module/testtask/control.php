@@ -34,7 +34,7 @@ class testtask extends control
         $this->session->set('testtaskList', $this->app->getURI(true));
 
         /* 设置产品和菜单。*/
-        $productID = common::saveProductState($productID, key($this->products));
+        $productID = $this->product->saveState($productID, key($this->products));
         $this->testtask->setMenu($this->products, $productID);
 
         /* 加载分页类。*/
@@ -66,7 +66,7 @@ class testtask extends control
         }
 
         /* 设置菜单。*/
-        $productID  = common::saveProductState($productID, key($this->products));
+        $productID  = $this->product->saveState($productID, key($this->products));
         $this->testtask->setMenu($this->products, $productID);
 
         /* 导航信息。*/
@@ -167,7 +167,7 @@ class testtask extends control
 
         /* 获得task信息。*/
         $task      = $this->testtask->getById($taskID);
-        $productID = common::saveProductState($task->product, key($this->products));
+        $productID = $this->product->saveState($task->product, key($this->products));
 
         /* 设置菜单。*/
         $this->testtask->setMenu($this->products, $productID);
@@ -212,7 +212,7 @@ class testtask extends control
 
         /* 获得task信息。*/
         $task      = $this->testtask->getById($taskID);
-        $productID = common::saveProductState($task->product, key($this->products));
+        $productID = $this->product->saveState($task->product, key($this->products));
 
         /* 构造搜索表单。*/
         $this->loadModel('testcase');

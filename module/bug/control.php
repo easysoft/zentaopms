@@ -43,7 +43,7 @@ class bug extends control
     {
         /* 设置产品id和模块id。*/
         $browseType = strtolower($browseType);
-        $productID  = common::saveProductState($productID, key($this->products));
+        $productID  = $this->product->saveState($productID, key($this->products));
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -230,7 +230,7 @@ class bug extends control
         }
 
         /* 设置当前的产品，设置菜单。*/
-        $productID = common::saveProductState($productID, key($this->products));
+        $productID = $this->product->saveState($productID, key($this->products));
         $this->bug->setMenu($this->products, $productID);
 
         /* 去掉几个类型的设置。*/

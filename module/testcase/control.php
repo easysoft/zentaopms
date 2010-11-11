@@ -34,7 +34,7 @@ class testcase extends control
     {
         /* 设置浏览模式，产品ID和模块ID。 */
         $browseType = strtolower($browseType);
-        $productID = common::saveProductState($productID, key($this->products));
+        $productID = $this->product->saveState($productID, key($this->products));
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -126,7 +126,7 @@ class testcase extends control
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
-        $productID       = common::saveProductState($productID, key($this->products));
+        $productID       = $this->product->saveState($productID, key($this->products));
         $currentModuleID = (int)$moduleID;
 
         /* 设置菜单。*/

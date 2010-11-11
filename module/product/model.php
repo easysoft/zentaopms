@@ -28,6 +28,22 @@ class productModel extends model
         }
     }
 
+    /**
+     * Save the product id user last visited to session.
+     * 
+     * @param  int $productID 
+     * @param  int $defaultProductID 
+     * @access public
+     * @return int
+     */
+    public function saveState($productID, $defaultProductID)
+    {
+        if($productID > 0) $this->session->set('product', (int)$productID);
+        if($productID == 0 and $this->cookie->lastProduct)    $this->session->set('product', (int)$this->cookie->lastProduct);
+        if($productID == 0 and $this->session->product == '') $this->session->set('product', $defaultProductID);
+        return $this->session->product;
+    }
+
     /* 检查权限。*/
     public function checkPriv($product)
     {

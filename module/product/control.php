@@ -45,7 +45,7 @@ class product extends control
         /* 设置当前的产品id和模块id。*/
         $this->session->set('storyList',   $this->app->getURI(true));
         $this->session->set('productList', $this->app->getURI(true));
-        $productID = common::saveProductState($productID, key($this->products));
+        $productID = $this->product->saveState($productID, key($this->products));
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 

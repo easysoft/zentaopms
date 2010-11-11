@@ -338,16 +338,6 @@ EOT;
         return true;
     }
 
-    /* 保存最后浏览的产品id到session会话中。*/
-    public static function saveProductState($productID, $defaultProductID)
-    {
-        global $app;
-        if($productID > 0) $app->session->set('product', (int)$productID);
-        if($productID == 0 and $app->cookie->lastProduct)    $app->session->set('product', (int)$app->cookie->lastProduct);
-        if($productID == 0 and $app->session->product == '') $app->session->set('product', $defaultProductID);
-        return $app->session->product;
-    }
-
     /**
      * Create changes of one object.
      * 
