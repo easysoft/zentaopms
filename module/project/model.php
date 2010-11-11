@@ -62,6 +62,23 @@ class projectModel extends model
         }
     }
 
+    /**
+     * Save the project id user last visited to session.
+     * 
+     * @param  int   $projectID 
+     * @param  array $projects 
+     * @access public
+     * @return int
+     */
+    public function saveState($projectID, $projects)
+    {
+        if($projectID > 0) $this->session->set('project', (int)$projectID);
+        if($projectID == 0 and $this->cookie->lastProject)    $this->session->set('project', (int)$this->cookie->lastProject);
+        if($projectID == 0 and $this->session->project == '') $this->session->set('project', $projects[0]);
+        if(!in_array($this->session->project, $projects)) $this->session->set('project', $projects[0]);
+        return $this->session->project;
+    }
+
     /* 新增项目。*/
     public function create()
     {

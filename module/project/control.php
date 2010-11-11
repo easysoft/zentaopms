@@ -56,7 +56,7 @@ class project extends control
         $this->loadModel('product');
 
         /* 获取当前项目的详细信息，相关产品，子项目以及团队成员。*/
-        $projectID     = common::saveProjectState($projectID, array_keys($this->projects));
+        $projectID     = $this->project->saveState($projectID, array_keys($this->projects));
         $project       = $this->project->getById($projectID);
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);

@@ -348,17 +348,6 @@ EOT;
         return $app->session->product;
     }
 
-    /* 保存最后浏览的项目id到session会话中。*/
-    public static function saveProjectState($projectID, $projects)
-    {
-        global $app;
-        if($projectID > 0) $app->session->set('project', (int)$projectID);
-        if($projectID == 0 and $app->cookie->lastProject)    $app->session->set('project', (int)$app->cookie->lastProject);
-        if($projectID == 0 and $app->session->project == '') $app->session->set('project', $projects[0]);
-        if(!in_array($app->session->project, $projects)) $app->session->set('project', $projects[0]);
-        return $app->session->project;
-    }
-
     /**
      * Create changes of one object.
      * 
