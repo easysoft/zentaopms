@@ -551,7 +551,7 @@ class bug extends control
         {
             $customFields = $this->post->customFields;
             $customFields = join(',', $customFields);
-            setcookie('bugFields', $customFields);
+            setcookie('bugFields', $customFields, $this->config->cookieLife);
             die(js::reload('parent'));
         }
         /* 设定自定义字段列表。*/
