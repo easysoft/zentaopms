@@ -93,6 +93,7 @@ $lang->searchObjects['build']       = 'B:Build';
 $lang->searchObjects['release']     = 'R:发布';
 $lang->searchObjects['productplan'] = 'P:产品计划';
 $lang->searchObjects['testtask']    = 'T:测试任务';
+$lang->searchObjects['doc']         = 'D:文档';
 $lang->searchTips                   = '输入编号';
 
 /* 首页菜单设置。*/

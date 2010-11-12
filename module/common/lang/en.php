@@ -24,6 +24,7 @@ $lang->logout       = 'Logout';
 $lang->login        = 'Login';
 $lang->aboutZenTao  = 'About';
 $lang->todayIs      = 'Today is %s，';
+$lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
 
 $lang->reset        = 'Reset';
 $lang->edit         = 'Edit';
@@ -92,6 +93,7 @@ $lang->searchObjects['build']       = 'Build';
 $lang->searchObjects['release']     = 'Release';
 $lang->searchObjects['productplan'] = 'Plan';
 $lang->searchObjects['testtask']    = 'Test Task';
+$lang->searchObjects['doc']         = 'Doc';
 $lang->searchTips                   = 'Id here';
 
 /* 首页菜单设置。*/
