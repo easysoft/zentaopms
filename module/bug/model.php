@@ -409,8 +409,20 @@ class bugModel extends model
         foreach($datas as $type => $data) if(isset($this->lang->bug->typeList[$type])) $data->name = $this->lang->bug->typeList[$type];
         return $datas;
     }
-
-
+  
+    /* 按assignedTo统计。*/
+    public function getDataOfBugsPerAssignedTo()
+    {
+        $datas = $this->dao->select('assignedTo AS name, COUNT(*) AS value')
+            ->from(TABLE_BUG)->where($this->session->bugReportCondition)
+            ->groupBy('name')
+            ->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
+        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        return $datas;
+    }
+    
     /* 合并公共的chart设置和当前chart的设置。*/
     public function mergeChartOption($chartType)
     {

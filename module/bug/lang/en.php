@@ -225,6 +225,7 @@ $lang->bug->report->charts['bugsPerSeverity']    = 'Severity';
 $lang->bug->report->charts['bugsPerResolution']  = 'Resolution';
 $lang->bug->report->charts['bugsPerStatus']      = 'Status';
 $lang->bug->report->charts['bugsPerType']        = 'Type';
+$lang->bug->report->charts['bugsPerAssignedTo']  = 'AssignedTo';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug处理时间统计';
 //$lang->bug->report->charts['bugHistories']       = 'Bug处理步骤统计';
 
@@ -267,6 +268,7 @@ $lang->bug->report->bugsPerSeverity->graph->xAxisName    = 'Severity';
 $lang->bug->report->bugsPerResolution->graph->xAxisName  = 'Resolution';
 $lang->bug->report->bugsPerStatus->graph->xAxisName      = 'Status';
 $lang->bug->report->bugsPerType->graph->xAxisName        = 'Type';
+$lang->bug->report->bugsPerAssignedTo->graph->xAxisName  = 'AssignedTo';
 $lang->bug->report->bugLiveDays->graph->xAxisName        = 'Live days';
 $lang->bug->report->bugHistories->graph->xAxisName       = 'Histories';
 
