@@ -306,14 +306,13 @@ class user extends control
                 $this->loadModel('action')->create('user', $user->id, 'login');
 
                 /* POST变量中设置了referer信息，且非user/login.html, 非user/deny.html，并且来自zentao系统。*/
-                if($this->post->referer != false and 
+                if($this->post->referer and 
                    strpos($this->post->referer, $loginLink) === false and 
-                   strpos($this->post->referer, $denyLink)  === false and 
-                   $from == 'zentao'
+                   strpos($this->post->referer, $denyLink)  === false 
                 )
                 {
                     if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'success')));
-                    die(js::locate($_POST['referer'], 'parent'));
+                    die(js::locate($this->post->referer, 'parent'));
                 }
                 else
                 {
