@@ -690,7 +690,7 @@ class router
         {
             $this->clientLang = $this->config->default->lang;
         }
-        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->cookiePath);
+        setcookie('lang', $this->clientLang, $this->config->cookieLife);
     }
 
     /**
@@ -740,7 +740,7 @@ class router
         {
             $this->clientTheme = $this->config->default->theme;
         }
-        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->cookiePath);
+        setcookie('theme', $this->clientTheme, $this->config->cookieLife);
     }
 
     /**
