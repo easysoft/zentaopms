@@ -21,9 +21,9 @@ $(document).ready(function()
       ?>
     </div>
   </div>
-  <div class='yui-u a-right'><?php common::printTopBar();?></div>
+  <div class='yui-u a-right'><?php commonModel::printTopBar();?></div>
 </div>
 <div id='navbar' class='yui-d0'>
-  <div id='mainmenu'><?php common::printMainmenu($this->moduleName);?></div>
-  <div id='modulemenu'><?php common::printModuleMenu($this->moduleName);?></div>
+  <div id='mainmenu'><?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?></div>
+  <div id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></div>
 </div>

@@ -5,7 +5,7 @@
 </div>
 <div id='footer' class='yui-d0 yui-t7'>
   <div class='yui-g'>
-    <div class='yui-g first' id='crumbs'><?php common::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?></div>
+    <div class='yui-g first' id='crumbs'><?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?></div>
     <div class='yui-g'>
       <div class='yui-u first'> </div>
       <div class='yui-u a-right'>

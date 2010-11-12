@@ -27,7 +27,7 @@ class common extends control
     }
 
     /**
-     * 检查用户对当前的请求有没有权限。如果没有权限，则跳转到登陆界面。
+     * Check the user has permission to access this method, if not, locate to the login page or deny page.
      * 
      * @access public
      * @return void
@@ -36,242 +36,57 @@ class common extends control
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if($module == 'user')
-        {
-            if($method == 'login' or $method == 'logout' or $method == 'deny') return true;
-        }
-        elseif($module == 'api' and $method == 'getsessionid') 
-        {
-            return true;
-        }
-        elseif($module == 'misc' and $method == 'about') 
-        {
-            return true;
-        }
+        if($this->common->isOpenMethod($module, $method)) return true;
+        if(isset($this->app->user) and $this->app->user->account == 'guest' and $this->server->php_auth_user) $this->common->identifyPhpAuth();
 
         if(isset($this->app->user))
         {
-            if(!common::hasPriv($module, $method))
-            {
-                $vars = "module=$module&method=$method";
-                if(isset($_SERVER['HTTP_REFERER']))
-                {
-                    $referer  = helper::safe64Encode($_SERVER['HTTP_REFERER']);
-                    $vars .= "&referer=$referer";
-                }
-                $denyLink = $this->createLink('user', 'deny', $vars);
-
-                /* Fix the bug of IE: use js locate, can't get the referer. */
-                if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
-                {
-                echo <<<EOT
-<a href='$denyLink' id='denylink' style='display:none'>deny</a>
-<script language='javascript'>document.getElementById('denylink').click();</script>
-EOT;
-                }
-                else
-                {
-                    echo js::locate($denyLink);
-                }
-                exit;
-            }
-        }
-        elseif(isset($_SERVER['PHP_AUTH_USER']) and isset($_SERVER['PHP_AUTH_PW']))
-        {
-            $account  = $_SERVER['PHP_AUTH_USER'];
-            $password = $_SERVER['PHP_AUTH_PW'];
-            $this->loadModel('user');
-            $user = $this->user->identify($account, $password);
-            if($user)
-            {
-                /* 对用户进行授权，并登记session。*/
-                $user->rights = $this->user->authorize($account);
-                $_SESSION['user'] = $user;
-                $this->app->user = $_SESSION['user'];
-
-                /* 记录登录记录。*/
-                $this->loadModel('action')->create('user', $user->id, 'login');
-            }
-            else
-            {
-                die(js::error($this->lang->user->loginFailed));
-            }
+            if(!common::hasPriv($module, $method)) $this->common->deny($module, $method);
         }
         else
         {
             $referer  = helper::safe64Encode($this->app->getURI(true));
-            $this->locate($this->createLink('user', 'login', "referer=$referer&from=zentao"));
+            $this->locate($this->createLink('user', 'login', "referer=$referer"));
         }
     }
 
-    /* 检查当前用户对某一个模块的某一个访问是否有权限访问。*/
+    /**
+     * Check the user has permisson of one method of one module.
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function hasPriv($module, $method)
     {
         global $app;
 
-        /* 检查是否是管理员。*/
+        /* Check is the super admin or not. */
         $account = ',' . $app->user->account . ',';
         if(strpos($app->company->admins, $account) !== false) return true; 
 
-        /* 非管理员，则检查权限列表中是否存在。*/
+        /* If not super admin, check the rights. */
         $rights  = $app->user->rights;
         if(isset($rights[strtolower($module)][strtolower($method)])) return true;
         return false;
     }
 
-    /* 打印顶部的条形区域。*/
-    public static function printTopBar()
-    {
-        global $lang, $app;
-
-        printf($lang->todayIs, date(DT_DATE3));
-        if(isset($app->user)) echo $app->user->realname . ' ';
-        if(isset($app->user) and $app->user->account != 'guest')
-        {
-            echo html::a(helper::createLink('my', 'index'), $lang->myControl);
-            echo html::a(helper::createLink('user', 'logout'), $lang->logout);
-        }
-        else
-        {
-            echo html::a(helper::createLink('user', 'login'), $lang->login);
-        }
-        echo html::a('#', $lang->switchHelp, '', "onclick='toggleHelpLink();'");
-        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
-        echo html::select('', $app->config->langs, $app->getClientLang(), 'class=switcher onchange="selectLang(this.value)"');
-    }
-
-    /* 打印主菜单。*/
-    public static function printMainmenu($moduleName)
-    {
-        global $app, $lang;
-        $logo = $app->getWebRoot() . 'theme/default/images/main/logo.png';
-        echo "<ul>\n";
-        echo "<li style='padding:0; height:30px'><a href='http://www.zentao.net' target='_blank'><img src='$logo' /></a></li>\n";
-
-        /* 设定当前的主菜单项。默认先取当前的模块名，如果有该模块所对应的菜单分组，则取分组名作为主菜单项。*/
-        $mainMenu = $moduleName;
-        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
-
-        /* 循环打印主菜单。*/
-        foreach($lang->menu as $menuKey => $menu)
-        {
-            $active = $menuKey == $mainMenu ? 'class=active' : '';
-            list($menuLabel, $module, $method) = explode('|', $menu);
-
-            if(common::hasPriv($module, $method))
-            {
-                $link  = helper::createLink($module, $method);
-                echo "<li $active><nobr><a href='$link'>$menuLabel</a></nobr></li>\n";
-            }
-        }
-
-        /* 打印搜索框。*/
-        $moduleName = $app->getModuleName();
-        $methodName = $app->getMethodName();
-        $searchObject = $moduleName;
-        if($moduleName == 'product')
-        {
-           if($methodName == 'browse') $searchObject = 'story';
-        }
-        elseif($moduleName == 'project')
-        {
-            if(strpos('task|story|bug|build', $methodName) !== false) $searchObject = $methodName;
-        }
-        elseif($moduleName == 'my' or $moduleName == 'user')
-        {
-            $searchObject = $methodName;
-        }
-
-        echo "<li id='searchbox'>"; 
-        echo html::select('searchType', $lang->searchObjects, $searchObject);
-        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-60px'");
-        echo html::submitButton($lang->go, 'onclick="shortcut()"');
-        echo "</li>";
-        echo "</ul>\n";
-    }
-
-    /* 打印模块的菜单。*/
-    public static function printModuleMenu($moduleName)
-    {
-        global $lang, $app;
-
-        /* 没有设置菜单，直接退出。*/
-        if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
-
-        /* 获得菜单设置，并记录当前的模块名和方法名。*/
-        $submenus      = $lang->$moduleName->menu;  
-        $currentModule = $app->getModuleName();
-        $currentMethod = $app->getMethodName();
-
-        /* 菜单开始。*/
-        echo "<ul>\n";
-
-        /* 循环处理每一个菜单项。*/
-        foreach($submenus as $submenu)
-        {
-            /* 初始化设置。*/
-            $link      = $submenu;
-            $subModule = '';
-            $alias     = '';
-            $float     = '';
-            $active    = '';
-            $target    = '';
-
-            /* 如果该菜单是以数组的形式配置的，则覆盖上面的默认设置。*/
-            if(is_array($submenu)) extract($submenu);
-
-            /* 打印菜单。*/
-            if(strpos($link, '|') === false)
-            {
-                echo "<li>$link</li>\n";
-            }
-            else
-            {
-                $link = explode('|', $link);
-                list($label, $module, $method) = $link;
-                $vars = isset($link[3]) ? $link[3] : '';
-                if(common::hasPriv($module, $method))
-                {
-                    global $app;
-
-                    /* 判断是否应该设置激活。*/
-                    if($currentModule == $subModule) $active = 'active';
-                    if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false)) $active = 'active';
-
-                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target) . "</li>\n";
-                }
-            }
-        }
-        echo "</ul>\n";
-    }
-
-    /* 打印面包屑导航。*/
-    public static function printBreadMenu($moduleName, $position)
-    {
-        global $lang;
-        $mainMenu = $moduleName;
-        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
-        list($menuLabel, $module, $method) = explode('|', $lang->menu->index);
-        echo html::a(helper::createLink($module, $method), $lang->ZenTaoPMS) . $lang->arrow;
-        if($moduleName != 'index')
-        {
-            list($menuLabel, $module, $method) = explode('|', $lang->menu->$mainMenu);
-            echo html::a(helper::createLink($module, $method), $menuLabel);
-        }
-        else
-        {
-            echo $lang->index->common;
-        }
-        if(empty($position)) return;
-        echo $lang->arrow;
-        foreach($position as $key => $link)
-        {
-            echo $link;
-            if(isset($position[$key + 1])) echo $lang->arrow;
-        }
-    }
-
-    /* 设置菜单的参数。*/
+    /**
+     * Replace the %s of one key of a menu by $params.
+     *
+     * All the menus are defined in the common's language file. But there're many dynamic params, so in the defination,
+     * we used %s as placeholder. These %s should be setted in one module.
+     *
+     * The items of one module's menu may be an string or array. For example, please see module/common/lang.
+     * 
+     * @param  string $object     the menus of one module
+     * @param  string $key        the menu item to be replaced
+     * @param  string $params     the params passed to the menu item
+     * @access public
+     * @return void
+     */
     public function setMenuVars($menu, $key, $params)
     {
         if(is_array($params))
@@ -302,7 +117,22 @@ EOT;
         }
     }
 
-    /* 打印带有orderby的链接。 */
+    /**
+     * Print the link contains orderBy field.
+     *
+     * This method will auto set the orderby param according the params. Fox example, if the order by is desc, 
+     * will be changed to asc.
+     * 
+     * @param  string $fieldName    the field name to sort by
+     * @param  string $orderBy      the order by string
+     * @param  string $vars         the vars to be passed
+     * @param  string $label        the label of the link
+     * @param  string $module       the module name
+     * @param  string $method       the method name
+     * @static
+     * @access public
+     * @return void
+     */
     public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
     {
         global $lang, $app;
@@ -330,7 +160,21 @@ EOT;
         echo "<div class='$className'>" . html::a($link, $label) . '</div>';
     }
 
-    /* 打印链接，会检查权限*/
+    /**
+     * Print link to an modules' methd.
+     *
+     * Before printing, check the privilege first. If no privilege, return fasle. Else, print the link, return true.
+     * 
+     * @param  string $module   the module name
+     * @param  string $method   the method
+     * @param  string $vars     vars to be passed
+     * @param  string $label    the label of the link
+     * @param  string $target   the target of the link
+     * @param  string $misc     others
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '')
     {
         if(!common::hasPriv($module, $method)) return false;

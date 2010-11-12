@@ -93,6 +93,70 @@ class commonModel extends model
     }
 
     /**
+     * Juage a method of one module is open or not?
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @access public
+     * @return bool
+     */
+    public function isOpenMethod($module, $method)
+    {
+        if($module == 'user' and strpos('login|logout|deny', $method) !== false) return true;
+        if($module == 'api'  and $method == 'getsessionid') return true;
+        if($module == 'misc' and $method == 'about') return true;
+        return false;
+    }
+
+    /**
+     * Identify user by PHP_AUTH_USER.
+     * 
+     * @access public
+     * @return void
+     */
+    public function identifyPhpAuth()
+    {
+        $account  = $this->server->php_auth_user;
+        $password = $this->server->php_auth_pw;
+        $user     = $this->loadModel('user')->identify($account, $password);
+        if(!$user) return false;
+
+        $user->rights = $this->user->authorize($account);
+        $this->session->set('user', $user);
+        $this->app->user = $this->session->user;
+        $this->loadModel('action')->create('user', $user->id, 'login');
+    }
+
+    /**
+     * Deny access.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deny($module, $method)
+    {
+        $vars = "module=$module&method=$method";
+        if(isset($this->server->http_referer))
+        {
+            $referer = helper::safe64Encode($this->server->http_referer);
+            $vars   .= "&referer=$referer";
+        }
+        $denyLink = helper::createLink('user', 'deny', $vars);
+
+        /* Fix the bug of IE: use js locate, can't get the referer. */
+        if(strpos($this->server->http_user_agent, 'MSIE') !== false)
+        {
+            echo "<a href='$denyLink' id='denylink' style='display:none'>deny</a>";
+            echo "<script language='javascript'>document.getElementById('denylink').click();</script>";
+        }
+        else
+        {
+            echo js::locate($denyLink);
+        }
+        exit;
+    }
+
+    /**
      * Get the run info.
      * 
      * @param mixed $startTime  the start time of this execution
@@ -106,6 +170,197 @@ class commonModel extends model
         $info['querys']   = count(dao::$querys);
         return $info;
     }
+
+    /**
+     * Print top bar.
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printTopBar()
+    {
+        global $lang, $app;
+
+        printf($lang->todayIs, date(DT_DATE3));
+        if(isset($app->user)) echo $app->user->realname . ' ';
+        if(isset($app->user) and $app->user->account != 'guest')
+        {
+            echo html::a(helper::createLink('my', 'index'), $lang->myControl);
+            echo html::a(helper::createLink('user', 'logout'), $lang->logout);
+        }
+        else
+        {
+            echo html::a(helper::createLink('user', 'login'), $lang->login);
+        }
+        echo html::a('#', $lang->switchHelp, '', "onclick='toggleHelpLink();'");
+        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
+        echo html::select('', $app->config->langs, $app->getClientLang(), 'class=switcher onchange="selectLang(this.value)"');
+    }
+
+    /**
+     * Print the main menu.
+     * 
+     * @param  string $moduleName 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printMainmenu($moduleName)
+    {
+        global $app, $lang;
+        $logo = $app->getWebRoot() . 'theme/default/images/main/logo.png';
+        echo "<ul>\n";
+        echo "<li style='padding:0; height:30px'><a href='http://www.zentao.net' target='_blank'><img src='$logo' /></a></li>\n";
+
+        /* Set the main main menu. */
+        $mainMenu = $moduleName;
+        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
+
+        /* Print all main menus. */
+        foreach($lang->menu as $menuKey => $menu)
+        {
+            $active = $menuKey == $mainMenu ? "class='active'" : '';
+            list($menuLabel, $module, $method) = explode('|', $menu);
+
+            if(common::hasPriv($module, $method))
+            {
+                $link  = helper::createLink($module, $method);
+                echo "<li $active><nobr><a href='$link'>$menuLabel</a></nobr></li>\n";
+            }
+        }
+
+    }
+
+    /**
+     * Print the search box.
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printSearchBox()
+    {
+        global $app, $lang;
+        $moduleName  = $app->getModuleName();
+        $methodName  = $app->getMethodName();
+        $searchObject = $moduleName;
+
+        if($moduleName == 'product')
+        {
+            if($methodName == 'browse') $searchObject = 'story';
+        }
+        elseif($moduleName == 'project')
+        {
+            if(strpos('task|story|bug|build', $methodName) !== false) $searchObject = $methodName;
+        }
+        elseif($moduleName == 'my' or $moduleName == 'user')
+        {
+            $searchObject = $methodName;
+        }
+
+        echo "<li id='searchbox'>"; 
+        echo html::select('searchType', $lang->searchObjects, $searchObject);
+        echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-60px'");
+        echo html::submitButton($lang->go, 'onclick="shortcut()"');
+        echo "</li>";
+        echo "</ul>\n";
+    }
+
+    /**
+     * Print the module menu.
+     * 
+     * @param  string $moduleName 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printModuleMenu($moduleName)
+    {
+        global $lang, $app;
+
+        if(!isset($lang->$moduleName->menu)) {echo "<ul></ul>"; return;}
+
+        /* Get the sub menus of the module, and get current module and method. */
+        $submenus      = $lang->$moduleName->menu;  
+        $currentModule = $app->getModuleName();
+        $currentMethod = $app->getMethodName();
+
+        /* The beginning of the menu. */
+        echo "<ul>\n";
+
+        /* Cycling to print every sub menus. */
+        foreach($submenus as $submenu)
+        {
+            /* Init the these vars. */
+            $link      = $submenu;
+            $subModule = '';
+            $alias     = '';
+            $float     = '';
+            $active    = '';
+            $target    = '';
+
+            if(is_array($submenu)) extract($submenu);   // If the sub menu is an array, extract it.
+
+            /* Print the menu. */
+            if(strpos($link, '|') === false)
+            {
+                echo "<li>$link</li>\n";
+            }
+            else
+            {
+                $link = explode('|', $link);
+                list($label, $module, $method) = $link;
+                $vars = isset($link[3]) ? $link[3] : '';
+                if(common::hasPriv($module, $method))
+                {
+                    global $app;
+
+                    /* Is the currentModule active? */
+                    if($currentModule == $subModule) $active = 'active';
+                    if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false)) $active = 'active';
+
+                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target) . "</li>\n";
+                }
+            }
+        }
+        echo "</ul>\n";
+    }
+
+    /**
+     * Print the bread menu.
+     * 
+     * @param  string $moduleName 
+     * @param  string $position 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printBreadMenu($moduleName, $position)
+    {
+        global $lang;
+        $mainMenu = $moduleName;
+        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
+        list($menuLabel, $module, $method) = explode('|', $lang->menu->index);
+        echo html::a(helper::createLink($module, $method), $lang->ZenTaoPMS) . $lang->arrow;
+        if($moduleName != 'index')
+        {
+            list($menuLabel, $module, $method) = explode('|', $lang->menu->$mainMenu);
+            echo html::a(helper::createLink($module, $method), $menuLabel);
+        }
+        else
+        {
+            echo $lang->index->common;
+        }
+        if(empty($position)) return;
+        echo $lang->arrow;
+        foreach($position as $key => $link)
+        {
+            echo $link;
+            if(isset($position[$key + 1])) echo $lang->arrow;
+        }
+    }
+
 
     /**
      * Diff two string. (see phpt)
