@@ -12,7 +12,7 @@
 /**
  * The base class of model.
  * 
- * @package ZenTaoCMS
+ * @package ZenTaoPMS
  */
 class model
 {
