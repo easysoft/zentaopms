@@ -354,6 +354,17 @@ function selectLang(lang)
 }
 
 /**
+ * Set the about link. 
+ * 
+ * @access public
+ * @return void
+ */
+function setAbout()
+{
+    $("a.about").colorbox({width:900, height:330, iframe:true, transition:'elastic', speed:500, scrolling:false});
+}
+
+/**
  * add one option of a select to another select. 
  * 
  * @param  string $SelectID 
@@ -492,6 +503,7 @@ $(document).ready(function()
     setHelpLink();
     setProductSwitcher();
     setProjectSwitcher();
+    setAbout();
     saveProduct();
     saveProject();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minus, begin ping.
