@@ -4,7 +4,7 @@ $webRoot      = $this->app->getWebRoot();
 $jsRoot       = $webRoot . "js/";
 $themeRoot    = $webRoot . "theme/";
 $defaultTheme = $webRoot . 'theme/default/';
-$langTheme    = $themeRoot . 'lang/' . $app->getClientLang() . 'css';
+$langTheme    = $themeRoot . 'lang/' . $app->getClientLang() . '.css';
 $clientTheme  = $this->app->getClientTheme();
 ?>
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dli'>
