@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoPMS
+ * @package     API
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -16,7 +16,15 @@ class ztclient
     public $agent;
     public $session;
 
-    /* The construce function. */
+    /**
+     * The construce function. 
+     * 
+     * @param  string $zentaoRoot   the zentao root url
+     * @param  string $account      the login account
+     * @param  string $password     the passwod
+     * @access public
+     * @return void
+     */
     public function __construct($zentaoRoot = '', $account = '', $password = '')
     {
         $this->agent = new snoopy();
@@ -34,7 +42,12 @@ class ztclient
         $this->login();
     }
 
-    /* Get the settings through getconfig api from remote. */
+    /**
+     * Get the settings through getconfig api from remote. 
+     * 
+     * @access private
+     * @return object
+     */
     private function getRemoteConfig()
     {
         $url = $this->zentao->root  . '/index.php?mode=getconfig';
@@ -43,19 +56,37 @@ class ztclient
         return $config;
     }
 
-    /* Set the session api. */
+    /**
+     * Set the session api.
+     * 
+     * @access private
+     * @return string the session api url.
+     */
     private function setSessionAPI()
     {
         return $this->setControlAPI('api', 'getsessionid');
     }
 
-    /* Set the login api. */
+    /**
+     * Set the login api.
+     * 
+     * @access private
+     * @return string the login api url.
+     */
     private function setLoginAPI()
     {
         return $this->setControlAPI('user', 'login');
     }
 
-    /* Set the method api. */
+    /**
+     * Set the method api.
+     * 
+     * @param  string $module   the module name 
+     * @param  string $method   the methhod name
+     * @param  string $vars     the vars to passwd
+     * @access private
+     * @return string the control api string.
+     */
     private function setControlAPI($module, $method, $vars = '')
     {
         if($this->zentao->requestType == 'GET')
@@ -77,7 +108,15 @@ class ztclient
         return $controlAPI;
     }
 
-    /* Set the method api. */
+    /**
+     * Set the method api.
+     * 
+     * @param  string $module   the module name 
+     * @param  string $method   the methhod name
+     * @param  string $vars     the vars to passwd
+     * @access private
+     * @return string the model api string.
+     */
     private function setModelAPI($module, $method, $vars = '')
     {
         $vars = str_replace('&', ',', $vars);
@@ -98,14 +137,24 @@ class ztclient
         return $modelAPI;
     }
 
-    /* 启动session. */
+    /**
+     * Start session 
+     * 
+     * @access public
+     * @return void
+     */
     public function startSession()
     {
         $this->session = null;
         $this->session = $this->httpGet($this->setSessionAPI());
     }
 
-    /* Login. */
+    /**
+     * Login.
+     * 
+     * @access public
+     * @return void
+     */
     public function login()
     {
         $loginAPI = $this->setLoginAPI();
@@ -114,19 +163,41 @@ class ztclient
         $this->httpGet($loginAPI);
     }
 
-    /* Fetch one method of a module's control. */
+    /**
+     * Fetch one method of a module's control. 
+     * 
+     * @param  string $module   the module name 
+     * @param  string $method   the methhod name
+     * @param  string $vars     the vars to passwd
+     * @access public
+     * @return void
+     */
     public function fetch($module, $method = 'index', $vars = '')
     {
         return $this->httpGet($this->setControlAPI($module, $method, $vars));
     }
 
-    /* Fetch one method of a module's model. */
+    /**
+     * Fetch one method of a module's model. 
+     * 
+     * @param  string $module   the module name 
+     * @param  string $method   the methhod name
+     * @param  string $vars     the vars to passwd
+     * @access public
+     * @return void
+     */
     public function fetchModel($module, $method, $vars = '')
     {
         return $this->httpGet($this->setModelAPI($module, $method, $vars));
     }
 
-    /* Get a api and check it. */
+    /**
+     * Get a api and check it. 
+     * 
+     * @param  string $url 
+     * @access private
+     * @return bool
+     */
     private function httpGet($url)
     {
         $this->agent->fetch($url);
@@ -137,6 +208,13 @@ class ztclient
         return true;
     }
 
+    /**
+     * Append session param to the url.
+     * 
+     * @param  string $url 
+     * @access private
+     * @return string
+     */
     private function appendSession($url)
     {
         if(strrpos($url, '&') === false) $url .= '?';
