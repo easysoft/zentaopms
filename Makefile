@@ -6,6 +6,7 @@ clean:
 	rm -fr zentaopms
 	rm -fr *.tar.gz
 	rm -fr *.zip
+	rm -fr api*
 tgz:
 	mkdir -p zentaopms/lib
 	mkdir -p zentaopms/db
@@ -38,6 +39,8 @@ tgz:
 	rm -fr zentaopms/www/bugfree
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
-zentaopmsdoc:
-	phpdoc -d config,lib,module,www -t zentaozentaopms -o HTML:frames:phphtmllib -ti ZenTaoPMSAPI参考手册 -s on -pp on -i *test*
-	phpdoc -d config,lib,module,www -t zentaozentaopms.chm -o chm:default:default -ti ZenTaoPMSAPI参考手册 -s on -pp on -i *test*
+phpdoc:
+	phpdoc -d bin,framework,config,lib,module,www -t api -o HTML:frames:phphtmllib -ti ZenTaoPMSAPI参考手册 -s on -pp on -i *test*
+	phpdoc -d bin,framework,config,lib,module,www -t api.chm -o chm:default:default -ti ZenTaoPMSAPI参考手册 -s on -pp on -i *test*
+doxygen:
+	doxygen .doxygen
