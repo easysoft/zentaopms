@@ -1,11 +1,11 @@
 <?php
 /**
- * The dao and sql class file of ZenTaoPHP.
+ * The dao and sql class file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoPHP
+ * @package     framework
  * @version     $Id: dao.class.php 134 2010-09-11 07:24:27Z wwccss $
  * @link        http://www.zentao.net
  */
@@ -13,7 +13,7 @@
 /**
  * DAO, data access object.
  * 
- * @package ZenTaoPHP
+ * @package framework
  */
 class dao
 {
@@ -1005,7 +1005,7 @@ class dao
 /**
  * The SQL class.
  * 
- * @package ZenTaoPHP
+ * @package framework
  */
 class sql
 {

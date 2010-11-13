@@ -1,18 +1,18 @@
 <?php
 /**
- * The pager class file of ZenTaoPHP.
+ * The pager class file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoPHP
+ * @package     framework
  * @version     $Id: pager.class.php 134 2010-09-11 07:24:27Z wwccss $
  * @link        http://www.zentao.net
  */
 /**
  * Pager class.
  * 
- * @package ZenTaoPHP
+ * @package framework
  */
 class pager
 {

@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoPMS
+ * @package     framework
  * @version     $Id: control.class.php 109 2010-05-02 15:42:08Z wwccss $
  * @link        http://www.zentao.net
  */
@@ -13,7 +13,7 @@
 /**
  * The base class of control.
  * 
- * @package ZenTaoPMS
+ * @package framework
  */
 class control
 {
