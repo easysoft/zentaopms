@@ -369,13 +369,14 @@ class js
     /**
      * Import a js file.
      * 
-     * @param  mixed $url 
+     * @param  string $url 
+     * @param  string $version 
      * @access public
      * @return string
      */
-    public static function import($url)
+    public static function import($url, $version = '')
     {
-        echo "<script src='$url' type='text/javascript'></script>\n";
+        echo "<script src='$url?v=$version' type='text/javascript'></script>\n";
     }
 
     /**
@@ -583,6 +584,8 @@ EOT;
         $jsConfig->currentMethod  = $methodName;
         $jsConfig->clientLang     = $clientLang;
         $jsConfig->requiredFields = $requiredFields;
+        $jsConfig->lblShowAll     = $lang->showAll;
+        $jsConfig->lblHideClosed  = $lang->hideClosed;
         $jsConfig->router         = $app->server->PHP_SELF;
 
         $js  = self::start(false);
@@ -602,12 +605,13 @@ class css
     /**
      * Import a css file.
      * 
-     * @param  mixed $url 
+     * @param  string $url 
+     * @param  string $version 
      * @access public
      * @return vod
      */
-    public static function import($url)
+    public static function import($url, $version = '')
     {
-        echo "<link rel='stylesheet' href='$url' type='text/css' media='screen' />\n";
+        echo "<link rel='stylesheet' href='$url?v=$version' type='text/css' media='screen' />\n";
     }
 }
