@@ -137,7 +137,7 @@ class model
      * loaded by loadModel() so we must get the module name of thie model.
      * 
      * @access protected
-     * @return string       the module name.
+     * @return string the module name.
      */
     protected function getModuleName()
     {
@@ -168,7 +168,7 @@ class model
      * 
      * @param   string  $moduleName
      * @access  public
-     * @return  object  the model object
+     * @return  object|bool  the model object or false if model file not exists.
      */
     public function loadModel($moduleName)
     {

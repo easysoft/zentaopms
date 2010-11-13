@@ -207,9 +207,9 @@ class control
     /**
      * Load the model file of one module.
      * 
-     * @param   string  $methodName    The method name, if empty, use current module's name.
+     * @param   string      $methodName    The method name, if empty, use current module's name.
      * @access  public
-     * @return  void
+     * @return  object|bool If no model file, return false. Else return the model object.
      */
     public function loadModel($moduleName = '')
     {
@@ -255,10 +255,10 @@ class control
     /**
      * Set the view file, thus can use fetch other module's page.
      * 
-     * @param string $moduleName    module name
-     * @param string $methodName    method name
+     * @param  string   $moduleName    module name
+     * @param  string   $methodName    method name
      * @access private
-     * @return string               the view file
+     * @return string  the view file
      */
     private function setViewFile($moduleName, $methodName)
     {
@@ -284,7 +284,7 @@ class control
      * 
      * @param  string $viewFile 
      * @access public
-     * @return string
+     * @return string|bool  If extension view file exists, return the path. Else return fasle.
      */
     public function getExtViewFile($viewFile)
     {
@@ -295,6 +295,7 @@ class control
             helper::cd($extPath);
             return $extViewFile;
         }
+        return false;
     }
 
     /**
@@ -324,10 +325,10 @@ class control
     /**
      * Parse view file. 
      *
-     * @param string $moduleName    module name, if empty, use current module.
-     * @param string $methodName    method name, if empty, use current method.
+     * @param  string $moduleName    module name, if empty, use current module.
+     * @param  string $methodName    method name, if empty, use current method.
      * @access public
-     * @return the parsed result.
+     * @return string the parsed result.
      */
     public function parse($moduleName = '', $methodName = '')
     {
@@ -407,7 +408,7 @@ class control
      * @param   string  $methodName    method name.
      * @param   array   $params        params.
      * @access  public
-     * @return  string
+     * @return  string  the parsed html.
      */
     public function fetch($moduleName = '', $methodName = '', $params = array())
     {
@@ -469,12 +470,12 @@ class control
     /**
      * Create a link to one method of one module.
      * 
-     * @param   string  $moduleName    module name
-     * @param   string  $methodName    method name
-     * @param   mixed   $vars          the params passwd, can be array(key=>value) or key1=value1&key2=value2
-     * @param   string  $viewType      the view type
+     * @param   string         $moduleName    module name
+     * @param   string         $methodName    method name
+     * @param   string|array   $vars          the params passed, can be array(key=>value) or key1=value1&key2=value2
+     * @param   string         $viewType      the view type
      * @access  public
-     * @return  string
+     * @return  string the link string.
      */
     public function createLink($moduleName, $methodName = 'index', $vars = array(), $viewType = '')
     {
@@ -485,11 +486,11 @@ class control
     /**
      * Create a link to the inner method of current module.
      * 
-     * @param   string  $methodName    method name
-     * @param   mixed   $vars          the params passwd, can be array(key=>value) or key1=value1&key2=value2
-     * @param   string  $viewType      the view type
+     * @param   string         $methodName    method name
+     * @param   string|array   $vars          the params passed, can be array(key=>value) or key1=value1&key2=value2
+     * @param   string         $viewType      the view type
      * @access  public
-     * @return  string
+     * @return  string  the link string.
      */
     public function inlink($methodName = 'index', $vars = array(), $viewType = '')
     {

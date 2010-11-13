@@ -29,7 +29,7 @@ class helper
      * @param mixed     $value      the value to be set.
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
     static public function setMember($objName, $key, $value)
     {
@@ -39,6 +39,7 @@ class helper
         $value = serialize($value);
         $code  = ("\$${objName}->{$key}=unserialize(<<<EOT\n$value\nEOT\n);");
         eval($code);
+        return true;
     }
 
     /**
@@ -51,13 +52,13 @@ class helper
      * helper::createLink('hello', 'index', array('var1' => 'value1', 'var2' => 'value2');
      * ?>
      * </code>
-     * @param string    $moduleName     module name
-     * @param string    $methodName     method name
-     * @param mixed     $vars           the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2) or key1=value1&key2=value2
-     * @param string    $viewType       the view type
+     * @param string       $moduleName     module name
+     * @param string       $methodName     method name
+     * @param string|array $vars           the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2) or key1=value1&key2=value2
+     * @param string       $viewType       the view type
      * @static
      * @access public
-     * @return string
+     * @return string the link string.
      */
     static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '')
     {
@@ -139,10 +140,10 @@ class helper
     /**
      * Set the model file of one module. If there's an extension file, merge it with the main model file.
      * 
-     * @param   string      $moduleName     the module name
+     * @param   string $moduleName the module name
      * @static
      * @access  public
-     * @return  string      the model file
+     * @return  string the model file
      */
     static public function setModelFile($moduleName)
     {
@@ -202,10 +203,10 @@ class helper
     /**
      * Create the in('a', 'b') string.
      * 
-     * @param   misc    $ids   the id lists, can be a array or a string with ids joined with comma.
+     * @param   string|array $ids   the id lists, can be a array or a string with ids joined with comma.
      * @static
      * @access  public
-     * @return  string
+     * @return  string  the string like IN('a', 'b').
      */
     static public function dbIN($ids)
     {
@@ -219,7 +220,7 @@ class helper
      * @param   string  $string   the string to encode.
      * @static
      * @access  public
-     * @return  string
+     * @return  string  encoded string.
      */
     static public function safe64Encode($string)
     {
@@ -232,7 +233,7 @@ class helper
      * @param   string  $string   the string to decode
      * @static
      * @access  public
-     * @return  string
+     * @return  string  decoded string.
      */
     static public function safe64Decode($string)
     {
@@ -245,7 +246,7 @@ class helper
      * @param   date  $date1   the first date.
      * @param   date  $date2   the sencode date.
      * @access  public
-     * @return  string  the diff of the two days.
+     * @return  int  the diff of the two days.
      */
     static public function diffDate($date1, $date2)
     {
@@ -278,7 +279,7 @@ class helper
      *  Judge a date is zero or not.
      * 
      * @access  public
-     * @return  date  today
+     * @return  bool
      */
     static public function isZeroDate($date)
     {
@@ -313,10 +314,10 @@ class helper
 /**
  *  The short alias of helper::createLink() method. 
  *
- * @param string $methodName  the method name
- * @param mixed  $vars        the vars to passed
- * @param string $viewType    
- * @return string
+ * @param  string        $methodName  the method name
+ * @param  string|array  $vars        the params passed to the method, can be array('key' => 'value') or key1=value1&key2=value2)
+ * @param  string        $viewType    
+ * @return string the link string.
  */
 function inLink($methodName = 'index', $vars = '', $viewType = '')
 {
@@ -342,7 +343,7 @@ function cycle($items)
  * Get current microtime.
  * 
  * @access protected
- * @return float        current time.
+ * @return float current time.
  */
 function getTime()
 {

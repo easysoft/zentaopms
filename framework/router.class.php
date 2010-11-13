@@ -832,7 +832,7 @@ class router
      * 
      * @param   string  $varName    PATH_INFO, ORIG_PATH_INFO
      * @access  private
-     * @return  string   the PATH_INFO
+     * @return  string the PATH_INFO
      */
     private function getPathInfo($varName)
     {
@@ -867,7 +867,7 @@ class router
     /**
      * Get the $URL
      * 
-     * @param   bool $full  true, the URI contains the webRoot, else only hte URI.
+     * @param  bool $full  true, the URI contains the webRoot, else only hte URI.
      * @access public
      * @return string
      */
@@ -902,7 +902,7 @@ class router
      *  This method should called manually in the router file(www/index.php) after the $lang, $config, $dbh loadde.
      *
      * @access public
-     * @return object
+     * @return object|bool  the common control object or false if not exits.
      */
     public function loadCommon()
     {
@@ -966,9 +966,9 @@ class router
     /**
      * Get the path of one module.
      * 
-     * @param string $moduleName    the module name
+     * @param  string $moduleName    the module name
      * @access public
-     * @return string   the module path
+     * @return string the module path
      */
     public function getModulePath($moduleName = '')
     {
@@ -979,10 +979,10 @@ class router
     /**
      * Get extension path of one module.
      * 
-     * @param mixed $moduleName     the module name
-     * @param mixed $ext            the extension type, can be control|model|view|lang|config
-     * @access public
-     * @return string               the extension path.
+     * @param   string $moduleName     the module name
+     * @param   string $ext            the extension type, can be control|model|view|lang|config
+     * @access  public
+     * @return  string the extension path.
      */
     public function getModuleExtPath($moduleName, $ext)
     {
@@ -1066,7 +1066,7 @@ class router
      * 4. call the method by call_user_function_array
      * 
      * @access public
-     * @return void
+     * @return bool|object  if the module object of die.
      */
     public function loadModule()
     {
@@ -1172,7 +1172,7 @@ class router
      * @param   array $defaultParams     the default params defined by the method.
      * @param   array $passedParams      the params passed in through url.
      * @access  private
-     * @return  array
+     * @return  array the merged params.
      */
     private function mergeParams($defaultParams, $passedParams)
     {
@@ -1292,10 +1292,10 @@ class router
      * 
      * First search in $appLibRoot, then $coreLibRoot.
      *
-     * @param mixed $className  the class name
-     * @param mixed $static     statis class or not
-     * @access public
-     * @return object           the instance of the class
+     * @param   string $className  the class name
+     * @param   bool   $static     statis class or not
+     * @access  public
+     * @return  object|bool the instance of the class or just true.
      */
     public function loadClass($className, $static = false)
     {
@@ -1318,7 +1318,7 @@ class router
         helper::import($classFile);
 
         /* If staitc, return. */
-        if($static) return;
+        if($static) return true;
 
         /* Instance it. */
         global $$className;
@@ -1332,10 +1332,10 @@ class router
      * 
      * If the module is common, search in $configRoot, else in $modulePath.
      *
-     * @param mixed $moduleName     module name
-     * @param bool  $exitIfNone     exit or not
-     * @access public
-     * @return object
+     * @param   string $moduleName     module name
+     * @param   bool  $exitIfNone     exit or not
+     * @access  public
+     * @return  object|bool the config object or false.
      */
     public function loadConfig($moduleName, $exitIfNone = true)
     {
@@ -1357,7 +1357,7 @@ class router
         if(!file_exists($mainConfigFile))
         {
             if($exitIfNone) self::error("config file $mainConfigFile not found", __FILE__, __LINE__, true);
-            if(empty($extConfigFiles)) return;  //  and no extension file, exit.
+            if(empty($extConfigFiles)) return false;  //  and no extension file, exit.
             $configFiles = $extConfigFiles;
         }
         else
@@ -1402,9 +1402,9 @@ class router
     /**
      * Load lang and return it as the global lang object.
      * 
-     * @param mixed $moduleName     the module name
-     * @access public
-     * @return void
+     * @param   string $moduleName     the module name
+     * @access  public
+     * @return  bool|ojbect the lang object or false.
      */
     public function loadLang($moduleName)
     {
@@ -1416,7 +1416,7 @@ class router
         /* Set the files to includ. */
         if(!file_exists($mainLangFile))
         {
-            if(empty($extLangFiles)) return;  // also no extension file.
+            if(empty($extLangFiles)) return false;  // also no extension file.
             $langFiles = $extLangFiles;
         }
         else
@@ -1443,13 +1443,13 @@ class router
      * Connect to database.
      * 
      * @access public
-     * @return object
+     * @return object|bool the database handler.
      */
     public function connectDB()
     {
         global $config, $dbh;
         if(!isset($config->db->driver)) self::error('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
-        if(!isset($config->db->user)) return;
+        if(!isset($config->db->user)) return false;
         if($config->db->driver == 'mysql')
         {
             $dsn = "mysql:host={$config->db->host}; port={$config->db->port}; dbname={$config->db->name}";
@@ -1525,10 +1525,10 @@ class language
     /**
      * Show a member 
      * 
-     * @param mixed $obj    the object
-     * @param mixed $key    the key
-     * @access public
-     * @return void
+     * @param   object $obj    the object
+     * @param   string $key    the key
+     * @access  public
+     * @return  void
      */
     public function show($obj, $key)
     {
@@ -1547,9 +1547,9 @@ class super
     /**
      * Construct, set the var scope.
      * 
-     * @param mixed $scope  the score, can be server, post, get, cookie, session, global
-     * @access public
-     * @return void
+     * @param   string $scope  the score, can be server, post, get, cookie, session, global
+     * @access  public
+     * @return  void
      */
     public function __construct($scope)
     {
@@ -1559,10 +1559,10 @@ class super
     /**
      * Set one member value. 
      * 
-     * @param mixed $key    the key
-     * @param mixed $value  the value
-     * @access public
-     * @return void
+     * @param   string    the key
+     * @param   mixed $value  the value
+     * @access  public
+     * @return  void
      */
     public function set($key, $value)
     {
@@ -1599,9 +1599,9 @@ class super
     /**
      * The magic get method.
      * 
-     * @param mixed $key    the key
+     * @param  string $key    the key
      * @access public
-     * @return mixed
+     * @return mixed|bool return the value of the key or false.
      */
     public function __get($key)
     {
