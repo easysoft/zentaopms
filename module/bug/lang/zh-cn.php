@@ -81,6 +81,7 @@ $lang->bug->byModule       = '按模块';
 $lang->bug->assignToMe     = '指派给我';
 $lang->bug->openedByMe     = '由我创建';
 $lang->bug->resolvedByMe   = '由我解决';
+$lang->bug->closedByMe     = '由我关闭';
 $lang->bug->assignToNull   = '未指派';
 $lang->bug->longLifeBugs   = '久未处理';
 $lang->bug->postponedBugs  = '被延期';

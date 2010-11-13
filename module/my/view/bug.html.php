@@ -13,6 +13,17 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
+  <div id='featurebar'>
+    <div class='f-left'>
+      <?php
+      echo "<span id='assigntomeTab'>"    . html::a(inlink('bug', "type=assigntome"),    $lang->bug->assignToMe)    . "</span>";
+      echo "<span id='openedbymeTab'>"    . html::a(inlink('bug', "type=openedbyme"),    $lang->bug->openedByMe)    . "</span>";
+      echo "<span id='resolvedbymeTab'>"  . html::a(inlink('bug', "type=resolvedbyme"),  $lang->bug->resolvedByMe)  . "</span>";
+      echo "<span id='closedByMeTab'>"    . html::a(inlink('bug', "type=closedbyme"),    $lang->bug->closedByMe)    . "</span>";
+      ?>
+    </div>
+  </div>
+  <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <table class='table-1 fixed tablesorter'>
     <thead>
     <tr class='colhead'>
@@ -50,5 +61,9 @@
     <?php endforeach;?>
     </tbody>
   </table>
+  <?php $pager->show();?>
 </div>
+<script language='javascript'>
+$("#<?php echo $type;?>Tab").addClass('active'); 
+</script>
 <?php include '../../common/view/footer.html.php';?>

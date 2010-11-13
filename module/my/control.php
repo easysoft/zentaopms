@@ -79,18 +79,50 @@ class my extends control
     }
 
     /* 用户的bug列表。*/
-    public function bug()
+    public function bug($type = 'assignToMe', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 登记session，加载语言。*/
         $this->session->set('bugList', $this->app->getURI(true));
         $this->app->loadLang('bug');
+ 
+        /* 加载分页类。*/
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $bugs = array();
+        if($type == 'assigntome')
+        {
+            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'openedbyme')
+        {
+            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'resolvedbyme')
+        {
+            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'closedbyme')
+        {
+            $bugs = $this->dao->findByClosedBy($this->app->user->account)->from(TABLE_BUG)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+     
         /* 赋值。*/
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
         $this->view->position[]    = $this->lang->my->bug;
-        $this->view->bugs          = $this->user->getBugs($this->app->user->account);
+        $this->view->bugs          = $bugs;
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->tabID         = 'bug';
+        $this->view->type          = $type;
+        $this->view->pager         = $pager;
 
         $this->display();
     }

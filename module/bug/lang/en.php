@@ -82,6 +82,7 @@ $lang->bug->assignToMe     = 'Tome';
 $lang->bug->openedByMe     = 'MyOpen';
 $lang->bug->resolvedByMe   = 'MyResolve';
 $lang->bug->assignToNull   = 'Assign null';
+$lang->bug->closedByMe     = 'MyClose';
 $lang->bug->longLifeBugs   = 'Long life';
 $lang->bug->postponedBugs  = 'Postponed';
 $lang->bug->allBugs        = 'All bug';
