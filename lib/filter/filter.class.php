@@ -10,33 +10,47 @@
  * @link        http://www.zentao.net
  */
 /**
- * validate类，提供对数据的验证。
+ * The valida clas, checking datas by rules.
  * 
  * @package framework
  */
 class validater
 {
     /**
-     * 参数个数的最大值。
+     * The max count of args.
      */
     const MAX_ARGS = 3;
 
-    /* 检查是否是布尔型。*/
+    /**
+     * Bool checking.
+     * 
+     * @param  bool $var 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkBool($var)
     {
         return filter_var($var, FILTER_VALIDATE_BOOLEAN);
     }
 
-    /* 检查是否是整型。*/
+    /**
+     * Int checking.
+     * 
+     * @param  int $var 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkInt($var)
     {
         $args = func_get_args();
-        if($var != 0) $var = ltrim($var, 0);  // 将左边的0去掉，filter的这个过滤规则比较严格。
+        if($var != 0) $var = ltrim($var, 0);  // Remove the left 0, filter don't think 00 is an int.
 
-        /* 设置了min。*/
+        /* Min is setted. */
         if(isset($args[1]))
         {
-            /* 同时设置了max。*/
+            /* And Max is setted. */
             if(isset($args[2]))
             {
                 $options = array('options' => array('min_range' => $args[1], 'max_range' => $args[2]));
@@ -54,25 +68,57 @@ class validater
         }
     }
 
-    /* 检查是否是浮点型。*/
+    /**
+     * Float checking.
+     * 
+     * @param  float  $var 
+     * @param  string $decimal 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkFloat($var, $decimal = '.')
     {
         return filter_var($var, FILTER_VALIDATE_FLOAT, array('options' => array('decimail' => $decimal)));
     }
 
-    /* 检查是否是email地址。*/
+    /**
+     * Email checking.
+     * 
+     * @param  string $var 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkEmail($var)
     {
         return filter_var($var, FILTER_VALIDATE_EMAIL);
     }
 
-    /* 检查是否是URL地址。备注：filter的这个检查并不靠普，比如如果url地址含有中文，就会失效。 */
+    /**
+     * URL checking. 
+     *
+     * The check rule of filter don't support chinese.
+     * 
+     * @param  string $var 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkURL($var)
     {
         return filter_var($var, FILTER_VALIDATE_URL);
     }
 
-    /* 检查是否是IP地址。NO_PRIV_RANGE是检查是否是私有地址，NO_RES_RANGE检查是否是保留IP地址。*/
+    /**
+     * IP checking.
+     * 
+     * @param  ip $var 
+     * @param  string $range all|public|static|private
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkIP($var, $range = 'all')
     {
         if($range == 'all')    return filter_var($var, FILTER_VALIDATE_IP);
@@ -84,7 +130,14 @@ class validater
         }
     }
 
-    /* 检查是否是日期。bug: 2009-09-31会被认为合法的日期，因为strtotime自动将其改为了10-01。*/
+    /**
+     * Date checking. Note: 2009-09-31 will be an valid date, because strtotime auto fixed it to 10-01.
+     * 
+     * @param  date $date 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkDate($date)
     {
         if($date == '0000-00-00') return true;
@@ -93,37 +146,84 @@ class validater
         return checkdate(date('m', $stamp), date('d', $stamp), date('Y', $stamp));
     }
 
-    /* 检查是否符合正则表达式。*/
+    /**
+     * REG checking.
+     * 
+     * @param  string $var 
+     * @param  string $reg 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkREG($var, $reg)
     {
         return filter_var($var, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => $reg)));
     }
     
-    /* 检查长度是否在指定的范围内。*/
+    /**
+     * Length checking.
+     * 
+     * @param  string $var 
+     * @param  string $max 
+     * @param  int    $min 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkLength($var, $max, $min = 0)
     {
         return self::checkInt(strlen($var), $min, $max);
     }
 
-    /* 检查长度是否在指定的范围内。*/
+    /**
+     * Empty checking.
+     * 
+     * @param  mixed $var 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkNotEmpty($var)
     {
         return !empty($var);
     }
 
-    /* 检查用户名。*/
+    /**
+     * Account checking.
+     * 
+     * @param  string $var 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkAccount($var)
     {
         return self::checkREG($var, '|[a-zA-Z0-9._]{3}|');
     }
 
-    /* 必须为某值。*/
+    /**
+     * Must equal a value.
+     * 
+     * @param  mixed  $var 
+     * @param  mixed $value 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function checkEqual($var, $value)
     {
         return $var == $value;
     }
 
-    /* 调用回掉函数。*/
+    /**
+     * Call a function to check it.
+     * 
+     * @param  mixed  $var 
+     * @param  string $func 
+     * @static
+     * @access public
+     * @return bool
+     */
     public static function call($var, $func)
     {
         return filter_var($var, FILTER_CALLBACK, array('options' => $func));
@@ -131,21 +231,27 @@ class validater
 }
 
 /**
- * fixer类，提供对数据的修正。
+ * fixer class, to fix data types.
  * 
  * @package framework
  */
 class fixer
 {
     /**
-     * 要处理的数据。
+     * The data to be fixed.
      * 
      * @var ojbect
      * @access private
      */
     private $data;
 
-    /* 构造函数。*/
+    /**
+     * The construction function, according the scope, convert it to object.
+     * 
+     * @param  string $scope    the scope of the var, should be post|get|server|session|cookie|env
+     * @access private
+     * @return void
+     */
     private function __construct($scope)
     {
        switch($scope)
@@ -177,13 +283,25 @@ class fixer
        }
     }
 
-    /* factory。*/
+    /**
+     * The factory function.
+     * 
+     * @param  string $scope 
+     * @access public
+     * @return object fixer object.
+     */
     public function input($scope)
     {
         return new fixer($scope);
     }
 
-    /* 去除email里面的非法字符。*/
+    /**
+     * Email fix.
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object.
+     */
     public function cleanEmail($fieldName)
     {
         $fields = $this->processFields($fieldName);
@@ -191,7 +309,13 @@ class fixer
         return $this;
     }
 
-    /* 对URL进行编码。*/
+    /**
+     * urlenocde.
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object.
+     */
     public function encodeURL($fieldName)
     {
         $fields = $this->processFields($fieldName);
@@ -203,7 +327,13 @@ class fixer
         return $this;
     }
 
-    /* 去除url里面的非法字符。*/
+    /**
+     * Clean the url.
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object.
+     */
     public function cleanURL($fieldName)
     {
         $fields = $this->processFields($fieldName);
@@ -211,7 +341,13 @@ class fixer
         return $this;
     }
 
-    /* 获取浮点数。*/
+    /**
+     * Float fixer.
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object.
+     */
     public function cleanFloat($fieldName)
     {
         $fields = $this->processFields($fieldName);
@@ -219,7 +355,13 @@ class fixer
         return $this;
     }
 
-    /* 获取整型。*/
+    /**
+     * Int fixer. 
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object.
+     */
     public function cleanINT($fieldName = '')
     {
         $fields = $this->processFields($fieldName);
@@ -227,7 +369,13 @@ class fixer
         return $this;
     }
 
-    /* 处理特殊字符。*/
+    /**
+     * Special chars 
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object
+     */
     public function specialChars($fieldName)
     {
         $fields = $this->processFields($fieldName);
@@ -235,7 +383,13 @@ class fixer
         return $this;
     }
 
-    /* 去除字符串里面的标签。*/
+    /**
+     * Strip tags 
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object
+     */
     public function stripTags($fieldName)
     {
         $fields = $this->processFields($fieldName);
@@ -243,7 +397,13 @@ class fixer
         return $this;
     }
 
-    /* 添加斜线。*/
+    /**
+     * Quote 
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object
+     */
     public function quote($fieldName)
     {
         $fields = $this->processFields($fieldName);
@@ -251,7 +411,14 @@ class fixer
         return $this;
     }
 
-    /* 设置默认值。*/
+    /**
+     * Set default value of some fileds.
+     * 
+     * @param  string $fields 
+     * @param  mixed  $value 
+     * @access public
+     * @return object fixer object
+     */
     public function setDefault($fields, $value)
     {
         $fields = strpos($fields, ',') ? explode(',', str_replace(' ', '', $fields)) : array($fields);
@@ -259,21 +426,42 @@ class fixer
         return $this;
     }
 
-    /* 条件设置。*/
+    /**
+     * Set value of a filed on the condition is true.
+     * 
+     * @param  bool   $condition 
+     * @param  string $fieldName 
+     * @param  string $value 
+     * @access public
+     * @return object fixer object
+     */
     public function setIF($condition, $fieldName, $value)
     {
         if($condition) $this->data->$fieldName = $value;
         return $this;
     }
 
-    /* 强制设置。*/
+    /**
+     * Set the value of a filed in force.
+     * 
+     * @param  string $fieldName 
+     * @param  mixed  $value 
+     * @access public
+     * @return object fixer object
+     */
     public function setForce($fieldName, $value)
     {
         $this->data->$fieldName = $value;
         return $this;
     }
 
-    /* 删除某一个字段。*/
+    /**
+     * Remove a field.
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object fixer object
+     */
     public function remove($fieldName)
     {
         $fields = $this->processFields($fieldName);
@@ -281,7 +469,14 @@ class fixer
         return $this;
     }
 
-    /* 条件删除。*/
+    /**
+     * Remove a filed on the condition is true.
+     * 
+     * @param  bool   $condition 
+     * @param  string $fields 
+     * @access public
+     * @return object fixer object
+     */
     public function removeIF($condition, $fields)
     {
         $fields = $this->processFields($fields);
@@ -289,21 +484,43 @@ class fixer
         return $this;
     }
 
-    /* 添加一个字段。*/
+    /**
+     * Add an item to the data.
+     * 
+     * @param  string $fieldName 
+     * @param  mixed  $value 
+     * @access public
+     * @return object fixer object
+     */
     public function add($fieldName, $value)
     {
         $this->data->$fieldName = $value;
         return $this;
     }
 
-    /* 条件添加。*/
+    /**
+     * Add an item to the data on the condition if true.
+     * 
+     * @param  bool   $condition 
+     * @param  string $fieldName 
+     * @param  mixed  $value 
+     * @access public
+     * @return object fixer object
+     */
     public function addIF($condition, $fieldName, $value)
     {
         if($condition) $this->data->$fieldName = $value;
         return $this;
     }
 
-    /* 连接。*/
+    /**
+     * Join the field.
+     * 
+     * @param  string $fieldName 
+     * @param  string $value 
+     * @access public
+     * @return object fixer object
+     */
     public function join($fieldName, $value)
     {
         if(!isset($this->data->$fieldName) or !is_array($this->data->$fieldName)) return $this;
@@ -311,7 +528,14 @@ class fixer
         return $this;
     }
 
-    /* 调用回掉函数。*/
+    /**
+     * Call a function to fix it.
+     * 
+     * @param  string $fieldName 
+     * @param  string $func 
+     * @access public
+     * @return object fixer object
+     */
     public function callFunc($fieldName, $func)
     {
         $fields = $this->processFields($fieldName);
@@ -319,14 +543,26 @@ class fixer
         return $this;
     }
 
-    /* 返回最终处理之后的数据。*/
+    /**
+     * Get the data after fixing.
+     * 
+     * @param  string $fieldName 
+     * @access public
+     * @return object
+     */
     public function get($fieldName = '')
     {
         if(empty($fieldName)) return $this->data;
         return $this->data->$fieldName;
     }
 
-    /* 处理传入的字段名：如果含有逗号，将其拆为数组。然后检查data变量中是否有这个字段。*/
+    /**
+     * Process fields, if contains ',', split it to array. If not in $data, remove it.
+     * 
+     * @param  string $fields 
+     * @access private
+     * @return array
+     */
     private function processFields($fields)
     {
         $fields = strpos($fields, ',') ? explode(',', str_replace(' ', '', $fields)) : array($fields);
