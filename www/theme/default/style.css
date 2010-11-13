@@ -4,7 +4,7 @@
 * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
 * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
-* @package     ZenTaoPMS
+* @package     front
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.ZenTaoPMS.com
 */
@@ -210,17 +210,17 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
 
-/* 最顶部的导航条。*/
+/* Top bar. */
 #topbar  {padding:3px; color:#fff}
 #topbar .yui-b, #topbar a {color:white}
 
-/* 导航条通用设置。*/
+/* The nav bar. /
 #navbar ul {margin:0; padding:0;} 
 #navbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none;}
 #navbar a  {text-decoration:none;}
 #navbar a:hover {color:#ff3600;}
 
-/* 一级菜单。*/
+/* Main menu. */
 #mainmenu ul {background-color:#16528b; height:30px; line-height:30px}
 #mainmenu li {padding:0 8px 0 8px; border-right:3px solid #002242; color:white; font-size:14px;}
 #mainmenu a  {color:white; font-weight:normal;}
@@ -230,7 +230,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #mainmenu #searchbox{float:right; border:none;}
 #mainmenu .button-s{border:none; padding:2px}
 
-/* 模块的菜单。*/
+/* Module menu. */
 #modulemenu    {color:#F30; margin-bottom:5px; font-size:14px;}
 #modulemenu ul {background-color:#cfe5f9; height:28px; line-height:28px;}
 #modulemenu li {padding:0 5px 0 5px;}
@@ -239,7 +239,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a {color:red; font-weight:bold}
 
-/* 功能菜单。*/
+/* Feature bar. */
 #featurebar {margin: 0 0 5px 0; background-color:#b8cdf0; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}
 #featurebar a              {text-decoration:none; color:#333; margin-right:3px; font-size:12px; background-color:#eee; border:1px solid #9b9b9b; padding:2px 3px 2px 3px;}
 #featurebar a:hover        {color:#ff3600; border-color:#F30;}
@@ -250,21 +250,21 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #featurebar .active a       {color:#03F; font-weight:bold; background-color:#c6e2fa; border:1px solid #66a9e7;}
 #featurebar .active select  {border:1px solid #0000ff;}
 
-/* TreeMenu设置。*/
+/* Tree menu. */
 #tree li      {list-style-type:none;}
 #tree .active {color:blue; font-weight:bold}
 
-/* 标题。*/
+/* Title bar. */
 #titlebar{font-size:14px; font-weight:bold; background-color:#b8cdf0; padding:0px 5px; margin:10px 0; height:30px; line-height:30px; border:1px solid #a5cbf3;}
 #titlebar #main {float:left;  width:70%; clear:none; text-align:left}
 #titlebar div   {float:right; width:30%; clear:none; text-align:right}
 #titlebar #main input {font-size:14px}
 #titlebar .text-1 {width:80%}
 
-/* 产品，项目切换的选择器。*/
+/* Product, project switcher. */
 #switcher {color:white; font-style:bold; background:red; cursor:pointer;}
 
-/* 页面其他元素。*/
+/* Other items. */
 .history, .changes {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}
 .history  .changes {border:none; margin:0; padding:0}
 .content {font-size:14px; padding:10px}
@@ -280,12 +280,12 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .tabs a{display:block; width:80%; margin:auto auto 10px auto; padding:5px; border:1px solid blue; text-decoration:none; overflow:hidden; white-space:nowrap; text-align:center}
 .tabs a.current {background:green; color:white}
 
-/* 页脚。*/
+/* Footer. */
 #footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background-color:#CEE7F3; border-top:1px solid #59AED7;}
 #crumbs    {padding:5px 0 5px 10px;}
 #poweredby {padding-right:12px; margin-top:5px; display:block;}
 
-/* debug使用的设置。*/
+/* Debug. */
 #debugbar  {width:100%; position:fixed; bottom:27px; left:0; margin:0; background-color:#CEE7F3} 
 #hiddenbar {width:100%; position:fixed; bottom:35px; left:0; margin:0; background-color:#CEE7F3}
 .hiddenwin {display:none}
