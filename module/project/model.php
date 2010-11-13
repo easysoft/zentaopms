@@ -114,6 +114,7 @@ class projectModel extends model
     public function update($projectID)
     {
         $oldProject = $this->getById($projectID);
+        $team = $this->getTeamMemberPairs($projectID);
         $this->lang->project->team = $this->lang->project->teamname;
         $projectID = (int)$projectID;
         $project = fixer::input('post')
@@ -134,6 +135,21 @@ class projectModel extends model
             ->where('id')->eq($projectID)
             ->limit(1)
             ->exec();
+        foreach($project as $fieldName => $value)
+        {
+            if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QM' or $fieldName == 'RM' )
+            {
+                if(!empty($value) and !isset($team[$value]))
+                {
+                    $member->project     = (int)$projectID;
+                    $member->account     = $value;
+                    $member->joinDate    = helper::today();
+                    $member->role        = $fieldName;
+                    $member->workingHour = '';
+                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                }
+            }
+        }
         if(!dao::isError()) return common::createChanges($oldProject, $project);
     }
 

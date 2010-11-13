@@ -421,6 +421,7 @@ class project extends control
         $this->view->position = $position;
         $this->view->projects = $projects;
         $this->view->project  = $project;
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed,nodeleted');
         $this->view->groups   = $this->loadModel('group')->getPairs();
 
         $this->display();

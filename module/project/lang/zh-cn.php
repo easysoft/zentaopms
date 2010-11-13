@@ -46,6 +46,7 @@ $lang->project->canceledDate = '取消日期';
 $lang->project->PO           = '产品负责人';
 $lang->project->PM           = '项目负责人';
 $lang->project->QM           = '测试负责人';
+$lang->project->RM           = '发布负责人';
 $lang->project->acl          = '访问控制';
 $lang->project->teamname     = '团队名称';
 $lang->project->products     = '相关产品';

@@ -34,6 +34,7 @@ $lang->project->canceledDate = 'Canceled date';
 $lang->project->PO           = 'Product owner';
 $lang->project->PM           = 'Project manager';
 $lang->project->QM           = 'QA manager';
+$lang->project->RM           = 'Release manager';
 $lang->project->acl          = 'Access limitation';
 $lang->project->teamname     = 'Team name';
 $lang->project->products     = 'Products';

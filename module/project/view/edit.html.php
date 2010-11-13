@@ -48,6 +48,22 @@ function setWhite(acl)
         <td><?php echo html::select('status', $lang->project->statusList, $project->status, 'class=text-3');?></td>
       </tr>
       <tr>
+        <th class='rowhead'><?php echo $lang->project->PO;?></th>
+        <td><?php echo html::select('PO', $users, $project->PO, 'class=text-3');?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->project->PM;?></th>
+        <td><?php echo html::select('PM', $users, $project->PM, 'class=text-3');?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->project->QM;?></th>
+        <td><?php echo html::select('QM', $users, $project->QM, 'class=text-3');?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->project->RM;?></th>
+        <td><?php echo html::select('RM', $users, $project->RM, 'class=text-3');?></td>
+      </tr>  
+      <tr>
         <th class='rowhead'><?php echo $lang->project->goal;?></th>
         <td><?php echo html::textarea('goal', $project->goal, "rows='5' class='area-1'");?></td>
       </tr>  
