@@ -1159,10 +1159,11 @@ class router
      */
     public function setParamsByGET($defaultParams)
     {
-        /* Unset the moduleVar, methodVar and viewVar, all the left are the params. */
+        /* Unset the moduleVar, methodVar, viewVar and session var, all the left are the params. */
         unset($_GET[$this->config->moduleVar]);
         unset($_GET[$this->config->methodVar]);
         unset($_GET[$this->config->viewVar]);
+        unset($_GET[$this->config->sessionVar]);
         $this->params = $this->mergeParams($defaultParams, $_GET);
     }
 
