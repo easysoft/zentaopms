@@ -1,62 +1,87 @@
-/* 根据不同的浏览器加载相应的修正样式表文件。*/
+/**
+ * Load css file of special browser.
+ * 
+ * @access public
+ * @return void
+ */
 function loadFixedCSS()
 {
     cssFile = '';
     if($.browser.msie && Math.floor(parseInt($.browser.version)) == 6)
     {
-        cssFile = themeRoot + 'ie.6.css';
+        cssFile = config.themeRoot + '/browser/ie.6.css';
     }
     else if($.browser.mozilla) 
     {
-        cssFile = themeRoot + 'firefox.css';
+        cssFile = config.themeRoot + '/browser/firefox.css';
     }
-    if(cssFile != '')
+    else if($.browser.opera) 
     {
-        document.write("<link rel='stylesheet' id='browsecss' href='" + cssFile + "' type='text/css' media='screen' />");
+        cssFile = config.themeRoot + '/browser/opera.css';
+    }
+    else if($.browser.safari) 
+    {
+        cssFile = config.themeRoot + '/browser/safari.css';
+    }
+    else if($.browser.chrome) 
+    {
+        cssFile = config.themeRoot + '/browser/chrome.css';
     }
 
-    /* 解决safari和chrome的caption问题。*/
-    if($.browser.safari && $('.caption-tl'))
+    if(cssFile != '')
     {
-        document.write("<style>caption{margin-bottom:15px}</style>");
+        document.write("<link rel='stylesheet' href='" + cssFile + "' type='text/css' media='screen' />");
     }
 }
 
-/* JS版本的createLink。*/
+/**
+ * Create link. 
+ * 
+ * @param  string $moduleName 
+ * @param  string $methodName 
+ * @param  string $vars 
+ * @param  string $viewType 
+ * @access public
+ * @return string
+ */
 function createLink(moduleName, methodName, vars, viewType)
 {
-    link = webRoot;
-    if(!viewType) viewType = defaultView;
+    if(!viewType) viewType = config.defaultView;
     if(vars)
     {
         vars = vars.split('&');
         for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
     }
-    if(requestType == 'PATH_INFO')
+    if(config.requestType == 'PATH_INFO')
     {
-        link += moduleName + requestFix + methodName;
+        link = config.webRoot + moduleName + config.requestFix + methodName;
         if(vars)
         {
-            if(pathType == "full")
+            if(config.pathType == "full")
             {
-                for(i = 0; i < vars.length; i ++) link += requestFix + vars[i][0] + requestFix + vars[i][1];
+                for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][0] + config.requestFix + vars[i][1];
             }
             else
             {
-                for(i = 0; i < vars.length; i ++) link += requestFix + vars[i][1];
+                for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][1];
             }
         }
         link += '.' + viewType;
     }
     else
     {
-        link += '?' + moduleVar + '=' + moduleName + '&' + methodVar + '=' + methodName + '&' + viewVar + '=' + viewType;
+        link = config.router + '?' + config.moduleVar + '=' + moduleName + '&' + config.methodVar + '=' + methodName + '&' + config.viewVar + '=' + viewType;
         if(vars) for(i = 0; i < vars.length; i ++) link += '&' + vars[i][0] + '=' + vars[i][1];
     }
     return link;
 }
 
-/* 快速跳转到某一个模块的某一个id。*/
+/**
+ * Go to the view page of one object.
+ * 
+ * @access public
+ * @return void
+ */
 function shortcut()
 {
     objectType  = $('#searchType').attr('value');
@@ -67,7 +92,12 @@ function shortcut()
     }
 }
 
-/* 自动设置所有属性为nobr的title。*/
+/**
+ * Set the titile of all objects which class is .nobr.
+ * 
+ * @access public
+ * @return void
+ */
 function setNowrapObjTitle()
 {
     $('.nobr').each(function (i) 
@@ -83,43 +113,57 @@ function setNowrapObjTitle()
     })
 }
 
-/* 设置产品选择器。*/
+/**
+ * Set the product switcher 
+ * 
+ * @access public
+ * @return void
+ */
 function setProductSwitcher()
 {
     productMode = $.cookie('productMode');
     if(!productMode) productMode = 'all';
     if(productMode == 'all')
     {
-        $("#productID").append($("<option value='noclosed' id='switcher'>" + lblHideClosed + "</option>"));
+        $("#productID").append($("<option value='noclosed' id='switcher'>" + config.lblHideClosed + "</option>"));
     }
     else
     {
-      $("#productID").append($("<option value='all' id='switcher'>" + lblShowAll + "</option>"));
+      $("#productID").append($("<option value='all' id='switcher'>" + config.lblShowAll + "</option>"));
     }
 }
 
-/* 选择产品。*/
+/**
+ * Switch the product.
+ * 
+ * @param  int    $productID 
+ * @param  string $module 
+ * @param  string $method 
+ * @param  string  $extra 
+ * @access public
+ * @return void
+ */
 function switchProduct(productID, module, method, extra)
 {
-    /* 如果传递过来的productID不是数字，则将其设置为产品选择方式。*/
+    /* If the product id is a string, use it as the product browse mode. */
     if(isNaN(productID))
     {
         $.cookie('productMode', productID);
         productID = 0;
     }
 
-    /* product, roadmap, bug, testcase, testtask，直接传递参数。*/
+    /* Module is product, roadmap, bug, testcase or testtask. switch directly. */
     if(module == 'product' || module == 'roadmap' || module == 'bug' || module == 'testcase' || module == 'testtask')
     {
         link = createLink(module, method, "productID=" + productID);
     }
-    /* productplan, relase模块需要处理非browse和create的方法。*/
+    /* Module is productplan, relase, must process method not browse and create. */
     else if(module == 'productplan' || module == 'release')
     {
         if(method != 'browse' && method != 'create') method = 'browse';
         link = createLink(module, method, "productID=" + productID);
     }
-    /* tree，需要单独传递参数。*/
+    /* Module is tree. */
     else if(module == 'tree')
     {
         link = createLink(module, method, "productID=" + productID + '&type=' + extra);
@@ -127,7 +171,16 @@ function switchProduct(productID, module, method, extra)
     location.href=link;
 }
 
-/* 选择文档库*/
+/**
+ * Switch doc library.
+ * 
+ * @param  int    $libID 
+ * @param  string $module 
+ * @param  string $method 
+ * @param  string $extra 
+ * @access public
+ * @return void
+ */
 function switchDocLib(libID, module, method, extra)
 {
     if(module == 'doc')
@@ -141,7 +194,6 @@ function switchDocLib(libID, module, method, extra)
             link = createLink('doc', 'browse');
         }
     }
-    /* tree，需要单独传递参数。*/
     else if(module == 'tree')
     {
         link = createLink(module, method, "rootID=" + libID + '&type=' + extra);
@@ -149,38 +201,56 @@ function switchDocLib(libID, module, method, extra)
     location.href=link;
 }
 
-/* 记住最后选择的产品id。*/
+/**
+ * Save the id of the product last visited.
+ * 
+ * @access public
+ * @return void
+ */
 function saveProduct()
 {
     if($('#productID')) $.cookie('lastProduct', $('#productID').val());
 }
 
-/* 设置项目选择器。*/
+/**
+ * Set project switcher 
+ * 
+ * @access public
+ * @return void
+ */
 function setProjectSwitcher()
 {
     projectMode = $.cookie('projectMode');
     if(!projectMode) projectMode = 'all';
     if(projectMode == 'all')
     {
-        $("#projectID").append($("<option value='noclosed' id='switcher'>" + lblHideClosed + "</option>"));
+        $("#projectID").append($("<option value='noclosed' id='switcher'>" + config.lblHideClosed + "</option>"));
     }
     else
     {
-      $("#projectID").append($("<option value='all' id='switcher'>" + lblShowAll + "</option>"));
+      $("#projectID").append($("<option value='all' id='switcher'>" + config.lblShowAll + "</option>"));
     }
 }
 
-/* 选择项目。*/
+/**
+ * Swtich project.
+ * 
+ * @param  int    $projectID 
+ * @param  string $module 
+ * @param  string $method 
+ * @access public
+ * @return void
+ */
 function switchProject(projectID, module, method)
 {
-    /* 如果传递过来的projectID不是数字，则将其设置为产品选择方式。*/
+    /* The projec id is a string, use it as the project model. */
     if(isNaN(projectID))
     {
         $.cookie('projectMode', projectID);
         projectID = 0;
     }
 
-    /* 如果是build模块，而且是edit方法，跳转地址改为project-build-xx.html。*/
+    /* Process build module. */
     if(module == 'build' && method == 'edit')
     {
         module = 'project';
@@ -190,7 +260,12 @@ function switchProject(projectID, module, method)
     location.href=link;
 }
 
-/* 记住最后选择的项目id。*/
+/**
+ * Save the id of the project last visited.
+ * 
+ * @access public
+ * @return void
+ */
 function saveProject()
 {
     if($('#projectID')) $.cookie('lastProject', $('#projectID').val());
@@ -203,32 +278,39 @@ function switchAccount(account, method)
     location.href=link;
 }
 
-/* 设置ping的地址，防止session超时。*/
+/**
+ * Set the ping url.
+ * 
+ * @access public
+ * @return void
+ */
 function setPing()
 {
     $('#hiddenwin').attr('src', createLink('misc', 'ping'));
 }
 
-/* 设置必填字段。*/
+/**
+ * Set required fields, add star class to them.
+ * 
+ * @access public
+ * @return void
+ */
 function setRequiredFields()
 {
-    if(!requiredFields) return false;
-    requiredFields = requiredFields.split(',');
+    if(!config.requiredFields) return false;
+    requiredFields = config.requiredFields.split(',');
     for(i = 0; i < requiredFields.length; i++)
     {
         $('#' + requiredFields[i]).after('<span class="star"> * </span>');
     }
 }
 
-/* 控制帮助链接的显示。*/
-function toggleHelpLink()
-{
-    $('.helplink').toggle();
-    if($.cookie('help') == 'off') return $.cookie('help', 'on');
-    if($.cookie('help') == 'on')  return $.cookie('help', 'off');
-}
-
-/* 设置帮助链接。*/
+/**
+ * Set the help links of forum's items.
+ * 
+ * @access public
+ * @return void
+ */
 function setHelpLink()
 {
     if(!$.cookie('help'))$.cookie('help', 'on');
@@ -241,19 +323,44 @@ function setHelpLink()
             if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
             if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
             currentFieldName = currentFieldName.toLowerCase();
-            $(this).after(' <a class="helplink ' + className + '" href=http://www.zentao.net/goto.php?item=fieldref&extra=lang=' + clientLang + ',module=' + currentModule + ',method=' + currentMethod + ',field=' + currentFieldName + ' target="_blank">?</a> ');
+            $(this).after(' <a class="helplink ' + className + '" href=http://www.zentao.net/goto.php?item=fieldref&extra=lang=' + config.clientLang + ',module=' + config.currentModule + ',method=' + config.currentMethod + ',field=' + currentFieldName + ' target="_blank">?</a> ');
         }
     );
 }
 
-/* select the language. */
+/**
+ * Toggle the help links.
+ * 
+ * @access public
+ * @return void
+ */
+function toggleHelpLink()
+{
+    $('.helplink').toggle();
+    if($.cookie('help') == 'off') return $.cookie('help', 'on');
+    if($.cookie('help') == 'on')  return $.cookie('help', 'off');
+}
+
+/**
+ * Set the ping url to keep the session.
+ * 
+ * @access public
+ * @return void
+ */
 function selectLang(lang)
 {
     $.cookie('lang', lang);
     location.href = location.href;
 }
 
-/* add one option of a select to another select. */
+/**
+ * add one option of a select to another select. 
+ * 
+ * @param  string $SelectID 
+ * @param  string $TargetID 
+ * @access public
+ * @return void
+ */
 function addItem(SelectID,TargetID)
 {
     ItemList = document.getElementById(SelectID);
@@ -280,7 +387,13 @@ function addItem(SelectID,TargetID)
     }
 }
 
-/* move one selected option from a select. */
+/**
+ * Remove one selected option from a select.
+ * 
+ * @param  string $SelectID 
+ * @access public
+ * @return void
+ */
 function delItem(SelectID)
 {
     ItemList = document.getElementById(SelectID);
@@ -294,7 +407,13 @@ function delItem(SelectID)
     }
 }
 
-/* move one selected option up from a select. */
+/**
+ * move one selected option up from a select. 
+ * 
+ * @param  string $SelectID 
+ * @access public
+ * @return void
+ */
 function upItem(SelectID)
 {
     ItemList = document.getElementById(SelectID);
@@ -316,7 +435,13 @@ function upItem(SelectID)
     }
 }
 
-/* move one selected option down from a select. */
+/**
+ * move one selected option down from a select. 
+ * 
+ * @param  string $SelectID 
+ * @access public
+ * @return void
+ */
 function downItem(SelectID)
 {
     ItemList = document.getElementById(SelectID);
@@ -338,7 +463,13 @@ function downItem(SelectID)
     }
 }
 
-/* select all items of a select. */
+/**
+ * select all items of a select. 
+ * 
+ * @param  string $SelectID 
+ * @access public
+ * @return void
+ */
 function selectItem(SelectID)
 {
     ItemList = document.getElementById(SelectID);
@@ -350,10 +481,10 @@ function selectItem(SelectID)
 }
 
 
-/* 需要不需要ping，已保证session不过期。 */
+/* Ping the server every some minutes to keep the session. */
 needPing = true;
 
-/* 自动执行的代码。*/
+/* When body's ready, execute these. */
 $(document).ready(function() 
 {
     setNowrapObjTitle();
@@ -363,10 +494,10 @@ $(document).ready(function()
     setProjectSwitcher();
     saveProduct();
     saveProject();
-    if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // 5分钟之后开始ping。
+    if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minus, begin ping.
 });
 
-/* CTRL+g 聚焦到搜索框。*/
+/* CTRL+g, auto focus on the search box. */
 $(document).bind('keydown', 'Ctrl+g', function(evt)
 {
     $('#searchQuery').attr('value', '');
