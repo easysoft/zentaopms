@@ -1,67 +1,65 @@
 <?php
 /**
- * The config file of ZenTaoPMS
+ * The config file of ZenTaoPMS.
+ *
+ * Don't modify this file directly, copy the item to my.php and change it.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     ZenTaoPMS
+ * @package     config
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-/* 基本参数设定。*/
-$config->version     = '1.3';             // 版本号，切勿修改。
-$config->encoding    = 'UTF-8';           // 网站的编码。
-$config->cookieLife  = time() + 2592000;  // cookie的生命周期。
-$config->timezone    = 'Asia/Shanghai';   // 时区设置，详细的列表，请访问 http://www.php.net/manual/en/timezones.php
+/* Basic settings. */
+$config->version     = '1.4';             // The version of zentaopms. Don't change it.
+$config->encoding    = 'UTF-8';           // The encoding of znetaopms.
+$config->cookieLife  = time() + 2592000;  // The cookie life time.
+$config->timezone    = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
 
-/* 请求方式设置。*/
-$config->requestType = 'PATH_INFO';       // 如何获取当前请求的信息，可选值：PATH_INFO|GET
-$config->pathType    = 'clean';           // requestType=PATH_INFO: 请求url的格式，可选值为full|clean，full格式会带有参数名称，clean则只有取值。
-$config->requestFix  = '-';               // requestType=PATH_INFO: 请求url的分隔符，可选值为斜线、减号。后面两种形式有助于SEO。
-$config->moduleVar   = 'm';               // requestType=GET: 模块变量名。
-$config->methodVar   = 'f';               // requestType=GET: 方法变量名。
-$config->viewVar     = 't';               // requestType=GET: 模板变量名。
-$config->sessionVar  = 'sid';             // requestType=GET: session变量名。
+/* The request settings. */
+$config->requestType = 'PATH_INFO';       // The request type: PATH_INFO|GET, if PATH_INFO, must use url rewrite.
+$config->pathType    = 'clean';           // If the request type is PATH_INFO, the path type.
+$config->requestFix  = '-';               // The divider in the url when PATH_INFO.
+$config->moduleVar   = 'm';               // requestType=GET: the module var name.
+$config->methodVar   = 'f';               // requestType=GET: the method var name.
+$config->viewVar     = 't';               // requestType=GET: the view var name.
+$config->sessionVar  = 'sid';             // requestType=GET: the session var name.
 
-/* 视图和主题。*/
-$config->views       = ',html,json,csv,'; // 支持的视图列表。
-$config->themes      = 'default,blue';    // 支持的主题列表。
+/* Views and themes. */
+$config->views       = ',html,json';      // Supported view formats.
+$config->themes      = 'default,blue';    // Supported themes.
 
-/* 支持的语言列表。*/
+/* Supported languages. */
 $config->langs['zh-cn'] = '中文简体';
 $config->langs['zh-tw'] = '中文繁體';
 $config->langs['en']    = 'English';
-$config->langs['ja']    = 'Japanese';
-$config->langs['ko']    = 'Korean';
+//$config->langs['ja']  = 'Japanese';
+//$config->langs['ko']  = 'Korean';
 
-/* 默认参数设定。*/
-$config->default->view   = 'html';             // 默认的视图格式。
-$config->default->lang   = 'zh-cn';            // 默认的语言。
-$config->default->theme  = 'default';          // 默认的主题。
-$config->default->module = 'index';            // 默认的模块。当请求中没有指定模块时，加载该模块。
-$config->default->method = 'index';            // 默认的方法。当请求中没有指定方法或者指定的方法不存在时，调用该方法。
+/* Default settings. */
+$config->default->view   = 'html';        // Default view.
+$config->default->lang   = 'en';          // Default language.
+$config->default->theme  = 'default';     // Default theme.
+$config->default->module = 'index';       // Default module.
+$config->default->method = 'index';       // Default method.
 
-/* 上传附件参数设定。*/
-$config->file->dangers = 'php,jsp,py,rb,asp,'; // 不允许上传的文件类型列表。
-$config->file->maxSize = 1024 * 1024;          // 允许上传的文件大小，单位为字节。
+/* Upload settings. */
+$config->file->dangers = 'php,jsp,py,rb,asp,'; // Dangerous files.
+$config->file->maxSize = 1024 * 1024;          // Max size.
 
-/* 数据库参数设定。*/
-$config->db->persistant = false;               // 是否打开持久连接。
-$config->db->driver     = 'mysql';             // pdo的驱动类型，目前暂时只支持mysql。
-$config->db->dao        = true;                // 是否使用DAO。
-$config->db->encoding   = 'UTF8';              // 数据库的编码。
-$config->db->strictMode = false;               // 关闭MySQL的严格模式。
+/* Database settings. */
+$config->db->persistant = false;           // Pconnect or not.
+$config->db->driver     = 'mysql';         // Must be MySQL. Don't support other database server yet.
+$config->db->encoding   = 'UTF8';          // Encoding of database.
+$config->db->strictMode = false;           // Turn off the strict mode of MySQL.
 
-/* 通过对象引用全局变量。*/
-$config->super2OBJ = true;
-
-/* 包含自定义配置文件。*/
+/* Include the custom config file. */
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
 if(file_exists($myConfig)) include $myConfig;
 if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
-/* 数据表的定义。*/
+/* Define the tables. */
 define('TABLE_COMPANY',        $config->db->prefix . 'company');
 define('TABLE_DEPT',           $config->db->prefix . 'dept');
 define('TABLE_CONFIG',         $config->db->prefix . 'config');
