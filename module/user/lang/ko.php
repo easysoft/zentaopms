@@ -59,7 +59,6 @@ $lang->user->realname  = 'Realname';
 $lang->user->nickname  = '별명';
 $lang->user->avatar    = '화신';
 $lang->user->birthyear = '출생 연도';
-$lang->user->birthday  = '생일';
 $lang->user->gendar    = '성별';
 $lang->user->email     = '이메일';
 $lang->user->msn       = 'MSN';

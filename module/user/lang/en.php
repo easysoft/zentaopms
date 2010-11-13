@@ -59,7 +59,6 @@ $lang->user->realname  = 'Realname';
 $lang->user->nickname  = 'Nickname';
 $lang->user->avatar    = 'Avatar';
 $lang->user->birthyear = 'Birth year';
-$lang->user->birthday  = 'Birthday';
 $lang->user->gendar    = 'Gender';
 $lang->user->email     = 'Email';
 $lang->user->msn       = 'MSN';

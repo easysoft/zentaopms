@@ -59,7 +59,6 @@ $lang->user->realname  = '真實姓名';
 $lang->user->nickname  = '暱稱';
 $lang->user->avatar    = '頭像';
 $lang->user->birthyear = '出生年';
-$lang->user->birthday  = '出生月日';
 $lang->user->gendar    = '性別';
 $lang->user->email     = '郵箱';
 $lang->user->msn       = 'MSN';

@@ -59,7 +59,6 @@ $lang->user->realname  = '実名';
 $lang->user->nickname  = 'ニックネーム';
 $lang->user->avatar    = 'アバター';
 $lang->user->birthyear = '誕生年';
-$lang->user->birthday  = '誕生日';
 $lang->user->gendar    = '性別';
 $lang->user->email     = 'Eメール';
 $lang->user->msn       = 'MSNの';
