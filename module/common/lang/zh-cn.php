@@ -53,6 +53,8 @@ $lang->switchDisplay= '[切换显示]';
 $lang->switchHelp   = '切换帮助';
 $lang->addFiles     = '上传了附件 ';
 $lang->files        = '附件 ';
+$lang->unfold       = '+';
+$lang->fold         = '-';
 
 $lang->selectAll    = '全选';
 $lang->notFound     = '抱歉，您访问的对象并不存在！';
@@ -109,6 +111,7 @@ $lang->my->menu->story    = '我的需求|my|story|';
 $lang->my->menu->project  = '我的项目|my|project|';
 $lang->my->menu->profile  = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
+
 
 /* 产品视图设置。*/
 $lang->product->menu->list   = '%s';

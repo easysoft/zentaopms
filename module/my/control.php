@@ -79,7 +79,7 @@ class my extends control
     }
 
     /* 用户的bug列表。*/
-    public function bug($type = 'assignToMe', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* 登记session，加载语言。*/
         $this->session->set('bugList', $this->app->getURI(true));
