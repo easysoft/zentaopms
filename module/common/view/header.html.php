@@ -3,7 +3,6 @@ if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::
 include 'header.lite.html.php';
 include 'colorbox.html.php';
 ?>
-
 <div id='topbar' class='yui-d0 yui-g'>
   <div class='yui-u first'>
     <div class='yui-b'>
