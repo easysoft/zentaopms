@@ -68,6 +68,7 @@ $lang->testcase->allCases       = 'All case';
 $lang->testcase->needConfirm    = 'Story changed';
 $lang->testcase->moduleCases    = 'By module';
 $lang->testcase->bySearch       = 'By search';
+$lang->testcase->doneByMe       = 'Done by me';
 
 $lang->testcase->lblProductAndModule         = 'Product & module';
 $lang->testcase->lblTypeAndPri               = 'Type & priority';

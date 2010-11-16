@@ -107,6 +107,7 @@ $lang->my->menu->account  = '%s' . $lang->arrow;
 $lang->my->menu->todo     = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task     = 'Task|my|task|';
 $lang->my->menu->bug      = 'Bug|my|bug|';
+$lang->my->menu->test     = 'Test|my|test|';
 $lang->my->menu->story    = 'Story|my|story|';
 $lang->my->menu->project  = 'Project|my|project|';
 $lang->my->menu->profile  = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');

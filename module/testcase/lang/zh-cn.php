@@ -68,6 +68,7 @@ $lang->testcase->allCases       = '所有Case';
 $lang->testcase->needConfirm    = '需求有变动的用例';
 $lang->testcase->moduleCases    = '按模块浏览';
 $lang->testcase->bySearch       = '搜索';
+$lang->testcase->doneByMe       = '我完成的';
 
 $lang->testcase->lblProductAndModule         = '产品模块';
 $lang->testcase->lblTypeAndPri               = '类型&优先级';

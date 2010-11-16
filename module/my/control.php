@@ -127,6 +127,53 @@ class my extends control
         $this->display();
     }
 
+    /* 用户的test列表。*/
+    public function test($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* 登记session，加载语言。*/
+        $this->session->set('testList', $this->app->getURI(true));
+        $this->app->loadLang('testcase');
+        
+        /* 加载分页类。*/
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        
+        $cases = array();
+        if($type == 'assigntome')
+        {
+            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                ->Where('t1.assignedTo')->eq($this->app->user->account)
+                ->andWhere('t1.status')->ne('done')
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'donebyme')
+        {
+            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                ->Where('t1.assignedTo')->eq($this->app->user->account)
+                ->andWhere('t1.status')->eq('done')
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'openedbyme')
+        {
+            $cases = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_CASE)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        
+        /* 赋值。*/
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->test;
+        $this->view->position[]    = $this->lang->my->test;
+        $this->view->cases         = $cases;
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->tabID         = 'test';
+        $this->view->type          = $type;
+        $this->view->pager         = $pager;
+        
+        $this->display();
+    }
+
     /* 用户的project列表。*/
     public function project()
     {
