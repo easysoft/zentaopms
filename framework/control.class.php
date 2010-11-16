@@ -271,11 +271,11 @@ class control
         /* The main view file, extension view file and hook file. */
         $mainViewFile = $modulePath . 'view' . $this->pathFix . $methodName . '.' . $this->viewType . '.php';
         $extViewFile  = $viewExtPath . $methodName . ".{$this->viewType}.php";
-        $extHookFile  = $viewExtPath . $methodName . ".{$this->viewType}.hook.php";
+        $extHookFiles = helper::ls($viewExtPath, '.hook.php');
 
         $viewFile = file_exists($extViewFile) ? $extViewFile : $mainViewFile;
         if(!file_exists($viewFile)) $this->app->error("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
-        if(file_exists($extHookFile)) return array('viewFile' => $viewFile, 'hookFile' => $extHookFile);
+        if(!empty($extHookFiles)) return array('viewFile' => $viewFile, 'hookFiles' => $extHookFiles);
         return $viewFile;
     }
 
@@ -391,7 +391,10 @@ class control
         extract((array)$this->view);
         ob_start();
         include $viewFile;
-        if(isset($hookFile)) include $hookFile;
+        if(isset($hookFiles))
+        {
+            foreach($hookFiles as $hookFile) include $hookFile;
+        }
         $this->output .= ob_get_contents();
         ob_end_clean();
 
