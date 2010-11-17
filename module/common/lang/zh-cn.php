@@ -180,7 +180,7 @@ $lang->company->menu->dept        = array('link' => '部门维护|dept|browse', 
 $lang->company->menu->browseGroup = array('link' => '权限分组|group|browse', 'subModule' => 'group');
 $lang->company->menu->edit        = array('link' => '公司管理|company|edit');
 $lang->company->menu->addGroup    = array('link' => '添加分组|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => '添加用户|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser     = array('link' => '添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
