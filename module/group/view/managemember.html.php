@@ -10,6 +10,15 @@
  * @link        http://www.zentao.net
  */
 ?>
+<script language="Javascript">
+function checkall(checker)
+{
+    $('input').each(function() 
+    {
+        $(this).attr("checked", checker.checked)
+    });
+}
+</script>
 <?php include '../../common/view/header.html.php';?>
 <style>#users span{display:block; width:100px; float:left}</style>
 <div class='yui-d0'>
@@ -17,9 +26,13 @@
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>
       <tr>
+        <th class='rowhead'><?php echo $lang->group->checkall;?><input type='checkbox' onclick='checkall(this);'></th>
         <td id='users'><?php foreach($allUsers as $account => $realname) echo '<span>' . html::checkbox('members', array($account => $realname), $groupUsers) . '</span>';?></td>
       </tr>
-      <tr><td class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td></tr>
+      <tr>
+        <th class='rowhead'></th>
+        <td class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td>
+      </tr>
     </table>
   </form>
 </div>  
