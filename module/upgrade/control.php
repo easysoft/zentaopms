@@ -11,13 +11,23 @@
  */
 class upgrade extends control
 {
-    /* 升级程序首页。*/
+    /**
+     * The index page.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->display();
     }
 
-    /* 选择系统。*/
+    /**
+     * Select the version of old zentao.
+     * 
+     * @access public
+     * @return void
+     */
     public function selectVersion()
     {
         $version = str_replace(array(' ', '.'), array('', '_'), $this->config->installedVersion);
@@ -28,18 +38,28 @@ class upgrade extends control
         $this->display();
     }
 
-    /* 确认。*/
+    /**
+     * Confirm the version.
+     * 
+     * @access public
+     * @return void
+     */
     public function confirm()
     {
         $this->view->header->title = $this->lang->upgrade->confirm;
         $this->view->position[]    = $this->lang->upgrade->common;
-        $this->view->confirm       = $this->upgrade->confirm($this->post->fromVersion);
+        $this->view->confirm       = $this->upgrade->getConfirm($this->post->fromVersion);
         $this->view->fromVersion   = $this->post->fromVersion;
 
         $this->display();
     }
 
-    /* 执行转换。*/
+    /**
+     * Execute the upgrading.
+     * 
+     * @access public
+     * @return void
+     */
     public function execute()
     {
         $this->upgrade->execute($this->post->fromVersion);
