@@ -114,7 +114,7 @@ class task extends control
         $this->view->header->title = $this->lang->task->edit;
         $this->view->position[]    = $this->lang->task->edit;
         $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->members       = $this->loadModel('user')->setDeleted($this->view->members, $this->view->task->owner);        
+        $this->view->members       = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->owner);        
         
         $this->display();
     }
@@ -210,8 +210,6 @@ class task extends control
         /* 赋值。*/
         $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
         $this->view->position[]    = $this->lang->task->start;
-        $this->view->members       = $this->loadModel('user')->setDeleted($this->view->members, $this->view->task->owner);        
-        
         $this->display();
     }
     
@@ -240,7 +238,6 @@ class task extends control
         /* 赋值。*/
         $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->complete;
         $this->view->position[]    = $this->lang->task->complete;
-        $this->view->members       = $this->loadModel('user')->setDeleted($this->view->members, $this->view->task->owner);        
         
         $this->display();
     }
@@ -270,7 +267,6 @@ class task extends control
         /* 赋值。*/
         $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->cancel;
         $this->view->position[]    = $this->lang->task->cancel;
-        $this->view->members       = $this->loadModel('user')->setDeleted($this->view->members, $this->view->task->owner);        
         
         $this->display();
     }
