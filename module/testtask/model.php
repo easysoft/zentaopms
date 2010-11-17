@@ -13,17 +13,31 @@
 <?php
 class testtaskModel extends model
 {
-    /* 设置菜单。*/
+    /**
+     * Set the menu. 
+     * 
+     * @param  array $products 
+     * @param  int   $productID 
+     * @access public
+     * @return void
+     */
     public function setMenu($products, $productID)
     {
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testtask', 'browse');\"");
-        common::setMenuVars($this->lang->testtask->menu, 'product',  $selectHtml . $this->lang->arrow);
-        common::setMenuVars($this->lang->testtask->menu, 'bug',      $productID);
-        common::setMenuVars($this->lang->testtask->menu, 'testcase', $productID);
-        common::setMenuVars($this->lang->testtask->menu, 'testtask', $productID);
+        foreach($this->lang->testtask->menu as $key => $value)
+        {
+            $replace = ($key == 'product') ? $selectHtml : $productID;
+            common::setMenuVars($this->lang->testtask->menu, $key, $replace);
+        }
     }
 
-    /* 创建一个测试任务。*/
+    /**
+     * Create a test task.
+     * 
+     * @param  int   $productID 
+     * @access public
+     * @return void
+     */
     function create($productID)
     {
         $task = fixer::input('post')
@@ -34,7 +48,15 @@ class testtaskModel extends model
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
-    /* 获得某一个产品的测试任务列表。*/
+    /**
+     * Get test taskes of a product.
+     * 
+     * @param  int    $productID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getProductTasks($productID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
@@ -49,7 +71,13 @@ class testtaskModel extends model
             ->fetchAll();
     }
 
-    /* 获取一个测试任务的详细信息。*/
+    /**
+     * Get test task info by id.
+     * 
+     * @param  int   $taskID 
+     * @access public
+     * @return void
+     */
     public function getById($taskID)
     {
         return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
@@ -60,18 +88,28 @@ class testtaskModel extends model
             ->where('t1.id')->eq((int)$taskID)->fetch();
     }
 
-    /* 更新测试任务信息。*/
+    /**
+     * Update a test task.
+     * 
+     * @param  int   $taskID 
+     * @access public
+     * @return void
+     */
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $task = fixer::input('post')
-            ->stripTags('name')
-            ->get();
+        $task = fixer::input('post')->stripTags('name')->get();
         $this->dao->update(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')->where('id')->eq($taskID)->exec();
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
-    /* 关联用例。*/
+    /**
+     * Link cases.
+     * 
+     * @param  int   $taskID 
+     * @access public
+     * @return void
+     */
     public function linkCase($taskID)
     {
         if($this->post->cases == false) return;
@@ -86,7 +124,14 @@ class testtaskModel extends model
         }
     }
 
-    /* 获得任务的执行用例列表。*/
+    /**
+     * Get test runs of a test task.
+     * 
+     * @param  int   $taskID 
+     * @param  int   $moduleID 
+     * @access public
+     * @return array
+     */
     public function getRuns($taskID, $moduleID)
     {
         return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
@@ -96,7 +141,14 @@ class testtaskModel extends model
             ->fetchAll();
     }
 
-    /* 获得需要用户执行的用例列表。*/
+    /**
+     * Get test runs of a user.
+     * 
+     * @param  int   $taskID 
+     * @param  int   $user 
+     * @access public
+     * @return array
+     */
     public function getUserRuns($taskID, $user)
     {
         return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
@@ -106,7 +158,13 @@ class testtaskModel extends model
             ->fetchAll();
     }
 
-    /* 获得某一个testrun的信息。*/
+    /**
+     * Get info of a test run.
+     * 
+     * @param  int   $runID 
+     * @access public
+     * @return void
+     */
     public function getRunById($runID)
     {
         $testRun = $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
@@ -114,10 +172,16 @@ class testtaskModel extends model
         return $testRun;
     }
 
-    /* 创建测试结果。*/
+    /**
+     * Create test result 
+     * 
+     * @param  int   $runID 
+     * @access public
+     * @return void
+     */
     public function createResult($runID)
     {
-        /* 计算case的结果。*/
+        /* Compute the test result. */
         $caseResult = 'pass';
         if(!$this->post->passall)
         {
@@ -131,7 +195,7 @@ class testtaskModel extends model
             }
         }
 
-        /* 合并步骤的实际输出结果。*/
+        /* Create result of every step. */
         foreach($this->post->steps as $stepID =>$stepResult)
         {
             $step['result'] = $stepResult;
@@ -139,6 +203,7 @@ class testtaskModel extends model
             $stepResults[$stepID] = $step;
         }
 
+        /* Insert into testResult table. */
         $now = helper::now();
         $result = fixer::input('post')
             ->add('run', $runID)
@@ -148,6 +213,8 @@ class testtaskModel extends model
             ->remove('steps,reals,passall')
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+
+        /* Update testRun's status. */
         if(!dao::isError())
         {
             $runStatus = $caseResult == 'blocked' ? 'blocked' : 'done';
@@ -160,7 +227,13 @@ class testtaskModel extends model
         }
     }
 
-    /* 获得执行结果。*/
+    /**
+     * Get results of a test run.
+     * 
+     * @param  int   $runID 
+     * @access public
+     * @return array
+     */
     public function getRunResults($runID)
     {
         $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
