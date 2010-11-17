@@ -13,26 +13,44 @@
 <?php
 class userModel extends model
 {
-    /* 设置菜单。*/
+    /**
+     * Set the menu.
+     * 
+     * @param  array  $users    user pairs
+     * @param  string $account  current account
+     * @access public
+     * @return void
+     */
     public function setMenu($users, $account)
     {
         $methodName = $this->app->getMethodName();
         $selectHtml = html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '$methodName')\"");
-        common::setMenuVars($this->lang->user->menu, 'account', $selectHtml);
-        common::setMenuVars($this->lang->user->menu, 'todo',    $account);
-        common::setMenuVars($this->lang->user->menu, 'task',    $account);
-        common::setMenuVars($this->lang->user->menu, 'bug',     $account);
-        common::setMenuVars($this->lang->user->menu, 'project', $account);
-        common::setMenuVars($this->lang->user->menu, 'profile', $account);
+        $menu       = $this->lang->user->menu;
+        foreach($this->lang->user->menu as $key => $value)
+        {
+            $replace = ($key == 'account') ? $selectHtml : $account;
+            common::setMenuVars($this->lang->user->menu, $key, $replace);
+        }
     }
 
-    /* 获得某一个公司的用户列表。*/
+    /**
+     * Get users list of current company.
+     * 
+     * @access public
+     * @return void
+     */
     public function getList()
     {
         return $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->orderBy('account')->fetchAll();
     }
 
-    /* 获得account=>realname的列表。params: noletter|noempty|noclosed|nodeleted。*/
+    /**
+     * Get the account=>relaname pairs.
+     * 
+     * @param  string $params   noletter|noempty|noclosed|nodeleted, can be sets of theme
+     * @access public
+     * @return array
+     */
     public function getPairs($params = '')
     {
         $users = $this->dao->select('account, realname')->from(TABLE_USER)
@@ -51,8 +69,15 @@ class userModel extends model
         return $users;
     }
     
-    /* 追加已经删除的用户。*/
-    public function setDeleted($users, $deleteds = '')
+    /**
+     * Appened deleted users to the user list.
+     * 
+     * @param  array    $users 
+     * @param  string   $deleteds   the deleted users, can be a list
+     * @access public
+     * @return array new user lists with deleted users.
+     */
+    public function appendDeleted($users, $deleteds = '')
     {
         $deleteds = explode(',', $deleteds);
         foreach($deleteds as $deleted)
@@ -62,7 +87,13 @@ class userModel extends model
         return $users;
     }
 
-    /* 获得用户的真实姓名和email地址列表。*/
+    /**
+     * Get user list with email and real name.
+     * 
+     * @param  string|array $users 
+     * @access public
+     * @return array
+     */
     public function getRealNameAndEmails($users)
     {
         $users = $this->dao->select('account, email, realname')->from(TABLE_USER)->where('account')->in($users)->fetchAll('account');
@@ -71,7 +102,13 @@ class userModel extends model
         return $users;
     }
 
-    /* 通过id获取某一个用户的信息。*/
+    /**
+     * Get user info by ID.
+     * 
+     * @param  int    $userID 
+     * @access public
+     * @return object|bool
+     */
     public function getById($userID)
     {
         $user = $this->dao->select('*')->from(TABLE_USER)
@@ -83,10 +120,14 @@ class userModel extends model
         return $user;
     }
 
-    /* 新增一个用户。*/
+    /**
+     * Create a user.
+     * 
+     * @access public
+     * @return void
+     */
     public function create()
     {
-        /* 先检查密码是否符合规则。*/
         if(!$this->checkPassword()) return;
 
         $user = fixer::input('post')
@@ -105,13 +146,17 @@ class userModel extends model
             ->exec();
     }
 
-    /* 更新一个用户。*/
+    /**
+     * Update a user.
+     * 
+     * @param  int    $userID 
+     * @access public
+     * @return void
+     */
     public function update($userID)
     {
-        /* 先检查密码是否符合规则。*/
         if(!$this->checkPassword()) return;
 
-        /* 进行其他的检查，更新数据库。*/
         $userID = (int)$userID;
         $user = fixer::input('post')
             ->setIF(isset($_POST['join']) and $this->post->join == '', 'join', '0000-00-00')
@@ -130,7 +175,12 @@ class userModel extends model
             ->exec();
     }
 
-    /* 检查密码是否符合要求。*/
+    /**
+     * Check the passwds posted.
+     * 
+     * @access public
+     * @return bool
+     */
     public function checkPassword()
     {
         if($this->post->password1 != false)
@@ -142,26 +192,25 @@ class userModel extends model
     }
     
     /**
-     * 验证用户的身份。
+     * Identify a user.
      * 
-     * @param   string $account     用户账号
-     * @param   string $password    用户密码
+     * @param   string $account     the user account
+     * @param   string $password    the user password or auth hash
      * @access  public
      * @return  object
      */
     public function identify($account, $password)
     {
         if(!$account or !$password) return false;
-
+  
+        /* Get the user first. If $password length is 32, don't add the password condition.  */
         $user = $this->dao->select('*')->from(TABLE_USER)
             ->where('account')->eq($account)
-            ->beginIF(strlen($password) != 32)
-            ->andWhere('password')->eq(md5($password))
-            ->fi()
+            ->beginIF(strlen($password) != 32)->andWhere('password')->eq(md5($password))->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch();
 
-        /* 密码长度为32位，改用md5 hash方式验证。*/
+        /* If the length of $password is 32, checking by the auth hash. */
         if(strlen($password) == 32)
         {
             $hash = $this->session->rand ? md5($user->password . $this->session->rand) : $user->password;
@@ -170,7 +219,7 @@ class userModel extends model
 
         if($user)
         {
-            $ip   = $_SERVER['REMOTE_ADDR'];
+            $ip   = $this->server->remove_addr;
             $last = time();
             $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
             $user->last = date(DT_DATETIME1, $user->last);
@@ -179,11 +228,11 @@ class userModel extends model
     }
 
     /**
-     * 取得对用户的授权。
+     * Authorize a user.
      * 
-     * @param   string $account   用户账号
+     * @param   string $account
      * @access  public
-     * @return  array             包含用户权限的数组。
+     * @return  array the user rights.
      */
     public function authorize($account)
     {
@@ -213,23 +262,35 @@ class userModel extends model
 
     /* 
     /**
-     * 判断用户是否在线。
+     * Judge a user is logon or not.
      * 
      * @access public
      * @return bool
      */
     public function isLogon()
     {
-        return (isset($_SESSION['user']) and !empty($_SESSION['user']) and $_SESSION['user']->account != 'guest');
+        return ($this->session->user and $this->session->user->account != 'guest');
     }
 
-    /* 获得用户所属的分组。*/
+    /**
+     * Get groups a user belongs to.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return array
+     */
     public function getGroups($account)
     {
         return $this->dao->findByAccount($account)->from(TABLE_USERGROUP)->fields('`group`')->fetchPairs();
     }
 
-    /* 获得用户参与的项目列表。*/
+    /**
+     * Get projects a user participated. 
+     * 
+     * @param  string $account 
+     * @access public
+     * @return array
+     */
     public function getProjects($account)
     {
         return $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
@@ -239,7 +300,13 @@ class userModel extends model
             ->fetchAll();
     }
 
-    /* 获得用户的Bug列表。*/
+    /**
+     * Get bugs assigned to a user.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return array
+     */
     public function getBugs($account)
     {
         return $this->dao->findByAssignedTo($account)->from(TABLE_BUG)->andWhere('deleted')->eq(0)->fetchAll();

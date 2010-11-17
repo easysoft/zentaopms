@@ -13,7 +13,12 @@ class user extends control
 {
     private $referer;
 
-    /* 构造函数。*/
+    /**
+     * Construct 
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -21,36 +26,47 @@ class user extends control
         $this->loadModel('dept');
     }
 
+    /**
+     * View a user.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
     public function view($account)
     {
         $this->locate($this->createLink('user', 'todo', "account=$account"));
     }
 
-    /* 用户的todo列表。*/
+    /**
+     * Todos of a user.
+     * 
+     * @param  string $account 
+     * @param  string $type         the tod type, today|lastweek|thisweek|all|undone, or a date.
+     * @param  string $status 
+     * @access public
+     * @return void
+     */
     public function todo($account, $type = 'today', $status = 'all')
     {
-        /* 登记session。*/
+        /* Set thie url to session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList', $uri);
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
 
-        /* 加载todo model。*/
-        $this->loadModel('todo');
+        /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-
-        /* 设置菜单。*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
-        $todos = $this->todo->getList($type, $account, $status);
+        /* Get user, totos. */
+        $user  = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $todos = $this->loadModel('todo')->getList($type, $account, $status);
         $date  = (int)$type == 0 ? $this->todo->today() : $type;
 
-        /* 设定header和position信息。*/
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
         $position[]      = $this->lang->user->todo;
 
-        /* 赋值。*/
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->tabID    = 'todo';
@@ -64,51 +80,56 @@ class user extends control
         $this->display();
     }
 
-    /* 用户的task列表。*/
+    /**
+     * Taskes of a user.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
     public function task($account)
     {
+        /* Save the session. */
         $this->session->set('taskList', $this->app->getURI(true));
 
-        /* 加载task model。*/
-        $this->loadModel('task');
+        /* Set the menu. */
         $this->lang->set('menugroup.user', 'company');
-        $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-
-        /* 设置菜单。*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
- 
-        /* 设定header和position信息。*/
+
+        /* Assign. */
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
         $position[]      = $this->lang->user->task;
-
-        /* 赋值。*/
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->tabID    = 'task';
-        $this->view->tasks    = $this->task->getUserTasks($account);
+        $this->view->tasks    = $this->loadModel('task')->getUserTasks($account);
         $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         $this->display();
     }
 
-    /* 用户的bug列表。*/
+    /**
+     * User bugs. 
+     * 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
     public function bug($account)
     {
+        /* Save the session. */
         $this->session->set('bugList', $this->app->getURI(true));
 
-        /* 加载bug model。*/
-        $this->loadModel('bug');
+        /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-
-        /* 设置菜单。*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+
+        /* Load the lang of bug module. */
+        $this->app->loadLang('bug');
  
-        /* 设定header和position信息。*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
         $position[]      = $this->lang->user->bug;
 
-        /* 赋值。*/
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->tabID    = 'bug';
@@ -119,22 +140,22 @@ class user extends control
         $this->display();
     }
 
-    /* 用户的project列表。*/
+    /**
+     * User projects. 
+     * 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
     public function project($account)
     {
-        /* 加载project model。*/
+        /* Set the menus. */
         $this->loadModel('project');
         $this->lang->set('menugroup.user', 'company');
-        $user = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-
-        /* 设置菜单。*/
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
-        /* 设定header和position信息。*/
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
         $position[]      = $this->lang->user->project;
-
-        /* 赋值。*/
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->tabID    = 'project';
@@ -144,13 +165,19 @@ class user extends control
         $this->display();
     }
 
-    /* 查看个人档案。*/
+    /**
+     * The profile of a user.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
     public function profile($account)
     {
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->profile;
         $position[]      = $this->lang->user->profile;
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
         $this->view->header   = $header;
@@ -160,8 +187,14 @@ class user extends control
         $this->display();
     }
 
-    /* 设置referer信息。*/
-    private function setReferer($referer = 0)
+    /**
+     * Set the rerferer.
+     * 
+     * @param  string   $referer 
+     * @access private
+     * @return void
+     */
+    private function setReferer($referer = '')
     {
         if(!empty($referer))
         {
@@ -169,15 +202,21 @@ class user extends control
         }
         else
         {
-            $this->referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+            $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
         }
         $this->referer = htmlspecialchars($this->referer);
     }
 
-    /* 创建一个用户。*/
-    public function create($deptID = 0, $from = 'admin')
+    /**
+     * Create a suer.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return void
+     */
+    public function create($deptID = 0)
     {
-        $this->lang->set('menugroup.user', $from);
+        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu = $this->lang->company->menu;
 
         if(!empty($_POST))
@@ -197,23 +236,22 @@ class user extends control
         $this->display();
     }
 
-    /* 编辑一个用户。*/
-    public function edit($userID, $from = 'admin')
+    /**
+     * Edit a user.
+     * 
+     * @param  string|int $userID   the int user id or account
+     * @access public
+     * @return void
+     */
+    public function edit($userID)
     {
-        $this->lang->set('menugroup.user', $from);
+        $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu = $this->lang->company->menu;
         if(!empty($_POST))
         {
             $this->user->update($userID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($from == 'admin')
-            {
-                die(js::locate($this->createLink('admin', 'browseuser'), 'parent'));
-            }
-            else
-            {
-                die(js::locate($this->createLink('company', 'browse'), 'parent'));
-            }
+            die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
         $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
@@ -226,7 +264,14 @@ class user extends control
         $this->display();
     }
 
-    /* 删除一个用户。*/
+    /**
+     * Delete a user.
+     * 
+     * @param  int    $userID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function delete($userID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -240,22 +285,8 @@ class user extends control
         }
     }
 
-    /* 激活一个用户。*/
-    public function activate($userID, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->user->confirmActivate, $this->createLink('user', 'activate', "userID=$userID&confirm=yes")));
-        }
-        else
-        {
-            $this->user->activate($userID);
-            die(js::locate($this->createLink('company', 'browse'), 'parent'));
-        }
-    }
-
     /**
-     * 登陆系统：完成用户身份验证，并取得授权。
+     * User login, identify him and authorize him.
      * 
      * @access public
      * @return void
@@ -267,7 +298,7 @@ class user extends control
         $loginLink = $this->createLink('user', 'login');
         $denyLink  = $this->createLink('user', 'deny');
 
-        /* 如果用户已经登录，返回原来的页面。*/
+        /* If user is logon, back to the rerferer. */
         if($this->user->isLogon())
         {
             if(strpos($this->referer, $loginLink) === false and 
@@ -283,7 +314,7 @@ class user extends control
             }
         }
 
-        /* 用户提交了登陆信息，则检查用户的身份。*/
+        /* Passed account and password by post or get. */
         if(!empty($_POST) or (isset($_GET['account']) and isset($_GET['password'])))
         {
             $account  = '';
@@ -297,15 +328,13 @@ class user extends control
 
             if($user)
             {
-                /* 对用户进行授权，并登记session。*/
+                /* Authorize him and save to session. */
                 $user->rights = $this->user->authorize($account);
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
-
-                /* 记录登录记录。*/
                 $this->loadModel('action')->create('user', $user->id, 'login');
 
-                /* POST变量中设置了referer信息，且非user/login.html, 非user/deny.html，并且来自zentao系统。*/
+                /* Go to the referer. */
                 if($this->post->referer and 
                    strpos($this->post->referer, $loginLink) === false and 
                    strpos($this->post->referer, $denyLink)  === false 
@@ -336,7 +365,15 @@ class user extends control
         }
     }
 
-    /* 访问受限页面。*/
+    /**
+     * Deny page.
+     * 
+     * @param  string $module
+     * @param  string $method 
+     * @param  string $refererBeforeDeny    the referer of the denied page.
+     * @access public
+     * @return void
+     */
     public function deny($module, $method, $refererBeforeDeny = '')
     {
         $this->setReferer();
@@ -344,8 +381,8 @@ class user extends control
         $this->view->header            = $header;
         $this->view->module            = $module;
         $this->view->method            = $method;
-        $this->view->denyPage          = $this->referer;        // 访问受限的页面。
-        $this->view->refererBeforeDeny = $refererBeforeDeny;    // 受限页面之前的referer页面。
+        $this->view->denyPage          = $this->referer;        // The denied page.
+        $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
         $this->app->loadLang($module);
         $this->app->loadLang('index');
         $this->display();
@@ -353,7 +390,7 @@ class user extends control
     }
 
     /**
-     * 退出系统。
+     * Logout.
      * 
      * @access public
      * @return void
