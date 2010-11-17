@@ -42,7 +42,13 @@ function checkall(checker)
         <td id='<?php echo $moduleName;?>' class='pv-10px'>
           <?php $i = 1;?>
           <?php foreach($moduleActions as $action => $actionLabel):?>
-          <div class='w-p20 f-left'><input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> /> <?php echo $lang->$moduleName->$actionLabel;?></div>
+          <div class='w-p20 f-left'><input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> />
+          <?php if(isset($lang->group->newPriv[$moduleName][$actionLabel])):?>
+          <font color="#FF0000"><?php echo $lang->$moduleName->$actionLabel;?></font>
+          <?php else:?>
+          <?php echo $lang->$moduleName->$actionLabel;?>
+          <?php endif;?>
+          </div>
           <?php if(($i %  4) == 0) echo "<div class='c-both'></div>"; $i ++;?>
           <?php endforeach;?>
         </td>

@@ -35,4 +35,5 @@ $lang->group->option   = '选项';
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
+$lang->group->newPriv['my']['test'] = '我的测试';
 include (dirname(__FILE__) . '/resource.php');

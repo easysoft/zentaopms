@@ -35,4 +35,5 @@ $lang->group->option   = 'Option';
 $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
 
+$lang->group->newPriv['my']['test'] = 'Test';
 include (dirname(__FILE__) . '/resource.php');
