@@ -13,16 +13,30 @@
 <?php
 class treeModel extends model
 {
-    /* 通过模块id获取模块信息。*/
+    /**
+     * Get module by ID.
+     * 
+     * @param  int    $moduleID 
+     * @access public
+     * @return object
+     */
     public function getByID($moduleID)
     {
         return $this->dao->findById((int)$moduleID)->from(TABLE_MODULE)->fetch();
     }
 
-    /* 生成查询的sql语句。*/
+    /**
+     * Build the sql query.
+     * 
+     * @param  int    $rootID 
+     * @param  string $type 
+     * @param  int    $startModule 
+     * @access private
+     * @return void
+     */
     private function buildMenuQuery($rootID, $type, $startModule)
     {
-        /* 查找startModule。*/
+        /* Set the start module. */
         $startModulePath = '';
         if($startModule > 0)
         {
@@ -38,7 +52,15 @@ class treeModel extends model
             ->get();
     }
 
-    /* 获取模块的下类列表，用于生成select控件。*/
+    /**
+     * Create an option menu in html.
+     * 
+     * @param  int    $rootID 
+     * @param  string $type 
+     * @param  int    $startModule 
+     * @access public
+     * @return string
+     */
     public function getOptionMenu($rootID, $type = 'story', $startModule = 0)
     {
         $treeMenu = array();
@@ -95,7 +117,17 @@ class treeModel extends model
         return $lastMenu;
     }
 
-    /* 获取树状的模块列表。*/
+    /**
+     * Get the tree menu in html.
+     * 
+     * @param  int    $rootID 
+     * @param  string $type 
+     * @param  int    $startModule 
+     * @param  string $userFunc     the function used to create link
+     * @param  string $extra        extra params
+     * @access public
+     * @return string
+     */
     public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '')
     {
         $treeMenu = array();
@@ -128,7 +160,13 @@ class treeModel extends model
         return $lastMenu; 
     }
 
-    /* 获得系统文档库的树状列表。*/
+    /**
+     * Get the tree menu of system document library.
+     * 
+     * @param  string $libID    product|project
+     * @access public
+     * @return string
+     */
     public function getSystemDocTreeMenu($libID)
     {
         $menu = "<ul id='tree'>";
@@ -150,7 +188,7 @@ class treeModel extends model
                         $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=product&module=$module->id&productID=$productID"), $module->name) . '</li>';
                     }
 
-                    /* 如果项目文档模块不为空，则追加项目文档列表。*/
+                    /* If $projectModules not emtpy, append the project modules. */
                     if($projectModules)
                     {
                         $menu .= '<li>';
@@ -194,21 +232,39 @@ class treeModel extends model
         return $menu;
     }
 
-    /* 生成需求链接。*/
+    /**
+     * Create link of a story.
+     * 
+     * @param  object   $module 
+     * @access private
+     * @return string
+     */
     private function createStoryLink($module)
     {
         $linkHtml = html::a(helper::createLink('product', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
-    /* 生成文档链接。*/
+    /**
+     * Create link of a doc.
+     * 
+     * @param  object   $module 
+     * @access private
+     * @return string
+     */
     private function createDocLink($module)
     {
         $linkHtml = html::a(helper::createLink('doc', 'browse', "libID={$module->root}&&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
-    /* 生成模块编辑链接。*/
+    /**
+     * Create the manage link of a module.
+     * 
+     * @param  object   $module 
+     * @access private
+     * @return string
+     */
     private function createManageLink($module)
     {
         static $users;
@@ -222,28 +278,54 @@ class treeModel extends model
         return $linkHtml;
     }
 
-    /* 生成Bug链接。*/
+    /**
+     * Create link of a bug.
+     * 
+     * @param  object  $module 
+     * @access private
+     * @return string
+     */
     private function createBugLink($module)
     {
         $linkHtml = html::a(helper::createLink('bug', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
-    /* 生成case链接。*/
+    /**
+     * Create link of a test case.
+     * 
+     * @param  object  $module 
+     * @access private
+     * @return string
+     */
     private function createCaseLink($module)
     {
         $linkHtml = html::a(helper::createLink('testcase', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
-    /* 生成测试任务的链接。*/
+    /**
+     * Create link of a test task.
+     * 
+     * @param  object  $module 
+     * @access private
+     * @return string
+     */
     private function createTestTaskLink($module, $extra)
     {
         $linkHtml = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
-    /* 获得某一个模块的直接下级模块。*/
+    /**
+     * Get sons of a module.
+     * 
+     * @param  int    $rootID 
+     * @param  int    $moduleID 
+     * @param  string $type 
+     * @access public
+     * @return array
+     */
     public function getSons($rootID, $moduleID, $type = 'root')
     {
         return $this->dao->select('*')->from(TABLE_MODULE)
@@ -254,7 +336,13 @@ class treeModel extends model
             ->fetchAll();
     }
     
-    /* 获得一个模块的id列表。*/
+    /**
+     * Get id list of a module's childs.
+     * 
+     * @param  int     $moduleID 
+     * @access public
+     * @return array
+     */
     public function getAllChildId($moduleID)
     {
         if($moduleID == 0) return array();
@@ -262,7 +350,13 @@ class treeModel extends model
         return $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like($module->path . '%')->fetchPairs();
     }
 
-    /* 获得一个模块的所有上级模块。*/
+    /**
+     * Get parents of a module.
+     * 
+     * @param  int    $moduleID 
+     * @access public
+     * @return array
+     */
     public function getParents($moduleID)
     {
         if($moduleID == 0) return array();
@@ -272,7 +366,13 @@ class treeModel extends model
         return $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($path)->orderBy('grade')->fetchAll();
     }
 
-    /* 更新排序信息。*/
+    /**
+     * Update modules' order.
+     * 
+     * @param  array   $orders 
+     * @access public
+     * @return void
+     */
     public function updateOrder($orders)
     {
         foreach($orders as $moduleID => $order)
@@ -281,7 +381,16 @@ class treeModel extends model
         }
     }
 
-    /* 更新某一个模块的子模块。*/
+    /**
+     * Manage childs of a module.
+     * 
+     * @param  int    $rootID 
+     * @param  string $type 
+     * @param  int    $parentModuleID 
+     * @param  array  $childs 
+     * @access public
+     * @return void
+     */
     public function manageChild($rootID, $type, $parentModuleID, $childs)
     {
         $parentModule = $this->getByID($parentModuleID);
@@ -300,10 +409,10 @@ class treeModel extends model
         {
             if(empty($moduleName)) continue;
 
-            /* 新增模块。*/
+            /* The new modules. */
             if(is_numeric($moduleID))
             {
-                $module->root = $rootID;
+                $module->root    = $rootID;
                 $module->name    = $moduleName;
                 $module->parent  = $parentModuleID;
                 $module->grade   = $grade;
@@ -323,7 +432,13 @@ class treeModel extends model
         }
     }
 
-    /* 编辑一个模块。*/
+    /**
+     * Update a module.
+     * 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
     public function update($moduleID)
     {
         $module = fixer::input('post')->specialChars('name')->get();
@@ -338,15 +453,21 @@ class treeModel extends model
         $this->fixModulePath();
     }
 
-    /* 删除一个模块。*/
+    /**
+     * Delete a module.
+     * 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
     public function delete($moduleID)
     {
         $module = $this->getById($moduleID);
         $childs = $this->getAllChildId($moduleID);
 
-        $this->dao->update(TABLE_MODULE)->set('grade = grade - 1')->where('id')->in($childs)->exec();                 // 更新所有的下级模块的grade。
-        $this->dao->update(TABLE_MODULE)->set('parent')->eq($module->parent)->where('parent')->eq($moduleID)->exec(); // 更新直接下级的parent。
-        $this->dao->delete()->from(TABLE_MODULE)->where('id')->eq($moduleID)->exec();                                 // 删除自己。
+        $this->dao->update(TABLE_MODULE)->set('grade = grade - 1')->where('id')->in($childs)->exec();                 // Update grade of all childs.
+        $this->dao->update(TABLE_MODULE)->set('parent')->eq($module->parent)->where('parent')->eq($moduleID)->exec(); // Update the parent of sons to my parent.
+        $this->dao->delete()->from(TABLE_MODULE)->where('id')->eq($moduleID)->exec();                                 // Delete my self.
         $this->fixModulePath();
 
         if($module->type == 'story') $this->dao->update(TABLE_STORY)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
@@ -354,17 +475,22 @@ class treeModel extends model
         if($module->type == 'case')  $this->dao->update(TABLE_CASE)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
     }
 
-    /* 修正modulePath字段。*/
+    /**
+     * Fix fieilds of all module, grade, parent, pathes and so on.
+     * 
+     * @access public
+     * @return void
+     */
     public function fixModulePath()
     {
-        /* 获得最大的级别。*/
+        /* Get the max grade. */
         $maxGrade = $this->dao->select('MAX(grade) AS grade')->from(TABLE_MODULE)->fetch('grade');
         $modules  = array();
 
-        /* 依次处理每个级别的模块。*/
+        /* Cycle ervery grade. */
         for($grade = 1; $grade <= $maxGrade; $grade ++)
         {
-            /* 当前级别的模块。*/
+            /* Modules of current grade. */
             $gradeModules = $this->dao->select('id, parent, grade')->from(TABLE_MODULE)->where('grade')->eq($grade)->fetchAll('id');
             foreach($gradeModules as $moduleID => $module)
             {
@@ -374,7 +500,7 @@ class treeModel extends model
                 }
                 else
                 {
-                    /* 取parent模块的path。*/
+                    /* Get the parent module to compute path and grade of my self. */
                     if(isset($modules[$module->parent]))
                     {
                         $module->path  = $modules[$module->parent]->path . "$moduleID,";
@@ -385,7 +511,7 @@ class treeModel extends model
             $modules += $gradeModules;
         }
 
-        /* 最后更新每一个模块。*/
+        /* Save modules to database. */
         foreach($modules as $moduleID => $module)
         {
             $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->limit(1)->exec();
