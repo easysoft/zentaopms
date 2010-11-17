@@ -17,7 +17,6 @@ $lang->user->read          = "查看用戶";
 $lang->user->edit          = "編輯用戶";
 $lang->user->update        = "編輯用戶";
 $lang->user->delete        = "刪除用戶";
-$lang->user->activate      = "激活";
 $lang->user->browse        = "瀏覽用戶";
 $lang->user->login         = "用戶登錄";
 $lang->user->userView      = "人員視圖";

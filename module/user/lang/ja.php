@@ -17,7 +17,6 @@ $lang->user->read          = "情報";
 $lang->user->edit          = "[編集]";
 $lang->user->update        = "アップグレード";
 $lang->user->delete        = "削除";
-$lang->user->activate      = "アクティブ";
 $lang->user->browse        = "ブラウズ";
 $lang->user->login         = "ログイン";
 $lang->user->userView      = "ユーザービュー";

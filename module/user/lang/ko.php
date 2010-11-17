@@ -17,7 +17,6 @@ $lang->user->read          = "정보";
 $lang->user->edit          = "편집";
 $lang->user->update        = "업그레 이드";
 $lang->user->delete        = "삭제";
-$lang->user->activate      = "활성화";
 $lang->user->browse        = "찾아보기";
 $lang->user->login         = "로그인";
 $lang->user->userView      = "사용자보기";
