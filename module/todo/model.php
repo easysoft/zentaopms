@@ -15,7 +15,14 @@ class todoModel extends model
 {
     const DAY_IN_FEATURE = 20300101;
 
-    /* 新增一个todo。*/
+    /**
+     * Create a todo.
+     * 
+     * @param  date   $date 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
     public function create($date, $account)
     {
         $todo = fixer::input('post')
@@ -40,7 +47,13 @@ class todoModel extends model
         return $this->dao->lastInsertID();
     }
 
-    /* 更新一个todo。*/
+    /**
+     * update a todo.
+     * 
+     * @param  int    $todoID 
+     * @access public
+     * @return void
+     */
     public function update($todoID)
     {
         $oldTodo = $this->getById($todoID);
@@ -59,7 +72,14 @@ class todoModel extends model
         if(!dao::isError()) return common::createChanges($oldTodo, $todo);
     }
     
-    /* 更改状态。*/
+    /**
+     * Change the status of a todo.
+     * 
+     * @param  string $todoID 
+     * @param  string $status 
+     * @access public
+     * @return void
+     */
     public function mark($todoID, $status)
     {
         $status = ($status == 'done') ? 'wait' : 'done';
@@ -68,7 +88,13 @@ class todoModel extends model
         return;
     }
 
-    /* 获得一条todo信息。*/
+    /**
+     * Get info of a todo.
+     * 
+     * @param  int    $todoID 
+     * @access public
+     * @return object|bool
+     */
     public function getById($todoID)
     {
         $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
@@ -79,7 +105,15 @@ class todoModel extends model
         return $todo;
     }
 
-    /* 获得用户的todo列表。*/
+    /**
+     * Get todo list of a user.
+     * 
+     * @param  date   $date 
+     * @param  string $account 
+     * @param  string $status   all|today|thisweek|lastweek|before, or a date.
+     * @access public
+     * @return void
+     */
     public function getList($date = 'today', $account = '', $status = 'all')
     {
         $todos = array();
@@ -128,14 +162,21 @@ class todoModel extends model
             $todo->begin = $this->formatTime($todo->begin);
             $todo->end   = $this->formatTime($todo->end);
 
-            /* 如果是私人事务，且当前用户非本人，更改标题。*/
+            /* If is private, change the title to private. */
             if($todo->private and $this->app->user->account != $todo->account) $todo->name = $this->lang->todo->thisIsPrivate;
             $todos[] = $todo;
         }
         return $todos;
     }
 
-    /* 生成日期列表。*/
+    /**
+     * Build date list, for selection use.
+     * 
+     * @param  int    $before 
+     * @param  int    $after 
+     * @access public
+     * @return void
+     */
     public function buildDateList($before = 7, $after = 7)
     {
         $today = strtotime($this->today());
@@ -169,7 +210,15 @@ class todoModel extends model
         return $dates;
     }
 
-    /* 生成时钟列表。*/
+    /**
+     * Build hour time list.
+     * 
+     * @param  int $begin 
+     * @param  int $end 
+     * @param  int $delta 
+     * @access public
+     * @return array
+     */
     public function buildTimeList($begin, $end, $delta)
     {
         $times = array();
@@ -185,22 +234,38 @@ class todoModel extends model
         return $times;
     }
 
-    /* 获得当天日期。*/
+    /**
+     * Get today.
+     * 
+     * @access public
+     * @return date
+     */
     public function today()
     {
         return date(DT_DATE2, time());
     }
 
-    /* 获得昨天的日期。*/
+    /**
+     * Get yesterday 
+     * 
+     * @access public
+     * @return date
+     */
     public function yesterday()
     {
         return date(DT_DATE1, strtotime('yesterday'));
     }
 
-    /* 获得当前的时间。*/
+    /**
+     * Get now time period.
+     * 
+     * @param  int    $delta 
+     * @access public
+     * @return string the current time period, like 0915
+     */
     public function now($delta = 15)
     {
-        $range = range($delta, 60 - $delta, $delta);
+        $range  = range($delta, 60 - $delta, $delta);
         $hour   = date('H', time());
         $minute = date('i', time());
 
@@ -224,14 +289,25 @@ class todoModel extends model
         return sprintf('%02d%02d', $hour, $minute);
     }
 
-    /* 格式化时间显示。*/
+    /**
+     * Format time 0915 to 09:15
+     * 
+     * @param  string $time 
+     * @access public
+     * @return string
+     */
     public function formatTime($time)
     {
         if(strlen($time) != 4 or $time == '2400') return '';
         return substr($time, 0, 2) . ':' . substr($time, 2, 2);
     }
 
-    /* 获得本周起止时间。*/
+    /**
+     * Get the begin and end date of this week.
+     * 
+     * @access public
+     * @return array
+     */
     public function getThisWeek()
     {
         $baseTime = $this->getMiddleOfThisWeek();
@@ -240,7 +316,12 @@ class todoModel extends model
         return array('begin' => $begin, 'end' => $end);
     }
 
-    /* 获得上周起止时间。*/
+    /**
+     * Get the begin and end date of last week.
+     * 
+     * @access public
+     * @return array
+     */
     public function getLastWeek()
     {
         $baseTime = $this->getMiddleOfLastWeek();
@@ -249,7 +330,14 @@ class todoModel extends model
         return array('begin' => $begin, 'end' => $end);
     }
 
-    /* 获得周中的时间戳，如果当前时间为礼拜一，则往后取一天，为礼拜天，则往前取一天，保证基准时间落在周中。*/
+    /**
+     * Get the time at the middle of this week.
+     * 
+     * If today in week is 1, move it one day in feature. Else is 7, move it back one day. To keep the time geted in this week.
+     *
+     * @access private
+     * @return time
+     */
     private function getMiddleOfThisWeek()
     {
         $baseTime = time();
@@ -259,14 +347,19 @@ class todoModel extends model
         return $baseTime;
     }
 
-    /* 获得上周周中的时间。*/
+    /**
+     * Get middle of last week 
+     * 
+     * @access private
+     * @return time
+     */
     private function getMiddleOfLastWeek()
     {
         $baseTime = time();
         $weekDay  = date('N');
         $baseTime = time() - 86400 * 7;
-        if($weekDay == 1) $baseTime = time() - 86400 * 4;  // 上个礼拜四
-        if($weekDay == 7) $baseTime = time() - 86400 * 10; // 上个礼拜四
+        if($weekDay == 1) $baseTime = time() - 86400 * 4;  // Make sure is last thursday.
+        if($weekDay == 7) $baseTime = time() - 86400 * 10; // Make sure is last thursday.
         return $baseTime;
     }
 }

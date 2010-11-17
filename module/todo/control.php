@@ -11,7 +11,12 @@
  */
 class todo extends control
 {
-    /* 构造函数。*/
+    /**
+     * Construct function, load model of task, bug, my.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -20,7 +25,14 @@ class todo extends control
         $this->loadModel('my')->setMenu();
     }
 
-    /* 添加todo。*/
+    /**
+     * Create a todo.
+     * 
+     * @param  string|date $date 
+     * @param  string      $account 
+     * @access public
+     * @return void
+     */
     public function create($date = 'today', $account = '')
     {
         if($date == 'today') $date = $this->todo->today();
@@ -45,7 +57,13 @@ class todo extends control
         $this->display();
     }
 
-    /* 编辑todo。*/
+    /**
+     * Edit a todo.
+     * 
+     * @param  int    $todoID 
+     * @access public
+     * @return void
+     */
     public function edit($todoID)
     {
         if(!empty($_POST))
@@ -60,7 +78,7 @@ class todo extends control
             die(js::locate(inlink('view', "todoID=$todoID"), 'parent'));
         }
 
-        /* 获取todo信息，判断是否是私人事务。*/
+        /* Judge a private todo or not, If private, die. */
         $todo = $this->todo->getById($todoID);
         if($todo->private and $this->app->user->account != $todo->account) die('private');
 
@@ -75,16 +93,24 @@ class todo extends control
         $this->display();
     }
 
-    /* 查看todo。*/
+    /**
+     * View a todo. 
+     * 
+     * @param  int    $todoID 
+     * @param  string $from     my|company
+     * @access public
+     * @return void
+     */
     public function view($todoID, $from = 'company')
     {
         $todo = $this->todo->getById($todoID);
         if(!$todo) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        /* 登记session。*/
+        /* Save the session. */
         $this->session->set('taskList', $this->app->getURI(true));
         $this->session->set('bugList',  $this->app->getURI(true));
 
+        /* Set menus. */
         $this->lang->todo->menu = $this->lang->user->menu;
         $this->loadModel('user')->setMenu($this->user->getPairs(), $todo->account);
         $this->lang->set('menugroup.todo', $from);
@@ -100,7 +126,14 @@ class todo extends control
         $this->display();
     }
 
-    /* 删除一个todo。*/
+    /**
+     * Delete a todo.
+     * 
+     * @param  int    $todoID 
+     * @param  string $confirm yes|no
+     * @access public
+     * @return void
+     */
     public function delete($todoID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -116,7 +149,14 @@ class todo extends control
         }
     }
 
-    /* 切换todo的状态。*/
+    /**
+     * Mark status of a todo.
+     * 
+     * @param  int    $todoID 
+     * @param  string $status   wait|doing|done
+     * @access public
+     * @return void
+     */
     public function mark($todoID, $status)
     {
         $this->todo->mark($todoID, $status);
@@ -134,7 +174,12 @@ class todo extends control
         die(js::reload('parent'));
     }
 
-    /* 批量导入今天。*/
+    /**
+     * Import selected todoes to today.
+     * 
+     * @access public
+     * @return void
+     */
     public function import2Today()
     {
         $todos = $this->post->todos;
