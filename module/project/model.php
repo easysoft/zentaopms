@@ -88,6 +88,7 @@ class projectModel extends model
             ->specialChars('goal, desc')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
+            ->remove('products')
             ->get();
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
@@ -124,6 +125,7 @@ class projectModel extends model
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
+            ->remove('products')
             ->get();
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')

@@ -43,6 +43,10 @@ function setWhite(acl)
         <td><?php echo html::input('team', '', "class='text-3'");?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
+        <td><?php echo html::checkbox("products", $allProducts, '');?></td>
+      </tr>
+      <tr>
         <th class='rowhead'><?php echo $lang->project->goal;?></th>
         <td><?php echo html::textarea('goal', '', "rows='5' class='area-1'");?></td>
       </tr>  

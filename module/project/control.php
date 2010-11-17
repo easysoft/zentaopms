@@ -371,6 +371,7 @@ class project extends control
         if(!empty($_POST))
         {
             $projectID = $this->project->create();
+            $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('project', $projectID, 'opened');
             die(js::locate($this->createLink('project', 'tips', "projectID=$projectID"), 'parent'));
@@ -383,6 +384,7 @@ class project extends control
         $this->view->position[]    = $this->view->header->title;
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->allProducts   = $this->loadModel('product')->getPairs();
         $this->display();
     }
 
@@ -393,6 +395,7 @@ class project extends control
         if(!empty($_POST))
         {
             $changes = $this->project->update($projectID);
+            $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             if($changes)
             {
@@ -416,13 +419,18 @@ class project extends control
         $position[]      = html::a($browseProjectLink, $project->name);
         $position[]      = $this->lang->project->edit;
 
+        $linkedProducts = $this->project->getProducts($project->id);
+        $linkedProducts = join(',', array_keys($linkedProducts));
+        
         /* 赋值。*/
-        $this->view->header   = $header;
-        $this->view->position = $position;
-        $this->view->projects = $projects;
-        $this->view->project  = $project;
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed,nodeleted');
-        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->header         = $header;
+        $this->view->position       = $position;
+        $this->view->projects       = $projects;
+        $this->view->project        = $project;
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,nodeleted');
+        $this->view->groups         = $this->loadModel('group')->getPairs();
+        $this->view->allProducts    = $this->loadModel('product')->getPairs();
+        $this->view->linkedProducts = $linkedProducts;
 
         $this->display();
     }
