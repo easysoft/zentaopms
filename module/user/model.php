@@ -25,7 +25,6 @@ class userModel extends model
     {
         $methodName = $this->app->getMethodName();
         $selectHtml = html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '$methodName')\"");
-        $menu       = $this->lang->user->menu;
         foreach($this->lang->user->menu as $key => $value)
         {
             $replace = ($key == 'account') ? $selectHtml : $account;
