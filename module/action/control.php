@@ -11,10 +11,19 @@
  */
 class action extends control
 {
-    /* 已删除记录列表。*/
+    /**
+     * Trash 
+     * 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function trash($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 登记session。*/
+        /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri);
         $this->session->set('productPlanList', $uri);
@@ -27,11 +36,11 @@ class action extends control
         $this->session->set('caseList',        $uri);
         $this->session->set('testtaskList',    $uri);
 
-        /* 设置标题和导航条。*/
+        /* Header and position. */
         $this->view->header->title = $this->lang->action->trash;
         $this->view->position[]    = $this->lang->action->trash;
 
-        /* 获取已删除记录。*/
+        /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         $this->view->trashes = $this->action->getTrashes($orderBy, $pager);
@@ -42,7 +51,13 @@ class action extends control
         $this->display();
     }
 
-    /* 还原某一个对象。*/
+    /**
+     * Undelete an object.
+     * 
+     * @param  int    $actionID 
+     * @access public
+     * @return void
+     */
     public function undelete($actionID)
     {
         $this->action->undelete($actionID);

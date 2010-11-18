@@ -13,10 +13,20 @@
 <?php
 class actionModel extends model
 {
-    const CAN_UNDELETED = 1;    // 标记extra字段为可以还原。
-    const BE_UNDELETED  = 0;    // 标记extra字段为已经还原。
+    const CAN_UNDELETED = 1;    // The deleted object can be undeleted or not.
+    const BE_UNDELETED  = 0;    // The deleted object has been undeleted or not.
 
-    /* 创建一条action动作。*/
+    /**
+     * Create a action.
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @param  string $actionType 
+     * @param  string $comment 
+     * @param  string $extra        the extra info of this action, according to different modules and actions, can set different extra.
+     * @access public
+     * @return int
+     */
     public function create($objectType, $objectID, $actionType, $comment = '', $extra = '')
     {
         $action->objectType = strtolower($objectType);
@@ -30,7 +40,14 @@ class actionModel extends model
         return $this->dbh->lastInsertID();
     }
 
-    /* 返回某一个对象的所有action列表。*/
+    /**
+     * Get actions of an object.
+     * 
+     * @param  int    $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return array
+     */
     public function getList($objectType, $objectID)
     {
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
@@ -46,13 +63,26 @@ class actionModel extends model
         return $actions;
     }
 
-    /* 获得action信息。*/
+    /**
+     * Get an action record.
+     * 
+     * @param  int    $actionID 
+     * @access public
+     * @return object
+     */
     public function getById($actionID)
     {
         return $this->dao->findById((int)$actionID)->from(TABLE_ACTION)->fetch();
     }
 
-    /* 获得所有的删除记录列表。*/
+    /**
+     * Get deleted objects.
+     * 
+     * @param  string    $orderBy 
+     * @param  object    $pager 
+     * @access public
+     * @return array
+     */
     public function getTrashes($orderBy, $pager)
     {
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
@@ -61,7 +91,7 @@ class actionModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
         if(!$trashes) return array();
         
-        /* 将对象按照类型分开，然后查找其对应的名称。*/
+        /* Group trashes by objectType, and get there name field. */
         foreach($trashes as $object) $typeTrashes[$object->objectType][] = $object->objectID;
         foreach($typeTrashes as $objectType => $objectIds)
         {
@@ -71,18 +101,31 @@ class actionModel extends model
             $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
         }
 
-        /* 将name字段添加到trashes中。*/
+        /* Add name field to the trashes. */
         foreach($trashes as $trash) $trash->objectName = $objectNames[$trash->objectType][$trash->objectID];
         return $trashes;
     }
 
-    /* 返回某一个action所对应的字段修改记录。*/
+    /**
+     * Get histories of an action.
+     * 
+     * @param  int    $actionID 
+     * @access public
+     * @return array
+     */
     public function getHistory($actionID)
     {
         return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->orderBy('id')->fetchGroup('action');
     }
 
-    /* 记录历史。*/
+    /**
+     * Log histories for an action.
+     * 
+     * @param  int    $actionID 
+     * @param  array  $changes 
+     * @access public
+     * @return void
+     */
     public function logHistory($actionID, $changes)
     {
         foreach($changes as $change) 
@@ -92,15 +135,24 @@ class actionModel extends model
         }
     }
 
-    /* 打印action标题，显示在每一个对象的详情界面。*/
+    /**
+     * Print actions of an object.
+     * 
+     * @param  array    $action 
+     * @access public
+     * @return void
+     */
     public function printAction($action)
     {
         $objectType = $action->objectType;
         $actionType = strtolower($action->action);
 
         /**
-         * 判断使用哪一种描述。如果该模块有对应的描述，则取之，然后则取action模块中对应的方法的描述。
-         * 如果还没有，则判断当前action是否有extra信息，如果有，则取action模块的extra描述，最后使用通用的描述。
+         * Set the desc string of this action.
+         *
+         * 1. If the module of this action has defined desc of this actionType, use it.
+         * 2. If no defined in the module language, search the common action define.
+         * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
          */
         if(isset($this->lang->$objectType->action->$actionType))
         {
@@ -115,12 +167,12 @@ class actionModel extends model
             $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
         }
 
-        /* 循环替换desc中对应的标签。*/
+        /* Cycle actions, replace vars. */
         foreach($action as $key => $value)
         {
             if($key == 'history') continue;
 
-            /* desc可能是数组，也有可能是一个字符串。*/
+            /* Desc can be an array or string. */
             if(is_array($desc))
             {
                 if($key == 'extra') continue;
@@ -132,7 +184,7 @@ class actionModel extends model
             }
         }
 
-        /* 如果desc是数组，再处理extra变量。例子参考bug模块的语言设置。*/
+        /* If the desc is an array, process extra. Please bug/lang. */
         if(is_array($desc))
         {
             $extra = strtolower($action->extra);
@@ -151,7 +203,14 @@ class actionModel extends model
         }
     }
 
-    /* 打印动态信息。*/
+    /**
+     * Get actions as dynamic.
+     * 
+     * @param  string $objectType 
+     * @param  int    $count 
+     * @access public
+     * @return void
+     */
     public function getDynamic($objectType = 'all', $count = 30)
     {
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
@@ -166,7 +225,7 @@ class actionModel extends model
             $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
             $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
 
-            /* 处理login和logout动作。*/
+            /* If action type is login or logout, needn't link. */
             if($actionType == 'login' or $actionType == 'logout')
             {
                 $action->objectLink  = '';
@@ -174,7 +233,7 @@ class actionModel extends model
                 continue;
             }
 
-            /* 其他的动作生成相应的链接。*/
+            /* Other actions, create a link. */
             if(strpos($action->objectLabel, '|') !== false)
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
@@ -189,16 +248,23 @@ class actionModel extends model
         return $actions;
     }
 
-    /* 打印修改记录。*/
+    /**
+     * Print changes of every action.
+     * 
+     * @param  string    $objectType 
+     * @param  array     $histories 
+     * @access public
+     * @return void
+     */
     public function printChanges($objectType, $histories)
     {
         if(empty($histories)) return;
 
-        /* 计算字段的最大长度，并将历史记录根据是否有diff分开，以保证含有diff的字段显示在最后面。*/
-        $maxLength            = 0;
-        $historiesWithDiff    = array();
-        $historiesWithoutDiff = array();
+        $maxLength            = 0;          // The max length of fields names.
+        $historiesWithDiff    = array();    // To save histories without diff info.
+        $historiesWithoutDiff = array();    // To save histories with diff info.
 
+        /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
         foreach($histories as $history)
         {
             $fieldName = $history->field;
