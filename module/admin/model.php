@@ -13,19 +13,35 @@
 <?php
 class adminModel extends model
 {
-    /* 获得整个pms系统的统计信息。*/
+    /**
+     * Get status of zentaopms.
+     * 
+     * @access public
+     * @return void
+     */
     public function getStatOfPMS()
     {
         $sql = "SHOW TABLE STATUS";
         $tables = $this->dbh->query($sql)->fetchALL();
     }
 
-    /* 获得某一个公司的统计信息。*/
+    /**
+     * Get state of company.
+     * 
+     * @param  int    $companyID 
+     * @access public
+     * @return void
+     */
     public function getStatOfCompany($companyID)
     {
     }
 
-    /* 获得系统的运行信息。*/
+    /**
+     * Get system info.
+     * 
+     * @access public
+     * @return void
+     */
     public function getStatOfSys()
     {
     }

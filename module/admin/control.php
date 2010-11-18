@@ -11,8 +11,13 @@
  */
 class admin extends control
 {
-    /* 首页。*/
-    public function index($tab = 'index')
+    /**
+     * Index page of admin module. Locate to action's trash page.
+     * 
+     * @access public
+     * @return void
+     */
+    public function index()
     {
         $this->locate($this->createLink('action', 'trash'));
     }
