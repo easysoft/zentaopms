@@ -26,7 +26,7 @@ class testcaseModel extends model
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testcase', 'browse');\"");
         foreach($this->lang->testcase->menu as $key => $menu)
         {
-            $replace = ($key == 'product') ? $selectHtml : $productID;
+            $replace = ($key == 'product') ? $selectHtml . $this->lang->arrow : $productID;
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
     }

@@ -26,7 +26,7 @@ class testtaskModel extends model
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testtask', 'browse');\"");
         foreach($this->lang->testtask->menu as $key => $value)
         {
-            $replace = ($key == 'product') ? $selectHtml : $productID;
+            $replace = ($key == 'product') ? $selectHtml . $this->lang->arrow: $productID;
             common::setMenuVars($this->lang->testtask->menu, $key, $replace);
         }
     }
