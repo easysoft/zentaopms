@@ -13,24 +13,30 @@
 <?php
 class testcaseModel extends model
 {
-    /* 设置菜单。*/
+    /**
+     * Set menu.
+     * 
+     * @param  array $products 
+     * @param  int   $productID 
+     * @access public
+     * @return void
+     */
     public function setMenu($products, $productID)
     {
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testcase', 'browse');\"");
         foreach($this->lang->testcase->menu as $key => $menu)
         {
-            if($key == 'product')
-            {
-                common::setMenuVars($this->lang->testcase->menu, 'product',  $selectHtml . $this->lang->arrow);
-            }
-            else
-            {
-                common::setMenuVars($this->lang->testcase->menu, $key, $productID);
-            }
+            $replace = ($key == 'product') ? $selectHtml : $productID;
+            common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
     }
 
-    /* 创建一个Case。*/
+    /**
+     * Create a case.
+     * 
+     * @access public
+     * @return void
+     */
     function create()
     {
         $now  = helper::now();
@@ -63,7 +69,16 @@ class testcaseModel extends model
         }
     }
 
-    /* 获得某一个产品，某一个模块下面的所有case。*/
+    /**
+     * Get cases of a module.
+     * 
+     * @param  int    $productID 
+     * @param  int    $moduleIds 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getModuleCases($productID, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_CASE)
@@ -73,7 +88,14 @@ class testcaseModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
-    /* 获取一个case的详细信息。*/
+    /**
+     * Get case info by ID.
+     * 
+     * @param  int    $caseID 
+     * @param  int    $version 
+     * @access public
+     * @return object|bool
+     */
     public function getById($caseID, $version = 0)
     {
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
@@ -93,7 +115,13 @@ class testcaseModel extends model
         return $case;
     }
 
-    /* 更新case信息。*/
+    /**
+     * Update a case.
+     * 
+     * @param  int    $caseID 
+     * @access public
+     * @return void
+     */
     public function update($caseID)
     {
         $oldCase     = $this->getById($caseID);
@@ -101,22 +129,23 @@ class testcaseModel extends model
         $stepChanged = false;
         $steps       = array();
 
-        //---------------- 判断步骤是否发生了变化。-------------------- */
-        /* 先去除post变量中空的步骤。 */
+        //---------------- Judge steps changed or not.-------------------- */
+        
+        /* Remove the empty setps in post. */
         foreach($this->post->steps as $key => $desc)
         {
             $desc = trim($desc);
             if(!empty($desc)) $steps[] = array('desc' => $desc, 'expect' => trim($this->post->expects[$key]));
         }
 
-        /* 如果步骤的数量不同，发生了变化。*/
+        /* If step count changed, case changed. */
         if(count($oldCase->steps) != count($steps))
         {
             $stepChanged = true;
         }
         else
         {
-            /* 比较每一个步骤是否有不同。*/
+            /* Compare every step. */
             foreach($oldCase->steps as $key => $oldStep)
             {
                 if(trim($oldStep->desc) != trim($steps[$key]['desc']) or trim($oldStep->expect) != $steps[$key]['expect']) 
@@ -128,7 +157,7 @@ class testcaseModel extends model
         }
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
 
-        $case    = fixer::input('post')
+        $case = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('version', $version)
@@ -154,7 +183,7 @@ class testcaseModel extends model
                 }
             }
 
-            /* 将步骤合并为字符串，以计算diff。*/
+            /* Join the steps to diff. */
             if($stepChanged)
             {
                 $oldCase->steps = $this->joinStep($oldCase->steps);
@@ -168,7 +197,13 @@ class testcaseModel extends model
         }
     }
 
-    /* 合并步骤。*/
+    /**
+     * Join steps to a string, thus can diff them.
+     * 
+     * @param  array   $steps 
+     * @access private
+     * @return string
+     */
     private function joinStep($steps)
     {
         $retrun = '';

@@ -13,7 +13,12 @@ class testcase extends control
 {
     private $products = array();
 
-    /* 构造函数，加载story, release, tree等模块。*/
+    /**
+     * Construct function, load product, tree, user auto.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -23,35 +28,53 @@ class testcase extends control
         $this->view->products = $this->products = $this->product->getPairs();
     }
 
-    /* case首页。*/
+    /**
+     * Index page.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->locate($this->createLink('testcase', 'browse'));
     }
 
-    /* 浏览一个产品下面的case。*/
+    /**
+     * Browse cases.
+     * 
+     * @param  int    $productID 
+     * @param  string $browseType 
+     * @param  int    $param 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 设置浏览模式，产品ID和模块ID。 */
+        /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
         $productID = $this->product->saveState($productID, key($this->products));
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
-        /* 设置菜单，登记session。*/
+        /* Set menu, save session. */
         $this->testcase->setMenu($this->products, $productID);
         $this->session->set('caseList', $this->app->getURI(true));
 
-        /* 加载分页类。*/
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* 如果是按照模块查找，或者列出所有。*/
+        /* By module or all cases. */
         if($browseType == 'bymodule' or $browseType == 'all')
         {
             $childModuleIds    = $this->tree->getAllChildId($moduleID);
             $this->view->cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
         }
+        /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
         {
             $this->view->cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -61,6 +84,7 @@ class testcase extends control
                 ->orderBy($orderBy)
                 ->fetchAll();
         }
+        /* By search. */
         elseif($browseType == 'bysearch')
         {
             if($queryID)
@@ -81,21 +105,21 @@ class testcase extends control
                 if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
             }
 
-            $caseQuery = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // 如果指定了搜索所有的产品，去掉这个查询条件。
+            $caseQuery = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // If product is all, change it to 1=1.
             $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->andWhere('product')->eq($productID)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
-        /* 构造搜索表单。*/
+        /* Build the search form. */
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['queryID']   = $queryID;
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->testcase->common;
@@ -112,7 +136,14 @@ class testcase extends control
         $this->display();
     }
 
-    /* 创建case。*/
+    /**
+     * Create a test case.
+     * 
+     * @param  int   $productID 
+     * @param  int   $moduleID 
+     * @access public
+     * @return void
+     */
     public function create($productID, $moduleID = 0)
     {
         $this->loadModel('story');
@@ -126,10 +157,11 @@ class testcase extends control
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
+        /* Set productID and currentModuleID. */
         $productID       = $this->product->saveState($productID, key($this->products));
         $currentModuleID = (int)$moduleID;
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->testcase->setMenu($this->products, $productID);
 
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
@@ -149,22 +181,26 @@ class testcase extends control
         $this->display();
     }
 
-    /* 查看一个case。*/
+    /**
+     * View a test case.
+     * 
+     * @param  int   $caseID 
+     * @param  int   $version 
+     * @access public
+     * @return void
+     */
     public function view($caseID, $version = 0)
     {
-        /* 获取case和产品信息，并设置菜单。*/
         $case = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $productID = $case->product;
         $this->testcase->setMenu($this->products, $productID);
 
-        /* 导航信息。*/
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->view;
         $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testcase->view;
 
-        /* 赋值。*/
         $this->view->case        = $case;
         $this->view->productName = $this->products[$productID];
         $this->view->modulePath  = $this->tree->getParents($case->module);
@@ -174,12 +210,17 @@ class testcase extends control
         $this->display();
     }
 
-    /* 编辑一个case。*/
+    /**
+     * Edit a case.
+     * 
+     * @param  int   $caseID 
+     * @access public
+     * @return void
+     */
     public function edit($caseID)
     {
         $this->loadModel('story');
 
-        /* 更新case信息。*/
         if(!empty($_POST))
         {
             $changes = $this->testcase->update($caseID);
@@ -197,7 +238,6 @@ class testcase extends control
             die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
         }
 
-        /* 生成表单。*/
         $case = $this->testcase->getById($caseID);
         if(empty($case->steps))
         {
@@ -211,7 +251,7 @@ class testcase extends control
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->testcase->edit;
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->testcase->setMenu($this->products, $productID);
 
         $users = $this->user->getPairs();
@@ -232,7 +272,14 @@ class testcase extends control
         $this->display();
     }
 
-    /* 删除用例。*/
+    /**
+     * Delete a test case
+     * 
+     * @param  int    $caseID 
+     * @param  string $confirm yes|noe
+     * @access public
+     * @return void
+     */
     public function delete($caseID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -246,7 +293,13 @@ class testcase extends control
         }
     }
 
-    /* 确认需求变动。*/
+    /**
+     * Confirm story changes.
+     * 
+     * @param  int   $caseID 
+     * @access public
+     * @return void
+     */
     public function confirmStoryChange($caseID)
     {
         $case = $this->testcase->getById($caseID);
