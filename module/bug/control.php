@@ -187,8 +187,8 @@ class bug extends control
     public function report($productID, $browseType, $moduleID)
     {
         $this->loadModel('report');
-        $this->view->charts = array();
-        $this->view->rendJS = '';
+        $this->view->charts   = array();
+        $this->view->renderJS = '';
 
         if(!empty($_POST))
         {
@@ -203,7 +203,7 @@ class bug extends control
                 $this->view->charts[$chart] = $this->report->createJSChart($chartOption->swf, $chartXML, $chartOption->width, $chartOption->height);
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
-            $this->view->rendJS = $this->report->rendJsCharts(count($this->view->charts));
+            $this->view->renderJS = $this->report->renderJsCharts(count($this->view->charts));
         }
 
         $this->bug->setMenu($this->products, $productID);

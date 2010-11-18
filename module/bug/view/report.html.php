@@ -83,5 +83,5 @@ function checkReverse()
     </div>
   </div>
 </div>
-<?php echo $rendJS;?>
+<?php echo $renderJS;?>
 <?php include '../../common/view/footer.html.php';?>
