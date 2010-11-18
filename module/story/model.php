@@ -13,7 +13,14 @@
 <?php
 class storyModel extends model
 {
-    /* 获取某一条需求的信息。*/
+    /**
+     * Get a story by id.
+     * 
+     * @param  int    $storyID 
+     * @param  int    $version 
+     * @access public
+     * @return object|bool
+     */
     public function getById($storyID, $version = 0)
     {
         $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
@@ -44,10 +51,16 @@ class storyModel extends model
         return $story;
     }
 
-    /* 获得需求的影响范围。*/
+    /**
+     * Get affected things. 
+     * 
+     * @param  object  $story 
+     * @access public
+     * @return object
+     */
     public function getAffectedScope($story)
     {
-        /* 移除已经结束的项目。*/
+        /* Remove closed projects. */
         if($story->projects)
         {
             foreach($story->projects as $projectID => $project)
@@ -56,7 +69,7 @@ class storyModel extends model
             }
         }
 
-        /* 获得项目中的成员。*/
+        /* Get team members. */
         if($story->projects)
         {
             $story->teams = $this->dao->select('account, project')
@@ -65,19 +78,24 @@ class storyModel extends model
                 ->fetchGroup('project');
         }
 
-        /* 获得影响的Bug。*/
+        /* Get affected bugs. */
         $story->bugs = $this->dao->findByStory($story->id)->from(TABLE_BUG)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
 
-        /* 获得影响的用例。*/
+        /* Get affected cases. */
         $story->cases = $this->dao->findByStory($story->id)->from(TABLE_CASE)->andWhere('deleted')->eq(0)->fetchAll();
 
         return $story;
     }
 
-    /* 新增需求。*/
+    /**
+     * Create a story.
+     * 
+     * @access public
+     * @return int|bool the id of the created story or false when error.
+     */
     public function create()
     {
         $now   = helper::now();
@@ -112,7 +130,13 @@ class storyModel extends model
         return false;
     }
 
-    /* 变更需求。*/
+    /**
+     * Change a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return array  the change of the story.
+     */
     public function change($storyID)
     {
         $now         = helper::now();
@@ -160,11 +184,17 @@ class storyModel extends model
         }
     }
  
-    /* 更新需求。*/
+    /**
+     * Update a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return array the changes of the story.
+     */
     public function update($storyID)
     {
-        $now         = helper::now();
-        $oldStory    = $this->getById($storyID);
+        $now      = helper::now();
+        $oldStory = $this->getById($storyID);
 
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,plan')
@@ -195,7 +225,13 @@ class storyModel extends model
         if(!dao::isError()) return common::createChanges($oldStory, $story);
     }
     
-    /* 评审需求。*/
+    /**
+     * Review a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return bool
+     */
     public function review($storyID)
     {
         if($this->post->result == false)   die(js::alert($this->lang->story->mustChooseResult));
@@ -240,7 +276,13 @@ class storyModel extends model
         return true;
     }
     
-    /* 关闭需求。*/
+    /**
+     * Close a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return bool
+     */
     public function close($storyID)
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
@@ -268,7 +310,13 @@ class storyModel extends model
         return true;
     }
 
-    /* 激活需求。*/
+    /**
+     * Activate a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return bool
+     */
     public function activate($storyID)
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
@@ -289,17 +337,24 @@ class storyModel extends model
         return true;
     }
 
-    /* 设置需求的*/
+    /**
+     * Set stage of a story.
+     * 
+     * @param  int    $storyID 
+     * @param  string $customStage 
+     * @access public
+     * @return bool
+     */
     public function setStage($storyID, $customStage = '')
     {
-        /* 指定了customStage，以其为准。*/
+        /* Custom stage defined, use it. */
         if($customStage)
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq($customStage)->where('id')->eq((int)$storyID)->exec();
-            return;
+            return true;
         }
 
-        /* 查找活动的项目。*/
+        /* Get projects which status is doing. */
         $projects = $this->dao->select('project')
             ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq((int)$storyID)
@@ -307,14 +362,15 @@ class storyModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs();
 
-        /* 如果没有项目，但有计划，则阶段为planned或wait。*/
+        /* If no projects, in plan, stage is planned. No plan, wait. */
         if(!$projects)
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq((int)$storyID)->andWhere('plan')->gt(0)->exec();
             $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq((int)$storyID)->andWhere('plan')->eq(0)->andWhere('status')->eq('active')->exec();
-            return;
+            return true;
         }
-        /* 查找对应的任务。*/
+
+        /* Search related taskes. */
         $tasks = $this->dao->select('type,status')->from(TABLE_TASK)
             ->where('project')->in($projects)
             ->andWhere('story')->eq($storyID)
@@ -322,14 +378,14 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('type');
 
-        /* 没有任务，则所处阶段为'已经立项'。*/
+        /* No taskes, then the stage is projected. */
         if(!$tasks)
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('projected')->where('id')->eq((int)$storyID)->exec();
-            return;
+            return true;
         }
 
-        /* 如果有测试任务。*/
+        /* If have test task, the stage is tested or testing. */
         if(isset($tasks['test']))
         {
             $stage = 'tested';
@@ -342,6 +398,7 @@ class storyModel extends model
                 }
             }
         }
+        /* No test taske, stage is done or developing. */
         else
         {
             $stage = 'developed';
@@ -361,7 +418,17 @@ class storyModel extends model
         return;
     }
 
-    /* 获得某一个产品某一个模块下面的所有需求列表。*/
+    /**
+     * Get stories list of a product.
+     * 
+     * @param  int           $productID 
+     * @param  array|string  $moduleIds 
+     * @param  string        $status 
+     * @param  string        $orderBy 
+     * @param  object        $pager 
+     * @access public
+     * @return array
+     */
     public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as planTitle')
@@ -374,7 +441,16 @@ class storyModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
-    /* 获得某一个产品某一个模块下面的所有需求id=>title列表。*/
+    /**
+     * Get stories pairs of a product.
+     * 
+     * @param  int           $productID 
+     * @param  array|string  $moduleIds 
+     * @param  string        $status 
+     * @param  string        $order 
+     * @access public
+     * @return array
+     */
     public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id_desc')
     {
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t2.name AS product')
@@ -390,7 +466,16 @@ class storyModel extends model
         return $this->formatStories($stories);
     }
 
-    /* 按照某一个查询条件获取列表。*/
+    /**
+     * Get stories by a query id.
+     * 
+     * @param  int    $productID 
+     * @param  string $query 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getByQuery($productID, $query, $orderBy, $pager = null)
     {
         $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($query)
@@ -413,7 +498,13 @@ class storyModel extends model
         return $stories;
     }
 
-    /* 获得某一个项目相关的所有需求列表。*/
+    /**
+     * Get stories list of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getProjectStories($projectID = 0)
     {
         return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -424,7 +515,14 @@ class storyModel extends model
             ->fetchAll('id');
     }
 
-    /* 获得某一个项目相关的需求id=>title的列表。*/
+    /**
+     * Get stories pairs of a project.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
     public function getProjectStoryPairs($projectID = 0, $productID = 0)
     {
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t3.name AS product')
@@ -441,7 +539,16 @@ class storyModel extends model
         return $this->formatStories($stories);
     }
 
-    /* 获得某一个产品计划下面所有的需求列表。*/
+    /**
+     * Get stories list of a plan.
+     * 
+     * @param  int    $planID 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_STORY)
@@ -451,7 +558,16 @@ class storyModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
-    /* 获得某一个产品计划下面所有的需求列表。*/
+    /**
+     * Get stories pairs of a plan.
+     * 
+     * @param  int    $planID 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getPlanStoryPairs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_STORY)
@@ -461,7 +577,16 @@ class storyModel extends model
             ->fetchAll();
     }
 
-    /* 获得指派给某一个用户的需求列表。*/
+    /**
+     * Get stories of a user.
+     * 
+     * @param  string $account 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getUserStories($account, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
@@ -473,7 +598,13 @@ class storyModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
-    /* 获得需求所在的活动的项目的成员列表。*/
+    /**
+     * Get doing projects' members of a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return array
+     */
     public function getProjectMembers($storyID)
     {
         $projects = $this->dao->select('project')
@@ -485,33 +616,57 @@ class storyModel extends model
         if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs('account'));
     }
 
-    /* 获得一个需求对应的版本号。*/
+    /**
+     * Get version of a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return int
+     */
     public function getVersion($storyID)
     {
         return $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq((int)$storyID)->fetch('version');
     }
 
-    /* 获得需求列表对应的版本列表。*/
+    /**
+     * Get versions of some stories.
+     * 
+     * @param  array|string story id list
+     * @access public
+     * @return array
+     */
     public function getVersions($storyID)
     {
         return $this->dao->select('id, version')->from(TABLE_STORY)->where('id')->in($storyID)->fetchPairs();
     }
 
-    /* 格式化需求显示。*/
+    /**
+     * Format stories 
+     * 
+     * @param  array    $stories 
+     * @access private
+     * @return void
+     */
     private function formatStories($stories)
     {
-        /* 查找每个story所对应的模块名称。*/
+        /* Get module names of stories. */
         /*$modules = array();
         foreach($stories as $story) $modules[] = $story->module;
         $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();*/
 
-        /* 重新组织每一个story的展示方式。*/
+        /* Format these stories. */
         $storyPairs = array('' => '');
         foreach($stories as $story) $storyPairs[$story->id] = $story->id . ':' . $story->title;
         return $storyPairs;
     }
 
-    /* 从story列表中提取所有出现过的账户。*/
+    /**
+     * Extract accounts from some stories.
+     * 
+     * @param  array  $stories 
+     * @access public
+     * @return array
+     */
     public function extractAccountsFromList($stories)
     {
         $accounts = array();
@@ -525,7 +680,13 @@ class storyModel extends model
         return array_unique($accounts);
     }
 
-    /* 从一条story中提取所有出现过的账户。*/
+    /**
+     * Extract accounts from a story.
+     * 
+     * @param  object  $story 
+     * @access public
+     * @return array
+     */
     public function extractAccountsFromSingle($story)
     {
         $accounts = array();

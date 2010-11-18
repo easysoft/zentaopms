@@ -11,7 +11,12 @@
  */
 class story extends control
 {
-    /* 构造函数。*/
+    /**
+     * The construct function, load product, tree, user auto.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -20,7 +25,14 @@ class story extends control
         $this->loadModel('user');
     }
 
-    /* 新增需求。*/
+    /**
+     * Create a story.
+     * 
+     * @param  int    $productID 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
     public function create($productID = 0, $moduleID = 0)
     {
         if(!empty($_POST))
@@ -33,16 +45,15 @@ class story extends control
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
-        /* 设置产品相关数据。*/
+        /* Set products, users and module. */
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
         $users    = $this->user->getPairs('nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->product->setMenu($products, $product->id);
 
-        /* 赋值到模板。*/
         $this->view->header->title    = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
         $this->view->position[]       = $this->lang->story->create;
@@ -55,20 +66,26 @@ class story extends control
         $this->display();
     }
 
-    /* 变更、编辑时的共同操作。 */
+    /**
+     * The common action when edit or change a story.
+     * 
+     * @param  int    $storyID 
+     * @access private
+     * @return void
+     */
     private function commonAction($storyID)
     {
-        /* 获取数据。*/
+        /* Get datas. */
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
         $users    = $this->user->getPairs('nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story');
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->product->setMenu($products, $product->id);
 
-        /* 赋值到模板。*/
+        /* Assign. */
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $this->view->product          = $product;
         $this->view->products         = $products;
@@ -79,7 +96,13 @@ class story extends control
         $this->view->actions          = $this->action->getList('story', $storyID);
     }
 
-    /* 编辑需求。*/
+    /**
+     * Edit a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function edit($storyID)
     {
         $this->loadModel('action');
@@ -99,14 +122,20 @@ class story extends control
 
         $this->commonAction($storyID);
   
-        /* 赋值到模板。*/
+        /* Assign. */
         $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $this->view->story->title;
         $this->view->position[]    = $this->lang->story->edit;
         $this->view->users         = $this->user->appendDeleted($this->user->getPairs('nodeleted'), $this->view->story->assignedTo);
         $this->display();
     }
 
-    /* 变更需求。*/
+    /**
+     * Change a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function change($storyID)
     {
         $this->loadModel('action');
@@ -135,13 +164,19 @@ class story extends control
         $this->app->loadLang('testcase');
         $this->app->loadLang('project');
 
-        /* 赋值到模板。*/
+        /* Assign. */
         $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->change . $this->lang->colon . $this->view->story->title;
         $this->view->position[]    = $this->lang->story->change;
         $this->display();
     }
 
-    /* 激活需求。*/
+    /**
+     * Activate a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function activate($storyID)
     {
         $this->loadModel('action');
@@ -157,13 +192,20 @@ class story extends control
 
         $this->commonAction($storyID);
 
-        /* 赋值到模板。*/
+        /* Assign. */
         $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->activate . $this->lang->colon . $this->view->story->title;
         $this->view->position[]    = $this->lang->story->activate;
         $this->display();
     }
 
-    /* 需求详情。*/
+    /**
+     * View a story.
+     * 
+     * @param  int    $storyID 
+     * @param  int    $version 
+     * @access public
+     * @return void
+     */
     public function view($storyID, $version = 0)
     {
         $this->loadModel('action');
@@ -177,7 +219,7 @@ class story extends control
         $modulePath   = $this->tree->getParents($story->module);
         $users        = $this->user->getPairs('noletter');
 
-        /* 设置菜单。*/
+        /* Set the menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
@@ -196,7 +238,14 @@ class story extends control
         $this->display();
     }
 
-    /* 删除一条story。*/
+    /**
+     * Delete a story.
+     * 
+     * @param  int    $storyID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function delete($storyID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -211,7 +260,13 @@ class story extends control
         }
     }
 
-    /* 评审一条需求。*/
+    /**
+     * Review a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function review($storyID)
     {
         $this->loadModel('action');
@@ -232,29 +287,27 @@ class story extends control
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
-        /* 获取需求和产品信息。*/
-        $story    = $this->story->getById($storyID);
-        $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+        /* Get story and product. */
+        $story   = $this->story->getById($storyID);
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
-        /* 设置评审结果可选值。*/
+        /* Set the review result options. */
         if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->reviewResultList['revert']);
         if($story->status == 'changed') unset($this->lang->story->reviewResultList['reject']);
 
-        /* 导航信息。*/
         $this->view->header->title = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
         $this->view->position[]    = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $this->view->position[]    = $this->lang->story->view;
 
-        /* 赋值。*/
         $this->view->product = $product;
         $this->view->story   = $story;
         $this->view->actions = $this->action->getList('story', $storyID);
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted');
 
-        /* 影响范围。*/
+        /* Get the affcected things. */
         $this->story->getAffectedScope($this->view->story);
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
@@ -264,7 +317,13 @@ class story extends control
         $this->display();
     }
 
-    /* 关闭一条需求。*/
+    /**
+     * Close a story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function close($storyID)
     {
         $this->loadModel('action');
@@ -279,22 +338,20 @@ class story extends control
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
-        /* 获取需求和产品信息。*/
-        $story    = $this->story->getById($storyID);
-        $product  = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+        /* Get story and product. */
+        $story   = $this->story->getById($storyID);
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
-        /* 设置评审结果可选值。*/
+        /* Set the closed reason options. */
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
 
-        /* 导航信息。*/
         $this->view->header->title = $product->name . $this->lang->colon . $this->lang->close . $this->lang->colon . $story->title;
         $this->view->position[]    = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $this->view->position[]    = $this->lang->close;
 
-        /* 赋值。*/
         $this->view->product = $product;
         $this->view->story   = $story;
         $this->view->actions = $this->action->getList('story', $storyID);
@@ -302,7 +359,14 @@ class story extends control
         $this->display();
     }
 
-    /* 需求的任务列表。*/
+    /**
+     * Tasks of a story.
+     * 
+     * @param  int    $storyID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function tasks($storyID, $projectID = 0)
     {
         $this->loadModel('task');
@@ -311,35 +375,58 @@ class story extends control
         exit;
     }
 
-    /* Ajax: 获取某一个项目的需求列表。*/
+    /**
+     * AJAX: get stories of a project in html select.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $productID 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function ajaxGetProjectStories($projectID, $productID = 0, $storyID = 0)
     {
         $stories = $this->story->getProjectStoryPairs($projectID, $productID);
         die(html::select('story', $stories, $storyID));
     }
 
-    /* Ajax: 获取某一个产品的需求列表。*/
+    /**
+     * AJAX: get stories of a product in html select.
+     * 
+     * @param  int    $productID 
+     * @param  int    $moduleID 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function ajaxGetProductStories($productID, $moduleID = 0, $storyID = 0)
     {
         $stories = $this->story->getProductStoryPairs($productID, $moduleID);
         die(html::select('story', $stories, $storyID, "class=''"));
     }
 
-    /* 发送邮件。*/
+    /**
+     * Send email.
+     * 
+     * @param  int    $storyID 
+     * @param  int    $actionID 
+     * @access private
+     * @return void
+     */
     private function sendmail($storyID, $actionID)
     {
-        /* 获得action信息。*/
+        /* Get actions. */
         $action          = $this->action->getById($actionID);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
         if(strtolower($action->action) == 'opened') $action->comment = $story->spec;
 
-        /* 设定toList和ccList。*/
+        /* Set toList and ccList. */
         $story  = $this->story->getById($storyID);
         $toList = $story->assignedTo;
         $ccList = str_replace(' ', '', trim($story->mailto, ','));
 
-        /* 当需求的操作是变更或者评审的时候，抄送给项目中成员。*/
+        /* If the action is changed or reviewed, mail to the project team. */
         if(strtolower($action->action) == 'changed' or strtolower($action->action) == 'reviewed')
         {
             $prjMembers = $this->story->getProjectMembers($storyID);
@@ -370,13 +457,13 @@ class story extends control
             $toList = $story->openedBy;
         }
 
-        /* 赋值，获得邮件内容。*/
+        /* Get the mail content. */
         $this->view->story  = $story;
         $this->view->action = $action;
         $this->view->users  = $this->user->getPairs('noletter');
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
-        /* 发信。*/
+        /* Send it. */
         $this->loadModel('mail')->send($toList, 'STORY #' . $story->id . $this->lang->colon . $story->title, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }
