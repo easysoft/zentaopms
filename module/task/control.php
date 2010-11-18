@@ -11,7 +11,12 @@
  */
 class task extends control
 {
-    /* 构造函数。*/
+    /**
+     * Construct function, load model of project and story modules.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -19,25 +24,36 @@ class task extends control
         $this->loadModel('story');
     }
 
-    /* 添加任务。*/
+    /**
+     * Create a task.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function create($projectID = 0, $storyID = 0)
     {
         $project = $this->project->getById($projectID); 
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
         if(!empty($_POST))
         {
             $tasksID = $this->task->create($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
+
+            /* Create actions. */
             $this->loadModel('action');
             foreach($tasksID as $taskID)
             {
                 $actionID = $this->action->create('task', $taskID, 'Opened', '');
                 $this->sendmail($taskID, $actionID);
             }            
+
+            /* Locate the browser. */
             if($this->post->after == 'continueAdding')
             {
                 echo js::alert($this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding']);
@@ -70,7 +86,13 @@ class task extends control
         $this->display();
     }
 
-    /* 公共的操作。*/
+    /**
+     * Common actions of task module.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
     public function commonAction($taskID)
     {
         $this->view->task    = $this->task->getByID($taskID);
@@ -79,16 +101,21 @@ class task extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noletter, noclosed, nodeleted'); 
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $this->view->project->id);
         $this->view->position[] = html::a($this->createLink('project', 'browse', "project={$this->view->task->project}"), $this->view->project->name);
 
     }
 
-    /* 编辑任务。*/
+    /**
+     * Edit a task.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
     public function edit($taskID)
     {
-        /* 执行公共的操作。*/
         $this->commonAction($taskID);
 
         if(!empty($_POST))
@@ -110,7 +137,6 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        /* 赋值。*/
         $this->view->header->title = $this->lang->task->edit;
         $this->view->position[]    = $this->lang->task->edit;
         $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
@@ -119,48 +145,20 @@ class task extends control
         $this->display();
     }
 
-    /* 记录工时。*/
-    public function logEfforts($taskID)
-    {
-        /* 执行公共的操作。*/
-        $this->commonAction($taskID);
-
-        if(!empty($_POST))
-        {
-            $this->loadModel('action');
-            $changes = $this->task->update($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('task', $taskID);
-
-            if($this->post->comment != '' or !empty($changes) or !empty($files))
-            {
-                $action = !empty($changes) ? 'Edited' : 'Commented';
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
-                $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
-            }
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
-        }
-
-        /* 导航信息。*/
-        $this->view->header->title = $this->lang->task->logEfforts;
-        $this->view->position[]    = $this->lang->task->logEfforts;
-
-        $this->display();
-    }
-
-    /* 查看任务。*/
+    /**
+     * View a task.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
     public function view($taskID)
     {
-        $this->loadModel('action');
         $task = $this->task->getById($taskID);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        /* Set menu. */
         $project = $this->project->getById($task->project);
-
-        /* 设置菜单。*/
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->view;
@@ -171,12 +169,18 @@ class task extends control
         $this->view->position = $position;
         $this->view->project  = $project;
         $this->view->task     = $task;
-        $this->view->actions  = $this->action->getList('task', $taskID);
+        $this->view->actions  = $this->loadModel('action')->getList('task', $taskID);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
-    /* 确认需求变动。*/
+    /**
+     * Confirm story change 
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
     public function confirmStoryChange($taskID)
     {
         $task = $this->task->getById($taskID);
@@ -185,10 +189,15 @@ class task extends control
         die(js::reload('parent'));
     }
 
-    /* 开始一个任务。*/
+    /**
+     * Start a task.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
     public function start($taskID)
     {
-        /* 执行公共的操作。*/
         $this->commonAction($taskID);
 
         if(!empty($_POST))
@@ -207,16 +216,20 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        /* 赋值。*/
         $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
         $this->view->position[]    = $this->lang->task->start;
         $this->display();
     }
     
-    /* 完成一个任务。*/
+    /**
+     * Complete a task.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
     public function complete($taskID)
     {
-        /* 执行公共的操作。*/
         $this->commonAction($taskID);
 
         if(!empty($_POST))
@@ -235,17 +248,21 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        /* 赋值。*/
         $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->complete;
         $this->view->position[]    = $this->lang->task->complete;
         
         $this->display();
     }
 
-    /* 取消一个任务。*/
+    /**
+     * Cancel a task.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
     public function cancel($taskID)
     {
-        /* 执行公共的操作。*/
         $this->commonAction($taskID);
 
         if(!empty($_POST))
@@ -264,14 +281,21 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        /* 赋值。*/
         $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->cancel;
         $this->view->position[]    = $this->lang->task->cancel;
         
         $this->display();
     }
 
-    /* 删除一个任务。*/
+    /**
+     * Delete a task.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $taskID 
+     * @param  string $confirm yes|no
+     * @access public
+     * @return void
+     */
     public function delete($projectID, $taskID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -287,14 +311,21 @@ class task extends control
         }
     }
 
-    /* 发送邮件。*/
+    /**
+     * Send email.
+     * 
+     * @param  int    $taskID 
+     * @param  int    $actionID 
+     * @access private
+     * @return void
+     */
     private function sendmail($taskID, $actionID)
     {
-        /* 设定toList和ccList。*/
+        /* Set toList and ccList. */
         $task   = $this->task->getByID($taskID);
         $toList = $task->owner;
-        
         $ccList = trim($task->mailto, ',');
+
         if($toList == '')
         {
             if($ccList == '') return;
@@ -311,23 +342,30 @@ class task extends control
             }
         }
 
-         /* 获得action信息。*/
+        /* Get action info. */
         $action          = $this->action->getById($actionID);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
 
-        /* 赋值，获得邮件内容。*/
+        /* Create the email content. */
         $this->view->task   = $task;
         $this->view->action = $action;
         $this->clear();
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
-        /* 发信。*/
+        /* Send emails. */
         $this->loadModel('mail')->send($toList, 'TASK#' . $task->id . $this->lang->colon . $task->name, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }
     
-    /* Ajax请求： 返回用户任务的下拉列表框。*/
+    /**
+     * AJAX: return tasks of a user in html select. 
+     * 
+     * @param  string $account 
+     * @param  string $status 
+     * @access public
+     * @return string
+     */
     public function ajaxGetUserTasks($account = '', $status = 'wait,doing')
     {
         if($account == '') $account = $this->app->user->account;
@@ -335,7 +373,14 @@ class task extends control
         die(html::select('task', $tasks, '', 'class=select-1'));
     }
 
-    /* Ajax请求： 返回项目任务的下拉列表框。*/
+    /**
+     * AJAX: return project tasks in html select.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $taskID 
+     * @access public
+     * @return string
+     */
     public function ajaxGetProjectTasks($projectID, $taskID = 0)
     {
         $tasks = $this->task->getProjectTaskPairs((int)$projectID);

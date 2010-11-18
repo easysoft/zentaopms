@@ -16,14 +16,15 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <style>.button-c {padding:2px} </style>
 <script language='javascript'>
-/* 拷贝需求标题为任务标题。*/
+/* Copy story title as task title. */
 function copyStoryTitle()
 {
     var storyTitle = $('#story option:selected').text();
     storyTitle = storyTitle.substr(storyTitle.lastIndexOf(':')+ 1);
     $('#name').attr('value', storyTitle);
 }
-/* 设置任务指派给多选。*/
+
+/* Set the owners field. */
 function setOwners(result)
 {
     if(result == 'affair')
@@ -37,7 +38,8 @@ function setOwners(result)
         $('#owner').removeAttr('multiple');
     }
 }
-/* 设置预览的链接。*/
+
+/* Set the story priview link. */
 function setPreview()
 {
     if(!$('#story').val())
@@ -55,7 +57,7 @@ function setPreview()
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(document).ready(function()
 {
-    KE.show({id:'desc', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')}); //富文本编辑器。
+    KE.show({id:'desc', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});
     setPreview();
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
 });

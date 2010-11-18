@@ -15,7 +15,13 @@ class taskModel extends model
 {
     const CUSTOM_STATUS_ORDER = 'wait,doing,done,cancel';
 
-    /* 新增一个任务。*/
+    /**
+     * Create a task.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function create($projectID)
     {
         $tasksID = array();
@@ -50,7 +56,13 @@ class taskModel extends model
         return $tasksID;
     }
 
-    /* 更新一个任务。*/
+    /**
+     * Update a task.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
@@ -77,7 +89,13 @@ class taskModel extends model
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
     
-    /* 改变一个任务的状态。*/
+    /**
+     * Change status of a task and return the diff info.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return array the diff info.
+     */
     public function changeStatus($taskID)
     {
         $oldTask = $this->getById($taskID);
@@ -100,7 +118,13 @@ class taskModel extends model
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
-    /* 通过id获取一个任务信息。*/
+    /**
+     * Get task info by Id.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return object|bool
+     */
     public function getById($taskID)
     {
         $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS ownerRealName')
@@ -114,7 +138,7 @@ class taskModel extends model
         if(!$task) return false;
         if($task->mailto)
         {
-            $task->mailto = ltrim(trim($task->mailto), ',');  // 去掉开始的，。
+            $task->mailto = ltrim(trim($task->mailto), ',');  // remove the first ,
             $task->mailto = str_replace(' ', '', $task->mailto);
             $task->mailto = rtrim($task->mailto, ',') . ',';
             $task->mailto = str_replace(',', ', ', $task->mailto);
@@ -123,16 +147,23 @@ class taskModel extends model
         return $this->processTask($task);
     }
     
-    /* 获得某一个项目的任务列表。*/
+    /**
+     * Get tasks of a project.
+     * 
+     * @param  int    $projectID 
+     * @param  string $status       all|needConfirm|wait|doing|done|cancel
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array|bool
+     */
     public function getProjectTasks($projectID, $status = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS ownerRealName')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')
-            ->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')
-            ->on('t1.owner = t3.account')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.owner = t3.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
@@ -144,14 +175,21 @@ class taskModel extends model
         return false;
     }
 
-    /* 获得某一个项目的任务id=>name列表。*/
+    /**
+     * Get project taskes paris.1
+     * 
+     * @param  int    $projectID 
+     * @param  string $status
+     * @param  string $orderBy 
+     * @access public
+     * @return array
+     */
     public function getProjectTaskPairs($projectID, $status = 'all', $orderBy = 'id_desc')
     {
         $tasks = array('' => '');
         $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS ownerRealName')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.owner = t2.account')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.owner = t2.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
@@ -161,7 +199,14 @@ class taskModel extends model
         return $tasks;
     }
 
-    /* 获得用户的任务列表。*/
+    /**
+     * Get tasks of a user.
+     * 
+     * @param  string $account 
+     * @param  string $status 
+     * @access public
+     * @return array
+     */
     public function getUserTasks($account, $status = 'all')
     {
         $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
@@ -178,14 +223,20 @@ class taskModel extends model
         return array();
     }
 
-    /* 获得用户的任务id=>name列表。*/
+    /**
+     * Get tasks pairs of a user.
+     * 
+     * @param  string $account 
+     * @param  string $status 
+     * @access public
+     * @return array
+     */
     public function getUserTaskPairs($account, $status = 'all')
     {
         $tasks = array();
         $sql = $this->dao->select('t1.id, t1.name, t2.name as project')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftjoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.owner')->eq($account)
             ->andWhere('t1.deleted')->eq(0);
         if($status != 'all') $sql->andwhere('t1.status')->in($status);
@@ -197,7 +248,14 @@ class taskModel extends model
         return $tasks;
     }
 
-    /* 获得story对应的task id=>name列表。*/
+    /**
+     * Get task pairs of a story.
+     * 
+     * @param  int    $storyID 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getStoryTaskPairs($storyID, $projectID = 0)
     {
          return $this->dao->select('id, name')
@@ -208,7 +266,14 @@ class taskModel extends model
             ->fetchPairs();
     }
 
-    /* 获得story对应的task数量。*/
+    /**
+     * Get counts of some stories's taskes.
+     * 
+     * @param  array  $stories 
+     * @param  int    $projectID 
+     * @access public
+     * @return int
+     */
     public function getStoryTaskCounts($stories, $projectID = 0)
     {
         $taskCounts = $this->dao->select('story, COUNT(*) AS tasks')
@@ -222,13 +287,19 @@ class taskModel extends model
         return $taskCounts;
     }
 
-    /* 计算一组任务的相关状态。*/
+    /**
+     * Batch process taskes.
+     * 
+     * @param  int    $tasks 
+     * @access private
+     * @return void
+     */
     private function processTasks($tasks)
     {
         $today = helper::today();
         foreach($tasks as $task)
         {
-            /* 计算是否延期。*/
+            /* Delayed or not. */
             if($task->status !== 'done' and $task->status !== 'cancel')
             {   
                 if($task->deadline != '0000-00-00')
@@ -238,7 +309,7 @@ class taskModel extends model
                 }
             }    
 	    
-            /* 判断需求是否变更。*/
+            /* Story changed or not. */
             $task->needConfirm = false;
             if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
             {
@@ -248,12 +319,18 @@ class taskModel extends model
         return $tasks;
     }
 
-    /* 计算一个任务的相关状态。*/
+    /**
+     * Process a task, judge it's status.
+     * 
+     * @param  object    $task 
+     * @access private
+     * @return object
+     */
     private function processTask($task)
     {
         $today = helper::today();
        
-        /* 计算是否延期。*/
+        /* Delayed or not?. */
         if($task->status !== 'done' and $task->status !== 'cancel')
         {
             if($task->deadline != '0000-00-00')
@@ -263,7 +340,7 @@ class taskModel extends model
 	        } 
 	    }
 	    
-        /* 判断需求是否变更。*/
+        /* Story changed or not. */
         $task->needConfirm = false;
         if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
         {
