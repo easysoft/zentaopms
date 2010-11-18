@@ -11,7 +11,12 @@
  */
 class api extends control
 {
-    /* 获得sessionid。*/
+    /**
+     * Return session to the client.
+     * 
+     * @access public
+     * @return void
+     */
     public function getSessionID()
     {
         $this->session->set('rand', mt_rand(0, 10000));
@@ -21,7 +26,15 @@ class api extends control
         $this->display();
     }
 
-    /* 获得某一个model某一个方法的结果。params的传递方式：param1=value1,param2=value2。*/
+    /**
+     * Execute a module's model's method, return the result.
+     * 
+     * @param  string    $moduleName 
+     * @param  string    $methodName 
+     * @param  string    $params        param1=value1,param2=value2, don't use & to join them.
+     * @access public
+     * @return string
+     */
     public function getModel($moduleName, $methodName, $params = '')
     {
         parse_str(str_replace(',', '&', $params), $params);
