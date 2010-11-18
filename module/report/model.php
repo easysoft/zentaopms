@@ -13,7 +13,16 @@
 <?php
 class reportModel extends model
 {
-    /* 输出chart swf代码。*/
+    /**
+     * Create the html code of chart.
+     * 
+     * @param  string $swf      the swf type
+     * @param  string $dataURL  the date url
+     * @param  int    $width 
+     * @param  int    $height 
+     * @access public
+     * @return string
+     */
     public function createChart($swf, $dataURL, $width = 800, $height = 500)
     {
         $chartRoot = $this->app->getWebRoot() . 'fusioncharts/';
@@ -29,7 +38,16 @@ class reportModel extends model
 EOT;
     }
 
-    /* 创建js输出的chart。*/
+    /**
+     * Create the js code of chart.
+     * 
+     * @param  string $swf      the swf type
+     * @param  string $dataURL  the date url
+     * @param  int    $width 
+     * @param  int    $height 
+     * @access public
+     * @return string
+     */
     public function createJSChart($swf, $dataXML, $width = 'auto', $height = 500)
     {
         $jsRoot = $this->app->getWebRoot() . 'js/';
@@ -59,7 +77,14 @@ $chartID.render("$divID");
 EOT;
     }
 
-    /* 生成single系列的xml数据。。 */
+    /**
+     * Create xml data of single charts.
+     * 
+     * @param  array  $sets 
+     * @param  array  $chartOptions 
+     * @access public
+     * @return string the xml data.
+     */
     public function createSingleXML($sets, $chartOptions = array())
     {
         $data  = pack("CCC", 0xef, 0xbb, 0xbf);
@@ -82,8 +107,14 @@ EOT;
         return $data;
     }
 
-    /* 输出渲染js图标的语句。*/
-    public function rendJsCharts($chartCount)
+    /**
+     * Create the js code to render chart.
+     * 
+     * @param  int    $chartCount 
+     * @access public
+     * @return string
+     */
+    public function renderJsCharts($chartCount)
     {
         $js = '<script language="Javascript">';
         for($i = 1; $i <= $chartCount; $i ++) $js .= "createChart$i()\n";
@@ -91,7 +122,13 @@ EOT;
         return $js;
     }
 
-    /* 计算每条数据所占的百分比。*/
+    /**
+     * Compute percent of every item.
+     * 
+     * @param  array    $datas 
+     * @access public
+     * @return array
+     */
     public function computePercent($datas)
     {
         $sum = 0;
