@@ -102,7 +102,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function task($projectID = 0, $status = 'all', $orderBy = 'status_asc,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($projectID = 0, $status = 'all', $orderBy = 'status_asc,id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
