@@ -11,7 +11,13 @@
  */
 class build extends control
 {
-    /* 添加build。*/
+    /**
+     * Create a buld.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function create($projectID)
     {
         if(!empty($_POST))
@@ -22,17 +28,23 @@ class build extends control
             die(js::locate($this->createLink('project', 'build', "project=$projectID"), 'parent'));
         }
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->loadModel('project')->setMenu($this->project->getPairs(), $projectID);
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header->title = $this->lang->build->create;
         $this->view->products = $this->project->getProducts($projectID);
         $this->view->users    = $this->loadModel('user')->getPairs();
         $this->display();
     }
 
-    /* 编辑build。*/
+    /**
+     * Edit a build.
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return void
+     */
     public function edit($buildID)
     {
         if(!empty($_POST))
@@ -47,11 +59,11 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
         }
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $build = $this->build->getById((int)$buildID);
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header->title = $this->lang->build->edit;
         $this->view->position[]    = $this->lang->build->edit;
         $this->view->products      = $this->project->getProducts($build->project);
@@ -60,16 +72,22 @@ class build extends control
         $this->display();
     }
                                                           
-    /* 查看build。*/
+    /**
+     * View a build.
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return void
+     */
     public function view($buildID)
     {
-        /* 设置菜单。*/
+        /* Set menu. */
         $build = $this->build->getById((int)$buildID);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header->title = $this->lang->build->view;
         $this->view->position[]    = $this->lang->build->view;
         $this->view->products      = $this->project->getProducts($build->project);
@@ -79,7 +97,14 @@ class build extends control
         $this->display();
     }
  
-    /* 删除build。*/
+    /**
+     * Delete a build.
+     * 
+     * @param  int    $buildID 
+     * @param  string $confirm  yes|noe
+     * @access public
+     * @return void
+     */
     public function delete($buildID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -94,14 +119,30 @@ class build extends control
         }
     }
 
-    /* AJAX接口：获得产品的build列表。*/
+    /**
+     * AJAX: get builds of a product in html select.
+     * 
+     * @param  int    $productID 
+     * @param  string $varName      the name of the select object to create
+     * @param  string $build        build to selected
+     * @access public
+     * @return string
+     */
     public function ajaxGetProductBuilds($productID, $varName, $build = '')
     {
         if($varName == 'openedBuild')   die(html::select($varName . '[]', $this->build->getProductBuildPairs($productID, 'noempty'), $build, 'size=4 class=select-3 multiple'));
         if($varName == 'resolvedBuild') die(html::select($varName, $this->build->getProductBuildPairs($productID, 'noempty'), $build, 'class=select-3'));
     }
 
-    /* AJAX接口：获得项目的build列表。*/
+    /**
+     * AJAX: get builds of a project in html select.
+     * 
+     * @param  int    $projectID
+     * @param  string $varName      the name of the select object to create
+     * @param  string $build        build to selected
+     * @access public
+     * @return string
+     */
     public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '')
     {
         if($varName == 'openedBuild')   die(html::select($varName . '[]', $this->build->getProjectBuildPairs($projectID, $productID, 'noempty'), $build, 'size=4 class=select-3 multiple'));

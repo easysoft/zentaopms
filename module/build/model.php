@@ -13,7 +13,13 @@
 <?php
 class buildModel extends model
 {
-    /* 获取build详细信息。*/
+    /**
+     * Get build info.
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return object
+     */
     public function getByID($buildID)
     {
         return $this->dao->select('t1.*, t2.name as projectName, t3.name as productName')
@@ -25,7 +31,13 @@ class buildModel extends model
             ->fetch();
     }
 
-    /* 查找项目中的build列表。*/
+    /**
+     * Get builds of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getProjectBuilds($projectID)
     {
         return $this->dao->select('t1.*, t2.name as projectName, t3.name as productName')
@@ -38,7 +50,15 @@ class buildModel extends model
             ->fetchAll();
     }
 
-    /* 查找项目中的build列表。params='noempty|notrunk' */
+    /**
+     * Get builds of a project in pairs. 
+     * 
+     * @param  int    $projectID 
+     * @param  int    $productID 
+     * @param  string $params       noempty|notrunk, can be a set of them
+     * @access public
+     * @return array
+     */
     public function getProjectBuildPairs($projectID, $productID, $params = '')
     {
         $sysBuilds = array();
@@ -59,7 +79,14 @@ class buildModel extends model
         return $sysBuilds + $builds;
     }
 
-    /* 查找产品中的build列表。params='noempty|notrunk' */
+    /**
+     * Get builds of a product in pairs. 
+     * 
+     * @param  int    $productID 
+     * @param  string $params       noempty|notrunk, can be a set of them
+     * @access public
+     * @return string
+     */
     public function getProductBuildPairs($productID, $params = '')
     {
         $sysBuilds = array();
@@ -79,7 +106,13 @@ class buildModel extends model
         return $sysBuilds + $builds;
     }
 
-    /* 创建。*/
+    /**
+     * Create a build
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function create($projectID)
     {
         $build = fixer::input('post')
@@ -91,7 +124,13 @@ class buildModel extends model
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
-    /* 编辑。*/
+    /**
+     * Update a build.
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return void
+     */
     public function update($buildID)
     {
         $oldBuild = $this->getByID($buildID);
