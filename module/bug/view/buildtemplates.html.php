@@ -10,7 +10,7 @@
 <script language='Javascript'>
 var setTemplateTitle = '<?php echo $lang->bug->setTemplateTitle;?>';
 
-/* 保存模板。*/
+/* Save template. */
 KE.lang.savetemplate = '<?php echo $lang->bug->saveTemplate;?>';
 KE.plugin.savetemplate = {
     click: function(id) {
@@ -26,7 +26,7 @@ KE.plugin.savetemplate = {
         });
     }
 }
-/* 设置bug模板。*/
+/* Set template. */
 function setTemplate(templateID)
 {
     $('#tplTitleBox' + templateID).attr('style', 'text-decoration:underline; color:#8B008B');
@@ -34,7 +34,7 @@ function setTemplate(templateID)
     KE.html('steps', steps);
 }
 
-/* 删除bug模板。*/
+/* Delete template. */
 function deleteTemplate(templateID)
 {
     if(!templateID) return;

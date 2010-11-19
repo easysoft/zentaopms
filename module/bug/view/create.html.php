@@ -24,46 +24,82 @@
 .text-1 {width: 85%}
 </style>
 <script language='Javascript'>
-/* 当选择产品时，触发这个方法。*/
+/**
+ * Load all fields. 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
 function loadAll(productID)
 {
-    $('#taskIdBox').get(0).innerHTML = '<select id="task"></select>';  // 将taskID内容复位。
-    loadModuleMenu(productID);              // 加载产品的模块列表。
-    loadProductStories(productID);          // 加载产品的需求列表。
-    loadProductProjects(productID);         // 加载项目列表。
-    loadProductBuilds(productID);           // 加载build列表。
-    setAssignedTo();                        // 设置默认指派人。
+    $('#taskIdBox').get(0).innerHTML = '<select id="task"></select>';  // Reset the task.
+    loadModuleMenu(productID);
+    loadProductStories(productID);
+    loadProductProjects(productID);
+    loadProductBuilds(productID); 
+    setAssignedTo(); 
 }
 
-/* 加载模块列表。*/
+/**
+ * Load module menu.
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
 function loadModuleMenu(productID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug');
     $('#moduleIdBox').load(link);
 }
 
-/* 加载产品的需求列表。*/
+/**
+ * Load product stories 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
 function loadProductStories(productID)
 {
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
     $('#storyIdBox').load(link);
 }
 
-/* 加载项目列表。*/
+/**
+ * Load projects of product. 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
 function loadProductProjects(productID)
 {
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID);
     $('#projectIdBox').load(link);
 }
 
-/* 加载产品build列表。*/
+/**
+ * Load product builds.
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
 function loadProductBuilds(productID)
 {
     link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild');
     $('#buildBox').load(link);
 }
 
-/* 加载项目的任务列表和需求列表。*/
+/**
+ * Load project related bugs and taskes.
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectRelated(projectID)
 {
     if(projectID)
@@ -80,14 +116,26 @@ function loadProjectRelated(projectID)
     }
 }
 
-/* 加载项目的任务列表。*/
+/**
+ * Load project taskes.
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectTasks(projectID)
 {
     link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID);
     $('#taskIdBox').load(link);
 }
 
-/* 加载项目的需求列表。*/
+/**
+ * Load project stories.
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectStories(projectID)
 {
     productID = $('#product').get(0).value; 
@@ -95,7 +143,12 @@ function loadProjectStories(projectID)
     $('#storyIdBox').load(link);
 }
 
-/* 设置默认指派者。*/
+/**
+ * Set the assignedTo field.
+ * 
+ * @access public
+ * @return void
+ */
 function setAssignedTo()
 {
     link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + $('#module').val() + '&productID=' + $('#product').val());
@@ -105,7 +158,13 @@ function setAssignedTo()
     });
 }
 
-/* 加载项目的build列表。*/
+/**
+ * Load project builds.
+ * 
+ * @param  int $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectBuilds(projectID)
 {
     link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=openedBuild');

@@ -15,7 +15,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
-/* 通过模块浏览。*/
+/* Browse by module. */
 function browseByModule(active)
 {
     $('#mainbox').addClass('yui-t1');
@@ -24,7 +24,7 @@ function browseByModule(active)
     $('#querybox').addClass('hidden');
     $('#' + active + 'Tab').removeClass('active');
 }
-/* 搜索。*/
+/* Search bugs. */
 function browseBySearch(active)
 {
     $('#mainbox').removeClass('yui-t1');
