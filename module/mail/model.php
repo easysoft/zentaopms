@@ -25,7 +25,12 @@ class mailModel extends model
         $this->setMTA();
     }
 
-    /* 设置邮件传输代理: MTA。*/
+    /**
+     * Set MTA.
+     * 
+     * @access public
+     * @return void
+     */
     public function setMTA()
     {
         if(self::$instance == null) self::$instance = new phpmailer(true);
@@ -36,7 +41,12 @@ class mailModel extends model
         $this->$funcName();
     }
 
-    /* SMTP方式。*/
+    /**
+     * Set smtp.
+     * 
+     * @access private
+     * @return void
+     */
     private function setSMTP()
     {
         $this->mta->isSMTP();
@@ -48,19 +58,34 @@ class mailModel extends model
         if(isset($this->config->mail->smtp->port)) $this->mta->Port = $this->config->mail->smtp->port;
     }
 
-    /* PHP Mail方式。*/
+    /**
+     * PHPmail.
+     * 
+     * @access private
+     * @return void
+     */
     private function setPhpMail()
     {
         $this->mta->isMail();
     }
 
-    /* SendMail方式。*/
+    /**
+     * Sendmail.
+     * 
+     * @access private
+     * @return void
+     */
     private function setSendMail()
     {
         $this->mta->isSendmail();
     }
 
-    /* GMAIL方式。*/
+    /**
+     * Gmail.
+     * 
+     * @access private
+     * @return void
+     */
     private function setGMail()
     {
         $this->mta->isSMTP();
@@ -73,12 +98,21 @@ class mailModel extends model
         $this->mta->Password   = $this->config->mail->gmail->password;
     }
 
-    /* 发送邮件。*/
+    /**
+     * Send email
+     * 
+     * @param  array   $toList 
+     * @param  string  $subject 
+     * @param  string  $body 
+     * @param  array   $ccList 
+     * @access public
+     * @return void
+     */
     public function send($toList, $subject, $body = '', $ccList = '')
     {
         if(!$this->config->mail->turnon) return;
 
-        /* 获得用户的真实姓名和email列表。*/
+        /* Get realname and email of users. */
         $this->loadModel('user');
         $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
         
@@ -104,7 +138,14 @@ class mailModel extends model
         }
     }
 
-    /* 设置发送地址。*/
+    /**
+     * Set to address
+     * 
+     * @param  array    $toList 
+     * @param  array    $emails 
+     * @access private
+     * @return void
+     */
     private function setTO($toList, $emails)
     {
         $toList = explode(',', str_replace(' ', '', $toList));
@@ -116,7 +157,14 @@ class mailModel extends model
         }
     }
 
-    /* 设置抄送地址。*/
+    /**
+     * Set cc.
+     * 
+     * @param  array    $ccList 
+     * @param  array    $emails 
+     * @access private
+     * @return void
+     */
     private function setCC($ccList, $emails)
     {
         $ccList = explode(',', str_replace(' ', '', $ccList));
@@ -129,38 +177,70 @@ class mailModel extends model
         }
     }
 
-    /* 设置主题。*/
+    /**
+     * Set subject 
+     * 
+     * @param  string    $subject 
+     * @access private
+     * @return void
+     */
     private function setSubject($subject)
     {
         $this->mta->Subject = stripslashes($subject);
     }
 
-    /* 设置body。*/
+    /**
+     * Set body.
+     * 
+     * @param  string    $body 
+     * @access private
+     * @return void
+     */
     private function setBody($body)
     {
         $this->mta->msgHtml("$body");
     }
 
-     /* 设置错误提示语言。*/
+    /**
+     * Set error lang. 
+     * 
+     * @access private
+     * @return void
+     */
     private function setErrorLang()
     {
         $this->mta->SetLanguage($this->app->getClientLang());
     }
    
-    /* 清楚地址和附件。*/
+    /**
+     * Clear.
+     * 
+     * @access private
+     * @return void
+     */
     private function clear()
     {
         $this->mta->clearAddresses();
         $this->mta->clearAttachments();
     }
 
-    /* 判断是否有错！*/
+    /**
+     * Is error?
+     * 
+     * @access public
+     * @return bool
+     */
     public function isError()
     {
         return !empty($this->errors);
     }
 
-    /* 获得错误。*/
+    /**
+     * Get errors. 
+     * 
+     * @access public
+     * @return void
+     */
     public function getError()
     {
         $errors = $this->errors;
