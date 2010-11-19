@@ -13,7 +13,12 @@ class bug extends control
 {
     private $products = array();
 
-    /* 构造函数，加载story, release, tree等模块。*/
+    /**
+     * Construct function, load some modules auto.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -32,26 +37,43 @@ class bug extends control
         $this->view->products = $this->products;
     }
 
-    /* bug首页。*/
+    /**
+     * The index page, locate to browse.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->locate($this->createLink('bug', 'browse'));
     }
 
-    /* 浏览一个产品下面的bug。*/
+    /**
+     * Browse bugs.
+     * 
+     * @param  int    $productID 
+     * @param  string $browseType 
+     * @param  int    $param 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 设置产品id和模块id。*/
+        /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
         $productID  = $this->product->saveState($productID, key($this->products));
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
-        /* 设置菜单，登记session。*/
+        /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID);
         $this->session->set('bugList', $this->app->getURI(true));
 
-        /* 加载分页类。*/
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
@@ -131,13 +153,13 @@ class bug extends control
             {
                 if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
             }
-            $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // 如果指定了搜索所有的产品，去掉这个查询条件。
+            $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
-        /* 处理查询语句，获取条件部分，并记录session。需求待确认的，不参与报表统计。*/
+        /* Process the sql, get the conditon partion, save it to session. Thus the report page can use the same condition. */
         if($browseType != 'needconfirm')
         {
             $sql = explode('WHERE', $this->dao->get());
@@ -145,7 +167,7 @@ class bug extends control
             $this->session->set('bugReportCondition', $sql[0]);
         }
 
-        /* 设置搜索表单。*/
+        /* Build the search form. */
         $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['product']['values']       = array($productID => $this->products[$productID], 'all' => $this->lang->bug->allProduct);
@@ -157,7 +179,7 @@ class bug extends control
 
         $users = $this->user->getPairs('noletter');
 
-        /* 设置自定义字段。*/
+        /* Get custome fields. */
         $customFields = $this->cookie->bugFields != false ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
         $customed     = !($customFields == $this->config->bug->list->defaultFields);
         
@@ -183,7 +205,15 @@ class bug extends control
         $this->display();
     }
 
-    /* 统计报表。*/
+    /**
+     * The report page.
+     * 
+     * @param  int    $productID 
+     * @param  string $browseType 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
     public function report($productID, $browseType, $moduleID)
     {
         $this->loadModel('report');
@@ -215,7 +245,14 @@ class bug extends control
         $this->display();
     }
 
-    /* 创建Bug。extras是其他的参数，key和value之间使用=连接，多个键值对之间使用,隔开。*/
+    /**
+     * Create a bug.
+     * 
+     * @param  int    $productID 
+     * @param  string $extras       others params, forexample, projectID=10,moduleID=10
+     * @access public
+     * @return void
+     */
     public function create($productID, $extras = '')
     {
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -229,16 +266,16 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}"), 'parent'));
         }
 
-        /* 设置当前的产品，设置菜单。*/
+        /* Get product, then set menu. */
         $productID = $this->product->saveState($productID, key($this->products));
         $this->bug->setMenu($this->products, $productID);
 
-        /* 去掉几个类型的设置。*/
+        /* Remove the unused types. */
         unset($this->lang->bug->typeList['designchange']);
         unset($this->lang->bug->typeList['newfeature']);
         unset($this->lang->bug->typeList['trackthings']);
 
-        /* 初始化变量。*/
+        /* Init vars. */
         $moduleID   = 0;
         $projectID  = 0;
         $taskID     = 0;
@@ -254,13 +291,15 @@ class bug extends control
         $mailto     = '';
         $keywords   = '';
 
-        /* 解析extra参数。*/
+        /* Parse the extras. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras);
 
-        /* 如果设置了runID，获得最后一次的resultID。*/
+        /* If set runID, get the last result info as the template. */
         if($runID > 0) $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->limit(1)->fetch('id');
         if(isset($resultID) and $resultID > 0) extract($this->bug->getBugInfoFromResult($resultID));
+
+        /* If bugID setted, use this bug as template. */
         if(isset($bugID)) 
         {
             $bug = $this->bug->getById($bugID);
@@ -272,7 +311,7 @@ class bug extends control
             $buildID   = $bug->openedBuild;
         }
 
-        /* 如果指定了项目，则查找项目范围内的build和story。*/
+        /* If projectID is setted, get builds and stories of this project. */
         if($projectID)
         {
             $builds  = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
@@ -284,7 +323,6 @@ class bug extends control
             $stories = $this->story->getProductStoryPairs($productID);
         }
 
-        /* 位置信息。*/
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->create;
@@ -314,25 +352,32 @@ class bug extends control
         $this->display();
     }
 
-    /* 查看一个bug。*/
+    /**
+     * View a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function view($bugID)
     {
-        /* 查找bug信息及相关产品信息。*/
+        /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        /* Get product info. */
         $productID   = $bug->product;
         $productName = $this->products[$productID];
         
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->bug->setMenu($this->products, $productID);
 
-        /* 位置信息。*/
+        /* Header and positon. */
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->view;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
         $this->view->position[]    = $this->lang->bug->view;
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->productID   = $productID;
         $this->view->productName = $productName;
         $this->view->modulePath  = $this->tree->getParents($bug->module);
@@ -344,10 +389,15 @@ class bug extends control
         $this->display();
     }
 
-    /* 编辑一个Bug。*/
+    /**
+     * Edit a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function edit($bugID)
     {
-        /* 更新bug信息。*/
         if(!empty($_POST))
         {
             $changes  = $this->bug->update($bugID);
@@ -365,25 +415,28 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        /* 查找当前bug信息和产品模块信息。*/
+        /* Get the info of bug, current product and modue. */
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
         $currentModuleID = $bug->module;
 
-        /* 修改类型的配置。*/
+        /**
+         * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task. 
+         * These thress types if upgrade from bugfree2.x.
+         */
         if($bug->type != 'designchange') unset($this->lang->bug->typeList['designchange']);
         if($bug->type != 'newfeature')   unset($this->lang->bug->typeList['newfeature']);
         if($bug->type != 'trackthings')  unset($this->lang->bug->typeList['trackthings']);
 
-        /* 设置菜单。*/
+        /* Set the menu. */
         $this->bug->setMenu($this->products, $productID);
 
-        /* 位置。*/
+        /* Set header and position. */
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->edit;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->edit;
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
@@ -401,10 +454,15 @@ class bug extends control
         $this->display();
     }
 
-    /* 解决bug。*/
+    /**
+     * Resolve a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function resolve($bugID)
     {
-        /* 更新bug信息。*/
         if(!empty($_POST))
         {
             $this->bug->resolve($bugID);
@@ -414,19 +472,14 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        /* 查找bug和产品信息。*/
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
-
-        /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
 
-        /* 位置。*/
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->bug->resolve;
 
-        /* 赋值。*/
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('nodeleted');
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
@@ -434,10 +487,15 @@ class bug extends control
         $this->display();
     }
 
-    /* 激活bug。*/
+    /**
+     * Activate a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function activate($bugID)
     {
-        /* 更新bug信息。*/
         if(!empty($_POST))
         {
             $this->bug->activate($bugID);
@@ -448,19 +506,14 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        /* 获得bug和产品信息。*/
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
-
-        /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
 
-        /* 当前位置。*/
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->bug->activate;
 
-        /* 赋值。*/
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('nodeleted');
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
@@ -469,10 +522,15 @@ class bug extends control
         $this->display();
     }
 
-    /* 激活bug。*/
+    /**
+     * Close a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function close($bugID)
     {
-        /* 更新bug信息。*/
         if(!empty($_POST))
         {
             $this->bug->close($bugID);
@@ -482,11 +540,8 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        /* bug和产品信息。*/
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
-
-        /* 设置菜单。*/
         $this->bug->setMenu($this->products, $productID);
 
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->close;
@@ -499,7 +554,13 @@ class bug extends control
         $this->display();
     }
 
-    /* 确认需求变动。*/
+    /**
+     * Confirm story change.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function confirmStoryChange($bugID)
     {
         $bug = $this->bug->getById($bugID);
@@ -508,7 +569,14 @@ class bug extends control
         die(js::reload('parent'));
     }
 
-    /* 删除bug。*/
+    /**
+     * Delete a bug.
+     * 
+     * @param  int    $bugID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function delete($bugID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -522,7 +590,12 @@ class bug extends control
         }
     }
 
-    /* 保存模板。*/
+    /**
+     * Save current template.
+     * 
+     * @access public
+     * @return string
+     */
     public function saveTemplate()
     {
         $this->bug->saveUserBugTemplate();
@@ -530,21 +603,37 @@ class bug extends control
         die($this->fetch('bug', 'buildTemplates'));
     }
 
-    /* 生成模板选择页面。*/
+    /**
+     * Build the user templates selection code.
+     * 
+     * @access public
+     * @return void
+     */
     public function buildTemplates()
     {
         $this->view->templates = $this->bug->getUserBugTemplates($this->app->user->account);
         $this->display('bug', 'buildTemplates');
     }
 
-    /* 删除一个bug模板。*/
+    /**
+     * Delete a user template.
+     * 
+     * @param  int    $templateID 
+     * @access public
+     * @return void
+     */
     public function deleteTemplate($templateID)
     {
         $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
         die();
     }
 
-    /* 自定义显示字段。*/
+    /**
+     * Custom fields.
+     * 
+     * @access public
+     * @return void
+     */
     public function customFields()
     {
         if($_POST)
@@ -554,7 +643,7 @@ class bug extends control
             setcookie('bugFields', $customFields, $this->config->cookieLife);
             die(js::reload('parent'));
         }
-        /* 设定自定义字段列表。*/
+
         $customFields = $this->cookie->bugFields ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
 
         $this->view->allFields     = $this->bug->getFieldPairs($this->config->bug->list->allFields);
@@ -563,7 +652,13 @@ class bug extends control
         die($this->display());
     }
 
-    /* 获得用户的bug列表。*/
+    /**
+     * AJAX: get bugs of a user in html select.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return string
+     */
     public function ajaxGetUserBugs($account = '')
     {
         if($account == '') $account = $this->app->user->account;
@@ -571,17 +666,31 @@ class bug extends control
         die(html::select('bug', $bugs, '', 'class=select-1'));
     }
 
-    /* 获得模块的默认指派人。*/
+    /**
+     * AJAX: Get bug owner of a module.
+     * 
+     * @param  int    $moduleID 
+     * @param  int    $productID 
+     * @access public
+     * @return string
+     */
     public function ajaxGetModuleOwner($moduleID, $productID = 0)
     {
         if($moduleID) die($this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch('owner'));
         die($this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('bugOwner'));
     }
 
-    /* 发送邮件。*/
+    /**
+     * Send email.
+     * 
+     * @param  int    $bugID 
+     * @param  int    $actionID 
+     * @access private
+     * @return void
+     */
     private function sendmail($bugID, $actionID)
     {
-        /* 设定toList和ccList。*/
+        /* Set toList and ccList. */
         $bug    = $this->bug->getByID($bugID);
         $toList = $bug->assignedTo;
         $ccList = trim($bug->mailto, ',');
@@ -605,18 +714,18 @@ class bug extends control
             $toList = $bug->resolvedBy;
         }
 
-        /* 获得action信息。*/
+        /* Get action info. */
         $action          = $this->action->getById($actionID);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
         if(strtolower($action->action) == 'opened') $action->comment = $bug->steps;
 
-        /* 赋值，获得邮件内容。*/
+        /* Create the mail content. */
         $this->view->bug    = $bug;
         $this->view->action = $action;
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
-        /* 发信。*/
+        /* Send it. */
         $this->loadModel('mail')->send($toList, 'BUG #' . $bug->id . $this->lang->colon . $bug->title, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }

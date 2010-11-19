@@ -13,24 +13,30 @@
 <?php
 class bugModel extends model
 {
-    /* 设置菜单。*/
+    /**
+     * Set menu.
+     * 
+     * @param  array  $products 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function setMenu($products, $productID)
     {
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'bug', 'browse');\"");
         foreach($this->lang->bug->menu as $key => $menu)
         {
-            if($key == 'product')
-            {
-                common::setMenuVars($this->lang->bug->menu, 'product',  $selectHtml . $this->lang->arrow);
-            }
-            else
-            {
-                common::setMenuVars($this->lang->bug->menu, $key, $productID);
-            }
+            $replace = ($key == 'product') ? $selectHtml . $this->lang->arrow : $productID;
+            common::setMenuVars($this->lang->bug->menu, $key, $replace);
         }
     }
 
-    /* 创建一个Bug。*/
+    /**
+     * Create a bug.
+     * 
+     * @access public
+     * @return int|bool
+     */
     public function create()
     {
         $now = helper::now();
@@ -56,7 +62,16 @@ class bugModel extends model
         return false;
     }
 
-    /* 获得某一个产品，某一个模块下面的所有bug。*/
+    /**
+     * Get bugs of a module.
+     * 
+     * @param  int             $productID 
+     * @param  string|array    $moduleIds 
+     * @param  string          $orderBy 
+     * @param  object          $pager 
+     * @access public
+     * @return array
+     */
     public function getModuleBugs($productID, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
@@ -66,7 +81,13 @@ class bugModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
-    /* 获取一个bug的详细信息。*/
+    /**
+     * Get info of a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return object
+     */
     public function getById($bugID)
     {
         $bug = $this->dao->select('t1.*, t2.name AS projectName, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, t4.name AS taskName')
@@ -79,7 +100,7 @@ class bugModel extends model
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
         if($bug->mailto)
         {
-            $bug->mailto = ltrim(trim($bug->mailto), ',');  // 去掉开始的，。
+            $bug->mailto = ltrim(trim($bug->mailto), ',');  // Remove the first ,
             $bug->mailto = str_replace(' ', '', $bug->mailto);
             $bug->mailto = rtrim($bug->mailto, ',') . ',';
             $bug->mailto = str_replace(',', ', ', $bug->mailto);
@@ -91,7 +112,13 @@ class bugModel extends model
         return $bug;
     }
 
-    /* 更新bug信息。*/
+    /**
+     * Update a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function update($bugID)
     {
         $oldBug = $this->getById($bugID);
@@ -132,7 +159,13 @@ class bugModel extends model
         if(!dao::isError()) return common::createChanges($oldBug, $bug);
     }
 
-    /* 解决Bug。*/
+    /**
+     * Resolve a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function resolve($bugID)
     {
         $oldBug = $this->getById($bugID);
@@ -157,7 +190,13 @@ class bugModel extends model
             ->exec();
     }
 
-    /* 激活Bug。*/
+    /**
+     * Activate a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function activate($bugID)
     {
         $oldBug = $this->getById($bugID);
@@ -181,7 +220,13 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
     }
 
-    /* 关闭Bug。*/
+    /**
+     * Close a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function close($bugID)
     {
         $oldBug = $this->getById($bugID);
@@ -200,7 +245,13 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
     }
 
-    /* 从bug列表中提取所有出现过的账户。*/
+    /**
+     * Extract accounts from some bugs.
+     * 
+     * @param  int    $bugs 
+     * @access public
+     * @return array
+     */
     public function extractAccountsFromList($bugs)
     {
         $accounts = array();
@@ -215,7 +266,13 @@ class bugModel extends model
         return array_unique($accounts);
     }
 
-    /* 从一条bug中提取所有出现过的账户。*/
+    /**
+     * Extract accounts from a bug.
+     * 
+     * @param  object    $bug 
+     * @access public
+     * @return array
+     */
     public function extractAccountsFromSingle($bug)
     {
         $accounts = array();
@@ -227,7 +284,13 @@ class bugModel extends model
         return array_unique($accounts);
     }
 
-    /* 获得用户的Bug id=>title列表。*/
+    /**
+     * Get bug pairs of a user.
+     * 
+     * @param  int    $account 
+     * @access public
+     * @return array
+     */
     public function getUserBugPairs($account)
     {
         $bugs = array();
@@ -246,7 +309,15 @@ class bugModel extends model
         return $bugs;
     }
 
-    /* 获得某个项目的bug列表。*/
+    /**
+     * Get bugs of a project.
+     * 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getProjectBugs($projectID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
@@ -255,7 +326,13 @@ class bugModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
-    /* 通过某一次测试结果获得bug的标题和步骤。*/
+    /**
+     * Get bug info from a result.
+     * 
+     * @param  int    $resultID 
+     * @access public
+     * @return array
+     */
     public function getBugInfoFromResult($resultID)
     {
         $title    = '';
@@ -285,7 +362,12 @@ class bugModel extends model
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story);
     }
 
-    /* 按项目统计bug数。*/
+    /**
+     * Get report data of bugs per project 
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfBugsPerProject()
     {
         $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('project')->orderBy('value DESC')->fetchAll('name');
@@ -295,7 +377,12 @@ class bugModel extends model
         return $datas;
     }
 
-    /* 按产品模块统计bug数。*/
+    /**
+     * Get report data of bugs per module 
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfBugsPerModule()
     {
         $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('module')->orderBy('value DESC')->fetchAll('name');
@@ -305,13 +392,23 @@ class bugModel extends model
         return $datas;
     }
 
-    /* 按bug创建日期统计。*/
+    /**
+     * Get report data of opened bugs per day.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfOpenedBugsPerDay()
     {
         return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('openedDate')->fetchAll();
     }
 
-    /* 按bug解决日期统计。*/
+    /**
+     * Get report data of resolved bugs per day.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfResolvedBugsPerDay()
     {
         return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
@@ -321,7 +418,12 @@ class bugModel extends model
             ->fetchAll();
     }
 
-    /* 按bug关闭日期统计。*/
+    /**
+     * Get report data of closed bugs per day.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfClosedBugsPerDay()
     {
         return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
@@ -330,7 +432,12 @@ class bugModel extends model
             ->orderBy('closedDate')->fetchAll();
     }
 
-    /* 按bug创建者统计。*/
+    /**
+     * Get report data of openeded bugs per user.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfOpenedBugsPerUser()
     {
         $datas = $this->dao->select('openedBy AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
@@ -340,7 +447,12 @@ class bugModel extends model
         return $datas;
     }
 
-    /* 按bug解决者统计。*/
+    /**
+     * Get report data of resolved bugs per user.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfResolvedBugsPerUser()
     {
         $datas = $this->dao->select('resolvedBy AS name, COUNT(*) AS value')
@@ -354,7 +466,12 @@ class bugModel extends model
         return $datas;
     }
 
-    /* 按bug关闭者统计。*/
+    /**
+     * Get report data of closed bugs per user.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfClosedBugsPerUser()
     {
         $datas = $this->dao->select('closedBy AS name, COUNT(*) AS value')
@@ -369,7 +486,12 @@ class bugModel extends model
         return $datas;
     }
 
-    /* 按bug严重程度统计。*/
+    /**
+     * Get report data of bugs per severity.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfBugsPerSeverity()
     {
         $datas = $this->dao->select('severity AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
@@ -378,7 +500,12 @@ class bugModel extends model
         return $datas;
     }
 
-    /* 按bug解决方案统计。*/
+    /**
+     * Get report data of bugs per resolution.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfBugsPerResolution()
     {
         $datas = $this->dao->select('resolution AS name, COUNT(*) AS value')
@@ -392,7 +519,12 @@ class bugModel extends model
         return $datas;
     }
 
-    /* 按bug状态统计。*/
+    /**
+     * Get report data of bugs per status.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfBugsPerStatus()
     {
         $datas = $this->dao->select('status AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
@@ -401,7 +533,12 @@ class bugModel extends model
         return $datas;
     }
 
-    /* 按bug类型统计。*/
+    /**
+     * Get report data of bugs per type.
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOfBugsPerType()
     {
         $datas = $this->dao->select('type AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
@@ -410,7 +547,12 @@ class bugModel extends model
         return $datas;
     }
   
-    /* 按assignedTo统计。*/
+    /**
+     * getDataOfBugsPerAssignedTo 
+     * 
+     * @access public
+     * @return void
+     */
     public function getDataOfBugsPerAssignedTo()
     {
         $datas = $this->dao->select('assignedTo AS name, COUNT(*) AS value')
@@ -423,13 +565,18 @@ class bugModel extends model
         return $datas;
     }
     
-    /* 合并公共的chart设置和当前chart的设置。*/
+    /**
+     * Merge the default chart settings and the settings of current chart.
+     * 
+     * @param  string    $chartType 
+     * @access public
+     * @return void
+     */
     public function mergeChartOption($chartType)
     {
         $chartOption  = $this->lang->bug->report->$chartType;
         $commonOption = $this->lang->bug->report->options;
 
-        /* 设置图表的标题和展示方式。*/
         $chartOption->graph->caption = $this->lang->bug->report->charts[$chartType];
         if(!isset($chartOption->swf))    $chartOption->swf    = $commonOption->swf;
         if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
@@ -439,7 +586,13 @@ class bugModel extends model
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
     }
 
-    /* 获得用户的Bug模板列表。*/
+    /**
+     * Get bug templates of a user.
+     * 
+     * @param  string    $account 
+     * @access public
+     * @return array
+     */
     public function getUserBugTemplates($account)
     {
         $templates = $this->dao->select('id, title, content')
@@ -450,7 +603,12 @@ class bugModel extends model
         return $templates;
     }
 
-    /* 保存用户的BUG模板。*/
+    /**
+     * Save user template.
+     * 
+     * @access public
+     * @return void
+     */
     public function saveUserBugTemplate()
     {
         $template = fixer::input('post')
@@ -461,7 +619,13 @@ class bugModel extends model
         $this->dao->insert(TABLE_USERTPL)->data($template)->autoCheck('title, content', 'notempty')->check('title', 'unique')->exec();
     }
 
-    /* 给一个字段的列表，返回字段和相应语言解释的键值对。*/
+    /**
+     * Return the file => label pairs of some fields.
+     * 
+     * @param  string    $fields 
+     * @access public
+     * @return array
+     */
     public function getFieldPairs($fields)
     {
         $fields = explode(',', $fields);
