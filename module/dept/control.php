@@ -13,13 +13,25 @@ class dept extends control
 {
     const NEW_CHILD_COUNT = 5;
 
+    /**
+     * Construct function, set menu. 
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
         $this->loadModel('company')->setMenu();
     }
 
-    /* 部门列表。*/
+    /**
+     * Browse a department.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return void
+     */
     public function browse($deptID = 0)
     {
         $header['title'] = $this->lang->dept->manage . $this->lang->colon . $this->app->company->name;
@@ -35,7 +47,13 @@ class dept extends control
         $this->display();
     }
 
-    /* 编辑部门。*/
+    /**
+     * Edit a department.
+     * 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
     public function edit($moduleID)
     {
         if(!empty($_POST))
@@ -50,7 +68,12 @@ class dept extends control
         $this->display();
     }
 
-    /* 更新排序。*/
+    /**
+     * Update the departments order.
+     * 
+     * @access public
+     * @return void
+     */
     public function updateOrder()
     {
         if(!empty($_POST))
@@ -60,7 +83,12 @@ class dept extends control
         }
     }
 
-    /* 维护下级部门。*/
+    /**
+     * Manage childs.
+     * 
+     * @access public
+     * @return void
+     */
     public function manageChild()
     {
         if(!empty($_POST))
@@ -70,7 +98,14 @@ class dept extends control
         }
     }
 
-    /* 删除某一个部门。*/
+    /**
+     * Delete a department.
+     * 
+     * @param  int    $deptID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function delete($deptID, $confirm = 'no')
     {
         if($confirm == 'no')

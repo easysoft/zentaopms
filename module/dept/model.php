@@ -13,13 +13,25 @@
 <?php
 class deptModel extends model
 {
-    /* 通过部门id获取部门信息。*/
+    /**
+     * Get a department by id.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return object
+     */
     public function getByID($deptID)
     {
         return $this->dao->findById($deptID)->from(TABLE_DEPT)->fetch();
     }
 
-    /* 生成查询的sql语句。*/
+    /**
+     * Build the query.
+     * 
+     * @param  int    $rootDeptID 
+     * @access private
+     * @return string
+     */
     private function buildMenuQuery($rootDeptID)
     {
         $rootDept = $this->getByID($rootDeptID);
@@ -30,7 +42,13 @@ class deptModel extends model
             ->get();
     }
 
-    /* 获取部门的下类列表，用于生成select控件。*/
+    /**
+     * Get option menu of departments.
+     * 
+     * @param  int    $rootDeptID 
+     * @access public
+     * @return array
+     */
     public function getOptionMenu($rootDeptID = 0)
     {
         $deptMenu = array();
@@ -87,7 +105,14 @@ class deptModel extends model
         return $lastMenu;
     }
 
-    /* 获取树状的部门列表。*/
+    /**
+     * Get the treemenu of departments.
+     * 
+     * @param  int    $rootDeptID 
+     * @param  string $userFunc 
+     * @access public
+     * @return string
+     */
     public function getTreeMenu($rootDeptID = 0, $userFunc)
     {
         $deptMenu = array();
@@ -120,7 +145,13 @@ class deptModel extends model
         return $lastMenu; 
     }
 
-    /* 生成编辑链接。*/
+    /**
+     * Create the manage link.
+     * 
+     * @param  int    $dept 
+     * @access public
+     * @return string
+     */
     public function createManageLink($dept)
     {
         $linkHtml  = $dept->name;
@@ -130,20 +161,38 @@ class deptModel extends model
         return $linkHtml;
     }
 
-    /* 生成用户链接。*/
+    /**
+     * Create the member link.
+     * 
+     * @param  int    $dept 
+     * @access public
+     * @return string
+     */
     public function createMemberLink($dept)
     {
         $linkHtml = html::a(helper::createLink('company', 'browse', "dept={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
         return $linkHtml;
     }
 
-    /* 获得某一个部门的直接下级部门。*/
+    /**
+     * Get sons of a department.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return array
+     */
     public function getSons($deptID)
     {
         return $this->dao->select('*')->from(TABLE_DEPT)->where('parent')->eq($deptID)->orderBy('`order`')->fetchAll();
     }
     
-    /* 获得一个部门的id列表。*/
+    /**
+     * Get all childs.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return array
+     */
     public function getAllChildId($deptID)
     {
         if($deptID == 0) return array();
@@ -152,7 +201,13 @@ class deptModel extends model
         return array_keys($childs);
     }
 
-    /* 获得一个部门的所有上级部门。*/
+    /**
+     * Get parents.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return array
+     */
     public function getParents($deptID)
     {
         if($deptID == 0) return array();
@@ -162,13 +217,26 @@ class deptModel extends model
         return $this->dao->select('*')->from(TABLE_DEPT)->where('id')->in($path)->orderBy('grade')->fetchAll();
     }
 
-    /* 更新排序信息。*/
+    /**
+     * Update order.
+     * 
+     * @param  int    $orders 
+     * @access public
+     * @return void
+     */
     public function updateOrder($orders)
     {
         foreach($orders as $deptID => $order) $this->dao->update(TABLE_DEPT)->set('`order`')->eq($order)->where('id')->eq($deptID)->exec();
     }
 
-    /* 更新某一个部门的子部门。*/
+    /**
+     * Manage childs.
+     * 
+     * @param  int    $parentDeptID 
+     * @param  string $childs 
+     * @access public
+     * @return void
+     */
     public function manageChild($parentDeptID, $childs)
     {
         $parentDept = $this->getByID($parentDeptID);
@@ -204,7 +272,13 @@ class deptModel extends model
         }
     }
 
-    /* 获得某一个部门的成员列表。*/
+    /**
+     * Get users of a deparment.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return array
+     */
     public function getUsers($deptID)
     {
         return $this->dao->select('*')->from(TABLE_USER)
@@ -214,7 +288,13 @@ class deptModel extends model
             ->fetchAll();
     }
     
-    /* 删除一个部门。Todo: 需要修改下级目录的权限，还有对应的需求列表。*/
+    /**
+     * Delete a department.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return void
+     */
     public function delete($deptID)
     {
         $this->dao->delete()->from(TABLE_DEPT)->where('id')->eq($deptID)->exec();
