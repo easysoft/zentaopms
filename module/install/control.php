@@ -11,21 +11,30 @@
  */
 class install extends control
 {
-    /* 构造函数，检查是否是通过安装入口调用。*/
+    /**
+     * Construct function.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         if(!defined('IN_INSTALL')) die();
         parent::__construct();
     }
 
-    /* 安装程序首页。*/
+    /**
+     * Index page of install module.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         if(!isset($this->config->installed) or !$this->config->installed) $this->session->set('installing', true);
 
         $this->view->header->title = $this->lang->install->welcome;
 
-        /* 获得官方网站最新的版本。*/
         $snoopy = $this->app->loadClass('snoopy');
         if(@$snoopy->fetchText('http://www.zentao.net/misc-getlatestrelease.json'))
         {
@@ -39,7 +48,12 @@ class install extends control
         $this->display();
     }
 
-    /* 第一步： 系统检查。*/
+    /**
+     * Check the system.
+     * 
+     * @access public
+     * @return void
+     */
     public function step1()
     {
         $this->view->header->title  = $this->lang->install->checking;
@@ -55,14 +69,24 @@ class install extends control
         $this->display();
     }
 
-    /* 第二步：配置表单。*/
+    /**
+     * Set configs.
+     * 
+     * @access public
+     * @return void
+     */
     public function step2()
     {
         $this->view->header->title = $this->lang->install->setConfig;
         $this->display();
     }
 
-    /* 生成配置文件。*/
+    /**
+     * Create the config file.
+     * 
+     * @access public
+     * @return void
+     */
     public function step3()
     {
         if(!empty($_POST))
@@ -90,7 +114,12 @@ class install extends control
         }
     }
 
-    /* 第四步，创建公司，生成管理员帐号。*/
+    /**
+     * Create company, admin.
+     * 
+     * @access public
+     * @return void
+     */
     public function step4()
     {
         if(!empty($_POST))

@@ -13,36 +13,66 @@
 <?php
 class installModel extends model
 {
-    /* 检查禅道的版本。*/
+    /**
+     * Check version of zentao.
+     * 
+     * @access public
+     * @return void
+     */
     public function checkZenTaoVersion()
     {
     }
 
-    /* 获得PHP版本。*/
+    /**
+     * get php version.
+     * 
+     * @access public
+     * @return string
+     */
     public function getPhpVersion()
     {
         return PHP_VERSION;
     }
 
-    /* 检查PHP版本是否符合要求。*/
+    /**
+     * Check php version.
+     * 
+     * @access public
+     * @return string   ok|fail
+     */
     public function checkPHP()
     {
         return $result = version_compare(PHP_VERSION, '5.2.0') >= 0 ? 'ok' : 'fail';
     }
 
-    /* 检查PDO扩展是否载入。*/
+    /**
+     * Check PDO.
+     * 
+     * @access public
+     * @return string   ok|fail
+     */
     public function checkPDO()
     {
         return $result = extension_loaded('pdo') ? 'ok' : 'fail';
     }
 
-    /* 检查PDO_MySQL扩展是否载入。*/
+    /**
+     * Check PDO::MySQL 
+     * 
+     * @access public
+     * @return string   ok|fail
+     */
     public function checkPDOMySQL()
     {
         return $result = extension_loaded('pdo_mysql') ? 'ok' : 'fail';
     }
 
-    /* 获得tmpRoot目录的信息。*/
+    /**
+     * Get tempRoot info.
+     * 
+     * @access public
+     * @return array
+     */
     public function getTmpRoot()
     {
         $result['path']    = $this->app->getTmpRoot();
@@ -51,14 +81,24 @@ class installModel extends model
         return $result;
     }
 
-    /* 检查tmpRoot目录权限。*/
+    /**
+     * Check tmpRoot.
+     * 
+     * @access public
+     * @return string   ok|fail
+     */
     public function checkTmpRoot()
     {
         $tmpRoot = $this->app->getTmpRoot();
         return $result = (is_dir($tmpRoot) and is_writable($tmpRoot)) ? 'ok' : 'fail';
     }
 
-    /* 获得DataRoot目录的信息。*/
+    /**
+     * Get data root 
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataRoot()
     {
         $result['path']    = $this->app->getAppRoot() . 'www' . $this->app->getPathFix() . 'data';
@@ -67,14 +107,24 @@ class installModel extends model
         return $result;
     }
 
-    /* 检查dataRoot目录权限。*/
+    /**
+     * Check the data root. 
+     * 
+     * @access public
+     * @return string ok|fail
+     */
     public function checkDataRoot()
     {
         $dataRoot = $this->app->getAppRoot() . 'www' . $this->app->getPathFix() . 'data';
         return $result = (is_dir($dataRoot) and is_writable($dataRoot)) ? 'ok' : 'fail';
     }
 
-    /* 获得INI文件的信息。*/
+    /**
+     * Get the php.ini info.
+     * 
+     * @access public
+     * @return string
+     */
     public function getIniInfo()
     {
         $iniInfo = '';
@@ -86,18 +136,28 @@ class installModel extends model
         return $iniInfo;
     }
 
-    /* 获得webRoot的地址。*/
+    /**
+     * Get web root.
+     * 
+     * @access public
+     * @return string
+     */
     public function getWebRoot()
     {
         return rtrim(str_replace('\\', '/', pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_DIRNAME)), '/') . '/';
     }
 
-    /* 检查配置。*/
+    /**
+     * Check config ok or not.
+     * 
+     * @access public
+     * @return array
+     */
     public function checkConfig()
     {
         $return->result = 'ok';
 
-        /* 连接到数据库。*/
+        /* Connect to database. */
         $this->setDBParam();
         $this->dbh = $this->connectDB();
         if(!is_object($this->dbh))
@@ -107,10 +167,10 @@ class installModel extends model
             return $return;
         }
 
-        /* 获得数据库版本。*/
+        /* Get mysql version. */
         $version = $this->getMysqlVersion();
 
-        /* 数据库不存在，尝试建之。*/
+        /* If database no exits, try create it. */
         if(!$this->dbExists())
         {
             if(!$this->createDB($version))
@@ -121,7 +181,7 @@ class installModel extends model
             }
         }
 
-        /* 创建表。*/
+        /* Create tables. */
         if(!$this->createTable($version))
         {
             $return->result = 'fail';
@@ -131,7 +191,12 @@ class installModel extends model
         return $return;
     }
 
-    /* 设置数据库参数。*/
+    /**
+     * Set database params.
+     * 
+     * @access public
+     * @return void
+     */
     public function setDBParam()
     {
         $this->config->db->host     = $this->post->dbHost;
@@ -142,7 +207,13 @@ class installModel extends model
         $this->config->db->prefix   = $this->post->dbPrefix;
 
     }
-    /* 连接到数据库。*/
+
+    /**
+     * Connect to database.
+     * 
+     * @access public
+     * @return object
+     */
     public function connectDB()
     {
         $dsn = "mysql:host={$this->config->db->host}; port={$this->config->db->port}";
@@ -160,14 +231,24 @@ class installModel extends model
         }
     }
 
-    /* 判断数据库是否存在。*/
+    /**
+     * Check db exits or not.
+     * 
+     * @access public
+     * @return bool
+     */
     public function dbExists()
     {
         $sql = "SHOW DATABASES like '{$this->config->db->name}'";
         return $this->dbh->query($sql)->fetch();
     }
 
-    /* 获得mysql的版本号。*/
+    /**
+     * Get mysql version.
+     * 
+     * @access public
+     * @return string
+     */
     public function getMysqlVersion()
     {
         $sql = "SELECT VERSION() AS version";
@@ -175,7 +256,13 @@ class installModel extends model
         return substr($result->version, 0, 3);
     }
 
-    /* 创建数据库。*/
+    /**
+     * Create database.
+     * 
+     * @param  string    $version 
+     * @access public
+     * @return bool
+     */
     public function createDB($version)
     {
         $sql = "CREATE DATABASE `{$this->config->db->name}`";
@@ -183,7 +270,13 @@ class installModel extends model
         return $this->dbh->query($sql);
     }
 
-    /* 创建表。*/
+    /**
+     * Create tables.
+     * 
+     * @param  string    $version 
+     * @access public
+     * @return bool
+     */
     public function createTable($version)
     {
         $dbFile = $this->app->getAppRoot() . 'db' . $this->app->getPathFix() . 'zentao.sql';
@@ -208,12 +301,17 @@ class installModel extends model
         return true;
     }
 
-    /* 生成公司，设立管理员帐号。*/
+    /**
+     * Create a comapny, set admin.
+     * 
+     * @access public
+     * @return void
+     */
     public function grantPriv()
     {
         if($this->post->password == '') die(js::error($this->lang->install->errorEmptyPassword));
 
-        /* 先插入公司。*/
+        /* Insert a company. */
         $company->name   = $this->post->company;
         $company->pms    = $this->post->pms;
         $company->admins = ",{$this->post->account},";
@@ -221,7 +319,7 @@ class installModel extends model
 
         if(!dao::isError())
         {
-            /* 设置管理员。*/
+            /* Set admin. */
             $companyID = $this->dbh->lastInsertID();
             $admin->account  = $this->post->account;
             $admin->realname = $this->post->account;
@@ -229,7 +327,7 @@ class installModel extends model
             $admin->company  = $companyID;
             $this->dao->insert(TABLE_USER)->data($admin)->autoCheck()->check('account', 'notempty')->exec();
 
-            /* 更新group和group表的company字段。*/
+            /* Update the group and groupPriv table. */
             $this->dao->update(TABLE_GROUP)->set('company')->eq($companyID)->exec($autoCompany = false);
             $this->dao->update(TABLE_GROUPPRIV)->set('company')->eq($companyID)->exec($autoCompany = false);
         }
