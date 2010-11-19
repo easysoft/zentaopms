@@ -11,26 +11,46 @@
  */
 class misc extends control
 {
-    /* 通过隐藏的iframe定时刷新此页面，保证session不过期。*/
+    /**
+     * Ping the server every 5 minutes to keep the session.
+     * 
+     * @access public
+     * @return void
+     */
     public function ping()
     {
         if(mt_rand(0, 10) == 5) $this->loadModel('setting')->setSN();
         die("<html><head><meta http-equiv='refresh' content='300' /></head><body></body></html>");
     }
 
-    /* 显示phpinfo信息。*/
+    /**
+     * Show php info.
+     * 
+     * @access public
+     * @return void
+     */
     public function phpinfo()
     {
         die(phpinfo());
     }
 
-    /* 关于禅道。*/
+    /**
+     * Show about info of zentao.
+     * 
+     * @access public
+     * @return void
+     */
     public function about()
     {
-        $this->display();
-        exit;
+        die($this->display());
     }
 
+    /**
+     * Update nl.
+     * 
+     * @access public
+     * @return void
+     */
     public function updateNL()
     {
         $this->loadModel('upgrade')->updateNL();
