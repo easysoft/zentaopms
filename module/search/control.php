@@ -11,6 +11,17 @@
  */
 class search extends control
 {
+    /**
+     * Build search form.
+     * 
+     * @param  string  $module 
+     * @param  array   $searchFields 
+     * @param  array   $fieldParams 
+     * @param  string  $actionURL 
+     * @param  int     $queryID 
+     * @access public
+     * @return void
+     */
     public function buildForm($module, $searchFields, $fieldParams, $actionURL, $queryID = 0)
     {
         $this->search->initSession($module, $searchFields, $fieldParams);
@@ -25,12 +36,24 @@ class search extends control
         $this->display();
     }
 
+    /**
+     * Build query
+     * 
+     * @access public
+     * @return void
+     */
     public function buildQuery()
     {
         $this->search->buildQuery();
         die(js::locate($this->post->actionURL, 'parent'));
     }
 
+    /**
+     * Save search query.
+     * 
+     * @access public
+     * @return void
+     */
     public function saveQuery()
     {
         $this->search->saveQuery();
@@ -38,12 +61,29 @@ class search extends control
         die('success');
     }
 
+    /**
+     * Delete a query 
+     * 
+     * @param  int    $queryID 
+     * @access public
+     * @return void
+     */
     public function deleteQuery($queryID)
     {
         $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
         die(js::reload('parent'));
     }
 
+    /**
+     * Create a select page of stories or taskes.
+     * 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @param  string $module 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
     public function select($productID, $projectID, $module, $moduleID)
     {
         $this->loadModel('product');

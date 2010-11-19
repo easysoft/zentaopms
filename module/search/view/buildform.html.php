@@ -1,6 +1,6 @@
 <?php
 /**
- * The edit view of search module of ZenTaoPMS.
+ * The buildform view of search module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
@@ -23,15 +23,27 @@ var setQueryTitle = '<?php echo $lang->search->setQueryTitle;?>';
 var module        = '<?php echo $module;?>';
 var actionURL     = '<?php echo $actionURL;?>';
 
-/* 根据字段的参数，重新设置它对应的操作符和值。*/
+/**
+ * When the value of the fields select changed, set the operator and value of the new field.
+ * 
+ * @param  string $fieldName 
+ * @param  int    $fieldNO 
+ * @access public
+ * @return void
+ */
 function setField(fieldName, fieldNO)
 {
-    $('#operator' + fieldNO).val(params[fieldName]['operator']);
+    $('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
     htmlString = $('#box' + fieldName).html().replace(fieldName, 'value' + fieldNO).replace(fieldName, 'value' + fieldNO);
     $('#valueBox' + fieldNO).html(htmlString);
 }
 
-/* 重置表单。*/
+/**
+ * Reset forms.
+ * 
+ * @access public
+ * @return void
+ */
 function resetForm()
 {
     for(i = 1; i <= groupItems * 2; i ++)
@@ -40,7 +52,12 @@ function resetForm()
     }
 }
 
-/* 显示更多的搜索选项。*/
+/**
+ * Show more fields.
+ * 
+ * @access public
+ * @return void
+ */
 function showmore()
 {
     for(i = 1; i <= groupItems * 2; i ++)
@@ -56,7 +73,12 @@ function showmore()
     $('#formType').val('more');
 }
 
-/* 显示简洁的搜索选项。*/
+/**
+ * Show lite search form.
+ * 
+ * @access public
+ * @return void
+ */
 function showlite()
 {
     for(i = 1; i <= groupItems * 2; i ++)
@@ -72,7 +94,12 @@ function showlite()
     $('#formType').val('lite');
 }
 
-/* 保存用户设定的查询条件。*/
+/**
+ * Save the query.
+ * 
+ * @access public
+ * @return void
+ */
 function saveQuery()
 {
     jPrompt(setQueryTitle, '', '', function(r) 
@@ -86,14 +113,25 @@ function saveQuery()
     });
 }
 
-/* 执行用户选中的query。*/
+/**
+ * Execute a query.
+ * 
+ * @param  int    $queryID 
+ * @access public
+ * @return void
+ */
 function executeQuery(queryID)
 {
     if(!queryID) return;
     location.href = actionURL.replace('myQueryID', queryID);
 }
 
-/* 删除Query。*/
+/**
+ * Delete a query.
+ * 
+ * @access public
+ * @return void
+ */
 function deleteQuery()
 {
     queryID = $('#queryID').val();
@@ -105,7 +143,7 @@ function deleteQuery()
 
 <div class='hidden'>
 <?php
-/* 输出所有字段的控件代码，当触发setField事件的时候，拷贝控件的html代码。*/
+/* Print every field as an html object, select or input. Thus when setFiled is called, copy it's html to build the search form. */
 foreach($fieldParams as $fieldName => $param)
 {
     echo "<span id='box$fieldName'>";
@@ -131,21 +169,21 @@ foreach($fieldParams as $fieldName => $param)
           $spanClass = $i == 1 ? 'inline' : 'hidden';
           echo "<span id='searchbox$fieldNO' class='$spanClass'>";
 
-          /* 取当前字段的设置。*/
+          /* Get params of current field. */
           $currentField = $formSession["field$fieldNO"];
           $param        = $fieldParams[$currentField];
 
-          /* 打印and or。*/
+          /* Print and or. */
           if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
           if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
-          /* 打印字段。*/
+          /* Print field. */
           echo html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)'");
 
-          /* 打印操作符。*/
+          /* Print operator. */
           echo html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"]);
 
-          /* 打印值。*/
+          /* Print value. */
           echo "<span id='valueBox$fieldNO'>";
           if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
           if($param['control'] == 'input') echo html::input("value$fieldNO",  $formSession["value$fieldNO"], 'class=text-2');
@@ -166,21 +204,21 @@ foreach($fieldParams as $fieldName => $param)
           $spanClass = $i == 1 ? 'inline' : 'hidden';
           echo "<span id='searchbox$fieldNO' class='$spanClass'>";
 
-          /* 取当前字段的设置。*/
+          /* Get params of current field. */
           $currentField = $formSession["field$fieldNO"];
           $param        = $fieldParams[$currentField];
 
-          /* 打印and or。*/
+          /* Print and or. */
           if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
           if($i > 1)  echo "<br />" . html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"]);
 
-          /* 打印字段。*/
+          /* Print field. */
           echo html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this.value, $fieldNO)'");
 
-          /* 打印操作符。*/
+          /* Print operator. */
           echo html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"]);
 
-          /* 打印值。*/
+          /* Print value. */
           echo "<span id='valueBox$fieldNO'>";
           if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
           if($param['control'] == 'input') echo html::input("value$fieldNO",  $formSession["value$fieldNO"], 'class=text-2');

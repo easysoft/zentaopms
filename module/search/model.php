@@ -13,10 +13,15 @@
 <?php
 class searchModel extends model
 {
-    /* 拼装SQL。*/
+    /**
+     * Build the query to execute.
+     * 
+     * @access public
+     * @return void
+     */
     public function buildQuery()
     {
-        /* 初始化变量。*/
+        /* Init vars. */
         $where      = '';
         $groupItems = $this->config->search->groupItems;
         $groupAndOr = strtoupper($this->post->groupAndOr);
@@ -24,29 +29,29 @@ class searchModel extends model
 
         for($i = 1; $i <= $groupItems * 2; $i ++)
         {
-            /* 拼两个分组之间的括号。*/
+            /* The and or between two groups. */
             if($i == 1) $where .= '( 1  ';
             if($i == $groupItems + 1) $where .= " ) $groupAndOr ( 1 ";
 
-            /* 设定各个变量的名称。*/
+            /* Set var names. */
             $fieldName    = "field$i";
             $andOrName    = "andOr$i";
             $operatorName = "operator$i";
             $valueName    = "value$i";
 
-            /* 对应的value为空，忽略。*/
+            /* Skip empty vales. */
             if($this->post->$valueName == false) continue; 
-            if($this->post->$valueName == 'null') $this->post->$valueName = '';
+            if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
 
-            /* 设置and, or。*/
+            /* Set and or. */
             $andOr = strtoupper($this->post->$andOrName);
             if($andOr != 'AND' and $andOr != 'OR') $andOr = 'AND';
             $where .= " $andOr ";
 
-            /* 字段名。*/
+            /* Set filed name. */
             $where .= '`' . $this->post->$fieldName . '` ';
 
-            /* 操作符。*/
+            /* Set operator. */
             $value    = $this->post->$valueName;
             $operator = $this->post->$operatorName;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
@@ -62,21 +67,30 @@ class searchModel extends model
 
         $where .=" )";
 
-        /* 登记session。*/
+        /* Save to session. */
         $querySessionName = $this->post->module . 'Query';
         $formSessionName  = $this->post->module . 'Form';
         $this->session->set($querySessionName, $where);
         $this->session->set($formSessionName,  $_POST);
     }
 
-    /* 初始化查询表单的session。*/
+    /**
+     * Init the search session for the first time search.
+     * 
+     * @param  string   $module 
+     * @param  array    $fields 
+     * @param  array    $fieldParams 
+     * @access public
+     * @return void
+     */
     public function initSession($module, $fields, $fieldParams)
     {
         $formSessionName  = $module . 'Form';
         if($this->session->$formSessionName != false) return;
+
         for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
         {
-            /* 设定各个变量的名称。*/
+            /* Var names. */
             $fieldName    = "field$i";
             $andOrName    = "andOr$i";
             $operatorName = "operator$i";
@@ -96,7 +110,14 @@ class searchModel extends model
         $this->session->set($formSessionName, $queryForm);
     }
 
-    /* 设置默认的参数。*/
+    /**
+     * Set default params for selection.
+     * 
+     * @param  array  $fields 
+     * @param  array  $params 
+     * @access public
+     * @return array
+     */
     public function setDefaultParams($fields, $params)
     {
         $users    = $this->loadModel('user')->getPairs();
@@ -114,7 +135,13 @@ class searchModel extends model
         return $params;
     }
 
-    /* 获得某一个查询。*/
+    /**
+     * Get a query.
+     * 
+     * @param  int    $queryID 
+     * @access public
+     * @return string
+     */
     public function getQuery($queryID)
     {
         $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
@@ -123,7 +150,12 @@ class searchModel extends model
         return $query;
     }
 
-    /* 保存查询。*/
+    /**
+     * Save current query to db.
+     * 
+     * @access public
+     * @return void
+     */
     public function saveQuery()
     {
         $sqlVar  = $this->post->module  . 'Query';
@@ -140,7 +172,13 @@ class searchModel extends model
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
     }
 
-    /* 获得用户查询对。*/
+    /**
+     * Get title => id pairs of a user.
+     * 
+     * @param  string    $module 
+     * @access public
+     * @return array
+     */
     public function getQueryPairs($module)
     {
         $queries = $this->dao->select('id, title')
@@ -154,7 +192,15 @@ class searchModel extends model
         return $queries;
     }
 
-    /* 按照某一个查询条件获取列表。*/
+    /**
+     * Get records by the conditon.
+     * 
+     * @param  string    $module 
+     * @param  string    $moduleIds 
+     * @param  string    $conditions 
+     * @access public
+     * @return array
+     */
     public function getBySelect($module, $moduleIds, $conditions)
     {
         if($module == 'story')
@@ -195,10 +241,17 @@ class searchModel extends model
         return $this->formatResults($results, $module);
     }
 
-    /* 格式化需求显示。*/
+    /**
+     * Format the results.
+     * 
+     * @param  array    $results 
+     * @param  string   $module 
+     * @access private
+     * @return array
+     */
     private function formatResults($results, $module)
     {
-        /* 重新组织每一个title的展示方式。*/
+        /* Get title field. */
         $title = ($module == 'story') ? 'title' : 'name';
         $resultPairs = array('' => '');
         foreach($results as $result) $resultPairs[$result->id] = $result->id . ':' . $result->$title;
