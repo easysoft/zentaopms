@@ -18,7 +18,7 @@ function loadProducts(project)
     link = createLink('project', 'ajaxGetProducts', 'projectID=' + project);
     $('#productBox').load(link);
 }
-/* 设置文档类型。*/
+/* Set doc type. */
 function setType(type)
 {
     if(type == 'url'){

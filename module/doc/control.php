@@ -11,7 +11,12 @@
  */
 class doc extends control
 {
-    /* 构造函数，加载公用的模块。*/
+    /**
+     * Construct function, load user, tree, action auto.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -21,32 +26,51 @@ class doc extends control
         $this->libs = $this->doc->getLibs();
     }
 
-    /* 首页，跳转到浏览页面。*/
+    /**
+     * Go to browse page.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->locate(inlink('browse'));
     }
 
-    /* 浏览文档。*/
+    /**
+     * Browse docs.
+     * 
+     * @param  string|int $libID    product|project or the int id of custom library
+     * @param  int    $moduleID 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function browse($libID = 'product', $moduleID = 0, $productID = 0, $projectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Set menu, save session. */
         $this->doc->setMenu($this->libs, $libID, 'doc');
         $this->session->set('docList',   $this->app->getURI(true));
 
-        /* 设置header和导航条信息。*/
+        /* Set header and position. */
         $this->view->header->title = $this->lang->doc->index . $this->lang->colon . $this->libs[$libID];
         $this->view->position[]    = $this->libs[$libID];
 
-        /* 加载分页类，并查询docs列表。*/
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* 查找文档列表。*/
+        /* Get docs. */
         $modules = 0;
         if($moduleID) $modules = $this->tree->getAllChildID($moduleID);
         $docs = $this->doc->getDocs($libID, $productID, $projectID, $modules, $orderBy, $pager);
 
-        /* 获得树状列表。*/
+        /* Get the tree menu. */
         if($libID == 'product' or $libID == 'project')
         {
             $moduleTree = $this->tree->getSystemDocTreeMenu($libID);
@@ -71,7 +95,12 @@ class doc extends control
         $this->display();
     }
 
-    /* 新增文档库。*/
+    /**
+     * Create a library.
+     * 
+     * @access public
+     * @return void
+     */
     public function createLib()
     {
         if(!empty($_POST))
@@ -90,7 +119,13 @@ class doc extends control
         die($this->display());
     }
 
-    /* 编辑文档库。*/
+    /**
+     * Edit a library.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
     public function editLib($libID)
     {
         if(!empty($_POST))
@@ -112,7 +147,14 @@ class doc extends control
         die($this->display());
     }
 
-    /* 删除文档库。*/
+    /**
+     * Delete a library.
+     * 
+     * @param  int    $libID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function deleteLib($libID, $confirm = 'no')
     {
         if($libID == 'product' or $libID == 'project') die();
@@ -127,7 +169,17 @@ class doc extends control
         }
     }
     
-    /* 创建文档。*/
+    /**
+     * Create a doc.
+     * 
+     * @param  int|string   $libID 
+     * @param  int          $moduleID 
+     * @param  int          $productID 
+     * @param  int          $projectID 
+     * @param  string       $from 
+     * @access public
+     * @return void
+     */
     public function create($libID, $moduleID = 0, $productID = 0, $projectID = 0, $from = 'doc')
     {
         $projectID = (int)$projectID;
@@ -152,7 +204,7 @@ class doc extends control
         $this->loadModel('product');
         $this->loadModel('project');
 
-        /* 设置当前的文档库，设置菜单。*/
+        /* According the from, set menus. */
         if($from == 'product')
         {
             $this->lang->doc->menu = $this->lang->product->menu;
@@ -170,7 +222,7 @@ class doc extends control
             $this->doc->setMenu($this->libs, $libID);
         }
 
-        /* 获得子模块列表。*/
+        /* Get the modules. */
         if($libID == 'product' or $libID == 'project')
         {
             $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
@@ -180,7 +232,6 @@ class doc extends control
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
 
-        /* 位置信息。*/
         $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
         $this->view->position[]    = $this->lang->doc->create;
@@ -196,10 +247,15 @@ class doc extends control
         $this->display();
     }
 
-    /* 编辑文档。*/
+    /**
+     * Edit a doc.
+     * 
+     * @param  int    $docID 
+     * @access public
+     * @return void
+     */
     public function edit($docID)
     {
-        /* 更新文档信息。*/
         if(!empty($_POST))
         {
             $changes  = $this->doc->update($docID);
@@ -216,14 +272,12 @@ class doc extends control
             die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
 
-        /* 查找当前文档信息。*/
+        /* Get doc and set menu. */
         $doc = $this->doc->getById($docID);
-
-        /* 设置菜单。*/
         $libID = $doc->lib;
         $this->doc->setMenu($this->libs, $libID);
 
-        /* 获得子模块列表。*/
+        /* Get modules. */
         if($libID == 'product' or $libID == 'project')
         {
             $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
@@ -233,7 +287,6 @@ class doc extends control
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
 
-        /* 位置信息。*/
         $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
         $this->view->position[]    = $this->lang->doc->create;
@@ -245,22 +298,27 @@ class doc extends control
         $this->display();
     }
 
-    /* 查看一个文档。*/
+    /**
+     * View a doc.
+     * 
+     * @param  int    $docID 
+     * @access public
+     * @return void
+     */
     public function view($docID)
     {
-        /* 查找文档信息。*/
+        /* Get doc. */
         $doc = $this->doc->getById($docID);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
         
-        /* 文档库名称。*/
+        /* Get library. */
         $lib = $doc->libName;
         if($doc->lib == 'product') $lib = $doc->productName;
         if($doc->lib == 'project') $lib = $doc->productName . $this->lang->arrow . $doc->projectName;
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->doc->setMenu($this->libs, $doc->lib);
 
-        /* 位置信息。*/
         $this->view->header->title = $this->libs[$doc->lib] . $this->lang->colon . $this->lang->doc->create;
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
         $this->view->position[]    = $this->lang->doc->create;
@@ -273,7 +331,14 @@ class doc extends control
         $this->display();
     }
 
-    /* 删除文档。*/
+    /**
+     * Delete a doc.
+     * 
+     * @param  int    $docID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function delete($docID, $confirm = 'no')
     {
         if($confirm == 'no')

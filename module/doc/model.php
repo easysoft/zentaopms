@@ -13,10 +13,17 @@
 <?php
 class docModel extends model
 {
-    /* 设置菜单。*/
+    /**
+     * Set menus
+     * 
+     * @param  array  $libs 
+     * @param  int    $libID 
+     * @param  string $extra 
+     * @access public
+     * @return void
+     */
     public function setMenu($libs, $libID, $extra = '')
     {
-        /* 获得当前的模块和方法，传递给switchDocLib方法，供页面跳转使用。*/
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
@@ -28,23 +35,38 @@ class docModel extends model
         }
     }
 
-    /* 通过ID获取文档库信息。*/
+    /**
+     * Get library by id.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return object
+     */
     public function getLibById($libID)
     {
         return $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch();
     }
 
-    /* 获取文档库列表。*/
+    /**
+     * Get libraries.
+     * 
+     * @access public
+     * @return array
+     */
     public function getLibs()
     {
         $libs = $this->dao->select('id, name')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->fetchPairs();
         return $this->lang->doc->systemLibs + $libs;
     }
 
-    /* 新增文档库。*/
+    /**
+     * Create a library.
+     * 
+     * @access public
+     * @return void
+     */
     public function createLib()
     {
-        /* 处理数据。*/
         $lib = fixer::input('post')->stripTags('name')->get();
         $this->dao->insert(TABLE_DOCLIB)
             ->data($lib)
@@ -55,10 +77,15 @@ class docModel extends model
         return $this->dao->lastInsertID();
     }
 
-    /* 编辑文档库。*/
+    /**
+     * Update a library.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
     public function updateLib($libID)
     {
-        /* 处理数据。*/
         $libID  = (int)$libID;
         $oldLib = $this->getLibById($libID);
         $lib = fixer::input('post')->stripTags('name')->get();
@@ -72,7 +99,18 @@ class docModel extends model
         if(!dao::isError()) return common::createChanges($oldLib, $lib);
     }
 
-    /* 获得文档列表。*/
+    /**
+     * Get docs.
+     * 
+     * @param  int|string   $libID 
+     * @param  int          $productID 
+     * @param  int          $projectID 
+     * @param  int          $module 
+     * @param  string       $orderBy 
+     * @param  object       $pager 
+     * @access public
+     * @return void
+     */
     public function getDocs($libID, $productID, $projectID, $module, $orderBy, $pager)
     {
         return $this->dao->select('*')->from(TABLE_DOC)
@@ -89,7 +127,13 @@ class docModel extends model
             ->fetchAll();
     }
 
-    /* 获取一个文档的详细信息。*/
+    /**
+     * Get doc info by id.
+     * 
+     * @param  int    $docID 
+     * @access public
+     * @return void
+     */
     public function getById($docID)
     {
         $doc = $this->dao->select('*')
@@ -110,7 +154,12 @@ class docModel extends model
         return $doc;
     }
 
-    /* 创建一个文档。*/
+    /**
+     * Create a doc.
+     * 
+     * @access public
+     * @return void
+     */
     public function create()
     {
         $now = helper::now();
@@ -139,7 +188,13 @@ class docModel extends model
         return false;
     }
 
-    /* 更新文档信息。*/
+    /**
+     * Update a doc.
+     * 
+     * @param  int    $docID 
+     * @access public
+     * @return void
+     */
     public function update($docID)
     {
         $oldDoc = $this->getById($docID);
@@ -164,7 +219,13 @@ class docModel extends model
         if(!dao::isError()) return common::createChanges($oldDoc, $doc);
     }
  
-    /* 获得某一个产品的文档列表。*/
+    /**
+     * Get docs of a product.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
     public function getProductDocs($productID)
     {
         return $this->dao->select('t1.*, t2.name as module')
@@ -176,19 +237,35 @@ class docModel extends model
             ->fetchAll();
     }
 
-    /* 获得某一个项目的文档列表。*/
+    /**
+     * Get docs of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getProjectDocs($projectID)
     {
         return $this->dao->findByProject($projectID)->from(TABLE_DOC)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchAll();
     }
 
-    /* 获得产品的文档模块列表*/
+    /**
+     * Get pairs of product modules.
+     * 
+     * @access public
+     * @return array
+     */
     public function getProductModulePairs()
     {
         return $this->dao->findByType('productdoc')->from(TABLE_MODULE)->fetchPairs('id', 'name');
     }
 
-    /* 获得项目的文档模块列表。*/
+    /**
+     * Get pairs of project modules.
+     * 
+     * @access public
+     * @return array
+     */
     public function getProjectModulePairs()
     {
         return $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->andWhere('type')->eq('projectdoc')->fetchPairs('id', 'name');

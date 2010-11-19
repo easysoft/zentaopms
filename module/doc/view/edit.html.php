@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <script language='javascript'>
-/* 设置文档类型。*/
+/* Set type. */
 var type = '<?php echo $doc->type;?>';
 $(document).ready(function()
 {

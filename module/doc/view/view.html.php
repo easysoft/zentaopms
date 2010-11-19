@@ -16,7 +16,7 @@
 var type = '<?php echo $doc->type;?>';
 $(document).ready(function()
 {
-    /* 判断文档类型。*/
+    /* Jude the type. */
     if(type == 'url') $('#urlBox').show();
     else if(type == 'text') $('#contentBox').show();
     else $('#fileBox').show();
