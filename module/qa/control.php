@@ -11,8 +11,14 @@
  */
 class qa extends control
 {
+    /**
+     * The index of qa, go to bug's browse page.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
-        $this->locate($this->createLink('bug', 'index'));
+        $this->locate($this->createLink('bug', 'browse'));
     }
 }
