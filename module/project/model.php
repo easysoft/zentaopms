@@ -13,29 +13,35 @@
 <?php
 class projectModel extends model
 {
-    /* 每次关联成员的数量。*/
+    /* The members every linking. */
     const LINK_MEMBERS_ONE_TIME = 10;
 
-    /* 检查权限。*/
+    /**
+     * Check the privilege. 
+     * 
+     * @param  object    $project 
+     * @access public
+     * @return bool
+     */
     public function checkPriv($project)
     {
-        /* 检查是否是管理员。*/
+        /* If is admin, return true. */
         $account = ',' . $this->app->user->account . ',';
         if(strpos($this->app->company->admins, $account) !== false) return true; 
 
-        /* 访问级别为open，不做任何处理。*/
+        /* If project is open, return true. */
         if($project->acl == 'open') return true;
 
-        /* 获得团队的成员列表，供后面判断。*/
+        /* Get team members. */
         $teamMembers = $this->getTeamMemberPairs($project->id);
 
-        /* 级别为private。*/
+        /* If project is private, only members can access. */
         if($project->acl == 'private')
         {
             return isset($teamMembers[$this->app->user->account]);
         }
 
-        /* 级别为custom。*/
+        /* Project's acl is custom, check the groups. */
         if($project->acl == 'custom')
         {
             if(isset($teamMembers[$this->app->user->account])) return true;
@@ -49,7 +55,14 @@ class projectModel extends model
         }
     }
 
-    /* 设置菜单。*/
+    /**
+     * Set menu.
+     * 
+     * @param  array  $projects 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function setMenu($projects, $projectID)
     {
         $moduleName = $this->app->getModuleName();
@@ -57,8 +70,8 @@ class projectModel extends model
         $selectHtml = html::select('projectID', $projects, $projectID, "onchange=\"switchProject(this.value, '$moduleName', '$methodName');\"");
         foreach($this->lang->project->menu as $key => $menu)
         {
-            if($key == 'list') common::setMenuVars($this->lang->project->menu, 'list',  $selectHtml . $this->lang->arrow);
-            else common::setMenuVars($this->lang->project->menu, $key,  $projectID);
+            $replace = $key == 'list' ? $selectHtml . $this->lang->arrow : $projectID;
+            common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
     }
 
@@ -79,7 +92,12 @@ class projectModel extends model
         return $this->session->project;
     }
 
-    /* 新增项目。*/
+    /**
+     * Create a project. 
+     * 
+     * @access public
+     * @return void
+     */
     public function create()
     {
         $this->lang->project->team = $this->lang->project->teamname;
@@ -99,7 +117,7 @@ class projectModel extends model
             ->check('code', 'unique')
             ->exec();
 
-        /* 将当前操作者加入到项目团队中。*/
+        /* Add the creater to the team. */
         if(!dao::isError())
         {
             $projectID = $this->dao->lastInsertId();
@@ -111,7 +129,13 @@ class projectModel extends model
         } 
     }
 
-    /* 更新一个项目。*/
+    /**
+     * Update a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function update($projectID)
     {
         $oldProject = $this->getById($projectID);
@@ -155,7 +179,12 @@ class projectModel extends model
         if(!dao::isError()) return common::createChanges($oldProject, $project);
     }
 
-    /* 获得项目id=>name列表。*/
+    /**
+     * Get project pairs.
+     * 
+     * @access public
+     * @return array
+     */
     public function getPairs()
     {
         $mode = $this->cookie->projectMode;
@@ -172,7 +201,13 @@ class projectModel extends model
         return $pairs;
     }
 
-    /* 获得完整的列表。*/
+    /**
+     * Get project lists.
+     * 
+     * @param  string $status 
+     * @access public
+     * @return array
+     */
     public function getList($status = 'all')
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
@@ -182,7 +217,13 @@ class projectModel extends model
             ->fetchAll();
     }
 
-    /* 通过Id获取项目信息。*/
+    /**
+     * Get project by id.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function getById($projectID)
     {
         $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
@@ -202,7 +243,13 @@ class projectModel extends model
         return $project;
     }
 
-    /* 获得相关的产品列表。*/
+    /**
+     * Get products of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getProducts($projectID)
     {
         return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -212,7 +259,13 @@ class projectModel extends model
             ->fetchPairs();
     }
 
-    /* 更新相关产品。*/
+    /**
+     * Update products of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function updateProducts($projectID)
     {
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
@@ -226,7 +279,13 @@ class projectModel extends model
         }
     }
 
-    /* 获得相关项目列表。*/
+    /**
+     * Get related projects 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getRelatedProjects($projectID)
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchAll('product');
@@ -242,7 +301,13 @@ class projectModel extends model
             ->fetchPairs();
     }
 
-    /* 获得可以被导入的任务列表。*/
+    /**
+     * Get rasks can be imported.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getTasks2Imported($projectID)
     {
         $this->loadModel('task');
@@ -258,15 +323,21 @@ class projectModel extends model
         return $tasks;
     }
 
-    /* 导入任务。*/
+    /**
+     * Import taskes.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function importTask($projectID)
     {
         $tasks = $this->dao->select('id, project, owner, story, consumed')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
 
-        /* 更新task表。*/
+        /* Update taskes. */
         foreach($tasks as $task)
         {
-            /* 记录owner和story。*/
+            /* Save the owners and stories, should linked to project. */
             $owners[$task->owner]  = $task->project;
             $stories[$task->story] = $task->story;
 
@@ -275,10 +346,10 @@ class projectModel extends model
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
         }
 
-        /* 去掉story=0的记录。*/
+        /* Remove empty story. */
         unset($stories[0]);
 
-        /* 将没有关联进来的用户加入到团队中。*/
+        /* Add members to project team. */
         $teamMembers = $this->getTeamMemberPairs($projectID);
         foreach($owners as $account => $preProjectID)
         {
@@ -291,7 +362,7 @@ class projectModel extends model
             }
         }
 
-        /* 将没有关联的需求关联到项目中。*/
+        /* Link stories. */
         $projectStories = $this->loadModel('story')->getProjectStoryPairs($projectID);
         foreach($stories as $storyID)
         {
@@ -303,13 +374,25 @@ class projectModel extends model
         }
     }
 
-    /* 获得相关的子项目列表。*/
+    /**
+     * Get child projects.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function getChildProjects($projectID)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)->where('parent')->eq((int)$projectID)->fetchPairs();
     }
 
-    /* 更新child项目。*/
+    /**
+     * Update childs.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function updateChilds($projectID)
     {
         $sql = "UPDATE " . TABLE_PROJECT . " SET parent = 0 WHERE parent = '$projectID'";
@@ -323,7 +406,13 @@ class projectModel extends model
         }
     }
 
-    /* 关联需求。*/
+    /**
+     * Link story.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function linkStory($projectID)
     {
         if($this->post->stories == false) return false;
@@ -342,7 +431,14 @@ class projectModel extends model
         }        
     }
 
-    /* 移除一个需求。*/
+    /**
+     * Unlink story. 
+     * 
+     * @param  int    $projectID 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function unlinkStory($projectID, $storyID)
     {
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->limit(1)->exec();
@@ -350,7 +446,13 @@ class projectModel extends model
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromproject', '', $projectID);
     }
 
-    /* 获取团队成员。*/
+    /**
+     * Get team members. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getTeamMembers($projectID)
     {
         return $this->dao->select('t1.*, t2.realname')->from(TABLE_TEAM)->alias('t1')
@@ -360,7 +462,14 @@ class projectModel extends model
             ->fetchAll();
     }
 
-   /* 获取团队成员account=>name列表。*/
+    /**
+     * Get team members in pair.
+     * 
+     * @param  int    $projectID 
+     * @param  string $params 
+     * @access public
+     * @return array
+     */
     public function getTeamMemberPairs($projectID, $params = '')
     {
         $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
@@ -380,7 +489,13 @@ class projectModel extends model
         return array('' => '') + $users;
     }
 
-    /* 关联成员。*/
+    /**
+     * Manage team members.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function manageMembers($projectID)
     {
         extract($_POST);
@@ -413,13 +528,25 @@ class projectModel extends model
         }        
     }
 
-     /* 删除一个成员。*/
+    /**
+     * Unlink a member.
+     * 
+     * @param  int    $projectID 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
     public function unlinkMember($projectID, $account)
     {
         $this->dao->delete()->from(TABLE_TEAM)->where('project')->eq((int)$projectID)->andWhere('account')->eq($account)->exec();
     }
 
-    /* 计算所有项目的燃尽图数据。*/
+    /**
+     * Compute burn of a project.
+     * 
+     * @access public
+     * @return array
+     */
     public function computeBurn()
     {
         $today    = helper::today();
@@ -447,14 +574,21 @@ class projectModel extends model
         return $burns;
     }
 
-    /* 燃烧图所需要的数据。*/
+    /**
+     * Get data of burn down chart.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $itemCounts 
+     * @access public
+     * @return array
+     */
     public function getBurnData($projectID = 0, $itemCounts = 30)
     {
-        /* 获得项目的信息，和已经计算过的燃烧图数量。*/
+        /* Get project and burn counts. */
         $project    = $this->getById($projectID);
         $burnCounts = $this->dao->select('count(*) AS counts')->from(TABLE_BURN)->where('project')->eq($projectID)->fetch('counts');
 
-        /* 如果已经有超过$itemCounts的数据，则直接查找最后$itemCounts的数据。*/
+        /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
         $sql = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
         if($burnCounts > $itemCounts)
         {
@@ -463,7 +597,7 @@ class projectModel extends model
         }
         else
         {
-            /* 不足$itemCounts，先将burn表里面的数据查出，再进行补齐。*/
+            /* The burnCounts < itemCounts, after getting from the db, padding left dates. */
             $sets    = $sql->orderBy('date ASC')->fetchAll('name');
             $current = helper::today();
             if($project->end != '0000-00-00')

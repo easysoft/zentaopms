@@ -1,21 +1,8 @@
 <?php
 /**
- * The control file of project module of ZenTaoMS.
+ * The control file of project module of ZenTaoPMS.
  *
- * ZenTaoMS is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * ZenTaoMS is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with ZenTaoMS.  If not, see <http://www.gnu.org/licenses/>.  
- *
- * @copyright   Copyright 2009-2010 青岛易软天创网络科技有限公司(www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id$
@@ -25,7 +12,12 @@ class project extends control
 {
     private $projects;
 
-    /* 构造函数，加载product, task, story等模块。*/
+    /**
+     * Construct function, Set projects.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -36,43 +28,59 @@ class project extends control
         }
     }
 
-    /* 项目视图首页，*/
+    /**
+     * The index page.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         if(empty($this->projects)) $this->locate($this->createLink('project', 'create'));
         $this->locate($this->createLink('project', 'browse'));
     }
 
-    /* 浏览某一个项目。*/
+    /**
+     * Browse a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function browse($projectID = 0)
     {
         $this->locate($this->createLink($this->moduleName, 'task', "projectID=$projectID"));
     }
 
-    /* task, story, bug等方法的一些公共操作。*/
+    /**
+     * Common actions.
+     * 
+     * @param  int    $projectID 
+     * @access private
+     * @return object current object
+     */
     private function commonAction($projectID = 0)
     {
-        /* 加载product模块。*/
         $this->loadModel('product');
 
-        /* 获取当前项目的详细信息，相关产品，子项目以及团队成员。*/
+        /* Get projects and products info. */
         $projectID     = $this->project->saveState($projectID, array_keys($this->projects));
         $project       = $this->project->getById($projectID);
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);
         $teamMembers   = $this->project->getTeamMembers($project->id);
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
-        /* 将其赋值到模板系统。*/
+        /* Assign. */
         $this->view->projects      = $this->projects;
         $this->view->project       = $project;
         $this->view->childProjects = $childProjects;
         $this->view->products      = $products;
         $this->view->teamMembers   = $teamMembers;
 
-        /* 检查是否有访问权限。*/
+        /* Check the privilege. */
         if(!$this->project->checkPriv($project))
         {
             echo(js::alert($this->lang->project->accessDenied));
@@ -82,30 +90,40 @@ class project extends control
         return $project;
     }
 
-    /* 浏览某一个项目下面的任务。*/
+    /**
+     * Tasks of a project.
+     * 
+     * @param  int    $projectID 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function task($projectID = 0, $status = 'all', $orderBy = 'status_asc,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 公共的操作。*/
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
-        /* 记录用户当前选择的列表。*/
+        /* Save to session. */
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList',    $uri);
         $this->app->session->set('storyList',   $uri);
         $this->app->session->set('projectList', $uri);
 
-        /* 设定header和position信息。*/
+        /* Header and position. */
         $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->task;
         $this->view->position[]    = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[]    = $this->lang->project->task;
 
-        /* 分页操作。*/
+        /* Load pager and get taskes. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager);
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->tasks      = $tasks ? $tasks : array();
         $this->view->tabID      = 'task';
         $this->view->pager      = $pager->get();
@@ -117,23 +135,29 @@ class project extends control
         $this->display();
     }
 
-    /* 按照tree的方式查看任务。*/
+    /**
+     * Browse taskes in group.
+     * 
+     * @param  int    $projectID 
+     * @param  string $groupBy    the field to group by
+     * @access public
+     * @return void
+     */
     public function grouptask($projectID = 0, $groupBy = 'story')
     {
-        /* 公共的操作。*/
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
-        /* 记录用户当前选择的列表。*/
+        /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true));
         $this->app->session->set('storyList', $this->app->getURI(true));
 
-        /* 设定header和position信息。*/
+        /* Header and session. */
         $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->project->task;
         $this->view->position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[]      = $this->lang->project->task;
 
-        /* 获得任务列表，并将其分组。*/
+        /* Get taskes and group them. */
         $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $groupBy);
         $groupBy     = strtolower(str_replace('`', '', $groupBy));
         $taskLang    = $this->lang->task;
@@ -164,7 +188,7 @@ class project extends control
             }
         }
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->tasks       = $groupTasks;
         $this->view->tabID       = 'task';
         $this->view->groupByList = $groupByList;
@@ -172,7 +196,13 @@ class project extends control
         $this->display();
     }
 
-    /* 将之前未完成的项目任务导入。*/
+    /**
+     * Import taskes undoned from other projects.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function importTask($projectID)
     {
         if(!empty($_POST))
@@ -183,7 +213,7 @@ class project extends control
 
         $project = $this->commonAction($projectID);
 
-        /* 登记session。*/
+        /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true));
         $this->app->session->set('storyList', $this->app->getURI(true));
 
@@ -194,31 +224,36 @@ class project extends control
         $this->display();
     }
 
-    /* 浏览某一个项目下面的需求。*/
+    /**
+     * Browse stories of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function story($projectID = 0)
     {
-        /* 加载story, user模块，加载task模块的语言。*/
+        /* Load these models. */
         $this->loadModel('story');
         $this->loadModel('user');
         $this->loadModel('task');
 
-        /* 记录用户当前选择的列表。*/
+        /* Save session. */
         $this->app->session->set('storyList', $this->app->getURI(true));
 
-        /* 公共的操作。*/
         $project = $this->commonAction($projectID);
 
-        /* 设定header和position信息。*/
+        /* Header and position. */
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->story;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->story;
 
-        /* 分页操作。*/
+        /* The pager. */
         $stories    = $this->story->getProjectStories($projectID);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header     = $header;
         $this->view->position   = $position;
         $this->view->stories    = $stories;
@@ -229,33 +264,42 @@ class project extends control
         $this->display();
     }
 
-    /* 浏览某一个项目下面的bug。*/
+    /**
+     * Browse bugs of a project. 
+     * 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function bug($projectID = 0, $orderBy = 'status,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 加载bug和user模块。*/
+        /* Load these two models. */
         $this->loadModel('bug');
         $this->loadModel('user');
 
-        /* 登记session。*/
+        /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true));
 
-        /* 公共的操作。*/
         $project   = $this->commonAction($projectID);
         $products  = $this->project->getProducts($project->id);
-        $productID = key($products);    // 取第一个产品，用来提交Bug。
+        $productID = key($products);    // Get the first product for creating bug.
 
-        /* 设定header和position信息。*/
+        /* Header and position. */
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->bug;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->bug;
 
-        /* 分页操作。*/
+        /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $bugs  = $this->bug->getProjectBugs($projectID, $orderBy, $pager);
         $users = $this->user->getPairs('noletter');
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header    = $header;
         $this->view->position  = $position;
         $this->view->bugs      = $bugs;
@@ -268,43 +312,53 @@ class project extends control
         $this->display();
     }
 
-    /* 浏览某一个项目下面的build。*/
+    /**
+     * Browse builds of a project. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function build($projectID = 0)
     {
         $this->session->set('buildList', $this->app->getURI(true));
 
-        /* 公共的操作。*/
         $project = $this->commonAction($projectID);
 
-        /* 设定header和position信息。*/
+        /* Header and position. */
         $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->build;
         $this->view->position[]    = html::a(inlink('browse', "projectID=$projectID"), $project->name);
         $this->view->position[]    = $this->lang->project->build;
 
-        /* 查找build列表。*/
+        /* Get builds. */
         $this->view->builds = $this->loadModel('build')->getProjectBuilds((int)$projectID);
 
         $this->display();
     }
 
-    /* 某一个项目的燃烧图。*/
+    /**
+     * Browse burndown chart of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function burn($projectID = 0)
     {
         $this->loadModel('report');
 
-        /* 公共的操作。*/
         $project = $this->commonAction($projectID);
 
-        /* 设定header和position信息。*/
+        /* Header and position. */
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->burn;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->burn;
 
-        /* 生成图表。*/
+        /* Create charts. */
         $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph);
         $charts  = $this->report->createJSChart('line', $dataXML, 800);
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->tabID    = 'burn';
@@ -313,7 +367,13 @@ class project extends control
         $this->display();
     }
 
-    /* 燃烧图所需要的数据。*/
+    /**
+     * Get data of burndown chart. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function burnData($projectID = 0)
     {
         $this->loadModel('report');
@@ -321,7 +381,13 @@ class project extends control
         die($this->report->createSingleXML($sets, $this->lang->project->charts->burn->graph));
     }
 
-    /* 计算燃烧图数据。*/
+    /**
+     * Compute burndown datas.
+     * 
+     * @param  string $reload 
+     * @access public
+     * @return void
+     */
     public function computeBurn($reload = 'no')
     {
         $this->view->burns = $this->project->computeBurn();
@@ -329,13 +395,17 @@ class project extends control
         die($this->display());
     }
 
-    /* 团队成员。*/
+    /**
+     * Browse team of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function team($projectID = 0)
     {
-        /* 公共的操作。*/
         $project = $this->commonAction($projectID);
 
-        /* 设定header和position信息。*/
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->team;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->team;
@@ -346,13 +416,18 @@ class project extends control
         $this->display();
     }
 
-    /* 文档列表。*/
+    /**
+     * Docs of a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function doc($projectID)
     {
         $this->project->setMenu($this->projects, $projectID);
         $this->session->set('docList', $this->app->getURI(true));
 
-        /* 赋值。*/
         $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $this->view->header->title = $this->lang->project->doc;
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $project->name);
@@ -364,8 +439,12 @@ class project extends control
         $this->display();
     }
 
-
-    /* 创建一个项目。*/
+    /**
+     * Create a project.
+     * 
+     * @access public
+     * @return void
+     */
     public function create()
     {
         if(!empty($_POST))
@@ -377,7 +456,6 @@ class project extends control
             die(js::locate($this->createLink('project', 'tips', "projectID=$projectID"), 'parent'));
         }
 
-        /* 设置菜单。*/
         $this->project->setMenu($this->projects, '');
 
         $this->view->header->title = $this->lang->project->create;
@@ -388,7 +466,13 @@ class project extends control
         $this->display();
     }
 
-    /* 编辑一个项目。*/
+    /**
+     * Edit a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function edit($projectID)
     {
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
@@ -405,16 +489,15 @@ class project extends control
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->project->setMenu($this->projects, $projectID);
 
         $projects = array('' => '') + $this->projects;
         $project  = $this->project->getById($projectID);
 
-        /* 从列表中删除当前项目。*/
+        /* Remove current project from the projects. */
         unset($projects[$projectID]);
 
-        /* 标题和位置信息。*/
         $header['title'] = $this->lang->project->edit . $this->lang->colon . $project->name;
         $position[]      = html::a($browseProjectLink, $project->name);
         $position[]      = $this->lang->project->edit;
@@ -422,7 +505,6 @@ class project extends control
         $linkedProducts = $this->project->getProducts($project->id);
         $linkedProducts = join(',', array_keys($linkedProducts));
         
-        /* 赋值。*/
         $this->view->header         = $header;
         $this->view->position       = $position;
         $this->view->projects       = $projects;
@@ -435,14 +517,19 @@ class project extends control
         $this->display();
     }
 
-    /* 项目基本信息。*/
+    /**
+     * View a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function view($projectID)
     {
-        /* 公共的操作。*/
         $project = $this->project->getById($projectID);
         if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
         $this->view->header->title = $this->lang->project->view;
@@ -457,7 +544,14 @@ class project extends control
         $this->display();
     }
 
-    /* 删除一个项目。*/
+    /**
+     * Delete a project.
+     * 
+     * @param  int    $projectID 
+     * @param  string $confirm   yes|no
+     * @access public
+     * @return void
+     */
     public function delete($projectID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -468,12 +562,18 @@ class project extends control
         else
         {
             $this->project->delete(TABLE_PROJECT, $projectID);
-            $this->session->set('project', '');     // 清除session。
+            $this->session->set('project', '');
             die(js::locate(inlink('index'), 'parent'));
         }
     }
 
-    /* 维护相关的产品。*/
+    /**
+     * Manage products.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function manageProducts($projectID)
     {
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
@@ -487,10 +587,10 @@ class project extends control
         $this->loadModel('product');
         $project  = $this->project->getById($projectID);
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
-        /* 标题和位置信息。*/
+        /* Title and position. */
         $header['title'] = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
         $position[]      = html::a($browseProjectLink, $project->name);
         $position[]      = $this->lang->project->manageProducts;
@@ -499,7 +599,7 @@ class project extends control
         $linkedProducts = $this->project->getProducts($project->id);
         $linkedProducts = join(',', array_keys($linkedProducts));
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header         = $header;
         $this->view->position       = $position;
         $this->view->allProducts    = $allProducts;
@@ -508,7 +608,13 @@ class project extends control
         $this->display();
     }
 
-    /* 维护子项目。*/
+    /**
+     * Manage childs projects.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function manageChilds($projectID)
     {
         $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
@@ -523,7 +629,7 @@ class project extends control
         unset($projects[$project->parent]);
         if(empty($projects)) $this->locate($browseProjectLink);
 
-        /* 标题和位置信息。*/
+        /* Header and position. */
         $header['title'] = $this->lang->project->manageChilds . $this->lang->colon . $project->name;
         $position[]      = html::a($browseProjectLink, $project->name);
         $position[]      = $this->lang->project->manageChilds;
@@ -531,10 +637,10 @@ class project extends control
         $childProjects = $this->project->getChildProjects($project->id);
         $childProjects = join(",", array_keys($childProjects));
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header        = $header;
         $this->view->position      = $position;
         $this->view->projects      = $projects;
@@ -543,7 +649,13 @@ class project extends control
         $this->display();
     }
     
-    /* 维护团队成员。*/
+    /**
+     * Manage members of the project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function manageMembers($projectID = 0)
     {
         if(!empty($_POST))
@@ -559,13 +671,13 @@ class project extends control
         $users   = array('' => '') + $users;
         $members = $this->project->getTeamMembers($projectID);
 
-        /* 设置已删除的团队成员。*/
+        /* The deleted members. */
         foreach($members as $member)
         {
             if(!@$users[$member->account]) $member->account .= $this->lang->user->deleted;
         }
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
         $header['title'] = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
@@ -580,7 +692,15 @@ class project extends control
         $this->display();
     }
 
-    /* 移除一个成员。*/
+    /**
+     * Unlink a memeber.
+     * 
+     * @param  int    $projectID 
+     * @param  string $account 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function unlinkMember($projectID, $account, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -594,16 +714,22 @@ class project extends control
         }
     }
 
-    /* 关联需求。*/
+    /**
+     * Link stories to a project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function linkStory($projectID = 0)
     {
-        /* 获得项目和相关产品信息。如果没有相关产品，则跳转到产品关联页面。*/
+        /* Get projects and products. */
         $project    = $this->project->getById($projectID);
         $products   = $this->project->getProducts($projectID);
         $browseLink = $this->createLink('project', 'story', "projectID=$projectID");
 
-        $this->session->set('storyList', $this->app->getURI(true)); // 记录需求列表状态。
-        $this->project->setMenu($this->projects, $project->id);     // 设置菜单。
+        $this->session->set('storyList', $this->app->getURI(true)); // Save session.
+        $this->project->setMenu($this->projects, $project->id);     // Set menu.
 
         if(empty($products))
         {
@@ -611,7 +737,6 @@ class project extends control
             die(js::locate($this->createLink('project', 'manageproducts', "projectID=$projectID")));
         }
 
-        /* 更新数据库。*/
         if(!empty($_POST))
         {
             $this->project->linkStory($projectID);
@@ -619,7 +744,6 @@ class project extends control
             exit;
         }
 
-        /* 加载数据。*/
         $this->loadModel('story');
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->linkStory;
@@ -639,7 +763,15 @@ class project extends control
         $this->display();
     }
 
-    /* 移除一个需求。*/
+    /**
+     * Unlink a story.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $storyID 
+     * @param  string $confirm    yes|no
+     * @access public
+     * @return void
+     */
     public function unlinkStory($projectID, $storyID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -655,22 +787,33 @@ class project extends control
         }
     }
 
-    /* 获得某一项目所对应的产品。*/
+    /**
+     * AJAX: get products of a project in html select.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function ajaxGetProducts($projectID)
     {
         $products = $this->project->getProducts($projectID);
         die(html::select('product', $products, '', 'class="select-3"'));
     }
     
-    /* 添加完项目之后，提示用户该如何处理。*/
+    /**
+     * When create a project, help the user. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function tips($projectID)
     {
         $url = $this->createLink('project', 'task', "projectID=$projectID");       
-        $header['title']        = $this->lang->project->tips;
+        $header['title']       = $this->lang->project->tips;
         $this->view->header    = $header;
         $this->view->projectID = $projectID;        
         $this->display();
         die("<html><head><meta http-equiv='refresh' content='3; url=$url' /></head><body></body></html>");
-        exit;
     }
 }
