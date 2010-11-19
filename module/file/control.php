@@ -11,7 +11,14 @@
  */
 class file extends control
 {
-    /* 生成文件上传的表单。*/
+    /**
+     * Build the upload form.
+     * 
+     * @param  int    $fileCount 
+     * @param  float  $percent 
+     * @access public
+     * @return void
+     */
     public function buildForm($fileCount = 2, $percent = 0.9)
     {
         $this->view->fileCount = $fileCount;
@@ -19,7 +26,12 @@ class file extends control
         $this->display();
     }
 
-    /* ajax接口，用于接收编辑器附件上传。*/
+    /**
+     * AJAX: get upload request from the web editor.
+     * 
+     * @access public
+     * @return void
+     */
     public function ajaxUpload()
     {
         $file = $this->file->getUpload('imgFile');
@@ -38,17 +50,24 @@ class file extends control
         }
     }
 
-    /* 下载一个文件。*/
+    /**
+     * Down a file.
+     * 
+     * @param  int    $fileID 
+     * @param  string $mouse 
+     * @access public
+     * @return void
+     */
     public function download($fileID, $mouse = '')
     {
         $file = $this->file->getById($fileID);
 
-        /* 判断是下载还是打开。*/
+        /* Judge the mode, down or open. */
         $mode  = 'down';
         $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
         if(strpos($fileTypes, $file->extension) !== false and $mouse == 'left') $mode = 'open';
 
-        /* 模式为open，直接在浏览器打开。*/
+        /* If the mode is open, locate directly. */
         if($mode == 'open')
         {
             if(file_exists($file->realPath))$this->locate($file->webPath);
@@ -56,7 +75,7 @@ class file extends control
         }
         else
         {
-            /* 下载文件。*/
+            /* Down the file. */
             if(file_exists($file->realPath))
             {
                 $fileName = $file->title . '.' . $file->extension;
@@ -71,13 +90,19 @@ class file extends control
         }
     }
 
-    /* 导出csv格式的文件。*/
+    /**
+     * Export as csv format.
+     * 
+     * @param  string    $agent 
+     * @access public
+     * @return void
+     */
     public function export2csv($agent)
     {
         $fileName   = $this->post->fileName;
         $csvData    = stripslashes($this->post->csvData);
 
-        /* 如果是中文，尝试将编码转为gbk. */
+        /* If the language is zh-cn, convert to gbk. */
         $clientLang = $this->app->getClientLang();
         if($clientLang == 'zh-cn')
         {
@@ -101,7 +126,14 @@ class file extends control
         die();
     }
 
-    /* 删除一个文件。*/
+    /**
+     * Delete a file.
+     * 
+     * @param  int    $fileID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function delete($fileID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -118,7 +150,14 @@ class file extends control
         }
     }
 
-    /* 显示下载及删除链接。*/
+    /**
+     * Print files. 
+     * 
+     * @param  array  $files 
+     * @param  string    $fieldset 
+     * @access public
+     * @return void
+     */
     public function printFiles($files, $fieldset)
     {
         $this->view->files    = $files;

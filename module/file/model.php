@@ -17,7 +17,12 @@ class fileModel extends model
     public $webPath   = '';
     public $now       = 0;
 
-    /* 构造函数。*/
+    /**
+     * Construct function.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -26,13 +31,26 @@ class fileModel extends model
         $this->setWebPath();
     }
 
-    /* 通过对象类型获取文件列表。*/
+    /**
+     * Get files of an object.
+     * 
+     * @param  string   $objectType 
+     * @param  string   $objectID 
+     * @access public
+     * @return array
+     */
     public function getByObject($objectType, $objectID)
     {
         return $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq($objectType)->andWhere('objectID')->eq((int)$objectID)->orderBy('id')->fetchAll();
     }
 
-    /* 获得某一个文件的信息。*/
+    /**
+     * Get info of a file.
+     * 
+     * @param  int    $fileID 
+     * @access public
+     * @return object
+     */
     public function getById($fileID)
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
@@ -41,7 +59,15 @@ class fileModel extends model
         return $file;
     }
 
-    /* 保存上传的文件。*/
+    /**
+     * Save upload.
+     * 
+     * @param  string $objectType 
+     * @param  string $objectID 
+     * @param  string $extra 
+     * @access public
+     * @return array
+     */
     public function saveUpload($objectType = '', $objectID = '', $extra = '')
     {
         $fileTitles = array();
@@ -63,19 +89,30 @@ class fileModel extends model
         return $fileTitles;
     }
 
-    /* 获得文件数量。*/
+    /**
+     * Get counts of uploaded files.
+     * 
+     * @access public
+     * @return int
+     */
     public function getCount()
     {
         return count($this->getUpload());
     }
 
-    /* 获取上传的文件信息。*/
+    /**
+     * Get info of uploaded files.
+     * 
+     * @param  string $htmlTagName 
+     * @access public
+     * @return array
+     */
     public function getUpload($htmlTagName = 'files')
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
 
-        /* 表单定义中的变量名是数组。*/
+        /* If the file var name is an array. */
         if(is_array($_FILES[$htmlTagName]['name']))
         {
             extract($_FILES[$htmlTagName]);
@@ -104,7 +141,13 @@ class fileModel extends model
         return $files;
     }
 
-    /* 获取文件扩展名。*/
+    /**
+     * Get extension of a file.
+     * 
+     * @param  string    $filename 
+     * @access private
+     * @return string
+     */
     private function getExtension($filename)
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
@@ -113,7 +156,14 @@ class fileModel extends model
         return $extension;
     }
 
-    /* 设置要存储的文件名。*/
+    /**
+     * Set path name of the uploaded file to be saved.
+     * 
+     * @param  int    $fileID 
+     * @param  string $extension 
+     * @access private
+     * @return string
+     */
     private function setPathName($fileID, $extension)
     {
         $sessionID  = session_id();
@@ -121,7 +171,12 @@ class fileModel extends model
         return date('Ym/dHis', $this->now) . $fileID . mt_rand(0, 10000) . $randString . '.' . $extension;
     }
 
-    /* 设置存储路径。*/
+    /**
+     * Set save path.
+     * 
+     * @access private
+     * @return void
+     */
     private function setSavePath()
     {
         $savePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . date('Ym/', $this->now);
@@ -129,7 +184,12 @@ class fileModel extends model
         $this->savePath = dirname($savePath) . '/';
     }
     
-    /* 设置web访问路径。*/
+    /**
+     * Set the web path of upload files.
+     * 
+     * @access public
+     * @return void
+     */
     public function setWebPath()
     {
         $this->webPath = $this->app->getWebRoot() . "data/upload/{$this->app->company->id}/";
