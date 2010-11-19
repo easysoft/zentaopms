@@ -11,7 +11,13 @@
  */
 class productplan extends control
 {
-    /* 公共操作。*/
+    /**
+     * Common actions
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function commonAction($productID)
     {
         $this->loadModel('product');
@@ -20,7 +26,13 @@ class productplan extends control
         $this->product->setMenu($this->product->getPairs(), $productID);
     }
 
-    /* 添加产品计划。*/
+    /**
+     * Create a plan.
+     * 
+     * @param  int    $product 
+     * @access public
+     * @return void
+     */
     public function create($product = '')
     {
         if(!empty($_POST))
@@ -37,7 +49,13 @@ class productplan extends control
         $this->display();
     }
 
-    /* 编辑产品计划。*/
+    /**
+     * Edit a plan.
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
     public function edit($planID)
     {
         if(!empty($_POST))
@@ -60,7 +78,14 @@ class productplan extends control
         $this->display();
     }
                                                           
-    /* 删除计划。*/
+    /**
+     * Delete a plan.
+     * 
+     * @param  int    $planID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function delete($planID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -75,7 +100,13 @@ class productplan extends control
         }
     }
 
-    /* 浏览计划列表。*/
+    /**
+     * Browse plans.
+     * 
+     * @param  int    $product 
+     * @access public
+     * @return void
+     */
     public function browse($product = 0)
     {
         $this->session->set('productPlanList', $this->app->getURI(true));
@@ -86,13 +117,22 @@ class productplan extends control
         $this->display();
     }
 
-    /* 计划详情。*/
+    /**
+     * View plan.
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
     public function view($planID = 0)
     {
         $this->session->set('storyList', $this->app->getURI(true));
+
         $plan = $this->productplan->getByID($planID);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $this->commonAction($plan->product);
+
         $this->view->header->title = $this->lang->productplan->view;
         $this->view->position[] = $this->lang->productplan->view;
         $this->view->planStories= $this->loadModel('story')->getPlanStories($planID);
@@ -103,7 +143,13 @@ class productplan extends control
         $this->display();
     }
 
-    /* 关联需求。*/
+    /**
+     * Link stories.
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
     public function linkStory($planID = 0)
     {
         $this->session->set('storyList', $this->app->getURI(true));
@@ -123,7 +169,14 @@ class productplan extends control
         $this->display();
     }
 
-    /* 移除一个需求。*/
+    /**
+     * Unlink story 
+     * 
+     * @param  int    $storyID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function unlinkStory($storyID, $confirm = 'no')
     {
         if($confirm == 'no')

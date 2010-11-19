@@ -13,13 +13,25 @@
 <?php
 class productplanModel extends model
 {
-    /* 获取计划信息。*/
+    /**
+     * Get plan by id.
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return object
+     */
     public function getByID($planID)
     {
         return $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
     }
 
-    /* 获取列表。*/
+    /**
+     * Get list 
+     * 
+     * @param  int    $product 
+     * @access public
+     * @return object
+     */
     public function getList($product = 0)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
@@ -27,7 +39,14 @@ class productplanModel extends model
             ->orderBy('begin')->fetchAll();
     }
 
-    /* 获取name=>value的键值对。*/
+    /**
+     * Get plan pairs.
+     * 
+     * @param  int    $product 
+     * @param  string $expired 
+     * @access public
+     * @return array
+     */
     public function getPairs($product = 0, $expired = '')
     {
         $date = date('Y-m-d');
@@ -40,7 +59,13 @@ class productplanModel extends model
             ->orderBy('begin')->fetchPairs();
     }
 
-    /* 创建。*/
+    /**
+     * Create a plan.
+     * 
+     * @param  int    $product 
+     * @access public
+     * @return int
+     */
     public function create($product)
     {
         $plan = fixer::input('post')
@@ -51,7 +76,13 @@ class productplanModel extends model
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
-    /* 编辑。*/
+    /**
+     * Update a plan
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return array
+     */
     public function update($planID)
     {
         $oldPlan = $this->getById($planID);
@@ -64,7 +95,13 @@ class productplanModel extends model
 
     }
 
-    /* 关联需求。*/
+    /**
+     * Link stories.
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
     public function linkStory($planID)
     {
         $this->loadModel('story');
@@ -77,7 +114,13 @@ class productplanModel extends model
         }        
     }
 
-    /* 移除需求。*/
+    /**
+     * Unlink story 
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function unlinkStory($storyID)
     {
         $planID = $this->dao->findByID($storyID)->from(TABLE_STORY)->fields('plan')->fetch('plan');
