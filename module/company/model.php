@@ -13,45 +13,72 @@
 <?php
 class companyModel extends model
 {
-    /* 设置菜单。*/
+    /**
+     * Set menu.
+     * 
+     * @param  int    $dept 
+     * @access public
+     * @return void
+     */
     public function setMenu($dept = 0)
     {
         common::setMenuVars($this->lang->company->menu, 'name', array($this->app->company->name));
         common::setMenuVars($this->lang->company->menu, 'addUser', array($dept));
     }
 
-    /* 获得公司列表。*/
+    /**
+     * Get company list.
+     * 
+     * @access public
+     * @return void
+     */
     public function getList()
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->fetchAll();
     }
 
-    /* 获得第一个公司。*/
+    /**
+     * Get the first company.
+     * 
+     * @access public
+     * @return void
+     */
     public function getFirst()
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->orderBy('id')->limit(1)->fetch();
     }
     
     /**
-     * 通过域名查找公司信息。
+     * get company by domain.
      * 
-     * @param   string  $domain     访问的域名，如果为空，则取HTTP_HOST变量。
+     * @param   string  $domain     if empty, use current HTTP_HOST.
      * @access  public
      * @return  object
      */
     public function getByDomain($domain = '')
     {
-        if(empty($domain)) $domain = $_SERVER['HTTP_HOST'];
+        if(empty($domain)) $domain = $this->server->http_host;
         return $this->dao->findByPMS($domain)->from(TABLE_COMPANY)->fetch();
     }
 
-    /* 通过id获取公司信息。*/
+    /**
+     * Get company info by id.
+     * 
+     * @param  int    $companyID 
+     * @access public
+     * @return object
+     */
     public function getByID($companyID = '')
     {
         return $this->dao->findById((int)$companyID)->from(TABLE_COMPANY)->fetch();
     }
 
-    /* 新增一个公司。*/
+    /**
+     * Create a company.
+     * 
+     * @access public
+     * @return void
+     */
     public function create()
     {
         $company = fixer::input('post')->get();
@@ -63,7 +90,12 @@ class companyModel extends model
             ->exec();
     }
 
-    /* 更新一个公司信息。*/
+    /**
+     * Update a company.
+     * 
+     * @access public
+     * @return void
+     */
     public function update()
     {
         $company   = fixer::input('post')->get();
@@ -77,7 +109,13 @@ class companyModel extends model
             ->exec();
     }
     
-    /* 删除一个公司。*/
+    /**
+     * Delete a company.
+     * 
+     * @param  int    $companyID 
+     * @access public
+     * @return void
+     */
     public function delete($companyID)
     {
         return $this->dao->delete()->from(TABLE_COMPANY)->where('id')->eq((int)$companyID)->limit(1)->exec();

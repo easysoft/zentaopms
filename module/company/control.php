@@ -11,7 +11,12 @@
  */
 class company extends control
 {
-    /* 构造函数。*/
+    /**
+     * Construct function, load dept and user models auto.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -20,13 +25,24 @@ class company extends control
         $this->company->setMenu();
     }
 
-    /* 公司首页。*/
+    /**
+     * Index page, header to browse.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->locate($this->createLink('company', 'browse'));
     }
 
-    /* 浏览某一个公司。*/
+    /**
+     * Browse departments and users of a company.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return void
+     */
     public function browse($deptID = 0)
     {
         $this->lang->set('menugroup.company', 'company');
@@ -47,7 +63,12 @@ class company extends control
         $this->display();
     }
 
-    /* 新增一个公司。*/
+    /**
+     * Create a company.
+     * 
+     * @access public
+     * @return void
+     */
     public function create()
     {
         if(!empty($_POST))
@@ -69,7 +90,12 @@ class company extends control
         $this->display();
     }
 
-    /* 编辑一个公司。*/
+    /**
+     * Edit a company.
+     * 
+     * @access public
+     * @return void
+     */
     public function edit()
     {
         if(!empty($_POST))
@@ -88,7 +114,14 @@ class company extends control
         $this->display();
     }
 
-    /* 删除公司。*/
+    /**
+     * Delete a company.
+     * 
+     * @param  int    $companyID 
+     * @param  string $confirm      yes|no
+     * @access public
+     * @return void
+     */
     public function delete($companyID, $confirm = 'no')
     {
         if($confirm == 'no')
