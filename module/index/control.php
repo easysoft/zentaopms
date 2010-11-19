@@ -13,7 +13,12 @@
  */
 class index extends control
 {
-    /* 构造函数。*/
+    /**
+     * Construct function, load project, product.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -21,6 +26,12 @@ class index extends control
         $this->loadModel('product');
     }
 
+    /**
+     * The index page of whole zentao system.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->loadModel('report');
@@ -30,7 +41,7 @@ class index extends control
         $this->app->loadLang('todo');
         $this->view->header->title = $this->lang->index->common;
 
-        /* 项目的统计数据。*/
+        /* Get project stats.  */
         $burns    = array();
         $projects = $this->project->getList('doing');
         foreach($projects as $project)
@@ -39,7 +50,7 @@ class index extends control
             $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 220);
         }
 
-        /* 综合的统计数据。*/
+        /* stat datas of whole zentao system. */
         $stats['project'] = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)->groupBy('status')->fetchPairs();
         $stats['product'] = $this->dao->select('status, count(*) as count')->from(TABLE_PRODUCT)->groupBy('status')->fetchPairs();
         $stats['task']    = $this->dao->select('status, count(*) as count')->from(TABLE_TASK)->groupBy('status')->fetchPairs();
@@ -47,7 +58,7 @@ class index extends control
         $stats['bug']     = $this->dao->select('status, count(*) as count')->from(TABLE_BUG)->groupBy('status')->fetchPairs();
         $stats['todo']    = $this->dao->select('status, count(*) as count')->from(TABLE_TODO)->groupBy('status')->fetchPairs();
 
-        /* 当前用户的相关任务、todo和bug。*/
+        /* Tasks, bugs, and todos of current user. */
         $my['tasks'] = $this->dao->select('id, name')->from(TABLE_TASK)->where('owner')->eq($this->session->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->in('wait,doing')->orderBy('id desc')->limit(10)->fetchPairs();
         $my['bugs']  = $this->dao->select('id, title')->from(TABLE_BUG)->where('assignedTo')->eq($this->session->user->account)->andWhere('deleted')->eq(0)->orderBy('id desc')->limit(10)->fetchPairs();
         $my['todos'] = $this->loadModel('todo')->getList('all', $this->session->user->account, 'wait, doing');
@@ -62,7 +73,12 @@ class index extends control
         $this->display();
     }
 
-    /* 测试扩展机制。*/
+    /**
+     * Just test the extension engine.
+     * 
+     * @access public
+     * @return void
+     */
     public function testext()
     {
         echo $this->fetch('misc', 'getsid');

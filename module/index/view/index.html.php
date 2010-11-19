@@ -11,20 +11,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/jquerytools.html.php';?>
-<?php
-function printStats($statusList, $stats)
-{
-    global $lang;
-    $sum = array_sum($stats);
-    $string = sprintf($lang->index->total, $sum);
-    foreach($stats as $status => $value)
-    {
-        $percent = round($value / $sum, 2) * 100 . '%';
-        $string .= strtolower($statusList[$status]) . " <strong>$value<small><i>($percent)</i></small></strong>$lang->comma ";
-    }
-    echo rtrim($string, $lang->comma) . $lang->dot;
-}
-?>
 <script language='Javascript'>
 $(function() 
 { 
@@ -61,27 +47,27 @@ $(function()
             <caption><?php echo $lang->index->stats;?></caption>
             <tr>
               <td><?php echo $lang->index->products;?></td>
-              <td><?php printStats($lang->product->statusList, $stats['product']);?></td>
+              <td><?php $this->index->printStats($lang->product->statusList, $stats['product']);?></td>
             </tr>
             <tr>
               <td><?php echo $lang->index->projects;?></td>
-              <td><?php printStats($lang->project->statusList, $stats['project']);?></td>
+              <td><?php $this->index->printStats($lang->project->statusList, $stats['project']);?></td>
             </tr>
             <tr>
               <td><?php echo $lang->index->tasks;?></td>
-              <td><?php printStats($lang->task->statusList, $stats['task']);?></td>
+              <td><?php $this->index->printStats($lang->task->statusList, $stats['task']);?></td>
             </tr>
             <tr>
               <td><?php echo $lang->index->stories;?></td>
-              <td><?php printStats($lang->story->statusList, $stats['story']);?></td>
+              <td><?php $this->index->printStats($lang->story->statusList, $stats['story']);?></td>
             </tr>
             <tr>
               <td><?php echo $lang->index->bugs;?></td>
-              <td><?php printStats($lang->bug->statusList, $stats['bug']);?></td>
+              <td><?php $this->index->printStats($lang->bug->statusList, $stats['bug']);?></td>
             </tr>
             <tr>
               <td><?php echo $lang->index->todos;?></td>
-              <td><?php printStats($lang->todo->statusList, $stats['todo']);?></td>
+              <td><?php $this->index->printStats($lang->todo->statusList, $stats['todo']);?></td>
             </tr>
           </table>
         </div>
