@@ -13,60 +13,85 @@ class product extends control
 {
     private $products = array();
 
-    /* 构造函数，加载story, release, tree等模块。*/
+    /**
+     * Construct function.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
 
-        /* 加载需要的模块。*/
+        /* Load need modules. */
         $this->loadModel('story');
         $this->loadModel('release');
         $this->loadModel('tree');
         $this->loadModel('user');
 
-        /* 获取所有的产品列表。如果还没有产品，则跳转到产品的添加页面。*/
+        /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs();
         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
 
-    /* 产品视图首页。*/
+    /**
+     * Index page, to browse.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->locate($this->createLink($this->moduleName, 'browse'));
     }
 
-    /* 浏览某一个产品。*/
+    /**
+     * Browse a product.
+     * 
+     * @param  int    $productID 
+     * @param  string $browseType 
+     * @param  int    $param 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 设置查询格式。*/
+        /* Lower browse type. */
         $browseType = strtolower($browseType);
 
-        /* 设置当前的产品id和模块id。*/
+        /* Save session. */
         $this->session->set('storyList',   $this->app->getURI(true));
         $this->session->set('productList', $this->app->getURI(true));
+
+        /* Set product, module and query. */
         $productID = $this->product->saveState($productID, key($this->products));
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
-        /* 检查是否有访问权限。*/
+        /* Has access privilege?. */
         if(!$this->product->checkPriv($this->product->getById($productID)))
         {
             echo(js::alert($this->lang->product->accessDenied));
             die(js::locate('back'));
         }
 
-        /* 设置菜单。*/
+        /* Set menu. */
         $this->product->setMenu($this->products, $productID);
 
-        /* 设置header和导航条信息。*/
+        /* Set header and position. */
         $this->view->header->title = $this->lang->product->index . $this->lang->colon . $this->products[$productID];
         $this->view->position[]    = $this->products[$productID];
 
-        /* 加载分页类，并查询stories列表。*/
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Get stories. */
         $stories = array();
         if($browseType == 'all')
         {
@@ -100,7 +125,7 @@ class product extends control
             $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy, $pager);
         }
 
-        /* 设置搜索条件。*/
+        /* Build search form. */
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
@@ -121,7 +146,12 @@ class product extends control
         $this->display();
     }
 
-    /* 新增产品。*/
+    /**
+     * Create a product. 
+     * 
+     * @access public
+     * @return void
+     */
     public function create()
     {
         if(!empty($_POST))
@@ -132,7 +162,6 @@ class product extends control
             die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
         }
 
-        /* 设置菜单。*/
         $this->product->setMenu($this->products, '');
 
         $this->view->header->title = $this->lang->product->create;
@@ -142,7 +171,13 @@ class product extends control
         $this->display();
     }
 
-    /* 编辑产品。*/
+    /**
+     * Edit a product.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function edit($productID)
     {
         if(!empty($_POST))
@@ -157,7 +192,6 @@ class product extends control
             die(js::locate(inlink('view', "product=$productID"), 'parent'));
         }
 
-        /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
@@ -171,10 +205,15 @@ class product extends control
         $this->display();
     }
 
-    /* 查看详情。*/
+    /**
+     * View a product.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function view($productID)
     {
-        /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
@@ -191,7 +230,14 @@ class product extends control
         $this->display();
     }
 
-    /* 删除产品。*/
+    /**
+     * Delete a product.
+     * 
+     * @param  int    $productID 
+     * @param  string $confirm    yes|no
+     * @access public
+     * @return void
+     */
     public function delete($productID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -206,13 +252,18 @@ class product extends control
         }
     }
 
-    /* 文档列表。*/
+    /**
+     * Docs of a product.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function doc($productID)
     {
         $this->product->setMenu($this->products, $productID);
         $this->session->set('docList', $this->app->getURI(true));
 
-        /* 赋值。*/
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $this->view->header->title = $this->lang->product->doc;
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
@@ -223,17 +274,20 @@ class product extends control
         $this->display();
     }
 
-    /* 产品路线图。*/
+    /**
+     * Road map of a product. 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function roadmap($productID)
     {
-        /* 设置菜单。*/
         $this->product->setMenu($this->products, $productID);
 
-        /* 登记session。*/
         $this->session->set('releaseList',     $this->app->getURI(true));
         $this->session->set('productPlanList', $this->app->getURI(true));
 
-        /* 赋值。*/
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $this->view->header->title = $this->lang->product->roadmap;
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
@@ -243,14 +297,28 @@ class product extends control
         $this->display();
     }
 
-    /* 获得某一个产品对应的项目列表。*/
+    /**
+     * AJAX: get projects of a product in html select.
+     * 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function ajaxGetProjects($productID, $projectID = 0)
     {
         $projects = $this->product->getProjectPairs($productID);
         die(html::select('project', $projects, $projectID, 'onchange=loadProjectRelated(this.value)'));
     }
 
-    /* 获得某一个产品对应的计划列表。*/
+    /**
+     * AJAX: get plans of a product in html select. 
+     * 
+     * @param  int    $productID 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
     public function ajaxGetPlans($productID, $planID = 0)
     {
         $plans = $this->loadModel('productplan')->getPairs($productID);

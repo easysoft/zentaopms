@@ -13,18 +13,25 @@
 <?php
 class productModel extends model
 {
-    /* 设置菜单。*/
+    /**
+     * Set menu. 
+     * 
+     * @param  array  $products 
+     * @param  int    $productID 
+     * @param  string $extra 
+     * @access public
+     * @return void
+     */
     public function setMenu($products, $productID, $extra = '')
     {
-        /* 获得当前的模块和方法，传递给switchProduct方法，供页面跳转使用。*/
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, '$currentModule', '$currentMethod', '$extra');\"");
-        common::setMenuVars($this->lang->product->menu, 'list', $selectHtml . $this->lang->arrow);
         foreach($this->lang->product->menu as $key => $menu)
         {
-            if($key != 'list') common::setMenuVars($this->lang->product->menu, $key, $productID);
+            $replace = $key == 'list' ? $selectHtml . $this->lang->arrow : $productID;
+            common::setMenuVars($this->lang->product->menu, $key, $replace);
         }
     }
 
@@ -44,26 +51,32 @@ class productModel extends model
         return $this->session->product;
     }
 
-    /* 检查权限。*/
+    /**
+     * Check privilege.
+     * 
+     * @param  int    $product 
+     * @access public
+     * @return bool
+     */
     public function checkPriv($product)
     {
-        /* 检查是否是管理员。*/
+        /* Is admin? */
         $account = ',' . $this->app->user->account . ',';
         if(strpos($this->app->company->admins, $account) !== false) return true; 
 
-        /* 访问级别为open，不做任何处理。*/
+        /* Product is open, return true. */
         if($product->acl == 'open') return true;
 
-        /* 获得团队的成员列表，供后面判断。*/
+        /* Get team members. */
         $teamMembers = $this->getTeamMemberPairs($product->id);
 
-        /* 级别为private。*/
+        /* Private. */
         if($product->acl == 'private')
         {
             return isset($teamMembers[$this->app->user->account]);
         }
 
-        /* 级别为custom。*/
+        /* Custom, check groups. */
         if($product->acl == 'custom')
         {
             if(isset($teamMembers[$this->app->user->account])) return true;
@@ -77,19 +90,35 @@ class productModel extends model
         }
     }
 
-    /* 通过ID获取产品信息。*/
+    /**
+     * Get product by id.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return object
+     */
     public function getById($productID)
     {
         return $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
     }
 
-    /* 获取产品列表。*/
+    /**
+     * Get products.
+     * 
+     * @access public
+     * @return array
+     */
     public function getList()
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
     }
 
-    /* 获取产品id=>name列表。*/
+    /**
+     * Get product pairs. 
+     * 
+     * @access public
+     * @return array
+     */
     public function getPairs()
     {
         $mode = $this->cookie->productMode;
@@ -106,16 +135,25 @@ class productModel extends model
         return $pairs;
     }
 
-    /* 获取产品的的状态分组。*/
+    /**
+     * Get grouped products.
+     * 
+     * @access public
+     * @return void
+     */
     public function getStatusGroups()
     {
         $products = $this->dao->select('id, name, status')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchGroup('status');
     }
 
-    /* 新增产品。*/
+    /**
+     * Create a product.
+     * 
+     * @access public
+     * @return int
+     */
     public function create()
     {
-        /* 处理数据。*/
         $product = fixer::input('post')
             ->stripTags('name,code')
             ->specialChars('desc')
@@ -132,11 +170,16 @@ class productModel extends model
         return $this->dao->lastInsertID();
     }
 
-    /* 更新产品。*/
+    /**
+     * Update a product.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
     public function update($productID)
     {
-        /* 处理数据。*/
-        $productID = (int)$productID;
+        $productID  = (int)$productID;
         $oldProduct = $this->getById($productID);
         $product = fixer::input('post')
             ->stripTags('name,code')
@@ -155,7 +198,13 @@ class productModel extends model
         if(!dao::isError()) return common::createChanges($oldProduct, $product);
     }
     
-    /* 获取产品的项目id=>value列表。*/
+    /**
+     * Get projects of a product in pairs.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
     public function getProjectPairs($productID)
     {
         $projects = $this->dao->select('t2.id, t2.name')
@@ -168,7 +217,13 @@ class productModel extends model
         return $projects;
     }
 
-    /* 计算产品路线图。*/
+    /**
+     * Get roadmap of a proejct
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
     public function getRoadmap($productID)
     {
         $plans    = $this->loadModel('productplan')->getList($productID);
@@ -190,7 +245,13 @@ class productModel extends model
         return $roadmap;
     }
 
-    /* 获取团队成员。*/
+    /**
+     * Get team members of a product from projects.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
     public function getTeamMemberPairs($productID)
     {
         $projects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
