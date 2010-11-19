@@ -11,7 +11,12 @@
  */
 class bugfree2ConvertModel extends bugfreeConvertModel
 {
-    /* 执行转换。*/
+    /**
+     * Execute the converter.
+     * 
+     * @access public
+     * @return array
+     */
     public function execute()
     {
         $this->clear();
@@ -30,7 +35,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return $result;
     }
 
-    /* 设置表名。*/
+    /**
+     * Set table names. 
+     * 
+     * @access public
+     * @return void
+     */
     public function setTable()
     {
         $dbPrefix = $this->post->dbPrefix;
@@ -46,10 +56,15 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         define('BUGFREE_TABLE_GROUP',      $dbPrefix . 'TestGroup');
     }
 
-    /* 转换用户。*/
+    /**
+     * Convert user.
+     * 
+     * @access public
+     * @return int      converted user count
+     */
     public function convertUser()
     {
-        /* 获得所有的用户列表。*/
+        /* Get all user list. */
         $users = $this->dao
             ->dbh($this->sourceDBH)
             ->select("username AS account, userpassword AS password, realname, email, isDroped AS deleted")
@@ -57,7 +72,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->orderBy('userID ASC')
             ->fetchAll('account', $autoCompany = false);
 
-        /* 导入到zentao数据库中。*/
+        /* Insert into zentao. */
         $convertCount = 0;
         foreach($users as $account => $user)
         {
@@ -74,7 +89,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return $convertCount;
     }
 
-    /* 转换用户分组。*/
+    /**
+     * Convert groups.
+     * 
+     * @access public
+     * @return void     converted group count.
+     */
     public function convertGroup()
     {
         $groups = $this->dao->dbh($this->sourceDBH)
@@ -83,17 +103,17 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->fetchAll('id', $autoCompany = false);
         foreach($groups as $groupID => $group)
         {
-            /* 处理group数据。*/
+            /* Fix the group data. */
             if($group->name == '[All Users]') continue;
             $groupUsers = explode(',', $group->users);
             unset($group->id);
             unset($group->users);
 
-            /* 插入到group表。*/
+            /* Insert into zentao's group table. */
             $this->dao->dbh($this->dbh)->insert(TABLE_GROUP)->data($group)->exec();
             $zentaoGroupID = $this->dao->lastInsertId();
 
-            /* 插入到userGroup表。*/
+            /* Insert into zentao's usergroup table. */
             foreach($groupUsers as $account)
             {
                 if(empty($account)) continue;
@@ -105,7 +125,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         }
     }
 
-    /* 转换项目为产品。*/
+    /**
+     * Convert projects.
+     * 
+     * @access public
+     * @return int      converted projects count.
+     */
     public function convertProject()
     {
         $projects = $this->dao->dbh($this->sourceDBH)
@@ -121,7 +146,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return count($projects);
     }
 
-    /* 转换原来的模块为Bug视图模块。*/
+    /**
+     * Convert modules.
+     * 
+     * @access public
+     * @return int      converted modules count.
+     */
     public function convertModule()
     {
         $this->map['module'][0] = 0;
@@ -147,7 +177,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             $this->map['module'][$moduleID] = $this->dao->lastInsertID();
         }
 
-        /* 更新parent。*/
+        /* Update parent. */
         foreach($modules as $oldModuleID => $module)
         {
             $newModuleID = $this->map['module'][$oldModuleID];
@@ -157,7 +187,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return count($modules);
     }
 
-    /* 转换Bug。*/
+    /**
+     * Convert bugs.
+     * 
+     * @access public
+     * @return int      converted bugs count.
+     */
     public function convertBug()
     {
         $bugs = $this->dao
@@ -195,7 +230,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->fetchAll('id', $autoCompany = false);
         foreach($bugs as $bugID => $bug)
         {
-            /* 修正Bug数据。*/
+            /* Fix some fileds of bug. */
             $bugID = (int)$bugID;
             unset($bug->id);
 
@@ -221,7 +256,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             $this->map['bug'][$bugID] = $this->dao->lastInsertID();
         }
 
-        /* 更新duplicateBug。 */
+        /* Update duplicated bugs. */
         foreach($this->map['bug'] as $oldBugID => $newBugID)
         {
             $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($newBugID)->where('duplicateBug')->eq($oldBugID)->exec();
@@ -229,7 +264,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return count($bugs);
     }
 
-    /* 转换case。*/
+    /**
+     * Convert cases.
+     * 
+     * @access public
+     * @return int      converted cases count.
+     */
     public function convertCase()
     {
         $cases = $this->dao
@@ -259,7 +299,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->fetchAll('id', $autoCompany = false);
         foreach($cases as $caseID => $case)
         {
-            /* 修正case的数据。*/
+            /* Fix fields of case. */
             $caseID = (int)$caseID;
             $step   = $case->step;
             $bugs   = explode(',', $case->bugID);
@@ -277,22 +317,22 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             if($case->type == 'functional')    $case->type   = 'feature';
             if($case->status == 'active')      $case->status = 'normal';
             
-            /* 将产品和模块替换成禅道系统中的id。*/
+            /* Change product and module by zentao's product and module. */
             $case->product = $this->map['product'][$case->product];
             $case->module  = $this->map['module'][$case->module];
 
-            /* 插入到case表中。*/
+            /* Insert into case table. */
             $this->dao->dbh($this->dbh)->insert(TABLE_CASE)->data($case)->exec();
             $zentaoCaseID = $this->dao->lastInsertID();
             $this->map['case'][$caseID] = $zentaoCaseID;
 
-            /* 用例步骤表。*/
+            /* Insert into case step table. */
             $caseStep->case    = $zentaoCaseID;
             $caseStep->version = 1;
             $caseStep->desc    = $step;
             $this->dao->dbh($this->dbh)->insert(TABLE_CASESTEP)->data($caseStep)->exec();
 
-            /* 更新相关bug。*/
+            /* Update related bugs. */
             foreach($bugs as $bugID)
             {
                 if(!isset($this->map['bug'][$bugID])) continue;
@@ -303,7 +343,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return count($cases);
     }
 
-    /* 转换测试执行结果。*/
+    /**
+     * Convert results.
+     * 
+     * @access public
+     * @return int      converted results count.
+     */
     public function convertResult()
     {
         $results = $this->dao->dbh($this->sourceDBH)
@@ -322,23 +367,28 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         {
             unset($result->id);
 
-            /* 记录对应的bug信息。*/
+            /* The bug id of zentao. */
             $bugID = (int)$result->bugID;
             $zentaoBugID = $this->map['bug'][$bugID];
             unset($result->bugID);
 
-            /* 插入到testResult表中。*/
+            /* Insert into test result table. */
             $this->dao->dbh($this->dbh)->insert(TABLE_TESTRESULT)->data($result)->exec();
             $zentaoResultID = $this->dao->lastInsertId();
             $this->map['result'][$resultID] = $zentaoResultID;
 
-            /* 更新bug表中的result字段。*/
+            /* Update result table. */
             $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('result')->eq($zentaoResultID)->where('id')->eq($zentaoBugID)->limit(1)->exec();
         }
         return count($results);
     }
 
-    /* 转换历史记录。*/
+    /**
+     * Convert actions.
+     * 
+     * @access public
+     * @return int      converted actions count.
+     */
     public function convertAction()
     {
         $actions = $this->dao
@@ -370,7 +420,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return count($actions);
     }
 
-    /* 转换历史修改记录。*/
+    /**
+     * Convert histories.
+     * 
+     * @access public
+     * @return int      the converted histories count.
+     */
     public function convertHistory()
     {
         $histories = $this->dao->dbh($this->sourceDBH)
@@ -385,7 +440,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         }
     }
 
-    /* 转换附件。*/
+    /**
+     * Convert attachments.
+     * 
+     * @access public
+     * @return int      the converted files count.
+     */
     public function convertFile()
     {
         $this->setPath();
@@ -402,7 +462,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             ->fetchAll('', $autoCompany = false);
         foreach($files as $file)
         {
-            /* 查找对应的action信息，以获得文件的相关字段。*/
+            /* Get the actionID in zentao, to get file info. */
             $zentaoActionID = $this->map['action'][$file->actionID];
             $zentaoAction   = $this->dao->dbh($this->dbh)->findById($zentaoActionID)->from(TABLE_ACTION)->fetch();
             $file->objectType = $zentaoAction->objectType;
@@ -411,14 +471,14 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             $file->addedDate  = $zentaoAction->date;
             unset($file->actionID);
 
-            /* 处理文件大小。*/
+            /* Compute the file size. */
             if(strpos($file->size, 'KB')) $file->size = (int)(str_replace('KB', '', $file->size) * 1024); 
             if(strpos($file->size, 'MB')) $file->size = (int)(str_replace('MB', '', $file->size) * 1024 * 1024); 
 
-            /* 插入到数据库。*/
+            /* Insert into database. */
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
-            /* 拷贝文件。*/
+            /* Copy file. */
             $soureFile = $this->filePath . $file->pathname;
             if(!file_exists($soureFile))
             {
@@ -436,7 +496,12 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         return count($files);
     }
 
-    /* 清空导入之后的数据。*/
+    /**
+     * Clear the converted records.
+     * 
+     * @access public
+     * @return void
+     */
     public function clear()
     {
         foreach($this->session->state as $table => $maxID)

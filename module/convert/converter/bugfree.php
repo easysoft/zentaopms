@@ -15,38 +15,69 @@ class bugfreeConvertModel extends convertModel
     public $filePath    = '';
     static public $info = array();
 
-    /* 构造函数，连接到数据库。*/
+    /**
+     * Connect to db auto.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
         parent::connectDB();
     }
 
-    /* 检查Tables。*/
+    /**
+     * Check table.
+     * 
+     * @access public
+     * @return bool
+     */
     public function checkTables()
     {
         return true;
     }
 
-    /* 检查安装路径。*/
+    /**
+     * Check the install path.
+     * 
+     * @access public
+     * @return bool
+     */
     public function checkPath()
     {
         $this->setPath();
         return file_exists($this->filePath);
     }
 
-    /* 设置附件路径。*/
+    /**
+     * Set the path of attachments.
+     * 
+     * @access public
+     * @return bool
+     */
     public function setPath()
     {
         $this->filePath = realpath($this->post->installPath) . $this->app->getPathFix() . 'BugFile' . $this->app->getPathFix();
     }
 
-    /* 执行转换。*/
+    /**
+     * Excute the convert.
+     * 
+     * @param  int    $version 
+     * @access public
+     * @return void
+     */
     public function execute($version)
     {
     }
 
-    /* 清空导入之后的数据。*/
+    /**
+     * Clear rows added in converting.
+     * 
+     * @access public
+     * @return void
+     */
     public function clear()
     {
         foreach($this->session->state as $table => $maxID)

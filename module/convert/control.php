@@ -11,7 +11,12 @@
  */
 class convert extends control
 {
-    /* 安装程序首页。*/
+    /**
+     * Index page of convert.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->convert->saveState();
@@ -19,14 +24,26 @@ class convert extends control
         $this->display();
     }
 
-    /* 选择系统。*/
+    /**
+     * Select the source system.
+     * 
+     * @access public
+     * @return void
+     */
     public function selectSource()
     {
         $this->view->header->title = $this->lang->convert->common . $this->lang->colon;
         $this->display();
     }
 
-    /* 转换参数设置。*/
+    /**
+     * Set configs of converter.
+     *
+     * This is the extrance of every system. It will call the set function of corresponding module.
+     * 
+     * @access public
+     * @return void
+     */
     public function setConfig()
     {
         if(!$this->post->source) 
@@ -43,7 +60,13 @@ class convert extends control
         $this->display();
     }
 
-    /* BugFree的设置界面。*/
+    /**
+     * The setting page of bugfree.
+     * 
+     * @param  string    $version 
+     * @access public
+     * @return void
+     */
     public function setBugFree($version)
     {
         $this->view->source      = 'BugFree';
@@ -54,7 +77,12 @@ class convert extends control
         $this->display();
     }
 
-    /* 检查配置。*/
+    /**
+     * Check config. Same as setConfig.
+     * 
+     * @access public
+     * @return void
+     */
     public function checkConfig()
     {
         $checkFunc = 'check' . $this->post->source;
@@ -64,22 +92,28 @@ class convert extends control
         $this->display();
     }
 
-    /* 检查BugFree的设置。*/
+    /**
+     * Check settings of bugfree.
+     * 
+     * @param  int    $version 
+     * @access public
+     * @return void
+     */
     public function checkBugFree($version)
     {
         helper::import('./converter/bugfree.php');
         $converter = new bugfreeConvertModel();
 
-        /* 分别检查数据库、表和安装路径。*/
+        /* Check it. */
         $checkInfo['db'] = $converter->connectDB();
         //if(is_object($checkInfo['db'])) $checkInfo['table'] = $converter->checkTables();
         $checkInfo['path'] = $converter->checkPath();
 
-        /* 计算检查结果。*/
+        /* Compute the checking result. */
         $result = 'pass';
         if(!is_object($checkInfo['db']) or !$checkInfo['path']) $result = 'fail';
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->version   = $version;
         $this->view->source    = 'bugfree';
         $this->view->result    = $result;
@@ -87,7 +121,12 @@ class convert extends control
         $this->display();
     }
 
-    /* 执行转换。*/
+    /**
+     * Execute the converting.
+     * 
+     * @access public
+     * @return void
+     */
     public function execute()
     {
         $convertFunc = 'convert' . $this->post->source;
@@ -98,7 +137,13 @@ class convert extends control
         $this->display();
     }
 
-    /* 转换BugFree。*/
+    /**
+     * Convert bugfree.
+     * 
+     * @param  int    $version 
+     * @access public
+     * @return void
+     */
     public function convertBugFree($version)
     {
         helper::import('./converter/bugfree.php');

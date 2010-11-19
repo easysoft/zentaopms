@@ -13,7 +13,12 @@
 <?php
 class convertModel extends model
 {
-    /* 连接到数据库。*/
+    /**
+     * Connect to db.
+     * 
+     * @access public
+     * @return void
+     */
     public function connectDB()
     {
         $dsn = "mysql:host={$this->post->dbHost}; port={$this->post->dbPort};dbname={$this->post->dbName}";
@@ -32,21 +37,31 @@ class convertModel extends model
         }
     }
  
-    /* 判断数据库是否存在。*/
+    /**
+     * Check database exits or not.
+     * 
+     * @access public
+     * @return object
+     */
     public function dbExists()
     {
         $sql = "SHOW DATABASES like '{$this->post->db->name}'";
         return $this->dbh->query($sql)->fetch();
     }
 
-    /* 记录当前数据库中的每个表最大id。*/
+    /**
+     * Save the max id of every table. Thus when we convert again, when can delete id larger then the saved max id.
+     * 
+     * @access public
+     * @return void
+     */
     public function saveState()
     {
-        /* 获得用户级别的常量定义列表。*/
+        /* Get user defined tables. */
         $constants     = get_defined_constants(true);
         $userConstants = $constants['user'];
 
-        /* 去掉不需要保存状态的表。*/
+        /* These tables needn't save. */
         unset($userConstants['TABLE_BURN']);
         unset($userConstants['TABLE_GROUPPRIV']);
         unset($userConstants['TABLE_PROJECTPRODUCT']);
@@ -55,7 +70,7 @@ class convertModel extends model
         unset($userConstants['TABLE_TEAM']);
         unset($userConstants['TABLE_USERGROUP']);
 
-        /* 查找每个表的id字段的最大值。*/
+        /* Get max id of every table. */
         foreach($userConstants as $key => $value)
         {
             if(strpos($key, 'TABLE') === false) continue;
