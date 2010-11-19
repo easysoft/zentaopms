@@ -11,7 +11,12 @@
  */
 class group extends control
 {
-    /* 构造函数。*/
+    /**
+     * Construct function.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -19,7 +24,13 @@ class group extends control
         $this->loadModel('user');
     }
 
-    /* 分组列表。*/
+    /**
+     * Browse groups.
+     * 
+     * @param  int    $companyID 
+     * @access public
+     * @return void
+     */
     public function browse($companyID = 0)
     {
         if($companyID == 0) $companyID = $this->app->company->id;
@@ -39,7 +50,12 @@ class group extends control
         $this->display();
     }
 
-    /* 创建一个用户组。*/
+    /**
+     * Create a group.
+     * 
+     * @access public
+     * @return void
+     */
     public function create()
     {
         if(!empty($_POST))
@@ -54,7 +70,13 @@ class group extends control
         $this->display();
     }
 
-    /* 编辑一个用户组。*/
+    /**
+     * Edit a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function edit($groupID)
     {
        if(!empty($_POST))
@@ -72,7 +94,13 @@ class group extends control
         $this->display();
     }
 
-    /* 复制一个用户组。*/
+    /**
+     * Copy a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function copy($groupID)
     {
        if(!empty($_POST))
@@ -88,8 +116,13 @@ class group extends control
         $this->display();
     }
 
-
-    /* 维护权限。*/
+    /**
+     * Manage privleges of a group. 
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function managePriv($groupID)
     {
         if(!empty($_POST))
@@ -107,12 +140,18 @@ class group extends control
         $this->view->group      = $group;
         $this->view->groupPrivs = $groupPrivs;
 
-        /* 加载每一个模块的语言文件。*/
+        /* Load lang files of every module. */
         foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
         $this->display();
     }
 
-    /* 维护用户。*/
+    /**
+     * Manage members of a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function manageMember($groupID)
     {
         if(!empty($_POST))
@@ -137,7 +176,14 @@ class group extends control
         $this->display();
     }
 
-    /* 删除一个分组。*/
+    /**
+     * Delete a group.
+     * 
+     * @param  int    $groupID 
+     * @param  string $confirm  yes|no
+     * @access public
+     * @return void
+     */
     public function delete($groupID, $confirm = 'no')
     {
         if($confirm == 'no')

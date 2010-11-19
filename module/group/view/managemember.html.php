@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php include '../../common/view/header.html.php';?>
 <script language="Javascript">
 function checkall(checker, id)
 {
@@ -19,7 +20,6 @@ function checkall(checker, id)
     });
 }
 </script>
-<?php include '../../common/view/header.html.php';?>
 <style>#users span{display:block; width:100px; float:left}</style>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>

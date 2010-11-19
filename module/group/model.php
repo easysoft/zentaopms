@@ -13,22 +13,38 @@
 <?php
 class groupModel extends model
 {
-    /* 为某一个公司添加分组。*/
+    /**
+     * Create a group.
+     * 
+     * @access public
+     * @return bool
+     */
     public function create()
     {
         $group = fixer::input('post')->specialChars('name, desc')->get();
         return $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
     }
 
-    /* 更新某一个分组信息。*/
+    /**
+     * Update a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function update($groupID)
     {
         $group = fixer::input('post')->specialChars('name, desc')->get();
         return $this->dao->update(TABLE_GROUP)->data($group)->batchCheck($this->config->group->edit->requiredFields, 'notempty')->where('id')->eq($groupID)->exec();
-        return $this->dbh->exec($sql);
     }
 
-    /* 复制一个分组。*/
+    /**
+     * Copy a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function copy($groupID)
     {
         $group = fixer::input('post')->specialChars('name, desc')->remove('options')->get();
@@ -43,7 +59,14 @@ class groupModel extends model
         }
     }
 
-    /* 拷贝权限。*/
+    /**
+     * Copy privileges.
+     * 
+     * @param  string    $fromGroup 
+     * @param  string    $toGroup 
+     * @access private
+     * @return void
+     */
     private function copyPriv($fromGroup, $toGroup)
     {
         $privs = $this->dao->findByGroup($fromGroup)->from(TABLE_GROUPPRIV)->fetchAll();
@@ -54,7 +77,14 @@ class groupModel extends model
         }
     }
 
-    /* 拷贝用户。*/
+    /**
+     * Copy user.
+     * 
+     * @param  string    $fromGroup 
+     * @param  string    $toGroup 
+     * @access private
+     * @return void
+     */
     private function copyUser($fromGroup, $toGroup)
     {
         $users = $this->dao->findByGroup($fromGroup)->from(TABLE_USERGROUP)->fetchAll();
@@ -65,25 +95,48 @@ class groupModel extends model
         }
     }
 
-    /* 获取某一个公司的分组列表。*/
+    /**
+     * Get group lists.
+     * 
+     * @param  int    $companyID 
+     * @access public
+     * @return array
+     */
     public function getList($companyID)
     {
         return $this->dao->findByCompany($companyID)->from(TABLE_GROUP)->fetchAll();
     }
 
-    /* 获得分组的key => value对。*/
+    /**
+     * Get group pairs.
+     * 
+     * @access public
+     * @return array
+     */
     public function getPairs()
     {
         return $this->dao->findByCompany($this->app->company->id)->fields('id, name')->from(TABLE_GROUP)->fetchPairs();
     }
 
-    /* 通过 id获取某一个分组信息。*/
+    /**
+     * Get group by id.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return object
+     */
     public function getByID($groupID)
     {
         return $this->dao->findById($groupID)->from(TABLE_GROUP)->fetch();
     }
 
-    /* 获得分组的权限列表。*/
+    /**
+     * Get privileges of a groups.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return array
+     */
     public function getPrivs($groupID)
     {
         $privs = array();
@@ -92,7 +145,13 @@ class groupModel extends model
         return $privs;
     }
     
-    /* 获得分组的用户列表。*/
+    /**
+     * Get user pairs of a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return array
+     */
     public function getUserPairs($groupID)
     {
         return $this->dao->select('t2.account, t2.realname')
@@ -103,7 +162,13 @@ class groupModel extends model
             ->fetchPairs();
     }
 
-    /* 删除一个分组信息。*/
+    /**
+     * Delete a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function delete($groupID)
     {
         $this->dao->delete()->from(TABLE_GROUP)->where('id')->eq($groupID)->exec();
@@ -111,13 +176,19 @@ class groupModel extends model
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->exec();
     }
 
-    /* 更新权限。*/
+    /**
+     * Update privilege of a group.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function updatePriv($groupID)
     {
-        /* 先删除原来的记录。*/
+        /* Delete old. */
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->exec();
 
-        /* 然后插入新的记录。*/
+        /* Insert new. */
         if($this->post->actions == false) return;
         foreach($this->post->actions as $moduleName => $moduleActions)
         {
@@ -131,13 +202,19 @@ class groupModel extends model
         }
     }
 
-    /* 更新成员。*/
+    /**
+     * Update users.
+     * 
+     * @param  int    $groupID 
+     * @access public
+     * @return void
+     */
     public function updateUser($groupID)
     {
-        /* 先删除原来的记录。*/
+        /* Delete old. */
         $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
 
-        /* 然后插入新的记录。*/
+        /* Insert new. */
         if($this->post->members == false) return;
         foreach($this->post->members as $account)
         {
