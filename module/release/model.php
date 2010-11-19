@@ -13,7 +13,13 @@
 <?php
 class releaseModel extends model
 {
-    /* 获取release详细信息。*/
+    /**
+     * Get release by id.
+     * 
+     * @param  int    $releaseID 
+     * @access public
+     * @return object
+     */
     public function getByID($releaseID)
     {
         return $this->dao->select('t1.*, t2.name as buildName, t3.name as productName')
@@ -25,7 +31,13 @@ class releaseModel extends model
             ->fetch();
     }
 
-    /* 查找release列表。*/
+    /**
+     * Get list of releases.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return array
+     */
     public function getList($productID)
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.name as buildName')
@@ -38,7 +50,13 @@ class releaseModel extends model
             ->fetchAll();
     }
 
-    /* 创建。*/
+    /**
+     * Create a release.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return int
+     */
     public function create($productID)
     {
         $release = fixer::input('post')
@@ -50,7 +68,13 @@ class releaseModel extends model
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
-    /* 编辑。*/
+    /**
+     * Update a release.
+     * 
+     * @param  int    $releaseID 
+     * @access public
+     * @return void
+     */
     public function update($releaseID)
     {
         $oldRelease = $this->getByID($releaseID);

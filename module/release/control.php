@@ -11,7 +11,13 @@
  */
 class release extends control
 {
-   /* 公共操作。*/
+    /**
+     * Common actions.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function commonAction($productID)
     {
         $this->loadModel('product');
@@ -20,7 +26,13 @@ class release extends control
         $this->product->setMenu($this->product->getPairs(), $productID);
     }
 
-    /* 浏览发布列表。*/
+    /**
+     * Browse releases.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function browse($productID)
     {
         $this->commonAction($productID);
@@ -31,7 +43,13 @@ class release extends control
         $this->display();
     }
 
-    /* 添加release。*/
+    /**
+     * Create a release.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function create($productID)
     {
         if(!empty($_POST))
@@ -50,7 +68,13 @@ class release extends control
         $this->display();
     }
 
-    /* 编辑release。*/
+    /**
+     * Edit a release.
+     * 
+     * @param  int    $releaseID 
+     * @access public
+     * @return void
+     */
     public function edit($releaseID)
     {
         if(!empty($_POST))
@@ -76,7 +100,13 @@ class release extends control
         $this->display();
     }
                                                           
-    /* 查看release。*/
+    /**
+     * View a release.
+     * 
+     * @param  int    $releaseID 
+     * @access public
+     * @return void
+     */
     public function view($releaseID)
     {
         $release = $this->release->getById((int)$releaseID);
@@ -84,7 +114,6 @@ class release extends control
 
         $this->commonAction($release->product);
 
-        /* 赋值。*/
         $this->view->header->title = $this->lang->release->view;
         $this->view->position[]    = $this->lang->release->view;
         $this->view->release       = $release;
@@ -93,7 +122,14 @@ class release extends control
         $this->display();
     }
  
-    /* 删除release。*/
+    /**
+     * Delete a release.
+     * 
+     * @param  int    $releaseID 
+     * @param  string $confirm      yes|no
+     * @access public
+     * @return void
+     */
     public function delete($releaseID, $confirm = 'no')
     {
         if($confirm == 'no')
