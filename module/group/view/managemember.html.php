@@ -11,9 +11,9 @@
  */
 ?>
 <script language="Javascript">
-function checkall(checker)
+function checkall(checker, id)
 {
-    $('input').each(function() 
+    $('#' + id + ' input').each(function() 
     {
         $(this).attr("checked", checker.checked)
     });
@@ -26,8 +26,22 @@ function checkall(checker)
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>
       <tr>
-        <th class='rowhead'><?php echo $lang->group->checkall;?><input type='checkbox' onclick='checkall(this);'></th>
-        <td id='users'><?php foreach($allUsers as $account => $realname) echo '<span>' . html::checkbox('members', array($account => $realname), $groupUsers) . '</span>';?></td>
+        <th class='rowhead'><?php echo $lang->group->inside;?><input type='checkbox' onclick='checkall(this, "group");'></th>
+        <td id='group' class='f-14px pv-10px'><?php $i = 1;?>
+          <?php foreach($groupUsers as $account => $realname):?>
+          <div class='w-p10 f-left'><?php echo '<span>' . html::checkbox('members', array($account => $realname), $account) . '</span>';?></div>
+          <?php if(($i %  8) == 0) echo "<div class='c-both'></div>"; $i ++;?>
+          <?php endforeach;?>
+        </td>
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->group->outside;?><input type='checkbox' onclick='checkall(this, "other");'></th>
+        <td id='other' class='f-14px pv-10px'><?php $i = 1;?>
+          <?php foreach($otherUsers as $account => $realname):?>
+          <div class='w-p10 f-left'><?php echo '<span>' . html::checkbox('members', array($account => $realname), '') . '</span>';?></div>
+          <?php if(($i %  8) == 0) echo "<div class='c-both'></div>"; $i ++;?>
+          <?php endforeach;?>
+        </td>
       </tr>
       <tr>
         <th class='rowhead'></th>

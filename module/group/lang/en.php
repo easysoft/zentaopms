@@ -31,6 +31,8 @@ $lang->group->method   = 'Method';
 $lang->group->priv     = 'Priviledge';
 $lang->group->checkall = 'Select all';
 $lang->group->option   = 'Option';
+$lang->group->inside   = 'Group users';
+$lang->group->outside  = 'Other users';
 
 $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
