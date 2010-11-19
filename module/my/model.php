@@ -13,7 +13,12 @@
 <?php
 class myModel extends model
 {
-    /* 处理菜单。*/
+    /**
+     * Set menu.
+     * 
+     * @access public
+     * @return void
+     */
     public function setMenu()
     {
         $this->lang->my->menu->account = sprintf($this->lang->my->menu->account, $this->app->user->realname);

@@ -11,7 +11,12 @@
  */
 class my extends control
 {
-    /* 构造函数。*/
+    /**
+     * Construct function.
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -19,26 +24,39 @@ class my extends control
         $this->my->setMenu();
     }
 
-    /* 首页，暂时跳转到待办事宜。*/
+    /**
+     * Index page, goto todo.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->locate($this->createLink('my', 'todo'));
     }
 
-    /* 用户的todo列表。*/
+    /**
+     * My todos.
+     * 
+     * @param  string $type 
+     * @param  string $account 
+     * @param  string $status 
+     * @access public
+     * @return void
+     */
     public function todo($type = 'today', $account = '', $status = 'all')
     {
-        /* 登记session。*/
+        /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList', $uri);
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
 
-        /* 导航条。*/
+        /* The header and position. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $this->view->position[]    = $this->lang->my->todo;
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->dates = $this->loadModel('todo')->buildDateList();
         $this->view->todos = $this->todo->getList($type, $account, $status);
         $this->view->date  = (int)$type == 0 ? $this->todo->today() : $type;
@@ -48,13 +66,18 @@ class my extends control
         $this->display();
     }
 
-    /* 用户的story列表。*/
+    /**
+     * My stories.
+     * 
+     * @access public
+     * @return void
+     */
     public function story()
     {
-        /* 登记session。*/
+        /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true));
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[]    = $this->lang->my->story;
         $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, 'active,draft,changed');
@@ -63,14 +86,19 @@ class my extends control
         $this->display();
     }
 
-    /* 用户的task列表。*/
+    /**
+     * My tasks.
+     * 
+     * @access public
+     * @return void
+     */
     public function task()
     {
-        /* 登记session。*/
+        /* Save session. */
         $this->session->set('taskList',  $this->app->getURI(true));
         $this->session->set('storyList', $this->app->getURI(true));
 
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[]    = $this->lang->my->task;
         $this->view->tabID         = 'task';
@@ -78,14 +106,24 @@ class my extends control
         $this->display();
     }
 
-    /* 用户的bug列表。*/
+    /**
+     * My bugs.
+     * 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function bug($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 登记session，加载语言。*/
+        /* Save session. load Lang. */
         $this->session->set('bugList', $this->app->getURI(true));
         $this->app->loadLang('bug');
  
-        /* 加载分页类。*/
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
@@ -115,7 +153,7 @@ class my extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
      
-        /* 赋值。*/
+        /* assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
         $this->view->position[]    = $this->lang->my->bug;
         $this->view->bugs          = $bugs;
@@ -127,14 +165,24 @@ class my extends control
         $this->display();
     }
 
-    /* 用户的test列表。*/
+    /**
+     * My test.
+     * 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function test($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        /* 登记session，加载语言。*/
+        /* Save session, load lang. */
         $this->session->set('testList', $this->app->getURI(true));
         $this->app->loadLang('testcase');
         
-        /* 加载分页类。*/
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         
@@ -162,7 +210,7 @@ class my extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         
-        /* 赋值。*/
+        /* Assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->test;
         $this->view->position[]    = $this->lang->my->test;
         $this->view->cases         = $cases;
@@ -174,13 +222,16 @@ class my extends control
         $this->display();
     }
 
-    /* 用户的project列表。*/
+    /**
+     * My projects.
+     * 
+     * @access public
+     * @return void
+     */
     public function project()
     {
-        /* 加载语言。*/
         $this->app->loadLang('project');
 
-        /* 赋值。*/
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
         $this->view->position[]    = $this->lang->my->project;
         $this->view->tabID         = 'project';
@@ -189,7 +240,12 @@ class my extends control
         $this->display();
     }
 
-    /* 编辑个人档案。*/
+    /**
+     * Edit profile 
+     * 
+     * @access public
+     * @return void
+     */
     public function editProfile()
     {
         if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
@@ -207,7 +263,12 @@ class my extends control
         $this->display();
     }
 
-    /* 查看个人档案。*/
+    /**
+     * View my profile.
+     * 
+     * @access public
+     * @return void
+     */
     public function profile()
     {
         if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
