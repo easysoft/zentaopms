@@ -34,4 +34,3 @@ if(!isset($config->installed) or !$config->installed) die(header('location: inst
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
-$common->printRunInfo($startTime);
