@@ -9,11 +9,12 @@
 * @link        http://www.ZenTaoPMS.com
 */
 /*-----------------------GLOBAL SETTING----------------------------*/
-body{padding-bottom:50px; color:#000; background:url(images/main/bgmain.png) repeat-x 0 -35px;}
+body {padding-bottom:30px; color:#000;}
 
 /*-----------------------FIELDSET SETTING----------------------------*/
 fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
+fieldset table    {border:none}
 fieldset .table-1 {margin:0;}
 fieldset .bd-1px, fieldset .bd-1px td, fieldset .bd-1px th {border:1px solid #b3c8dc; padding:2px}
 fieldset tr, fieldset td, fieldset th {border:none; padding:2px}
@@ -45,9 +46,11 @@ ins{background:#cfc; text-decoration:none}
 .button-c{padding:3px 20px 3px 20px}
 
 /*-----------------------TABLE SETTING----------------------------*/
-table, th, td {border-color:#b3c8dc;}
-tr, th, td    {padding:2px 3px 2px 3px}
-caption       {border:1px solid #b3c8dc; background:#cbd5d9; margin:0; padding:5px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
+table      {border:1px solid #99BBE8;}
+td, tr, th {border:none}
+tr, th, td {padding:3px 3px 3px 3px}
+
+caption     {border:1px solid #99BBE8; background:#DFE8F6; margin:0; padding:2px 2px 2px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
 .caption-tr {caption-side:top; text-align:right; border:none; background:none;}
 .caption-tl {caption-side:top; text-align:left;  border:none; background:none;}
 .table-1 {width:100%; margin-bottom:10px}
@@ -59,8 +62,8 @@ caption       {border:1px solid #b3c8dc; background:#cbd5d9; margin:0; padding:5
 .table-5 {width:600px;margin-bottom:10px}
 .table-6 {width:800px;margin-bottom:10px}
 
-.colhead td  {text-align:center; background-color:#cbd5d9;}
-.colhead th  {text-align:center; background-color:#cbd5d9; font-size:14px}
+.colhead td  {text-align:center; background-color:#DFE8F6;}
+.colhead th  {text-align:center; background-color:#DFE8F6; font-size:14px; border-bottom:1px solid #99BBE8}
 .colhead a   {text-decoration:none; display:block;}
 .colhead th a{color:#333; font-size:14px;}
 .colhead th a:hover{color:#F30;}
@@ -68,18 +71,18 @@ caption       {border:1px solid #b3c8dc; background:#cbd5d9; margin:0; padding:5
 .rowhead     {font-weight:bold; text-align:right; width:100px}
 .fixed       {table-layout:fixed}
 
-.nobr        {overflow:hidden; white-space:nowrap;}
-.fixed th, .fixed td {overflow:hidden; white-space:nowrap;}
+.nobr                     {overflow:hidden; white-space:nowrap;}
+.fixed th, .fixed td      {overflow:hidden; white-space:nowrap;}
 .nofixed th, .nofixed td  {overflow:visible; white-space:normal}
 
 .odd     {background:#fff;}
-.even    {background:#ebf0f4;}
+.even    {background:#f1f1f1;}
 .hoover  {background:#d0dee3;}
 .clicked {background:#fce6a2;}
 
 /* copyed from tablesorter plugin. */
 table.tablesorter thead tr div{padding:0; margin:0} 
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {color:red; background:#BCD4EC}
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {color:red;}
 table.tablesorter thead tr .headerSortDown a, table.tablesorter thead tr .headerSortUp a {color:red}
 table.tablesorter thead tr .header         {background-image: url(./images/tablesorter/bg.gif);   background-repeat: no-repeat; background-position: center right; cursor: pointer;}
 table.tablesorter thead tr .headerSortUp   {background-image: url(./images/tablesorter/asc.gif);  background-repeat: no-repeat; background-position: center right; cursor: pointer;}
@@ -177,8 +180,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .f-14px  {font-size:14px}
 .f-16px  {font-size:16px}
 
-.box-title   {border:1px solid #b3c8dc; background-color:#cbd5d9; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
-.box-content {border:1px solid #b3c8dc; padding:5px}
+.box-title   {border:1px solid #99BBE8; background-color:#DEEEF4; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
+.box-content {border:1px solid #99BBE8; padding:5px}
 
 /*-----------------------BORDER SETTING--------------------------*/
 .bd-1px    {border:1px        solid}
@@ -209,6 +212,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .warning {background:yellow; color:red; font-weight:bold}
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
+/* Header. */
+#header{margin-bottom:5px; background:#16528b; border-bottom:1px solid #e4e4e4;}
 
 /* Top bar. */
 #topbar  {padding:3px; color:#fff}
@@ -221,33 +226,33 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #navbar a:hover {color:#ff3600;}
 
 /* Main menu. */
-#mainmenu ul {background-color:#16528b; height:30px; line-height:30px}
+#mainmenu ul {background-color:#1d64ad; height:30px; line-height:30px}
 #mainmenu li {padding:0 8px 0 8px; border-right:3px solid #002242; color:white; font-size:14px;}
 #mainmenu a  {color:white; font-weight:normal;}
-#mainmenu .active   {background-color:#cfe5f9;}
-#mainmenu .active a {color:#333; font-weight:bold;}
+#mainmenu .active   {background-color:#EDEFF4;}
+#mainmenu .active a {color:#009900; font-weight:bold;}
 
 #mainmenu #searchbox{float:right; border:none;}
 #mainmenu .button-s{border:none; padding:2px}
 
 /* Module menu. */
-#modulemenu    {color:#F30; margin-bottom:5px; font-size:14px;}
-#modulemenu ul {background-color:#cfe5f9; height:28px; line-height:28px;}
+#modulemenu    {color:#F30; margin-bottom:0px; font-size:14px;}
+#modulemenu ul {background-color:#EDEFF4; height:28px; line-height:28px;}
 #modulemenu li {padding:0 5px 0 5px;}
 #modulemenu a  {color:#111; font-weight:normal; font-size:14px;}
-#modulemenu .active a {color:#002f75; font-weight:bold;}
+#modulemenu .active a {color:#009900; font-weight:bold;}
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a {color:red; font-weight:bold}
 
 /* Feature bar. */
-#featurebar {margin: 0 0 5px 0; background-color:#b8cdf0; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}
-#featurebar a              {text-decoration:none; color:#333; margin-right:3px; font-size:12px; background-color:#eee; border:1px solid #9b9b9b; padding:2px 3px 2px 3px;}
+#featurebar {margin: 0 0 5px 0; background-color:#DFE8F6; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}
+#featurebar a              {text-decoration:none; color:#000; margin-right:3px;}
 #featurebar a:hover        {color:#ff3600; border-color:#F30;}
-#featurebar .f-right a     {color:#ff3600; font-weight:bold;}
+#featurebar .f-right a     {color:red; font-weight:bold;}
 #featurebar #bysearchTab a {padding-left:10px; padding-right:10px}
 #featurebar select         {font-size:12px; height:22px; margin-top:3px;}
 
-#featurebar .active a       {color:#03F; font-weight:bold; background-color:#c6e2fa; border:1px solid #66a9e7;}
+#featurebar .active a       {color:#009900; font-weight:bold;}
 #featurebar .active select  {border:1px solid #0000ff;}
 
 /* Tree menu. */
@@ -255,7 +260,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #tree .active {color:blue; font-weight:bold}
 
 /* Title bar. */
-#titlebar{font-size:14px; font-weight:bold; background-color:#b8cdf0; padding:0px 5px; margin:10px 0; height:30px; line-height:30px; border:1px solid #a5cbf3;}
+#titlebar{font-size:14px; font-weight:bold; background-color:#DFE8F6; padding:0px 5px; margin:10px 0; height:30px; line-height:30px;}
 #titlebar #main {float:left;  width:70%; clear:none; text-align:left}
 #titlebar div   {float:right; width:30%; clear:none; text-align:right}
 #titlebar #main input {font-size:14px}
@@ -282,15 +287,12 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .tabs a.current {background:green; color:white}
 
 /* Footer. */
-#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background-color:#CEE7F3; border-top:1px solid #59AED7;}
+#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background-color:#FBF5C6; border-top:1px solid #F4BF20;}
 #crumbs    {padding:5px 0 5px 10px;}
 #poweredby {padding-right:12px; margin-top:5px; display:block;}
 
 /* Debug. */
-#debugbar  {width:100%; position:fixed; bottom:27px; left:0; margin:0; background-color:#CEE7F3} 
-#hiddenbar {width:100%; position:fixed; bottom:35px; left:0; margin:0; background-color:#CEE7F3}
-.hiddenwin {display:none}
-.debugwin  {display:block; width:100%; height:20px;}
+.debugwin  {display:block; width:100%; height:20px; position:fixed; bottom:27px; border:1px solid black}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
 .done      {color:#078F0E;}
