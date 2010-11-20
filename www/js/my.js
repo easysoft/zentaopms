@@ -361,7 +361,7 @@ function selectLang(lang)
  */
 function setAbout()
 {
-    $("a.about").colorbox({width:900, height:330, iframe:true, transition:'elastic', speed:500, scrolling:false});
+    if($('a.about').size()) $("a.about").colorbox({width:900, height:330, iframe:true, transition:'elastic', speed:500, scrolling:false});
 }
 
 /**
