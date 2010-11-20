@@ -113,7 +113,7 @@ class ztclient
      * 
      * @param  string $module   the module name 
      * @param  string $method   the methhod name
-     * @param  string $vars     the vars to passwd
+     * @param  string $vars     the vars to passed
      * @access private
      * @return string the model api string.
      */
