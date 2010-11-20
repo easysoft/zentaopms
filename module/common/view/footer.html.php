@@ -1,7 +1,7 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<p style='margin-bottom:50px'></p>
-<div class='yui-d0' id='hiddenbar'>
-  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='<?php $config->debug ? print("debugwin") : print('hiddenwin')?>'></iframe>
+<div id='divider'></div>
+<div class='yui-d0'>
+  <iframe frameborder='0' name='hiddenwin' class='<?php $config->debug ? print("debugwin") : print('hidden')?>'></iframe>
 </div>
 <div id='footer' class='yui-d0 yui-t7'>
   <div class='yui-g'>
