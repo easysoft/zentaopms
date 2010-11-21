@@ -20,7 +20,17 @@ class file extends control
      * @return void
      */
     public function buildForm($fileCount = 2, $percent = 0.9)
-    {
+    { 
+        if(!file_exists($this->file->savePath)) 
+        {
+            $warming = "The directory" . "'" . $this->file->savePath . "'" . "is no exist";
+            echo "<span style='color:red''>$warming </span>";
+        }
+        else if(!is_writable($this->file->savePath))
+        {
+            $warming = "The directory " . "'" . $this->file->savePath . "'" . " is unwritable, please change it's file permission.command in linux:sudo chmod a+rx " . "'" . $this->file->savePath . "'";
+            echo "<span style = 'color:red'>$warming </font>";
+        }
         $this->view->fileCount = $fileCount;
         $this->view->percent   = $percent;
         $this->display();
