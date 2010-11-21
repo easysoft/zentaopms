@@ -98,11 +98,6 @@ class buildModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
-        $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)
-            ->where('build')->in(array_keys($builds))
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
-        foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
         return $sysBuilds + $builds;
     }
 
