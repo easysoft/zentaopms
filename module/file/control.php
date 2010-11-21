@@ -65,7 +65,7 @@ class file extends control
         /* Judge the mode, down or open. */
         $mode  = 'down';
         $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
-        if(strpos($fileTypes, $file->extension) !== false and $mouse == 'left') $mode = 'open';
+        if(stripos($fileTypes, $file->extension) !== false and $mouse == 'left') $mode = 'open';
 
         /* If the mode is open, locate directly. */
         if($mode == 'open')
