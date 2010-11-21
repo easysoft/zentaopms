@@ -289,7 +289,7 @@ class doc extends control
 
         $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
-        $this->view->position[]    = $this->lang->doc->create;
+        $this->view->position[]    = $this->lang->doc->edit;
 
         $this->view->doc              = $doc;
         $this->view->libID            = $libID;
@@ -321,7 +321,7 @@ class doc extends control
 
         $this->view->header->title = $this->libs[$doc->lib] . $this->lang->colon . $this->lang->doc->create;
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
-        $this->view->position[]    = $this->lang->doc->create;
+        $this->view->position[]    = $this->lang->doc->view;
 
         $this->view->doc     = $doc;
         $this->view->lib     = $lib;
