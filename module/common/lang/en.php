@@ -23,7 +23,7 @@ $lang->currentPos   = 'Current';
 $lang->logout       = 'Logout';
 $lang->login        = 'Login';
 $lang->aboutZenTao  = 'About';
-$lang->todayIs      = 'Today is %s，';
+$lang->todayIs      = '%s, ';
 $lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time: %s ms, Memory: %s KB, Queries: %s.  </div></div>";
 
 $lang->reset        = 'Reset';
@@ -72,18 +72,18 @@ $lang->openedByAB   = 'Open';
 $lang->assignedToAB = 'To';
 $lang->typeAB       = 'Type';
 
-/* 主导航菜单。*/
+/* The main menu. */
 $lang->menu->index   = 'Index|index|index';
 $lang->menu->my      = 'Dashboard|my|index';
 $lang->menu->product = 'Product|product|index';
 $lang->menu->project = 'Project|project|index';
 $lang->menu->qa      = 'QA|qa|index';
 $lang->menu->doc     = 'Doc|doc|index';
-//$lang->menu->forum   = '讨论视图|doc|index';
+//$lang->menu->forum   = 'Forum|forum|index';
 $lang->menu->company = 'Company|company|index';
 $lang->menu->admin   = 'Admin|admin|index';
 
-/* 查询条中可以选择的对象列表。*/
+/* The objects in the search box. */
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Task';
@@ -98,11 +98,11 @@ $lang->searchObjects['testtask']    = 'Test Task';
 $lang->searchObjects['doc']         = 'Doc';
 $lang->searchTips                   = 'Id here';
 
-/* 首页菜单设置。*/
+/* Index mododule menu. */
 $lang->index->menu->product = 'Products|product|browse';
 $lang->index->menu->project = 'Projects|project|browse';
 
-/* 我的地盘菜单设置。*/
+/* Dashboard menu. */
 $lang->my->menu->account  = '%s' . $lang->arrow;
 $lang->my->menu->todo     = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task     = 'Task|my|task|';
@@ -113,7 +113,7 @@ $lang->my->menu->project  = 'Project|my|project|';
 $lang->my->menu->profile  = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
 
-/* 产品视图设置。*/
+/* Product menu. */
 $lang->product->menu->list   = '%s';
 $lang->product->menu->story  = array('link' => 'Story|product|browse|productID=%s',     'subModule' => 'story');
 $lang->product->menu->plan   = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
@@ -129,7 +129,7 @@ $lang->story->menu           = $lang->product->menu;
 $lang->productplan->menu     = $lang->product->menu;
 $lang->release->menu         = $lang->product->menu;
 
-/* 项目视图菜单设置。*/
+/* Project menu. */
 $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
 $lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s');
@@ -148,7 +148,7 @@ $lang->project->menu->create = array('link' => 'New Project|project|create', 'fl
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
 
-/* QA视图菜单设置。*/
+/* QA menu. */
 $lang->bug->menu->product  = '%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
@@ -164,7 +164,7 @@ $lang->testtask->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s')
 $lang->testtask->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
 $lang->testtask->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
-/* 文档视图菜单设置。*/
+/* Doc menu. */
 $lang->doc->menu->list    = '%s';
 $lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s');
 $lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
@@ -172,7 +172,7 @@ $lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
 $lang->doc->menu->create  = array('link' => 'New Library|doc|createLib', 'float' => 'right');
 
-/* 组织结构视图菜单设置。*/
+/* Company menu. */
 $lang->company->menu->name        = '%s' . $lang->arrow;
 $lang->company->menu->browseUser  = array('link' => 'Users|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
@@ -183,7 +183,7 @@ $lang->company->menu->addUser     = array('link' => 'Add User|user|create|dept=%
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
-/* 用户信息菜单设置。*/
+/* User menu. */
 $lang->user->menu->account  = '%s' . $lang->arrow;
 $lang->user->menu->todo     = array('link' => 'Todo|user|todo|account=%s', 'subModule' => 'todo');
 $lang->user->menu->task     = 'Task|user|task|account=%s';
@@ -192,14 +192,14 @@ $lang->user->menu->project  = 'Project|user|project|account=%s';
 $lang->user->menu->profile  = array('link' => 'Profile|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
 
-/* 后台管理菜单设置。*/
+/* Admin menu. */
 $lang->admin->menu->trashes = array('link' => 'Trash|action|trash', 'subModule' => 'action');
 $lang->admin->menu->convert = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
 
-/*菜单设置：分组设置。*/
+/* Groups. */
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
 $lang->menugroup->productplan = 'product';
@@ -217,13 +217,13 @@ $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
 
-/* 错误提示信息。*/
+/* Error info. */
 $lang->error->companyNotFound = "The domain %s does not exist.";
 $lang->error->length          = array("『%s』length should be『%s』", "『%s』length should between『%s』and 『%s』.");
 $lang->error->reg             = "『%s』should like『%s』";
 $lang->error->unique          = "『%s』has『%s』already.";
 $lang->error->notempty        = "『%s』can not be empty.";
-$lang->error->equal           = "『%s』must be『%s』。";
+$lang->error->equal           = "『%s』must be『%s』.";
 $lang->error->int             = array("『%s』should be interger", "『%s』should between『%s-%s』.");
 $lang->error->float           = "『%s』should be a interger or float.";
 $lang->error->email           = "『%s』should be email.";
@@ -232,7 +232,7 @@ $lang->error->account         = "『%s』should be a valid account.";
 $lang->error->passwordsame    = "Two passwords must be the same";
 $lang->error->passwordrule    = "Password should more than six letters.";
 
-/* 分页信息。*/
+/* Pager. */
 $lang->pager->noRecord  = "No records yet.";
 $lang->pager->digest    = "<strong>%s</strong> records, <strong>%s</strong> per page, <strong>%s/%s</strong> ";
 $lang->pager->first     = "First";
@@ -248,7 +248,7 @@ $lang->zentaoDESC     = "ZenTaoPMS is an open sourced project management system.
 
 
 
-/* 时间格式设置。*/
+/* Date times. */
 define('DT_DATETIME1',  'Y-m-d H:i:s');
 define('DT_DATETIME2',  'y-m-d H:i');
 define('DT_MONTHTIME1', 'n/d H:i');
@@ -259,7 +259,7 @@ define('DT_DATE3',     'F j, Y ');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
 
-/* 表情。*/
+/* Smilies. */
 $lang->smilies->smile       = 'Smile';
 $lang->smilies->sad         = 'Sad';
 $lang->smilies->wink        = 'Wink';
