@@ -47,7 +47,7 @@ $lang->user->gendarList->m = '男';
 $lang->user->gendarList->f = '女';
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
-$lang->user->keepLogin['on']      = '保持登录状态';
+$lang->user->keepLogin['on']      = '保持登录';
 
 $lang->user->id        = '用户编号';
 $lang->user->company   = '所属公司';
