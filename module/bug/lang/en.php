@@ -78,9 +78,9 @@ $lang->bug->confirmStoryChange = 'Confirm Story Change';
 /* 查询条件列表。*/
 $lang->bug->selectProduct  = 'Select product';
 $lang->bug->byModule       = 'ByModule';
-$lang->bug->assignToMe     = 'Tome';
-$lang->bug->openedByMe     = 'MyOpen';
-$lang->bug->resolvedByMe   = 'MyResolve';
+$lang->bug->assignToMe     = 'My Bugs';
+$lang->bug->openedByMe     = 'My Open';
+$lang->bug->resolvedByMe   = 'My Resolve';
 $lang->bug->assignToNull   = 'Assign null';
 $lang->bug->closedByMe     = 'MyClose';
 $lang->bug->longLifeBugs   = 'Long life';

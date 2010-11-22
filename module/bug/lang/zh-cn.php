@@ -88,7 +88,7 @@ $lang->bug->postponedBugs  = '被延期';
 $lang->bug->allBugs        = '所有Bug';
 $lang->bug->moduleBugs     = '按模块浏览';
 $lang->bug->byQuery        = '搜索';
-$lang->bug->needConfirm    = '需求有变动的Bug';
+$lang->bug->needConfirm    = '需求变动';
 $lang->bug->allProduct     = '所有产品';
 
 /* 页面标签。*/
