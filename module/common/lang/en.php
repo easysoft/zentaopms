@@ -87,7 +87,7 @@ $lang->menu->admin   = 'Admin|admin|index';
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Task';
-$lang->searchObjects['testcase']    = 'Case';
+$lang->searchObjects['testcase']    = 'Test Case';
 $lang->searchObjects['project']     = 'Project';
 $lang->searchObjects['product']     = 'Product';
 $lang->searchObjects['user']        = 'User';
@@ -151,17 +151,17 @@ $lang->build->menu           = $lang->project->menu;
 /* QA menu. */
 $lang->bug->menu->product  = '%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->bug->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s');
 
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
+$lang->testcase->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s');
 
 $lang->testtask->menu->product  = '%s';
 $lang->testtask->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testtask->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
+$lang->testtask->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s');
 $lang->testtask->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
 /* Doc menu. */

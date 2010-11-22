@@ -15,7 +15,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
-/* 切换至按模块浏览。*/
+/* Switch to module browse. */
 function browseByModule(active)
 {
     $('#mainbox').addClass('yui-t1');
@@ -25,7 +25,7 @@ function browseByModule(active)
     $('#bysearchTab').removeClass('active');
 }
 
-/* 通过搜索方式。*/
+/* Swtich to search module. */
 function browseBySearch(active)
 {
     $('#mainbox').removeClass('yui-t1');
@@ -41,9 +41,9 @@ function browseBySearch(active)
     <div class='f-left'>
       <?php
       echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testcase->moduleCases . "</a></span> ";
-      echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->testcase->bySearch}</a></span> ";
       echo "<span id='allTab'>"         . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->testcase->allCases) . "</span>";
       echo "<span id='needconfirmTab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->testcase->needConfirm) . "</span>";
+      echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->testcase->bySearch}</a></span> ";
       ?>
     </div>
     <div class='f-right'>

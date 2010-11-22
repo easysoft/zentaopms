@@ -15,7 +15,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
-/* 切换浏览方式。*/
+/* Browse by module. */
 function browseByModule()
 {
     $('#mainbox').addClass('yui-t1');
@@ -25,6 +25,7 @@ function browseByModule()
     $('#bysearchTab').removeClass('active');
     $('#querybox').addClass('hidden');
 }
+/* By search. */
 function search(active)
 {
     $('#mainbox').removeClass('yui-t1');
@@ -41,8 +42,8 @@ function search(active)
   <div id='featurebar'>
     <div class='f-left'>
       <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>
-      <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><a href='#'><?php echo $lang->product->searchStory;?></a></span>
       <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->product->allStory);?></span>
+      <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><a href='#'><?php echo $lang->product->searchStory;?></a></span>
     </div>
     <div class='f-right'>
       <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
