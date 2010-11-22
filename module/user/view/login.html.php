@@ -25,6 +25,7 @@ table, tr, td, th, input{ border:none;}
 #poweredby{color:#fff; margin-top:40px; text-align:center; line-height:1}
 #poweredby a {color:#fff}
 .button-s, .button-c {padding:3px 5px 3px 5px; width:80px; font-size:14px; font-weight:bold}
+#keeplogin {color:white; font-size:14px}
 </style>
 <script language='Javascript'>
 $(document).ready(function(){
@@ -36,19 +37,20 @@ $(document).ready(function(){
     <table align='center' class='table-4'> 
       <caption id='welcome'><?php printf($lang->welcome, $app->company->name);?></caption>
       <tr>
-        <td class='rowhead pt-10px'><?php echo $lang->user->account;?>：</td>  
-        <td class='pt-10px'><input class='text-2' type='text' name='account' id='account' /></td>
+        <td class='rowhead'><?php echo $lang->user->account;?>：</td>  
+        <td><input class='text-2' type='text' name='account' id='account' /></td>
       </tr>  
       <tr>
         <td class='rowhead'><?php echo $lang->user->password;?>：</td>  
         <td><input class='text-2' type='password' name='password' /></td>
       </tr>
       <tr>
-        <td class='rowhead'>Language:</td>  
+        <td class='rowhead' valign='top'>Language:</td>  
         <td><?php echo html::select('lang', $config->langs, $this->app->getClientLang(), 'class=select-2 onchange=selectLang(this.value)');?></td>
       </tr>
+      <tr><td></td><td id='keeplogin'><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td></tr>
       <tr>
-        <td colspan='2' class='a-center pt-20px'>
+        <td colspan='2' class='a-center'>
         <?php 
         echo html::submitButton($lang->login);
         if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
@@ -57,12 +59,14 @@ $(document).ready(function(){
         </td>
       </tr>  
     </table>
-    <div class='yui-d0' id='debugbar'><iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hidden'></iframe></div>
     <div id='poweredby'>
     powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>). <br />
     <script src='http://www.zentao.net/check.php?v=<?php echo $config->version;?>&s=<?php echo $s;?>'></script>
     </div>
   </form>
 </div>  
+<div class='yui-d0'>
+ <iframe frameborder='0' name='hiddenwin' class='<?php $config->debug ? print("debugwin") : print('hidden')?>'></iframe>
+</div>
 </body>
 </html>

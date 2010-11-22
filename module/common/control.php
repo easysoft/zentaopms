@@ -37,7 +37,8 @@ class common extends control
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
         if($this->common->isOpenMethod($module, $method)) return true;
-        if(isset($this->app->user) and $this->app->user->account == 'guest' and $this->server->php_auth_user) $this->common->identifyPhpAuth();
+        if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
+        if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
 
         if(isset($this->app->user))
         {

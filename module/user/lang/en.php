@@ -47,6 +47,7 @@ $lang->user->gendarList->m = 'Male';
 $lang->user->gendarList->f = 'Female';
 $lang->user->statusList['active'] = 'Activate';
 $lang->user->statusList['delete'] = 'Deleted';
+$lang->user->keepLogin['on']      = 'Keep login';
 
 $lang->user->id        = 'ID';
 $lang->user->company   = 'Company';

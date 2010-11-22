@@ -109,25 +109,6 @@ class commonModel extends model
     }
 
     /**
-     * Identify user by PHP_AUTH_USER.
-     * 
-     * @access public
-     * @return void
-     */
-    public function identifyPhpAuth()
-    {
-        $account  = $this->server->php_auth_user;
-        $password = $this->server->php_auth_pw;
-        $user     = $this->loadModel('user')->identify($account, $password);
-        if(!$user) return false;
-
-        $user->rights = $this->user->authorize($account);
-        $this->session->set('user', $user);
-        $this->app->user = $this->session->user;
-        $this->loadModel('action')->create('user', $user->id, 'login');
-    }
-
-    /**
      * Deny access.
      * 
      * @access public
@@ -194,8 +175,8 @@ class commonModel extends model
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
         echo html::a('#', $lang->switchHelp, '', "onclick='toggleHelpLink();'");
-        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
         echo html::select('', $app->config->langs, $app->getClientLang(), 'class=switcher onchange="selectLang(this.value)"');
+        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
     }
 
     /**

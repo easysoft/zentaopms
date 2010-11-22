@@ -334,6 +334,9 @@ class user extends control
                 $this->app->user = $this->session->user;
                 $this->loadModel('action')->create('user', $user->id, 'login');
 
+                /* Keep login. */
+                if($this->post->keepLogin) $this->user->keepLogin($user);
+
                 /* Go to the referer. */
                 if($this->post->referer and 
                    strpos($this->post->referer, $loginLink) === false and 
@@ -358,9 +361,10 @@ class user extends control
         else
         {
             $header['title'] = $this->lang->user->login;
-            $this->view->header  = $header;
-            $this->view->referer = $this->referer;
-            $this->view->s       = $this->loadModel('setting')->getItem('system', 'global', 'sn');
+            $this->view->header    = $header;
+            $this->view->referer   = $this->referer;
+            $this->view->s         = $this->loadModel('setting')->getItem('system', 'global', 'sn');
+            $this->view->keepLogin = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
             $this->display();
         }
     }
@@ -399,6 +403,8 @@ class user extends control
     {
         $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
         session_destroy();
+        setcookie('za', false);
+        setcookie('zp', false);
         $vars = !empty($referer) ? "referer=$referer" : '';
         $this->locate($this->createLink('user', 'login', $vars));
     }

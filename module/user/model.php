@@ -205,25 +205,70 @@ class userModel extends model
         /* Get the user first. If $password length is 32, don't add the password condition.  */
         $user = $this->dao->select('*')->from(TABLE_USER)
             ->where('account')->eq($account)
-            ->beginIF(strlen($password) != 32)->andWhere('password')->eq(md5($password))->fi()
+            ->beginIF(strlen($password) < 32)->andWhere('password')->eq(md5($password))->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch();
 
-        /* If the length of $password is 32, checking by the auth hash. */
+        /* If the length of $password is 32 or 40, checking by the auth hash. */
         if(strlen($password) == 32)
         {
             $hash = $this->session->rand ? md5($user->password . $this->session->rand) : $user->password;
+            $user = $password == $hash ? $user : '';
+        }
+        elseif(strlen($password) == 40)
+        {
+            $hash = sha1($user->account . $user->password . $user->last);
             $user = $password == $hash ? $user : '';
         }
 
         if($user)
         {
             $ip   = $this->server->remove_addr;
-            $last = time();
+            $last = $this->server->request_time;
             $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
             $user->last = date(DT_DATETIME1, $user->last);
         }
         return $user;
+    }
+
+    /**
+     * Identify user by PHP_AUTH_USER.
+     * 
+     * @access public
+     * @return void
+     */
+    public function identifyByPhpAuth()
+    {
+        $account  = $this->server->php_auth_user;
+        $password = $this->server->php_auth_pw;
+        $user     = $this->identify($account, $password);
+        if(!$user) return false;
+
+        $user->rights = $this->authorize($account);
+        $this->session->set('user', $user);
+        $this->app->user = $this->session->user;
+        $this->loadModel('action')->create('user', $user->id, 'login');
+    }
+
+    /**
+     * Identify user by cookie.
+     * 
+     * @access public
+     * @return void
+     */
+    public function identifyByCookie()
+    {
+        $account  = $this->cookie->za;
+        $authHash = $this->cookie->zp;
+        $user     = $this->identify($account, $authHash);
+        if(!$user) return false;
+
+        $user->rights = $this->authorize($account);
+        $this->session->set('user', $user);
+        $this->app->user = $this->session->user;
+        $this->loadModel('action')->create('user', $user->id, 'login');
+
+        $this->keepLogin($user);
     }
 
     /**
@@ -257,6 +302,21 @@ class userModel extends model
             $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
         }
         return $rights;
+    }
+
+    /**
+     * Keep the user in login state.
+     * 
+     * @param  string    $account 
+     * @param  string    $password 
+     * @access public
+     * @return void
+     */
+    public function keepLogin($user)
+    {
+        setcookie('keepLogin', 'on', $this->config->cookieLife, $this->config->webRoot);
+        setcookie('za', $user->account, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot);
     }
 
     /* 
