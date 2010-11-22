@@ -22,6 +22,7 @@
     </caption>
     <thead>
     <tr class='colhead'>
+      <th class='w-id'><?php echo $lang->release->id;?></th>
       <th><?php echo $lang->release->name;?></th>
       <th><?php echo $lang->release->build;?></th>
       <th class='w-100px'><?php echo $lang->release->date;?></th>
@@ -30,11 +31,12 @@
     </thead>
     <tbody>
     <?php foreach($releases as $release):?>
-    <tr class='a-center'>
+    <tr>
+      <td class='a-center'><?php echo $release->id;?></td>
       <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
       <td><?php echo $release->buildName;?></td>
-      <td><?php echo $release->date;?></td>
-      <td>
+      <td class='a-center'><?php echo $release->date;?></td>
+      <td class='a-center'>
         <?php
         common::printLink('release', 'edit',   "release=$release->id", $lang->edit);
         common::printLink('release', 'delete', "release=$release->id", $lang->delete, 'hiddenwin');
