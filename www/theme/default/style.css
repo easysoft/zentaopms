@@ -293,7 +293,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #poweredby {padding-right:12px; margin-top:5px; display:block;}
 
 /* Debug. */
-.debugwin  {display:block; width:100%; height:20px; position:fixed; bottom:27px; border:1px solid black}
+.debugwin  {display:block; width:100%; height:20px; position:fixed; bottom:27px;}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
 .done      {color:#078F0E;}
