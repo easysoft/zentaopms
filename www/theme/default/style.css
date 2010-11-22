@@ -33,7 +33,7 @@ ins{background:#cfc; text-decoration:none}
 .select-3 {width: 245px} 
 .select-4 {width: 360px}
 .select-5 {width: 480px}
-.switcher {font-size:smaller; font-weight:bold;border:none; color:white; background:#002242}
+.switcher {font-size:smaller; font-weight:bold;border:none; color:white; background:#16528b}
 
 .area-1{width: 90%;}
 .area-2{width: 120px}
@@ -46,11 +46,11 @@ ins{background:#cfc; text-decoration:none}
 .button-c{padding:3px 20px 3px 20px}
 
 /*-----------------------TABLE SETTING----------------------------*/
-table      {border:1px solid #99BBE8;}
+table      {border:1px solid #e4e4e4;}
 td, tr, th {border:none}
 tr, th, td {padding:3px 3px 3px 3px}
 
-caption     {border:1px solid #99BBE8; background:#DFE8F6; margin:0; padding:2px 2px 2px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
+caption     {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:2px 2px 2px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
 .caption-tr {caption-side:top; text-align:right; border:none; background:none;}
 .caption-tl {caption-side:top; text-align:left;  border:none; background:none;}
 .table-1 {width:100%; margin-bottom:10px}
@@ -62,8 +62,8 @@ caption     {border:1px solid #99BBE8; background:#DFE8F6; margin:0; padding:2px
 .table-5 {width:600px;margin-bottom:10px}
 .table-6 {width:800px;margin-bottom:10px}
 
-.colhead td  {text-align:center; background-color:#DFE8F6;}
-.colhead th  {text-align:center; background-color:#DFE8F6; font-size:14px; border-bottom:1px solid #99BBE8}
+.colhead td  {text-align:center; background-color:#efefef;}
+.colhead th  {text-align:center; background-color:#efefef; font-size:14px; border-bottom:1px solid #e4e4e4}
 .colhead a   {text-decoration:none; display:block;}
 .colhead th a{color:#333; font-size:14px;}
 .colhead th a:hover{color:#F30;}
@@ -180,8 +180,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .f-14px  {font-size:14px}
 .f-16px  {font-size:16px}
 
-.box-title   {border:1px solid #99BBE8; background-color:#DEEEF4; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
-.box-content {border:1px solid #99BBE8; padding:5px}
+.box-title   {border:1px solid #e4e4e4; background-color:#efefef; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
+.box-content {border:1px solid #e4e4e4; padding:5px}
 
 /*-----------------------BORDER SETTING--------------------------*/
 .bd-1px    {border:1px        solid}
@@ -245,7 +245,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #modulemenu .right  a {color:red; font-weight:bold}
 
 /* Feature bar. */
-#featurebar {margin: 0 0 5px 0; background-color:#DFE8F6; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}
+#featurebar {margin: 0 0 5px 0; background-color:#EDF3FE; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}
 #featurebar a              {text-decoration:none; color:#000; margin-right:3px;}
 #featurebar a:hover        {color:#ff3600; border-color:#F30;}
 #featurebar .f-right a     {color:red; font-weight:bold;}
@@ -260,7 +260,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #tree .active {color:blue; font-weight:bold}
 
 /* Title bar. */
-#titlebar{font-size:14px; font-weight:bold; background-color:#DFE8F6; padding:0px 5px; margin:10px 0; height:30px; line-height:30px;}
+#titlebar {font-size:14px; font-weight:bold; background-color:#efefef; padding:0px 5px; margin:10px 0; height:30px; line-height:30px;}
 #titlebar #main {float:left;  width:70%; clear:none; text-align:left}
 #titlebar div   {float:right; width:30%; clear:none; text-align:right}
 #titlebar #main input {font-size:14px}
@@ -270,9 +270,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #switcher {color:white; font-style:bold; background:red; cursor:pointer;}
 
 /* Other items. */
-.history, .changes {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}
-.history  .changes {border:none; margin:0; padding:0}
 #actionbox .button-c {font-size:9px; height:20px; padding:0 5px 0 5px}
+.history, .changes   {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}
+.history  .changes   {border:none; margin:0; padding:0}
 .content {font-size:14px; padding:10px}
 .content p {margin:0}
 .roadmap {width:200px; margin:10px auto 10px auto; padding:10px; border:1px solid gray;}
