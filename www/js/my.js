@@ -7,9 +7,10 @@
 function loadFixedCSS()
 {
     cssFile = '';
-    if($.browser.msie && Math.floor(parseInt($.browser.version)) == 6)
+    if($.browser.msie )
     {
-        cssFile = config.themeRoot + '/browser/ie.6.css';
+        version = Math.floor(parseInt($.browser.version));
+        cssFile = version == 6 ? config.themeRoot + '/browser/ie.6.css' : config.themeRoot + 'browser/ie.css';
     }
     else if($.browser.mozilla) 
     {
