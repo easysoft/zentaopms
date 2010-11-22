@@ -118,7 +118,12 @@ class tree extends control
             echo js::alert($this->lang->tree->successSave);
             die(js::reload('parent'));
         }
-        $this->view->module     = $this->tree->getById($moduleID);
+        $module     = $this->tree->getById($moduleID);
+        if($module->owner == null)
+        {
+           $module->owner = $this->loadModel('product')->getById($module->root)->bugOwner;        
+        }
+        $this->view->module     = $module;
         $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->root, $this->view->module->type);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
