@@ -572,6 +572,7 @@ EOT;
         if(isset($config->$moduleName->$methodName->requiredFields)) $requiredFields = str_replace(' ', '', $config->$moduleName->$methodName->requiredFields);
 
         $jsConfig->webRoot        = $config->webRoot;
+        $jsConfig->cookieLife     = ceil(($config->cookieLife - time()) / 86400);
         $jsConfig->requestType    = $config->requestType;
         $jsConfig->pathType       = $config->pathType;
         $jsConfig->requestFix     = $config->requestFix;

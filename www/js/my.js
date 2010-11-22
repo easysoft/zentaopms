@@ -148,7 +148,7 @@ function switchProduct(productID, module, method, extra)
     /* If the product id is a string, use it as the product browse mode. */
     if(isNaN(productID))
     {
-        $.cookie('productMode', productID);
+        $.cookie('productMode', productID, {expires:config.cookieLife, path:config.webRoot});
         productID = 0;
     }
 
@@ -209,7 +209,7 @@ function switchDocLib(libID, module, method, extra)
  */
 function saveProduct()
 {
-    if($('#productID')) $.cookie('lastProduct', $('#productID').val());
+    if($('#productID')) $.cookie('lastProduct', $('#productID').val(), {expires:config.cookieLife, path:config.webRoot});
 }
 
 /**
@@ -246,7 +246,7 @@ function switchProject(projectID, module, method)
     /* The projec id is a string, use it as the project model. */
     if(isNaN(projectID))
     {
-        $.cookie('projectMode', projectID);
+        $.cookie('projectMode', projectID, {expires:config.cookieLife, path:config.webRoot});
         projectID = 0;
     }
 
@@ -268,7 +268,7 @@ function switchProject(projectID, module, method)
  */
 function saveProject()
 {
-    if($('#projectID')) $.cookie('lastProject', $('#projectID').val());
+    if($('#projectID')) $.cookie('lastProject', $('#projectID').val(), {expires:config.cookieLife, path:config.webRoot});
 }
 
 /* 选择用户。*/
@@ -313,7 +313,7 @@ function setRequiredFields()
  */
 function setHelpLink()
 {
-    if(!$.cookie('help'))$.cookie('help', 'on');
+    if(!$.cookie('help')) $.cookie('help', 'off', {expires:config.cookieLife, path:config.webRoot});
     className = $.cookie('help') == 'off' ? 'hidden' : '';
 
     $('form input[id], form select[id], form textarea[id]').each(function()
@@ -337,8 +337,8 @@ function setHelpLink()
 function toggleHelpLink()
 {
     $('.helplink').toggle();
-    if($.cookie('help') == 'off') return $.cookie('help', 'on');
-    if($.cookie('help') == 'on')  return $.cookie('help', 'off');
+    if($.cookie('help') == 'off') return $.cookie('help', 'on',  {expires:config.cookieLife, path:config.webRoot});
+    if($.cookie('help') == 'on')  return $.cookie('help', 'off', {expires:config.cookieLife, path:config.webRoot});
 }
 
 /**
@@ -349,7 +349,7 @@ function toggleHelpLink()
  */
 function selectLang(lang)
 {
-    $.cookie('lang', lang);
+    $.cookie('lang', lang, {expires:config.cookieLife, path:config.webRoot});
     location.href = location.href;
 }
 
