@@ -69,7 +69,7 @@ $lang->bug->reportChart    = 'Report';
 $lang->bug->delete         = 'Delete Bug';
 $lang->bug->saveTemplate   = 'Save template';
 $lang->bug->deleteTemplate = 'Delete template';
-$lang->bug->customFields   = 'Custom Field';
+$lang->bug->customFields   = 'Custom';
 $lang->bug->restoreDefault = 'Default';
 $lang->bug->ajaxGetUserBugs    = 'API: My Bugs';
 $lang->bug->ajaxGetModuleOwner = 'API: Get module default owner';
@@ -78,17 +78,18 @@ $lang->bug->confirmStoryChange = 'Confirm Story Change';
 /* 查询条件列表。*/
 $lang->bug->selectProduct  = 'Select product';
 $lang->bug->byModule       = 'ByModule';
-$lang->bug->assignToMe     = 'My Bugs';
-$lang->bug->openedByMe     = 'My Open';
-$lang->bug->resolvedByMe   = 'My Resolve';
-$lang->bug->assignToNull   = 'Assign null';
+$lang->bug->assignToMe     = 'MyBugs';
+$lang->bug->openedByMe     = 'MyOpen';
+$lang->bug->resolvedByMe   = 'MyResolve';
+$lang->bug->assignToNull   = 'Unassigned';
 $lang->bug->closedByMe     = 'MyClose';
-$lang->bug->longLifeBugs   = 'Long life';
+$lang->bug->unResolved     = 'Unresolved';
+$lang->bug->longLifeBugs   = 'Longlife';
 $lang->bug->postponedBugs  = 'Postponed';
-$lang->bug->allBugs        = 'All bug';
-$lang->bug->moduleBugs     = 'By module';
+$lang->bug->allBugs        = 'Allbug';
+$lang->bug->moduleBugs     = 'ByModule';
 $lang->bug->byQuery        = 'Search';
-$lang->bug->needConfirm    = 'Story changed';
+$lang->bug->needConfirm    = 'StoryChanged';
 $lang->bug->allProduct     = 'All products';
 
 /* 页面标签。*/

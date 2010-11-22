@@ -113,6 +113,12 @@ class bug extends control
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
+        elseif($browseType == 'unresolved')
+        {
+            $bugs = $this->dao->findByStatus('active')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
         elseif($browseType == 'longlifebugs')
         {
             $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
