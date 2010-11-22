@@ -65,8 +65,6 @@ $(document).ready(function(){
     </div>
   </form>
 </div>  
-<div class='yui-d0'>
- <iframe frameborder='0' name='hiddenwin' class='<?php $config->debug ? print("debugwin") : print('hidden')?>'></iframe>
-</div>
+<div class='yui-d0'><iframe frameborder='0' scrolling='no' name='hiddenwin' class='hidden'></iframe></div>
 </body>
 </html>

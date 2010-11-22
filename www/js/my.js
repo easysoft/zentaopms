@@ -378,6 +378,22 @@ function setAbout()
 }
 
 /**
+ * Set the css of the iframe.
+ * 
+ * @param  string $color 
+ * @access public
+ * @return void
+ */
+function setDebugWin(color)
+{  
+    if($.browser.msie)
+    {
+        var debugWin = $(".debugwin")[0].contentWindow.document;
+        $("body", debugWin).append("<style>body{background:" + color + "}</style>");
+    }
+}
+
+/**
  * add one option of a select to another select. 
  * 
  * @param  string $SelectID 
