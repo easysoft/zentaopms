@@ -28,7 +28,7 @@ $config->sessionVar  = 'sid';             // requestType=GET: the session var na
 
 /* Views and themes. */
 $config->views       = ',html,json';      // Supported view formats.
-$config->themes      = 'default,blue';    // Supported themes.
+$config->themes      = 'default,green';   // Supported themes.
 
 /* Supported languages. */
 $config->langs['zh-cn'] = '中文简体';

@@ -98,9 +98,9 @@ $lang->searchObjects['testtask']    = 'Test Task';
 $lang->searchObjects['doc']         = 'Doc';
 $lang->searchTips                   = 'Id here';
 
-/* 风格列表。*/
-$lang->themes['default'] = '默认风格';
-$lang->themes['blue']    = '蓝色风格';
+/* Themes. */
+$lang->themes['default'] = 'Default';
+$lang->themes['green']   = 'Green';
 
 /* Index mododule menu. */
 $lang->index->menu->product = 'Products|product|browse';

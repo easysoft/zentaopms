@@ -100,7 +100,7 @@ $lang->searchTips                   = '输入编号';
 
 /* 风格列表。*/
 $lang->themes['default'] = '默认风格';
-$lang->themes['blue']    = '蓝色风格';
+$lang->themes['green']   = '绿色风格';
 
 /* 首页菜单设置。*/
 $lang->index->menu->product = '浏览产品|product|browse';
