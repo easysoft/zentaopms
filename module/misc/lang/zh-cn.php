@@ -54,4 +54,4 @@ $lang->misc->zentao->service['scrumtrain'] = 'scrum培训';
 $lang->misc->zentao->service['fwtrain']    = '禅道PHP框架培训';
 $lang->misc->zentao->service['servicemore']= '更多服务...';
 
-$lang->misc->copyright = "版权所有 &copy;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>QingDao Nature Easy Soft Network Technology Co,LTD </a>";
+$lang->misc->copyright = "版权所有 &copy;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>青岛易软天创网络科技有限公司</a>";
