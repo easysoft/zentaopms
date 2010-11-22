@@ -71,9 +71,13 @@ class doc extends control
         $docs = $this->doc->getDocs($libID, $productID, $projectID, $modules, $orderBy, $pager);
 
         /* Get the tree menu. */
-        if($libID == 'product' or $libID == 'project')
+        if($libID == 'product')
         {
-            $moduleTree = $this->tree->getSystemDocTreeMenu($libID);
+            $moduleTree = $this->tree->getProductDocTreeMenu();
+        }
+        elseif($libID == 'project')
+        {
+            $moduleTree = $this->tree->getProjectDocTreeMenu();
         }
         else
         {

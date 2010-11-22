@@ -161,73 +161,91 @@ class treeModel extends model
     }
 
     /**
-     * Get the tree menu of system document library.
+     * Get the tree menu of product document library.
      * 
-     * @param  string $libID    product|project
      * @access public
      * @return string
      */
-    public function getSystemDocTreeMenu($libID)
+    public function getProductDocTreeMenu()
     {
         $menu = "<ul id='tree'>";
-        if($libID == 'product')
+        $products = $this->loadModel('product')->getPairs();
+        $modules  = $this->dao->findByType('productdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+        $projectModules = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+
+        foreach($products as $productID =>$productName)
         {
-            $products = $this->loadModel('product')->getPairs();
-            $modules  = $this->dao->findByType('productdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
-            $projectModules = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
-            
-            foreach($products as $productID =>$productName)
+            $menu .= '<li>';
+            $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID"), $productName);
+            if($modules)
             {
-                $menu .= '<li>';
-                $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID"), $productName);
-                if($modules)
+                $menu .= '<ul>';
+                foreach($modules as $module)
                 {
+                    $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=product&module=$module->id&productID=$productID"), $module->name) . '</li>';
+                }
+
+                /* If $projectModules not emtpy, append the project modules. */
+                if($projectModules)
+                {
+                    $menu .= '<li>';
+                    $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID&projectID=int"), $this->lang->tree->projectDoc);
                     $menu .= '<ul>';
-                    foreach($modules as $module)
+                    foreach($projectModules as $module)
                     {
                         $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=product&module=$module->id&productID=$productID"), $module->name) . '</li>';
                     }
-
-                    /* If $projectModules not emtpy, append the project modules. */
-                    if($projectModules)
-                    {
-                        $menu .= '<li>';
-                        $menu .= html::a(helper::createLink('doc', 'browse', "libID=product&module=0&productID=$productID&projectID=int"), $this->lang->tree->projectDoc);
-                        $menu .= '<ul>';
-                        foreach($projectModules as $module)
-                        {
-                            $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=product&module=$module->id&productID=$productID"), $module->name) . '</li>';
-                        }
-                        $menu .= '</ul></li>';
-                    }
-
-                    $menu .= '</ul>';
+                    $menu .= '</ul></li>';
                 }
-                $menu .= '</li>';
+
+                $menu .= '</ul>';
             }
         }
-        elseif($libID == 'project')
+
+        $menu .= '</li>';
+        return $menu;
+    }
+
+    /**
+     * Get the tree menu of project document library.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getProjectDocTreeMenu()
+    {
+        $menu     = "<ul id='tree'>";
+        $products = $this->loadModel('product')->getPairs();
+        $projects = $this->loadModel('project')->getProductGroupList();
+        $modules  = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+
+        foreach($products as $productID => $productName)
         {
-            $projects = $this->loadModel('project')->getPairs();
-            $modules  = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
-            
-            foreach($projects as $projectID =>$projectName)
+            $menu .= '<li>';
+            $menu .= $productName;
+
+            if(isset($projects[$productID]))
             {
-                $menu .= '<li>';
-                $menu .= html::a(helper::createLink('doc', 'browse', "libID=project&moduleID=0&productID=0&projectID=$projectID"), $projectName);
-                if($modules)
+                $menu .= '<ul>';
+                foreach($projects[$productID] as $project)
                 {
-                    $menu .= '<ul>';
-                    foreach($modules as $module)
+                    $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=project&module=0&productID=0&projectID=$project->id"), $project->name);
+                    if($modules)
                     {
-                        $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=project&module=$module->id&productID=0&projectID=$projectID"), $module->name) . '</li>';
+                        $menu .= '<ul>';
+                        foreach($modules as $module)
+                        {
+                            $menu .= '<li>' . html::a(helper::createLink('doc', 'browse', "libID=project&module=$module->id&productID=0&projectID=$project->id"), $module->name) . '</li>';
+                        }
+                        $menu .= '</ul>';
                     }
-                    $menu .= '</ul>';
+                    $menu .= '</li>';
                 }
-                $menu .= '</li>';
+                $menu .='</ul>';
             }
+            $menu .='</li>';
         }
- 
+
         $menu .= '</ul>';
         return $menu;
     }

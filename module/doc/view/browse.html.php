@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<div class='yui-d0 yui-t1' id='mainbox'>
+<div class='yui-d0 yui-t2' id='mainbox'>
 
   <div class="yui-main">
     <div class="yui-b">

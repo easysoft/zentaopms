@@ -218,6 +218,21 @@ class projectModel extends model
     }
 
     /**
+     * Get projects lists grouped by product.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getProductGroupList()
+    {
+        return $this->dao->select('t1.id, t1.name, t2.product')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.deleted')->eq(0)
+            ->orderBy('t1.id')
+            ->fetchGroup('product');
+    }
+
+    /**
      * Get project by id.
      * 
      * @param  int    $projectID 
