@@ -57,7 +57,7 @@ function setWhite(acl)
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->acl;?></th>
-        <td><?php echo html::radio('acl', $lang->project->aclList, 'open', "onclick='setWhite(this.value);'");?></td>
+        <td><?php echo nl2br(html::radio('acl', $lang->project->aclList, 'open', "onclick='setWhite(this.value);'"));?></td>
       </tr>  
       <tr id='whitelistBox' class='hidden'>
         <th class='rowhead'><?php echo $lang->project->whitelist;?></th>
