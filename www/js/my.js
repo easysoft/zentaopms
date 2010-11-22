@@ -342,7 +342,7 @@ function toggleHelpLink()
 }
 
 /**
- * Set the ping url to keep the session.
+ * Set language.
  * 
  * @access public
  * @return void
@@ -350,6 +350,18 @@ function toggleHelpLink()
 function selectLang(lang)
 {
     $.cookie('lang', lang, {expires:config.cookieLife, path:config.webRoot});
+    location.href = location.href;
+}
+
+/**
+ * Set theme.
+ * 
+ * @access public
+ * @return void
+ */
+function selectTheme(theme)
+{
+    $.cookie('theme', theme, {expires:config.cookieLife, path:config.webRoot});
     location.href = location.href;
 }
 

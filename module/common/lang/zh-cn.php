@@ -98,6 +98,10 @@ $lang->searchObjects['testtask']    = 'T:测试任务';
 $lang->searchObjects['doc']         = 'D:文档';
 $lang->searchTips                   = '输入编号';
 
+/* 风格列表。*/
+$lang->themes['default'] = '默认风格';
+$lang->themes['blue']    = '蓝色风格';
+
 /* 首页菜单设置。*/
 $lang->index->menu->product = '浏览产品|product|browse';
 $lang->index->menu->project = '浏览项目|project|browse';

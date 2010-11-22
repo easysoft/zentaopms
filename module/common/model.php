@@ -174,8 +174,6 @@ class commonModel extends model
         {
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
-        echo html::a('#', $lang->switchHelp, '', "onclick='toggleHelpLink();'");
-        echo html::select('', $app->config->langs, $app->getClientLang(), 'class=switcher onchange="selectLang(this.value)"');
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
     }
 

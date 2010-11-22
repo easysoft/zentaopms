@@ -1,5 +1,5 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<link rel='stylesheet' href='<?php echo $clientTheme;?>datepicker.css' type='text/css' />
+<link rel='stylesheet' href='<?php echo $defaultTheme;?>datepicker.css' type='text/css' />
 <script src='<?php echo $jsRoot;?>jquery/datepicker/min.js'  type='text/javascript'></script>
 <script src='<?php echo $jsRoot;?>jquery/datepicker/date.js' type='text/javascript'></script>
 <script language='javascript'>

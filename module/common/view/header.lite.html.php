@@ -28,7 +28,7 @@ $clientTheme  = $this->app->getClientTheme();
   css::import($defaultTheme . 'yui.css',   $config->version);
   css::import($defaultTheme . 'style.css', $config->version);
   css::import($langTheme, $config->version);
-  if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css', $version);
+  if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css', $config->version);
 
   echo html::icon($webRoot . 'favicon.ico');
   ?>

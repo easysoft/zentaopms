@@ -11,6 +11,9 @@ include 'colorbox.html.php';
         echo $app->company->name . $lang->colon;
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
+        echo html::a('#', $lang->switchHelp, '', "onclick='toggleHelpLink();'");
+        echo html::select('', $app->config->langs, $this->cookie->lang,  'class=switcher onchange="selectLang(this.value)"');
+        echo html::select('', $app->lang->themes,  $this->cookie->theme, 'class=switcher onchange="selectTheme(this.value)"');
         ?>
       </div>
     </div>
