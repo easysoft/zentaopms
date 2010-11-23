@@ -44,6 +44,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
     public function setTable()
     {
         $dbPrefix = $this->post->dbPrefix;
+        define('BUGFREE_TABLE_OPTION',     $dbPrefix . 'TestOptions');
         define('BUGFREE_TABLE_USER',       $dbPrefix . 'TestUser');
         define('BUGFREE_TABLE_PROJECT',    $dbPrefix . 'TestProject');
         define('BUGFREE_TABLE_MODULE',     $dbPrefix . 'TestModule');
@@ -54,6 +55,21 @@ class bugfree2ConvertModel extends bugfreeConvertModel
         define('BUGFREE_TABLE_FILE',       $dbPrefix . 'TestFile');
         define('BUGFREE_TABLE_HISTORY',    $dbPrefix . 'TestHistory');
         define('BUGFREE_TABLE_GROUP',      $dbPrefix . 'TestGroup');
+    }
+
+    /**
+     * Get the version of bugfree2.x.
+     * 
+     * @access public
+     * @return int
+     */
+    public function getBugFreeVersion()
+    {
+        return $this->dao->dbh($this->sourceDBH)
+            ->select("optionValue as version")->from(BUGFREE_TABLE_OPTION)
+            ->where('OptionName')->eq('dbVersion')
+            ->fetch('version', $autoCompany = false);
+
     }
 
     /**
@@ -97,6 +113,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
      */
     public function convertGroup()
     {
+        if(!$this->tableExists(BUGFREE_TABLE_GROUP)) return false;
         $groups = $this->dao->dbh($this->sourceDBH)
             ->select("groupID AS id, groupName AS name, groupUser AS users")
             ->from(BUGFREE_TABLE_GROUP)
@@ -242,6 +259,7 @@ class bugfree2ConvertModel extends bugfreeConvertModel
             $bug->status = strtolower($bug->status);
             $bug->os     = strtolower($bug->os);
             $bug->browser= strtolower($bug->browser);
+            $bug->steps  = nl2br($bug->steps);
 
             if($bug->os == 'winvista')        $bug->os      = 'vista';
             if($bug->browser == 'firefox3.0') $bug->browser = 'firefox3';

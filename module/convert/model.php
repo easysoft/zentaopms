@@ -41,11 +41,23 @@ class convertModel extends model
      * Check database exits or not.
      * 
      * @access public
-     * @return object
+     * @return bool
      */
     public function dbExists()
     {
         $sql = "SHOW DATABASES like '{$this->post->db->name}'";
+        return $this->dbh->query($sql)->fetch();
+    }
+
+    /**
+     * Check table exits or not.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function tableExists($table)
+    {
+        $sql = "SHOW tables like '$table'";
         return $this->dbh->query($sql)->fetch();
     }
 

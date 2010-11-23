@@ -258,7 +258,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 $action->objectID = $zentaoBugID;
                 if($key == 0)
                 {
-                    $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('steps')->eq($action->comment)->where('id')->eq($zentaoBugID)->exec();
+                    $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('steps')->eq(nl2br($action->comment))->where('id')->eq($zentaoBugID)->exec();
                     $action->comment = '';
                 }
                 $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
