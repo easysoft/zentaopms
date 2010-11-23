@@ -5,3 +5,6 @@ $config->todo->dates->end             = 3;
 $config->todo->times->begin           = 9;
 $config->todo->times->end             = 22;
 $config->todo->times->delta           = 15;
+
+$config->todo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->todo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

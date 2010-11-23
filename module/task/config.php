@@ -18,3 +18,6 @@ $config->task->search['params']['owner']        = array('operator' => '=',      
 $config->task->search['params']['status']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->statusList);
 $config->task->search['params']['pri']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->priList);
 $config->task->search['params']['type']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->typeList);
+
+$config->task->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->task->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

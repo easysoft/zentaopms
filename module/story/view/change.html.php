@@ -12,7 +12,6 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script language='javascript'>KE.show({id:'spec', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});</script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'>

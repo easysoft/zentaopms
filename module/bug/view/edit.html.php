@@ -29,46 +29,76 @@ oldTaskID    = '<?php echo $bug->task;?>';
 oldOpenedBuild   = '<?php echo $bug->openedBuild;?>';
 oldResolvedBuild = '<?php echo $bug->resolvedBuild;?>';
 emptySelect  = "<select name='task' id='task'><option value=''></option></select>";
-/* 当选择产品时，触发这个方法。*/
+/**
+ * Load all fields.
+ * 
+ * @param  int $productID 
+ * @access public
+ * @return void
+ */
 function loadAll(productID)
 {
     if(!changeProductConfirmed)
     {
          firstChoice = confirm('<?php echo $lang->bug->confirmChangeProduct;?>');
-         changeProductConfirmed = true;    // 已经提示过，下次就不再提示了。
+         changeProductConfirmed = true;    // Only notice the user one time.
     }
     if(changeProductConfirmed || firstChoice)
     {
         $('#taskIdBox').get(0).innerHTML = emptySelect;
-        loadModuleMenu(productID);      // 加载产品的模块列表。
-        loadProductStories(productID);  // 加载产品的需求列表。
-        loadProductProjects(productID); // 加载项目列表。
-        loadProductBuilds(productID);   // 加载build列表。
+        loadModuleMenu(productID); 
+        loadProductStories(productID);
+        loadProductProjects(productID); 
+        loadProductBuilds(productID);
     }
 }
 
-/* 加载模块列表。*/
+/**
+ * Load module menu.
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
 function loadModuleMenu(productID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug');
     $('#moduleIdBox').load(link);
 }
 
-/* 加载产品的需求列表。*/
+/**
+ * Load product stories 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
 function loadProductStories(productID)
 {
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleId=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link);
 }
 
-/* 加载项目列表。*/
+/**
+ * Load projects of product. 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
 function loadProductProjects(productID)
 {
     link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=' + oldProjectID);
     $('#projectIdBox').load(link);
 }
 
-/* 加载产品build列表。*/
+/**
+ * loadProductBuilds 
+ * 
+ * @param  productID $productID 
+ * @access public
+ * @return void
+ */
 function loadProductBuilds(productID)
 {
     link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
@@ -77,7 +107,13 @@ function loadProductBuilds(productID)
     $('#resolvedBuildBox').load(link);
 }
 
-/* 加载项目的任务列表和需求列表。*/
+/**
+ * loadProjectRelated 
+ * 
+ * @param  projectID $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectRelated(projectID)
 {
     if(projectID)
@@ -93,14 +129,26 @@ function loadProjectRelated(projectID)
     }
 }
 
-/* 加载项目的任务列表。*/
+/**
+ * loadProjectTasks 
+ * 
+ * @param  projectID $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectTasks(projectID)
 {
     link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID + '&taskID=' + oldTaskID);
     $('#taskIdBox').load(link);
 }
 
-/* 加载项目的需求列表。*/
+/**
+ * loadProjectStories 
+ * 
+ * @param  projectID $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectStories(projectID)
 {
     productID = $('#product').get(0).value; 
@@ -108,7 +156,13 @@ function loadProjectStories(projectID)
     $('#storyIdBox').load(link);
 }
 
-/* 加载项目的build列表。*/
+/**
+ * Load builds of a project.
+ * 
+ * @param  int      $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectBuilds(projectID)
 {
     productID = $('#product').val();
@@ -118,7 +172,13 @@ function loadProjectBuilds(projectID)
     $('#resolvedBuildBox').load(link);
 }
 
-/* 设置重复bug的显示。*/
+/**
+ * Set duplicate field.
+ * 
+ * @param  string $resolution 
+ * @access public
+ * @return void
+ */
 function setDuplicate(resolution)
 {
     if(resolution == 'duplicate')
@@ -136,7 +196,6 @@ $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
     $("#searchTasks").colorbox({width:680, height:400, iframe:true, transition:'none'});
-    KE.show({id:'steps', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});
 
 });
 </script>

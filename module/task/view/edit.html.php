@@ -25,7 +25,6 @@ var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
-    KE.show({ id:'desc', items:simpleTools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')}); 
 
 })
 </script>
@@ -70,7 +69,7 @@ $(function() {
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->story;?></th>
-          <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?> 
+          <td><div class='searchleft'><?php echo html::select('story', $stories, $task->story, 'class=select-1');?></div>
           <?php echo html::a($this->createLink('search', 'select', "productID=0&projectID=$project->id&module=story&storyID=$task->story"), $lang->go, "_blank", "class='search' id='searchStories'");?>
           </td>
         </tr>  

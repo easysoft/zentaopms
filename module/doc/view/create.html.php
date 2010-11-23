@@ -37,7 +37,6 @@ function setType(type)
         $('#contentBox').hide();
     }
 }
-$(function() {KE.show({id:'content', items:tools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});});
 </script>
 <div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>

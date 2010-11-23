@@ -72,3 +72,6 @@ $config->bug->list->allFields = 'id, module, project, story, task,
     lastEditedBy,
     lastEditedDate';
 $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
+
+$config->bug->editor->create = array('id' => 'steps', 'tools' => 'bugTools');
+$config->bug->editor->edit   = array('id' => 'steps', 'tools' => 'bugTools');

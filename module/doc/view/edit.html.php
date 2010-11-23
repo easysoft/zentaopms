@@ -32,8 +32,6 @@ $(document).ready(function()
         $('#contentBox').hide();
         $('#fileBox').show();
     }
-
-$(function() {KE.show({id:'content', items:tools, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});});
 });
 </script>
 <div class='yui-d0'>
