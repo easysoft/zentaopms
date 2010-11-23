@@ -26,6 +26,7 @@ table, tr, td, th, input{ border:none;}
 #poweredby a {color:#fff}
 .button-s, .button-c {padding:3px 5px 3px 5px; width:80px; font-size:14px; font-weight:bold}
 #keeplogin {color:white; font-size:14px}
+.rowhead {border:none}
 </style>
 <script language='Javascript'>
 $(document).ready(function(){
