@@ -49,7 +49,7 @@ class testtaskModel extends model
     }
 
     /**
-     * Get test taskes of a product.
+     * Get test tasks of a product.
      * 
      * @param  int    $productID 
      * @param  string $orderBy 

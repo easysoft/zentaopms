@@ -176,7 +176,7 @@ class taskModel extends model
     }
 
     /**
-     * Get project taskes paris.1
+     * Get project tasks pairs.
      * 
      * @param  int    $projectID 
      * @param  string $status
@@ -267,7 +267,7 @@ class taskModel extends model
     }
 
     /**
-     * Get counts of some stories's taskes.
+     * Get counts of some stories' tasks.
      * 
      * @param  array  $stories 
      * @param  int    $projectID 
@@ -288,7 +288,7 @@ class taskModel extends model
     }
 
     /**
-     * Batch process taskes.
+     * Batch process tasks.
      * 
      * @param  int    $tasks 
      * @access private

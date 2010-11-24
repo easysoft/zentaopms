@@ -359,7 +359,7 @@ class projectModel extends model
     }
 
     /**
-     * Import taskes.
+     * Import tasks.
      * 
      * @param  int    $projectID 
      * @access public
@@ -369,7 +369,7 @@ class projectModel extends model
     {
         $tasks = $this->dao->select('id, project, assignedTo, story, consumed')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
 
-        /* Update taskes. */
+        /* Update tasks. */
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to project. */

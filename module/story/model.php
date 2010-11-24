@@ -370,7 +370,7 @@ class storyModel extends model
             return true;
         }
 
-        /* Search related taskes. */
+        /* Search related tasks. */
         $tasks = $this->dao->select('type,status')->from(TABLE_TASK)
             ->where('project')->in($projects)
             ->andWhere('story')->eq($storyID)
@@ -378,7 +378,7 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('type');
 
-        /* No taskes, then the stage is projected. */
+        /* No tasks, then the stage is projected. */
         if(!$tasks)
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('projected')->where('id')->eq((int)$storyID)->exec();

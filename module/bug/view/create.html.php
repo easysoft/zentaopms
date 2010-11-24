@@ -94,7 +94,7 @@ function loadProductBuilds(productID)
 }
 
 /**
- * Load project related bugs and taskes.
+ * Load project related bugs and tasks.
  * 
  * @param  int    $projectID 
  * @access public
@@ -117,7 +117,7 @@ function loadProjectRelated(projectID)
 }
 
 /**
- * Load project taskes.
+ * Load project tasks.
  * 
  * @param  int    $projectID 
  * @access public

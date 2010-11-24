@@ -38,7 +38,7 @@ class testtask extends control
     }
 
     /**
-     * Browse test taskes. 
+     * Browse test tasks. 
      * 
      * @param  int    $productID 
      * @param  string $orderBy 

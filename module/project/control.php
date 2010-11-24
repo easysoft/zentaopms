@@ -118,7 +118,7 @@ class project extends control
         $this->view->position[]    = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[]    = $this->lang->project->task;
 
-        /* Load pager and get taskes. */
+        /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager);
@@ -136,7 +136,7 @@ class project extends control
     }
 
     /**
-     * Browse taskes in group.
+     * Browse tasks in group.
      * 
      * @param  int    $projectID 
      * @param  string $groupBy    the field to group by
@@ -157,7 +157,7 @@ class project extends control
         $this->view->position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[]      = $this->lang->project->task;
 
-        /* Get taskes and group them. */
+        /* Get tasks and group them. */
         $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $groupBy);
         $groupBy     = strtolower(str_replace('`', '', $groupBy));
         $taskLang    = $this->lang->task;
@@ -197,7 +197,7 @@ class project extends control
     }
 
     /**
-     * Import taskes undoned from other projects.
+     * Import tasks undoned from other projects.
      * 
      * @param  int    $projectID 
      * @access public

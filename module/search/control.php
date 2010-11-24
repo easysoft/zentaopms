@@ -75,7 +75,7 @@ class search extends control
     }
 
     /**
-     * Create a select page of stories or taskes.
+     * Create a select page of stories or tasks.
      * 
      * @param  int    $productID 
      * @param  int    $projectID 
