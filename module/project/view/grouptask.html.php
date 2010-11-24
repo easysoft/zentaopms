@@ -19,7 +19,7 @@
       <th></th>
       <th><?php echo $lang->task->name;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
-      <th class='w-user'><?php echo $lang->task->owner;?></th>
+      <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
       <th><?php echo $lang->task->estimateAB;?></th>
       <th><?php echo $lang->task->consumedAB;?></th>
       <th><?php echo $lang->task->leftAB;?></th>
@@ -35,12 +35,12 @@
       <td colspan='10'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
     </tr>
       <?php foreach($groupTasks as $task):?>
-      <?php $ownerClass = $task->owner == $app->user->account ? 'style=color:red' : '';?>
+      <?php $assignedToClass = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
       <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
-        <td class='<?php echo $groupClass;?> bd-none'></td>
+        <td class='<?php echo $groupClass;?>' style='border:none'></td>
         <td class='a-left'>&nbsp;<?php echo $task->id . $lang->colon; if(common::hasPriv('task', 'view')) echo html::a($this->createLink('task', 'view', "task=$task->id"), $task->name); else echo $task->name;?></td>
         <td><?php echo $task->pri;?></td>
-        <td <?php echo $ownerClass;?>><?php echo $task->ownerRealName;?></td>
+        <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
         <td><?php echo $task->estimate;?></td>
         <td><?php echo $task->consumed;?></td>
         <td><?php echo $task->left;?></td>

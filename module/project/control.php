@@ -174,9 +174,9 @@ class project extends control
             {
                 $groupTasks[$taskLang->statusList[$task->status]][] = $task;
             }
-            elseif($groupBy == 'owner')
+            elseif($groupBy == 'assignedto')
             {
-                $groupTasks[$task->ownerRealName][] = $task;
+                $groupTasks[$task->assignedToRealName][] = $task;
             }
             elseif($groupBy == 'type')
             {

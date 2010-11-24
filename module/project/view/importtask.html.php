@@ -21,7 +21,7 @@
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th class='w-p30'><?php echo $lang->task->name;?></th>
-      <th class='w-user'><?php echo $lang->task->owner;?></th>
+      <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
       <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
       <th class='w-status'><?php echo $lang->statusAB;?></th>
@@ -31,13 +31,13 @@
     </thead>
     <tbody>
     <?php foreach($tasks2Imported as $task):?>
-    <?php $class = $task->owner == $app->user->account ? 'style=color:red' : '';?>
+    <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
     <tr class='a-center'>
       <td><?php echo $projects[$task->project];?></td>
       <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
       <td><?php echo $task->pri;?></td>
       <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
-      <td <?php echo $class;?>><?php echo $task->ownerRealName;?></td>
+      <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $task->left;?></td>
       <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList[$task->status];?></td>

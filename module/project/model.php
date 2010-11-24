@@ -366,13 +366,13 @@ class projectModel extends model
      */
     public function importTask($projectID)
     {
-        $tasks = $this->dao->select('id, project, owner, story, consumed')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $tasks = $this->dao->select('id, project, assignedTo, story, consumed')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
 
         /* Update taskes. */
         foreach($tasks as $task)
         {
-            /* Save the owners and stories, should linked to project. */
-            $owners[$task->owner]  = $task->project;
+            /* Save the assignedToes and stories, should linked to project. */
+            $assignedToes[$task->assignedTo]  = $task->project;
             $stories[$task->story] = $task->story;
 
             $status = $task->consumed > 0 ? 'doing' : 'wait';
@@ -385,7 +385,7 @@ class projectModel extends model
 
         /* Add members to project team. */
         $teamMembers = $this->getTeamMemberPairs($projectID);
-        foreach($owners as $account => $preProjectID)
+        foreach($assignedToes as $account => $preProjectID)
         {
             if(!isset($teamMembers[$account]))
             {
