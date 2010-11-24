@@ -17,13 +17,13 @@
     <tr>
       <th><?php echo $lang->task->id;?></th>
       <th><?php echo $lang->task->name;?></th>
-      <th><?php echo $lang->task->owner;?></th>
+      <th><?php echo $lang->task->assignedTo;?></th>
     </tr>
     <?php foreach($tasks as $task):?>
     <tr>
       <td><?php echo $task->id;?></td>
       <td><?php echo $task->name;?></td>
-      <td><?php echo $task->owner;?></td>
+      <td><?php echo $task->assignedTo;?></td>
     </tr>
     <?php endforeach;?>
   </table>

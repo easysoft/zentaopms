@@ -140,7 +140,7 @@ class task extends control
         $this->view->header->title = $this->lang->task->edit;
         $this->view->position[]    = $this->lang->task->edit;
         $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->members       = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->owner);        
+        $this->view->members       = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->assignedTo);        
         
         $this->display();
     }
@@ -323,7 +323,7 @@ class task extends control
     {
         /* Set toList and ccList. */
         $task   = $this->task->getByID($taskID);
-        $toList = $task->owner;
+        $toList = $task->assignedTo;
         $ccList = trim($task->mailto, ',');
 
         if($toList == '')

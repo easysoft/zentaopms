@@ -74,8 +74,8 @@ $(function() {
           </td>
         </tr>  
         <tr>
-          <th class='rowhead'><?php echo $lang->task->owner;?></th>
-          <td><?php echo html::select('owner', $members, $task->owner, 'class=select-1');?> 
+          <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
+          <td><?php echo html::select('assignedTo', $members, $task->assignedTo, 'class=select-1');?> 
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->type;?></th>

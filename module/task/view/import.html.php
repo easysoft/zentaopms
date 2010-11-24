@@ -18,7 +18,7 @@
       <th><?php echo $lang->task->id;?></th>
       <th><?php echo $lang->task->pri;?></th>
       <th><?php echo $lang->task->name;?></th>
-      <th><?php echo $lang->task->owner;?></th>
+      <th><?php echo $lang->task->assignedTo;?></th>
       <th><?php echo $lang->task->estimate;?></th>
       <th><?php echo $lang->task->consumed;?></th>
       <th><?php echo $lang->task->left;?></th>
@@ -30,12 +30,12 @@
     </thead>
     <tbody>
     <?php foreach($tasks as $task):?>
-    <?php $class = $task->owner == $app->user->account ? 'style=color:red' : '';?>
+    <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
     <tr class='a-center'>
       <td><?php if(common::hasPriv('task', 'view')) echo html::a($this->createLink('task', 'view', "task=$task->id"), sprintf('%03d', $task->id)); else printf('%03d', $task->id);?></td>
       <td><?php echo $task->pri;?></td>
       <td class='a-left nobr'><?php echo $task->name;?></td>
-      <td <?php echo $class;?>><?php echo $task->ownerRealName;?></td>
+      <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $task->estimate;?></td>
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>

@@ -25,7 +25,7 @@ class taskModel extends model
     public function create($projectID)
     {
         $tasksID = array();
-        foreach($this->post->owner as $owner)
+        foreach($this->post->assignedTo as $assignedTo)
         {
             $task = fixer::input('post')
                 ->striptags('name')
@@ -33,7 +33,7 @@ class taskModel extends model
                 ->setDefault('estimate, left, story', 0)
                 ->setDefault('deadline', '0000-00-00')
                 ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
-                ->setForce('owner', $owner)
+                ->setForce('assignedTo', $assignedTo)
                 ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
                 ->setDefault('statusCustom', strpos(self::CUSTOM_STATUS_ORDER, $this->post->status) + 1)
                 ->remove('after,files,labels')
@@ -49,7 +49,7 @@ class taskModel extends model
                 $taskID = $this->dao->lastInsertID();
                 if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
                 $this->loadModel('file')->saveUpload('task', $taskID);
-                $tasksID[$owner] = $taskID;
+                $tasksID[$assignedTo] = $taskID;
             }
             else return false;
         }
@@ -127,12 +127,12 @@ class taskModel extends model
      */
     public function getById($taskID)
     {
-        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS ownerRealName')
+        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')
             ->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')
-            ->on('t1.owner = t3.account')
+            ->on('t1.assignedTo = t3.account')
             ->where('t1.id')->eq((int)$taskID)
             ->fetch();
         if(!$task) return false;
@@ -160,10 +160,10 @@ class taskModel extends model
     public function getProjectTasks($projectID, $status = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
-        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS ownerRealName')
+        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.owner = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
@@ -187,15 +187,15 @@ class taskModel extends model
     public function getProjectTaskPairs($projectID, $status = 'all', $orderBy = 'id_desc')
     {
         $tasks = array('' => '');
-        $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS ownerRealName')
+        $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.owner = t2.account')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->orderBy($orderBy)
             ->query();
-        while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->ownerRealName:$task->name";
+        while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->assignedToRealName:$task->name";
         return $tasks;
     }
 
@@ -215,7 +215,7 @@ class taskModel extends model
             ->on('t1.project = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')
             ->on('t1.story = t3.id')
-            ->where('t1.owner')->eq($account)
+            ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->fetchAll();
@@ -237,7 +237,7 @@ class taskModel extends model
         $sql = $this->dao->select('t1.id, t1.name, t2.name as project')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.owner')->eq($account)
+            ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0);
         if($status != 'all') $sql->andwhere('t1.status')->in($status);
         $stmt = $sql->query();

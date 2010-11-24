@@ -13,7 +13,7 @@
 <table width='98%' align='center'>
   <tr class='header'>
     <td>
-      TASK #<?php echo $task->id . "=>$task->owner " . html::a(common::getSysURL() . $this->createLink('task', 'view', "taskID=$task->id"), $task->name);?>
+      TASK #<?php echo $task->id . "=>$task->assignedTo " . html::a(common::getSysURL() . $this->createLink('task', 'view', "taskID=$task->id"), $task->name);?>
     </td>
   </tr>
   <tr>

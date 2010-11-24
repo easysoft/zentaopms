@@ -88,8 +88,8 @@
           </td>
         </tr>  
         <tr>
-          <th class='rowhead'><?php echo $lang->task->owner;?></th>
-          <td><?php echo $task->ownerRealName;?> 
+          <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
+          <td><?php echo $task->assignedToRealName;?> 
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->task->type;?></th>

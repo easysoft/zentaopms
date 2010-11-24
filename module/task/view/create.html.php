@@ -24,18 +24,18 @@ function copyStoryTitle()
     $('#name').attr('value', storyTitle);
 }
 
-/* Set the owners field. */
+/* Set the assignedTos field. */
 function setOwners(result)
 {
     if(result == 'affair')
     {
-        $('#owner').attr('size', 4);
-        $('#owner').attr('multiple', 'multiple');
+        $('#assignedTo').attr('size', 4);
+        $('#assignedTo').attr('multiple', 'multiple');
     }
     else
     {
-        $('#owner').removeAttr('size');
-        $('#owner').removeAttr('multiple');
+        $('#assignedTo').removeAttr('size');
+        $('#assignedTo').removeAttr('multiple');
     }
 }
 
@@ -90,8 +90,8 @@ $(document).ready(function()
         <td><?php echo html::select('status', $lang->task->statusList, 'wait', 'class=select-3');?></td>
       </tr>
       <tr>
-        <th class='rowhead'><?php echo $lang->task->owner;?></th>
-        <td><?php echo html::select('owner[]', $members, '', 'class=select-3');?></td>
+        <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
+        <td><?php echo html::select('assignedTo[]', $members, '', 'class=select-3');?></td>
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->task->mailto;?></th>
