@@ -180,12 +180,13 @@ class projectModel extends model
     /**
      * Get project pairs.
      * 
+     * @param  string $mode     all|noclosed or empty 
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs($mode = '')
     {
-        $mode = $this->cookie->projectMode ? $this->cookie->projectMode : 'noclosed';
+        if($mode == '') $mode = $this->cookie->projectMode ? $this->cookie->projectMode : 'noclosed';
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)

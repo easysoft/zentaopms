@@ -221,6 +221,7 @@ class project extends control
         $this->view->position[]     = html::a(inlink('browse', "projectID=$projectID"), $project->name);
         $this->view->position[]     = $this->lang->project->importTask;
         $this->view->tasks2Imported = $this->project->getTasks2Imported($projectID);
+        $this->view->projects       = $this->project->getPairs('all');
         $this->display();
     }
 

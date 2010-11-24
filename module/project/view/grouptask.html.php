@@ -37,7 +37,7 @@
       <?php foreach($groupTasks as $task):?>
       <?php $assignedToClass = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
       <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
-        <td class='<?php echo $groupClass;?>' style='border:none'></td>
+        <td class='<?php echo $groupClass;?>'></td>
         <td class='a-left'>&nbsp;<?php echo $task->id . $lang->colon; if(common::hasPriv('task', 'view')) echo html::a($this->createLink('task', 'view', "task=$task->id"), $task->name); else echo $task->name;?></td>
         <td><?php echo $task->pri;?></td>
         <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
