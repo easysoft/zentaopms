@@ -43,6 +43,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -56,6 +57,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -68,6 +70,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '0_6beta')
         {
@@ -79,6 +82,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '1_0beta')
         {
@@ -89,6 +93,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '1_0rc1')
         {
@@ -98,6 +103,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '1_0rc2')
         {
@@ -106,6 +112,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '1_0')
         {
@@ -113,21 +120,29 @@ class upgradeModel extends model
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '1_0_1')
         {
             $this->upgradeFrom1_0_1To1_1();
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '1_1')
         {
             $this->upgradeFrom1_1To1_2();
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
         }
         elseif($fromVersion == '1_2')
         {
             $this->upgradeFrom1_2To1_3();
+            $this->upgradeFrom1_3To1_4();
+        }
+        elseif($fromVersion == '1_3')
+        {
+            $this->upgradeFrom1_3To1_4();
         }
 
         $this->setting->setSN();
@@ -154,6 +169,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -165,6 +181,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -175,6 +192,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
         elseif($fromVersion == '0_6beta')
         {
@@ -184,6 +202,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
         elseif($fromVersion == '1_0beta')
         {
@@ -192,6 +211,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
         elseif($fromVersion == '1_0rc1')
         {
@@ -199,21 +219,29 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
         elseif($fromVersion == '1_0rc2' || $fromVersion == '1_0' || $fromVersion == '1_0_1')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
         elseif($fromVersion == '1_1')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
         elseif($fromVersion == '1_2')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
+        }
+        elseif($fromVersion == '1_3')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
         }
 
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
@@ -348,8 +376,21 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('1.2'));
         $this->updateUBB();
-        $this->updateNL();
+        $this->updateNL1_2();
         if(!$this->isError()) $this->setting->updateVersion('1.3');
+    }
+
+    /**
+     * Upgrade from 1.3 to 1.4.
+     * 
+     * @access private
+     * @return void
+     */
+    private function upgradeFrom1_3To1_4()
+    {
+        $this->execSQL($this->getUpgradeFile('1.3'));
+        $this->updateNL1_3();
+        if(!$this->isError()) $this->setting->updateVersion('1.4');
     }
 
     /**
@@ -405,12 +446,12 @@ class upgradeModel extends model
     }
 
     /**
-     * Update nl to br.
+     * Update nl to br from 1.2 version.
      * 
      * @access public
      * @return void
      */
-    public function updateNL()
+    public function updateNL1_2()
     {
         $tasks     = $this->dao->select('id, `desc`')->from(TABLE_TASK)->fetchAll();
         $stories   = $this->dao->select('story, version, spec')->from(TABLE_STORYSPEC)->fetchAll();
@@ -438,6 +479,52 @@ class upgradeModel extends model
         {
             $testtask->desc = nl2br($testtask->desc);
             $this->dao->update(TABLE_TESTTASK)->data($testtask)->where('id')->eq($testtask->id)->exec();
+        }
+    }
+
+    /**
+     * Update nl to br from 1.3 version.
+     * 
+     * @access public
+     * @return void
+     */
+    public function updateNL1_3()
+    {
+        $products = $this->dao->select('id, `desc`')->from(TABLE_PRODUCT)->fetchAll();
+        $plans    = $this->dao->select('id, `desc`')->from(TABLE_PRODUCTPLAN)->fetchAll();
+        $releases = $this->dao->select('id, `desc`')->from(TABLE_RELEASE)->fetchAll();
+        $projects = $this->dao->select('id, `desc`, goal')->from(TABLE_PROJECT)->fetchAll();
+        $builds   = $this->dao->select('id, `desc`')->from(TABLE_BUILD)->fetchAll();
+
+        foreach($products as $product)
+        {
+            $product->desc = nl2br($product->desc);
+            $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($product->id)->exec();
+        }
+
+        foreach($plans as $plan)
+        {
+            $plan->desc = nl2br($plan->desc);
+            $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($plan->id)->exec();
+        }
+
+        foreach($releases as $release)
+        {
+            $release->desc = nl2br($release->desc);
+            $this->dao->update(TABLE_RELEASE)->data($release)->where('id')->eq($release->id)->exec();
+        }
+
+        foreach($projects as $project)
+        {
+            $project->desc = nl2br($project->desc);
+            $project->goal = nl2br($project->goal);
+            $this->dao->update(TABLE_RPOJECT)->data($project)->where('id')->eq($project->id)->exec();
+        }
+
+        foreach($builds as $build)
+        {
+            $build->desc = nl2br($build->desc);
+            $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($build->id)->exec();
         }
     }
 
