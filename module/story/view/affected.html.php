@@ -10,7 +10,7 @@
         <tr class='colhead'>
           <th><?php echo $lang->task->id;?></th>
           <th><?php echo $lang->task->name;?></th>
-          <th><?php echo $lang->task->owner;?></th>
+          <th><?php echo $lang->task->assignedTo;?></th>
           <th><?php echo $lang->task->status;?></th>
           <th><?php echo $lang->task->consumed;?></th>
           <th><?php echo $lang->task->left;?></th>
@@ -20,7 +20,7 @@
         <tr class='a-center'>
           <td><?php echo $task->id;?></td>
           <td class='a-left'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '_blank');?></td>
-          <td><?php echo $users[$task->owner];?></td>
+          <td><?php echo $users[$task->assignedTo];?></td>
           <td><?php echo $lang->task->statusList[$task->status];?></td>
           <td><?php echo $task->consumed;?></td>
           <td><?php echo $task->left;?></td>

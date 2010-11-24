@@ -37,7 +37,7 @@ class storyModel extends model
             ->where('t1.story')->eq($storyID)
             ->orderBy('t1.project DESC')
             ->fetchAll('project');
-        $story->tasks     = $this->dao->select('id, name, owner, project, status, consumed, `left`')->from(TABLE_TASK)->where('story')->eq($storyID)->orderBy('id DESC')->fetchGroup('project');
+        $story->tasks     = $this->dao->select('id, name, assignedTo, project, status, consumed, `left`')->from(TABLE_TASK)->where('story')->eq($storyID)->orderBy('id DESC')->fetchGroup('project');
         //$story->bugCount  = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_BUG)->where('story')->eq($storyID)->fetch('count');
         //$story->caseCount = $this->dao->select('COUNT(*)')->alias('count')->from(TABLE_CASE)->where('story')->eq($storyID)->fetch('count');
         if($story->toBug) $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
