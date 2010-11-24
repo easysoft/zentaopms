@@ -56,7 +56,7 @@ class testcase extends control
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
-        $productID = $this->product->saveState($productID, key($this->products));
+        $productID = $this->product->saveState($productID, $this->products);
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -158,7 +158,7 @@ class testcase extends control
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         /* Set productID and currentModuleID. */
-        $productID       = $this->product->saveState($productID, key($this->products));
+        $productID       = $this->product->saveState($productID, $this->products);
         $currentModuleID = (int)$moduleID;
 
         /* Set menu. */

@@ -54,7 +54,7 @@ class testtask extends control
         $this->session->set('testtaskList', $this->app->getURI(true));
 
         /* Set menu. */
-        $productID = $this->product->saveState($productID, key($this->products));
+        $productID = $this->product->saveState($productID, $this->products);
         $this->testtask->setMenu($this->products, $productID);
 
         /* Load pager. */
@@ -91,7 +91,7 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $productID  = $this->product->saveState($productID, key($this->products));
+        $productID  = $this->product->saveState($productID, $this->products);
         $this->testtask->setMenu($this->products, $productID);
 
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
@@ -206,7 +206,7 @@ class testtask extends control
 
         /* Get task info. */
         $task      = $this->testtask->getById($taskID);
-        $productID = $this->product->saveState($task->product, key($this->products));
+        $productID = $this->product->saveState($task->product, $this->products);
 
         /* Set menu. */
         $this->testtask->setMenu($this->products, $productID);
@@ -264,7 +264,7 @@ class testtask extends control
 
         /* Get task and product id. */
         $task      = $this->testtask->getById($taskID);
-        $productID = $this->product->saveState($task->product, key($this->products));
+        $productID = $this->product->saveState($task->product, $this->products);
 
         /* Build the search form. */
         $this->loadModel('testcase');

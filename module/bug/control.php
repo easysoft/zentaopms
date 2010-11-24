@@ -65,7 +65,7 @@ class bug extends control
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
-        $productID  = $this->product->saveState($productID, key($this->products));
+        $productID  = $this->product->saveState($productID, $this->products);
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -273,7 +273,7 @@ class bug extends control
         }
 
         /* Get product, then set menu. */
-        $productID = $this->product->saveState($productID, key($this->products));
+        $productID = $this->product->saveState($productID, $this->products);
         $this->bug->setMenu($this->products, $productID);
 
         /* Remove the unused types. */
