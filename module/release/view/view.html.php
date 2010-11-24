@@ -32,7 +32,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->release->desc;?></th>
-      <td><?php echo nl2br($release->desc);?></td>
+      <td class='content'><?php echo $release->desc;?></td>
     </tr>  
   </table>
   <div class='a-center f-16px strong'>
