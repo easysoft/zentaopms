@@ -110,11 +110,7 @@ class buildModel extends model
      */
     public function create($projectID)
     {
-        $build = fixer::input('post')
-            ->stripTags('name')
-            ->specialChars('desc')
-            ->add('project', (int)$projectID)
-            ->get();
+        $build = fixer::input('post')->stripTags('name')->add('project', (int)$projectID)->get();
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name','unique')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
@@ -129,10 +125,7 @@ class buildModel extends model
     public function update($buildID)
     {
         $oldBuild = $this->getByID($buildID);
-        $build = fixer::input('post')
-            ->stripTags('name')
-            ->specialChars('desc')
-            ->get();
+        $build = fixer::input('post')->stripTags('name')->get();
         $this->dao->update(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->edit->requiredFields, 'notempty')->where('id')->eq((int)$buildID)->exec();
         if(!dao::isError()) return common::createChanges($oldBuild, $build);
     }

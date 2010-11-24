@@ -41,7 +41,7 @@
 
     <tr>
       <th class='rowhead'><?php echo $lang->build->desc;?></th>
-      <td><?php echo nl2br($build->desc);?></td>
+      <td class='content'><?php echo $build->desc;?></td>
     </tr>  
   </table>
   <div class='a-center f-16px strong'>
