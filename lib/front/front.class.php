@@ -543,7 +543,7 @@ class js
      */
     static private function start($full = true)
     {
-        if($full) return "<html><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><script language='Javascript'>";
+        if($full) return "<html><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><style>body{background:white}</style><script language='Javascript'>";
         return "<script language='Javascript'>";
     }
 
@@ -742,6 +742,8 @@ EOT;
         $jsConfig->requiredFields = $requiredFields;
         $jsConfig->lblShowAll     = $lang->showAll;
         $jsConfig->lblHideClosed  = $lang->hideClosed;
+        $jsConfig->submitting     = $lang->submitting;
+        $jsConfig->save           = $lang->save;
         $jsConfig->router         = $app->server->PHP_SELF;
 
         $js  = self::start(false);

@@ -37,6 +37,7 @@ $lang->import       = '导入';
 $lang->exportCSV    = '导出csv';
 $lang->setFileName  = '请输入文件名：';
 $lang->activate     = '激活';
+$lang->submitting   = '稍候...';
 $lang->save         = '保存';
 $lang->confirm      = '确认';
 $lang->preview      = '预览';

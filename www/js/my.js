@@ -386,11 +386,34 @@ function setAbout()
  */
 function setDebugWin(color)
 {  
-    if($.browser.msie)
+    if($.browser.msie && $('.debugwin').size() == 1)
     {
         var debugWin = $(".debugwin")[0].contentWindow.document;
         $("body", debugWin).append("<style>body{background:" + color + "}</style>");
     }
+}
+
+/**
+ * Disable the submit button when submit form.
+ * 
+ * @access public
+ * @return void
+ */
+function setForm()
+{
+      $('form').submit(function()
+      {
+          $(":submit").attr('disabled', 'disabled');
+          $(":submit").attr('value', config.submitting);
+          $(":submit").addClass('button-d');
+      });
+
+      $("body").click(function()
+      {
+          $(":submit").removeAttr('disabled');
+          $(":submit").attr('value', config.save);
+          $(":submit").removeClass('button-d');
+      });
 }
 
 /**
@@ -536,6 +559,7 @@ $(document).ready(function()
     saveProduct();
     saveProject();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minus, begin ping.
+    setForm();
 });
 
 /* CTRL+g, auto focus on the search box. */

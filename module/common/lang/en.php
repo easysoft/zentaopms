@@ -37,6 +37,7 @@ $lang->import       = 'Import';
 $lang->exportCSV    = 'Export CSV';
 $lang->setFileName  = 'Please input file name:';
 $lang->activate     = 'Activate';
+$lang->submitting   = 'Saving...';
 $lang->save         = 'Save';
 $lang->confirm      = 'Confirm';
 $lang->preview      = 'Preview';
