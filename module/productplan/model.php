@@ -68,10 +68,7 @@ class productplanModel extends model
      */
     public function create($product)
     {
-        $plan = fixer::input('post')
-            ->stripTags('title')
-            ->specialChars('desc')
-            ->get();
+        $plan = fixer::input('post')->stripTags('title')->get();
         $this->dao->insert(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck($this->config->productplan->create->requiredFields, 'notempty')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
@@ -86,13 +83,9 @@ class productplanModel extends model
     public function update($planID)
     {
         $oldPlan = $this->getById($planID);
-        $plan = fixer::input('post')
-            ->stripTags('title')
-            ->specialChars('desc')
-            ->get();
+        $plan = fixer::input('post')->stripTags('title')->get();
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')->where('id')->eq((int)$planID)->exec();
         if(!dao::isError()) return common::createChanges($oldPlan, $plan);
-
     }
 
     /**

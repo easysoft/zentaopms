@@ -29,7 +29,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->productplan->desc;?></th>
-      <td><?php echo nl2br($plan->desc);?></th>
+      <td class='content'><?php echo $plan->desc;?></th>
     </tr>
   </table>
   <div class='a-center f-16px strong'>
