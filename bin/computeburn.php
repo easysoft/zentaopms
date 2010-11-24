@@ -1,61 +1,49 @@
 #!/usr/bin/env php
 <?php
-/* 包含http客户端类，snoopy。在禅道lib/snoopy里面可以找到。*/
-include dirname(dirname(__FILE__)) . '/lib/snoopy/snoopy.class.php';
+include dirname(dirname(__FILE__)) . '/lib/api/api.class.php';
 
-/* 用来登录的地址，用户名和密码。*/
-$zentaoRoot  = "http://pms.easysoft.com/";
-$account     = "";              // 需要设置有更新燃尽图权限的用户名和密码。
-$password    = "";
-$requestType = "PATH_INFO";     // 禅道系统访问方式，请根据实际的配置进行修改。
-
-if($account == '' and $password == '') die("Must set account and password.\n");
-
-/* 设置API地址。*/
-if($requestType == 'GET')
+class computeburn
 {
-    /* API地址，以GET方式为例。*/
-    $loginAPI   = $zentaoRoot . "?m=user&f=login"; 
-    $sessionAPI = $zentaoRoot . "?m=api&f=getSessionID&t=json";
-    $burnAPI    = $zentaoRoot . "?m=project&f=computeburn"; 
-}
-elseif($requestType == 'PATH_INFO')
-{
-    /* API地址，以PATH_INFO方式为例。*/
-    $loginAPI   = $zentaoRoot . "user-login.json?a=1"; 
-    $sessionAPI = $zentaoRoot . "api-getsessionid.json?a=1";
-    $burnAPI    = $zentaoRoot . "project-computeburn?a=1"; 
-}
-
-/* 获取session. */
-$snoopy = new Snoopy;
-$snoopy->fetch($sessionAPI);
-$session = json_decode($snoopy->results);
-$session = json_decode($session->data);
-
-/*用户登录*/
-$authHash = md5(md5($password) . $session->rand);
-$submitVars["account"]  = $account; 
-$submitVars["password"] = $authHash;
-$snoopy->cookies[$session->sessionName] = $session->sessionID;
-$snoopy->submit($loginAPI, $submitVars);
-
-/* 直接调用project模块的burn页面。*/
-$snoopy->fetch($burnAPI . "&$session->sessionName=$session->sessionID");
-$burns = $snoopy->results;
-if($burns)
-{
-    if(strpos($burns, 'script') === false)
+    public $config;    // the config var.
+    public $zentao;    // the zentao client.
+    
+    public function __construct($config)
     {
-        echo $burns;
+        $this->initConfig($config);
+        $this->initZenTao();
     }
-    else
+
+    /* run. */
+    public function run()
     {
-        echo "No priviledge.\n";
+        $result = $this->zentao->fetchModel('project', 'computeburn');
+        if(empty($result)) return;
+        foreach($result as $burns)
+        {
+            echo $burns->project  . "\t";
+            echo $burns->projectName . "\t";
+            echo $burns->date . "\t";
+            echo $burns->left . "\n";
+        }
+    }
+    
+    /* Init the config. */
+    private function initConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /* Init the client of zentao api. */
+    private function initZenTao()
+    {
+        $this->zentao = new ztclient($this->config->zentao->root, $this->config->zentao->account, $this->config->zentao->password);
     }
 }
-else
-{
-    echo "no projects.\n";
-}
+
+$config->zentao->root     = "";    // 禅道访问的完整路径，包括后面的斜线。比如http://pms.zentao.net/
+$config->zentao->account  = "";    // 可以访问禅道的帐号，需要有超级model调用接口的访问权限。
+$config->zentao->password = "";    // 密码。
+
+$computeburn = new computeburn($config);
+$computeburn->run();
 ?>
