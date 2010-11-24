@@ -23,8 +23,16 @@
       <td><?php echo $product->code;?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->product->bugOwner;?></th>
-      <td><?php echo $users[$product->bugOwner];?></td>
+      <th class='rowhead'><?php echo $lang->product->PO;?></th>
+      <td><?php echo $users[$product->PO];?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->product->QM;?></th>
+      <td><?php echo $users[$product->QM];?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->product->RM;?></th>
+      <td><?php echo $users[$product->RM];?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->status;?></th>
@@ -32,7 +40,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->desc;?></th>
-      <td><?php echo nl2br($product->desc);?></td>
+      <td class='content'><?php echo $product->desc;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->acl;?></th>

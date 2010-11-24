@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <script language='Javascript'>
 function setWhite(acl)
 {
@@ -23,23 +24,27 @@ function setWhite(acl)
       <caption><?php echo $lang->product->create;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->product->name;?></th>
-        <td><?php echo html::input('name', '', "class='text-2'");?></td>
+        <td><?php echo html::input('name', '', "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->code;?></th>
-        <td><?php echo html::input('code', '', "class='text-2'");?></td>
+        <td><?php echo html::input('code', '', "class='text-3'");?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->product->bugOwner;?></th>
-        <td><?php echo html::select('bugOwner', $users, $this->app->user->account, "class='select-2'");?></td>
+        <th class='rowhead'><?php echo $lang->product->PO;?></th>
+        <td><?php echo html::select('PO', $users, $this->app->user->account, "class='select-3'");?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->product->status;?></th>
-        <td><?php echo html::select('status', $lang->product->statusList, '', "class='select-2'");?></td>
+        <th class='rowhead'><?php echo $lang->product->QM;?></th>
+        <td><?php echo html::select('QM', $users, $this->app->user->account, "class='select-3'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->product->RM;?></th>
+        <td><?php echo html::select('RM', $users, $this->app->user->account, "class='select-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->desc;?></th>
-        <td><?php echo html::textarea('desc', '', "rows='5' class='area-1'");?></textarea></td>
+        <td><?php echo html::textarea('desc', '', "rows='8' class='area-1'");?></textarea></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->acl;?></th>

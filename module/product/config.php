@@ -33,3 +33,6 @@ $config->product->search['params']['mailto']       = array('operator' => 'includ
 
 $config->product->create->requiredFields = 'name,code';
 $config->product->edit->requiredFields   = 'name,code';
+
+$config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

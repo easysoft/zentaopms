@@ -259,6 +259,21 @@ class projectModel extends model
     }
 
     /**
+     * Get the default managers for a project from it's related products. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return object
+     */
+    public function getDefaultManagers($projectID)
+    {
+        return $this->dao->select('PO,QM,RM')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
+            ->where('t2.project')->eq($projectID)
+            ->fetch();
+    }
+
+    /**
      * Get products of a project.
      * 
      * @param  int    $projectID 

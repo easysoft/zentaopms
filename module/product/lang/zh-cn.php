@@ -40,7 +40,9 @@ $lang->product->code      = '产品代号';
 $lang->product->order     = '排序';
 $lang->product->status    = '状态';
 $lang->product->desc      = '产品描述';
-$lang->product->bugOwner  = 'Bug负责人';
+$lang->product->PO        = '产品负责人';
+$lang->product->QM        = '测试负责人';
+$lang->product->RM        = '发布负责人';
 $lang->product->acl       = '访问控制';
 $lang->product->whitelist = '分组白名单';
 

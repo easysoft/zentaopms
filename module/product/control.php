@@ -69,7 +69,7 @@ class product extends control
         $this->session->set('productList', $this->app->getURI(true));
 
         /* Set product, module and query. */
-        $productID = $this->product->saveState($productID, key($this->products));
+        $productID = $this->product->saveState($productID, $this->products);
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
@@ -224,7 +224,7 @@ class product extends control
         $this->view->position[]    = $this->lang->product->view;
         $this->view->product       = $product;
         $this->view->actions       = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users         = $this->user->getPairs();
+        $this->view->users         = $this->user->getPairs('noletter');
         $this->view->groups        = $this->loadModel('group')->getPairs();
 
         $this->display();

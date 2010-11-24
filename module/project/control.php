@@ -494,6 +494,11 @@ class project extends control
 
         $projects = array('' => '') + $this->projects;
         $project  = $this->project->getById($projectID);
+        $managers = $this->project->getDefaultManagers($projectID);
+        if(empty($project->PO)) $project->PO = $managers->PO;
+        if(empty($project->PM)) $project->PM = $this->app->user->account;
+        if(empty($project->QM)) $project->QM = $managers->QM;
+        if(empty($project->RM)) $project->RM = $managers->RM;
 
         /* Remove current project from the projects. */
         unset($projects[$projectID]);
@@ -539,7 +544,7 @@ class project extends control
         $this->view->products = $this->project->getProducts($project->id);
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->actions  = $this->loadModel('action')->getList('project', $projectID);
-        $this->view->users    = $this->loadModel('user')->getPairs();
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }

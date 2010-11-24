@@ -38,16 +38,17 @@ class productModel extends model
     /**
      * Save the product id user last visited to session.
      * 
-     * @param  int $productID 
-     * @param  int $defaultProductID 
+     * @param  int   $productID 
+     * @param  array $products
      * @access public
      * @return int
      */
-    public function saveState($productID, $defaultProductID)
+    public function saveState($productID, $products)
     {
         if($productID > 0) $this->session->set('product', (int)$productID);
         if($productID == 0 and $this->cookie->lastProduct)    $this->session->set('product', (int)$this->cookie->lastProduct);
-        if($productID == 0 and $this->session->product == '') $this->session->set('product', $defaultProductID);
+        if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
+        if(!isset($products[$this->session->product])) $this->session->set('product', key($products));
         return $this->session->product;
     }
 
@@ -68,7 +69,7 @@ class productModel extends model
         if($product->acl == 'open') return true;
 
         /* Get team members. */
-        $teamMembers = $this->getTeamMemberPairs($product->id);
+        $teamMembers = $this->getTeamMemberPairs($product);
 
         /* Private. */
         if($product->acl == 'private')
@@ -156,8 +157,10 @@ class productModel extends model
     {
         $product = fixer::input('post')
             ->stripTags('name,code')
-            ->specialChars('desc')
              ->setIF($this->post->acl != 'custom', 'whitelist', '')
+             ->setDefault('status', 'normal')
+             ->setDefault('createdBy', $this->app->user->account)
+             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->get();
         $this->dao->insert(TABLE_PRODUCT)
@@ -183,7 +186,6 @@ class productModel extends model
         $oldProduct = $this->getById($productID);
         $product = fixer::input('post')
             ->stripTags('name,code')
-            ->specialChars('desc')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
             ->get();
@@ -248,14 +250,20 @@ class productModel extends model
     /**
      * Get team members of a product from projects.
      * 
-     * @param  int    $productID 
+     * @param  object   $product 
      * @access public
      * @return array
      */
-    public function getTeamMemberPairs($productID)
+    public function getTeamMemberPairs($product)
     {
-        $projects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetchPairs();
-        if(!$projects) return array();
-        return $this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs();
+        $members[$product->PO] = $product->PO;
+        $members[$product->QM] = $product->QM;
+        $members[$product->RM] = $product->RM;
+        $members[$product->createdBy] = $product->createdBy;
+
+        $projects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product->id)->fetchPairs();
+        if(!$projects) return $members;
+        $projectTeams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs();
+        return array_merge($members, $projectTeams);
     }
 }

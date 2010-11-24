@@ -40,7 +40,9 @@ $lang->product->code      = 'Code';
 $lang->product->order     = 'Order';
 $lang->product->status    = 'Status';
 $lang->product->desc      = 'Desc';
-$lang->product->bugOwner  = 'Bug Owner';
+$lang->product->PO        = 'Product owner';
+$lang->product->QM        = 'QA manager';
+$lang->product->RM        = 'Release manager';
 $lang->product->acl       = 'Access limitation';
 $lang->product->whitelist = 'Whitelist';
 

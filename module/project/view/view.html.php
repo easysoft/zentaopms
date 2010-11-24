@@ -39,6 +39,22 @@
       <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
     </tr>
     <tr>
+      <th class='rowhead'><?php echo $lang->project->PM;?></th>
+      <td><?php echo $users[$project->PM];?></td>
+    </tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->project->PO;?></th>
+      <td><?php echo $users[$project->PO];?></td>
+    </tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->project->QM;?></th>
+      <td><?php echo $users[$project->QM];?></td>
+    </tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->project->RM;?></th>
+      <td><?php echo $users[$project->RM];?></td>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->project->lblStats;?></th>
       <td><?php printf($lang->project->stats, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?></td>
     </tr>

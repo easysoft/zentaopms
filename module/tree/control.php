@@ -118,10 +118,10 @@ class tree extends control
             echo js::alert($this->lang->tree->successSave);
             die(js::reload('parent'));
         }
-        $module     = $this->tree->getById($moduleID);
+        $module = $this->tree->getById($moduleID);
         if($module->owner == null)
         {
-           $module->owner = $this->loadModel('product')->getById($module->root)->bugOwner;        
+           $module->owner = $this->loadModel('product')->getById($module->root)->QM;
         }
         $this->view->module     = $module;
         $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->root, $this->view->module->type);

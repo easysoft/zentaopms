@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <script language='Javascript'>
 function setWhite(acl)
 {
@@ -23,23 +24,31 @@ function setWhite(acl)
       <caption><?php echo $lang->product->edit;?></caption>
       <tr>
         <th class='rowhead'><?php echo $lang->product->name;?></th>
-        <td><?php echo html::input('name', $product->name, "class='text-2'");?></td>
+        <td><?php echo html::input('name', $product->name, "class='text-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->code;?></th>
-        <td><?php echo html::input('code', $product->code, "class='text-2'");?></td>
+        <td><?php echo html::input('code', $product->code, "class='text-3'");?></td>
       </tr>  
       <tr>
-        <th class='rowhead'><?php echo $lang->product->bugOwner;?></th>
-        <td><?php echo html::select('bugOwner', $users, $product->bugOwner, "class='select-2'");?></td>
+        <th class='rowhead'><?php echo $lang->product->PO;?></th>
+        <td><?php echo html::select('PO', $users, $product->PO, "class='select-3'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->product->QM;?></th>
+        <td><?php echo html::select('QM', $users, $product->QM, "class='select-3'");?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->product->RM;?></th>
+        <td><?php echo html::select('RM', $users, $product->RM, "class='select-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->status;?></th>
-        <td><?php echo html::select('status', $lang->product->statusList, $product->status, "class='select-2'");?></td>
+        <td><?php echo html::select('status', $lang->product->statusList, $product->status, "class='select-3'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->desc;?></th>
-        <td><?php echo html::textarea('desc', $product->desc, "rows='5' class='area-1'");?></td>
+        <td><?php echo html::textarea('desc', htmlspecialchars($product->desc), "rows='8' class='area-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->product->acl;?></th>
