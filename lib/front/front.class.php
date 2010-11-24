@@ -213,7 +213,7 @@ class html
             $string .= "<span><input type='checkbox' name='{$name}[]' value='$key' ";
             $string .= strpos($checked, ",$key,") !== false ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " /><label>$value</label></span>\n";
+            $string .= " /> <label>$value</label></span>\n";
         }
         return $string;
     }
