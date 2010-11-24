@@ -103,7 +103,6 @@ class projectModel extends model
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->stripTags('name, code, team')
-            ->specialChars('goal, desc')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
             ->remove('products')
@@ -144,7 +143,6 @@ class projectModel extends model
         $projectID = (int)$projectID;
         $project = fixer::input('post')
             ->stripTags('name, code, team')
-            ->specialChars('goal, desc')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')

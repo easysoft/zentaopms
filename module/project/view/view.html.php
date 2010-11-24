@@ -28,11 +28,11 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->goal;?></th>
-      <td><?php echo nl2br($project->goal);?></td>
+      <td class='content'><?php echo $project->goal;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->desc;?></th>
-      <td><?php echo nl2br($project->desc);?></td>
+      <td class='content'><?php echo $project->desc;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->status;?></th>

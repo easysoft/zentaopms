@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <script language='Javascript'>
 function setWhite(acl)
 {
@@ -69,11 +70,11 @@ function setWhite(acl)
       </tr>
       <tr>
         <th class='rowhead'><?php echo $lang->project->goal;?></th>
-        <td><?php echo html::textarea('goal', $project->goal, "rows='5' class='area-1'");?></td>
+        <td><?php echo html::textarea('goal', htmlspecialchars($project->goal), "rows='6' class='area-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->desc;?></th>
-        <td><?php echo html::textarea('desc', $project->desc, "rows='5' class='area-1'");?></td>
+        <td><?php echo html::textarea('desc', htmlspecialchars($project->desc), "rows='6' class='area-1'");?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->project->acl;?></th>
