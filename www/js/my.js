@@ -123,7 +123,7 @@ function setNowrapObjTitle()
 function setProductSwitcher()
 {
     productMode = $.cookie('productMode');
-    if(!productMode) productMode = 'all';
+    if(!productMode) productMode = 'noclosed';
     if(productMode == 'all')
     {
         $("#productID").append($("<option value='noclosed' id='switcher'>" + config.lblHideClosed + "</option>"));
@@ -222,7 +222,7 @@ function saveProduct()
 function setProjectSwitcher()
 {
     projectMode = $.cookie('projectMode');
-    if(!projectMode) projectMode = 'all';
+    if(!projectMode) projectMode = 'noclosed';
     if(projectMode == 'all')
     {
         $("#projectID").append($("<option value='noclosed' id='switcher'>" + config.lblHideClosed + "</option>"));

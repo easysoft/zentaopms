@@ -185,7 +185,7 @@ class projectModel extends model
      */
     public function getPairs()
     {
-        $mode = $this->cookie->projectMode;
+        $mode = $this->cookie->projectMode ? $this->cookie->projectMode : 'noclosed';
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)
@@ -265,10 +265,16 @@ class projectModel extends model
      */
     public function getDefaultManagers($projectID)
     {
-        return $this->dao->select('PO,QM,RM')->from(TABLE_PRODUCT)->alias('t1')
+        $managers = $this->dao->select('PO,QM,RM')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
             ->where('t2.project')->eq($projectID)
             ->fetch();
+        if($managers) return $managers;
+
+        $managers->PO = '';
+        $managers->QM = '';
+        $managers->RM = '';
+        return $managers;
     }
 
     /**

@@ -122,7 +122,7 @@ class productModel extends model
      */
     public function getPairs()
     {
-        $mode = $this->cookie->productMode;
+        $mode = $this->cookie->productMode ? $this->cookie->productMode : 'noclosed';
         $products = $this->dao->select('*')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
