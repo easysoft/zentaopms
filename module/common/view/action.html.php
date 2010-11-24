@@ -45,9 +45,12 @@ function switchHistoryDisplay(historyID,type)
       <?php if(!empty($action->comment) or !empty($action->history)):?>
       <?php if(!empty($action->comment)) echo "<div class='history'>";?>
         <?php echo "<span id='historyBox$i' class='hidden'>";?>
-          <div class='changes'><?php echo $this->action->printChanges($action->objectType, $action->history);?></div>
+          <div class='changes'>
+          <?php echo $this->action->printChanges($action->objectType, $action->history);?>
+          <?php if($action->comment) echo '<br />';?>
+          </div>
         </span>
-        <?php if($action->comment and $action->history) echo '<br />'; echo nl2br($action->comment);?>
+        <?php if($action->comment) echo nl2br($action->comment);?>
       <?php if(!empty($action->comment)) echo "</div>";?>
       <?php endif;?>
     </li>
