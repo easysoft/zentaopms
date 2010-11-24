@@ -59,7 +59,7 @@ class index extends control
         $stats['todo']    = $this->dao->select('status, count(*) as count')->from(TABLE_TODO)->groupBy('status')->fetchPairs();
 
         /* Tasks, bugs, and todos of current user. */
-        $my['tasks'] = $this->dao->select('id, name')->from(TABLE_TASK)->where('owner')->eq($this->session->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->in('wait,doing')->orderBy('id desc')->limit(10)->fetchPairs();
+        $my['tasks'] = $this->dao->select('id, name')->from(TABLE_TASK)->where('assignedTo')->eq($this->session->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->in('wait,doing')->orderBy('id desc')->limit(10)->fetchPairs();
         $my['bugs']  = $this->dao->select('id, title')->from(TABLE_BUG)->where('assignedTo')->eq($this->session->user->account)->andWhere('deleted')->eq(0)->orderBy('id desc')->limit(10)->fetchPairs();
         $my['todos'] = $this->loadModel('todo')->getList('all', $this->session->user->account, 'wait, doing');
 
