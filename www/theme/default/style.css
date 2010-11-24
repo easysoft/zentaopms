@@ -289,6 +289,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .tabs a.current {background:green; color:white}
 
 /* Footer. */
+#divider   {margin-bottom:30px}
 #footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background-color:#FBF5C6; border-top:1px solid #F4BF20;}
 #crumbs    {padding:5px 0 5px 10px;}
 #poweredby {padding-right:12px; margin-top:5px; display:block;}
