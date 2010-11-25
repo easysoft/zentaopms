@@ -53,12 +53,14 @@ $lang->task->canceledBy   = '由谁取消';
 $lang->task->canceledDate = '取消时间';
 $lang->task->closedBy     = '由谁关闭';
 $lang->task->closedDate   = '关闭时间';
-$lang->task->lasteEdited  = '最后编辑';
+$lang->task->closedReason = '关闭原因';
+$lang->task->lastEdited   = '最后编辑';
 
 $lang->task->statusList['wait']    = '未开始';
 $lang->task->statusList['doing']   = '进行中';
 $lang->task->statusList['done']    = '已完成';
 $lang->task->statusList['cancel']  = '已取消';
+$lang->task->statusList['closed']  = '已关闭';
 
 $lang->task->typeList[''] = '';
 $lang->task->typeList['design'] = '设计';
@@ -76,6 +78,10 @@ $lang->task->priList[1]  = '1';
 $lang->task->priList[2]  = '2';
 $lang->task->priList[4]  = '4';
 
+$lang->task->reasonList['']       = '';
+$lang->task->reasonList['done']   = '已完成';
+$lang->task->reasonList['cancel'] = '已取消';
+
 $lang->task->afterChoices['continueAdding'] = '继续为该需求添加任务';
 $lang->task->afterChoices['toTastList']     = '返回任务列表';
 $lang->task->afterChoices['toStoryList']    = '返回需求列表';
@@ -92,6 +98,7 @@ $lang->task->buttonDone       = '完成';
 
 $lang->task->legendBasic  = '基本信息';
 $lang->task->legendEffort = '工时信息';
+$lang->task->legendLife   = '任务的一生';
 $lang->task->legendDesc   = '任务描述';
 $lang->task->legendAction = '操作';
 

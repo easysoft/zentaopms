@@ -118,7 +118,6 @@ $lang->my->menu->project  = '我的项目|my|project|';
 $lang->my->menu->profile  = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
 
-
 /* 产品视图设置。*/
 $lang->product->menu->list   = '%s';
 $lang->product->menu->story  = array('link' => '需求列表|product|browse|productID=%s',     'subModule' => 'story');
@@ -229,6 +228,7 @@ $lang->error->length          = array("『%s』长度错误，应当为『%s』"
 $lang->error->reg             = "『%s』不符合格式，应当为:『%s』。";
 $lang->error->unique          = "『%s』已经有『%s』这条记录了。";
 $lang->error->notempty        = "『%s』不能为空。";
+$lang->error->empty           = "『%s』必须为空。";
 $lang->error->equal           = "『%s』必须为『%s』。";
 $lang->error->int             = array("『%s』应当是数字。", "『%s』应当介于『%s-%s』之间。");
 $lang->error->float           = "『%s』应当是数字，可以是小数。";

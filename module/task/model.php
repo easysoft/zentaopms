@@ -13,7 +13,7 @@
 <?php
 class taskModel extends model
 {
-    const CUSTOM_STATUS_ORDER = 'wait,doing,done,cancel';
+    const CUSTOM_STATUS_ORDER = 'wait,doing,done,cancel,closed';
 
     /**
      * Create a task.
@@ -66,12 +66,29 @@ class taskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $task = fixer::input('post')
+        $now     = helper::now();
+        $task    = fixer::input('post')
             ->striptags('name')
             ->setDefault('story, estimate, left, consumed', 0)
+            ->setDefault('deadline', '0000-00-00')
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+
             ->setIF($this->post->status == 'done', 'left', 0)
+            ->setIF($this->post->status == 'done'   and !$this->post->finishedBy,   'finishedBy',   $this->app->user->account)
+            ->setIF($this->post->status == 'done'   and !$this->post->finishedDate, 'finishedDate', $now)
+
+            ->setIF($this->post->status == 'cancel' and !$this->post->canceledBy,   'canceledBy',   $this->app->user->account)
+            ->setIF($this->post->status == 'cancel' and !$this->post->canceledDate, 'canceledDate', $now)
+            ->setIF($this->post->status == 'cancel', 'closedBy',     $this->post->canceledBy  ? $this->post->canceledBy   : $this->app->user->account)
+            ->setIF($this->post->status == 'cancel', 'closedDate',   $this->post->canceledDate? $this->post->canceledDate : $now)
+            ->setIF($this->post->status == 'cancel', 'closedReason', 'cancel')
+
+            ->setIF($this->post->status == 'closed' and !$this->post->closedBy,     'closedBy',     $this->app->user->account)
+            ->setIF($this->post->status == 'closed' and !$this->post->closedDate,   'closedDate',   $now)
             ->setIF($this->post->consumed > 0 and $this->post->left > 0 and $this->post->status == 'wait', 'status', 'doing')
+
+            ->add('lastEditedBy',   $this->app->user->account)
+            ->add('lastEditedDate', $now)
             ->remove('comment,files,labels')
             ->get();
         $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
@@ -79,12 +96,23 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
+
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
+            ->checkIF($task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
+
+            ->batchCheckIF($task->status == 'waiting' or $task->status == 'doing', 'finishedBy, finishedDate, closedBy, closedDate, closedReason', 'empty')
+
             ->checkIF($task->status == 'done', 'consumed', 'notempty')
-            ->checkIF($task->left == 0 and $task->status != 'cancel', 'status', 'equal', 'done')
+            ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
+
+            ->checkIF($task->status == 'cancel', 'finishedBy',  'empty')
+            ->checkIF($task->status == 'cancel', 'finishedDate','empty')
+
+            ->checkIF($task->status == 'closed', 'closedReason', 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
+
         if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -136,6 +164,7 @@ class taskModel extends model
             ->where('t1.id')->eq((int)$taskID)
             ->fetch();
         if(!$task) return false;
+        foreach($task as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
         if($task->mailto)
         {
             $task->mailto = ltrim(trim($task->mailto), ',');  // remove the first ,

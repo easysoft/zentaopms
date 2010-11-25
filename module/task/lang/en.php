@@ -53,12 +53,14 @@ $lang->task->canceledBy   = 'Canceled By';
 $lang->task->canceledDate = 'Canceled Date';
 $lang->task->closedBy     = 'Closed By';
 $lang->task->closedDate   = 'Closed Date';
-$lang->task->lasteEdited  = 'Last Edited';
+$lang->task->closedReason = 'Closed Reason';
+$lang->task->lastEdited   = 'Last Edited';
 
 $lang->task->statusList['wait']    = 'Waiting';
 $lang->task->statusList['doing']   = 'Doing';
 $lang->task->statusList['done']    = 'Done';
 $lang->task->statusList['cancel']  = 'Canceled';
+$lang->task->statusList['closed']  = 'Closed';
 
 $lang->task->typeList[''] = '';
 $lang->task->typeList['design'] = 'Design';
@@ -76,6 +78,10 @@ $lang->task->priList[1]  = '1';
 $lang->task->priList[2]  = '2';
 $lang->task->priList[4]  = '4';
 
+$lang->task->reasonList['']       = '';
+$lang->task->reasonList['done']   = 'Done';
+$lang->task->reasonList['cancel'] = 'Canceled';
+
 $lang->task->afterChoices['continueAdding'] = 'Continue add task for this story';
 $lang->task->afterChoices['toTastList']     = 'To task list';
 $lang->task->afterChoices['toStoryList']    = 'To story list';
@@ -92,6 +98,7 @@ $lang->task->buttonDone       = 'Done';
 
 $lang->task->legendBasic  = 'Basic info';
 $lang->task->legendEffort = 'Effort';
+$lang->task->legendLife   = 'Lifetime';
 $lang->task->legendDesc   = 'Desc';
 $lang->task->legendAction = 'Action';
 

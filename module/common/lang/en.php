@@ -228,6 +228,7 @@ $lang->error->length          = array("『%s』length should be『%s』", "『%s
 $lang->error->reg             = "『%s』should like『%s』";
 $lang->error->unique          = "『%s』has『%s』already.";
 $lang->error->notempty        = "『%s』can not be empty.";
+$lang->error->empty           = "『%s』 must be empty.";
 $lang->error->equal           = "『%s』must be『%s』.";
 $lang->error->int             = array("『%s』should be interger", "『%s』should between『%s-%s』.");
 $lang->error->float           = "『%s』should be a interger or float.";

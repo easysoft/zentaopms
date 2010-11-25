@@ -116,6 +116,43 @@ $(function() {
         </tr>
       </table>
     </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->task->legendLife;?></legend>
+      <table class='table-1'> 
+        <tr>
+          <th class='rowhead w-p20'><?php echo $lang->task->openedBy;?></th>
+          <td><?php echo $users[$task->openedBy];?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->finishedBy;?></th>
+          <td><?php echo html::select('finishedBy', $users, $task->finishedBy, 'class="select-1"');?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->finishedDate;?></th>
+          <td><?php echo html::input('finishedDate', $task->finishedDate, 'class="text-1"');?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->canceledBy;?></th>
+          <td><?php echo html::select('canceledBy', $users, $task->canceledBy, 'class="select-1"');?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->canceledDate;?></th>
+          <td><?php echo html::input('canceledDate', $task->canceledDate, 'class="text-1"');?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->closedBy;?></th>
+          <td><?php echo html::select('closedBy', $users, $task->closedBy, 'class="select-1"');?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->closedReason;?></th>
+          <td><?php echo html::select('closedReason', $lang->task->reasonList, $task->closedReason, 'class="select-1"');?></td>
+        </tr>
+        <tr>
+          <th class='rowhead'><?php echo $lang->task->closedDate;?></th>
+          <td><?php echo html::input('closedDate', $task->closedDate, 'class="text-1"');?></td>
+        </tr>
+      </table>
+    </fieldset>
   </div>
 </div>
 </form>

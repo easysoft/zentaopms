@@ -390,6 +390,7 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('1.3'));
         $this->updateNL1_3();
+        $this->updateTasks();
         if(!$this->isError()) $this->setting->updateVersion('1.4');
     }
 
@@ -526,6 +527,86 @@ class upgradeModel extends model
             $build->desc = nl2br($build->desc);
             $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($build->id)->exec();
         }
+    }
+
+    /**
+     * Update task fields.
+     * 
+     * @access public
+     * @return void
+     */
+    public function updateTasks()
+    {
+        /* Get all actions of tasks. */
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('task')
+            ->orderBy('id')
+            ->fetchAll('id');
+
+        /* Get histories about status field. */
+        $histories = $this->dao->select()->from(TABLE_HISTORY)
+            ->where('action')->in(array_keys($actions))
+            ->andWhere('field')->eq('status')
+            ->orderBy('id')
+            ->fetchGroup('action');
+
+        $tasks = array();
+        foreach($actions as $action)
+        {
+            if(!isset($tasks[$action->objectID]))
+            {
+                $tasks[$action->objectID] = new stdclass;
+            }
+            $task = $tasks[$action->objectID];
+
+            $task->id   = $action->objectID;
+            $actionType = strtolower($action->action);
+
+            /* Set the openedBy info. */
+            if($actionType == 'opened')
+            {
+                $task->openedBy   = $action->actor;
+                $task->openedDate = $action->date;
+            }
+            else
+            {
+                if(!isset($histories[$action->id])) continue;
+
+                $actionHistories = $histories[$action->id];
+                foreach($actionHistories as $history)
+                {
+                    /* Finished by. */
+                    if($history->new == 'done')
+                    {
+                        $task->finishedBy   = $action->actor;
+                        $task->finishedDate = $action->date;
+                        $action->action     = 'finished';
+                    }
+                    /* Canceled By. */
+                    elseif($history->new == 'cancel')
+                    {
+                        $task->canceledBy   = $action->actor;
+                        $task->canceledDate = $action->date;
+                        $action->action     = 'canceled';
+                    }
+                }
+
+                /* Last edited by .*/
+                $task->lastEditedBy   = $action->actor;
+                $task->lastEditedDate = $action->date;
+
+                /* Update action type. */
+                $this->dao->update(TABLE_ACTION)->set('action')->eq($action->action)->where('id')->eq($action->id)->exec(false);
+            }
+        }
+
+        /* Update db. */
+        foreach($tasks as $task)
+        {
+            $this->dao->update(TABLE_TASK)->data($task, false)->where('id')->eq($task->id)->exec(false);
+        }
+
+        /* Update action name. */
     }
 
     /**
