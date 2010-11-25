@@ -176,7 +176,7 @@ class validater
     }
 
     /**
-     * Empty checking.
+     * Not empty checking.
      * 
      * @param  mixed $var 
      * @static
@@ -186,6 +186,19 @@ class validater
     public static function checkNotEmpty($var)
     {
         return !empty($var);
+    }
+
+    /**
+     * Empty checking.
+     * 
+     * @param  mixed $var 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkEmpty($var)
+    {
+        return empty($var);
     }
 
     /**
