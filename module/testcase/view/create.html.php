@@ -53,16 +53,16 @@
               <th class='w-100px'><?php echo $lang->actions;?></th>
             </tr>
             <?php
-            for($i = 1; $i <= 5; $i ++)
+            for($i = 1; $i <= 3; $i ++)
             {
                 echo "<tr id='row$i' class='a-center'>";
                 echo "<th class='stepID'>$i</th>";
-                echo '<td class="w-p50">' . html::textarea('steps[]', '', "class='w-p100'") . '</td>';
-                echo '<td>' . html::textarea('expects[]', '', "class='w-p100'") . '</td>';
+                echo '<td class="w-p50">' . html::textarea('steps[]', '', "rows='3' class='w-p100'") . '</td>';
+                echo '<td>' . html::textarea('expects[]', '', "rows='3' class='w-p100'") . '</td>';
                 echo "<td class='a-center w-100px'><nobr>";
-                echo "<input type='button' tabindex='-1' class='addbutton' onclick='preInsert($i)'  value='{$lang->testcase->insertBefore}' /> ";
-                echo "<input type='button' tabindex='-1' class='addbutton' onclick='postInsert($i)' value='{$lang->testcase->insertAfter}'  /> ";
-                echo "<input type='button' tabindex='-1' class='delbutton' onclick='deleteRow($i)'  value='{$lang->testcase->deleteStep}'   /> ";
+                echo "<input type='button' tabindex='-1' class='addbutton' onclick='preInsert($i)'  value='{$lang->testcase->insertBefore}' /><br /> ";
+                echo "<input type='button' tabindex='-1' class='addbutton' onclick='postInsert($i)' value='{$lang->testcase->insertAfter}'  /><br /> ";
+                echo "<input type='button' tabindex='-1' class='delbutton' onclick='deleteRow($i)'  value='{$lang->testcase->deleteStep}'   /><br /> ";
                 echo "</nobr></td>";
                 echo '</tr>';
             }

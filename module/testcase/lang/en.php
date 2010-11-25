@@ -56,9 +56,9 @@ $lang->testcase->delete         = "Delete";
 $lang->testcase->browse         = "Browse";
 $lang->testcase->confirmStoryChange = 'Confirm story change';
 
-$lang->testcase->deleteStep     = 'ｘ';
-$lang->testcase->insertBefore   = '＋↑';
-$lang->testcase->insertAfter    = '＋↓';
+$lang->testcase->deleteStep     = 'Delete';
+$lang->testcase->insertBefore   = 'Insert before';
+$lang->testcase->insertAfter    = 'Insert after';
 
 $lang->testcase->selectProduct  = 'Select product';
 $lang->testcase->byModule       = 'By module';

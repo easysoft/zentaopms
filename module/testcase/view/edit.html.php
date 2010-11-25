@@ -32,35 +32,30 @@ $(document).ready(function()
 <div class='yui-d0 yui-t8'>
   <div class='yui-main'>
     <div class='yui-b'>
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendSteps;?></legend>
-        <div class='a-center'>
-          <table class='table-1 bd-1px'>
-            <tr class='colhead'>
-              <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
-              <th><?php echo $lang->testcase->stepDesc;?></th>
-              <th><?php echo $lang->testcase->stepExpect;?></th>
-              <th class='w-100px'><?php echo $lang->actions;?></th>
-            </tr>
-            <?php
-            foreach($case->steps as $stepID => $step)
-            {
-                $stepID += 1;
-                echo "<tr id='row$stepID' class='a-center'>";
-                echo "<th class='stepID'>$stepID</th>";
-                echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "class='w-p100'") . '</td>';
-                echo '<td>' . html::textarea('expects[]', $step->expect, "class='w-p100'") . '</td>';
-                echo "<td class='a-center w-100px'><nobr>";
-                echo "<input type='button' tabindex='-1' class='addbutton' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' /> ";
-                echo "<input type='button' tabindex='-1' class='addbutton' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  /> ";
-                echo "<input type='button' tabindex='-1' class='delbutton' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   /> ";
-                echo "</nobr></td>";
-                echo '</tr>';
-            }
-            ?>
-          </table>
-        </div>
-      </fieldset>
+      <table class='table-1'>
+        <tr class='colhead'>
+          <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
+          <th><?php echo $lang->testcase->stepDesc;?></th>
+          <th><?php echo $lang->testcase->stepExpect;?></th>
+          <th class='w-100px'><?php echo $lang->actions;?></th>
+        </tr>
+        <?php
+        foreach($case->steps as $stepID => $step)
+        {
+            $stepID += 1;
+            echo "<tr id='row$stepID' class='a-center'>";
+            echo "<th class='stepID'>$stepID</th>";
+            echo '<td class="w-p50">' . html::textarea('steps[]', $step->desc, "rows='3' class='w-p100'") . '</td>';
+            echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='w-p100'") . '</td>';
+            echo "<td class='a-center w-100px'><nobr>";
+            echo "<input type='button' tabindex='-1' class='addbutton' onclick='preInsert($stepID)'  value='{$lang->testcase->insertBefore}' /><br />";
+            echo "<input type='button' tabindex='-1' class='addbutton' onclick='postInsert($stepID)' value='{$lang->testcase->insertAfter}'  /><br /> ";
+            echo "<input type='button' tabindex='-1' class='delbutton' onclick='deleteRow($stepID)'  value='{$lang->testcase->deleteStep}'   /><br /> ";
+            echo "</nobr></td>";
+            echo '</tr>';
+        }
+        ?>
+      </table>
 
       <fieldset>
         <legend><?php echo $lang->testcase->legendComment;?></legend>

@@ -33,26 +33,23 @@
 <div class='yui-d0 yui-t8'>
   <div class='yui-main'>
     <div class='yui-b'>
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendSteps;?></legend>
-        <table class='table-1 bd-1px bd-gray colored'>
-          <tr class='colhead'>
-          <th class='w-30px bd-1px bd-gray'><?php echo $lang->testcase->stepID;?></td>
-          <th class='w-p70 bd-1px bd-gray'><?php echo $lang->testcase->stepDesc;?></td>
-          <th class='bd-1px bd-gray'><?php echo $lang->testcase->stepExpect;?></td>
-          </tr> 
-        <?php
-        foreach($case->steps as $stepID => $step)
-        {
-            $stepID += 1;
-            echo "<tr class='bd-1px bd-gray'><th class='bd-1px bd-gray'>$stepID</th>";
-            echo "<td class='bd-1px bd-gray'>" . nl2br($step->desc) . "</td>";
-            echo "<td>" . nl2br($step->expect) . "</td>";
-            echo "</tr>";
-        }
-        ?>
-        </table>
-      </fieldset>
+      <table class='table-1 colored'>
+        <tr class='colhead'>
+        <th class='w-30px'><?php echo $lang->testcase->stepID;?></td>
+        <th class='w-p70'><?php echo $lang->testcase->stepDesc;?></td>
+        <th><?php echo $lang->testcase->stepExpect;?></td>
+        </tr> 
+      <?php
+      foreach($case->steps as $stepID => $step)
+      {
+          $stepID += 1;
+          echo "<tr><th class='rowhead w-id a-center strong'>$stepID</th>";
+          echo "<td>" . nl2br($step->desc) . "</td>";
+          echo "<td>" . nl2br($step->expect) . "</td>";
+          echo "</tr>";
+      }
+      ?>
+      </table>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>

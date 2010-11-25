@@ -56,9 +56,9 @@ $lang->testcase->delete         = "删除用例";
 $lang->testcase->browse         = "用例列表";
 $lang->testcase->confirmStoryChange = '确认需求变动';
 
-$lang->testcase->deleteStep     = 'ｘ';
-$lang->testcase->insertBefore   = '＋↑';
-$lang->testcase->insertAfter    = '＋↓';
+$lang->testcase->deleteStep     = '删除';
+$lang->testcase->insertBefore   = '之前添加';
+$lang->testcase->insertAfter    = '之后添加';
 
 $lang->testcase->selectProduct  = '请选择产品';
 $lang->testcase->byModule       = '按模块';

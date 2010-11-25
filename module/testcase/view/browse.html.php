@@ -76,9 +76,10 @@ function browseBySearch(active)
           </tr>
           <?php foreach($cases as $case):?>
           <tr class='a-center'>
-            <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
+            <?php $viewLink = inlink('view', "caseID=$case->id");?>
+            <td><?php echo html::a($viewLink, sprintf('%03d', $case->id));?></td>
             <td><?php echo $case->pri?></td>
-            <td class='a-left'><?php echo $case->title;?></td>
+            <td class='a-left'><?php echo html::a($viewLink, $case->title);?></td>
             <?php if($browseType == 'needconfirm'):?>
             <td class='a-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
             <td><?php echo html::a(inlink('confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');?></td>
