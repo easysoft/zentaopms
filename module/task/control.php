@@ -288,6 +288,40 @@ class task extends control
     }
 
     /**
+     * Activate a task.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function activate($taskID)
+    {
+        $this->commonAction($taskID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->task->changeStatus($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $action = !empty($changes) ? 'Started' : 'Commented';
+                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
+        $this->view->position[]    = $this->lang->task->activate;
+        $this->display();
+    }
+    
+
+
+    /**
      * Delete a task.
      * 
      * @param  int    $projectID 

@@ -82,6 +82,7 @@ class taskModel extends model
             ->setIF($this->post->status == 'cancel', 'closedBy',     $this->post->canceledBy  ? $this->post->canceledBy   : $this->app->user->account)
             ->setIF($this->post->status == 'cancel', 'closedDate',   $this->post->canceledDate? $this->post->canceledDate : $now)
             ->setIF($this->post->status == 'cancel', 'closedReason', 'cancel')
+            ->setIF($this->post->status == 'cancel', 'status', 'closed')
 
             ->setIF($this->post->status == 'closed' and !$this->post->closedBy,     'closedBy',     $this->app->user->account)
             ->setIF($this->post->status == 'closed' and !$this->post->closedDate,   'closedDate',   $now)
@@ -102,15 +103,14 @@ class taskModel extends model
             ->checkIF($task->consumed != false, 'consumed', 'float')
             ->checkIF($task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
 
-            ->batchCheckIF($task->status == 'waiting' or $task->status == 'doing', 'finishedBy, finishedDate, closedBy, closedDate, closedReason', 'empty')
+            ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
             ->checkIF($task->status == 'done', 'consumed', 'notempty')
             ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
-
-            ->checkIF($task->status == 'cancel', 'finishedBy',  'empty')
-            ->checkIF($task->status == 'cancel', 'finishedDate','empty')
+            ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
             ->checkIF($task->status == 'closed', 'closedReason', 'notempty')
+            ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
         if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
