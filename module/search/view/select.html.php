@@ -26,9 +26,8 @@ function setField(fieldName, fieldNO)
     htmlString = $('#box' + fieldName).html().replace(fieldName, 'value' + fieldNO).replace(fieldName, 'value' + fieldNO);
     $('#valueBox' + fieldNO).html(htmlString);
 }
-function setSelected()
+function setSelected(result)
 {
-    result = $(":radio:checked").val();
     if(module == 'story') parent.$('#story').val(result);
     else if(module == 'task') parent.$('#task').val(result);
     parent.$.fn.colorbox.close();
@@ -83,10 +82,9 @@ foreach($fieldParams as $fieldName => $param)
   <?php if(!$title) continue;?>    
     <tr class='a-center'>
       <td class='a-left nobr'><nobr><?php echo $title;?></nobr></td>
-      <td><input type='radio' name='moduleTitle' value='<?php echo $id;?>' <?php if($id == $moduleID) echo "checked='checked'";?>></td>
+      <td><input type='radio' name='moduleTitle' onclick=setSelected(this.value) value='<?php echo $id;?>' <?php if($id == $moduleID) echo "checked='checked'";?>></td>
     </tr>
   <?php endforeach;?>
   </tbody>
 </table>
-<div class='a-center'><?php echo html::submitButton($lang->confirm, "onclick=setSelected()");?></div>
 </form>
