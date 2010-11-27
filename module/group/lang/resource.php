@@ -219,7 +219,7 @@ $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
 $lang->resource->search->saveQuery    = 'saveQuery';
 $lang->resource->search->deleteQuery  = 'deleteQuery';
-//$lang->resource->search->select       = 'select';
+$lang->resource->search->select       = 'select';
 
 /* Admin. */
 $lang->resource->admin->index         = 'index';

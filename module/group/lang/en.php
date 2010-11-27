@@ -37,5 +37,6 @@ $lang->group->outside  = 'Other users';
 $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
 
-$lang->group->newPriv['my']['test'] = 'Test';
+$lang->group->newPriv['my']['test']       = 'Test';
+$lang->group->newPriv['search']['select'] = 'Stories/Tasks filter';
 include (dirname(__FILE__) . '/resource.php');

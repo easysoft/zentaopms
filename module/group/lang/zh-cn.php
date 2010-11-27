@@ -37,5 +37,6 @@ $lang->group->outside  = '组外用户';
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
-$lang->group->newPriv['my']['test'] = '我的测试';
+$lang->group->newPriv['my']['test']       = '我的测试';
+$lang->group->newPriv['search']['select'] = '需求/任务筛选';
 include (dirname(__FILE__) . '/resource.php');
