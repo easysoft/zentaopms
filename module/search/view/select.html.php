@@ -75,7 +75,7 @@ foreach($fieldParams as $fieldName => $param)
   <thead>
     <tr class='colhead'>
       <th><?php echo $lang->search->{$module . 'Title'};?></th>
-      <th class='w-30px {sorter:false}'><?php echo $lang->search->select;?></th>
+      <th class='w-100px {sorter:false}'><?php echo $lang->search->select;?></th>
     </tr> 
   </thead>
   <tbody>

@@ -92,7 +92,7 @@ class search extends control
         if($module == 'story')
         {
             $fieldParams  = $this->config->product->search;
-            $moduleTitles = $projectID ? $this->loadModel('story')->getProjectStoryPairs($projectID) : $this->loadModel('story')->getProductStoryPairs($productID);
+            $moduleTitles = $projectID ? $this->loadModel('story')->getProjectStoryPairs($projectID, $productID) : $this->loadModel('story')->getProductStoryPairs($productID);
         }
         else if($module == 'task')
         {

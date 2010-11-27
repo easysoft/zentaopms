@@ -191,12 +191,36 @@ function setDuplicate(resolution)
     }
 }
 
+/**
+ * Get story or task list.
+ * 
+ * @param  string $module 
+ * @access public
+ * @return void
+ */
+function getList(module)
+{
+    productID = $('#product').get(0).value;
+    projectID = $('#project').get(0).value;
+    storyID   = $('#story').get(0).value;
+    taskID    = $('#task').get(0).value;
+    if(module == 'story')
+    {
+        link = createLink('search', 'select', 'productID=' + productID + '&projectID=' + projectID + '&module=story&moduleID=' + storyID);
+        $('#storyListIdBox a').attr("href", link);
+    }
+    else
+    {
+        link = createLink('search', 'select', 'productID=' + productID + '&projectID=' + projectID + '&module=task&moduleID=' + taskID);
+        $('#taskListIdBox a').attr("href", link);
+    }
+}
+
 var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
     $("#searchTasks").colorbox({width:680, height:400, iframe:true, transition:'none'});
-
 });
 </script>
 <form method='post' target='hiddenwin' enctype='multipart/form-data'>
@@ -302,13 +326,13 @@ $(function() {
         <tr>
           <td class='rowhead'><?php echo $lang->bug->story;?></td>
           <td><div id='storyIdBox' class='searchleft'><?php echo html::select('story', $stories, $bug->story, "class=select-3");?></div>
-          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=$bug->project&module=story&storyID=$bug->story"), $lang->go, "_blank", "class='search' id='searchStories'");?>
+          <div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList('story')");?></div>
           </td>
         </tr>
         <tr>
           <td class='rowhead'><?php echo $lang->bug->task;?></td>
           <td><div id='taskIdBox' class='searchleft'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></div>
-          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=$bug->project&module=task&taskID=$bug->task"), $lang->go, "_blank", "class='search' id='searchTasks'");?>
+          <div id='taskListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchTasks' onclick=getList('task')");?></div>
           </td>
         </tr>
       </table>
