@@ -1340,6 +1340,8 @@ class router
      */
     public function loadConfig($moduleName, $exitIfNone = true)
     {
+        $extConfigFiles = array();
+
         /* Set the main config file and extension config file. */
         if($moduleName == 'common')
         {
