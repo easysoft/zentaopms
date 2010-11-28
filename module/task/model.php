@@ -189,7 +189,8 @@ class taskModel extends model
             ->setDefault('assignedDate', $now)
             ->setDefault('closedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('closedDate, lastEditedDate', $now) 
-            ->setDefault('closedReason', 'done') 
+            ->setIF($oldTask->status == 'done',   'closedReason', 'done') 
+            ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel') 
             ->remove('comment')->get();
         $this->setStatus($task);
 
