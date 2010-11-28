@@ -35,3 +35,5 @@ UPDATE zt_task SET assignedTo = owner ;
 ALTER TABLE `zt_task` DROP `owner`;
 ALTER TABLE `zt_task` CHANGE `status` `status` ENUM( 'wait', 'doing', 'done', 'cancel', 'closed' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'wait';
 ALTER TABLE `zt_task` ADD `closedReason` VARCHAR( 30 ) NOT NULL AFTER `closedDate` ;
+
+update zt_groupPriv set method='finish' where module='task' and method='complete';
