@@ -23,14 +23,14 @@ include '../framework/helper.class.php';
 $startTime = getTime();
 
 /* Instance the app. */
-$app    = router::createApp('pms', dirname(dirname(__FILE__)));
-$common = $app->loadCommon();
+$app = router::createApp('pms', dirname(dirname(__FILE__)));
 
 /* Check the reqeust is getconfig or not. Check installed or not. */
 if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die($app->exportConfig());  // 
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
 
 /* Run the app. */
+$common = $app->loadCommon();
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
