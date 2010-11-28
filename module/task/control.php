@@ -203,13 +203,12 @@ class task extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->changeStatus($taskID);
+            $changes = $this->task->start($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $action = !empty($changes) ? 'Started' : 'Commented';
-                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $actionID = $this->action->create('task', $taskID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
@@ -222,36 +221,68 @@ class task extends control
     }
     
     /**
-     * Complete a task.
+     * Finish a task.
      * 
      * @param  int    $taskID 
      * @access public
      * @return void
      */
-    public function complete($taskID)
+    public function finish($taskID)
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->changeStatus($taskID);
+            $changes = $this->task->finish($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $action = !empty($changes) ? 'Finished' : 'Commented';
-                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $actionID = $this->action->create('task', $taskID, 'Finished', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->complete;
-        $this->view->position[]    = $this->lang->task->complete;
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->position[]    = $this->lang->task->finish;
         
         $this->display();
+    }
+
+    /**
+     * Close a task.
+     * 
+     * @param  int      $taskID 
+     * @access public
+     * @return void
+     */
+    public function close($taskID)
+    {
+        $this->commonAction($taskID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->task->close($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('task', $taskID, 'Closed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->position[]    = $this->lang->task->finish;
+        
+        $this->display();
+
     }
 
     /**
@@ -268,13 +299,12 @@ class task extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->changeStatus($taskID);
+            $changes = $this->task->cancel($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $action = !empty($changes) ? 'Canceled' : 'Commented';
-                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $actionID = $this->action->create('task', $taskID, 'Canceled', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
@@ -301,25 +331,22 @@ class task extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->changeStatus($taskID);
+            $changes = $this->task->activate($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $action = !empty($changes) ? 'Started' : 'Commented';
-                $actionID = $this->action->create('task', $taskID, $action, $this->post->comment);
+                $actionID = $this->action->create('task', $taskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->activate;
         $this->view->position[]    = $this->lang->task->activate;
         $this->display();
     }
-    
-
 
     /**
      * Delete a task.

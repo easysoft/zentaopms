@@ -3,7 +3,8 @@ global $lang;
 $config->task->create->requiredFields   = 'name,estimate,type,pri';
 $config->task->edit->requiredFields     = $config->task->create->requiredFields;
 $config->task->start->requiredFields    = 'estimate';
-$config->task->complete->requiredFields = $config->task->start->requiredFields;
+$config->task->finish->requiredFields   = 'consumed';
+$config->task->activate->requiredFields = 'left';
 
 $config->task->search['module']                   = 'task';
 $config->task->search['fields']['name']           = $lang->task->name;

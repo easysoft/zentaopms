@@ -86,10 +86,6 @@ $(document).ready(function()
         <td><?php echo html::select('type', $lang->task->typeList, '', 'class=select-3 onchange="setOwners(this.value)"');?></td>
       </tr>
       <tr>
-        <th class='rowhead'><?php echo $lang->task->status;?></th>
-        <td><?php echo html::select('status', $lang->task->statusList, 'wait', 'class=select-3');?></td>
-      </tr>
-      <tr>
         <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
         <td><?php echo html::select('assignedTo[]', $members, '', 'class=select-3');?></td>
       </tr>
