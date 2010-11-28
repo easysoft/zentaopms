@@ -291,7 +291,7 @@ class taskModel extends model
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
-     * @return array|bool
+     * @return array
      */
     public function getProjectTasks($projectID, $status = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
@@ -303,12 +303,14 @@ class taskModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
+            ->beginIF($status == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($status == 'delayed')->andWhere('deadline')->lt(helper::now())->fi()
             ->beginIF($status != 'all' and $status != 'needConfirm')->andWhere('t1.status')->in($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
         if($tasks) return $this->processTasks($tasks);
-        return false;
+        return array();
     }
 
     /**

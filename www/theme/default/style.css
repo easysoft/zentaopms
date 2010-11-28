@@ -255,7 +255,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #featurebar select         {font-size:12px; height:22px; margin-top:3px;}
 
 #featurebar .active a       {color:#009900; font-weight:bold;}
-#featurebar .active select  {border:1px solid #0000ff;}
+#featurebar .active select  {border:3px solid #009900;}
 
 /* Tree menu. */
 #tree li      {list-style-type:none;}

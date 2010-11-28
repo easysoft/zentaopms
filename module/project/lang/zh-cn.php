@@ -82,16 +82,21 @@ $lang->project->importTask     = '导入之前未完';
 $lang->project->ajaxGetProducts= '接口：获得项目产品列表';
 
 /* 分组浏览。*/
-$lang->project->listTask            = '列表方式';
-$lang->project->groupTaskByStory    = '需求分组';
-$lang->project->groupTaskByStatus   = '状态分组';
-$lang->project->groupTaskByPri      = '优先级分组';
-$lang->project->groupTaskByOwner    = '指派给分组';
-$lang->project->groupTaskByEstimate = '预计分组';
-$lang->project->groupTaskByConsumed = '已消耗分组';
-$lang->project->groupTaskByLeft     = '剩余分组';
-$lang->project->groupTaskByType     = '类型分组';
-$lang->project->groupTaskByDeadline = '截止分组';
+$lang->project->allTasks            = '所有任务';
+$lang->project->assignedToMe        = '指派给我';
+$lang->project->statusWait          = '未开始';
+$lang->project->statusDoing         = '进行中';
+$lang->project->statusDone          = '已完成';
+$lang->project->delayed             = '已延期';
+$lang->project->groups['story']     = '需求分组';
+$lang->project->groups['status']    = '状态分组';
+$lang->project->groups['pri']       = '优先级分组';
+$lang->project->groups['assignedTo']= '指派给分组';
+$lang->project->groups['estimate']  = '预计分组';
+$lang->project->groups['consumed']  = '已消耗分组';
+$lang->project->groups['left']      = '剩余分组';
+$lang->project->groups['type']      = '类型分组';
+$lang->project->groups['deadline']  = '截止分组';
 $lang->project->listTaskNeedConfrim = '需求变动';
 
 /* 页面提示。*/

@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-/* 字段列表.*/
+/* Fields. */
 $lang->project->common       = 'Project';
 $lang->project->id           = 'ID';
 $lang->project->company      = 'Company';
@@ -46,7 +46,7 @@ $lang->team->role        = 'Role';
 $lang->team->joinDate    = 'Join date';
 $lang->team->workingHour = 'Hour/Day';
 
-/* 字段取值列表.*/
+/* Lists. */
 $lang->project->statusList['']      = '';
 $lang->project->statusList['wait']  = 'Waitting';
 $lang->project->statusList['doing'] = 'Doing';
@@ -56,7 +56,7 @@ $lang->project->aclList['open']    = 'Default(Having the priviledge of project m
 $lang->project->aclList['private'] = 'Private(Only team members can visit)';
 $lang->project->aclList['custom']  = 'Whitelist(Team members and who belongs to the whitelist grups can visit)';
 
-/* 方法列表.*/
+/* Methods.*/
 $lang->project->index          = "Index";
 $lang->project->task           = 'Task';
 $lang->project->groupTask      = 'View task by group';
@@ -81,20 +81,25 @@ $lang->project->unlinkStory    = 'Remove story';
 $lang->project->importTask     = 'Import undone';
 $lang->project->ajaxGetProducts= "API: get project's products";
 
-/* 分组浏览.*/
-$lang->project->listTask            = 'List';
-$lang->project->groupTaskByStory    = 'By story';
-$lang->project->groupTaskByStatus   = 'By status';
-$lang->project->groupTaskByPri      = 'By priority';
-$lang->project->groupTaskByOwner    = 'By owner';
-$lang->project->groupTaskByEstimate = 'By estimate';
-$lang->project->groupTaskByConsumed = 'By consumed';
-$lang->project->groupTaskByLeft     = 'By left';
-$lang->project->groupTaskByType     = 'By type';
-$lang->project->groupTaskByDeadline = 'BY deadline';
+/* Browse. */
+$lang->project->allTasks            = 'All';
+$lang->project->assignedToMe        = 'My';
+$lang->project->statusWait          = 'Wait';
+$lang->project->statusDoing         = 'Doing';
+$lang->project->statusDone          = 'Done';
+$lang->project->delayed             = 'Delayed';
+$lang->project->groups['story']     = 'Group by story';
+$lang->project->groups['status']    = 'Group by status';
+$lang->project->groups['pri']       = 'Group by priority';
+$lang->project->groups['assignedTo']= 'Group by assignedTo';
+$lang->project->groups['estimate']  = 'Group by estimate';
+$lang->project->groups['consumed']  = 'Group by consumed';
+$lang->project->groups['left']      = 'Group by left';
+$lang->project->groups['type']      = 'Group by type';
+$lang->project->groups['deadline']  = 'Group by deadline';
 $lang->project->listTaskNeedConfrim = 'Story changed';
 
-/* 页面提示.*/
+/* Notcie. */
 $lang->project->selectProject  = "Select project";
 $lang->project->beginAndEnd    = 'Begin and end';
 $lang->project->lblStats       = 'Stats';
@@ -104,14 +109,14 @@ $lang->project->storySummary   = "Total 『%s』stories, estimate『%s』hours."
 $lang->project->wbs            = "WBS";
 $lang->project->largeBurnChart = 'View large';
 
-/* 交互提示.*/
+/* Confirm. */
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';
 $lang->project->confirmUnlinkMember   = 'Are you sure to remove this user from this project?';
 $lang->project->confirmUnlinkStory    = 'Are you sure to remove the story from this project?';
 $lang->project->errorNoLinkedProducts = 'There is no linked products, go to the link page.';
 $lang->project->accessDenied          = 'Access to this project denied.';
 
-/* 统计.*/
+/* Report. */
 $lang->project->charts->burn->graph->caption      = "Burndown chart";
 $lang->project->charts->burn->graph->xAxisName    = "Date";
 $lang->project->charts->burn->graph->yAxisName    = "HOUR";

@@ -1,18 +1,25 @@
+<script language='Javascript'>
+function switchGroup(projectID, groupBy)
+{
+    link = createLink('project', 'groupTask', 'project=' + projectID + '&groupBy=' + groupBy);
+    location.href=link;
+}
+</script>
 <div class="yui-d0">
   <div id='featurebar'>
     <div class='f-left'>
     <?php
-    echo "<span id='list'>"      ; common::printLink('project', 'task',      "project=$project->id",                   $lang->project->listTask);            echo  '</span>' ;
-    echo "<span id='story'>"     ; common::printLink('project', 'groupTask', "project=$project->id&groupby=story",     $lang->project->groupTaskByStory);    echo  '</span>' ;
-    echo "<span id='status'>"    ; common::printLink('project', 'groupTask', "project=$project->id&groupby=status",    $lang->project->groupTaskByStatus);   echo  '</span>' ;
-    echo "<span id='pri'>"       ; common::printLink('project', 'groupTask', "project=$project->id&groupby=pri",       $lang->project->groupTaskByPri);      echo  '</span>' ;
-    echo "<span id='assignedto'>"; common::printLink('project', 'groupTask', "project=$project->id&groupby=assignedTo",     $lang->project->groupTaskByOwner);    echo  '</span>' ;
-    echo "<span id='estimate'>"  ; common::printLink('project', 'groupTask', "project=$project->id&groupby=estimate",  $lang->project->groupTaskByEstimate); echo  '</span>' ;
-    echo "<span id='consumed'>"  ; common::printLink('project', 'groupTask', "project=$project->id&groupby=consumed",  $lang->project->groupTaskByConsumed); echo  '</span>' ;
-    echo "<span id='left'>"      ; common::printLink('project', 'groupTask', "project=$project->id&groupby=left",      $lang->project->groupTaskByLeft);     echo  '</span>' ;
-    echo "<span id='type'>"      ; common::printLink('project', 'groupTask', "project=$project->id&groupby=type",      $lang->project->groupTaskByType);     echo  '</span>' ;
-    echo "<span id='deadline'>"  ; common::printLink('project', 'groupTask', "project=$project->id&groupby=deadline",  $lang->project->groupTaskByDeadline); echo  '</span>' ;
-    echo "<span id='needconfirm'>"; common::printLink('project', 'task',  "project=$project->id&status=needConfirm",$lang->project->listTaskNeedConfrim); echo  '</span>' ;
+    echo "<span id='allTab'>"         ; common::printLink('project', 'task', "project=$project->id",                   $lang->project->allTasks);     echo  '</span>' ;
+    echo "<span id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$project->id&type=assignedtome", $lang->project->assignedToMe); echo  '</span>' ;
+    echo "<span id='waitTab'>"        ; common::printLink('project', 'task', "project=$project->id&type=wait",         $lang->project->statusWait);   echo  '</span>' ;
+    echo "<span id='doingTab'>"       ; common::printLink('project', 'task', "project=$project->id&type=doing",        $lang->project->statusDoing);  echo  '</span>' ;
+    echo "<span id='doneTab'>"        ; common::printLink('project', 'task', "project=$project->id&type=done",         $lang->project->statusDone);   echo  '</span>' ;
+    echo "<span id='delayedTab'>"     ; common::printLink('project', 'task', "project=$project->id&type=delayed",      $lang->project->delayed);      echo  '</span>' ;
+
+    echo "<span id='groupTab'>";
+    echo html::select('groupBy', $lang->project->groups, isset($groupBy) ? $groupBy : '', "onchange='switchGroup({$project->id}, this.value)'");
+    echo "</span>";
+    echo "<span id='needconfirmTab'>"; common::printLink('project', 'task',  "project=$project->id&status=needConfirm",$lang->project->listTaskNeedConfrim); echo  '</span>' ;
     ?>
     </div>
     <div class='f-right'>

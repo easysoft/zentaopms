@@ -84,5 +84,5 @@
   </table>
   <div class='a-right'><?php echo $pager;?></div>
 </div>  
-<script language='Javascript'>$('#<?php echo $browseType;?>').addClass('active');</script>
+<script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

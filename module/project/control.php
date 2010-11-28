@@ -130,7 +130,7 @@ class project extends control
         $this->view->recTotal   = $pager->recTotal;
         $this->view->recPerPage = $pager->recPerPage;
         $this->view->orderBy    = $orderBy;
-        $this->view->browseType = $status != 'needConfirm' ? 'list' : 'needconfirm';
+        $this->view->browseType = strtolower($status);
 
         $this->display();
     }
@@ -192,7 +192,8 @@ class project extends control
         $this->view->tasks       = $groupTasks;
         $this->view->tabID       = 'task';
         $this->view->groupByList = $groupByList;
-        $this->view->browseType  = $groupBy;
+        $this->view->browseType  = 'group';
+        $this->view->groupBy     = $groupBy;
         $this->display();
     }
 
