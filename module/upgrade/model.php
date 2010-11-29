@@ -388,9 +388,9 @@ class upgradeModel extends model
      */
     private function upgradeFrom1_3To1_4()
     {
-        $this->execSQL($this->getUpgradeFile('1.3'));
         $this->updateNL1_3();
         $this->updateTasks();
+        $this->execSQL($this->getUpgradeFile('1.3'));
         if(!$this->isError()) $this->setting->updateVersion('1.4');
     }
 

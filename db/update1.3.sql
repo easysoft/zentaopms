@@ -37,3 +37,6 @@ ALTER TABLE `zt_task` CHANGE `status` `status` ENUM( 'wait', 'doing', 'done', 'c
 ALTER TABLE `zt_task` ADD `closedReason` VARCHAR( 30 ) NOT NULL AFTER `closedDate` ;
 
 update zt_groupPriv set method='finish' where module='task' and method='complete';
+
+UPDATE zt_task SET assignedTo = openedBy,assignedDate = finishedDate WHERE STATUS = 'done';
+UPDATE zt_task SET assignedTo = openedBy,assignedDate = canceledDate WHERE STATUS = 'cancel';

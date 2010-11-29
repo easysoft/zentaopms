@@ -289,24 +289,25 @@ class taskModel extends model
      * 
      * @param  int    $projectID 
      * @param  string $status       all|needConfirm|wait|doing|done|cancel
-     * @param  string $orderBy 
+     * @param  string $type 
      * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getProjectTasks($projectID, $status = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
+    public function getProjectTasks($projectID, $type = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
+        $type    = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($status == 'needConfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
-            ->beginIF($status == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
-            ->beginIF($status == 'delayed')->andWhere('deadline')->lt(helper::now())->fi()
-            ->beginIF($status != 'all' and $status != 'needConfirm')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
+            ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'delayed')->andWhere('deadline')->lt(helper::now())->fi()
+            ->beginIF(strpos('all|needconfirm|assignedtome|delayed', $type) === false)->andWhere('t1.status')->in($type)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
