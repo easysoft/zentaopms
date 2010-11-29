@@ -89,10 +89,11 @@ class my extends control
     /**
      * My tasks.
      * 
+     * @param  string $type the browse type
      * @access public
      * @return void
      */
-    public function task()
+    public function task($type = 'assignedto')
     {
         /* Save session. */
         $this->session->set('taskList',  $this->app->getURI(true));
@@ -102,7 +103,9 @@ class my extends control
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[]    = $this->lang->my->task;
         $this->view->tabID         = 'task';
-        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, 'wait,doing');
+        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, $type);
+        $this->view->type          = $type;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

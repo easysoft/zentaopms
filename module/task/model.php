@@ -342,11 +342,11 @@ class taskModel extends model
      * Get tasks of a user.
      * 
      * @param  string $account 
-     * @param  string $status 
+     * @param  string $type     the query type 
      * @access public
      * @return array
      */
-    public function getUserTasks($account, $status = 'all')
+    public function getUserTasks($account, $type = 'assignedto')
     {
         $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
             ->from(TABLE_TASK)->alias('t1')
@@ -354,9 +354,12 @@ class taskModel extends model
             ->on('t1.project = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')
             ->on('t1.story = t3.id')
-            ->where('t1.assignedTo')->eq($account)
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($type == 'openedby')->andWhere('t1.openedBy')->eq($account)->fi()
+            ->beginIF($type == 'assignedto')->andWhere('t1.assignedto')->eq($account)->fi()
+            ->beginIF($type == 'finishedby')->andWhere('t1.finishedby')->eq($account)->fi()
+            ->beginIF($type == 'closedby')->andWhere('t1.closedby')->eq($account)->fi()
+            ->beginIF($type == 'canceledby')->andWhere('t1.canceledby')->eq($account)->fi()
             ->fetchAll();
         if($tasks) return $this->processTasks($tasks);
         return array();

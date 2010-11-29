@@ -63,7 +63,5 @@
   </table>
   <?php $pager->show();?>
 </div>
-<script language='javascript'>
-$("#<?php echo $type;?>Tab").addClass('active'); 
-</script>
+<script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

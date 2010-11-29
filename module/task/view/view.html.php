@@ -22,7 +22,7 @@
     if(!$task->deleted)
     {
         //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
-        if(!(($task->status == 'wait'   or $task->status == 'cancel') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
+        if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
         if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
         if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
         if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
@@ -49,7 +49,7 @@
         <?php
         if(!$task->deleted)
         {
-            if(!(($task->status == 'wait'  or $task->status == 'cancel') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
+            if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
             if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
             if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
             if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';

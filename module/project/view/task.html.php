@@ -29,7 +29,7 @@
       <th class='w-date'>  <?php common::printOrderLink('deadline',  $orderBy, $vars, $lang->task->deadlineAB);?></th>
       <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
       <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story);?></th>
-      <th class='w-70px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -66,16 +66,11 @@
         ?>
       </td>
       <td>
-        <?php common::printLink('task', 'edit',   "taskid=$task->id", $lang->edit);?>
-        <?php 
-        if($browseType == 'needconfirm')
-        {
-            common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
-        }
-        else
-        {
-            common::printLink('task', 'delete', "projectID=$task->project&taskid=$task->id", $lang->delete, 'hiddenwin');
-        }
+        <?php
+        if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
+        if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
+        if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
+        if($browseType == 'needconfirm') common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
         ?>
       </td>
     </tr>

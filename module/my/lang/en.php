@@ -1,7 +1,7 @@
 <?php
 $lang->my->common = 'Dashboard';
 
-/* 方法列表。*/
+/* Methods. */
 $lang->my->index       = 'Index';
 $lang->my->todo        = 'Todo';
 $lang->my->task        = 'Task';
@@ -12,3 +12,9 @@ $lang->my->project     = 'Project';
 $lang->my->team        = 'Team';
 $lang->my->profile     = 'Profile';
 $lang->my->editProfile = 'Edit profile';
+
+$lang->my->taskMenu->assignedToMe = 'To me';
+$lang->my->taskMenu->openedByMe   = 'My opened';
+$lang->my->taskMenu->finishedByMe = 'My finished';
+$lang->my->taskMenu->closedByMe   = 'My closed';
+$lang->my->taskMenu->canceledByMe = 'My canceled';
