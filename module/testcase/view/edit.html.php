@@ -13,6 +13,21 @@
 <?php include './header.html.php';?>
 <style>#module{width:90%}</style>
 <script language='javascript'>
+/**
+ * Get story list.
+ * 
+ * @param  string $module 
+ * @access public
+ * @return void
+ */
+function getList()
+{
+    productID = $('#product').get(0).value;
+    storyID   = $('#story').get(0).value;
+    link = createLink('search', 'select', 'productID=' + productID + '&projectID=0&module=story&moduleID=' + storyID);
+    $('#storyListIdBox a').attr("href", link);
+}
+
 $(document).ready(function()
 {
     $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
@@ -91,7 +106,7 @@ $(document).ready(function()
         <tr>
           <td class='rowhead'><?php echo $lang->testcase->story;?></td>
           <td class='a-left'><div id='storyIdBox' class='searchleft'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
-          <?php echo html::a($this->createLink('search', 'select', "productID=$productID&projectID=0&module=story&storyID=$case->story"), $lang->go, "_blank", "class='search' id='searchStories'");?>
+          <div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList()");?></div>
           </td>       
         </tr>
         <tr>

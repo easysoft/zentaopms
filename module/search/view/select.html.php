@@ -66,7 +66,7 @@ foreach($fieldParams as $fieldName => $param)
   /* 打印值。*/
   echo "<span id='valueBox$fieldNO'>";
   if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
-  if($param['control'] == 'input') echo html::input("value$fieldNO",  $formSession["value$fieldNO"], 'class=text-2');
+  if($param['control'] == 'input') echo html::input("value$fieldNO",  $formSession["value$fieldNO"], 'class=text-4');
   echo '</span>';
   ?>
   </nobr>
