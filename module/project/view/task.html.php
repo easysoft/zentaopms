@@ -16,7 +16,7 @@
 <?php include './taskheader.html.php';?>
 <div class='yui-d0'>
   <table class='table-1 fixed colored tablesorter datatable'>
-    <?php $vars = "projectID=$project->id&status=all&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
+    <?php $vars = "projectID=$project->id&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>
     <tr class='colhead'>
       <th class='w-id'>    <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>

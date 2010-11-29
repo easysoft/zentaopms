@@ -131,6 +131,7 @@ class project extends control
         $this->view->recPerPage = $pager->recPerPage;
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = strtolower($status);
+        $this->view->status     = $status;
 
         $this->display();
     }
