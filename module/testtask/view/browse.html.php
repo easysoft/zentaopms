@@ -24,6 +24,7 @@
       <th><?php echo $lang->testtask->name;?></th>
       <th><?php echo $lang->testtask->project;?></th>
       <th><?php echo $lang->testtask->build;?></th>
+      <th class='w-user'><?php echo $lang->testtask->owner;?></th>
       <th class='w-80px'><?php echo $lang->testtask->begin;?></th>
       <th class='w-80px'><?php echo $lang->testtask->end;?></th>
       <th class='w-50px'><?php echo $lang->statusAB;?></th>
@@ -37,6 +38,7 @@
       <td class='a-left nobr'><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
       <td class='nobr'><?php echo $task->projectName?></td>
       <td class='nobr'><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
+      <td><?php echo $users[$task->owner];?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
       <td><?php echo $lang->testtask->statusList[$task->status];?></td>

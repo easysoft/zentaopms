@@ -69,6 +69,7 @@ class testtask extends control
         $this->view->pager         = $pager;
         $this->view->orderBy       = $orderBy;
         $this->view->tasks         = $this->testtask->getProductTasks($productID);
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
 
         $this->display();
     }
