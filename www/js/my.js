@@ -401,19 +401,20 @@ function setDebugWin(color)
  */
 function setForm()
 {
-      $('form').submit(function()
-      {
-          $(":submit").attr('disabled', 'disabled');
-          $(":submit").attr('value', config.submitting);
-          $(":submit").addClass('button-d');
-      });
+    submitLabel = $(':submit').attr('value');
+    $('form').submit(function()
+    {
+        $(":submit").attr('disabled', 'disabled');
+        $(":submit").attr('value', config.submitting);
+        $(":submit").addClass('button-d');
+    });
 
-      $("body").click(function()
-      {
-          $(":submit").removeAttr('disabled');
-          $(":submit").attr('value', config.save);
-          $(":submit").removeClass('button-d');
-      });
+    $("body").click(function()
+    {
+        $(":submit").removeAttr('disabled');
+        $(":submit").attr('value', submitLabel);
+        $(":submit").removeClass('button-d');
+    });
 }
 
 /**
