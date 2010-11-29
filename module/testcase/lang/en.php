@@ -62,13 +62,13 @@ $lang->testcase->insertAfter    = 'Insert after';
 
 $lang->testcase->selectProduct  = 'Select product';
 $lang->testcase->byModule       = 'By module';
-$lang->testcase->assignToMe     = 'Assigned to me';
-$lang->testcase->openedByMe     = 'Opened by me';
+$lang->testcase->assignToMe     = 'Cases to me';
+$lang->testcase->openedByMe     = 'My Opened cases';
 $lang->testcase->allCases       = 'All case';
 $lang->testcase->needConfirm    = 'Story changed';
 $lang->testcase->moduleCases    = 'By module';
 $lang->testcase->bySearch       = 'By search';
-$lang->testcase->doneByMe       = 'Done by me';
+$lang->testcase->doneByMe       = 'My runed cases';
 
 $lang->testcase->lblProductAndModule         = 'Product & module';
 $lang->testcase->lblTypeAndPri               = 'Type & priority';

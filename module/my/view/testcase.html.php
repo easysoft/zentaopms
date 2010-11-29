@@ -12,16 +12,27 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<script language='javascript'>
+$(document).ready(function()
+{
+    $("a.iframe").colorbox({width:900, height:600, iframe:true, transition:'none'});
+});
+</script>
+
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'>
       <?php
-      echo "<span id='assigntomeTab'>" . html::a(inlink('test', "type=assigntome"),  $lang->testcase->assignToMe) . "</span>";
-      echo "<span id='donebymeTab'>"   . html::a(inlink('test', "type=donebyme"),    $lang->testcase->doneByMe)   . "</span>";
-      echo "<span id='closedbymeTab'>" . html::a(inlink('test', "type=openedbyme"),  $lang->testcase->openedByMe) . "</span>";
+      echo "<span id='testtask'>"      . html::a($this->createLink('my', 'testtask'),  $lang->my->testTask) . "</span>";
+      echo "<span id='assigntomeTab'>" . html::a($this->createLink('my', 'testcase', "type=assigntome"),  $lang->testcase->assignToMe) . "</span>";
+      //echo "<span id='donebymeTab'>"   . html::a($this->createLink('my', 'testcase', "type=donebyme"),    $lang->testcase->doneByMe)   . "</span>";
+      echo "<span id='openedbymeTab'>" . html::a($this->createLink('my', 'testcase', "type=openedbyme"),  $lang->testcase->openedByMe) . "</span>";
       ?>
     </div>
   </div>
+</div>
+
+<div class='yui-d0'>
   <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <table class='table-1 fixed tablesorter'>
     <thead>
@@ -47,7 +58,6 @@
         <td>
           <?php
           common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-          common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
           ?>
         </td>
       </tr>
@@ -56,7 +66,5 @@
   </table>
   <?php $pager->show();?>
 </div>
-<script language="Javascript">
-$("#<?php echo $type;?>Tab").addClass('active'); 
-</script>
+<script language="Javascript">$("#<?php echo $type;?>Tab").addClass('active'); </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -89,6 +89,25 @@ class testtaskModel extends model
     }
 
     /**
+     * Get test tasks by user.
+     * 
+     * @param   string $account 
+     * @access  public
+     * @return  array
+     */
+    public function getByUser($account)
+    {
+        return $this->dao->select('t1.*, t2.name AS projectName, t3.name AS buildName')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.owner')->eq($account)
+            ->orderBy('id desc')
+            ->fetchAll();
+    }
+
+    /**
      * Update a test task.
      * 
      * @param  int   $taskID 

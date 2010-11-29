@@ -62,13 +62,13 @@ $lang->testcase->insertAfter    = '之后添加';
 
 $lang->testcase->selectProduct  = '请选择产品';
 $lang->testcase->byModule       = '按模块';
-$lang->testcase->assignToMe     = '指派给我';
-$lang->testcase->openedByMe     = '由我创建';
+$lang->testcase->assignToMe     = '指派给我的用例';
+$lang->testcase->openedByMe     = '由我创建的用例';
 $lang->testcase->allCases       = '所有Case';
 $lang->testcase->needConfirm    = '需求有变动的用例';
 $lang->testcase->moduleCases    = '按模块浏览';
 $lang->testcase->bySearch       = '搜索';
-$lang->testcase->doneByMe       = '我完成的';
+$lang->testcase->doneByMe       = '我完成的用例';
 
 $lang->testcase->lblProductAndModule         = '产品模块';
 $lang->testcase->lblTypeAndPri               = '类型&优先级';

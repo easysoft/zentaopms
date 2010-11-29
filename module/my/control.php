@@ -170,7 +170,28 @@ class my extends control
     }
 
     /**
-     * My test.
+     * My test task.
+     * 
+     * @access public
+     * @return void
+     */
+    public function testtask()
+    {
+        /* Save session. */
+        $this->session->set('testtaskList', $this->app->getURI(true));
+
+        $this->app->loadLang('testcase');
+
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->testTask;
+        $this->view->position[]    = $this->lang->my->testTask;
+        $this->view->tasks         = $this->loadModel('testtask')->getByUser($this->app->user->account);
+        
+        $this->display();
+
+    }
+
+    /**
+     * My test case.
      * 
      * @param  string $type 
      * @param  string $orderBy 
@@ -180,10 +201,10 @@ class my extends control
      * @access public
      * @return void
      */
-    public function test($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        $this->session->set('testList', $this->app->getURI(true));
+        $this->session->set('caseList', $this->app->getURI(true));
         $this->app->loadLang('testcase');
         
         /* Load pager. */
@@ -195,8 +216,10 @@ class my extends control
         {
             $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
                 ->Where('t1.assignedTo')->eq($this->app->user->account)
                 ->andWhere('t1.status')->ne('done')
+                ->andWhere('t3.status')->ne('done')
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($type == 'donebyme')
@@ -215,8 +238,8 @@ class my extends control
         }
         
         /* Assign. */
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->test;
-        $this->view->position[]    = $this->lang->my->test;
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->testCase;
+        $this->view->position[]    = $this->lang->my->testCase;
         $this->view->cases         = $cases;
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->tabID         = 'test';
