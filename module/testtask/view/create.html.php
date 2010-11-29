@@ -13,6 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<script language='Javascript'>
+function loadBuilds()
+{
+}
+</script>
 <div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
@@ -24,6 +29,10 @@
       <tr>
         <th class='rowhead'><?php echo $lang->testtask->build;?></th>
         <td><?php echo html::select('build', $builds, '', 'class=select-3');?></td>
+      </tr>  
+      <tr>
+        <th class='rowhead'><?php echo $lang->testtask->owner;?></th>
+        <td><?php echo html::select('owner', $users, '', 'class=select-3');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->testtask->begin;?></th>

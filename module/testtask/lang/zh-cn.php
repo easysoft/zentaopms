@@ -30,6 +30,7 @@ $lang->testtask->id             = '任务编号';
 $lang->testtask->product        = '所属产品';
 $lang->testtask->project        = '所属项目';
 $lang->testtask->build          = 'Build';
+$lang->testtask->owner          = '负责人';
 $lang->testtask->name           = '任务名称';
 $lang->testtask->begin          = '开始日期';
 $lang->testtask->end            = '结束日期';

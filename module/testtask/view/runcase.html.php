@@ -14,7 +14,7 @@
 <style>body{background:white}</style>
 <div class='yui-d0'>
   <form method='post'>
-  <table class='table-1 bd-1px'>
+  <table class='table-1'>
     <caption class='caption-tl'>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></caption>
     <tr class='colhead'>
       <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>

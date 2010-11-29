@@ -28,6 +28,10 @@
       <td><?php $task->buildName ? print($task->buildName) : print($task->build);?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->testtask->owner;?></th>
+      <td><?php echo $users[$task->owner];?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
       <td><?php echo $task->begin;?></td>
     </tr>  

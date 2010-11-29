@@ -30,6 +30,7 @@ $lang->testtask->id             = 'ID';
 $lang->testtask->product        = 'Product';
 $lang->testtask->project        = 'Project';
 $lang->testtask->build          = 'Build';
+$lang->testtask->owner          = 'Owner';
 $lang->testtask->name           = 'Name';
 $lang->testtask->begin          = 'Begin';
 $lang->testtask->end            = 'End';

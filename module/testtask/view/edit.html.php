@@ -26,6 +26,10 @@
         <td><?php echo html::select('build', $builds, $task->build, 'class=select-3');?></td>
       </tr>  
       <tr>
+        <th class='rowhead'><?php echo $lang->testtask->owner;?></th>
+        <td><?php echo html::select('owner', $users, $task->owner, 'class=select-3');?></td>
+      </tr>  
+      <tr>
         <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
         <td><?php echo html::input('begin', $task->begin, "class='text-3 date'");?>
       </tr>  

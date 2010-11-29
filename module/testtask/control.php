@@ -100,6 +100,7 @@ class testtask extends control
 
         $this->view->projects  = $this->product->getProjectPairs($productID);
         $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         $this->display();
     }
@@ -125,7 +126,7 @@ class testtask extends control
 
         $this->view->productID = $productID;
         $this->view->task      = $task;
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->actions   = $this->loadModel('action')->getList('testtask', $taskID);
 
         $this->display();
@@ -218,6 +219,7 @@ class testtask extends control
         $this->view->task      = $task;
         $this->view->projects  = $this->product->getProjectPairs($productID);
         $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->users     = $this->loadModel('user')->getPairs();
 
         $this->display();
     }

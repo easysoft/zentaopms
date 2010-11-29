@@ -15,7 +15,7 @@
 <div class='yui-d0'>
   <h1>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></h1>
   <?php foreach($results as $result):?>
-  <table class='table-1 bd-1px'>
+  <table class='table-1'>
   <caption>RESULT#<?php echo $result->id . ' ' . $result->date . " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></caption>
     <tr>
       <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
