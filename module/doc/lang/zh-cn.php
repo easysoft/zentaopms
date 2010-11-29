@@ -51,5 +51,6 @@ $lang->doc->types['file'] = '文件';
 $lang->doc->types['url']  = '链接';
 $lang->doc->types['text'] = '网页';
 
+$lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = " 您确定删除该文档库吗？";
 $lang->doc->errorEditSystemDoc = "系统文档库无需修改。";
