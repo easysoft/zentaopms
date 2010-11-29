@@ -13,6 +13,18 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='yui-d0'>
+  <div id='featurebar'>
+    <div class='f-left'>
+      <?php
+      echo "<span id='assignedtoTab'>" . html::a(inlink('story', "type=assignedto"),  $lang->my->storyMenu->assignedToMe) . "</span>";
+      echo "<span id='openedbyTab'>"   . html::a(inlink('story', "type=openedby"),    $lang->my->storyMenu->openedByMe)   . "</span>";
+      echo "<span id='reviewedbyTab'>" . html::a(inlink('story', "type=reviewedby"),  $lang->my->storyMenu->reviewedByMe) . "</span>";
+      echo "<span id='closedbyTab'>"   . html::a(inlink('story', "type=closedby"),    $lang->my->storyMenu->closedByMe)   . "</span>";
+      ?>
+    </div>
+  </div>
+</div>
+<div class='yui-d0'>
   <table class='table-1 tablesorter'>
     <thead>
       <tr class='colhead'>
@@ -53,4 +65,5 @@
     </tbody>
   </table>
 </div>
+<script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

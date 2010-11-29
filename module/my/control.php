@@ -72,7 +72,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function story()
+    public function story($type = 'assignedto')
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true));
@@ -80,8 +80,9 @@ class my extends control
         /* Assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[]    = $this->lang->my->story;
-        $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, 'active,draft,changed');
+        $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, $type);
         $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->type          = $type;
 
         $this->display();
     }

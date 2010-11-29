@@ -18,3 +18,8 @@ $lang->my->taskMenu->openedByMe   = 'My opened';
 $lang->my->taskMenu->finishedByMe = 'My finished';
 $lang->my->taskMenu->closedByMe   = 'My closed';
 $lang->my->taskMenu->canceledByMe = 'My canceled';
+
+$lang->my->storyMenu->assignedToMe = 'To me';
+$lang->my->storyMenu->openedByMe   = 'My opened';
+$lang->my->storyMenu->reviewedByMe = 'My reviewed';
+$lang->my->storyMenu->closedByMe   = 'My closed';

@@ -581,20 +581,24 @@ class storyModel extends model
      * Get stories of a user.
      * 
      * @param  string $account 
-     * @param  string $status 
+     * @param  string $type         the query type 
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getUserStories($account, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getUserStories($account, $type = 'assignedto', $orderBy = 'id_desc', $pager = null)
     {
+        $type = strtolower($type);
         return $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
-            ->where('t1.assignedTo')->eq($account)
-            ->andWhere('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($type == 'assignedto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'openedby')->andWhere('openedby')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'reviewedby')->andWhere('reviewedby')->like('%' . $this->app->user->account . '%')->fi()
+            ->beginIF($type == 'closedby')->andWhere('closedby')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
