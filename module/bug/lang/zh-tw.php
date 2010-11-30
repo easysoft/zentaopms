@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 1069 2010-09-11 07:26:25Z yuren_@126.com $
+ * @version     $Id: zh-tw.php 1270 2010-11-22 02:41:32Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -81,13 +81,15 @@ $lang->bug->byModule       = '按模組';
 $lang->bug->assignToMe     = '指派給我';
 $lang->bug->openedByMe     = '由我創建';
 $lang->bug->resolvedByMe   = '由我解決';
+$lang->bug->closedByMe     = '由我關閉';
 $lang->bug->assignToNull   = '未指派';
+$lang->bug->unResolved     = '未解決';
 $lang->bug->longLifeBugs   = '久未處理';
 $lang->bug->postponedBugs  = '被延期';
 $lang->bug->allBugs        = '所有Bug';
 $lang->bug->moduleBugs     = '按模組瀏覽';
 $lang->bug->byQuery        = '搜索';
-$lang->bug->needConfirm    = '需求有變動的Bug';
+$lang->bug->needConfirm    = '需求變動';
 $lang->bug->allProduct     = '所有產品';
 
 /* 頁面標籤。*/
@@ -225,6 +227,7 @@ $lang->bug->report->charts['bugsPerSeverity']    = 'Bug嚴重程度統計';
 $lang->bug->report->charts['bugsPerResolution']  = 'Bug解決方案統計';
 $lang->bug->report->charts['bugsPerStatus']      = 'Bug狀態統計';
 $lang->bug->report->charts['bugsPerType']        = 'Bug類型統計';
+$lang->bug->report->charts['bugsPerAssignedTo']  = '指派給統計';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug處理時間統計';
 //$lang->bug->report->charts['bugHistories']       = 'Bug處理步驟統計';
 
@@ -267,6 +270,7 @@ $lang->bug->report->bugsPerSeverity->graph->xAxisName    = '嚴重程度';
 $lang->bug->report->bugsPerResolution->graph->xAxisName  = '解決方案';
 $lang->bug->report->bugsPerStatus->graph->xAxisName      = '狀態';
 $lang->bug->report->bugsPerType->graph->xAxisName        = '類型';
+$lang->bug->report->bugsPerAssignedTo->graph->xAxisName  = '指派給';
 $lang->bug->report->bugLiveDays->graph->xAxisName        = '處理時間';
 $lang->bug->report->bugHistories->graph->xAxisName       = '處理步驟';
 

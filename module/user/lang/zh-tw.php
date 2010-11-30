@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1279 2010-11-22 07:31:28Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->user->common        = '用戶';
@@ -47,6 +47,7 @@ $lang->user->gendarList->m = '男';
 $lang->user->gendarList->f = '女';
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
+$lang->user->keepLogin['on']      = '保持登錄';
 
 $lang->user->id        = '用戶編號';
 $lang->user->company   = '所屬公司';

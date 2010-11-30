@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1280 2010-11-22 07:43:20Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->misc->common  = '雜項';
@@ -54,4 +54,4 @@ $lang->misc->zentao->service['scrumtrain'] = 'scrum培訓';
 $lang->misc->zentao->service['fwtrain']    = '禪道PHP框架培訓';
 $lang->misc->zentao->service['servicemore']= '更多服務...';
 
-$lang->misc->copyright = "版權所有 &copy;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>QingDao Nature Easy Soft Network Technology Co,LTD </a>";
+$lang->misc->copyright = "版權所有 &copy;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a>";

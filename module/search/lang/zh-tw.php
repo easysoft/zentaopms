@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id: zh-tw.php 1082 2010-09-12 06:09:29Z yuren_@126.com $
+ * @version     $Id: zh-tw.php 1150 2010-11-09 07:19:37Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';

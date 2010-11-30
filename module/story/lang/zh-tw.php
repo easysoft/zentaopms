@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1150 2010-11-09 07:19:37Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->story->browse    = "需求列表";

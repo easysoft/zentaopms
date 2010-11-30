@@ -1,12 +1,12 @@
 <?php
 /**
- * The project module zh-tw file of ZenTaoPMS.
+ * The project module zh-tw file of ZenTaoMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1347 2010-11-30 10:27:43Z yuren_@126.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -34,6 +34,7 @@ $lang->project->canceledDate = '取消日期';
 $lang->project->PO           = '產品負責人';
 $lang->project->PM           = '項目負責人';
 $lang->project->QM           = '測試負責人';
+$lang->project->RM           = '發佈負責人';
 $lang->project->acl          = '訪問控制';
 $lang->project->teamname     = '團隊名稱';
 $lang->project->products     = '相關產品';
@@ -81,16 +82,22 @@ $lang->project->importTask     = '導入之前未完';
 $lang->project->ajaxGetProducts= '介面：獲得項目產品列表';
 
 /* 分組瀏覽。*/
-$lang->project->listTask            = '列表方式';
-$lang->project->groupTaskByStory    = '需求分組';
-$lang->project->groupTaskByStatus   = '狀態分組';
-$lang->project->groupTaskByPri      = '優先順序分組';
-$lang->project->groupTaskByOwner    = '指派給分組';
-$lang->project->groupTaskByEstimate = '預計分組';
-$lang->project->groupTaskByConsumed = '已消耗分組';
-$lang->project->groupTaskByLeft     = '剩餘分組';
-$lang->project->groupTaskByType     = '類型分組';
-$lang->project->groupTaskByDeadline = '截止分組';
+$lang->project->allTasks            = '所有任務';
+$lang->project->assignedToMe        = '指派給我';
+$lang->project->finishedByMe        = '由我完成';
+$lang->project->statusWait          = '未開始';
+$lang->project->statusDoing         = '進行中';
+$lang->project->statusDone          = '已完成';
+$lang->project->delayed             = '已延期';
+$lang->project->groups['story']     = '需求分組';
+$lang->project->groups['status']    = '狀態分組';
+$lang->project->groups['pri']       = '優先順序分組';
+$lang->project->groups['assignedTo']= '指派給分組';
+$lang->project->groups['estimate']  = '預計分組';
+$lang->project->groups['consumed']  = '已消耗分組';
+$lang->project->groups['left']      = '剩餘分組';
+$lang->project->groups['type']      = '類型分組';
+$lang->project->groups['deadline']  = '截止分組';
 $lang->project->listTaskNeedConfrim = '需求變動';
 
 /* 頁面提示。*/
@@ -109,6 +116,12 @@ $lang->project->confirmUnlinkMember   = '您確定從該項目中移除該用戶
 $lang->project->confirmUnlinkStory    = '您確定從該項目中移除該需求嗎？';
 $lang->project->errorNoLinkedProducts = '該項目沒有關聯的產品，系統將轉到產品關聯頁面';
 $lang->project->accessDenied          = '您無權訪問該項目！';
+$lang->project->tips                  = '提示';
+$lang->project->afterInfo             = '項目添加成功，您現在可以進行以下操作：';
+$lang->project->setTeam               = '設置團隊';
+$lang->project->linkStory             = '關聯需求';
+$lang->project->createTask            = '添加任務';
+$lang->project->goback                = '返回項目首頁（5秒後將自動跳轉）';
 
 /* 統計。*/
 $lang->project->charts->burn->graph->caption      = "燃盡圖";

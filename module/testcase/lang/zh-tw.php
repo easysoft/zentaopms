@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1340 2010-11-29 14:57:55Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id             = '用例編號';
@@ -56,18 +56,19 @@ $lang->testcase->delete         = "刪除用例";
 $lang->testcase->browse         = "用例列表";
 $lang->testcase->confirmStoryChange = '確認需求變動';
 
-$lang->testcase->deleteStep     = 'ｘ';
-$lang->testcase->insertBefore   = '＋↑';
-$lang->testcase->insertAfter    = '＋↓';
+$lang->testcase->deleteStep     = '刪除';
+$lang->testcase->insertBefore   = '之前添加';
+$lang->testcase->insertAfter    = '之後添加';
 
 $lang->testcase->selectProduct  = '請選擇產品';
 $lang->testcase->byModule       = '按模組';
-$lang->testcase->assignToMe     = '指派給我';
-$lang->testcase->openedByMe     = '由我創建';
+$lang->testcase->assignToMe     = '指派給我的用例';
+$lang->testcase->openedByMe     = '由我創建的用例';
 $lang->testcase->allCases       = '所有Case';
 $lang->testcase->needConfirm    = '需求有變動的用例';
 $lang->testcase->moduleCases    = '按模組瀏覽';
 $lang->testcase->bySearch       = '搜索';
+$lang->testcase->doneByMe       = '我完成的用例';
 
 $lang->testcase->lblProductAndModule         = '產品模組';
 $lang->testcase->lblTypeAndPri               = '類型&優先順序';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 1111 2010-09-14 03:16:08Z yuren_@126.com $
+ * @version     $Id: zh-tw.php 1150 2010-11-09 07:19:37Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -34,26 +34,26 @@ $lang->action->objectTypes['doc']         = '文檔';
 $lang->action->objectTypes['doclib']      = '文檔庫';
 
 /* 用來描述操作歷史記錄。*/
-$lang->action->desc->common      = '$date, <strong>$action</strong> by <strong>$actor</strong>';
-$lang->action->desc->extra       = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
-$lang->action->desc->opened      = '$date, 由 <strong>$actor</strong> 創建。';
-$lang->action->desc->created     = '$date, 由 <strong>$actor</strong> 創建。';
-$lang->action->desc->changed     = '$date, 由 <strong>$actor</strong> 變更。';
-$lang->action->desc->edited      = '$date, 由 <strong>$actor</strong> 編輯。';
-$lang->action->desc->closed      = '$date, 由 <strong>$actor</strong> 關閉。';
-$lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 刪除。';
-$lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 刪除了附件：<strong><i>$extra</i></strong>';
-$lang->action->desc->erased      = '$date, 由 <strong>$actor</strong> 刪除。';
-$lang->action->desc->undeleted   = '$date, 由 <strong>$actor</strong> 還原。';
-$lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 發表評論。';
-$lang->action->desc->activated   = '$date, 由 <strong>$actor</strong> 激活。';
-$lang->action->desc->moved       = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"';
-$lang->action->desc->confirmed   = '$date, 由 <strong>$actor</strong> 確認需求變動，最新版本為<strong>#$extra</strong>';
-$lang->action->desc->started     = '$date, 由 <strong>$actor</strong> 啟動。';
-$lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。';
-$lang->action->desc->finished    = '$date, 由 <strong>$actor</strong> 完成。';
-$lang->action->desc->diff1       = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />';
-$lang->action->desc->diff2       = '修改了 <strong><i>%s</i></strong>，區別為：<blockquote>%s</blockquote>';
+$lang->action->desc->common      = '$date, <strong>$action</strong> by <strong>$actor</strong>' . "\n";
+$lang->action->desc->extra       = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>' . "\n";
+$lang->action->desc->opened      = '$date, 由 <strong>$actor</strong> 創建。' . "\n";
+$lang->action->desc->created     = '$date, 由 <strong>$actor</strong> 創建。' . "\n";
+$lang->action->desc->changed     = '$date, 由 <strong>$actor</strong> 變更。' . "\n";
+$lang->action->desc->edited      = '$date, 由 <strong>$actor</strong> 編輯。' . "\n";
+$lang->action->desc->closed      = '$date, 由 <strong>$actor</strong> 關閉。' . "\n";
+$lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 刪除。' . "\n";
+$lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 刪除了附件：<strong><i>$extra</i></strong>' . "\n";
+$lang->action->desc->erased      = '$date, 由 <strong>$actor</strong> 刪除。' . "\n";
+$lang->action->desc->undeleted   = '$date, 由 <strong>$actor</strong> 還原。' . "\n";
+$lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 發表評論。' . "\n";
+$lang->action->desc->activated   = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
+$lang->action->desc->moved       = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"' . "\n";
+$lang->action->desc->confirmed   = '$date, 由 <strong>$actor</strong> 確認需求變動，最新版本為<strong>#$extra</strong>' . "\n";
+$lang->action->desc->started     = '$date, 由 <strong>$actor</strong> 啟動。' . "\n";
+$lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。' . "\n";
+$lang->action->desc->finished    = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
+$lang->action->desc->diff1       = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />' . "\n";
+$lang->action->desc->diff2       = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . '<blockquote>%s</blockquote>' . "\n";
 
 /* 用來顯示動態信息。*/
 $lang->action->label->created             = '創建了';

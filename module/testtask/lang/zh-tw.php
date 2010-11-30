@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1337 2010-11-29 13:01:52Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -30,6 +30,7 @@ $lang->testtask->id             = '任務編號';
 $lang->testtask->product        = '所屬產品';
 $lang->testtask->project        = '所屬項目';
 $lang->testtask->build          = 'Build';
+$lang->testtask->owner          = '負責人';
 $lang->testtask->name           = '任務名稱';
 $lang->testtask->begin          = '開始日期';
 $lang->testtask->end            = '結束日期';

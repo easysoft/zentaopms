@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 1103 2010-09-13 11:02:40Z wwccss $
+ * @version     $Id: zh-tw.php 1340 2010-11-29 14:57:55Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -20,10 +20,11 @@ $lang->ZenTaoPMS     = '禪道管理';
 $lang->welcome      = "歡迎使用『%s』{$lang->colon} {$lang->ZenTaoPMS}";
 $lang->myControl    = "我的地盤";
 $lang->currentPos   = '當前位置：';
-$lang->logout       = '退出系統';
+$lang->logout       = '退出';
 $lang->login        = '登錄';
 $lang->aboutZenTao  = '關於禪道';
 $lang->todayIs      = '今天是%s，';
+$lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
 
 $lang->reset        = '重填';
 $lang->edit         = '編輯';
@@ -36,6 +37,7 @@ $lang->import       = '導入';
 $lang->exportCSV    = '導出csv';
 $lang->setFileName  = '請輸入檔案名：';
 $lang->activate     = '激活';
+$lang->submitting   = '稍候...';
 $lang->save         = '保存';
 $lang->confirm      = '確認';
 $lang->preview      = '預覽';
@@ -52,6 +54,8 @@ $lang->switchDisplay= '[切換顯示]';
 $lang->switchHelp   = '切換幫助';
 $lang->addFiles     = '上傳了附件 ';
 $lang->files        = '附件 ';
+$lang->unfold       = '+';
+$lang->fold         = '-';
 
 $lang->selectAll    = '全選';
 $lang->notFound     = '抱歉，您訪問的對象並不存在！';
@@ -92,7 +96,12 @@ $lang->searchObjects['build']       = 'B:Build';
 $lang->searchObjects['release']     = 'R:發佈';
 $lang->searchObjects['productplan'] = 'P:產品計劃';
 $lang->searchObjects['testtask']    = 'T:測試任務';
+$lang->searchObjects['doc']         = 'D:文檔';
 $lang->searchTips                   = '輸入編號';
+
+/* 風格列表。*/
+$lang->themes['default'] = '預設風格';
+$lang->themes['green']   = '綠色風格';
 
 /* 首頁菜單設置。*/
 $lang->index->menu->product = '瀏覽產品|product|browse';
@@ -103,6 +112,7 @@ $lang->my->menu->account  = '%s' . $lang->arrow;
 $lang->my->menu->todo     = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task     = '我的任務|my|task|';
 $lang->my->menu->bug      = '我的Bug|my|bug|';
+$lang->my->menu->testask  = '我的測試|my|testtask|';
 $lang->my->menu->story    = '我的需求|my|story|';
 $lang->my->menu->project  = '我的項目|my|project|';
 $lang->my->menu->profile  = array('link' => '我的檔案|my|profile|', 'alias' => 'editprofile');
@@ -174,7 +184,7 @@ $lang->company->menu->dept        = array('link' => '部門維護|dept|browse', 
 $lang->company->menu->browseGroup = array('link' => '權限分組|group|browse', 'subModule' => 'group');
 $lang->company->menu->edit        = array('link' => '公司管理|company|edit');
 $lang->company->menu->addGroup    = array('link' => '添加分組|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => '添加用戶|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser     = array('link' => '添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
@@ -218,6 +228,7 @@ $lang->error->length          = array("『%s』長度錯誤，應當為『%s』"
 $lang->error->reg             = "『%s』不符合格式，應當為:『%s』。";
 $lang->error->unique          = "『%s』已經有『%s』這條記錄了。";
 $lang->error->notempty        = "『%s』不能為空。";
+$lang->error->empty           = "『%s』必須為空。";
 $lang->error->equal           = "『%s』必須為『%s』。";
 $lang->error->int             = array("『%s』應當是數字。", "『%s』應當介於『%s-%s』之間。");
 $lang->error->float           = "『%s』應當是數字，可以是小數。";

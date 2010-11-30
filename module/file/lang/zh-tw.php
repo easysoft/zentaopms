@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
- * @version     $Id: zh-tw.php 1101 2010-09-13 08:11:44Z wwccss $
+ * @version     $Id: zh-tw.php 1150 2010-11-09 07:19:37Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->file->common     = '附件';

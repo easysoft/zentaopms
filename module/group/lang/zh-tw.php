@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 1068 2010-09-11 07:11:57Z wwccss $
+ * @version     $Id: zh-tw.php 1342 2010-11-30 03:36:13Z yuren_@126.com $
  * @link        http://www.zentao.net
  */
 $lang->group->common       = '權限分組';
@@ -31,6 +31,8 @@ $lang->group->method   = '方法';
 $lang->group->priv     = '權限';
 $lang->group->checkall = '全選';
 $lang->group->option   = '選項';
+$lang->group->inside   = '組內用戶';
+$lang->group->outside  = '組外用戶';
 
 $lang->group->copyOptions['copyPriv'] = '複製權限';
 $lang->group->copyOptions['copyUser'] = '複製用戶';
