@@ -240,4 +240,7 @@ $lang->resource->action->undelete = 'undelete';
 /* New privilege.*/
 $lang->group->newPriv['my']['testTask']   = 'testTask';
 $lang->group->newPriv['my']['testCase']   = 'testCase';
+$lang->group->newPriv['task']['activate'] = 'activate';
+$lang->group->newPriv['task']['close']    = 'close';
+$lang->group->newPriv['task']['finish']   = 'finish';
 $lang->group->newPriv['search']['select'] = 'select';
