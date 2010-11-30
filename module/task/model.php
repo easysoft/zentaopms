@@ -307,7 +307,7 @@ class taskModel extends model
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
             ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($type == 'finishedbyme')->andWhere('t1.finishedby')->eq($this->app->user->account)->fi()
-            ->beginIF($type == 'delayed')->andWhere('deadline')->between('1970-1-1', helper::now())->fi()
+            ->beginIF($type == 'delayed')->andWhere('deadline')->between('1970-1-1', helper::now())->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF(strpos('all|needconfirm|assignedtome|delayed|finishedbyme', $type) === false)->andWhere('t1.status')->in($type)->fi()
             ->orderBy($orderBy)
             ->page($pager)
