@@ -1428,6 +1428,8 @@ class sql
     public function between($min, $max)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $min = $this->quote($min);
+        $max = $this->quote($max);
         $this->sql .= " BETWEEN $min AND $max ";
         return $this;
     }
