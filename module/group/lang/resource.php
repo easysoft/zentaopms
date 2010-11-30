@@ -236,3 +236,8 @@ $lang->resource->file->ajaxUpload = 'ajaxUpload';
 $lang->resource->misc->ping       = 'ping';
 $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undelete';
+
+/* New privilege.*/
+$lang->group->newPriv['my']['testTask']   = 'testTask';
+$lang->group->newPriv['my']['testCase']   = 'testCase';
+$lang->group->newPriv['search']['select'] = 'select';
