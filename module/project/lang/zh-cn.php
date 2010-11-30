@@ -121,7 +121,7 @@ $lang->project->afterInfo             = '项目添加成功，您现在可以进
 $lang->project->setTeam               = '设置团队';
 $lang->project->linkStory             = '关联需求';
 $lang->project->createTask            = '添加任务';
-$lang->project->goback                = '返回项目首页(3秒后将自动跳转)';
+$lang->project->goback                = '返回项目首页（5秒后将自动跳转）';
 
 /* 统计。*/
 $lang->project->charts->burn->graph->caption      = "燃尽图";

@@ -116,6 +116,12 @@ $lang->project->confirmUnlinkMember   = 'Are you sure to remove this user from t
 $lang->project->confirmUnlinkStory    = 'Are you sure to remove the story from this project?';
 $lang->project->errorNoLinkedProducts = 'There is no linked products, go to the link page.';
 $lang->project->accessDenied          = 'Access to this project denied.';
+$lang->project->tips                  = 'Tips';
+$lang->project->afterInfo             = 'Successful and you can do:';
+$lang->project->setTeam               = 'Set team';
+$lang->project->linkStory             = 'Link story';
+$lang->project->createTask            = 'Create task';
+$lang->project->goback                = 'Go back（Automatically after 5 seconds）';
 
 /* Report. */
 $lang->project->charts->burn->graph->caption      = "Burndown chart";

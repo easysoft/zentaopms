@@ -448,15 +448,22 @@ class project extends control
      * @access public
      * @return void
      */
-    public function create()
+    public function create($projectID = '')
     {
+        if($projectID)
+        {
+            $this->view->tips = $this->fetch('project', 'tips', "projectID=$projectID");
+            $this->display();
+            exit;
+        }
+
         if(!empty($_POST))
         {
             $projectID = $this->project->create();
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('project', $projectID, 'opened');
-            die(js::locate($this->createLink('project', 'tips', "projectID=$projectID"), 'parent'));
+            die(js::locate($this->createLink('project', 'create', "projectID=$projectID"), 'parent'));
         }
 
         $this->project->setMenu($this->projects, '');
@@ -818,10 +825,8 @@ class project extends control
     public function tips($projectID)
     {
         $url = $this->createLink('project', 'task', "projectID=$projectID");       
-        $header['title']       = $this->lang->project->tips;
-        $this->view->header    = $header;
         $this->view->projectID = $projectID;        
-        $this->display();
-        die("<html><head><meta http-equiv='refresh' content='3; url=$url' /></head><body></body></html>");
+        $this->display('project', 'tips');
+        die("<html><head><meta http-equiv='refresh' content='5; url=$url' /></head><body></body></html>");
     }
 }

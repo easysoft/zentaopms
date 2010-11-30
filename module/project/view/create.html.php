@@ -10,6 +10,21 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if(isset($tips)):?>
+<?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/colorbox.html.php';?>
+<body style='background:white'>
+<script language='Javascript'>
+var tips = <?php echo json_encode($tips);?>;
+$(document).ready(function() 
+{
+    $.fn.colorbox({html:tips, open:true, width:480, height:280});
+});
+</script>
+</body>
+</html>
+<?php exit;?>
+<?php endif;?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
