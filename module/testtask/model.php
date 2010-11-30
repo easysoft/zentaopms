@@ -101,7 +101,7 @@ class testtaskModel extends model
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
-            ->andWhere('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq(0)
             ->andWhere('t1.owner')->eq($account)
             ->orderBy('id desc')
             ->fetchAll();
