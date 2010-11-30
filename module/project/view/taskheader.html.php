@@ -11,6 +11,7 @@ function switchGroup(projectID, groupBy)
     <?php
     echo "<span id='allTab'>"         ; common::printLink('project', 'task', "project=$project->id",                   $lang->project->allTasks);     echo  '</span>' ;
     echo "<span id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$project->id&type=assignedtome", $lang->project->assignedToMe); echo  '</span>' ;
+    echo "<span id='finishedbymeTab'>"; common::printLink('project', 'task', "project=$project->id&type=finishedbyme", $lang->project->finishedByMe); echo  '</span>' ;
     echo "<span id='waitTab'>"        ; common::printLink('project', 'task', "project=$project->id&type=wait",         $lang->project->statusWait);   echo  '</span>' ;
     echo "<span id='doingTab'>"       ; common::printLink('project', 'task', "project=$project->id&type=doing",        $lang->project->statusDoing);  echo  '</span>' ;
     echo "<span id='doneTab'>"        ; common::printLink('project', 'task', "project=$project->id&type=done",         $lang->project->statusDone);   echo  '</span>' ;

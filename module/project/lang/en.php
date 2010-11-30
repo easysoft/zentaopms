@@ -83,7 +83,8 @@ $lang->project->ajaxGetProducts= "API: get project's products";
 
 /* Browse. */
 $lang->project->allTasks            = 'All';
-$lang->project->assignedToMe        = 'My';
+$lang->project->assignedToMe        = 'To me';
+$lang->project->finishedByMe        = 'My done';
 $lang->project->statusWait          = 'Wait';
 $lang->project->statusDoing         = 'Doing';
 $lang->project->statusDone          = 'Done';
