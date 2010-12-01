@@ -27,7 +27,7 @@
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->builder;?></th>
-        <td><?php echo html::select('builder', $users, $app->user->account, 'class="select-3"');?></td>
+        <td><?php echo html::select('builder', $users, $build->builder, 'class="select-3"');?></td>
       </tr>  
       <tr>
         <th class='rowhead'><?php echo $lang->build->date;?></th>
