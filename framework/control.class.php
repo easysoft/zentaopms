@@ -391,10 +391,7 @@ class control
         extract((array)$this->view);
         ob_start();
         include $viewFile;
-        if(isset($hookFiles))
-        {
-            foreach($hookFiles as $hookFile) include $hookFile;
-        }
+        if(isset($hookFiles)) foreach($hookFiles as $hookFile) include $hookFile;
         $this->output .= ob_get_contents();
         ob_end_clean();
 
