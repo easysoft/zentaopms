@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-/* 字段列表。*/
+/* Fieldlist. */
 $lang->bug->common         = 'Bug';
 $lang->bug->id             = 'ID';
 $lang->bug->product        = 'Product';
@@ -56,7 +56,7 @@ $lang->bug->keywords       = 'Keywords';
 $lang->bug->lastEditedByAB   = 'Edited';
 $lang->bug->lastEditedDateAB = 'Edited Date';
 
-/* 方法列表。*/
+/* Actions. */
 $lang->bug->index          = 'Index';
 $lang->bug->create         = 'Create Bug';
 $lang->bug->edit           = 'Edit Bug';
@@ -75,7 +75,7 @@ $lang->bug->ajaxGetUserBugs    = 'API: My Bugs';
 $lang->bug->ajaxGetModuleOwner = 'API: Get module default owner';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
 
-/* 查询条件列表。*/
+/* Browse tabs. */
 $lang->bug->selectProduct  = 'Select product';
 $lang->bug->byModule       = 'ByModule';
 $lang->bug->assignToMe     = 'MyBugs';
@@ -92,7 +92,7 @@ $lang->bug->byQuery        = 'Search';
 $lang->bug->needConfirm    = 'StoryChanged';
 $lang->bug->allProduct     = 'All products';
 
-/* 页面标签。*/
+/* Labels. */
 $lang->bug->lblProductAndModule         = 'Product&Module';
 $lang->bug->lblProjectAndTask           = 'Project&Task';
 $lang->bug->lblStory                    = 'Story';
@@ -105,7 +105,7 @@ $lang->bug->lblResolved                 = 'Resolved';
 $lang->bug->lblAllFields                = 'All Fields';
 $lang->bug->lblCustomFields             = 'Custom Fields';
 
-/* legend列表。*/
+/* Legends. */
 $lang->bug->legendBasicInfo   = 'Basic info';
 $lang->bug->legendMailto      = 'Mailto';
 $lang->bug->legendAttatch     = 'Files';
@@ -119,7 +119,7 @@ $lang->bug->legendComment     = 'Comment';
 $lang->bug->legendLife        = 'Lifetime';
 $lang->bug->legendMisc        = 'Misc';
 
-/* 功能按钮。*/
+/* Action buttons. */
 $lang->bug->buttonCopy     = 'Copy';
 $lang->bug->buttonEdit     = 'Edit';
 $lang->bug->buttonActivate = 'Activate';
@@ -127,17 +127,17 @@ $lang->bug->buttonResolve  = 'Resolve';
 $lang->bug->buttonClose    = 'Close';
 $lang->bug->buttonToList   = 'Back';
 
-/* 交互提示。*/
+/* Confirm messags. */
 $lang->bug->confirmChangeProduct = 'Change product will change project, task and story also, are you sure?';
 $lang->bug->confirmDelete        = 'Are you sure to delete this bug?';
 $lang->bug->setTemplateTitle     = 'Please input the template title:';
 
-/* 模板。*/
+/* Templates. *./
 $lang->bug->tplStep        = "<p>[Steps]</p>";
 $lang->bug->tplResult      = "<p>[Result]</p>";
 $lang->bug->tplExpect      = "<p>[Expect]</p>";
 
-/* 各个字段取值列表。*/
+/* Field options lists. */
 $lang->bug->severityList[3] = '3';
 $lang->bug->severityList[1] = '1';
 $lang->bug->severityList[2] = '2';
@@ -208,7 +208,7 @@ $lang->bug->resolutionList['notrepro']   = 'Not reproduce';
 $lang->bug->resolutionList['postponed']  = 'Postponed';
 $lang->bug->resolutionList['willnotfix'] = "Won't fix";
 
-/* 统计报表。*/
+/* Report. */
 $lang->bug->report->common        = 'Report';
 $lang->bug->report->select        = 'Select';
 $lang->bug->report->create        = 'Create';
@@ -241,8 +241,8 @@ $lang->bug->report->options->graph->decimalPrecision = 0;
 $lang->bug->report->options->graph->animation        = 0;
 $lang->bug->report->options->graph->rotateNames      = 0;
 $lang->bug->report->options->graph->yAxisName        = 'COUNT';
-$lang->bug->report->options->graph->pieRadius        = 100; // 饼图直径。
-$lang->bug->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
+$lang->bug->report->options->graph->pieRadius        = 100;
+$lang->bug->report->options->graph->showColumnShadow = 0;
 
 $lang->bug->report->bugsPerProject->graph->xAxisName     = 'Project';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = 'Module';

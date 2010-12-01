@@ -33,7 +33,7 @@ $lang->action->objectTypes['user']        = 'User';
 $lang->action->objectTypes['doc']         = 'DOC';
 $lang->action->objectTypes['doclib']      = 'DocLib';
 
-/* 用来描述操作历史记录.*/
+/* The desc of actions. */
 $lang->action->desc->common      = '$date, <strong>$action</strong> by <strong>$actor</strong>';
 $lang->action->desc->extra       = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->opened      = '$date, Opened by <strong>$actor</strong>.';
@@ -55,7 +55,7 @@ $lang->action->desc->finished    = '$date, Finished by <strong>$actor</strong>.'
 $lang->action->desc->diff1       = 'Changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
 $lang->action->desc->diff2       = 'Changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>';
 
-/* 用来显示动态信息.*/
+/* The action labels. */
 $lang->action->label->created             = 'created';
 $lang->action->label->opened              = 'opened';
 $lang->action->label->changed             = 'changed';
@@ -82,7 +82,7 @@ $lang->action->label->finished            = 'finished';
 $lang->action->label->login               = 'login';
 $lang->action->label->logout              = "logout";
 
-/* 用来生成相应对象的链接.*/
+/* Link of every action. */
 $lang->action->label->product     = 'product|product|view|productID=%s';
 $lang->action->label->productplan = 'plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'release|release|view|productID=%s';

@@ -85,7 +85,7 @@ $lang->install->value      = 'Value';
 $lang->install->saveConfig = 'Save config';
 $lang->install->save2File  = '<div class="a-center"><span class="fail">Try to save the config auto, but failed.</span></div>Copy the text of the textareaand save to "<strong> %s </strong>".';
 $lang->install->saved2File = 'The config file has saved to "<strong>%s</strong> ".';
-$lang->install->errorNotSaveConfig = '还没有保存配置文件';
+$lang->install->errorNotSaveConfig = "Hasn't save the config file. ";
 
 $lang->install->getPriv  = 'Set admin';
 $lang->install->company  = 'Company name';

@@ -40,7 +40,7 @@ $lang->testcase->stage            = 'Stage';
 $lang->testcase->lastEditedByAB   = 'Last edited by';
 $lang->testcase->lastEditedDateAB = 'Last edited date';
 $lang->testcase->allProduct       = 'All product';
-$lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
+$lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID     = 'ID';
 $lang->testcase->stepDesc   = 'Step';

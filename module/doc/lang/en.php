@@ -9,7 +9,7 @@
  * @version     $Id: en.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentao.net
  */
-/* 字段列表。*/
+/* Fields. */
 $lang->doc->common         = 'Doc';
 $lang->doc->id             = 'ID';
 $lang->doc->product        = 'Product';
@@ -32,7 +32,7 @@ $lang->doc->editedDate     = 'Edited date';
 $lang->doc->moduleName     = 'Module name';
 $lang->doc->moduleOrder    = 'Module order';
 
-/* 方法列表。*/
+/* Actions. */
 $lang->doc->index          = 'Index';
 $lang->doc->create         = 'Create doc';
 $lang->doc->edit           = 'Edit doc';
