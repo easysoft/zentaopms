@@ -188,9 +188,7 @@ class commonModel extends model
     public static function printMainmenu($moduleName)
     {
         global $app, $lang;
-        $logo = $app->getWebRoot() . 'theme/default/images/main/logo.png';
         echo "<ul>\n";
-        echo "<li style='padding:0; height:30px'><a href='http://www.zentao.net' target='_blank'><img src='$logo' /></a></li>\n";
 
         /* Set the main main menu. */
         $mainMenu = $moduleName;

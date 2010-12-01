@@ -102,6 +102,7 @@ $lang->searchTips                   = 'Id here';
 /* Themes. */
 $lang->themes['default'] = 'Default';
 $lang->themes['green']   = 'Green';
+$lang->themes['red']     = 'Red';
 
 /* Index mododule menu. */
 $lang->index->menu->product = 'Products|product|browse';
@@ -264,37 +265,3 @@ define('DT_DATE2',     'Ymd');
 define('DT_DATE3',     'F j, Y ');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
-
-/* Smilies. */
-$lang->smilies->smile       = 'Smile';
-$lang->smilies->sad         = 'Sad';
-$lang->smilies->wink        = 'Wink';
-$lang->smilies->tongue      = 'Tongue';
-$lang->smilies->shocked     = 'Shocked';
-$lang->smilies->eyesdown    = 'Disappointed';
-$lang->smilies->angry       = 'Angry';
-$lang->smilies->cool        = 'Cool';
-$lang->smilies->indifferent = 'Indifferent';
-$lang->smilies->sick        = 'Sick';
-$lang->smilies->blush       = 'Blush';
-$lang->smilies->angel       = 'Angel';
-$lang->smilies->confused    = 'COnfused';
-$lang->smilies->cry         = 'Cry';
-$lang->smilies->footinmouth = 'Secret';
-$lang->smilies->biggrin     = 'Laugh';
-$lang->smilies->nerd        = 'Nerd';
-$lang->smilies->tired       = 'Tired';
-$lang->smilies->rose        = 'Rose';
-$lang->smilies->kiss        = 'Kiss';
-$lang->smilies->heart       = 'Love';
-$lang->smilies->hug         = 'Hug';
-$lang->smilies->dog         = 'Dog';
-$lang->smilies->deadrose    = 'Dead Rose';
-$lang->smilies->clock       = 'Clock';
-$lang->smilies->brokenheart = 'Broken Heart';
-$lang->smilies->coffee      = 'Coffee';
-$lang->smilies->computer    = 'Computer';
-$lang->smilies->devil       = 'Devil';
-$lang->smilies->thumbsup    = 'Thumb up';
-$lang->smilies->thumbsdown  = 'Hhumb down';
-$lang->smilies->mail        = 'Email';

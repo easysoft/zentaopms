@@ -100,8 +100,9 @@ $lang->searchObjects['doc']         = 'D:文档';
 $lang->searchTips                   = '输入编号';
 
 /* 风格列表。*/
-$lang->themes['default'] = '默认风格';
-$lang->themes['green']   = '绿色风格';
+$lang->themes['default'] = '默认';
+$lang->themes['green']   = '绿色';
+$lang->themes['red']     = '红色';
 
 /* 首页菜单设置。*/
 $lang->index->menu->product = '浏览产品|product|browse';
@@ -264,37 +265,3 @@ define('DT_DATE2',     'Ymd');
 define('DT_DATE3',     'Y年m月d日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
-
-/* 表情。*/
-$lang->smilies->smile       = '微笑';
-$lang->smilies->sad         = '悲伤';
-$lang->smilies->wink        = '眨眼';
-$lang->smilies->tongue      = '吐舌头';
-$lang->smilies->shocked     = '惊讶';
-$lang->smilies->eyesdown    = '失望';
-$lang->smilies->angry       = '愤怒';
-$lang->smilies->cool        = '耍酷';
-$lang->smilies->indifferent = '冷漠';
-$lang->smilies->sick        = '病中';
-$lang->smilies->blush       = '脸红';
-$lang->smilies->angel       = '天使';
-$lang->smilies->confused    = '困惑';
-$lang->smilies->cry         = '大哭';
-$lang->smilies->footinmouth = '保密';
-$lang->smilies->biggrin     = '大笑';
-$lang->smilies->nerd        = '书呆子';
-$lang->smilies->tired       = '好累';
-$lang->smilies->rose        = '玫瑰';
-$lang->smilies->kiss        = '吻';
-$lang->smilies->heart       = '心';
-$lang->smilies->hug         = '拥抱';
-$lang->smilies->dog         = '狗狗';
-$lang->smilies->deadrose    = '残花';
-$lang->smilies->clock       = '时钟';
-$lang->smilies->brokenheart = '伤心';
-$lang->smilies->coffee      = '咖啡';
-$lang->smilies->computer    = '计算机';
-$lang->smilies->devil       = '魔鬼';
-$lang->smilies->thumbsup    = '赞同';
-$lang->smilies->thumbsdown  = '反对';
-$lang->smilies->mail        = '邮件';
