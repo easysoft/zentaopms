@@ -20,6 +20,7 @@
       <th><?php echo $lang->task->name;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
+      <th class='w-user'><?php echo $lang->task->finishedBy;?></th>
       <th><?php echo $lang->task->estimateAB;?></th>
       <th><?php echo $lang->task->consumedAB;?></th>
       <th><?php echo $lang->task->leftAB;?></th>
@@ -41,6 +42,7 @@
         <td class='a-left'>&nbsp;<?php echo $task->id . $lang->colon; if(common::hasPriv('task', 'view')) echo html::a($this->createLink('task', 'view', "task=$task->id"), $task->name); else echo $task->name;?></td>
         <td><?php echo $task->pri;?></td>
         <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
+        <td><?php echo $users[$task->finishedBy];?></td>
         <td><?php echo $task->estimate;?></td>
         <td><?php echo $task->consumed;?></td>
         <td><?php echo $task->left;?></td>

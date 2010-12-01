@@ -92,7 +92,11 @@ $lang->project->delayed             = 'Delayed';
 $lang->project->groups['story']     = 'Group by story';
 $lang->project->groups['status']    = 'Group by status';
 $lang->project->groups['pri']       = 'Group by priority';
+$lang->project->groups['openedby']  = 'Group by openedBy';
 $lang->project->groups['assignedTo']= 'Group by assignedTo';
+$lang->project->groups['finishedby']= 'Group by finishedBy';
+$lang->project->groups['closedby']  = 'Group by closedBy';
+
 $lang->project->groups['estimate']  = 'Group by estimate';
 $lang->project->groups['consumed']  = 'Group by consumed';
 $lang->project->groups['left']      = 'Group by left';

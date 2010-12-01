@@ -132,6 +132,7 @@ class project extends control
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = strtolower($status);
         $this->view->status     = $status;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
@@ -164,6 +165,9 @@ class project extends control
         $taskLang    = $this->lang->task;
         $groupByList = array();
         $groupTasks  = array();
+
+        /* Get users. */
+        $users = $this->loadModel('user')->getPairs('noletter');
         foreach($tasks as $task)
         {
             if($groupBy == 'story')
@@ -178,6 +182,18 @@ class project extends control
             elseif($groupBy == 'assignedto')
             {
                 $groupTasks[$task->assignedToRealName][] = $task;
+            }
+            elseif($groupBy == 'openedby')
+            {
+                $groupTasks[$users[$task->openedBy]][] = $task;
+            }
+            elseif($groupBy == 'finishedby')
+            {
+                $groupTasks[$users[$task->finishedBy]][] = $task;
+            }
+            elseif($groupBy == 'closedby')
+            {
+                $groupTasks[$users[$task->closedBy]][] = $task;
             }
             elseif($groupBy == 'type')
             {
@@ -195,6 +211,7 @@ class project extends control
         $this->view->groupByList = $groupByList;
         $this->view->browseType  = 'group';
         $this->view->groupBy     = $groupBy;
+        $this->view->users       = $users;
         $this->display();
     }
 

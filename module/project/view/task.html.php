@@ -23,6 +23,7 @@
       <th class='w-pri'>   <?php common::printOrderLink('pri',       $orderBy, $vars, $lang->priAB);?></th>
       <th class='w-p30'>   <?php common::printOrderLink('name',      $orderBy, $vars, $lang->task->name);?></th>
       <th class='w-user'>  <?php common::printOrderLink('assignedTo',$orderBy, $vars, $lang->task->assignedTo);?></th>
+      <th class='w-user'>  <?php common::printOrderLink('finishedBy',$orderBy, $vars, $lang->task->finishedBy);?></th>
       <th class='w-hour'>  <?php common::printOrderLink('estimate',  $orderBy, $vars, $lang->task->estimateAB);?></th>
       <th class='w-hour'>  <?php common::printOrderLink('consumed',  $orderBy, $vars, $lang->task->consumedAB);?></th>
       <th class='w-hour'>  <?php common::printOrderLink('left',      $orderBy, $vars, $lang->task->leftAB);?></th>
@@ -40,6 +41,7 @@
       <td><?php echo $lang->task->priList[$task->pri];?></td>
       <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
+      <td><?php echo $users[$task->finishedBy];?></td>
       <td><?php echo $task->estimate;?></td>
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>
