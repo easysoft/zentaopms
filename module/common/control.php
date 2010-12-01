@@ -225,7 +225,6 @@ class common extends control
      */
     public function getSysURL()
     {
-        global $config;
         $httpType = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on' ? 'https' : 'http';
         $httpHost = $_SERVER['HTTP_HOST'];
         return "$httpType://$httpHost";
