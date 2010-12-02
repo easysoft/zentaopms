@@ -249,7 +249,7 @@ $lang->pager->last      = "Last";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "Official Site";
-$lang->sponser        = "<a href='http://www.pujia.com' target='_blank'>PuJia Sponsed</a>";
+$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=outsofting' target='_blank'>Sponsor:OutSofting</a>";
 $lang->zentaoKeywords = "Open Source Project Management System";
 $lang->zentaoDESC     = "ZenTaoPMS is an open sourced project management system."; 
 

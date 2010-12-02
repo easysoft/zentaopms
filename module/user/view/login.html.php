@@ -61,7 +61,9 @@ $(document).ready(function(){
       </tr>  
     </table>
     <div id='poweredby'>
-    powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>). <br />
+      powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>)
+      <?php echo $lang->sponser;?>
+      <br />
     <script src='http://www.zentao.net/check.php?v=<?php echo $config->version;?>&s=<?php echo $s;?>'></script>
     </div>
   </form>

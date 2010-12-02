@@ -3,15 +3,11 @@
 <div class='yui-d0'>
   <iframe frameborder='0' name='hiddenwin' scrolling='no' class='<?php $config->debug ? print("debugwin") : print('hidden')?>'></iframe>
 </div>
-<div id='footer' class='yui-d0 yui-t7'>
-  <div class='yui-g'>
-    <div class='yui-g first' id='crumbs'><?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?></div>
-    <div class='yui-g'>
-      <div class='yui-u first'> </div>
-      <div class='yui-u a-right'>
-        <span id='poweredby'>powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span>
-      </div>
-    </div>
+<div id='footer' class='yui-d0'>
+  <div class='half-left' id='crumbs'><?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?></div>
+  <div class='half-right a-right padding-5px'>
+    <span id='poweredby'>powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span>
+    <?php echo $lang->sponser;?>
   </div>
 </div>
 <script laguage='Javascript'>$().ready(function(){setDebugWin('white')})</script>
