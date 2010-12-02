@@ -37,7 +37,7 @@
       <td class='a-left nobr'><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
       <td class='a-left nobr'><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
       <td><?php echo $build->date?></td>
-      <td><?php echo $build->builder?></td>
+      <td><?php echo $users[$build->builder]?></td>
       <td>
         <?php 
         common::printLink('build', 'edit',   "buildID=$build->id", $lang->edit);

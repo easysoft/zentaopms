@@ -352,6 +352,7 @@ class project extends control
 
         /* Get builds. */
         $this->view->builds = $this->loadModel('build')->getProjectBuilds((int)$projectID);
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
