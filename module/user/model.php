@@ -210,12 +210,12 @@ class userModel extends model
             ->fetch();
 
         /* If the length of $password is 32 or 40, checking by the auth hash. */
-        if(strlen($password) == 32)
+        if($user and strlen($password) == 32)
         {
             $hash = $this->session->rand ? md5($user->password . $this->session->rand) : $user->password;
             $user = $password == $hash ? $user : '';
         }
-        elseif(strlen($password) == 40)
+        elseif($user and strlen($password) == 40)
         {
             $hash = sha1($user->account . $user->password . $user->last);
             $user = $password == $hash ? $user : '';
