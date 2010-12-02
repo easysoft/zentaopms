@@ -16,9 +16,12 @@
 <body style='background:white'>
 <script language='Javascript'>
 var tips = <?php echo json_encode($tips);?>;
+var projectID = <?php echo $projectID;?>;
+defaultURL = createLink('project', 'task', 'projectID=' + projectID);
 $(document).ready(function() 
 {
     $.fn.colorbox({html:tips, open:true, width:480, height:280});
+    setTimeout( function() {location.href=defaultURL}, 5000);
 });
 </script>
 </body>

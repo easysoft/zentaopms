@@ -470,7 +470,8 @@ class project extends control
     {
         if($projectID)
         {
-            $this->view->tips = $this->fetch('project', 'tips', "projectID=$projectID");
+            $this->view->tips      = $this->fetch('project', 'tips', "projectID=$projectID");
+            $this->view->projectID = $projectID;
             $this->display();
             exit;
         }
@@ -842,9 +843,7 @@ class project extends control
      */
     public function tips($projectID)
     {
-        $url = $this->createLink('project', 'task', "projectID=$projectID");       
         $this->view->projectID = $projectID;        
         $this->display('project', 'tips');
-        echo "<html><head><meta http-equiv='refresh' content='5; url=$url' /></head><body></body></html>";
     }
 }
