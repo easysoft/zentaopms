@@ -141,6 +141,8 @@ class taskModel extends model
             ->autoCheck()
             ->check('consumed,left', 'float')
             ->where('id')->eq((int)$taskID)->exec();
+
+        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -169,6 +171,8 @@ class taskModel extends model
             ->autoCheck()
             ->check('consumed', 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
+
+        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
     
@@ -195,6 +199,8 @@ class taskModel extends model
         $this->setStatus($task);
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+
+        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -221,6 +227,8 @@ class taskModel extends model
         $this->setStatus($task);
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+
+        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -248,10 +256,11 @@ class taskModel extends model
             ->autoCheck()
             ->check('left', 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
+
+        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
 
     }
-
 
     /**
      * Get task info by Id.

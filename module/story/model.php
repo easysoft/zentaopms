@@ -358,7 +358,7 @@ class storyModel extends model
         $projects = $this->dao->select('project')
             ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq((int)$storyID)
-            ->andWhere('t2.status')->eq('doing')
+            ->andWhere('t2.status')->ne('done')
             ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs();
 
@@ -375,6 +375,7 @@ class storyModel extends model
             ->where('project')->in($projects)
             ->andWhere('story')->eq($storyID)
             ->andWhere('status')->ne('cancel')
+            ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('type');
 
