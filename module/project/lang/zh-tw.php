@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 1347 2010-11-30 10:27:43Z yuren_@126.com $
+ * @version     $Id: zh-tw.php 1356 2010-12-01 13:38:53Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -92,7 +92,10 @@ $lang->project->delayed             = '已延期';
 $lang->project->groups['story']     = '需求分組';
 $lang->project->groups['status']    = '狀態分組';
 $lang->project->groups['pri']       = '優先順序分組';
+$lang->project->groups['openedby']  = '創建者分組';
 $lang->project->groups['assignedTo']= '指派給分組';
+$lang->project->groups['finishedby']= '完成者分組';
+$lang->project->groups['closedby']  = '關閉者分組';
 $lang->project->groups['estimate']  = '預計分組';
 $lang->project->groups['consumed']  = '已消耗分組';
 $lang->project->groups['left']      = '剩餘分組';

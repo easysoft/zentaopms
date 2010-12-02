@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 1150 2010-11-09 07:19:37Z wwccss $
+ * @version     $Id: zh-tw.php 1367 2010-12-02 08:21:49Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -24,9 +24,11 @@ $lang->install->desc             = <<<EOT
 
 禪道項目管理軟件使用PHP + MySQL開發，基于自主的PHP開發框架──ZenTaoPHP而成。第三方開發者或者企業可以非常方便的開發插件或者進行定製。
 
-禪道項目管理軟件由<strong class='red'><a href='http://www.cnezsoft.com' target='_blank'>QingDao Nature Easy Soft Network Technology Co,LTD 開發</a></strong>。
-禪道項目管理軟件的官方支持網站：<a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
-官方技術支持QQ群：41408140
+禪道項目管理軟件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='red'>青島易軟天創網絡科技有限公司</a>開發</strong>。
+官方網站：<a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
+新浪微博：<a href='http://t.sina.com.cn/zentaopms' target='_blank'>t.sina.com.cn/zentaopms</a>
+騰訊微博：<a href='http://t.qq.com/zentaopms/' target='_blank'>t.qq.com/zentaopms</a>
+QQ交流群：60121455 
 
 您現在正在安裝的版本是 <strong class='red'>%s</strong>。
 EOT;
