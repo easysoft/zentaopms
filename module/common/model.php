@@ -350,8 +350,10 @@ class commonModel extends model
      */
     public static function diff($text1, $text2)
     {
-        $w  = explode("\n", trim($text1));
-        $o  = explode("\n", trim($text2));
+        $text1 = str_replace('&nbsp;', '', trim($text1));
+        $text2 = str_replace('&nbsp;', '', trim($text2));
+        $w  = explode("\n", $text1);
+        $o  = explode("\n", $text2);
         $w1 = array_diff_assoc($w,$o);
         $o1 = array_diff_assoc($o,$w);
         $w2 = array();
