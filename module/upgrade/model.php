@@ -388,9 +388,9 @@ class upgradeModel extends model
      */
     private function upgradeFrom1_3To1_4()
     {
+        $this->execSQL($this->getUpgradeFile('1.3'));
         $this->updateNL1_3();
         $this->updateTasks();
-        $this->execSQL($this->getUpgradeFile('1.3'));
         if(!$this->isError()) $this->setting->updateVersion('1.4');
     }
 
@@ -519,7 +519,7 @@ class upgradeModel extends model
         {
             $project->desc = nl2br($project->desc);
             $project->goal = nl2br($project->goal);
-            $this->dao->update(TABLE_RPOJECT)->data($project)->where('id')->eq($project->id)->exec();
+            $this->dao->update(TABLE_PROJECT)->data($project)->where('id')->eq($project->id)->exec();
         }
 
         foreach($builds as $build)
@@ -605,6 +605,9 @@ class upgradeModel extends model
         {
             $this->dao->update(TABLE_TASK)->data($task, false)->where('id')->eq($task->id)->exec(false);
         }
+
+        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy, assignedDate = finishedDate')->where('status')->eq('done')->exec(false);
+        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy, assignedDate = canceledDate')->where('status')->eq('cancel')->exec(false);
 
         /* Update action name. */
     }
