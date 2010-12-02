@@ -845,6 +845,6 @@ class project extends control
         $url = $this->createLink('project', 'task', "projectID=$projectID");       
         $this->view->projectID = $projectID;        
         $this->display('project', 'tips');
-        die("<html><head><meta http-equiv='refresh' content='5; url=$url' /></head><body></body></html>");
+        echo "<html><head><meta http-equiv='refresh' content='5; url=$url' /></head><body></body></html>";
     }
 }
