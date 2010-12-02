@@ -51,11 +51,11 @@ class index extends control
         }
 
         /* stat datas of whole zentao system. */
-        $stats['project'] = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)->groupBy('status')->fetchPairs();
-        $stats['product'] = $this->dao->select('status, count(*) as count')->from(TABLE_PRODUCT)->groupBy('status')->fetchPairs();
-        $stats['task']    = $this->dao->select('status, count(*) as count')->from(TABLE_TASK)->groupBy('status')->fetchPairs();
-        $stats['story']   = $this->dao->select('status, count(*) as count')->from(TABLE_STORY)->groupBy('status')->fetchPairs();
-        $stats['bug']     = $this->dao->select('status, count(*) as count')->from(TABLE_BUG)->groupBy('status')->fetchPairs();
+        $stats['project'] = $this->dao->select('status, count(*) as count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->groupBy('status')->fetchPairs();
+        $stats['product'] = $this->dao->select('status, count(*) as count')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->groupBy('status')->fetchPairs();
+        $stats['task']    = $this->dao->select('status, count(*) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->groupBy('status')->fetchPairs();
+        $stats['story']   = $this->dao->select('status, count(*) as count')->from(TABLE_STORY)->where('deleted')->eq(0)->groupBy('status')->fetchPairs();
+        $stats['bug']     = $this->dao->select('status, count(*) as count')->from(TABLE_BUG)->where('deleted')->eq(0)->groupBy('status')->fetchPairs();
         $stats['todo']    = $this->dao->select('status, count(*) as count')->from(TABLE_TODO)->groupBy('status')->fetchPairs();
 
         /* Tasks, bugs, and todos of current user. */
