@@ -26,6 +26,7 @@ ZenTaoPMS is developped by PHH and mysql under the zentaophp framework developpe
 
 ZenTaoPMS is developped by <strong class='red'><a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a></strong>。
 The official website of ZenTaoPMS is <a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
+twitter:zentaopms
 
 The version of current release is <strong class='red'>%s</strong>。
 EOT;
