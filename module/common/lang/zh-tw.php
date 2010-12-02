@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 1340 2010-11-29 14:57:55Z wwccss $
+ * @version     $Id: zh-tw.php 1349 2010-12-01 06:18:22Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -100,8 +100,9 @@ $lang->searchObjects['doc']         = 'D:文檔';
 $lang->searchTips                   = '輸入編號';
 
 /* 風格列表。*/
-$lang->themes['default'] = '預設風格';
-$lang->themes['green']   = '綠色風格';
+$lang->themes['default'] = '預設';
+$lang->themes['green']   = '綠色';
+$lang->themes['red']     = '紅色';
 
 /* 首頁菜單設置。*/
 $lang->index->menu->product = '瀏覽產品|product|browse';
@@ -248,7 +249,7 @@ $lang->pager->last      = "末頁";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方網站";
-$lang->sponser        = "<a href='http://www.pujia.com' target='_blank'>普加贊助</a>";
+$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=outsofting' target='_blank'>OutSofting贊助</a>";
 $lang->zentaoKeywords = "開源項目管理軟件,項目管理,項目管理軟件,pmp,pms,php框架，國產php框架，scrum工具,scrum管理工具,scrum管理軟件,敏捷項目管理,禪道";
 $lang->zentaoDESC     = "禪道項目管理軟件(ZenTaoPMS)是一款國產的，基于LGPL協議，開源免費的項目管理軟件(工具、系統)，同時也是一款scrum管理工具。
     它集產品管理、項目管理、測試管理於一體，同時還包含了事務管理、組織管理等諸多功能，是中小型企業項目管理的首選。禪道項目管理軟件使用PHP + MySQL開發，
@@ -264,37 +265,3 @@ define('DT_DATE2',     'Ymd');
 define('DT_DATE3',     'Y年m月d日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
-
-/* 表情。*/
-$lang->smilies->smile       = '微笑';
-$lang->smilies->sad         = '悲傷';
-$lang->smilies->wink        = '眨眼';
-$lang->smilies->tongue      = '吐舌頭';
-$lang->smilies->shocked     = '驚訝';
-$lang->smilies->eyesdown    = '失望';
-$lang->smilies->angry       = '憤怒';
-$lang->smilies->cool        = '耍酷';
-$lang->smilies->indifferent = '冷漠';
-$lang->smilies->sick        = '病中';
-$lang->smilies->blush       = '臉紅';
-$lang->smilies->angel       = '天使';
-$lang->smilies->confused    = '困惑';
-$lang->smilies->cry         = '大哭';
-$lang->smilies->footinmouth = '保密';
-$lang->smilies->biggrin     = '大笑';
-$lang->smilies->nerd        = '書獃子';
-$lang->smilies->tired       = '好累';
-$lang->smilies->rose        = '玫瑰';
-$lang->smilies->kiss        = '吻';
-$lang->smilies->heart       = '心';
-$lang->smilies->hug         = '擁抱';
-$lang->smilies->dog         = '狗狗';
-$lang->smilies->deadrose    = '殘花';
-$lang->smilies->clock       = '時鐘';
-$lang->smilies->brokenheart = '傷心';
-$lang->smilies->coffee      = '咖啡';
-$lang->smilies->computer    = '計算機';
-$lang->smilies->devil       = '魔鬼';
-$lang->smilies->thumbsup    = '贊同';
-$lang->smilies->thumbsdown  = '反對';
-$lang->smilies->mail        = '郵件';
