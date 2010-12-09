@@ -12,6 +12,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<script language="Javascript">
+function checkall(checker)
+{
+    $('input').each(function() 
+    {
+        $(this).attr("checked", checker.checked)
+    });
+}
+</script>
+
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'>
@@ -26,6 +36,7 @@
   </div>
 </div>
 <div class='yui-d0'>
+  <form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
   <table class='table-1 tablesorter fixed' id='tasktable'>
     <thead>
     <tr class='colhead'>
@@ -45,7 +56,10 @@
     <tbody>
     <?php foreach($tasks as $task):?>
     <tr class='a-center'>
-      <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+      <td class='a-left'>
+        <input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' />
+        <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?>
+      </td>
       <td><?php echo $lang->task->priList[$task->pri];?></td>
       <td class='nobr'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></th>
       <td class='a-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
@@ -66,7 +80,15 @@
     </tr>
     <?php endforeach;?>
     </tbody>
+    <tfoot>
+    <tr><td colspan='11'>
+      <input type='checkbox' onclick='checkall(this);'><?php echo $lang->selectAll;?>
+      <?php 
+      echo html::submitButton($lang->close)?>
+    </td></tr>
+    </tfoot>
   </table> 
+  </form>
 </div>
 <script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

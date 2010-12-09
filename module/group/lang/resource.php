@@ -107,6 +107,7 @@ $lang->resource->task->start               = 'start';
 $lang->resource->task->finish              = 'finish';
 $lang->resource->task->cancel              = 'cancel';
 $lang->resource->task->close               = 'close';
+$lang->resource->task->batchClose          = 'batchClose';
 $lang->resource->task->activate            = 'activate';
 $lang->resource->task->delete              = 'delete';
 $lang->resource->task->view                = 'view';
@@ -238,9 +239,10 @@ $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undelete';
 
 /* New privilege.*/
-$lang->group->newPriv['my']['testTask']   = 'testTask';
-$lang->group->newPriv['my']['testCase']   = 'testCase';
-$lang->group->newPriv['task']['activate'] = 'activate';
-$lang->group->newPriv['task']['close']    = 'close';
-$lang->group->newPriv['task']['finish']   = 'finish';
-$lang->group->newPriv['search']['select'] = 'select';
+$lang->group->newPriv['my']['testTask']     = 'testTask';
+$lang->group->newPriv['my']['testCase']     = 'testCase';
+$lang->group->newPriv['task']['activate']   = 'activate';
+$lang->group->newPriv['task']['close']      = 'close';
+$lang->group->newPriv['task']['batchClose'] = 'batchClose';
+$lang->group->newPriv['task']['finish']     = 'finish';
+$lang->group->newPriv['search']['select']   = 'select';

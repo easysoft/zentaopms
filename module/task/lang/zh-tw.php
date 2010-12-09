@@ -19,6 +19,7 @@ $lang->task->logEfforts= "記錄工時";
 $lang->task->start     = "開始任務";
 $lang->task->finish    = "完成任務";
 $lang->task->close     = "關閉任務";
+$lang->task->batchClose= "批量關閉";
 $lang->task->cancel    = "取消任務";
 $lang->task->activate  = "激活任務";
 $lang->task->confirmStoryChange = "確認需求變動";

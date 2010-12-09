@@ -286,6 +286,38 @@ class task extends control
     }
 
     /**
+     * Batch close tasks.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchClose()
+    {
+        if($this->post->tasks)
+        {
+            $tasks = $this->post->tasks;
+            unset($_POST['tasks']);
+            $this->loadModel('action');
+
+            foreach($tasks as $taskID)
+            {
+                $task = $this->task->getById($taskID);
+                if($task->status == 'wait' or $task->status == 'doing') continue;
+
+                $changes = $this->task->close($taskID);
+
+                if($changes)
+                {
+                    $actionID = $this->action->create('task', $taskID, 'Closed', '');
+                    $this->action->logHistory($actionID, $changes);
+                    $this->sendmail($taskID, $actionID);
+                }
+            }
+        }
+        die(js::reload('parent'));
+    }
+
+    /**
      * Cancel a task.
      * 
      * @param  int    $taskID 

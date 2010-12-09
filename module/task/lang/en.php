@@ -19,6 +19,7 @@ $lang->task->logEfforts= "Efforts";
 $lang->task->start     = "Start";
 $lang->task->finish    = "Finish";
 $lang->task->close     = "Close";
+$lang->task->batchClose= "Batch close";
 $lang->task->cancel    = "Cancel";
 $lang->task->activate  = "Activate";
 $lang->task->confirmStoryChange = "Confirm story change";
