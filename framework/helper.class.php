@@ -309,6 +309,28 @@ class helper
         }
         return $files;
     }
+
+    /**
+     * Change directory.
+     * 
+     * @param  string $path 
+     * @static
+     * @access public
+     * @return void
+     */
+    static function cd($path = '')
+    {
+        static $cwd = '';
+        if($path)
+        {
+            $cwd = getcwd();
+            chdir($path);
+        }
+        else
+        {
+            chdir($cwd);
+        }
+    }
 }
 
 /**
