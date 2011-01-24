@@ -145,10 +145,10 @@ class fileModel extends model
      * Get extension of a file.
      * 
      * @param  string    $filename 
-     * @access private
+     * @access public
      * @return string
      */
-    private function getExtension($filename)
+    public function getExtension($filename)
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         if(empty($extension)) return 'txt';
@@ -161,10 +161,10 @@ class fileModel extends model
      * 
      * @param  int    $fileID 
      * @param  string $extension 
-     * @access private
+     * @access public
      * @return string
      */
-    private function setPathName($fileID, $extension)
+    public function setPathName($fileID, $extension)
     {
         $sessionID  = session_id();
         $randString = substr($sessionID, mt_rand(0, strlen($sessionID) - 5), 3);
@@ -174,10 +174,10 @@ class fileModel extends model
     /**
      * Set save path.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setSavePath()
+    public function setSavePath()
     {
         $savePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . date('Ym/', $this->now);
         if(!file_exists($savePath)) @mkdir($savePath, 0777, true);
