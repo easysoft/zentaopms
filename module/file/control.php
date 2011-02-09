@@ -96,7 +96,10 @@ class file extends control
                 $fileData = file_get_contents($file->realPath);
                 echo $fileData;
             }
-            $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+            else
+            {
+                $this->app->error("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+            }
         }
     }
 
