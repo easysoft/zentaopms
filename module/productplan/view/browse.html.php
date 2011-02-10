@@ -35,7 +35,7 @@
       <td><?php echo $plan->begin;?></td>
       <td><?php echo $plan->end;?></td>
       <td class='a-left nobr'><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
-      <td class='a-left nobr'><?php echo $plan->desc;?></td>
+      <td class='a-left nobr content'><?php echo $plan->desc;?></td>
       <td>
         <?php
         common::printLink('productplan', 'edit', "planID=$plan->id", $lang->edit);
