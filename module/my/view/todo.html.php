@@ -53,7 +53,7 @@ function changeDate(date)
     <tbody>
     <?php foreach($todos as $todo):?>
     <tr class='a-center'>
-      <td>
+      <td class='a-left'>
         <?php
         if($importFeature) echo "<input type='checkbox' name='todos[]' value='$todo->id' /> ";
         echo $todo->id;
