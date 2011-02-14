@@ -772,4 +772,17 @@ class css
     {
         echo "<link rel='stylesheet' href='$url?v=$version' type='text/css' media='screen' />\n";
     }
+
+    /**
+     * Print a css code.
+     * 
+     * @param  string    $css 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function internal($css)
+    {
+        echo "<style>$css</style>";
+    }
 }
