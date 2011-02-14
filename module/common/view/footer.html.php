@@ -10,6 +10,9 @@
     <?php echo $lang->sponser;?>
   </div>
 </div>
-<script laguage='Javascript'>$().ready(function(){setDebugWin('white')})</script>
+<script laguage='Javascript'>
+$().ready(function(){setDebugWin('white')})
+<?php if($pageJS) echo $pageJS;?>
+</script>
 </body>
 </html>
