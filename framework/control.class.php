@@ -299,6 +299,50 @@ class control
     }
 
     /**
+     * Get css code for a method. 
+     * 
+     * @param  string    $moduleName 
+     * @param  string    $methodName 
+     * @access private
+     * @return string
+     */
+    private function getCSS($moduleName, $methodName)
+    {
+        $moduleName = strtolower(trim($moduleName));
+        $methodName = strtolower(trim($methodName));
+        $modulePath = $this->app->getModulePath($moduleName);
+
+        $css = '';
+        $mainCssFile   = $modulePath . 'css' . $this->pathFix . 'common.css';
+        $methodCssFile = $modulePath . 'css' . $this->pathFix . $methodName . '.css';
+        if(file_exists($mainCssFile))   $css .= file_get_contents($mainCssFile);
+        if(file_exists($methodCssFile)) $css .= file_get_contents($methodCssFile);
+        return $css;
+    }
+
+    /**
+     * Get js code for a method. 
+     * 
+     * @param  string    $moduleName 
+     * @param  string    $methodName 
+     * @access private
+     * @return string
+     */
+    private function getJS($moduleName, $methodName)
+    {
+        $moduleName = strtolower(trim($moduleName));
+        $methodName = strtolower(trim($methodName));
+        $modulePath = $this->app->getModulePath($moduleName);
+
+        $js = '';
+        $mainJsFile   = $modulePath . 'js' . $this->pathFix . 'common.js';
+        $methodJsFile = $modulePath . 'js' . $this->pathFix . $methodName . '.js';
+        if(file_exists($mainJsFile))   $js .= file_get_contents($mainJsFile);
+        if(file_exists($methodJsFile)) $js .= file_get_contents($methodJsFile);
+        return $js;
+    }
+
+    /**
      * Assign one var to the view vars.
      * 
      * @param   string  $name       the name.
@@ -383,6 +427,12 @@ class control
         /* Set the view file. */
         $viewFile = $this->setViewFile($moduleName, $methodName);
         if(is_array($viewFile)) extract($viewFile);
+
+        /* Get css and js. */
+        $css = $this->getCSS($moduleName, $methodName);
+        $js  = $this->getJS($moduleName, $methodName);
+        if($css) $this->view->pageCss = $css;
+        if($js)  $this->view->pageJS  = $js;
 
         /* Change the dir to the view file to keep the relative pathes work. */
         $currentPWD = getcwd();
