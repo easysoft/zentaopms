@@ -4,9 +4,9 @@ include 'header.lite.html.php';
 include 'colorbox.html.php';
 ?>
 <div id='header'>
-  <div id='topbar' class='yui-d0 yui-g'>
-    <div class='yui-u first'>
-      <div class='yui-b'>
+  <div class='g' id='header'>
+    <div class='u-1-2'>
+      <div class='cont'>
         <?php
         echo $app->company->name . $lang->colon;
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
@@ -17,9 +17,9 @@ include 'colorbox.html.php';
         ?>
       </div>
     </div>
-    <div class='yui-u a-right'><?php commonModel::printTopBar();?></div>
+    <div class='u-1-2'><div class='cont a-right'><?php commonModel::printTopBar();?></div></div>
   </div>
-  <div id='navbar' class='yui-d0'>
+  <div class='g' id='navbar'>
     <div id='mainmenu'><?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?></div>
     <div id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></div>
   </div>

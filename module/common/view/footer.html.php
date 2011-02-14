@@ -12,7 +12,7 @@
 </div>
 <script laguage='Javascript'>
 $().ready(function(){setDebugWin('white')})
-<?php if($pageJS) echo $pageJS;?>
+<?php if(isset($pageJS)) echo $pageJS;?>
 </script>
 </body>
 </html>

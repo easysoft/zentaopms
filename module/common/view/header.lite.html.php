@@ -13,7 +13,7 @@ $clientTheme  = $this->app->getClientTheme();
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   <?php
   $header = isset($header) ? (object)$header : new stdclass();
-  if(!isset($header->title))    $header->title = $lang->ZenTaoPMS;
+  if(!isset($header->title))    $header->title    = $lang->ZenTaoPMS;
   if(!isset($header->keywords)) $header->keywords = $lang->zentaoKeywords;
   if(!isset($header->desc))     $header->desc     = $lang->zentaoDESC;
 
@@ -29,6 +29,7 @@ $clientTheme  = $this->app->getClientTheme();
   css::import($defaultTheme . 'style.css', $config->version);
   css::import($langTheme, $config->version);
   if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css', $config->version);
+  if(isset($pageCss)) css::internal($pageCss);
 
   echo html::icon($webRoot . 'favicon.ico');
   ?>
