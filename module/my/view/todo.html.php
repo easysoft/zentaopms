@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
 function changeDate(date)
 {
@@ -33,9 +34,14 @@ function changeDate(date)
        ?>
        <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
-    <div class='f-right'><?php echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);?></div>
+    <div class='f-right'>
+      <?php 
+	  echo html::export2csv($lang->exportCSV, $lang->setFileName);
+	  echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
+	  ?>
+	</div>
   </div>
-  <table class='table-1 tablesorter'>
+  <table class='table-1 tablesorter datatable''>
     <thead>
     <tr class='colhead'>
       <th class='w-id'><?php echo $lang->idAB;?></th>
