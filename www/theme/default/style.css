@@ -218,10 +218,11 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #header{margin-bottom:5px; background:#16528b; border-bottom:1px solid #e4e4e4;}
 
 /* Top bar. */
-#topbar  {padding:3px; color:#fff}
-#topbar .yui-b, #topbar a {color:white}
+#topbar  {padding:3px 10px; color:#fff}
+#topbar a {color:white}
 
 /* The nav bar. */
+#navbar{padding:0 10px}
 #navbar ul {margin:0; padding:0;} 
 #navbar li {margin:0; padding:0; float:left; text-align:center; list-style-type:none;}
 #navbar a  {text-decoration:none;}
