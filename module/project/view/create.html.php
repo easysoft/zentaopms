@@ -37,7 +37,7 @@ function setWhite(acl)
     acl == 'custom' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
 }
 </script>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $lang->project->create;?></caption>
@@ -87,5 +87,5 @@ function setWhite(acl)
       </tr>
     </table>
   </form>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

@@ -22,7 +22,7 @@ function checkall(checker)
 }
 </script>
 
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <div id='featurebar'>
     <div class='f-left'>
       <?php
@@ -35,7 +35,7 @@ function checkall(checker)
     </div>
   </div>
 </div>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
   <table class='table-1 tablesorter fixed' id='tasktable'>
     <thead>

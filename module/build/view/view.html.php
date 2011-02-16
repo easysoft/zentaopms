@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table class='table-1'> 
     <caption><?php echo $lang->build->view;?></caption>
     <tr>

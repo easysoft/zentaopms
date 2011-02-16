@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table class='table-1 fixed colored tablesorter'>
     <caption class='caption-tl'>
       <div class='f-left'><?php echo $lang->project->bug;?></div>

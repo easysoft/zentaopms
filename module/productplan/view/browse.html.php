@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table class='table-1 tablesorter fixed'>
     <caption class='caption-tr'>
       <div class='f-left'><?php echo $lang->productplan->browse;?></div>

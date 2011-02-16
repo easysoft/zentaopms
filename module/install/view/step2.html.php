@@ -10,7 +10,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' action='<?php echo $this->createLink('install', 'step3');?>'>
   <table align='center' class='table-6'>
     <caption><?php echo $lang->install->setConfig;?></caption>

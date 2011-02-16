@@ -22,7 +22,7 @@ $(document).ready(function()
     else $('#fileBox').show();
 });
 </script>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table class='table-1'>
   <caption><?php echo $doc->title . $lang->colon . $lang->doc->view;?></caption>
     <tr>

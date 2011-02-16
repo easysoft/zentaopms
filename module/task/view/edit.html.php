@@ -29,7 +29,7 @@ $(function() {
 })
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <div id='titlebar'>
     <div id='main'>TASK #<?php echo $task->id . $lang->colon . html::input('name', $task->name, 'class="text-1"');?></div>
     <div><?php echo html::submitButton();?></div>

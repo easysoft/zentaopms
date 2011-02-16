@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-5'> 
       <caption><?php echo $lang->company->edit;?></caption>

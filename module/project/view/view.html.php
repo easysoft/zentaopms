@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table align='center' class='table-1'>
     <caption><?php echo $project->name;?></caption>
     <tr>
@@ -90,5 +90,5 @@
   ?>
   </div>
   <?php include '../../common/view/action.html.php';?>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

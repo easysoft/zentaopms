@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <div id='featurebar'>
     <div class='f-right'>
       <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>

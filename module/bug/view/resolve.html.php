@@ -25,7 +25,7 @@ function setDuplicate(resolution)
 }
 </script>
 <form method='post' target='hiddenwin'>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table class='table-1'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
@@ -57,5 +57,5 @@ function setDuplicate(resolution)
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

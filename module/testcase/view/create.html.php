@@ -11,7 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table class='table-1'> 
       <caption><?php echo $lang->testcase->create;?></caption>
@@ -83,5 +83,5 @@
       </tr>
     </table>
   </form>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

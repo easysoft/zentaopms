@@ -34,7 +34,7 @@ $(document).ready(function()
 });
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <div id='titlebar'>
     <div id='main'>
     CASE #<?php echo $case->id . $lang->colon;?>
@@ -148,5 +148,5 @@ $(document).ready(function()
       </table>
     </fieldset>
   </div>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

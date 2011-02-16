@@ -18,7 +18,7 @@ function loadBuilds()
 {
 }
 </script>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' target='hiddenwin'>
     <table class='table-1'> 
       <caption><?php echo $lang->testtask->create;?></caption>
@@ -59,5 +59,5 @@ function loadBuilds()
       </tr>
     </table>
   </form>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

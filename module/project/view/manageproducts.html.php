@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <style>span{display:block; float:left; width:200px}</style>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post'>
     <table align='center' class='table-4'> 
       <caption><?php echo $lang->project->manageProducts;?></caption>
@@ -22,5 +22,5 @@
       <tr><td class='a-center'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

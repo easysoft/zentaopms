@@ -14,7 +14,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
 <?php include './taskheader.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table class='table-1 fixed colored tablesorter datatable'>
     <?php $vars = "projectID=$project->id&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>

@@ -20,7 +20,7 @@ function changeDate(date)
     location.href=link;
 }
 </script>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
    <div id='featurebar'>
      <div class='f-left'>
@@ -65,5 +65,5 @@ function changeDate(date)
     </tbody>
   </table>
 </form>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

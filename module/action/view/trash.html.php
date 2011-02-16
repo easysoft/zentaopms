@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<div class='yui-d0'>
+<div class='g'><div class='u-1'>
   <table class='table-1 colored tablesorter'>
     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <thead>
@@ -40,5 +40,5 @@
     </tbody>
   </table>
   <div class='a-right'><?php $pager->show();?></div>
-</div>  
+</div></div></div>
 <?php include '../../common/view/footer.html.php';?>

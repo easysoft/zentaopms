@@ -28,7 +28,7 @@ function checkall(checker)
     });
 }
 </script>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' target='hiddenwin'>
     <table class='table-1 a-left'> 
       <caption class='caption-tl'><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>

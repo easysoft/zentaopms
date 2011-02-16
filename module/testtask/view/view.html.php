@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table class='table-1'> 
     <caption><?php echo $lang->testtask->view;?></caption>
     <tr>
@@ -62,5 +62,5 @@
     ?>
   </div>
   <?php include '../../common/view/action.html.php';?>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table align='center' class='table-4'>
     <caption><?php echo $lang->user->profile;?></caption>
     <tr>
@@ -50,5 +50,5 @@
       <td><?php echo $user->last;?></td>
     </tr>
   </table>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

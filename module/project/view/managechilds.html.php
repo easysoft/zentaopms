@@ -25,5 +25,5 @@
       <tr><td class='a-center'><input type='submit' name='submit' /></td></tr>
     </table>
   </form>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

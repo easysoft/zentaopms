@@ -224,7 +224,7 @@ $(function() {
 });
 </script>
 <form method='post' target='hiddenwin' enctype='multipart/form-data'>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <div id='titlebar'>
     <div id='main'>
     BUG #<?php echo $bug->id . $lang->colon;?>
@@ -397,5 +397,5 @@ $(function() {
       </table>
     </fieldset>
   </div>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

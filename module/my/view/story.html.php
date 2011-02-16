@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <div id='featurebar'>
     <div class='f-left'>
       <?php
@@ -24,7 +24,7 @@
     </div>
   </div>
 </div>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <table class='table-1 tablesorter'>
     <thead>
       <tr class='colhead'>

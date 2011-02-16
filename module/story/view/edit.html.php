@@ -13,7 +13,7 @@
 <?php include './header.html.php';?>
 <style>#module, #plan {width:90%}</style>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <div id='titlebar'>
     <div id='main'>STORY #<?php echo $story->id . $lang->colon . $story->title;?></div>
     <div><?php echo html::submitButton()?></div>

@@ -21,7 +21,7 @@ function checkall(checker)
     });
 }
 </script>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <?php echo $searchForm;?>
   <form method='post'>
   <table class='table-1 colored tablesorter fixed'>

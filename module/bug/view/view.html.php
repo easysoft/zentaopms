@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../file/view/download.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <div id='titlebar'>
     <div id='main' <?php if($bug->deleted) echo "class='deleted'";?>>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
     <div>
@@ -222,5 +222,5 @@
       </table>
     </fieldset>
   </div>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

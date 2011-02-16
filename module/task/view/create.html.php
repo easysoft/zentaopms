@@ -61,7 +61,7 @@ $(document).ready(function()
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
 });
 </script>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $lang->task->create;?></caption>

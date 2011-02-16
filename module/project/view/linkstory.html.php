@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 tablesorter a-center'> 
       <thead>
@@ -49,5 +49,5 @@
       <tfoot><tr><td colspan='8'><?php echo html::submitButton();?></td></tr></tfoot>
     </table>
   </form>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

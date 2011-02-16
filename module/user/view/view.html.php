@@ -70,5 +70,5 @@ EOT;
       <?php include $tabID . '.html.php';?>
     </div>
   </div>  
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

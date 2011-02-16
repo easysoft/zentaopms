@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
+<div class='g'><div class='u-1'>
   <table align='center' class='table-1'>
     <tr class='colhead'>
      <th><?php echo $lang->company->id;?></th>
@@ -45,5 +45,5 @@
    </tr>
    <?php endforeach;?>
   </table>
-</div>  
+</div></div>  
 <?php include '../../common/view/footer.html.php';?>

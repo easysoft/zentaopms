@@ -59,7 +59,7 @@ function setStory(reason)
     }
 }
 </script>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $story->title;?></caption>
@@ -111,5 +111,5 @@ function setStory(reason)
   </form>
   <?php include './affected.html.php';?>
   <?php include '../../common/view/action.html.php';?>
-</div>
+</div></div>
 <?php include '../../common/view/footer.html.php';?>

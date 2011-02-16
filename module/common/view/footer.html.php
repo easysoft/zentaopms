@@ -1,6 +1,6 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <div id='divider'></div>
-<div class='yui-d0'>
+<div class='yui-d0'><div class='u-1'>
   <iframe frameborder='0' name='hiddenwin' scrolling='no' class='<?php $config->debug ? print("debugwin") : print('hidden')?>'></iframe>
 </div>
 <div id='footer' class='yui-d0'>
