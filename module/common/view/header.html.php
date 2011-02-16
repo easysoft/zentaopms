@@ -19,8 +19,10 @@ include 'colorbox.html.php';
     </div>
     <div class='u-1-2'><div class='cont a-right'><?php commonModel::printTopBar();?></div></div>
   </div>
-  <div id='navbar'>
-    <div id='mainmenu'><?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?></div>
-    <div id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></div>
+  <div class='g' id='navbar'>
+    <div class='u-1'>
+      <div id='mainmenu'><?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?></div>
+      <div id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></div>
+    </div>
   </div>
 </div>
