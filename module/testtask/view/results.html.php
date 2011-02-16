@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <style>body{background:white}</style>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <h1>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></h1>
   <?php foreach($results as $result):?>
   <table class='table-1'>

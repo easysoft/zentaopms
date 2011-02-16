@@ -13,7 +13,7 @@
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <style>#plan {width:245px}</style>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table align='center' class='table-1'> 
       <caption><?php echo $lang->story->create;?></caption>

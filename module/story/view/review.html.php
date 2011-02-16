@@ -59,7 +59,7 @@ function setStory(reason)
     }
 }
 </script>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $story->title;?></caption>

@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <table class='table-6' align='center'>
     <caption><?php echo $lang->product->roadmap;?></caption>
     <?php 

@@ -21,7 +21,7 @@ function checkall(checker, id)
 }
 </script>
 <style>#users span{display:block; width:100px; float:left}</style>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>

@@ -10,7 +10,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <?php if(isset($error)):?>
   <table class='table-6' align='center'>
 	<caption><?php echo $lang->install->error;?></caption>

@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
   <table class='table-1 a-left'> 
     <caption>

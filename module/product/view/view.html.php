@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <table align='center' class='table-1'> 
     <caption><?php echo $lang->product->view;?></caption>
     <tr>

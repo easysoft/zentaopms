@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../file/view/download.html.php';?>
 
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <div id='titlebar'>
     <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . $lang->colon . $task->name;?></div>
     <div>

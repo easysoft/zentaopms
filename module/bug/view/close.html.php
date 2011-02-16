@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <form method='post' target='hiddenwin'>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <table class='table-1'>
     <caption><?php echo $bug->title;?></caption>
     <tr>

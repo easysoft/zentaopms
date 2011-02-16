@@ -36,7 +36,7 @@ function browseBySearch(active)
     $('#bymoduleTab').removeClass('active');
 }
 </script>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <div id='featurebar'>
     <div class='f-left'>
       <?php

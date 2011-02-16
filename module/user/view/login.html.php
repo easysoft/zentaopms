@@ -68,6 +68,6 @@ $(document).ready(function(){
     </div>
   </form>
 </div>  
-<div class='yui-d0'><div class='u-1'><iframe frameborder='0' scrolling='no' name='hiddenwin' class='hidden'></iframe></div>
+<div class='g'><div class='u-1'><iframe frameborder='0' scrolling='no' name='hiddenwin' class='hidden'></iframe></div>
 </body>
 </html>

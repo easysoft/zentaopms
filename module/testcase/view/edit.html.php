@@ -34,7 +34,7 @@ $(document).ready(function()
 });
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <div id='titlebar'>
     <div id='main'>
     CASE #<?php echo $case->id . $lang->colon;?>

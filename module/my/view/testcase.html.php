@@ -19,7 +19,7 @@ $(document).ready(function()
 });
 </script>
 
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <div id='featurebar'>
     <div class='f-left'>
       <?php
@@ -32,7 +32,7 @@ $(document).ready(function()
   </div>
 </div>
 
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <table class='table-1 fixed tablesorter'>
     <thead>

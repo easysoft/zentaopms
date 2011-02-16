@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
 
   <table class='table-1 fixed colored tablesorter' align='center'>
     <caption class='caption-tr'><?php common::printLink('doc', 'create', "libID=project&moduleID=0&productID=0&projectID=$project->id&from=project", $lang->doc->create);?></caption>

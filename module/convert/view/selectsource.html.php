@@ -10,7 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <form method='post' action='<?php echo inlink('setConfig');?>'>
   <table align='center' class='table-5 f-14px'>
     <caption><?php echo $lang->convert->selectSource;?></caption>

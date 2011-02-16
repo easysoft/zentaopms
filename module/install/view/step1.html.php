@@ -10,7 +10,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <table align='center' class='table-6 a-center'>
     <caption><?php echo $lang->install->checking;?></caption>
     <tr>

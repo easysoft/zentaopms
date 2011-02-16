@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../file/view/download.html.php';?>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <div id='titlebar' <?php if($case->deleted) echo "class='deleted'";?>>
     CASE #<?php echo $case->id . $lang->colon . $case->title;?>
     <div class='f-right'>

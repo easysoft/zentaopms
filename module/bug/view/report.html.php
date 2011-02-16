@@ -35,7 +35,7 @@ function checkReverse()
 }
 </script>
 
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <div id='featurebar'>
     <div class='f-left'><?php echo $lang->bug->report->common;?></div>
     <div class='f-right'><?php common::printLink('bug', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->goback); ?></div>

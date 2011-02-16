@@ -18,7 +18,7 @@ $(document).ready(function()
     $("a.iframe").colorbox({width:640, height:480, iframe:true, transition:'none'});
 });
 </script>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <table class='table-1 tablesorter fixed'>
     <caption class='caption-tl'>
       <div class='f-left'><?php echo $lang->project->story;?></div>

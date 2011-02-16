@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <style>span{display:block; float:left; width:200px}</style>
-<div class='yui-d0'><div class='u-1'>
+<div class='g'><div class='u-1'>
   <form method='post'>
     <table align='center' class='table-4'> 
       <caption><?php echo $lang->project->manageProducts;?></caption>
