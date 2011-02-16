@@ -61,7 +61,7 @@ class my extends control
         $this->view->todos = $this->todo->getList($type, $account, $status);
         $this->view->date  = (int)$type == 0 ? $this->todo->today() : $type;
         $this->view->type  = $type;
-        $this->view->importFeature = ($type == 'before');
+        $this->view->importFeature = ($type == 'before' or $type == TODOMODEL::DAY_IN_FEATURE);
 
         $this->display();
     }

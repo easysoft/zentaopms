@@ -138,7 +138,7 @@ class todoModel extends model
         elseif($date == 'before')
         {
             $begin = '1970-01-01';
-            $end   = self::DAY_IN_FEATURE;
+            $end   = $this->yesterday();
         }
         else
         {
@@ -157,9 +157,6 @@ class todoModel extends model
             ->query();
         while($todo = $stmt->fetch())
         {
-            if($begin == $this->today())
-            {
-            }
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
             $todo->begin = $this->formatTime($todo->begin);
