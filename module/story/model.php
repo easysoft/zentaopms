@@ -649,10 +649,10 @@ class storyModel extends model
      * Format stories 
      * 
      * @param  array    $stories 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function formatStories($stories)
+    protected function formatStories($stories)
     {
         /* Get module names of stories. */
         /*$modules = array();

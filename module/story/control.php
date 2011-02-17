@@ -70,10 +70,10 @@ class story extends control
      * The common action when edit or change a story.
      * 
      * @param  int    $storyID 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function commonAction($storyID)
+    protected function commonAction($storyID)
     {
         /* Get datas. */
         $story    = $this->story->getById($storyID);
@@ -410,10 +410,10 @@ class story extends control
      * 
      * @param  int    $storyID 
      * @param  int    $actionID 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function sendmail($storyID, $actionID)
+    protected function sendmail($storyID, $actionID)
     {
         /* Get actions. */
         $action          = $this->action->getById($actionID);
