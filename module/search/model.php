@@ -2,7 +2,7 @@
 /**
  * The model file of search module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
@@ -246,10 +246,10 @@ class searchModel extends model
      * 
      * @param  array    $results 
      * @param  string   $module 
-     * @access private
+     * @access protected
      * @return array
      */
-    private function formatResults($results, $module)
+    protected function formatResults($results, $module)
     {
         /* Get title field. */
         $title = ($module == 'story') ? 'title' : 'name';

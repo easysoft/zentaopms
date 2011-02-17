@@ -2,7 +2,7 @@
 /**
  * The model file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -444,10 +444,10 @@ class taskModel extends model
      * Batch process tasks.
      * 
      * @param  int    $tasks 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function processTasks($tasks)
+    protected function processTasks($tasks)
     {
         $today = helper::today();
         foreach($tasks as $task)
@@ -476,10 +476,10 @@ class taskModel extends model
      * Process a task, judge it's status.
      * 
      * @param  object    $task 
-     * @access private
+     * @access protected
      * @return object
      */
-    private function processTask($task)
+    protected function processTask($task)
     {
         $today = helper::today();
        
@@ -506,10 +506,10 @@ class taskModel extends model
      * Set the status field of a task.
      * 
      * @param  object $task 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setStatus($task)
+    protected function setStatus($task)
     {
         $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
     }

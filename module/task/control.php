@@ -2,7 +2,7 @@
 /**
  * The control file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -409,10 +409,10 @@ class task extends control
      * 
      * @param  int    $taskID 
      * @param  int    $actionID 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function sendmail($taskID, $actionID)
+    protected function sendmail($taskID, $actionID)
     {
         /* Set toList and ccList. */
         $task   = $this->task->getByID($taskID);

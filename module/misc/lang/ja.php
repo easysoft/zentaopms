@@ -2,7 +2,7 @@
 /**
  * The misc module Japanese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
@@ -54,4 +54,4 @@ $lang->misc->zentao->service['scrumtrain'] = 'スクラムの訓練';
 $lang->misc->zentao->service['fwtrain']    = 'ZenTaoPHPトレーニング';
 $lang->misc->zentao->service['servicemore']= 'もっと見る...';
 
-$lang->misc->copyright = "著作権と警官y;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a>";
+$lang->misc->copyright = "著作権と警官y;2009-2011 <a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a>";

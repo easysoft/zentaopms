@@ -2,7 +2,7 @@
 /**
  * The model file of mail module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     mail
@@ -44,10 +44,10 @@ class mailModel extends model
     /**
      * Set smtp.
      * 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setSMTP()
+    protected function setSMTP()
     {
         $this->mta->isSMTP();
         $this->mta->SMTPDebug = $this->config->mail->smtp->debug;
@@ -61,10 +61,10 @@ class mailModel extends model
     /**
      * PHPmail.
      * 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setPhpMail()
+    protected function setPhpMail()
     {
         $this->mta->isMail();
     }
@@ -72,10 +72,10 @@ class mailModel extends model
     /**
      * Sendmail.
      * 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setSendMail()
+    protected function setSendMail()
     {
         $this->mta->isSendmail();
     }
@@ -83,10 +83,10 @@ class mailModel extends model
     /**
      * Gmail.
      * 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setGMail()
+    protected function setGMail()
     {
         $this->mta->isSMTP();
         $this->mta->SMTPDebug  = $this->config->mail->gmail->debug;
@@ -143,10 +143,10 @@ class mailModel extends model
      * 
      * @param  array    $toList 
      * @param  array    $emails 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setTO($toList, $emails)
+    protected function setTO($toList, $emails)
     {
         $toList = explode(',', str_replace(' ', '', $toList));
         foreach($toList as $account)
@@ -162,10 +162,10 @@ class mailModel extends model
      * 
      * @param  array    $ccList 
      * @param  array    $emails 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setCC($ccList, $emails)
+    protected function setCC($ccList, $emails)
     {
         $ccList = explode(',', str_replace(' ', '', $ccList));
         if(!is_array($ccList)) return;
@@ -181,10 +181,10 @@ class mailModel extends model
      * Set subject 
      * 
      * @param  string    $subject 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setSubject($subject)
+    protected function setSubject($subject)
     {
         $this->mta->Subject = stripslashes($subject);
     }
@@ -193,10 +193,10 @@ class mailModel extends model
      * Set body.
      * 
      * @param  string    $body 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setBody($body)
+    protected function setBody($body)
     {
         $this->mta->msgHtml("$body");
     }
@@ -204,10 +204,10 @@ class mailModel extends model
     /**
      * Set error lang. 
      * 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function setErrorLang()
+    protected function setErrorLang()
     {
         $this->mta->SetLanguage($this->app->getClientLang());
     }
@@ -215,10 +215,10 @@ class mailModel extends model
     /**
      * Clear.
      * 
-     * @access private
+     * @access protected
      * @return void
      */
-    private function clear()
+    protected function clear()
     {
         $this->mta->clearAddresses();
         $this->mta->clearAttachments();

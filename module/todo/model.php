@@ -2,7 +2,7 @@
 /**
  * The model file of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
@@ -335,10 +335,10 @@ class todoModel extends model
      * 
      * If today in week is 1, move it one day in feature. Else is 7, move it back one day. To keep the time geted in this week.
      *
-     * @access private
+     * @access protected
      * @return time
      */
-    private function getMiddleOfThisWeek()
+    protected function getMiddleOfThisWeek()
     {
         $baseTime = time();
         $weekDay  = date('N');
@@ -350,10 +350,10 @@ class todoModel extends model
     /**
      * Get middle of last week 
      * 
-     * @access private
+     * @access protected
      * @return time
      */
-    private function getMiddleOfLastWeek()
+    protected function getMiddleOfLastWeek()
     {
         $baseTime = time();
         $weekDay  = date('N');

@@ -2,7 +2,7 @@
 /**
  * The model file of case module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -201,10 +201,10 @@ class testcaseModel extends model
      * Join steps to a string, thus can diff them.
      * 
      * @param  array   $steps 
-     * @access private
+     * @access protected
      * @return string
      */
-    private function joinStep($steps)
+    protected function joinStep($steps)
     {
         $retrun = '';
         foreach($steps as $step) $return .= $step->desc . ' EXPECT:' . $step->expect . "\n";
