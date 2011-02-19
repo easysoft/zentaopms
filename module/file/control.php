@@ -19,7 +19,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function buildForm($fileCount = 2, $percent = 0.9)
+    public function buildForm($fileCount = 2, $percent = 0.99)
     { 
         if(!file_exists($this->file->savePath)) 
         {
