@@ -2,7 +2,7 @@
 /**
  * The edit view file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -13,7 +13,7 @@
 <?php include './header.html.php';?>
 <style>#module, #plan {width:90%}</style>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <div id='titlebar'>
     <div id='main'>STORY #<?php echo $story->id . $lang->colon . $story->title;?></div>
     <div><?php echo html::submitButton()?></div>

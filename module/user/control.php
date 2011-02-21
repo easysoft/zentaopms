@@ -2,7 +2,7 @@
 /**
  * The control file of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
@@ -191,10 +191,10 @@ class user extends control
      * Set the rerferer.
      * 
      * @param  string   $referer 
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function setReferer($referer = '')
+    private function setReferer($referer = '')
     {
         if(!empty($referer))
         {

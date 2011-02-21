@@ -2,7 +2,7 @@
 /**
  * The control file of file module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
@@ -19,7 +19,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function buildForm($fileCount = 2, $percent = 0.99)
+    public function buildForm($fileCount = 2, $percent = 0.9)
     { 
         if(!file_exists($this->file->savePath)) 
         {

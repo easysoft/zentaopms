@@ -2,7 +2,7 @@
 /**
  * The view of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
@@ -22,7 +22,7 @@ $(document).ready(function()
     else $('#fileBox').show();
 });
 </script>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <table class='table-1'>
   <caption><?php echo $doc->title . $lang->colon . $lang->doc->view;?></caption>
     <tr>

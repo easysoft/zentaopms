@@ -2,7 +2,7 @@
 /**
  * The control file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -70,10 +70,10 @@ class story extends control
      * The common action when edit or change a story.
      * 
      * @param  int    $storyID 
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function commonAction($storyID)
+    private function commonAction($storyID)
     {
         /* Get datas. */
         $story    = $this->story->getById($storyID);
@@ -410,10 +410,10 @@ class story extends control
      * 
      * @param  int    $storyID 
      * @param  int    $actionID 
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function sendmail($storyID, $actionID)
+    private function sendmail($storyID, $actionID)
     {
         /* Get actions. */
         $action          = $this->action->getById($actionID);

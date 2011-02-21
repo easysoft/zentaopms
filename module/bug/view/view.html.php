@@ -2,7 +2,7 @@
 /**
  * The view file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -12,58 +12,56 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../file/view/download.html.php';?>
-<div class='g'>
-  <div class='u-1'>
-    <div id='titlebar'>
-      <div id='main' <?php if($bug->deleted) echo "class='deleted'";?>>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
-      <div>
-        <?php
-        $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
-        $params     = "bugID=$bug->id";
-        $copyParams = "productID=$productID&extra=bugID=$bug->id";
-        if(!$bug->deleted)
-        {
-            common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
-            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
-            if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
-            if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
-            common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
-            common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
-        }
-        echo html::a($browseLink, $lang->goback);
-        ?>
-      </div>
+<div class='yui-d0'>
+  <div id='titlebar'>
+    <div id='main' <?php if($bug->deleted) echo "class='deleted'";?>>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
+    <div>
+      <?php
+      $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
+      $params     = "bugID=$bug->id";
+      $copyParams = "productID=$productID&extra=bugID=$bug->id";
+      if(!$bug->deleted)
+      {
+          common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+          if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+          if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
+          if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+          common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
+          common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
+      }
+      echo html::a($browseLink, $lang->goback);
+      ?>
     </div>
   </div>
 </div>
 
-<div class='g side-right-5'>
-  <div class='u mainbar'>
-    <div class='cont'>
+<div class='yui-d0 yui-t8'>
+  <div class='yui-main'>
+    <div class='yui-b'>
       <fieldset>
         <legend><?php echo $lang->bug->legendSteps;?></legend>
         <div class='content'><?php echo $bug->steps;?></div>
       </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center f-16px strong'>
-        <?php
-        if(!$bug->deleted)
-        {
-            common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
-            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
-            if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
-            if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
-            common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
-            common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
-        }
-        echo html::a($browseLink, $lang->goback);
-        ?>
+      <div class='a-center' style='font-size:16px; font-weight:bold'>
+      <?php
+      if(!$bug->deleted)
+      {
+          common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+          if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+          if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
+          if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+          common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
+          common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
+      }
+      echo html::a($browseLink, $lang->goback);
+      ?>
       </div>
     </div>
   </div>
 
-  <div class='u sidebar'>
+  <div class='yui-b'>
     <fieldset>
       <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
       <table class='table-1 a-left'>

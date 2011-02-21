@@ -2,7 +2,7 @@
 /**
  * The view file of case module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <table class='table-1'> 
     <caption><?php echo $lang->testtask->view;?></caption>
     <tr>
@@ -62,5 +62,5 @@
     ?>
   </div>
   <?php include '../../common/view/action.html.php';?>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

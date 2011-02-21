@@ -2,7 +2,7 @@
 /**
  * The report view file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -35,7 +35,7 @@ function checkReverse()
 }
 </script>
 
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'><?php echo $lang->bug->report->common;?></div>
     <div class='f-right'><?php common::printLink('bug', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->goback); ?></div>

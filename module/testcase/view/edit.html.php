@@ -2,7 +2,7 @@
 /**
  * The edit file of case module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -34,7 +34,7 @@ $(document).ready(function()
 });
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <div id='titlebar'>
     <div id='main'>
     CASE #<?php echo $case->id . $lang->colon;?>
@@ -148,5 +148,5 @@ $(document).ready(function()
       </table>
     </fieldset>
   </div>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -2,7 +2,7 @@
 /**
  * The model file of tree module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -31,10 +31,10 @@ class treeModel extends model
      * @param  int    $rootID 
      * @param  string $type 
      * @param  int    $startModule 
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function buildMenuQuery($rootID, $type, $startModule)
+    private function buildMenuQuery($rootID, $type, $startModule)
     {
         /* Set the start module. */
         $startModulePath = '';
@@ -254,10 +254,10 @@ class treeModel extends model
      * Create link of a story.
      * 
      * @param  object   $module 
-     * @access protected
+     * @access private
      * @return string
      */
-    protected function createStoryLink($module)
+    private function createStoryLink($module)
     {
         $linkHtml = html::a(helper::createLink('product', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -267,10 +267,10 @@ class treeModel extends model
      * Create link of a doc.
      * 
      * @param  object   $module 
-     * @access protected
+     * @access private
      * @return string
      */
-    protected function createDocLink($module)
+    private function createDocLink($module)
     {
         $linkHtml = html::a(helper::createLink('doc', 'browse', "libID={$module->root}&&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -280,10 +280,10 @@ class treeModel extends model
      * Create the manage link of a module.
      * 
      * @param  object   $module 
-     * @access protected
+     * @access private
      * @return string
      */
-    protected function createManageLink($module)
+    private function createManageLink($module)
     {
         static $users;
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
@@ -300,10 +300,10 @@ class treeModel extends model
      * Create link of a bug.
      * 
      * @param  object  $module 
-     * @access protected
+     * @access private
      * @return string
      */
-    protected function createBugLink($module)
+    private function createBugLink($module)
     {
         $linkHtml = html::a(helper::createLink('bug', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -313,10 +313,10 @@ class treeModel extends model
      * Create link of a test case.
      * 
      * @param  object  $module 
-     * @access protected
+     * @access private
      * @return string
      */
-    protected function createCaseLink($module)
+    private function createCaseLink($module)
     {
         $linkHtml = html::a(helper::createLink('testcase', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -326,10 +326,10 @@ class treeModel extends model
      * Create link of a test task.
      * 
      * @param  object  $module 
-     * @access protected
+     * @access private
      * @return string
      */
-    protected function createTestTaskLink($module, $extra)
+    private function createTestTaskLink($module, $extra)
     {
         $linkHtml = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;

@@ -2,7 +2,7 @@
 /**
  * The create view of case module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -11,7 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table class='table-1'> 
       <caption><?php echo $lang->testcase->create;?></caption>
@@ -83,5 +83,5 @@
       </tr>
     </table>
   </form>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

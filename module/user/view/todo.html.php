@@ -2,7 +2,7 @@
 /**
  * The todo view file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -20,7 +20,7 @@ function changeDate(date)
     location.href=link;
 }
 </script>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
    <div id='featurebar'>
      <div class='f-left'>
@@ -65,5 +65,5 @@ function changeDate(date)
     </tbody>
   </table>
 </form>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

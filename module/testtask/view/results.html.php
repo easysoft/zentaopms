@@ -2,7 +2,7 @@
 /**
  * The runrun view file of testtask of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <style>body{background:white}</style>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <h1>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></h1>
   <?php foreach($results as $result):?>
   <table class='table-1'>

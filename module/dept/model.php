@@ -2,7 +2,7 @@
 /**
  * The model file of dept dept of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
@@ -29,10 +29,10 @@ class deptModel extends model
      * Build the query.
      * 
      * @param  int    $rootDeptID 
-     * @access protected
+     * @access private
      * @return string
      */
-    protected function buildMenuQuery($rootDeptID)
+    private function buildMenuQuery($rootDeptID)
     {
         $rootDept = $this->getByID($rootDeptID);
         if(!$rootDept) $rootDept->path = '';

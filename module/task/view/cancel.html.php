@@ -2,7 +2,7 @@
 /**
  * The cancel file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     task
@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <form method='post' target='hiddenwin'>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
@@ -24,5 +24,5 @@
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

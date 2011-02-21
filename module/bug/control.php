@@ -2,7 +2,7 @@
 /**
  * The control file of bug currentModule of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -691,10 +691,10 @@ class bug extends control
      * 
      * @param  int    $bugID 
      * @param  int    $actionID 
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function sendmail($bugID, $actionID)
+    private function sendmail($bugID, $actionID)
     {
         /* Set toList and ccList. */
         $bug    = $this->bug->getByID($bugID);

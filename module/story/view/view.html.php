@@ -2,7 +2,7 @@
 /**
  * The view file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../file/view/download.html.php';?>
 
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <div id='titlebar'>
     <div id='main' <?php if($story->deleted) echo "class='deleted'";?>>STORY #<?php echo $story->id . $lang->colon . $story->title;?></div>
     <div>
@@ -213,5 +213,5 @@
      <div><?php for($i = $story->version; $i >= 1; $i --) echo html::a(inlink('view', "storyID=$story->id&version=$i"), "#$i");?></div>
    </fieldset>
   </div>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

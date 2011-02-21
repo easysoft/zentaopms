@@ -2,7 +2,7 @@
 /**
  * The edit file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -14,57 +14,257 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<style>
+#product, #module, #project, #story, #task, #resolvedBuild{width:220px}
+#steps {width:100%}
+.select-3 {width:220px}
+.text-3   {width:215px}
+</style>
 <script language='Javascript'>
 changeProductConfirmed = false;
 changeProjectConfirmed = false;
-oldProjectID     = '<?php echo $bug->project;?>';
-oldStoryID       = '<?php echo $bug->story;?>';
-oldTaskID        = '<?php echo $bug->task;?>';
+oldProjectID = '<?php echo $bug->project;?>';
+oldStoryID   = '<?php echo $bug->story;?>';
+oldTaskID    = '<?php echo $bug->task;?>';
 oldOpenedBuild   = '<?php echo $bug->openedBuild;?>';
 oldResolvedBuild = '<?php echo $bug->resolvedBuild;?>';
-userList         = "<?php echo join(',', array_keys($users));?>".split(',');
-emptySelect      = "<select name='task' id='task'><option value=''></option></select>";
+emptySelect  = "<select name='task' id='task'><option value=''></option></select>";
+/**
+ * Load all fields.
+ * 
+ * @param  int $productID 
+ * @access public
+ * @return void
+ */
+function loadAll(productID)
+{
+    if(!changeProductConfirmed)
+    {
+         firstChoice = confirm('<?php echo $lang->bug->confirmChangeProduct;?>');
+         changeProductConfirmed = true;    // Only notice the user one time.
+    }
+    if(changeProductConfirmed || firstChoice)
+    {
+        $('#taskIdBox').get(0).innerHTML = emptySelect;
+        loadModuleMenu(productID); 
+        loadProductStories(productID);
+        loadProductProjects(productID); 
+        loadProductBuilds(productID);
+    }
+}
+
+/**
+ * Load module menu.
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadModuleMenu(productID)
+{
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug');
+    $('#moduleIdBox').load(link);
+}
+
+/**
+ * Load product stories 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadProductStories(productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleId=0&storyID=' + oldStoryID);
+    $('#storyIdBox').load(link);
+}
+
+/**
+ * Load projects of product. 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadProductProjects(productID)
+{
+    link = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=' + oldProjectID);
+    $('#projectIdBox').load(link);
+}
+
+/**
+ * loadProductBuilds 
+ * 
+ * @param  productID $productID 
+ * @access public
+ * @return void
+ */
+function loadProductBuilds(productID)
+{
+    link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
+    $('#openedBuildBox').load(link);
+    link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
+    $('#resolvedBuildBox').load(link);
+}
+
+/**
+ * loadProjectRelated 
+ * 
+ * @param  projectID $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectRelated(projectID)
+{
+    if(projectID)
+    {
+        loadProjectTasks(projectID);
+        loadProjectStories(projectID);
+        loadProjectBuilds(projectID);
+    }
+    else
+    {
+        $('#taskIdBox').get(0).innerHTML = emptySelect;
+        loadProductStories($('#product').get(0).value);
+    }
+}
+
+/**
+ * loadProjectTasks 
+ * 
+ * @param  projectID $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectTasks(projectID)
+{
+    link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID + '&taskID=' + oldTaskID);
+    $('#taskIdBox').load(link);
+}
+
+/**
+ * loadProjectStories 
+ * 
+ * @param  projectID $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectStories(projectID)
+{
+    productID = $('#product').get(0).value; 
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID + '&storyID=' + oldStoryID);
+    $('#storyIdBox').load(link);
+}
+
+/**
+ * Load builds of a project.
+ * 
+ * @param  int      $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectBuilds(projectID)
+{
+    productID = $('#product').val();
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild);
+    $('#openedBuildBox').load(link);
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild);
+    $('#resolvedBuildBox').load(link);
+}
+
+/**
+ * Set duplicate field.
+ * 
+ * @param  string $resolution 
+ * @access public
+ * @return void
+ */
+function setDuplicate(resolution)
+{
+    if(resolution == 'duplicate')
+    {
+        $('#duplicateBugBox').show();
+    }
+    else
+    {
+        $('#duplicateBugBox').hide();
+    }
+}
+
+/**
+ * Get story or task list.
+ * 
+ * @param  string $module 
+ * @access public
+ * @return void
+ */
+function getList(module)
+{
+    productID = $('#product').get(0).value;
+    projectID = $('#project').get(0).value;
+    storyID   = $('#story').get(0).value;
+    taskID    = $('#task').get(0).value;
+    if(module == 'story')
+    {
+        link = createLink('search', 'select', 'productID=' + productID + '&projectID=' + projectID + '&module=story&moduleID=' + storyID);
+        $('#storyListIdBox a').attr("href", link);
+    }
+    else
+    {
+        link = createLink('search', 'select', 'productID=' + productID + '&projectID=' + projectID + '&module=task&moduleID=' + taskID);
+        $('#taskListIdBox a').attr("href", link);
+    }
+}
+
+var userList = "<?php echo join(',', array_keys($users));?>".split(',');
+$(function() {
+    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
+    $("#searchTasks").colorbox({width:680, height:400, iframe:true, transition:'none'});
+});
 </script>
 <form method='post' target='hiddenwin' enctype='multipart/form-data'>
-<div class='g'>
-  <div class='u-1'>
-    <div id='titlebar'>
-      <div id='main'>
-      BUG #<?php echo $bug->id . $lang->colon;?>
-      <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class=text-1');?>
-      </div>
-      <div><?php echo html::submitButton()?></div>
+<div class='yui-d0'>
+  <div id='titlebar'>
+    <div id='main'>
+    BUG #<?php echo $bug->id . $lang->colon;?>
+    <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class=text-1');?>
     </div>
+    <div><?php echo html::submitButton()?></div>
   </div>
 </div>
 
-<div class='g side-right-5'>
-  <div class='u mainbar'>
-    <div class='cont'>
-      <fieldset>
-        <legend><?php echo $lang->bug->legendSteps;?></legend>
-        <div class='w-p99'><?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12'");?></div>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->bug->legendComment;?></legend>
-        <?php echo html::textarea('comment', '', "rows='6' class='w-p99'");?>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->bug->legendAttatch;?></legend>
-        <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
-      </fieldset>
-      <div class='a-center'>
-        <?php 
-        echo html::submitButton();
-        $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
-        echo html::linkButton($lang->goback, $browseLink);
-        ?>
-      </div>
+<div class='yui-d0 yui-t8'>
+  <div class='yui-main'>
+    <div class='yui-b'>
+      <table class='table-1 bd-none'>
+        <tr class='bd-none'><td class='bd-none'>
+          <fieldset>
+            <legend><?php echo $lang->bug->legendSteps;?></legend>
+            <div class='w-p90'><?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12'");?></div>
+          </fieldset>
+          <fieldset>
+          <legend><?php echo $lang->bug->legendComment;?></legend>
+            <?php echo html::textarea('comment', '', "rows='6' class='area-1'");?>
+          </fieldset>
+          <fieldset>
+          <legend><?php echo $lang->bug->legendAttatch;?></legend>
+          <?php echo $this->fetch('file', 'buildform', 'filecount=2');?>
+          </fieldset>
+          <div class='a-center'>
+            <?php 
+            echo html::submitButton();
+            $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
+            echo html::linkButton($lang->goback, $browseLink);
+            ?>
+          </div>
+        </td></tr>
+      </table>
       <?php include '../../common/view/action.html.php';?>
-    </div>    
+    </div>
   </div>
 
-  <div class='u sidebar'>
+  <div class='yui-b'>
     <fieldset>
       <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
       <table class='table-1 a-left' cellpadding='0' cellspacing='0'>

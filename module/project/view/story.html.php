@@ -2,7 +2,7 @@
 /**
  * The story view file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
@@ -18,7 +18,7 @@ $(document).ready(function()
     $("a.iframe").colorbox({width:640, height:480, iframe:true, transition:'none'});
 });
 </script>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <table class='table-1 tablesorter fixed'>
     <caption class='caption-tl'>
       <div class='f-left'><?php echo $lang->project->story;?></div>

@@ -1,5 +1,5 @@
 <script language='Javascript'>var needPing = false;</script>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <iframe frameborder='0' name='hiddenwin' id='hiddenwin' class='hiddenwin'></iframe>
 </div>
 <div id='footer' class='yui-d0 yui-t7'>

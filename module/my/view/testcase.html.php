@@ -2,7 +2,7 @@
 /**
  * The test view file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -19,7 +19,7 @@ $(document).ready(function()
 });
 </script>
 
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'>
       <?php
@@ -32,7 +32,7 @@ $(document).ready(function()
   </div>
 </div>
 
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <table class='table-1 fixed tablesorter'>
     <thead>

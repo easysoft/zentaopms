@@ -2,7 +2,7 @@
 /**
  * The model file of group module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
@@ -64,10 +64,10 @@ class groupModel extends model
      * 
      * @param  string    $fromGroup 
      * @param  string    $toGroup 
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function copyPriv($fromGroup, $toGroup)
+    private function copyPriv($fromGroup, $toGroup)
     {
         $privs = $this->dao->findByGroup($fromGroup)->from(TABLE_GROUPPRIV)->fetchAll();
         foreach($privs as $priv)
@@ -82,10 +82,10 @@ class groupModel extends model
      * 
      * @param  string    $fromGroup 
      * @param  string    $toGroup 
-     * @access protected
+     * @access private
      * @return void
      */
-    protected function copyUser($fromGroup, $toGroup)
+    private function copyUser($fromGroup, $toGroup)
     {
         $users = $this->dao->findByGroup($fromGroup)->from(TABLE_USERGROUP)->fetchAll();
         foreach($users as $user)

@@ -2,7 +2,7 @@
 /**
  * The create view of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -61,7 +61,7 @@ $(document).ready(function()
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
 });
 </script>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table align='center' class='table-1 a-left'> 
       <caption><?php echo $lang->task->create;?></caption>

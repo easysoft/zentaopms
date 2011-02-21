@@ -2,7 +2,7 @@
 /**
  * The manage privilege view of group module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
@@ -28,7 +28,7 @@ function checkall(checker)
     });
 }
 </script>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <form method='post' target='hiddenwin'>
     <table class='table-1 a-left'> 
       <caption class='caption-tl'><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>

@@ -2,7 +2,7 @@
 /**
  * The control file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id$
@@ -56,10 +56,10 @@ class project extends control
      * Common actions.
      * 
      * @param  int    $projectID 
-     * @access protected
+     * @access private
      * @return object current object
      */
-    protected function commonAction($projectID = 0)
+    private function commonAction($projectID = 0)
     {
         $this->loadModel('product');
 

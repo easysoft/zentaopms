@@ -77,4 +77,6 @@ if($.browser.msie && Math.floor(parseInt($.browser.version)) == 6)
     $("#browsecss").attr('href', '');
 }
 </script>
-<?php include '../../common/view/footer.html.php';?>
+<iframe frameborder='0' name='hiddenwin'  class='<?php $config->debug ? print("debugwin") : print('hiddenwin')?>'></iframe>
+</body>
+</html>

@@ -2,7 +2,7 @@
 /**
  * The html template file of step1 method of install module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -10,7 +10,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <table align='center' class='table-6 a-center'>
     <caption><?php echo $lang->install->checking;?></caption>
     <tr>

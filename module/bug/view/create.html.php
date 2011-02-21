@@ -2,7 +2,7 @@
 /**
  * The create view of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -14,8 +14,171 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script language='Javascript'> var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
-<div class='g'><div class='u-1'>
+
+<style>
+#project, #product  {width:200px}
+#module, #task      {width:400px}
+#severity, #browser {width:113px}
+#story{width:605px}
+#steps{width:100%}
+.text-1 {width: 85%}
+</style>
+<script language='Javascript'>
+/**
+ * Load all fields. 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadAll(productID)
+{
+    $('#taskIdBox').get(0).innerHTML = '<select id="task"></select>';  // Reset the task.
+    loadModuleMenu(productID);
+    loadProductStories(productID);
+    loadProductProjects(productID);
+    loadProductBuilds(productID); 
+    setAssignedTo(); 
+}
+
+/**
+ * Load module menu.
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadModuleMenu(productID)
+{
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug');
+    $('#moduleIdBox').load(link);
+}
+
+/**
+ * Load product stories 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadProductStories(productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
+    $('#storyIdBox').load(link);
+}
+
+/**
+ * Load projects of product. 
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadProductProjects(productID)
+{
+    link = createLink('product', 'ajaxGetProjects', 'productID=' + productID);
+    $('#projectIdBox').load(link);
+}
+
+/**
+ * Load product builds.
+ * 
+ * @param  int    $productID 
+ * @access public
+ * @return void
+ */
+function loadProductBuilds(productID)
+{
+    link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild');
+    $('#buildBox').load(link);
+}
+
+/**
+ * Load project related bugs and tasks.
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectRelated(projectID)
+{
+    if(projectID)
+    {
+        loadProjectTasks(projectID);
+        loadProjectStories(projectID);
+        loadProjectBuilds(projectID);
+    }
+    else
+    {
+        $('#taskIdBox').get(0).innerHTML = '';
+        loadProductStories($('#product').get(0).value);
+        loadProductBuilds($('#product').get(0).value);
+    }
+}
+
+/**
+ * Load project tasks.
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectTasks(projectID)
+{
+    link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID);
+    $('#taskIdBox').load(link);
+}
+
+/**
+ * Load project stories.
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectStories(projectID)
+{
+    productID = $('#product').get(0).value; 
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID);
+    $('#storyIdBox').load(link);
+}
+
+/**
+ * Set the assignedTo field.
+ * 
+ * @access public
+ * @return void
+ */
+function setAssignedTo()
+{
+    link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + $('#module').val() + '&productID=' + $('#product').val());
+    $.get(link, function(owner)
+    {
+        $('#assignedTo').val(owner);
+    });
+}
+
+/**
+ * Load project builds.
+ * 
+ * @param  int $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectBuilds(projectID)
+{
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=openedBuild');
+    $('#buildBox').load(link);
+}
+
+var userList = "<?php echo join(',', array_keys($users));?>".split(',');
+$(function() {
+    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    setAssignedTo();
+})
+
+</script>
+<div class='yui-d0'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin'>
     <table class='table-1'> 
       <caption><?php echo $lang->bug->create;?></caption>
@@ -97,5 +260,5 @@
       </tr>
     </table>
   </form>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

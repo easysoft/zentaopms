@@ -2,7 +2,7 @@
 /**
  * The browse view file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -38,7 +38,7 @@ function search(active)
 
 </script>
 
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'>
       <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>

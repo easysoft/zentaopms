@@ -2,7 +2,7 @@
 /**
  * The view file of view method of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
   <table class='table-1 a-left'> 
     <caption>

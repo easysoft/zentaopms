@@ -1,7 +1,7 @@
 /**
 * The css file of ZenTaoPMS.
 *
-* @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+* @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
 * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
 * @package     front
@@ -10,44 +10,9 @@
 */
 /*-----------------------GLOBAL SETTING----------------------------*/
 body {padding-bottom:30px; color:#000;}
-.g {margin-left:10px; margin-right:10px}
-.cont {width:100%; border:none; margin:0 0 5px 0}
-.cont td, .cont tr {border:none; padding:0}
-
-.side-left-1 {padding-left:160px}
-.side-left-2 {padding-left:180px}
-.side-left-3 {padding-left:240px}
-.side-left-4 {padding-left:300px}
-.side-left-5 {padding-left:336px}
-
-.side-right-1 {padding-right:160px}
-.side-right-2 {padding-right:180px}
-.side-right-3 {padding-right:240px}
-.side-right-4 {padding-right:300px}
-.side-right-5 {padding-right:336px}
-
-.side-left-1 .sidebar {width:160px; margin-left:-160px;}
-.side-left-2 .sidebar {width:180px; margin-left:-180px;}
-.side-left-3 .sidebar {width:240px; margin-left:-240px;}
-.side-left-4 .sidebar {width:300px; margin-left:-300px;}
-.side-left-5 .sidebar {width:336px; margin-left:-336px;}
-
-.side-right-1 .sidebar {width:160px; margin-right:-160px;}
-.side-right-2 .sidebar {width:180px; margin-right:-180px;}
-.side-right-3 .sidebar {width:240px; margin-right:-240px;}
-.side-right-4 .sidebar {width:300px; *width:300px;_position:static; margin-right:-300px;}
-.side-right-5 .sidebar {width:336px; margin-right:-336px;}
-
-.side-left-1  .sidebar, .side-left-2  .sidebar, .side-left-3  .sidebar, .side-left-4  .sidebar, .side-left-5  .sidebar{position:relative;}
-.side-right-1 .sidebar, .side-right-2 .sidebar, .side-right-3 .sidebar, .side-right-4 .sidebar, .side-right-5 .sidebar{position:relative; float:right}
-
-.side-left-1 .cont, .side-left-2 .cont, .side-left-3 .cont, .side-left-4 .cont, .side-left-5 .cont {margin-left:10px}
-.side-right-1 .cont, .side-right-2 .cont, .side-right-3 .cont, .side-right-4 .cont, .side-right-5 .cont {margin-right:10px}
-
-.mainbar {width:100%}
 
 /*-----------------------FIELDSET SETTING----------------------------*/
-fieldset {border:1px solid #efefef; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
+fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
 fieldset table    {border:none}
 fieldset .table-1 {margin:0;}
@@ -84,7 +49,7 @@ ins{background:#cfc; text-decoration:none}
 /*-----------------------TABLE SETTING----------------------------*/
 table      {border:1px solid #e4e4e4;}
 td, tr, th {border:none; border-bottom:1px solid #e4e4e4}
-tr, th, td {padding:3px 3px 2px 3px}
+tr, th, td {padding:3px 3px 3px 3px}
 
 caption     {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:2px 2px 2px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
 .caption-tr {caption-side:top; text-align:right; border:none; background:none;}
@@ -161,7 +126,6 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .w-p80 {width: 80%}
 .w-p85 {width: 85%}
 .w-p90 {width: 90%}
-.w-p99 {width: 99%}
 .w-p100 {width: 100%}
 
 .w-20px {width:20px}
@@ -251,11 +215,11 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
 /* Header. */
-#header{margin-bottom:5px; padding:2px 10px 0px 10px; background:#16528b; border-bottom:1px solid #e4e4e4;}
+#header{margin-bottom:5px; background:#16528b; border-bottom:1px solid #e4e4e4;}
 
 /* Top bar. */
-#topbar  {color:#fff}
-#topbar a {color:white}
+#topbar  {padding:3px; color:#fff}
+#topbar .yui-b, #topbar a {color:white}
 
 /* The nav bar. */
 #navbar ul {margin:0; padding:0;} 

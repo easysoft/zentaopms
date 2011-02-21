@@ -2,7 +2,7 @@
 /**
  * The view file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../file/view/download.html.php';?>
 
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
   <div id='titlebar'>
     <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . $lang->colon . $task->name;?></div>
     <div>
@@ -163,5 +163,5 @@
       </table>
     </fieldset>
    </div>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

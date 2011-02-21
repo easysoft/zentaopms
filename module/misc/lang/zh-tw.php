@@ -2,7 +2,7 @@
 /**
  * The misc module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
@@ -54,4 +54,4 @@ $lang->misc->zentao->service['scrumtrain'] = 'scrum培訓';
 $lang->misc->zentao->service['fwtrain']    = '禪道PHP框架培訓';
 $lang->misc->zentao->service['servicemore']= '更多服務...';
 
-$lang->misc->copyright = "版權所有 &copy;2009-2011 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a>";
+$lang->misc->copyright = "版權所有 &copy;2009-2010 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a>";

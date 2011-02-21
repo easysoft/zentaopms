@@ -1,6 +1,6 @@
  /*
  * AutoSuggest
- * Copyright 2009-2011 Drew Wilson
+ * Copyright 2009-2010 Drew Wilson
  * www.drewwilson.com
  * code.drewwilson.com/entry/autosuggest-jquery-plugin
  *

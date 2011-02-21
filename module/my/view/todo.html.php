@@ -2,7 +2,7 @@
 /**
  * The todo view file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
 function changeDate(date)
 {
@@ -20,7 +19,7 @@ function changeDate(date)
     location.href=link;
 }
 </script>
-<div class='g'><div class='u-1'>
+<div class='yui-d0'>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
    <div id='featurebar'>
      <div class='f-left'>
@@ -34,14 +33,9 @@ function changeDate(date)
        ?>
        <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
-    <div class='f-right'>
-      <?php 
-	  echo html::export2csv($lang->exportCSV, $lang->setFileName);
-	  echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
-	  ?>
-	</div>
+    <div class='f-right'><?php echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);?></div>
   </div>
-  <table class='table-1 tablesorter datatable''>
+  <table class='table-1 tablesorter'>
     <thead>
     <tr class='colhead'>
       <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -94,5 +88,5 @@ function changeDate(date)
     </tfoot>
   </table>
 </form>
-</div></div>
+</div>
 <?php include '../../common/view/footer.html.php';?>
