@@ -29,6 +29,7 @@ $clientTheme  = $this->app->getClientTheme();
   css::import($defaultTheme . 'style.css', $config->version);
   css::import($langTheme, $config->version);
   if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css', $config->version);
+  if(isset($pageCss)) css::internal($pageCss);
 
   echo html::icon($webRoot . 'favicon.ico');
   ?>
