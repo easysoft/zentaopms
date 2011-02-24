@@ -8,91 +8,31 @@
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.ZenTaoPMS.com
 */
-/*-----------------------GLOBAL SETTING----------------------------*/
-body {padding-bottom:30px; color:#000; margin:0}
-.cont {width:100%; margin:0; border:none; text-align:left}
-.cont tr, .cont th, .cont td {border:none; padding:0;}
-
-/*-----------------------FIELDSET SETTING----------------------------*/
+/*-----------------------BASE SETTING----------------------------*/
+body     {margin:0}
 fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
-fieldset table    {border:none}
-fieldset .table-1 {margin:0;}
-fieldset .bd-1px, fieldset .bd-1px td, fieldset .bd-1px th {border:1px solid #b3c8dc; padding:2px}
-fieldset tr, fieldset td, fieldset th {border:none; padding:2px}
 del{background:#fcc;}
 ins{background:#cfc; text-decoration:none}
 
-/*-----------------------FORM SETTING----------------------------*/
-.text-1 {width: 90%}
-.text-2 {width: 120px}
-.text-3 {width: 240px}
-.text-4 {width: 360px}
-.text-5 {width: 480px}
+/*-----------------------LAYOUT SETTING ----------------------------*/
+.outer {margin:0 10px}
+.cont, .cont-lt1, .cont-lt2, .cont-lt3, .cont-lt4, .cont-lt5, .cont-rt1, .cont-rt2, .cont-rt3, .cont-rt4, .cont-rt5 {width:100%; margin:0; border:none; text-align:left}
+.cont tr, .cont td {border:none; padding:0}
+.cont-lt1 tr, .cont-lt2 tr, .cont-lt3 tr, .cont-lt4 tr, .cont-lt5 tr {border:none; padding:0}
+.cont-lt1 td, .cont-lt2 td, .cont-lt3 td, .cont-lt4 td, .cont-lt5 td {border:none; padding:0}
+.cont-rt1 tr, .cont-rt2 tr, .cont-rt3 tr, .cont-rt4 tr, .cont-rt5 tr {border:none; padding:0}
+.cont-rt1 td, .cont-rt2 td, .cont-rt3 td, .cont-rt4 td, .cont-rt5 td {border:none; padding:0}
 
-.select-1 {width: 90%}
-.select-2 {width: 125px}
-.select-3 {width: 245px} 
-.select-4 {width: 360px}
-.select-5 {width: 480px}
-.switcher {border:none; color:white; background:#16528b}
+.cont-lt1 .side, .cont-rt1 .side {width:160px}
+.cont-lt2 .side, .cont-rt2 .side {width:180px}
+.cont-lt3 .side, .cont-rt3 .side {width:240px}
+.cont-lt4 .side, .cont-rt4 .side {width:300px}
+.cont-lt5 .side, .cont-rt5 .side {width:336px}
 
-.area-1{width: 90%;}
-.area-2{width: 120px}
-.area-3{width: 240px}
-.area-4{width: 360px}
-.area-5{width: 480px}
+.cont-lt1 .divider,.cont-lt2 .divider,.cont-lt3 .divider,.cont-lt4 .divider,.cont-lt5 .divider {width:10px}
+.cont-rt1 .divider,.cont-rt2 .divider,.cont-rt3 .divider,.cont-rt4 .divider,.cont-rt5 .divider {width:10px}
 
-.button-s{padding:3px 20px 3px 20px}
-.button-r{padding:3px 20px 3px 20px}
-.button-c{padding:3px 20px 3px 20px}
-.button-d{color:blue}
-
-/*-----------------------TABLE SETTING----------------------------*/
-table      {border:1px solid #e4e4e4;}
-td, tr, th {border:none; border-bottom:1px solid #e4e4e4}
-tr, th, td {padding:3px 3px 3px 3px}
-
-caption     {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:2px 2px 2px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
-.caption-tr {caption-side:top; text-align:right; border:none; background:none;}
-.caption-tl {caption-side:top; text-align:left;  border:none; background:none;}
-.table-1 {width:100%; margin-bottom:10px}
-
-/*--------------------------------------------------------*/
-.table-2 {width:240px;margin-bottom:10px}
-.table-3 {width:360px;margin-bottom:10px}
-.table-4 {width:480px;margin-bottom:10px}
-.table-5 {width:600px;margin-bottom:10px}
-.table-6 {width:800px;margin-bottom:10px}
-
-.colhead td  {text-align:center; background-color:#efefef;}
-.colhead th  {text-align:center; background-color:#efefef; font-size:14px; border-bottom:1px solid #e4e4e4}
-.colhead a   {text-decoration:none; display:block;}
-.colhead th a{color:#333; font-size:14px;}
-.colhead th a:hover{color:#F30;}
-
-.rowhead {font-weight:bold; text-align:right; width:100px; border-right:1px solid #e4e4e4}
-fieldset .rowhead {border:none}
-
-.fixed {table-layout:fixed}
-.nobr                     {overflow:hidden; white-space:nowrap;}
-.fixed th, .fixed td      {overflow:hidden; white-space:nowrap;}
-.nofixed th, .nofixed td  {overflow:visible; white-space:normal}
-
-.odd     {background:#fff;}
-.even    {background:#f1f1f1;}
-.hoover  {background:#d0dee3;}
-.clicked {background:#fce6a2;}
-
-/* copyed from tablesorter plugin. */
-table.tablesorter thead tr div{padding:0; margin:0} 
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {color:red;}
-table.tablesorter thead tr .headerSortDown a, table.tablesorter thead tr .headerSortUp a {color:red}
-table.tablesorter thead tr .header         {background-image: url(./images/tablesorter/bg.gif);   background-repeat: no-repeat; background-position: center right; cursor: pointer;}
-table.tablesorter thead tr .headerSortUp   {background-image: url(./images/tablesorter/asc.gif);  background-repeat: no-repeat; background-position: center right; cursor: pointer;}
-table.tablesorter thead tr .headerSortDown {background-image: url(./images/tablesorter/desc.gif); background-repeat: no-repeat; background-position: center right; cursor: pointer;}
-
-/*-----------------------LAYOUT SETTING----------------------------*/
 .f-left   {float:left;  padding-left: 5px}
 .f-right  {float:right; padding-right:5px}
 .c-none   {clear:none;}
@@ -184,8 +124,77 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .f-14px  {font-size:14px}
 .f-16px  {font-size:16px}
 
-.box-title   {border:1px solid #e4e4e4; background-color:#efefef; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
-.box-content {border:1px solid #e4e4e4; padding:5px}
+/*-----------------------FORM SETTING----------------------------*/
+.text-1 {width: 90%}
+.text-2 {width: 120px}
+.text-3 {width: 240px}
+.text-4 {width: 360px}
+.text-5 {width: 480px}
+
+.select-1 {width: 90%}
+.select-2 {width: 125px}
+.select-3 {width: 245px} 
+.select-4 {width: 360px}
+.select-5 {width: 480px}
+
+.area-1{width: 90%;}
+.area-2{width: 120px}
+.area-3{width: 240px}
+.area-4{width: 360px}
+.area-5{width: 480px}
+
+.button-s{padding:3px 20px 3px 20px}
+.button-r{padding:3px 20px 3px 20px}
+.button-c{padding:3px 20px 3px 20px}
+.button-d{color:blue}
+
+/*-----------------------TABLE SETTING----------------------------*/
+table      {border:1px solid #e4e4e4;}
+td, tr, th {border:none; border-bottom:1px solid #e4e4e4}
+tr, th, td {padding:3px 3px 3px 3px}
+
+caption     {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:2px 2px 2px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
+.caption-tr {caption-side:top; text-align:right; border:none; background:none;}
+.caption-tl {caption-side:top; text-align:left;  border:none; background:none;}
+
+.table-1 {width:100%; margin-bottom:10px}
+.table-2 {width:240px;margin-bottom:10px}
+.table-3 {width:360px;margin-bottom:10px}
+.table-4 {width:480px;margin-bottom:10px}
+.table-5 {width:600px;margin-bottom:10px}
+.table-6 {width:800px;margin-bottom:10px}
+
+.colhead td  {text-align:center; background-color:#efefef;}
+.colhead th  {text-align:center; background-color:#efefef; font-size:14px; border-bottom:1px solid #e4e4e4}
+.colhead a   {text-decoration:none; display:block;}
+.colhead th a{color:#333; font-size:14px;}
+.colhead th a:hover{color:#F30;}
+
+.rowhead {font-weight:bold; text-align:right; width:100px; border-right:1px solid #e4e4e4}
+
+.fixed {table-layout:fixed}
+.nobr                     {overflow:hidden; white-space:nowrap;}
+.fixed th, .fixed td      {overflow:hidden; white-space:nowrap;}
+.nofixed th, .nofixed td  {overflow:visible; white-space:normal}
+
+.odd     {background:#fff;}
+.even    {background:#f1f1f1;}
+.hoover  {background:#d0dee3;}
+.clicked {background:#fce6a2;}
+
+fieldset .rowhead {border:none}
+fieldset table    {border:none}
+fieldset .table-1 {margin:0;}
+fieldset .bd-1px, fieldset .bd-1px td, fieldset .bd-1px th {border:1px solid #b3c8dc; padding:2px}
+fieldset tr, fieldset td, fieldset th {border:none; padding:2px}
+
+/* copyed from tablesorter plugin. */
+table.tablesorter thead tr div{padding:0; margin:0} 
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {color:red;}
+table.tablesorter thead tr .headerSortDown a, table.tablesorter thead tr .headerSortUp a {color:red}
+table.tablesorter thead tr .header         {background-image: url(./images/tablesorter/bg.gif);   background-repeat: no-repeat; background-position: center right; cursor: pointer;}
+table.tablesorter thead tr .headerSortUp   {background-image: url(./images/tablesorter/asc.gif);  background-repeat: no-repeat; background-position: center right; cursor: pointer;}
+table.tablesorter thead tr .headerSortDown {background-image: url(./images/tablesorter/desc.gif); background-repeat: no-repeat; background-position: center right; cursor: pointer;}
 
 /*-----------------------BORDER SETTING--------------------------*/
 .bd-1px    {border:1px        solid}
@@ -222,6 +231,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Top bar. */
 #topbar, #topbar a {color:#fff}
 #topbar {margin-bottom:2px}
+#topbar select {border:none; color:white; background:#16528b}
 
 /* The nav bar. */
 #navbar ul {margin:0; padding:0;} 
@@ -301,6 +311,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .debugwin  {display:block; width:100%; height:20px; position:fixed; bottom:27px;}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
+.box-title  {border:1px solid #e4e4e4; background-color:#efefef; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
+.box-content{border:1px solid #e4e4e4; padding:5px}
 .done      {color:#078F0E;}
 .wait      {color:#888;}
 .doing     {color:#F30;}
