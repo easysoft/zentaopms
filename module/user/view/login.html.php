@@ -10,12 +10,8 @@
  */
 include '../../common/view/header.lite.html.php';
 ?>
-<script language='Javascript'>
-$(document).ready(function(){
-    $('#account').focus();
-})
-</script>
-<form method='post' target='hiddenwin' class='pt-200px'>
+<div class='outer pt-200px'>
+<form method='post' target='hiddenwin'>
   <table align='center' class='table-4'> 
     <caption id='welcome'><?php printf($lang->welcome, $app->company->name);?></caption>
     <tr>
@@ -48,6 +44,4 @@ $(document).ready(function(){
   <script src='http://www.zentao.net/check.php?v=<?php echo $config->version;?>&s=<?php echo $s;?>'></script>
   </div>
 </form>
-<div class='outer'><iframe frameborder='0' scrolling='no' name='hiddenwin' class='hidden'></iframe></div>
-</body>
-</html>
+<?php include '../../common/view/footer.lite.html.php';?>
