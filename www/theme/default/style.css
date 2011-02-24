@@ -9,7 +9,7 @@
 * @link        http://www.ZenTaoPMS.com
 */
 /*-----------------------BASE SETTING----------------------------*/
-body     {margin:0}
+body     {margin:0; text-align:left}
 fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
 del{background:#fcc;}
