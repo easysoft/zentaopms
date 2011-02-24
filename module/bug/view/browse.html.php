@@ -15,65 +15,52 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
-/* Browse by module. */
-function browseByModule(active)
-{
-    $('#mainbox').addClass('yui-t1');
-    $('#treebox').removeClass('hidden');
-    $('#bymoduleTab').addClass('active');
-    $('#querybox').addClass('hidden');
-    $('#' + active + 'Tab').removeClass('active');
-}
-/* Search bugs. */
-function browseBySearch(active)
-{
-    $('#mainbox').removeClass('yui-t1');
-    $('#treebox').addClass('hidden');
-    $('#querybox').removeClass('hidden');
-    $('#bymoduleTab').removeClass('active');
-    $('#' + active + 'Tab').removeClass('active');
-    $('#bysearchTab').addClass('active');
-}
-
-$(document).ready(function()
-{
-    $("a.iframe").colorbox({width:640, height:420, iframe:true, transition:'none'});
-});
+var browseType = '<?php echo $browseType;?>';
+var moduleID   = '<?php echo $moduleID;?>';
+var customed   = <?php echo (int)$customed;?>;
 </script>
 
-<div class='yui-d0'>
-  <div id='featurebar'>
-    <div class='f-left'>
-      <?php
-      echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->bug->moduleBugs . "</a></span> ";
-      echo "<span id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
-      echo "<span id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
-      echo "<span id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
-      echo "<span id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</span>";
-      echo "<span id='unresolvedTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unResolved&param=0"),    $lang->bug->unResolved)    . "</span>";
-      echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
-      echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
-      echo "<span id='allTab'>"         . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
-      echo "<span id='needconfirmTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
-      echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->bug->byQuery}</a></span> ";
-      ?>
-    </div>
-    <div class='f-right'>
-      <?php common::printLink('bug', 'customFields', '', $lang->bug->customFields, '', "class='iframe'"); ?>
-      <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
-      <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->bug->report->common); ?>
-      <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", $lang->bug->create); ?>
-    </div>
+<div id='featurebar'>
+  <div class='f-left'>
+    <?php
+    echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->bug->moduleBugs . "</a></span> ";
+    echo "<span id='assigntomeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToMe&param=0"),    $lang->bug->assignToMe)    . "</span>";
+    echo "<span id='openedbymeTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=openedByMe&param=0"),    $lang->bug->openedByMe)    . "</span>";
+    echo "<span id='resolvedbymeTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=resolvedByMe&param=0"),  $lang->bug->resolvedByMe)  . "</span>";
+    echo "<span id='assigntonullTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=assignToNull&param=0"),  $lang->bug->assignToNull)  . "</span>";
+    echo "<span id='unresolvedTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unResolved&param=0"),    $lang->bug->unResolved)    . "</span>";
+    echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
+    echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
+    echo "<span id='allTab'>"         . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
+    echo "<span id='needconfirmTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
+    echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->bug->byQuery}</a></span> ";
+    ?>
   </div>
-  <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+  <div class='f-right'>
+    <?php common::printLink('bug', 'customFields', '', $lang->bug->customFields, '', "class='iframe'"); ?>
+    <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
+    <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->bug->report->common); ?>
+    <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", $lang->bug->create); ?>
+  </div>
 </div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 
 <?php if($customed){include 'browse.custom.html.php'; exit;}?>
-<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
 
-  <div class="yui-main">
-    <div class="yui-b">
-      <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+<table class='cont-lt1'>
+  <tr valign='top'>
+    <td class='side <?php echo $treeClass;?>' id='treebox'>
+      <div class='box-title'><?php echo $productName;?></div>
+      <div class='box-content'>
+        <?php echo $moduleTree;?>
+        <div class='a-right'>
+          <?php if(common::hasPriv('tree', 'browse')) echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=bug"), $lang->tree->manage);?>
+        </div>
+      </div>
+    </td>
+    <td class='divider <?php echo $treeClass;?>'></td>
+    <td>
+       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
         <tr class='colhead'>
@@ -123,22 +110,7 @@ $(document).ready(function()
         </tbody>
       </table>
       <?php $pager->show();?>
-    </div>
-  </div>
-
-  <div class='yui-b  <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
-    <div class='box-title'><?php echo $productName;?></div>
-    <div class='box-content'>
-      <?php echo $moduleTree;?>
-      <div class='a-right'>
-        <?php if(common::hasPriv('tree', 'browse')) echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=bug"), $lang->tree->manage);?>
-      </div>
-    </div>
-  </div>
-
-</div>  
-<script language='javascript'>
-$("#<?php echo $browseType;?>Tab").addClass('active'); 
-$("#module<?php echo $moduleID;?>").addClass('active'); 
-</script>
+    </td>
+  </tr>
+</table>  
 <?php include '../../common/view/footer.html.php';?>

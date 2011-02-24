@@ -199,6 +199,7 @@ class bug extends control
         $this->view->productName = $this->products[$productID];
         $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
         $this->view->browseType  = $browseType;
+        $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
         $this->view->bugs        = $bugs;
         $this->view->users       = $users;
         $this->view->pager       = $pager;

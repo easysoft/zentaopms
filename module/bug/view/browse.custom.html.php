@@ -1,8 +1,6 @@
-<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
-
-<table class='table-1 bd-none'>
+<table class='cont-lt1'>
   <tr valign='top'>
-    <td class='bd-none <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
+    <td class='side <?php echo $treeClass;?>' id='treebox'>
       <nobr>
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
@@ -13,7 +11,8 @@
       </div>
       </nobr>
     </td>
-    <td class='bd-none'>
+    <td class='divider'></td>
+    <td>
       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <table class='table-1 colored tablesorter datatable'>
         <thead>
@@ -69,14 +68,4 @@
     </td>
   </tr>
 </table>
-<script language='javascript'>
-$("#<?php echo $browseType;?>Tab").addClass('active'); 
-$("#module<?php echo $moduleID;?>").addClass('active');
-if($.browser.msie && Math.floor(parseInt($.browser.version)) == 6)
-{
-    $("#browsecss").attr('href', '');
-}
-</script>
-<iframe frameborder='0' name='hiddenwin'  class='<?php $config->debug ? print("debugwin") : print('hiddenwin')?>'></iframe>
-</body>
-</html>
+<?php include '../../common/view/footer.lite.html.php';?>
