@@ -151,7 +151,6 @@ ins{background:#cfc; text-decoration:none}
 /*-----------------------TABLE SETTING----------------------------*/
 table      {border:1px solid #e4e4e4;}
 td, tr, th {border:none; border-bottom:1px solid #e4e4e4}
-tr, th, td {padding:3px 3px 3px 3px}
 
 caption     {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:2px 2px 2px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
 .caption-tr {caption-side:top; text-align:right; border:none; background:none;}
@@ -163,6 +162,10 @@ caption     {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:2px
 .table-4 {width:480px;margin-bottom:10px}
 .table-5 {width:600px;margin-bottom:10px}
 .table-6 {width:800px;margin-bottom:10px}
+
+.table-1 tr, .table-2 tr, .table-3 tr, .table-4 tr, .table-5 tr {padding:3px 3px 3px 3px}
+.table-1 td, .table-2 td, .table-3 td, .table-4 td, .table-5 td {padding:3px 3px 3px 3px}
+.table-1 th, .table-2 th, .table-3 th, .table-4 th, .table-5 th {padding:3px 3px 3px 3px}
 
 .colhead td  {text-align:center; background-color:#efefef;}
 .colhead th  {text-align:center; background-color:#efefef; font-size:14px; border-bottom:1px solid #e4e4e4}
@@ -226,7 +229,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
 /* Header. */
-#header{margin-bottom:10px; padding:2px 10px 0 10px; background:#16528b; border-bottom:1px solid #e4e4e4;}
+#header{margin-bottom:5px; padding:2px 10px 0 10px; background:#16528b; border-bottom:1px solid #e4e4e4;}
 
 /* Top bar. */
 #topbar, #topbar a {color:#fff}
