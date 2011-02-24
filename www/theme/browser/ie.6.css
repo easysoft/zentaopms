@@ -1,6 +1,5 @@
 html{overflow:hidden;}
-body{height:100%; overflow:auto}
+body{height:100%; overflow:auto;margin:0 15px 0 0}
 div#footer, div#debugbar, div#hiddenbar{position:absolute;}
-.yui-d0 {width: 95%;} /* fix the error of fixed layout table. */
 .button-s, .button-c, .button-r{padding:0; font-size:14px}
 #divider{margin-bottom:35px}
