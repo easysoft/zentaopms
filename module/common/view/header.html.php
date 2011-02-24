@@ -24,3 +24,4 @@ include 'colorbox.html.php';
     <tr><td id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></td></tr>
   </table>
 </div>
+<div class='outer'>
