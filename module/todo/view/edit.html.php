@@ -50,7 +50,7 @@
         <th class='rowhead'><?php echo $lang->todo->beginAndEnd;?></th>
         <td>
           <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class=select-2') . html::select('end', $times, $todo->end, 'class=select-2');?>
-          <input type='checkbox' id='switcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> ><?php echo $lang->todo->lblDisableDate;?>
+          <input type='checkbox' id='dateSwitcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> ><?php echo $lang->todo->lblDisableDate;?>
         </td>
       </tr>  
       <tr>
@@ -66,4 +66,4 @@
   </form>
 </div>  
 <?php include './footer.html.php';?>
-<script language='Javascript'>switchDateFeature(document.getElementById('switcher'));</script>
+<script language='Javascript'>switchDateFeature(document.getElementById('dateSwitcher'));</script>
