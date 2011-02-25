@@ -11,22 +11,16 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>body{background:white; margin-top:20px; padding-bottom:0}</style>
-<div id='yui-d0'>
-  <form method='post'>
-    <table class='table-1'> 
-      <caption><?php echo $lang->doc->createLib;?></caption>
-      <tr>
-        <th class='rowhead'><?php echo $lang->doc->libName;?></th>
-        <td><?php echo html::input('name', '', "class='text-1'");?></td>
-      </tr>  
-      <tr>
-        <td colspan='2' class='a-center'>
-        <?php echo html::submitButton();?>
-        </td>
-      </tr>
-    </table>
-  </form>
-</div>  
-</body>
-</html>
+<form method='post'>
+  <table class='table-1'> 
+    <caption><?php echo $lang->doc->createLib;?></caption>
+    <tr>
+      <th class='rowhead'><?php echo $lang->doc->libName;?></th>
+      <td><?php echo html::input('name', '', "class='text-1'");?></td>
+    </tr>  
+    <tr>
+      <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
+    </tr>
+  </table>
+</form>
+<?php include '../../common/view/footer.lite.html.php';?>
