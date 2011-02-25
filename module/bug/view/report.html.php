@@ -11,30 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>span {display:block}</style>
-<script language='javascript'>
-/* 全选 */
-function checkAll()
-{
-    var checkOBJ = $('input');
-    for(var i = 0; i < checkOBJ.length; i++)
-    {
-        checkOBJ.get(i).checked = true;
-    }
-}
-
-/* 反选 */
-function checkReverse()
-{
-    var checkOBJ = $('input');
-    for(var i = 0; i < checkOBJ.length; i++)
-    {
-        checkOBJ.get(i).checked = !checkOBJ.get(i).checked;
-    }
-    return;
-}
-</script>
-
 <div class='yui-d0'>
   <div id='featurebar'>
     <div class='f-left'><?php echo $lang->bug->report->common;?></div>
@@ -42,20 +18,21 @@ function checkReverse()
   </div>
 </div>
 
-<div class='yui-d0 yui-t1'>
-  <div class='yui-b'>
-    <div class='box-title'><?php echo $lang->bug->report->select;?></div>
-    <div class='box-content'>
-      <form method='post'>
-      <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts);?>
-      <input type='button' value='<?php echo $lang->bug->report->selectAll;?>'     onclick='checkAll()' />
-      <input type='button' value='<?php echo $lang->bug->report->selectReverse;?>' onclick='checkReverse()' />
-      <br /><br />
-      <?php echo html::submitButton($lang->bug->report->create);?>
-     </div>
-  </div>
-  <div class="yui-main">
-    <div class="yui-b">
+<table class='cont-lt1'>
+  <tr valign='top'>
+    <td class='side'>
+      <div class='box-title'><?php echo $lang->bug->report->select;?></div>
+      <div class='box-content'>
+        <form method='post'>
+        <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts);?>
+        <input type='button' value='<?php echo $lang->bug->report->selectAll;?>'     onclick='checkAll()' />
+        <input type='button' value='<?php echo $lang->bug->report->selectReverse;?>' onclick='checkReverse()' />
+        <br /><br />
+        <?php echo html::submitButton($lang->bug->report->create);?>
+      </div>
+    </td>
+    <td class='divider'></td>
+    <td>
       <table class='table-1'>
         <caption><?php echo $lang->bug->report->common;?></caption>
         <?php foreach($charts as $chartType => $chartContent):?>
@@ -80,8 +57,8 @@ function checkReverse()
         </tr>
         <?php endforeach;?>
       </table>
-    </div>
-  </div>
-</div>
+    </td>
+  </tr>
+</table>
 <?php echo $renderJS;?>
 <?php include '../../common/view/footer.html.php';?>
