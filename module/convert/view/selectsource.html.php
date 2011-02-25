@@ -10,8 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
-  <form method='post' action='<?php echo inlink('setConfig');?>'>
+<form method='post' action='<?php echo inlink('setConfig');?>'>
   <table align='center' class='table-5 f-14px'>
     <caption><?php echo $lang->convert->selectSource;?></caption>
     <tr>
@@ -28,6 +27,5 @@
       <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
-  </form>
-</div>
+</form>
 <?php include '../../common/view/footer.html.php';?>

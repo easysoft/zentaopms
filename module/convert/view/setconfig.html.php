@@ -10,8 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
-  <form method='post' action='<?php echo inlink('checkconfig');?>'>
+<form method='post' action='<?php echo inlink('checkconfig');?>'>
   <table align='center' class='table-5 f-14px'>
     <caption><?php echo $lang->convert->setting . $lang->colon . strtoupper($source);?></caption>
     <?php echo $setting;?>
@@ -20,6 +19,5 @@
     </tr>
   </table>
   <?php echo html::hidden('source', $source) . html::hidden('version', $version);?>
-  </form>
-</div>
+</form>
 <?php include '../../common/view/footer.html.php';?>
