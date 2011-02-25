@@ -34,8 +34,6 @@ $config->themes = 'default,green,red';    // Supported themes.
 $config->langs['zh-cn'] = '中文简体';
 $config->langs['zh-tw'] = '中文繁體';
 $config->langs['en']    = 'English';
-//$config->langs['ja']  = 'Japanese';
-//$config->langs['ko']  = 'Korean';
 
 /* Default settings. */
 $config->default->view   = 'html';        // Default view.
