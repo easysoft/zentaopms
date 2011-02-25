@@ -63,7 +63,7 @@
         <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
         <table class='table-1 a-left'>
           <tr valign='middle'>
-            <th class='rowhead w-p20'><?php echo $lang->bug->product;?></th>
+            <th class='rowhead'><?php echo $lang->bug->product;?></th>
             <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?>
           </tr>
           <tr>

@@ -68,7 +68,7 @@ userList         = "<?php echo join(',', array_keys($users));?>".split(',');
         <legend><?php echo $lang->bug->legendBasicInfo;?></legend>
         <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
           <tr>
-            <td class='rowhead w-p20'><?php echo $lang->bug->product;?></td>
+            <td class='rowhead'><?php echo $lang->bug->product;?></td>
             <td>
               <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value);");?>
             </td>
