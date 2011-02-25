@@ -13,18 +13,25 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<div class='yui-d0'>
-  <div id='featurebar'>
-    <div class='f-right'>
-      <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>
-    </div>
+<div id='featurebar'>
+  <div class='f-right'>
+    <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>
   </div>
 </div>
 
-<div class='yui-d0 yui-t7' id='mainbox'>
-
-  <div class="yui-main">
-    <div class="yui-b">
+<table class='cont-lt3'>
+  <tr valign='top'>
+    <td class='side'>
+      <div class='box-title'><?php echo $libName;?></div>
+      <div class='box-content'>
+        <?php echo $moduleTree;?>
+        <div class='a-right'>
+          <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->tree->manage);?>
+        </div>
+      </div>
+    </td>
+    <td class='divider'></td>
+    <td>
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
           <tr class='colhead'>
@@ -61,18 +68,7 @@
         </tbody>
       </table>
       <?php $pager->show();?>
-    </div>
-  </div>
-
-  <div class='yui-b' id='treebox'>
-    <div class='box-title'><?php echo $libName;?></div>
-    <div class='box-content'>
-      <?php echo $moduleTree;?>
-      <div class='a-right'>
-        <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->tree->manage);?>
-      </div>
-    </div>
-  </div>
-
-</div>  
+    </td>              
+  </tr>    
+</table>  
 <?php include './footer.html.php';?>
