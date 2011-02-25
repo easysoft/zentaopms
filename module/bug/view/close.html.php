@@ -27,4 +27,5 @@
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>
+</form>
 <?php include '../../common/view/footer.html.php';?>
