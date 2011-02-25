@@ -48,27 +48,6 @@ class dept extends control
     }
 
     /**
-     * Edit a department.
-     * 
-     * @param  int    $moduleID 
-     * @access public
-     * @return void
-     */
-    public function edit($moduleID)
-    {
-        if(!empty($_POST))
-        {
-            if($this->product->update($_POST)) die(js::locate($this->createLink($this->moduleName, 'index', "product=$_POST[id]"), 'parent'));
-        }
-
-        $product = $this->product->getByID($productID);
-        $header['title'] = $this->lang->product->edit . $this->lang->colon . $product->name;
-        $this->view->header  = $header;
-        $this->view->product = $product;
-        $this->display();
-    }
-
-    /**
      * Update the departments order.
      * 
      * @access public
