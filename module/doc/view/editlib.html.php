@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php if($libID == 'product' or $libID == 'project'):?>
-  <h3><?php echo $lang->doc->errorEditSystemDoc;?></h3>
+  <p class='a-center strong mt-10px'><?php echo $lang->doc->errorEditSystemDoc;?></p>
 <?php else:?>
 <form method='post'>
   <table class='table-1'> 
@@ -25,3 +25,4 @@
   </table>
 </form>
 <?php endif;?>
+<?php include '../../common/view/footer.lite.html.php';?>
