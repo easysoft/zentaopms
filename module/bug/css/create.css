@@ -4,3 +4,7 @@
 #story  {width:605px}
 #steps  {width:100%}
 .text-1 {width: 85%}
+
+/* The build template setting. */
+.button-c {padding:2px}
+.ke-icon-savetemplate {background-image: url(theme/default/images/kindeditor/save.gif); background-position: center; width: 56px; height: 20px;} 

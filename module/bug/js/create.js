@@ -149,3 +149,34 @@ $(function() {
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     setAssignedTo();
 })
+
+/* Save template. */
+KE.plugin.savetemplate = {
+    click: function(id) {
+        content = KE.html('steps');
+        jPrompt(setTemplateTitle, '','', function(r)
+        {
+            if(!r || !content) return;
+            saveTemplateLink = createLink('bug', 'saveTemplate');
+            $.post(saveTemplateLink, {title:r, content:content}, function(data)
+            {
+                $('#tplBox').html(data);
+            });
+        });
+    }
+}
+/* Set template. */
+function setTemplate(templateID)
+{
+    $('#tplTitleBox' + templateID).attr('style', 'text-decoration:underline; color:#8B008B');
+    steps = $('#template' + templateID).html();
+    KE.html('steps', steps);
+}
+
+/* Delete template. */
+function deleteTemplate(templateID)
+{
+    if(!templateID) return;
+    hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
+    $('#tplBox' + templateID).addClass('hidden');
+}

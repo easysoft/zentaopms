@@ -14,6 +14,9 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<script language='Javascript'>
+userList = "<?php echo join(',', array_keys($users));?>".split(',');
+</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'> 
     <caption><?php echo $lang->bug->create;?></caption>

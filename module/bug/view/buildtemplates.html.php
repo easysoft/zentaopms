@@ -1,46 +1,6 @@
-<style>
-.button-c {padding:1px}
-.ke-icon-savetemplate {
-    background-image: url(theme/default/images/kindeditor/save.gif);
-    background-position: center;
-    width: 56px;
-    height: 20px;
-}
-</style>
 <script language='Javascript'>
-var setTemplateTitle = '<?php echo $lang->bug->setTemplateTitle;?>';
-
-/* Save template. */
+setTemplateTitle = '<?php echo $lang->bug->setTemplateTitle;?>';
 KE.lang.savetemplate = '<?php echo $lang->bug->saveTemplate;?>';
-KE.plugin.savetemplate = {
-    click: function(id) {
-        content = KE.html('steps');
-        jPrompt(setTemplateTitle, '','', function(r)
-        {
-            if(!r || !content) return;
-            saveTemplateLink = createLink('bug', 'saveTemplate');
-            $.post(saveTemplateLink, {title:r, content:content}, function(data)
-            {
-                $('#tplBox').html(data);
-            });
-        });
-    }
-}
-/* Set template. */
-function setTemplate(templateID)
-{
-    $('#tplTitleBox' + templateID).attr('style', 'text-decoration:underline; color:#8B008B');
-    steps = $('#template' + templateID).html();
-    KE.html('steps', steps);
-}
-
-/* Delete template. */
-function deleteTemplate(templateID)
-{
-    if(!templateID) return;
-    hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
-    $('#tplBox' + templateID).addClass('hidden');
-}
 </script>
 <?php 
 foreach($templates as $key => $template)
