@@ -11,21 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<script language='Javascript'>
-function setDuplicate(resolution)
-{
-    if(resolution == 'duplicate')
-    {
-        $('#duplicateBugBox').show();
-    }
-    else
-    {
-        $('#duplicateBugBox').hide();
-    }
-}
-</script>
 <form method='post' target='hiddenwin'>
-<div class='yui-d0'>
   <table class='table-1'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
@@ -57,5 +43,5 @@ function setDuplicate(resolution)
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>
-</div>
+</form>
 <?php include '../../common/view/footer.html.php';?>
