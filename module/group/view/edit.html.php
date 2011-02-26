@@ -11,20 +11,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
-  <form method='post' target='hiddenwin'>
-    <table align='center' class='table-4'> 
-      <caption><?php echo $lang->group->edit;?></caption>
-      <tr>
-        <th class='rowhead'><?php echo $lang->group->name;?></th>
-        <td><?php echo html::input('name', $group->name, "class='text-1'");?></td>
-      </tr>  
-      <tr>
-        <th class='rowhead'><?php echo $lang->group->desc;?></th>
-        <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='area-1'");?></td>
-      </tr>  
-      <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
-    </table>
-  </form>
-</div>  
+<form method='post' target='hiddenwin'>
+  <table align='center' class='table-4'> 
+    <caption><?php echo $lang->group->edit;?></caption>
+    <tr>
+      <th class='rowhead'><?php echo $lang->group->name;?></th>
+      <td><?php echo html::input('name', $group->name, "class='text-1'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->group->desc;?></th>
+      <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='area-1'");?></td>
+    </tr>  
+    <tr><td colspan='2' class='a-center'><?php echo html::submitButton();?></td></tr>
+  </table>
+</form>
 <?php include '../../common/view/footer.html.php';?>
