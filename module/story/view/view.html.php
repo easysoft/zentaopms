@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../file/view/download.html.php';?>
 
 <div class='yui-d0'>
   <div id='titlebar'>
