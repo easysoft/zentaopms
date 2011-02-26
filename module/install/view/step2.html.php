@@ -9,9 +9,8 @@
  * @version     $Id$
  */
 ?>
-<?php include './header.html.php';?>
-<div class='yui-d0'>
-  <form method='post' action='<?php echo $this->createLink('install', 'step3');?>'>
+<?php include '../../common/view/header.lite.html.php';?>
+<form method='post' action='<?php echo $this->createLink('install', 'step3');?>'>
   <table align='center' class='table-6'>
     <caption><?php echo $lang->install->setConfig;?></caption>
     <tr>
@@ -54,6 +53,5 @@
       <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>
     </tr>
   </table>
-  </form>
-</div>
-<?php include './footer.html.php';?>
+</form>
+<?php include '../../common/view/footer.lite.html.php';?>

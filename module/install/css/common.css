@@ -1,0 +1,4 @@
+body{background:white; margin-top:50px}
+caption, th, td {padding:10px; font-size:16px}
+.ok{background:green; color:white}
+.fail{background:red; color:white}
