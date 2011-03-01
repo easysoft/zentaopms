@@ -11,41 +11,39 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
-  <table class='table-1'> 
-    <caption><?php echo $lang->release->view;?></caption>
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->product;?></th>
-      <td><?php echo $release->productName;?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->name;?></th>
-      <td class='<?php if($release->deleted) echo 'deleted';?>'><?php echo $release->name;?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->build;?></th>
-      <td><?php echo $release->buildName;?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->date;?></th>
-      <td><?php echo $release->date;?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->release->desc;?></th>
-      <td class='content'><?php echo $release->desc;?></td>
-    </tr>  
-  </table>
-  <div class='a-center f-16px strong'>
-    <?php
-    $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
-    if(!$release->deleted)
-    {
-        common::printLink('release', 'edit',   "releaseID=$release->id", $lang->edit);
-        common::printLink('release', 'delete', "releaseID=$release->id", $lang->delete, 'hiddenwin');
-    }
-    echo html::a($browseLink, $lang->goback);
-    ?>
-  </div>
-  <?php include '../../common/view/action.html.php';?>
-</div>  
+<table class='table-1'> 
+  <caption><?php echo $lang->release->view;?></caption>
+  <tr>
+    <th class='rowhead'><?php echo $lang->release->product;?></th>
+    <td><?php echo $release->productName;?></td>
+  </tr>  
+  <tr>
+    <th class='rowhead'><?php echo $lang->release->name;?></th>
+    <td class='<?php if($release->deleted) echo 'deleted';?>'><?php echo $release->name;?></td>
+  </tr>  
+  <tr>
+    <th class='rowhead'><?php echo $lang->release->build;?></th>
+    <td><?php echo $release->buildName;?></td>
+  </tr>  
+  <tr>
+    <th class='rowhead'><?php echo $lang->release->date;?></th>
+    <td><?php echo $release->date;?></td>
+  </tr>  
+  <tr>
+    <th class='rowhead'><?php echo $lang->release->desc;?></th>
+    <td class='content'><?php echo $release->desc;?></td>
+  </tr>  
+</table>
+<div class='a-center f-16px strong'>
+  <?php
+  $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
+  if(!$release->deleted)
+  {
+      common::printLink('release', 'edit',   "releaseID=$release->id", $lang->edit);
+      common::printLink('release', 'delete', "releaseID=$release->id", $lang->delete, 'hiddenwin');
+  }
+  echo html::a($browseLink, $lang->goback);
+  ?>
+</div>
+<?php include '../../common/view/action.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
