@@ -12,31 +12,20 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<script language="Javascript">
-function checkall(checker)
-{
-    $('input').each(function() 
-    {
-        $(this).attr("checked", checker.checked)
-    });
-}
-</script>
+<script language="Javascript">var type='<?php echo $type;?>';</script>
 
-<div class='yui-d0'>
-  <div id='featurebar'>
-    <div class='f-left'>
-      <?php
-      echo "<span id='assignedtoTab'>" . html::a(inlink('task', "type=assignedto"),  $lang->my->taskMenu->assignedToMe) . "</span>";
-      echo "<span id='openedbyTab'>"   . html::a(inlink('task', "type=openedby"),    $lang->my->taskMenu->openedByMe)   . "</span>";
-      echo "<span id='finishedbyTab'>" . html::a(inlink('task', "type=finishedby"),  $lang->my->taskMenu->finishedByMe) . "</span>";
-      echo "<span id='closedbyTab'>"   . html::a(inlink('task', "type=closedby"),    $lang->my->taskMenu->closedByMe)   . "</span>";
-      echo "<span id='canceledbyTab'>" . html::a(inlink('task', "type=canceledby"),  $lang->my->taskMenu->canceledByMe) . "</span>";
-      ?>
-    </div>
+<div id='featurebar'>
+  <div class='f-left'>
+    <?php
+    echo "<span id='assignedtoTab'>" . html::a(inlink('task', "type=assignedto"),  $lang->my->taskMenu->assignedToMe) . "</span>";
+    echo "<span id='openedbyTab'>"   . html::a(inlink('task', "type=openedby"),    $lang->my->taskMenu->openedByMe)   . "</span>";
+    echo "<span id='finishedbyTab'>" . html::a(inlink('task', "type=finishedby"),  $lang->my->taskMenu->finishedByMe) . "</span>";
+    echo "<span id='closedbyTab'>"   . html::a(inlink('task', "type=closedby"),    $lang->my->taskMenu->closedByMe)   . "</span>";
+    echo "<span id='canceledbyTab'>" . html::a(inlink('task', "type=canceledby"),  $lang->my->taskMenu->canceledByMe) . "</span>";
+    ?>
   </div>
 </div>
-<div class='yui-d0'>
-  <form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
+<form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
   <table class='table-1 tablesorter fixed' id='tasktable'>
     <thead>
     <tr class='colhead'>
@@ -81,14 +70,13 @@ function checkall(checker)
     <?php endforeach;?>
     </tbody>
     <tfoot>
-    <tr><td colspan='11'>
-      <input type='checkbox' onclick='checkall(this);'><?php echo $lang->selectAll;?>
-      <?php 
-      echo html::submitButton($lang->close)?>
-    </td></tr>
+      <tr>
+        <td colspan='11'>
+          <input type='checkbox' onclick='checkall(this);'><?php echo $lang->selectAll;?>
+          <?php echo html::submitButton($lang->close)?>
+        </td>
+      </tr>
     </tfoot>
   </table> 
-  </form>
-</div>
-<script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
+</form>
 <?php include '../../common/view/footer.html.php';?>
