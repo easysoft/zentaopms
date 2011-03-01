@@ -12,8 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div class='yui-d0'>
-  <form method='post' target='hiddenwin'>
+<form method='post' target='hiddenwin'>
   <table class='table-1 fixed tablesorter'>
     <thead>
     <tr class='colhead'>
@@ -56,6 +55,5 @@
     </tbody>
   </table>
   <div class='a-right'><?php echo html::submitButton($lang->project->importTask);?></div>
-  </form>
-</div>  
+</form>
 <?php include '../../common/view/footer.html.php';?>
