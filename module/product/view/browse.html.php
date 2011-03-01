@@ -14,49 +14,34 @@
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
-<script language='Javascript'>
-/* Browse by module. */
-function browseByModule()
-{
-    $('#mainbox').addClass('yui-t1');
-    $('#treebox').removeClass('hidden');
-    $('#bymoduleTab').addClass('active');
-    $('#allTab').removeClass('active');
-    $('#bysearchTab').removeClass('active');
-    $('#querybox').addClass('hidden');
-}
-/* By search. */
-function search(active)
-{
-    $('#mainbox').removeClass('yui-t1');
-    $('#treebox').addClass('hidden');
-    $('#querybox').removeClass('hidden');
-    $('#bymoduleTab').removeClass('active');
-    $('#' + active + 'Tab').removeClass('active');
-    $('#bysearchTab').addClass('active');
-}
-
-</script>
-
-<div class='yui-d0'>
-  <div id='featurebar'>
-    <div class='f-left'>
-      <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>
-      <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->product->allStory);?></span>
-      <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><a href='#'><?php echo $lang->product->searchStory;?></a></span>
-    </div>
-    <div class='f-right'>
-      <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
-      <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
-    </div>
+<div id='featurebar'>
+  <div class='f-left'>
+    <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>
+    <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->product->allStory);?></span>
+    <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><a href='#'><?php echo $lang->product->searchStory;?></a></span>
   </div>
-    <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+  <div class='f-right'>
+    <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
+    <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
+  </div>
 </div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 
-<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
-
-  <div class="yui-main">
-    <div class="yui-b">
+<table class='cont-lt1'>
+  <tr valign='top'>
+    <td class='side <?php echo $treeClass;?>' id='treebox'>
+      <div class='box-title'><?php echo $productName;?></div>
+      <div class='box-content'>
+        <?php echo $moduleTree;?>
+        <div class='a-right'>
+          <?php if(common::hasPriv('product', 'edit'))   echo html::a($this->createLink('product', 'edit',   "productID=$productID"), $lang->edit);?>
+          <?php if(common::hasPriv('product', 'delete')) echo html::a($this->createLink('product', 'delete', "productID=$productID&confirm=no"),   $lang->delete, 'hiddenwin');?>
+          <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "rootID=$productID&view=story"), $lang->tree->manage);?>
+        </div>
+      </div>
+    </td>
+    <td class='divider <?php echo $treeClass;?>'></td>
+    <td>
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
           <tr class='colhead'>
@@ -102,22 +87,9 @@ function search(active)
         </tbody>
       </table>
       <?php $pager->show();?>
-    </div>
-  </div>
-
-  <div class='yui-b <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
-    <div class='box-title'><?php echo $productName;?></div>
-    <div class='box-content'>
-      <?php echo $moduleTree;?>
-      <div class='a-right'>
-        <?php if(common::hasPriv('product', 'edit'))   echo html::a($this->createLink('product', 'edit',   "productID=$productID"), $lang->edit);?>
-        <?php if(common::hasPriv('product', 'delete')) echo html::a($this->createLink('product', 'delete', "productID=$productID&confirm=no"),   $lang->delete, 'hiddenwin');?>
-        <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "rootID=$productID&view=story"), $lang->tree->manage);?>
-      </div>
-    </div>
-  </div>
-
-</div>  
+    </td>              
+  </tr>
+</table>
 <script language='javascript'>
 $('#module<?php echo $moduleID;?>').addClass('active')
 $('#<?php echo $browseType;?>Tab').addClass('active')
