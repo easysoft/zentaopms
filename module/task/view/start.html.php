@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <form method='post' target='hiddenwin'>
-<div class='yui-d0'>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
@@ -32,5 +31,5 @@
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>
-</div>
+</form>
 <?php include '../../common/view/footer.html.php';?>
