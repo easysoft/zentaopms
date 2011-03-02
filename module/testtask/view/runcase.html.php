@@ -11,9 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>body{background:white}</style>
-<div class='yui-d0'>
-  <form method='post'>
+<form method='post'>
   <table class='table-1'>
     <caption class='caption-tl'>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></caption>
     <tr class='colhead'>
@@ -45,5 +43,5 @@
       </td>
     </tr>
   </table>
-  </form>
-</div>
+</form>
+<?php include '../../common/view/footer.lite.html.php';?>

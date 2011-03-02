@@ -14,50 +14,36 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
-<script language='javascript'>
-$(document).ready(function()
-{
-    $("a.iframe").colorbox({width:900, height:600, iframe:true, transition:'none'});
-});
-
-function checkall(checker)
-{
-    $('input').each(function() 
-    {
-        $(this).attr("checked", checker.checked)
-    });
-}
-/* 切换至按模块浏览。*/
-function browseByModule(active)
-{
-    $('#mainbox').addClass('yui-t1');
-    $('#treebox').removeClass('hidden');
-    $('#bymoduleTab').addClass('active');
-    $('#' + active + 'Tab').removeClass('active');
-}
+<script language="Javascript">
+var browseType = '<?php echo $browseType;?>';
+var moduleID   = '<?php echo $moduleID;?>';
 </script>
-<div class='yui-d0'>
-  <div id='featurebar'>
-    <div class='f-left'>
-      <?php
-      echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testtask->byModule . "</a></span> ";
-      echo "<span id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</span>";
-      echo "<span id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</span>";
-      ?>
-    </div>
-    <div class='f-right'>
-      <?php
-      echo html::export2csv($lang->exportCSV, $lang->setFileName);
-      common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);
-      echo html::a($this->session->testtaskList, $lang->goback);
-      ?>
-    </div>
+
+<div id='featurebar'>
+  <div class='f-left'>
+    <?php
+    echo "<span id='bymoduleTab' onclick=\"browseByModule('$browseType')\"><a href='#'>" . $lang->testtask->byModule . "</a></span> ";
+    echo "<span id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</span>";
+    echo "<span id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</span>";
+    ?>
+  </div>
+  <div class='f-right'>
+    <?php
+    echo html::export2csv($lang->exportCSV, $lang->setFileName);
+    common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);
+    echo html::a($this->session->testtaskList, $lang->goback);
+    ?>
   </div>
 </div>
 
-<div class='yui-d0 <?php if($browseType == 'bymodule') echo 'yui-t1';?>' id='mainbox'>
-  <div class='yui-main'>
-    <div class='yui-b'>
+<table class='cont-lt1'>
+  <tr valign='top'>
+    <td class='side <?php echo $treeClass;?>'>
+      <div class='box-title'><?php echo $productName;?></div>
+      <div class='box-content'><?php echo $moduleTree;?></div>
+    </td>
+    <td class='divider <?php echo $treeClass;?>'></td>
+    <td>
       <form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'>
       <table class='table-1 tablesorter datatable mb-zero fixed'>
         <thead>
@@ -109,15 +95,7 @@ function browseByModule(active)
         </tr>
       </table>
       </form>
-    </div>
-  </div>
-  <div class='yui-b  <?php if($browseType != 'bymodule') echo 'hidden';?>' id='treebox'>
-    <div class='box-title'><?php echo $productName;?></div>
-    <div class='box-content'><?php echo $moduleTree;?></div>
-  </div>
-</div>
-<script language="Javascript">
-$("#<?php echo $browseType;?>Tab").addClass('active');
-$("#module<?php echo $moduleID;?>").addClass('active'); 
-</script>
+    </td>
+  </tr>
+</table>
 <?php include '../../common/view/footer.html.php';?>

@@ -181,6 +181,7 @@ class testtask extends control
         $this->view->browseType  = $browseType;
         $this->view->taskID      = $taskID;
         $this->view->moduleID    = $moduleID;
+        $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
 
         $this->display();
     }
