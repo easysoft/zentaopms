@@ -132,6 +132,7 @@ class testcase extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
+        $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
 
         $this->display();
     }

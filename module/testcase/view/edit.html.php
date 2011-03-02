@@ -11,42 +11,18 @@
  */
 ?>
 <?php include './header.html.php';?>
-<style>#module{width:90%}</style>
-<script language='javascript'>
-/**
- * Get story list.
- * 
- * @param  string $module 
- * @access public
- * @return void
- */
-function getList()
-{
-    productID = $('#product').get(0).value;
-    storyID   = $('#story').get(0).value;
-    link = createLink('search', 'select', 'productID=' + productID + '&projectID=0&module=story&moduleID=' + storyID);
-    $('#storyListIdBox a').attr("href", link);
-}
-
-$(document).ready(function()
-{
-    $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
-});
-</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-<div class='yui-d0'>
-  <div id='titlebar'>
-    <div id='main'>
-    CASE #<?php echo $case->id . $lang->colon;?>
-    <?php echo html::input('title', $case->title, 'class=text-1');?>
-    </div>
-    <div><?php echo html::submitButton();?></div>
+<div id='titlebar'>
+  <div id='main'>
+  CASE #<?php echo $case->id . $lang->colon;?>
+  <?php echo html::input('title', $case->title, 'class=text-1');?>
   </div>
+  <div><?php echo html::submitButton();?></div>
 </div>
 
-<div class='yui-d0 yui-t8'>
-  <div class='yui-main'>
-    <div class='yui-b'>
+<table class='cont-rt5'>
+  <tr valign='top'>
+    <td>
       <table class='table-1'>
         <tr class='colhead'>
           <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
@@ -88,65 +64,65 @@ $(document).ready(function()
       </div>
       <?php include '../../common/view/action.html.php';?>
 
-    </div>
-  </div>
-
-  <div class='yui-b'>
-    <fieldset>
-      <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
-      <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
-        <tr>
-          <td class='rowhead w-p20'><?php echo $lang->testcase->product;?></td>
-          <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-1'");?></td>
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->module;?></td>
-          <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "class='select-1'");?></span></td>
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-          <td class='a-left'><div id='storyIdBox' class='searchleft'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
-          <div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList()");?></div>
-          </td>       
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->type;?></td>
-          <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=select-1');?>
-        </tr>
-        <tr>
-          <th class='rowhead'><?php echo $lang->testcase->stage;?></th>
-          <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='select-1' multiple='multiple'");?></td>
-        </tr>  
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
-          <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=select-1');?>
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->status;?></td>
-          <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=select-1');?></td>
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>
-          <td><?php echo html::input('keywords', $case->keywords, 'class=text-1');?></td>
-        </tr>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
-          <td><?php echo html::input('linkCase', $case->linkCase, 'class=text-1');?></td>
-        </tr>
-      </table>
-    </fieldset>
-    <fieldset>
-      <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>
-      <table class='table-1 a-left'>
-        <tr>
-          <td class='rowhead w-p20'><?php echo $lang->testcase->openedBy;?></td>
-          <td><?php echo $case->openedBy . $lang->at . $case->openedDate;?></td>
-        <tr>
-          <td class='rowhead'><?php echo $lang->testcase->lblLastEdited;?></td>
-          <td><?php if($case->lastEditedBy) echo $case->lastEditedBy . $lang->at . $case->lastEditedDate;?></td>
-        </tr>
-      </table>
-    </fieldset>
-  </div>
-</div>
+    </td>
+    <td class='divider'></td>
+    <td class='side'>
+      <fieldset>
+        <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
+        <table class='table-1 a-left' cellpadding='0' cellspacing='0'>
+          <tr>
+            <td class='rowhead w-p20'><?php echo $lang->testcase->product;?></td>
+            <td><?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-1'");?></td>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->testcase->module;?></td>
+            <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "class='select-1'");?></span></td>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->testcase->story;?></td>
+            <td class='a-left'><div id='storyIdBox' class='searchleft'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
+            <div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList()");?></div>
+            </td>       
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->testcase->type;?></td>
+            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=select-1');?>
+          </tr>
+          <tr>
+            <th class='rowhead'><?php echo $lang->testcase->stage;?></th>
+            <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='select-1' multiple='multiple'");?></td>
+          </tr>  
+          <tr>
+            <td class='rowhead'><?php echo $lang->testcase->pri;?></td>
+            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=select-1');?>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->testcase->status;?></td>
+            <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=select-1');?></td>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>
+            <td><?php echo html::input('keywords', $case->keywords, 'class=text-1');?></td>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
+            <td><?php echo html::input('linkCase', $case->linkCase, 'class=text-1');?></td>
+          </tr>
+        </table>
+      </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>
+        <table class='table-1 a-left'>
+          <tr>
+            <td class='rowhead w-p20'><?php echo $lang->testcase->openedBy;?></td>
+            <td><?php echo $case->openedBy . $lang->at . $case->openedDate;?></td>
+          <tr>
+            <td class='rowhead'><?php echo $lang->testcase->lblLastEdited;?></td>
+            <td><?php if($case->lastEditedBy) echo $case->lastEditedBy . $lang->at . $case->lastEditedDate;?></td>
+          </tr>
+        </table>
+      </fieldset>
+    </td>
+  </tr>
+</table>
 <?php include '../../common/view/footer.html.php';?>
