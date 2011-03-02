@@ -11,28 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<script language='Javascript'>
-function setStory(reason)
-{
-    if(reason == 'duplicate')
-    {
-        $('#duplicateStoryBox').show();
-        $('#childStoriesBox').hide();
-    }
-    else if(reason == 'subdivided')
-    {
-        $('#duplicateStoryBox').hide();
-        $('#childStoriesBox').show();
-    }
-    else
-    {
-        $('#duplicateStoryBox').hide();
-        $('#childStoriesBox').hide();
-    }
-}
-</script>
-<div class='yui-d0'>
-  <form method='post' target='hiddenwin'>
+<form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $story->title;?></caption>
     <tr>
@@ -58,7 +37,6 @@ function setStory(reason)
       </td>
     </tr>
   </table>
-  </form>
   <?php include '../../common/view/action.html.php';?>
-</div>
+</form>
 <?php include '../../common/view/footer.html.php';?>

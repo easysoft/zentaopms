@@ -12,8 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='yui-d0'>
-  <form method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $lang->story->change;?></caption>
     <tr>
@@ -45,6 +44,5 @@
   </div>
   <?php include './affected.html.php';?>
   <?php include '../../common/view/action.html.php';?>
-  </form>
-</div>
+</form>
 <?php include '../../common/view/footer.html.php';?>

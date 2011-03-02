@@ -13,54 +13,8 @@
 <?php include './header.html.php';?>
 <script language='Javascript'>
 var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : print($story->openedBy);?>';
-function switchShow(result)
-{
-    if(result == 'reject')
-    {
-        $('#rejectedReasonBox').show();
-        $('#preVersionBox').hide();
-        $('#assignedTo').val('closed');
-    }
-    else if(result == 'revert')
-    {
-        $('#preVersionBox').show();
-        $('#rejectedReasonBox').hide();
-        $('#duplicateStoryBox').hide();
-        $('#childStoriesBox').hide();
-        $('#assignedTo').val(assignedTo);
-    }
-    else
-    {
-        $('#preVersionBox').hide();
-        $('#rejectedReasonBox').hide();
-        $('#duplicateStoryBox').hide();
-        $('#childStoriesBox').hide();
-        $('#rejectedReasonBox').hide();
-        $('#assignedTo').val(assignedTo);
-    }
-}
-
-function setStory(reason)
-{
-    if(reason == 'duplicate')
-    {
-        $('#duplicateStoryBox').show();
-        $('#childStoriesBox').hide();
-    }
-    else if(reason == 'subdivided')
-    {
-        $('#duplicateStoryBox').hide();
-        $('#childStoriesBox').show();
-    }
-    else
-    {
-        $('#duplicateStoryBox').hide();
-        $('#childStoriesBox').hide();
-    }
-}
 </script>
-<div class='yui-d0'>
-  <form method='post' target='hiddenwin'>
+<form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $story->title;?></caption>
     <tr>
@@ -108,8 +62,7 @@ function setStory(reason)
       </td>
     </tr>
   </table>
-  </form>
-  <?php include './affected.html.php';?>
-  <?php include '../../common/view/action.html.php';?>
-</div>
+</form>
+<?php include './affected.html.php';?>
+<?php include '../../common/view/action.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
