@@ -16,7 +16,7 @@
   <table align='center' class='table-6 f-14px'>
     <caption><?php echo $lang->upgrade->confirm;?></caption>
     <tr>
-      <td><textarea rows='20' class='area-1'><?php echo $confirm;?></textarea></td>
+      <td class='a-center'><textarea rows='20' class='area-1'><?php echo $confirm;?></textarea></td>
     <tr>
       <td class='a-center'><?php echo html::submitButton($lang->upgrade->sureExecute) . html::hidden('fromVersion', $fromVersion);?></td>
     </tr>

@@ -10,9 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>body{background:white}</style>
-<div class='yui-d0' style='margin-top:50px'>
-  <form method='post' action='<?php echo inlink('confirm');?>'>
+<form method='post' action='<?php echo inlink('confirm');?>'>
   <table align='center' class='table-5 f-14px'>
     <caption><?php echo $lang->upgrade->selectVersion;?></caption>
     <tr>
@@ -27,6 +25,5 @@
       <td colspan='2' class='a-center'><?php echo html::submitButton($lang->upgrade->common);?></td>
     </tr>
   </table>
-  </form>
-</div>
+</form>
 <?php include '../../common/view/footer.html.php';?>

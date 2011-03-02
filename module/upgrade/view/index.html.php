@@ -10,17 +10,13 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>body{background:white}</style>
-<div class='yui-d0' style='margin-top:50px'>
-  <table align='center' class='table-5 f-14px'>
-    <caption><?php echo $lang->upgrade->warnning;?></caption>
-    <tr>
-      <td><?php echo $lang->upgrade->warnningContent;?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='a-center'><?php echo html::linkButton($lang->upgrade->common, inlink('selectVersion'));?></td>
-    </tr>
-  </table>
-  </form>
-</div>
+<table align='center' class='table-5 f-14px'>
+  <caption><?php echo $lang->upgrade->warnning;?></caption>
+  <tr>
+    <td><?php echo $lang->upgrade->warnningContent;?></td>
+  </tr>
+  <tr>
+    <td colspan='2' class='a-center'><?php echo html::linkButton($lang->upgrade->common, inlink('selectVersion'));?></td>
+  </tr>
+</table>
 <?php include '../../common/view/footer.html.php';?>
