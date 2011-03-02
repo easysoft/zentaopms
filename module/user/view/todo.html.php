@@ -12,15 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<script language='Javascript'>
-var account='<?php echo $account;?>'
-function changeDate(date)
-{
-    link = createLink('user', 'todo', 'account=' + account + '&date=' + date);
-    location.href=link;
-}
-</script>
-<div class='yui-d0'>
+<script language='Javascript'>var account='<?php echo $account;?>'</script>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
    <div id='featurebar'>
      <div class='f-left'>
@@ -65,5 +57,4 @@ function changeDate(date)
     </tbody>
   </table>
 </form>
-</div>
 <?php include '../../common/view/footer.html.php';?>

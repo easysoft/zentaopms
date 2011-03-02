@@ -10,8 +10,7 @@
  */
 include '../../common/view/header.lite.html.php';
 ?>
-<div class='outer pt-200px'>
-<form method='post' target='hiddenwin'>
+<form method='post' target='hiddenwin' class='pt-200px'>
   <table align='center' class='table-4'> 
     <caption id='welcome'><?php printf($lang->welcome, $app->company->name);?></caption>
     <tr>
