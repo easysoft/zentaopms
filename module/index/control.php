@@ -42,12 +42,15 @@ class index extends control
         $this->view->header->title = $this->lang->index->common;
 
         /* Get project stats.  */
+        unset($this->lang->report->colors);
+        $this->lang->project->charts->burn->graph->caption = '';
+        $this->lang->project->charts->burn->graph->xAxisName = "";
         $burns    = array();
         $projects = $this->project->getList('doing');
         foreach($projects as $project)
         {
             $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph);
-            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 220);
+            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 180);
         }
 
         /* stat datas of whole zentao system. */

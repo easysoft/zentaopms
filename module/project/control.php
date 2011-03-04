@@ -367,6 +367,7 @@ class project extends control
     public function burn($projectID = 0)
     {
         $this->loadModel('report');
+        unset($this->lang->report->colors);
 
         $project = $this->commonAction($projectID);
 
@@ -377,7 +378,7 @@ class project extends control
 
         /* Create charts. */
         $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph);
-        $charts  = $this->report->createJSChart('line', $dataXML, 800);
+        $charts  = $this->report->createJSChart('line', $dataXML, 700, 350);
 
         /* Assign. */
         $this->view->header   = $header;
