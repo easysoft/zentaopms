@@ -63,15 +63,7 @@ class helper
     static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '')
     {
         global $app, $config;
-
-        $link = $config->webRoot;
-        if($config->requestType == 'GET')
-        {
-            if(strpos($_SERVER['SCRIPT_NAME'], 'index.php') === false)
-            {
-                $link = $_SERVER['SCRIPT_NAME'];
-            }
-        }
+        $link = $config->requestType == 'PATH_INFO' ? $config->webRoot : $_SERVER['PHP_SELF'];
 
         /* Set the view type and vars. */
         if(empty($viewType)) $viewType = $app->getViewType();
