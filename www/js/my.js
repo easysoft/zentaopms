@@ -405,11 +405,14 @@ function setForm()
     $('form').submit(function()
     {
         submitObj   = $(this).find(':submit');
-        submitLabel = $(submitObj).attr('value');
-        $(submitObj).attr('disabled', 'disabled');
-        $(submitObj).attr('value', config.submitting);
-        $(submitObj).addClass('button-d');
-        formClicked = true;
+        if($(submitObj).size() == 1)
+        {
+            submitLabel = $(submitObj).attr('value');
+            $(submitObj).attr('disabled', 'disabled');
+            $(submitObj).attr('value', config.submitting);
+            $(submitObj).addClass('button-d');
+            formClicked = true;
+        }
     });
 
     $("body").click(function()
