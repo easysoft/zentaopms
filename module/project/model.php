@@ -248,7 +248,7 @@ class projectModel extends model
             SUM(`left`) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
-            ->andWhere('status')->ne('cancel')
+            ->andWhere('status')->notin('cancel,closed')
             ->andWhere('deleted')->eq(0)
             ->fetch();
         $project->totalEstimate = round($total->totalEstimate, 1);
@@ -597,7 +597,7 @@ class projectModel extends model
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
-            ->andWhere('status')->ne('cancel')
+            ->andWhere('status')->notin('cancel,closed')
             ->groupBy('project')
             ->fetchAll();
 
