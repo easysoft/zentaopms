@@ -514,7 +514,6 @@ class control
     {
         if(empty($this->output)) $this->parse($moduleName, $methodName);
         echo $this->output;
-        if($this->viewType == 'json') die();
     }
 
     /**
