@@ -401,19 +401,26 @@ function setDebugWin(color)
  */
 function setForm()
 {
-    submitLabel = $(':submit').attr('value');
+    var formClicked = false;
     $('form').submit(function()
     {
-        $(":submit").attr('disabled', 'disabled');
-        $(":submit").attr('value', config.submitting);
-        $(":submit").addClass('button-d');
+        submitObj   = $(this).find(':submit');
+        submitLabel = $(submitObj).attr('value');
+        $(submitObj).attr('disabled', 'disabled');
+        $(submitObj).attr('value', config.submitting);
+        $(submitObj).addClass('button-d');
+        formClicked = true;
     });
 
     $("body").click(function()
     {
-        $(":submit").removeAttr('disabled');
-        $(":submit").attr('value', submitLabel);
-        $(":submit").removeClass('button-d');
+        if(formClicked)
+        {
+            $(submitObj).removeAttr('disabled');
+            $(submitObj).attr('value', submitLabel);
+            $(submitObj).removeClass('button-d');
+        }
+        formClicked = false;
     });
 }
 
