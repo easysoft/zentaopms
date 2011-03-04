@@ -434,6 +434,10 @@ class task extends control
                 $ccList = substr($ccList, $commaPos + 1);
             }
         }
+        elseif(strtolower($toList) == 'closed')
+        {
+            $toList = $task->finishedBy;
+        }
 
         /* Get action info. */
         $action          = $this->action->getById($actionID);
