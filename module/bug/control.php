@@ -316,6 +316,7 @@ class bug extends control
             $storyID   = $bug->story;
             $buildID   = $bug->openedBuild;
             $severity  = $bug->severity;
+            $type      = $bug->type;    
         }
 
         /* If projectID is setted, get builds and stories of this project. */
@@ -356,6 +357,7 @@ class bug extends control
         $this->view->mailto           = $mailto;
         $this->view->keywords         = $keywords;
         $this->view->severity         = $severity;
+        $this->view->type             = $type;    
 
         $this->display();
     }
