@@ -77,13 +77,20 @@
           <tr>
             <td class='rowhead'><?php echo $lang->story->module;?></td>
             <td> 
-              <?php
-              foreach($modulePath as $key => $module)
-              {
-                  if(!common::printLink('product', 'browse', "productID=$story->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                  if(isset($modulePath[$key + 1])) echo $lang->arrow;
-              }
-              ?>
+            <?php
+            if(empty($modulePath))
+            {
+                echo "/";
+            }
+            else
+            {
+                foreach($modulePath as $key => $module)
+                {
+                    if(!common::printLink('product', 'browse', "productID=$story->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                    if(isset($modulePath[$key + 1])) echo $lang->arrow;
+                }
+            }
+            ?>
             </td>
           </tr>
           <tr>
