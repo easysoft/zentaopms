@@ -46,7 +46,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.id DESC')
+            ->orderBy('t1.date DESC,t1.id desc')
             ->fetchAll();
     }
 
