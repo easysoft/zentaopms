@@ -199,7 +199,6 @@ class bug extends control
         $this->view->productName = $this->products[$productID];
         $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
         $this->view->browseType  = $browseType;
-        $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
         $this->view->bugs        = $bugs;
         $this->view->users       = $users;
         $this->view->pager       = $pager;
@@ -316,6 +315,7 @@ class bug extends control
             $taskID    = $bug->task;
             $storyID   = $bug->story;
             $buildID   = $bug->openedBuild;
+            $severity  = $bug->severity;
         }
 
         /* If projectID is setted, get builds and stories of this project. */
@@ -355,6 +355,7 @@ class bug extends control
         $this->view->assignedTo       = $assignedTo;
         $this->view->mailto           = $mailto;
         $this->view->keywords         = $keywords;
+        $this->view->severity         = $severity;
 
         $this->display();
     }
