@@ -49,7 +49,7 @@ userList = "<?php echo join(',', array_keys($users));?>".split(',');
     <tr>
       <th class='rowhead'><?php echo $lang->bug->lblTypeAndSeverity;?></th>
       <td> 
-        <?php echo html::select('type', $lang->bug->typeList, 'codeerror', 'class=select-2');?> 
+        <?php echo html::select('type', $lang->bug->typeList, $type, 'class=select-2');?> 
         <?php echo html::select('severity', $lang->bug->severityList, $severity, 'class=select-2');?>
       </td>
     </tr>
