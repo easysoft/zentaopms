@@ -11,24 +11,28 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<table align='center' class='table-1'>
+<?php include '../../common/view/tablesorter.html.php';?>
+<table align='center' class='table-1 tablesorter'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->group->browse;?></div>
     <div class='f-right'><?php echo html::a(inlink('create'), $lang->group->create);?></div>
   </caption>
+  <thead>
   <tr class='colhead'>
    <th><?php echo $lang->group->id;?></th>
    <th><?php echo $lang->group->name;?></th>
    <th><?php echo $lang->group->desc;?></th>
    <th class='w-p60'><?php echo $lang->group->users;?></th>
-   <th><?php echo $lang->actions;?></th>
+   <th class='{sorter:false}'><?php echo $lang->actions;?></th>
  </tr>
+ </thead>
+ <tbody>
  <?php foreach($groups as $group):?>
  <tr class='a-center'>
-   <td><?php echo $group->id;?></td>
+   <td class='strong'><?php echo $group->id;?></td>
    <td><?php echo $group->name;?></td>
    <td class='a-left'><?php echo $group->desc;?></td>
-   <td class='a-left'><?php foreach($groupUsers[$group->id] as $user) echo $user . ' ';?></td>
+   <td class='a-left'><?php foreach($groupUsers[$group->id] as $user) echo "<span class='user'>$user</span>";?></td>
    <td>
      <?php common::printLink('group', 'managepriv',   "type=byGroup&param=$group->id", $lang->group->managePriv);?>
      <?php common::printLink('group', 'managemember', "groupID=$group->id", $lang->group->manageMember);?>
@@ -38,5 +42,6 @@
    </td>
  </tr>
  <?php endforeach;?>
+ </tbody>
 </table>
 <?php include '../../common/view/footer.html.php';?>

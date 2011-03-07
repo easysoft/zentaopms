@@ -160,6 +160,7 @@ class groupModel extends model
             ->where('`group`')->eq((int)$groupID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.company')->eq($this->app->company->id)
+            ->orderBy('t2.account')
             ->fetchPairs();
     }
 
