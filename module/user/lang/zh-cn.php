@@ -73,5 +73,5 @@ $lang->user->zipcode   = '邮编';
 $lang->user->join      = '加入日期';
 $lang->user->visits    = '访问次数';
 $lang->user->ip        = '最后IP';
-$lang->user->last      = '最后登录时间';
+$lang->user->last      = '最后登录';
 $lang->user->status    = '状态';

@@ -43,6 +43,7 @@ include '../../common/view/tablesorter.html.php';
           <th><?php echo $lang->user->gendar;?></th>
           <th><?php echo $lang->user->phone;?></th>
           <th><?php echo $lang->user->join;?></th>
+          <th><?php echo $lang->user->last;?></th>
           <th><?php echo $lang->user->visits;?></th>
           <th><?php echo $lang->actions;?></th>
         </tr>
@@ -58,6 +59,7 @@ include '../../common/view/tablesorter.html.php';
           <td><?php if(isset($lang->user->gendarList->{$user->gendar})) echo $lang->user->gendarList->{$user->gendar};?></td>
           <td><?php echo $user->phone;?></td>
           <td><?php echo $user->join;?></td>
+          <td><?php echo date('Y-m-d', $user->last);?></td>
           <td><?php echo $user->visits;?></td>
           <td>
             <?php 
