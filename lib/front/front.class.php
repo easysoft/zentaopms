@@ -751,6 +751,22 @@ EOT;
         $js .= self::end();
         echo $js;
     }
+
+    /**
+     * Execute some js code.
+     * 
+     * @param string $code 
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function execute($code)
+    {
+        $js = self::start();
+        $js .= $code;
+        $js .= self::end();
+        echo $js;
+    }
 }
 
 /**
