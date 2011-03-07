@@ -144,7 +144,7 @@ class installModel extends model
      */
     public function getWebRoot()
     {
-        return rtrim(str_replace('\\', '/', pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_DIRNAME)), '/') . '/';
+        return rtrim(str_replace('\\', '/', pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME)), '/') . '/';
     }
 
     /**

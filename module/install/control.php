@@ -21,6 +21,7 @@ class install extends control
     {
         if(!defined('IN_INSTALL')) die();
         parent::__construct();
+        $this->config->webRoot = $this->install->getWebRoot();
     }
 
     /**
