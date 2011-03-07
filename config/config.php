@@ -16,6 +16,7 @@ $config->version     = '1.4';             // The version of zentaopms. Don't cha
 $config->encoding    = 'UTF-8';           // The encoding of znetaopms.
 $config->cookieLife  = time() + 2592000;  // The cookie life time.
 $config->timezone    = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
+$config->webRoot     = '';                // The root path of the pms.
 
 /* The request settings. */
 $config->requestType = 'PATH_INFO';       // The request type: PATH_INFO|GET, if PATH_INFO, must use url rewrite.
