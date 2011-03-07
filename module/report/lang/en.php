@@ -27,3 +27,5 @@ $lang->report->colors[]   = 'B3AA00';
 $lang->report->colors[]   = '008ED6';
 $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
+
+$lang->report->singleColor[] = 'F6BD0F';

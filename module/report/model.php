@@ -82,24 +82,26 @@ EOT;
      * 
      * @param  array  $sets 
      * @param  array  $chartOptions 
+     * @param  array  $colors 
      * @access public
      * @return string the xml data.
      */
-    public function createSingleXML($sets, $chartOptions = array())
+    public function createSingleXML($sets, $chartOptions = array(), $colors = array())
     {
-        $data  = pack("CCC", 0xef, 0xbb, 0xbf);
+        $data  = pack("CCC", 0xef, 0xbb, 0xbf); // utf-8 bom.
         $data .="<?xml version='1.0' encoding='UTF-8'?>";
 
         $data .= '<graph';
         foreach($chartOptions as $key => $value) $data .= " $key='$value'";
         $data .= ">";
 
-        $colorCount = count($this->lang->report->colors);
+        if(empty($colors)) $colors = $this->lang->report->colors;
+        $colorCount = count($colors);
         $i = 0;
         foreach($sets as $set)
         {
             if($i == $colorCount) $i = 0;
-            $color = $this->lang->report->colors[$i];
+            $color = $colors[$i];
             $i ++;
             $data .= "<set name='$set->name' value='$set->value' color='$color' />";
         }
