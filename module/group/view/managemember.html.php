@@ -34,7 +34,13 @@
     </tr>
     <tr>
       <th class='rowhead'></th>
-      <td class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td>
+      <td class='a-center'>
+        <?php 
+        echo html::submitButton();
+        echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
+        echo html::hidden('foo'); // Just a var, to make sure $_POST is not empty.
+        ?>
+      </td>
     </tr>
   </table>
 </form>

@@ -26,7 +26,7 @@
         <?php foreach($moduleActions as $action => $actionLabel):?>
         <div class='w-p20 f-left'><input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> />
         <?php if(isset($lang->group->newPriv[$moduleName][$actionLabel])):?>
-        <font color="#FF0000"><?php echo $lang->$moduleName->$actionLabel;?></font>
+        <span class='red'><?php echo $lang->$moduleName->$actionLabel;?></span>
         <?php else:?>
         <?php echo $lang->$moduleName->$actionLabel;?>
         <?php endif;?>
@@ -38,7 +38,13 @@
     <?php endforeach;?>
     <tr>
       <th class='rowhead'><?php echo $lang->group->checkall;?><input type='checkbox' onclick='checkall(this);'></th>
-      <td class='a-center'><?php echo html::submitButton($lang->save, 'name="submit"') . html::linkButton($lang->goback, $this->createLink('group', 'browse'));?></td>
+      <td class='a-center'>
+        <?php 
+        echo html::submitButton($lang->save);
+        echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
+        echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.
+        ?>
+      </td>
     </tr>
   </table>
 </form>

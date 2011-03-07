@@ -123,25 +123,31 @@ class group extends control
      * @access public
      * @return void
      */
-    public function managePriv($groupID)
+    public function managePriv($type = 'byGroup', $param = 0)
     {
+        if($type == 'byGroup') $groupID = $param;
+
         if(!empty($_POST))
         {
             $this->group->updatePriv($groupID);
-            die(js::alert($this->lang->group->successSaved));
+            echo js::alert($this->lang->group->successSaved);
+            die(js::execute('parent.document.body.click();'));
         }
 
-        $group      = $this->group->getById($groupID);
-        $groupPrivs = $this->group->getPrivs($groupID);
+        if($type == 'byGroup')
+        {
+            $group      = $this->group->getById($groupID);
+            $groupPrivs = $this->group->getPrivs($groupID);
 
-        $this->view->header->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
-        $this->view->position[]    = $group->name . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->header->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->position[]    = $group->name . $this->lang->colon . $this->lang->group->managePriv;
 
-        $this->view->group      = $group;
-        $this->view->groupPrivs = $groupPrivs;
+            $this->view->group      = $group;
+            $this->view->groupPrivs = $groupPrivs;
 
-        /* Load lang files of every module. */
-        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
+            /* Load lang files of every module. */
+            foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
+        }
         $this->display();
     }
 
