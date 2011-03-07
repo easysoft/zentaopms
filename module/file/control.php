@@ -23,13 +23,13 @@ class file extends control
     { 
         if(!file_exists($this->file->savePath)) 
         {
-            $warming = "The directory" . "'" . $this->file->savePath . "'" . "is no exist";
-            echo "<span style='color:red''>$warming </span>";
+            printf($this->lang->file->errorNotExists, $this->file->savePath);
+            return false;
         }
-        else if(!is_writable($this->file->savePath))
+        elseif(!is_writable($this->file->savePath))
         {
-            $warming = "The directory " . "'" . $this->file->savePath . "'" . " is unwritable, please change it's file permission.command in linux:sudo chmod a+rx " . "'" . $this->file->savePath . "'";
-            echo "<span style = 'color:red'>$warming </font>";
+            printf($this->lang->file-errorCanNotWrite, $this->file->savePath, $this->file->savePath);
+            return false;
         }
         $this->view->fileCount = $fileCount;
         $this->view->percent   = $percent;

@@ -16,4 +16,6 @@ $lang->file->export2CSV = '導出CSV';
 $lang->file->ajaxUpload = '介面：編輯器上傳附件';
 $lang->file->label      = '標題：';
 
+$lang->file->errorNotExists   = "<span class='red'>文件 '%s' 不存在</span>";
+$lang->file->errorCanNotWrite = "<span class='red'>文件 '%s' 不可寫,請改變文件的權限。在linux中輸入指令:sudo chmod a+rx '%s'</span>";
 $lang->file->confirmDelete = " 您確定刪除該附件嗎？";
