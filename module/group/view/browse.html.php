@@ -24,24 +24,27 @@
    <th><?php echo $lang->group->desc;?></th>
    <th class='w-p60'><?php echo $lang->group->users;?></th>
    <th class='{sorter:false}'><?php echo $lang->actions;?></th>
- </tr>
- </thead>
- <tbody>
- <?php foreach($groups as $group):?>
- <tr class='a-center'>
-   <td class='strong'><?php echo $group->id;?></td>
-   <td><?php echo $group->name;?></td>
-   <td class='a-left'><?php echo $group->desc;?></td>
-   <td class='a-left'><?php foreach($groupUsers[$group->id] as $user) echo "<span class='user'>$user</span>";?></td>
-   <td>
-     <?php common::printLink('group', 'managepriv',   "type=byGroup&param=$group->id", $lang->group->managePriv);?>
-     <?php common::printLink('group', 'managemember', "groupID=$group->id", $lang->group->manageMember);?>
-     <?php common::printLink('group', 'edit',         "groupID=$group->id", $lang->edit);?>
-     <?php common::printLink('group', 'copy',         "groupID=$group->id", $lang->copy);?>
-     <?php common::printLink('group', 'delete',       "groupID=$group->id", $lang->delete, "hiddenwin");?>
-   </td>
- </tr>
- <?php endforeach;?>
- </tbody>
+  </tr>
+  </thead>
+  <tbody>
+  <?php foreach($groups as $group):?>
+  <tr class='a-center'>
+    <td class='strong'><?php echo $group->id;?></td>
+    <td><?php echo $group->name;?></td>
+    <td class='a-left'><?php echo $group->desc;?></td>
+    <td class='a-left'><?php foreach($groupUsers[$group->id] as $user) echo "<span class='user'>$user</span>";?></td>
+    <td>
+      <?php common::printLink('group', 'managepriv',   "type=byGroup&param=$group->id", $lang->group->managePrivByGroup);?>
+      <?php common::printLink('group', 'managemember', "groupID=$group->id", $lang->group->manageMember);?>
+      <?php common::printLink('group', 'edit',         "groupID=$group->id", $lang->edit);?>
+      <?php common::printLink('group', 'copy',         "groupID=$group->id", $lang->copy);?>
+      <?php common::printLink('group', 'delete',       "groupID=$group->id", $lang->delete, "hiddenwin");?>
+    </td>
+  </tr>
+  <?php endforeach;?>
+  </tbody>
+  <tfoot>
+  <tr><td colspan='5' class='a-center'><?php echo html::linkButton($lang->group->managePrivByModule, inlink('managePriv', 'type=byModule'));?></td></tr>
+  </tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>

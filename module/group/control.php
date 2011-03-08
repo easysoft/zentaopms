@@ -126,11 +126,14 @@ class group extends control
     public function managePriv($type = 'byGroup', $param = 0)
     {
         if($type == 'byGroup') $groupID = $param;
+        $this->view->type = $type;
+        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
 
         if(!empty($_POST))
         {
-            $this->group->updatePriv($groupID);
-            echo js::alert($this->lang->group->successSaved);
+            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID);
+            if($type == 'byModule') $result = $this->group->updatePrivByModule();
+            print(js::alert($result ? $this->lang->group->successSaved : $this->lang->group->errorNotSaved));
             die(js::execute('parent.document.body.click();'));
         }
 
@@ -145,8 +148,23 @@ class group extends control
             $this->view->group      = $group;
             $this->view->groupPrivs = $groupPrivs;
 
-            /* Load lang files of every module. */
-            foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
+        }
+        elseif($type == 'byModule')
+        {
+            $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->position[]    = $this->lang->group->managePriv;
+
+            foreach($this->lang->resource as $module => $moduleActions)
+            {
+                $modules[$module] = $this->lang->$module->common;
+                foreach($moduleActions as $action)
+                {
+                    $actions[$module][$action] = $this->lang->$module->$action;
+                }
+            }
+            $this->view->groups  = $this->group->getPairs();
+            $this->view->modules = $modules;
+            $this->view->actions = $actions;
         }
         $this->display();
     }

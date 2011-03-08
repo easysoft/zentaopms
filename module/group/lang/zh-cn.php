@@ -9,18 +9,21 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->group->common       = '权限分组';
-$lang->group->browse       = '浏览分组';
-$lang->group->create       = '新增分组';
-$lang->group->edit         = '编辑分组';
-$lang->group->copy         = '复制分组';
-$lang->group->delete       = '删除分组';
-$lang->group->managePriv   = '权限维护';
-$lang->group->manageMember = '成员维护';
-$lang->group->linkMember   = '关联用户';
-$lang->group->unlinkMember = '移除用户';
-$lang->group->confirmDelete= '您确定删除该用户分组吗？';
-$lang->group->successSaved = '成功保存';
+$lang->group->common             = '权限分组';
+$lang->group->browse             = '浏览分组';
+$lang->group->create             = '新增分组';
+$lang->group->edit               = '编辑分组';
+$lang->group->copy               = '复制分组';
+$lang->group->delete             = '删除分组';
+$lang->group->managePriv         = '权限维护';
+$lang->group->managePrivByGroup  = '权限维护';
+$lang->group->managePrivByModule = '按模块分配权限';
+$lang->group->manageMember       = '成员维护';
+$lang->group->linkMember         = '关联用户';
+$lang->group->unlinkMember       = '移除用户';
+$lang->group->confirmDelete      = '您确定删除该用户分组吗？';
+$lang->group->successSaved       = '成功保存';
+$lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';
 
 $lang->group->id       = '编号';
 $lang->group->name     = '分组名称';

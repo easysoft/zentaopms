@@ -9,18 +9,21 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->group->common       = 'Group';
-$lang->group->browse       = 'Browse';
-$lang->group->create       = 'Create';
-$lang->group->edit         = 'Edit';
-$lang->group->copy         = 'Copy';
-$lang->group->delete       = 'Delete';
-$lang->group->managePriv   = 'Privilege';
-$lang->group->manageMember = 'Members';
-$lang->group->linkMember   = 'Add members';
-$lang->group->unlinkMember = 'Remove member';
-$lang->group->confirmDelete= 'Are you sure to delete this group?';
-$lang->group->successSaved = 'Success saved.';
+$lang->group->common             = 'Group';
+$lang->group->browse             = 'Browse';
+$lang->group->create             = 'Create';
+$lang->group->edit               = 'Edit';
+$lang->group->copy               = 'Copy';
+$lang->group->delete             = 'Delete';
+$lang->group->managePriv         = 'Privilege';
+$lang->group->managePrivByGroup  = 'Privilege';
+$lang->group->managePrivByModule = 'Manage privilege by module';
+$lang->group->manageMember       = 'Members';
+$lang->group->linkMember         = 'Add members';
+$lang->group->unlinkMember       = 'Remove member';
+$lang->group->confirmDelete      = 'Are you sure to delete this group?';
+$lang->group->successSaved       = 'Success saved.';
+$lang->group->errorNotSaved      = 'Not saved, please make sure you have selected some actions and groups.';
 
 $lang->group->id       = 'Id';
 $lang->group->name     = 'Name';

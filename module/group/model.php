@@ -183,15 +183,14 @@ class groupModel extends model
      * 
      * @param  int    $groupID 
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updatePriv($groupID)
+    public function updatePrivByGroup($groupID)
     {
         /* Delete old. */
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->exec();
 
         /* Insert new. */
-        if($this->post->actions == false) return;
         foreach($this->post->actions as $moduleName => $moduleActions)
         {
             foreach($moduleActions as $actionName)
@@ -202,6 +201,30 @@ class groupModel extends model
                 $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
             }
         }
+        return true;
+    }
+
+    /**
+     * Update privilege by module.
+     * 
+     * @access public
+     * @return void
+     */
+    public function updatePrivByModule()
+    {
+        if($this->post->module == false or $this->post->actions == false or $this->post->groups == false) return false;
+
+        foreach($this->post->actions as $action)
+        {
+            foreach($this->post->groups as $group)
+            {
+                $data->group  = $group;
+                $data->module = $this->post->module;
+                $data->method = $action;
+                $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            }
+        }
+        return true;
     }
 
     /**
