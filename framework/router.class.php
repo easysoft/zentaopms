@@ -1464,6 +1464,7 @@ class router
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $dbh->exec("SET NAMES {$config->db->encoding}");
             if(isset($config->db->strictMode) and $config->db->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
+            if($this->isCentOS()) $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
             $this->dbh = $dbh;
             return $dbh;
         }
@@ -1471,6 +1472,20 @@ class router
         {
             self::error($exception->getMessage(), __FILE__, __LINE__, $exit = true);
         }
+    }
+
+    /**
+     * Judge the os is centos or not.
+     * 
+     * @access private
+     * @return bool
+     */
+    private function isCentOS()
+    {
+        if(PHP_OS != 'Linux') return false;
+        $issueFile = '/etc/issue';
+        if(!file_exists($issueFile) or !is_readable($issueFile)) return false;
+        return stripos(file_get_contents($issueFile), 'centos') !== false;
     }
 }
 
