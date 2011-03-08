@@ -381,6 +381,13 @@ class userModel extends model
      */
     public function getBugs($account)
     {
-        return $this->dao->findByAssignedTo($account)->from(TABLE_BUG)->andWhere('deleted')->eq(0)->fetchAll();
+        return $this->dao->select('*')
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')
+            ->on('t1.product = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andwhere('t1.deleted')->eq(0)
+            ->andwhere('t1.assignedTo')->eq($account)
+            ->fetchAll();
     }
 }
