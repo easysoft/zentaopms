@@ -62,23 +62,26 @@ $lang->install->dataRoot     = '上传文件目录';
 $lang->install->mkdir        = '<p>需要创建目录%s。<br /> linux下面命令为：<br /> mkdir -p %s</p>';
 $lang->install->chmod        = '需要修改目录 "%s" 的权限。<br />linux下面命令为：<br />chmod o=rwx -R %s';
 
-$lang->install->settingDB    = '设置数据库';
-$lang->install->webRoot      = 'PMS所在网站目录';
-$lang->install->requestType  = 'URL方式';
+$lang->install->settingDB   = '设置数据库';
+$lang->install->webRoot     = 'PMS所在网站目录';
+$lang->install->requestType = 'URL方式';
+$lang->install->defaultLang = '默认语言';
+$lang->install->dbHost      = '数据库服务器';
+$lang->install->dbHostNote  = '如果localhost无法访问，尝试使用127.0.0.1';
+$lang->install->dbPort      = '服务器端口';
+$lang->install->dbUser      = '数据库用户名';
+$lang->install->dbPassword  = '数据库密码';
+$lang->install->dbName      = 'PMS使用的库';
+$lang->install->dbPrefix    = '建表使用的前缀';
+$lang->install->createDB    = '自动创建数据库';
+$lang->install->clearDB     = '清空现有数据';
+
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
-$lang->install->dbHost     = '数据库服务器';
-$lang->install->dbHostNote = '如果localhost无法访问，尝试使用127.0.0.1';
-$lang->install->dbPort     = '服务器端口';
-$lang->install->dbUser     = '数据库用户名';
-$lang->install->dbPassword = '数据库密码';
-$lang->install->dbName     = 'PMS使用的库';
-$lang->install->dbPrefix   = '建表使用的前缀';
-$lang->install->createDB   = '自动创建数据库';
-$lang->install->clearDB    = '清空现有数据';
 
 $lang->install->errorConnectDB     = '数据库连接失败 ';
 $lang->install->errorCreateDB      = '数据库创建失败';
+$lang->install->errorDBExists      = '数据库已经存在，继续安装请选择清空数据';
 $lang->install->errorCreateTable   = '创建表失败';
 
 $lang->install->setConfig  = '生成配置文件';

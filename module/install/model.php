@@ -180,6 +180,12 @@ class installModel extends model
                 return $return;
             }
         }
+        elseif($this->post->clearDB == false)
+        {
+            $return->result = 'fail';
+            $return->error  = $this->lang->install->errorDBExists;
+            return $return;
+        }
 
         /* Create tables. */
         if(!$this->createTable($version))

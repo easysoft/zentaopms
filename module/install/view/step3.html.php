@@ -15,17 +15,18 @@ if(!isset($error))
 {
     $configContent = <<<EOT
 <?php
-\$config->installed       = true;	//标志是否已经安装。
-\$config->debug           = false;	//是否打开debug功能。如果系统运行不正常，可将其设为true。
-\$config->requestType     = '$requestType';	//如何获取当前请求的信息，可选值：PATH_INFO|GET。
-\$config->db->host        = '$dbHost';	//mysql主机。
-\$config->db->port        = '$dbPort';	//mysql主机端口号。
-\$config->db->name        = '$dbName';	//数据库名称。
-\$config->db->user        = '$dbUser';	//数据库用户名。
-\$config->db->password    = '$dbPassword';		//密码。
-\$config->db->prefix      = '$dbPrefix';	//表前缀。
-\$config->webRoot         = '{$this->post->webRoot}';		//web网站的根目录。如果后面pms的目录有变化，需要修改此选项。
-\$config->default->domain = '$domain';	//默认域名。
+\$config->installed       = true;
+\$config->debug           = false;
+\$config->requestType     = '$requestType';
+\$config->db->host        = '$dbHost';
+\$config->db->port        = '$dbPort';
+\$config->db->name        = '$dbName';
+\$config->db->user        = '$dbUser';
+\$config->db->password    = '$dbPassword';
+\$config->db->prefix      = '$dbPrefix';
+\$config->webRoot         = '$webRoot';
+\$config->default->domain = '$domain';
+\$config->default->lang   = '$defaultLang';
 EOT;
 }
 ?>

@@ -15,7 +15,7 @@
     <caption><?php echo $lang->install->setConfig;?></caption>
     <tr>
       <th class='w-p20'><?php echo $lang->install->key;?></th>
-      <th><?php echo $lang->install->value?></th>
+      <th class='a-left'><?php echo $lang->install->value?></th>
     </tr>
     <tr>
       <th><?php echo $lang->install->webRoot;?></th>
@@ -24,6 +24,10 @@
     <tr>
       <th><?php echo $lang->install->requestType;?></th>
       <td><?php echo html::radio('requestType', $lang->install->requestTypes, 'GET');?></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->install->defaultLang;?></th>
+      <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang());?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbHost;?></th>
