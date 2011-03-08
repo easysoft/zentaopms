@@ -134,9 +134,14 @@ class my extends control
         $bugs = array();
         if($type == 'assigntome')
         {
-            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+            $bugs = $this->dao->select('*')
+                ->from(TABLE_BUG)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')
+                ->on('t1.product = t2.id')
+                ->where('t2.deleted')->eq(0)
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t1.assignedTo')->eq($this->app->user->account)
+                ->orderBy('t1.id_desc')->page($pager)->fetchAll();
         }
         elseif($type == 'openedbyme')
         {
