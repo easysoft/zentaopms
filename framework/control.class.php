@@ -288,7 +288,7 @@ class control
      */
     public function getExtViewFile($viewFile)
     {
-        $extPath     = dirname(dirname(realpath($viewFile))) . '/opt/view/';
+        $extPath     = dirname(dirname(realpath($viewFile))) . '/ext/view/';
         $extViewFile = $extPath . basename($viewFile);
         if(file_exists($extViewFile))
         {

@@ -986,7 +986,7 @@ class router
      */
     public function getModuleExtPath($moduleName, $ext)
     {
-        return $this->getModuleRoot() . strtolower(trim($moduleName)) . $this->pathFix . 'opt' . $this->pathFix . $ext . $this->pathFix;
+        return $this->getModuleRoot() . strtolower(trim($moduleName)) . $this->pathFix . 'ext' . $this->pathFix . $ext . $this->pathFix;
     }
 
     /**
