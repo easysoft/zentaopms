@@ -23,7 +23,7 @@
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->todo->date;?></th>
-    <td><?php echo date(DT_DATE1, strtotime($todo->date));?></td>
+    <td><?php print($todo->date == todoModel::DAY_IN_FEATURE ? $lang->todo->dayInFeature : date(DT_DATE1, strtotime($todo->date)));?></td>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->todo->type;?></th>
