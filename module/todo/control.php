@@ -15,7 +15,7 @@ class todo extends control
      * Construct function, load model of task, bug, my.
      * 
      * @access public
-     * @return void
+     * @return voidzentaoms\www
      */
     public function __construct()
     {
