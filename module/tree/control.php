@@ -198,7 +198,7 @@ class tree extends control
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu($rootID, $viewType = 'product', $rootModuleID = 0)
+    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0)
     {
         $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
         die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));

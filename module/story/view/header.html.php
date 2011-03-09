@@ -3,7 +3,7 @@
 <script language='Javascript'>
 function loadProduct(productID)
 {
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=product');
+    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story');
     planLink   = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&planID=' + $('#plan').val());
     $('#moduleIdBox').load(moduleLink);
     $('#planIdBox').load(planLink);
