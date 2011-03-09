@@ -324,9 +324,12 @@ function setHelpLink()
             if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
             if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
             currentFieldName = currentFieldName.toLowerCase();
-            $(this).after(' <a class="helplink ' + className + '" href=http://www.zentao.net/goto.php?item=fieldref&extra=lang=' + config.clientLang + ',module=' + config.currentModule + ',method=' + config.currentMethod + ',field=' + currentFieldName + ' target="_blank">?</a> ');
+            helpLink = createLink('help', 'field', 'module=' + config.currentModule + '&method=' + config.currentMethod + '&field=' + currentFieldName);
+            $(this).after(' <a class="helplink ' + className + '" href=' + helpLink + ' target="_blank">?</a> ');
         }
     );
+
+    if($('a.helplink').size()) $("a.helplink").colorbox({width:600, height:240, iframe:true, transition:'elastic', speed:350, scrolling:false});
 }
 
 /**
