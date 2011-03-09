@@ -190,12 +190,19 @@ class projectModel extends model
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($mode == 'noclosed')->andWhere('status')->ne('done')->fi()
-            ->orderBy('status, end desc')->fetchAll();
+            ->orderBy('status, end desc')
+            ->fetchAll();
         $pairs = array();
         foreach($projects as $project)
         {
+            if($mode == 'noclosed' and $project->status == 'done') continue;
             if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
+        }
+        /* If the pairs is empty, to make sure there's an project in the pairs. */
+        if(empty($pairs) and isset($projects[0]))
+        {
+            $firstProject = $projects[0];
+            $pairs[$firstProject->id] = $firstProject->name;
         }
         return $pairs;
     }
