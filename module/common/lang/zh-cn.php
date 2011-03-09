@@ -176,6 +176,7 @@ $lang->doc->menu->browse  = array('link' => '文档列表|doc|browse|libID=%s');
 $lang->doc->menu->edit    = '编辑文档库|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '维护模块|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
+$lang->doc->menu->search  = array('link' => '搜索|doc|byQuery');
 $lang->doc->menu->create  = array('link' => '新增文档库|doc|createLib', 'float' => 'right');
 
 /* 组织结构视图菜单设置。*/

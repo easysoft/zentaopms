@@ -18,6 +18,7 @@
     <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>
   </div>
 </div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 
 <table class='cont-lt3'>
   <tr valign='top'>
@@ -35,7 +36,7 @@
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
           <tr class='colhead'>
-            <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&$browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
             <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
             <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->doc->type);?></th>

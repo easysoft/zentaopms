@@ -176,6 +176,7 @@ $lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s');
 $lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
 $lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
+$lang->doc->menu->search  = array('link' => 'Search|doc|byQuery');
 $lang->doc->menu->create  = array('link' => 'New Library|doc|createLib', 'float' => 'right');
 
 /* Company menu. */

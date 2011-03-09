@@ -102,8 +102,11 @@ class project extends control
      * @access public
      * @return void
      */
-    public function task($projectID = 0, $status = 'all', $orderBy = 'status_asc,id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
-    {
+    public function task($projectID = 0, $status = 'all', $param=0, $orderBy = 'status_asc,id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {   
+        /* Set browseType, productID, moduleID and queryID. */
+        $browseType = strtolower($status);
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
@@ -121,7 +124,51 @@ class project extends control
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager);
+
+        $tasks=array();
+        if($browseType!="bysearch")
+        {
+            $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager); 
+        }
+        else
+        {   
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('taskQuery', $query->sql);
+                    $this->session->set('taskForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('taskQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
+            }
+            $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all product.
+            $taskids = $this->dao->select('id')->from(TABLE_TASK)->where($taskQuery)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->fetchAll('id');
+            $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+                ->from(TABLE_TASK)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+                ->where('t1.project')->eq((int)$projectID)
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($taskids))
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll();
+        }
+       /* Build the search form. */
+        $this->config->project->search['actionURL'] = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
+        $this->config->project->search['queryID']   = $queryID;
+        $this->config->project->search['params']['project']['values']       = array($projectID => $this->projects[$projectID], 'all' => $this->lang->project->allProject);
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->project->search);
 
         /* Assign. */
         $this->view->tasks      = $tasks ? $tasks : array();
@@ -130,9 +177,10 @@ class project extends control
         $this->view->recTotal   = $pager->recTotal;
         $this->view->recPerPage = $pager->recPerPage;
         $this->view->orderBy    = $orderBy;
-        $this->view->browseType = strtolower($status);
+        $this->view->browseType = $browseType;
         $this->view->status     = $status;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->param      = $param;
 
         $this->display();
     }

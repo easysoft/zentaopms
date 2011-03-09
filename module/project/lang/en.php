@@ -103,6 +103,10 @@ $lang->project->groups['left']      = 'Group by left';
 $lang->project->groups['type']      = 'Group by type';
 $lang->project->groups['deadline']  = 'Group by deadline';
 $lang->project->listTaskNeedConfrim = 'Story changed';
+$lang->project->byQuery             = 'Search';
+
+/* Browse tabs. */
+$lang->project->allProject          = 'All projects';
 
 /* Notcie. */
 $lang->project->selectProject  = "Select project";

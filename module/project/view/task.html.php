@@ -14,8 +14,9 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
 <?php include './taskheader.html.php';?>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 <table class='table-1 fixed colored tablesorter datatable'>
-  <?php $vars = "projectID=$project->id&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
+  <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
   <thead>
   <tr class='colhead'>
     <th class='w-id'>    <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>

@@ -34,8 +34,8 @@ var actionURL     = '<?php echo $actionURL;?>';
 function setField(fieldName, fieldNO)
 {
     $('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
-    htmlString = $('#box' + fieldName).html().replace(fieldName, 'value' + fieldNO).replace(fieldName, 'value' + fieldNO);
-    $('#valueBox' + fieldNO).html(htmlString);
+    $('#valueBox' + fieldNO) .html($('#box' + fieldName).children().clone());
+    $('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
 }
 
 /**

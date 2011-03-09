@@ -44,6 +44,9 @@ $lang->doc->editLib        = 'Edit library';
 $lang->doc->deleteLib      = 'Delete library';
 $lang->doc->libName        = 'Library name';
 
+/* Browse tabs. */
+$lang->doc->allProduct     = 'All products';
+
 $lang->doc->systemLibs['product'] = 'Product doc';
 $lang->doc->systemLibs['project'] = 'Project doc';
 

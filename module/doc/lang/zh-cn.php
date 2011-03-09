@@ -44,6 +44,9 @@ $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
 $lang->doc->libName        = '文档库名称';
 
+/* 查询条件列表 */
+$lang->doc->allProduct     = '所有产品';
+
 $lang->doc->systemLibs['product'] = '产品文档库';
 $lang->doc->systemLibs['project'] = '项目文档库';
 
