@@ -296,6 +296,8 @@ class bug extends control
         $assignedTo = '';
         $mailto     = '';
         $keywords   = '';
+        $severity   = 3;
+        $type       = 'codeerror';
 
         /* Parse the extras. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
@@ -316,7 +318,7 @@ class bug extends control
             $storyID   = $bug->story;
             $buildID   = $bug->openedBuild;
             $severity  = $bug->severity;
-            $type      = $bug->type;    
+            $type      = $bug->type;
         }
 
         /* If projectID is setted, get builds and stories of this project. */
