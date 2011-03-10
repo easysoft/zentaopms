@@ -10,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/colorbox.html.php';?>
 <?php if(isset($error)):?>
 <table class='table-6' align='center'>
 <caption><?php echo $lang->install->error;?></caption>
