@@ -274,7 +274,6 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
         }
 
-
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
 
