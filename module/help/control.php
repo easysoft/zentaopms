@@ -25,6 +25,7 @@ class help extends control
     {
         $clientLang = $this->app->getClientLang();
         include "./lang/field.$clientLang.php";
+
         $fieldName = '';
         $fieldNote = $this->lang->help->noHelpYet;
         if(isset($help->$module->$field))
@@ -32,6 +33,10 @@ class help extends control
             $fieldHelp = explode('|', $help->$module->$field);
             $fieldName = $fieldHelp[0];
             if(isset($fieldHelp[1])) $fieldNote = $fieldHelp[1];
+        }
+        elseif($field == 'labels')
+        {
+            list($fieldName, $fieldNote) = explode('|', $help->file->labels);
         }
         $this->view->header->title = $fieldName;
         $this->view->fieldName = $fieldName;

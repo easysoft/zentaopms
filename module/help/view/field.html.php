@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <table class='table-1' height=180>
-  <tr valign='middle' class='a-center f-14px'>
+  <tr valign='middle' class='f-14px'>
     <td><?php echo '<strong>' . $fieldName . '</strong>' . ($fieldName ? $lang->arrow : '') .  $fieldNote?></td>
   </tr>
 </table>
