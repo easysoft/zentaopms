@@ -186,6 +186,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
         }
         elseif($fromVersion == '0_4beta')
         {
