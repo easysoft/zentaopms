@@ -134,7 +134,7 @@ class doc extends control
         {
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
-        $this->config->doc->search['params']['module']['values']        = $moduleOptionMenu;
+        $this->config->doc->search['params']['module']['values']        = array(''=>'') + $moduleOptionMenu;
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->doc->search);
 
         $this->view->libID         = $libID;
