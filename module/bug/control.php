@@ -207,6 +207,7 @@ class bug extends control
         $this->view->moduleID    = $moduleID;
         $this->view->customed    = $customed;
         $this->view->customFields= explode(',', str_replace(' ', '', trim($customFields)));
+        $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
 
         $this->display();
     }
