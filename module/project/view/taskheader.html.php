@@ -13,7 +13,7 @@
   echo html::select('groupBy', $lang->project->groups, isset($groupBy) ? $groupBy : '', "onchange='switchGroup({$project->id}, this.value)'");
   echo "</span>";
   echo "<span id='needconfirmTab'>"; common::printLink('project', 'task',  "project=$project->id&status=needConfirm",$lang->project->listTaskNeedConfrim); echo  '</span>' ;
-  echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->project->byQuery}</a></span> ";
+  echo "<span id='bysearchTab' onclick=\"search()\"><a href='#'>{$lang->project->byQuery}</a></span> ";
   ?>
   </div>
   <div class='f-right'>

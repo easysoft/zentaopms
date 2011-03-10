@@ -29,6 +29,10 @@ $lang->doc->addedDate      = '添加时间';
 $lang->doc->editedBy       = '由谁编辑';
 $lang->doc->editedDate     = '编辑时间';
 
+$lang->doc->moduleDoc      = '按模块浏览';
+$lang->doc->searchDoc      = '搜索';
+//$lang->doc->allDoc         = '所有文档';
+
 $lang->doc->moduleName     = '模块名称';
 $lang->doc->moduleOrder    = '模块排序';
 
@@ -46,6 +50,7 @@ $lang->doc->libName        = '文档库名称';
 
 /* 查询条件列表 */
 $lang->doc->allProduct     = '所有产品';
+$lang->doc->allProject     = '所有项目';
 
 $lang->doc->systemLibs['product'] = '产品文档库';
 $lang->doc->systemLibs['project'] = '项目文档库';

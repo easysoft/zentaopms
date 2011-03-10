@@ -149,25 +149,13 @@ class project extends control
             {
                 if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
             }
-            $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all product.
-            $taskids = $this->dao->select('id')->from(TABLE_TASK)->where($taskQuery)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->fetchAll('id');
-            $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
-                ->from(TABLE_TASK)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-                ->where('t1.project')->eq((int)$projectID)
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t1.id')->in(array_keys($taskids))
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll();
-        }
+            $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
+            $tasks     = $this->project->getSearchTasks($projectID, $taskQuery, $pager, $orderBy);
+       }
        /* Build the search form. */
         $this->config->project->search['actionURL'] = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->config->project->search['queryID']   = $queryID;
-        $this->config->project->search['params']['project']['values']       = array($projectID => $this->projects[$projectID], 'all' => $this->lang->project->allProject);
+        $this->config->project->search['params']['project']['values']       = array(''=>'', $projectID => $this->projects[$projectID], 'all' => $this->lang->project->allProject);
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->project->search);
 
         /* Assign. */

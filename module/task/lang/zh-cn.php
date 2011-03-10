@@ -57,6 +57,7 @@ $lang->task->closedDate   = '关闭时间';
 $lang->task->closedReason = '关闭原因';
 $lang->task->lastEdited   = '最后编辑';
 
+$lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未开始';
 $lang->task->statusList['doing']   = '进行中';
 $lang->task->statusList['done']    = '已完成';

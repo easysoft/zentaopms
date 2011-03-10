@@ -297,13 +297,7 @@ class commonModel extends model
                     /* Is the currentModule active? */
                     if($currentModule == $subModule) $active = 'active';
                     if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false)) $active = 'active';
-                    if($method == "byQuery")
-                    {
-                        echo "<li class='$float $active'>" . html::a('#',$label,$target,"id='$method'") . "</li>\n";
-                    }else
-                    {
-                        echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target) . "</li>\n";
-                    }
+                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target) . "</li>\n";
                 }
             }
         }

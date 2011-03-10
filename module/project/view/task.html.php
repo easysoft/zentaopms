@@ -14,6 +14,9 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
 <?php include './taskheader.html.php';?>
+<script language='Javascript'>
+var browseType = '<?php echo $browseType;?>';
+</script>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 <table class='table-1 fixed colored tablesorter datatable'>
   <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
@@ -80,5 +83,4 @@
   </tbody>
 </table>
 <div class='a-right'><?php echo $pager;?></div>
-<script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

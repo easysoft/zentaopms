@@ -29,6 +29,10 @@ $lang->doc->addedDate      = 'Added date';
 $lang->doc->editedBy       = 'Edited by';
 $lang->doc->editedDate     = 'Edited date';
 
+$lang->doc->moduleDoc      = 'By module';
+$lang->doc->searchDoc      = 'By search';
+//$lang->doc->allDoc         = 'All document';
+
 $lang->doc->moduleName     = 'Module name';
 $lang->doc->moduleOrder    = 'Module order';
 
@@ -46,6 +50,7 @@ $lang->doc->libName        = 'Library name';
 
 /* Browse tabs. */
 $lang->doc->allProduct     = 'All products';
+$lang->doc->allProject     = 'All projects';
 
 $lang->doc->systemLibs['product'] = 'Product doc';
 $lang->doc->systemLibs['project'] = 'Project doc';

@@ -13,8 +13,15 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<script language='Javascript'>
+var browseType = '<?php echo $browseType;?>';
+</script>
 <div id='featurebar'>
-  <div class='f-right'>
+   <div class='f-left'>
+   <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></span>
+    <span id='bysearchTab' onclick='search()'><a href='#'><?php echo $lang->doc->searchDoc;?></a></span>
+  </div>
+ <div class='f-right'>
     <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>
   </div>
 </div>
@@ -22,7 +29,7 @@
 
 <table class='cont-lt3'>
   <tr valign='top'>
-    <td class='side'>
+    <td class='side' id='treebox'>
       <div class='box-title'><?php echo $libName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
@@ -36,7 +43,7 @@
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
           <tr class='colhead'>
-            <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&$browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
             <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
             <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->doc->type);?></th>
@@ -55,7 +62,7 @@
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
             <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
             <td><?php echo $lang->doc->types[$doc->type];?></td>
-            <td><?php echo $users[$doc->addedBy];?></td>
+            <td><?php echo $doc->addedBy;?></td>
             <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
             <td>
               <?php 

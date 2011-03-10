@@ -57,6 +57,7 @@ $lang->task->closedDate   = 'Closed Date';
 $lang->task->closedReason = 'Closed Reason';
 $lang->task->lastEdited   = 'Last Edited';
 
+$lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Waiting';
 $lang->task->statusList['doing']   = 'Doing';
 $lang->task->statusList['done']    = 'Done';

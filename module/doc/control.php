@@ -11,7 +11,6 @@
  */
 class doc extends control
 {
-    private $products = array();
     /**
      * Construct function, load user, tree, action auto.
      * 
@@ -25,14 +24,8 @@ class doc extends control
         $this->loadModel('tree');
         $this->loadModel('action');
         $this->loadModel('product');
+        $this->loadModel('project');
         $this->libs = $this->doc->getLibs();
-        $this->products = $this->product->getPairs();
-        if(empty($this->products))
-        {
-            echo js::alert($this->lang->product->errorNoProduct);
-            die(js::locate($this->createLink('product', 'create')));
-        }
-        $this->view->products = $this->products;
     }
 
     /**
@@ -64,7 +57,6 @@ class doc extends control
     {  
         /* Set browseType.*/ 
         $browseType = strtolower($browseType);
-        $productID = $this->product->saveState($productID, $this->products);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
@@ -107,6 +99,7 @@ class doc extends control
                 if($this->session->docQuery == false) $this->session->set('docQuery', ' 1 = 1');
             }
             $docQuery = str_replace("`product` = 'all'", '1', $this->session->docQuery); // Search all producti.
+            $docQuery = str_replace("`project` = 'all'", '1', $docQuery);                // Search all project.
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -129,9 +122,19 @@ class doc extends control
         /* Build the search form. */
         $this->config->doc->search['actionURL'] = $this->createLink('doc', 'browse', "libID=$libID&moduleID=$moduleID&procuctID=$productID&projectID=$projectID&browseType=bySearch&queryID=myQueryID");
         $this->config->doc->search['queryID']   = $queryID;
-        $this->config->doc->search['params']['product']['values']       = array($productID => $this->products[$productID], 'all' => $this->lang->doc->allProduct);
-        $this->config->doc->search['params']['lib']['values']           = $this->doc->getLibs();
-        $this->config->doc->search['params']['module']['values']        = $this->tree->getOptionMenu($productID, $viewType = 'doc', $startModuleID = 0);
+        $this->config->doc->search['params']['product']['values']       = array(''=>'') + $this->product->getPairs() + array('all'=>$this->lang->doc->allProduct);
+        $this->config->doc->search['params']['project']['values']       = array(''=>'') + $this->project->getPairs() + array('all'=>$this->lang->doc->allProject);
+        $this->config->doc->search['params']['lib']['values']           = array(''=>'') + $this->libs;
+                /* Get the modules. */
+        if($libID == 'product' or $libID == 'project')
+        {
+            $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
+        }
+        else
+        {
+            $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
+        }
+        $this->config->doc->search['params']['module']['values']        = $moduleOptionMenu;
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->doc->search);
 
         $this->view->libID         = $libID;
@@ -141,7 +144,7 @@ class doc extends control
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->docs          = $docs;
         $this->view->pager         = $pager;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        //$this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy       = $orderBy;
         $this->view->productID     = $productID;
         $this->view->projectID     = $projectID;
