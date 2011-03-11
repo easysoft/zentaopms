@@ -27,3 +27,5 @@ $lang->index->total    = '共 <strong>%s</strong> 个,';
 $lang->index->myTodo   = '我的Todo';
 $lang->index->myTask   = '我的任务';
 $lang->index->myBug    = '我的Bug';
+
+$lang->index->noProjectsTip = '目前还没有进行中的项目。马上创建一个吧';

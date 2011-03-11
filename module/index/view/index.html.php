@@ -17,6 +17,9 @@
       <table class='table-1' id='projectbox' height='240'>
         <caption><?php echo $lang->index->projects;?></caption>
         <tr>
+          <?php if(empty($projects)):?>
+          <td class='a-center'><?php echo $lang->index->noProjectsTip;?></td>
+          <?php else:?>
           <td class='tabs' width='220'><?php foreach($projects as $project) echo "<a href='#' title='$project->name'>$project->name</a>";?></td>
           <td class='panes'>
             <?php foreach($projects as $key => $project):?>
@@ -30,6 +33,7 @@
             </div>
             <?php endforeach;?>
           </td>
+          <?php endif;?>
         </tr>
       </table>
       <table class='cont'>
