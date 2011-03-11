@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 1376 2010-12-02 13:45:59Z wwccss $
+ * @version     $Id: zh-tw.php 1539 2011-03-10 02:29:19Z yidong@cnezsoft.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -121,15 +121,14 @@ $lang->todo->menu         = $lang->my->menu;
 
 /* 產品視圖設置。*/
 $lang->product->menu->list   = '%s';
-$lang->product->menu->story  = array('link' => '需求列表|product|browse|productID=%s',     'subModule' => 'story');
-$lang->product->menu->plan   = array('link' => '計劃列表|productplan|browse|productID=%s', 'subModule' => 'productplan');
-$lang->product->menu->release= array('link' => '發佈列表|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->menu->story  = array('link' => '需求|product|browse|productID=%s',     'subModule' => 'story');
+$lang->product->menu->plan   = array('link' => '計劃|productplan|browse|productID=%s', 'subModule' => 'productplan');
+$lang->product->menu->release= array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap= '路線圖|product|roadmap|productID=%s';
-$lang->product->menu->doc    = array('link' => '文檔列表|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view   = '基本信息|product|view|productID=%s';
-$lang->product->menu->edit   = '編輯產品|product|edit|productID=%s';
-$lang->product->menu->module = '維護模組|tree|browse|productID=%s&view=story';
-$lang->product->menu->delete = array('link' => '刪除產品|product|delete|productID=%s', 'target' => 'hiddenwin');
+$lang->product->menu->doc    = array('link' => '文檔|product|doc|productID=%s', 'subModule' => 'doc');
+$lang->product->menu->view   = '概況|product|view|productID=%s';
+$lang->product->menu->edit   = '編輯|product|edit|productID=%s';
+$lang->product->menu->module = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->create = array('link' => '新增產品|product|create', 'float' => 'right');
 $lang->story->menu           = $lang->product->menu;
 $lang->productplan->menu     = $lang->product->menu;
@@ -144,11 +143,10 @@ $lang->project->menu->build     = array('link' => 'Build|project|build|projectID
 $lang->project->menu->burn      = '燃盡圖|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=%s', 'subModule' => 'doc');
-$lang->project->menu->product   = '關聯產品|project|manageproducts|projectID=%s';
+$lang->project->menu->product   = '產品|project|manageproducts|projectID=%s';
 $lang->project->menu->linkstory = array('link' => '關聯需求|project|linkstory|projectID=%s');
-$lang->project->menu->view      = '基本信息|project|view|projectID=%s';
-$lang->project->menu->edit      = '編輯項目|project|edit|projectID=%s';
-$lang->project->menu->delete    = array('link' => '刪除項目|project|delete|projectID=%s', 'target' => 'hiddenwin');
+$lang->project->menu->view      = '概況|project|view|projectID=%s';
+$lang->project->menu->edit      = '編輯|project|edit|projectID=%s';
 
 $lang->project->menu->create = array('link' => '新增項目|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;

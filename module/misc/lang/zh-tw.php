@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
- * @version     $Id: zh-tw.php 1280 2010-11-22 07:43:20Z wwccss $
+ * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->misc->common  = '雜項';

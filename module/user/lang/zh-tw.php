@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 1279 2010-11-22 07:31:28Z wwccss $
+ * @version     $Id: zh-tw.php 1519 2011-03-07 14:49:57Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->user->common        = '用戶';
@@ -73,5 +73,5 @@ $lang->user->zipcode   = '郵編';
 $lang->user->join      = '加入日期';
 $lang->user->visits    = '訪問次數';
 $lang->user->ip        = '最後IP';
-$lang->user->last      = '最後登錄時間';
+$lang->user->last      = '最後登錄';
 $lang->user->status    = '狀態';

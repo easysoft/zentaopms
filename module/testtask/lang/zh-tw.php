@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 1337 2010-11-29 13:01:52Z wwccss $
+ * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";

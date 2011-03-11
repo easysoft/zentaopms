@@ -29,6 +29,10 @@ $lang->doc->addedDate      = '添加時間';
 $lang->doc->editedBy       = '由誰編輯';
 $lang->doc->editedDate     = '編輯時間';
 
+$lang->doc->moduleDoc      = '按模組瀏覽';
+$lang->doc->searchDoc      = '搜索';
+//$lang->doc->allDoc         = '所有文檔';
+
 $lang->doc->moduleName     = '模組名稱';
 $lang->doc->moduleOrder    = '模組排序';
 
@@ -43,6 +47,10 @@ $lang->doc->createLib      = '創建文檔庫';
 $lang->doc->editLib        = '編輯文檔庫';
 $lang->doc->deleteLib      = '刪除文檔庫';
 $lang->doc->libName        = '文檔庫名稱';
+
+/* 查詢條件列表 */
+$lang->doc->allProduct     = '所有產品';
+$lang->doc->allProject     = '所有項目';
 
 $lang->doc->systemLibs['product'] = '產品文檔庫';
 $lang->doc->systemLibs['project'] = '項目文檔庫';

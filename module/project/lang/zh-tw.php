@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 1356 2010-12-01 13:38:53Z wwccss $
+ * @version     $Id: zh-tw.php 1531 2011-03-09 04:03:38Z yidong@cnezsoft.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -102,6 +102,10 @@ $lang->project->groups['left']      = '剩餘分組';
 $lang->project->groups['type']      = '類型分組';
 $lang->project->groups['deadline']  = '截止分組';
 $lang->project->listTaskNeedConfrim = '需求變動';
+$lang->project->byQuery             = '搜索';
+
+/* 查詢條件列表。*/
+$lang->project->allProject          = '所有項目';
 
 /* 頁面提示。*/
 $lang->project->selectProject  = "請選擇項目";
@@ -134,3 +138,4 @@ $lang->project->charts->burn->graph->baseFontSize = 12;
 $lang->project->charts->burn->graph->formatNumber = 0;
 $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
+$lang->project->charts->burn->graph->showValues   = 0;

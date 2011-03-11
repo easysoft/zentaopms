@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id: zh-tw.php 1150 2010-11-09 07:19:37Z wwccss $
+ * @version     $Id: zh-tw.php 1516 2011-03-07 09:07:06Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->report->common     = '報表';
@@ -27,3 +27,5 @@ $lang->report->colors[]   = 'B3AA00';
 $lang->report->colors[]   = '008ED6';
 $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
+
+$lang->report->singleColor[] = 'F6BD0F';

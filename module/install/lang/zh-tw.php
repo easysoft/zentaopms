@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 1367 2010-12-02 08:21:49Z wwccss $
+ * @version     $Id: zh-tw.php 1544 2011-03-10 06:45:01Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -26,9 +26,10 @@ $lang->install->desc             = <<<EOT
 
 禪道項目管理軟件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='red'>青島易軟天創網絡科技有限公司</a>開發</strong>。
 官方網站：<a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
+技術支持: <a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
 新浪微博：<a href='http://t.sina.com.cn/zentaopms' target='_blank'>t.sina.com.cn/zentaopms</a>
 騰訊微博：<a href='http://t.qq.com/zentaopms/' target='_blank'>t.qq.com/zentaopms</a>
-QQ交流群：60121455 
+QQ交流群：102807460
 
 您現在正在安裝的版本是 <strong class='red'>%s</strong>。
 EOT;
@@ -62,23 +63,26 @@ $lang->install->dataRoot     = '上傳檔案目錄';
 $lang->install->mkdir        = '<p>需要創建目錄%s。<br /> linux下面命令為：<br /> mkdir -p %s</p>';
 $lang->install->chmod        = '需要修改目錄 "%s" 的權限。<br />linux下面命令為：<br />chmod o=rwx -R %s';
 
-$lang->install->settingDB    = '設置資料庫';
-$lang->install->webRoot      = 'PMS所在網站目錄';
-$lang->install->requestType  = 'URL方式';
+$lang->install->settingDB   = '設置資料庫';
+$lang->install->webRoot     = 'PMS所在網站目錄';
+$lang->install->requestType = 'URL方式';
+$lang->install->defaultLang = '預設語言';
+$lang->install->dbHost      = '資料庫伺服器';
+$lang->install->dbHostNote  = '如果localhost無法訪問，嘗試使用127.0.0.1';
+$lang->install->dbPort      = '伺服器連接埠';
+$lang->install->dbUser      = '資料庫用戶名';
+$lang->install->dbPassword  = '資料庫密碼';
+$lang->install->dbName      = 'PMS使用的庫';
+$lang->install->dbPrefix    = '建表使用的首碼';
+$lang->install->createDB    = '自動創建資料庫';
+$lang->install->clearDB     = '清空現有數據';
+
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '靜態友好方式';
-$lang->install->dbHost     = '資料庫伺服器';
-$lang->install->dbHostNote = '如果localhost無法訪問，嘗試使用127.0.0.1';
-$lang->install->dbPort     = '伺服器連接埠';
-$lang->install->dbUser     = '資料庫用戶名';
-$lang->install->dbPassword = '資料庫密碼';
-$lang->install->dbName     = 'PMS使用的庫';
-$lang->install->dbPrefix   = '建表使用的首碼';
-$lang->install->createDB   = '自動創建資料庫';
-$lang->install->clearDB    = '清空現有數據';
 
 $lang->install->errorConnectDB     = '資料庫連接失敗 ';
 $lang->install->errorCreateDB      = '資料庫創建失敗';
+$lang->install->errorDBExists      = '資料庫已經存在，繼續安裝請選擇清空數據';
 $lang->install->errorCreateTable   = '創建表失敗';
 
 $lang->install->setConfig  = '生成配置檔案';

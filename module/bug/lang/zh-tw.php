@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 1270 2010-11-22 02:41:32Z wwccss $
+ * @version     $Id: zh-tw.php 1498 2011-03-04 09:06:00Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -156,10 +156,13 @@ $lang->bug->osList['winxp']   = 'Windows XP';
 $lang->bug->osList['win7']    = 'Windows 7';
 $lang->bug->osList['vista']   = 'Windows Vista';
 $lang->bug->osList['win2000'] = 'Windows 2000';
+$lang->bug->osList['win2003'] = 'Windows 2003';
+$lang->bug->osList['win2008'] = 'Windows 2008';
 $lang->bug->osList['winnt']   = 'Windows NT';
 $lang->bug->osList['win98']   = 'Windows 98';
 $lang->bug->osList['linux']   = 'Linux';
 $lang->bug->osList['freebsd'] = 'FreeBSD';
+$lang->bug->osList['mac']     = 'Mac OS';
 $lang->bug->osList['unix']    = 'Unix';
 $lang->bug->osList['others']  = '其他';
 
@@ -171,10 +174,12 @@ $lang->bug->browserList['ie7']      = 'IE7';
 $lang->bug->browserList['ie8']      = 'IE8';
 $lang->bug->browserList['firefox']  = 'firefox系列';
 $lang->bug->browserList['firefox2'] = 'firefox2';
-$lang->bug->browserList['firefx3']  = 'firefox3';
+$lang->bug->browserList['firefox3']  = 'firefox3';
+$lang->bug->browserList['firefox4']  = 'firefox4';
 $lang->bug->browserList['opera']    = 'opera系列';
 $lang->bug->browserList['opera9']   = 'opera9';
 $lang->bug->browserList['oprea10']  = 'opera10';
+$lang->bug->browserList['oprea11']  = 'opera11';
 $lang->bug->browserList['safari']   = 'safari';
 $lang->bug->browserList['chrome']   = 'chrome';
 $lang->bug->browserList['other']    = '其他';
