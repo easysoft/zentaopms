@@ -44,12 +44,20 @@ class index extends control
         /* Get project stats.  */
         $this->lang->project->charts->burn->graph->caption = '';
         $this->lang->project->charts->burn->graph->xAxisName = "";
-        $burns    = array();
-        $projects = $this->project->getList('doing');
-        foreach($projects as $project)
+        $burns        = array();
+        $projects     = $this->project->getList('all');
+        $projectCount = count($projects);   // Get the count of all projects, thus we can judge wether the first time to using zentao.
+        foreach($projects as $key => $project)
         {
-            $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
-            $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 180);
+            if($project->status == 'doing')
+            {
+                $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
+                $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 180);
+            }
+            else
+            {
+                unset($projects[$key]);  // Remove the project not doing.
+            }
         }
 
         /* stat datas of whole zentao system. */
@@ -65,12 +73,13 @@ class index extends control
         $my['bugs']  = $this->dao->select('id, title')->from(TABLE_BUG)->where('assignedTo')->eq($this->session->user->account)->andWhere('deleted')->eq(0)->orderBy('id desc')->limit(10)->fetchPairs();
         $my['todos'] = $this->loadModel('todo')->getList('all', $this->session->user->account, 'wait, doing');
 
-        $this->view->projects = $projects;
-        $this->view->burns    = $burns;
-        $this->view->stats    = $stats;
-        $this->view->my       = $my;
-        $this->view->actions  = $this->loadModel('action')->getDynamic('all', 23);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects      = $projects;
+        $this->view->projectsCount = $projectCount;
+        $this->view->burns         =  $burns;
+        $this->view->stats         =  $stats;
+        $this->view->my            =  $my;
+        $this->view->actions       =  $this->loadModel('action')->getDynamic('all', 23);
+        $this->view->users         =  $this->loadModel('user')->getPairs('noletter');
         $this->view->users['guest']= 'guest';    // append the guest account.
         $this->display();
     }

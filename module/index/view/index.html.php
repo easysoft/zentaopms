@@ -14,12 +14,30 @@
 <table class='cont-rt4'>
   <tr valign='top'>
     <td>
+      <?php if(empty($projects)):?>
+      <table class='table-1' height='240'>
+        <caption><?php echo $lang->index->projects;?></caption>
+        <tr>
+          <td class='a-center f-14px'>
+            <?php 
+            $productLink = $this->createLink('product', 'create');
+            $projectLink = $this->createLink('project', 'create');
+            if($projectsCount == 0)
+            {
+                printf($lang->index->firstUsingTip, $productLink, $projectLink);
+            }
+            else
+            {
+                printf($lang->index->noProjectsTip, $projectLink);
+            }
+            ?>
+          </td>
+        </tr>
+      </table>
+      <?php else:?>
       <table class='table-1' id='projectbox' height='240'>
         <caption><?php echo $lang->index->projects;?></caption>
         <tr>
-          <?php if(empty($projects)):?>
-          <td class='a-center'><?php echo $lang->index->noProjectsTip;?></td>
-          <?php else:?>
           <td class='tabs' width='220'><?php foreach($projects as $project) echo "<a href='#' title='$project->name'>$project->name</a>";?></td>
           <td class='panes'>
             <?php foreach($projects as $key => $project):?>
@@ -33,9 +51,9 @@
             </div>
             <?php endforeach;?>
           </td>
-          <?php endif;?>
         </tr>
       </table>
+      <?php endif;?>
       <table class='cont'>
         <tr>
           <td class='w-p50'>

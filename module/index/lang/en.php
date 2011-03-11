@@ -27,3 +27,7 @@ $lang->index->total    = 'Total <strong>%s</strong>, ';
 $lang->index->myTodo   = 'My Todo';
 $lang->index->myTask   = 'My Task';
 $lang->index->myBug    = 'My Bug';
+
+$lang->index->firstUsingTip = "The first time to use zentao? See our <a href='http://www.zentao.net/help-read-79236.html' target='_blank'>help document</a> first.
+                               or start using zentao by <a href='%s'>createing a product</a> or <a href='%s'>createing a project</a>。";
+$lang->index->noProjectsTip = "目前还没有进行中的项目，<a href='%s'>马上创建一个项目吧</a>，或者修改已有的项目，将其状态改为<i class='strong'>进行中</i>";

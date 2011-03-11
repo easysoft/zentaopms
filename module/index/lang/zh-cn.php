@@ -28,4 +28,6 @@ $lang->index->myTodo   = '我的Todo';
 $lang->index->myTask   = '我的任务';
 $lang->index->myBug    = '我的Bug';
 
-$lang->index->noProjectsTip = '目前还没有进行中的项目。马上创建一个吧';
+$lang->index->firstUsingTip = "看起来您是刚刚开始使用禅道，您可以先看看我们的<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>帮助文档</a>，
+                               或者马上开始：<a href='%s'>创建产品</a>，<a href='%s'>创建项目</a>。";
+$lang->index->noProjectsTip = "目前还没有进行中的项目，<a href='%s'>马上创建一个项目吧</a>，或者修改已有的项目，将其状态改为<i class='strong'>进行中</i>";
