@@ -171,7 +171,7 @@ $help->testtask->end        = '結束日期';
 $help->testtask->desc       = '任務描述';
 $help->testtask->status     = '當前狀態';
 $help->testtask->assignedto = '指派給|一個測試任務可能要執行很多個測試用例，可以將測試用例進行細分，某某跑幾個用例，另外一個人跑其他的用例。';
-$help->testtask->linkversio = '關聯(版本)|用例的版本，一般來講應當執行最新的版本。';
+$help->testtask->linkversion= '關聯(版本)|用例的版本，一般來講應當執行最新的版本。';
 $help->testtask->lastrun    = '最後執行';
 $help->testtask->lastresult = '最終結果';
 
@@ -197,3 +197,12 @@ $help->user->last      = '最後登錄時間';
 
 $help->my->date        = '選擇日期|選擇要查看的todo的日期';
 $help->user->date      = '選擇日期|選擇要查看的todo的日期';
+
+$help->doc->product    = '所屬產品';
+$help->doc->project    = '所屬項目';
+$help->doc->library    = '所屬文檔庫';
+$help->doc->module     = '文檔分類';
+$help->doc->type       = '文檔類型';
+$help->doc->title      = '文檔標題';
+$help->doc->digest     = '文檔摘要';
+$help->doc->url        = '相應的連結地址';
