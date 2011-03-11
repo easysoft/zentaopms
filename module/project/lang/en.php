@@ -117,6 +117,7 @@ $lang->project->storySummary   = "Total 『%s』stories, estimate『%s』hours."
 $lang->project->wbs            = "WBS";
 $lang->project->largeBurnChart = 'View large';
 $lang->project->howToUpdateBurn= "<a href='%s' class='helplink'><i>How?</i></a>";
+$lang->project->whyNoStories   = "There no active stories to added to this project. Please check the linked product.";
 
 /* Confirm. */
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';

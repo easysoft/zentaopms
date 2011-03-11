@@ -117,6 +117,7 @@ $lang->project->storySummary   = "共『%s』个需求，预计『%s』个工时
 $lang->project->wbs            = "分解任务";
 $lang->project->largeBurnChart = '点击查看大图';
 $lang->project->howToUpdateBurn= "<a href='%s' class='helplink'><i>如何更新?</i></a>";
+$lang->project->whyNoStories   = "看起来没有需求可以关联。请检查下项目关联的产品中有没有需求，而且要确保它们已经审核通过。";
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';

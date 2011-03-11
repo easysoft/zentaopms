@@ -27,6 +27,7 @@
     </tr>
     </thead>
     <tbody>
+    <?php $storyCount = 0;?>
     <?php foreach($allStories as $story):?>
     <?php if(isset($prjStories[$story->id])) continue;?>
     <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
@@ -43,9 +44,10 @@
         <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
       </td>
     </tr>
+    <?php $storyCount ++;?>
     <?php endforeach;?>
     </tbody>
-    <tfoot><tr><td colspan='8'><?php echo html::submitButton();?></td></tr></tfoot>
+    <tfoot><tr><td colspan='8' class='f-14px'><?php print($storyCount? html::submitButton() : $lang->project->whyNoStories);?></td></tr></tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
