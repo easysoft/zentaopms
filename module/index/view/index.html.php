@@ -47,6 +47,7 @@
               echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $project->name);
               common::printLink('project', 'burn', "projectID=$project->id", $lang->project->largeBurnChart);
               common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
+              printf($lang->project->howToUpdateBurn, $this->createLink('help', 'field', 'module=project&method-burn&field=updateburn'));
               ?>
             </div>
             <?php endforeach;?>

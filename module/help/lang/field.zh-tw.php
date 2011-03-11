@@ -90,14 +90,16 @@ $help->productplan->desc    = '描述|可以對計划進行較詳細的描述。
 $help->productplan->begin   = '開始日期|計劃開始的日期。';
 $help->productplan->end     = '結束日期|計劃結束的日期。';
 
-$help->project->name   = '項目名稱';
-$help->project->code   = '項目代號|項目的代碼，作為團隊內部對某一個項目的簡短稱呼。';
-$help->project->begin  = '開始日期|項目一般應該有明確的起止時間。';
-$help->project->end    = '結束日期|對於scrum而言，一般不宜超過30天。';
-$help->project->team   = '團隊名稱|團隊內部可以自己選擇自己喜歡的名稱。';
-$help->project->status = '項目狀態|只有狀態為進行中的項目，其燃燒圖才會在首頁出現。';
-$help->project->desc   = '項目描述|項目的描述。';
-$help->project->goal   = '項目目標|項目所要取得的目標。';
+$help->project->name       = '項目名稱';
+$help->project->code       = '項目代號|項目的代碼，作為團隊內部對某一個項目的簡短稱呼。';
+$help->project->begin      = '開始日期|項目一般應該有明確的起止時間。';
+$help->project->end        = '結束日期|對於scrum而言，一般不宜超過30天。';
+$help->project->team       = '團隊名稱|團隊內部可以自己選擇自己喜歡的名稱。';
+$help->project->status     = '項目狀態|只有狀態為進行中的項目，其燃燒圖才會在首頁出現。';
+$help->project->desc       = '項目描述|項目的描述。';
+$help->project->goal       = '項目目標|項目所要取得的目標。';
+$help->project->updateburn = '更新燃盡圖|<br />1. 通過手工點擊“更新燃盡圖”來進行更新。<br />2. 通過計劃任務來進行更新。
+                              詳情請查看<a href="http://www.zentao.net/help-book-zentaopmshelp.html" target="_blank">《如何更新燃盡圖》</a>';
 
 $help->release->product = '產品';
 $help->release->build   = 'build|所對應的build。build是在項目視圖中，在某一個項目中創建。';

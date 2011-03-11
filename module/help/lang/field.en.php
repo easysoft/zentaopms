@@ -98,6 +98,8 @@ $help->project->team   = 'Team name';
 $help->project->status = 'Project status|Only runing projects can appears in the home page';
 $help->project->desc   = 'Description';
 $help->project->goal   = 'The goal of the project';
+$help->project->updateburn = 'Update burn down chart|<br />1. Click the "update burndown" link to update it manually.<br />2. Update it by cron.
+                              for more, see <a href="http://www.zentao.net/help-book-zentaopmshelp.html" target="_blank">How to update burndown chart</a>.';
 
 $help->release->product = 'Product';
 $help->release->build   = 'Build|The related build.';

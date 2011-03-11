@@ -96,7 +96,6 @@ $lang->project->groups['openedby']  = 'Group by openedBy';
 $lang->project->groups['assignedTo']= 'Group by assignedTo';
 $lang->project->groups['finishedby']= 'Group by finishedBy';
 $lang->project->groups['closedby']  = 'Group by closedBy';
-
 $lang->project->groups['estimate']  = 'Group by estimate';
 $lang->project->groups['consumed']  = 'Group by consumed';
 $lang->project->groups['left']      = 'Group by left';
@@ -117,6 +116,7 @@ $lang->project->oneLineStats   = "Project『%s』, code is『%s』, products is�
 $lang->project->storySummary   = "Total 『%s』stories, estimate『%s』hours.";
 $lang->project->wbs            = "WBS";
 $lang->project->largeBurnChart = 'View large';
+$lang->project->howToUpdateBurn= "<a href='%s' class='helplink'><i>How?</i></a>";
 
 /* Confirm. */
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';

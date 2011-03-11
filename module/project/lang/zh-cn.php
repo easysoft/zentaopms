@@ -116,6 +116,7 @@ $lang->project->oneLineStats   = "项目『%s』, 代号为『%s』, 相关产�
 $lang->project->storySummary   = "共『%s』个需求，预计『%s』个工时。";
 $lang->project->wbs            = "分解任务";
 $lang->project->largeBurnChart = '点击查看大图';
+$lang->project->howToUpdateBurn= "<a href='%s' class='helplink'><i>如何更新?</i></a>";
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';
