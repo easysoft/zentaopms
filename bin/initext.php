@@ -11,13 +11,8 @@
  */
 include '../config/config.php';
 
-if(!isset($argv[1]))
-{
-    die("Please input the directory path of 'module'! For example, c:\zentao\home\zentao\module\ \n");
-}
-
 $modules    = array();
-$moduleRoot = $argv[1];
+$moduleRoot = realpath('../module/') . '/';
 
 if(is_dir($moduleRoot))
 {
@@ -38,26 +33,26 @@ else
 foreach($modules as $module)
 { 
     /*  设定各个目录。*/
-    $optRoot      = $moduleRoot . DIRECTORY_SEPARATOR. $module . DIRECTORY_SEPARATOR . 'opt';
-    $optControl   = $optRoot . DIRECTORY_SEPARATOR . 'control';
-    $optModel     = $optRoot . DIRECTORY_SEPARATOR . 'model';
-    $optView      = $optRoot . DIRECTORY_SEPARATOR . 'view';
-    $optConfig    = $optRoot . DIRECTORY_SEPARATOR . 'config';
-    $optLang      = $optRoot . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR;
+    $extRoot      = $moduleRoot . DIRECTORY_SEPARATOR. $module . DIRECTORY_SEPARATOR . 'ext';
+    $extControl   = $extRoot . DIRECTORY_SEPARATOR . 'control';
+    $extModel     = $extRoot . DIRECTORY_SEPARATOR . 'model';
+    $extView      = $extRoot . DIRECTORY_SEPARATOR . 'view';
+    $extConfig    = $extRoot . DIRECTORY_SEPARATOR . 'config';
+    $extLang      = $extRoot . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR;
 
     /* 建立各个扩展目录 */
-    if(!file_exists($optRoot))    mkdir($optRoot,    0777);
-    if(!file_exists($optControl)) mkdir($optControl, 0777);      
-    if(!file_exists($optModel))   mkdir($optModel,   0777);
-    if(!file_exists($optView))    mkdir($optView,    0777);
-    if(!file_exists($optConfig))  mkdir($optConfig,  0777);
-    if(!file_exists($optLang))    mkdir($optLang,    0777);
+    if(!file_exists($extRoot))    mkdir($extRoot,    0777);
+    if(!file_exists($extControl)) mkdir($extControl, 0777);      
+    if(!file_exists($extModel))   mkdir($extModel,   0777);
+    if(!file_exists($extView))    mkdir($extView,    0777);
+    if(!file_exists($extConfig))  mkdir($extConfig,  0777);
+    if(!file_exists($extLang))    mkdir($extLang,    0777);
 
     /* 创建语言目录。*/
     $langs = array_keys($config->langs);
     foreach($langs as $lang)
     {
-        $langPath = $optLang . $lang;
+        $langPath = $extLang . $lang;
         if(!file_exists($langPath)) mkdir($langPath, 0777);
     }
 
