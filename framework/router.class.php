@@ -1464,7 +1464,11 @@ class router
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $dbh->exec("SET NAMES {$config->db->encoding}");
             if(isset($config->db->strictMode) and $config->db->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
-            if(helper::isCentOS()) $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+            if(helper::isCentOS())
+            {
+                $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+                $dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            }
             $this->dbh = $dbh;
             return $dbh;
         }
