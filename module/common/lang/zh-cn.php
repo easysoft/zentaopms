@@ -147,7 +147,6 @@ $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
 $lang->project->menu->linkstory = array('link' => '关联需求|project|linkstory|projectID=%s');
 $lang->project->menu->view      = '概况|project|view|projectID=%s';
 $lang->project->menu->edit      = '编辑|project|edit|projectID=%s';
-
 $lang->project->menu->create = array('link' => '新增项目|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;

@@ -129,7 +129,6 @@ $lang->product->menu->doc    = array('link' => 'Doc|product|doc|productID=%s', '
 $lang->product->menu->view   = 'Info|product|view|productID=%s';
 $lang->product->menu->edit   = 'Edit|product|edit|productID=%s';
 $lang->product->menu->module = 'Modules|tree|browse|productID=%s&view=story';
-$lang->product->menu->delete = array('link' => 'Delete|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->create = array('link' => 'New Product|product|create', 'float' => 'right');
 $lang->story->menu           = $lang->product->menu;
 $lang->productplan->menu     = $lang->product->menu;
@@ -148,8 +147,6 @@ $lang->project->menu->product   = 'Link Product|project|manageproducts|projectID
 $lang->project->menu->linkstory = array('link' => 'Link Story|project|linkstory|projectID=%s');
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->edit      = 'Edit|project|edit|projectID=%s';
-$lang->project->menu->delete    = array('link' => 'Delete|project|delete|projectID=%s', 'target' => 'hiddenwin');
-
 $lang->project->menu->create = array('link' => 'New Project|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;

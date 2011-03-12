@@ -140,3 +140,4 @@ $lang->project->charts->burn->graph->baseFontSize = 12;
 $lang->project->charts->burn->graph->formatNumber = 0;
 $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
+$lang->project->charts->burn->graph->showValues   = 0;
