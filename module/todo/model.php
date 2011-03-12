@@ -83,7 +83,7 @@ class todoModel extends model
     public function mark($todoID, $status)
     {
         $status = ($status == 'done') ? 'wait' : 'done';
-        $this->dao->update(TABLE_TODO)->set('status')->eq($status)->set('date')->eq($this->today())->where('id')->eq((int)$todoID)->exec();
+        $this->dao->update(TABLE_TODO)->set('status')->eq($status)->where('id')->eq((int)$todoID)->exec();
         $this->loadModel('action')->create('todo', $todoID, 'marked', '', $status);
         return;
     }
