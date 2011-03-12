@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 1539 2011-03-10 02:29:19Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 1557 2011-03-11 15:13:10Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -247,7 +247,7 @@ $lang->pager->last      = "末頁";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方網站";
-$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=outsofting' target='_blank'>OutSofting贊助</a>";
+$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=comemind' target='_blank'>Comemind贊助</a>";
 $lang->zentaoKeywords = "開源項目管理軟件,項目管理,項目管理軟件,pmp,pms,php框架，國產php框架，scrum工具,scrum管理工具,scrum管理軟件,敏捷項目管理,禪道";
 $lang->zentaoDESC     = "禪道項目管理軟件(ZenTaoPMS)是一款國產的，基于LGPL協議，開源免費的項目管理軟件(工具、系統)，同時也是一款scrum管理工具。
     它集產品管理、項目管理、測試管理於一體，同時還包含了事務管理、組織管理等諸多功能，是中小型企業項目管理的首選。禪道項目管理軟件使用PHP + MySQL開發，

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
+ * @version     $Id: zh-tw.php 1555 2011-03-11 13:31:07Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->index->common = '首頁';
@@ -27,3 +27,7 @@ $lang->index->total    = '共 <strong>%s</strong> 個,';
 $lang->index->myTodo   = '我的Todo';
 $lang->index->myTask   = '我的任務';
 $lang->index->myBug    = '我的Bug';
+
+$lang->index->firstUsingTip = "看起來您是剛剛開始使用禪道，您可以先看看我們的<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>幫助文檔</a>，
+                               或者馬上開始：<a href='%s'>創建產品</a>，<a href='%s'>創建項目</a>。";
+$lang->index->noProjectsTip = "目前還沒有進行中的項目，<a href='%s'>馬上創建一個項目吧</a>，或者修改已有的項目，將其狀態改為<i class='strong'>進行中</i>";

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 1531 2011-03-09 04:03:38Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 1558 2011-03-11 15:14:33Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -116,6 +116,8 @@ $lang->project->oneLineStats   = "項目『%s』, 代號為『%s』, 相關產�
 $lang->project->storySummary   = "共『%s』個需求，預計『%s』個工時。";
 $lang->project->wbs            = "分解任務";
 $lang->project->largeBurnChart = '點擊查看大圖';
+$lang->project->howToUpdateBurn= "<a href='%s' class='helplink'><i>如何更新?</i></a>";
+$lang->project->whyNoStories   = "看起來沒有需求可以關聯。請檢查下項目關聯的產品中有沒有需求，而且要確保它們已經審核通過。";
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您確定刪除項目[%s]嗎？';

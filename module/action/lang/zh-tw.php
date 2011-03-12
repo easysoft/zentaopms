@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
+ * @version     $Id: zh-tw.php 1561 2011-03-12 02:02:52Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -18,6 +18,8 @@ $lang->action->objectID   = '對象ID';
 $lang->action->objectName = '對象名稱';
 $lang->action->actor      = '操作者';
 $lang->action->date       = '日期';
+$lang->action->trashTips  = '提示：禪道系統的刪除都是標記刪除，並沒有真正從資料庫裡面刪除數據。這樣做是為了系統數據的完整和安全。
+                             因此如果你確定要刪除某一條數據，可以使用phpmyadmin等管理工具，進資料庫刪除。';
 
 $lang->action->objectTypes['product']     = '產品';
 $lang->action->objectTypes['story']       = '需求';
