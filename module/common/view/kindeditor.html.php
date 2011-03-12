@@ -39,7 +39,7 @@ $(document).ready(function()
         editorTool = simpleTools;
         if(editor.tools == 'bugTools')  editorTool = bugTools;
         if(editor.tools == 'fullTools') editorTool = fullTools;
-        KE.show({id:editorID, items:editorTool, filterMode:true, imageUploadJson: createLink('file', 'ajaxUpload')});
+        KE.show({id:editorID, items:editorTool, filterMode:true, urlType:'relative', imageUploadJson: createLink('file', 'ajaxUpload')});
 
         $('form').submit(function() 
         {
