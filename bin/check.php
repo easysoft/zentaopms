@@ -31,7 +31,11 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                     $methodName = $method->name;
                     if(!isset($lang->resource->$moduleName->$methodName))
                     {
-                        echo $moduleName . "\t" . $methodName . " not in the list. \n";
+                        $methodName = strtolower($methodName);
+                        if(!isset($lang->resource->$moduleName->$methodName))
+                        {
+                            echo $moduleName . "\t" . $methodName . " not in the list. \n";
+                        }
                     }
                 }
             }
