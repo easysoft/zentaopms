@@ -9,6 +9,7 @@
  * @version     $Id$
  */
 include '../../common/view/header.lite.html.php';
+include '../../common/view/colorbox.html.php';
 ?>
 <form method='post' target='hiddenwin'>
   <table align='center' class='table-4'> 
