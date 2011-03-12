@@ -314,7 +314,7 @@ function setRequiredFields()
  */
 function setHelpLink()
 {
-    if(!$.cookie('help')) $.cookie('help', 'off', {expires:config.cookieLife, path:config.webRoot});
+    if(!$.cookie('help')) $.cookie('help', 'on', {expires:config.cookieLife, path:config.webRoot});
     className = $.cookie('help') == 'off' ? 'hidden' : '';
 
     $('form input[id], form select[id], form textarea[id]').each(function()
