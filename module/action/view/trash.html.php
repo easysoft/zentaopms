@@ -37,6 +37,9 @@
   </tr>
   <?php endforeach;?>
   </tbody>
+  <tfoot>
+  <tr><td colspan='6'><i><?php echo $lang->action->trashTips;?></i></td></tr>
+  </tfoot>
 </table>
 <div class='a-right'><?php $pager->show();?></div>
 <?php include '../../common/view/footer.html.php';?>

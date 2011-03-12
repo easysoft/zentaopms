@@ -18,6 +18,8 @@ $lang->action->objectID   = '对象ID';
 $lang->action->objectName = '对象名称';
 $lang->action->actor      = '操作者';
 $lang->action->date       = '日期';
+$lang->action->trashTips  = '提示：禅道系统的删除都是标记删除，并没有真正从数据库里面删除数据。这样做是为了系统数据的完整和安全。
+                             因此如果你确定要删除某一条数据，可以使用phpmyadmin等管理工具，进数据库删除。';
 
 $lang->action->objectTypes['product']     = '产品';
 $lang->action->objectTypes['story']       = '需求';
