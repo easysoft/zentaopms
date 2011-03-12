@@ -431,6 +431,22 @@ function setForm()
 }
 
 /**
+ * Set the max with of image.
+ * 
+ * @access public
+ * @return void
+ */
+function setImageSize()
+{
+    bodyWidth = $('body').width();
+    maxWidth = bodyWidth - 420; // The side bar's width is 336, and add some margins.
+    $('.content image').each(function()
+    {
+        if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
+    });
+}
+
+/**
  * add one option of a select to another select. 
  * 
  * @param  string $SelectID 
@@ -574,6 +590,7 @@ $(document).ready(function()
     saveProject();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minus, begin ping.
     setForm();
+    setImageSize();
 });
 
 /* CTRL+g, auto focus on the search box. */
