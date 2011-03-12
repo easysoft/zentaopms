@@ -33,4 +33,5 @@ if(version_compare($config->version, $config->installedVersion) <= 0) die(header
 
 /* Run it. */
 $app->parseRequest();
+$common->checkUpgradeStatus();
 $app->loadModule();

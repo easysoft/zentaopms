@@ -24,6 +24,10 @@ EOT;
 
 
 
+$lang->upgrade->setStatusFile = "For security reason, we will check file <strong>%s</strong><br />
+                                 But this file doesn't exist or out of date. You can use the flowing command to create(update)it <br />
+                                 For linux:<strong>touch %s;</strong> <br />
+                                 For windows:<strong>echo ok > %s</strong>";
 $lang->upgrade->selectVersion = 'Select version';
 $lang->upgrade->noteVersion   = "Must select the correct version";
 $lang->upgrade->fromVersion   = 'From version';

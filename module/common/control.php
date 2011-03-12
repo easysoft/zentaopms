@@ -53,6 +53,22 @@ class common extends control
     }
 
     /**
+     * Check upgrade's status file is ok or not.
+     * 
+     * @access public
+     * @return void
+     */
+    public function checkUpgradeStatus()
+    {
+        $statusFile = $this->app->getAppRoot() . 'www' . $this->pathFix . 'ok';
+        if(!file_exists($statusFile) or time() - filemtime($statusFile) > 3600)
+        {
+            $this->app->loadLang('upgrade');
+            die(printf($this->lang->upgrade->setStatusFile, $statusFile, $statusFile, $statusFile));
+        }
+    }
+
+    /**
      * Check the user has permisson of one method of one module.
      * 
      * @param  string $module 
