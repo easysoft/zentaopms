@@ -180,9 +180,14 @@ class user extends control
         /* Set menu. */
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
+        $user = $this->user->getById($account);
+        $deptPath = $this->dept->getParents($user->dept);
+
         $this->view->header   = $header;
         $this->view->position = $position;
-        $this->view->user     = $this->user->getById($account);
+        $this->view->user     = $user;
+
+        $this->view->deptPath = $deptPath;
 
         $this->display();
     }
