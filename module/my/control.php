@@ -21,6 +21,7 @@ class my extends control
     {
         parent::__construct();
         $this->loadModel('user');
+        $this->loadModel('dept');
         $this->my->setMenu();
     }
 
@@ -304,6 +305,9 @@ class my extends control
     public function profile()
     {
         if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
+        $user                 = $this->user->getById($this->app->user->account);
+        $deptPath             = $this->dept->getParents($user->dept); 
+        $this->view->deptPath = $deptPath;
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
         $this->view->position[]    = $this->lang->my->profile;
         $this->view->user          = $this->user->getById($this->app->user->id);

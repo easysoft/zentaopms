@@ -15,6 +15,26 @@
 <table align='center' class='table-4'>
   <caption><?php echo $lang->my->profile;?></caption>
   <tr>
+    <th class='rowhead'><?php echo $lang->user->dept;?></th>
+    <td>
+    <?php
+    if(empty($deptPath))
+    {
+        echo "/";
+    }
+    else
+    {
+        foreach($deptPath as $key => $dept)
+        {
+            if($dept->name) echo $dept->name;
+            if(isset($deptPath[$key + 1])) echo $lang->arrow;
+        }
+    }
+    ?>
+    </td>
+  </tr>
+
+  <tr>
     <th class='rowhead'><?php echo $lang->user->account;?></th>
     <td><?php echo $user->account;?></td>
   </tr>
