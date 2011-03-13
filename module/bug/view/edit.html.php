@@ -125,13 +125,13 @@ userList         = "<?php echo join(',', array_keys($users));?>".split(',');
           <tr>
             <td class='rowhead'><?php echo $lang->bug->story;?></td>
             <td><div id='storyIdBox' class='searchleft'><?php echo html::select('story', $stories, $bug->story, "class=select-3");?></div>
-            <div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList('story')");?></div>
+            <!--<div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList('story')");?></div>-->
             </td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->task;?></td>
             <td><div id='taskIdBox' class='searchleft'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></div>
-            <div id='taskListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchTasks' onclick=getList('task')");?></div>
+            <!--<div id='taskListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchTasks' onclick=getList('task')");?></div>-->
             </td>
           </tr>
         </table>

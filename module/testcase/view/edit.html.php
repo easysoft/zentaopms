@@ -81,7 +81,7 @@
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->story;?></td>
             <td class='a-left'><div id='storyIdBox' class='searchleft'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
-            <div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList()");?></div>
+            <!--<div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList()");?></div>-->
             </td>       
           </tr>
           <tr>

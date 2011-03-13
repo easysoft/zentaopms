@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include '../../common/view/colorbox.html.php';?>
 <style>
 .helplink {display:none}
 body {background:white; margin:20px 10px 0 0; padding-bottom:0}
