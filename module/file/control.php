@@ -28,7 +28,7 @@ class file extends control
         }
         elseif(!is_writable($this->file->savePath))
         {
-            printf($this->lang->file-errorCanNotWrite, $this->file->savePath, $this->file->savePath);
+            printf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath);
             return false;
         }
         $this->view->fileCount = $fileCount;
