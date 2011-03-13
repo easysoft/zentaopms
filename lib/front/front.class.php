@@ -703,7 +703,7 @@ EOT;
     static public function reload($window = 'self')
     {
         $js  = self::start();
-        $js .= "$window.location.reload()";
+        $js .=  "$window.location.href=$window.location.href";
         $js .= self::end();
         return $js;
     }
