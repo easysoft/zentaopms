@@ -64,7 +64,9 @@ class common extends control
         if(!file_exists($statusFile) or time() - filemtime($statusFile) > 3600)
         {
             $this->app->loadLang('upgrade');
-            die(printf($this->lang->upgrade->setStatusFile, $statusFile, $statusFile, $statusFile));
+            echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
+            printf($this->lang->upgrade->setStatusFile, $statusFile, $statusFile, $statusFile);
+            die('</body></html>');
         }
     }
 
