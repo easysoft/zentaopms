@@ -20,7 +20,6 @@ $config->doc->search['fields']['lib']            = $lang->doc->lib;
 $config->doc->search['fields']['digest']         = $lang->doc->digest;
 $config->doc->search['fields']['content']        = $lang->doc->content;
 $config->doc->search['fields']['url']            = $lang->doc->url;
-$config->doc->search['fields']['views']          = $lang->doc->views;
 $config->doc->search['fields']['addedBy']        = $lang->doc->addedBy;
 $config->doc->search['fields']['addedDate']      = $lang->doc->addedDate;
 $config->doc->search['fields']['editedBy']       = $lang->doc->editedBy;
@@ -36,7 +35,6 @@ $config->doc->search['params']['lib']           = array('operator' => '=',      
 $config->doc->search['params']['digest']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['content']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['url']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->doc->search['params']['views']         = array('operator' => '>',       'control' => 'input',  'values' => '' );
 $config->doc->search['params']['addedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->doc->search['params']['addedDate']     = array('operator' => '>=',      'control' => 'input',  'values' => '');
 $config->doc->search['params']['editedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
