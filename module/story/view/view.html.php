@@ -37,18 +37,7 @@
         <legend><?php echo $lang->story->legendSpec;?></legend>
         <div class='content'><?php echo $story->spec;?></div>
       </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->story->legendAttatch;?></legend>
-        <div>
-        <?php 
-        foreach($story->files as $file)
-        {
-            echo html::a($this->createLink('file', 'download', "fileID=$file->id"), $file->title, '_blank', "onclick='return downloadFile($file->id)'");
-            echo html::commonButton('x', "onclick=deleteFile($file->id)");
-        }
-        ?>
-        </div>
-      </fieldset>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>
       <?php
