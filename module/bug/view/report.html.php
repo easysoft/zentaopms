@@ -11,11 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
-  <div id='featurebar'>
-    <div class='f-left'><?php echo $lang->bug->report->common;?></div>
-    <div class='f-right'><?php common::printLink('bug', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->goback); ?></div>
-  </div>
+<div id='featurebar'>
+  <div class='f-left'><?php echo $lang->bug->report->common;?></div>
+  <div class='f-right'><?php common::printLink('bug', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->goback); ?></div>
 </div>
 
 <table class='cont-lt1'>
