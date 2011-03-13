@@ -354,7 +354,7 @@ function toggleHelpLink()
 function selectLang(lang)
 {
     $.cookie('lang', lang, {expires:config.cookieLife, path:config.webRoot});
-    location.href = location.href;
+    location.reload();
 }
 
 /**
@@ -366,7 +366,7 @@ function selectLang(lang)
 function selectTheme(theme)
 {
     $.cookie('theme', theme, {expires:config.cookieLife, path:config.webRoot});
-    location.href = location.href;
+    location.reload();
 }
 
 /**
