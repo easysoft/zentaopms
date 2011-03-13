@@ -3,4 +3,4 @@
 #mainmenu a {color:#fff}
 #mainmenu a:hover {color:yellow;}
 #mainmenu .active a{color:#990000}
-.switcher{background:#990000}
+#topbar select{background:#990000}
