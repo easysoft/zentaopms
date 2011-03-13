@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
- * @version     $Id: zh-tw.php 1512 2011-03-07 02:56:53Z guotao@cnezsoft.com $
+ * @version     $Id: zh-tw.php 1584 2011-03-13 03:44:03Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->file->common     = '附件';
@@ -16,6 +16,6 @@ $lang->file->export2CSV = '導出CSV';
 $lang->file->ajaxUpload = '介面：編輯器上傳附件';
 $lang->file->label      = '標題：';
 
-$lang->file->errorNotExists   = "<span class='red'>檔案 '%s' 不存在</span>";
-$lang->file->errorCanNotWrite = "<span class='red'>檔案 '%s' 不可寫,請改變檔案的權限。在linux中輸入指令:sudo chmod a+rx '%s'</span>";
+$lang->file->errorNotExists   = "<span class='red'>檔案夾 '%s' 不存在</span>";
+$lang->file->errorCanNotWrite = "<span class='red'>檔案夾 '%s' 不可寫,請改變檔案夾的權限。在linux中輸入指令:sudo chmod -R 777 '%s'</span>";
 $lang->file->confirmDelete    = " 您確定刪除該附件嗎？";
