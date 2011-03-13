@@ -185,7 +185,7 @@ class bug extends control
 
         $users = $this->user->getPairs('noletter');
 
-        /* Get custome fields. */
+        /* Get custom fields. */
         $customFields = $this->cookie->bugFields != false ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
         $customed     = !($customFields == $this->config->bug->list->defaultFields);
         
