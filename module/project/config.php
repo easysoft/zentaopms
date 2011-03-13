@@ -52,4 +52,4 @@ $config->project->search['params']['openedDate']    = array('operator' => '>=', 
 $config->project->search['params']['finishedDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '');
 $config->project->search['params']['closedDate']    = array('operator' => '>=',      'control' => 'input',  'values' => '');
 $config->project->search['params']['canceledDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '');
-$config->project->search['params']['deadline']      = array('operator' => '>=',      'control' => 'input',  'values' => '');
+$config->project->search['params']['deadline']      = array('operator' => '=',       'control' => 'input',  'values' => '');
