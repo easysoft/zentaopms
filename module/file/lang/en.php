@@ -17,5 +17,5 @@ $lang->file->ajaxUpload = 'AJAX: upload file from editor';
 $lang->file->label      = 'Title: ';
 
 $lang->file->errorNotExists   = "<span class='red'>The directory '%s' is no exist</span>";
-$lang->file->errorCanNotWrite = "<span class='red'>The directory '%s' is unwritable, please change it's file permission.command in linux:sudo chmod a+rx '%s'</span>";
+$lang->file->errorCanNotWrite = "<span class='red'>The directory '%s' is unwritable, please change it's permission. Command in linux:sudo -R chmod 777 '%s'</span>";
 $lang->file->confirmDelete    = " Are you sure to delete this file?";
