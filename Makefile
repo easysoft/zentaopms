@@ -21,8 +21,9 @@ tgz:
 	cp bin/ztc* zentaopms/bin
 	cp bin/computeburn.php zentaopms/bin
 	cp bin/getbugs.php zentaopms/bin
-	cp bin/initopt.php zentaopms/bin
+	cp bin/initext.php zentaopms/bin
 	cp bin/todo.php zentaopms/bin
+	cp bin/convertopt.php zentaopms/bin
 	chmod a+rx zentaopms/bin/*
 	cp -fr framework zentaopms/
 	cp -fr lib/* zentaopms/lib/
