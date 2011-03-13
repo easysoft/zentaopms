@@ -13,10 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <table class='table-1 a-left'> 
-  <caption>
-    <div class='f-left'><?php echo $lang->todo->view;?></div>
-    <div class='f-right'><?php echo html::a($this->session->todoList, $lang->goback);?></div>
-  </caption>
+  <caption><?php echo $lang->todo->view;?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->todo->account;?></th>
     <td><?php echo $todo->account;?></td>
