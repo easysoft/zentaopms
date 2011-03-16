@@ -135,7 +135,7 @@ class my extends control
         $bugs = array();
         if($type == 'assigntome')
         {
-            $bugs = $this->dao->select('*')
+            $bugs = $this->dao->select('t1.*')
                 ->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')
                 ->on('t1.product = t2.id')
