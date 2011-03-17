@@ -52,6 +52,7 @@ $config->db->persistant = false;           // Pconnect or not.
 $config->db->driver     = 'mysql';         // Must be MySQL. Don't support other database server yet.
 $config->db->encoding   = 'UTF8';          // Encoding of database.
 $config->db->strictMode = false;           // Turn off the strict mode of MySQL.
+$config->db->checkCentOS= true;            // Whether check is centos or not, thus to fix the error of pdo in centos.
 
 /* Include the custom config file. */
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
