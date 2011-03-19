@@ -1,4 +1,4 @@
-name: 5upm
+name: zentaopms
 version: 10
 handle:
   - rewrite: if(!is_dir() && !is_file()) goto "index.php/%{REQUEST_URI}"
