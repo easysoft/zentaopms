@@ -46,7 +46,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.date DESC,t1.id desc')
+            ->orderBy('t1.date DESC , t1.id desc')
             ->fetchAll();
     }
 
@@ -69,7 +69,7 @@ class buildModel extends model
             ->where('project')->eq((int)$projectID)
             ->beginIF($productID)->andWhere('product')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')->fetchPairs();
+            ->orderBy('date desc , id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
         $releases = $this->dao->select('build,name')->from(TABLE_RELEASE)
             ->where('build')->in(array_keys($builds))
@@ -96,7 +96,7 @@ class buildModel extends model
         $builds = $this->dao->select('id,name')->from(TABLE_BUILD)
             ->where('product')->eq((int)$productID)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')->fetchPairs();
+            ->orderBy('date desc , id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
         return $sysBuilds + $builds;
     }

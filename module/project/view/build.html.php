@@ -19,6 +19,7 @@
   </caption>
   <thead>
   <tr class='colhead'>
+    <th class='w-id'><?php echo $lang->build->id;?></th>
     <th class='w-120px'><?php echo $lang->build->product;?></th>
     <th><?php echo $lang->build->name;?></th>
     <th><?php echo $lang->build->scmPath;?></th>
@@ -31,6 +32,7 @@
   <tbody>
   <?php foreach($builds as $build):?>
   <tr class='a-center'>
+    <td><?php echo $build->id;?></td>
     <td><?php echo $build->productName;?></td>
     <td class='a-left'><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
     <td class='a-left nobr'><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
