@@ -21,6 +21,8 @@ class file extends control
      */
     public function buildForm($fileCount = 2, $percent = 0.9)
     { 
+        $sumSize = $this->config->pms->dbSize + $this->config->pms->fileSize;
+        if($sumSize > $this->config->file->maxSize)die('超过最大容量,无法上传，付费可继续上传！');
         if(!file_exists($this->file->savePath)) 
         {
             printf($this->lang->file->errorNotExists, $this->file->savePath);
@@ -44,6 +46,8 @@ class file extends control
      */
     public function ajaxUpload()
     {
+        $sumSize = $this->config->pms->dbSize + $this->config->pms->fileSize;
+        if($sumSize > $this->config->file->maxSize)die('超过最大容量,无法上传，付费可继续上传！');
         $file = $this->file->getUpload('imgFile');
         $file = $file[0];
         if($file)
