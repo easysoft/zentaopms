@@ -803,7 +803,7 @@ class router
         if(empty($pathInfo)) $pathInfo = $this->getPathInfo('ORIG_PATH_INFO');
         if(!empty($pathInfo))
         {
-            $dotPos = strpos($pathInfo, '.');
+            $dotPos = strrpos($pathInfo, '.');
             if($dotPos)
             {
                 $this->URI      = substr($pathInfo, 0, $dotPos);
