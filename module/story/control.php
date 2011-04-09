@@ -23,6 +23,7 @@ class story extends control
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
+        $this->products = $this->product->getPairs();
     }
 
     /**
@@ -422,9 +423,10 @@ class story extends control
         if(strtolower($action->action) == 'opened') $action->comment = $story->spec;
 
         /* Set toList and ccList. */
-        $story  = $this->story->getById($storyID);
-        $toList = $story->assignedTo;
-        $ccList = str_replace(' ', '', trim($story->mailto, ','));
+        $story       = $this->story->getById($storyID);
+        $productName = $this->products[$story->product];
+        $toList      = $story->assignedTo;
+        $ccList      = str_replace(' ', '', trim($story->mailto, ','));
 
         /* If the action is changed or reviewed, mail to the project team. */
         if(strtolower($action->action) == 'changed' or strtolower($action->action) == 'reviewed')
@@ -464,7 +466,7 @@ class story extends control
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */
-        $this->loadModel('mail')->send($toList, 'STORY #' . $story->id . $this->lang->colon . $story->title, $mailContent, $ccList);
+        $this->loadModel('mail')->send($toList, $productName. ':'. 'STORY #' . $story->id . $this->lang->colon . $story->title, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }
 }
