@@ -483,7 +483,7 @@ class control
         if($moduleName != $this->moduleName) helper::import($file2Included);
         
         /* Set the name of the class to be called. */
-        $className = class_exists("ext$moduleName") ? "ext$moduleName" : $moduleName;
+        $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
         if(!class_exists($className)) $this->app->error(" The class $className not found", __FILE__, __LINE__, $exit = true);
 
         /* Parse the params, create the $module control object. */

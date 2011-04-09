@@ -1089,7 +1089,7 @@ class router
 
         /* Get the default setings of the method to be called useing the reflecting. */
         $defaultParams = array();
-        $methodReflect = new reflectionMethod($moduleName, $methodName);
+        $methodReflect = new reflectionMethod($className, $methodName);
         foreach($methodReflect->getParameters() as $param)
         {
             $name    = $param->getName();
