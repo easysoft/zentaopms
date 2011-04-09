@@ -704,9 +704,10 @@ class bug extends control
     private function sendmail($bugID, $actionID)
     {
         /* Set toList and ccList. */
-        $bug    = $this->bug->getByID($bugID);
-        $toList = $bug->assignedTo;
-        $ccList = trim($bug->mailto, ',');
+        $bug         = $this->bug->getByID($bugID);
+        $productName = $this->products[$bug->product];
+        $toList      = $bug->assignedTo;
+        $ccList      = trim($bug->mailto, ',');
         if($toList == '')
         {
             if($ccList == '') return;
@@ -739,7 +740,7 @@ class bug extends control
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */
-        $this->loadModel('mail')->send($toList, 'BUG #' . $bug->id . $this->lang->colon . $bug->title, $mailContent, $ccList);
+        $this->loadModel('mail')->send($toList, $productName. ':'. 'BUG #'. $bug->id . $this->lang->colon . $bug->title, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }
 }
