@@ -24,35 +24,35 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->story->plan;?></th>
-      <td><span id='planIdBox'><?php echo html::select('plan', $plans, '', 'class=select-3');?></span></td>
+      <td><span id='planIdBox'><?php echo html::select('plan', $plans, $story->plan, 'class=select-3');?></span></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->pri;?></th>
-      <td><?php echo html::select('pri', (array)$lang->story->priList, '', 'class=select-3');?></td>
+      <td><?php echo html::select('pri', (array)$lang->story->priList, $story->pri, 'class=select-3');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->estimate;?></th>
-      <td><?php echo html::input('estimate', '', "class='text-3'");?></td>
+      <td><?php echo html::input('estimate', $story->estimate, "class='text-3'");?></td>
     </tr> 
     <tr>
       <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
-      <td><?php echo html::select('assignedTo', $users, '', 'class=select-3') . html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?></td>
+      <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class=select-3') . html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->story->title;?></th>
-      <td><?php echo html::input('title', '', "class='text-1'");?></td>
+      <td><?php echo html::input('title', $story->title, "class='text-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->story->spec;?></th>
-      <td><?php echo html::textarea('spec', '', "rows='9' class='text-1'");?><br /><?php echo $lang->story->specTemplate;?></td>
+      <td><?php echo html::textarea('spec', $story->spec, "rows='9' class='text-1'");?><br /><?php echo $lang->story->specTemplate;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><nobr><?php echo $lang->story->keywords;?></nobr></th>
-      <td><?php echo html::input('keywords', '', 'class="text-1"');?></td>
+      <td><?php echo html::input('keywords', $story->keywords, 'class="text-1"');?></td>
     </tr>
     <tr>
       <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
-      <td><?php echo html::input('mailto', '', 'class="text-1"');?></td>
+      <td><?php echo html::input('mailto', $story->mailto, 'class="text-1"');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->legendAttatch;?></th>

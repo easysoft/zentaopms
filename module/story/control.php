@@ -34,7 +34,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $moduleID = 0)
+    public function create($productID = 0, $moduleID = 0, $storyID = 0)
     {
         if(!empty($_POST))
         {
@@ -55,6 +55,7 @@ class story extends control
         /* Set menu. */
         $this->product->setMenu($products, $product->id);
 
+        $this->view->story            = $this->story->getByID($storyID);
         $this->view->header->title    = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
         $this->view->position[]       = $this->lang->story->create;
