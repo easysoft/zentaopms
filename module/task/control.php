@@ -415,9 +415,10 @@ class task extends control
     private function sendmail($taskID, $actionID)
     {
         /* Set toList and ccList. */
-        $task   = $this->task->getByID($taskID);
-        $toList = $task->assignedTo;
-        $ccList = trim($task->mailto, ',');
+        $task        = $this->task->getByID($taskID);
+        $projectName = $this->project->getByID($task->project)->name;
+        $toList      = $task->assignedTo;
+        $ccList      = trim($task->mailto, ',');
 
         if($toList == '')
         {
@@ -451,7 +452,7 @@ class task extends control
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send emails. */
-        $this->loadModel('mail')->send($toList, 'TASK#' . $task->id . $this->lang->colon . $task->name, $mailContent, $ccList);
+        $this->loadModel('mail')->send($toList, $projectName. ':'. 'TASK#' . $task->id . $this->lang->colon . $task->name, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }
     
