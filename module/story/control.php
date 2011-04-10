@@ -54,7 +54,33 @@ class story extends control
         /* Set menu. */
         $this->product->setMenu($products, $product->id);
 
-        $this->view->story            = $this->story->getByID($storyID);
+        /* Init vars. */
+        $planID     = 0;
+        $priID      = 0;
+        $productID  = 0;
+        $estimate   = '';
+        $assignedTo = '';
+        $title      = '';
+        $spec       = '';
+        $keywords   = '';
+        $mailto     = '';
+
+        if($storyID > 0)
+        {
+            $story = $this->story->getByID($storyID);
+            extract((array)$story);
+            $planID     = $story->plan;
+            $priID      = $story->pri;
+            $productID  = $story->product;
+            $estimate   = $story->estimate;
+            $assignedTo = $story->assignedTo;
+            $title      = $story->title;
+            $spec       = $story->spec;
+            $keywords   = $story->keywords;
+            $mailto     = $story->mailto;
+            $product    = $this->product->getById($story->product);
+        }
+
         $this->view->header->title    = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
         $this->view->position[]       = $this->lang->story->create;
@@ -64,6 +90,16 @@ class story extends control
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
+        $this->view->planID           = $planID;
+        $this->view->priID            = $priID;
+        $this->view->productID        = $productID;
+        $this->view->estimate         = $estimate;
+        $this->view->assignedTo       = $assignedTo;
+        $this->view->title            = $title;
+        $this->view->spec             = $spec;
+        $this->view->keywords         = $keywords;
+        $this->view->mailto           = $mailto;
+
         $this->display();
     }
 
