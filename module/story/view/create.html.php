@@ -18,7 +18,7 @@
     <tr>
       <th class='rowhead'><?php echo $lang->story->product;?></th>
       <td>
-        <?php echo html::select('product', $products, $product->id, "onchange=loadProduct(this.value); class='select-3'");?>
+        <?php echo html::select('product', $products, $productID, "onchange=loadProduct(this.value); class='select-3'");?>
         <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID);?></span>
       </td>
     </tr>  
@@ -28,7 +28,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->pri;?></th>
-      <td><?php echo html::select('pri', (array)$lang->story->priList, $priID, 'class=select-3');?></td>
+      <td><?php echo html::select('pri', (array)$lang->story->priList, $pri, 'class=select-3');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->estimate;?></th>

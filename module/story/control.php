@@ -56,8 +56,7 @@ class story extends control
 
         /* Init vars. */
         $planID     = 0;
-        $priID      = 0;
-        $productID  = 0;
+        $pri        = 0;
         $estimate   = '';
         $assignedTo = '';
         $title      = '';
@@ -67,31 +66,29 @@ class story extends control
 
         if($storyID > 0)
         {
-            $story = $this->story->getByID($storyID);
-            extract((array)$story);
+            $story      = $this->story->getByID($storyID);
             $planID     = $story->plan;
-            $priID      = $story->pri;
+            $pri        = $story->pri;
             $productID  = $story->product;
+            $moduleID   = $story->module;
             $estimate   = $story->estimate;
             $assignedTo = $story->assignedTo;
             $title      = $story->title;
             $spec       = $story->spec;
             $keywords   = $story->keywords;
             $mailto     = $story->mailto;
-            $product    = $this->product->getById($story->product);
         }
 
         $this->view->header->title    = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
         $this->view->position[]       = $this->lang->story->create;
-        $this->view->product          = $product;
         $this->view->products         = $products;
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
         $this->view->planID           = $planID;
-        $this->view->priID            = $priID;
+        $this->view->pri              = $pri;
         $this->view->productID        = $productID;
         $this->view->estimate         = $estimate;
         $this->view->assignedTo       = $assignedTo;
