@@ -23,7 +23,6 @@ class story extends control
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
-        $this->products = $this->product->getPairs();
     }
 
     /**
@@ -425,7 +424,7 @@ class story extends control
 
         /* Set toList and ccList. */
         $story       = $this->story->getById($storyID);
-        $productName = $this->products[$story->product];
+        $productName = $this->product->getById($story->product)->name;
         $toList      = $story->assignedTo;
         $ccList      = str_replace(' ', '', trim($story->mailto, ','));
 
@@ -467,7 +466,7 @@ class story extends control
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */
-        $this->loadModel('mail')->send($toList, $productName. ':'. 'STORY #' . $story->id . $this->lang->colon . $story->title, $mailContent, $ccList);
+        $this->loadModel('mail')->send($toList, $productName . ':' . 'STORY #' . $story->id . $this->lang->colon . $story->title, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }
 }
