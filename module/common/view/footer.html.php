@@ -1,17 +1,5 @@
 </div>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<?php 
-    $extPath     = dirname(dirname(dirname(realpath($viewFile)))) . '/common/ext/view/';
-    $extViewFile = $extPath . 'footer.hook.*';
-    $names = glob($extViewFile);
-    if(!empty($names))
-    {
-        foreach($names as $name)
-        {
-            include $name;
-        }
-    }
-?>
 <div id='divider'></div>
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php $config->debug ? print("debugwin") : print('hidden')?>'></iframe>
 <div id='footer'>
@@ -29,5 +17,11 @@
 $().ready(function(){setDebugWin('white')})
 <?php if(isset($pageJS)) echo $pageJS;?>
 </script>
+<?php 
+$extPath     = dirname(dirname(dirname(realpath($viewFile)))) . '/common/ext/view/';
+$extHookFile = $extPath . 'footer.hook.*';
+$files = glob($extHookFile);
+if($files) foreach($files as $file) include $file;
+?>
 </body>
 </html>
