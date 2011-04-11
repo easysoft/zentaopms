@@ -572,6 +572,7 @@ function selectItem(SelectID)
         opt.selected = true;
     }
 }
+
 /**
  * Auto checked the checkbox of a row. 
  * 
@@ -579,20 +580,22 @@ function selectItem(SelectID)
  * @access public
  * @return void
  */
-function autoCheck(classID)
+function autoCheck()
 {
-  if(classID == null) classID = '.tablesorter';
-  $(classID + ' tr').toggle(
-      function(){
-      $(this).find(':checkbox').attr('checked','checked');
-      },
-      function(){
-      $(this).find(':checkbox').removeAttr('checked');
-      }
-      );
+  $('.tablesorter tr :checkbox').click(function(){
+        if($(this).attr('checked'))
+          $(this).attr('checked', false);
+        else
+          $(this).attr('checked', true);
+        return;
+      });
+  $('.tablesorter tr').click(function(){
+        if($(this).find(':checkbox').attr('checked'))
+          $(this).find(':checkbox').attr('checked', false);
+        else
+          $(this).find(':checkbox').attr('checked', true);
+      });
 }
-
-
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
