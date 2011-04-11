@@ -58,6 +58,7 @@ build4sae:
 	mv zentaopms/index.php.new zentaopms/index.php
 	mv zentaopms/install.php.new zentaopms/install.php
 	mv zentaopms/upgrade.php.new zentaopms/upgrade.php
+	touch zentaopms/config/my.php
 	# get the extension files.
 	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/sae
 	mv sae/lib/saestorage zentaopms/lib/
