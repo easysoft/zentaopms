@@ -572,6 +572,25 @@ function selectItem(SelectID)
         opt.selected = true;
     }
 }
+/**
+ * Auto checked the checkbox of a row. 
+ * 
+ * @param  string $classID
+ * @access public
+ * @return void
+ */
+function autoCheck(classID)
+{
+  if(classID == null) classID = '.tablesorter';
+  $(classID + ' tr').toggle(
+      function(){
+      $(this).find(':checkbox').attr('checked','checked');
+      },
+      function(){
+      $(this).find(':checkbox').removeAttr('checked');
+      }
+      );
+}
 
 
 /* Ping the server every some minutes to keep the session. */
@@ -591,6 +610,7 @@ $(document).ready(function()
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minus, begin ping.
     setForm();
     setImageSize();
+    autoCheck();
 });
 
 /* CTRL+g, auto focus on the search box. */
