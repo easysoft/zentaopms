@@ -1,4 +1,4 @@
-function syncModule()
+function syncModule(rootID)
 {
     link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + $('#productModule').val() + '&rootID=' + rootID);
     $.getJSON(link, function(modules)
@@ -18,6 +18,20 @@ function syncModule()
             if(value) $('#moduleBox').append("<span><input name=modules[] value=" + value + " style=margin-bottom:5px class=text-3 /><br /><span>");
         })
     })
+}
+function syncProduct(obj)
+{
+    link = createLink('tree', 'ajaxGetModules', 'rootID=' + obj.value);
+    $.getJSON(link, function(modules)
+    {
+        $('.helplink').addClass('hidden');
+        $('#productModule').empty();
+        $.each(modules, function(key, value)
+        {  
+            $('#productModule').append('<option value=' + key + '>' + value + '</option')
+        }); 
+    })
+    $('#copyModule').attr('onclick', 'syncModule('+obj.value+')');
 }
 $(document).ready(function()
 {

@@ -53,6 +53,7 @@ class tree extends control
         if($viewType == 'story')
         {
             $this->product->setMenu($this->product->getPairs(), $rootID, 'story');
+            $this->view->allProduct = $this->product->getPairs();
             $this->lang->tree->menu = $this->lang->product->menu;
             $this->lang->set('menugroup.tree', 'product');
 
@@ -200,6 +201,8 @@ class tree extends control
      */
     public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0)
     {
+
+            $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
         die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));
     }
@@ -221,6 +224,19 @@ class tree extends control
             ->andWhere('type')->eq('story')
             ->fetchPairs();
         foreach($modules as $key => $name) $modules[$key] = str_replace(" ","&nbsp;","$name");
+        die(json_encode($modules));
+    }
+   /**
+     * AJAX: get modules.
+     * 
+     * @param  int $moduleID 
+     * @param  int $rootID 
+     * @access public
+     * @return string json_encoded modules.
+     */
+    public function ajaxGetModules($rootID = 0, $type='story')
+    {
+        $modules = $this->tree->getOptionMenu($rootID, 'story');
         die(json_encode($modules));
     }
 }

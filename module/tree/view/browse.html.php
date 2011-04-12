@@ -54,7 +54,15 @@
               if($viewType != 'story' and strpos($viewType, 'doc') === false)
               {
                   echo html::select('productModule', $productModules, '', 'class=select-3');
-                  echo html::commonButton($lang->tree->syncFromProduct, 'onclick=syncModule()');
+                  echo html::commonButton($lang->tree->syncFromProduct, 'onclick=syncModule('.$rootID.')');
+                  echo '<br />';
+              }
+              else if($viewType == 'story')
+              {
+                  echo html::select('allProduct', $allProduct, $rootID, 'class=select-3 onchange=syncProduct(this)');
+                  echo '<br>';
+                  echo html::select('productModule', $productModules, '', 'class=select-3');
+                  echo html::commonButton($lang->tree->syncFromProduct, 'id=copyModule onclick=syncModule('.$rootID.')');
                   echo '<br />';
               }
               $maxOrder = 0;
