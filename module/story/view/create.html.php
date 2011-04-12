@@ -34,6 +34,10 @@
       <th class='rowhead'><?php echo $lang->story->spec;?></th>
       <td><?php echo html::textarea('spec', $spec, "rows='9' class='text-1'");?><br /><?php echo $lang->story->specTemplate;?></td>
     </tr>  
+       <tr>
+      <th class='rowhead'><?php echo $lang->story->verify;?></th>
+      <td><?php echo html::textarea('verify', $verify, "rows='6' class='text-1'");?></td>
+    </tr> 
      <tr>
       <th class='rowhead'><?php echo $lang->story->pri;?></th>
       <td><?php echo html::select('pri', (array)$lang->story->priList, $pri, 'class=select-3');?></td>
@@ -50,10 +54,7 @@
       <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
       <td><?php echo html::input('mailto', $mailto, 'class="text-1"');?></td>
     </tr>
-    <tr>
-      <th class='rowhead'><?php echo $lang->story->verify;?></th>
-      <td><?php echo html::textarea('verify', $verify, "rows='6' class='text-1'");?></td>
-    </tr> 
+
     <tr>
       <th class='rowhead'><nobr><?php echo $lang->story->keywords;?></nobr></th>
       <td><?php echo html::input('keywords', $keywords, 'class="text-1"');?></td>
