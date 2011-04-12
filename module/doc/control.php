@@ -321,12 +321,12 @@ class doc extends control
             $changes  = $this->doc->update($docID);
             if(dao::isError()) die(js::error(dao::getError()));
             $files = $this->loadModel('file')->saveUpload('doc', $docID);
-            if(!empty($changes) or !empty($files))
+            if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
                 $fileAction = '';
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
-                $actionID = $this->action->create('doc', $docID, $action, $fileAction);
+                $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
             die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));

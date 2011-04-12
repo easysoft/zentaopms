@@ -18,6 +18,7 @@ $lang->doc->lib            = 'Library';
 $lang->doc->module         = 'Module';
 $lang->doc->title          = 'Title';
 $lang->doc->digest         = 'Digest';
+$lang->doc->comment        = 'Comment';
 $lang->doc->type           = 'Type';
 $lang->doc->content        = 'Content';
 $lang->doc->keywords       = 'Keywords';

@@ -18,6 +18,7 @@ $lang->doc->lib            = '所属文档库';
 $lang->doc->module         = '所属分类';
 $lang->doc->title          = '文档标题';
 $lang->doc->digest         = '文档摘要';
+$lang->doc->comment        = '文档备注';
 $lang->doc->type           = '文档类型';
 $lang->doc->content        = '文档正文';
 $lang->doc->keywords       = '关键字';
