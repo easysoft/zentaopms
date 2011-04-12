@@ -32,6 +32,7 @@ $lang->story->release        = 'Release';
 $lang->story->bug            = 'Related Bug';
 $lang->story->title          = 'Title';
 $lang->story->spec           = 'Spec';
+$lang->story->verify         = 'Verify';
 $lang->story->type           = 'Type ';
 $lang->story->pri            = 'Priority';
 $lang->story->estimate       = 'Estimate';

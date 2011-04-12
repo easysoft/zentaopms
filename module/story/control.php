@@ -61,6 +61,7 @@ class story extends control
         $assignedTo = '';
         $title      = '';
         $spec       = '';
+        $verify     = '';
         $keywords   = '';
         $mailto     = '';
 
@@ -75,6 +76,7 @@ class story extends control
             $assignedTo = $story->assignedTo;
             $title      = $story->title;
             $spec       = $story->spec;
+            $verify     = $story->verify;
             $keywords   = $story->keywords;
             $mailto     = $story->mailto;
         }
@@ -94,6 +96,7 @@ class story extends control
         $this->view->assignedTo       = $assignedTo;
         $this->view->title            = $title;
         $this->view->spec             = $spec;
+        $this->view->verify           = $verify;
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
 

@@ -38,6 +38,10 @@
         <legend><?php echo $lang->story->legendSpec;?></legend>
         <div class='content'><?php echo $story->spec;?></div>
       </fieldset>
+      <fieldset>
+        <legend><?php echo $lang->story->legendVerify;?></legend>
+        <div class='content'><?php echo $story->verify;?></div>
+      </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center' style='font-size:16px; font-weight:bold'>

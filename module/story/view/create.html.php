@@ -51,6 +51,10 @@
       <td><?php echo html::input('mailto', $mailto, 'class="text-1"');?></td>
     </tr>
     <tr>
+      <th class='rowhead'><?php echo $lang->story->verify;?></th>
+      <td><?php echo html::textarea('verify', $verify, "rows='6' class='text-1'");?></td>
+    </tr> 
+    <tr>
       <th class='rowhead'><nobr><?php echo $lang->story->keywords;?></nobr></th>
       <td><?php echo html::input('keywords', $keywords, 'class="text-1"');?></td>
     </tr>

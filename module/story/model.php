@@ -27,9 +27,10 @@ class storyModel extends model
         if(!$story) return false;
         if(substr($story->closedDate, 0, 4) == '0000') $story->closedDate = '';
         if($version == 0) $version = $story->version;
-        $spec = $this->dao->select('title,spec')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
-        $story->title = $spec->title;
-        $story->spec  = $spec->spec;
+        $spec = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
+        $story->title    = $spec->title;
+        $story->spec     = $spec->spec;
+        $story->verify   = $spec->verify;
         $story->projects = $this->dao->select('t1.project, t2.name, t2.status')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
@@ -112,7 +113,7 @@ class storyModel extends model
             ->add('status', 'draft')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview, 'status', 'active')
-            ->remove('files,labels,spec,needNotReview')
+            ->remove('files,labels,spec,verify,needNotReview')
             ->get();
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
@@ -124,6 +125,7 @@ class storyModel extends model
             $data->version = 1;
             $data->title   = $story->title;
             $data->spec    = $this->post->spec;
+            $data->verify  = $this->post->verify;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
             return $storyID;
         }
@@ -158,7 +160,7 @@ class storyModel extends model
             ->setIF($specChanged, 'closedReason', '')
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
-            ->remove('files,labels,spec,comment,needNotReview')
+            ->remove('files,labels,spec,verify,comment,needNotReview')
             ->get();
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -173,8 +175,10 @@ class storyModel extends model
                 $data->version = $oldStory->version + 1;
                 $data->title   = $story->title;
                 $data->spec    = $this->post->spec;
+                $data->verify  = $this->post->verify;
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
                 $story->spec   = $this->post->spec;
+                $story->verify = $this->post->verify;
             }
             else
             {

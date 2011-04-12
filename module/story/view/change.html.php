@@ -28,6 +28,10 @@
       <td><?php echo html::textarea('spec', htmlspecialchars($story->spec), 'rows=8 class="area-1"');?><br /> <?php echo $lang->story->specTemplate;?></td>
     </tr>
     <tr>
+      <th class='rowhead'><?php echo $lang->story->verify;?></th>
+      <td><?php echo html::textarea('verify', htmlspecialchars($story->verify), 'rows=6 class="area-1"');?></td>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->story->comment;?></th>
       <td><?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?></td>
     </tr>
