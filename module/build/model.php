@@ -126,7 +126,7 @@ class buildModel extends model
     {
         $oldBuild = $this->getByID($buildID);
         $build = fixer::input('post')->stripTags('name')->get();
-        $this->dao->update(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->edit->requiredFields, 'notempty')->where('id')->eq((int)$buildID)->exec();
+        $this->dao->update(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->edit->requiredFields, 'notempty')->where('id')->eq((int)$buildID)->check('name','unique')->exec();
         if(!dao::isError()) return common::createChanges($oldBuild, $build);
     }
 }
