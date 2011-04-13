@@ -51,7 +51,7 @@ $(document).ready(function()
     </tr>  
    <tr>
       <th class='rowhead'><?php echo $lang->doc->comment;?></th>
-      <td><?php echo html::textarea('comment', $doc->comment, "class='text-1' rows=3");?></td>
+      <td><?php echo html::textarea('comment','', "class='text-1' rows=3");?></td>
     </tr> 
     <tr id='fileBox' class='hidden'>
       <th class='rowhead'><?php echo $lang->doc->files;?></th>
