@@ -70,7 +70,8 @@
      <tr>
       <th class='rowhead'><?php echo $lang->files;?></th>
       <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
-    </tr>   <tr>
+    </tr>  
+     <tr>
       <th class='rowhead'><?php echo $lang->task->afterSubmit;?></th>
       <td><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td> 
     </tr>
