@@ -18,6 +18,7 @@ $config->doc->search['fields']['project']        = $lang->doc->project;
 $config->doc->search['fields']['type']           = $lang->doc->type;
 $config->doc->search['fields']['lib']            = $lang->doc->lib;
 $config->doc->search['fields']['digest']         = $lang->doc->digest;
+$config->doc->search['fields']['comment']        = $lang->doc->comment;
 $config->doc->search['fields']['content']        = $lang->doc->content;
 $config->doc->search['fields']['url']            = $lang->doc->url;
 $config->doc->search['fields']['addedBy']        = $lang->doc->addedBy;
@@ -33,6 +34,7 @@ $config->doc->search['params']['project']       = array('operator' => '=',      
 $config->doc->search['params']['type']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->doc->types);
 $config->doc->search['params']['lib']           = array('operator' => '=',       'control' => 'select', 'values' => '' );
 $config->doc->search['params']['digest']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->doc->search['params']['comment']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['content']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['url']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['addedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
