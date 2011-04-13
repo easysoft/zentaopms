@@ -144,3 +144,55 @@ $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
 $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。'); 
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。'); 
+
+/* 统计报表。*/
+$lang->story->report->common        = '统计报表';
+$lang->story->report->select        = '请选择报表类型';
+$lang->story->report->create        = '生成报表';
+$lang->story->report->selectAll     = '全选';
+$lang->story->report->selectReverse = '反选';
+
+$lang->story->report->charts['storysPerProduct']        = '产品需求数量';
+$lang->story->report->charts['storysPerModule']         = '模块需求数量';
+$lang->story->report->charts['storysPerPlan']           = '计划进行统计';
+$lang->story->report->charts['storysPerStatus']         = '状态进行统计';
+$lang->story->report->charts['storysPerStage']          = '所处阶段进行统计';
+$lang->story->report->charts['storysPerPri']            = '优先级进行统计';
+$lang->story->report->charts['storysPerEstimate']       = '预计工时进行统计';
+$lang->story->report->charts['storysPerOpenedBy']       = '由谁创建来进行统计';
+$lang->story->report->charts['storysPerAssignedTo']     = '当前指派来进行统计';
+$lang->story->report->charts['storysPerClosedReason']   = '关闭原因来进行统计';
+$lang->story->report->charts['storysPerChange']         = '变更次数来进行统计';
+
+$lang->story->report->options->swf                     = 'pie2d';
+$lang->story->report->options->width                   = 'auto';
+$lang->story->report->options->height                  = 300;
+$lang->story->report->options->graph->baseFontSize     = 12;
+$lang->story->report->options->graph->showNames        = 1;
+$lang->story->report->options->graph->formatNumber     = 1;
+$lang->story->report->options->graph->decimalPrecision = 0;
+$lang->story->report->options->graph->animation        = 0;
+$lang->story->report->options->graph->rotateNames      = 0;
+$lang->story->report->options->graph->yAxisName        = 'COUNT';
+$lang->story->report->options->graph->pieRadius        = 100; // 饼图直径。
+$lang->story->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
+
+$lang->story->report->storysPerProduct->graph->xAxisName      = '产品';
+$lang->story->report->storysPerModule->graph->xAxisName       = '模块';
+$lang->story->report->storysPerPlan->graph->xAxisName         = '产品计划';
+$lang->story->report->storysPerStatus->graph->xAxisName       = '状态';
+$lang->story->report->storysPerStage->graph->xAxisName        = '所处阶段';
+$lang->story->report->storysPerPri->graph->xAxisName          = '优先级';
+$lang->story->report->storysPerOpenedBy->graph->xAxisName     = '由谁创建';
+$lang->story->report->storysPerAssignedTo->graph->xAxisName   = '当前指派';
+$lang->story->report->storysPerClosedReason->graph->xAxisName = '关闭原因';
+
+$lang->story->report->storysPerEstimate->swf                = 'column2d';
+$lang->story->report->storysPerEstimate->height             = 400;
+$lang->story->report->storysPerEstimate->graph->xAxisName   = '预计时间';
+$lang->story->report->storysPerEstimate->graph->rotateNames = 1;
+
+$lang->story->report->storysPerChange->swf                 = 'column2d';
+$lang->story->report->storysPerChange->height              = 400;
+$lang->story->report->storysPerChange->graph->xAxisName    = '变更次数';
+$lang->story->report->storysPerChange->graph->rotateNames  = 1;

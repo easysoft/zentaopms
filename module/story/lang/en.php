@@ -114,6 +114,7 @@ $lang->story->legendProjectAndTask = 'Project & task';
 $lang->story->legendLinkStories    = 'Related story';
 $lang->story->legendChildStories   = 'Child story';
 $lang->story->legendSpec           = 'Spec';
+$lang->story->legendVerify         = 'Verified standard';
 $lang->story->legendHistory        = 'History';
 $lang->story->legendVersion        = 'Versions';
 $lang->story->legendMisc           = 'Misc';
@@ -142,4 +143,56 @@ $lang->story->action->closed              = array('main' => '$date, Closed by <s
 $lang->story->action->linked2plan         = array('main' => '$date, Linked to plan <strong>$extra</strong> by <strong>$actor</strong>.'); 
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, Removed from <stong>$extra></strong> by <strong>$actor</strong>'); 
 $lang->story->action->linked2project      = array('main' => '$date, Linked to project <strong>$extra</strong> by <strong>$actor</strong>.'); 
-$lang->story->action->unlinkedfromproject = array('main' => '$date, Removed from project <strontg>$extra</strong> by <strong>$actor</strong>.'); 
+$lang->story->action->unlinkedfromproject = array('main' => '$date, Removed from project <strontg>$extra</strong> by <strong>$actor</strong>.');
+
+/* Report*/
+$lang->story->report->common        = 'Report';
+$lang->story->report->select        = 'Select';
+$lang->story->report->create        = 'Creat';
+$lang->story->report->selectAll     = 'All';
+$lang->story->report->selectReverse = 'Reverse';
+
+$lang->story->report->charts['storysPerProduct']        = 'Product storys';
+$lang->story->report->charts['storysPerModule']         = 'Module storys';
+$lang->story->report->charts['storysPerPlan']           = 'Plan storys';
+$lang->story->report->charts['storysPerStatus']         = 'Sotrys of status';
+$lang->story->report->charts['storysPerStage']          = 'Storys of stage';
+$lang->story->report->charts['storysPerPri']            = 'Storys of priority';
+$lang->story->report->charts['storysPerEstimate']       = 'Storys of Estimate';
+$lang->story->report->charts['storysPerOpenedBy']       = 'Opened by user';
+$lang->story->report->charts['storysPerAssignedTo']     = 'Assigned to user';
+$lang->story->report->charts['storysPerClosedReason']   = 'Storys for reason';
+$lang->story->report->charts['storysPerChange']         = 'Storys of change';
+
+$lang->story->report->options->swf                     = 'pie2d';
+$lang->story->report->options->width                   = 'auto';
+$lang->story->report->options->height                  = 300;
+$lang->story->report->options->graph->baseFontSize     = 12;
+$lang->story->report->options->graph->showNames        = 1;
+$lang->story->report->options->graph->formatNumber     = 1;
+$lang->story->report->options->graph->decimalPrecision = 0;
+$lang->story->report->options->graph->animation        = 0;
+$lang->story->report->options->graph->rotateNames      = 0;
+$lang->story->report->options->graph->yAxisName        = 'COUNT';
+$lang->story->report->options->graph->pieRadius        = 100; // 饼图直径。
+$lang->story->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
+
+$lang->story->report->storysPerProduct->graph->xAxisName      = 'Product';
+$lang->story->report->storysPerModule->graph->xAxisName       = 'Module';
+$lang->story->report->storysPerPlan->graph->xAxisName         = 'Plan';
+$lang->story->report->storysPerStatus->graph->xAxisName       = 'Status';
+$lang->story->report->storysPerStage->graph->xAxisName        = 'Stage';
+$lang->story->report->storysPerPri->graph->xAxisName          = 'Priority';
+$lang->story->report->storysPerOpenedBy->graph->xAxisName     = 'Opened by';
+$lang->story->report->storysPerAssignedTo->graph->xAxisName   = 'Assigned to';
+$lang->story->report->storysPerClosedReason->graph->xAxisName = 'Closed reason';
+
+$lang->story->report->storysPerEstimate->swf                = 'column2d';
+$lang->story->report->storysPerEstimate->height             = 400;
+$lang->story->report->storysPerEstimate->graph->xAxisName   = 'Estimate';
+$lang->story->report->storysPerEstimate->graph->rotateNames = 1;
+
+$lang->story->report->storysPerChange->swf                 = 'column2d';
+$lang->story->report->storysPerChange->height              = 400;
+$lang->story->report->storysPerChange->graph->xAxisName    = 'Change';
+$lang->story->report->storysPerChange->graph->rotateNames  = 1;

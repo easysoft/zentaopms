@@ -505,4 +505,44 @@ class story extends control
         $this->loadModel('mail')->send($toList, $productName . ':' . 'STORY #' . $story->id . $this->lang->colon . $story->title, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }
+    /**
+     * The report page.
+     * 
+     * @param  int    $productID 
+     * @param  string $browseType 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function report($productID, $browseType, $moduleID)
+    {
+        $this->loadModel('report');
+        $this->view->charts   = array();
+        $this->view->renderJS = '';
+
+        if(!empty($_POST))
+        {
+            foreach($this->post->charts as $chart)
+            {
+                $chartFunc   = 'getDataOf' . $chart;
+                $chartData   = $this->story->$chartFunc();
+                $chartOption = $this->lang->story->report->$chart;
+                $this->story->mergeChartOption($chart);
+
+                $chartXML  = $this->report->createSingleXML($chartData, $chartOption->graph);
+                $this->view->charts[$chart] = $this->report->createJSChart($chartOption->swf, $chartXML, $chartOption->width, $chartOption->height);
+                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+            }
+            $this->view->renderJS = $this->report->renderJsCharts(count($this->view->charts));
+        }
+        $this->products = $this->product->getPairs();
+        $this->product->setMenu($this->products, $productID);
+        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->story->common;
+        $this->view->productID     = $productID;
+        $this->view->browseType    = $browseType;
+        $this->view->moduleID      = $moduleID;
+        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+        $this->display();
+    }
+
 }

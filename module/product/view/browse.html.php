@@ -22,6 +22,7 @@
   </div>
   <div class='f-right'>
     <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
+    <?php common::printLink('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->story->report->common); ?>
     <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
   </div>
 </div>
