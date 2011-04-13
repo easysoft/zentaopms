@@ -60,7 +60,7 @@ class releaseModel extends model
     public function create($productID)
     {
         $release = fixer::input('post')->stripTags('name')->add('product', (int)$productID)->get();
-        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }
 
@@ -75,7 +75,7 @@ class releaseModel extends model
     {
         $oldRelease = $this->getByID($releaseID);
         $release = fixer::input('post')->stripTags('name')->get();
-        $this->dao->update(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->edit->requiredFields, 'notempty')->where('id')->eq((int)$releaseID)->exec();
+        $this->dao->update(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->edit->requiredFields, 'notempty')->where('id')->eq((int)$releaseID)->check('name','unique')->exec();
         if(!dao::isError()) return common::createChanges($oldRelease, $release);
     }
 }
