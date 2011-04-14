@@ -1,4 +1,9 @@
 name: zentaopms
 version: 10
+cron:
+  - description: cron test
+    url: project-computeburn-admin.html
+    schedule: every day of month 00:00
+    timezone: Beijing
 handle:
   - rewrite: if(!is_dir() && !is_file()) goto "index.php/%{REQUEST_URI}"

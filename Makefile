@@ -59,20 +59,23 @@ build4sae:
 	mv zentaopms/install.php.new zentaopms/install.php
 	mv zentaopms/upgrade.php.new zentaopms/upgrade.php
 	touch zentaopms/config/my.php
+	# change the logic of merge model file in helper.class.php.
+	sed -e 's/\$$app->getTmpRoot/"saemc:\/\/" . \$$app\-\>getTmpRoot/g' zentaopms/framework/helper.class.php >zentaopms/framework/helper.class.new
+	mv zentaopms/framework/helper.class.new zentaopms/framework/helper.class.php
 	# get the extension files.
 	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/sae
 	mv sae/lib/saestorage zentaopms/lib/
 	cp -fr sae/* zentaopms/module/
 	# crreate the merged model files for file module.
-	cat zentaopms/module/file/model.php > zentaopms/tmp/model/file.php
-	echo 'class extFileModel extends fileModel\n{' >> zentaopms/tmp/model/file.php
-	sed -e 's/<?php//' zentaopms/module/file/ext/model/sae.php >> zentaopms/tmp/model/file.php
-	echo '\n}' >> zentaopms/tmp/model/file.php
+	#cat zentaopms/module/file/model.php > zentaopms/tmp/model/file.php
+	#echo 'class extFileModel extends fileModel\n{' >> zentaopms/tmp/model/file.php
+	#sed -e 's/<?php//' zentaopms/module/file/ext/model/sae.php >> zentaopms/tmp/model/file.php
+	#echo '\n}' >> zentaopms/tmp/model/file.php
 	# crreate the merged model files for install module.
-	cat zentaopms/module/install/model.php > zentaopms/tmp/model/install.php
-	echo 'class extInstallModel extends installModel\n{' >> zentaopms/tmp/model/install.php
-	sed -e 's/<?php//' zentaopms/module/install/ext/model/sae.php >> zentaopms/tmp/model/install.php
-	echo '\n}' >> zentaopms/tmp/model/install.php
+	#cat zentaopms/module/install/model.php > zentaopms/tmp/model/install.php
+	#echo 'class extInstallModel extends installModel\n{' >> zentaopms/tmp/model/install.php
+	#sed -e 's/<?php//' zentaopms/module/install/ext/model/sae.php >> zentaopms/tmp/model/install.php
+	#echo '\n}' >> zentaopms/tmp/model/install.php
 	# create the package.
 	mkdir 10
 	mv zentaopms 10/code
