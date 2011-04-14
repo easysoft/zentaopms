@@ -12,8 +12,8 @@ include 'colorbox.html.php';
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
         echo html::a('#', $lang->switchHelp, '', "onclick='toggleHelpLink();'");
-        echo html::select('', $app->config->langs, $this->cookie->lang,  'onchange="selectLang(this.value)"');
-        echo html::select('', $app->lang->themes,  $this->cookie->theme, 'onchange="selectTheme(this.value)"');
+        echo html::select('', $app->config->langs, $app->getClientLang(),  'onchange="selectLang(this.value)"');
+        echo html::select('', $app->lang->themes,  $app->getClientTheme(), 'onchange="selectTheme(this.value)"');
         ?>
       </td>
       <td class='a-right'><?php commonModel::printTopBar();?></td>
