@@ -37,7 +37,7 @@
     <td>
       <fieldset>
         <legend><?php echo $lang->bug->legendSteps;?></legend>
-        <div class='content'><?php echo $bug->steps;?></div>
+        <div class='content'><?php echo str_replace('<p>[', '<p class="stepTitle">[', $bug->steps);?></div>
       </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
