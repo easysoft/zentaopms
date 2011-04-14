@@ -349,7 +349,22 @@ class user extends control
                 )
                 {
                     if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'success')));
-                    die(js::locate($this->post->referer, 'parent'));
+                    if($this->config->requestType == 'PATH_INFO')
+                    {
+                        $path   = substr($this->post->referer, strrpos($this->post->referer, '/')+1);
+                        $path   = rtrim($path, 'html');
+                        $path   = rtrim($path, '.');
+                        list($module, $method)   = explode($this->config->requestFix, $path);
+                    }
+                    else
+                    {
+                        $module = $this->get->m;
+                        $method = $this->get->f;
+                    }
+                    if(common::hasPriv($module, $method))
+                        die(js::locate($this->post->referer, 'parent'));
+                    else
+                        die(js::locate($this->config->default->module, 'parent'));
                 }
                 else
                 {
