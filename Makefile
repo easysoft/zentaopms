@@ -18,6 +18,7 @@ tgz:
 	mkdir -p zentaopms/tmp/cache
 	mkdir -p zentaopms/tmp/log
 	mkdir -p zentaopms/tmp/model
+	mkdir -p zentaopms/tmp/extension
 	# copy files.
 	cp -fr framework zentaopms/
 	cp -fr lib/ zentaopms/
