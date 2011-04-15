@@ -144,6 +144,7 @@ class model
         $parentClass = get_parent_class($this);
         $selfClass   = get_class($this);
         $className   = $parentClass == 'model' ? $selfClass : $parentClass;
+        if($className == 'extensionModel') return 'extension';
         return strtolower(str_ireplace(array('ext', 'Model'), '', $className));
     }
 
