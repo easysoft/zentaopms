@@ -383,8 +383,16 @@ class projectModel extends model
             $assignedToes[$task->assignedTo]  = $task->project;
             $stories[$task->story] = $task->story;
 
-            $status = $task->consumed > 0 ? 'doing' : 'wait';
-            $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->set('status')->eq($status)->where('id')->in($this->post->tasks)->exec();
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->status  = $task->consumed > 0 ? 'doing' : 'wait';
+
+            if($task->status == 'cancel')
+            {
+                $data->canceledBy = '';
+                $data->canceledDate = NULL;
+            }
+            $this->dao->update(TABLE_TASK)->data($data)->where('id')->in($this->post->tasks)->exec();
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
         }
 
