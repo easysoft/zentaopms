@@ -144,5 +144,18 @@ $lang->task->report->options->graph->yAxisName        = 'COUNT';
 $lang->task->report->options->graph->pieRadius        = 100;
 $lang->task->report->options->graph->showColumnShadow = 0;
 
-$lang->task->report->tasksPerProject->graph->xAxisName   = 'Project';
-$lang->task->report->tasksPerProject->graph->rotateNames = 'Module';
+$lang->task->report->tasksPerProject->graph->xAxisName     = 'Project';
+$lang->task->report->tasksPerAssignedTo->graph->xAxisName  = 'User';
+$lang->task->report->tasksPerType->graph->xAxisName        = 'Type';
+$lang->task->report->tasksPerPri->graph->xAxisName         = 'Pri';
+$lang->task->report->tasksPerDeadline->graph->xAxisName    = 'Date';
+$lang->task->report->tasksPerEstimate->graph->xAxisName    = 'Time';
+$lang->task->report->tasksPerLeft->graph->xAxisName        = 'Time';
+$lang->task->report->tasksPerConsumed->graph->xAxisName    = 'Time';
+$lang->task->report->tasksPerFinishedBy->graph->xAxisName  = 'User';
+$lang->task->report->tasksPerCloseReason->graph->xAxisName = 'Close Reason';
+
+$lang->task->report->finishedTasksPerDay->graph->swf         = 'column2d';
+$lang->task->report->finishedTasksPerDay->graph->height      = 400;
+$lang->task->report->finishedTasksPerDay->graph->xAxisName   = 'Date';
+$lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';

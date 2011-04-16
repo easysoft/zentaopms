@@ -127,7 +127,7 @@ $lang->task->report->charts['tasksPerDeadline']     = '截止日期统计';
 $lang->task->report->charts['tasksPerEstimate']     = '预计时间统计';
 $lang->task->report->charts['tasksPerLeft']         = '剩余时间统计';
 $lang->task->report->charts['tasksPerConsumed']     = '消耗时间统计';
-$lang->task->report->charts['tasksPerFinishedBy']   = '由有谁完成统计';
+$lang->task->report->charts['tasksPerFinishedBy']   = '由谁完成统计';
 $lang->task->report->charts['tasksPerClosedReason'] = '关闭原因统计';
 $lang->task->report->charts['finishedTasksPerDay']  = '每天完成统计';
 
@@ -144,5 +144,18 @@ $lang->task->report->options->graph->yAxisName        = 'COUNT';
 $lang->task->report->options->graph->pieRadius        = 100; // 饼图直径。
 $lang->task->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
 
-$lang->task->report->tasksPerProject->graph->xAxisName   = 'Project';
-$lang->task->report->tasksPerProject->graph->rotateNames = 'Module';
+$lang->task->report->tasksPerProject->graph->xAxisName     = '项目';
+$lang->task->report->tasksPerAssignedTo->graph->xAxisName  = '用户';
+$lang->task->report->tasksPerType->graph->xAxisName        = '类型';
+$lang->task->report->tasksPerPri->graph->xAxisName         = '优先级';
+$lang->task->report->tasksPerDeadline->graph->xAxisName    = '日期';
+$lang->task->report->tasksPerEstimate->graph->xAxisName    = '时间';
+$lang->task->report->tasksPerLeft->graph->xAxisName        = '时间';
+$lang->task->report->tasksPerConsumed->graph->xAxisName    = '时间';
+$lang->task->report->tasksPerFinishedBy->graph->xAxisName  = '用户';
+$lang->task->report->tasksPerCloseReason->graph->xAxisName = '关闭原因';
+
+$lang->task->report->finishedTasksPerDay->graph->swf         = 'column2d';
+$lang->task->report->finishedTasksPerDay->graph->height      = 400;
+$lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
+$lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
