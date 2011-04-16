@@ -111,3 +111,22 @@ $lang->task->copyStoryTitle      = "同需求";
 $lang->task->afterSubmit         = "添加之后";
 $lang->task->successSaved        = "成功添加，";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天 </strong>";
+
+/* 统计报表。*/
+$lang->task->report->common        = '统计报表';
+$lang->task->report->select        = '请选择报表类型';
+$lang->task->report->create        = '生成报表';
+$lang->task->report->selectAll     = '全选';
+$lang->task->report->selectReverse = '反选';
+
+$lang->task->report->charts['tasksPerProject']      = '项目任务数统计';
+$lang->task->report->charts['tasksPerAssignedTo']   = '指派给统计';
+$lang->task->report->charts['tasksPerType']         = '任务类型统计';
+$lang->task->report->charts['tasksPerPrimary']      = '优先级统计';
+$lang->task->report->charts['tasksPerDeadline']     = '截止日期统计';
+$lang->task->report->charts['tasksPerEstimate']     = '预计时间统计';
+$lang->task->report->charts['tasksPerLeft']         = '剩余时间统计';
+$lang->task->report->charts['tasksPerConsumed']     = '消耗时间统计';
+$lang->task->report->charts['tasksPerFinishedBy']   = '由有谁完成统计';
+$lang->task->report->charts['tasksPerClosedReason'] = '关闭原因统计';
+$lang->task->report->charts['finishedTasksPerDay']  = '每天完成统计';

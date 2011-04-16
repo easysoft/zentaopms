@@ -484,4 +484,43 @@ class task extends control
         $tasks = $this->task->getProjectTaskPairs((int)$projectID);
         die(html::select('task', $tasks, $taskID));
     }
+
+    /**
+     * The report page.
+     * 
+     * @param  int    $projectID 
+     * @param  string $browseType 
+     * @access public
+     * @return void
+     */
+    public function report($projectID, $browseType)
+    {
+        
+        $this->loadModel('report');
+        $this->view->charts   = array();
+        $this->view->renderJS = '';
+
+        if(!empty($_POST))
+        {
+            foreach($this->post->charts as $chart)
+            {
+                $chartFunc   = 'getDataOf' . $chart;
+                $chartData   = $this->task->$chartFunc();
+                $chartOption = $this->lang->task->report->$chart;
+                $this->task->mergeChartOption($chart);
+
+                $chartXML  = $this->report->createSingleXML($chartData, $chartOption->graph);
+                $this->view->charts[$chart] = $this->report->createJSChart($chartOption->swf, $chartXML, $chartOption->width, $chartOption->height);
+                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+            }
+            $this->view->renderJS = $this->report->renderJsCharts(count($this->view->charts));
+        }
+        $this->project->setMenu($this->project->getPairs(), $projectID);
+        $this->projects            = $this->project->getPairs();
+        $this->view->header->title = $this->projects[$projectID] . $this->lang->colon . $this->lang->task->report->common;
+        $this->view->projectID     = $projectID;
+        $this->view->browseType    = $browseType;
+        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+        $this->display();
+    }
 }

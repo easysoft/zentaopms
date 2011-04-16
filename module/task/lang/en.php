@@ -111,3 +111,22 @@ $lang->task->copyStoryTitle      = "Same as story";
 $lang->task->afterSubmit         = "After created";
 $lang->task->successSaved        = "Success saved";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> Postponed %s days </strong>";
+
+/* Report. */
+$lang->task->report->common        = 'Report';
+$lang->task->report->select        = 'Select';
+$lang->task->report->create        = 'Create';
+$lang->task->report->selectAll     = 'All';
+$lang->task->report->selectReverse = 'Reverse';
+
+$lang->task->report->charts['tasksPerProject']      = 'Project tasks';
+$lang->task->report->charts['tasksPerAssignedTo']   = 'Assigned To';
+$lang->task->report->charts['tasksPerType']         = 'Type';
+$lang->task->report->charts['tasksPerPrimary']      = 'Primary';
+$lang->task->report->charts['tasksPerDeadline']     = 'Deadline';
+$lang->task->report->charts['tasksPerEstimate']     = 'Estimate time';
+$lang->task->report->charts['tasksPerLeft']         = 'Left time';
+$lang->task->report->charts['tasksPerConsumed']     = 'Consumed time';
+$lang->task->report->charts['tasksPerFinishedBy']   = 'Finished By';
+$lang->task->report->charts['tasksPerClosedReason'] = 'Closed reason';
+$lang->task->report->charts['finishedTasksPerDay']  = 'Finished tasks per day';
