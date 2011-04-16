@@ -513,4 +513,74 @@ class taskModel extends model
     {
         $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
     }
+    
+    /**
+     * Merge the default chart settings and the settings of current chart.
+     * 
+     * @param  string    $chartType 
+     * @access public
+     * @return void
+     */
+    public function mergeChartOption($chartType)
+    {
+        $chartOption  = $this->lang->task->report->$chartType;
+        $commonOption = $this->lang->task->report->options;
+
+        $chartOption->graph->caption = $this->lang->task->report->charts[$chartType];
+        if(!isset($chartOption->swf))    $chartOption->swf    = $commonOption->swf;
+        if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
+        if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
+
+        /* 合并配置。*/
+        foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+    }
+    
+    /**
+     * tasks report
+     */
+    
+    public function getDataOftasksPerProject()
+    {
+
+    }
+    public function getDataOftasksPerAssignedTo()
+    {
+
+    }
+    public function getDataOftasksPerType()
+    {
+
+    }
+    public function getDataOftasksPerDeadline()
+    {
+
+    }
+    public function getDataOftasksPerPri()
+    {
+
+    }
+    public function getDataOftasksPerEstimate()
+    {
+
+    }
+    public function getDataOftasksPerLeft()
+    {
+
+    }
+    public function getDataOftasksPerConsumed()
+    {
+
+    }
+    public function getDataOftasksPerFinishedBy()
+    {
+
+    }
+    public function getDataOftasksPerClosedReason()
+    {
+
+    }
+    public function getDataOffinishedtasksPerDay()
+    {
+
+    }
 }
