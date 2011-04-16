@@ -26,5 +26,7 @@ $config->testcase->search['params']['pri']          = array('operator' => '=',  
 $config->testcase->search['params']['type']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->testcase->typeList);
 $config->testcase->search['params']['stage']        = array('operator' => 'include', 'control' => 'select', 'values' => $lang->testcase->stageList);
 
+$config->testcase->defaultSteps = 3;
+
 $config->testcase->create->requiredFields = 'title,type';
 $config->testcase->edit->requiredFields   = 'title,type';

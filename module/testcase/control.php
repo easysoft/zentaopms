@@ -145,7 +145,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function create($productID, $moduleID = 0)
+    public function create($productID, $moduleID = 0, $testcaseID = 0)
     {
         $this->loadModel('story');
         if(!empty($_POST))
@@ -165,6 +165,37 @@ class testcase extends control
         /* Set menu. */
         $this->testcase->setMenu($this->products, $productID);
 
+        /* Init vars. */
+        $pri        = 0;
+        $storyID    = 0;
+        $type       = '';
+        $stage      = '';
+        $title      = '';
+        $keywords   = '';
+        $steps      = array();
+
+        if($testcaseID > 0)
+        {
+            $testcase  = $this->testcase->getById($testcaseID);
+            $productID = $testcase->product;
+            $type      = $testcase->type ? $testcase->type : 'feature';
+            $stage     = $testcase->stage;
+            $pri       = $testcase->pri;
+            $storyID   = $testcase->story;
+            $title     = $testcase->title;
+            $keywords  = $testcase->keywords;
+            $steps     = $testcase->steps;
+        }
+
+        /* Padding the steps to the default steps count. */
+        if(count($steps) < $this->config->testcase->defaultSteps)
+        {
+            $paddingCount = $this->config->testcase->defaultSteps - count($steps);
+            $step->desc   = '';
+            $step->expect = '';
+            for($i = 1; $i <= $paddingCount; $i ++) $steps[] = $step;
+        }
+
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
         $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->testcase->create;
@@ -178,6 +209,13 @@ class testcase extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->stories          = $this->story->getProductStoryPairs($productID);
+        $this->view->type             = $type;
+        $this->view->stage            = $stage;
+        $this->view->pri              = $pri;
+        $this->view->storyID          = $storyID;
+        $this->view->title            = $title;
+        $this->view->keywords         = $keywords;
+        $this->view->steps            = $steps;
 
         $this->display();
     }
