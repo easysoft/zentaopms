@@ -243,7 +243,8 @@ class productModel extends model
             $year = substr($plan->end, 0, 4);
             $roadmap[$year][] = $plan;
         }
-        arsort($roadmap);
+
+        ksort($roadmap);
         return $roadmap;
     }
 

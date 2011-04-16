@@ -295,7 +295,6 @@ class product extends control
         $this->view->position[]    = $this->lang->product->roadmap;
         $this->view->product       = $product;
         $this->view->roadmaps      = $this->product->getRoadmap($productID);
-        ksort($this->view->roadmaps);
 
         $this->display();
     }
