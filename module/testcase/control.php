@@ -142,6 +142,7 @@ class testcase extends control
      * 
      * @param  int   $productID 
      * @param  int   $moduleID 
+     * @param  int   $testcaseID
      * @access public
      * @return void
      */
@@ -166,13 +167,13 @@ class testcase extends control
         $this->testcase->setMenu($this->products, $productID);
 
         /* Init vars. */
-        $pri        = 0;
-        $storyID    = 0;
-        $type       = '';
-        $stage      = '';
-        $title      = '';
-        $keywords   = '';
-        $steps      = array();
+        $type     = '';
+        $stage    = '';
+        $pri      = 0;
+        $storyID  = 0;
+        $title    = '';
+        $keywords = '';
+        $steps    = array();
 
         if($testcaseID > 0)
         {
