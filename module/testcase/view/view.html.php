@@ -20,6 +20,7 @@
     if(!$case->deleted)
     {
         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
+        common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&testcaseID=$case->id", $lang->copy);
         common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
     }
     echo html::a($browseLink, $lang->goback);
