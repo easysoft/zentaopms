@@ -521,6 +521,7 @@ class task extends control
         $this->view->projectID     = $projectID;
         $this->view->browseType    = $browseType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+
         $this->display();
     }
 }

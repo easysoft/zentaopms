@@ -541,11 +541,20 @@ class taskModel extends model
     
     public function getDataOftasksPerProject()
     {
-
+        $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        $projects = $this->loadModel('project')->getPairs();
+        foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+        return $datas;
     }
+
     public function getDataOftasksPerAssignedTo()
     {
-
+        $datas = $this->dao->select('assignedTo as name, count(assignedTo) as value')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        $projects = $this->loadModel('project')->getPairs();
+        foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+        return $datas;
     }
     public function getDataOftasksPerType()
     {

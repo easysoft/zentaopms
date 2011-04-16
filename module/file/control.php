@@ -20,7 +20,7 @@ class file extends control
      * @return void
      */
     public function buildForm($fileCount = 2, $percent = 0.9)
-    { 
+    {
         if(!file_exists($this->file->savePath)) 
         {
             printf($this->lang->file->errorNotExists, $this->file->savePath);

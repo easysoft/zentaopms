@@ -107,8 +107,8 @@ class project extends control
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-        $project   = $this->commonAction($projectID);
-        $projectID = $project->id;
+        $project    = $this->commonAction($projectID);
+        $projectID  = $project->id;
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -151,7 +151,15 @@ class project extends control
             }
             $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
             $tasks     = $this->project->getSearchTasks($projectID, $taskQuery, $pager, $orderBy);
-       }
+        }
+
+        if($browseType != 'needconfirm')
+        {
+            $sql = explode('WHERE', $this->dao->get());
+            $sql = explode('ORDER', $sql[1]);
+            $this->session->set('taskReportCondition', $sql[0]);
+        }
+
        /* Build the search form. */
         $this->config->project->search['actionURL'] = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->config->project->search['queryID']   = $queryID;
