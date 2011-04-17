@@ -61,6 +61,7 @@ $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Waiting';
 $lang->task->statusList['doing']   = 'Doing';
 $lang->task->statusList['done']    = 'Done';
+$lang->task->statusList['undone']  = 'unDone';
 $lang->task->statusList['cancel']  = 'Canceled';
 $lang->task->statusList['closed']  = 'Closed';
 
@@ -153,9 +154,9 @@ $lang->task->report->tasksPerEstimate->graph->xAxisName    = 'Time';
 $lang->task->report->tasksPerLeft->graph->xAxisName        = 'Time';
 $lang->task->report->tasksPerConsumed->graph->xAxisName    = 'Time';
 $lang->task->report->tasksPerFinishedBy->graph->xAxisName  = 'User';
-$lang->task->report->tasksPerCloseReason->graph->xAxisName = 'Close Reason';
+$lang->task->report->tasksPerClosedReason->graph->xAxisName = 'Closed Reason';
 
-$lang->task->report->finishedTasksPerDay->graph->swf         = 'column2d';
-$lang->task->report->finishedTasksPerDay->graph->height      = 400;
+$lang->task->report->finishedTasksPerDay->swf         = 'column2d';
+$lang->task->report->finishedTasksPerDay->height      = 400;
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = 'Date';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';

@@ -515,6 +515,7 @@ class task extends control
             }
             $this->view->renderJS = $this->report->renderJsCharts(count($this->view->charts));
         }
+
         $this->project->setMenu($this->project->getPairs(), $projectID);
         $this->projects            = $this->project->getPairs();
         $this->view->header->title = $this->projects[$projectID] . $this->lang->colon . $this->lang->task->report->common;

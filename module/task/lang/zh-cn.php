@@ -61,6 +61,7 @@ $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未开始';
 $lang->task->statusList['doing']   = '进行中';
 $lang->task->statusList['done']    = '已完成';
+$lang->task->statusList['undone']  = '未完成';
 $lang->task->statusList['cancel']  = '已取消';
 $lang->task->statusList['closed']  = '已关闭';
 
@@ -153,9 +154,9 @@ $lang->task->report->tasksPerEstimate->graph->xAxisName    = '时间';
 $lang->task->report->tasksPerLeft->graph->xAxisName        = '时间';
 $lang->task->report->tasksPerConsumed->graph->xAxisName    = '时间';
 $lang->task->report->tasksPerFinishedBy->graph->xAxisName  = '用户';
-$lang->task->report->tasksPerCloseReason->graph->xAxisName = '关闭原因';
+$lang->task->report->tasksPerClosedReason->graph->xAxisName = '关闭原因';
 
-$lang->task->report->finishedTasksPerDay->graph->swf         = 'column2d';
-$lang->task->report->finishedTasksPerDay->graph->height      = 400;
+$lang->task->report->finishedTasksPerDay->swf         = 'column2d';
+$lang->task->report->finishedTasksPerDay->height      = 400;
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';

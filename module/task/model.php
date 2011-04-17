@@ -531,65 +531,199 @@ class taskModel extends model
         if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
         if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
 
-        /* 合并配置。*/
+        /* merge configuration */
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
     }
     
     /**
-     * tasks report
+     * Get report data of tasks per project 
+     * 
+     * @access public
+     * @return array
      */
-    
     public function getDataOftasksPerProject()
     {
-        $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('project as name, count(*) as value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('project')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
         $projects = $this->loadModel('project')->getPairs();
         foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
         return $datas;
     }
 
+    /**
+     * Get report data of tasks per assignedTo 
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOftasksPerAssignedTo()
     {
-        $datas = $this->dao->select('assignedTo as name, count(assignedTo) as value')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('assignedTo AS name, count(*) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('assignedTo')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
         if(!$datas) return array();
-        $projects = $this->loadModel('project')->getPairs();
-        foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
+        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
         return $datas;
     }
+
+    /**
+     * Get report data of tasks per type 
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOftasksPerType()
     {
-
+        $datas = $this->dao->select('type AS  name, count(*) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('type')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+        if(!$datas) return array();
+        foreach($datas as $type => $data) if(isset($this->lang->task->typeList[$type])) $data->name = $this->lang->task->typeList[$type];
+        return $datas;
     }
-    public function getDataOftasksPerDeadline()
-    {
 
-    }
+    /**
+     * Get report data of tasks per priority
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOftasksPerPri()
     {
-
+        return $this->dao->select('pri AS name, COUNT(*) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('pri')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
     }
+   
+    /**
+     * Get report data of tasks per deadline 
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDataOftasksPerDeadline()
+    {
+        return $this->dao->select('deadline AS name, COUNT(*) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('deadline')
+            ->having('name != 0000-00-00')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+    }
+
+    /**
+     * Get report data of tasks per estimate 
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOftasksPerEstimate()
     {
-
+        return $this->dao->select('estimate AS name, COUNT(*) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('estimate')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
     }
+
+    /**
+     * Get report data of tasks per left
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOftasksPerLeft()
     {
-
+        return $this->dao->select('`left` AS name, COUNT(*) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('`left`')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
     }
+
+    /**
+     * Get report data of tasks per consumed
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOftasksPerConsumed()
     {
-
+        return $this->dao->select('consumed AS name, COUNT(*) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('consumed')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
     }
+
+    /**
+     * Get report data of tasks per finishedBy 
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOftasksPerFinishedBy()
     {
-
+        $datas = $this->dao->select('finishedBy AS name, COUNT(finishedBy) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('finishedBy')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+        if(!$datas) return array();
+        foreach($datas as $key => $data) $data->name = $data->name ? $data->name : $this->lang->task->statusList['undone'];
+        return $datas;
     }
+
+    /**
+     * Get report data of tasks per closed reason  
+     * 
+     * @access public
+     * @return array
+     */
     public function getDataOftasksPerClosedReason()
     {
-
+        return $this->dao->select('closedReason AS name, COUNT(*) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('closedReason')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
     }
-    public function getDataOffinishedtasksPerDay()
-    {
 
+    /**
+     * Get report data of finished tasks per day
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDataOffinishedTasksPerDay()
+    {
+        return $this->dao->select('DATE_FORMAT(finishedDate, "%Y-%m-%d") AS name, COUNT(finishedDate) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('finishedDate')
+            ->having('name != 0000-00-00')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
     }
 }
