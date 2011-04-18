@@ -12,6 +12,7 @@ $config->action->objectTables['testtask']    = TABLE_TESTTASK;
 $config->action->objectTables['user']        = TABLE_USER;
 $config->action->objectTables['doc']         = TABLE_DOC;
 $config->action->objectTables['doclib']      = TABLE_DOCLIB;
+$config->action->objectTables['todo']        = TABLE_TODO;
 
 $config->action->objectNameFields['product']     = 'name';
 $config->action->objectNameFields['story']       = 'title';
@@ -26,3 +27,4 @@ $config->action->objectNameFields['testtask']    = 'name';
 $config->action->objectNameFields['user']        = 'account';
 $config->action->objectNameFields['doc']         = 'title';
 $config->action->objectNameFields['doclib']      = 'name';
+$config->action->objectNameFields['todo']        = 'name';

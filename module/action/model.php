@@ -211,14 +211,34 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function getDynamic($objectType = 'all', $count = 30)
+    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'id_desc', $pager = null)
     {
+        $period = $this->computeBeginAndEnd($period);
+        extract($period);
+
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->beginIF($objectType != 'all')->where('objectType')->eq($objectType)->fi()
-            ->orderBy('id desc')->limit($count)->fetchAll();
+            ->where('date')->gt($begin)
+            ->andWhere('date')->lt($end)
+            ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+
         if(!$actions) return array();
+
+        /* Group trashes by objectType, and get there name field. */
+        foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
+        foreach($objectTypes as $objectType => $objectIds)
+        {
+            $objectIds   = array_unique($objectIds);
+            $table       = $this->config->action->objectTables[$objectType];
+            $field       = $this->config->action->objectNameFields[$objectType];
+            $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+        }
+
         foreach($actions as $action)
         {
+            /* Add name field to the trashes. */
+            $action->objectName = $objectNames[$action->objectType][$action->objectID];
+
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
             $action->date        = date(DT_MONTHTIME2, strtotime($action->date));
@@ -246,6 +266,39 @@ class actionModel extends model
             }
         }
         return $actions;
+    }
+
+    /**
+     * Compute the begin date and end date of a period.
+     * 
+     * @param  string    $period 
+     * @access private
+     * @return array
+     */
+    private function computeBeginAndEnd($period)
+    {
+        $this->loadModel('todo');
+
+        $today      = $this->todo->today();
+        $tomorrow   = $this->todo->tomorrow();
+        $yesterday  = $this->todo->yesterday();
+        $twoDaysAgo = $this->todo->twoDaysAgo();
+
+        if($period == 'all')        return array('begin' => '1970-1-1',  'end' => '2109-1-1');
+        if($period == 'today')      return array('begin' => $today,      'end' => $tomorrow);
+        if($period == 'yesterday')  return array('begin' => $yesterday,  'end' => $today);
+        if($period == 'twodaysago') return array('begin' => $twoDaysAgo, 'end' => $yesterday);
+
+        /* If the period is by week, add the end time to the end date. */
+        if($period == 'thisweek' or $period == 'lastweek')
+        {
+            $func = "get$period";
+            extract($this->todo->$func());
+            return array('begin' => $begin, 'end' => $end . ' 23:59:59');
+        }
+
+        if($period == 'thismonth')  return $this->todo->getThisMonth();
+        if($period == 'lastmonth')  return $this->todo->getLastMonth();
     }
 
     /**

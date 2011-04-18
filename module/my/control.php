@@ -313,4 +313,47 @@ class my extends control
         $this->view->user          = $this->user->getById($this->app->user->id);
         $this->display();
     }
+
+    /**
+     * My dynamic.
+     * 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function dynamic($type = 'today', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save session. */
+        $uri = $this->app->getURI(true);
+        $this->session->set('productList',     $uri);
+        $this->session->set('productPlanList', $uri);
+        $this->session->set('releaseList',     $uri);
+        $this->session->set('storyList',       $uri);
+        $this->session->set('projectList',     $uri);
+        $this->session->set('taskList',        $uri);
+        $this->session->set('buildList',       $uri);
+        $this->session->set('bugList',         $uri);
+        $this->session->set('caseList',        $uri);
+        $this->session->set('testtaskList',    $uri);
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
+
+        /* The header and position. */
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
+        $this->view->position[]    = $this->lang->my->dynamic;
+
+        /* Assign. */
+        $this->view->type    = $type;
+        $this->view->actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager);
+        $this->display();
+    }
+
 }

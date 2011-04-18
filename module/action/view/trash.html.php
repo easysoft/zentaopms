@@ -17,10 +17,10 @@
   <thead>
   <tr class='colhead'>
     <th class='w-80px'><?php common::printOrderLink('objectType',  $orderBy, $vars, $lang->action->objectType);?></th>
-    <th class='w-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
+    <th class='w-id'>  <?php common::printOrderLink('objectID',    $orderBy, $vars, $lang->idAB);?></th>
     <th><?php echo $lang->action->objectName;?></th>
-    <th class='w-100px'><?php common::printOrderLink('actor',       $orderBy, $vars, $lang->action->actor);?></th>
-    <th class='w-150px'><?php common::printOrderLink('date',        $orderBy, $vars, $lang->action->date);?></th>
+    <th class='w-100px'><?php common::printOrderLink('actor',      $orderBy, $vars, $lang->action->actor);?></th>
+    <th class='w-150px'><?php common::printOrderLink('date',       $orderBy, $vars, $lang->action->date);?></th>
     <th class='w-80px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>

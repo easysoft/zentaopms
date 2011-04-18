@@ -116,6 +116,7 @@ $lang->my->menu->bug      = '我的Bug|my|bug|';
 $lang->my->menu->testask  = '我的测试|my|testtask|';
 $lang->my->menu->story    = '我的需求|my|story|';
 $lang->my->menu->project  = '我的项目|my|project|';
+$lang->my->menu->dynamic  = '我的动态|my|dynamic|';
 $lang->my->menu->profile  = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
 

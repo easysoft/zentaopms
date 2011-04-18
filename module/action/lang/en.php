@@ -21,6 +21,15 @@ $lang->action->date       = 'Date';
 $lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic, the real data don't be erased from the database.
                              So if you want to erase a record, can use phpmyadmin and such tools to remove it from database.";
 
+$lang->action->dynamic->today     = 'Today';
+$lang->action->dynamic->yesterday = 'Yesterday';
+$lang->action->dynamic->twoDaysAgo= 'The day Before Yesterday';
+$lang->action->dynamic->thisWeek  = 'This Week';
+$lang->action->dynamic->lastWeek  = 'Last Week';
+$lang->action->dynamic->thisMonth = 'This Month';
+$lang->action->dynamic->lastMonth = 'Last Month';
+$lang->action->dynamic->all       = 'All';
+
 $lang->action->objectTypes['product']     = 'PRODUCT';
 $lang->action->objectTypes['story']       = 'STORY';
 $lang->action->objectTypes['productplan'] = 'PLAN';

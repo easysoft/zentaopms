@@ -73,12 +73,16 @@ class index extends control
         $my['bugs']  = $this->dao->select('id, title')->from(TABLE_BUG)->where('assignedTo')->eq($this->session->user->account)->andWhere('deleted')->eq(0)->orderBy('id desc')->limit(10)->fetchPairs();
         $my['todos'] = $this->loadModel('todo')->getList('all', $this->session->user->account, 'wait, doing');
 
+        /* Set the dynamic pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, $this->config->index->dynamicCounts);
+
         $this->view->projects      = $projects;
         $this->view->projectsCount = $projectCount;
         $this->view->burns         =  $burns;
         $this->view->stats         =  $stats;
         $this->view->my            =  $my;
-        $this->view->actions       =  $this->loadModel('action')->getDynamic('all', 23);
+        $this->view->actions       =  $this->loadModel('action')->getDynamic('all', 'all', 'id_desc', $pager);
         $this->view->users         =  $this->loadModel('user')->getPairs('noletter');
         $this->view->users['guest']= 'guest';    // append the guest account.
         $this->display();

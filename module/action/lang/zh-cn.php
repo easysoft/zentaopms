@@ -17,9 +17,19 @@ $lang->action->objectType = '对象类型';
 $lang->action->objectID   = '对象ID';
 $lang->action->objectName = '对象名称';
 $lang->action->actor      = '操作者';
+$lang->action->action     = '动作';
 $lang->action->date       = '日期';
 $lang->action->trashTips  = '提示：禅道系统的删除都是标记删除，并没有真正从数据库里面删除数据。这样做是为了系统数据的完整和安全。
                              因此如果你确定要删除某一条数据，可以使用phpmyadmin等管理工具，进数据库删除。';
+
+$lang->action->dynamic->today     = '今天';
+$lang->action->dynamic->yesterday = '昨天';
+$lang->action->dynamic->twoDaysAgo= '前天';
+$lang->action->dynamic->thisWeek  = '本周';
+$lang->action->dynamic->lastWeek  = '上周';
+$lang->action->dynamic->thisMonth = '本月';
+$lang->action->dynamic->lastMonth = '上月';
+$lang->action->dynamic->all       = '所有';
 
 $lang->action->objectTypes['product']     = '产品';
 $lang->action->objectTypes['story']       = '需求';
@@ -34,6 +44,7 @@ $lang->action->objectTypes['testtask']    = '测试任务';
 $lang->action->objectTypes['user']        = '用户';
 $lang->action->objectTypes['doc']         = '文档';
 $lang->action->objectTypes['doclib']      = '文档库';
+$lang->action->objectTypes['todo']        = 'TODO';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc->common      = '$date, <strong>$action</strong> by <strong>$actor</strong>' . "\n";

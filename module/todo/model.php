@@ -257,6 +257,28 @@ class todoModel extends model
     }
 
     /**
+     * Get tomorrow.
+     * 
+     * @access public
+     * @return date
+     */
+    public function tomorrow()
+    {
+        return date(DT_DATE1, strtotime('tomorrow'));
+    }
+
+    /**
+     * Get the day before yesterday.
+     * 
+     * @access public
+     * @return date
+     */
+    public function twoDaysAgo()
+    {
+        return date(DT_DATE1, strtotime('-2 days'));
+    }
+
+    /**
      * Get now time period.
      * 
      * @param  int    $delta 
@@ -361,5 +383,19 @@ class todoModel extends model
         if($weekDay == 1) $baseTime = time() - 86400 * 4;  // Make sure is last thursday.
         if($weekDay == 7) $baseTime = time() - 86400 * 10; // Make sure is last thursday.
         return $baseTime;
+    }
+
+    public function getThisMonth()
+    {
+        $begin = date('Y-m');
+        $end   = date('Y-m', strtotime('next month'));
+        return array('begin' => $begin, 'end' => $end);
+    }
+
+    public function getLastMonth()
+    {
+        $begin = date('Y-m', strtotime('last month'));
+        $end   = date('Y-m', strtotime('this month'));
+        return array('begin' => $begin, 'end' => $end);
     }
 }
