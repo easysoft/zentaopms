@@ -22,19 +22,60 @@ class extension extends control
     {
         $this->view->header->title = $this->lang->extension->browse;
         $this->view->position[]    = $this->lang->extension->browse;
+        $this->view->tab           = $type;
         $this->display();
     }
 
-    public function download()
+    /**
+     * Obtain an extension from the community.
+     * 
+     * @param  string $type 
+     * @param  string $param 
+     * @access public
+     * @return void
+     */
+    public function obtain($type = 'byDownloads', $param = '', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        /* Init vars. */
+        $type       = strtolower($type);
+        $moduleID   = $type == 'bymodule' ? (int)$param : 0;
+        $extensions = array();
+        $pager      = null;
+
+        /* Get results from the api. */
+        $results = $this->extension->getExtensionsByAPI($type, $param, $recTotal, $recPerPage, $pageID);
+        if($results)
+        {
+            $this->app->loadClass('pager', $static = true);
+            $pager      = new pager($results->dbPager->recTotal, $results->dbPager->recPerPage, $results->dbPager->pageID);
+            $extensions = $results->extensions;
+        }
+
+        $this->view->moduleTree = $this->extension->getModulesByAPI();
+        $this->view->extensions = $extensions;
+        $this->view->pager      = $pager;
+        $this->view->tab        = 'obtain';
+        $this->view->type       = $type;
+        $this->view->moduleID   = $moduleID;
+        $this->display();
     }
 
-    public function upload()
+    /**
+     * Install a extension
+     * 
+     * @param  int    $downLink 
+     * @access public
+     * @return void
+     */
+    public function install($extension, $downLink = '')
     {
-    }
+        if($downLink) $this->extension->download($extension, helper::safe64Decode($downLink));
 
-    public function install($extension)
-    {
+        $packgeFile = $this->extension->getPackageFile($extension);
+        if(!file_exists($packgeFile)) die(js::error('not found'));
+
+        $this->extension->install($extension);
+        echo 'installed';
     }
 
     public function uninstall()

@@ -10,18 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
-<div id='featurebar'>
-  <?php 
-  echo '<span id="installed">'  . html::a(inlink('browse', "type=installed"),   $lang->extension->installed)   . '</span>';
-  echo '<span id="deactivated">'. html::a(inlink('browse', "type=deactivated"), $lang->extension->deactivated) . '</span>';
-  echo '<span id="available">'  . html::a(inlink('browse', "type=available"),   $lang->extension->available )  . '</span>';
-  echo '<span id="download">'   . html::a(inlink('download'), $lang->extension->download) . '</span>';
-  echo '<span id="upload" >'    . html::a(inlink('upload'),   $lang->extension->upload) . '</span>';
-  ?>
-  <script>$('#<?php echo $type;?>').addClass('active')</script>
-</div>
+<?php include 'header.html.php';?>
 <table class='table-1 tablesorter'>
   <thead>
   <tr class='colhead'>
@@ -29,7 +18,16 @@
     <th><?php echo $lang->extension->version;?></th>
     <th><?php echo $lang->extension->author;?></th>
     <th><?php echo $lang->extension->desc;?></th>
+    <th>操作</th>
   </tr>
   </thead>
+  <tbody>
+  <tr >
+    <td><?php echo $lang->extension->name;?></td>
+    <td><?php echo $lang->extension->version;?></td>
+    <td><?php echo $lang->extension->author;?></td>
+    <td><?php echo $lang->extension->desc;?></td>
+  </tr>
+  </tbody>
 </table>
 <?php include '../../common/view/footer.html.php';?>
