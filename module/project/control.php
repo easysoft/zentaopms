@@ -150,7 +150,7 @@ class project extends control
                 if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
             }
             $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
-            $tasks     = $this->project->getSearchTasks($projectID, $taskQuery, $pager, $orderBy);
+            $tasks     = $this->project->getSearchTasks($taskQuery, $pager, $orderBy);
         }
 
         if($browseType != 'needconfirm')

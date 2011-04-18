@@ -675,23 +675,31 @@ class projectModel extends model
         foreach($sets as $set) $set->name = substr($set->name, 5);
         return $sets;
     }
-    /*
-     * Get data of search task
-     * @param string        $queryString
+
+    /**
+     * Get taskes by search.
+     * 
+     * @param  string $condition 
+     * @param  object $pager 
+     * @param  string $orderBy 
      * @access public
      * @return array
      */
-    public function getSearchTasks($projectID, $queryString, $pager, $orderBy)
+    public function getSearchTasks($condition, $pager, $orderBy)
     {
-        $taskIdList = $this->dao->select('id')->from(TABLE_TASK)->where($queryString)
-             ->andWhere('deleted')->eq(0)
-             ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        $taskIdList = $this->dao->select('id')
+            ->from(TABLE_TASK)
+            ->where($condition)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
              ->from(TABLE_TASK)->alias('t1')
              ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
              ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-             ->where('t1.project')->eq((int)$projectID)
-             ->andWhere('t1.deleted')->eq(0)
+             ->where('t1.deleted')->eq(0)
              ->andWhere('t1.id')->in(array_keys($taskIdList))
              ->orderBy($orderBy)
              ->fetchAll();
