@@ -62,11 +62,6 @@ class extensionModel extends model
         $this->apiRoot = $this->config->extension->apiRoot;
     }
 
-    public function getLocalExtensions($status)
-    {
-        return $this->dao->findByStatus($status)->from(TABLE_EXTENSION)->fetchAll();
-    }
-
     /**
      * Fetch data from an api.
      * 
@@ -114,6 +109,77 @@ class extensionModel extends model
         $data = $this->fetchAPI($apiURL);
         if(isset($data->extensions)) return $data;
         return false;
+    }
+
+    /**
+     * Download an extension.
+     * 
+     * @param  string    $extension 
+     * @param  string    $downLink 
+     * @access public
+     * @return void
+     */
+    public function downloadPackage($extension, $downLink)
+    {
+        $packageFile = $this->getPackageFile($extension);
+        $this->agent->fetch($downLink);
+        file_put_contents($packageFile, $this->agent->results);
+    }
+
+    /**
+     * Get extensions by status.
+     * 
+     * @param  string    $status 
+     * @access public
+     * @return array
+     */
+    public function getLocalExtensions($status)
+    {
+        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('status')->eq($status)->fi()->fetchAll();
+    }
+
+    /**
+     * Get extension info from database.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return object
+     */
+    public function getInfoFromDB($extension)
+    {
+        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('code')->eq($extension)->fi()->fetch();
+    }
+
+    /**
+     * Get info of an extension from the package file.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return object
+     */
+    public function getInfoFromPackage($extension)
+    {
+        /* Init the data. */
+        $data->name    = $extension;
+        $data->code    = $extension;
+        $data->version = 'unknown';
+        $data->author  = 'unknown';
+        $data->desc    = $extension;
+        $data->site    = 'unknown';
+        $data->license = 'unknown';
+        $data->zentaoVersion = '';
+
+        /* Redad the info file of the package. */
+        $infoFile = "ext/$extension/doc/copyright.txt";
+        if(!file_exists($infoFile)) return $data;
+
+        $info = (object)parse_ini_file($infoFile);
+        foreach($info as $key => $value)
+        {
+            if(isset($data->$key)) $data->$key = $value;
+        }
+        if(isset($info->zentaoversion)) $data->zentaoVersion = $info->zentaoversion;
+        return $data;
     }
 
     /**
@@ -176,9 +242,10 @@ class extensionModel extends model
         $return->errors        = '';
         $return->mkdirCommands = '';
         $return->chmodCommands = '';
+        $return->dirs2Created  = array();
 
         $appRoot = $this->app->getAppRoot();
-        $pathes  = $this->extractPathesFromPackage($extension);
+        $pathes  = $this->getPathesFromPackage($extension);
         foreach($pathes as $path)
         {
             if($path == 'db' or $path == 'doc') continue;
@@ -196,6 +263,7 @@ class extensionModel extends model
                 $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
                 $return->mkdirCommands .= "mkdir $path<br />";
                 $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                $return->dirs2Created[] = $path;
             }
         }
 
@@ -204,21 +272,6 @@ class extensionModel extends model
         $return->errors .= $this->lang->extension->executeCommands . $return->mkdirCommands;
         if(PHP_OS == 'Linux') $return->errors .= $return->chmodCommands;
         return $return;
-    }
-
-    /**
-     * Download an extension.
-     * 
-     * @param  string    $extension 
-     * @param  string    $downLink 
-     * @access public
-     * @return void
-     */
-    public function downloadPackage($extension, $downLink)
-    {
-        $packageFile = $this->getPackageFile($extension);
-        $this->agent->fetch($downLink);
-        file_put_contents($packageFile, $this->agent->results);
     }
 
     /**
@@ -240,13 +293,13 @@ class extensionModel extends model
     }
 
     /**
-     * Extract pathes from an extension package.
+     * Get pathes from an extension package.
      * 
      * @param  string    $extension 
      * @access public
      * @return array
      */
-    public function extractPathesFromPackage($extension)
+    public function getPathesFromPackage($extension)
     {
         $pathes = array();
         $packageFile = $this->getPackageFile($extension);
@@ -290,6 +343,60 @@ class extensionModel extends model
         }
 
         return $copiedFiles;
+    }
+
+    /**
+     * Remove an extension.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return array     un removed files.
+     */
+    public function removePackage($extension)
+    {
+        $extension = $this->getInfoFromDB($extension);
+        $dirs  = json_decode($extension->dirs);
+        $files = json_decode($extension->files);
+        $unremovedDirs  = array();
+        $unremovedFiles = array();
+        $appRoot = $this->app->getAppRoot();
+
+        if($dirs)
+        {
+            foreach($dirs as $dir)
+            {
+                if(!@rmdir($appRoot . $dir))
+                {
+                    $unremovedDirs[] = $appRoot . $dir;
+                }
+            }
+        }
+
+        if($files)
+        {
+            foreach($files as $file)
+            {
+                if(!@unlink($appRoot . $file))
+                {
+                    $unremovedFiles[] = $appRoot . $file;
+                }
+            }
+        }
+        return array('unremovedDirs' => $unremovedDirs, 'unremovedFiles' => $unremovedFiles);
+    }
+
+    /**
+     * Erase an extension's package file.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return void
+     */
+    public function erasePackage($extension)
+    {
+        $packageFile = $this->getPackageFile($extension);
+        unlink($packageFile);
+        $this->dao->delete()->from(TABLE_EXTENSION)->where('code')->eq($extension)->exec();
     }
 
     /**
@@ -353,6 +460,55 @@ class extensionModel extends model
     }
 
     /**
+     * Save the extension to database.
+     * 
+     * @param  int    $extension 
+     * @access public
+     * @return void
+     */
+    public function saveExtension($extension)
+    {
+        $extension = $this->getInfoFromPackage($extension);
+        $extension->status = 'available';
+        $this->dao->replace(TABLE_EXTENSION)->data($extension)->exec();
+    }
+
+    /**
+     * Update an extension.
+     * 
+     * @param  string    $extension 
+     * @param  string    $status 
+     * @param  array     $files 
+     * @access public
+     * @return void
+     */
+    public function updateExtension($extension, $data)
+    {
+        $data = (object)$data;
+        $appRoot = $this->app->getAppRoot();
+
+        if(isset($data->dirs))
+        {
+
+            foreach($data->dirs as $key => $dir)
+            {
+                $data->dirs[$key] = str_replace($appRoot, '', $dir);
+            }
+            $data->dirs = json_encode($data->dirs);
+        }
+
+        if(isset($data->files))
+        {
+            foreach($data->files as $key => $file)
+            {
+                $data->files[$key] = str_replace($appRoot, '', $file);
+            }
+            $data->files = json_encode($data->files);
+        }
+        return $this->dao->update(TABLE_EXTENSION)->data($data)->where('code')->eq($extension)->exec();
+    }
+
+    /**
      * Copy a directory from an directory to another directory.
      * 
      * @param  string    $from 
@@ -382,8 +538,12 @@ class extensionModel extends model
             $fullEntry = $from . $entry;
             if(is_file($fullEntry))
             {
+                if(file_exists($to . $entry))
+                {
+                    unlink($to . $entry);
+                }
                 copy($fullEntry, $to . $entry);
-                $copiedFiles[] = $fullEntry;
+                $copiedFiles[] = $to . $entry;
             }
             else
             {
@@ -426,62 +586,5 @@ class extensionModel extends model
         }
         rmdir($dir);
         return true;
-    }
-
-    /**
-     * Save the extension to database.
-     * 
-     * @param  int    $extension 
-     * @access public
-     * @return void
-     */
-    public function save2DB($extension)
-    {
-        $extension = $this->getExtensionInfo($extension);
-        $extension->status = 'available';
-        $this->dao->replace(TABLE_EXTENSION)->data($extension)->exec();
-    }
-
-    /**
-     * Update the status of an extension.
-     * 
-     * @param  string    $extension 
-     * @param  string    $status 
-     * @access public
-     * @return void
-     */
-    public function updateStatus($extension, $status)
-    {
-        return $this->dao->update(TABLE_EXTENSION)->set('status')->eq($status)->where('code')->eq($extension)->exec();
-    }
-
-    /**
-     * Get info of an extension.
-     * 
-     * @param  string    $extension 
-     * @access public
-     * @return object
-     */
-    public function getExtensionInfo($extension)
-    {
-        $data->name    = $extension;
-        $data->code    = $extension;
-        $data->version = 'unknown';
-        $data->author  = 'unknown';
-        $data->desc    = $extension;
-        $data->site    = 'unknown';
-        $data->license = 'unknown';
-        $data->zentaoVersion = '';
-
-        $infoFile = "ext/$extension/doc/copyright.txt";
-        if(!file_exists($infoFile)) return $data;
-
-        $info = (object)parse_ini_file($infoFile);
-        foreach($info as $key => $value)
-        {
-            if(isset($data->$key)) $data->$key = $value;
-        }
-        if(isset($info->zentaoversion)) $data->zentaoVersion = $info->zentaoversion;
-        return $data;
     }
 }

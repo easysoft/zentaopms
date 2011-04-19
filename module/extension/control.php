@@ -14,16 +14,16 @@ class extension extends control
     /**
      * Browse extensions.
      *
-     * @param  string $type     browse type.
+     * @param  string   $status
      * @access public
      * @return void
      */
-    public function browse($type = 'installed')
+    public function browse($status = 'installed')
     {
         $this->view->header->title = $this->lang->extension->browse;
         $this->view->position[]    = $this->lang->extension->browse;
-        $this->view->tab           = $type;
-        $this->view->extensions    = $this->extension->getLocalExtensions($type);
+        $this->view->tab           = $status;
+        $this->view->extensions    = $this->extension->getLocalExtensions($status);
         $this->display();
     }
 
@@ -104,7 +104,7 @@ class extension extends control
                 $this->view->error = sprintf($this->lang->extension->errorDownloadFailed, $packageFile);
                 die($this->display());
             }
-            elseif(md5_file($packageFile) != $md5)
+            elseif(md5_file($packageFile) == $md5)
             {
                 unlink($packageFile);
                 $this->view->error = sprintf($this->lang->extension->errorMd5Checking, $packageFile);
@@ -123,6 +123,8 @@ class extension extends control
         $return = $this->extension->checkExtensionPathes($extension);
         if($return->result != 'ok')
         {
+            $this->session->set('dirs2Created', $return->dirs2Created);   // Save the dirs to be created.
+
             $this->view->error = $return->errors;
             die($this->display());
         }
@@ -131,12 +133,16 @@ class extension extends control
         $this->extension->extractPackage($extension);
 
         /* Save to database. */
-        $this->extension->save2DB($extension);
+        $this->extension->saveExtension($extension);
 
         /* Copy files to target directory. */
         $this->view->files = $this->extension->copyPackageFiles($extension);
 
         /* Judge need execute db install or not. */
+        $data->status = 'installed';
+        $data->dirs   = $this->session->dirs2Created;
+        $data->files  = $this->view->files;
+
         if($this->extension->needExecuteDB($extension, 'install'))
         {
             $return = $this->extension->executeDB($extension, 'install');
@@ -145,11 +151,11 @@ class extension extends control
                 $this->view->error = sprintf($this->lang->extension->errorInstallDB, $return->error);
                 die($this->display());
             }
-            $this->extension->updateStatus($extension, 'installed');
+            $this->extension->updateExtension($extension, $data);
         }
         else
         {
-            $this->extension->updateStatus($extension, 'installed');
+            $this->extension->updateExtension($extension, $data);
         }
 
         $this->view->downloadedPackage = !empty($downLink);
@@ -157,15 +163,74 @@ class extension extends control
         $this->display();
     }
 
-    public function uninstall()
+    /**
+     * Uninstall an extension.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return void
+     */
+    public function uninstall($extension)
     {
+        $this->extension->removePackage($extension);
+        $this->extension->executeDB($extension, 'uninstall');
+        $this->extension->updateExtension($extension, array('status' => 'available'));
     }
 
-    public function activate()
+    /**
+     * Activate an extension;
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return void
+     */
+    public function activate($extension)
     {
+        $this->extension->copyPackageFiles($extension);
+        $this->extension->updateExtension($extension, array('status' => 'installed'));
     }
 
-    public function deactivate()
+    /**
+     * Deactivate an extension
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return void
+     */
+    public function deactivate($extension)
     {
+        $this->extension->removePackage($extension);
+        $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+    }
+
+    /**
+     * Upload an extension
+     * 
+     * @access public
+     * @return void
+     */
+    public function upload()
+    {
+        if($_FILES)
+        {
+            $tmpName   = $_FILES['file']['tmp_name'];
+            $fileName  = $_FILES['file']['name'];
+            $extension = basename($fileName, '.zip');
+            move_uploaded_file($tmpName, $this->app->getTmpRoot() . "/extension/$fileName");
+            $this->locate(inlink('install', "extension=$extension"));
+        }
+        $this->display();
+    }
+
+    /**
+     * Erase an extension.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return void
+     */
+    public function erase($extension)
+    {
+        $this->extension->erasePackage($extension);
     }
 }

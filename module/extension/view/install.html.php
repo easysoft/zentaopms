@@ -33,6 +33,7 @@
         echo '</ul>';
         echo "<h3 class='success'>{$lang->extension->successInstallDB}</h3>";
         echo "<h1 class='a-center'>{$lang->extension->installFinished}</h1>";
+        echo "<p class='a-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse') . '"') . '</p>';
         ?>
       <?php endif;?>
     </td>

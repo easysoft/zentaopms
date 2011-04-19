@@ -20,6 +20,7 @@ $lang->extension->obtain    = '获得插件';
 $lang->extension->download  = '下载插件';
 $lang->extension->downloadAB= '下载';
 $lang->extension->upload    = '上传插件';
+$lang->extension->erase     = '清除';
 
 $lang->extension->installed   = '已安装';
 $lang->extension->deactivated = '已禁用';
@@ -49,6 +50,7 @@ $lang->extension->executeCommands          = '<h3>执行下面的命令来修正
 $lang->extension->successDownloadedPackage = '成功下载插件';
 $lang->extension->successCopiedFiles       = '成功拷贝文件';
 $lang->extension->successInstallDB         = '成功安装数据库';
+$lang->extension->viewInstalled            = '查看已安装插件';
 
 $lang->extension->errorDownloadPathNotFound    = '插件下载存储路径<strong>%s</strong>不存在。<br />linux下面请执行命令：<strong>mkdir %s</strong>来修正。';
 $lang->extension->errorDownloadPathNotWritable = '插件下载存储路径<strong>%s</strong>不可写。<br />linux下面请执行命令：<strong>sudo chmod 777 %s</strong>来修正。';
