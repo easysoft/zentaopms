@@ -100,6 +100,9 @@ class product extends control
         elseif($browseType == 'bymodule')
         {
             $childModuleIds = $this->tree->getAllChildID($moduleID);
+            $storyQuery = $this->dao->andWhere('product')->in($productID)->andWhere('module')->in($childModuleIds)->get();
+            $storyQuery = substr($storyQuery, strpos($storyQuery,'product'));
+            $this->session->set('storyReport', $storyQuery);
             $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
         }
         elseif($browseType == 'bysearch')
@@ -121,6 +124,7 @@ class product extends control
             {
                 if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
             }
+            $this->session->set('storyReport', $this->session->storyQuery);
 
             $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy, $pager);
         }
