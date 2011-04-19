@@ -428,4 +428,53 @@ class user extends control
         $vars = !empty($referer) ? "referer=$referer" : '';
         $this->locate($this->createLink('user', 'login', $vars));
     }
+    
+    /**
+     * My dynamic.
+     * 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function dynamic($period = 'today', $account = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* set menus. */
+        $this->lang->set('menugroup.user', 'company');
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+
+        /* Save session. */
+        $uri   = $this->app->getURI(true);
+        $this->session->set('productList',     $uri);
+        $this->session->set('productPlanList', $uri);
+        $this->session->set('releaseList',     $uri);
+        $this->session->set('storyList',       $uri);
+        $this->session->set('projectList',     $uri);
+        $this->session->set('taskList',        $uri);
+        $this->session->set('buildList',       $uri);
+        $this->session->set('bugList',         $uri);
+        $this->session->set('caseList',        $uri);
+        $this->session->set('testtaskList',    $uri);
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
+
+        $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
+        $this->view->position[]    = $this->lang->company->dynamic;
+
+        /* Assign. */
+        $this->view->period  = $period;
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->account = $account;
+        $this->view->actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager);
+        $this->display();
+    }
+
+
 }

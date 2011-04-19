@@ -194,6 +194,7 @@ $lang->user->menu->todo     = array('link' => 'TODO列表|user|todo|account=%s',
 $lang->user->menu->task     = '任务列表|user|task|account=%s';
 $lang->user->menu->bug      = 'Bug列表|user|bug|account=%s';
 $lang->user->menu->project  = '项目列表|user|project|account=%s';
+$lang->user->menu->dynamic  = '用户动态|user|dynamic|type=today&account=%s';
 $lang->user->menu->profile  = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
 

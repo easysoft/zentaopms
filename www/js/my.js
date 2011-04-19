@@ -272,10 +272,24 @@ function saveProject()
     if($('#projectID')) $.cookie('lastProject', $('#projectID').val(), {expires:config.cookieLife, path:config.webRoot});
 }
 
-/* 选择用户。*/
+/**
+ * Switch account 
+ * 
+ * @param  string $account 
+ * @param  string $method 
+ * @access public
+ * @return void
+ */
 function switchAccount(account, method)
 {
-    link = createLink('user', method, 'account=' + account);
+    if(method == 'dynamic')
+    {
+        link = createLink('user', method, 'period=' + period + '&account=' + account);
+    }
+    else
+    {
+        link = createLink('user', method, 'account=' + account);
+    }
     location.href=link;
 }
 

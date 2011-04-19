@@ -193,6 +193,7 @@ $lang->user->menu->todo     = array('link' => 'Todo|user|todo|account=%s', 'subM
 $lang->user->menu->task     = 'Task|user|task|account=%s';
 $lang->user->menu->bug      = 'Bug列表|user|bug|account=%s';
 $lang->user->menu->project  = 'Project|user|project|account=%s';
+$lang->user->menu->dynamic  = 'Dynamic|user|dynamic|account=%s';
 $lang->user->menu->profile  = array('link' => 'Profile|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
 

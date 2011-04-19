@@ -209,7 +209,7 @@ class actionModel extends model
      * @param  string $objectType 
      * @param  int    $count 
      * @access public
-     * @return void
+     * @return array
      */
     public function getDynamic($account = 'all', $period = 'all', $orderBy = 'id_desc', $pager = null)
     {
