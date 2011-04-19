@@ -181,6 +181,7 @@ $lang->company->menu->browseUser  = array('link' => 'Users|company|browse', 'sub
 $lang->company->menu->dept        = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => 'Group|group|browse', 'subModule' => 'group');
 $lang->company->menu->edit        = array('link' => 'Company|company|edit');
+$lang->company->menu->dynamic     = 'Dynamic|company|dynamic|';
 $lang->company->menu->addGroup    = array('link' => 'Add Group|group|create', 'float' => 'right');
 $lang->company->menu->addUser     = array('link' => 'Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;

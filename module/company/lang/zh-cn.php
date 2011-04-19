@@ -17,6 +17,7 @@ $lang->company->read     = "公司信息";
 $lang->company->update   = "更新公司";
 $lang->company->delete   = "删除公司";
 $lang->company->browse   = "用户列表";
+$lang->company->dynamic  = "组织动态";
 $lang->company->depts    = "部门列表";
 $lang->company->orgView  = '组织视图';
 

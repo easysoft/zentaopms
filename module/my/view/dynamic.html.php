@@ -14,14 +14,14 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
   <?php 
-  echo '<span id="today">'      . html::a(inlink('dynamic', "date=today"),      $lang->action->dynamic->today)      . '</span>';
-  echo '<span id="yesterday">'  . html::a(inlink('dynamic', "date=yesterday"),  $lang->action->dynamic->yesterday)  . '</span>';
-  echo '<span id="twodaysago">' . html::a(inlink('dynamic', "date=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</span>';
-  echo '<span id="thisweek">'   . html::a(inlink('dynamic', "date=thisweek"),   $lang->action->dynamic->thisWeek)   . '</span>';
-  echo '<span id="lastweek">'   . html::a(inlink('dynamic', "date=lastweek"),   $lang->action->dynamic->lastWeek)   . '</span>';
-  echo '<span id="thismonth">'  . html::a(inlink('dynamic', "date=thismonth"),  $lang->action->dynamic->thisMonth)  . '</span>';
-  echo '<span id="lastmonth">'  . html::a(inlink('dynamic', "date=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</span>';
-  echo '<span id="all">'        . html::a(inlink('dynamic', "date=all"),        $lang->action->dynamic->all)        . '</span>';
+  echo '<span id="today">'      . html::a(inlink('dynamic', "type=today"),      $lang->action->dynamic->today)      . '</span>';
+  echo '<span id="yesterday">'  . html::a(inlink('dynamic', "type=yesterday"),  $lang->action->dynamic->yesterday)  . '</span>';
+  echo '<span id="twodaysago">' . html::a(inlink('dynamic', "type=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</span>';
+  echo '<span id="thisweek">'   . html::a(inlink('dynamic', "type=thisweek"),   $lang->action->dynamic->thisWeek)   . '</span>';
+  echo '<span id="lastweek">'   . html::a(inlink('dynamic', "type=lastweek"),   $lang->action->dynamic->lastWeek)   . '</span>';
+  echo '<span id="thismonth">'  . html::a(inlink('dynamic', "type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</span>';
+  echo '<span id="lastmonth">'  . html::a(inlink('dynamic', "type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</span>';
+  echo '<span id="all">'        . html::a(inlink('dynamic', "type=all"),        $lang->action->dynamic->all)        . '</span>';
   ?>
 </div>
 

@@ -17,6 +17,7 @@ $lang->company->read     = "Info";
 $lang->company->update   = "Update";
 $lang->company->delete   = "Delete";
 $lang->company->browse   = "User";
+$lang->company->dynamic  = "Dynamic";
 $lang->company->depts    = "Dept";
 $lang->company->orgView  = 'Company';
 
