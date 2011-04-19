@@ -47,7 +47,7 @@
           <th><?php echo $lang->extension->desc;?></th>
           <th><?php echo $lang->extension->author;?></th>
           <th class='w-id'><?php echo $lang->extension->downloads;?></th>
-          <th class='w-100px'>操作</th>
+          <th class='w-100px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>

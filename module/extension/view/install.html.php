@@ -14,12 +14,29 @@
 <table class='table-1'>
   <caption><?php echo $header->title;?></caption>
   <tr>
-    <td>
+    <td valign='middle'>
       <?php if($error):?>
-      <?php echo "<h3 class='error'>{$lang->extension->installFailed}</h3> $error";?>
+        <?php 
+        echo "<h3 class='error'>{$lang->extension->installFailed}</h3>"; 
+        echo "<p>$error</p>";
+        echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');
+        ?>
       <?php else:?>
+        <?php
+        if($downloadedPackage) echo  "<h3 class='success'>{$lang->extension->successDownloadedPackage}</h3>";
+        echo "<h3 class='success'>{$lang->extension->successCopiedFiles}</h3>";
+        echo '<ul>';
+        foreach($files as $file)
+        {
+            echo "<li>$file</li>";
+        }
+        echo '</ul>';
+        echo "<h3 class='success'>{$lang->extension->successInstallDB}</h3>";
+        echo "<h1 class='a-center'>{$lang->extension->installFinished}</h1>";
+        ?>
       <?php endif;?>
     </td>
   </tr>
 </table>
-<?php include '../../common/view/footer.lite.html.php';?>
+</body>
+</html>

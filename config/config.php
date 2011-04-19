@@ -101,3 +101,4 @@ define('TABLE_MODULE',         $config->db->prefix . 'module');
 define('TABLE_ACTION',         $config->db->prefix . 'action');
 define('TABLE_FILE',           $config->db->prefix . 'file');
 define('TABLE_HISTORY',        $config->db->prefix . 'history');
+define('TABLE_EXTENSION',      $config->db->prefix . 'extension');

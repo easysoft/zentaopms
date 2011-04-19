@@ -23,6 +23,7 @@ class extension extends control
         $this->view->header->title = $this->lang->extension->browse;
         $this->view->position[]    = $this->lang->extension->browse;
         $this->view->tab           = $type;
+        $this->view->extensions    = $this->extension->getLocalExtensions($type);
         $this->display();
     }
 
@@ -105,6 +106,7 @@ class extension extends control
             }
             elseif(md5_file($packageFile) != $md5)
             {
+                unlink($packageFile);
                 $this->view->error = sprintf($this->lang->extension->errorMd5Checking, $packageFile);
                 die($this->display());
             }
@@ -117,7 +119,7 @@ class extension extends control
             die($this->display());
         }
 
-        /* Checking the extension path. */
+        /* Checking the extension pathes. */
         $return = $this->extension->checkExtensionPathes($extension);
         if($return->result != 'ok')
         {
@@ -127,7 +129,32 @@ class extension extends control
 
         /* Extract the package. */
         $this->extension->extractPackage($extension);
-        $this->extension->copyPackageFiles($extension);
+
+        /* Save to database. */
+        $this->extension->save2DB($extension);
+
+        /* Copy files to target directory. */
+        $this->view->files = $this->extension->copyPackageFiles($extension);
+
+        /* Judge need execute db install or not. */
+        if($this->extension->needExecuteDB($extension, 'install'))
+        {
+            $return = $this->extension->executeDB($extension, 'install');
+            if($return->result != 'ok')
+            {
+                $this->view->error = sprintf($this->lang->extension->errorInstallDB, $return->error);
+                die($this->display());
+            }
+            $this->extension->updateStatus($extension, 'installed');
+        }
+        else
+        {
+            $this->extension->updateStatus($extension, 'installed');
+        }
+
+        $this->view->downloadedPackage = !empty($downLink);
+
+        $this->display();
     }
 
     public function uninstall()
