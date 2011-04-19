@@ -101,7 +101,9 @@ class product extends control
         elseif($browseType == 'bymodule')
         {
             $childModuleIds = $this->tree->getAllChildID($moduleID);
-            $storyQuery = $this->dao->andWhere('product')->in($productID)->andWhere('module')->in($childModuleIds)->get();
+            $storyQuery = $this->dao->andWhere('product')->in($productID)
+                ->beginIF(!empty($childModuleIds))->andWhere('module')->in($childModuleIds)->fi()
+                ->get();
             $storyQuery = substr($storyQuery, strpos($storyQuery,'product'));
             $this->session->set('storyReport', $storyQuery);
             $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
@@ -148,7 +150,6 @@ class product extends control
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
         $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
-
         $this->display();
     }
 
