@@ -124,27 +124,79 @@ class extensionModel extends model
     }
 
     /**
-     * Install an extension.
+     * Check the download path.
+     * 
+     * @access public
+     * @return object   the check result.
+     */
+    public function checkDownloadPath()
+    {
+        /* Init the return. */
+        $return->result = 'ok';
+        $return->error  = '';
+
+        $tmpRoot = $this->app->getTmpRoot();
+        $downloadPath = $tmpRoot . 'extension';
+
+        if(!is_dir($downloadPath))
+        {
+            if(is_writable($tmpRoot))
+            {
+                mkdir($downloadPath);
+            }
+            else
+            {
+                $return->result = 'fail';
+                $return->error  = sprintf($this->lang->extension->errorDownloadPathNotFound, $downloadPath, $downloadPath);
+            }
+        }
+        elseif(!is_writable($downloadPath))
+        {
+            $return->result = 'fail';
+            $return->error  = sprintf($this->lang->extension->errorDownloadPathNotWritable, $downloadPath, $downloadPath);
+        }
+        return $return;
+    }
+
+    /**
+     * Check extension files.
      * 
      * @param  string    $extension 
      * @access public
-     * @return void
+     * @return object
      */
-    public function install($extension)
+    public function checkExtensionPathes($extension)
     {
-        $packageFile = $this->getPackageFile($extension);
+        $return->result      = 'ok';
+        $return->errors      = '';
+        $return->dirCommands = '';
+        $return->modCommands = '';
 
-        /* Extract the zip file. */
-        $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($packageFile);
-        $zip->extract(PCLZIP_OPT_PATH, 'ext');
-
-        /* Copy to the destination. */
-        $this->xcopy("ext/$extension/module", $this->app->getAppRoot() . 'module');
-        $this->xcopy("ext/$extension/www",    $this->app->getAppRoot() . 'www');
-        $this->xcopy("ext/$extension/bin",    $this->app->getAppRoot() . 'bin');
-        $this->xcopy("ext/$extension/config", $this->app->getAppRoot() . 'config');
-        $this->xcopy("ext/$extension/lib",    $this->app->getAppRoot() . 'bli');
+        $appRoot = $this->app->getAppRoot();
+        $pathes  = $this->extractPathesFromPackage($extension);
+        foreach($pathes as $path)
+        {
+            if($path == 'db' or $path == 'doc') continue;
+            $path = $appRoot . $path;
+            if(file_exists($path))
+            {
+                if(!is_writable($path))
+                {
+                    $return->errors   .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
+                    $return->modCommands .= "chmod -R 777 $path<br />";
+                }
+            }
+            elseif(!is_writable(dirname($path)))
+            {
+                $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
+                $return->dirCommands .= "mkdir $path<br />";
+                $return->modCommands .= "chmod -R 777 $path<br />";
+            }
+        }
+        if($return->errors) $return->result = 'fail';
+        $return->dirCommands = str_replace('/', DIRECTORY_SEPARATOR, $return->dirCommands);
+        $return->errors .= $return->dirCommands . $return->modCommands;
+        return $return;
     }
 
     /**
@@ -155,11 +207,71 @@ class extensionModel extends model
      * @access public
      * @return void
      */
-    public function download($extension, $downLink)
+    public function downloadPackage($extension, $downLink)
     {
         $packageFile = $this->getPackageFile($extension);
         $this->agent->fetch($downLink);
         file_put_contents($packageFile, $this->agent->results);
+    }
+
+    /**
+     * Extract an extension.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return void
+     */
+    public function extractPackage($extension)
+    {
+        $packageFile = $this->getPackageFile($extension);
+
+        /* Extract the zip file. */
+        $this->app->loadClass('pclzip', true);
+        $zip = new pclzip($packageFile);
+        $zip->extract(PCLZIP_OPT_PATH, 'ext');
+    }
+
+    /**
+     * Extract pathes from an extension package.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return array
+     */
+    public function extractPathesFromPackage($extension)
+    {
+        $pathes = array();
+        $packageFile = $this->getPackageFile($extension);
+
+        /* Get files from the package file. */
+        $this->app->loadClass('pclzip', true);
+        $zip   = new pclzip($packageFile);
+        $files = $zip->listContent();
+
+        foreach($files as $file)
+        {
+            $file = (object)$file;
+            if($file->folder) continue;
+            $file->filename = substr($file->filename, strpos($file->filename, '/') + 1);
+            $pathes[] = dirname($file->filename);
+        }
+        return array_unique($pathes);
+    }
+
+    /**
+     * Copy package files. 
+     * 
+     * @param  int    $extension 
+     * @access public
+     * @return void
+     */
+    public function copyPackageFiles($extension)
+    {
+        $this->xcopy("ext/$extension/module", $this->app->getAppRoot() . 'module');
+        $this->xcopy("ext/$extension/www",    $this->app->getAppRoot() . 'www');
+        $this->xcopy("ext/$extension/bin",    $this->app->getAppRoot() . 'bin');
+        $this->xcopy("ext/$extension/config", $this->app->getAppRoot() . 'config');
+        $this->xcopy("ext/$extension/lib",    $this->app->getAppRoot() . 'bli');
     }
 
     /**

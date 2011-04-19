@@ -41,3 +41,13 @@ $lang->extension->byAddedTime   = '最新添加';
 $lang->extension->byUpdatedTime = '最近更新';
 $lang->extension->bySearch      = '搜索';
 $lang->extension->byCategory    = '分类浏览';
+
+$lang->extension->installFailed = '安装失败，错误原因如下:';
+$lang->extension->errorDownloadPathNotFound    = '插件下载存储路径<strong>%s</strong>不存在。<br />linux下面请执行命令：<strong>mkdir %s</strong>来修正。';
+$lang->extension->errorDownloadPathNotWritable = '插件下载存储路径<strong>%s</strong>不可写。<br />linux下面请执行命令：<strong>chmod 777 %s</strong>来修正。';
+$lang->extension->errorPackageFileExists       = '下载路径已经有一个名为的<strong>%s</strong>附件。<h3>重新安装，<a href="%s">请点击此链接</a></h3>';
+$lang->extension->errorDownloadFailed          = '下载失败，请重新下载。如果多次重试还不行，请尝试手工下载，然后通过上传功能上传。';
+$lang->extension->errorMd5Checking             = '下载文件不完整，请重新下载。如果多次重试还不行，请尝试手工下载，然后通过上传功能上传。';
+$lang->extension->errorPackageNotFound         = '包文件 <strong>%s </strong>没有找到，可能是因为自动下载失败。您可以尝试再次下载。';
+$lang->extension->errorTargetPathNotWritable   = '目标路径 <strong>%s </strong>不可写。';
+$lang->extension->errorTargetPathNotExists     = '目标路径 <strong>%s </strong>不存在。';

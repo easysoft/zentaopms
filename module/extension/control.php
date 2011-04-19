@@ -63,19 +63,71 @@ class extension extends control
     /**
      * Install a extension
      * 
-     * @param  int    $downLink 
+     * @param  string $extension 
+     * @param  string $downLink 
+     * @param  string $md5 
+     * @param  string $forceInstall 
      * @access public
      * @return void
      */
-    public function install($extension, $downLink = '')
+    public function install($extension, $downLink = '', $md5 = '', $forceInstall = 'no')
     {
-        if($downLink) $this->extension->download($extension, helper::safe64Decode($downLink));
+        $this->view->error = '';
+        $this->view->header->title = $this->lang->extension->install . $this->lang->colon . $extension;
 
-        $packgeFile = $this->extension->getPackageFile($extension);
-        if(!file_exists($packgeFile)) die(js::error('not found'));
+        /* Get the package file name. */
+        $packageFile = $this->extension->getPackageFile($extension);
 
-        $this->extension->install($extension);
-        echo 'installed';
+        if($downLink)
+        {
+            /* Checking download path. */
+            $return = $this->extension->checkDownloadPath();
+            if($return->result != 'ok')
+            {
+                $this->view->error = $return->error;
+                die($this->display());
+            }
+
+            /* Check file exists or not. */
+            if(file_exists($packageFile) and $forceInstall == 'no') 
+            {
+                $forceInstallLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&forecInstall=yes");
+                $this->view->error = sprintf($this->lang->extension->errorPackageFileExists, $packageFile, $forceInstallLink);
+                die($this->display());
+            }
+
+            /* Download the package file. */
+            $this->extension->downloadPackage($extension, helper::safe64Decode($downLink));
+            if(!file_exists($packageFile))
+            {
+                $this->view->error = sprintf($this->lang->extension->errorDownloadFailed, $packageFile);
+                die($this->display());
+            }
+            elseif(md5_file($packageFile) != $md5)
+            {
+                $this->view->error = sprintf($this->lang->extension->errorMd5Checking, $packageFile);
+                die($this->display());
+            }
+        }
+
+        /* Check the package file exists or not. */
+        if(!file_exists($packageFile)) 
+        {
+            $this->view->error = sprintf($this->lang->extension->errorPackageNotFound, $packageFile);
+            die($this->display());
+        }
+
+        /* Checking the extension path. */
+        $return = $this->extension->checkExtensionPathes($extension);
+        if($return->result != 'ok')
+        {
+            $this->view->error = $return->errors;
+            die($this->display());
+        }
+
+        /* Extract the package. */
+        $this->extension->extractPackage($extension);
+        $this->extension->copyPackageFiles($extension);
     }
 
     public function uninstall()

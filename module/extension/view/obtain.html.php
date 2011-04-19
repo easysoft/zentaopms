@@ -61,8 +61,9 @@
           <td><?php echo $extension->downloads;?></td>
           <td>
             <?php 
-            echo html::linkButton($lang->extension->installAB,  inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink)));
-            echo html::linkButton($lang->extension->downloadAB, $extension->downLink);
+            $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
+            echo html::a($installLink, $lang->extension->installAB, '', "class='button-c iframe'");
+            echo html::a($extension->downLink, $lang->extension->downloadAB, '', "class='button-c'");
             ?>
           </td>
         </tr>
