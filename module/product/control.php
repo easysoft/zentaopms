@@ -96,6 +96,7 @@ class product extends control
         if($browseType == 'all')
         {
             $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
+            $this->session->set('storyReport', '1 = 1');
         }
         elseif($browseType == 'bymodule')
         {
