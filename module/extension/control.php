@@ -43,6 +43,9 @@ class extension extends control
         $extensions = array();
         $pager      = null;
 
+        /* Set the key. */
+        if($type == 'bysearch') $param = helper::safe64Encode($this->post->key);
+
         /* Get results from the api. */
         $results = $this->extension->getExtensionsByAPI($type, $param, $recTotal, $recPerPage, $pageID);
         if($results)
