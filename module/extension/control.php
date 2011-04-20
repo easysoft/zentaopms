@@ -150,6 +150,7 @@ class extension extends control
         $data->status = 'installed';
         $data->dirs   = $this->session->dirs2Created;
         $data->files  = $this->view->files;
+        $data->installedTime = helper::now();
 
         if($this->extension->needExecuteDB($extension, 'install'))
         {
