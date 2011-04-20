@@ -22,6 +22,7 @@ $lang->task->close     = "关闭任务";
 $lang->task->batchClose= "批量关闭";
 $lang->task->cancel    = "取消任务";
 $lang->task->activate  = "激活任务";
+$lang->task->reportChart        = "报表统计";
 $lang->task->confirmStoryChange = "确认需求变动";
 
 $lang->task->common       = '任务';

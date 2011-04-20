@@ -22,6 +22,7 @@ $lang->task->close     = "Close";
 $lang->task->batchClose= "Batch close";
 $lang->task->cancel    = "Cancel";
 $lang->task->activate  = "Activate";
+$lang->task->reportChart        = "Report chart";
 $lang->task->confirmStoryChange = "Confirm story change";
 
 $lang->task->common       = 'Task';
