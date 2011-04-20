@@ -114,7 +114,7 @@ $lang->resource->task->view                = 'view';
 $lang->resource->task->confirmStoryChange  = 'confirmStoryChange';
 $lang->resource->task->ajaxGetUserTasks    = 'ajaxGetUserTasks';
 $lang->resource->task->ajaxGetProjectTasks = 'ajaxGetProjectTasks';
-$lang->resource->task->report              = 'report';
+$lang->resource->task->report              = 'reportChart';
 
 /* Build. */
 $lang->resource->build->create               = 'create';
