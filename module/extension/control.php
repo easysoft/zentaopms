@@ -130,7 +130,12 @@ class extension extends control
         }
 
         /* Extract the package. */
-        $this->extension->extractPackage($extension);
+        $return = $this->extension->extractPackage($extension);
+        if($return->result != 'ok')
+        {
+            $this->view->error = sprintf($this->lang->extension->errorExtracted, $packageFile, $return->error);
+            die($this->display());
+        }
 
         /* Save to database. */
         $this->extension->saveExtension($extension);
@@ -172,9 +177,11 @@ class extension extends control
      */
     public function uninstall($extension)
     {
-        $this->extension->removePackage($extension);
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
+        $this->view->removeCommands = $this->extension->removePackage($extension);
+        $this->view->header->title  = $this->lang->extension->uninstallFinished;
+        $this->display();
     }
 
     /**
@@ -188,6 +195,8 @@ class extension extends control
     {
         $this->extension->copyPackageFiles($extension);
         $this->extension->updateExtension($extension, array('status' => 'installed'));
+        $this->view->header->title = $this->lang->extension->activateFinished;
+        $this->display();
     }
 
     /**
@@ -199,8 +208,10 @@ class extension extends control
      */
     public function deactivate($extension)
     {
-        $this->extension->removePackage($extension);
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+        $this->view->removeCommands = $this->extension->removePackage($extension);
+        $this->view->header->title  = $this->lang->extension->deactivateFinished;
+        $this->display();
     }
 
     /**
@@ -231,6 +242,8 @@ class extension extends control
      */
     public function erase($extension)
     {
-        $this->extension->erasePackage($extension);
+        $this->view->removeCommands = $this->extension->erasePackage($extension);
+        $this->view->header->title  = $this->lang->extension->eraseFinished;
+        $this->display();
     }
 }

@@ -279,17 +279,25 @@ class extensionModel extends model
      * 
      * @param  string    $extension 
      * @access public
-     * @return void
+     * @return object
      */
-    public function extractPackage($extension)
+    public function extractPackage($extension) 
     {
-        /* Extract the zip file. */
+        $return->result = 'ok';
+        $return->error  = '';
+
         $packageFile = $this->getPackageFile($extension);
         $this->app->loadClass('pclzip', true);
         $zip = new pclzip($packageFile);
         $files = $zip->listContent();
         $removePath = $files[0]['filename'];
-        $zip->extract(PCLZIP_OPT_PATH, "ext/$extension", PCLZIP_OPT_REMOVE_PATH, $removePath);
+        if($zip->extract(PCLZIP_OPT_PATH, "ext/$extension", PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
+        {
+            $return->result = 'fail';
+            $return->error  = $zip->errorInfo(true);
+        }
+
+        return $return;
     }
 
     /**
@@ -308,12 +316,15 @@ class extensionModel extends model
         $this->app->loadClass('pclzip', true);
         $zip   = new pclzip($packageFile);
         $files = $zip->listContent();
-        foreach($files as $file)
+        if($files)
         {
-            $file = (object)$file;
-            if($file->folder) continue;
-            $file->filename = substr($file->filename, strpos($file->filename, '/') + 1);
-            $pathes[] = dirname($file->filename);
+            foreach($files as $file)
+            {
+                $file = (object)$file;
+                if($file->folder) continue;
+                $file->filename = substr($file->filename, strpos($file->filename, '/') + 1);
+                $pathes[] = dirname($file->filename);
+            }
         }
 
         /* Append the pathes to stored the extracted files. */
@@ -350,25 +361,21 @@ class extensionModel extends model
      * 
      * @param  string    $extension 
      * @access public
-     * @return array     un removed files.
+     * @return array     the remove commands need executed manually.
      */
     public function removePackage($extension)
     {
         $extension = $this->getInfoFromDB($extension);
         $dirs  = json_decode($extension->dirs);
         $files = json_decode($extension->files);
-        $unremovedDirs  = array();
-        $unremovedFiles = array();
         $appRoot = $this->app->getAppRoot();
+        $removeCommands = array();
 
         if($dirs)
         {
             foreach($dirs as $dir)
             {
-                if(!@rmdir($appRoot . $dir))
-                {
-                    $unremovedDirs[] = $appRoot . $dir;
-                }
+                if(!@rmdir($appRoot . $dir)) $removeCommands[] = "rmdir $appRoot$dir";
             }
         }
 
@@ -376,13 +383,16 @@ class extensionModel extends model
         {
             foreach($files as $file)
             {
-                if(!@unlink($appRoot . $file))
+                $file = $appRoot . $file;
+                if(!file_exists($file)) continue;
+
+                if(!@unlink($file))
                 {
-                    $unremovedFiles[] = $appRoot . $file;
+                    $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file" : "del $file";
                 }
             }
         }
-        return array('unremovedDirs' => $unremovedDirs, 'unremovedFiles' => $unremovedFiles);
+        return $removeCommands;
     }
 
     /**
@@ -390,13 +400,29 @@ class extensionModel extends model
      * 
      * @param  string    $extension 
      * @access public
-     * @return void
+     * @return array     the remove commands need executed manually.
      */
     public function erasePackage($extension)
     {
-        $packageFile = $this->getPackageFile($extension);
-        unlink($packageFile);
+        $removeCommands = array();
+
         $this->dao->delete()->from(TABLE_EXTENSION)->where('code')->eq($extension)->exec();
+
+        /* Remove the zip file. */
+        $packageFile = $this->getPackageFile($extension);
+        if(file_exists($packageFile) and !@unlink($packageFile))
+        {
+            $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $packageFile" : "del $packageFile";
+        }
+
+        /* Remove the extracted files. */
+        $extractedDir = realpath("ext/$extension");
+        if(!$this->removeDir($extractedDir))
+        {
+            $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $extractedDir" : "rmdir $extractedDir /s";
+        }
+
+        return $removeCommands;
     }
 
     /**
@@ -487,9 +513,8 @@ class extensionModel extends model
         $data = (object)$data;
         $appRoot = $this->app->getAppRoot();
 
-        if(isset($data->dirs))
+        if(isset($data->dirs) and $data->dirs)
         {
-
             foreach($data->dirs as $key => $dir)
             {
                 $data->dirs[$key] = str_replace($appRoot, '', $dir);
@@ -584,7 +609,7 @@ class extensionModel extends model
                 $this->removeDir($fullEntry);
             }
         }
-        rmdir($dir);
+        if(!@rmdir($dir)) return false;
         return true;
     }
 }
