@@ -432,7 +432,8 @@ class user extends control
     /**
      * My dynamic.
      * 
-     * @param  string $type 
+     * @param  string $period 
+     * @param  string $account 
      * @param  string $orderBy 
      * @param  int    $recTotal 
      * @param  int    $recPerPage 
