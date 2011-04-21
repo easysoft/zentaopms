@@ -52,8 +52,15 @@
       </td>
     </tr>
     <?php endforeach;?>
-  </tbody>
+  </tbody> 
+  <tfoot>
+         <tr>
+           <td colspan=7>
+               <?php $pager->show();?>
+           </td>
+         </tr>
+  </tfoot>
+ 
 </table>
-<?php $pager->show();?>
 <script language="Javascript">$("#<?php echo $type;?>Tab").addClass('active'); </script>
 <?php include '../../common/view/footer.html.php';?>

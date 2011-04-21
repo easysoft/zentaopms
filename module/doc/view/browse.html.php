@@ -74,8 +74,14 @@ var browseType = '<?php echo $browseType;?>';
           </tr>
           <?php endforeach;?>
         </tbody>
+        <tfoot>
+         <tr>
+           <td colspan=6>
+               <?php $pager->show();?>
+           </td>
+         </tr>
+        </tfoot>
       </table>
-      <?php $pager->show();?>
     </td>              
   </tr>    
 </table>  

@@ -86,8 +86,14 @@
           </tr>
           <?php endforeach;?>
         </tbody>
-      </table>
-      <?php $pager->show();?>
+        <tfoot>
+         <tr>
+           <td colspan = 10>
+               <?php $pager->show();?>
+           </td>
+         </tr>
+        </tfoot>
+ </table>
     </td>              
   </tr>
 </table>
