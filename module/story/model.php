@@ -530,7 +530,7 @@ class storyModel extends model
      */
     public function getProjectStoryPairs($projectID = 0, $productID = 0)
     {
-        $stories = $this->dao->select('t2.id, t2.title, t2.module, t3.name AS product')
+        $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')
             ->on('t1.story = t2.id')
@@ -665,7 +665,7 @@ class storyModel extends model
 
         /* Format these stories. */
         $storyPairs = array('' => '');
-        foreach($stories as $story) $storyPairs[$story->id] = $story->id . ':' . $story->title;
+        foreach($stories as $story) $storyPairs[$story->id] ='ID：' .  $story->id . ' ；  ' . '优先级：' . $story->pri . ' ；  ' . '预计工时：' . $story->estimate . ' ； ' .'需求名称 ' . ':' . $story->title;
         return $storyPairs;
     }
 
