@@ -150,7 +150,15 @@ class pager
      */
     public function setRecPerPage($recPerPage)
     {
-        $this->recPerPage = ($recPerPage > 0) ? $recPerPage : PAGER::DEFAULT_REC_PRE_PAGE;
+        if($recPerPage != '全部') 
+        {
+            $this->recPerPage = $recPerPage; //($recPerPage > 0) ? $recPerPage : PAGER::DEFAULT_REC_PRE_PAGE;
+        }
+        else
+        {
+            $this->recPerPage = $this->recTotal;
+        }
+ 
     }
 
     /**
@@ -161,7 +169,7 @@ class pager
      */
     public function setPageTotal()
     {
-        $this->pageTotal = ceil($this->recTotal / $this->recPerPage);
+        $this->pageTotal = ($this->recPerPage > 0) ? ceil($this->recTotal / $this->recPerPage) : 1;
     }
 
     /**
@@ -431,9 +439,11 @@ EOT;
     private function createRecPerPageList()
     {
         for($i = 5; $i <= 50; $i += 5) $range[$i] = $i;
-        $range[100] = 100;
-        $range[200] = 200;
-        $range[500] = 500;
+        $range[100]  = 100;
+        $range[200]  = 200;
+        $range[500]  = 500;
+        $range[1000] = 1000;
+        $range['all']  = '全部';
         return html::select('_recPerPage', $range, $this->recPerPage, "onchange='submitPage(\"changeRecPerPage\");'");
     }
 
