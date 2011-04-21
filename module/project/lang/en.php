@@ -88,6 +88,7 @@ $lang->project->finishedByMe        = 'My done';
 $lang->project->statusWait          = 'Wait';
 $lang->project->statusDoing         = 'Doing';
 $lang->project->statusDone          = 'Done';
+$lang->project->statusClosed        = 'Closed';
 $lang->project->delayed             = 'Delayed';
 $lang->project->groups['story']     = 'Group by story';
 $lang->project->groups['status']    = 'Group by status';

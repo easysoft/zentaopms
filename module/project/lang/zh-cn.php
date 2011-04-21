@@ -88,6 +88,7 @@ $lang->project->finishedByMe        = '由我完成';
 $lang->project->statusWait          = '未开始';
 $lang->project->statusDoing         = '进行中';
 $lang->project->statusDone          = '已完成';
+$lang->project->statusClosed        = '已关闭';
 $lang->project->delayed             = '已延期';
 $lang->project->groups['story']     = '需求分组';
 $lang->project->groups['status']    = '状态分组';

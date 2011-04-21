@@ -136,8 +136,16 @@
     <td class='side'>
       <table class='table-1 colored'>
         <caption><?php echo $lang->index->latest;?></caption>
-        <?php 
-        foreach($actions as $action)
+     <tr>
+      <td class='a-left f-14px'>
+    <?php 
+           $dynamicLink = $this->createLink('company','dynamic');
+            printf($lang->index->dynamicTip,$dynamicLink); 
+       ?>
+      </td>
+     </tr>
+    <?php 
+            foreach($actions as $action)
         {
             $user = isset($users[$action->actor]) ? $users[$action->actor] : $action->actor;
             echo "<tr><td>";
