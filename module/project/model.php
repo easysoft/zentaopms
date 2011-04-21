@@ -374,7 +374,7 @@ class projectModel extends model
      */
     public function importTask($projectID)
     {
-        $tasks = $this->dao->select('id, project, assignedTo, story, consumed')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $tasks = $this->dao->select('id, project, assignedTo, story, consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
 
         /* Update tasks. */
         foreach($tasks as $task)
@@ -385,17 +385,17 @@ class projectModel extends model
 
             $data = new stdclass();
             $data->project = $projectID;
-            $data->status  = $task->consumed > 0 ? 'doing' : 'wait';
 
             if($task->status == 'cancel')
             {
                 $data->canceledBy = '';
                 $data->canceledDate = NULL;
             }
+
+            $data->status  = $task->consumed > 0 ? 'doing' : 'wait';
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->in($this->post->tasks)->exec();
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
         }
-
         /* Remove empty story. */
         unset($stories[0]);
 
