@@ -381,7 +381,7 @@ class userModel extends model
      */
     public function getBugs($account)
     {
-        return $this->dao->select('*')
+        return $this->dao->select('t1.*')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
