@@ -15,10 +15,17 @@
   <caption><?php echo $header->title;?></caption>
   <tr>
     <td valign='middle'>
-      <?php
-      echo "<h3 class='a-center success'>{$header->title}</h3>";
-      echo "<p class='a-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse', 'type=installed') . '"') . '</p>';
-      ?>
+     <?php
+    if(isset($return) and $return->return == 'fail')
+    {
+        echo $return->error;
+    }
+    else
+    {
+        echo "<h3 class='a-center success'>{$header->title}</h3>";
+        echo "<p class='a-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse', 'type=installed') . '"') . '</p>';
+    }
+    ?>
     </td>
   </tr>
 </table>

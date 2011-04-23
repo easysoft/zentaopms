@@ -74,7 +74,7 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function install($extension, $downLink = '', $md5 = '', $forceInstall = 'no')
+    public function install($extension, $downLink = '', $md5 = '', $forceInstall = 'no', $isCheck = true)
     {
         $this->view->error = '';
         $this->view->header->title = $this->lang->extension->install . $this->lang->colon . $extension;
@@ -134,12 +134,20 @@ class extension extends control
 
         /* Extract the package. */
         $return = $this->extension->extractPackage($extension);
-        if($return->result != 'ok')
+       if($return->result != 'ok')
         {
             $this->view->error = sprintf($this->lang->extension->errorExtracted, $packageFile, $return->error);
             die($this->display());
         }
 
+       $return = $this->extension->checkFile($extension, 'repeat', $isCheck);
+        if($return->result != 'ok')
+        {
+            $continueLink = inlink('install', "extension=$extension&downLink=&md5=&forecInstall=&isCheck=" . false);
+            $resetLink    = inlink('obtain');
+            $this->view->error = sprintf($this->lang->extension->errorRepeatFile, $return->error, $continueLink, $resetLink);
+            die($this->display());
+        }
         /* Save to database. */
         $this->extension->saveExtension($extension);
 
@@ -179,11 +187,24 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function uninstall($extension)
+    public function uninstall($extension,$isCheck = true)
     {
+        $return->return         = 'ok';
+        $checkReturn = $this->extension->checkFile($extension, 'change', $isCheck);
+        if($checkReturn->result != 'ok')
+        {
+            $continueLink = inlink('uninstall', "extension=$extension&isCheck=" . false);
+            $resetLink    = inlink('browse');
+            $return->removeCommands = sprintf($this->lang->extension->errorChangeFile, $checkReturn->error, $continueLink, $resetLink);
+            $return->return         = 'fail';
+            $this->view->return     = $return;
+            die($this->display());
+        }
+
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
-        $this->view->removeCommands = $this->extension->removePackage($extension);
+        $return->removeCommands     = $this->extension->removePackage($extension);
+        $this->view->return         = $return;
         $this->view->header->title  = $this->lang->extension->uninstallFinished;
         $this->display();
     }
@@ -195,8 +216,18 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function activate($extension)
+    public function activate($extension, $isCheck = true)
     {
+        $return = $this->extension->checkFile($extension, 'repeat', $isCheck);
+        if($return->result != 'ok')
+        {
+            $continueLink = inlink('activate', "extension=$extension&isCheck=" . false);
+            $resetLink    = inlink('browse', 'type=deactivated');
+            $return->error = sprintf($this->lang->extension->errorRepeatFile, $return->error, $continueLink, $resetLink);
+            $this->view->return     = $return;
+            die($this->display());
+        }
+
         $this->extension->copyPackageFiles($extension);
         $this->extension->updateExtension($extension, array('status' => 'installed'));
         $this->view->header->title = $this->lang->extension->activateFinished;
@@ -210,10 +241,22 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function deactivate($extension)
+    public function deactivate($extension, $isCheck = true)
     {
+        $return->return         = 'ok';
+        $checkReturn = $this->extension->checkFile($extension, 'change', $isCheck);
+        if($checkReturn->result != 'ok')
+        {
+            $continueLink = inlink('deactivate', "extension=$extension&isCheck=" . false);
+            $resetLink    = inlink('browse');
+            $return->removeCommands = sprintf($this->lang->extension->errorChangeFile, $checkReturn->error, $continueLink, $resetLink);
+            $return->return         = 'fail';
+            $this->view->return     = $return;
+            die($this->display());
+        }
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
-        $this->view->removeCommands = $this->extension->removePackage($extension);
+        $return->removeCommands = $this->extension->removePackage($extension);
+        $this->view->return   = $return;
         $this->view->header->title  = $this->lang->extension->deactivateFinished;
         $this->display();
     }

@@ -14,16 +14,24 @@
 <table class='table-1'>
   <caption><?php echo $header->title;?></caption>
   <tr>
-    <td valign='middle'>
-      <?php
-      echo "<h3 class='a-center success'>{$header->title}</h3>";
-      if($removeCommands)
-      {
-          echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";
-          echo join($removeCommands, '<br />');
-      }
-      echo "<p class='a-center'>" . html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"') . '</p>';
-      ?>
+  <td valign='middle'>
+    <?php
+    if($return->return == 'fail')
+    {
+        echo $return->removeCommands;
+    }
+    else
+    {
+        echo "<h3 class='a-center success'>{$header->title}</h3>";
+        if($return->removeCommands)
+        {
+             echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";
+             echo join($retrun->removeCommands, '<br />');
+        }
+        echo "<p class='a-center'>" . html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"') . '</p>';
+    }
+
+    ?>
     </td>
   </tr>
 </table>

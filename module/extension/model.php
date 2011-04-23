@@ -352,7 +352,6 @@ class extensionModel extends model
             if($path == 'db' or $path == 'doc' or $path == '..' or $path == '.') continue;
             $copiedFiles = $this->copyDir($extensionDir . $path, $appRoot . $path);
         }
-
         return $copiedFiles;
     }
 
@@ -513,7 +512,7 @@ class extensionModel extends model
         $data = (object)$data;
         $appRoot = $this->app->getAppRoot();
 
-        if(isset($data->dirs) and $data->dirs)
+        if(isset($data->dirs))
         {
             foreach($data->dirs as $key => $dir)
             {
@@ -611,5 +610,82 @@ class extensionModel extends model
         }
         if(!@rmdir($dir)) return false;
         return true;
+    }
+    
+    /**
+     * Check the file for repeat or changed
+     * 
+     * @param  string    $moveFile 
+     * @param  string    $extensionFile 
+     * @access public
+     * @return object
+     */
+    public function checkFile($extension,$type = 'repeat', $isCheck = true)
+    {
+        $return->result = 'ok';
+        $return->error  = '';
+        if(!$isCheck) return $return;
+
+        $extensionFiles = $this->getAllExtensionFile($extension);
+        $appRoot = $this->app->getAppRoot();
+        foreach($extensionFiles as $extensionFile)
+        {
+            $compareFile = $appRoot . str_replace(realpath("ext/$extension") . '/', '', $extensionFile);
+            if(!file_exists($compareFile)) continue;
+            if($type =='repeat' and md5_file($extensionFile) == md5_file($compareFile)) $return->error .= $compareFile . '<br />';
+            elseif($type =='change' and md5_file($extensionFile) != md5_file($compareFile)) $return->error .= $compareFile . '<br />';
+        }
+        if($return->error != '') $return->result = 'fail';
+        return $return;
+    }
+
+    /**
+     * Get all extension files 
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return array
+     */
+    public function getAllExtensionFile($extension)
+    {
+        $extensionDir = "ext/$extension/";
+        $files = $this->getFile($extensionDir, array('db', 'doc'));
+        return $files;
+
+    }
+
+    /**
+     * Foreach the dir's files
+     * 
+     * @param  string    $dir 
+     * @param  array     $exceptions 
+     * @access private
+     * @return array
+     */
+    private function getFile($dir, $exceptions = array())
+    {
+         static $files = array();
+
+         if(!is_dir($dir)) return $files;
+
+         $dir    = realpath($dir) . '/';
+         $entries = scandir($dir);
+ 
+         foreach($entries as $entry)
+         {
+             if($entry == '.' or $entry == '..') continue;
+             if(in_array($entry, $exceptions)) continue;
+             $fullEntry = $dir . $entry;
+             if(is_file($fullEntry))
+             {
+                 $files[] = $dir . $entry;
+             }
+             else
+             {
+                 $nextDir = $dir . $entry;
+                 $this->getFile($nextDir);
+             }
+         }
+         return $files;
     }
 }

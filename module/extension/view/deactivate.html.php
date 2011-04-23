@@ -15,15 +15,22 @@
   <caption><?php echo $header->title;?></caption>
   <tr>
     <td valign='middle'>
-      <?php
+<?php
+if($return->return == 'fail')
+{
+    echo $return->removeCommands;
+}
+else
+{
       echo "<h3 class='a-center success'>{$header->title}</h3>";
-      if($removeCommands)
+      if($return->removeCommands)
       {
           echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";
-          echo join($removeCommands, '<br />');
+          echo join($retrun->removeCommands, '<br />');
       }
       echo "<p class='a-center'>" . html::commonButton($lang->extension->viewDeactivated, 'onclick=parent.location.href="' . inlink('browse', 'type=deactivated') . '"') . '</p>';
-      ?>
+}
+?>
     </td>
   </tr>
 </table>
