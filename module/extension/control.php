@@ -71,6 +71,7 @@ class extension extends control
      * @param  string $downLink 
      * @param  string $md5 
      * @param  string $forceInstall 
+     * @param  bool   $isCheck    isCheck for check the file repeat and changed
      * @access public
      * @return void
      */
@@ -93,9 +94,9 @@ class extension extends control
             }
 
             /* Check file exists or not. */
-            if(file_exists($packageFile) and $forceInstall == 'no') 
+            if(file_exists($packageFile) and $forceInstall == 'no')
             {
-                $forceInstallLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&forecInstall=yes");
+                $forceInstallLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&forecInstall=yes&isCheck=$isCheck");
                 $this->view->error = sprintf($this->lang->extension->errorPackageFileExists, $packageFile, $forceInstallLink);
                 die($this->display());
             }
@@ -140,10 +141,21 @@ class extension extends control
             die($this->display());
         }
 
+       $zentaoVersion = $this->extension->getZentaoVersion($extension);
+       /* Check version again for upload and install again */
+       if(!$this->extension->checkVersion($zentaoVersion, $this->session->isPass))
+       {
+           $forceInstallLink  = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&forceInstall=$forceInstall&isCheck=$isCheck");
+           $waringLink        = inlink('waring', "url=".helper::safe64Encode($forceInstallLink)."&zentaoVersion=$zentaoVersion&isPass=" . true);
+           $resetLink         = inlink('obtain');
+           $this->view->error = sprintf($this->lang->extension->errorCheckIncompatible, $waringLink, $resetLink);
+           die($this->display());
+       }
+       
        $return = $this->extension->checkFile($extension, 'repeat', $isCheck);
         if($return->result != 'ok')
         {
-            $continueLink = inlink('install', "extension=$extension&downLink=&md5=&forecInstall=&isCheck=" . false);
+            $continueLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&forceInstall=$forceInstall&isCheck=" . false);
             $resetLink    = inlink('obtain');
             $this->view->error = sprintf($this->lang->extension->errorRepeatFile, $return->error, $continueLink, $resetLink);
             die($this->display());
@@ -177,6 +189,7 @@ class extension extends control
 
         $this->view->downloadedPackage = !empty($downLink);
 
+        $this->session->set('isPass', false);
         $this->display();
     }
 
@@ -292,5 +305,30 @@ class extension extends control
         $this->view->removeCommands = $this->extension->erasePackage($extension);
         $this->view->header->title  = $this->lang->extension->eraseFinished;
         $this->display();
+    }
+
+    /**
+     * waring for install and download 
+     * 
+     * @param  string     $url 
+     * @param  string     $zentaoVersion 
+     * @param  bool       $isPass 
+     * @access public
+     * @return void
+     */
+    public function waring($url, $zentaoVersion = '', $isPass = false)
+    {
+        /* Check version for download*/
+        if(!$this->extension->checkVersion($zentaoVersion, $isPass))
+        {
+            $forceInstallLink  = inlink('waring', "url=$url&zentaoVersion=$zentaoVersion&isPass=" . true);
+            $resetLink         = inlink('obtain');
+            $this->view->error = sprintf($this->lang->extension->errorCheckIncompatible, $forceInstallLink, $resetLink);
+            $this->view->header->title  = $this->lang->extension->waringInstall;
+            die($this->display());
+        }
+        $this->session->set('isPass', true);
+        $url = helper::safe64Decode($url);
+        $this->locate($url);
     }
 }

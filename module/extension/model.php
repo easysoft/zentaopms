@@ -611,12 +611,50 @@ class extensionModel extends model
         if(!@rmdir($dir)) return false;
         return true;
     }
-    
+
+    /**
+     * Check the extension's version is compatibility for zentao version
+     * 
+     * @param  string    $version 
+     * @param  bool      $isPass  true is not check and false is check
+     * @access public
+     * @return bool
+     */
+    public function checkVersion($version, $isPass = false)
+    {
+        if($isPass) return true;
+        if($version == 'all') return true;
+        $version = explode(',', $version);
+        if(in_array($this->config->version, $version)) return true;
+        return false;
+    }
+
+    /**
+     * Get the extension's zentaoVersion 
+     * 
+     * @param  string    $extenstion 
+     * @access public
+     * @return string
+     */
+    public function getZentaoVersion($extension)
+    {
+        $zentaoVersion = '';
+        $infoFile      = "ext/$extension/doc/copyright.txt";
+        if(!file_exists($infoFile)) return $zentaoVersion;
+
+        $info = parse_ini_file($infoFile);
+        if(!isset($info['zentaoVersion'])) return $zentaoVersion;
+        $zentaoVersion = $info['zentaoVersion'];
+
+        return $zentaoVersion;
+    }
+
     /**
      * Check the file for repeat or changed
      * 
-     * @param  string    $moveFile 
-     * @param  string    $extensionFile 
+     * @param  string    $extension 
+     * @param  string    $type
+     * @param  bool      $isCheck
      * @access public
      * @return object
      */

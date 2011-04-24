@@ -62,8 +62,8 @@
           <td>
             <?php 
             $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
-            echo html::a($installLink, $lang->extension->installAB, '', "class='button-c iframe'");
-            echo html::a($extension->downLink, $lang->extension->downloadAB, '', "class='button-c'");
+            echo html::a(inlink('waring',"url=" . helper::safe64Encode($installLink) . "&zentaoVersion=$extension->zentaoVersion"), $lang->extension->installAB, '', "class='button-c iframe'");
+            echo html::a(inlink('waring',"url=" . helper::safe64Encode($extension->downLink) . "&zentaoVersion=$extension->zentaoVersion"), $lang->extension->downloadAB, '', "class='button-c iframe'");
             ?>
           </td>
         </tr>

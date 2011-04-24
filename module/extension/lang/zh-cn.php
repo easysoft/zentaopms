@@ -43,6 +43,7 @@ $lang->extension->byUpdatedTime = '最近更新';
 $lang->extension->bySearch      = '搜索';
 $lang->extension->byCategory    = '分类浏览';
 
+$lang->extension->waringInstall            = '安装警告：';
 $lang->extension->installFailed            = '安装失败，错误原因如下:';
 $lang->extension->installFinished          = '恭喜您，插件顺利的安装成功！';
 $lang->extension->refreshPage              = '刷新页面';
@@ -60,6 +61,7 @@ $lang->extension->viewInstalled            = '查看已安装插件';
 $lang->extension->viewAvailable            = '查看可安装插件';
 $lang->extension->viewDeactivated          = '查看已禁用插件';
 
+$lang->extension->errorCheckIncompatible       = '该插件与禅道版本不兼容，安装后可能无法使用。。<h3>是否继续，<a href="%s">强制安装</a>&nbsp;&nbsp;<a href="#" onclick=parent.location.href="%s">取消</a></h3>';
 $lang->extension->errorDownloadPathNotFound    = '插件下载存储路径<strong>%s</strong>不存在。<br />linux下面请执行命令：<strong>mkdir %s</strong>来修正。';
 $lang->extension->errorDownloadPathNotWritable = '插件下载存储路径<strong>%s</strong>不可写。<br />linux下面请执行命令：<strong>sudo chmod 777 %s</strong>来修正。';
 $lang->extension->errorPackageFileExists       = '下载路径已经有一个名为的<strong>%s</strong>附件。<h3>重新安装，<a href="%s">请点击此链接</a></h3>';
