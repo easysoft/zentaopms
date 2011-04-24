@@ -63,6 +63,10 @@ class testcase extends control
         /* Set menu, save session. */
         $this->testcase->setMenu($this->products, $productID);
         $this->session->set('caseList', $this->app->getURI(true));
+        $this->session->set('productID', $productID);
+        $this->session->set('moduleID', $moduleID);
+        $this->session->set('browseType', $browseType);
+        $this->session->set('orderBy', $orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -347,4 +351,88 @@ class testcase extends control
         $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
         die(js::reload('parent'));
     }
+
+    /**
+     * get data to export
+     */
+    public function exportData($fileName, $fileType)
+    {
+        $users = $this->loadModel('user')->getPairs(); 
+        $productID  = $this->session->productID;
+        $browseType = $this->session->browseType;
+        $orderBy    = $this->session->orderBy;
+        $moduleID   = $this->session->moduleID;
+        $pager      = null;
+        /* By module or all cases. */
+        if($browseType == 'bymodule' or $browseType == 'all')
+        {
+            $childModuleIds    = $this->tree->getAllChildId($moduleID);
+            $cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
+        }
+        /* Cases need confirmed. */
+        elseif($browseType == 'needconfirm')
+        {
+            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where("t2.status = 'active'")
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.version > t1.storyVersion')
+                ->orderBy($orderBy)
+                ->fetchAll();
+        }
+        /* By search. */
+        elseif($browseType == 'bysearch')
+        {
+            $caseQuery = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // If product is all, change it to 1=1.
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
+                ->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+
+        if($browseType != 'needconfirm')
+        {
+            $data[] = array(
+                "id"       => $this->lang->idAB,
+                "pri"      => $this->lang->priAB,
+                "title"    => $this->lang->testcase->title,
+                "type"     => $this->lang->typeAB,
+                "openedBy" => $this->lang->openedByAB,
+                "status"   => $this->lang->statusAB,
+            );
+            foreach($cases as $case)
+            {
+                $tmp = array(
+                    "id"       => $case->id,
+                    "pri"      => $case->pri,
+                    "title"    => $case->title,
+                    "type"     => $this->lang->testcase->typeList[$case->type],
+                    "openedBy" => $users[$case->openedBy],
+                    "status"   => $this->lang->testcase->statusList[$case->status]
+                );
+                $data[] = $tmp;
+            }
+        }
+        else
+        {
+            $data[] = array(
+                "id"       => $this->lang->idAB,
+                "pri"      => $this->lang->priAB,
+                "title"    => $this->lang->testcase->title,
+                "story"    => $this->lang->testcase->story
+            );
+            foreach($cases as $case)
+            {
+                $tmp = array(
+                    "id"       => $case->id,
+                    "pri"      => $case->pri,
+                    "title"    => $case->title,
+                    "story"    => $case->storyTitle
+                );
+                $data[] = $tmp;
+            }
+
+        }
+        a($data);exit;
+        $this->fetch('file', 'export', "data=$data&fileName=$fileName&fileType=$fileType");
+    } 
 }
