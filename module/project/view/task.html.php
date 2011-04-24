@@ -16,6 +16,9 @@
 <?php include './taskheader.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
+$("#bysearchTab").toggle(
+    function(){$("#querybox").show();},
+    function(){$("#querybox").hide();} );
 </script>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 <table class='table-1 fixed colored tablesorter datatable'>

@@ -295,7 +295,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function story($projectID = 0)
+    public function story($projectID = 0, $orderBy = 'status_asc,id_desc')
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -313,7 +313,7 @@ class project extends control
         $position[]      = $this->lang->project->story;
 
         /* The pager. */
-        $stories    = $this->story->getProjectStories($projectID);
+        $stories    = $this->story->getProjectStories($projectID,$orderBy);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
 
@@ -321,6 +321,7 @@ class project extends control
         $this->view->header     = $header;
         $this->view->position   = $position;
         $this->view->stories    = $stories;
+        $this->view->orderBy    = $orderBy;
         $this->view->storyTasks = $storyTasks;
         $this->view->tabID      = 'story';
         $this->view->users      = $users;

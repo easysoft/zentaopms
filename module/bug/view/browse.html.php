@@ -18,6 +18,7 @@
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
 var customed   = <?php echo (int)$customed;?>;
+
 </script>
 
 <div id='featurebar'>
@@ -36,6 +37,12 @@ var customed   = <?php echo (int)$customed;?>;
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->bug->byQuery}</a></span> ";
     ?>
   </div>
+<script language='Javascript'>
+    $("#bysearchTab").toggle(
+        function(){$("#querybox").show(); $("#sidetable").hide(); },
+        function(){$("#querybox").hide(); $("#sidetable").show(); }
+    );
+</script>
   <div class='f-right'>
     <?php common::printLink('bug', 'customFields', '', $lang->bug->customFields, '', "class='iframe'"); ?>
     <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
@@ -49,7 +56,7 @@ var customed   = <?php echo (int)$customed;?>;
 
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td class='side <?php echo $treeClass;?>' id='treebox'>
+    <td id='sidetable' class='side <?php echo $treeClass;?>' id='treebox'>
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>

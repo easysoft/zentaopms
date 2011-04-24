@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->project->story;?></div>
@@ -21,16 +21,17 @@
   </caption>
   <thead>
     <tr class='colhead'>
-      <th class='w-id'><?php echo $lang->idAB;?></th>
-      <th class='w-pri'><?php echo $lang->priAB;?></th>
-      <th><?php echo $lang->story->title;?></th>
-      <th class='w-user'><?php echo $lang->openedByAB;?></th>
-      <th class='w-user'><?php echo $lang->assignedToAB;?></th>
-      <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
-      <th class='w-status'><?php echo $lang->statusAB;?></th>
-      <th class='w-status'><?php echo $lang->story->stageAB;?></th>
-      <th class='w-50px'><?php echo $lang->story->taskCount;?></th>
-      <th class='w-100px'><?php echo $lang->actions;?></th>
+    <?php $vars = "projectID={$project->id}&orderBy=%s"; ?>
+      <th class='w-id'>     <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-pri'>    <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
+      <th>                  <?php common::printOrderLink('title',        $orderBy, $vars, $lang->story->title);?></th>
+      <th class='w-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+      <th class='w-hour'>   <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
+      <th class='w-hour'>   <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
+      <th class='w-hour'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
+      <th class='w-status'> <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
+      <th class='w-50px'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->story->taskCount);?></th>
+      <th class='w-100px'>  <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->actions);?></th>
     </tr>
   </thead>
   <tbody>

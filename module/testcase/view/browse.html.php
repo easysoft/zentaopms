@@ -28,6 +28,13 @@ var moduleID   = '<?php echo $moduleID;?>';
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
+<script language='Javascript'>
+    $("#bysearchTab").
+        toggle(
+            function(){$("#querybox").show(); $("#sidetable").hide(); },
+            function(){$("#querybox").hide(); $("#sidetable").show(); }
+        ); 
+</script>
   <div class='f-right'>
     <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
     <?php common::printLink('testcase', 'create', "productID=$productID&moduleID=$moduleID", $lang->testcase->create); ?>
@@ -37,7 +44,7 @@ var moduleID   = '<?php echo $moduleID;?>';
 
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td class='side <?php echo $treeClass;?>'>
+    <td id='sidetable' class='side <?php echo $treeClass;?>'>
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>

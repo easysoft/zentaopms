@@ -20,6 +20,11 @@
     <span id='allTab'><?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->product->allStory);?></span>
     <span id='bysearchTab' onclick='search("<?php echo $browseType;?>")'><a href='#'><?php echo $lang->product->searchStory;?></a></span>
   </div>
+  <script language='Javascript'>
+    $("#bysearchTab").toggle(
+        function(){ $("#querybox").show(); $("#sidetable").hide();},
+        function(){ $("#querybox").hide(); $("#sidetable").show();} );
+  </script>
   <div class='f-right'>
     <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
     <?php common::printLink('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->story->report->common); ?>
@@ -30,7 +35,7 @@
 
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td class='side <?php echo $treeClass;?>' id='treebox'>
+    <td id='sidetable'class='side <?php echo $treeClass;?>' id='treebox'>
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
