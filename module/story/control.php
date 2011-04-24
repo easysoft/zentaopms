@@ -544,5 +544,63 @@ class story extends control
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
         $this->display();
     }
-
+ 
+    /**
+     * get data to export
+     */
+    public function exportData($fileName, $fileType)
+    { 
+        $users = $this->loadModel('user')->getPairs(); 
+        $productID  = $this->session->productID;
+        $browseType = $this->session->browseType;
+        $orderBy    = $this->session->orderBy;
+        $moduleID   = $this->session->moduleID;
+       
+        $stories = array();
+        if($browseType == 'all')
+        {
+            $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy);
+        }
+        elseif($browseType == 'bymodule')
+        {
+            $childModuleIds = $this->tree->getAllChildID($moduleID);
+            $storyQuery = $this->dao->andWhere('product')->in($productID)
+                ->beginIF(!empty($childModuleIds))->andWhere('module')->in($childModuleIds)->fi()
+                ->get();
+            $storyQuery = substr($storyQuery, strpos($storyQuery,'product'));
+            $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy);
+        }
+        elseif($browseType == 'bysearch')
+        {
+            $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy);
+        }
+        $data[] = array(
+            'id'         => $this->lang->idAB,
+            'pri'        => $this->lang->priAB,
+            'title'      => $this->lang->story->title,
+            'plan'       => $this->lang->story->planAB,
+            'openedBy'   => $this->lang->openedByAB,
+            'assignedTo' => $this->lang->assignedToAB,
+            'estimate'   => $this->lang->story->estimateAB,
+            'status'     => $this->lang->statusAB,
+            'stage'      => $this->lang->story->stageAB
+        );
+        foreach($stories as $story)
+        {
+            $tmp = array(
+                'id'         => $story->id,
+                'pri'        => $story->pri,
+                'title'      => $story->title,
+                'plan'       => $story->planTitle,
+                'openedBy'   => $users[$story->openedBy],
+                'assignedTo' => $users[$story->assignedTo],
+                'estimate'   => $story->estimate,
+                'status'     => $this->lang->story->statusList[$story->status],
+                'stage'      => $this->lang->story->stageList[$story->stage]
+            );
+            $data[] = $tmp;
+        }
+        a($data);exit;
+        $this->fetch('file', 'export', "data=$data&fileName=$fileName&fileType=$fileType");
+    }
 }
