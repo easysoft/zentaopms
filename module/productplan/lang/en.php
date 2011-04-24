@@ -30,3 +30,5 @@ $lang->productplan->title   = 'Title';
 $lang->productplan->desc    = 'Desc';
 $lang->productplan->begin   = 'Begin';
 $lang->productplan->end     = 'End';
+
+$lang->productplan->storySummary   = "Total 『%s』stories, estimate『%s』hours.";

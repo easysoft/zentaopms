@@ -61,11 +61,16 @@
   </tr>
   </thead>
   <tbody>
+  <?php $totalEstimate = 0.0;?>
   <?php foreach($planStories as $story):?>
-  <tr>
-    <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
+  <?php
+     $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
+     $totalEstimate += $story->estimate; 
+   ?>
+ <tr>
+    <td><?php echo html::a($viewLink, $story->id);?></td>
     <td><?php echo $story->pri;?></td>
-    <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+    <td class='a-left nobr'><?php echo html::a($viewLink , $story->title);?></td>
     <td><?php echo $users[$story->openedBy];?></td>
     <td><?php echo $users[$story->assignedTo];?></td>
     <td><?php echo $story->estimate;?></td>
@@ -74,6 +79,11 @@
     <td><?php common::printLink('productplan', 'unlinkStory', "story=$story->id", $lang->productplan->unlinkStory, 'hiddenwin');?></td>
   </tr>
   <?php endforeach;?>
+ <tr>
+              <td colspan=9 class='a-right'><?php printf($lang->productplan->storySummary, count($planStories), $totalEstimate);?>
+              </td>
+            </tr>
+
   </tbody>
 </table>
 <?php include '../../common/view/footer.html.php';?>

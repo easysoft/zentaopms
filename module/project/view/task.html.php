@@ -37,8 +37,37 @@ var browseType = '<?php echo $browseType;?>';
   </tr>
   </thead>
   <tbody>
+  <?php  $statusWait    = 0;
+         $statusDone    = 0;
+         $statusDoing   = 0;
+         $statusCancel  = 0;  
+         $totalEstimate = 0.0;
+         $totalConsumed = 0.0;
+         $totalLeft     = 0.0;
+  ?>
   <?php foreach($tasks as $task):?>
   <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
+  <?php $taskLink  = $this->createLink('task','view',"taskID=$task->id");
+       $totalEstimate += $task->estimate;
+       $totalConsumed += $task->consumed;
+       $totalLeft     += $task->left;
+       if($task->status == 'wait')
+       {
+           $statusWait++;
+       }
+       elseif($task->status == 'doing')
+       {
+           $statusDoing++;
+       }
+       elseif($task->status == 'done')
+       {
+           $statusDone++;
+       }
+       else
+       {
+           $statusCancel++;
+       }
+     ?>
   <tr class='a-center'>
     <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
     <td><?php echo $lang->task->priList[$task->pri];?></td>
@@ -53,7 +82,7 @@ var browseType = '<?php echo $browseType;?>';
       <?php
       if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
       {
-          echo "<span class='warning'>{$lang->story->changed}</span> ";
+     echo "<span class='warning'>{$lang->story->changed}</span> ";
       }
       else
       {
@@ -80,6 +109,7 @@ var browseType = '<?php echo $browseType;?>';
     </td>
   </tr>
   <?php endforeach;?>
+    <tr><td colspan= 12  class='a-right'><?php printf($lang->project->taskSummary, count($tasks), $statusWait,$statusDoing,$statusDone,$statusCancel,$totalEstimate,$totalConsumed,$totalLeft);?></td></tr>
   </tbody>
 </table>
 <div class='a-right'><?php echo $pager;?></div>

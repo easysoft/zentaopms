@@ -57,3 +57,5 @@ $lang->product->statusList['closed'] = 'Closed';
 $lang->product->aclList['open']    = 'Default(Having product module prividge, can visit this product)';
 $lang->product->aclList['private'] = 'Private(Only project team members can visit)';
 $lang->product->aclList['custom']  = 'Whitelist(Project team members and who belongs to the whilelist groups can visit)';
+
+$lang->product->storySummary   = "Total 『%s』stories, estimate『%s』hours.";

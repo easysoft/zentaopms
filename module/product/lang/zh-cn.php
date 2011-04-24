@@ -57,3 +57,5 @@ $lang->product->statusList['closed'] = '结束';
 $lang->product->aclList['open']    = '默认设置(有产品视图权限，即可访问)';
 $lang->product->aclList['private'] = '私有项目(只有项目团队成员才能访问)';
 $lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
+
+$lang->product->storySummary   = "共『%s』个需求，预计『%s』个工时。";
