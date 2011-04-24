@@ -524,4 +524,59 @@ class task extends control
 
         $this->display();
     }
+
+    /**
+     * get data to export
+     */
+    public function exportData($fileName, $fileType)
+    {
+        $users = $this->loadModel('user')->getPairs(); 
+        $projectID  = $this->session->projectID;
+        $browseType = $this->session->browseType;
+        $orderBy    = $this->session->orderBy;
+
+        $tasks=array();
+        if($browseType!="bysearch")
+        {
+            $tasks = $this->task->getProjectTasks($projectID, $browseType, $orderBy); 
+        }
+        else
+        {   
+            $taskQuery  = $this->session->taskQuery;
+            $tasks = $this->project->getSearchTasks($taskQuery, null, $orderBy);
+        }
+
+        $data[] = array(
+            $this->lang->idAB,
+            $this->lang->priAB,
+            $this->lang->task->name,
+            $this->lang->task->assignedTo,
+            $this->lang->task->finishedBy,
+            $this->lang->task->estimateAB,
+            $this->lang->task->consumedAB,
+            $this->lang->task->leftAB,
+            $this->lang->task->deadlineAB,
+            $this->lang->statusAB,
+            $this->lang->task->story
+        );
+        foreach($tasks as $task)
+        {
+            $tmp = array(
+                "id"         => $task->id,
+                "pri"        => $this->lang->task->priList[$task->pri],
+                "name"       => $task->name,
+                "assignedTo" => $task->assignedTo,
+                "finishedBy" => $users[$task->finishedBy],
+                "estimate"   => $task->estimate,
+                "consumed"   => $task->consumed,
+                "left"       => $task->left,
+                "deadline"   => substr($task->deadline, 0, 4),
+                "status"     => $this->lang->task->statusList[$task->status],
+                "storyTitle" => $task->storyTitle
+            );
+            $data[] = $tmp;
+        }
+        a($data);exit;
+        $this->fetch('file', 'export', "data=$data&fileName=$fileName&fileType=$fileType");
+    } 
 }
