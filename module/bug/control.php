@@ -71,8 +71,11 @@ class bug extends control
 
         /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID);
-        $this->session->set('bugList', $this->app->getURI(true));
-
+        $this->session->set('bugList',    $this->app->getURI(true));
+        $this->session->set('productID',  $productID);
+        $this->session->set('moduleID',   $moduleID);
+        $this->session->set('orderBy',    $orderBy);
+        $this->session->set('browseType', $browseType);
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -743,4 +746,139 @@ class bug extends control
         $this->loadModel('mail')->send($toList, $productName . ':' . 'BUG #'. $bug->id . $this->lang->colon . $bug->title, $mailContent, $ccList);
         if($this->mail->isError()) echo js::error($this->mail->getError());
     }
+
+    /**
+     * get data to export
+     */
+    public function exportData($fileName, $fileType)
+    {
+        $users = $this->loadModel('user')->getPairs(); 
+        $productID  = $this->session->productID;
+        $moduleID   = $this->session->moduleID;
+        $browseType = $this->session->browseType;
+        $orderBy    = $this->session->orderBy;
+        $pager      = null;
+        
+        $bugs = array();
+        if($browseType == 'all')
+        {
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($browseType == "bymodule")
+        {
+            $childModuleIds = $this->tree->getAllChildId($moduleID);
+            $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $orderBy, $pager);
+        }
+        elseif($browseType == 'assigntome')
+        {
+            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($browseType == 'openedbyme')
+        {
+            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($browseType == 'resolvedbyme')
+        {
+            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($browseType == 'assigntonull')
+        {
+            $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($browseType == 'unresolved')
+        {
+            $bugs = $this->dao->findByStatus('active')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($browseType == 'longlifebugs')
+        {
+            $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('openedDate')->lt(date(DT_DATE1,strtotime('-7 days')))
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($browseType == 'postponedbugs')
+        {
+            $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($browseType == 'needconfirm')
+        {
+            $bugs = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where("t2.status = 'active'")
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.version > t1.storyVersion')
+                ->orderBy($orderBy)
+                ->fetchAll();
+        }
+        elseif($browseType == 'bysearch')
+        {
+            $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        
+        if($browseType != 'needconfirm')
+        { 
+            $data[] = array(
+                'id'         => $this->lang->idAB,
+                'severity'   => $this->lang->bug->severityAB,
+                'pri'        => $this->lang->priAB,
+                'title'      => $this->lang->bug->title,
+                'openedBy'   => $this->lang->bug->openedByAB,
+                'assignedTo' => $this->lang->assignedToAB,
+                'resolvedBy' => $this->lang->bug->resolvedByAB,
+                'resolvtion' => $this->lang->bug->resolutionAB,
+            );
+            foreach($bugs as $bug)
+            {
+                $tmp = array(
+                    'id'         => $bug->id,
+                    'severity'   => $this->lang->bug->severityList[$bug->severity],
+                    'pri'        => $this->lang->bug->priList[$bug->pri],
+                    'title'      => $bug->title,
+                    'openedBy'   => $users[$bug->openedBy],
+                    'assignedTo' => $users[$bug->assignedTo],
+                    'resolvedBy' => $users[$bug->resolvedBy],
+                    'resolvtion' => $this->lang->bug->resolutionList[$bug->resolution]
+                );
+                $data[] = $tmp;
+            }
+        }
+        else
+        {
+            $data[] = array(
+                'id'         => $this->lang->idAB,
+                'severity'   => $this->lang->bug->severityAB,
+                'pri'        => $this->lang->priAB,
+                'title'      => $this->lang->bug->title,
+                'story'      => $this->lang->bug->story            
+            );
+            foreach($bugs as $bug)
+            {
+                $tmp = array(
+                    'id'         => $bug->id,
+                    'severity'   => $this->lang->bug->severityList[$bug->severity],
+                    'pri'        => $this->lang->bug->priList[$bug->pri],
+                    'title'      => $bug->title,
+                    'story'      => $bug->storyTitle           
+                );
+                $data[] = $tmp;
+            }
+        }
+        $this->post->set('data', $data);
+        $this->fetch('file', 'export', "fileName=$fileName&fileType=$fileType");
+    } 
 }
