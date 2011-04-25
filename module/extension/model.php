@@ -261,7 +261,7 @@ class extensionModel extends model
             elseif(!is_writable(dirname($path)))
             {
                 $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
-                $return->mkdirCommands .= "mkdir $path<br />";
+                $return->mkdirCommands .= "mkdir -p $path<br />";
                 $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 $return->dirs2Created[] = $path;
             }
@@ -461,6 +461,9 @@ class extensionModel extends model
     {
         $return->result = 'ok';
         $return->error  = '';
+
+        $dbFile = $this->getDBFile($extension, $method);
+        if(!file_exists($dbFile)) return $return;
 
         $sqls = file_get_contents($this->getDBFile($extension, $method));
         $sqls = explode(';', $sqls);
