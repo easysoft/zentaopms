@@ -27,6 +27,16 @@
     <th><?php echo $lang->task->deadlineAB;?></th>
     <th colspan='2' class='a-left'><?php echo $lang->task->status;?></th>
   </tr>
+<?php  
+         $taskSum       = 0;
+         $statusWait    = 0;
+         $statusDone    = 0;
+         $statusDoing   = 0;
+         $statusCancel  = 0;  
+         $totalEstimate = 0.0;
+         $totalConsumed = 0.0;
+         $totalLeft     = 0.0;
+  ?>
   <?php $i = 0;?>
   <?php foreach($tasks as $groupKey => $groupTasks):?>
   <?php $groupClass = ($i % 2 == 0) ? 'even' : 'bg-yellow'; $i ++;?>
@@ -34,8 +44,31 @@
     <td class='<?php echo $groupClass;?> a-center f-16px strong'><?php echo $groupKey;?></td>
     <td colspan='10'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
   </tr>
-    <?php foreach($groupTasks as $task):?>
-    <?php $assignedToClass = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
+  <?php foreach($groupTasks as $task):?>
+  <?php $assignedToClass = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
+  <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
+  <?php $taskLink  = $this->createLink('task','view',"taskID=$task->id");
+        $totalEstimate += $task->estimate;
+        $totalConsumed += $task->consumed;
+        $totalLeft     += $task->left;
+       if($task->status == 'wait')
+       {
+           $statusWait++;
+       }
+       elseif($task->status == 'doing')
+       {
+           $statusDoing++;
+       }
+       elseif($task->status == 'done')
+       {
+           $statusDone++;
+       }
+       else
+       {
+           $statusCancel++;
+       }
+       $taskSum += count($tasks);
+     ?>
     <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
       <td class='<?php echo $groupClass;?>'></td>
       <td class='a-left'>&nbsp;<?php echo $task->id . $lang->colon; if(common::hasPriv('task', 'view')) echo html::a($this->createLink('task', 'view', "task=$task->id"), $task->name); else echo $task->name;?></td>
@@ -53,8 +86,13 @@
         <?php if(common::hasPriv('task', 'delete')) echo html::a($this->createLink('task', 'delete', "projectID=$task->project&taskid=$task->id"), $lang->delete, 'hiddenwin');?>
       </td>
     </tr>
+      <?php endforeach;?>
     <?php endforeach;?>
-  <?php endforeach;?>
+        <?php 
+              if(count($tasks) == 0) $taskSum = 0;
+              else                   $taskSum = $taskSum/count($tasks);
+        ?>
+    <tr><td colspan= 12  class='a-right'><?php printf($lang->project->taskSummary, $taskSum, $statusWait,$statusDoing,$statusDone,$statusCancel,$totalEstimate,$totalConsumed,$totalLeft);?></td></tr>
 </table>
 <script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>
