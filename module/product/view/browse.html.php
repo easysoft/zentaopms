@@ -22,8 +22,8 @@
   </div>
   <script language='Javascript'>
     $("#bysearchTab").toggle(
-        function(){ $("#querybox").show(); $("#sidetable").hide();},
-        function(){ $("#querybox").hide(); $("#sidetable").show();} );
+        function(){ $("#querybox").show(); $("#sidetable").hide(); $("#divider").hide(); },
+        function(){ $("#querybox").hide(); $("#sidetable").show(); $("#divider").show(); } );
   </script>
   <div class='f-right'>
     <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
@@ -46,7 +46,7 @@
         </div>
       </div>
     </td>
-    <td class='divider <?php echo $treeClass;?>'></td>
+    <td id='divider' class='divider <?php echo $treeClass;?>'></td>
     <td>
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>

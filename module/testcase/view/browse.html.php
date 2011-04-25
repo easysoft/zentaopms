@@ -31,8 +31,8 @@ var moduleID   = '<?php echo $moduleID;?>';
 <script language='Javascript'>
     $("#bysearchTab").
         toggle(
-            function(){$("#querybox").show(); $("#sidetable").hide(); },
-            function(){$("#querybox").hide(); $("#sidetable").show(); }
+            function(){$("#querybox").show(); $("#sidetable").hide(); $("#divider").hide(); },
+            function(){$("#querybox").hide(); $("#sidetable").show(); $("#divider").show(); }
         ); 
 </script>
   <div class='f-right'>
@@ -53,7 +53,7 @@ var moduleID   = '<?php echo $moduleID;?>';
         </div>
       </div>
     </td>
-    <td class='divider <?php echo $treeClass;?>'></td>
+    <td id='divider' class='divider <?php echo $treeClass;?>'></td>
     <td>
       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <table class='table-1 colored tablesorter datatable'>

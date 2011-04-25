@@ -17,7 +17,7 @@
   <tr class='colhead'>
     <th></th>
     <th><?php echo $lang->task->name;?></th>
-    <th class='w-pri'><?php echo $lang->priAB;?></th>
+    <th class='w-pri'> <?php echo $lang->priAB;?></th>
     <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
     <th class='w-user'><?php echo $lang->task->finishedBy;?></th>
     <th><?php echo $lang->task->estimateAB;?></th>
@@ -27,7 +27,7 @@
     <th><?php echo $lang->task->deadlineAB;?></th>
     <th colspan='2' class='a-left'><?php echo $lang->task->status;?></th>
   </tr>
-<?php  
+  <?php  
          $taskSum       = 0;
          $statusWait    = 0;
          $statusDone    = 0;
@@ -46,11 +46,11 @@
   </tr>
   <?php foreach($groupTasks as $task):?>
   <?php $assignedToClass = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
-  <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
-  <?php $taskLink  = $this->createLink('task','view',"taskID=$task->id");
-        $totalEstimate += $task->estimate;
-        $totalConsumed += $task->consumed;
-        $totalLeft     += $task->left;
+  <?php $class           = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
+  <?php $taskLink        = $this->createLink('task','view',"taskID=$task->id");
+        $totalEstimate  += $task->estimate;
+        $totalConsumed  += $task->consumed;
+        $totalLeft      += $task->left;
        if($task->status == 'wait')
        {
            $statusWait++;
