@@ -331,4 +331,27 @@ class extension extends control
         $url = helper::safe64Decode($url);
         $this->locate($url);
     }
+
+    /**
+     * Check the extension score 
+     * 
+     * @param  int       $score 
+     * @param  string    $installUrl 
+     * @param  string    $downloadUrl 
+     * @param  string    $zentaoVersion 
+     * @access public
+     * @return void
+     */
+    public function checkScore($score, $installUrl, $downloadUrl, $zentaoVersion)
+    {
+        if($score)
+        {
+            $resetLink         = inlink('obtain');
+            $downloadUrl = helper::safe64Decode($downloadUrl);
+            $this->view->error = sprintf($this->lang->extension->errorCheckScore, $downloadUrl, $resetLink);
+            $this->view->header->title  = $this->lang->extension->needScore;
+            die($this->display());
+        }
+        else $this->locate(inlink('waring', "url=$installUrl&zentaoVersion=$zentaoVersion"));
+    }
 }
