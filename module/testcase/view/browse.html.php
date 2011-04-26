@@ -31,8 +31,8 @@ var moduleID   = '<?php echo $moduleID;?>';
 <script language='Javascript'>
     $("#bysearchTab").
         toggle(
-            function(){$("#querybox").show(); $("#sidetable").hide(); $("#divider").hide(); },
-            function(){$("#querybox").hide(); $("#sidetable").show(); $("#divider").show(); }
+            function(){$("#querybox").show(); $(".side").hide(); $(".divider").hide(); },
+            function(){$("#querybox").hide(); $(".side").show(); $(".divider").show(); }
         ); 
 </script>
   <div class='f-right'>
@@ -44,7 +44,7 @@ var moduleID   = '<?php echo $moduleID;?>';
 
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td id='sidetable' class='side <?php echo $treeClass;?>'>
+    <td class='side <?php echo $treeClass;?>'>
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
@@ -53,7 +53,7 @@ var moduleID   = '<?php echo $moduleID;?>';
         </div>
       </div>
     </td>
-    <td id='divider' class='divider <?php echo $treeClass;?>'></td>
+    <td class='divider <?php echo $treeClass;?>'></td>
     <td>
       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <table class='table-1 colored tablesorter datatable'>
@@ -63,7 +63,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-pri'><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
             <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
             <?php if($browseType == 'needconfirm'):?>
-            <th>  <?php common::printOrderLink('story', $orderBy, $vars, $lang->testcase->story);?></th>
+            <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->testcase->story);?></th>
             <th class='w-50px'><?php echo $lang->actions;?></th>
             <?php else:?>
             <th class='w-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>

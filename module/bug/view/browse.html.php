@@ -32,15 +32,15 @@ var customed   = <?php echo (int)$customed;?>;
     echo "<span id='unresolvedTab'>"    . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=unResolved&param=0"),    $lang->bug->unResolved)    . "</span>";
     echo "<span id='longlifebugsTab'>"  . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=longLifeBugs&param=0"),  $lang->bug->longLifeBugs)  . "</span>";
     echo "<span id='postponedbugsTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=postponedBugs&param=0"), $lang->bug->postponedBugs) . "</span>";
-    echo "<span id='allTab'>"         . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
-    echo "<span id='needconfirmTab'>" . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
+    echo "<span id='allTab'>"           . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=all&param=0&orderBy=$orderBy&recTotal=0&recPerPage=200"), $lang->bug->allBugs) . "</span>";
+    echo "<span id='needconfirmTab'>"   . html::a($this->createLink('bug', 'browse', "productid=$productID&browseType=needconfirm&param=0"), $lang->bug->needConfirm) . "</span>";
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->bug->byQuery}</a></span> ";
     ?>
   </div>
 <script language='Javascript'>
     $("#bysearchTab").toggle(
-        function(){$("#querybox").show(); $("#sidetable").hide(); $("#divider").hide(); },
-        function(){$("#querybox").hide(); $("#sidetable").show(); $("#divider").show(); }
+        function(){$("#querybox").show(); $("#treebox").hide(); $(".divider").hide(); },
+        function(){$("#querybox").hide(); $("#treebox").show(); $(".divider").show(); }
     );
 </script>
   <div class='f-right'>
@@ -56,7 +56,7 @@ var customed   = <?php echo (int)$customed;?>;
 
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td id='sidetable' class='side <?php echo $treeClass;?>' id='treebox'>
+    <td class='side <?php echo $treeClass;?>' id='treebox'>
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
@@ -79,9 +79,9 @@ var customed   = <?php echo (int)$customed;?>;
           <th class='w-p40'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
           <th class='w-50px'><?php echo $lang->actions;?></th>
           <?php else:?>
-          <th class='w-user'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-          <th class='w-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+          <th class='w-user'><?php common::printOrderLink('openedBy',         $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-user'><?php common::printOrderLink('assignedTo',       $orderBy, $vars, $lang->assignedToAB);?></th>
+          <th class='w-user'><?php common::printOrderLink('resolvedBy',       $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>
@@ -107,7 +107,7 @@ var customed   = <?php echo (int)$customed;?>;
             <?php
             $params = "bugID=$bug->id";
             if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
-            if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))     echo $lang->bug->buttonClose . ' ';
+            if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, $lang->bug->buttonClose)))   echo $lang->bug->buttonClose . ' ';
             common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
             ?>
           </td>

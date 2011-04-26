@@ -44,6 +44,15 @@
     <td class='<?php echo $groupClass;?> a-center f-16px strong'><?php echo $groupKey;?></td>
     <td colspan='10'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
   </tr>
+  <?php
+         $groupWait    = 0;
+         $groupDone    = 0;
+         $groupDoing   = 0;
+         $groupCancel  = 0;  
+         $groupEstimate = 0.0;
+         $groupConsumed = 0.0;
+         $groupLeft     = 0.0;
+  ?>
   <?php foreach($groupTasks as $task):?>
   <?php $assignedToClass = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
   <?php $class           = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
@@ -51,22 +60,32 @@
         $totalEstimate  += $task->estimate;
         $totalConsumed  += $task->consumed;
         $totalLeft      += $task->left;
+
+        $groupEstimate  += $task->estimate;
+        $groupConsumed  += $task->consumed;
+        $groupLeft      += $task->left;
+
        if($task->status == 'wait')
        {
            $statusWait++;
+           $groupWait++;
        }
        elseif($task->status == 'doing')
        {
            $statusDoing++;
+           $groupDoing++;
        }
        elseif($task->status == 'done')
        {
            $statusDone++;
+           $groupDone++;
        }
        else
        {
            $statusCancel++;
+           $groupCancel++;
        }
+       $groupSum = count($groupTasks);
        $taskSum += count($tasks);
      ?>
     <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
@@ -87,12 +106,12 @@
       </td>
     </tr>
       <?php endforeach;?>
+    <tr><td colspan = 12  class ='a-right'><?php printf($lang->project->taskSummary, $groupSum, $groupWait,$groupDoing,$groupDone,$groupCancel,$groupEstimate,$groupConsumed,$groupLeft);?></td></tr>
     <?php endforeach;?>
         <?php 
               if(count($tasks) == 0) $taskSum = 0;
               else                   $taskSum = $taskSum/count($tasks);
         ?>
-    <tr><td colspan= 12  class='a-right'><?php printf($lang->project->taskSummary, $taskSum, $statusWait,$statusDoing,$statusDone,$statusCancel,$totalEstimate,$totalConsumed,$totalLeft);?></td></tr>
 </table>
 <script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>
