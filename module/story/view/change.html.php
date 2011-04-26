@@ -13,6 +13,7 @@
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
+  <?php include './affected.html.php';?>
   <table class='table-1'>
     <caption><?php echo $lang->story->change;?></caption>
     <tr>
@@ -46,7 +47,6 @@
     echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
     ?>
   </div>
-  <?php include './affected.html.php';?>
   <?php include '../../common/view/action.html.php';?>
 </form>
 <?php include '../../common/view/footer.html.php';?>
