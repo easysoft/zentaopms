@@ -53,7 +53,17 @@ class tree extends control
         if($viewType == 'story')
         {
             $this->product->setMenu($this->product->getPairs(), $rootID, 'story');
-            $this->view->allProduct = $this->product->getPairs();
+            $products = $this->product->getPairs();
+            $allProduct = array();
+            foreach($products as $key => $productVal)
+            {
+                if($key == $rootID) continue;
+                $allProduct[$key] = $productVal;
+            }
+            $this->view->allProduct =$allProduct;
+            $keys = array_keys($allProduct);
+            $this->view->key = $keys[0];
+            $this->view->productModules = $this->tree->getOptionMenu($keys[0], 'story');
             $this->lang->tree->menu = $this->lang->product->menu;
             $this->lang->set('menugroup.tree', 'product');
 

@@ -59,22 +59,22 @@
               }
               else if($viewType == 'story')
               {
-                  echo html::select('allProduct', $allProduct, $rootID, 'class=select-3 onchange=syncProduct(this)');
-                  echo html::select('productModule', $productModules, '', 'class=select-3');
-                  echo html::commonButton($lang->tree->syncFromProduct, 'id=copyModule onclick=syncProductModule('.$rootID.')');
+                  echo html::select('allProduct', $allProduct, 'onchange=syncProduct(this)');
+                  echo html::select('productModule', $productModules, '');
+                  echo html::commonButton($lang->tree->syncFromProduct, 'id=copyModule onclick=syncModule('.$key.')');
                   echo '<br />';
                   echo '<br />';
                   echo '<br />';
               }
               $maxOrder = 0;
-              echo '<div id=sonModule>';
+              echo '<div id="sonModule">';
               foreach($sons as $sonModule)
               {
                   if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
                   echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
               }
               for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
-            ?>
+              ?>
               </div>
             </td>
           </tr>
