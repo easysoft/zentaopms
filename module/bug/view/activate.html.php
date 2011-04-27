@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->openedBuild;?></td>
-      <td><?php echo html::select('openedBuild', $builds, $bug->resolvedBuild, 'class=select-3');?></td>
+      <td><?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class=select-3');?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>
