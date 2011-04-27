@@ -136,23 +136,22 @@
     <td class='side'>
       <table class='table-1 colored'>
         <caption><?php echo $lang->index->latest;?></caption>
-     <tr>
-      <td class='a-left f-14px'>
-    <?php 
-           $dynamicLink = $this->createLink('company','dynamic');
-            printf($lang->index->dynamicTip,$dynamicLink); 
-       ?>
-      </td>
-     </tr>
-    <?php 
-            foreach($actions as $action)
+        <?php 
+        foreach($actions as $action)
         {
             $user = isset($users[$action->actor]) ? $users[$action->actor] : $action->actor;
             echo "<tr><td>";
             printf($lang->index->action, $action->date, $user, $action->actionLabel, $action->objectLabel, $action->objectLink);
             echo "</td></tr>";
         }
-        ?>
+       ?>
+       <tr>
+         <td class='a-right f-14px'>
+         <?php 
+         common::printLink('company', 'dynamic', '', $lang->more);
+         ?>
+          </td>
+        </tr>
       </table>
     </td>
   </tr>  

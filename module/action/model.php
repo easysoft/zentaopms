@@ -224,7 +224,7 @@ class actionModel extends model
 
         if(!$actions) return array();
 
-        /* Group trashes by objectType, and get there name field. */
+        /* Group actions by objectType, and get there name field. */
         foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIds)
         {
@@ -234,9 +234,11 @@ class actionModel extends model
             $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
         }
 
+        $objectNames['user'][0] = 'guest';    // Add guest account.
+
         foreach($actions as $action)
         {
-            /* Add name field to the trashes. */
+            /* Add name field to the actions. */
             $action->objectName = $objectNames[$action->objectType][$action->objectID];
 
             $actionType = strtolower($action->action);
