@@ -32,6 +32,7 @@ class taskModel extends model
                 ->add('project', (int)$projectID)
                 ->setDefault('estimate, left, story', 0)
                 ->setDefault('deadline', '0000-00-00')
+                ->setDefault('status', 'wait')
                 ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
                 ->setForce('assignedTo', $assignedTo)
                 ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -39,6 +40,7 @@ class taskModel extends model
                 ->setDefault('openedDate', helper::now())
                 ->remove('after,files,labels')
                 ->get();
+
             $this->setStatus($task);
 
             $this->dao->insert(TABLE_TASK)->data($task)
@@ -46,6 +48,7 @@ class taskModel extends model
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->exec();
+
             if(!dao::isError())
             {
                 $taskID = $this->dao->lastInsertID();
@@ -53,7 +56,10 @@ class taskModel extends model
                 $this->loadModel('file')->saveUpload('task', $taskID);
                 $tasksID[$assignedTo] = $taskID;
             }
-            else return false;
+            else
+            {
+                return false;
+            }
         }
         return $tasksID;
     }
