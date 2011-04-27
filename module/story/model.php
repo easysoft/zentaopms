@@ -458,7 +458,7 @@ class storyModel extends model
      */
     public function getProductStoryPairs($productID = 0, $moduleIds = 0, $status = 'all', $order = 'id_desc')
     {
-        $stories = $this->dao->select('t1.id, t1.title, t1.module, t2.name AS product')
+        $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1')
             ->beginIF($productID)->andWhere('t1.product')->in($productID)->fi()
@@ -665,7 +665,7 @@ class storyModel extends model
 
         /* Format these stories. */
         $storyPairs = array('' => '');
-        foreach($stories as $story) $storyPairs[$story->id] ='ID：' .  $story->id . ' ；  ' . '优先级：' . $story->pri . ' ；  ' . '预计工时：' . $story->estimate . ' ； ' .'需求名称 ' . ':' . $story->title;
+        foreach($stories as $story) $storyPairs[$story->id] = $story->id . ':' . $story->title . "({$this->lang->story->pri}:$story->pri, {$this->lang->story->estimate}: $story->estimate)";
         return $storyPairs;
     }
 

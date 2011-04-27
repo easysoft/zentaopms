@@ -99,7 +99,7 @@ $help->project->status     = '项目状态|只有状态为进行中的项目，�
 $help->project->desc       = '项目描述|项目的描述。';
 $help->project->goal       = '项目目标|项目所要取得的目标。';
 $help->project->updateburn = '更新燃尽图|<br />1. 通过手工点击“更新燃尽图”来进行更新。<br />2. 通过计划任务来进行更新。
-                              详情请查看<a href="http://www.zentao.net/help-book-zentaopmshelp.html" target="_blank">《如何更新燃尽图》</a>';
+                              详情请查看<a href="http://www.zentao.net/help-read-79063.html" target="_blank">《如何更新燃尽图》</a>';
 
 $help->release->product = '产品';
 $help->release->build   = 'build|所对应的build。build是在项目视图中，在某一个项目中创建。';

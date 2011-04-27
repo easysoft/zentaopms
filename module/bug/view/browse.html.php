@@ -39,8 +39,8 @@ var customed   = <?php echo (int)$customed;?>;
   </div>
 <script language='Javascript'>
     $("#bysearchTab").toggle(
-        function(){$("#querybox").show(); $("#treebox").hide(); $(".divider").hide(); },
-        function(){$("#querybox").hide(); $("#treebox").show(); $(".divider").show(); }
+        function(){$("#querybox").show(); },
+        function(){$("#querybox").hide(); }
     );
 </script>
   <div class='f-right'>

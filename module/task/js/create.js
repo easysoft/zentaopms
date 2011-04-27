@@ -2,7 +2,9 @@
 function copyStoryTitle()
 {
     var storyTitle = $('#story option:selected').text();
-    storyTitle = storyTitle.substr(storyTitle.lastIndexOf(':')+ 1);
+    startPosition = storyTitle.indexOf(':') + 1;
+    endPosition   = storyTitle.lastIndexOf('(');
+    storyTitle = storyTitle.substr(startPosition, endPosition - startPosition);
     $('#name').attr('value', storyTitle);
 }
 
