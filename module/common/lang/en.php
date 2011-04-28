@@ -34,7 +34,7 @@ $lang->close        = 'Close';
 $lang->link         = 'Link';
 $lang->unlink       = 'Unlink';
 $lang->import       = 'Import';
-$lang->exportCSV    = 'Export CSV';
+$lang->export       = 'Export';
 $lang->setFileName  = 'Please input file name:';
 $lang->activate     = 'Activate';
 $lang->submitting   = 'Saving...';
@@ -98,6 +98,11 @@ $lang->searchObjects['productplan'] = 'Plan';
 $lang->searchObjects['testtask']    = 'Test Task';
 $lang->searchObjects['doc']         = 'Doc';
 $lang->searchTips                   = 'Id here';
+
+/* File type of export. */
+$lang->exportFileTypeList['csv']  = 'csv';
+$lang->exportFileTypeList['xml']  = 'xml';
+$lang->exportFileTypeList['html'] = 'html';
 
 /* Themes. */
 $lang->themes['default'] = 'Default';

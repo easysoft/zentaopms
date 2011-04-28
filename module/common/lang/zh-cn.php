@@ -34,7 +34,7 @@ $lang->close        = '关闭';
 $lang->link         = '关联';
 $lang->unlink       = '移除';
 $lang->import       = '导入';
-$lang->exportCSV    = '导出csv';
+$lang->export       = '导出';
 $lang->setFileName  = '请输入文件名：';
 $lang->activate     = '激活';
 $lang->submitting   = '稍候...';
@@ -98,6 +98,11 @@ $lang->searchObjects['productplan'] = 'P:产品计划';
 $lang->searchObjects['testtask']    = 'T:测试任务';
 $lang->searchObjects['doc']         = 'D:文档';
 $lang->searchTips                   = '输入编号';
+
+/* 导出文件的类型列表。*/
+$lang->exportFileTypeList['csv']  = 'csv';
+$lang->exportFileTypeList['xml']  = 'xml';
+$lang->exportFileTypeList['html'] = 'html';
 
 /* 风格列表。*/
 $lang->themes['default'] = '默认';

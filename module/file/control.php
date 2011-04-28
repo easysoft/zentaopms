@@ -106,14 +106,21 @@ class file extends control
     /**
      * Export as csv format.
      * 
-     * @param  string    $agent 
      * @access public
      * @return void
      */
-    public function export2csv($agent)
+    public function export2CSV()
     {
-        $fileName   = $this->post->fileName;
-        $csvData    = stripslashes($this->post->csvData);
+        $fileName = $this->post->fileName;
+        $csvData  = $this->post->rows;
+        $output   = '';
+
+        /* format csvData form array to string. */
+        $output .= '"'. implode('","', $this->post->fields) . '"' . "\n";
+        foreach($csvData as $value)
+        {
+            $output .= '"'. implode('","', (array)$value) . '"' . "\n";
+        }
 
         /* If the language is zh-cn, convert to gbk. */
         $clientLang = $this->app->getClientLang();
@@ -121,23 +128,89 @@ class file extends control
         {
             if(function_exists('mb_convert_encoding'))
             {
-                $csvData = @mb_convert_encoding($csvData, 'gbk', 'utf-8');
+                $output = @mb_convert_encoding($output, 'gbk', 'utf-8');
             }
             elseif(function_exists('iconv'))
             {
-                $csvData = @iconv('utf-8', 'gbk', $csvData);
+                $output = @iconv('utf-8', 'gbk', $output);
             }
         }
 
         if(strpos($fileName, '.csv') === false) $fileName .= '.csv';
-        if($agent == 'ie') $fileName = urlencode($fileName);
         header('Content-type: application/csv');
         header("Content-Disposition: attachment; filename=$fileName");
         header("Pragma: no-cache");
         header("Expires: 0");
-        echo $csvData;
+        echo $output;
         die();
     }
+
+    /**
+     * export as xml format
+     * 
+     * @access public
+     * @return void
+     */
+    public function export2XML() 
+    {  
+        $xmlData  = $this->post->rows;
+        $fileName = $this->post->fileName;
+        $fields   = $this->post->fields;
+        $output   = '';
+        $content  = '';
+        $xmlMark  = '<?xml version="1.0" encoding="utf-8"?><xml>';
+        $tmpArray = array();
+
+        /* format xmlData from array to xml. */
+        $content .= "<fields><field>" . implode("</field><field>", $fields) . "</field></fields>";
+        foreach($xmlData as $row)
+        {
+            $tmpArray[] = "<row>" . implode("</row><row>", (array)$row) . "</row>";
+        }
+        $content .= "<rows>" . implode("</rows><rows>", $tmpArray) . "</rows>";
+        $output   = $xmlMark . $content . '</xml>';
+
+        if(strpos($fileName, '.xml') === false) $fileName .= '.xml';
+        header('Content-type: application/xml');
+        header("Content-Disposition: attachment; filename=$fileName");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        echo $output;
+        die();
+    }  
+
+    /**
+     * export as html format
+     * 
+     * @access public
+     * @return void
+     */
+    public function export2HTML() 
+    {  
+        $htmlData = $this->post->rows;
+        $fileName = $this->post->fileName;
+        $fields   = $this->post->fields;
+        $output   = '';
+        $content  = '';
+        $tmpArray = array();
+
+        /* format htmlData from array to html. */
+        $content .= "<thead><th>" . implode("</th><th>", $fields) . "</th></thead>";
+        foreach($htmlData as $tbody)
+        {
+            $tmpArray[] = "<td>" . implode("</td><td>", (array)$tbody) . "</td>";
+        }
+        $content .= "<tbody><tr>" . implode("</tr></tbody><tbody><tr>", $tmpArray) . "</tr></tbody>";
+        $output   = "<html><head><title>$fileName</title></head><body><table>$content</table></body></html>";
+
+        if(strpos($fileName, '.html') === false) $fileName .= '.html';
+        header('Content-type: application/html');
+        header("Content-Disposition: attachment; filename=$fileName");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        echo $output;
+        die();
+    }  
 
     /**
      * Delete a file.

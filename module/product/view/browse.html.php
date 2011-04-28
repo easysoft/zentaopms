@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<?php include '../../common/view/table2csv.html.php';?>
 <div id='featurebar'>
   <div class='f-left'>
     <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>
@@ -26,7 +25,7 @@
         function(){ $("#querybox").hide(); $("#treebox").show(); $(".divider").show(); } );
   </script>
   <div class='f-right'>
-    <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
+    <?php common::printLink('story', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
     <?php common::printLink('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->story->report->common); ?>
     <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
   </div>

@@ -48,6 +48,7 @@ $lang->resource->product->ajaxGetPlans    = 'ajaxGetPlans';
 /* Story. */
 $lang->resource->story->create  = 'create';
 $lang->resource->story->edit    = 'edit';
+$lang->resource->story->export  = 'export';
 $lang->resource->story->delete  = 'delete';
 $lang->resource->story->view    = 'view';
 $lang->resource->story->change  = 'lblChange';
@@ -230,14 +231,16 @@ $lang->resource->search->select       = 'select';
 $lang->resource->admin->index         = 'index';
 
 /* Others. */
-$lang->resource->api->getModel    = 'getModel';
-$lang->resource->file->download   = 'download';
-$lang->resource->file->delete     = 'delete';
-$lang->resource->file->export2CSV = 'export2CSV';
-$lang->resource->file->ajaxUpload = 'ajaxUpload';
-$lang->resource->misc->ping       = 'ping';
-$lang->resource->action->trash    = 'trash';
-$lang->resource->action->undelete = 'undelete';
+$lang->resource->api->getModel     = 'getModel';
+$lang->resource->file->download    = 'download';
+$lang->resource->file->delete      = 'delete';
+$lang->resource->file->export2CSV  = 'export2CSV';
+$lang->resource->file->export2XML  = 'export2XML';
+$lang->resource->file->export2HTML = 'export2HTML';
+$lang->resource->file->ajaxUpload  = 'ajaxUpload';
+$lang->resource->misc->ping        = 'ping';
+$lang->resource->action->trash     = 'trash';
+$lang->resource->action->undelete  = 'undelete';
 
 /* New privilege.*/
 $lang->group->newPriv['my']['testTask']     = 'testTask';

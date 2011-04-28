@@ -547,60 +547,110 @@ class story extends control
  
     /**
      * get data to export
+     * 
+     * @param  int $productID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
      */
-    public function exportData($fileName, $fileType)
+    public function export($productID, $orderBy)
     { 
-        $users = $this->loadModel('user')->getPairs(); 
-        $productID  = $this->session->productID;
-        $browseType = $this->session->browseType;
-        $orderBy    = $this->session->orderBy;
-        $moduleID   = $this->session->moduleID;
-       
-        $stories = array();
-        if($browseType == 'all')
-        {
-            $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy);
-        }
-        elseif($browseType == 'bymodule')
-        {
-            $childModuleIds = $this->tree->getAllChildID($moduleID);
-            $storyQuery = $this->dao->andWhere('product')->in($productID)
-                ->beginIF(!empty($childModuleIds))->andWhere('module')->in($childModuleIds)->fi()
-                ->get();
-            $storyQuery = substr($storyQuery, strpos($storyQuery,'product'));
-            $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy);
-        }
-        elseif($browseType == 'bysearch')
-        {
-            $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy);
-        }
-        $data[] = array(
-            'id'         => $this->lang->idAB,
-            'pri'        => $this->lang->priAB,
-            'title'      => $this->lang->story->title,
-            'plan'       => $this->lang->story->planAB,
-            'openedBy'   => $this->lang->openedByAB,
-            'assignedTo' => $this->lang->assignedToAB,
-            'estimate'   => $this->lang->story->estimateAB,
-            'status'     => $this->lang->statusAB,
-            'stage'      => $this->lang->story->stageAB
-        );
-        foreach($stories as $story)
-        {
-            $tmp = array(
-                'id'         => $story->id,
-                'pri'        => $story->pri,
-                'title'      => $story->title,
-                'plan'       => $story->planTitle,
-                'openedBy'   => $users[$story->openedBy],
-                'assignedTo' => $users[$story->assignedTo],
-                'estimate'   => $story->estimate,
-                'status'     => $this->lang->story->statusList[$story->status],
-                'stage'      => $this->lang->story->stageList[$story->stage]
+        $relatedStories = '';
+        $linkStories    = array();
+        $childStories   = array();
+        $fields         = array();
+
+        $users    = $this->loadModel('user')->getPairs();
+        $products = $this->loadModel('product')->getPairs();
+
+        /* get the fields of story module from lang. */
+        $fields = array(
+            'id'             => $this->lang->story->id, 
+            'product'        => $this->lang->story->product, 
+            'module'         => $this->lang->story->module, 
+            'plan'           => $this->lang->story->plan, 
+            'title'          => $this->lang->story->title, 
+            'keywords'       => $this->lang->story->keywords, 
+            'pri'            => $this->lang->story->pri, 
+            'estimate'       => $this->lang->story->estimate, 
+            'status'         => $this->lang->story->status, 
+            'stage'          => $this->lang->story->stage, 
+            'mailto'         => $this->lang->story->mailto, 
+            'openedBy'       => $this->lang->story->openedBy, 
+            'openedDate'     => $this->lang->story->openedDate, 
+            'assignedTo'     => $this->lang->story->assignedTo,
+            'assignedDate'   => $this->lang->story->assignedDate, 
+            'lastEditedBy'   => $this->lang->story->lastEditedBy,
+            'lastEditedDate' => $this->lang->story->lastEditedDate, 
+            'reviewedBy'     => $this->lang->story->reviewedBy, 
+            'reviewedDate'   => $this->lang->story->reviewedDate, 
+            'closedBy'       => $this->lang->story->closedBy, 
+            'closedDate'     => $this->lang->story->closedDate, 
+            'closedReason'   => $this->lang->story->closedReason, 
+            'childStories'   => $this->lang->story->childStories, 
+            'linkStories'    => $this->lang->story->linkStories, 
+            'duplicateStory' => $this->lang->story->duplicateStory, 
+            'version'        => $this->lang->story->version, 
+            'planTitle'      => $this->lang->story->plan, 
             );
-            $data[] = $tmp;
+
+        /* format the fields of every story in order to export data. */
+        if($_POST)
+        {
+            $stories = $this->story->getByQuery($productID, $this->session->storyReport, $orderBy);
+            foreach($stories as $story)
+            {
+                $relatedStories .= $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory . ',';
+            }
+            $relatedStories  = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($relatedStories)->fetchPairs('id', 'title');
+
+            foreach($stories as $story)
+            {
+                $childStories = explode(',', $story->childStories);
+                $linkStories  = explode(',', $story->linkStories);
+                $module       = $this->dao->select('name')->from(TABLE_MODULE)->where('id')->eq($story->module)->fetch();
+
+                foreach($childStories as $childStory)
+                {
+                    if(isset($relatedStories[$childStory])) $story->childStories .= $relatedStories[$childStory];
+                }
+                foreach($linkStories as $linkStory)
+                {
+                    if(isset($relatedStories[$linkStory])) $story->linkStories .=  $relatedStories[$linkStory];
+                }
+                if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
+
+                /* drop some field that is not needed. */
+                unset($story->company);
+                unset($story->fromBug);
+                unset($story->type);
+                unset($story->toBug);
+                unset($story->deleted);
+
+                /* fill some field with useful value. */
+                $story->product        = $products[$story->product];
+                $story->pri            = $this->lang->story->priList[$story->pri];
+                $story->module         = $module ? $module->name : '';
+                $story->status         = $this->lang->story->statusList[$story->status];
+                $story->stage          = $this->lang->story->stageList[$story->stage];
+                $story->openedBy       = $users[$story->openedBy];
+                $story->openedDate     = substr($story->openedDate, 0, 10);
+                $story->assignedTo     = $users[$story->assignedTo];
+                $story->assignedDate   = substr($story->assignedDate, 0, 10);
+                $story->lastEditedBy   = $users[$story->lastEditedBy];
+                $story->lastEditedDate = substr($story->lastEditedDate, 0, 10);
+                $story->reviewedBy     = $users[$story->reviewedBy];
+                $story->closedBy       = $users[$story->closedBy]; 
+                $story->closedDate     = substr($story->closedDate, 0, 10);
+            }
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $stories);
+            if($this->post->fileType == 'csv')  $this->fetch('file', 'export2CSV', $_POST);
+            if($this->post->fileType == 'xml')  $this->fetch('file', 'export2XML', $_POST);
+            if($this->post->fileType == 'html') $this->fetch('file', 'export2HTML', $_POST);
         }
-        a($data);exit;
-        $this->fetch('file', 'export', "data=$data&fileName=$fileName&fileType=$fileType");
+
+        $this->display();
     }
 }
