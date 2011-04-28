@@ -15,6 +15,7 @@
   <thead>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->extension->name;?></th>
+    <th class='w-50px'><?php echo $lang->extension->code;?></th>
     <th class='w-50px'><?php echo $lang->extension->version;?></th>
     <th><?php echo $lang->extension->desc;?></th>
     <th class='w-100px'><?php echo $lang->extension->author;?></th>
@@ -25,6 +26,7 @@
   <?php foreach($extensions as $extension):?>
   <tr >
     <td><?php echo $extension->name;?></td>
+    <td><?php echo $extension->code;?></td>
     <td class='a-center'><?php echo $extension->version;?></td>
     <td><?php echo $extension->desc;?></td>
     <td><?php echo $extension->author;?></td>
@@ -38,7 +40,8 @@
 
       if($extension->status == 'installed')   echo $deactivateCode . $uninstallCode;
       if($extension->status == 'deactivated') echo $activateCode   . $uninstallCode;
-      if($extension->status == 'available')   echo $installCode . $eraseCode;
+      if($extension->status == 'available')   echo $installCode    . $eraseCode;
+      echo html::a($extension->site, $lang->extension->site, '_blank', 'class=button-c');
       ?>
     </td>
   </tr>

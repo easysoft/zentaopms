@@ -50,7 +50,7 @@
           <th class='w-id'><?php echo $lang->extension->downloads;?></th>
           <th><?php echo $lang->extension->public;?></th>
           <th><?php echo $lang->extension->compatible;?></th>
-          <th class='w-100px'><?php echo $lang->actions;?></th>
+          <th class='w-150px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
@@ -67,21 +67,21 @@
           <td><?php echo $lang->extension->compatibleList[$extension->compatible];?></td>
           <td class='a-right'>
             <?php 
-            $autoInstall  = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
-            $forceInstall = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&overridePackage=no&ignoreCompitable=yes");
+            $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&overridePackage=no&ignoreCompitable=yes");
             if($extension->public)
             {
-                if($extension->compatible)  echo html::a($autoInstall,  $lang->extension->installAuto, '', 'class="iframe"');
-                if(!$extension->compatible) echo html::a($forceInstall, $lang->extension->installForce, '', 'class="iframe"');
+                $label = $extension->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
+                echo html::a($installLink, $label, '', 'class="iframe button-c"');
             }
-            echo html::a($extension->downLink, $lang->extension->downloadAB);
+            echo html::a($extension->downLink, $lang->extension->downloadAB, '', 'class=button-c');
+            echo html::a($extension->site, $lang->extension->site, '_blank', 'class=button-c');
             ?>
           </td>
         </tr>
         <?php endforeach;?>
         </tbody>
         <tfoot>
-          <tr><td class='a-right' colspan='7'><?php if($pager) $pager->show();?></td></tr>
+          <tr><td class='a-right' colspan='10'><?php if($pager) $pager->show();?></td></tr>
         </tfoot>
       </table>
     </td>

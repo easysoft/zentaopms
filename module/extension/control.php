@@ -136,65 +136,65 @@ class extension extends control
 
         /* Extract the package. */
         $return = $this->extension->extractPackage($extension);
-       if($return->result != 'ok')
+        if($return->result != 'ok')
         {
             $this->view->error = sprintf($this->lang->extension->errorExtracted, $packageFile, $return->error);
             die($this->display());
         }
 
-       /* Check version comptiable. */
-       $zentaoVersion = $this->extension->getZentaoVersion($extension);
-       if(!$this->extension->checkVersion($zentaoVersion) and $ignoreCompitable == 'no')
-       {
-           $ignoreLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&overridePackage=$overridePackage&ignoreCompitable=yes");
-           $returnLink = inlink('obtain');
-           $this->view->error = sprintf($this->lang->extension->errorCheckIncompatible, $ignoreLink, $returnLink);
-           die($this->display());
-       }
+        /* Check version comptiable. */
+        $zentaoVersion = $this->extension->getZentaoVersion($extension);
+        if(!$this->extension->checkVersion($zentaoVersion) and $ignoreCompitable == 'no')
+        {
+            $ignoreLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&overridePackage=$overridePackage&ignoreCompitable=yes");
+            $returnLink = inlink('obtain');
+            $this->view->error = sprintf($this->lang->extension->errorCheckIncompatible, $ignoreLink, $returnLink);
+            die($this->display());
+        }
 
-       /* Check files in the package conflicts with exists files or not. */
-       if($overrideFile == 'no')
-       {
-           $return = $this->extension->checkFile($extension);
-           if($return->result != 'ok')
-           {
-               $overrideLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&overridePackage=$overridePackage&ignoreCompitable=$ignoreCompitable&overrideFile=yes");
-               $returnLink   = inlink('obtain');
-               $this->view->error = sprintf($this->lang->extension->errorFileConflicted, $return->error, $overrideLink, $returnLink);
-               die($this->display());
-           }
-       }
+        /* Check files in the package conflicts with exists files or not. */
+        if($overrideFile == 'no')
+        {
+            $return = $this->extension->checkFile($extension);
+            if($return->result != 'ok')
+            {
+                $overrideLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&overridePackage=$overridePackage&ignoreCompitable=$ignoreCompitable&overrideFile=yes");
+                $returnLink   = inlink('obtain');
+                $this->view->error = sprintf($this->lang->extension->errorFileConflicted, $return->error, $overrideLink, $returnLink);
+                die($this->display());
+            }
+        }
 
-       /* Save to database. */
-       $this->extension->saveExtension($extension);
+        /* Save to database. */
+        $this->extension->saveExtension($extension);
 
-       /* Copy files to target directory. */
-       $this->view->files = $this->extension->copyPackageFiles($extension);
+        /* Copy files to target directory. */
+        $this->view->files = $this->extension->copyPackageFiles($extension);
 
-       /* Judge need execute db install or not. */
-       $data->status = 'installed';
-       $data->dirs   = $this->session->dirs2Created;
-       $data->files  = $this->view->files;
-       $data->installedTime = helper::now();
+        /* Judge need execute db install or not. */
+        $data->status = 'installed';
+        $data->dirs   = $this->session->dirs2Created;
+        $data->files  = $this->view->files;
+        $data->installedTime = helper::now();
 
-       if($this->extension->needExecuteDB($extension, 'install'))
-       {
-           $return = $this->extension->executeDB($extension, 'install');
-           if($return->result != 'ok')
-           {
-               $this->view->error = sprintf($this->lang->extension->errorInstallDB, $return->error);
-               die($this->display());
-           }
-           $this->extension->updateExtension($extension, $data);
-       }
-       else
-       {
-           $this->extension->updateExtension($extension, $data);
-       }
+        if($this->extension->needExecuteDB($extension, 'install'))
+        {
+            $return = $this->extension->executeDB($extension, 'install');
+            if($return->result != 'ok')
+            {
+                $this->view->error = sprintf($this->lang->extension->errorInstallDB, $return->error);
+                die($this->display());
+            }
+            $this->extension->updateExtension($extension, $data);
+        }
+        else
+        {
+            $this->extension->updateExtension($extension, $data);
+        }
 
-       $this->view->downloadedPackage = !empty($downLink);
+        $this->view->downloadedPackage = !empty($downLink);
 
-       $this->display();
+        $this->display();
     }
 
     /**
@@ -204,24 +204,11 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function uninstall($extension,$isCheck = true)
+    public function uninstall($extension)
     {
-        $return->return         = 'ok';
-        $checkReturn = $this->extension->checkFile($extension, 'change', $isCheck);
-        if($checkReturn->result != 'ok')
-        {
-            $continueLink = inlink('uninstall', "extension=$extension&isCheck=" . false);
-            $resetLink    = inlink('browse');
-            $return->removeCommands = sprintf($this->lang->extension->errorChangeFile, $checkReturn->error, $continueLink, $resetLink);
-            $return->return         = 'fail';
-            $this->view->return     = $return;
-            die($this->display());
-        }
-
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
-        $return->removeCommands     = $this->extension->removePackage($extension);
-        $this->view->return         = $return;
+        $this->view->removeCommands = $this->extension->removePackage($extension);
         $this->view->header->title  = $this->lang->extension->uninstallFinished;
         $this->display();
     }
@@ -233,16 +220,18 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function activate($extension, $isCheck = true)
+    public function activate($extension, $ignore = 'no')
     {
-        $return = $this->extension->checkFile($extension, 'repeat', $isCheck);
-        if($return->result != 'ok')
+        if($ignore == 'no')
         {
-            $continueLink = inlink('activate', "extension=$extension&isCheck=" . false);
-            $resetLink    = inlink('browse', 'type=deactivated');
-            $return->error = sprintf($this->lang->extension->errorRepeatFile, $return->error, $continueLink, $resetLink);
-            $this->view->return     = $return;
-            die($this->display());
+            $return = $this->extension->checkFile($extension);
+            if($return->result != 'ok')
+            {
+                $ignoreLink = inlink('activate', "extension=$extension&ignore=yes");
+                $resetLink  = inlink('browse', 'type=deactivated');
+                $this->view->error = sprintf($this->lang->extension->errorFileConflicted, $return->error, $ignoreLink, $resetLink);
+                die($this->display());
+            }
         }
 
         $this->extension->copyPackageFiles($extension);
@@ -258,22 +247,10 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function deactivate($extension, $ignore = 'no')
+    public function deactivate($extension)
     {
-        $return->return = 'ok';
-        $checkReturn = $this->extension->checkFile($extension);
-        if($checkReturn->result != 'ok' and $ignore == 'no')
-        {
-            $continueLink = inlink('deactivate', "extension=$extension&ignore=yes");
-            $resetLink    = inlink('browse');
-            $return->removeCommands = sprintf($this->lang->extension->errorFileChanged, $checkReturn->error, $continueLink, $resetLink);
-            $return->return         = 'fail';
-            $this->view->return     = $return;
-            die($this->display());
-        }
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
-        $return->removeCommands = $this->extension->removePackage($extension);
-        $this->view->return   = $return;
+        $this->view->removeCommands = $this->extension->removePackage($extension);
         $this->view->header->title  = $this->lang->extension->deactivateFinished;
         $this->display();
     }

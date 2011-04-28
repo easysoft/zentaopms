@@ -26,9 +26,9 @@
         if($downloadedPackage) echo  "<h3 class='success'>{$lang->extension->successDownloadedPackage}</h3>";
         echo "<h3 class='success'>{$lang->extension->successCopiedFiles}</h3>";
         echo '<ul>';
-        foreach($files as $file)
+        foreach($files as $fileName => $md5)
         {
-            echo "<li>$file</li>";
+            echo "<li>$fileName</li>";
         }
         echo '</ul>';
         echo "<h3 class='success'>{$lang->extension->successInstallDB}</h3>";

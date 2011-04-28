@@ -16,20 +16,13 @@
   <tr>
     <td valign='middle'>
     <?php
-    if($return->return == 'fail')
+    echo "<h3 class='a-center success'>{$header->title}</h3>";
+    if($removeCommands)
     {
-        echo $return->removeCommands;
+        echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";
+        echo join($removeCommands, '<br />');
     }
-    else
-    {
-        echo "<h3 class='a-center success'>{$header->title}</h3>";
-        if($return->removeCommands)
-        {
-             echo "<p class='strong'>{$lang->extension->unremovedFiles}</p>";
-             echo join($return->removeCommands, '<br />');
-        }
-        echo "<p class='a-center'>" . html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"') . '</p>';
-    }
+    echo "<p class='a-center'>" . html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"') . '</p>';
     ?>
     </td>
   </tr>

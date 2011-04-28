@@ -448,6 +448,11 @@ class extensionModel extends model
             if($path == 'db' or $path == 'doc' or $path == '..' or $path == '.') continue;
             $copiedFiles = $this->copyDir($extensionDir . $path, $appRoot . $path);
         }
+        foreach($copiedFiles as $key => $copiedFile)
+        {
+            $copiedFiles[$copiedFile] = md5_file($copiedFile);
+            unset($copiedFiles[$key]);
+        }
         return $copiedFiles;
     }
 
@@ -476,12 +481,16 @@ class extensionModel extends model
 
         if($files)
         {
-            foreach($files as $file)
+            foreach($files as $file => $savedMd5)
             {
                 $file = $appRoot . $file;
                 if(!file_exists($file)) continue;
 
-                if(!@unlink($file))
+                if(md5_file($file) != $savedMd5)
+                {
+                    $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file #changed" : "del $file :changed";
+                }
+                elseif(!@unlink($file))
                 {
                     $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file" : "del $file";
                 }
@@ -611,9 +620,11 @@ class extensionModel extends model
 
         if(isset($data->files))
         {
-            foreach($data->files as $key => $file)
+            foreach($data->files as $fullFilePath => $md5)
             {
-                $data->files[$key] = str_replace($appRoot, '', $file);
+                $relativeFilePath = str_replace($appRoot, '', $fullFilePath);
+                $data->files[$relativeFilePath] = $md5;
+                unset($data->files[$fullFilePath]);
             }
             $data->files = json_encode($data->files);
         }

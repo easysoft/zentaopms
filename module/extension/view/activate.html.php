@@ -16,9 +16,9 @@
   <tr>
     <td valign='middle'>
      <?php
-    if(isset($return) and $return->return == 'fail')
+    if(isset($error) and $error)
     {
-        echo $return->error;
+        echo $error;
     }
     else
     {
