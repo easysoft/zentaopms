@@ -202,6 +202,86 @@ class extensionModel extends model
     }
 
     /**
+     * Get pathes from an extension package.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return array
+     */
+    public function getPathesFromPackage($extension)
+    {
+        $pathes = array();
+        $packageFile = $this->getPackageFile($extension);
+
+        /* Get files from the package file. */
+        $this->app->loadClass('pclzip', true);
+        $zip   = new pclzip($packageFile);
+        $files = $zip->listContent();
+        if($files)
+        {
+            foreach($files as $file)
+            {
+                $file = (object)$file;
+                if($file->folder) continue;
+                $file->filename = substr($file->filename, strpos($file->filename, '/') + 1);
+                $pathes[] = dirname($file->filename);
+            }
+        }
+
+        /* Append the pathes to stored the extracted files. */
+        $pathes[] = "module/extension/ext/";
+
+        return array_unique($pathes);
+    }
+
+    /**
+     * Get all files from a package.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return array
+     */
+    public function getFilesFromPackage($extension)
+    {
+        $extensionDir = "ext/$extension/";
+        $files = $this->readDir($extensionDir, array('db', 'doc'));
+        return $files;
+    }
+
+    /**
+     * Get the extension's zentaoVersion 
+     * 
+     * @param  string    $extenstion 
+     * @access public
+     * @return string
+     */
+    public function getZentaoVersion($extension)
+    {
+        $zentaoVersion = '';
+        $infoFile      = "ext/$extension/doc/copyright.txt";
+        if(!file_exists($infoFile)) return $zentaoVersion;
+
+        $info = parse_ini_file($infoFile);
+        if(!isset($info['zentaoVersion'])) return $zentaoVersion;
+        $zentaoVersion = $info['zentaoVersion'];
+
+        return $zentaoVersion;
+    }
+
+    /**
+     * Get the install db file.
+     * 
+     * @param  string    $extension 
+     * @param  string    $method 
+     * @access public
+     * @return string
+     */
+    public function getDBFile($extension, $method = 'install')
+    {
+        return "ext/$extension/db/$method.sql";
+    }
+
+    /**
      * Check the download path.
      * 
      * @access public
@@ -282,6 +362,48 @@ class extensionModel extends model
     }
 
     /**
+     * Check the extension's version is compatibility for zentao version
+     * 
+     * @param  string    $version 
+     * @access public
+     * @return bool
+     */
+    public function checkVersion($version)
+    {
+        if($version == 'all') return true;
+        $version = explode(',', $version);
+        if(in_array($this->config->version, $version)) return true;
+        return false;
+    }
+
+    /**
+     * Check files in the package conflicts with exists files or not.
+     * 
+     * @param  string    $extension 
+     * @param  string    $type
+     * @param  bool      $isCheck
+     * @access public
+     * @return object
+     */
+    public function checkFile($extension)
+    {
+        $return->result = 'ok';
+        $return->error  = '';
+
+        $extensionFiles = $this->getFilesFromPackage($extension);
+        $appRoot = $this->app->getAppRoot();
+        foreach($extensionFiles as $extensionFile)
+        {
+            $compareFile = $appRoot . str_replace(realpath("ext/$extension") . '/', '', $extensionFile);
+            if(!file_exists($compareFile)) continue;
+            if(md5_file($extensionFile) != md5_file($compareFile)) $return->error .= $compareFile . '<br />';
+        }
+
+        if($return->error != '') $return->result = 'fail';
+        return $return;
+    }
+
+    /**
      * Extract an extension.
      * 
      * @param  string    $extension 
@@ -305,39 +427,6 @@ class extensionModel extends model
         }
 
         return $return;
-    }
-
-    /**
-     * Get pathes from an extension package.
-     * 
-     * @param  string    $extension 
-     * @access public
-     * @return array
-     */
-    public function getPathesFromPackage($extension)
-    {
-        $pathes = array();
-        $packageFile = $this->getPackageFile($extension);
-
-        /* Get files from the package file. */
-        $this->app->loadClass('pclzip', true);
-        $zip   = new pclzip($packageFile);
-        $files = $zip->listContent();
-        if($files)
-        {
-            foreach($files as $file)
-            {
-                $file = (object)$file;
-                if($file->folder) continue;
-                $file->filename = substr($file->filename, strpos($file->filename, '/') + 1);
-                $pathes[] = dirname($file->filename);
-            }
-        }
-
-        /* Append the pathes to stored the extracted files. */
-        $pathes[] = "module/extension/ext/";
-
-        return array_unique($pathes);
     }
 
     /**
@@ -432,19 +521,6 @@ class extensionModel extends model
     }
 
     /**
-     * Get the install db file.
-     * 
-     * @param  string    $extension 
-     * @param  string    $method 
-     * @access public
-     * @return string
-     */
-    public function getDBFile($extension, $method = 'install')
-    {
-        return "ext/$extension/db/$method.sql";
-    }
-
-    /**
      * Judge need execute db install or not.
      * 
      * @param  string    $extension 
@@ -524,7 +600,7 @@ class extensionModel extends model
         $data = (object)$data;
         $appRoot = $this->app->getAppRoot();
 
-        if(isset($data->dirs))
+        if(isset($data->dirs) and $data->dirs)
         {
             foreach($data->dirs as $key => $dir)
             {
@@ -625,82 +701,6 @@ class extensionModel extends model
     }
 
     /**
-     * Check the extension's version is compatibility for zentao version
-     * 
-     * @param  string    $version 
-     * @access public
-     * @return bool
-     */
-    public function checkVersion($version)
-    {
-        if($version == 'all') return true;
-        $version = explode(',', $version);
-        if(in_array($this->config->version, $version)) return true;
-        return false;
-    }
-
-    /**
-     * Get the extension's zentaoVersion 
-     * 
-     * @param  string    $extenstion 
-     * @access public
-     * @return string
-     */
-    public function getZentaoVersion($extension)
-    {
-        $zentaoVersion = '';
-        $infoFile      = "ext/$extension/doc/copyright.txt";
-        if(!file_exists($infoFile)) return $zentaoVersion;
-
-        $info = parse_ini_file($infoFile);
-        if(!isset($info['zentaoVersion'])) return $zentaoVersion;
-        $zentaoVersion = $info['zentaoVersion'];
-
-        return $zentaoVersion;
-    }
-
-    /**
-     * Check files in the package conflicts with exists files or not.
-     * 
-     * @param  string    $extension 
-     * @param  string    $type
-     * @param  bool      $isCheck
-     * @access public
-     * @return object
-     */
-    public function checkFile($extension)
-    {
-        $return->result = 'ok';
-        $return->error  = '';
-
-        $extensionFiles = $this->getAllExtensionFile($extension);
-        $appRoot = $this->app->getAppRoot();
-        foreach($extensionFiles as $extensionFile)
-        {
-            $compareFile = $appRoot . str_replace(realpath("ext/$extension") . '/', '', $extensionFile);
-            if(!file_exists($compareFile)) continue;
-            if(md5_file($extensionFile) != md5_file($compareFile)) $return->error .= $compareFile . '<br />';
-        }
-
-        if($return->error != '') $return->result = 'fail';
-        return $return;
-    }
-
-    /**
-     * Get all extension files 
-     * 
-     * @param  string    $extension 
-     * @access public
-     * @return array
-     */
-    public function getAllExtensionFile($extension)
-    {
-        $extensionDir = "ext/$extension/";
-        $files = $this->getFile($extensionDir, array('db', 'doc'));
-        return $files;
-    }
-
-    /**
      * Get files under a directory recursive.
      * 
      * @param  string    $dir 
@@ -708,7 +708,7 @@ class extensionModel extends model
      * @access private
      * @return array
      */
-    private function getFile($dir, $exceptions = array())
+    private function readDir($dir, $exceptions = array())
     {
          static $files = array();
 
@@ -730,7 +730,7 @@ class extensionModel extends model
              else
              {
                  $nextDir = $dir . $entry;
-                 $this->getFile($nextDir);
+                 $this->readDir($nextDir);
              }
          }
          return $files;
