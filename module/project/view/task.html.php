@@ -82,8 +82,8 @@ $("#bysearchTab").toggle(
       if($browseType == 'needconfirm') common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
       ?>
     </td>
-  </tr>
-  <?php endforeach;?>
+    </tr>
+       <?php endforeach;?>
     <tr>
         <td colspan= 12  class='a-right'>
         <?php 
@@ -99,6 +99,12 @@ $("#bysearchTab").toggle(
         </td>
     </tr>
   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan = 12 class = 'a-right'>   
+         <?php echo $pager;?>
+      </td>
+    </tr>
+  </tfoot>
 </table>
-<div class='a-right'><?php echo $pager;?></div>
 <?php include '../../common/view/footer.html.php';?>
