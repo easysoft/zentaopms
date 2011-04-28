@@ -84,7 +84,20 @@ $("#bysearchTab").toggle(
     </td>
   </tr>
   <?php endforeach;?>
-    <tr><td colspan= 12  class='a-right'><?php printf($lang->project->taskSummary, count($tasks), $statusWait,$statusDoing,$statusDone,$statusCancel,$totalEstimate,$totalConsumed,$totalLeft);?></td></tr>
+    <tr>
+        <td colspan= 12  class='a-right'>
+        <?php 
+            if ($status != 'wait' & $status != 'done' & $status != 'doing' & $status != 'closed' & $status != 'finishedbyme')
+            {
+                printf($lang->project->taskSummaryall, count($tasks), $statusWait,$statusDoing,$statusDone,$statusCancel,$totalEstimate,$totalConsumed,$totalLeft);
+            }
+            else
+            {
+                printf($lang->project->taskSummarypart, count($tasks), $totalEstimate,$totalConsumed,$totalLeft);
+            }
+        ?>
+        </td>
+    </tr>
   </tbody>
 </table>
 <div class='a-right'><?php echo $pager;?></div>
