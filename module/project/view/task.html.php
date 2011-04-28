@@ -89,11 +89,11 @@ $("#bysearchTab").toggle(
         <?php 
             if ($status != 'wait' & $status != 'done' & $status != 'doing' & $status != 'closed' & $status != 'finishedbyme')
             {
-                printf($lang->project->taskSummaryall, count($tasks), $statusWait,$statusDoing,$statusDone,$statusCancel,$totalEstimate,$totalConsumed,$totalLeft);
+                printf($lang->project->taskSummaryAll, count($tasks), $statusWait,$statusDoing,$statusDone,$statusCancel,$totalEstimate,$totalConsumed,$totalLeft);
             }
             else
             {
-                printf($lang->project->taskSummarypart, count($tasks), $totalEstimate,$totalConsumed,$totalLeft);
+                printf($lang->project->taskSummaryPart, count($tasks), $totalEstimate,$totalConsumed,$totalLeft);
             }
         ?>
         </td>

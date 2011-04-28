@@ -106,7 +106,7 @@
       </td>
     </tr>
       <?php endforeach;?>
-    <tr><td colspan = 12  class ='a-right'><?php printf($lang->project->taskSummary, $groupSum, $groupWait,$groupDoing,$groupDone,$groupCancel,$groupEstimate,$groupConsumed,$groupLeft);?></td></tr>
+    <tr><td colspan = 12  class ='a-right'><?php printf($lang->project->taskSummaryAll, $groupSum, $groupWait,$groupDoing,$groupDone,$groupCancel,$groupEstimate,$groupConsumed,$groupLeft);?></td></tr>
     <?php endforeach;?>
         <?php 
               if(count($tasks) == 0) $taskSum = 0;
