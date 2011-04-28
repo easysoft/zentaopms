@@ -107,7 +107,14 @@ class extensionModel extends model
     {
         $apiURL = $this->apiRoot . 'apiGetExtensions-' . $type . '-' . $param . '.json';
         $data = $this->fetchAPI($apiURL);
-        if(isset($data->extensions)) return $data;
+        if(isset($data->extensions))
+        {
+            foreach($data->extensions as $extension)
+            {
+                $extension->compatible = $this->checkVersion($extension->zentaoVersion);
+            }
+            return $data;
+        }
         return false;
     }
 
@@ -496,8 +503,10 @@ class extensionModel extends model
      */
     public function saveExtension($extension)
     {
+        $code      = $extension;
         $extension = $this->getInfoFromPackage($extension);
         $extension->status = 'available';
+        $extension->code   = $code;
         $this->dao->replace(TABLE_EXTENSION)->data($extension)->exec();
     }
 
@@ -619,13 +628,11 @@ class extensionModel extends model
      * Check the extension's version is compatibility for zentao version
      * 
      * @param  string    $version 
-     * @param  bool      $isPass  true is not check and false is check
      * @access public
      * @return bool
      */
-    public function checkVersion($version, $isPass = false)
+    public function checkVersion($version)
     {
-        if($isPass) return true;
         if($version == 'all') return true;
         $version = explode(',', $version);
         if(in_array($this->config->version, $version)) return true;
@@ -653,7 +660,7 @@ class extensionModel extends model
     }
 
     /**
-     * Check the file for repeat or changed
+     * Check files in the package conflicts with exists files or not.
      * 
      * @param  string    $extension 
      * @param  string    $type
@@ -661,11 +668,10 @@ class extensionModel extends model
      * @access public
      * @return object
      */
-    public function checkFile($extension,$type = 'repeat', $isCheck = true)
+    public function checkFile($extension)
     {
         $return->result = 'ok';
         $return->error  = '';
-        if(!$isCheck) return $return;
 
         $extensionFiles = $this->getAllExtensionFile($extension);
         $appRoot = $this->app->getAppRoot();
@@ -673,9 +679,9 @@ class extensionModel extends model
         {
             $compareFile = $appRoot . str_replace(realpath("ext/$extension") . '/', '', $extensionFile);
             if(!file_exists($compareFile)) continue;
-            if($type =='repeat' and md5_file($extensionFile) == md5_file($compareFile)) $return->error .= $compareFile . '<br />';
-            elseif($type =='change' and md5_file($extensionFile) != md5_file($compareFile)) $return->error .= $compareFile . '<br />';
+            if(md5_file($extensionFile) != md5_file($compareFile)) $return->error .= $compareFile . '<br />';
         }
+
         if($return->error != '') $return->result = 'fail';
         return $return;
     }
@@ -692,11 +698,10 @@ class extensionModel extends model
         $extensionDir = "ext/$extension/";
         $files = $this->getFile($extensionDir, array('db', 'doc'));
         return $files;
-
     }
 
     /**
-     * Foreach the dir's files
+     * Get files under a directory recursive.
      * 
      * @param  string    $dir 
      * @param  array     $exceptions 
@@ -716,6 +721,7 @@ class extensionModel extends model
          {
              if($entry == '.' or $entry == '..') continue;
              if(in_array($entry, $exceptions)) continue;
+
              $fullEntry = $dir . $entry;
              if(is_file($fullEntry))
              {

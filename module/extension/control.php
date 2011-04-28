@@ -70,12 +70,13 @@ class extension extends control
      * @param  string $extension 
      * @param  string $downLink 
      * @param  string $md5 
-     * @param  string $forceInstall 
-     * @param  bool   $isCheck    isCheck for check the file repeat and changed
+     * @param  string $overridePackage 
+     * @param  string $ignoreCompitable 
+     * @param  string $overrideFile
      * @access public
      * @return void
      */
-    public function install($extension, $downLink = '', $md5 = '', $forceInstall = 'no', $isCheck = true)
+    public function install($extension, $downLink = '', $md5 = '', $overridePackage = 'no', $ignoreCompitable = 'no', $overrideFile = 'no')
     {
         $this->view->error = '';
         $this->view->header->title = $this->lang->extension->install . $this->lang->colon . $extension;
@@ -94,10 +95,10 @@ class extension extends control
             }
 
             /* Check file exists or not. */
-            if(file_exists($packageFile) and $forceInstall == 'no')
+            if(file_exists($packageFile) and $overridePackage == 'no')
             {
-                $forceInstallLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&forecInstall=yes&isCheck=$isCheck");
-                $this->view->error = sprintf($this->lang->extension->errorPackageFileExists, $packageFile, $forceInstallLink);
+                $overrideLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&overridePackage=yes&ignoreCompitable=$ignoreCompitable");
+                $this->view->error = sprintf($this->lang->extension->errorPackageFileExists, $packageFile, $overrideLink);
                 die($this->display());
             }
 
@@ -141,56 +142,59 @@ class extension extends control
             die($this->display());
         }
 
+       /* Check version comptiable. */
        $zentaoVersion = $this->extension->getZentaoVersion($extension);
-       /* Check version again for upload and install again */
-       if(!$this->extension->checkVersion($zentaoVersion, $this->session->isPass))
+       if(!$this->extension->checkVersion($zentaoVersion) and $ignoreCompitable == 'no')
        {
-           $forceInstallLink  = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&forceInstall=$forceInstall&isCheck=$isCheck");
-           $waringLink        = inlink('waring', "url=".helper::safe64Encode($forceInstallLink)."&zentaoVersion=$zentaoVersion&isPass=" . true);
-           $resetLink         = inlink('obtain');
-           $this->view->error = sprintf($this->lang->extension->errorCheckIncompatible, $waringLink, $resetLink);
+           $ignoreLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&overridePackage=$overridePackage&ignoreCompitable=yes");
+           $returnLink = inlink('obtain');
+           $this->view->error = sprintf($this->lang->extension->errorCheckIncompatible, $ignoreLink, $returnLink);
            die($this->display());
        }
-       
-       $return = $this->extension->checkFile($extension, 'repeat', $isCheck);
-        if($return->result != 'ok')
-        {
-            $continueLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&forceInstall=$forceInstall&isCheck=" . false);
-            $resetLink    = inlink('obtain');
-            $this->view->error = sprintf($this->lang->extension->errorRepeatFile, $return->error, $continueLink, $resetLink);
-            die($this->display());
-        }
-        /* Save to database. */
-        $this->extension->saveExtension($extension);
 
-        /* Copy files to target directory. */
-        $this->view->files = $this->extension->copyPackageFiles($extension);
+       /* Check files in the package conflicts with exists files or not. */
+       if($overrideFile == 'no')
+       {
+           $return = $this->extension->checkFile($extension);
+           if($return->result != 'ok')
+           {
+               $overrideLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&overridePackage=$overridePackage&ignoreCompitable=$ignoreCompitable&overrideFile=yes");
+               $returnLink   = inlink('obtain');
+               $this->view->error = sprintf($this->lang->extension->errorFileConflicted, $return->error, $overrideLink, $returnLink);
+               die($this->display());
+           }
+       }
 
-        /* Judge need execute db install or not. */
-        $data->status = 'installed';
-        $data->dirs   = $this->session->dirs2Created;
-        $data->files  = $this->view->files;
-        $data->installedTime = helper::now();
+       /* Save to database. */
+       $this->extension->saveExtension($extension);
 
-        if($this->extension->needExecuteDB($extension, 'install'))
-        {
-            $return = $this->extension->executeDB($extension, 'install');
-            if($return->result != 'ok')
-            {
-                $this->view->error = sprintf($this->lang->extension->errorInstallDB, $return->error);
-                die($this->display());
-            }
-            $this->extension->updateExtension($extension, $data);
-        }
-        else
-        {
-            $this->extension->updateExtension($extension, $data);
-        }
+       /* Copy files to target directory. */
+       $this->view->files = $this->extension->copyPackageFiles($extension);
 
-        $this->view->downloadedPackage = !empty($downLink);
+       /* Judge need execute db install or not. */
+       $data->status = 'installed';
+       $data->dirs   = $this->session->dirs2Created;
+       $data->files  = $this->view->files;
+       $data->installedTime = helper::now();
 
-        $this->session->set('isPass', false);
-        $this->display();
+       if($this->extension->needExecuteDB($extension, 'install'))
+       {
+           $return = $this->extension->executeDB($extension, 'install');
+           if($return->result != 'ok')
+           {
+               $this->view->error = sprintf($this->lang->extension->errorInstallDB, $return->error);
+               die($this->display());
+           }
+           $this->extension->updateExtension($extension, $data);
+       }
+       else
+       {
+           $this->extension->updateExtension($extension, $data);
+       }
+
+       $this->view->downloadedPackage = !empty($downLink);
+
+       $this->display();
     }
 
     /**
@@ -254,15 +258,15 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function deactivate($extension, $isCheck = true)
+    public function deactivate($extension, $ignore = 'no')
     {
-        $return->return         = 'ok';
-        $checkReturn = $this->extension->checkFile($extension, 'change', $isCheck);
-        if($checkReturn->result != 'ok')
+        $return->return = 'ok';
+        $checkReturn = $this->extension->checkFile($extension);
+        if($checkReturn->result != 'ok' and $ignore == 'no')
         {
-            $continueLink = inlink('deactivate', "extension=$extension&isCheck=" . false);
+            $continueLink = inlink('deactivate', "extension=$extension&ignore=yes");
             $resetLink    = inlink('browse');
-            $return->removeCommands = sprintf($this->lang->extension->errorChangeFile, $checkReturn->error, $continueLink, $resetLink);
+            $return->removeCommands = sprintf($this->lang->extension->errorFileChanged, $checkReturn->error, $continueLink, $resetLink);
             $return->return         = 'fail';
             $this->view->return     = $return;
             die($this->display());
@@ -305,53 +309,5 @@ class extension extends control
         $this->view->removeCommands = $this->extension->erasePackage($extension);
         $this->view->header->title  = $this->lang->extension->eraseFinished;
         $this->display();
-    }
-
-    /**
-     * waring for install and download 
-     * 
-     * @param  string     $url 
-     * @param  string     $zentaoVersion 
-     * @param  bool       $isPass 
-     * @access public
-     * @return void
-     */
-    public function waring($url, $zentaoVersion = '', $isPass = false)
-    {
-        /* Check version for download*/
-        if(!$this->extension->checkVersion($zentaoVersion, $isPass))
-        {
-            $forceInstallLink  = inlink('waring', "url=$url&zentaoVersion=$zentaoVersion&isPass=" . true);
-            $resetLink         = inlink('obtain');
-            $this->view->error = sprintf($this->lang->extension->errorCheckIncompatible, $forceInstallLink, $resetLink);
-            $this->view->header->title  = $this->lang->extension->waringInstall;
-            die($this->display());
-        }
-        $this->session->set('isPass', true);
-        $url = helper::safe64Decode($url);
-        $this->locate($url);
-    }
-
-    /**
-     * Check the extension score 
-     * 
-     * @param  int       $score 
-     * @param  string    $installUrl 
-     * @param  string    $downloadUrl 
-     * @param  string    $zentaoVersion 
-     * @access public
-     * @return void
-     */
-    public function checkScore($score, $installUrl, $downloadUrl, $zentaoVersion)
-    {
-        if($score)
-        {
-            $resetLink         = inlink('obtain');
-            $downloadUrl = helper::safe64Decode($downloadUrl);
-            $this->view->error = sprintf($this->lang->extension->errorCheckScore, $downloadUrl, $resetLink);
-            $this->view->header->title  = $this->lang->extension->needScore;
-            die($this->display());
-        }
-        else $this->locate(inlink('waring', "url=$installUrl&zentaoVersion=$zentaoVersion"));
     }
 }

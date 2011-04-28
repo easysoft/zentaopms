@@ -43,10 +43,13 @@
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->extension->id;?></th>
           <th class='w-150px'><?php echo $lang->extension->name;?></th>
+          <th class='w-50px'><?php echo $lang->extension->code;?></th>
           <th class='w-50px'><?php echo $lang->extension->version;?></th>
           <th><?php echo $lang->extension->desc;?></th>
           <th><?php echo $lang->extension->author;?></th>
           <th class='w-id'><?php echo $lang->extension->downloads;?></th>
+          <th><?php echo $lang->extension->public;?></th>
+          <th><?php echo $lang->extension->compatible;?></th>
           <th class='w-100px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
@@ -55,17 +58,23 @@
         <tr class='a-center'>
           <td class='strong'><?php echo $extension->id;?></td>
           <td class='a-left'><?php echo $extension->name;?></td>
+          <td><?php echo $extension->code;?></td>
           <td><?php echo $extension->version;?></td>
           <td class='a-left'><?php echo $extension->desc;?></td>
           <td><?php echo $extension->author;?></td>
           <td><?php echo $extension->downloads;?></td>
-          <td>
+          <td><?php echo $lang->extension->publicList[$extension->public];?></td>
+          <td><?php echo $lang->extension->compatibleList[$extension->compatible];?></td>
+          <td class='a-right'>
             <?php 
-            $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
-            $downLink    = substr($extension->downLink, 0, strpos($extension->downLink, '/')) . "/file-download-$extension->fileId.html";
-            if(!isset($extension->score))$extension->score = 0;
-            echo html::a(inlink('checkScore',"score=$extension->score&installUrl=" . helper::safe64Encode($installLink) . "&downloadUrl=" . helper::safe64Encode($downLink) . "&zentaoVersion=$extension->zentaoVersion"), $lang->extension->installAB, '', "class='button-c iframe'");
-            echo html::a(inlink('waring',"url=" . helper::safe64Encode($downLink) . "&zentaoVersion=$extension->zentaoVersion"), $lang->extension->downloadAB, '', "class='button-c iframe'");
+            $autoInstall  = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
+            $forceInstall = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&overridePackage=no&ignoreCompitable=yes");
+            if($extension->public)
+            {
+                if($extension->compatible)  echo html::a($autoInstall,  $lang->extension->installAuto, '', 'class="iframe"');
+                if(!$extension->compatible) echo html::a($forceInstall, $lang->extension->installForce, '', 'class="iframe"');
+            }
+            echo html::a($extension->downLink, $lang->extension->downloadAB);
             ?>
           </td>
         </tr>

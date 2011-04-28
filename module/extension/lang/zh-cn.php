@@ -9,18 +9,20 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->extension->common    = '插件管理';
-$lang->extension->browse    = '浏览插件';
-$lang->extension->install   = '安装插件';
-$lang->extension->installAB = '安装';
-$lang->extension->uninstall = '卸载';
-$lang->extension->activate  = '激活';
-$lang->extension->deactivate= '禁用';
-$lang->extension->obtain    = '获得插件';
-$lang->extension->download  = '下载插件';
-$lang->extension->downloadAB= '下载';
-$lang->extension->upload    = '上传插件';
-$lang->extension->erase     = '清除';
+$lang->extension->common       = '插件管理';
+$lang->extension->browse       = '浏览插件';
+$lang->extension->install      = '安装插件';
+$lang->extension->installAuto  = '自动安装';
+$lang->extension->installForce = '强制安装';
+$lang->extension->cannotInstall= '需手工安装';
+$lang->extension->uninstall    = '卸载';
+$lang->extension->activate     = '激活';
+$lang->extension->deactivate   = '禁用';
+$lang->extension->obtain       = '获得插件';
+$lang->extension->download     = '下载插件';
+$lang->extension->downloadAB   = '下载';
+$lang->extension->upload       = '上传插件';
+$lang->extension->erase        = '清除';
 
 $lang->extension->installed   = '已安装';
 $lang->extension->deactivated = '已禁用';
@@ -28,6 +30,7 @@ $lang->extension->available   = '可安装';
 
 $lang->extension->id          = '编号';
 $lang->extension->name        = '名称';
+$lang->extension->code        = '英文名';
 $lang->extension->version     = '版本';
 $lang->extension->author      = '作者';
 $lang->extension->license     = '授权';
@@ -35,7 +38,15 @@ $lang->extension->desc        = '描述';
 $lang->extension->site        = '官方网站';
 $lang->extension->addedTime   = '添加时间';
 $lang->extension->updatedTime = '更新时间';
-$lang->extension->downloads   = '下载';
+$lang->extension->downloads   = '下载量';
+$lang->extension->public      = '直接下载';
+$lang->extension->compatible  = '兼容性';
+
+$lang->extension->publicList[0] = '手工下载';
+$lang->extension->publicList[1] = '直接下载';
+
+$lang->extension->compatibleList[0] = '不兼容';
+$lang->extension->compatibleList[1] = '兼容';
 
 $lang->extension->byDownloads   = '最多下载';
 $lang->extension->byAddedTime   = '最新添加';
@@ -70,8 +81,8 @@ $lang->extension->errorPackageFileExists       = '下载路径已经有一个名
 $lang->extension->errorDownloadFailed          = '下载失败，请重新下载。如果多次重试还不行，请尝试手工下载，然后通过上传功能上传。';
 $lang->extension->errorMd5Checking             = '下载文件不完整，请重新下载。如果多次重试还不行，请尝试手工下载，然后通过上传功能上传。';
 $lang->extension->errorExtracted               = '包文件<strong> %s </strong>解压缩失败，可能不是一个有效的zip文件。错误信息如下：<br />%s';
-$lang->extension->errorRepeatFile              = '有以下安装文件重复：<br />%s。<h3>是否继续安装，<a href="%s">覆盖安装</a>&nbsp;&nbsp;<a href="#" onclick=parent.location.href="%s">取消</a></h3>';
-$lang->extension->errorChangeFile              = '有以下安装文件做过改动：<br />%s。<h3>是否继续，<a href="%s">确定删除</a>&nbsp;&nbsp;<a href="#" onclick=parent.location.href="%s">取消</a></h3>';
+$lang->extension->errorFileConflicted          = '有以下安装文件冲突：<br />%s <h3>是否继续安装，<a href="%s">覆盖安装</a>&nbsp;&nbsp;<a href="#" onclick=parent.location.href="%s">取消</a></h3>';
+$lang->extension->errorFileChanged             = '有以下安装文件做过改动：<br />%s<h3>是否继续，<a href="%s">确定继续</a>&nbsp;&nbsp;<a href="#" onclick=parent.location.href="%s">取消</a></h3>';
 $lang->extension->errorPackageNotFound         = '包文件 <strong>%s </strong>没有找到，可能是因为自动下载失败。您可以尝试再次下载。';
 $lang->extension->errorTargetPathNotWritable   = '目标路径 <strong>%s </strong>不可写。';
 $lang->extension->errorTargetPathNotExists     = '目标路径 <strong>%s </strong>不存在。';
