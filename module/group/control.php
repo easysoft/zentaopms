@@ -146,6 +146,7 @@ class group extends control
             $this->view->position[]    = $group->name . $this->lang->colon . $this->lang->group->managePriv;
 
             $this->view->group      = $group;
+            $this->view->changelogs = $this->lang->changelog;
             $this->view->groupPrivs = $groupPrivs;
 
         }

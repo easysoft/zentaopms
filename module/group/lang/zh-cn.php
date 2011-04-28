@@ -40,4 +40,14 @@ $lang->group->outside  = '组外用户';
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
+$lang->group->query             = '标红';
+$lang->group->addPriv           = '版本新增权限';
+$lang->group->versions['1.0.1'] = '禅道1.0.1';
+$lang->group->versions['1.1']   = '禅道1.1';
+$lang->group->versions['1.2']   = '禅道1.2';
+$lang->group->versions['1.3']   = '禅道1.3';
+$lang->group->versions['1.4']   = '禅道1.4';
+$lang->group->versions['1.5']   = '禅道1.5';
+$lang->group->versions['2.0']   = '禅道2.0';
+
 include (dirname(__FILE__) . '/resource.php');

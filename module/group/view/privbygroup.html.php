@@ -12,7 +12,15 @@
 ?>
 <form method='post' target='hiddenwin'>
   <table class='table-1 a-left'> 
-    <caption class='caption-tl'><?php echo $group->name . $lang->colon . $lang->group->managePriv;?></caption>
+    <caption class='caption-tl'><?php echo $group->name . $lang->colon . $lang->group->managePriv;?>
+      <span class='half-right'>
+        <?php 
+        echo $lang->group->addPriv . $lang->colon;
+        echo html::select('version', $this->lang->group->versions);
+        echo html::commonButton($this->lang->group->query, "onclick=showPriv()");
+        ?>
+      </span>
+    </caption>
     <tr class='colhead'>
       <th><?php echo $lang->group->module;?></th>
       <th><?php echo $lang->group->method;?></th>
@@ -25,9 +33,11 @@
         <?php foreach($moduleActions as $action => $actionLabel):?>
         <div class='w-p20 f-left'><input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> />
         <?php if(isset($lang->group->newPriv[$moduleName][$actionLabel])):?>
-        <span class='red'><?php echo $lang->$moduleName->$actionLabel;?></span>
+        <span class='priv red' id=<?php echo $moduleName . '-' . $actionLabel;?>><?php echo $lang->$moduleName->$actionLabel;?></span>
         <?php else:?>
+        <span class='priv' id=<?php echo $moduleName . '-' . $actionLabel;?>>
         <?php echo $lang->$moduleName->$actionLabel;?>
+        </span>
         <?php endif;?>
         </div>
         <?php if(($i %  4) == 0) echo "<div class='c-both'></div>"; $i ++;?>
@@ -47,3 +57,6 @@
     </tr>
   </table>
 </form>
+<script type='text/javascript'>
+    var newPriv=<?php echo json_encode($changelogs)?>
+</script>

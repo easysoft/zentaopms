@@ -247,3 +247,44 @@ $lang->group->newPriv['task']['close']      = 'close';
 $lang->group->newPriv['task']['batchClose'] = 'batchClose';
 $lang->group->newPriv['task']['finish']     = 'finish';
 $lang->group->newPriv['search']['select']   = 'select';
+
+/* Every version of new privilege. */
+
+$lang->changelog['1.0.1'][] = 'project-computeBurn';
+
+$lang->changelog['1.1'][]   = 'search-saveQuery';
+$lang->changelog['1.1'][]   = 'search-deleteQuery';
+
+$lang->changelog['1.2'][]   = 'product-doc';
+$lang->changelog['1.2'][]   = 'project-doc';
+$lang->changelog['1.2'][]   = 'project-ajaxGetProducts';
+$lang->changelog['1.2'][]   = 'bug-saveTemplate';
+$lang->changelog['1.2'][]   = 'bug-deleteTemplate';
+$lang->changelog['1.2'][]   = 'bug-customFields';
+$lang->changelog['1.2'][]   = 'bug-ajaxGetModuleOwner';
+$lang->changelog['1.2'][]   = 'doc-index';
+$lang->changelog['1.2'][]   = 'doc-browse';
+$lang->changelog['1.2'][]   = 'doc-createLib';
+$lang->changelog['1.2'][]   = 'doc-editLib';
+$lang->changelog['1.2'][]   = 'doc-deleteLib';
+$lang->changelog['1.2'][]   = 'doc-create';
+$lang->changelog['1.2'][]   = 'doc-view';
+$lang->changelog['1.2'][]   = 'doc-edit';
+$lang->changelog['1.2'][]   = 'doc-delete';
+$lang->changelog['1.2'][]   = 'doc-deleteFile';
+
+$lang->changelog['1.3'][]   = 'task-start';
+$lang->changelog['1.3'][]   = 'task-complete';
+$lang->changelog['1.3'][]   = 'task-cancel';
+$lang->changelog['1.3'][]   = 'tree-ajaxGetSonModules';
+$lang->changelog['1.3'][]   = 'file-delete';
+$lang->changelog['1.3'][]   = 'file-ajaxUpload';
+
+$lang->changelog['1.4'][]   = 'my-testTask';
+$lang->changelog['1.4'][]   = 'my-testCase';
+$lang->changelog['1.4'][]   = 'task-finish';
+$lang->changelog['1.4'][]   = 'task-close';
+$lang->changelog['1.4'][]   = 'task-activate';
+$lang->changelog['1.4'][]   = 'search-select';
+
+$lang->changelog['1.5'][]   = 'task-batchClose';

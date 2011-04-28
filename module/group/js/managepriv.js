@@ -14,6 +14,16 @@ function checkall(checker)
     });
 }
 
+function showPriv()
+{
+    var version = $('#version').val();
+    $('.priv').removeClass('red');
+    privs = newPriv[version];
+    for(var item in privs)
+    {
+        $('#' + privs[item]).addClass('red');
+    }
+}
 /**
  * Control the actions select control for a module.
  * 
