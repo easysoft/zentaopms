@@ -40,38 +40,10 @@ $("#bysearchTab").toggle(
   </tr>
   </thead>
   <tbody>
-  <?php  $statusWait    = 0;
-         $statusDone    = 0;
-         $statusDoing   = 0;
-         $statusCancel  = 0;  
-         $totalEstimate = 0.0;
-         $totalConsumed = 0.0;
-         $totalLeft     = 0.0;
-  ?>
   <?php foreach($tasks as $task):?>
   <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
-  <?php $taskLink  = $this->createLink('task','view',"taskID=$task->id");
-       $totalEstimate += $task->estimate;
-       $totalConsumed += $task->consumed;
-       $totalLeft     += $task->left;
-       if($task->status == 'wait')
-       {
-           $statusWait++;
-       }
-       elseif($task->status == 'doing')
-       {
-           $statusDoing++;
-       }
-       elseif($task->status == 'done')
-       {
-           $statusDone++;
-       }
-       else
-       {
-           $statusCancel++;
-       }
-     ?>
-  <tr class='a-center'>
+
+   <tr class='a-center'>
     <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
     <td><?php echo $lang->task->priList[$task->pri];?></td>
     <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
