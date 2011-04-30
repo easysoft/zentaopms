@@ -29,4 +29,11 @@ $(document).ready(function()
     {
         $("#browsecss").attr('href', '');
     }
+
+    /* Toggle the search form. */
+    $("#bysearchTab").toggle
+    (
+        function(){$("#querybox").show();},
+        function(){$("#querybox").hide();}
+    );
 });

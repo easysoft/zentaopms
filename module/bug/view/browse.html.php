@@ -18,7 +18,6 @@
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
 var customed   = <?php echo (int)$customed;?>;
-
 </script>
 
 <div id='featurebar'>
@@ -37,12 +36,6 @@ var customed   = <?php echo (int)$customed;?>;
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->bug->byQuery}</a></span> ";
     ?>
   </div>
-<script language='Javascript'>
-    $("#bysearchTab").toggle(
-        function(){$("#querybox").show(); },
-        function(){$("#querybox").hide(); }
-    );
-</script>
   <div class='f-right'>
     <?php common::printLink('bug', 'customFields', '', $lang->bug->customFields, '', "class='iframe'"); ?>
     <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
@@ -65,7 +58,7 @@ var customed   = <?php echo (int)$customed;?>;
         </div>
       </div>
     </td>
-    <td id='divider' class='divider <?php echo $treeClass;?>'></td>
+    <td class='divider <?php echo $treeClass;?>'></td>
     <td>
        <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <table class='table-1 fixed colored tablesorter datatable'>
@@ -115,13 +108,7 @@ var customed   = <?php echo (int)$customed;?>;
         </tr>
         <?php endforeach;?>
         </tbody>
-        <tfoot>
-        <tr>
-          <td colspan = 9>
-              <?php $pager->show();?>
-          </td>
-        </tr>
-        </tfoot>
+        <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
       </table>
     </td>
   </tr>
