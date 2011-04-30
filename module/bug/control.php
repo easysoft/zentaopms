@@ -72,10 +72,7 @@ class bug extends control
         /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID);
         $this->session->set('bugList',    $this->app->getURI(true));
-        $this->session->set('productID',  $productID);
-        $this->session->set('moduleID',   $moduleID);
-        $this->session->set('orderBy',    $orderBy);
-        $this->session->set('browseType', $browseType);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
