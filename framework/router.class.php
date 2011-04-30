@@ -679,7 +679,14 @@ class router
         }    
         elseif(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
         {
-            $this->clientLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ','));
+            if(strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ',') === false)
+            {
+                $this->clientLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+            }
+            else
+            {
+                $this->clientLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ','));
+            }
         }
         if(!empty($this->clientLang))
         {
