@@ -45,11 +45,11 @@ $(document).ready(function()
       <th class='rowhead'><?php echo $lang->doc->content;?></th>
       <td><?php echo html::textarea('content', htmlspecialchars($doc->content), "class='text-1' rows='8' style='width:90%; height:200px'");?></td>
     </tr>  
-  <tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->doc->digest;?></th>
       <td><?php echo html::textarea('digest', $doc->digest, "class='text-1' rows=3");?></td>
     </tr>  
-   <tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->doc->comment;?></th>
       <td><?php echo html::textarea('comment','', "class='text-1' rows=3");?></td>
     </tr> 
