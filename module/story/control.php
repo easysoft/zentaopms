@@ -642,6 +642,7 @@ class story extends control
                 $story->reviewedBy     = $users[$story->reviewedBy];
                 $story->closedBy       = $users[$story->closedBy]; 
                 $story->closedDate     = substr($story->closedDate, 0, 10);
+                $story->closedReason   = $this->lang->story->reasonList[$story->closedReason];
             }
 
             $this->post->set('fields', $fields);
