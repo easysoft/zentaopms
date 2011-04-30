@@ -145,13 +145,7 @@
             echo "</td></tr>";
         }
        ?>
-       <tr>
-         <td class='a-right f-14px'>
-         <?php 
-         common::printLink('company', 'dynamic', '', $lang->more);
-         ?>
-          </td>
-        </tr>
+       <tr><td class='a-right f-14px'><?php common::printLink('company', 'dynamic', '', $lang->more);?></td></tr>
       </table>
     </td>
   </tr>  
