@@ -29,14 +29,9 @@
       <td id='<?php echo $moduleName;?>' class='pv-10px'>
         <?php $i = 1;?>
         <?php foreach($moduleActions as $action => $actionLabel):?>
-        <div class='w-p20 f-left'><input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> />
-        <?php if(isset($lang->group->newPriv[$moduleName][$actionLabel])):?>
-        <span class='priv red' id=<?php echo $moduleName . '-' . $actionLabel;?>><?php echo $lang->$moduleName->$actionLabel;?></span>
-        <?php else:?>
-        <span class='priv' id=<?php echo $moduleName . '-' . $actionLabel;?>>
-        <?php echo $lang->$moduleName->$actionLabel;?>
-        </span>
-        <?php endif;?>
+        <div class='w-p20 f-left'>
+          <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> />
+          <span class='priv' id=<?php echo $moduleName . '-' . $actionLabel;?>><?php echo $lang->$moduleName->$actionLabel;?></span>
         </div>
         <?php if(($i %  4) == 0) echo "<div class='c-both'></div>"; $i ++;?>
         <?php endforeach;?>
@@ -55,6 +50,4 @@
     </tr>
   </table>
 </form>
-<script type='text/javascript'>
-    var newPriv=<?php echo json_encode($changelogs)?>
-</script>
+<script type='text/javascript'>var newPriv = <?php echo json_encode($changelogs)?></script>
