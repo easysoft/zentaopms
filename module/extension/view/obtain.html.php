@@ -33,12 +33,13 @@
       </div>
       <div class='box-title'><?php echo $lang->extension->byCategory;?></div>
       <div class='box-content' id='tree'>
-        <?php echo $moduleTree;?>
+        <?php $moduleTree ? print($moduleTree) : print($lang->extension->errorGetModules);?>
       </div>
     </td>
     <td class='divider'></td>
     <td> 
       <table class='table-1 tablesorter'>
+      <?php if($extensions):?>
         <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->extension->id;?></th>
@@ -83,6 +84,9 @@
         <tfoot>
           <tr><td class='a-right' colspan='10'><?php if($pager) $pager->show();?></td></tr>
         </tfoot>
+      <?php else:?>
+      <tr><td><?php echo $lang->extension->errorGetExtensions;?></td></tr>
+      <?php endif;?>
       </table>
     </td>
   </tr>

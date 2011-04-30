@@ -19,7 +19,7 @@
     <th class='w-50px'><?php echo $lang->extension->version;?></th>
     <th><?php echo $lang->extension->desc;?></th>
     <th class='w-100px'><?php echo $lang->extension->author;?></th>
-    <th class='w-150px'><?php echo $lang->actions;?></th>
+    <th class='w-200px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
