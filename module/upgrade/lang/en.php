@@ -48,3 +48,4 @@ $lang->upgrade->fromVersions['1_1']       = '1.1';
 $lang->upgrade->fromVersions['1_2']       = '1.2';
 $lang->upgrade->fromVersions['1_3']       = '1.3';
 $lang->upgrade->fromVersions['1_4']       = '1.4';
+$lang->upgrade->fromVersions['1_5']       = '1.5';
