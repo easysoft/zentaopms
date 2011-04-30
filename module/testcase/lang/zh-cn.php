@@ -54,6 +54,7 @@ $lang->testcase->view           = "用例详情";
 $lang->testcase->edit           = "编辑用例";
 $lang->testcase->delete         = "删除用例";
 $lang->testcase->browse         = "用例列表";
+$lang->testcase->export         = "导出数据";
 $lang->testcase->confirmStoryChange = '确认需求变动';
 
 $lang->testcase->deleteStep     = '删除';

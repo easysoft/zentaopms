@@ -355,7 +355,7 @@ class testcase extends control
     /**
      * get data to export
      */
-    public function exportData($fileName, $fileType)
+    public function export($fileName, $fileType)
     {
         $users = $this->loadModel('user')->getPairs(); 
         $productID  = $this->session->productID;

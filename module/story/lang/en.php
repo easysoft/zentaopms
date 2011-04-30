@@ -9,20 +9,22 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->story->browse    = "Browse";
-$lang->story->create    = "Create";
-$lang->story->change    = "Change";
-$lang->story->changed   = 'Changed';
-$lang->story->review    = 'Review';
-$lang->story->edit      = "Edit";
-$lang->story->close     = 'Close';
-$lang->story->activate  = 'Activate';
-$lang->story->delete    = "Delete";
-$lang->story->view      = "Info";
-$lang->story->tasks     = "Tasks";
-$lang->story->taskCount = 'Tasks count';
-$lang->story->bugs      = "Bug";
-$lang->story->linkStory = 'Related story';
+$lang->story->browse      = "Browse";
+$lang->story->create      = "Create";
+$lang->story->change      = "Change";
+$lang->story->changed     = 'Changed';
+$lang->story->review      = 'Review';
+$lang->story->edit        = "Edit";
+$lang->story->close       = 'Close';
+$lang->story->activate    = 'Activate';
+$lang->story->delete      = "Delete";
+$lang->story->view        = "Info";
+$lang->story->tasks       = "Tasks";
+$lang->story->taskCount   = 'Tasks count';
+$lang->story->bugs        = "Bug";
+$lang->story->linkStory   = 'Related story';
+$lang->story->export      = "Export";
+$lang->story->reportChart = "Report";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';

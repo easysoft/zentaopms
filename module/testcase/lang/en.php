@@ -54,6 +54,7 @@ $lang->testcase->view           = "Info";
 $lang->testcase->edit           = "Edit";
 $lang->testcase->delete         = "Delete";
 $lang->testcase->browse         = "Browse";
+$lang->testcase->export         = "Export";
 $lang->testcase->confirmStoryChange = 'Confirm story change';
 
 $lang->testcase->deleteStep     = 'Delete';

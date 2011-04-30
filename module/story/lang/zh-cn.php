@@ -9,20 +9,22 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->story->browse    = "需求列表";
-$lang->story->create    = "新增需求";
-$lang->story->change    = "变更";
-$lang->story->changed   = '需求变更';
-$lang->story->review    = '评审';
-$lang->story->edit      = "编辑需求";
-$lang->story->close     = '关闭';
-$lang->story->activate  = '激活';
-$lang->story->delete    = "删除需求";
-$lang->story->view      = "需求详情";
-$lang->story->tasks     = "相关任务";
-$lang->story->taskCount = '任务数';
-$lang->story->bugs      = "Bug";
-$lang->story->linkStory = '关联需求';
+$lang->story->browse      = "需求列表";
+$lang->story->create      = "新增需求";
+$lang->story->change      = "变更";
+$lang->story->changed     = '需求变更';
+$lang->story->review      = '评审';
+$lang->story->edit        = "编辑需求";
+$lang->story->close       = '关闭';
+$lang->story->activate    = '激活';
+$lang->story->delete      = "删除需求";
+$lang->story->view        = "需求详情";
+$lang->story->tasks       = "相关任务";
+$lang->story->taskCount   = '任务数';
+$lang->story->bugs        = "Bug";
+$lang->story->linkStory   = '关联需求';
+$lang->story->export      = "导出数据";
+$lang->story->reportChart = "统计报表";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '编号';

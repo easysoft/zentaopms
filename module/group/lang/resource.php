@@ -23,6 +23,7 @@ $lang->resource->my->testcase    = 'testCase';
 $lang->resource->my->story       = 'story';
 $lang->resource->my->project     = 'project';
 $lang->resource->my->profile     = 'profile';
+$lang->resource->my->dynamic     = 'dynamic';
 $lang->resource->my->editProfile = 'editProfile';
 
 /* Todo. */
@@ -56,6 +57,7 @@ $lang->resource->story->review  = 'lblReview';
 $lang->resource->story->close   = 'lblClose';
 $lang->resource->story->activate= 'lblActivate';
 $lang->resource->story->tasks   = 'tasks';
+$lang->resource->story->report  = 'reportChart';
 $lang->resource->story->ajaxGetProjectStories = 'ajaxGetProjectStories';
 $lang->resource->story->ajaxGetProductStories = 'ajaxGetProductStories';
 
@@ -112,6 +114,7 @@ $lang->resource->task->batchClose          = 'batchClose';
 $lang->resource->task->activate            = 'activate';
 $lang->resource->task->delete              = 'delete';
 $lang->resource->task->view                = 'view';
+$lang->resource->task->export              = 'export';
 $lang->resource->task->confirmStoryChange  = 'confirmStoryChange';
 $lang->resource->task->ajaxGetUserTasks    = 'ajaxGetUserTasks';
 $lang->resource->task->ajaxGetProjectTasks = 'ajaxGetProjectTasks';
@@ -153,6 +156,7 @@ $lang->resource->testcase->create             = 'create';
 $lang->resource->testcase->view               = 'view';
 $lang->resource->testcase->edit               = 'edit';
 $lang->resource->testcase->delete             = 'delete';
+$lang->resource->testcase->export             = 'export';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 
 /* Test task. */
@@ -184,6 +188,7 @@ $lang->resource->doc->delete    = 'delete';
 $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
 $lang->resource->company->edit   = 'edit';
+$lang->resource->company->dynamic= 'dynamic';
 
 /* Department. */
 $lang->resource->dept->browse      = 'browse';
@@ -209,6 +214,7 @@ $lang->resource->user->todo   = 'todo';
 $lang->resource->user->task   = 'task';
 $lang->resource->user->bug    = 'bug';
 $lang->resource->user->project= 'project';
+$lang->resource->user->dynamic= 'dynamic';
 $lang->resource->user->profile= 'profile';
 
 /* Tree. */
@@ -230,6 +236,16 @@ $lang->resource->search->select       = 'select';
 /* Admin. */
 $lang->resource->admin->index         = 'index';
 
+/* Extension. */
+$lang->resource->extension->browse     = 'browse';
+$lang->resource->extension->obtain     = 'obtain';
+$lang->resource->extension->install    = 'install';
+$lang->resource->extension->uninstall  = 'uninstall';
+$lang->resource->extension->activate   = 'activate';
+$lang->resource->extension->deactivate = 'deactivate';
+$lang->resource->extension->upload     = 'upload';
+$lang->resource->extension->erase      = 'erase';
+
 /* Others. */
 $lang->resource->api->getModel     = 'getModel';
 $lang->resource->file->download    = 'download';
@@ -242,17 +258,7 @@ $lang->resource->misc->ping        = 'ping';
 $lang->resource->action->trash     = 'trash';
 $lang->resource->action->undelete  = 'undelete';
 
-/* New privilege.*/
-$lang->group->newPriv['my']['testTask']     = 'testTask';
-$lang->group->newPriv['my']['testCase']     = 'testCase';
-$lang->group->newPriv['task']['activate']   = 'activate';
-$lang->group->newPriv['task']['close']      = 'close';
-$lang->group->newPriv['task']['batchClose'] = 'batchClose';
-$lang->group->newPriv['task']['finish']     = 'finish';
-$lang->group->newPriv['search']['select']   = 'select';
-
 /* Every version of new privilege. */
-
 $lang->changelog['1.0.1'][] = 'project-computeBurn';
 
 $lang->changelog['1.1'][]   = 'search-saveQuery';
