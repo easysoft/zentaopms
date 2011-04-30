@@ -121,6 +121,7 @@ $lang->my->menu->bug      = 'Bug|my|bug|';
 $lang->my->menu->testask  = 'Test|my|testtask|';
 $lang->my->menu->story    = 'Story|my|story|';
 $lang->my->menu->project  = 'Project|my|project|';
+$lang->my->menu->dynamic  = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile  = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
 
@@ -203,11 +204,13 @@ $lang->user->menu->profile  = array('link' => 'Profile|user|profile|account=%s',
 $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
 
 /* Admin menu. */
-$lang->admin->menu->trashes = array('link' => 'Trash|action|trash', 'subModule' => 'action');
-$lang->admin->menu->convert = array('link' => 'Import|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
+$lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
+$lang->extension->menu      = $lang->admin->menu;
 
 /* Groups. */
 $lang->menugroup->release     = 'product';
@@ -226,6 +229,7 @@ $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
+$lang->menugroup->extension   = 'admin';
 
 /* Error info. */
 $lang->error->companyNotFound = "The domain %s does not exist.";

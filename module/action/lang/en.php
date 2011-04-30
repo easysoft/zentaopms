@@ -17,6 +17,7 @@ $lang->action->objectType = 'Object';
 $lang->action->objectID   = 'ID';
 $lang->action->objectName = 'Name';
 $lang->action->actor      = 'Actor';
+$lang->action->action     = 'Action';
 $lang->action->date       = 'Date';
 $lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic, the real data don't be erased from the database.
                              So if you want to erase a record, can use phpmyadmin and such tools to remove it from database.";
@@ -43,6 +44,7 @@ $lang->action->objectTypes['testtask']    = 'Test Task';
 $lang->action->objectTypes['user']        = 'User';
 $lang->action->objectTypes['doc']         = 'DOC';
 $lang->action->objectTypes['doclib']      = 'DocLib';
+$lang->action->objectTypes['todo']        = 'TODO';
 
 /* The desc of actions. */
 $lang->action->desc->common      = '$date, <strong>$action</strong> by <strong>$actor</strong>';

@@ -12,6 +12,7 @@ $lang->my->story       = 'Story';
 $lang->my->project     = 'Project';
 $lang->my->team        = 'Team';
 $lang->my->profile     = 'Profile';
+$lang->my->dynamic     = 'Dynamic';
 $lang->my->editProfile = 'Edit profile';
 
 $lang->my->taskMenu->assignedToMe = 'To me';

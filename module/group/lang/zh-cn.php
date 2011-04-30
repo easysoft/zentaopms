@@ -40,8 +40,7 @@ $lang->group->outside  = '组外用户';
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
-$lang->group->query             = '标红';
-$lang->group->addPriv           = '版本新增权限';
+$lang->group->versions['']      = '显示各版本新增权限';
 $lang->group->versions['1.0.1'] = '禅道1.0.1';
 $lang->group->versions['1.1']   = '禅道1.1';
 $lang->group->versions['1.2']   = '禅道1.2';
