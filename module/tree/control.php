@@ -53,16 +53,16 @@ class tree extends control
         if($viewType == 'story')
         {
             $this->lang->set('menugroup.tree', 'product');
-
             $this->product->setMenu($this->product->getPairs(), $rootID, 'story');
+            $this->lang->tree->menu = $this->lang->product->menu;
+
             $products = $this->product->getPairs();
             unset($products[$rootID]);
-            $key = key($products);
+            $currentProduct = key($products);
 
             $this->view->allProduct     = $products;
-            $this->view->key            = $key;
-            $this->view->productModules = $this->tree->getOptionMenu($key, 'story');
-            $this->lang->tree->menu     = $this->lang->product->menu;
+            $this->view->currentProduct = $currentProduct;
+            $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
 
             $header['title'] = $this->lang->tree->manageProduct . $this->lang->colon . $product->name;
             $position[]      = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);

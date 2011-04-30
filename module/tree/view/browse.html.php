@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
-<script language='javascript'>var rootID = '<?php echo $rootID;?>';</script>
 <table class='cont-lt5'>
   <tr valign='top'>
     <td class='side'>
@@ -61,9 +60,7 @@
               {
                   echo html::select('allProduct', $allProduct, '', 'onchange=syncProduct(this)');
                   echo html::select('productModule', $productModules, '');
-                  echo html::commonButton($lang->tree->syncFromProduct, 'id=copyModule onclick=syncModule('.$key.')');
-                  echo '<br />';
-                  echo '<br />';
+                  echo html::commonButton($lang->tree->syncFromProduct, 'id=copyModule onclick=syncModule('.$currentProduct.')');
                   echo '<br />';
               }
               $maxOrder = 0;
