@@ -52,20 +52,17 @@ class tree extends control
 
         if($viewType == 'story')
         {
+            $this->lang->set('menugroup.tree', 'product');
+
             $this->product->setMenu($this->product->getPairs(), $rootID, 'story');
             $products = $this->product->getPairs();
-            $allProduct = array();
-            foreach($products as $key => $productVal)
-            {
-                if($key == $rootID) continue;
-                $allProduct[$key] = $productVal;
-            }
-            $this->view->allProduct =$allProduct;
-            $keys = array_keys($allProduct);
-            $this->view->key = $keys[0];
-            $this->view->productModules = $this->tree->getOptionMenu($keys[0], 'story');
-            $this->lang->tree->menu = $this->lang->product->menu;
-            $this->lang->set('menugroup.tree', 'product');
+            unset($products[$rootID]);
+            $key = key($products);
+
+            $this->view->allProduct     = $products;
+            $this->view->key            = $key;
+            $this->view->productModules = $this->tree->getOptionMenu($key, 'story');
+            $this->lang->tree->menu     = $this->lang->product->menu;
 
             $header['title'] = $this->lang->tree->manageProduct . $this->lang->colon . $product->name;
             $position[]      = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
@@ -209,12 +206,13 @@ class tree extends control
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0)
+    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0, $returnType = 'html')
     {
 
-            $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
+        $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
-        die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));
+        if($returnType == 'html') die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));
+        if($returnType == 'json') die(json_encode($optionMenu));
     }
 
     /**
@@ -234,19 +232,6 @@ class tree extends control
             ->andWhere('type')->eq('story')
             ->fetchPairs();
         foreach($modules as $key => $name) $modules[$key] = str_replace(" ","&nbsp;","$name");
-        die(json_encode($modules));
-    }
-   /**
-     * AJAX: get modules.
-     * 
-     * @param  int $moduleID 
-     * @param  int $rootID 
-     * @access public
-     * @return string json_encoded modules.
-     */
-    public function ajaxGetModules($rootID = 0, $type='story')
-    {
-        $modules = $this->tree->getOptionMenu($rootID, 'story');
         die(json_encode($modules));
     }
 }

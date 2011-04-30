@@ -22,7 +22,7 @@ function syncModule(rootID)
 
 function syncProduct(obj)
 {
-    link = createLink('tree', 'ajaxGetModules', 'rootID=' + obj.value);
+    link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + obj.value + "&viewType=story&rootModuleID=0&returnType=json");
     $.getJSON(link, function(modules)
     {
         $('.helplink').addClass('hidden');
