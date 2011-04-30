@@ -10,17 +10,4 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
-<form method='post' target='hiddenwin'>
-  <table class='table-1'>
-    <caption><?php echo $lang->export;?></caption>
-    <tr>
-      <td>
-        <?php echo html::input('fileName');?>
-        <?php echo html::select('fileType', $lang->exportFileTypeList);?> 
-        <?php echo html::submitButton();?>
-      </td>
-    </tr>
-  </table>
-</form>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include '../../file/view/export.html.php';?>

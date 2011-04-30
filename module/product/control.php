@@ -128,7 +128,6 @@ class product extends control
                 if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
             }
             $this->session->set('storyReport', $this->session->storyQuery);
-
             $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy, $pager);
         }
 

@@ -560,12 +560,13 @@ class story extends control
         $childStories   = array();
         $fields         = array();
 
-        $users    = $this->loadModel('user')->getPairs();
+        $users    = $this->loadModel('user')->getPairs('noletter');
         $products = $this->loadModel('product')->getPairs();
 
         /* get the fields of story module from lang. */
         $fields = array(
             'id'             => $this->lang->story->id, 
+            'spec'           => $this->lang->story->spec, 
             'product'        => $this->lang->story->product, 
             'module'         => $this->lang->story->module, 
             'plan'           => $this->lang->story->plan, 
@@ -592,11 +593,13 @@ class story extends control
             'duplicateStory' => $this->lang->story->duplicateStory, 
             'version'        => $this->lang->story->version, 
             'planTitle'      => $this->lang->story->plan, 
-            );
+            'legendAttatch'  => $this->lang->story->legendAttatch,
+        );
 
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
+            echo $this->session->storyReport;exit;
             $stories = $this->story->getByQuery($productID, $this->session->storyReport, $orderBy);
             foreach($stories as $story)
             {
@@ -606,9 +609,25 @@ class story extends control
 
             foreach($stories as $story)
             {
-                $childStories = explode(',', $story->childStories);
-                $linkStories  = explode(',', $story->linkStories);
-                $module       = $this->dao->select('name')->from(TABLE_MODULE)->where('id')->eq($story->module)->fetch();
+                $childStories   = explode(',', $story->childStories);
+                $linkStories    = explode(',', $story->linkStories);
+                $module         = $this->dao->select('name')->from(TABLE_MODULE)->where('id')->eq($story->module)->fetch();
+                $storySpec      = $this->dao->select('spec')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->fetch();
+                $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($story->id)->fetchAll();
+
+                if(isset($storySpec->spec))
+                {
+                    $storySpec->spec = str_replace("&lt;br /&gt;", "\n", $storySpec->spec);
+                    $storySpec->spec = str_replace("<br />", "\n", $storySpec->spec);
+                    $storySpec->spec = str_replace("&nbsp;", " ", $storySpec->spec);
+                    $storySpec->spec = str_replace('"', '""', $storySpec->spec);
+                }
+
+                foreach($legendAttatchs as $legendAttatch) 
+                {
+                    $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$story->company/" . $legendAttatch->pathname;
+                    $story->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
+                }
 
                 foreach($childStories as $childStory)
                 {
@@ -621,13 +640,13 @@ class story extends control
                 if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 /* drop some field that is not needed. */
-                unset($story->company);
                 unset($story->fromBug);
                 unset($story->type);
                 unset($story->toBug);
                 unset($story->deleted);
 
                 /* fill some field with useful value. */
+                $story->company        = $storySpec ? $storySpec->spec : '';
                 $story->product        = $products[$story->product];
                 $story->pri            = $this->lang->story->priList[$story->pri];
                 $story->module         = $module ? $module->name : '';
