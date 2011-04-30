@@ -15,9 +15,7 @@
     <caption class='caption-tl'><?php echo $group->name . $lang->colon . $lang->group->managePriv;?>
       <span class='half-right'>
         <?php 
-        echo $lang->group->addPriv . $lang->colon;
-        echo html::select('version', $this->lang->group->versions);
-        echo html::commonButton($this->lang->group->query, "onclick=showPriv()");
+        echo html::select('version', $this->lang->group->versions, '', 'onchange=showPriv()');
         ?>
       </span>
     </caption>
