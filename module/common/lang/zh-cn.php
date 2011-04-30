@@ -206,7 +206,7 @@ $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'f
 /* 后台管理菜单设置。*/
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
 $lang->admin->menu->convert   = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
-$lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->extension = array('link' => '插件管理|extension|obtain', 'subModule' => 'extension');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
