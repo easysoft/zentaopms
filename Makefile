@@ -36,6 +36,7 @@ tgz:
 	chmod 777 -R zentaopms/www/data
 	chmod 777 zentaopms/config
 	chmod a+rx zentaopms/bin/*
+	find zentaopms/ -name ext |xargs chmod -R 777
 	# zip it.
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
@@ -67,16 +68,6 @@ build4sae:
 	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/sae
 	mv sae/lib/saestorage zentaopms/lib/
 	cp -fr sae/* zentaopms/module/
-	# crreate the merged model files for file module.
-	#cat zentaopms/module/file/model.php > zentaopms/tmp/model/file.php
-	#echo 'class extFileModel extends fileModel\n{' >> zentaopms/tmp/model/file.php
-	#sed -e 's/<?php//' zentaopms/module/file/ext/model/sae.php >> zentaopms/tmp/model/file.php
-	#echo '\n}' >> zentaopms/tmp/model/file.php
-	# crreate the merged model files for install module.
-	#cat zentaopms/module/install/model.php > zentaopms/tmp/model/install.php
-	#echo 'class extInstallModel extends installModel\n{' >> zentaopms/tmp/model/install.php
-	#sed -e 's/<?php//' zentaopms/module/install/ext/model/sae.php >> zentaopms/tmp/model/install.php
-	#echo '\n}' >> zentaopms/tmp/model/install.php
 	# create the package.
 	mkdir 10
 	mv zentaopms 10/code
