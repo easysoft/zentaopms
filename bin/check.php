@@ -9,6 +9,24 @@ class control {}
 $moduleRoot = '../module/';
 include $moduleRoot . '/group/lang/resource.php';
 
+$whiteList[] = 'api-getsessionid';
+$whiteList[] = 'bug-buildtemplates';
+$whiteList[] = 'bug-exportdata';
+$whiteList[] = 'company-create';
+$whiteList[] = 'company-delete';
+$whiteList[] = 'file-buildform';
+$whiteList[] = 'file-printfiles';
+$whiteList[] = 'help-field';
+$whiteList[] = 'index-testext';
+$whiteList[] = 'productplan-commonaction';
+$whiteList[] = 'project-managechilds';
+$whiteList[] = 'project-tips';
+$whiteList[] = 'release-commonaction';
+$whiteList[] = 'task-commonaction';
+$whiteList[] = 'user-login';
+$whiteList[] = 'user-deny';
+$whiteList[] = 'user-logout';
+
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
 foreach(glob($moduleRoot . '*') as $modulePath)
@@ -29,6 +47,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                 if($methodRef->isPublic() and strpos($method->name, '__') === false)
                 {
                     $methodName = $method->name;
+                    if(in_array($moduleName . '-' . strtolower($method->name), $whiteList)) continue;
                     if(!isset($lang->resource->$moduleName->$methodName))
                     {
                         $methodName = strtolower($methodName);
@@ -73,7 +92,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                 if(trim($mainKey) != trim($key))
                 {
                     $key = trim($key);
-                    echo "$moduleName $langKey $mainKey $key  $lineNO \n";
+                    echo "$moduleName $langKey $mainKey $key " . ($lineNO + 1) . "\n";
                     break;
                 }
             }
