@@ -357,8 +357,8 @@ class html
     {
         return "<a href='#' onclick=\"$('.datatable').table2CSV({title:'$pluginTitle'})\" $misc />$label</a>\n<div id='exporter' class='hidden'></div>\n";
     }
-    
-    /*!
+
+    /**
      * ubb2html support for php
      * @requires xhEditor
      * 
