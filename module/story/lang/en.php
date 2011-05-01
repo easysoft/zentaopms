@@ -164,7 +164,7 @@ $lang->story->report->charts['storysPerEstimate']       = 'Storys of Estimate';
 $lang->story->report->charts['storysPerOpenedBy']       = 'Opened by user';
 $lang->story->report->charts['storysPerAssignedTo']     = 'Assigned to user';
 $lang->story->report->charts['storysPerClosedReason']   = 'Storys for reason';
-$lang->story->report->charts['storysPerChange']         = 'Storys of change';
+$lang->story->report->charts['storysPerChange']         = 'Story version';
 
 $lang->story->report->options->swf                     = 'pie2d';
 $lang->story->report->options->width                   = 'auto';
@@ -176,8 +176,8 @@ $lang->story->report->options->graph->decimalPrecision = 0;
 $lang->story->report->options->graph->animation        = 0;
 $lang->story->report->options->graph->rotateNames      = 0;
 $lang->story->report->options->graph->yAxisName        = 'COUNT';
-$lang->story->report->options->graph->pieRadius        = 100; // 饼图直径。
-$lang->story->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
+$lang->story->report->options->graph->pieRadius        = 100;
+$lang->story->report->options->graph->showColumnShadow = 0; 
 
 $lang->story->report->storysPerProduct->graph->xAxisName      = 'Product';
 $lang->story->report->storysPerModule->graph->xAxisName       = 'Module';

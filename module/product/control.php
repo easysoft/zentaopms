@@ -95,17 +95,11 @@ class product extends control
         $stories = array();
         if($browseType == 'all')
         {
-            $this->session->set('storyReport', 'product in(' . $productID . ')');
             $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
         }
         elseif($browseType == 'bymodule')
         {
             $childModuleIds = $this->tree->getAllChildID($moduleID);
-            $storyQuery = $this->dao->andWhere('product')->in($productID)
-                ->beginIF(!empty($childModuleIds))->andWhere('module')->in($childModuleIds)->fi()
-                ->get();
-            $storyQuery = substr($storyQuery, strpos($storyQuery,'product'));
-            $this->session->set('storyReport', $storyQuery);
             $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
         }
         elseif($browseType == 'bysearch')
@@ -127,9 +121,15 @@ class product extends control
             {
                 if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
             }
-            $this->session->set('storyReport', $this->session->storyQuery);
             $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy, $pager);
         }
+
+        /* Set session for report Query*/
+        $storyReport = $this->session->reportQuery == false ? $this->dao->get() : $this->session->reportQuery;
+        $sql = explode('WHERE', $storyReport);
+        $sql = explode('ORDER', $sql[1]);
+        $this->session->set('storyReport', str_replace(array('t1.','t2.'), '', $sql[0]));
+        $this->session->set('reportQuery', '');
 
         /* Build search form. */
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
