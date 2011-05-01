@@ -38,6 +38,7 @@ $lang->user->bug         = 'Bug';
 $lang->user->todo        = 'Todo';
 $lang->user->story       = 'Story';
 $lang->user->team        = 'Team';
+$lang->user->dynamic     = 'Dynamic';
 $lang->user->editProfile = 'Edit profile';
 
 $lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";

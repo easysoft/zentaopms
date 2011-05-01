@@ -38,6 +38,7 @@ $lang->user->bug         = '用户Bug';
 $lang->user->todo        = '用户TODO';
 $lang->user->story       = '用户需求';
 $lang->user->team        = '用户团队';
+$lang->user->dynamic     = '用户动态';
 $lang->user->editProfile = '修改信息';
 
 $lang->user->errorDeny   = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
