@@ -13,9 +13,9 @@
 <form method='post' target='hiddenwin'>
   <table class='table-1 a-left'> 
     <caption class='caption-tl'><?php echo $group->name . $lang->colon . $lang->group->managePriv;?>
-      <span class='half-right'>
+      <span>
         <?php 
-        echo html::select('version', $this->lang->group->versions, '', 'onchange=showPriv()');
+        echo html::select('version', $this->lang->group->versions, '', "onchange=showPriv(this.value)");
         ?>
       </span>
     </caption>
@@ -50,4 +50,7 @@
     </tr>
   </table>
 </form>
-<script type='text/javascript'>var newPriv = <?php echo json_encode($changelogs)?></script>
+<script type='text/javascript'>
+    var newPriv = <?php echo json_encode($changelogs)?>;
+    var version = "<?php echo $this->config->version?>";
+</script>

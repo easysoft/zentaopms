@@ -14,16 +14,16 @@ function checkall(checker)
     });
 }
 
-function showPriv()
+function showPriv(value)
 {
-    var version = $('#version').val();
     $('.priv').removeClass('red');
-    privs = newPriv[version];
+    privs = newPriv[value];
     for(var item in privs)
     {
         $('#' + privs[item]).addClass('red');
     }
 }
+
 /**
  * Control the actions select control for a module.
  * 
@@ -37,3 +37,9 @@ function setModuleActions(module)
     $('#actionBox select').val('');                     // Unselect all select.
     $('.' + module + 'Actions').removeClass('hidden');  // Show the action control for current module.
 }
+
+$(function()
+    {
+        showPriv(version);
+    }
+);
