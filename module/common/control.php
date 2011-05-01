@@ -65,8 +65,9 @@ class common extends control
         {
             $this->app->loadLang('upgrade');
             echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
+            echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td>";
             printf($this->lang->upgrade->setStatusFile, $statusFile, $statusFile, $statusFile);
-            die('</body></html>');
+            die('</td></tr></table></body></html>');
         }
     }
 
