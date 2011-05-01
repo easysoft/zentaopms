@@ -40,13 +40,13 @@
       <td><?php echo $this->fetch('file', 'buildform', 'filecount=2');?></td>
     </tr>
   </table>
-    <?php include './affected.html.php';?>
- <div class='a-center'>
+  <?php include './affected.html.php';?>
+  <div class='a-center'>
     <?php 
     echo html::submitButton();
     echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
     ?>
   </div>
- <?php include '../../common/view/action.html.php';?>
+  <?php include '../../common/view/action.html.php';?>
 </form>
 <?php include '../../common/view/footer.html.php';?>
