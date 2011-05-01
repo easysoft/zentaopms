@@ -56,9 +56,8 @@ class story extends control
 
         /* Init vars. */
         $planID     = 0;
-        $pri        = 3;
+        $pri        = 0;
         $estimate   = '';
-        $assignedTo = '';
         $title      = '';
         $spec       = '';
         $verify     = '';
@@ -73,10 +72,9 @@ class story extends control
             $productID  = $story->product;
             $moduleID   = $story->module;
             $estimate   = $story->estimate;
-            $assignedTo = $story->assignedTo;
             $title      = $story->title;
-            $spec       = $story->spec;
-            $verify     = $story->verify;
+            $spec       = htmlspecialchars($story->spec);
+            $verify     = htmlspecialchars($story->verify);
             $keywords   = $story->keywords;
             $mailto     = $story->mailto;
         }
@@ -93,7 +91,6 @@ class story extends control
         $this->view->pri              = $pri;
         $this->view->productID        = $productID;
         $this->view->estimate         = $estimate;
-        $this->view->assignedTo       = $assignedTo;
         $this->view->title            = $title;
         $this->view->spec             = $spec;
         $this->view->verify           = $verify;
@@ -599,7 +596,6 @@ class story extends control
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
-            echo $this->session->storyReport;exit;
             $stories = $this->story->getByQuery($productID, $this->session->storyReport, $orderBy);
             foreach($stories as $story)
             {

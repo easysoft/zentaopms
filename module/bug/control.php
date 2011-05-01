@@ -353,7 +353,7 @@ class bug extends control
         $this->view->buildID          = $buildID;
         $this->view->caseID           = $caseID;
         $this->view->title            = $title;
-        $this->view->steps            = $steps;
+        $this->view->steps            = htmlspecialchars($steps);
         $this->view->os               = $os;
         $this->view->browser          = $browser;
         $this->view->assignedTo       = $assignedTo;
