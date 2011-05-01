@@ -58,9 +58,12 @@
               }
               else if($viewType == 'story')
               {
-                  echo html::select('allProduct', $allProduct, '', 'onchange=syncProduct(this)');
-                  echo html::select('productModule', $productModules, '');
-                  echo html::commonButton($lang->tree->syncFromProduct, 'id=copyModule onclick=syncModule('.$currentProduct.')');
+                  if($allProduct)
+                  {
+                      echo html::select('allProduct', $allProduct, '', 'onchange=syncProduct(this)');
+                      echo html::select('productModule', $productModules, '');
+                      echo html::commonButton($lang->tree->syncFromProduct, 'id=copyModule onclick=syncModule('.$currentProduct.')');
+                  }
                   echo '<br />';
               }
               $maxOrder = 0;
