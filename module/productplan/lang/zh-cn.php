@@ -30,5 +30,3 @@ $lang->productplan->title   = '名称';
 $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '开始日期';
 $lang->productplan->end     = '结束日期';
-
-$lang->productplan->storySummary   = "共『%s』个需求，预计『%s』个工时。";

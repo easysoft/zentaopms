@@ -126,6 +126,7 @@ class productplan extends control
      */
     public function view($planID = 0)
     {
+        $this->loadModel('product');
         $this->session->set('storyList', $this->app->getURI(true));
 
         $plan = $this->productplan->getByID($planID);

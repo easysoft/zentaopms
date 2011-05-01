@@ -32,7 +32,7 @@
   </tr>
 </table>
 <div class='a-center f-16px strong'>
-  <?php
+ <?php
   $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
   if(!$plan->deleted)
   {
@@ -44,7 +44,6 @@
   ?>
 </div>
 <?php include '../../common/view/action.html.php';?>
-
 <table class='table-1 tablesorter a-center'> 
   <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
   <thead>
@@ -79,11 +78,7 @@
     <td><?php common::printLink('productplan', 'unlinkStory', "story=$story->id", $lang->productplan->unlinkStory, 'hiddenwin');?></td>
   </tr>
   <?php endforeach;?>
- <tr>
-              <td colspan=9 class='a-right'><?php printf($lang->productplan->storySummary, count($planStories), $totalEstimate);?>
-              </td>
-            </tr>
-
-  </tbody>
+ <tr><td colspan='9' class='a-right'><?php printf($lang->product->storySummary, count($planStories), $totalEstimate);?> </td></tr>
+ </tbody>
 </table>
 <?php include '../../common/view/footer.html.php';?>
