@@ -692,11 +692,10 @@ class taskModel extends model
         $datas = $this->dao->select('finishedBy AS name, COUNT(finishedBy) AS value')
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->session->taskReportCondition)
+            ->andWhere('finishedBy')->ne('')
             ->groupBy('finishedBy')
             ->orderBy('value DESC')
             ->fetchAll('name');
-        if(!$datas) return array();
-        foreach($datas as $key => $data) $data->name = $data->name ? $data->name : $this->lang->task->statusList['undone'];
         return $datas;
     }
 

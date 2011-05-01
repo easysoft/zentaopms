@@ -492,7 +492,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function report($projectID, $browseType)
+    public function report($projectID, $browseType = 'all')
     {
         
         $this->loadModel('report');
