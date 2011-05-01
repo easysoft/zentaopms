@@ -698,6 +698,7 @@ class router
             $this->clientLang = $this->config->default->lang;
         }
         setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot);
+        if(!isset($_COOKIE['lang'])) $_COOKIE['lang'] = $this->clientLang;
     }
 
     /**
@@ -748,6 +749,7 @@ class router
             $this->clientTheme = $this->config->default->theme;
         }
         setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot);
+        if(!isset($_COOKIE['theme'])) $_COOKIE['theme'] = $this->clientTheme;
     }
 
     /**
