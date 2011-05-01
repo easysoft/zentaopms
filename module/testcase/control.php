@@ -116,6 +116,12 @@ class testcase extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
+        /* save session .*/
+        $sql = $this->dao->get();
+        $sql = explode('WHERE', $sql);
+        $sql = explode('ORDER', $sql[1]);
+        $this->session->set('testcaseReport', $sql[0]);
+
         /* Build the search form. */
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
@@ -353,86 +359,114 @@ class testcase extends control
     }
 
     /**
-     * get data to export
+     * export 
+     * 
+     * @param  string $productID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
      */
-    public function export($fileName, $fileType)
+    public function export($productID, $orderBy)
     {
-        $users = $this->loadModel('user')->getPairs(); 
-        $productID  = $this->session->productID;
-        $browseType = $this->session->browseType;
-        $orderBy    = $this->session->orderBy;
-        $moduleID   = $this->session->moduleID;
-        $pager      = null;
-        /* By module or all cases. */
-        if($browseType == 'bymodule' or $browseType == 'all')
+        $fields   = array();
+        $users    = $this->loadModel('user')->getPairs('noletter');
+        $products = $this->loadModel('product')->getPairs();
+        $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->fetchPairs();
+        $relatedStories = $this->dao->select('id, title')->from(TABLE_STORY)->fetchPairs();
+        $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->fetchPairs();
+
+        /* get the fields of task module from lang. */
+        $fields = array(
+            'id'             => $this->lang->testcase->id, 
+            'step'           => $this->lang->testcase->stepDesc . $this->lang->testcase->stepExpect,
+            'product'        => $this->lang->testcase->product, 
+            'module'         => $this->lang->testcase->module, 
+            'story'          => $this->lang->testcase->story,
+            'storyVersion'   => $this->lang->testcase->storyVersion,
+            'title'          => $this->lang->testcase->title, 
+            'keywords'       => $this->lang->testcase->keywords, 
+            'pri'            => $this->lang->testcase->pri, 
+            'type'           => $this->lang->testcase->type, 
+            'stage'          => $this->lang->testcase->stage, 
+            'howRun'         => $this->lang->testcase->howRun, 
+            'scriptedBy'     => $this->lang->testcase->scriptedBy, 
+            'scriptedDate'   => $this->lang->testcase->scriptedDate, 
+            'scriptStatus'   => $this->lang->testcase->scriptedStatus, 
+            'scriptLocation' => $this->lang->testcase->scriptedLocation, 
+            'status'         => $this->lang->testcase->status, 
+            'frequency'      => $this->lang->testcase->frequency,
+            'order'          => $this->lang->testcase->order, 
+            'openedBy'       => $this->lang->testcase->openedBy, 
+            'openedDate'     => $this->lang->testcase->openedDate, 
+            'lastEditedBy'   => $this->lang->testcase->lastEditedBy, 
+            'lastEditedDate' => $this->lang->testcase->lastEditedDate, 
+            'version'        => $this->lang->testcase->version, 
+            'linkCase'       => $this->lang->testcase->linkCase
+        );
+
+        if($_POST)
         {
-            $childModuleIds    = $this->tree->getAllChildId($moduleID);
-            $cases = $this->testcase->getModuleCases($productID, $childModuleIds, $orderBy, $pager);
-        }
-        /* Cases need confirmed. */
-        elseif($browseType == 'needconfirm')
-        {
-            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where("t2.status = 'active'")
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t2.version > t1.storyVersion')
-                ->orderBy($orderBy)
-                ->fetchAll();
-        }
-        /* By search. */
-        elseif($browseType == 'bysearch')
-        {
-            $caseQuery = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // If product is all, change it to 1=1.
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
-                ->andWhere('product')->eq($productID)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+            $testcases = $this->testcase->getByQuery($productID, $this->session->testcaseReport, $orderBy);
+
+            foreach($testcases as $testcase)
+            {
+                $step = '';
+                $i    = 1;
+                $testcaseSteps = $this->dao->select('`desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->eq($testcase->id)->fetchAll();
+                foreach($testcaseSteps as $testcaseStep)
+                {
+                    $step   .= $i . '、' . $this->lang->testcase->stepDesc . ':' . $testcaseStep->desc . $this->lang->testcase->stepExpect . ':' . $testcaseStep->expect . "<br />";
+                    $i++;
+                }
+                $testcase->company = $step;
+
+                if($_POST['fileType'] == 'html')
+                {
+                    $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->eq($testcase->id)->fetchAll();
+                    if($legendAttatchs)
+                    {
+                        foreach($legendAttatchs as $legendAttatch) 
+                        {
+                            $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$testcase->company/" . $legendAttatch->pathname;
+                            $testcase->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
+                        }
+                    }
+                }
+                else if($_POST['fileType'] == 'csv')
+                {
+                    $testcase->company = str_replace("&lt;br /&gt;", "\n", $testcase->company);
+                    $testcase->company = str_replace("<br />", "\n", $testcase->company);
+                    $testcase->company = str_replace("&nbsp;", " ", $testcase->company);
+                    $testcase->company = str_replace('"', '""', $testcase->company);
+                }
+
+                /* drop some field that is not needed. */
+                unset($testcase->path);
+
+                /* fill some field with useful value. */
+                $testcase->module   = isset($relatedModules[$testcase->module]) ? $relatedModules[$testcase->module] : '';
+                $testcase->story    = isset($relatedStories[$testcase->story]) ? $relatedStories[$testcase->story] : '';
+                $testcase->linkCase = isset($relatedCases[$testcase->linkCase]) ? $relatedCases[$testcase->linkCase] : '';
+
+                $testcase->product        = $products[$testcase->product];
+                $testcase->pri            = $this->lang->testcase->priList[$testcase->pri];
+                $testcase->type           = $this->lang->testcase->typeList[$testcase->type];
+                $testcase->stage          = $this->lang->testcase->stageList[$testcase->stage];
+                $testcase->scriptedBy     = $users[$testcase->scriptedBy] ;
+                $testcase->status         = $this->lang->testcase->statusList[$testcase->status];
+                $testcase->openedBy       = $users[$testcase->openedBy];
+                $testcase->openedDate     = substr($testcase->openedDate, 0, 10);
+                $testcase->lastEditedBy   = $users[$testcase->lastEditedBy];
+                $testcase->lastEditedDate = substr($testcase->lastEditedDate, 0, 10);
+            }
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $testcases);
+            if($this->post->fileType == 'csv')  $this->fetch('file', 'export2CSV', $_POST);
+            if($this->post->fileType == 'xml')  $this->fetch('file', 'export2XML', $_POST);
+            if($this->post->fileType == 'html') $this->fetch('file', 'export2HTML', $_POST);
         }
 
-        if($browseType != 'needconfirm')
-        {
-            $data[] = array(
-                "id"       => $this->lang->idAB,
-                "pri"      => $this->lang->priAB,
-                "title"    => $this->lang->testcase->title,
-                "type"     => $this->lang->typeAB,
-                "openedBy" => $this->lang->openedByAB,
-                "status"   => $this->lang->statusAB,
-            );
-            foreach($cases as $case)
-            {
-                $tmp = array(
-                    "id"       => $case->id,
-                    "pri"      => $case->pri,
-                    "title"    => $case->title,
-                    "type"     => $this->lang->testcase->typeList[$case->type],
-                    "openedBy" => $users[$case->openedBy],
-                    "status"   => $this->lang->testcase->statusList[$case->status]
-                );
-                $data[] = $tmp;
-            }
-        }
-        else
-        {
-            $data[] = array(
-                "id"       => $this->lang->idAB,
-                "pri"      => $this->lang->priAB,
-                "title"    => $this->lang->testcase->title,
-                "story"    => $this->lang->testcase->story
-            );
-            foreach($cases as $case)
-            {
-                $tmp = array(
-                    "id"       => $case->id,
-                    "pri"      => $case->pri,
-                    "title"    => $case->title,
-                    "story"    => $case->storyTitle
-                );
-                $data[] = $tmp;
-            }
-
-        }
-        a($data);exit;
-        $this->fetch('file', 'export', "data=$data&fileName=$fileName&fileType=$fileType");
-    } 
+        $this->display();
+    }
 }

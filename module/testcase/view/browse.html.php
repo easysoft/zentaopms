@@ -36,7 +36,7 @@ var moduleID   = '<?php echo $moduleID;?>';
         ); 
 </script>
   <div class='f-right'>
-    <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
+    <?php common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
     <?php common::printLink('testcase', 'create', "productID=$productID&moduleID=$moduleID", $lang->testcase->create); ?>
   </div>
 </div>

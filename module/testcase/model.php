@@ -116,6 +116,25 @@ class testcaseModel extends model
     }
 
     /**
+     * getByQuery 
+     * 
+     * @param  string $productID 
+     * @param  string $query 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function getByQuery($productID, $query, $orderBy)
+    {
+        $tmpTestcases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')->where($query)
+            ->andWhere('product')->eq((int)$productID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->fetchAll();
+        return $tmpTestcases;
+    }
+
+    /**
      * Update a case.
      * 
      * @param  int    $caseID 
