@@ -22,27 +22,29 @@
       <th class='rowhead'><?php echo $lang->task->project;?></th>
       <td><?php echo $project->name;?></td>
     </tr>  
-     <tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
+      <td><?php echo html::select('assignedTo[]', $members, '', 'class=select-3');?></td>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->task->story;?></th>
       <td>
         <?php echo html::select('story', $stories, $storyID, 'class=select-1 onchange=setPreview();');?>
         <a href='' id='preview' class='iframe' target='_blank'><?php echo $lang->preview;?></a>
       </td>
     </tr>  
-  
-  <tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->task->name;?></th>
       <td>
-        <?php
-        echo html::input('name', '', "class='text-1'");
-        echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle()');?>
+      <?php
+      echo html::input('name', '', "class='text-1'");
+      echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle()');?>
       </td>
     </tr>  
-     <tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->task->desc;?></th>
       <td><?php echo html::textarea('desc', '', "rows='7' class='area-1'");?></td>
     </tr>  
-    
     <tr>
       <th class='rowhead'><?php echo $lang->task->pri;?></th>
       <td><?php echo html::select('pri', $lang->task->priList, '', 'class=select-3');?> 
@@ -60,18 +62,14 @@
       <td><?php echo html::select('type', $lang->task->typeList, '', 'class=select-3 onchange="setOwners(this.value)"');?></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo[]', $members, '', 'class=select-3');?></td>
-    </tr>
-    <tr>
       <th class='rowhead'><?php echo $lang->task->mailto;?></th>
       <td> <?php echo html::input('mailto', '', 'class=text-1');?> </td>
     </tr>
-     <tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->files;?></th>
       <td class='a-left'><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
-     <tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->task->afterSubmit;?></th>
       <td><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td> 
     </tr>
