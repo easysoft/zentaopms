@@ -484,7 +484,7 @@ class storyModel extends model
     public function getByQuery($productID, $query, $orderBy, $pager = null)
     {
         $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($query)
-            ->andWhere('product')->eq((int)$productID)
+            ->beginIF($productID != 'all')->andWhere('product')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
