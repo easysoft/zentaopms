@@ -165,6 +165,11 @@ class bug extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
+        $sql = $this->dao->get();
+        $sql = explode('WHERE', $sql);
+        $sql = explode('ORDER', $sql[1]);
+        $this->session->set('bugReport', $sql[0]);
+
         /* Process the sql, get the conditon partion, save it to session. Thus the report page can use the same condition. */
         if($browseType != 'needconfirm')
         {
@@ -745,137 +750,129 @@ class bug extends control
     }
 
     /**
-     * get data to export
+     * Get data to export 
+     * 
+     * @param  string $productID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
      */
-    public function exportData($fileName, $fileType)
+    public function export($productID, $orderBy)
     {
-        $users = $this->loadModel('user')->getPairs(); 
-        $productID  = $this->session->productID;
-        $moduleID   = $this->session->moduleID;
-        $browseType = $this->session->browseType;
-        $orderBy    = $this->session->orderBy;
-        $pager      = null;
-        
-        $bugs = array();
-        if($browseType == 'all')
+        $fields         = array();
+        $users          = $this->loadModel('user')->getPairs('noletter');
+        $products       = $this->loadModel('product')->getPairs();
+        $projects       = $this->loadModel('project')->getPairs();
+        $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->fetchPairs();
+        $relatedModule  = $this->dao->select('id, name')->from(TABLE_MODULE)->fetchPairs();
+        $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->fetchPairs();
+        $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->fetchPairs();
+        $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->fetchPairs();
+
+        /* get the fields of bug module from lang. */
+        $fields = array(
+            'id'             => $this->lang->bug->id, 
+            'product'        => $this->lang->bug->product, 
+            'module'         => $this->lang->bug->module, 
+            'project'        => $this->lang->bug->project, 
+            'story'          => $this->lang->bug->story, 
+            'storyVersion'   => $this->lang->bug->storyVersion,
+            'task'           => $this->lang->bug->task,
+            'title'          => $this->lang->bug->title,
+            'keywords'       => $this->lang->bug->keywords,
+            'severity'       => $this->lang->bug->severity,
+            'pri'            => $this->lang->bug->pri,
+            'type'           => $this->lang->bug->type,
+            'os'             => $this->lang->bug->os,
+            'browser'        => $this->lang->bug->browser,
+            'hardware'       => $this->lang->bug->hardware,
+            'found'          => $this->lang->bug->found,
+            'steps'          => $this->lang->bug->steps,
+            'status'         => $this->lang->bug->status,
+            'mailto'         => $this->lang->bug->mailto,
+            'openedBy'       => $this->lang->bug->openedBy,
+            'openedDate'     => $this->lang->bug->openedDate,
+            'openedBuild'    => $this->lang->bug->openedBuild,
+            'assignedTo'     => $this->lang->bug->assignedTo,
+            'assignedDate'   => $this->lang->bug->assignedDate,
+            'resolvedBy'     => $this->lang->bug->resolvedBy,
+            'resolution'     => $this->lang->bug->resolution,
+            'resolvedBuild'  => $this->lang->bug->resolvedBuild,
+            'resolvedDate'   => $this->lang->bug->resolvedDate,
+            'colsedBy'       => $this->lang->bug->closedBy,
+            'closedDate'     => $this->lang->bug->closedDate,
+            'duplicateBug'   => $this->lang->bug->duplicateBug,
+            'linkBug'        => $this->lang->bug->linkBug,
+            'case'           => $this->lang->bug->case,
+            'lastEditedBy'   => $this->lang->bug->lastEditedBy,
+            'lastEditedDate' => $this->lang->bug->lastEditedDate,
+        );
+
+        if($_POST)
         {
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == "bymodule")
-        {
-            $childModuleIds = $this->tree->getAllChildId($moduleID);
-            $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $orderBy, $pager);
-        }
-        elseif($browseType == 'assigntome')
-        {
-            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'openedbyme')
-        {
-            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'resolvedbyme')
-        {
-            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'assigntonull')
-        {
-            $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'unresolved')
-        {
-            $bugs = $this->dao->findByStatus('active')->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'longlifebugs')
-        {
-            $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('openedDate')->lt(date(DT_DATE1,strtotime('-7 days')))
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'postponedbugs')
-        {
-            $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'needconfirm')
-        {
-            $bugs = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where("t2.status = 'active'")
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t2.version > t1.storyVersion')
-                ->orderBy($orderBy)
-                ->fetchAll();
-        }
-        elseif($browseType == 'bysearch')
-        {
-            $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        
-        if($browseType != 'needconfirm')
-        { 
-            $data[] = array(
-                'id'         => $this->lang->idAB,
-                'severity'   => $this->lang->bug->severityAB,
-                'pri'        => $this->lang->priAB,
-                'title'      => $this->lang->bug->title,
-                'openedBy'   => $this->lang->bug->openedByAB,
-                'assignedTo' => $this->lang->assignedToAB,
-                'resolvedBy' => $this->lang->bug->resolvedByAB,
-                'resolvtion' => $this->lang->bug->resolutionAB,
-            );
+            $bugs   = $this->bug->getByQuery($productID, $this->session->bugReport, $orderBy);
+
             foreach($bugs as $bug)
             {
-                $tmp = array(
-                    'id'         => $bug->id,
-                    'severity'   => $this->lang->bug->severityList[$bug->severity],
-                    'pri'        => $this->lang->bug->priList[$bug->pri],
-                    'title'      => $bug->title,
-                    'openedBy'   => $users[$bug->openedBy],
-                    'assignedTo' => $users[$bug->assignedTo],
-                    'resolvedBy' => $users[$bug->resolvedBy],
-                    'resolvtion' => $this->lang->bug->resolutionList[$bug->resolution]
-                );
-                $data[] = $tmp;
+                if($_POST['fileType'] == 'csv')
+                {
+                    $bug->steps = str_replace("&lt;br /&gt;", "\n", $bug->steps);
+                    $bug->steps = str_replace("<br />", "\n", $bug->steps);
+                    $bug->steps = str_replace("&nbsp;", " ", $bug->steps);
+                    $bug->steps = str_replace('"', '""', $bug->steps);
+                }
+                else if($_POST['fileType'] == 'html')
+                {
+                    $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->eq($bug->id)->fetchAll();
+                    if($legendAttatchs)
+                    {
+                        foreach($legendAttatchs as $legendAttatch) 
+                        {
+                            $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$bug->company/" . $legendAttatch->pathname;
+                            $task->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
+                        }
+                    }
+                }
+
+                /* drop some field that is not needed. */
+                unset($bug->company);
+                unset($bug->caseVersion);
+                unset($bug->result);
+
+                /* fill some field with useful value. */
+                $bug->story        = isset($relatedStories[$bug->story]) ?  $relatedStories[$bug->story] : '';
+                $bug->module       = isset($relatedModules[$bug->module]) ? $relatedModules[$bug->module] : '';
+                $bug->task         = isset($relatedTasks[$bug->task]) ? $relatedTasks[$bug->task] : '';
+                $bug->duplicateBug = isset($relatedBugs[$bug->duplicateBug]) ? $relatedBugs[$bug->duplicateBug] : '';
+                $bug->linkBug      = isset($relatedBugs[$bug->linkBug]) ? $relatedBugs[$bug->linkBug] : '';
+                $bug->case         = isset($relatedCases[$bug->case]) ? $relatedCases[$bug->case] : '';
+                $bug->project      = isset($projects[$bug->project]) ? $projects[$bug->project] : '';
+
+                $bug->product        = $products[$bug->product];
+                $bug->pri            = $this->lang->bug->priList[$bug->pri];
+                $bug->type           = $this->lang->bug->typeList[$bug->type];
+                $bug->status         = $this->lang->bug->statusList[$bug->status];
+                $bug->mailto         = $users[$bug->mailto];
+                $bug->openedBy       = $users[$bug->openedBy];
+                $bug->openedDate     = substr($bug->openedDate, 0, 10);
+                $bug->assignedTo     = $users[$bug->assignedTo];
+                $bug->assignedDate   = substr($bug->assignedDate, 0, 10);
+                $bug->resolvedBy     = $users[$bug->resolvedBy];
+                $bug->resolution     = $this->lang->bug->resolutionList[$bug->resolution];
+                $bug->resolvedDate   = substr($bug->resolvedDate, 0, 10);
+                $bug->closedBy       = $users[$bug->closedBy];
+                $bug->closedDate     = substr($bug->closedDate, 0, 10);
+                $bug->lastEditedBy   = $users[$bug->lastEditedBy];
+                $bug->lastEditedDate = substr($bug->lastEditedDate, 0, 10);
             }
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $bugs);
+            if($this->post->fileType == 'csv')  $this->fetch('file', 'export2CSV', $_POST);
+            if($this->post->fileType == 'xml')  $this->fetch('file', 'export2XML', $_POST);
+            if($this->post->fileType == 'html') $this->fetch('file', 'export2HTML', $_POST);
         }
-        else
-        {
-            $data[] = array(
-                'id'         => $this->lang->idAB,
-                'severity'   => $this->lang->bug->severityAB,
-                'pri'        => $this->lang->priAB,
-                'title'      => $this->lang->bug->title,
-                'story'      => $this->lang->bug->story            
-            );
-            foreach($bugs as $bug)
-            {
-                $tmp = array(
-                    'id'         => $bug->id,
-                    'severity'   => $this->lang->bug->severityList[$bug->severity],
-                    'pri'        => $this->lang->bug->priList[$bug->pri],
-                    'title'      => $bug->title,
-                    'story'      => $bug->storyTitle           
-                );
-                $data[] = $tmp;
-            }
-        }
-        $this->post->set('data', $data);
-        $this->fetch('file', 'export', "fileName=$fileName&fileType=$fileType");
-    } 
+
+        $this->display();
+    }
 }

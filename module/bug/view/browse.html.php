@@ -37,8 +37,8 @@ var customed   = <?php echo (int)$customed;?>;
     ?>
   </div>
   <div class='f-right'>
+    <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
     <?php common::printLink('bug', 'customFields', '', $lang->bug->customFields, '', "class='iframe'"); ?>
-    <?php echo html::export2csv($lang->exportCSV, $lang->setFileName);?>
     <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->bug->report->common); ?>
     <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", $lang->bug->create); ?>
   </div>
