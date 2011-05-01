@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<table class='table-1 tablesorter fixed'>
+<table class='table-1 fixed colored tablesorter datatable'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->project->story;?></div>
     <div class='f-right'>
