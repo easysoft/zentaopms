@@ -99,7 +99,7 @@ $help->project->status     = '項目狀態|只有狀態為進行中的項目，�
 $help->project->desc       = '項目描述|項目的描述。';
 $help->project->goal       = '項目目標|項目所要取得的目標。';
 $help->project->updateburn = '更新燃盡圖|<br />1. 通過手工點擊“更新燃盡圖”來進行更新。<br />2. 通過計劃任務來進行更新。
-                              詳情請查看<a href="http://www.zentao.net/help-book-zentaopmshelp.html" target="_blank">《如何更新燃盡圖》</a>';
+                              詳情請查看<a href="http://www.zentao.net/help-read-79063.html" target="_blank">《如何更新燃盡圖》</a>';
 
 $help->release->product = '產品';
 $help->release->build   = 'build|所對應的build。build是在項目視圖中，在某一個項目中創建。';
@@ -112,6 +112,7 @@ $help->story->module         = '所屬模組|屬於哪個模組。做好功能�
 $help->story->plan           = '產品計劃|屬於哪個計劃，通過計劃，可以對產品進行宏觀的把握。';
 $help->story->title          = '需求名稱|很重要的信息，應該用清晰明了的語言描述。';
 $help->story->spec           = '需求描述|需求的描述，儘量按照禪道給出的模板來描述。';
+$help->story->verify         = '驗收標準|需求驗收的標準';
 $help->story->pri            = '優先順序|很重要的欄位，在關聯需求到項目的時候，需要按照優先順序進行排序。';
 $help->story->estimate       = '預計工時|產品人員在建立需求時，應對該需求所需要花費的時間進行大致估計，或者是團隊成員一起達成一致。該欄位在確定項目所做的需求時，其參考作用。';
 $help->story->status         = '當前狀態|需求當前的狀態，其中只有處于激活狀態的需求才可能關聯到項目，進行任務的分解。';

@@ -112,6 +112,7 @@ $help->story->module         = 'Module|Can use module to manage story.';
 $help->story->plan           = 'Product plan|Through plan, can give the team a overview of the product';
 $help->story->title          = 'Title';
 $help->story->spec           = 'The story spec';
+$help->story->spec           = 'The story verify';
 $help->story->pri            = 'Priority|When selected to project, the story should be ordered by the priority field first.';
 $help->story->estimate       = 'Estimate|Estimate the story point.';
 $help->story->status         = 'Status|Only the active story can be added to a project. The default status is draft, so should be reviewed.';
