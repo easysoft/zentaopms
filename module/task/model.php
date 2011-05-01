@@ -731,4 +731,26 @@ class taskModel extends model
             ->orderBy('value DESC')
             ->fetchAll('name');
     }
+
+    /**
+     * Get report data of status
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDataOftasksPerStatus()
+    {
+        $datas = $this->dao->select('status AS name, COUNT(status) AS value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskReportCondition)
+            ->groupBy('status')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+        if(!$datas)return array();
+        foreach($datas as $status => $data)
+        {
+            $data->name = $this->lang->task->statusList[$status];
+        }
+        return $datas;
+    }
 }
