@@ -138,7 +138,7 @@ class company extends control
     }
 
     /**
-     * My dynamic.
+     * Company dynamic.
      * 
      * @param  string $type 
      * @param  string $orderBy 
