@@ -294,3 +294,20 @@ $lang->changelog['1.4'][]   = 'task-activate';
 $lang->changelog['1.4'][]   = 'search-select';
 
 $lang->changelog['1.5'][]   = 'task-batchClose';
+
+$lang->changelog['2.0'][]   = 'my-dynamic';
+$lang->changelog['2.0'][]   = 'story-export';
+$lang->changelog['2.0'][]   = 'story-reportChart';
+$lang->changelog['2.0'][]   = 'task-export';
+$lang->changelog['2.0'][]   = 'task-reportChart';
+$lang->changelog['2.0'][]   = 'taskcase-export';
+alang->changelog['2.0'][]   = 'company-dynamic';
+$lang->changelog['2.0'][]   = 'user-dynamic';
+$lang->changelog['2.0'][]   = 'extension-browse';
+$lang->changelog['2.0'][]   = 'extension-obtain';
+$lang->changelog['2.0'][]   = 'extension-install';
+$lang->changelog['2.0'][]   = 'extension-uninstall';
+$lang->changelog['2.0'][]   = 'extension-activate';
+$lang->changelog['2.0'][]   = 'extension-deactivate';
+$lang->changelog['2.0'][]   = 'extension-upload';
+$lang->changelog['2.0'][]   = 'extension-erase';
