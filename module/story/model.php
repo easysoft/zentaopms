@@ -28,9 +28,9 @@ class storyModel extends model
         if(substr($story->closedDate, 0, 4) == '0000') $story->closedDate = '';
         if($version == 0) $version = $story->version;
         $spec = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
-        $story->title    = $spec->title;
-        $story->spec     = $spec->spec;
-        $story->verify   = $spec->verify;
+        $story->title  = isset($spec->title)  ? $spec->title  : '';
+        $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
+        $story->verify = isset($spec->verify) ? $spec->verify : '';
         $story->projects = $this->dao->select('t1.project, t2.name, t2.status')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
@@ -514,7 +514,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $orderBy = 'status_asc,id_desc')
+    public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc')
     {
         return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')

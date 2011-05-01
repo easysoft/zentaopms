@@ -340,7 +340,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function story($projectID = 0, $orderBy = 'status_asc,id_desc')
+    public function story($projectID = 0, $orderBy = 'pri_asc,id_desc')
     {
         /* Load these models. */
         $this->loadModel('story');
