@@ -72,7 +72,7 @@ class todoModel extends model
             ->exec();
         if(!dao::isError()) return common::createChanges($oldTodo, $todo);
     }
-    
+
     /**
      * Change the status of a todo.
      * 
@@ -386,6 +386,12 @@ class todoModel extends model
         return $baseTime;
     }
 
+    /**
+     * Get this month begin and end time
+     * 
+     * @access public
+     * @return array
+     */
     public function getThisMonth()
     {
         $begin = date('Y-m');
@@ -393,6 +399,12 @@ class todoModel extends model
         return array('begin' => $begin, 'end' => $end);
     }
 
+    /**
+     * Get last month begin and end time
+     * 
+     * @access public
+     * @return array
+     */
     public function getLastMonth()
     {
         $begin = date('Y-m', strtotime('last month'));
