@@ -436,7 +436,7 @@ class user extends control
     }
     
     /**
-     * My dynamic.
+     * User dynamic.
      * 
      * @param  string $period 
      * @param  string $account 
