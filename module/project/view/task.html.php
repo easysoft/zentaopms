@@ -37,10 +37,40 @@ var browseType = '<?php echo $browseType;?>';
     <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
+  <?php  
+    $taskSum       = 0;
+    $statusWait    = 0;
+    $statusDone    = 0;
+    $statusDoing   = 0;
+    $statusClosed  = 0;  
+    $totalEstimate = 0.0;
+    $totalConsumed = 0.0;
+    $totalLeft     = 0.0;
+  ?>
   <tbody>
   <?php foreach($tasks as $task):?>
   <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
-
+  <?php  
+    $totalEstimate  += $task->estimate;
+    $totalConsumed  += $task->consumed;
+    $totalLeft      += ($task->status == 'cancel' ? 0 : $task->left);
+    if($task->status == 'wait')
+    {
+        $statusWait++;
+    }
+    elseif($task->status == 'doing')
+    {
+        $statusDoing++;
+    }
+    elseif($task->status == 'done')
+    {
+        $statusDone++;
+    }
+    elseif($task->status == 'closed')
+    {
+        $statusClosed++;
+    }
+   ?>
    <tr class='a-center'>
     <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
     <td><?php echo $lang->task->priList[$task->pri];?></td>
@@ -75,7 +105,7 @@ var browseType = '<?php echo $browseType;?>';
     <td>
       <?php
       if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
-      if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
+      if(!(($task->status == 'done'  or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
       if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
       if($browseType == 'needconfirm') common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
       ?>
@@ -83,26 +113,19 @@ var browseType = '<?php echo $browseType;?>';
     </tr>
        <?php endforeach;?>
     <tr>
-        <td colspan= 12  class='a-right'>
-        <?php 
-            if ($status != 'wait' & $status != 'done' & $status != 'doing' & $status != 'closed' & $status != 'finishedbyme')
-            {
-                printf($lang->project->taskSummaryAll, count($tasks), $statusWait,$statusDoing,$statusDone,$statusCancel,$totalEstimate,$totalConsumed,$totalLeft);
-            }
-            else
-            {
-                printf($lang->project->taskSummaryPart, count($tasks), $totalEstimate,$totalConsumed,$totalLeft);
-            }
-        ?>
-        </td>
+      <td colspan='12' class='a-right'>
+       <?php 
+        if($status == 'wait' or $status == 'doing' or $status == 'done' or $status == 'closed' or $status == 'finishedbyme')
+        {
+            printf($lang->project->taskSummaryPart, count($tasks), $totalEstimate, $totalConsumed, $totalLeft);
+        }
+        else printf($lang->project->taskSummaryAll, count($tasks), $statusWait, $statusDoing, $statusDone, $statusClosed, $totalEstimate, $totalConsumed, $totalLeft);
+       ?>
+      </td>
     </tr>
   </tbody>
   <tfoot>
-    <tr>
-      <td colspan = 12 class = 'a-right'>   
-         <?php echo $pager;?>
-      </td>
-    </tr>
+    <tr><td colspan='12' class='a-right'><?php echo $pager;?></td></tr>
   </tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>

@@ -32,7 +32,7 @@
     $statusWait    = 0;
     $statusDone    = 0;
     $statusDoing   = 0;
-    $statusCancel  = 0;  
+    $statusClosed  = 0;  
     $totalEstimate = 0.0;
     $totalConsumed = 0.0;
     $totalLeft     = 0.0;
@@ -45,10 +45,10 @@
     <td colspan='10'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
   </tr>
   <?php
-    $groupWait    = 0;
-    $groupDone    = 0;
-    $groupDoing   = 0;
-    $groupCancel  = 0;  
+    $groupWait     = 0;
+    $groupDone     = 0;
+    $groupDoing    = 0;
+    $groupClosed   = 0;  
     $groupEstimate = 0.0;
     $groupConsumed = 0.0;
     $groupLeft     = 0.0;
@@ -59,11 +59,11 @@
   <?php  
     $totalEstimate  += $task->estimate;
     $totalConsumed  += $task->consumed;
-    $totalLeft      += $task->left;
+    $totalLeft      += ($task->status == 'cancel' ? 0 : $task->left);
 
     $groupEstimate  += $task->estimate;
     $groupConsumed  += $task->consumed;
-    $groupLeft      += $task->left;
+    $groupLeft      += ($task->status == 'cancel' ? 0 : $task->left);
 
     if($task->status == 'wait')
     {
@@ -80,10 +80,10 @@
         $statusDone++;
         $groupDone++;
     }
-    else
+    elseif($task->status == 'closed')
     {
-        $statusCancel++;
-        $groupCancel++;
+        $statusClosed++;
+        $groupClosed++;
     }
     $groupSum = count($groupTasks);
     $taskSum += count($tasks);
@@ -106,7 +106,7 @@
       </td>
     </tr>
       <?php endforeach;?>
-    <tr><td colspan='12' class='a-right'><?php printf($lang->project->taskSummaryAll, $groupSum, $groupWait,$groupDoing,$groupDone,$groupCancel,$groupEstimate,$groupConsumed,$groupLeft);?></td></tr>
+    <tr><td colspan='12' class='a-right'><?php printf($lang->project->taskSummaryAll, $groupSum, $groupWait, $groupDoing, $groupDone, $groupClosed, $groupEstimate, $groupConsumed, $groupLeft);?></td></tr>
   <?php endforeach;?>
 </table>
 <script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>
