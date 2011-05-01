@@ -527,10 +527,10 @@ class bug extends control
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->bug->activate;
 
-        $this->view->bug              = $bug;
-        $this->view->users            = $this->user->getPairs('nodeleted');
-        $this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
-        $this->view->actions          = $this->action->getList('bug', $bugID);
+        $this->view->bug             = $bug;
+        $this->view->users           = $this->user->getPairs('nodeleted');
+        $this->view->builds          = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+        $this->view->actions         = $this->action->getList('bug', $bugID);
 
         $this->display();
     }
