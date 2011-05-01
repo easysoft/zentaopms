@@ -121,7 +121,16 @@ class product extends control
             {
                 if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
             }
-            $stories = $this->story->getByQuery($productID, $this->session->storyQuery, $orderBy, $pager);
+
+            $allProduct     = "`product` = 'all'";
+            $storyQuery     = $this->session->storyQuery;
+            $queryProductID = $productID;
+            if(strpos($this->session->storyQuery, $allProduct) !== false)
+            {
+                $storyQuery     = str_replace($allProduct, '1', $this->session->storyQuery);
+                $queryProductID = 'all';
+            }
+            $stories = $this->story->getByQuery($queryProductID, $storyQuery, $orderBy, $pager);
         }
 
         /* Set session for report Query*/
@@ -135,6 +144,7 @@ class product extends control
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
+        $this->config->product->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->product->allProduct);
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);
 
         $this->view->productID     = $productID;
