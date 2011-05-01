@@ -48,7 +48,7 @@
     </tr> 
     <tr>
       <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>
-      <td><?php echo html::select('assignedTo', $users, $assignedTo, 'class=select-3') . html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?></td>
+      <td><?php echo html::select('assignedTo', $users, '', 'class=select-3') . html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview'");?></td>
     </tr>  
      <tr>
       <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
