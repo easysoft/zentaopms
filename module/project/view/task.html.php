@@ -13,12 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/table2csv.html.php';?>
+<?php include '../../common/js/togglesearch.js';?>
 <?php include './taskheader.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
-$("#bysearchTab").toggle(
-    function(){$("#querybox").show();},
-    function(){$("#querybox").hide();} );
 </script>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 <table class='table-1 fixed colored tablesorter datatable'>
