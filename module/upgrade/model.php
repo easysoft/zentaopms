@@ -498,14 +498,14 @@ class upgradeModel extends model
         foreach($userConstants as $key => $value)
         {
             if(strpos($key, 'TABLE') === false) continue;
-            if($key == 'TABLE_COMPANY'    or 
-                $key == 'TABLE_CONFIG'    or 
-                $key == 'TABLE_USERQUERY' or
-                $key == 'TABLE_DOCLIB'    or
-                $key == 'TABLE_DOC'       or
-                $key == 'TABLE_USERTPL'
-            ) continue;
-            $this->dbh->query("UPDATE $value SET company = '{$this->app->company->id}'");
+            if($key == 'TABLE_COMPANY') continue;
+
+            $table  = $value;
+            $result = $this->dbh->query("SHOW TABLES LIKE '$table'");
+            if($result->rowCount() > 0)
+            {
+                $this->dbh->query("UPDATE $table SET company = '{$this->app->company->id}'");
+            }
         }
     }
 
