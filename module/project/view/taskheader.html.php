@@ -19,7 +19,7 @@
   </div>
   <div class='f-right'>
     <?php 
-    echo html::export2csv($lang->exportCSV, $lang->setFileName);
+    common::printLink('task', 'export', "projectID=$projectID&orderBy=$orderBy", $lang->export, '', 'class="export"');
     common::printLink('project', 'importTask', "project=$project->id", $lang->project->importTask);
     common::printLink('task', 'report', "project=$project->id&browseType=$browseType", $lang->task->report->common);
     common::printLink('task', 'create', "project=$project->id", $lang->task->create);

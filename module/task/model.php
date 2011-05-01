@@ -300,6 +300,26 @@ class taskModel extends model
     }
     
     /**
+     * getByQuery 
+     * 
+     * @param  string $projectID 
+     * @param  string $query 
+     * @param  string $orderBy 
+     * @param  string $pager 
+     * @access public
+     * @return void
+     */
+    public function getByQuery($projectID, $query, $orderBy)
+    {
+        $tmpTasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($query)
+            ->andWhere('project')->eq((int)$projectID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->fetchAll();
+        return $tmpTasks;
+    }
+
+    /**
      * Get tasks of a project.
      * 
      * @param  int    $projectID 
@@ -327,6 +347,11 @@ class taskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+
+        $sql = explode('WHERE', $this->dao->get());
+        $sql = explode('ORDER', $sql[1]);
+        $this->session->set('taskReport', $sql[0]);
+
         if($tasks) return $this->processTasks($tasks);
         return array();
     }
@@ -628,7 +653,6 @@ class taskModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->session->taskReportCondition)
             ->groupBy('deadline')
-            ->having('name != 0000-00-00')
             ->orderBy('value DESC')
             ->fetchAll('name');
     }

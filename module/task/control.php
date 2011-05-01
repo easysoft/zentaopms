@@ -527,56 +527,118 @@ class task extends control
 
     /**
      * get data to export
+     * 
+     * @param  int $projectID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
      */
-    public function export($fileName, $fileType)
+    public function export($projectID, $orderBy)
     {
-        $users = $this->loadModel('user')->getPairs(); 
-        $projectID  = $this->session->projectID;
-        $browseType = $this->session->browseType;
-        $orderBy    = $this->session->orderBy;
+        $fields   = array();
+        $users    = $this->loadModel('user')->getPairs('noletter');
+        $projects = $this->loadModel('project')->getPairs();
+        $relatedStories  = $this->dao->select('id,title')->from(TABLE_STORY)->fetchPairs();
 
-        $tasks=array();
-        if($browseType!="bysearch")
-        {
-            $tasks = $this->task->getProjectTasks($projectID, $browseType, $orderBy); 
-        }
-        else
-        {   
-            $taskQuery  = $this->session->taskQuery;
-            $tasks = $this->project->getSearchTasks($taskQuery, null, $orderBy);
-        }
-
-        $data[] = array(
-            $this->lang->idAB,
-            $this->lang->priAB,
-            $this->lang->task->name,
-            $this->lang->task->assignedTo,
-            $this->lang->task->finishedBy,
-            $this->lang->task->estimateAB,
-            $this->lang->task->consumedAB,
-            $this->lang->task->leftAB,
-            $this->lang->task->deadlineAB,
-            $this->lang->statusAB,
-            $this->lang->task->story
+        /* get the fields of task module from lang. */
+        $fields = array(
+            'id'             => $this->lang->task->id, 
+            'project'        => $this->lang->task->project, 
+            'story'          => $this->lang->task->story, 
+            'storyVersion'   => $this->lang->task->storyVersion, 
+            'name'           => $this->lang->task->name,
+            'type'           => $this->lang->task->type,
+            'pri'            => $this->lang->task->pri, 
+            'estimate'       => $this->lang->task->estimate, 
+            'consumed'       => $this->lang->task->consumed, 
+            'left'           => $this->lang->task->left, 
+            'deadline'       => $this->lang->task->deadline, 
+            'status'         => $this->lang->task->status, 
+            'statusCustom'   => $this->lang->task->statusCustom, 
+            'mailto'         => $this->lang->task->mailto, 
+            'desc'           => $this->lang->task->desc, 
+            'openedBy'       => $this->lang->task->openedBy, 
+            'openedDate'     => $this->lang->task->openedDate, 
+            'assignedTo'     => $this->lang->task->assignedTo,
+            'assignedDate'   => $this->lang->task->assignedDate, 
+            'finishedBy'     => $this->lang->task->finishedBy, 
+            'finishedDate'   => $this->lang->task->finishedDate, 
+            'canceledBy'     => $this->lang->task->canceledBy, 
+            'canceledDate'   => $this->lang->task->canceledDate, 
+            'closedBy'       => $this->lang->task->closedBy, 
+            'closedDate'     => $this->lang->task->closedDate, 
+            'closedReason'   => $this->lang->task->closedReason, 
+            'lastEditedBy'   => $this->lang->task->lastEditedBy,
+            'lastEditedDate' => $this->lang->task->lastEditedDate, 
         );
-        foreach($tasks as $task)
+
+        if($_POST)
         {
-            $tmp = array(
-                "id"         => $task->id,
-                "pri"        => $this->lang->task->priList[$task->pri],
-                "name"       => $task->name,
-                "assignedTo" => $task->assignedTo,
-                "finishedBy" => $users[$task->finishedBy],
-                "estimate"   => $task->estimate,
-                "consumed"   => $task->consumed,
-                "left"       => $task->left,
-                "deadline"   => substr($task->deadline, 0, 4),
-                "status"     => $this->lang->task->statusList[$task->status],
-                "storyTitle" => $task->storyTitle
-            );
-            $data[] = $tmp;
+            $tasks = $this->task->getByQuery($projectID, $this->session->taskReport, $orderBy);
+
+            foreach($tasks as $task)
+            {
+                if($_POST['fileType'] == 'html')
+                {
+                    $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->eq($task->id)->fetchAll();
+                    if($legendAttatchs)
+                    {
+                        foreach($legendAttatchs as $legendAttatch) 
+                        {
+                            $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$task->company/" . $legendAttatch->pathname;
+                            $task->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
+                        }
+                    }
+                }
+                else if($_POST['fileType'] == 'csv')
+                {
+                    $task->desc = str_replace("&lt;br /&gt;", "\n", $task->desc);
+                    $task->desc = str_replace("<br />", "\n", $task->desc);
+                    $task->desc = str_replace("&nbsp;", " ", $task->desc);
+                    $task->desc = str_replace('"', '""', $task->desc);
+                }
+
+                /* drop some field that is not needed. */
+                unset($task->company);
+
+                /* fill some field with useful value. */
+                if(isset($relatedStories[$task->story]))
+                {
+                    $task->story = $relatedStories[$task->story];
+                }
+                else 
+                {
+                    $task->story = '';
+                }
+
+                $task->project        = $projects[$task->project];
+                $task->type           = $this->lang->task->typeList[$task->type];
+                $task->pri            = $this->lang->task->priList[$task->pri];
+                $task->estimate       = substr($task->estimate, 0, 10);
+                $task->deadline       = substr($task->deadline, 0, 10);
+                $task->status         = $this->lang->task->statusList[$task->status];
+                $task->openedBy       = $users[$task->openedBy];
+                $task->openedDate     = substr($task->openedDate, 0, 10);
+                $task->assignedTo     = $users[$task->assignedTo];
+                $task->assignedDate   = substr($task->assignedTo, 0, 10);
+                $task->finishedBy     = $users[$task->finishedBy];
+                $task->finishedDate   = substr($task->finishedDate, 0, 10);
+                $task->canceledBy     = $users[$task->canceledBy];
+                $task->canceledDate   = substr($task->canceledDate, 0, 10);
+                $task->closedBy       = $users[$task->closedBy];
+                $task->closedDate     = substr($task->closedDate, 0, 10);
+                $task->closedReason   = $this->lang->task->reasonList[$task->closedReason];
+                $task->lastEditedBy   = $users[$task->lastEditedBy];
+                $task->lastEditedDate = substr($task->lastEditedDate, 0, 10);
+            }
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $tasks);
+            if($this->post->fileType == 'csv')  $this->fetch('file', 'export2CSV', $_POST);
+            if($this->post->fileType == 'xml')  $this->fetch('file', 'export2XML', $_POST);
+            if($this->post->fileType == 'html') $this->fetch('file', 'export2HTML', $_POST);
         }
-        a($data);exit;
-        $this->fetch('file', 'export', "data=$data&fileName=$fileName&fileType=$fileType");
-    } 
+
+        $this->display();
+    }
 }
