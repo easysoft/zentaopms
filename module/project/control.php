@@ -135,8 +135,8 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $tasks=array();
-        if($browseType!="bysearch")
+        $tasks = array();
+        if($browseType != "bysearch")
         {
             $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager); 
         }
@@ -160,6 +160,7 @@ class project extends control
                 if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
             }
             $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
+            $this->session->set('taskReport', $this->session->taskQuery);
             $tasks     = $this->project->getSearchTasks($taskQuery, $pager, $orderBy);
         }
 
@@ -203,25 +204,24 @@ class project extends control
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->project->search);
 
         /* Assign. */
-        $this->view->tasks           = $tasks;
-        $this->view->tabID           = 'task';
-        $this->view->pager           = $pager->get();
-        $this->view->recTotal        = $pager->recTotal;
-        $this->view->recPerPage      = $pager->recPerPage;
-        $this->view->orderBy         = $orderBy;
-        $this->view->browseType      = $browseType;
-        $this->view->status          = $status;
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
-        $this->view->param           = $param;
-        
-        $this->view->statusWait      =$statusWait;
-        $this->view->statusDone      =$statusDone;
-        $this->view->statusDoing     =$statusDoing;
-        $this->view->statusCancel    =$statusCancel;  
-        $this->view->totalEstimate   =$totalEstimate;
-        $this->view->totalConsumed   =$totalConsumed;
-        $this->view->totalLeft       =$totalLeft;
-
+        $this->view->tasks         = $tasks;
+        $this->view->tabID         = 'task';
+        $this->view->pager         = $pager->get();
+        $this->view->recTotal      = $pager->recTotal;
+        $this->view->recPerPage    = $pager->recPerPage;
+        $this->view->orderBy       = $orderBy;
+        $this->view->browseType    = $browseType;
+        $this->view->status        = $status;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->param         = $param;
+        $this->view->projectID     = $projectID;
+        $this->view->statusWait    = $statusWait;
+        $this->view->statusDone    = $statusDone;
+        $this->view->statusDoing   = $statusDoing;
+        $this->view->statusCancel  = $statusCancel;  
+        $this->view->totalEstimate = $totalEstimate;
+        $this->view->totalConsumed = $totalConsumed;
+        $this->view->totalLeft     = $totalLeft;
 
         $this->display();
     }
