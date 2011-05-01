@@ -7,16 +7,6 @@ function browseByModule(active)
     $('#querybox').addClass('hidden');
     $('#' + active + 'Tab').removeClass('active');
 }
-/* Search bugs. */
-function browseBySearch(active)
-{
-    $('#treebox').addClass('hidden');
-    $('.divider').addClass('hidden');
-    $('#querybox').removeClass('hidden');
-    $('#bymoduleTab').removeClass('active');
-    $('#' + active + 'Tab').removeClass('active');
-    $('#bysearchTab').addClass('active');
-}
 
 $(document).ready(function()
 {
@@ -29,13 +19,6 @@ $(document).ready(function()
     {
         $("#browsecss").attr('href', '');
     }
-
-    /* Toggle the search form. */
-    $("#bysearchTab").toggle
-    (
-        function(){$("#querybox").show();},
-        function(){$("#querybox").hide();}
-    );
 });
 
 $(document).ready(function() 
