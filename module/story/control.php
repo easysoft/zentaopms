@@ -605,24 +605,30 @@ class story extends control
 
             foreach($stories as $story)
             {
-                $childStories   = explode(',', $story->childStories);
-                $linkStories    = explode(',', $story->linkStories);
-                $module         = $this->dao->select('name')->from(TABLE_MODULE)->where('id')->eq($story->module)->fetch();
-                $storySpec      = $this->dao->select('spec')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->fetch();
-                $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($story->id)->fetchAll();
+                $childStories = explode(',', $story->childStories);
+                $linkStories  = explode(',', $story->linkStories);
+                $module       = $this->dao->select('name')->from(TABLE_MODULE)->where('id')->eq($story->module)->fetch();
+                $storySpec    = $this->dao->select('spec')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->fetch();
 
-                if(isset($storySpec->spec))
+                if($_POST['fileType'] == 'html')
                 {
-                    $storySpec->spec = str_replace("&lt;br /&gt;", "\n", $storySpec->spec);
-                    $storySpec->spec = str_replace("<br />", "\n", $storySpec->spec);
-                    $storySpec->spec = str_replace("&nbsp;", " ", $storySpec->spec);
-                    $storySpec->spec = str_replace('"', '""', $storySpec->spec);
+                    $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($story->id)->fetchAll();
+
+                    foreach($legendAttatchs as $legendAttatch) 
+                    {
+                        $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$story->company/" . $legendAttatch->pathname;
+                        $story->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
+                    }
                 }
-
-                foreach($legendAttatchs as $legendAttatch) 
+                else if($_POST['fileType'] == 'csv')
                 {
-                    $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$story->company/" . $legendAttatch->pathname;
-                    $story->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
+                    if(isset($storySpec->spec))
+                    {
+                        $storySpec->spec = str_replace("&lt;br /&gt;", "\n", $storySpec->spec);
+                        $storySpec->spec = str_replace("<br />", "\n", $storySpec->spec);
+                        $storySpec->spec = str_replace("&nbsp;", " ", $storySpec->spec);
+                        $storySpec->spec = str_replace('"', '""', $storySpec->spec);
+                    }
                 }
 
                 foreach($childStories as $childStory)
