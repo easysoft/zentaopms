@@ -602,14 +602,7 @@ class task extends control
                 unset($task->company);
 
                 /* fill some field with useful value. */
-                if(isset($relatedStories[$task->story]))
-                {
-                    $task->story = $relatedStories[$task->story];
-                }
-                else 
-                {
-                    $task->story = '';
-                }
+                $task->story = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] : '';
 
                 $task->project        = $projects[$task->project];
                 $task->type           = $this->lang->task->typeList[$task->type];
