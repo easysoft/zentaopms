@@ -165,6 +165,7 @@ class bug extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
+        /* save session .*/
         $sql = $this->dao->get();
         $sql = explode('WHERE', $sql);
         $sql = explode('ORDER', $sql[1]);

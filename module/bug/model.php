@@ -131,7 +131,6 @@ class bugModel extends model
         return $tmpBugs;
     }
 
-
     /**
      * Update a bug.
      * 
