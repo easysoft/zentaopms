@@ -27,6 +27,10 @@ class productModel extends model
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
+        /* init currentModule and currentMethod for report*/
+        if($currentModule == 'story')  $currentModule = 'product';
+        if($currentMethod == 'report') $currentMethod = 'browse';
+
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, '$currentModule', '$currentMethod', '$extra');\"");
         foreach($this->lang->product->menu as $key => $menu)
         {
