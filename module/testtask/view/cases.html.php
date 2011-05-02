@@ -29,7 +29,6 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
   <div class='f-right'>
     <?php
-    echo html::export2csv($lang->exportCSV, $lang->setFileName);
     common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);
     echo html::a($this->session->testtaskList, $lang->goback);
     ?>
