@@ -19,8 +19,7 @@ $lang->action->objectName = '对象名称';
 $lang->action->actor      = '操作者';
 $lang->action->action     = '动作';
 $lang->action->date       = '日期';
-$lang->action->trashTips  = '提示：禅道系统的删除都是标记删除，并没有真正从数据库里面删除数据。这样做是为了系统数据的完整和安全。
-                             因此如果你确定要删除某一条数据，可以使用phpmyadmin等管理工具，进数据库删除。';
+$lang->action->trashTips  = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
 
 $lang->action->dynamic->today     = '今天';
 $lang->action->dynamic->yesterday = '昨天';

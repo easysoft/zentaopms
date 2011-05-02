@@ -19,8 +19,7 @@ $lang->action->objectName = 'Name';
 $lang->action->actor      = 'Actor';
 $lang->action->action     = 'Action';
 $lang->action->date       = 'Date';
-$lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic, the real data don't be erased from the database.
-                             So if you want to erase a record, can use phpmyadmin and such tools to remove it from database.";
+$lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic";
 
 $lang->action->dynamic->today     = 'Today';
 $lang->action->dynamic->yesterday = 'Yesterday';
