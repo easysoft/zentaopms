@@ -28,13 +28,6 @@ var moduleID   = '<?php echo $moduleID;?>';
     echo "<span id='bysearchTab' onclick=\"browseBySearch('$browseType')\"><a href='#'>{$lang->testcase->bySearch}</a></span> ";
     ?>
   </div>
-<script language='Javascript'>
-    $("#bysearchTab").
-        toggle(
-            function(){$("#querybox").show(); $(".side").hide(); $(".divider").hide(); },
-            function(){$("#querybox").hide(); $(".side").show(); $(".divider").show(); }
-        ); 
-</script>
   <div class='f-right'>
     <?php common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
     <?php common::printLink('testcase', 'create', "productID=$productID&moduleID=$moduleID", $lang->testcase->create); ?>
