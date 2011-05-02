@@ -233,6 +233,7 @@ class bugModel extends model
             ->add('duplicateBug', 0)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->join('openedBuild', ',')
             ->remove('comment,files,labels')
             ->get();
 
