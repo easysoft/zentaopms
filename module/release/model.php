@@ -75,7 +75,12 @@ class releaseModel extends model
     {
         $oldRelease = $this->getByID($releaseID);
         $release = fixer::input('post')->stripTags('name')->get();
-        $this->dao->update(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->edit->requiredFields, 'notempty')->where('id')->eq((int)$releaseID)->check('name','unique')->exec();
+        $this->dao->update(TABLE_RELEASE)->data($release)
+            ->autoCheck()
+            ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
+            ->check('name','unique', "id != $releaseID")
+            ->where('id')->eq((int)$releaseID)
+            ->exec();
         if(!dao::isError()) return common::createChanges($oldRelease, $release);
     }
 }
