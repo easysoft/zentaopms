@@ -170,7 +170,7 @@ class project extends control
         /* Assign. */
         $this->view->tasks           = $tasks;
         $this->view->tabID           = 'task';
-        $this->view->pager           = $pager->get();
+        $this->view->pager           = $pager;
         $this->view->recTotal        = $pager->recTotal;
         $this->view->recPerPage      = $pager->recPerPage;
         $this->view->orderBy         = $orderBy;

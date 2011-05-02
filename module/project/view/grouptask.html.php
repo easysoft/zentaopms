@@ -105,8 +105,8 @@
         <?php if(common::hasPriv('task', 'delete')) echo html::a($this->createLink('task', 'delete', "projectID=$task->project&taskid=$task->id"), $lang->delete, 'hiddenwin');?>
       </td>
     </tr>
-      <?php endforeach;?>
-    <tr><td colspan='12' class='a-right'><?php printf($lang->project->taskSummaryAll, $groupSum, $groupWait, $groupDoing, $groupDone, $groupClosed, $groupEstimate, $groupConsumed, $groupLeft);?></td></tr>
+    <?php endforeach;?>
+    <tr class='child-of-node-<?php echo $groupKey;?> <?php echo $groupClass;?>'><td colspan='12' class='a-right'><?php printf($lang->project->groupSummary, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?></td></tr>
   <?php endforeach;?>
 </table>
 <script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>
