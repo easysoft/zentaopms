@@ -33,6 +33,7 @@ $config->doc->search['params']['project']       = array('operator' => '=',      
 $config->doc->search['params']['type']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->doc->types);
 $config->doc->search['params']['lib']           = array('operator' => '=',       'control' => 'select', 'values' => '' );
 $config->doc->search['params']['digest']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->doc->search['params']['content']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['url']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['addedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->doc->search['params']['addedDate']     = array('operator' => '>=',      'control' => 'input',  'values' => '');
