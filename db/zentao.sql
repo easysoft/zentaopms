@@ -1425,4 +1425,9 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 5, 'misc', 'ping'),
 (1, 5, 'action', 'trash'),
 (1, 5, 'action', 'undelete'),
-(1, 6, 'misc', 'ping');
+(1, 6, 'misc', 'ping'),
+(1, 1, 'bug', 'export'),
+(1, 2, 'bug', 'export'),
+(1, 3, 'bug', 'export'),
+(1, 4, 'bug', 'export'),
+(1, 5, 'bug', 'export');
