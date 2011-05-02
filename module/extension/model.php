@@ -262,8 +262,8 @@ class extensionModel extends model
         if(!file_exists($infoFile)) return $zentaoVersion;
 
         $info = parse_ini_file($infoFile);
-        if(!isset($info['zentaoVersion'])) return $zentaoVersion;
-        $zentaoVersion = $info['zentaoVersion'];
+        if(isset($info['zentaoVersion'])) return $info['zentaoVersion'];
+        if(isset($info['zentaoversion'])) return $info['zentaoversion'];
 
         return $zentaoVersion;
     }
@@ -609,11 +609,14 @@ class extensionModel extends model
         $data = (object)$data;
         $appRoot = $this->app->getAppRoot();
 
-        if(isset($data->dirs) and $data->dirs)
+        if(isset($data->dirs))
         {
-            foreach($data->dirs as $key => $dir)
+            if($data->dirs)
             {
-                $data->dirs[$key] = str_replace($appRoot, '', $dir);
+                foreach($data->dirs as $key => $dir)
+                {
+                    $data->dirs[$key] = str_replace($appRoot, '', $dir);
+                }
             }
             $data->dirs = json_encode($data->dirs);
         }
