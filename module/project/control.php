@@ -256,7 +256,8 @@ class project extends control
         $this->view->tabID       = 'task';
         $this->view->groupByList = $groupByList;
         $this->view->browseType  = 'group';
-        $this->view->groupBy     = $groupBy;
+        $this->view->orderBy     = $groupBy;
+        $this->view->projectID   = $projectID;
         $this->view->users       = $users;
         $this->display();
     }
