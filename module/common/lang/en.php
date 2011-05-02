@@ -206,7 +206,7 @@ $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'f
 /* Admin menu. */
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
-$lang->admin->menu->extension = array('link' => 'Extension|extension|obtain', 'subModule' => 'extension');
+$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
