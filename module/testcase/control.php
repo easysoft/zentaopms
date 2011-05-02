@@ -415,10 +415,10 @@ class testcase extends control
                 $testcaseSteps = $this->dao->select('`desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->eq($testcase->id)->fetchAll();
                 foreach($testcaseSteps as $testcaseStep)
                 {
-                    $step   .= $i . '、' . $this->lang->testcase->stepDesc . ':' . $testcaseStep->desc . $this->lang->testcase->stepExpect . ':' . $testcaseStep->expect . "<br />";
+                    $step   .= $i . '、' . $this->lang->testcase->stepDesc . ':' . $testcaseStep->desc . '<br />' . $this->lang->testcase->stepExpect . ':' . $testcaseStep->expect . "<br />";
                     $i++;
                 }
-                $testcase->company = $step;
+                $testcase->step = $step;
 
                 if($_POST['fileType'] == 'html')
                 {
