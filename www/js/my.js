@@ -620,6 +620,47 @@ function autoCheck()
       });
 }
 
+/**
+ * Show the search or reduction the style. 
+ * 
+ * @access public
+ * @return void
+ */
+function togglesearch()
+{
+    $("#bysearchTab").toggle(
+      function()
+      {
+          if(browseType == 'bymodule')
+          {
+              $('#treebox').addClass('hidden');
+              $('.divider').addClass('hidden');
+              $('#bymoduleTab').removeClass('active');
+          }
+          else
+          {
+              $('#' + browseType + 'Tab').removeClass('active');
+          }
+          $('#bysearchTab').addClass('active');
+          $('#querybox').removeClass('hidden');
+      },
+      function()
+      {
+          if(browseType == 'bymodule')
+          {
+              $('#treebox').removeClass('hidden');
+              $('.divider').removeClass('hidden');
+              $('#bymoduleTab').addClass('active');
+          }
+          else
+          {
+              $('#' + browseType +'Tab').addClass('active');
+          }
+          $('#bysearchTab').removeClass('active');
+          $('#querybox').addClass('hidden');
+      } 
+    );
+}
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -638,6 +679,7 @@ $(document).ready(function()
     setForm();
     setImageSize();
     autoCheck();
+    togglesearch();
 });
 
 /* CTRL+g, auto focus on the search box. */
