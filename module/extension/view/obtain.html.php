@@ -58,7 +58,7 @@
         <?php foreach($extensions as $extension):?>
         <tr class='a-center'>
           <td class='strong'><?php echo $extension->id;?></td>
-          <td class='a-left'><?php echo $extension->name;?></td>
+          <td class='a-left'><?php echo html::a($extension->viewLink, $extension->name, '_blank');?></td>
           <td><?php echo $extension->code;?></td>
           <td><?php echo $extension->version;?></td>
           <td class='a-left'><?php echo $extension->desc;?></td>
@@ -68,13 +68,15 @@
           <td><?php echo $lang->extension->compatibleList[$extension->compatible];?></td>
           <td class='a-right'>
             <?php 
-            $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&overridePackage=no&ignoreCompitable=yes");
+            $installLink   = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&overridePackage=no&ignoreCompitable=yes");
+            $downLinkClass = 'manual';
             if($extension->public)
             {
                 $label = $extension->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
                 echo html::a($installLink, $label, '', 'class="iframe button-c"');
+                $downLinkClass = 'manual';
             }
-            echo html::a($extension->downLink, $lang->extension->downloadAB, '', 'class=button-c');
+            echo html::a($extension->downLink, $lang->extension->downloadAB, '', 'class="manual button-c"');
             echo html::a($extension->site, $lang->extension->site, '_blank', 'class=button-c');
             ?>
           </td>
