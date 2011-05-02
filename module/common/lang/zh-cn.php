@@ -249,7 +249,7 @@ $lang->error->passwordrule    = "密码应该符合规则，长度至少为六�
 
 /* 分页信息。*/
 $lang->pager->noRecord  = "暂时没有记录";
-$lang->pager->digest    = "共<strong>%s</strong>条记录,每页 <strong>%s</strong>条，页面：<strong>%s/%s</strong> ";
+$lang->pager->digest    = "共<strong>%s</strong>条记录，每页 <strong>%s</strong>条，页面：<strong>%s/%s</strong> ";
 $lang->pager->first     = "首页";
 $lang->pager->pre       = "上页";
 $lang->pager->next      = "下页";
