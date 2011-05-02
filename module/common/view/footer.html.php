@@ -19,7 +19,7 @@ $().ready(function(){setDebugWin('white')})
 </script>
 <?php 
 $extPath     = dirname(dirname(dirname(realpath($viewFile)))) . '/common/ext/view/';
-$extHookFile = $extPath . 'footer.hook.*';
+$extHookFile = $extPath . 'footer.*.hook.php';
 $files = glob($extHookFile);
 if($files) foreach($files as $file) include $file;
 ?>
