@@ -872,7 +872,7 @@ class storyModel extends model
             ->groupBy('assignedTo')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) $data->name = $this->users[$account] != '' ? $this->users[$account] : $this->lang->report->undefined;
+        foreach($datas as $account => $data) $data->name = isset($this->users[$account]) and $this->users[$account] != '' ? $this->users[$account] : $this->lang->report->undefined;
         return $datas;
     }
 
