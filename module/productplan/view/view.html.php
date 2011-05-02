@@ -78,7 +78,7 @@
     <td><?php common::printLink('productplan', 'unlinkStory', "story=$story->id", $lang->productplan->unlinkStory, 'hiddenwin');?></td>
   </tr>
   <?php endforeach;?>
- <tr><td colspan='9' class='a-right'><?php printf($lang->product->storySummary, count($planStories), $totalEstimate);?> </td></tr>
  </tbody>
+ <tfoot><tr><td colspan='9' class='a-left'><?php printf($lang->product->storySummary, count($planStories), $totalEstimate);?> </td></tr></tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>

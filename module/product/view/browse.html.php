@@ -91,10 +91,10 @@ var browseType = '<?php echo $browseType;?>';
         </tbody>
         <tfoot>
         <tr>
-          <td colspan= 10  class='a-right'><?php printf($lang->product->storySummary, count($stories), $totalEstimate);?></td>
-        </tr>
-        <tr>
-           <td colspan = 10><?php $pager->show();?></td>
+          <td colspan='10' class='a-right'>
+            <div class='f-left'><?php printf($lang->product->storySummary, count($stories), $totalEstimate);?></div>
+            <?php $pager->show();?>
+          </td>
         </tr>
         </tfoot>
       </table>
