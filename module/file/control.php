@@ -89,12 +89,8 @@ class file extends control
             if(file_exists($file->realPath))
             {
                 $fileName = $file->title . '.' . $file->extension;
-                if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) $fileName = urlencode($fileName);
-                header('Content-Description: File Transfer');
-                header('Content-type: application/octet-stream');
-                header("Content-Disposition: attachment; filename=$fileName");
                 $fileData = file_get_contents($file->realPath);
-                echo $fileData;
+                $this->sendDownHeader($fileName, $file->extension, $fileData);
             }
             else
             {
@@ -111,16 +107,9 @@ class file extends control
      */
     public function export2CSV()
     {
-        $fileName = $this->post->fileName;
-        $csvData  = $this->post->rows;
-        $output   = '';
-
-        /* format csvData form array to string. */
-        $output .= '"'. implode('","', $this->post->fields) . '"' . "\n";
-        foreach($csvData as $value)
-        {
-            $output .= '"'. implode('","', (array)$value) . '"' . "\n";
-        }
+        $this->view->fields = $this->post->fields;
+        $this->view->rows   = $this->post->rows;
+        $output = $this->parse('file', 'export2csv');
 
         /* If the language is zh-cn, convert to gbk. */
         $clientLang = $this->app->getClientLang();
@@ -136,13 +125,7 @@ class file extends control
             }
         }
 
-        if(strpos($fileName, '.csv') === false) $fileName .= '.csv';
-        header('Content-type: application/csv');
-        header("Content-Disposition: attachment; filename=$fileName");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-        echo $output;
-        die();
+        $this->sendDownHeader($this->post->fileName, 'csv', $output);
     }
 
     /**
@@ -153,30 +136,12 @@ class file extends control
      */
     public function export2XML() 
     {  
-        $xmlData  = $this->post->rows;
-        $fileName = $this->post->fileName;
-        $fields   = $this->post->fields;
-        $output   = '';
-        $content  = '';
-        $xmlMark  = '<?xml version="1.0" encoding="utf-8"?><xml>';
-        $tmpArray = array();
+        $this->view->fields = $this->post->fields;
+        $this->view->rows   = $this->post->rows;
+        
+        $output = $this->parse('file', 'export2XML');
 
-        /* format xmlData from array to xml. */
-        $content .= "<fields><field>" . implode("</field><field>", $fields) . "</field></fields>";
-        foreach($xmlData as $row)
-        {
-            $tmpArray[] = "<row>" . implode("</row><row>", (array)$row) . "</row>";
-        }
-        $content .= "<rows>" . implode("</rows><rows>", $tmpArray) . "</rows>";
-        $output   = $xmlMark . $content . '</xml>';
-
-        if(strpos($fileName, '.xml') === false) $fileName .= '.xml';
-        header('Content-type: application/xml');
-        header("Content-Disposition: attachment; filename=$fileName");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-        echo $output;
-        die();
+        $this->sendDownHeader($this->post->fileName, 'xml', $output);
     }  
 
     /**
@@ -187,30 +152,41 @@ class file extends control
      */
     public function export2HTML() 
     {  
-        $htmlData = $this->post->rows;
-        $fileName = $this->post->fileName;
-        $fields   = $this->post->fields;
-        $output   = '';
-        $content  = '';
-        $tmpArray = array();
+        $this->view->fields   = $this->post->fields;
+        $this->view->rows     = $this->post->rows;
+        $this->view->fileName = $this->post->fileName;
+        $output = $this->parse('file', 'export2Html');
 
-        /* format htmlData from array to html. */
-        $content .= "<thead><th>" . implode("</th><th>", $fields) . "</th></thead>";
-        foreach($htmlData as $tbody)
-        {
-            $tmpArray[] = "<td>" . implode("</td><td>", (array)$tbody) . "</td>";
-        }
-        $content .= "<tbody><tr>" . implode("</tr></tbody><tbody><tr>", $tmpArray) . "</tr></tbody>";
-        $output   = "<html><head><title>$fileName</title></head><body><table>$content</table></body></html>";
+        $this->sendDownHeader($this->post->fileName, 'html', $output);
+    }  
 
-        if(strpos($fileName, '.html') === false) $fileName .= '.html';
-        header('Content-type: application/html');
+    /**
+     * Send the download header to the client.
+     * 
+     * @param  string    $fileName 
+     * @param  string    $extension 
+     * @access public
+     * @return void
+     */
+    public function sendDownHeader($fileName, $fileType, $content)
+    {
+        /* Append the extension name auto. */
+        $extension = '.' . $fileType;
+        if(strpos($fileName, $extension) === false) $fileName .= $extension;
+
+        /* urlencode the filename for ie. */
+        if(strpos($this->server->http_user_agent, 'MSIE') !== false) $fileName = urlencode($fileName);
+
+        /* Judge the content type. */
+        $mimes = $this->config->file->mimes;
+        $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
+
+        header("Content-type: $contentType");
         header("Content-Disposition: attachment; filename=$fileName");
         header("Pragma: no-cache");
         header("Expires: 0");
-        echo $output;
-        die();
-    }  
+        die($content);
+    }
 
     /**
      * Delete a file.
