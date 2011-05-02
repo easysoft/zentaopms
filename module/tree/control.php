@@ -28,6 +28,8 @@ class tree extends control
         if(strpos('story|bug|case', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
+            a($product);
+            exit;
             $this->view->root = $product;
             $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         }

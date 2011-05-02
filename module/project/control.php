@@ -178,6 +178,7 @@ class project extends control
         $this->view->status          = $status;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->param           = $param;
+        $this->view->projectID       = $projectID;
 
         $this->display();
     }
