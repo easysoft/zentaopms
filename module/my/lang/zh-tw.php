@@ -12,6 +12,7 @@ $lang->my->story       = '我的需求';
 $lang->my->project     = '我的項目';
 $lang->my->team        = '我的團隊';
 $lang->my->profile     = '我的檔案';
+$lang->my->dynamic     = '我的動態';
 $lang->my->editProfile = '更新信息';
 
 $lang->my->taskMenu->assignedToMe = '指派給我';

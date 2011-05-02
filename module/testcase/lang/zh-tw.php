@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
+ * @version     $Id: zh-tw.php 1739 2011-04-30 05:47:41Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id             = '用例編號';
@@ -54,6 +54,7 @@ $lang->testcase->view           = "用例詳情";
 $lang->testcase->edit           = "編輯用例";
 $lang->testcase->delete         = "刪除用例";
 $lang->testcase->browse         = "用例列表";
+$lang->testcase->export         = "導出數據";
 $lang->testcase->confirmStoryChange = '確認需求變動';
 
 $lang->testcase->deleteStep     = '刪除';

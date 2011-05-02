@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
- * @version     $Id: zh-tw.php 1577 2011-03-13 01:40:10Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 1781 2011-05-01 06:46:59Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->upgrade->common  = '升級';
@@ -24,10 +24,11 @@ $lang->upgrade->warnningContent = <<<EOT
    要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。<br />
    比如： mysqldump -u root -p zentao >zentao.bak
 EOT;
-$lang->upgrade->setStatusFile = '基于安全考慮，升級之間需要檢查這個檔案：<strong>%s</strong><br />
+$lang->upgrade->setStatusFile = '<p>基于安全考慮，升級之間需要檢查這個檔案：<strong>%s</strong><br />
                                  該檔案不存在或者已經過期，請用下面的命令來創建或者更新它。<br />
                                  linux下面的命令：<strong>touch %s;</strong> <br />
-                                 windows下面的命令：<strong>echo ok > %s</strong>';
+                                 windows下面的命令：<strong>echo ok > %s</strong></p>
+                                 我已經完成上面的工作，<a href="upgrade.php">繼續更新</a>';
 $lang->upgrade->selectVersion = '選擇版本';
 $lang->upgrade->noteVersion   = "務必選擇正確的版本，否則會造成數據丟失。";
 $lang->upgrade->fromVersion   = '原來的版本';
@@ -48,3 +49,4 @@ $lang->upgrade->fromVersions['1_1']       = '1.1';
 $lang->upgrade->fromVersions['1_2']       = '1.2';
 $lang->upgrade->fromVersions['1_3']       = '1.3';
 $lang->upgrade->fromVersions['1_4']       = '1.4';
+$lang->upgrade->fromVersions['1_5']       = '1.5';

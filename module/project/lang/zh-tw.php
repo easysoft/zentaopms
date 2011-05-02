@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 1558 2011-03-11 15:14:33Z wwccss $
+ * @version     $Id: zh-tw.php 1830 2011-05-02 06:50:14Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -88,6 +88,7 @@ $lang->project->finishedByMe        = '由我完成';
 $lang->project->statusWait          = '未開始';
 $lang->project->statusDoing         = '進行中';
 $lang->project->statusDone          = '已完成';
+$lang->project->statusClosed        = '已關閉';
 $lang->project->delayed             = '已延期';
 $lang->project->groups['story']     = '需求分組';
 $lang->project->groups['status']    = '狀態分組';
@@ -111,9 +112,10 @@ $lang->project->allProject          = '所有項目';
 $lang->project->selectProject  = "請選擇項目";
 $lang->project->beginAndEnd    = '起止時間';
 $lang->project->lblStats       = '工時統計';
-$lang->project->stats          = '總共預計『%s』工時<br />已經消耗『%s』工時<br />預計剩餘『%s』工時';
-$lang->project->oneLineStats   = "項目『%s』, 代號為『%s』, 相關產品為『%s』，『%s』開始，『%s』結束，總預計『%s』工時，已消耗『%s』工時，預計剩餘『%s』工時。";
-$lang->project->storySummary   = "共『%s』個需求，預計『%s』個工時。";
+$lang->project->stats          = '總共預計<strong>%s</strong>工時<br />已經消耗<strong>%s</strong>工時<br />預計剩餘<strong>%s</strong>工時';
+$lang->project->oneLineStats   = "項目<strong>%s</strong>, 代號為<strong>%s</strong>, 相關產品為<strong>%s</strong>，<strong>%s</strong>開始，<strong>%s</strong>結束，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，預計剩餘<strong>%s</strong>工時。";
+$lang->project->taskSummary    = "本頁共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
+$lang->project->groupSummary   = "本組共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
 $lang->project->wbs            = "分解任務";
 $lang->project->largeBurnChart = '點擊查看大圖';
 $lang->project->howToUpdateBurn= "<a href='%s' class='helplink'><i>如何更新?</i></a>";

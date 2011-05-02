@@ -6,23 +6,25 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
+ * @version     $Id: zh-tw.php 1839 2011-05-02 09:22:34Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->story->browse    = "需求列表";
-$lang->story->create    = "新增需求";
-$lang->story->change    = "變更";
-$lang->story->changed   = '需求變更';
-$lang->story->review    = '評審';
-$lang->story->edit      = "編輯需求";
-$lang->story->close     = '關閉';
-$lang->story->activate  = '激活';
-$lang->story->delete    = "刪除需求";
-$lang->story->view      = "需求詳情";
-$lang->story->tasks     = "相關任務";
-$lang->story->taskCount = '任務數';
-$lang->story->bugs      = "Bug";
-$lang->story->linkStory = '關聯需求';
+$lang->story->browse      = "需求列表";
+$lang->story->create      = "新增需求";
+$lang->story->change      = "變更";
+$lang->story->changed     = '需求變更';
+$lang->story->review      = '評審';
+$lang->story->edit        = "編輯需求";
+$lang->story->close       = '關閉';
+$lang->story->activate    = '激活';
+$lang->story->delete      = "刪除需求";
+$lang->story->view        = "需求詳情";
+$lang->story->tasks       = "相關任務";
+$lang->story->taskCount   = '任務數';
+$lang->story->bugs        = "Bug";
+$lang->story->linkStory   = '關聯需求';
+$lang->story->export      = "導出數據";
+$lang->story->reportChart = "統計報表";
 
 $lang->story->common         = '需求';
 $lang->story->id             = '編號';
@@ -32,6 +34,7 @@ $lang->story->release        = '發佈計劃';
 $lang->story->bug            = '相關bug';
 $lang->story->title          = '需求名稱';
 $lang->story->spec           = '需求描述';
+$lang->story->verify         = '驗收標準';
 $lang->story->type           = '需求類型 ';
 $lang->story->pri            = '優先順序';
 $lang->story->estimate       = '預計工時';
@@ -113,6 +116,7 @@ $lang->story->legendProjectAndTask = '項目任務';
 $lang->story->legendLinkStories    = '相關需求';
 $lang->story->legendChildStories   = '細分需求';
 $lang->story->legendSpec           = '需求描述';
+$lang->story->legendVerify         = '驗收標準';
 $lang->story->legendHistory        = '歷史記錄';
 $lang->story->legendVersion        = '歷史版本';
 $lang->story->legendMisc           = '其他相關';
@@ -142,3 +146,47 @@ $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。'); 
 $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到項目 <strong>$extra</strong>。'); 
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 從項目 <strong>$extra</strong> 移除。'); 
+
+/* 統計報表。*/
+$lang->story->report->common        = '統計報表';
+$lang->story->report->select        = '請選擇報表類型';
+$lang->story->report->create        = '生成報表';
+$lang->story->report->selectAll     = '全選';
+$lang->story->report->selectReverse = '反選';
+
+$lang->story->report->charts['storysPerProduct']        = '產品需求數量';
+$lang->story->report->charts['storysPerModule']         = '模組需求數量';
+$lang->story->report->charts['storysPerPlan']           = '計划進行統計';
+$lang->story->report->charts['storysPerStatus']         = '狀態進行統計';
+$lang->story->report->charts['storysPerStage']          = '所處階段進行統計';
+$lang->story->report->charts['storysPerPri']            = '優先順序進行統計';
+$lang->story->report->charts['storysPerEstimate']       = '預計工時進行統計';
+$lang->story->report->charts['storysPerOpenedBy']       = '由誰創建來進行統計';
+$lang->story->report->charts['storysPerAssignedTo']     = '當前指派來進行統計';
+$lang->story->report->charts['storysPerClosedReason']   = '關閉原因來進行統計';
+$lang->story->report->charts['storysPerChange']         = '變更次數來進行統計';
+
+$lang->story->report->options->swf                     = 'pie2d';
+$lang->story->report->options->width                   = 'auto';
+$lang->story->report->options->height                  = 300;
+$lang->story->report->options->graph->baseFontSize     = 12;
+$lang->story->report->options->graph->showNames        = 1;
+$lang->story->report->options->graph->formatNumber     = 1;
+$lang->story->report->options->graph->decimalPrecision = 0;
+$lang->story->report->options->graph->animation        = 0;
+$lang->story->report->options->graph->rotateNames      = 0;
+$lang->story->report->options->graph->yAxisName        = 'COUNT';
+$lang->story->report->options->graph->pieRadius        = 100; // 餅圖直徑。
+$lang->story->report->options->graph->showColumnShadow = 0;   // 是否顯示柱狀圖陰影。
+
+$lang->story->report->storysPerProduct->graph->xAxisName      = '產品';
+$lang->story->report->storysPerModule->graph->xAxisName       = '模組';
+$lang->story->report->storysPerPlan->graph->xAxisName         = '產品計劃';
+$lang->story->report->storysPerStatus->graph->xAxisName       = '狀態';
+$lang->story->report->storysPerStage->graph->xAxisName        = '所處階段';
+$lang->story->report->storysPerPri->graph->xAxisName          = '優先順序';
+$lang->story->report->storysPerOpenedBy->graph->xAxisName     = '由誰創建';
+$lang->story->report->storysPerAssignedTo->graph->xAxisName   = '當前指派';
+$lang->story->report->storysPerClosedReason->graph->xAxisName = '關閉原因';
+$lang->story->report->storysPerEstimate->graph->xAxisName     = '預計時間';
+$lang->story->report->storysPerChange->graph->xAxisName       = '變更次數';

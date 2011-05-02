@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
- * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
+ * @version     $Id: zh-tw.php 1795 2011-05-01 08:37:26Z liukmqd@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->productplan->common    = '產品計劃';

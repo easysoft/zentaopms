@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
- * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
+ * @version     $Id: zh-tw.php 1674 2011-04-19 03:30:33Z liukmqd@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->company->common   = '組織視圖';
@@ -17,6 +17,7 @@ $lang->company->read     = "公司信息";
 $lang->company->update   = "更新公司";
 $lang->company->delete   = "刪除公司";
 $lang->company->browse   = "用戶列表";
+$lang->company->dynamic  = "組織動態";
 $lang->company->depts    = "部門列表";
 $lang->company->orgView  = '組織視圖';
 

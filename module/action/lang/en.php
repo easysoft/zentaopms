@@ -23,11 +23,11 @@ $lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic";
 
 $lang->action->dynamic->today     = 'Today';
 $lang->action->dynamic->yesterday = 'Yesterday';
-$lang->action->dynamic->twoDaysAgo= 'The day Before Yesterday';
-$lang->action->dynamic->thisWeek  = 'This Week';
-$lang->action->dynamic->lastWeek  = 'Last Week';
-$lang->action->dynamic->thisMonth = 'This Month';
-$lang->action->dynamic->lastMonth = 'Last Month';
+$lang->action->dynamic->twoDaysAgo= 'Two days ago';
+$lang->action->dynamic->thisWeek  = 'This week';
+$lang->action->dynamic->lastWeek  = 'Last week';
+$lang->action->dynamic->thisMonth = 'This month';
+$lang->action->dynamic->lastMonth = 'Last month';
 $lang->action->dynamic->all       = 'All';
 
 $lang->action->objectTypes['product']     = 'PRODUCT';

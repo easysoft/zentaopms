@@ -197,11 +197,11 @@ $lang->group->menu           = $lang->company->menu;
 $lang->user->menu->account  = '%s' . $lang->arrow;
 $lang->user->menu->todo     = array('link' => 'Todo|user|todo|account=%s', 'subModule' => 'todo');
 $lang->user->menu->task     = 'Task|user|task|account=%s';
-$lang->user->menu->bug      = 'Bug列表|user|bug|account=%s';
+$lang->user->menu->bug      = 'Bug|user|bug|account=%s';
 $lang->user->menu->project  = 'Project|user|project|account=%s';
 $lang->user->menu->dynamic  = 'Dynamic|user|dynamic|type=today&account=%s';
 $lang->user->menu->profile  = array('link' => 'Profile|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
+$lang->user->menu->browse   = array('link' => 'Manage user|company|browse|', 'float' => 'right');
 
 /* Admin menu. */
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');

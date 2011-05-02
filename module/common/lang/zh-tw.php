@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 1557 2011-03-11 15:13:10Z wwccss $
+ * @version     $Id: zh-tw.php 1829 2011-05-02 06:42:18Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -34,7 +34,7 @@ $lang->close        = '關閉';
 $lang->link         = '關聯';
 $lang->unlink       = '移除';
 $lang->import       = '導入';
-$lang->exportCSV    = '導出csv';
+$lang->export       = '導出';
 $lang->setFileName  = '請輸入檔案名：';
 $lang->activate     = '激活';
 $lang->submitting   = '稍候...';
@@ -99,6 +99,11 @@ $lang->searchObjects['testtask']    = 'T:測試任務';
 $lang->searchObjects['doc']         = 'D:文檔';
 $lang->searchTips                   = '輸入編號';
 
+/* 導出檔案的類型列表。*/
+$lang->exportFileTypeList['csv']  = 'csv';
+$lang->exportFileTypeList['xml']  = 'xml';
+$lang->exportFileTypeList['html'] = 'html';
+
 /* 風格列表。*/
 $lang->themes['default'] = '預設';
 $lang->themes['green']   = '綠色';
@@ -116,6 +121,7 @@ $lang->my->menu->bug      = '我的Bug|my|bug|';
 $lang->my->menu->testask  = '我的測試|my|testtask|';
 $lang->my->menu->story    = '我的需求|my|story|';
 $lang->my->menu->project  = '我的項目|my|project|';
+$lang->my->menu->dynamic  = '我的動態|my|dynamic|';
 $lang->my->menu->profile  = array('link' => '我的檔案|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu         = $lang->my->menu;
 
@@ -181,6 +187,7 @@ $lang->company->menu->browseUser  = array('link' => '用戶列表|company|browse
 $lang->company->menu->dept        = array('link' => '部門維護|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '權限分組|group|browse', 'subModule' => 'group');
 $lang->company->menu->edit        = array('link' => '公司管理|company|edit');
+$lang->company->menu->dynamic     = '組織動態|company|dynamic|';
 $lang->company->menu->addGroup    = array('link' => '添加分組|group|create', 'float' => 'right');
 $lang->company->menu->addUser     = array('link' => '添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
@@ -192,15 +199,18 @@ $lang->user->menu->todo     = array('link' => 'TODO列表|user|todo|account=%s',
 $lang->user->menu->task     = '任務列表|user|task|account=%s';
 $lang->user->menu->bug      = 'Bug列表|user|bug|account=%s';
 $lang->user->menu->project  = '項目列表|user|project|account=%s';
+$lang->user->menu->dynamic  = '用戶動態|user|dynamic|type=today&account=%s';
 $lang->user->menu->profile  = array('link' => '用戶信息|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse   = array('link' => '用戶管理|company|browse|', 'float' => 'right');
 
 /* 後台管理菜單設置。*/
-$lang->admin->menu->trashes = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
-$lang->admin->menu->convert = array('link' => '從其他系統導入|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
+$lang->admin->menu->convert   = array('link' => '從其他系統導入|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
+$lang->extension->menu      = $lang->admin->menu;
 
 /*菜單設置：分組設置。*/
 $lang->menugroup->release     = 'product';
@@ -219,6 +229,7 @@ $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
+$lang->menugroup->extension   = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
@@ -238,7 +249,7 @@ $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六�
 
 /* 分頁信息。*/
 $lang->pager->noRecord  = "暫時沒有記錄";
-$lang->pager->digest    = "共<strong>%s</strong>條記錄,每頁 <strong>%s</strong>條，頁面：<strong>%s/%s</strong> ";
+$lang->pager->digest    = "共<strong>%s</strong>條記錄，每頁 <strong>%s</strong>條，頁面：<strong>%s/%s</strong> ";
 $lang->pager->first     = "首頁";
 $lang->pager->pre       = "上頁";
 $lang->pager->next      = "下頁";

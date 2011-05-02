@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 1561 2011-03-12 02:02:52Z wwccss $
+ * @version     $Id: zh-tw.php 1825 2011-05-02 05:54:29Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -17,9 +17,18 @@ $lang->action->objectType = '對象類型';
 $lang->action->objectID   = '對象ID';
 $lang->action->objectName = '對象名稱';
 $lang->action->actor      = '操作者';
+$lang->action->action     = '動作';
 $lang->action->date       = '日期';
-$lang->action->trashTips  = '提示：禪道系統的刪除都是標記刪除，並沒有真正從資料庫裡面刪除數據。這樣做是為了系統數據的完整和安全。
-                             因此如果你確定要刪除某一條數據，可以使用phpmyadmin等管理工具，進資料庫刪除。';
+$lang->action->trashTips  = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
+
+$lang->action->dynamic->today     = '今天';
+$lang->action->dynamic->yesterday = '昨天';
+$lang->action->dynamic->twoDaysAgo= '前天';
+$lang->action->dynamic->thisWeek  = '本週';
+$lang->action->dynamic->lastWeek  = '上周';
+$lang->action->dynamic->thisMonth = '本月';
+$lang->action->dynamic->lastMonth = '上月';
+$lang->action->dynamic->all       = '所有';
 
 $lang->action->objectTypes['product']     = '產品';
 $lang->action->objectTypes['story']       = '需求';
@@ -34,6 +43,7 @@ $lang->action->objectTypes['testtask']    = '測試任務';
 $lang->action->objectTypes['user']        = '用戶';
 $lang->action->objectTypes['doc']         = '文檔';
 $lang->action->objectTypes['doclib']      = '文檔庫';
+$lang->action->objectTypes['todo']        = 'TODO';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc->common      = '$date, <strong>$action</strong> by <strong>$actor</strong>' . "\n";
@@ -47,7 +57,7 @@ $lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 刪除。
 $lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 刪除了附件：<strong><i>$extra</i></strong>' . "\n";
 $lang->action->desc->erased      = '$date, 由 <strong>$actor</strong> 刪除。' . "\n";
 $lang->action->desc->undeleted   = '$date, 由 <strong>$actor</strong> 還原。' . "\n";
-$lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 發表評論。' . "\n";
+$lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 添加備註。' . "\n";
 $lang->action->desc->activated   = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->moved       = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"' . "\n";
 $lang->action->desc->confirmed   = '$date, 由 <strong>$actor</strong> 確認需求變動，最新版本為<strong>#$extra</strong>' . "\n";
