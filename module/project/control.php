@@ -150,21 +150,14 @@ class project extends control
                 if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
             }
             $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
-            $this->session->set('taskReport', $this->session->taskQuery);
-            $tasks     = $this->project->getSearchTasks($taskQuery, $pager, $orderBy);
-        }
-
-        if($browseType != 'needconfirm')
-        {
-            $sql = explode('WHERE', $this->dao->get());
-            $sql = explode('ORDER', $sql[1]);
-            $this->session->set('taskReportCondition', $sql[0]);
+            $this->session->set('taskReportCondition', $taskQuery);
+            $tasks = $this->project->getSearchTasks($taskQuery, $pager, $orderBy);
         }
 
        /* Build the search form. */
         $this->config->project->search['actionURL'] = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->config->project->search['queryID']   = $queryID;
-        $this->config->project->search['params']['project']['values']       = array(''=>'', $projectID => $this->projects[$projectID], 'all' => $this->lang->project->allProject);
+        $this->config->project->search['params']['project']['values'] = array(''=>'', $projectID => $this->projects[$projectID], 'all' => $this->lang->project->allProject);
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->project->search);
 
         /* Assign. */

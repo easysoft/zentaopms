@@ -350,7 +350,7 @@ class taskModel extends model
 
         $sql = explode('WHERE', $this->dao->get());
         $sql = explode('ORDER', $sql[1]);
-        $this->session->set('taskReport', $sql[0]);
+        $this->session->set('taskReportCondition', $sql[0]);
 
         if($tasks) return $this->processTasks($tasks);
         return array();
@@ -581,7 +581,7 @@ class taskModel extends model
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        $projects = $this->loadModel('project')->getPairs();
+        $projects = $this->loadModel('project')->getPairs('all');
         foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
         return $datas;
     }
@@ -720,6 +720,9 @@ class taskModel extends model
             ->groupBy('finishedBy')
             ->orderBy('value DESC')
             ->fetchAll('name');
+        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
+        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+
         return $datas;
     }
 
@@ -731,12 +734,21 @@ class taskModel extends model
      */
     public function getDataOftasksPerClosedReason()
     {
-        return $this->dao->select('closedReason AS name, COUNT(*) AS value')
+        $datas = $this->dao->select('closedReason AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->session->taskReportCondition)
             ->groupBy('closedReason')
             ->orderBy('value DESC')
             ->fetchAll('name');
+
+        foreach($datas as $closedReason => $data)
+        {
+            if(isset($this->lang->task->reasonList[$closedReason]))
+            {
+                $data->name = $this->lang->task->reasonList[$closedReason];
+            }
+        }
+        return $datas;
     }
 
     /**
@@ -747,13 +759,21 @@ class taskModel extends model
      */
     public function getDataOffinishedTasksPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(finishedDate, "%Y-%m-%d") AS name, COUNT(finishedDate) AS value')
+        $datas= $this->dao->select('DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->session->taskReportCondition)
-            ->groupBy('finishedDate')
-            ->having('name != 0000-00-00')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
+            ->groupBy('date')
+            ->having('date != "0000-00-00"')
+            ->orderBy('finishedDate')
+            ->fetchAll();
+
+        /* Change data to name, because the task table has name field, conflicts. */
+        foreach($datas as $data)
+        {
+            $data->name = $data->date;
+            unset($data->date);
+        }
+        return $datas;
     }
 
     /**
