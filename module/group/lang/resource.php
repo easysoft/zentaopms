@@ -141,6 +141,7 @@ $lang->resource->bug->resolve             = 'resolve';
 $lang->resource->bug->activate            = 'activate';
 $lang->resource->bug->close               = 'close';
 $lang->resource->bug->report              = 'reportChart';
+$lang->resource->bug->export              = 'export';
 $lang->resource->bug->confirmStoryChange  = 'confirmStoryChange';
 $lang->resource->bug->delete              = 'delete';
 $lang->resource->bug->saveTemplate        = 'saveTemplate';
@@ -296,6 +297,7 @@ $lang->changelog['1.4'][]   = 'search-select';
 $lang->changelog['1.5'][]   = 'task-batchClose';
 
 $lang->changelog['2.0'][]   = 'my-dynamic';
+$lang->changelog['2.0'][]   = 'bug-export';
 $lang->changelog['2.0'][]   = 'story-export';
 $lang->changelog['2.0'][]   = 'story-reportChart';
 $lang->changelog['2.0'][]   = 'task-export';
