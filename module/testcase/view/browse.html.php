@@ -88,13 +88,7 @@ var moduleID   = '<?php echo $moduleID;?>';
           </tr>
         <?php endforeach;?>
         </thead>
-        <tfoot>
-         <tr>
-           <td colspan=7>
-               <?php $pager->show();?>
-           </td>
-         </tr>
-        </tfoot>
+        <tfoot><tr><td colspan='7'><?php $pager->show();?></td></tr></tfoot>
       </table>
     </td>              
   </tr>              
