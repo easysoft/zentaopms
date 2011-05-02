@@ -15,7 +15,7 @@
   <table class='table-1'>
     <caption><?php echo $lang->export;?></caption>
     <tr>
-      <td>
+      <td class='a-center' style='padding-top:30px;'>
         <?php echo html::input('fileName');?>
         <?php echo html::select('fileType', $lang->exportFileTypeList);?> 
         <?php echo html::submitButton();?>
