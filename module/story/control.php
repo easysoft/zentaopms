@@ -660,7 +660,14 @@ class story extends control
                 $story->assignedDate   = substr($story->assignedDate, 0, 10);
                 $story->lastEditedBy   = $users[$story->lastEditedBy];
                 $story->lastEditedDate = substr($story->lastEditedDate, 0, 10);
-                $story->reviewedBy     = $users[$story->reviewedBy];
+                
+                $story->reviewedBy     = trim(trim($story->reviewedBy), ',');
+                $reviewedBys           = explode(',', $story->reviewedBy);
+                $story->reviewedBy     = '';
+                foreach($reviewedBys as $reviewedBy)
+                {
+                    if(isset($users[$reviewedBy])) $story->reviewedBy .= $users[$reviewedBy] . ',';
+                }
                 $story->closedBy       = $users[$story->closedBy]; 
                 $story->closedDate     = substr($story->closedDate, 0, 10);
                 $story->closedReason   = $this->lang->story->reasonList[$story->closedReason];

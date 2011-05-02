@@ -853,12 +853,19 @@ class bug extends control
                 $bug->pri            = $this->lang->bug->priList[$bug->pri];
                 $bug->type           = $this->lang->bug->typeList[$bug->type];
                 $bug->status         = $this->lang->bug->statusList[$bug->status];
-                $bug->mailto         = $users[$bug->mailto];
+                
+                $bug->mailto = trim(trim($bug->mailto), ',');
+                $mailtos     = explode(',', $bug->mailto);
+                $bug->mailto = '';
+                foreach($mailtos as $mailto)
+                {
+                    if(isset($users[$mailto])) $bug->mailto .= $users[$mailto] . ',';
+                }
                 $bug->openedBy       = $users[$bug->openedBy];
                 $bug->openedDate     = substr($bug->openedDate, 0, 10);
-                $bug->assignedTo     = $users[$bug->assignedTo];
+                if(isset($users[$bug->assignedTo]))$bug->assignedTo = $users[$bug->assignedTo];
                 $bug->assignedDate   = substr($bug->assignedDate, 0, 10);
-                $bug->resolvedBy     = $users[$bug->resolvedBy];
+                if(isset($users[$bug->resolvedBy])) $bug->resolvedBy = $users[$bug->resolvedBy];
                 $bug->resolution     = $this->lang->bug->resolutionList[$bug->resolution];
                 $bug->resolvedDate   = substr($bug->resolvedDate, 0, 10);
                 $bug->closedBy       = $users[$bug->closedBy];
