@@ -188,13 +188,5 @@ $lang->story->report->storysPerPri->graph->xAxisName          = 'Priority';
 $lang->story->report->storysPerOpenedBy->graph->xAxisName     = 'Opened by';
 $lang->story->report->storysPerAssignedTo->graph->xAxisName   = 'Assigned to';
 $lang->story->report->storysPerClosedReason->graph->xAxisName = 'Closed reason';
-
-$lang->story->report->storysPerEstimate->swf                = 'column2d';
-$lang->story->report->storysPerEstimate->height             = 400;
-$lang->story->report->storysPerEstimate->graph->xAxisName   = 'Estimate';
-$lang->story->report->storysPerEstimate->graph->rotateNames = 1;
-
-$lang->story->report->storysPerChange->swf                 = 'column2d';
-$lang->story->report->storysPerChange->height              = 400;
-$lang->story->report->storysPerChange->graph->xAxisName    = 'Change';
-$lang->story->report->storysPerChange->graph->rotateNames  = 1;
+$lang->story->report->storysPerEstimate->graph->xAxisName     = 'Estimate';
+$lang->story->report->storysPerChange->graph->xAxisName       = 'Change';

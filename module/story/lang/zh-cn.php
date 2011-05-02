@@ -188,13 +188,5 @@ $lang->story->report->storysPerPri->graph->xAxisName          = '优先级';
 $lang->story->report->storysPerOpenedBy->graph->xAxisName     = '由谁创建';
 $lang->story->report->storysPerAssignedTo->graph->xAxisName   = '当前指派';
 $lang->story->report->storysPerClosedReason->graph->xAxisName = '关闭原因';
-
-$lang->story->report->storysPerEstimate->swf                = 'column2d';
-$lang->story->report->storysPerEstimate->height             = 400;
-$lang->story->report->storysPerEstimate->graph->xAxisName   = '预计时间';
-$lang->story->report->storysPerEstimate->graph->rotateNames = 1;
-
-$lang->story->report->storysPerChange->swf                 = 'column2d';
-$lang->story->report->storysPerChange->height              = 400;
-$lang->story->report->storysPerChange->graph->xAxisName    = '变更次数';
-$lang->story->report->storysPerChange->graph->rotateNames  = 1;
+$lang->story->report->storysPerEstimate->graph->xAxisName     = '预计时间';
+$lang->story->report->storysPerChange->graph->xAxisName       = '变更次数';
