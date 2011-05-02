@@ -49,6 +49,7 @@ $lang->product->whitelist = '分组白名单';
 $lang->product->moduleStory = '按模块浏览';
 $lang->product->searchStory = '搜索';
 $lang->product->allStory    = '全部需求';
+$lang->product->allProduct  = '全部产品';
 
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';

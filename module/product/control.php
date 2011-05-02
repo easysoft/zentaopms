@@ -61,7 +61,6 @@ class product extends control
      */
     public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('bug');
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 
@@ -145,7 +144,7 @@ class product extends control
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
-        $this->config->product->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->bug->allProduct);
+        $this->config->product->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->product->allProduct);
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);
 
         $this->view->productID     = $productID;

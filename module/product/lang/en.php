@@ -49,6 +49,7 @@ $lang->product->whitelist = 'Whitelist';
 $lang->product->moduleStory = 'By module';
 $lang->product->searchStory = 'By search';
 $lang->product->allStory    = 'All story';
+$lang->product->allProduct  = 'All products';
 
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
