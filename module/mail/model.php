@@ -56,6 +56,7 @@ class mailModel extends model
         $this->mta->Username  = $this->config->mail->smtp->username;
         $this->mta->Password  = $this->config->mail->smtp->password;
         if(isset($this->config->mail->smtp->port)) $this->mta->Port = $this->config->mail->smtp->port;
+        if(empty($this->config->mail->smtp->secure))$this->mta->SMTPSecure = strtolower($this->config->mail->smtp->secure);
     }
 
     /**
