@@ -369,7 +369,7 @@ class user extends control
                     }
                     else
                     {
-                        die(js::locate($this->config->default->module, 'parent'));
+                        die(js::locate($this->createLink($this->config->default->module), 'parent'));
                     }
                 }
                 else
