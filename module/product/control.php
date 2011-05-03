@@ -133,12 +133,10 @@ class product extends control
             $stories = $this->story->getByQuery($queryProductID, $storyQuery, $orderBy, $pager);
         }
 
-        /* Set session for report Query*/
-        $storyReport = $this->session->reportQuery == false ? $this->dao->get() : $this->session->reportQuery;
-        $sql = explode('WHERE', $storyReport);
+        /* Set session for report query. */
+        $sql = explode('WHERE', $this->session->storyReport);
         $sql = explode('ORDER', $sql[1]);
         $this->session->set('storyReport', str_replace(array('t1.','t2.'), '', $sql[0]));
-        $this->session->set('reportQuery', '');
 
         /* Build search form. */
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
