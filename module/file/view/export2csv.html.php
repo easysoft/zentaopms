@@ -14,5 +14,11 @@
 echo '"'. implode('","', $fields) . '"' . "\n";
 foreach($rows as $row)
 {
-    echo '"'. implode('","', (array)$row) . '"' . "\n";
+    echo '"';
+    foreach($fields as $fieldName => $fieldLabel)
+    {
+        isset($row->$fieldName) ? print($row->$fieldName) : print('');
+        echo '","';
+    }
+    echo '"' . "\n";
 }
