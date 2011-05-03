@@ -1,7 +1,6 @@
 $(function()
 {
     $('#' + browseType + 'Tab').addClass('active');
-    if(browseType == 'bysearch')search();
 });
 
 $(document).ready(function() 

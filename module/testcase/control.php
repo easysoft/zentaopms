@@ -368,103 +368,103 @@ class testcase extends control
      */
     public function export($productID, $orderBy)
     {
-        $fields   = array();
-        $users    = $this->loadModel('user')->getPairs('noletter');
-        $products = $this->loadModel('product')->getPairs();
-        $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->fetchPairs();
-        $relatedStories = $this->dao->select('id, title')->from(TABLE_STORY)->fetchPairs();
-        $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->fetchPairs();
-
-        /* get the fields of task module from lang. */
-        $fields = array(
-            'id'             => $this->lang->testcase->id, 
-            'step'           => $this->lang->testcase->stepDesc . $this->lang->testcase->stepExpect,
-            'product'        => $this->lang->testcase->product, 
-            'module'         => $this->lang->testcase->module, 
-            'story'          => $this->lang->testcase->story,
-            'storyVersion'   => $this->lang->testcase->storyVersion,
-            'title'          => $this->lang->testcase->title, 
-            'keywords'       => $this->lang->testcase->keywords, 
-            'pri'            => $this->lang->testcase->pri, 
-            'type'           => $this->lang->testcase->type, 
-            'stage'          => $this->lang->testcase->stage, 
-            'howRun'         => $this->lang->testcase->howRun, 
-            'scriptedBy'     => $this->lang->testcase->scriptedBy, 
-            'scriptedDate'   => $this->lang->testcase->scriptedDate, 
-            'scriptStatus'   => $this->lang->testcase->scriptedStatus, 
-            'scriptLocation' => $this->lang->testcase->scriptedLocation, 
-            'status'         => $this->lang->testcase->status, 
-            'frequency'      => $this->lang->testcase->frequency,
-            'order'          => $this->lang->testcase->order, 
-            'openedBy'       => $this->lang->testcase->openedBy, 
-            'openedDate'     => $this->lang->testcase->openedDate, 
-            'lastEditedBy'   => $this->lang->testcase->lastEditedBy, 
-            'lastEditedDate' => $this->lang->testcase->lastEditedDate, 
-            'version'        => $this->lang->testcase->version, 
-            'linkCase'       => $this->lang->testcase->linkCase
-        );
-
         if($_POST)
         {
-            $testcases = $this->testcase->getByQuery($productID, $this->session->testcaseReport, $orderBy);
+            $caseLang   = $this->lang->testcase;
+            $caseConfig = $this->config->testcase;
 
-            foreach($testcases as $testcase)
+            /* Create field lists. */
+            $fields = explode(',', $caseConfig->exportFields);
+            foreach($fields as $key => $fieldName)
             {
-                $step = '';
-                $i    = 1;
-                $testcaseSteps = $this->dao->select('`desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->eq($testcase->id)->fetchAll();
-                foreach($testcaseSteps as $testcaseStep)
-                {
-                    $step   .= $i . '、' . $this->lang->testcase->stepDesc . ':' . $testcaseStep->desc . '<br />' . $this->lang->testcase->stepExpect . ':' . $testcaseStep->expect . "<br />";
-                    $i++;
-                }
-                $testcase->step = $step;
+                $fieldName = trim($fieldName);
+                $fields[$fieldName] = isset($caseLang->$fieldName) ? $caseLang->$fieldName : $fieldName;
+                unset($fields[$key]);
+            }
 
-                if($_POST['fileType'] == 'html')
+            /* Get cases. */
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')->where($this->session->testcaseReport)->orderBy($orderBy)->fetchAll('id');
+
+            /* Get users, products and projects. */
+            $users    = $this->loadModel('user')->getPairs('noletter');
+            $products = $this->loadModel('product')->getPairs();
+
+            /* Get related objects id lists. */
+            $relatedModuleIdList = array();
+            $relatedStoryIdList  = array();
+            $relatedCaseIdList   = array();
+
+            foreach($cases as $case)
+            {
+                $relatedModuleIdList[$case->module] = $case->module;
+                $relatedStoryIdList[$case->story]   = $case->story;
+                $relatedCaseIdList[$case->linkCase] = $case->linkCase;
+
+                /* Process link cases. */
+                $linkCases = explode(',', $case->linkCase);
+                foreach($linkCases as $linkCaseID)
                 {
-                    $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->eq($testcase->id)->fetchAll();
-                    if($legendAttatchs)
+                    if($linkCaseID) $relatedCaseIdList[$linkCaseID] = trim($linkCaseID);
+                }
+            }
+
+            /* Get related objects title or names. */
+            $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
+            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+            $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
+            $relatedSteps   = $this->dao->select('`case`, version, `desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case');
+
+            foreach($cases as $case)
+            {
+                $case->steps = '';
+                if(isset($relatedSteps[$case->id]))
+                {
+                    $i = 1;
+                    foreach($relatedSteps[$case->id] as $step)
                     {
-                        foreach($legendAttatchs as $legendAttatch) 
-                        {
-                            $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$testcase->company/" . $legendAttatch->pathname;
-                            $testcase->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
-                        }
+                        $case->steps .= $i . ":" . $step->desc . '<br />' . $caseLang->stepExpect . ':' . $step->expect . '<br />';
+                        $i ++;
+                        if($step->version != $case->version) break;
                     }
                 }
-                else if($_POST['fileType'] == 'csv')
+
+                if($this->post->fileType == 'csv')
                 {
-                    $testcase->company = str_replace("&lt;br /&gt;", "\n", $testcase->company);
-                    $testcase->company = str_replace("<br />", "\n", $testcase->company);
-                    $testcase->company = str_replace("&nbsp;", " ", $testcase->company);
-                    $testcase->company = str_replace('"', '""', $testcase->company);
+                    $case->steps = str_replace('<br />', "\n", $case->steps);
+                    $case->steps = str_replace('"', '""', $case->steps);
                 }
 
-                /* drop some field that is not needed. */
-                unset($testcase->path);
-
                 /* fill some field with useful value. */
-                $testcase->module   = isset($relatedModules[$testcase->module]) ? $relatedModules[$testcase->module] : '';
-                $testcase->story    = isset($relatedStories[$testcase->story]) ? $relatedStories[$testcase->story] : '';
-                $testcase->linkCase = isset($relatedCases[$testcase->linkCase]) ? $relatedCases[$testcase->linkCase] : '';
+                if(isset($products[$case->product]))      $case->product = $products[$case->product];
+                if(isset($relatedModules[$case->module])) $case->module  = $relatedModules[$case->module];
+                if(isset($relatedStories[$case->story]))  $case->story   = $relatedStories[$case->story];
 
-                $testcase->product        = $products[$testcase->product];
-                $testcase->pri            = $this->lang->testcase->priList[$testcase->pri];
-                $testcase->type           = $this->lang->testcase->typeList[$testcase->type];
-                $testcase->stage          = $this->lang->testcase->stageList[$testcase->stage];
-                $testcase->scriptedBy     = $users[$testcase->scriptedBy] ;
-                $testcase->status         = $this->lang->testcase->statusList[$testcase->status];
-                $testcase->openedBy       = $users[$testcase->openedBy];
-                $testcase->openedDate     = substr($testcase->openedDate, 0, 10);
-                $testcase->lastEditedBy   = $users[$testcase->lastEditedBy];
-                $testcase->lastEditedDate = substr($testcase->lastEditedDate, 0, 10);
+                if(isset($caseLang->priList[$case->pri]))       $case->pri          = $caseLang->priList[$case->pri];
+                if(isset($caseLang->typeList[$case->type]))     $case->type         = $caseLang->typeList[$case->type];
+                if(isset($caseLang->stageList[$case->stage]))   $case->stage        = $caseLang->stageList[$case->stage];
+                if(isset($caseLang->statusList[$case->status])) $case->status       = $caseLang->statusList[$case->status];
+                if(isset($users[$case->openedBy]))              $case->openedBy     = $users[$case->openedBy];
+                if(isset($users[$case->lastEditedBy]))          $case->lastEditedBy = $users[$case->lastEditedBy];
+
+                $case->openedDate     = substr($case->openedDate, 0, 10);
+                $case->lastEditedDate = substr($case->lastEditedDate, 0, 10);
+
+                if($case->linkCase)
+                {
+                    $tmpLinkCases = array();
+                    $linkCaseIdList = explode(',', $case->linkCase);
+                    foreach($linkCaseIdList as $linkCaseID)
+                    {
+                        $linkCaseID = trim($linkCaseID);
+                        $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] : $linkCaseID;
+                    }
+                    $case->linkCase = join("; \n", $tmpLinkCases);
+                }
             }
 
             $this->post->set('fields', $fields);
-            $this->post->set('rows', $testcases);
-            if($this->post->fileType == 'csv')  $this->fetch('file', 'export2CSV', $_POST);
-            if($this->post->fileType == 'xml')  $this->fetch('file', 'export2XML', $_POST);
-            if($this->post->fileType == 'html') $this->fetch('file', 'export2HTML', $_POST);
+            $this->post->set('rows', $cases);
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
         $this->display();

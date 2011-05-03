@@ -11,6 +11,7 @@ if($config->mail->mta == 'smtp')
     $config->mail->smtp->auth     = true;       // Need auth or not.
     $config->mail->smtp->host     = '';         // The smtp server host address.
     $config->mail->smtp->port     = '';         // The smtp server host port.
+    $config->mail->smtp->secure   = '';         // The type to encode datas, 'ssl' or 'tls' allowed
     $config->mail->smtp->username = '';         // The smtp user, may be a full email adress.
     $config->mail->smtp->password = '';         // The smtp user's password.
 }

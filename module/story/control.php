@@ -552,132 +552,156 @@ class story extends control
      */
     public function export($productID, $orderBy)
     { 
-        $relatedStories = '';
-        $linkStories    = array();
-        $childStories   = array();
-        $fields         = array();
-
-        $users    = $this->loadModel('user')->getPairs('noletter');
-        $products = $this->loadModel('product')->getPairs();
-
-        /* get the fields of story module from lang. */
-        $fields = array(
-            'id'             => $this->lang->story->id, 
-            'spec'           => $this->lang->story->spec, 
-            'product'        => $this->lang->story->product, 
-            'module'         => $this->lang->story->module, 
-            'plan'           => $this->lang->story->plan, 
-            'title'          => $this->lang->story->title, 
-            'keywords'       => $this->lang->story->keywords, 
-            'pri'            => $this->lang->story->pri, 
-            'estimate'       => $this->lang->story->estimate, 
-            'status'         => $this->lang->story->status, 
-            'stage'          => $this->lang->story->stage, 
-            'mailto'         => $this->lang->story->mailto, 
-            'openedBy'       => $this->lang->story->openedBy, 
-            'openedDate'     => $this->lang->story->openedDate, 
-            'assignedTo'     => $this->lang->story->assignedTo,
-            'assignedDate'   => $this->lang->story->assignedDate, 
-            'lastEditedBy'   => $this->lang->story->lastEditedBy,
-            'lastEditedDate' => $this->lang->story->lastEditedDate, 
-            'reviewedBy'     => $this->lang->story->reviewedBy, 
-            'reviewedDate'   => $this->lang->story->reviewedDate, 
-            'closedBy'       => $this->lang->story->closedBy, 
-            'closedDate'     => $this->lang->story->closedDate, 
-            'closedReason'   => $this->lang->story->closedReason, 
-            'childStories'   => $this->lang->story->childStories, 
-            'linkStories'    => $this->lang->story->linkStories, 
-            'duplicateStory' => $this->lang->story->duplicateStory, 
-            'version'        => $this->lang->story->version, 
-            'planTitle'      => $this->lang->story->plan, 
-            'legendAttatch'  => $this->lang->story->legendAttatch,
-        );
-
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
-            $stories = $this->story->getByQuery($productID, $this->session->storyReport, $orderBy);
-            foreach($stories as $story)
+            $storyLang   = $this->lang->story;
+            $storyConfig = $this->config->story;
+
+            /* Create field lists. */
+            $fields = explode(',', $storyConfig->list->exportFields);
+            foreach($fields as $key => $fieldName)
             {
-                $relatedStories .= $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory . ',';
+                $fieldName = trim($fieldName);
+                $fields[$fieldName] = isset($storyLang->$fieldName) ? $storyLang->$fieldName : $fieldName;
+                unset($fields[$key]);
             }
-            $relatedStories  = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($relatedStories)->fetchPairs('id', 'title');
+
+            /* Get stories. */
+            $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyReport)->orderBy($orderBy)->fetchAll('id');
+
+            /* Get users, products and projects. */
+            $users    = $this->loadModel('user')->getPairs('noletter');
+            $products = $this->loadModel('product')->getPairs();
+
+            /* Get related objects id lists. */
+            $relatedModuleIdList = array();
+            $relatedStoryIdList  = array();
+            $relatedPlanIdList   = array();
 
             foreach($stories as $story)
             {
-                $childStories = explode(',', $story->childStories);
-                $linkStories  = explode(',', $story->linkStories);
-                $module       = $this->dao->select('name')->from(TABLE_MODULE)->where('id')->eq($story->module)->fetch();
-                $storySpec    = $this->dao->select('spec')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->fetch();
+                $relatedModuleIdList[$story->module] = $story->module;
+                $relatedPlanIdList[$story->plan]     = $story->plan;
 
-                if($_POST['fileType'] == 'html')
+                /* Process related stories. */
+                $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
+                $relatedStories = explode(',', $relatedStories);
+                foreach($relatedStories as $storyID)
                 {
-                    $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($story->id)->fetchAll();
+                    if($storyID) $relatedStoryIdList[$storyID] = trim($storyID);
+                }
+            }
 
-                    foreach($legendAttatchs as $legendAttatch) 
-                    {
-                        $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$story->company/" . $legendAttatch->pathname;
-                        $story->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
-                    }
-                }
-                else if($_POST['fileType'] == 'csv')
+            /* Get related objects title or names. */
+            $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
+            $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in($relatedPlanIdList)->fetchPairs();
+            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in(@array_keys($stories))->fetchGroup('objectID');
+            $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in(@array_keys($stories))->orderBy('version desc')->fetchGroup('story');
+
+            foreach($stories as $story)
+            {
+                $story->spec   = '';
+                $story->verify = '';
+                if(isset($relatedSpecs[$story->id]))
                 {
-                    if(isset($storySpec->spec))
-                    {
-                        $storySpec->spec = str_replace("&lt;br /&gt;", "\n", $storySpec->spec);
-                        $storySpec->spec = str_replace("<br />", "\n", $storySpec->spec);
-                        $storySpec->spec = str_replace("&nbsp;", " ", $storySpec->spec);
-                        $storySpec->spec = str_replace('"', '""', $storySpec->spec);
-                    }
+                    $storySpec     = $relatedSpecs[$story->id][0];
+                    $story->title  = $storySpec->title;
+                    $story->spec   = $storySpec->spec;
+                    $story->verify = $storySpec->verify;
                 }
 
-                foreach($childStories as $childStory)
+                if($this->post->fileType == 'csv')
                 {
-                    if(isset($relatedStories[$childStory])) $story->childStories .= $relatedStories[$childStory];
-                }
-                foreach($linkStories as $linkStory)
-                {
-                    if(isset($relatedStories[$linkStory])) $story->linkStories .=  $relatedStories[$linkStory];
-                }
-                if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
+                    $story->spec = htmlspecialchars_decode($story->spec);
+                    $story->spec = str_replace("<br />", "\n", $story->spec);
+                    $story->spec = str_replace('"', '""', $story->spec);
 
-                /* drop some field that is not needed. */
-                unset($story->fromBug);
-                unset($story->type);
-                unset($story->toBug);
-                unset($story->deleted);
+                    $story->verify = htmlspecialchars_decode($story->verify);
+                    $story->verify = str_replace("<br />", "\n", $story->verify);
+                    $story->verify = str_replace('"', '""', $story->verify);
+                }
 
                 /* fill some field with useful value. */
-                $story->company        = $storySpec ? $storySpec->spec : '';
-                $story->product        = $products[$story->product];
-                $story->pri            = $this->lang->story->priList[$story->pri];
-                $story->module         = $module ? $module->name : '';
-                $story->status         = $this->lang->story->statusList[$story->status];
-                $story->stage          = $this->lang->story->stageList[$story->stage];
-                $story->openedBy       = $users[$story->openedBy];
+                if(isset($products[$story->product]))              $story->product        = $products[$story->product];
+                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module];
+                if(isset($relatedPlans[$story->plan]))             $story->plan           = $relatedPlans[$story->plan];
+                if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
+
+                if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
+                if(isset($storyLang->statusList[$story->status]))       $story->status       = $storyLang->statusList[$story->status];
+                if(isset($storyLang->stageList[$story->stage]))         $story->stage        = $storyLang->stageList[$story->stage];
+                if(isset($storyLang->reasonList[$story->closedReason])) $story->closedReason = $storyLang->reasonList[$story->closedReason];
+
+                if(isset($users[$story->openedBy]))     $story->openedBy     = $users[$story->openedBy];
+                if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo];
+                if(isset($users[$story->lastEditedBy])) $story->lastEditedBy = $users[$story->lastEditedBy];
+                if(isset($users[$story->closedBy]))     $story->closedBy     = $users[$story->closedBy]; 
+
                 $story->openedDate     = substr($story->openedDate, 0, 10);
-                $story->assignedTo     = $users[$story->assignedTo];
                 $story->assignedDate   = substr($story->assignedDate, 0, 10);
-                $story->lastEditedBy   = $users[$story->lastEditedBy];
                 $story->lastEditedDate = substr($story->lastEditedDate, 0, 10);
-                
-                $story->reviewedBy     = trim(trim($story->reviewedBy), ',');
-                $reviewedBys           = explode(',', $story->reviewedBy);
-                $story->reviewedBy     = '';
+                $story->closedDate     = substr($story->closedDate, 0, 10);
+
+
+                if($story->linkStories)
+                {
+                    $tmpLinkStories = array();
+                    $linkStoriesIdList = explode(',', $story->linkStories);
+                    foreach($linkStoriesIdList as $linkStoryID)
+                    {
+                        $linkStoryID = trim($linkStoryID);
+                        $tmpLinkStories[] = isset($relatedStories[$linkStoryID]) ? $relatedStories[$linkStoryID] : $linkStoryID;
+                    }
+                    $story->linkStories = join("; \n", $tmpLinkStories);
+                }
+
+                if($story->childStories)
+                {
+                    $tmpChildStories = array();
+                    $childStoriesIdList = explode(',', $story->childStories);
+                    foreach($childStoriesIdList as $childStoryID)
+                    {
+                        $childStoryID = trim($childStoryID);
+                        $tmpChildStories[] = isset($relatedStories[$childStoryID]) ? $relatedStories[$childStoryID] : $childStoryID;
+                    }
+                    $story->childStories = join("; \n", $tmpChildStories);
+                }
+
+                /* Set related files. */
+                if(isset($relatedFiles[$story->id]))
+                {
+                    foreach($relatedFiles[$story->id] as $file)
+                    {
+                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/$story->company/" . $file->pathname;
+                        $story->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
+                    }
+                }
+
+                $story->mailto = trim(trim($story->mailto), ',');
+                $mailtos = explode(',', $story->mailto);
+                $story->mailto = '';
+                foreach($mailtos as $mailto)
+                {
+                    $mailto = trim($mailto);
+                    if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
+                }
+
+                $story->reviewedBy = trim(trim($story->reviewedBy), ',');
+                $reviewedBys = explode(',', $story->reviewedBy);
+                $story->reviewedBy = '';
                 foreach($reviewedBys as $reviewedBy)
                 {
+                    $reviewedBy = trim($reviewedBy);
                     if(isset($users[$reviewedBy])) $story->reviewedBy .= $users[$reviewedBy] . ',';
                 }
-                $story->closedBy       = $users[$story->closedBy]; 
-                $story->closedDate     = substr($story->closedDate, 0, 10);
-                $story->closedReason   = $this->lang->story->reasonList[$story->closedReason];
+
             }
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $stories);
-            if($this->post->fileType == 'csv')  $this->fetch('file', 'export2CSV', $_POST);
-            if($this->post->fileType == 'xml')  $this->fetch('file', 'export2XML', $_POST);
-            if($this->post->fileType == 'html') $this->fetch('file', 'export2HTML', $_POST);
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
         $this->display();

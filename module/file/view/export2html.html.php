@@ -30,10 +30,11 @@ table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}
 <?php
 foreach($rows as $row)
 {
-    echo "<tr>\n";
-    foreach($row as $fieldName => $fieldValue)
+    echo "<tr valign='top'>\n";
+    foreach($fields as $fieldName => $fieldLabel)
     {
-        echo "<td>$fieldValue</td>\n";
+        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+        echo "<td><nobr>$fieldValue</nobr></td>\n";
     }
     echo "</tr>\n";
 }

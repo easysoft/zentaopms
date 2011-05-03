@@ -165,12 +165,6 @@ class bug extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
-        /* save session .*/
-        $sql = $this->dao->get();
-        $sql = explode('WHERE', $sql);
-        $sql = explode('ORDER', $sql[1]);
-        $this->session->set('bugReport', $sql[0]);
-
         /* Process the sql, get the conditon partion, save it to session. Thus the report page can use the same condition. */
         if($browseType != 'needconfirm')
         {
@@ -760,125 +754,169 @@ class bug extends control
      */
     public function export($productID, $orderBy)
     {
-        $fields         = array();
-        $users          = $this->loadModel('user')->getPairs('noletter');
-        $products       = $this->loadModel('product')->getPairs();
-        $projects       = $this->loadModel('project')->getPairs();
-        $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->fetchPairs();
-        $relatedModule  = $this->dao->select('id, name')->from(TABLE_MODULE)->fetchPairs();
-        $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->fetchPairs();
-        $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->fetchPairs();
-        $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->fetchPairs();
-
-        /* get the fields of bug module from lang. */
-        $fields = array(
-            'id'             => $this->lang->bug->id, 
-            'product'        => $this->lang->bug->product, 
-            'module'         => $this->lang->bug->module, 
-            'project'        => $this->lang->bug->project, 
-            'story'          => $this->lang->bug->story, 
-            'storyVersion'   => $this->lang->bug->storyVersion,
-            'task'           => $this->lang->bug->task,
-            'title'          => $this->lang->bug->title,
-            'keywords'       => $this->lang->bug->keywords,
-            'severity'       => $this->lang->bug->severity,
-            'pri'            => $this->lang->bug->pri,
-            'type'           => $this->lang->bug->type,
-            'os'             => $this->lang->bug->os,
-            'browser'        => $this->lang->bug->browser,
-            'hardware'       => $this->lang->bug->hardware,
-            'found'          => $this->lang->bug->found,
-            'steps'          => $this->lang->bug->steps,
-            'status'         => $this->lang->bug->status,
-            'mailto'         => $this->lang->bug->mailto,
-            'openedBy'       => $this->lang->bug->openedBy,
-            'openedDate'     => $this->lang->bug->openedDate,
-            'openedBuild'    => $this->lang->bug->openedBuild,
-            'assignedTo'     => $this->lang->bug->assignedTo,
-            'assignedDate'   => $this->lang->bug->assignedDate,
-            'resolvedBy'     => $this->lang->bug->resolvedBy,
-            'resolution'     => $this->lang->bug->resolution,
-            'resolvedBuild'  => $this->lang->bug->resolvedBuild,
-            'resolvedDate'   => $this->lang->bug->resolvedDate,
-            'colsedBy'       => $this->lang->bug->closedBy,
-            'closedDate'     => $this->lang->bug->closedDate,
-            'duplicateBug'   => $this->lang->bug->duplicateBug,
-            'linkBug'        => $this->lang->bug->linkBug,
-            'case'           => $this->lang->bug->case,
-            'lastEditedBy'   => $this->lang->bug->lastEditedBy,
-            'lastEditedDate' => $this->lang->bug->lastEditedDate,
-        );
-
         if($_POST)
         {
-            $bugs   = $this->bug->getByQuery($productID, $this->session->bugReport, $orderBy);
+            $bugLang   = $this->lang->bug;
+            $bugConfig = $this->config->bug;
+
+            /* Create field lists. */
+            $fields = explode(',', $bugConfig->list->exportFields);
+            foreach($fields as $key => $fieldName)
+            {
+                $fieldName = trim($fieldName);
+                $fields[$fieldName] = isset($bugLang->$fieldName) ? $bugLang->$fieldName : $fieldName;
+                unset($fields[$key]);
+            }
+
+            /* Get bugs. */
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->alias('t1')->where($this->session->bugReportCondition)->orderBy($orderBy)->fetchAll('id');
+
+            /* Get users, products and projects. */
+            $users    = $this->loadModel('user')->getPairs('noletter');
+            $products = $this->loadModel('product')->getPairs();
+            $projects = $this->loadModel('project')->getPairs('all');
+
+            /* Get related objects id lists. */
+            $relatedModuleIdList = array();
+            $relatedStoryIdList  = array();
+            $relatedTaskIdList   = array();
+            $relatedBugIdList    = array();
+            $relatedCaseIdList   = array();
+            $relatedBuildIdList  = array();
 
             foreach($bugs as $bug)
             {
-                if($_POST['fileType'] == 'csv')
+                $relatedModuleIdList[$bug->module]    = $bug->module;
+                $relatedStoryIdList[$bug->story]      = $bug->story;
+                $relatedTaskIdList[$bug->task]        = $bug->task;
+                $relatedCaseIdList[$bug->case]        = $bug->case;
+                $relatedBugIdList[$bug->duplicateBug] = $bug->duplicateBug;
+
+                /* Process link bugs. */
+                $linkBugs = explode(',', $bug->linkBug);
+                foreach($linkBugs as $linkBugID)
                 {
-                    $bug->steps = str_replace("&lt;br /&gt;", "\n", $bug->steps);
+                    if($linkBugID) $relatedBugIdList[$linkBugID] = trim($linkBugID);
+                }
+
+                /* Process builds. */
+                $builds = $bug->openedBuild . ',' . $bug->resolvedBuild;
+                $builds = explode(',', $builds);
+                foreach($builds as $buildID)
+                {
+                    if($buildID) $relatedBuildIdList[$buildID] = trim($buildID);
+                }
+            }
+
+            /* Get related objects title or names. */
+            $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
+            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+            $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
+            $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($relatedBugIdList)->fetchPairs();
+            $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
+            $relatedBuilds  = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
+            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->fetchGroup('objectID');
+
+            foreach($bugs as $bug)
+            {
+                if($this->post->fileType == 'csv')
+                {
+                    $bug->steps = htmlspecialchars_decode($bug->steps);
                     $bug->steps = str_replace("<br />", "\n", $bug->steps);
-                    $bug->steps = str_replace("&nbsp;", " ", $bug->steps);
                     $bug->steps = str_replace('"', '""', $bug->steps);
                 }
-                else if($_POST['fileType'] == 'html')
+
+                /* fill some field with useful value. */
+                if(isset($products[$bug->product]))         $bug->product      = $products[$bug->product];
+                if(isset($projects[$bug->project]))         $bug->project      = $projects[$bug->project];
+                if(isset($relatedModules[$bug->module]))    $bug->module       = $relatedModules[$bug->module];
+                if(isset($relatedStories[$bug->story]))     $bug->story        = $relatedStories[$bug->story];
+                if(isset($relatedTasks[$bug->task]))        $bug->task         = $relatedTasks[$bug->task];
+                if(isset($relatedBugs[$bug->duplicateBug])) $bug->duplicateBug = $relatedBugs[$bug->duplicateBug];
+                if(isset($relatedCases[$bug->case]))        $bug->case         = $relatedCases[$bug->case];
+
+                if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
+                if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
+                if(isset($bugLang->statusList[$bug->status]))         $bug->status     = $bugLang->statusList[$bug->status];
+                if(isset($bugLang->resolutionList[$bug->resolution])) $bug->resolution = $bugLang->resolutionList[$bug->resolution];
+                
+                if(isset($users[$bug->openedBy]))     $bug->openedBy     = $users[$bug->openedBy];
+                if(isset($users[$bug->assignedTo]))   $bug->assignedTo   = $users[$bug->assignedTo];
+                if(isset($users[$bug->resolvedBy]))   $bug->resolvedBy   = $users[$bug->resolvedBy];
+                if(isset($users[$bug->lastEditedBy])) $bug->lastEditedBy = $users[$bug->lastEditedBy];
+                if(isset($users[$bug->closedBy]))     $bug->closedBy     = $users[$bug->closedBy];
+
+                $bug->openedDate     = substr($bug->openedDate,     0, 10);
+                $bug->assignedDate   = substr($bug->assignedDate,   0, 10);
+                $bug->closedDate     = substr($bug->closedDate,     0, 10);
+                $bug->resolvedDate   = substr($bug->resolvedDate,   0, 10);
+                $bug->lastEditedDate = substr($bug->lastEditedDate, 0, 10);
+
+                if($bug->linkBug)
                 {
-                    $legendAttatchs = $this->dao->select('pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->eq($bug->id)->fetchAll();
-                    if($legendAttatchs)
+                    $tmpLinkBugs = array();
+                    $linkBugIdList = explode(',', $bug->linkBug);
+                    foreach($linkBugIdList as $linkBugID)
                     {
-                        foreach($legendAttatchs as $legendAttatch) 
-                        {
-                            $legendAttatch->pathname = "http://" . $_SERVER['HTTP_HOST'] . $this->config->webRoot . "data/upload/$bug->company/" . $legendAttatch->pathname;
-                            $task->legendAttatchs  .= "<a href=$legendAttatch->pathname>" . $legendAttatch->title . "</a><br />";
-                        }
+                        $linkBugID = trim($linkBugID);
+                        $tmpLinkBugs[] = isset($relatedBugs[$linkBugID]) ? $relatedBugs[$linkBugID] : $linkBugID;
                     }
+                    $bug->linkBug = join("; \n", $tmpLinkBugs);
+                }
+
+                if($bug->openedBuild)
+                {
+                    $tmpOpenedBuilds   = array();
+                    $tmpResolvedBuilds = array();
+                    $buildIdList = explode(',', $bug->openedBuild);
+                    foreach($buildIdList as $buildID)
+                    {
+                        $buildID = trim($buildID);
+                        $tmpOpenedBuilds[] = isset($relatedBuilds[$buildID]) ? $relatedBuilds[$buildID] : $buildID;
+                    }
+                    $bug->openedBuild = join("; \n", $tmpOpenedBuilds);
+                }
+
+                if($bug->resolvedBuild)
+                {
+                    $buildIdList = explode(',', $bug->resolvedBuild);
+                    foreach($buildIdList as $buildID)
+                    {
+                        $buildID = trim($buildID);
+                        $tmpResolvedBuilds[] = isset($relatedBuilds[$buildID]) ? $relatedBuilds[$buildID] : $buildID;
+                    }
+                    $bug->resolvedBuild = join("; \n", $tmpResolvedBuilds);
+                }
+
+                /* Set related files. */
+                if(isset($relatedFiles[$bug->id]))
+                {
+                    foreach($relatedFiles[$bug->id] as $file)
+                    {
+                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/$bug->company/" . $file->pathname;
+                        $bug->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
+                    }
+                }
+
+                $bug->mailto = trim(trim($bug->mailto), ',');
+                $mailtos     = explode(',', $bug->mailto);
+                $bug->mailto = '';
+                foreach($mailtos as $mailto)
+                {
+                    $mailto = trim($mailto);
+                    if(isset($users[$mailto])) $bug->mailto .= $users[$mailto] . ',';
                 }
 
                 /* drop some field that is not needed. */
                 unset($bug->company);
                 unset($bug->caseVersion);
                 unset($bug->result);
-
-                /* fill some field with useful value. */
-                $bug->story        = isset($relatedStories[$bug->story]) ?  $relatedStories[$bug->story] : '';
-                $bug->module       = isset($relatedModules[$bug->module]) ? $relatedModules[$bug->module] : '';
-                $bug->task         = isset($relatedTasks[$bug->task]) ? $relatedTasks[$bug->task] : '';
-                $bug->duplicateBug = isset($relatedBugs[$bug->duplicateBug]) ? $relatedBugs[$bug->duplicateBug] : '';
-                $bug->linkBug      = isset($relatedBugs[$bug->linkBug]) ? $relatedBugs[$bug->linkBug] : '';
-                $bug->case         = isset($relatedCases[$bug->case]) ? $relatedCases[$bug->case] : '';
-                $bug->project      = isset($projects[$bug->project]) ? $projects[$bug->project] : '';
-
-                $bug->product        = $products[$bug->product];
-                $bug->pri            = $this->lang->bug->priList[$bug->pri];
-                $bug->type           = $this->lang->bug->typeList[$bug->type];
-                $bug->status         = $this->lang->bug->statusList[$bug->status];
-                
-                $bug->mailto = trim(trim($bug->mailto), ',');
-                $mailtos     = explode(',', $bug->mailto);
-                $bug->mailto = '';
-                foreach($mailtos as $mailto)
-                {
-                    if(isset($users[$mailto])) $bug->mailto .= $users[$mailto] . ',';
-                }
-                $bug->openedBy       = $users[$bug->openedBy];
-                $bug->openedDate     = substr($bug->openedDate, 0, 10);
-                if(isset($users[$bug->assignedTo]))$bug->assignedTo = $users[$bug->assignedTo];
-                $bug->assignedDate   = substr($bug->assignedDate, 0, 10);
-                if(isset($users[$bug->resolvedBy])) $bug->resolvedBy = $users[$bug->resolvedBy];
-                $bug->resolution     = $this->lang->bug->resolutionList[$bug->resolution];
-                $bug->resolvedDate   = substr($bug->resolvedDate, 0, 10);
-                $bug->closedBy       = $users[$bug->closedBy];
-                $bug->closedDate     = substr($bug->closedDate, 0, 10);
-                $bug->lastEditedBy   = $users[$bug->lastEditedBy];
-                $bug->lastEditedDate = substr($bug->lastEditedDate, 0, 10);
+                unset($bug->deleted);
             }
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $bugs);
-            if($this->post->fileType == 'csv')  $this->fetch('file', 'export2CSV', $_POST);
-            if($this->post->fileType == 'xml')  $this->fetch('file', 'export2XML', $_POST);
-            if($this->post->fileType == 'html') $this->fetch('file', 'export2HTML', $_POST);
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
         $this->display();

@@ -436,7 +436,7 @@ class storyModel extends model
      */
     public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.title as planTitle')
+        $stories = $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
@@ -444,6 +444,11 @@ class storyModel extends model
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
+        
+        /* Set session for report query. */
+        $this->session->set('storyReport', $this->dao->get());
+        
+        return $stories;
     }
 
     /**
@@ -491,7 +496,7 @@ class storyModel extends model
             ->fetchGroup('plan');
 
         /* Set session for report query. */
-        $this->session->set('reportQuery', $this->dao->get());
+        $this->session->set('storyReport', $this->dao->get());
 
         if(!$tmpStories) return array();
         $plans   = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($tmpStories))->fetchPairs();

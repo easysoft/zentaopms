@@ -30,3 +30,10 @@ $config->testcase->defaultSteps = 3;
 
 $config->testcase->create->requiredFields = 'title,type';
 $config->testcase->edit->requiredFields   = 'title,type';
+
+$config->testcase->exportFields = '
+    id, product, module, story,
+    title, steps, keywords,
+    pri, type, stage, status, frequency,
+    openedBy, openedDate, lastEditedBy, lastEditedDate, 
+    version,linkCase';

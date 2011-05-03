@@ -113,25 +113,6 @@ class bugModel extends model
     }
 
     /**
-     * getByQuery 
-     * 
-     * @param  string $productID 
-     * @param  string $query 
-     * @param  string $orderBy 
-     * @access public
-     * @return void
-     */
-    public function getByQuery($productID, $query, $orderBy)
-    {
-        $tmpBugs = $this->dao->select('*')->from(TABLE_BUG)->alias('t1')->where($query)
-            ->andWhere('product')->eq((int)$productID)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->fetchAll();
-        return $tmpBugs;
-    }
-
-    /**
      * Update a bug.
      * 
      * @param  int    $bugID 
@@ -233,6 +214,7 @@ class bugModel extends model
             ->add('duplicateBug', 0)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->join('openedBuild', ',')
             ->remove('comment,files,labels')
             ->get();
 
