@@ -835,10 +835,10 @@ class bug extends control
                 if(isset($relatedBugs[$bug->duplicateBug])) $bug->duplicateBug = $relatedBugs[$bug->duplicateBug];
                 if(isset($relatedCases[$bug->case]))        $bug->case         = $relatedCases[$bug->case];
 
-                $bug->pri        = $bugLang->priList[$bug->pri];
-                $bug->type       = $bugLang->typeList[$bug->type];
-                $bug->status     = $bugLang->statusList[$bug->status];
-                $bug->resolution = $bugLang->resolutionList[$bug->resolution];
+                if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
+                if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
+                if(isset($bugLang->statusList[$bug->status]))         $bug->status     = $bugLang->statusList[$bug->status];
+                if(isset($bugLang->resolutionList[$bug->resolution])) $bug->resolution = $bugLang->resolutionList[$bug->resolution];
                 
                 if(isset($users[$bug->openedBy]))     $bug->openedBy     = $users[$bug->openedBy];
                 if(isset($users[$bug->assignedTo]))   $bug->assignedTo   = $users[$bug->assignedTo];

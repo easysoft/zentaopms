@@ -439,12 +439,13 @@ class testcase extends control
                 if(isset($relatedModules[$case->module])) $case->module  = $relatedModules[$case->module];
                 if(isset($relatedStories[$case->story]))  $case->story   = $relatedStories[$case->story];
 
-                $case->pri            = $caseLang->priList[$case->pri];
-                $case->type           = $caseLang->typeList[$case->type];
-                $case->stage          = $caseLang->stageList[$case->stage];
-                $case->status         = $this->lang->case->statusList[$case->status];
-                $case->openedBy       = $users[$case->openedBy];
-                $case->lastEditedBy   = $users[$case->lastEditedBy];
+                if(isset($caseLang->priList[$case->pri]))       $case->pri          = $caseLang->priList[$case->pri];
+                if(isset($caseLang->typeList[$case->type]))     $case->type         = $caseLang->typeList[$case->type];
+                if(isset($caseLang->stageList[$case->stage]))   $case->stage        = $caseLang->stageList[$case->stage];
+                if(isset($caseLang->statusList[$case->status])) $case->status       = $caseLang->statusList[$case->status];
+                if(isset($users[$case->openedBy]))              $case->openedBy     = $users[$case->openedBy];
+                if(isset($users[$case->lastEditedBy]))          $case->lastEditedBy = $users[$case->lastEditedBy];
+
                 $case->openedDate     = substr($case->openedDate, 0, 10);
                 $case->lastEditedDate = substr($case->lastEditedDate, 0, 10);
 
