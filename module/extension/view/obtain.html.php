@@ -49,8 +49,8 @@
           <th><?php echo $lang->extension->desc;?></th>
           <th><?php echo $lang->extension->author;?></th>
           <th class='w-id'><?php echo $lang->extension->downloads;?></th>
-          <th><?php echo $lang->extension->public;?></th>
-          <th><?php echo $lang->extension->compatible;?></th>
+          <th class='w-80px'><?php echo $lang->extension->public;?></th>
+          <th class='w-50px'><?php echo $lang->extension->compatible;?></th>
           <th class='w-150px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
