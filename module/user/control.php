@@ -359,8 +359,11 @@ class user extends control
                     }
                     else
                     {
-                        $module = $this->get->m;
-                        $method = $this->get->f;
+                        $url   = html_entity_decode($this->post->referer);
+                        $param = substr($url, strrpos($url, '?') + 1);
+                        list($module, $method) = explode('&', $param);
+                        $module = str_replace('m=', '', $module);
+                        $method = str_replace('f=', '', $method);
                     }
 
                     if(common::hasPriv($module, $method))
