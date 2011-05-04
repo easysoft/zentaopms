@@ -477,7 +477,7 @@ class user extends control
 
         /* Assign. */
         $this->view->period  = $period;
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
         $this->view->account = $account;
         $this->view->actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager);
         $this->display();

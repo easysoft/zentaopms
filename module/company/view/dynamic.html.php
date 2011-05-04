@@ -42,7 +42,7 @@
   <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
   <tr class='a-center'>
     <td><?php echo $action->date;?></td>
-    <td><?php echo $app->user->realname;?></td>
+    <td><?php isset($users[$action->actor]) ? print($users[$action->actor]) : print($action->actor);?></td>
     <td><?php echo $action->actionLabel;?></td>
     <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
     <td><?php echo $action->objectID;?></td>
