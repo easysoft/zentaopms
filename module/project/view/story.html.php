@@ -30,8 +30,8 @@
       <th class='w-hour'>   <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
       <th class='w-hour'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
       <th class='w-status'> <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
-      <th class='w-50px'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->story->taskCount);?></th>
-      <th class='w-100px'>  <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->actions);?></th>
+      <th class='w-50px'>   <?php echo $lang->story->taskCount;?></th>
+      <th class='w-100px'>  <?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>

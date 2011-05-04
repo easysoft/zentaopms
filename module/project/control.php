@@ -288,10 +288,11 @@ class project extends control
      * Browse stories of a project.
      * 
      * @param  int    $projectID 
+     * @param  string $orderBy 
      * @access public
      * @return void
      */
-    public function story($projectID = 0, $orderBy = 'pri_asc,id_desc')
+    public function story($projectID = 0, $orderBy = 'pri_asc')
     {
         /* Load these models. */
         $this->loadModel('story');
