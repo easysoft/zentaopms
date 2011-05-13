@@ -63,7 +63,7 @@ build4sae:
 	# replace the error_log to sae_debug
 	sed -e 's/error_log/sae_debug/g' zentaopms/framework/router.class.php | sed -e "s/saveSQL/saveSQL4SAE/" >zentaopms/framework/router.class.php.new
 	mv zentaopms/framework/router.class.php.new zentaopms/framework/router.class.php
-	cat build/sae/savesql.php >> zentaopms/framework/helper.php
+	cat build/sae/savesql.php >> zentaopms/framework/helper.class.php
 	# change the logic of merge model file in helper.class.php.
 	sed -e 's/\$$app->getTmpRoot/"saemc:\/\/" . \$$app\-\>getTmpRoot/g' zentaopms/framework/helper.class.php >zentaopms/framework/helper.class.new
 	mv zentaopms/framework/helper.class.new zentaopms/framework/helper.class.php
