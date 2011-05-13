@@ -32,7 +32,7 @@ $config->set('default.module', 'install');
 $app->setDebug();
 
 /* During the installation, if the database params is setted, auto connect the db. */
-if(isset($config->installed) and $config->installed) $dbh = $app->connectDB();
+if(isset($config->installed) and $config->installed) $app->connectDB();
 
 $app->parseRequest();
 $app->loadModule();

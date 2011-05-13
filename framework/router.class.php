@@ -1463,7 +1463,7 @@ class router
      * Connect to database.
      * 
      * @access public
-     * @return object|bool the database handler.
+     * @return void
      */
     public function connectDB()
     {
