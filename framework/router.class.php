@@ -131,7 +131,7 @@ class router
     /**
      * The control object of current module.
      * 
-     * @var string
+     * @var object
      * @access public
      */
     public $control;
@@ -195,7 +195,7 @@ class router
     /**
      * The global $config object.
      * 
-     * @var string
+     * @var object
      * @access public
      */
     public $config;
@@ -203,7 +203,7 @@ class router
     /**
      * The global $lang object.
      * 
-     * @var string
+     * @var object
      * @access public
      */
     public $lang;
@@ -211,10 +211,18 @@ class router
     /**
      * The global $dbh object, the database connection handler.
      * 
-     * @var string
+     * @var object
      * @access private
      */
     public $dbh;
+
+    /**
+     * The slave database handler.
+     * 
+     * @var object
+     * @access private
+     */
+    public $slaveDBH;
 
     /**
      * The $post object, used to access the $_POST var.
@@ -1459,26 +1467,39 @@ class router
      */
     public function connectDB()
     {
-        global $config, $dbh;
-        if(!isset($config->db->driver)) self::error('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
-        if(!isset($config->db->user)) return false;
-        if($config->db->driver == 'mysql')
+        global $config, $dbh, $slaveDBH;
+
+        if(isset($config->db->host))      $this->dbh      = $dbh      = $this->connectByPDO($config->db);
+        if(isset($config->slaveDB->host)) $this->slaveDBH = $slaveDBH = $this->connectByPDO($config->slaveDB);
+    }
+
+    /**
+     * Connect database by PDO.
+     * 
+     * @param  object    $params    the database params.
+     * @access private
+     * @return object|bool
+     */
+    private function connectByPDO($params)
+    {
+        if(!isset($params->driver)) self::error('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
+        if(!isset($params->user)) return false;
+        if($params->driver == 'mysql')
         {
-            $dsn = "mysql:host={$config->db->host}; port={$config->db->port}; dbname={$config->db->name}";
+            $dsn = "mysql:host={$params->host}; port={$params->port}; dbname={$params->name}";
         }    
         try 
         {
-            $dbh = new PDO($dsn, $config->db->user, $config->db->password, array(PDO::ATTR_PERSISTENT => $config->db->persistant));
+            $dbh = new PDO($dsn, $params->user, $params->password, array(PDO::ATTR_PERSISTENT => $params->persistant));
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->exec("SET NAMES {$config->db->encoding}");
-            if(isset($config->db->strictMode) and $config->db->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
-            if(isset($config->db->checkCentOS) and $config->db->checkCentOS and helper::isCentOS())
+            $dbh->exec("SET NAMES {$params->encoding}");
+            if(isset($params->strictMode) and $params->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
+            if(isset($params->checkCentOS) and $params->checkCentOS and helper::isCentOS())
             {
                 $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
                 $dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
             }
-            $this->dbh = $dbh;
             return $dbh;
         }
         catch (PDOException $exception)

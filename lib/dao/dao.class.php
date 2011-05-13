@@ -57,6 +57,14 @@ class dao
     protected $dbh;
 
     /**
+     * The global slaveDBH(database handler) object.
+     * 
+     * @var object
+     * @access protected
+     */
+    protected $slaveDBH;
+
+    /**
      * The sql object, used to creat the query sql.
      * 
      * @var object
@@ -130,11 +138,12 @@ class dao
      */
     public function __construct()
     {
-        global $app, $config, $lang, $dbh;
-        $this->app    = $app;
-        $this->config = $config;
-        $this->lang   = $lang;
-        $this->dbh    = $dbh;
+        global $app, $config, $lang, $dbh, $slaveDBH;
+        $this->app      = $app;
+        $this->config   = $config;
+        $this->lang     = $lang;
+        $this->dbh      = $dbh;
+        $this->slaveDBH = $slaveDBH ? $slaveDBH : false;
 
         $this->reset();
     }
@@ -476,8 +485,17 @@ class dao
         $sql = $this->processSQL($autoCompany);
         try
         {
+            $method = $this->method;
             $this->reset();
-            return $this->dbh->query($sql);
+
+            if($this->slaveDBH and $method == 'select')
+            {
+                return $this->slaveDBH->query($sql);
+            }
+            else
+            {
+                return $this->dbh->query($sql);
+            }
         }
         catch (PDOException $e) 
         {

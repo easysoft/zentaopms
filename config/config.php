@@ -47,12 +47,19 @@ $config->default->method = 'index';       // Default method.
 $config->file->dangers = 'php,jsp,py,rb,asp,'; // Dangerous files.
 $config->file->maxSize = 1024 * 1024;          // Max size.
 
-/* Database settings. */
-$config->db->persistant = false;           // Pconnect or not.
-$config->db->driver     = 'mysql';         // Must be MySQL. Don't support other database server yet.
-$config->db->encoding   = 'UTF8';          // Encoding of database.
-$config->db->strictMode = false;           // Turn off the strict mode of MySQL.
-$config->db->checkCentOS= true;            // Whether check is centos or not, thus to fix the error of pdo in centos.
+/* Master database settings. */
+$config->db->persistant = false;     // Pconnect or not.
+$config->db->driver     = 'mysql';   // Must be MySQL. Don't support other database server yet.
+$config->db->encoding   = 'UTF8';    // Encoding of database.
+$config->db->strictMode = false;     // Turn off the strict mode of MySQL.
+$config->db->checkCentOS= true;      // Whether check is centos or not, thus to fix the error of pdo in centos.
+
+/* Slave database settings. */
+$config->slaveDB->persistant = false;      
+$config->slaveDB->driver     = 'mysql';    
+$config->slaveDB->encoding   = 'UTF8';     
+$config->slaveDB->strictMode = false;      
+$config->slaveDB->checkCentOS= true;       
 
 /* Include the custom config file. */
 $myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
