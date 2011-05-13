@@ -11,7 +11,11 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+/* Set the error reporting. */
 error_reporting(0);
+
+/* Start output buffer. */
+ob_start();
 
 /* Load the framework. */
 include '../framework/router.class.php';
@@ -34,3 +38,6 @@ $common = $app->loadCommon();
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
+
+/* Flush the buffer. */
+ob_end_flush();
