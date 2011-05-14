@@ -9,7 +9,7 @@ function loadAll(productID)
 {
     if(!changeProductConfirmed)
     {
-         firstChoice = confirm('<?php echo $lang->bug->confirmChangeProduct;?>');
+         firstChoice = confirm(confirmChangeProduct);
          changeProductConfirmed = true;    // Only notice the user one time.
     }
     if(changeProductConfirmed || firstChoice)

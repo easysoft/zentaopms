@@ -17,20 +17,21 @@
 <script language='Javascript'>
 changeProductConfirmed = false;
 changeProjectConfirmed = false;
-oldProjectID = '<?php echo $bug->project;?>';
-oldStoryID   = '<?php echo $bug->story;?>';
-oldTaskID    = '<?php echo $bug->task;?>';
-oldOpenedBuild   = '<?php echo $bug->openedBuild;?>';
-oldResolvedBuild = '<?php echo $bug->resolvedBuild;?>';
-emptySelect      = "<select name='task' id='task'><option value=''></option></select>";
-userList         = "<?php echo join(',', array_keys($users));?>".split(',');
+confirmChangeProduct   = '<?php echo $lang->bug->confirmChangeProduct;?>';
+oldProjectID           = '<?php echo $bug->project;?>';
+oldStoryID             = '<?php echo $bug->story;?>';
+oldTaskID              = '<?php echo $bug->task;?>';
+oldOpenedBuild         = '<?php echo $bug->openedBuild;?>';
+oldResolvedBuild       = '<?php echo $bug->resolvedBuild;?>';
+emptySelect            = "<select name='task' id='task'><option value=''></option></select>";
+userList               = "<?php echo join(',', array_keys($users));?>".split(',');
 </script>
 <form method='post' target='hiddenwin' enctype='multipart/form-data'>
 <div id='titlebar'>
   <div id='main'>
   BUG #<?php echo $bug->id . $lang->colon;?>
   <?php echo html::input('title', str_replace("'","&#039;",$bug->title), 'class=text-1');?>
-  </div>
+ </div>
   <div><?php echo html::submitButton()?></div>
 </div>
 
