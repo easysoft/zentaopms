@@ -98,7 +98,7 @@ class companyModel extends model
      */
     public function update()
     {
-        $company   = fixer::input('post')->get();
+        $company   = fixer::input('post')->stripTags('name')->get();        
         $companyID = $this->app->company->id;
         $this->dao->update(TABLE_COMPANY)
             ->data($company)
