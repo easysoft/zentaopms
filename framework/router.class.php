@@ -1324,16 +1324,14 @@ class router
         if(is_dir($classFile)) $classFile .= $this->pathFix . $className;
         $classFile .= '.class.php';
 
-        if(!is_file($classFile)) 
+        if(!helper::import($classFile))
         {
             /* Search in $coreLibRoot. */
             $classFile = $this->coreLibRoot . $className;
             if(is_dir($classFile)) $classFile .= $this->pathFix . $className;
             $classFile .= '.class.php';
-            if(!is_file($classFile)) $this->error("class file $classFile not found", __FILE__, __LINE__, $exit = true);
+            if(!helper::import($classFile)) $this->error("class file $classFile not found", __FILE__, __LINE__, $exit = true);
         }
-
-        helper::import($classFile);
 
         /* If staitc, return. */
         if($static) return true;
