@@ -118,7 +118,7 @@ class helper
      */
     static public function import($file)
     {
-        if(!file_exists($file)) return false;
+        if(!is_file($file)) return false;
         static $includedFiles = array();
         if(!isset($includedFiles[$file]))
         {
@@ -126,7 +126,7 @@ class helper
             $includedFiles[$file] = true;
             return true;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -337,7 +337,6 @@ class helper
         if(!file_exists($issueFile) or !is_readable($issueFile)) return false;
         return stripos(file_get_contents($issueFile), 'centos') !== false;
     }
-
 }
 
 /**

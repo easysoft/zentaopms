@@ -217,7 +217,7 @@ class control
         $modelFile = helper::setModelFile($moduleName);
 
         /* If no model file, try load config. */
-        if(!file_exists($modelFile)) 
+        if(!helper::import($modelFile)) 
         {
             $this->app->loadConfig($moduleName, false);
             $this->app->loadLang($moduleName);
@@ -225,7 +225,6 @@ class control
             return false;
         }
 
-        helper::import($modelFile);
         $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
         if(!class_exists($modelClass)) $this->app->error(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
 
@@ -274,7 +273,7 @@ class control
         $extHookFiles = helper::ls($viewExtPath, '.hook.php');
 
         $viewFile = file_exists($extViewFile) ? $extViewFile : $mainViewFile;
-        if(!file_exists($viewFile)) $this->app->error("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+        if(!is_file($viewFile)) $this->app->error("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
         if(!empty($extHookFiles)) return array('viewFile' => $viewFile, 'hookFiles' => $extHookFiles);
         return $viewFile;
     }
@@ -316,7 +315,7 @@ class control
         $mainCssFile   = $modulePath . 'css' . $this->pathFix . 'common.css';
         $methodCssFile = $modulePath . 'css' . $this->pathFix . $methodName . '.css';
         if(file_exists($mainCssFile))   $css .= file_get_contents($mainCssFile);
-        if(file_exists($methodCssFile)) $css .= file_get_contents($methodCssFile);
+        if(is_file($methodCssFile))     $css .= file_get_contents($methodCssFile);
         return $css;
     }
 
@@ -338,7 +337,7 @@ class control
         $mainJsFile   = $modulePath . 'js' . $this->pathFix . 'common.js';
         $methodJsFile = $modulePath . 'js' . $this->pathFix . $methodName . '.js';
         if(file_exists($mainJsFile))   $js .= file_get_contents($mainJsFile);
-        if(file_exists($methodJsFile)) $js .= file_get_contents($methodJsFile);
+        if(is_file($methodJsFile))     $js .= file_get_contents($methodJsFile);
         return $js;
     }
 
@@ -477,7 +476,7 @@ class control
         $file2Included     = file_exists($actionExtFile) ? $actionExtFile : $moduleControlFile;
 
         /* Load the control file. */
-        if(!file_exists($file2Included)) $this->app->error("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
+        if(!is_file($file2Included)) $this->app->error("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
         $currentPWD = getcwd();
         chdir(dirname($file2Included));
         if($moduleName != $this->moduleName) helper::import($file2Included);

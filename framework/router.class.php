@@ -960,7 +960,7 @@ class router
     public function setControlFile($exitIfNone = true)
     {
         $this->controlFile = $this->moduleRoot . $this->moduleName . $this->pathFix . 'control.php';
-        if(!file_exists($this->controlFile))
+        if(!is_file($this->controlFile))
         {
             $this->error("the control file $this->controlFile not found.", __FILE__, __LINE__, $exitIfNone);
             return false;
@@ -1324,13 +1324,13 @@ class router
         if(is_dir($classFile)) $classFile .= $this->pathFix . $className;
         $classFile .= '.class.php';
 
-        if(!file_exists($classFile)) 
+        if(!is_file($classFile)) 
         {
             /* Search in $coreLibRoot. */
             $classFile = $this->coreLibRoot . $className;
             if(is_dir($classFile)) $classFile .= $this->pathFix . $className;
             $classFile .= '.class.php';
-            if(!file_exists($classFile)) $this->error("class file $classFile not found", __FILE__, __LINE__, $exit = true);
+            if(!is_file($classFile)) $this->error("class file $classFile not found", __FILE__, __LINE__, $exit = true);
         }
 
         helper::import($classFile);
@@ -1364,7 +1364,7 @@ class router
         {
             $mainConfigFile = $this->configRoot . 'config.php';
             $myConfig       = $this->configRoot . 'my.php';
-            if(file_exists($myConfig)) $extConfigFiles[] = $myConfig;
+            if(is_file($myConfig)) $extConfigFiles[] = $myConfig;
         }
         else
         {
@@ -1374,7 +1374,7 @@ class router
         }
 
         /* Set the files to include. */
-        if(!file_exists($mainConfigFile))
+        if(!is_file($mainConfigFile))
         {
             if($exitIfNone) self::error("config file $mainConfigFile not found", __FILE__, __LINE__, true);
             if(empty($extConfigFiles)) return false;  //  and no extension file, exit.
@@ -1434,7 +1434,7 @@ class router
         $extLangFiles = helper::ls($extLangPath . $this->clientLang, '.php');
 
         /* Set the files to includ. */
-        if(!file_exists($mainLangFile))
+        if(!is_file($mainLangFile))
         {
             if(empty($extLangFiles)) return false;  // also no extension file.
             $langFiles = $extLangFiles;
