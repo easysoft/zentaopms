@@ -517,17 +517,19 @@ class upgradeModel extends model
      */
     private function updateUBB()
     {
+        $this->app->loadClass('ubb', true);
+
         $bugs = $this->dao->select('id, steps')->from(TABLE_BUG)->fetchAll();
         $userTemplates = $this->dao->select('id, content')->from(TABLE_USERTPL)->fetchAll();
             
         foreach($bugs as $id => $bug)
         {
-            $bug->steps = html::parseUBB($bug->steps);
+            $bug->steps = ubb::parseUBB($bug->steps);
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
         }
         foreach($userTemplates as $template)
         {
-            $template->content = html::parseUBB($template->content);
+            $template->content = ubb::parseUBB($template->content);
             $this->dao->update(TABLE_USERTPL)->data($template)->where('id')->eq($template->id)->exec();
         }
     }
