@@ -9,6 +9,7 @@
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
  */
+
 /**
  * The helper class, contains the tool functions.
  *
