@@ -1,6 +1,6 @@
 <?php
 /**
- * The helper class file of ZenTaoPHP framework.
+ * The html class file of ZenTaoPHP framework.
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
