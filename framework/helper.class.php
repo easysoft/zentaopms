@@ -17,6 +17,32 @@
 class helper
 {
     /**
+     * Set the member's value of one object.
+     * <code>
+     * <?php
+     * $lang->db->user = 'wwccss';
+     * helper::setMember('lang', 'db.user', 'chunsheng.wang');
+     * ?>
+     * </code>
+     * @param string    $objName    the var name of the object.
+     * @param string    $key        the key of the member, can be parent.child.
+     * @param mixed     $value      the value to be set.
+     * @static
+     * @access public
+     * @return bool
+     */
+    static public function setMember($objName, $key, $value)
+    {
+        global $$objName;
+        if(!is_object($$objName) or empty($key)) return false;
+        $key   = str_replace('.', '->', $key);
+        $value = serialize($value);
+        $code  = ("\$${objName}->{$key}=unserialize(<<<EOT\n$value\nEOT\n);");
+        eval($code);
+        return true;
+    }
+
+    /**
      * Create a link to a module's method.
      * 
      * This method also mapped in control class to call conveniently.
