@@ -1,13 +1,13 @@
 <?php
 /**
- * The dao and sql class file of ZenTaoPMS.
+ * The dao and sql class file of ZenTaoPHP framework.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     framework
- * @version     $Id: dao.class.php 134 2010-09-11 07:24:27Z wwccss $
- * @link        http://www.zentao.net
+ * The author disclaims copyright to this source code.  In place of
+ * a legal notice, here is a blessing:
+ * 
+ *  May you do good and not evil.
+ *  May you find forgiveness for yourself and forgive others.
+ *  May you share freely, never taking more than you give.
  */
 
 /**
@@ -573,7 +573,7 @@ class dao
         }
     }
 
-    //-------------------- 数据获取相关的方法。--------------------//
+    //-------------------- Fetch related methods. -------------------//
 
     /**
      * Fetch one record.
@@ -983,8 +983,8 @@ class dao
 
             if($type == 'enum' or $type == 'set')
             {
-                $rangeBegin  = $firstPOS + 2;  // 将第一个引号去掉。
-                $rangeEnd    = strrpos($rawField->type, ')') - 1; // 将最后一个引号去掉。
+                $rangeBegin  = $firstPOS + 2;                       // Remove the first quote.
+                $rangeEnd    = strrpos($rawField->type, ')') - 1;   // Remove the last quote.
                 $range       = substr($rawField->type, $rangeBegin, $rangeEnd - $rangeBegin);
                 $field['rule'] = 'reg';
                 $field['options']['reg']  = '/' . str_replace("','", '|', $range) . '/';
