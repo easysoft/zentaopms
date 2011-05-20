@@ -1,14 +1,15 @@
 <?php
 /**
- * The router, config and lang class file of ZenTaoPMS.
+ * The router, config and lang class file of ZenTaoPHP framework.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     framework
- * @version     $Id: router.class.php 111 2010-05-11 08:17:32Z wwccss $
- * @link        http://www.zentao.net
+ * The author disclaims copyright to this source code.  In place of
+ * a legal notice, here is a blessing:
+ * 
+ *  May you do good and not evil.
+ *  May you find forgiveness for yourself and forgive others.
+ *  May you share freely, never taking more than you give.
  */
+
 /**
  * The router class.
  * 
