@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/table2csv.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
 </script>
