@@ -28,7 +28,7 @@ class indexModel extends model
         foreach($stats as $status => $value)
         {
             $percent = round($value / $sum, 2) * 100 . '%';
-            $string .= strtolower($statusList[$status]) . " <strong>$value<small><i>($percent)</i></small></strong>$lang->comma ";
+            $string .= strtolower($statusList[$status]) . " <strong>$value<small><i>($percent)</i></small></strong>$lang->comma";
         }
         echo rtrim($string, $lang->comma) . $lang->dot;
     }
