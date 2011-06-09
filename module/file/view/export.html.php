@@ -11,7 +11,29 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' target='hiddenwin'>
+<?php include '../../common/view/colorbox.html.php';?>
+
+<script>
+function setDownloading()
+{
+    $.cookie('downloading', 0);
+    time = setInterval("closeWindow()", 300);
+    return true;
+}
+
+function closeWindow()
+{
+    if($.cookie('downloading') == 1 || i >= 30)
+    {
+        parent.$.fn.colorbox.close();
+        $.cookie('downloading', null);
+        clearInterval(time);
+    }
+    i ++;
+}
+</script>
+
+<form method='post' target='hiddenwin' onsubmit='setDownloading();'>
   <table class='table-1'>
     <caption><?php echo $lang->export;?></caption>
     <tr>
