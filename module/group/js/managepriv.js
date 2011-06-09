@@ -24,6 +24,9 @@ function showPriv(value)
     }
 }
 
+/* Override the setHelpLink(). */
+function setHelpLink(){}
+
 /**
  * Control the actions select control for a module.
  * 
@@ -39,7 +42,7 @@ function setModuleActions(module)
 }
 
 $(function()
-    {
-        showPriv(version);
-    }
+{
+    showPriv(version);
+}
 );
