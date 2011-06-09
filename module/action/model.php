@@ -231,9 +231,26 @@ class actionModel extends model
             $objectIds   = array_unique($objectIds);
             $table       = $this->config->action->objectTables[$objectType];
             $field       = $this->config->action->objectNameFields[$objectType];
-            $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+            if($table != 'zt_todo')
+            {
+                $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+            }
+            else
+            {
+                $todos = $this->dao->select("id, $field AS name, account, private")->from($table)->where('id')->in($objectIds)->fetchAll('id');
+                foreach($todos as $id => $todo)
+                {
+                    if($todo->private == 1 and $todo->account != $this->app->user->account) 
+                    {
+                       $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
+                    }
+                    else
+                    {
+                       $objectNames[$objectType][$id] = $todo->name;
+                    }
+                }
+            } 
         }
-
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
         foreach($actions as $action)

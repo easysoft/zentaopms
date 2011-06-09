@@ -90,6 +90,7 @@ $lang->project->statusDoing         = '进行中';
 $lang->project->statusDone          = '已完成';
 $lang->project->statusClosed        = '已关闭';
 $lang->project->delayed             = '已延期';
+$lang->project->groups['']          = '分组查看';
 $lang->project->groups['story']     = '需求分组';
 $lang->project->groups['status']    = '状态分组';
 $lang->project->groups['pri']       = '优先级分组';

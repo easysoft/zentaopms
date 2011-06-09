@@ -199,8 +199,9 @@ class project extends control
         $this->view->position[]      = $this->lang->project->task;
 
         /* Get tasks and group them. */
-        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $groupBy);
+        $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $groupBy ? $groupBy : 'story');
         $groupBy     = strtolower(str_replace('`', '', $groupBy));
+       
         $taskLang    = $this->lang->task;
         $groupByList = array();
         $groupTasks  = array();
@@ -211,6 +212,11 @@ class project extends control
         {
             if($groupBy == 'story')
             { 
+                $groupTasks[$task->story][] = $task;
+                $groupByList[$task->story]  = $task->storyTitle;
+            }
+            elseif($groupBy == '')
+            {
                 $groupTasks[$task->story][] = $task;
                 $groupByList[$task->story]  = $task->storyTitle;
             }
@@ -249,6 +255,7 @@ class project extends control
         $this->view->tabID       = 'task';
         $this->view->groupByList = $groupByList;
         $this->view->browseType  = 'group';
+        $this->view->groupBy     = $groupBy;
         $this->view->orderBy     = $groupBy;
         $this->view->projectID   = $projectID;
         $this->view->users       = $users;
