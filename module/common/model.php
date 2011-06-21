@@ -178,7 +178,6 @@ class commonModel extends model
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
         echo $lang->scrum;
         echo $lang->training;
-        echo $lang->sponser;
     }
 
     /**
