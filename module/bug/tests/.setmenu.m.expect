@@ -1,0 +1,6 @@
+<select name='productID' id='productID' onchange="switchProduct(this.value, 'bug', 'browse');">
+<option value='0'>1</option>
+<option value='1' selected='selected'>2</option>
+<option value='2'>3</option>
+</select>
+ » 
