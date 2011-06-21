@@ -257,7 +257,7 @@ $lang->pager->last      = "末页";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方网站";
-$lang->community      = "<a href='http://www.chinascrum.org' target='_blank'>scrum社区</a>";
+$lang->community      = "<a href='http://www.chinascrum.org' target='_blank'>Scrum社区</a>";
 $lang->training       = "<a href='http://www.zentao.net/article-view-79371.html' target='_blank'>敏捷培训</a>";
 $lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=comemind' target='_blank'>Comemind赞助</a>";
 $lang->zentaoKeywords = "开源项目管理软件,项目管理,项目管理软件,pmp,pms,php框架，国产php框架，scrum工具,scrum管理工具,scrum管理软件,敏捷项目管理,禅道";

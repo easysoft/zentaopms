@@ -257,6 +257,8 @@ $lang->pager->last      = "Last";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "Official Site";
+$lang->community      = "<a href='http://www.chinascrum.org' target='_blank'>Scrum:Community</a>";
+$lang->training       = "<a href='http://www.zentao.net/article-view-79371.html' target='_blank'>Scrum:Training</a>";
 $lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=comemind' target='_blank'>Sponsor:Comemind</a>";
 $lang->zentaoKeywords = "Open Source Project Management System";
 $lang->zentaoDESC     = "ZenTaoPMS is an open sourced project management system."; 
