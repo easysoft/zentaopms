@@ -1,13 +1,5 @@
-INSERT INTO `zentaopms`.`zt_groupPriv` (
-  `company` ,
-  `group` ,
-  `module` ,
-  `method`
-)
-VALUES (
-  '1', '0', 'my', 'testTask'
-), (
-'1', '0', 'my', 'testCase'
-);
+UPDATE `zt_groupPriv` SET `method` = 'testTask' WHERE `method`='testtask';
 
+UPDATE `zt_groupPriv` SET `method` = 'testCase' WHERE `method`='testcase';
+        
 
