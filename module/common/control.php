@@ -237,6 +237,22 @@ class common extends control
     }
 
     /**
+     * Save the id of the last browse product to session.
+     *
+     * @access public
+     * @return string 
+     */
+    public static function saveProductState($productID, $defaultProductID)
+    {
+        global $app;
+        if($productID > 0) $app->session->set('product', (int)$productID);
+        if($productID == 0 and $app->cookie->lastProduct)    $app->session->se('product', (int)$app->cookie->lastProduct);
+        if($productID == 0 and $app->session->product == '') $app->session->set('product', $defaultProductID);
+        return $app->session->product;
+    }
+    
+
+    /**
      * Get the full url of the system.
      * 
      * @access public

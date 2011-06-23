@@ -114,16 +114,16 @@ $lang->index->menu->product = '浏览产品|product|browse';
 $lang->index->menu->project = '浏览项目|project|browse';
 
 /* 我的地盘菜单设置。*/
-$lang->my->menu->account  = '%s' . $lang->arrow;
-$lang->my->menu->todo     = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
-$lang->my->menu->task     = '我的任务|my|task|';
-$lang->my->menu->bug      = '我的Bug|my|bug|';
-$lang->my->menu->testask  = '我的测试|my|testtask|';
-$lang->my->menu->story    = '我的需求|my|story|';
-$lang->my->menu->project  = '我的项目|my|project|';
-$lang->my->menu->dynamic  = '我的动态|my|dynamic|';
-$lang->my->menu->profile  = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
-$lang->todo->menu         = $lang->my->menu;
+$lang->my->menu->account   = '%s' . $lang->arrow;
+$lang->my->menu->todo      = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
+$lang->my->menu->task      = '我的任务|my|task|';
+$lang->my->menu->bug       = '我的Bug|my|bug|';
+$lang->my->menu->testtask  = '我的测试|my|testtask|';
+$lang->my->menu->story     = '我的需求|my|story|';
+$lang->my->menu->project   = '我的项目|my|project|';
+$lang->my->menu->dynamic   = '我的动态|my|dynamic|';
+$lang->my->menu->profile   = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
+$lang->todo->menu          = $lang->my->menu;
 
 /* 产品视图设置。*/
 $lang->product->menu->list   = '%s';
