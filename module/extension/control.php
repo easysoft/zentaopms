@@ -109,7 +109,7 @@ class extension extends control
                 $this->view->error = sprintf($this->lang->extension->errorDownloadFailed, $packageFile);
                 die($this->display());
             }
-            elseif(md5_file($packageFile) == $md5)
+            elseif($md5 != '' and md5_file($packageFile) != $md5)
             {
                 unlink($packageFile);
                 $this->view->error = sprintf($this->lang->extension->errorMd5Checking, $packageFile);
