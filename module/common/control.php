@@ -246,7 +246,7 @@ class common extends control
     {
         global $app;
         if($productID > 0) $app->session->set('product', (int)$productID);
-        if($productID == 0 and $app->cookie->lastProduct)    $app->session->se('product', (int)$app->cookie->lastProduct);
+        if($productID == 0 and $app->cookie->lastProduct)    $app->session->set('product', (int)$app->cookie->lastProduct);
         if($productID == 0 and $app->session->product == '') $app->session->set('product', $defaultProductID);
         return $app->session->product;
     }
