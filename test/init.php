@@ -1,4 +1,5 @@
 <?php
+$dir = getcwd();
 chdir(dirname(__FILE__));
 
 /* Load the framework. */
@@ -6,7 +7,7 @@ include '../framework/router.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
 include '../framework/helper.class.php';
-
+chdir($dir);
 /* Create the app. */
 $app = router::createApp('pms', dirname(dirname(__FILE__)));
 
