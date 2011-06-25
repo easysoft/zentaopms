@@ -144,7 +144,7 @@ class storyModel extends model
         $now         = helper::now();
         $oldStory    = $this->getById($storyID);
         $specChanged = false;
-        if($this->post->spec != $oldStory->spec or $this->post->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
+        if($this->post->spec != $oldStory->spec or $this->post->verify != $oldStory->verify or $this->post->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
 
         $story = fixer::input('post')
             ->stripTags('title')
