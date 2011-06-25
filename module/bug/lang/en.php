@@ -133,7 +133,7 @@ $lang->bug->confirmChangeProduct = 'Change product will change project, task and
 $lang->bug->confirmDelete        = 'Are you sure to delete this bug?';
 $lang->bug->setTemplateTitle     = 'Please input the template title:';
 
-/* Templates. *./
+/* Templates. */
 $lang->bug->tplStep        = "<p>[Steps]</p>";
 $lang->bug->tplResult      = "<p>[Result]</p>";
 $lang->bug->tplExpect      = "<p>[Expect]</p>";
