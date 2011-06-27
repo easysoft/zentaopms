@@ -207,10 +207,12 @@ $lang->user->menu->browse   = array('link' => 'Manage user|company|browse|', 'fl
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->editor    = array('link' => 'Extend online|editor|index', 'subModule' => 'editor');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
 $lang->extension->menu      = $lang->admin->menu;
+$lang->editor->menu         = $lang->admin->menu;
 
 /* Groups. */
 $lang->menugroup->release     = 'product';
@@ -230,6 +232,7 @@ $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
+$lang->menugroup->editor      = 'admin';
 
 /* Error info. */
 $lang->error->companyNotFound = "The domain %s does not exist.";

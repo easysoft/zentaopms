@@ -38,6 +38,7 @@ class extensionModel extends model
         parent::__construct();
         $this->setAgent();
         $this->setApiRoot();
+        $this->classFile = $this->app->loadClass('file');
     }
 
     /**
@@ -244,7 +245,7 @@ class extensionModel extends model
     public function getFilesFromPackage($extension)
     {
         $extensionDir = "ext/$extension/";
-        $files = $this->readDir($extensionDir, array('db', 'doc'));
+        $files = $this->classFile->readDir($extensionDir, array('db', 'doc'));
         return $files;
     }
 
@@ -446,7 +447,7 @@ class extensionModel extends model
         foreach($pathes as $path)
         {
             if($path == 'db' or $path == 'doc' or $path == '..' or $path == '.') continue;
-            $copiedFiles = $this->copyDir($extensionDir . $path, $appRoot . $path);
+            $copiedFiles = $this->classFile->copyDir($extensionDir . $path, $appRoot . $path);
         }
         foreach($copiedFiles as $key => $copiedFile)
         {
@@ -521,7 +522,7 @@ class extensionModel extends model
 
         /* Remove the extracted files. */
         $extractedDir = realpath("ext/$extension");
-        if(!$this->removeDir($extractedDir))
+        if(!$this->classFile->removeDir($extractedDir))
         {
             $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $extractedDir" : "rmdir $extractedDir /s";
         }
@@ -632,121 +633,5 @@ class extensionModel extends model
             $data->files = json_encode($data->files);
         }
         return $this->dao->update(TABLE_EXTENSION)->data($data)->where('code')->eq($extension)->exec();
-    }
-
-    /**
-     * Copy a directory from an directory to another directory.
-     * 
-     * @param  string    $from 
-     * @param  string    $to 
-     * @access public
-     * @return array     copied files.
-     */
-    public function copyDir($from, $to)
-    {
-        static $copiedFiles = array();
-
-        if(!is_dir($from) or !is_readable($from)) return $copiedFiles;
-        if(!is_dir($to))
-        {
-            if(!is_writable(dirname($to))) return $copiedFiles;
-            mkdir($to);
-        }
-
-        $from    = realpath($from) . '/';
-        $to      = realpath($to) . '/';
-        $entries = scandir($from);
-
-        foreach($entries as $entry)
-        {
-            if($entry == '.' or $entry == '..') continue;
-
-            $fullEntry = $from . $entry;
-            if(is_file($fullEntry))
-            {
-                if(file_exists($to . $entry))
-                {
-                    unlink($to . $entry);
-                }
-                copy($fullEntry, $to . $entry);
-                $copiedFiles[] = $to . $entry;
-            }
-            else
-            {
-                $nextFrom = $from . $entry;
-                $nextTo   = $to . $entry;
-                $this->copyDir($nextFrom, $nextTo);
-            }
-        }
-        return $copiedFiles;
-    }
-
-    /**
-     * Remove a dir.
-     * 
-     * @param  string    $dir 
-     * @access public
-     * @return bool
-     */
-    public function removeDir($dir)
-    {
-        $dir = realpath($dir) . '/';
-
-        if(!is_writable($dir)) return false;
-        if(!is_dir($dir)) return true;
-
-        $entries = scandir($dir);
-        foreach($entries as $entry)
-        {
-            if($entry == '.' or $entry == '..') continue;
-
-            $fullEntry = $dir . $entry;
-            if(is_file($fullEntry))
-            {
-                unlink($fullEntry);
-            }
-            else
-            {
-                $this->removeDir($fullEntry);
-            }
-        }
-        if(!@rmdir($dir)) return false;
-        return true;
-    }
-
-    /**
-     * Get files under a directory recursive.
-     * 
-     * @param  string    $dir 
-     * @param  array     $exceptions 
-     * @access private
-     * @return array
-     */
-    private function readDir($dir, $exceptions = array())
-    {
-         static $files = array();
-
-         if(!is_dir($dir)) return $files;
-
-         $dir    = realpath($dir) . '/';
-         $entries = scandir($dir);
- 
-         foreach($entries as $entry)
-         {
-             if($entry == '.' or $entry == '..') continue;
-             if(in_array($entry, $exceptions)) continue;
-
-             $fullEntry = $dir . $entry;
-             if(is_file($fullEntry))
-             {
-                 $files[] = $dir . $entry;
-             }
-             else
-             {
-                 $nextDir = $dir . $entry;
-                 $this->readDir($nextDir);
-             }
-         }
-         return $files;
     }
 }
