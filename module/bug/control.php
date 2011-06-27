@@ -431,6 +431,7 @@ class bug extends control
         /* Get the info of bug, current product and modue. */
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
+        $projectID       = $bug->project;
         $currentModuleID = $bug->module;
 
         /**
@@ -459,7 +460,8 @@ class bug extends control
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
         $this->view->users            = $this->user->appendDeleted($this->user->getPairs('nodeleted'), "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy");
-        $this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+        $this->view->openedBuilds     = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
+        //$this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;
         $this->view->actions          = $this->action->getList('bug', $bugID);
         $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
