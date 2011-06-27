@@ -177,7 +177,7 @@ class testcase extends control
         $this->testcase->setMenu($this->products, $productID);
 
         /* Init vars. */
-        $type     = '';
+        $type     = 'feature';
         $stage    = '';
         $pri      = 0;
         $storyID  = 0;
