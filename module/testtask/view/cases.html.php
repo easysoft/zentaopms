@@ -63,7 +63,7 @@ var moduleID   = '<?php echo $moduleID;?>';
           <tr class='a-center'>
             <td class='a-left'><?php echo "<input type='checkbox' name='cases[]' value='$run->case' /> ";  printf('%03d', $run->case);?></td>
             <td><?php echo $run->pri?></td>
-            <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version"), $run->title, '_blank');?>
+            <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case"), $run->title, '_blank');?>
             </td>
             <td><?php echo $lang->testcase->typeList[$run->type];?></td>
             <td><?php $assignedTo = $users[$run->assignedTo]; echo substr($assignedTo, strpos($assignedTo, ':') + 1);?></td>
