@@ -62,12 +62,12 @@ EOT;
         if($count == 1) $js = "<script language='Javascript' src='{$jsRoot}misc/fusioncharts.js'></script>";
         return <<<EOT
 $js
-<div id="$divID"></div>
+<div id="$divID" class='chartDiv'></div>
 <script language="JavaScript"> 
 function createChart$count()
 {
 chartWidth = "$width";
-if(chartWidth == 'auto') chartWidth = $('#$divID').width();
+if(chartWidth == 'auto') chartWidth = $('#$divID').width() - 10;
 if(chartWidth < 300) chartWidth = 300;
 var $chartID = new FusionCharts("$chartRoot$swfFile", "{$chartID}id", chartWidth, "$height"); 
 $chartID.setDataXML("$dataXML");
