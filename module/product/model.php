@@ -110,12 +110,18 @@ class productModel extends model
     /**
      * Get products.
      * 
+     * @param  string $status 
+     * @param  int    $limit 
      * @access public
      * @return array
      */
-    public function getList()
+    public function getList($status = 'all', $limit = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->fetchAll('id');
     }
 
     /**
@@ -270,5 +276,30 @@ class productModel extends model
         if(!$projects) return $members;
         $projectTeams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs();
         return array_merge($members, $projectTeams);
+    }
+
+    /**
+     * Get product stats.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getStats()
+    {
+        $this->loadModel('report');
+        $this->loadModel('story');
+
+        $products = $this->getList('normal', $this->config->index->projectCounts);
+        foreach($products as $key => $product)
+        {
+            if($this->checkPriv($product))
+            {
+                $this->session->set('storyReport', "product = '{$product->id}' AND deleted = '0'");
+                $dataXML = $this->report->createSingleXML($this->story->getDataOfStorysPerStatus($product->id), $this->lang->story->report->options->graph);
+                $charts[$product->id] = $this->report->createJSChart('pie2d', $dataXML, 'auto', 210);
+            }
+        }
+
+        return array('products' => $products, 'charts' => $charts);
     }
 }
