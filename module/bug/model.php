@@ -289,10 +289,12 @@ class bugModel extends model
      * Get bug pairs of a user.
      * 
      * @param  int    $account 
+     * @param  bool   $appendProduct 
+     * @param  int    $limit 
      * @access public
      * @return array
      */
-    public function getUserBugPairs($account)
+    public function getUserBugPairs($account, $appendProduct = true, $limit = 0)
     {
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
@@ -301,10 +303,12 @@ class bugModel extends model
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('id desc')
+            ->beginIF($limit > 0)->limit($limit)->fi()
             ->query();
         while($bug = $stmt->fetch())
         {
-            $bug->title = $bug->product . ' / ' . $bug->title;
+            if($appendProduct) $bug->title = $bug->product . ' / ' . $bug->title;
             $bugs[$bug->id] = $bug->title;
         }
         return $bugs;
