@@ -112,10 +112,11 @@ class todoModel extends model
      * @param  date   $date 
      * @param  string $account 
      * @param  string $status   all|today|thisweek|lastweek|before, or a date.
+     * @param  int    $limit    
      * @access public
      * @return void
      */
-    public function getList($date = 'today', $account = '', $status = 'all')
+    public function getList($date = 'today', $account = '', $status = 'all', $limit = 0)
     {
         $todos = array();
         if($date == 'today') 
@@ -155,6 +156,7 @@ class todoModel extends model
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
             ->orderBy('date, status, begin')
+            ->beginIF($limit > 0)->limit($limit)->fi()
             ->query();
         while($todo = $stmt->fetch())
         {
