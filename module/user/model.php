@@ -46,7 +46,7 @@ class userModel extends model
     /**
      * Get the account=>relaname pairs.
      * 
-     * @param  string $params   noletter|noempty|noclosed|nodeleted, can be sets of theme
+     * @param  string $params   noletter|noempty|noclosed|nodeleted|withguest, can be sets of theme
      * @access public
      * @return array
      */
@@ -63,8 +63,9 @@ class userModel extends model
             if(strpos($params, 'noletter') !== false) $firstLetter =  '';
             $users[$account] =  $firstLetter . ($realName ? $realName : $account);
         }
-        if(strpos($params, 'noempty')  === false) $users = array('' => '') + $users;
-        if(strpos($params, 'noclosed') === false) $users = $users + array('closed' => 'Closed');
+        if(strpos($params, 'noempty')   === false) $users = array('' => '') + $users;
+        if(strpos($params, 'noclosed')  === false) $users = $users + array('closed' => 'Closed');
+        if(strpos($params, 'withguest') !== false) $users = $users + array('guest' => 'Guest');
         return $users;
     }
     
