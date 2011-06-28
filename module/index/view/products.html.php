@@ -20,7 +20,7 @@
       <div class='pane a-center'>
       <?php
       echo $productStats['charts'][$product->id];
-      echo html::a($this->createLink('product', 'browse', "productID=$product->id"), $lang->project->goHome);
+      echo html::a($this->createLink('product', 'browse', "productID=$product->id"), $lang->index->productHome);
       ?>
       </div>
       <?php endforeach;?>

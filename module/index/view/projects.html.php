@@ -15,7 +15,7 @@
        <div class='pane a-center'>
        <?php
        echo $projectStats['burns'][$project->id];
-       echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $lang->project->goHome);
+       echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $lang->index->projectHome);
        common::printLink('project', 'burn', "projectID=$project->id", $lang->project->largeBurnChart);
        common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
        printf($lang->project->howToUpdateBurn, $this->createLink('help', 'field', 'module=project&method-burn&field=updateburn'));

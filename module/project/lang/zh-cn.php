@@ -134,7 +134,6 @@ $lang->project->setTeam               = '设置团队';
 $lang->project->linkStory             = '关联需求';
 $lang->project->createTask            = '添加任务';
 $lang->project->goback                = '返回项目首页（5秒后将自动跳转）';
-$lang->project->goHome                = '访问项目主页';
 
 /* 统计。*/
 $lang->project->charts->burn->graph->caption      = "燃尽图";
