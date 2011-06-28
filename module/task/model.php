@@ -365,11 +365,13 @@ class taskModel extends model
      * 
      * @param  string $account 
      * @param  string $type     the query type 
+     * @param  int    $limit   
      * @access public
      * @return array
      */
-    public function getUserTasks($account, $type = 'assignedto')
+    public function getUserTasks($account, $type = 'assignedto', $limit = 0)
     {
+        $type = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')
@@ -382,6 +384,8 @@ class taskModel extends model
             ->beginIF($type == 'finishedby')->andWhere('t1.finishedby')->eq($account)->fi()
             ->beginIF($type == 'closedby')->andWhere('t1.closedby')->eq($account)->fi()
             ->beginIF($type == 'canceledby')->andWhere('t1.canceledby')->eq($account)->fi()
+            ->orderBy('id desc')
+            ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll();
         if($tasks) return $this->processTasks($tasks);
         return array();
