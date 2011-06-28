@@ -46,7 +46,7 @@
             }
             else
             {
-                echo $bug->$fieldName;
+                echo !($bug->$fieldName == '0') ? $bug->$fieldName : '';
             }
             ?>
           </nobr></td>

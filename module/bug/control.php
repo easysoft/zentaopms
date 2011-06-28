@@ -165,6 +165,45 @@ class bug extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
+    /*    $bugs = $this->dao->select('t1.*, t2.name AS project, t3.name AS module, t4.title AS story, t5.name AS task, t6.title AS case')
+            ->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.id')
+            ->leftJoin(TABLE_STORY)->alias('t4')->on('t1.story = t4.id')->leftJoin(TABLE_TASK)->alias('t5')->on('t1.task = t5.id')->leftJoin(TABLE_CASE)->alias('t6')->on('t1.case = t6.id')
+            ->where('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->fetchAll();
+     */
+
+         /* Get related objects id lists. */
+         $relatedModuleIdList   = array();
+         $relatedStoryIdList    = array();
+         $relatedTaskIdList     = array();
+         $relatedCaseIdList     = array();
+         $relatedProjectIdList  = array();
+
+         foreach($bugs as $bug)
+         {
+             $relatedModuleIdList[$bug->module]    = $bug->module;
+             $relatedStoryIdList[$bug->story]      = $bug->story;
+             $relatedTaskIdList[$bug->task]        = $bug->task;
+             $relatedCaseIdList[$bug->case]        = $bug->case;
+             $relatedProjectIdList[$bug->project]  = $bug->project;
+
+
+             /* Get related objects title or names. */
+             $relatedModules   = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
+             $relatedStories   = $this->dao->select('id, title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+             $relatedTasks     = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
+             $relatedCases     = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
+             $relatedProjects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->in($relatedProjectIdList)->fetchPairs();
+
+             /* fill some field with useful value. */
+             if(isset($relatedProjects[$bug->project]))  $bug->project      = $relatedProjects[$bug->project];
+             if(isset($relatedModules[$bug->module]))    $bug->module       = $relatedModules[$bug->module];
+             if(isset($relatedStories[$bug->story]))     $bug->story        = $relatedStories[$bug->story];
+             if(isset($relatedTasks[$bug->task]))        $bug->task         = $relatedTasks[$bug->task];
+             if(isset($relatedCases[$bug->case]))        $bug->case         = $relatedCases[$bug->case];
+         }
+
         /* Process the sql, get the conditon partion, save it to session. Thus the report page can use the same condition. */
         if($browseType != 'needconfirm')
         {
