@@ -13,13 +13,20 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <table class='table-1'>
-<tr><td>
-<?php echo $tree;?>
-<br />
-</td>
-<td>
-</td>
-</tr>
+  <tr>
+    <td width='300'>
+    <?php echo $tree?>
+    <br />
+    </td>
+    <td valign='top'>
+    <span><?php if($filePath) printf($lang->editor->editFile,$filePath)?></span>
+    <form method='post' target='hiddenwin' action='<?php echo inlink('save', "filePath=" . helper::safe64Encode($filePath))?>'>
+    <?php echo html::textarea('fileContent', $fileContent, "class='area-1' rows=40")?>
+    <br/>
+    <?php echo html::submitButton()?>
+    </form>
+    </td>
+  </tr>
 </table>
 <?php include '../../common/view/footer.html.php';?>
 
