@@ -241,6 +241,34 @@ class projectModel extends model
     }
 
     /**
+     * Get project stats.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getProjectStats()
+    {
+        $this->loadModel('report');
+
+        $this->lang->project->charts->burn->graph->caption = '';
+        $this->lang->project->charts->burn->graph->xAxisName = "";
+        $this->lang->project->charts->burn->graph->yAxisName = "";
+
+        $burns    = array();
+        $projects = $this->getList('doing', $this->config->index->projectCounts);
+        foreach($projects as $key => $project)
+        {
+            if($this->checkPriv($project))
+            {
+                $dataXML = $this->report->createSingleXML($this->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
+                $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 210);
+            }
+        }
+
+        return array('projects' => $projects, 'burns' => $burns);
+    }
+
+    /**
      * Get project by id.
      * 
      * @param  int    $projectID 
