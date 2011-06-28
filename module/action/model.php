@@ -228,6 +228,8 @@ class actionModel extends model
         foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIds)
         {
+            if(!isset($this->config->action->objectTables[$objectType])) continue;    // If no defination for this type, omit it.
+
             $objectIds   = array_unique($objectIds);
             $table       = $this->config->action->objectTables[$objectType];
             $field       = $this->config->action->objectNameFields[$objectType];
@@ -256,7 +258,7 @@ class actionModel extends model
         foreach($actions as $action)
         {
             /* Add name field to the actions. */
-            $action->objectName = $objectNames[$action->objectType][$action->objectID];
+            $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
@@ -276,12 +278,12 @@ class actionModel extends model
             if(strpos($action->objectLabel, '|') !== false)
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
-                $action->objectLink  = html::a(helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID)), '#' . $action->objectID);
+                $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                 $action->objectLabel = $objectLabel;
             }
             else
             {
-                $action->objectLink = '#' . $action->objectID;
+                $action->objectLink = '';
             }
         }
         return $actions;
