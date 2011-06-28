@@ -72,7 +72,7 @@ class editorModel extends model
             {
                 $extensionList[$extensionFullDir] = array();
                 /* extend of lang is more a grade of directroy. */
-                if($extensionDir == 'lang')
+                if($extensionDir == 'lang' or $extensionDir == 'js' or $extensionDir == 'css')
                 {
                     $langDirs = scandir($extensionFullDir);
                     foreach($langDirs as $langDir)
