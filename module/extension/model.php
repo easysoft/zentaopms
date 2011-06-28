@@ -90,7 +90,8 @@ class extensionModel extends model
     {
         $requestType = $this->config->requestType;
         $webRoot     = helper::safe64Encode($this->config->webRoot);
-        $apiURL      = $this->apiRoot . 'apiGetmodules-' . $requestType . '-' . $webRoot . '.json';
+        $requestLang = str_replace('-', '_', $this->cookie->lang);
+        $apiURL      = $this->apiRoot . 'apiGetmodules-' . $requestType . '-' . $webRoot . '-' . $requestLang . '.json';
         $data = $this->fetchAPI($apiURL);
         if(isset($data->modules)) return $data->modules;
         return false;
@@ -106,7 +107,8 @@ class extensionModel extends model
      */
     public function getExtensionsByAPI($type, $param)
     {
-        $apiURL = $this->apiRoot . 'apiGetExtensions-' . $type . '-' . $param . '.json';
+        $requestLang = str_replace('-', '_', $this->cookie->lang);
+        $apiURL = $this->apiRoot . 'apiGetExtensions-' . $type . '-' . $param . '-' . $requestLang . '.json';
         $data = $this->fetchAPI($apiURL);
         if(isset($data->extensions))
         {
