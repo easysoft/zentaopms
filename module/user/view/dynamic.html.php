@@ -45,7 +45,7 @@
     <td><?php echo $action->actionLabel;?></td>
     <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
     <td><?php echo $action->objectID;?></td>
-    <td class='a-left'><?php echo html::a($this->createLink($module, 'view', "id=$action->objectID"), $action->objectName);?></td>
+    <td class='a-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
   </tr>
   <?php endforeach;?>
   </tbody>
