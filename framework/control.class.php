@@ -310,12 +310,17 @@ class control
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
         $modulePath = $this->app->getModulePath($moduleName);
+        $cssExtPath = $this->app->getModuleExtPath($moduleName, 'css') . $methodName . $this->pathFix;
 
         $css = '';
         $mainCssFile   = $modulePath . 'css' . $this->pathFix . 'common.css';
         $methodCssFile = $modulePath . 'css' . $this->pathFix . $methodName . '.css';
         if(file_exists($mainCssFile))   $css .= file_get_contents($mainCssFile);
         if(is_file($methodCssFile))     $css .= file_get_contents($methodCssFile);
+        foreach(glob($cssExtPath . '*.css') as $cssFile)
+        {
+            $css .= file_get_contents($cssFile);
+        }
         return $css;
     }
 
@@ -332,12 +337,17 @@ class control
         $moduleName = strtolower(trim($moduleName));
         $methodName = strtolower(trim($methodName));
         $modulePath = $this->app->getModulePath($moduleName);
+        $jsExtPath  = $this->app->getModuleExtPath($moduleName, 'js') . $methodName . $this->pathFix;
 
         $js = '';
         $mainJsFile   = $modulePath . 'js' . $this->pathFix . 'common.js';
         $methodJsFile = $modulePath . 'js' . $this->pathFix . $methodName . '.js';
         if(file_exists($mainJsFile))   $js .= file_get_contents($mainJsFile);
         if(is_file($methodJsFile))     $js .= file_get_contents($methodJsFile);
+        foreach(glob($jsExtPath . '*.js') as $jsFile)
+        {
+            $js .= file_get_contents($jsFile);
+        }
         return $js;
     }
 
