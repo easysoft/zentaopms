@@ -211,15 +211,17 @@ class projectModel extends model
      * Get project lists.
      * 
      * @param  string $status 
+     * @param  int    $limit 
      * @access public
      * @return array
      */
-    public function getList($status = 'all')
+    public function getList($status = 'all', $limit = 0)
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('status, end DESC')
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll();
     }
 
