@@ -1,0 +1,9 @@
+.tab-box  {margin:0;}
+.tab-box td, .tab-box tr{padding:0; margin:0}
+.tab-title{margin: 0; padding:5px; background:#efefef; border:none; border-bottom:1px solid #ddd; cursor:hand; font-size:14px}
+
+.block {border:1px solid #efefef}
+
+#row1{margin-bottom:10px}
+#row1 .table-1, #row1 caption{border:none}
+#row2 .table-1, #row2 caption{border:none}
