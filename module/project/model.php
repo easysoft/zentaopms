@@ -263,6 +263,10 @@ class projectModel extends model
                 $dataXML = $this->report->createSingleXML($this->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
                 $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 210);
             }
+            else
+            {
+                unset($projects[$key]);
+            }
         }
 
         return array('projects' => $projects, 'burns' => $burns);

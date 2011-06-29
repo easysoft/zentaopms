@@ -298,6 +298,10 @@ class productModel extends model
                 $dataXML = $this->report->createSingleXML($this->story->getDataOfStorysPerStatus($product->id), $this->lang->story->report->options->graph);
                 $charts[$product->id] = $this->report->createJSChart('pie2d', $dataXML, 'auto', 210);
             }
+            else
+            {
+                unset($products[$key]);
+            }
         }
 
         return array('products' => $products, 'charts' => $charts);
