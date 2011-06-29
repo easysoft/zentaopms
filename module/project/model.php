@@ -243,10 +243,12 @@ class projectModel extends model
     /**
      * Get project stats.
      * 
+     * @param  int    $counts 
+     *
      * @access public
      * @return array
      */
-    public function getProjectStats()
+    public function getProjectStats($counts)
     {
         $this->loadModel('report');
 
@@ -255,7 +257,7 @@ class projectModel extends model
         $this->lang->project->charts->burn->graph->yAxisName = "";
 
         $burns    = array();
-        $projects = $this->getList('doing', $this->config->index->projectCounts);
+        $projects = $this->getList('doing', $counts);
         foreach($projects as $key => $project)
         {
             if($this->checkPriv($project))

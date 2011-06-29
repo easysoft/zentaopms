@@ -281,15 +281,17 @@ class productModel extends model
     /**
      * Get product stats.
      * 
+     * @param  int    $counts 
+     *
      * @access public
      * @return array
      */
-    public function getStats()
+    public function getStats($counts)
     {
         $this->loadModel('report');
         $this->loadModel('story');
 
-        $products = $this->getList('normal', $this->config->index->projectCounts);
+        $products = $this->getList('normal', $counts);
         foreach($products as $key => $product)
         {
             if($this->checkPriv($product))
