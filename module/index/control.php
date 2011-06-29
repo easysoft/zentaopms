@@ -32,24 +32,7 @@ class index extends control
      */
     public function index()
     {
-        $this->view->header->title = $this->lang->index->common;
-
-        $projectStats = $this->loadModel('project')->getProjectStats();
-        $productStats = $this->loadModel('product')->getStats();
-
-        /* Set the dynamic pager. */
-        $maxCounts = max(count($projectStats['projects']), count($productStats['products']));   // Get the max counts of projects and products, thus to get more dynamics to keep smae high.
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, $this->config->index->dynamicCounts + $maxCounts);
-
-        $this->view->projectStats  = $projectStats;
-        $this->view->productStats  = $productStats;
-        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 'all', 'id_desc', $pager);
-        $this->view->todos         = $this->loadModel('todo')->getList('today', $this->app->user->account, 'wait, doing', $this->config->index->todoCounts);
-        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', $this->config->index->taskCounts);
-        $this->view->bugs          = $this->loadModel('bug')->getUserBugPairs($this->app->user->account, false, $this->config->index->bugCounts);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|withguest');
-        $this->display();
+        $this->locate($this->createLink('my', 'index'));
     }
 
     /**
