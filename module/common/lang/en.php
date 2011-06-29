@@ -74,13 +74,11 @@ $lang->assignedToAB = 'To';
 $lang->typeAB       = 'Type';
 
 /* The main menu. */
-$lang->menu->index   = 'Index|index|index';
 $lang->menu->my      = 'Dashboard|my|index';
 $lang->menu->product = 'Product|product|index';
 $lang->menu->project = 'Project|project|index';
 $lang->menu->qa      = 'Test|qa|index';
 $lang->menu->doc     = 'Doc|doc|index';
-//$lang->menu->forum   = 'Forum|forum|index';
 $lang->menu->company = 'Company|company|index';
 $lang->menu->admin   = 'Admin|admin|index';
 

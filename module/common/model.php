@@ -320,8 +320,7 @@ class commonModel extends model
         global $lang;
         $mainMenu = $moduleName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
-        list($menuLabel, $module, $method) = explode('|', $lang->menu->index);
-        echo html::a(helper::createLink($module, $method), $lang->ZenTaoPMS) . $lang->arrow;
+        echo html::a(helper::createLink('my', 'index'), $lang->ZenTaoPMS) . $lang->arrow;
         if($moduleName != 'index')
         {
             list($menuLabel, $module, $method) = explode('|', $lang->menu->$mainMenu);
