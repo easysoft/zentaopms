@@ -25,3 +25,13 @@ $lang->my->storyMenu->assignedToMe = '指派给我';
 $lang->my->storyMenu->openedByMe   = '由我创建';
 $lang->my->storyMenu->reviewedByMe = '由我评审';
 $lang->my->storyMenu->closedByMe   = '由我关闭';
+
+$lang->my->home->latest        =  '最新动态';
+$lang->my->home->action        =  "%s, %s <i>%s</i> %s <a href='%s'>%s</a>。";
+$lang->my->home->projects      =  '项目';
+$lang->my->home->products      =  '产品';
+$lang->my->home->projectHome   = '访问项目主页';
+$lang->my->home->productHome   = '访问产品主页';
+$lang->my->home->noProjectsTip = "目前还没有进行中的项目，<a href='%s'>马上创建一个项目吧</a>，<br />或者修改已有的项目，将其状态改为<i class='strong'>进行中</i>。
+                                 <a href='http://www.zentao.net/help-read-79236.html' target='_blank'>帮助文档</a>";
+$lang->my->home->noProductsTip = "目前还没有产品，<a href='%s'>马上创建一个产品吧</a>，<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>帮助文档</a>";

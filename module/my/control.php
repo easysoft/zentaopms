@@ -33,7 +33,27 @@ class my extends control
      */
     public function index()
     {
-        $this->locate($this->createLink('my', 'todo'));
+        $account = $this->app->user->account;
+
+        /* Get project and product stats. */
+        $projectStats = $this->loadModel('project')->getProjectStats($this->config->my->projectCounts);
+        $productStats = $this->loadModel('product')->getStats($this->config->my->productCounts);
+
+        /* Set the dynamic pager. */
+        $maxCounts = max(count($projectStats['projects']), count($productStats['products']));   // Get the max counts of projects and products, thus to get more dynamics to keep smae high.
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, $this->config->my->dynamicCounts + $maxCounts);
+
+        $this->view->projectStats  = $projectStats;
+        $this->view->productStats  = $productStats;
+        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 'all', 'id_desc', $pager);
+        $this->view->todos         = $this->loadModel('todo')->getList('today', $account, 'wait, doing', $this->config->my->todoCounts);
+        $this->view->tasks         = $this->loadModel('task')->getUserTasks($account, 'assignedTo', $this->config->my->taskCounts);
+        $this->view->bugs          = $this->loadModel('bug')->getUserBugPairs($account, false, $this->config->my->bugCounts);
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|withguest');
+        $this->view->header->title = $this->lang->my->common;
+
+        $this->display();
     }
 
     /**
