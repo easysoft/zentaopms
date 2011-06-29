@@ -14,15 +14,15 @@
 <?php include '../../common/view/colorize.html.php';?>
 <table class='cont' id='row1'>
   <tr valign='top'>
-    <td width='33%' style='padding-right:10px'><?php include './projects.html.php';?></td>
-    <td width='33%' style='padding-right:10px'><?php include './products.html.php';?></td>
+    <td width='33%' style='padding-right:20px'><?php include './projects.html.php';?></td>
+    <td width='33%' style='padding-right:20px'><?php include './products.html.php';?></td>
     <td width='33%'><?php include './dynamic.html.php';?></td>
   </tr>
 </table>
 <table class='cont' id='row2'>
   <tr valign='top'>
-    <td width='33%' style='padding-right:10px'><?php include './mytodoes.html.php';?></td>
-    <td width='33%' style='padding-right:10px'><?php include './mytasks.html.php';?></td>
+    <td width='33%' style='padding-right:20px'><?php include './mytodoes.html.php';?></td>
+    <td width='33%' style='padding-right:20px'><?php include './mytasks.html.php';?></td>
     <td width='33%'><?php include './mybugs.html.php';?></td>
   </tr>
 </table>

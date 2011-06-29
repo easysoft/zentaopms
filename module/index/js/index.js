@@ -4,8 +4,9 @@ $(function()
     $("#productbox").tabs("#productbox div.pane", {tabs: 'h2', effect: 'fade', initialIndex: 0});
 
     /* Set the heights of every block to keep them same height. */
-    row1Height = $('#row1').height();
-    row2Height = $('#row2').height();
+    row1Height = $('#row1').height() - 10;
+    row2Height = $('#row2').height() - 10;
+    row2Height = row2Height > 200 ? row2Height : 200;   // Min height is 200px.
     $('#row1 .block').each(function(){$(this).css('height', row1Height);})
     $('#row2 .block').each(function(){$(this).css('height', row2Height);})
 
