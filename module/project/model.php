@@ -222,7 +222,7 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('status, end DESC')
             ->beginIF($limit)->limit($limit)->fi()
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
@@ -257,13 +257,17 @@ class projectModel extends model
         $this->lang->project->charts->burn->graph->yAxisName = "";
 
         $burns    = array();
-        $projects = $this->getList('doing', $counts);
+        $projects = $this->getList(',wait, doing');
+        $i        = 1;
         foreach($projects as $key => $project)
         {
             if($this->checkPriv($project))
             {
-                $dataXML = $this->report->createSingleXML($this->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
-                $burns[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 210);
+                if($i <= $counts and $project->status == 'doing')
+                {
+                    $dataXML = $this->report->createSingleXML($this->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
+                    $charts[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 210);
+                }
             }
             else
             {
@@ -271,7 +275,7 @@ class projectModel extends model
             }
         }
 
-        return array('projects' => $projects, 'burns' => $burns);
+        return array('projects' => $projects, 'charts' => $charts);
     }
 
     /**
