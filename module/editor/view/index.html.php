@@ -59,11 +59,11 @@
           {
               echo $lang->editor->exampleHook;
           }
-          elseif(strpos(basename($filePath), '.js') !== false)
+          elseif($action and $action == 'extendOther' and strpos(basename($filePath), '.js') !== false)
           {
               echo $lang->editor->exampleJs;
           }
-          elseif(strpos(basename($filePath), '.css') !== false)
+          elseif($action and $action == 'extendOther' and strpos(basename($filePath), '.css') !== false)
           {
               echo $lang->editor->exampleCss;
           }
@@ -75,7 +75,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if($action != 'edit'):?>
+        <?php if($action and $action != 'edit'):?>
         <tr>
           <td><?php echo $lang->editor->overrideFile?></td>
           <td><input type='checkbox' name='override' id='override' /> <?php echo $lang->editor->isOverride?></td>
@@ -88,4 +88,3 @@
   </tr>
 </table>
 <?php include '../../common/view/footer.html.php';?>
-
