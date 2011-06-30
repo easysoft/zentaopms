@@ -16,7 +16,7 @@ $lang->dot          = '.';
 $lang->at           = ' at ';
 $lang->downArrow    = '↓';
 
-$lang->ZenTaoPMS     = 'ZenTaoPMS';
+$lang->ZenTaoPMS    = 'ZenTaoPMS';
 $lang->welcome      = "Welcome to『%s』{$lang->colon} {$lang->ZenTaoPMS}";
 $lang->myControl    = "Dashboard";
 $lang->currentPos   = 'Current';
@@ -258,8 +258,8 @@ $lang->pager->last      = "Last";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "Official Site";
-$lang->scrum          = "<a href='http://www.chinascrum.org' target='_blank'>Scrum:Community</a> ";
-$lang->training       = "<a href='http://www.zentao.net/article-view-79371.html' target='_blank'>Scrum:Training</a> ";
+$lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum community</a> ";
+$lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>Agile training</a> ";
 $lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=comemind' target='_blank'>Sponsor:Comemind</a>";
 $lang->zentaoKeywords = "Open Source Project Management System";
 $lang->zentaoDESC     = "ZenTaoPMS is an open sourced project management system."; 
