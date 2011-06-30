@@ -417,7 +417,7 @@ class user extends control
         $this->view->denyPage          = $this->referer;        // The denied page.
         $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
         $this->app->loadLang($module);
-        $this->app->loadLang('index');
+        $this->app->loadLang('my');
         $this->display();
         exit;
     }

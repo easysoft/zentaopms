@@ -20,7 +20,7 @@ include '../../common/view/header.lite.html.php';
 
       printf($lang->user->errorDeny, $moduleName, $methodName);
       echo "<br />";
-      echo html::a($this->createLink($config->default->module), $lang->index->common);
+      echo html::a($this->createLink($config->default->module), $lang->my->common);
       if($refererBeforeDeny) echo html::a(helper::safe64Decode($refererBeforeDeny), $lang->user->goback);
       echo html::a($this->createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), $lang->user->relogin);
       ?>
