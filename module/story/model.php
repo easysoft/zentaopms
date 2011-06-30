@@ -221,10 +221,10 @@ class storyModel extends model
             ->data($story)
             ->autoCheck()
             ->batchCheck($this->config->story->edit->requiredFields, 'notempty')
-            ->checkIF($story->closedBy, 'closedReason', 'notempty')
-            ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
-            ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            ->checkIF($story->closedReason == 'subdivided', 'childStories', 'notempty')
+            ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
+            ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
+            ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF(isset($story->closedReason) and $story->closedReason == 'subdivided', 'childStories', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError()) return common::createChanges($oldStory, $story);
     }
