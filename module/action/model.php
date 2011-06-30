@@ -36,8 +36,55 @@ class actionModel extends model
         $action->date       = helper::now();
         $action->comment    = htmlspecialchars($comment);
         $action->extra      = $extra;
+
+        /* Get product and project for this object. */
+        $productAndProject  = $this->getProductAndProject($objectType, $objectID);
+        $action->product    = $productAndProject['product'];
+        $action->project    = $productAndProject['project'];
+
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         return $this->dbh->lastInsertID();
+    }
+
+    /**
+     * Get product and project of an object.
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return array
+     */
+    public function getProductAndProject($objectType, $objectID)
+    {
+        $objectType  = strtolower($objectType);
+        $emptyRecord = array('product' => 0, 'project' => 0);
+
+        /* If objectType is product or project, return the objectID. */
+        if($objectType == 'product') return array('product' => $objectID, 'project' => 0);
+        if($objectType == 'project') return array('project' => $objectID, 'product' => 0);
+
+        /* Only process these object types. */
+        if(strpos('story, productplan, release, task, build. bug, case, testtask, doc', $objectType) !== false)
+        {
+            if(!isset($this->config->action->objectTables[$objectType])) return $emptyRecord;
+
+            /* Set fields to fetch. */
+            if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
+            if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project';
+            if($objectType == 'release') $fields = 'product, build';
+            if($objectType == 'task')    $fields = 'project, story';
+
+            $record = $this->dao->select($fields)->from($this->config->action->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+
+            /* Process story, release and task. */
+            if($objectType == 'story')   $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->fetch('project');
+            if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
+            if($objectType == 'task')    $record->product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetch('product');
+
+            if($record) return (array)$record;
+            return $emptyRecord;
+        }
+        return $emptyRecord;
     }
 
     /**
