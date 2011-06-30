@@ -408,10 +408,10 @@ EOD;
         switch($action)
         {
         case 'extendModel':
-            $fileName = empty($fileName) ? basename($filePath) . '.php' : $fileName;
+            $fileName = empty($fileName) ? strtolower(basename($filePath)) . '.php' : $fileName;
             return $extPath . 'model/' . $fileName;
         case 'extendControl':
-            $fileName = basename($filePath) . '.php';
+            $fileName = strtolower(basename($filePath)) . '.php';
             return $extPath . 'control/' . $fileName;
         case 'override':
             $fileName = basename($filePath);
