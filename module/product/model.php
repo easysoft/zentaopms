@@ -291,13 +291,13 @@ class productModel extends model
         $this->loadModel('report');
         $this->loadModel('story');
 
-        $products = $this->getList('normal');
+        $products = $this->getList(',normal');
         $i = 1;
         foreach($products as $key => $product)
         {
             if($this->checkPriv($product))
             {
-                if($i <= $counts)
+                if($i <= $counts and $product->status == 'normal')
                 {
                     $this->session->set('storyReport', "product = '{$product->id}' AND deleted = '0'");
                     $dataXML = $this->report->createSingleXML($this->story->getDataOfStorysPerStatus($product->id), $this->lang->story->report->options->graph);
