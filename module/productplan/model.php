@@ -62,11 +62,10 @@ class productplanModel extends model
     /**
      * Create a plan.
      * 
-     * @param  int    $product 
      * @access public
      * @return int
      */
-    public function create($product)
+    public function create()
     {
         $plan = fixer::input('post')->stripTags('title')->get();
         $this->dao->insert(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->batchCheck($this->config->productplan->create->requiredFields, 'notempty')->exec();
