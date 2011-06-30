@@ -1,5 +1,5 @@
 <div class='block'>
-<?php if(empty($productStats['products'])):?>
+<?php if(empty($productStats['charts'])):?>
 <table class='table-1 a-center' height='100%'>
   <caption><?php echo $lang->my->home->products;?></caption>
   <tr>

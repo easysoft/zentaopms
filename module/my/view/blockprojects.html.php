@@ -1,5 +1,5 @@
 <div class='block'>
-<?php if(count($projectStats['projects']) == 0):?>
+<?php if(count($projectStats['charts']) == 0):?>
 <table class='table-1 a-center' height='100%'>
   <caption><?php echo $lang->my->home->projects;?></caption>
   <tr>
