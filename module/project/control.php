@@ -80,13 +80,6 @@ class project extends control
         $this->view->products      = $products;
         $this->view->teamMembers   = $teamMembers;
 
-        /* Check the privilege. */
-        if(!$this->project->checkPriv($project))
-        {
-            echo(js::alert($this->lang->project->accessDenied));
-            die(js::locate('back'));
-        }
-
         return $project;
     }
 

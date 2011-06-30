@@ -65,6 +65,13 @@ class projectModel extends model
      */
     public function setMenu($projects, $projectID)
     {
+        /* Check the privilege. */
+        if(!isset($projects[$projectID]) and !$this->checkPriv($this->getById($projectID)))
+        {
+            echo(js::alert($this->lang->project->accessDenied));
+            die(js::locate('back'));
+        }
+
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
         $selectHtml = html::select('projectID', $projects, $projectID, "onchange=\"switchProject(this.value, '$moduleName', '$methodName');\"");
@@ -198,8 +205,9 @@ class projectModel extends model
             if($mode == 'noclosed' and $project->status == 'done') continue;
             if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
         }
+
         /* If the pairs is empty, to make sure there's an project in the pairs. */
-        if(empty($pairs) and isset($projects[0]))
+        if(empty($pairs) and isset($projects[0]) and $this->checkPriv($projects[0]))
         {
             $firstProject = $projects[0];
             $pairs[$firstProject->id] = $firstProject->name;
@@ -258,6 +266,7 @@ class projectModel extends model
 
         $burns    = array();
         $projects = $this->getList(',wait, doing');
+        $charts   = array();
         $i        = 1;
         foreach($projects as $key => $project)
         {
