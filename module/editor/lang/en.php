@@ -5,7 +5,7 @@ $lang->editor->newLang   = 'New language';
 $lang->editor->newConfig = 'New config';
 $lang->editor->newHook   = 'New hook';
 $lang->editor->newExtend = 'Nwe extend';
-$lang->editor->cover     = 'Cover';
+$lang->editor->override  = 'override';
 $lang->editor->edit      = 'Edit extend';
 
 $lang->editor->filePath     = "File Path:";
