@@ -291,14 +291,19 @@ class productModel extends model
         $this->loadModel('report');
         $this->loadModel('story');
 
-        $products = $this->getList('normal', $counts);
+        $products = $this->getList('normal');
+        $i = 1;
         foreach($products as $key => $product)
         {
             if($this->checkPriv($product))
             {
-                $this->session->set('storyReport', "product = '{$product->id}' AND deleted = '0'");
-                $dataXML = $this->report->createSingleXML($this->story->getDataOfStorysPerStatus($product->id), $this->lang->story->report->options->graph);
-                $charts[$product->id] = $this->report->createJSChart('pie2d', $dataXML, 'auto', 210);
+                if($i <= $counts)
+                {
+                    $this->session->set('storyReport', "product = '{$product->id}' AND deleted = '0'");
+                    $dataXML = $this->report->createSingleXML($this->story->getDataOfStorysPerStatus($product->id), $this->lang->story->report->options->graph);
+                    $charts[$product->id] = $this->report->createJSChart('pie2d', $dataXML, 'auto', 210);
+                    $i ++;
+                }
             }
             else
             {
