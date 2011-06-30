@@ -302,7 +302,7 @@ class doc extends control
         $this->view->productID        = $productID;
         $this->view->projectID        = $projectID;
         $this->view->products         = $projectID == 0 ? $this->product->getPairs() : $this->project->getProducts($projectID);
-        $this->view->projects         = $this->loadModel('project')->getPairs();
+        $this->view->projects         = $this->loadModel('project')->getPairs('all');
 
         $this->display();
     }
