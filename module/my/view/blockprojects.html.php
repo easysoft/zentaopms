@@ -10,13 +10,13 @@
   <table class='table-1 tab-box' id='projectbox'>
     <tr>
       <td>
-      <?php foreach($projectStats['projects'] as $id => $project):?>
-       <h2 class='tab-title' ><?php echo $lang->my->home->projects . $lang->colon . $project->name;?></h2>
+      <?php foreach($projectStats['charts'] as $projectID => $chart):?>
+       <h2 class='tab-title' ><?php echo $lang->my->home->projects . $lang->colon . $projectStats['projects'][$projectID]->name;?></h2>
        <div class='pane a-center'>
        <?php
-       echo $projectStats['burns'][$project->id];
-       echo html::a($this->createLink('project', 'browse', "projectid=$project->id"), $lang->my->home->projectHome);
-       common::printLink('project', 'burn', "projectID=$project->id", $lang->project->largeBurnChart);
+       echo $chart;
+       echo html::a($this->createLink('project', 'browse', "projectid=$projectID"), $lang->my->home->projectHome);
+       common::printLink('project', 'burn', "projectID=$projectID", $lang->project->largeBurnChart);
        common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
        printf($lang->project->howToUpdateBurn, $this->createLink('help', 'field', 'module=project&method-burn&field=updateburn'));
        ?>

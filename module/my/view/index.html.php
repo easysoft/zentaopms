@@ -27,9 +27,9 @@
   </tr>
 </table>
 <script language='Javascript'>
-var projectCounts = <?php echo count($projectStats['projects']);?>;
-var productCounts = <?php echo count($productStats['products']);?>;
-<?php for($i = 1;  $i <= count($projectStats['projects']); $i ++) echo "createChart$i();"; ?>
-<?php for($j = $i; $j <  count($productStats['products']) + $i; $j ++) echo "createChart$j();"; ?>
+var projectCounts = <?php echo count($projectStats['charts']);?>;
+var productCounts = <?php echo count($productStats['charts']);?>;
+<?php for($i = 1;  $i <= count($projectStats['charts']); $i ++) echo "createChart$i();"; ?>
+<?php for($j = $i; $j <  count($productStats['charts']) + $i; $j ++) echo "createChart$j();"; ?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

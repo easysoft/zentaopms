@@ -7,6 +7,12 @@
   <?php 
   foreach($actions as $action)
   {
+      $canView = false;
+      if(common::hasPriv('company', 'dynamic')) $canView = true;
+      if($action->product == 0 and $action->project == 0) $canView = true;
+      if(isset($productStats['products'][$action->product]) or isset($projectStats['projects'][$action->project])) $canView = true;
+
+      if(!$canView) continue;
       $user = isset($users[$action->actor]) ? $users[$action->actor] : $action->actor;
       if($action->action == 'login' or $action->action == 'logout') $action->objectName = '';
       echo "<tr><td class='nobr' width='95%'>";

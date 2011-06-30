@@ -15,12 +15,12 @@
   <table class='table-1 tab-box' id='productbox' height='100%'>
     <tr>
       <td valign='top'>
-      <?php foreach($productStats['products'] as $id => $product):?>
-      <h2 class='tab-title' ><?php echo $lang->my->home->products . $lang->colon . $product->name;?></h2>
+      <?php foreach($productStats['charts'] as $productID => $chart):?>
+      <h2 class='tab-title' ><?php echo $lang->my->home->products . $lang->colon . $productStats['products'][$productID]->name;?></h2>
       <div class='pane a-center'>
       <?php
-      echo $productStats['charts'][$product->id];
-      echo html::a($this->createLink('product', 'browse', "productID=$product->id"), $lang->my->home->productHome);
+      echo $chart;
+      echo html::a($this->createLink('product', 'browse', "productID=$productID"), $lang->my->home->productHome);
       ?>
       </div>
       <?php endforeach;?>
