@@ -24,6 +24,13 @@ class productModel extends model
      */
     public function setMenu($products, $productID, $extra = '')
     {
+        /* Has access privilege?. */
+        if(!isset($products[$productID]) and !$this->checkPriv($this->getById($productID)))
+        {
+            echo(js::alert($this->lang->product->accessDenied));
+            die(js::locate('back'));
+        }
+
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
@@ -292,6 +299,7 @@ class productModel extends model
         $this->loadModel('story');
 
         $products = $this->getList(',normal');
+        $charts   = array();
         $i = 1;
         foreach($products as $key => $product)
         {

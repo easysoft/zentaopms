@@ -73,13 +73,6 @@ class product extends control
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
-        /* Has access privilege?. */
-        if(!$this->product->checkPriv($this->product->getById($productID)))
-        {
-            echo(js::alert($this->lang->product->accessDenied));
-            die(js::locate('back'));
-        }
-
         /* Set menu. */
         $this->product->setMenu($this->products, $productID);
 
