@@ -134,7 +134,6 @@ class group extends control
             if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID);
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
             print(js::alert($result ? $this->lang->group->successSaved : $this->lang->group->errorNotSaved));
-            die(js::execute('parent.document.body.click();'));
         }
 
         if($type == 'byGroup')
