@@ -26,7 +26,16 @@ $lang->convert->source           = '来源系统';
 $lang->convert->version          = '版本';
 $lang->convert->mustSelectSource = "必须选择一个来源。";
 
+$lang->convert->direction              = '请选择项目问题转换方向';
+$lang->convert->questionTypeOfRedmine  = 'Redmine中问题类型';
+$lang->convert->aimTypeOfZentao        = '转化为Zentao中的类型';
+
+$lang->convert->directionList['bug']     = 'Bug';
+$lang->convert->directionList['task']    = '任务';
+$lang->convert->directionList['story']   = '需求';
+
 $lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x', 'bugfree_2' => '2.x');
+$lang->convert->sourceList['Redmine'] = array('Redmine_1_1' => '1.1');
 
 $lang->convert->setting     = '设置';
 $lang->convert->checkConfig = '检查配置';

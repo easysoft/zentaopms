@@ -78,6 +78,22 @@ class convert extends control
     }
 
     /**
+     * The setting page of Redmine.
+     * 
+     * @param  string    $version 
+     * @access public
+     * @return void
+     */
+    public function setRedmine($version)
+    {
+        $this->view->source      = 'Redmine';
+        $this->view->version     = $version;
+        $this->view->dbName      = 'redmine';
+        $this->view->dbCharset   = 'utf8';
+        $this->display();
+    }
+
+    /**
      * Check config. Same as setConfig.
      * 
      * @access public
@@ -122,6 +138,54 @@ class convert extends control
     }
 
     /**
+     * Check settings of Redmine.
+     * 
+     * @param  int    $version 
+     * @access public
+     * @return void
+     */
+    public function checkRedmine($version)
+    {
+        helper::import('./converter/redmine.php');
+        $converter = new redmineConvertModel();
+
+        /* Check it. */
+        $checkInfo['db'] = $converter->connectDB();
+        //if(is_object($checkInfo['db'])) $checkInfo['table'] = $converter->checkTables();
+        $checkInfo['path'] = $converter->checkPath();
+
+        /* Compute the checking result. */
+        $result = 'pass';
+        if(!is_object($checkInfo['db']) or !$checkInfo['path']) $result = 'fail';
+
+        /* Assign. */
+        $this->view->version   = $version;
+        $this->view->source    = 'Redmine';
+        $this->view->result    = $result;
+        $this->view->checkInfo = $checkInfo;
+        $this->display();
+    }
+
+    public function setParam()
+    {
+        if()
+        if(!empty($_POST))
+        {
+            foreach($this->post as $issueType => $aimType)
+            {
+                if('bug' == $aimType) convertBug($issueType);
+                elseif('task' == $aimType) convertTask($issueType);
+                elseif('story' == $aimType) convertStory($issueType);
+                else die('errer');
+            }
+        }
+        $trackers = $this->dao->dbh($this->sourceDBH)->select('name')->from('trackers')->fetchAll('id', $autoCompany = false);
+
+        $this->view->trackers = $trackers;
+        $this->display();
+    }
+
+   /**
      * Execute the converting.
      * 
      * @access public
@@ -155,4 +219,17 @@ class convert extends control
         $this->view->info    = bugfreeConvertModel::$info;
         $this->display();
     }
+
+    public function convertRedmine($version)
+    {
+        helper::import('./converter/redmine.php');
+        helper::import("./converter/redmine$version.php");
+        $className = "redmine11ConvertModel";
+        $converter = new $className();
+        $this->view->version = $version;
+        $this->view->result  = $converter->execute($version);
+        $this->view->info    = bugfreeConvertModel::$info;
+        $this->display();
+    }
+
 }
