@@ -165,42 +165,50 @@ class bug extends control
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
-         /* Get related objects id lists. */
-         $relatedModuleIdList   = array();
-         $relatedStoryIdList    = array();
-         $relatedTaskIdList     = array();
-         $relatedCaseIdList     = array();
-         $relatedProjectIdList  = array();
-
-         foreach($bugs as $bug)
-         {
-             $relatedModuleIdList[$bug->module]    = $bug->module;
-             $relatedStoryIdList[$bug->story]      = $bug->story;
-             $relatedTaskIdList[$bug->task]        = $bug->task;
-             $relatedCaseIdList[$bug->case]        = $bug->case;
-             $relatedProjectIdList[$bug->project]  = $bug->project;
-
-             /* Get related objects title or names. */
-             $relatedModules   = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
-             $relatedStories   = $this->dao->select('id, title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
-             $relatedTasks     = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
-             $relatedCases     = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-             $relatedProjects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->in($relatedProjectIdList)->fetchPairs();
-
-             /* fill some field with useful value. */
-             if(isset($relatedModules[$bug->module]))    $bug->module       = $relatedModules[$bug->module];
-             if(isset($relatedStories[$bug->story]))     $bug->story        = $relatedStories[$bug->story];
-             if(isset($relatedTasks[$bug->task]))        $bug->task         = $relatedTasks[$bug->task];
-             if(isset($relatedCases[$bug->case]))        $bug->case         = $relatedCases[$bug->case];
-             if(isset($relatedProjects[$bug->project]))  $bug->project      = $relatedProjects[$bug->project];
-         }
-
         /* Process the sql, get the conditon partion, save it to session. Thus the report page can use the same condition. */
         if($browseType != 'needconfirm')
         {
             $sql = explode('WHERE', $this->dao->get());
             $sql = explode('ORDER', $sql[1]);
             $this->session->set('bugReportCondition', $sql[0]);
+        }
+
+        /* Get custom fields. */
+        $customFields = $this->cookie->bugFields != false ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
+        $customed     = !($customFields == $this->config->bug->list->defaultFields);
+ 
+        /* If customed, get related name or titles. */
+        if($customed)
+        {
+            /* Get related objects id lists. */
+            $relatedModuleIdList   = array();
+            $relatedStoryIdList    = array();
+            $relatedTaskIdList     = array();
+            $relatedCaseIdList     = array();
+            $relatedProjectIdList  = array();
+
+            foreach($bugs as $bug)
+            {
+                $relatedModuleIdList[$bug->module]   = $bug->module;
+                $relatedStoryIdList[$bug->story]     = $bug->story;
+                $relatedTaskIdList[$bug->task]       = $bug->task;
+                $relatedCaseIdList[$bug->case]       = $bug->case;
+                $relatedProjectIdList[$bug->project] = $bug->project;
+
+                /* Get related objects title or names. */
+                $relatedModules   = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
+                $relatedStories   = $this->dao->select('id, title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+                $relatedTasks     = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
+                $relatedCases     = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
+                $relatedProjects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->in($relatedProjectIdList)->fetchPairs();
+
+                /* fill some field with useful value. */
+                if(isset($relatedModules[$bug->module]))    $bug->module       = $relatedModules[$bug->module];
+                if(isset($relatedStories[$bug->story]))     $bug->story        = $relatedStories[$bug->story];
+                if(isset($relatedTasks[$bug->task]))        $bug->task         = $relatedTasks[$bug->task];
+                if(isset($relatedCases[$bug->case]))        $bug->case         = $relatedCases[$bug->case];
+                if(isset($relatedProjects[$bug->project]))  $bug->project      = $relatedProjects[$bug->project];
+            }
         }
 
         /* Build the search form. */
@@ -214,11 +222,7 @@ class bug extends control
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
 
         $users = $this->user->getPairs('noletter');
-
-        /* Get custom fields. */
-        $customFields = $this->cookie->bugFields != false ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
-        $customed     = !($customFields == $this->config->bug->list->defaultFields);
-        
+       
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $position[]      = $this->lang->bug->common;
