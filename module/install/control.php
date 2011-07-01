@@ -36,15 +36,7 @@ class install extends control
 
         $this->view->header->title = $this->lang->install->welcome;
 
-        $snoopy = $this->app->loadClass('snoopy');
-        if(@$snoopy->fetchText('http://www.zentao.net/misc-getlatestrelease.json'))
-        {
-            $result = json_decode($snoopy->results);
-            if(isset($result->release) and $this->config->version != $result->release->version)
-            {
-                $this->view->latestRelease = $result->release;
-            }
-        }
+        if($release = $this->install->getLatestRelease()) $this->view->latestRelease = $release;
 
         $this->display();
     }
