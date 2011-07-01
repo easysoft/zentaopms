@@ -53,22 +53,22 @@ class redmine11ConvertModel extends redmineConvertModel
         $this->dao->dbh($this->dbh);
         $this->loadModel('tree')->fixModulePath();
 
-        $result['group']         = $convertGroupCount      
-        $result['user']          = $convertUserCount       
-        $result['product']       = $convertProductCount    
-        $result['project']       = $convertProjectCount    
-        $result['story']         = $convertStoryCount      
-        $result['task']          = $convertTaskCount       
-        $result['bug']           = $convertBugCount        
-        $result['productPlan']   = $convertProductPlanCount
-        $result['team']          = $convertTeamCount           
-        $result['release']       = $convertReleaseCount        
-        $result['build']         = $convertBuildCount          
-        $result['docLib']        = $convertDocLibCount         
-        $result['doc']           = $convertDocCount            
-        $result['file']          = $convertFileCount           
-        return $result;        
-    }                          
+        $result['group']       = $convertGroupCount;
+        $result['user']        = $convertUserCount ;
+        $result['product']     = $convertProductCount ;
+        $result['project']     = $convertProjectCount ;
+        $result['story']       = $convertStoryCount;
+        $result['task']        = $convertTaskCount ;
+        $result['bug']         = $convertBugCount ;
+        $result['productPlan'] = $convertProductPlanCount;
+        $result['team']        = $convertTeamCount;
+        $result['release']     = $convertReleaseCount;
+        $result['build']       = $convertBuildCount;
+        $result['docLib']      = $convertDocLibCount ;
+        $result['doc']         = $convertDocCount;
+        $result['file']        = $convertFileCount;
+        return $result;
+    }                       
                                
     /**                        
      * Set table names.        
@@ -166,10 +166,10 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get user list. */
         $users = $this->dao->dbh($this->sourceDBH)
-            ->select("login AS account, firstname, lastname, email")
+            ->select("login AS account, firstname, lastname, mail")
             ->from(REDMINE_TABLE_USERS)
             ->where('type')->eq('User')
-            ->orderBy('userID ASC')
+            ->orderBy('id ASC')
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao. */
@@ -677,7 +677,7 @@ class redmine11ConvertModel extends redmineConvertModel
             }
             elseif($file['objectType'] == 'Document')
             {
-                $file['objectType'] = 'doc' 
+                $file['objectType'] = 'doc' ;
                 $file['objectID']   = $this->map['docs'][$file['objectID']];
             }
             elseif($file['objectType'] == 'WikiPage')
@@ -701,7 +701,7 @@ class redmine11ConvertModel extends redmineConvertModel
                 $file['objectID']   = $this->dao->lastInsertID();
             }
 
-            $pathname = pathinfo($file['pathname'])
+            $pathname = pathinfo($file['pathname']);
             $file['extension'] = $pathname["extension"];
 
             /* Insert into database. */

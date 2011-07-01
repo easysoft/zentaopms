@@ -58,7 +58,7 @@ class redmineConvertModel extends convertModel
      */
     public function setPath()
     {
-        $this->filePath = realpath($this->post->installPath) . $this->app->getPathFix() . 'redmine' . $this->app->getPathFix();
+        $this->filePath = realpath($this->post->installPath) . $this->app->getPathFix() . 'files' . $this->app->getPathFix();
     }
 
     /**

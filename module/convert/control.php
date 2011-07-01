@@ -168,7 +168,6 @@ class convert extends control
 
     public function setParam()
     {
-        if()
         if(!empty($_POST))
         {
             foreach($this->post as $issueType => $aimType)

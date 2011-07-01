@@ -35,7 +35,7 @@ $lang->convert->directionList['task']    = '任务';
 $lang->convert->directionList['story']   = '需求';
 
 $lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x', 'bugfree_2' => '2.x');
-$lang->convert->sourceList['Redmine'] = array('Redmine_1_1' => '1.1');
+$lang->convert->sourceList['Redmine'] = array('Redmine_1.1' => '1.1');
 
 $lang->convert->setting     = '设置';
 $lang->convert->checkConfig = '检查配置';
