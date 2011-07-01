@@ -49,13 +49,40 @@ class editor extends control
             {
                 $okUrl = $this->editor->getExtendLink($filePath, 'extendControl', 'yes');
                 $cancelUrl = $this->editor->getExtendLink($filePath, 'extendControl', 'no');
-                if(!$isExtends) die(js::confirm($this->lang->editor->extendConfirm, $okUrl, $cencelUrl));
-                $fileContent = $this->editor->extendControl($filePath);
+                if(!$isExtends) die(js::confirm($this->lang->editor->extendConfirm, $okUrl, $cancelUrl));
+                $fileContent = $this->editor->extendControl($filePath, $isExtends);
+            }
+            elseif($action == 'newPage')
+            {
+                $fileContent = $this->editor->newControl($filePath);
             }
         }
         $this->view->fileContent = $fileContent;
         $this->view->filePath    = $filePath;
         $this->view->action      = $action;
+        $this->display();
+    }
+
+    /**
+     * Set Page name. 
+     * 
+     * @param  string    $filePath 
+     * @access public
+     * @return void
+     */
+    public function newPage($filePath)
+    {
+        $filePath = helper::safe64Decode($filePath);
+        if($_POST)
+        {
+            $saveFilePath = $this->editor->getSavePath($filePath, 'newMethod');
+            $extendLink   = $this->editor->getExtendLink($saveFilePath, 'newPage');
+            if(file_exists($saveFilePath) and !$this->post->override) die(js::confirm($this->lang->editor->repeatPage, $extendLink, '', 'parent'));
+            die(js::locate($extendLink, 'parent'));
+        }
+        $allModules = $this->editor->getModuleFiles();
+        $this->view->tree = $this->editor->printTree($allModules);
+        $this->view->filePath    = $filePath;
         $this->display();
     }
 
@@ -71,8 +98,8 @@ class editor extends control
         if($filePath and $_POST)
         {
             $filePath = helper::safe64Decode($filePath);
-            if($action != 'edit') $filePath = $this->editor->getSavePath($filePath, $action);
-            if($action != 'edit' and file_exists($filePath) and !$this->post->override) die(js::error($this->lang->editor->repeatFile));
+            if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
+            if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) die(js::error($this->lang->editor->repeatFile));
             $this->editor->save($filePath);
             die(js::locate(inlink('index', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'parent'));
         }

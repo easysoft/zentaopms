@@ -193,12 +193,16 @@ class editorModel extends model
             }
             else
             {
-                $tree .= $fileName . html::a($this->getExtendLink($filePath, "newExtend"), $this->lang->editor->newExtend);
+                $tree .= "$fileName " . html::a($this->getExtendLink($filePath, "newExtend"), $this->lang->editor->newExtend);
             }
         }
-        elseif($fileName == 'model.php' or $fileName == 'control.php')
+        elseif($fileName == 'model.php')
         {
-            $tree .= $fileName . html::a($this->getExtendLink($filePath, 'newMethod'), $this->lang->editor->newMethod);
+            $tree .= "$fileName " . html::a($this->getExtendLink($filePath, 'newMethod'), $this->lang->editor->newMethod);
+        }
+        elseif($fileName == 'control.php')
+        {
+            $tree .= "$fileName " . html::a(inlink('newPage', "filePath=" . helper::safe64Encode($filePath)), $this->lang->editor->newPage);
         }
         else
         {
@@ -220,11 +224,11 @@ class editorModel extends model
         $tree = '';
         if(strpos($filePath, '/ext/') !== false)
         {
-            $tree .= $file . html::a($this->getExtendLink($filePath, "edit"), $this->lang->edit) . html::a(inlink('delete', 'path=' . helper::safe64Encode($filePath)), $this->lang->delete, 'hiddenwin') . "\n";
+            $tree .= "$file " . html::a($this->getExtendLink($filePath, "edit"), $this->lang->edit) . html::a(inlink('delete', 'path=' . helper::safe64Encode($filePath)), $this->lang->delete, 'hiddenwin') . "\n";
         }
         elseif(basename(dirname($filePath))== 'view')
         {
-            $tree .= $file . html::a($this->getExtendLink($filePath, "override"), $this->lang->editor->override) . html::a($this->getExtendLink($filePath, "newHook"), $this->lang->editor->newHook) . "\n";
+            $tree .= "$file " . html::a($this->getExtendLink($filePath, "override"), $this->lang->editor->override) . html::a($this->getExtendLink($filePath, "newHook"), $this->lang->editor->newHook) . "\n";
         }
         else
         {
@@ -232,7 +236,7 @@ class editorModel extends model
             $action = 'extendOther';
             if($parentDir == 'control.php') $action = 'extendControl';
             if($parentDir == 'model.php') $action = 'extendModel';
-            $tree .= $file . html::a($this->getExtendLink($filePath, $action), $this->lang->editor->extend);
+            $tree .= "$file " . html::a($this->getExtendLink($filePath, $action), $this->lang->editor->extend);
             if($parentDir == 'lang') $tree .= html::a($this->getExtendLink($filePath, "new" . str_replace('-', '_', basename($filePath, '.php'))), $this->lang->editor->newLang);
             if(basename($filePath) == 'config.php') $tree .= html::a($this->getExtendLink($filePath, "newConfig"), $this->lang->editor->newConfig);
         }
@@ -305,7 +309,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function extendControl($filePath)
+    public function extendControl($filePath, $isExtends)
     {
         $className = basename(dirname(dirname($filePath)));
         $methodName = basename($filePath);
@@ -313,6 +317,7 @@ EOD;
         {
             $methodParam = $this->getParam($className, $methodName);
             return $fileContent = <<<EOD
+<?php
 include '../../control.php';
 class my$className extends $className
 {
@@ -327,12 +332,37 @@ EOD;
         {
             $methodCode = $this->getMethodCode($className, $methodName);
             return $fileContent = <<<EOD
+<?php
 class $className extends control
 {
-$methodCode
+$methodcode
 }
 EOD;
        }
+    }
+
+    /**
+     * Add a control method.
+     * 
+     * @param  string    $filePath 
+     * @access public
+     * @return string
+     */
+    public function newControl($filePath)
+    {
+        $className = strstr($filePath, '/module/');
+        $className = substr($className, 0, strpos($className, '/', 9));
+        $className = basename($className);
+        $methodName = basename($filePath, '.php');
+        return $fileContent = <<<EOD
+<?php
+class $className extends control
+{
+    public function $methodName()
+    {
+    }
+}
+EOD;
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
 /**
- * The dir view file of dir module of ZenTaoPMS.
+ * The editor view file of dir module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     dir
+ * @package     editor
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -29,29 +29,27 @@
         </caption>
         <?php if($filePath):?>        
         <tr>
-          <td><?php echo $lang->editor->filePath?></td>
+          <th><?php echo $lang->editor->filePath?></th>
           <td><?php echo $filePath?></td>
         </tr>
         <?php endif?>
+        <?php $rows = 40?>
+        <?php if(!empty($showContent)):?>
         <tr>
-          <td class='w-80px'><?php echo $lang->editor->fileContent?></td>
+          <th><?php echo $lang->editor->sourceFile?></th>
+          <td><?php echo "<pre>$showContent</pre>"?></td>
+        </tr>
+        <?php $rows = 20?>
+        <?php endif?>
+        <tr>
+          <th class='w-80px'><?php echo $lang->editor->fileContent?></th>
           <td>
-          <?php if(isset($showContent))
-          {
-              echo "<pre>$showContent</pre>";
-              $rows = 20;
-          }
-          else
-          {
-              $rows = 40;
-          }
-          ?>
           <?php echo html::textarea('fileContent', $fileContent, "class='area-1' rows=$rows")?>
           </td>
         </tr>
-        <?php if($action and $action != 'edit' and $action != 'extendControl' and $action != 'override'):?>
+        <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override'):?>
         <tr>
-          <td><?php echo $lang->editor->fileName?></td>
+          <th><?php echo $lang->editor->fileName?></th>
           <td>
           <?php
           echo html::input('fileName', '', "class=text-5");
@@ -75,9 +73,9 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if($action and $action != 'edit'):?>
+        <?php if($action and $action != 'edit' and $action != 'newPage'):?>
         <tr>
-          <td><?php echo $lang->editor->overrideFile?></td>
+          <th><?php echo $lang->editor->overrideFile?></th>
           <td><input type='checkbox' name='override' id='override' /> <?php echo $lang->editor->isOverride?></td>
         </tr>
         <?php endif;?>
