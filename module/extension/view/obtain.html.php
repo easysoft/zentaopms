@@ -72,9 +72,24 @@
             $downLinkClass = 'manual';
             if($extension->public)
             {
-                $label = $extension->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
-                echo html::a($installLink, $label, '', 'class="iframe button-c"');
-                $downLinkClass = 'manual';
+                if(isset($installeds[$extension->code]))
+                {
+                    if($installeds[$extension->code]->version != $extension->version)
+                    {
+                        $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
+                        echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe button-c"');
+                    }
+                    else
+                    {
+                        echo html::commonButton($lang->extension->installed, 'disabled=true');
+                    }
+                }
+                else
+                {
+                    $label = $extension->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
+                    echo html::a($installLink, $label, '', 'class="iframe button-c"');
+                    $downLinkClass = 'manual';
+                }
             }
             echo html::a($extension->downLink, $lang->extension->downloadAB, '', 'class="manual button-c"');
             echo html::a($extension->site, $lang->extension->site, '_blank', 'class=button-c');

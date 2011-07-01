@@ -145,7 +145,7 @@ class extensionModel extends model
      */
     public function getLocalExtensions($status)
     {
-        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('status')->eq($status)->fi()->fetchAll();
+        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('status')->eq($status)->fi()->fetchAll('code');
     }
 
     /**

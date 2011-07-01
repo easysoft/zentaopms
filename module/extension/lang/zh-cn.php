@@ -22,6 +22,7 @@ $lang->extension->download     = '下载插件';
 $lang->extension->downloadAB   = '下载';
 $lang->extension->upload       = '上传插件';
 $lang->extension->erase        = '清除';
+$lang->extension->upgrade      = '升级';
 
 $lang->extension->installed   = '已安装';
 $lang->extension->deactivated = '已禁用';

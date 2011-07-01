@@ -57,6 +57,7 @@ class extension extends control
 
         $this->view->moduleTree = $this->extension->getModulesByAPI();
         $this->view->extensions = $extensions;
+        $this->view->installeds = $this->extension->getLocalExtensions('installed');
         $this->view->pager      = $pager;
         $this->view->tab        = 'obtain';
         $this->view->type       = $type;
@@ -286,5 +287,20 @@ class extension extends control
         $this->view->removeCommands = $this->extension->erasePackage($extension);
         $this->view->header->title  = $this->lang->extension->eraseFinished;
         $this->display();
+    }
+
+    /**
+     * Update extension.
+     * 
+     * @param  string $extension 
+     * @param  string $downLink 
+     * @param  string $md5 
+     * @access public
+     * @return void
+     */
+    public function upgrade($extension, $downLink = '', $md5 = '')
+    {
+        $this->extension->removePackage($extension);
+        $this->locate(inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&overridePackage=no&ignoreCompitable=yes"));
     }
 }
