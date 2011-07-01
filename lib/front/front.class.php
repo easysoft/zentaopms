@@ -425,7 +425,7 @@ class js
         {
             $alertMessage = $message;
         }
-        return self::alert($alertMessage) .self::resetForm();
+        return self::alert($alertMessage);
     }
 
     /**
