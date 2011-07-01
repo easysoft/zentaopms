@@ -400,7 +400,7 @@ class js
      */
     static public function alert($message = '')
     {
-        return self::start() . "alert('" . $message . "')" . self::end();
+        return self::start() . "alert('" . $message . "')" . self::end() . self::resetForm();
     }
 
     /**
@@ -425,7 +425,19 @@ class js
         {
             $alertMessage = $message;
         }
-        return self::alert($alertMessage);
+        return self::alert($alertMessage) .self::resetForm();
+    }
+
+    /**
+     * Reset the submit form. 
+     * 
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function resetForm()
+    {
+        return self::start() . 'if(window.parent) window.parent.document.body.click();' . self::end();
     }
 
     /**
