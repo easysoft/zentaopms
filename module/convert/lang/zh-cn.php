@@ -90,4 +90,6 @@ $lang->convert->errorConnectDB     = '数据库连接失败 ';
 $lang->convert->errorFileNotExits  = '文件 %s 不存在';
 $lang->convert->errorUserExists    = '用户 %s 已存在';
 $lang->convert->errorGroupExists   = '分组 %s 已存在';
+$lang->convert->errorBuildExists   = 'Build %s 已存在';
+$lang->convert->errorReleaseExists = '发布 %s 已存在';
 $lang->convert->errorCopyFailed    = '文件 %s 拷贝失败';

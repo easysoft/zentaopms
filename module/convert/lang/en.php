@@ -90,4 +90,6 @@ $lang->convert->errorConnectDB     = 'Connect to database server failed.';
 $lang->convert->errorFileNotExits  = 'File %s not exits.';
 $lang->convert->errorUserExists    = 'User %s exits already.';
 $lang->convert->errorGroupExists   = 'Group %s exits already.';
+$lang->convert->errorBuildExists   = 'Build %s exits already.';
+$lang->convert->errorReleaseExists = 'Release %s exits already.';
 $lang->convert->errorCopyFailed    = 'file %s copy failed.';

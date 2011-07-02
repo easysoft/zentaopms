@@ -144,8 +144,8 @@ class redmine11ConvertModel extends redmineConvertModel
             ->where('type')->eq('Group')
             ->fetchAll('id', $autoCompany = false);
 
-        $zentaoGroupNames = $this->dao->dbh($this->dbh)->select('id, name')->from(TABLE_GROUP)->fetchPairs('id');
-        $zentaoGroupIDs = $this->dao->dbh($this->dbh)->select('name, id')->from(TABLE_GROUP)->fetchPairs('name');
+        $zentaoGroupNames = $this->dao->dbh($this->dbh)->select('id, name')->from(TABLE_GROUP)->fetchPairs();
+        $zentaoGroupIDs = $this->dao->dbh($this->dbh)->select('name, id')->from(TABLE_GROUP)->fetchPairs();
 
         /* Insert into zentao */
         $convertCount = 0;
@@ -323,19 +323,44 @@ class redmine11ConvertModel extends redmineConvertModel
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
+        $convertBuildsCount = 0;
+        $convertReleasesCount = 0;
+        $zentaoBuildNames = $this->dao->dbh($this->dbh)->select('id, name')->from(TABLE_BUILD)->fetchPairs();
+        $zentaoBuildIDs = $this->dao->dbh($this->dbh)->select('name, id')->from(TABLE_BUILD)->fetchPairs();
+        $zentaoReleaseNames = $this->dao->dbh($this->dbh)->select('id, name')->from(TABLE_RELEASE)->fetchPairs();
+        $zentaoReleaseIDs = $this->dao->dbh($this->dbh)->select('name, id')->from(TABLE_RELEASE)->fetchPairs();
         foreach($buildAndReleases as $id => $buildAndRelease)
         {
             $buildAndRelease->project = $this->map['project'][$id];
             $buildAndRelease->product = $this->map['products'][$buildAndRelease->project_id];
             unset($buildAndRelease->id);
             unset($buildAndRelease->project_id);
-            $this->dao->dbh($this->dbh)->insert(TABLE_BUILD)->data($buildAndRelease)->exec();
-            $buildAndRelease->build = $this->dao->lastInsertID();
+
+            if(in_array($buildAndRelease->name, $zentaoBuildNames))
+            {
+                self::$info['builds'][] = sprintf($this->lang->convert->errorBuildExists, $buildAndRelease->name);
+                $buildAndRelease->build = $zentaoBuildIDs[$buildAndRelease->name];
+            }
+            else
+            {
+                $this->dao->dbh($this->dbh)->insert(TABLE_BUILD)->data($buildAndRelease)->exec();
+                $buildAndRelease->build = $this->dao->lastInsertID();
+                $convertBuildsCount ++;
+            }
+
             unset($buildAndRelease->project);
-            $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($buildAndRelease)->exec();
+            if(in_array($buildAndRelease->name, $zentaoBuildNames))
+            {
+                self::$info['releases'][] = sprintf($this->lang->convert->errorReleaseExists, $buildAndRelease->name);
+            }
+            else
+            {
+                $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($buildAndRelease)->exec();
+                $convertReleasesCount ++;
+            }
         }
-        self::$convertBuildCount += count($buildAndReleases);
-        self::$convertReleaseCount += count($buildAndReleases);
+        self::$convertBuildCount += $convertBuildsCount;
+        self::$convertReleaseCount += $convertReleasesCount;
     }
 
     /**
