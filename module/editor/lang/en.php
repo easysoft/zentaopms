@@ -10,10 +10,9 @@ $lang->editor->override  = 'override';
 $lang->editor->edit      = 'Edit extend';
 
 $lang->editor->moduleList   = 'Module list';
-$lang->editor->filePath     = "File Path:";
+$lang->editor->filePath     = "Extend:";
 $lang->editor->sourceFile   = 'Source file:';
 $lang->editor->fileName     = "File name:";
-$lang->editor->fileContent  = "File content:";
 $lang->editor->isOverride   = "Override repeat file";
 $lang->editor->exampleHook  = "(For example:***.html.hook.php)";
 $lang->editor->exampleJs    = "(For example:***.js)";

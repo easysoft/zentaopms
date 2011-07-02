@@ -58,7 +58,7 @@ class editor extends control
             {
                 $this->view->showContent = htmlspecialchars(file_get_contents($filePath));
             }
-            elseif($action == 'edit' or $action == 'override')
+            if($action == 'edit' or $action == 'override')
             {
                 if(file_exists($filePath))
                 {
@@ -88,6 +88,10 @@ class editor extends control
             elseif($action == 'newPage')
             {
                 $fileContent = $this->editor->newControl($filePath);
+            }
+            elseif(strrpos(basename($filePath), '.php') !== false and empty($fileContent))
+            {
+                $fileContent = "<?php\n";
             }
         }
         $this->view->fileContent = $fileContent;
@@ -132,6 +136,7 @@ class editor extends control
             if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
             if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) die(js::error($this->lang->editor->repeatFile));
             $this->editor->save($filePath);
+            echo js::reload('parent.parent.extendWin');
             die(js::locate(inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'parent'));
         }
     }

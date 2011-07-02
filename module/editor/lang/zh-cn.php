@@ -10,10 +10,9 @@ $lang->editor->override  = '覆盖';
 $lang->editor->edit      = '编辑扩展';
 
 $lang->editor->moduleList   = '模块列表';
-$lang->editor->filePath     = "文件路径：";
+$lang->editor->filePath     = "扩展：";
 $lang->editor->sourceFile   = '源文件：';
 $lang->editor->fileName     = "文件名：";
-$lang->editor->fileContent  = "文件内容：";
 $lang->editor->isOverride   = "覆盖重复文件";
 $lang->editor->exampleHook  = "(例如：***.html.hook.php)";
 $lang->editor->exampleJs    = "(例如：***.js)";

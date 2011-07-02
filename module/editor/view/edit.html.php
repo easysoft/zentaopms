@@ -24,20 +24,17 @@
   <tr>
     <td>
       <?php echo "<span class='strong'>" . $lang->editor->sourceFile . '</span>'?><br />
-      <div id='showContent' style='width:90%; overflow:auto'>
-      <?php echo "<pre>$showContent</pre>"?>
-      </div>
+      <textarea id='showContent' class="w-p100"> <?php echo $showContent?></textarea>
     </td>
   </tr>
   <?php endif?>
   <tr>
-    <td colspan='2'>
-    <?php echo "<span class='strong'>" . $lang->editor->fileContent . '</span>'?><br />
-    <?php echo html::textarea('fileContent', $fileContent, "class='area-1'")?>
+    <td>
+    <?php echo html::textarea('fileContent', $fileContent, "class='w-p100'")?>
     </td>
   </tr>
   <tr>
-    <td colspan='2'>
+    <td>
     <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override' and $action != 'extendControl'):?>
     <?php echo "<span class='strong'>" . $lang->editor->fileName . '</span>'?>
       <span>
@@ -67,7 +64,7 @@
     <?php endif;?>
     </td>
   </tr>
-  <tr><td colspan='2' align='center'><?php echo html::submitButton()?><td></tr>
+  <tr><td align='center'><?php echo html::submitButton()?><td></tr>
 </table>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

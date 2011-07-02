@@ -18,4 +18,12 @@
     <td valign='top'><?php echo $tree?></td>
   </tr>
 </table>
-<?php include '../../common/view/footer.lite.html.php';?>
+<script type='text/javascript'>
+$(function()
+{
+    $("#extendTree").treeview();
+});
+</script>
+<iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='hidden'></iframe>
+<body>
+</html>

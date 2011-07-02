@@ -198,10 +198,21 @@ class editorModel extends model
         $tree = $isRoot ? "<ul id='extendTree'>\n" : "<ul>\n";
         if($isRoot)
         {
-            $langFile = key($files) . '/lang/' . $this->cookie->lang. '.php';
+            $langFile = dirname(key($files)) . '/lang/' . $this->cookie->lang. '.php';
             if(file_exists($langFile)) include_once $langFile;
-            $module = basename(key($files));
-            $this->module = empty($lang) ? '' : $lang->$module;
+            $module = basename(dirname(key($files)));
+            if(isset($lang->$module))
+            {
+                $this->module = $lang->$module;
+            }
+            elseif(isset($this->lang->$module))
+            {
+                $this->module = $this->lang->$module;
+            }
+            else
+            {
+                $this->module = '';
+            }
         }
         foreach($files as $key => $file)
         {
@@ -286,7 +297,14 @@ class editorModel extends model
         }
         elseif(isset($this->lang->editor->translate[$file]))
         {
-           $file = "<span title='$file'>" . $this->lang->editor->translate[$file] . '</span>';
+            if(strpos($filePath, '/ext/') !== false and $file == 'config.php')
+            {
+                $file = "<span title='$file'>$file</span>";
+            }
+            else
+            {
+                $file = "<span title='$file'>" . $this->lang->editor->translate[$file] . '</span>';
+            }
         }
         else
         {
@@ -362,8 +380,8 @@ class editorModel extends model
      */
     public function extendModel($filePath)
     {
-        include(dirname($filePath));
         $className = basename(dirname(dirname($filePath)));
+        if(!class_exists($className)) include(dirname($filePath));
         $methodName = basename($filePath);
         $methodParam = $this->getParam($className, $methodName, 'Model');
         return $fileContent = <<<EOD
@@ -384,8 +402,8 @@ EOD;
      */
     public function extendControl($filePath, $isExtends)
     {
-        include(dirname($filePath));
         $className = basename(dirname(dirname($filePath)));
+        if(!class_exists($className)) include(dirname($filePath));
         $methodName = basename($filePath);
         if($isExtends == 'yes')
         {
