@@ -37,10 +37,12 @@
       $uninstallCode  = html::a(inlink('uninstall',  "extension=$extension->code"), $lang->extension->uninstall, '',  "class='button-c iframe'");
       $installCode    = html::a(inlink('install',    "extension=$extension->code"), $lang->extension->install, '',    "class='button-c iframe'");
       $eraseCode      = html::a(inlink('erase',      "extension=$extension->code"), $lang->extension->erase, '',      "class='button-c iframe'");
-
-      if($extension->status == 'installed')   echo $deactivateCode . $uninstallCode;
-      if($extension->status == 'deactivated') echo $activateCode   . $uninstallCode;
-      if($extension->status == 'available')   echo $installCode    . $eraseCode;
+      if($extension->function != 'patch')
+      {
+          if($extension->status == 'installed')   echo $deactivateCode . $uninstallCode;
+          if($extension->status == 'deactivated') echo $activateCode   . $uninstallCode;
+          if($extension->status == 'available')   echo $installCode    . $eraseCode;
+      }
       echo html::a($extension->site, $lang->extension->site, '_blank', 'class=button-c');
       ?>
     </td>

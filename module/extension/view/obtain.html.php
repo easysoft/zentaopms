@@ -72,23 +72,26 @@
             $downLinkClass = 'manual';
             if($extension->public)
             {
-                if(isset($installeds[$extension->code]))
+                if($extension->function != 'computer' and $extension->function != 'mobile')
                 {
-                    if($installeds[$extension->code]->version != $extension->version)
+                    if(isset($installeds[$extension->code]))
                     {
-                        $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
-                        echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe button-c"');
+                        if($installeds[$extension->code]->version != $extension->version)
+                        {
+                            $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
+                            echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe button-c"');
+                        }
+                        else
+                        {
+                            echo html::commonButton($lang->extension->installed, 'disabled=true');
+                        }
                     }
                     else
                     {
-                        echo html::commonButton($lang->extension->installed, 'disabled=true');
+                        $label = $extension->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
+                        echo html::a($installLink, $label, '', 'class="iframe button-c"');
+                        $downLinkClass = 'manual';
                     }
-                }
-                else
-                {
-                    $label = $extension->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
-                    echo html::a($installLink, $label, '', 'class="iframe button-c"');
-                    $downLinkClass = 'manual';
                 }
             }
             echo html::a($extension->downLink, $lang->extension->downloadAB, '', 'class="manual button-c"');
