@@ -14,12 +14,11 @@ $lang->editor->filePath     = "File Path:";
 $lang->editor->sourceFile   = 'Source file:';
 $lang->editor->fileName     = "File name:";
 $lang->editor->fileContent  = "File content:";
-$lang->editor->overrideFile = "Repeat file:";
-$lang->editor->isOverride   = "Override";
-$lang->editor->exampleHook  = "For example:***.html.hook.php";
-$lang->editor->exampleJs    = "For example:***.js";
-$lang->editor->exampleCss   = "For example:***.css";
-$lang->editor->examplePHP   = "For example:***.php";
+$lang->editor->isOverride   = "Override repeat file";
+$lang->editor->exampleHook  = "(For example:***.html.hook.php)";
+$lang->editor->exampleJs    = "(For example:***.js)";
+$lang->editor->exampleCss   = "(For example:***.css)";
+$lang->editor->examplePHP   = "(For example:***.php)";
 $lang->editor->pageName     = "Page Name:";
 
 $lang->editor->deleteConfirm = 'Are you sure?';

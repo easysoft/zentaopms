@@ -14,12 +14,11 @@ $lang->editor->filePath     = "文件路径：";
 $lang->editor->sourceFile   = '源文件：';
 $lang->editor->fileName     = "文件名：";
 $lang->editor->fileContent  = "文件内容：";
-$lang->editor->overrideFile = "重复文件：";
-$lang->editor->isOverride   = "覆盖";
-$lang->editor->exampleHook  = "例如：***.html.hook.php";
-$lang->editor->exampleJs    = "例如：***.js";
-$lang->editor->exampleCss   = "例如：***.css";
-$lang->editor->examplePHP   = "例如：***.php";
+$lang->editor->isOverride   = "覆盖重复文件";
+$lang->editor->exampleHook  = "(例如：***.html.hook.php)";
+$lang->editor->exampleJs    = "(例如：***.js)";
+$lang->editor->exampleCss   = "(例如：***.css)";
+$lang->editor->examplePHP   = "(例如：***.php)";
 $lang->editor->pageName     = "页面名称：";
 
 $lang->editor->deleteConfirm = '是否要删除？';

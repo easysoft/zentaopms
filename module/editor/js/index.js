@@ -1,6 +1,6 @@
 $(function()
 {
-   var showHeight = $(window).height() - 125;
+   var showHeight = $(window).height() - $('#header').height() - $('#footer').height() - $('#hiddenwin').height();
    $('#editWin').height(showHeight);
    $('#extendWin').height(showHeight);
 });

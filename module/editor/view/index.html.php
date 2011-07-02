@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<table class='table-1'>
+<table class='table-1 bd-none'>
   <tr valign='top'>
     <td width='160'>
       <div class='box-title'><?php echo $lang->editor->moduleList?></div>

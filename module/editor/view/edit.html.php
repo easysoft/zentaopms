@@ -20,56 +20,53 @@
     <?php echo $filePath?>
   </caption>
   <?php endif?>
-  <?php $rows = 39?>
   <?php if(!empty($showContent)):?>
   <tr>
-    <th><?php echo $lang->editor->sourceFile?></th>
     <td>
-<div style='width:100%; height:300px; overflow:auto'>
-<?php echo "<pre>$showContent</pre>"?>
-</div>
-</td>
+      <?php echo "<span class='strong'>" . $lang->editor->sourceFile . '</span>'?><br />
+      <div id='showContent' style='width:90%; overflow:auto'>
+      <?php echo "<pre>$showContent</pre>"?>
+      </div>
+    </td>
   </tr>
-  <?php $rows = 20?>
   <?php endif?>
   <tr>
-    <th class='w-80px'><?php echo $lang->editor->fileContent?></th>
-    <td>
-    <?php echo html::textarea('fileContent', $fileContent, "class='area-1' rows=$rows")?>
+    <td colspan='2'>
+    <?php echo "<span class='strong'>" . $lang->editor->fileContent . '</span>'?><br />
+    <?php echo html::textarea('fileContent', $fileContent, "class='area-1'")?>
     </td>
   </tr>
-  <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override' and $action != 'extendControl'):?>
   <tr>
-    <th><?php echo $lang->editor->fileName?></th>
-    <td>
-    <?php
-    echo html::input('fileName', '', "class=text-5");
-    if($action == 'newHook')
-    {
-        echo $lang->editor->exampleHook;
-    }
-    elseif($action and $action == 'extendOther' and strpos(basename($filePath), '.js') !== false or $action == 'newJS')
-    {
-        echo $lang->editor->exampleJs;
-    }
-    elseif($action and $action == 'extendOther' and strpos(basename($filePath), '.css') !== false or $action == 'newCSS')
-    {
-        echo $lang->editor->exampleCss;
-    }
-    else
-    {
-        echo $lang->editor->examplePHP;
-    }
-    ?>
+    <td colspan='2'>
+    <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override' and $action != 'extendControl'):?>
+    <?php echo "<span class='strong'>" . $lang->editor->fileName . '</span>'?>
+      <span>
+      <?php
+      echo html::input('fileName', '', "class=text-4");
+      if($action == 'newHook')
+      {
+          echo $lang->editor->exampleHook;
+      }
+      elseif($action and $action == 'extendOther' and strpos(basename($filePath), '.js') !== false or $action == 'newJS')
+      {
+          echo $lang->editor->exampleJs;
+      }
+      elseif($action and $action == 'extendOther' and strpos(basename($filePath), '.css') !== false or $action == 'newCSS')
+      {
+          echo $lang->editor->exampleCss;
+      }
+      else
+      {
+          echo $lang->editor->examplePHP;
+      }
+     ?>
+     </span>
+    <?php endif;?>
+    <?php if($action and $action != 'edit' and $action != 'newPage'):?>
+      <span class='strong'><input type='checkbox' name='override' id='override' /> <?php echo $lang->editor->isOverride?></span>
+    <?php endif;?>
     </td>
   </tr>
-  <?php endif;?>
-  <?php if($action and $action != 'edit' and $action != 'newPage'):?>
-  <tr>
-    <th><?php echo $lang->editor->overrideFile?></th>
-    <td><input type='checkbox' name='override' id='override' /> <?php echo $lang->editor->isOverride?></td>
-  </tr>
-  <?php endif;?>
   <tr><td colspan='2' align='center'><?php echo html::submitButton()?><td></tr>
 </table>
 </form>
