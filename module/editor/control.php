@@ -17,15 +17,43 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function index($filePath = '', $action = '', $isExtends = '')
+    public function index()
     {
-        $allModules = $this->editor->getModuleFiles();
-        $this->view->tree = $this->editor->printTree($allModules);
+        $this->view->moduleList = $this->editor->getModules();
+        $this->display();
+    }
+
+    /**
+     * Show this module of files.
+     * 
+     * @param  string $moduleDir 
+     * @access public
+     * @return void
+     */
+    public function extend($moduleDir = '')
+    {
+        $moduleFiles = $this->editor->getModuleFiles($moduleDir);
+        $this->view->module = $moduleDir;
+        $this->view->tree = $this->editor->printTree($moduleFiles);
+        $this->display();
+    }
+
+    /**
+     * Edit extend. 
+     * 
+     * @param  string $filePath 
+     * @param  string $action 
+     * @param  string $isExtends 
+     * @access public
+     * @return void
+     */
+    public function edit($filePath = '', $action = '', $isExtends = '')
+    {
         $this->view->safeFilePath = $filePath;
-        $filePath = helper::safe64Decode($filePath);
         $fileContent  = '';
         if($filePath)
         {
+            $filePath = helper::safe64Decode($filePath);
             if($action == 'extendOther' and file_exists($filePath))
             {
                 $this->view->showContent = htmlspecialchars(file_get_contents($filePath));
@@ -35,6 +63,11 @@ class editor extends control
                 if(file_exists($filePath))
                 {
                     $fileContent = file_get_contents($filePath);
+                    if($action == 'override')
+                    {
+                        $fileContent = str_replace('../../', '../../../', $fileContent);
+                        $fileContent = str_replace(array('\'./', '"./'), array('\'../../view/', '"../../view'), $fileContent);
+                    }
                 }
                 else
                 {
@@ -80,8 +113,6 @@ class editor extends control
             if(file_exists($saveFilePath) and !$this->post->override) die(js::confirm($this->lang->editor->repeatPage, $extendLink, '', 'parent'));
             die(js::locate($extendLink, 'parent'));
         }
-        $allModules = $this->editor->getModuleFiles();
-        $this->view->tree = $this->editor->printTree($allModules);
         $this->view->filePath    = $filePath;
         $this->display();
     }
@@ -101,7 +132,7 @@ class editor extends control
             if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
             if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) die(js::error($this->lang->editor->repeatFile));
             $this->editor->save($filePath);
-            die(js::locate(inlink('index', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'parent'));
+            die(js::locate(inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'parent'));
         }
     }
 

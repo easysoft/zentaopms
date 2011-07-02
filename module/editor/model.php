@@ -12,44 +12,60 @@
 class editorModel extends model
 {
     /**
+     * Get all modules 
+     * 
+     * @access public
+     * @return string
+     */
+    public function getModules()
+    {
+        $modules = glob($this->app->getModuleRoot() . '*');
+        $moduleList  = '<ul>';
+        foreach($modules as $module)
+        {
+            $module = basename($module);
+            if($module == 'editor' or $module == 'help' or $module == 'setting') continue;
+            $moduleName  = !empty($this->lang->editor->modules[$module]) ? $this->lang->editor->modules[$module] : $module;
+            $moduleList .= '<li>' . html::a(inlink('extend', "moduleDir=$module"),  $moduleName, 'extendWin') . '</li>';
+        }
+        $moduleList .= '</ul>';
+        return $moduleList;
+    }
+
+    /**
      * Get module files, contain control's methods and model's method but except ext.
      * 
      * @access public
      * @return array
      */
-    public function getModuleFiles()
+    public function getModuleFiles($moduleDir)
     {
         $moduleRoot = $this->app->getModuleRoot();
-        $allModules = array();
-        $moduleDirs = scandir($moduleRoot);
-        foreach($moduleDirs as $moduleDir)
+        $moduleFullDir = $moduleRoot . $moduleDir;
+        $moduleFiles = scandir($moduleFullDir);
+        foreach($moduleFiles as $moduleFile)
         {
-            if($moduleDir == '.' or $moduleDir == '..' or $moduleDir == '.svn') continue;
-            $moduleFullDir = $moduleRoot . $moduleDir;
-            $moduleFiles = scandir($moduleFullDir);
-            foreach($moduleFiles as $moduleFile)
+            if($moduleFile == '.' or $moduleFile == '..' or $moduleFile == '.svn') continue;
+            $moduleFullFile = $moduleFullDir . '/' . $moduleFile;
+            if($moduleFile == 'control.php' or $moduleFile == 'model.php')
             {
-                if($moduleFile == '.' or $moduleFile == '..' or $moduleFile == '.svn') continue;
-                $moduleFullFile = $moduleFullDir . '/' . $moduleFile;
-                if($moduleFile == 'control.php' or $moduleFile == 'model.php')
-                {
-                    $allModules[$moduleFullDir][$moduleFullFile] = $this->analysis($moduleFullFile);
-                }
-                elseif($moduleFile == 'ext')
-                {
-                    $allModules[$moduleFullDir][$moduleFullFile] = $this->getExtensionFiles($moduleFullFile);
-                }
-                elseif(is_dir($moduleFullFile)) 
-                {
-                    $ext = ($moduleFile == 'js' or $moduleFile == 'css') ? $moduleFile : 'php';
-                    foreach(glob($moduleFullFile . '/' . "*.$ext") as $fileName) $allModules[$moduleFullDir][$moduleFullFile][$fileName] = basename($fileName);
-                }
-                else
-                {
-                    $allModules[$moduleFullDir][$moduleFullFile] = $moduleFile;
-                }
+                $allModules[$moduleFullDir][$moduleFullFile] = $this->analysis($moduleFullFile);
+            }
+            elseif($moduleFile == 'ext')
+            {
+                $allModules[$moduleFullDir][$moduleFullFile] = $this->getExtensionFiles($moduleFullFile);
+            }
+            elseif(is_dir($moduleFullFile)) 
+            {
+                $ext = ($moduleFile == 'js' or $moduleFile == 'css') ? $moduleFile : 'php';
+                foreach(glob($moduleFullFile . '/' . "*.$ext") as $fileName) $allModules[$moduleFullDir][$moduleFullFile][$fileName] = basename($fileName);
+            }
+            else
+            {
+                $allModules[$moduleFullDir][$moduleFullFile] = $moduleFile;
             }
         }
+        $allModules = $this->sortModule($moduleFullDir, $allModules);
         return $allModules;
     }
 
@@ -87,7 +103,30 @@ class editorModel extends model
                 }
             }
         }
+        $extensionList = $this->sortModule($extPath, $extensionList, true);
         return $extensionList;
+    }
+
+    /**
+     * Sort module 
+     * 
+     * @param  string    $filePath 
+     * @param  string    $moduleFiles 
+     * @param  bool      $isExtension 
+     * @access public
+     * @return array
+     */
+    public function sortModule($filePath, $moduleFiles, $isExtension = false)
+    {
+        $sort = $isExtension ? 'extSort' : 'sort';
+        $sortModules = array();
+        if(!$isExtension) $moduleFiles = $moduleFiles[$filePath];
+        foreach($this->config->editor->$sort as $sort)
+        {
+            $sortKey = empty($sort) ? $filePath : $filePath . '/' . $sort;
+            if(array_key_exists($sortKey, $moduleFiles)) $sortModules[$sortKey] = $moduleFiles[$sortKey];
+        }
+        return $sortModules;
     }
 
     /**
@@ -140,6 +179,7 @@ class editorModel extends model
         {
             $methodName = $method->name;
             if($method->getFileName() != $fileName) continue;
+            if($methodName == '__construct') continue;
             $classMethod[$fileName . '/' . $methodName] = $methodName;
         }
         return $classMethod;
@@ -155,7 +195,14 @@ class editorModel extends model
     public function printTree($files, $isRoot = true)
     {
         if(empty($files) or !is_array($files)) return false;
-        $tree = $isRoot ? "<ul id='tree'>\n" : "<ul>\n";
+        $tree = $isRoot ? "<ul id='extendTree'>\n" : "<ul>\n";
+        if($isRoot)
+        {
+            $langFile = key($files) . '/lang/' . $this->cookie->lang. '.php';
+            if(file_exists($langFile)) include_once $langFile;
+            $module = basename(key($files));
+            $this->module = empty($lang) ? '' : $lang->$module;
+        }
         foreach($files as $key => $file)
         {
             $tree .= "<li>\n";
@@ -185,28 +232,39 @@ class editorModel extends model
     {
         $tree = '';
         $fileName = basename($filePath);
+        if(isset($this->lang->editor->modules[$fileName]))
+        {
+            $file = "<span title='$fileName'>" . $this->lang->editor->modules[$fileName] . '</span>';
+        }
+        elseif(isset($this->lang->editor->translate[$fileName]))
+        {
+           $file = "<span title='$fileName'>" . $this->lang->editor->translate[$fileName] . '</span>';
+        }
+        else
+        {
+            $file = "<span title='$fileName'>$fileName</span>";
+        }
         if(strpos($filePath, '/ext/') !== false)
         {
-            if($fileName == 'lang' or $fileName == 'js' or $fileName == 'css')
+            switch($fileName)
             {
-                $tree .= $fileName;
-            }
-            else
-            {
-                $tree .= "$fileName " . html::a($this->getExtendLink($filePath, "newExtend"), $this->lang->editor->newExtend);
+            case 'lang': $tree .= $file; break;
+            case 'js':   $tree .= "$file " . html::a($this->getExtendLink($filePath, "newJS"), $this->lang->editor->newExtend, 'editWin'); break;
+            case 'css':  $tree .= "$file " . html::a($this->getExtendLink($filePath, "newCSS"), $this->lang->editor->newExtend, 'editWin'); break;
+            default:     $tree .= "$file " . html::a($this->getExtendLink($filePath, "newExtend"), $this->lang->editor->newExtend, 'editWin');
             }
         }
         elseif($fileName == 'model.php')
         {
-            $tree .= "$fileName " . html::a($this->getExtendLink($filePath, 'newMethod'), $this->lang->editor->newMethod);
+            $tree .= "$file " . html::a($this->getExtendLink($filePath, 'newMethod'), $this->lang->editor->newMethod, 'editWin');
         }
         elseif($fileName == 'control.php')
         {
-            $tree .= "$fileName " . html::a(inlink('newPage', "filePath=" . helper::safe64Encode($filePath)), $this->lang->editor->newPage);
+            $tree .= "$file " . html::a(inlink('newPage', "filePath=" . helper::safe64Encode($filePath)), $this->lang->editor->newPage, 'editWin');
         }
         else
         {
-            $tree .= $fileName;
+            $tree .= $file;
         }
         return $tree;
     }
@@ -222,13 +280,27 @@ class editorModel extends model
     public function addLink4File($filePath, $file)
     {
         $tree = '';
+        if(isset($this->module->$file) and !is_object($this->module->$file) and !is_array($this->module->$file))
+        {
+           $file = "<span title='$file'>" . $this->module->$file . '</span>';
+        }
+        elseif(isset($this->lang->editor->translate[$file]))
+        {
+           $file = "<span title='$file'>" . $this->lang->editor->translate[$file] . '</span>';
+        }
+        else
+        {
+            $file = "<span title='$file'>$file</span>";
+        }
         if(strpos($filePath, '/ext/') !== false)
         {
-            $tree .= "$file " . html::a($this->getExtendLink($filePath, "edit"), $this->lang->edit) . html::a(inlink('delete', 'path=' . helper::safe64Encode($filePath)), $this->lang->delete, 'hiddenwin') . "\n";
+            $tree .= "$file " . html::a($this->getExtendLink($filePath, "edit"), $this->lang->edit, 'editWin');
+            $tree .= html::a(inlink('delete', 'path=' . helper::safe64Encode($filePath)), $this->lang->delete, 'hiddenwin') . "\n";
         }
         elseif(basename(dirname($filePath))== 'view')
         {
-            $tree .= "$file " . html::a($this->getExtendLink($filePath, "override"), $this->lang->editor->override) . html::a($this->getExtendLink($filePath, "newHook"), $this->lang->editor->newHook) . "\n";
+            $tree .= "$file " . html::a($this->getExtendLink($filePath, "override"), $this->lang->editor->override, 'editWin');
+            $tree .= html::a($this->getExtendLink($filePath, "newHook"), $this->lang->editor->newHook, 'editWin') . "\n";
         }
         else
         {
@@ -236,9 +308,9 @@ class editorModel extends model
             $action = 'extendOther';
             if($parentDir == 'control.php') $action = 'extendControl';
             if($parentDir == 'model.php') $action = 'extendModel';
-            $tree .= "$file " . html::a($this->getExtendLink($filePath, $action), $this->lang->editor->extend);
-            if($parentDir == 'lang') $tree .= html::a($this->getExtendLink($filePath, "new" . str_replace('-', '_', basename($filePath, '.php'))), $this->lang->editor->newLang);
-            if(basename($filePath) == 'config.php') $tree .= html::a($this->getExtendLink($filePath, "newConfig"), $this->lang->editor->newConfig);
+            $tree .= "$file " . html::a($this->getExtendLink($filePath, $action), $this->lang->editor->extend, 'editWin');
+            if($parentDir == 'lang') $tree .= html::a($this->getExtendLink($filePath, "new" . str_replace('-', '_', basename($filePath, '.php'))), $this->lang->editor->newLang, 'editWin');
+            if(basename($filePath) == 'config.php') $tree .= html::a($this->getExtendLink($filePath, "newConfig"), $this->lang->editor->newConfig, 'editWin');
         }
         return $tree;
     }
@@ -254,7 +326,7 @@ class editorModel extends model
      */
     public function getExtendLink($filePath, $action, $isExtends = '')
     {
-        return inlink('index', "filePath=" . helper::safe64Encode($filePath) . "&action=$action&isExtends=$isExtends");
+        return inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=$action&isExtends=$isExtends");
     }
 
     /**
@@ -269,14 +341,14 @@ class editorModel extends model
         $fileContent = $this->post->fileContent;
         if(get_magic_quotes_gpc()) $fileContent = stripslashes($fileContent);
         $dirPath = dirname($filePath);
-        if(!is_dir($dirPath) and is_writable(dirname($dirPath))) mkdir($dirPath, 0777, true);
+        $extFilePath = substr($filePath, 0, strpos($filePath, '/ext/') + 4);
+        if(!is_dir($dirPath) and is_writable($extFilePath)) mkdir($dirPath, 0777, true);
         if(is_writable($dirPath))
         {
             file_put_contents($filePath, $fileContent);
         }
         else
         {
-            $extFilePath = substr($filePath, 0, strpos($filePath, '/ext/') + 4);
             die(js::alert($this->lang->editor->notWritable . $extFilePath));
         }
     }
@@ -290,6 +362,7 @@ class editorModel extends model
      */
     public function extendModel($filePath)
     {
+        include(dirname($filePath));
         $className = basename(dirname(dirname($filePath)));
         $methodName = basename($filePath);
         $methodParam = $this->getParam($className, $methodName, 'Model');
@@ -311,6 +384,7 @@ EOD;
      */
     public function extendControl($filePath, $isExtends)
     {
+        include(dirname($filePath));
         $className = basename(dirname(dirname($filePath)));
         $methodName = basename($filePath);
         if($isExtends == 'yes')
@@ -335,7 +409,7 @@ EOD;
 <?php
 class $className extends control
 {
-$methodcode
+$methodCode
 }
 EOD;
        }
@@ -459,6 +533,8 @@ EOD;
             elseif($action == 'method') return $extPath . basename($filePath, '.php') . '/' . $fileName;
             elseif($action == 'extend') return $filePath . '/' . $fileName;
             elseif($action == 'config') return $extPath . 'config/' . $fileName;
+            elseif($action == 'js') return $extPath . 'js/' . substr($fileName, 0, strrpos($fileName, '.')) . '/' . $fileName;
+            elseif($action == 'css') return $extPath . 'css/' . substr($fileName, 0, strrpos($fileName, '.')) . '/' . $fileName;
             else return $extPath . 'lang/' . str_replace('_', '-', $action) . '/' . $fileName;
         }
     }

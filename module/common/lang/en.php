@@ -73,6 +73,8 @@ $lang->openedByAB   = 'Open';
 $lang->assignedToAB = 'To';
 $lang->typeAB       = 'Type';
 
+$lang->common->common = 'Common module';
+
 /* The main menu. */
 $lang->menu->my      = 'Dashboard|my|index';
 $lang->menu->product = 'Product|product|index';

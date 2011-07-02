@@ -73,6 +73,8 @@ $lang->openedByAB   = '创建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
 
+$lang->common->common = '公有模块';
+
 /* 主导航菜单。*/
 $lang->menu->my      = '我的地盘|my|index';
 $lang->menu->product = '产品视图|product|index';
