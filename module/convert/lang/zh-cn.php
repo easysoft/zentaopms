@@ -71,7 +71,23 @@ $lang->convert->bugfree->results  = '测试结果';
 $lang->convert->bugfree->actions  = '历史记录';
 $lang->convert->bugfree->files    = '附件';
 
+$lang->convert->redmine->users        = '用户';
+$lang->convert->redmine->groups       = '用户分组';
+$lang->convert->redmine->products     = '产品';
+$lang->convert->redmine->projects     = '项目';
+$lang->convert->redmine->stories      = '需求';
+$lang->convert->redmine->tasks        = '任务';
+$lang->convert->redmine->bugs         = 'Bug';
+$lang->convert->redmine->productPlans = '产品计划';
+$lang->convert->redmine->teams        = '团队';
+$lang->convert->redmine->releases     = '发布';
+$lang->convert->redmine->builds       = 'Build';
+$lang->convert->redmine->docLibs      = '文档库';
+$lang->convert->redmine->docs         = '文档';
+$lang->convert->redmine->files        = '附件';
+
 $lang->convert->errorConnectDB     = '数据库连接失败 ';
 $lang->convert->errorFileNotExits  = '文件 %s 不存在';
 $lang->convert->errorUserExists    = '用户 %s 已存在';
+$lang->convert->errorGroupExists   = '分组 %s 已存在';
 $lang->convert->errorCopyFailed    = '文件 %s 拷贝失败';

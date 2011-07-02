@@ -151,7 +151,6 @@ class convert extends control
 
         /* Check it. */
         $checkInfo['db'] = $converter->connectDB();
-        //if(is_object($checkInfo['db'])) $checkInfo['table'] = $converter->checkTables();
         $checkInfo['path'] = $converter->checkPath();
 
         /* Compute the checking result. */
@@ -219,6 +218,13 @@ class convert extends control
         $this->display();
     }
 
+    /**
+     * convert redmine 
+     * 
+     * @param  int    $version 
+     * @access public
+     * @return void
+     */
     public function convertRedmine($version)
     {
         helper::import('./converter/redmine.php');
@@ -227,8 +233,7 @@ class convert extends control
         $converter = new $className();
         $this->view->version = $version;
         $this->view->result  = $converter->execute($version);
-        $this->view->info    = bugfreeConvertModel::$info;
+        $this->view->info    = redmineConvertModel::$info;
         $this->display();
     }
-
 }

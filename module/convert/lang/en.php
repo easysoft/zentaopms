@@ -71,7 +71,23 @@ $lang->convert->bugfree->results  = 'Result';
 $lang->convert->bugfree->actions  = 'History';
 $lang->convert->bugfree->files    = 'File';
 
+$lang->convert->redmine->users        = 'Users';
+$lang->convert->redmine->groups       = 'Groups';
+$lang->convert->redmine->products     = 'Products';
+$lang->convert->redmine->projects     = 'Projects';
+$lang->convert->redmine->stories      = 'Stories';
+$lang->convert->redmine->tasks        = 'Tasks';
+$lang->convert->redmine->bugs         = 'Bugs';
+$lang->convert->redmine->productPlans = 'ProductPlans';
+$lang->convert->redmine->teams        = 'Teams';
+$lang->convert->redmine->releases     = 'Releases';
+$lang->convert->redmine->builds       = 'Builds';
+$lang->convert->redmine->docLibs      = 'DocLibs';
+$lang->convert->redmine->docs         = 'Docs';
+$lang->convert->redmine->files        = 'files';
+
 $lang->convert->errorConnectDB     = 'Connect to database server failed.';
 $lang->convert->errorFileNotExits  = 'File %s not exits.';
 $lang->convert->errorUserExists    = 'User %s exits already.';
+$lang->convert->errorGroupExists   = 'Group %s exits already.';
 $lang->convert->errorCopyFailed    = 'file %s copy failed.';

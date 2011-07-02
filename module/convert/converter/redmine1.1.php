@@ -53,20 +53,20 @@ class redmine11ConvertModel extends redmineConvertModel
         $this->dao->dbh($this->dbh);
         $this->loadModel('tree')->fixModulePath();
 
-        $result['group']       = $convertGroupCount;
-        $result['user']        = $convertUserCount ;
-        $result['product']     = $convertProductCount ;
-        $result['project']     = $convertProjectCount ;
-        $result['story']       = $convertStoryCount;
-        $result['task']        = $convertTaskCount ;
-        $result['bug']         = $convertBugCount ;
-        $result['productPlan'] = $convertProductPlanCount;
-        $result['team']        = $convertTeamCount;
-        $result['release']     = $convertReleaseCount;
-        $result['build']       = $convertBuildCount;
-        $result['docLib']      = $convertDocLibCount ;
-        $result['doc']         = $convertDocCount;
-        $result['file']        = $convertFileCount;
+        $result['groups']       = redmine11ConvertModel::$convertGroupCount;
+        $result['users']        = redmine11ConvertModel::$convertUserCount ;
+        $result['products']     = redmine11ConvertModel::$convertProductCount ;
+        $result['projects']     = redmine11ConvertModel::$convertProjectCount ;
+        $result['stories']      = redmine11ConvertModel::$convertStoryCount;
+        $result['tasks']        = redmine11ConvertModel::$convertTaskCount ;
+        $result['bugs']         = redmine11ConvertModel::$convertBugCount ;
+        $result['productPlans'] = redmine11ConvertModel::$convertProductPlanCount;
+        $result['teams']        = redmine11ConvertModel::$convertTeamCount;
+        $result['releases']     = redmine11ConvertModel::$convertReleaseCount;
+        $result['builds']       = redmine11ConvertModel::$convertBuildCount;
+        $result['docLibs']      = redmine11ConvertModel::$convertDocLibCount ;
+        $result['docs']         = redmine11ConvertModel::$convertDocCount;
+        $result['files']        = redmine11ConvertModel::$convertFileCount;
         return $result;
     }                       
                                
@@ -137,23 +137,44 @@ class redmine11ConvertModel extends redmineConvertModel
      */
     public function convertGroup()
     {
-        if(!$this->tableExists(REDMINE_TABLE_USERS)) return false;
-
         /* Get group list */
         $groups = $this->dao->dbh($this->sourceDBH)
-            ->select("lastName AS name")
+            ->select("id, lastName AS name")
             ->from(REDMINE_TABLE_USERS)
             ->where('type')->eq('Group')
             ->fetchAll('id', $autoCompany = false);
 
+        $zentaoGroups = $this->dao->dbh($this->dbh)->select('id, name')->from(TABLE_GROUP)->fetchAll();
+
         /* Insert into zentao */
+        $convertCount = 0;
         foreach($groups as $groupID =>$group)
         {
-            $this->dao->dbh($this->dbh)->insert(TABLE_GROUP)
-                ->data($group)->exec();
-            $this->map['groups'][$groupID] = $this->dao->lastInsertID();
+            $mark = false;
+            $groupExistID = 0;
+            unset($group->id);
+            foreach($zentaoGroups as $zentaoGroup)
+            {
+                if($group->name == $zentaoGroup->name) 
+                {
+                    $mark =true;
+                    $groupExistID = $zentaoGroup->id;
+                }
+            }
+            if($mark == false)
+            {
+                $this->dao->dbh($this->dbh)->insert(TABLE_GROUP)
+                    ->data($group)->exec();
+                $this->map['groups'][$groupID] = $this->dao->lastInsertID();
+                $convertCount ++;
+            }
+            else
+            {
+                self::$info['groups'][] = sprintf($this->lang->convert->errorGroupExists, $group->name);
+                $this->map['groups'][$groupID] = $groupExistID;
+            }
         }
-        $convertGroupCount += count($groups);
+        redmine11ConvertModel::$convertGroupCount += $convertCount;
     }
 
     /**
@@ -166,29 +187,36 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get user list. */
         $users = $this->dao->dbh($this->sourceDBH)
-            ->select("login AS account, firstname, lastname, mail")
+            ->select("id, login AS account, firstname, lastname, mail as email")
             ->from(REDMINE_TABLE_USERS)
             ->where('type')->eq('User')
-            ->orderBy('id ASC')
             ->fetchAll('id', $autoCompany = false);
+
+        $zentaoUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->fetchAll();
 
         /* Insert into zentao. */
         $convertCount = 0;
         foreach($users as $id => $user)
         {
-            if(!$this->dao->dbh($this->dbh)->findByAccount($user['account'])->from(TABLE_USER)->fetch('account'))
+            $mark = false;
+            foreach($zentaoUsers as $zentaoUser)
             {
-                $user['password'] = 'e10adc3949ba59abbe56e057f20f883e';
-                $user['realname'] = $user['lastname'] . $user['firstname'];
-                unset($user['lastname']);
-                unset($user['firstname']);
+                if($zentaoUser->account == $user->account) $mark = true;
+            }
+            if(!$mark)
+            {
+                $user->password = 'e10adc3949ba59abbe56e057f20f883e';
+                $user->realname = $user->lastname . $user->firstname;
+                unset($user->id);
+                unset($user->lastname);
+                unset($user->firstname);
                 $this->dao->dbh($this->dbh)->insert(TABLE_USER)->data($user)->exec();
                 $this->map['users'][$id] = $this->dao->lastInsertID();
                 $convertCount ++;
             }
             else
             {
-                self::$info['users'][] = sprintf($this->lang->convert->errorUserExists, $account);
+                self::$info['users'][] = sprintf($this->lang->convert->errorUserExists, $user->account);
             }
         }
 
@@ -197,7 +225,7 @@ class redmine11ConvertModel extends redmineConvertModel
             ->set('guest')->eq(1)
             ->set('admins')->eq(',admin,')
             ->exec();
-        $convertUserCount += $convertCount;
+        redmine11ConvertModel::$convertUserCount += $convertCount;
     }
 
     /**
@@ -208,18 +236,33 @@ class redmine11ConvertModel extends redmineConvertModel
      */
     public function convertUserGroup()
     {
+        $this->map['groups'][0] = 0;
         /* Get relation between user and group list. */
         $userGroups = $this->dao->dbh($this->sourceDBH)
-            ->select('t1.group_id AS group, t2.login AS account')
+            ->select("t1.group_id, t2.login as account")
             ->from(REDMINE_TABLE_GROUPS_USERS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.user_id = t2.id')
             ->fetchAll('', $autoCompany = false);
 
+        $zentaoUserGroups = $this->dao->dbh($this->dbh)->select('*')->from(TABLE_USERGROUP)->fetchAll();
+
         /* Insert into zentao. */
+        $mark = false;
         foreach($userGroups as $userGroup)
         {
-            $userGroup['group'] = $this->map['groups'][$userGroup['group']];
-            $this->dao->dbh($this->dbh)->insert(TABLE_USERGROUP)->data($userGroup)->exec();
+            $userGroup->group = $this->map['groups'][$userGroup->group_id];
+            unset($userGroup->group_id);
+            foreach($zentaoUserGroups as $zentaoUserGroup)
+            {
+                if($userGroup->group == $zentaoUserGroup->group and $userGroup->account == $zentaoUserGroup->account)
+                {
+                    $mark = true;
+                }
+            }
+            if($mark == false)
+            {
+                $this->dao->dbh($this->dbh)->insert(TABLE_USERGROUP)->data($userGroup)->exec();
+            }
         }
     }
 
@@ -233,17 +276,20 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get product list */
         $products = $this->dao->dbh($this->sourceDBH)
-            ->select("name, description AS desc, created_on AS createdDate")
+            ->select("id, name, description, created_on as createdDate")
             ->from(REDMINE_TABLE_PROJECTS)
             ->fetchAll('id', $autoComapny = false);
 
         /* Insert into zentao */
         foreach($products as $productID => $product)
         {
+            $product->desc = $product->description;
+            unset($product->id);
+            unset($product->description);
             $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($product)->exec();
             $this->map['products'][$productID] = $this->dao->lastInsertID();
         }
-        $convertProductCount += count($products);
+        redmine11ConvertModel::$convertProductCount += count($products);
     }
 
     /**
@@ -256,15 +302,18 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get project list */
         $projects = $this->dao->dbh($this->sourceDBH)
-            ->select("name, project_id AS productID, description AS desc, effective_date AS end")
+            ->select("id, name, project_id, description, effective_date AS end")
             ->from(REDMINE_TABLE_VERSIONS)
             ->fetchAll('id', $autoComapny = false);
 
         /* Insert into zentao */
         foreach($projects as $projectID => $project)
         {
-            $productID = $project['productID'];
-            unset($project['productID']);
+            $productID = $project->project_id;
+            $project->desc = $project->description;
+            unset($project->id);
+            unset($project->project_id);
+            unset($project->description);
             $this->dao->dbh($this->dbh)->insert(TABLE_PROJECT)->data($project)->exec();
             $this->map['projects'][$productID][$projectID] = $this->dao->lastInsertID();
             $this->map['project'][$projectID]  = $this->map['projects'][$productID][$projectID];
@@ -273,12 +322,12 @@ class redmine11ConvertModel extends redmineConvertModel
         /* Create a same name project with product */
         foreach($this->map['products'] as $productID)
         {
-            $project = $this->dao->dbh($this->dbh)->select('name')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetchAll();
+            $project = $this->dao->dbh($this->dbh)->select('name')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
             $this->dao->dbh($this->dbh)->insert(TABLE_PROJECT)->data($project)->exec();
             $this->map['projectOfProduct'][$productID] = $this->dao->lastinsertID();
         }
         $convertCount = count($projects) + count($this->map['projectOfProduct']);
-        $converProjectCount += $convertCount;
+        redmine11ConvertModel::$convertProjectCount += $convertCount;
     }
     
     /**
@@ -291,22 +340,26 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get build list */
         $buildAndReleases = $this->dao->dbh($this->sourceDBH)
-            ->select('name, project_id AS productID, description AS desc, effective_date AS date')
+            ->select('id, name, project_id, description, effective_date AS date')
             ->from(REDMINE_TABLE_VERSIONS)
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
         foreach($buildAndReleases as $id => $buildAndRelease)
         {
-            $buildAndRelease['project'] = $this->map['project'][$id];
-            $buildAndRelease['product'] = $this->map['products'][$buildAndRelease['productID']];
-            unset($buildAndRelease['productID']);
+            $buildAndRelease->project = $this->map['project'][$id];
+            $buildAndRelease->product = $this->map['products'][$buildAndRelease->project_id];
+            $buildAndRelease->desc    = $buildAndRelease->description; 
+            unset($buildAndRelease->id);
+            unset($buildAndRelease->project_id);
+            unset($buildAndRelease->description);
             $this->dao->dbh($this->dbh)->insert(TABLE_BUILD)->data($buildAndRelease)->exec();
-            $buildAndRelease['build'] = $this->dao->lastInsertID();
+            $buildAndRelease->build = $this->dao->lastInsertID();
+            unset($buildAndRelease->project);
             $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($buildAndRelease)->exec();
         }
-        $convertBuildCount += count($buildAndReleases);
-        $convertReleaseCount += count($buildAndReleases);
+        redmine11ConvertModel::$convertBuildCount += count($buildAndReleases);
+        redmine11ConvertModel::$convertReleaseCount += count($buildAndReleases);
     }
 
     /**
@@ -319,28 +372,35 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get productPlan list */
         $productPlans = $this->dao->dbh($this->sourceDBH)
-            ->select('name AS title, project_id AS productID, description AS desc, effective_date AS end, created_on AS begin')
+            ->select('id, name, project_id, description, effective_date, created_on AS begin')
             ->from(REDMINE_TABLE_VERSIONS)
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
         foreach($productPlans as $id => $productPlan)
         {
-            $productPlan['product'] = $this->map['products'][$productPlan['productID']];
-            unset($productPlan['productID']);
+            $productPlan->product = $this->map['products'][$productPlan->project_id];
+            $productPlan->title   = $productPlan->name;
+            $productPlan->desc    = $productPlan->description;
+            $productPlan->end     = $productPlan->effective_date;
+            unset($productPlan->id);
+            unset($productPlan->project_id);
+            unset($productPlan->name);
+            unset($productPlan->description);
+            unset($productPlan->effective_date);
             $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCTPLAN)->data($productPlan)->exec();
         }
 
         /* Create a same plan with product */
         foreach($this->map['products'] as $productID)
         {
-            $productPlan = $this->dao->dbh($this->dbh)->select('name as title')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetchAll();
-            $productPlan['product'] = $productID;
+            $productPlan = $this->dao->dbh($this->dbh)->select('name as title')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+            $productPlan->product = $productID;
             $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCTPLAN)->data($productPlan)->exec();
             $this->map['planOfProduct'][$productID] = $this->dao->lastinsertID();
         }
         $convertCount = count($this->map['products']) + count($productPlans);
-        $convertProductPlanCount += $convertCount;
+        redmine11ConvertModel::$convertProductPlanCount += $convertCount;
     } 
 
     /**
@@ -373,23 +433,26 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get team list */
         $teams = $this->dao->dbh($this->sourceDBH)
-            ->select('t2.login AS account, t1.project_id AS productID, t1.created_on AS joinDate')
-            ->form(REDMIN_TABLE_MEMBERS)->alias('t1')
+            ->select("t2.login, t1.project_id, t1.created_on AS joinDate")
+            ->from(REDMINE_TABLE_MEMBERS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.user_id = t2.id')
+            ->where('t2.type')->eq('User')
             ->fetchAll('', $autoCompany = false);
 
         /* Insert into zentao */
         foreach($teams as $team)
         {
-            $productID = $team[productID];
-            unset($team[productID]);
+            $productID = $team->project_id;
+            $team->account = $team->login;
+            unset($team->project_id);
+            unset($team->login);
             foreach($this->map['projects'][$productID] as $projectID)
             {
-                $team['project'] = $projectID;
+                $team->project = $projectID;
                 $this->dao->dbh($this->dbh)->insert(TABLE_TEAM)->data($team)->exec();
             }
         }
-        $convertTeamCount += count($teams);
+        redmine11ConvertModel::$convertTeamCount += count($teams);
     }
 
     /**
@@ -402,19 +465,19 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get docLib list */
         $docLibs = $this->dao->dbh($this->sourceDBH)
-            ->select('name')->from(REDMINE_TABLE_ENUMERATIONS)
+            ->select('id, name')->from(REDMINE_TABLE_ENUMERATIONS)
             ->where('type')->eq('DocumentCategory')
-            ->andWhere('project_id')->eq(NULL)
             ->andWhere('active')->eq(1)//carefull, maybe a bug about this.
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
         foreach($docLibs as $docLibID => $docLib)
         {
+            unset($docLib->id);
             $this->dao->dbh($this->dbh)->insert(TABLE_DOCLIB)->data($docLib)->exec();
             $this->map['docLibs'][$docLibID] = $this->dao->lastInsertID();
         }
-        $convertDocLibCount += count($docLibs);
+        redmine11ConvertModel::$convertDocLibCount += count($docLibs);
     }
 
     /**
@@ -427,22 +490,23 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get all docs */
         $docs = $this->dao->dbh($this->sourceDBH)
-            ->select('t1.project_id AS product, t2.id AS lib, t1.title, t1.description AS content, t1.created_on AS addedDate')
-            ->from(REDMINE_TABLE_DOCUMENT)->alias('t1')
+            ->select("t1.id, t1.project_id AS product, t2.id AS lib, t1.title, t1.description AS content, t1.created_on AS addedDate")
+            ->from(REDMINE_TABLE_DOCUMENTS)->alias('t1')
             ->leftjoin(REDMINE_TABLE_ENUMERATIONS)->alias('t2')->on('t1.category_id = t2.id')
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
         foreach($docs as $docID => $doc)
         {
-            $doc['type'] = 'text';
-            $doc['project'] = 0;
-            $doc['product'] = $this->map['products'][$doc['product']];
-            $doc['lib'] = $this->map['docLibs'][$doc['lib']];
+            unset($doc->id);
+            $doc->type = 'text';
+            $doc->project = 0;
+            $doc->product = $this->map['products'][$doc->product];
+            $doc->lib = $this->map['docLibs'][$doc->lib];
             $this->dao->dbh($this->dbh)->insert(TABLE_DOC)->data($doc)->exec();
             $this->map['docs'][$docID] = $this->dao->lastInsertID();
         }
-        $convertDocCount += count($docs);
+        redmine11ConvertModel::$convertDocCount += count($docs);
     }
 
     /**
@@ -455,29 +519,28 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get news from redmine */
         $news = $this->dao->dbh($this->sourceDBH)
-            ->select('t1.project_id as product, t1.title, t1.summary as digest, t1.description as content, t2.login as addedBy, t1.created_on as addedDate')
+            ->select("t1.project_id as product, t1.title, t1.summary as digest, t1.description as content, t2.login as addedBy, t1.created_on as addedDate")
             ->from(REDMINE_TABLE_NEWS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.author_id = t2.id')
             ->fetchAll('', $autoCompany = false);
 
         /* Create a news docLib  */
-        $newLib = array();
-        $newLib['name'] = 'news';
+        $newLib->name = 'news';
         $this->dao->dbh($this->dbh)->insert(TABLE_DOCLIB)->data($newLib)->exec();
         $this->map['news'] = $this->dao->lastInsertID();
-        $convertDocLibCount += 1;
+        redmine11ConvertModel::$convertDocLibCount += 1;
 
         /* Insert into zentao */
         foreach($news as $new)
         {
-            $new['product'] = $this->map['products'][$new['product']];
-            $new['project'] = 0;
-            $new['lib']     = $this->map['news'];
-            $new['type']    = 'text';
+            $new->product = $this->map['products'][$new->product];
+            $new->project = 0;
+            $new->lib     = $this->map['news'];
+            $new->type    = 'text';
 
             $this->dao->dbh($this->dbh)->insert(TABLE_DOC)->data($new)->exec();
         }
-        $convertDocCount += count($news);
+        redmine11ConvertModel::$convertDocCount += count($news);
     }
 
     /**
@@ -490,8 +553,35 @@ class redmine11ConvertModel extends redmineConvertModel
      * @access public
      * @return void
      */
-    public function convertIssue($aimTypes, $statusTypes, $priTypes)
+    public function convertIssue()
     {
+        $aimTypes[1] = 'bug';
+        $aimTypes[2] = 'story';
+        $aimTypes[3] = 'task';
+        $statusTypes['task'][1] = 'wait'; 
+        $statusTypes['task'][2] = 'wait'; 
+        $statusTypes['task'][3] = 'wait'; 
+        $statusTypes['bug'][1] = 'active'; 
+        $statusTypes['bug'][2] = 'active'; 
+        $statusTypes['bug'][3] = 'active'; 
+        $statusTypes['story'][1] = 'active'; 
+        $statusTypes['story'][2] = 'active'; 
+        $statusTypes['story'][3] = 'active'; 
+        $priTypes['task'][1] = 1;
+        $priTypes['task'][2] = 1;
+        $priTypes['task'][3] = 1;
+        $priTypes['task'][4] = 1;
+        $priTypes['task'][5] = 1;
+        $priTypes['bug'][1] = 1;
+        $priTypes['bug'][2] = 1;
+        $priTypes['bug'][3] = 1;
+        $priTypes['bug'][4] = 1;
+        $priTypes['bug'][5] = 1;
+        $priTypes['story'][1] = 1;
+        $priTypes['story'][2] = 1;
+        $priTypes['story'][3] = 1;
+        $priTypes['story'][4] = 1;
+        $priTypes['story'][5] = 1;
         foreach($aimTypes as $issueType => $aimType)
         {
             if('story' == $aimType)
@@ -521,41 +611,41 @@ class redmine11ConvertModel extends redmineConvertModel
     public function convertStory($issueType, $statusTypes, $priTypes)
     {
         /* Get story list*/
-        $storyes = $this->dao->dbh($this->sourceDBH)
-            ->select('t1.project_id as product, t1.subject as title, description as spec, t1.status_id as status, t2.login as assignedTo, t1.priority_id as pri, t3.login as openedBy, t1.created_on as openedDate, t1.estimated_hours as estimate, t1.updated_on as lastEditedDate')
-            ->form(REDMINE_TABLE_ISSUES)->alias('t1')
+        $stories = $this->dao->dbh($this->sourceDBH)
+            ->select("t1.id, t1.project_id as product, t1.subject as title, t1.description as spec, t1.status_id as status, t2.login as assignedTo, t1.priority_id as pri, t3.login as openedBy, t1.created_on as openedDate, t1.estimated_hours as estimate, t1.updated_on as lastEditedDate")
+            ->from(REDMINE_TABLE_ISSUES)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
-            ->where('t1.category_id')->eq($issueType)
+            ->where('t1.tracker_id')->eq($issueType)
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
-        foreach($storyes as $issueID => $story)
+        foreach($stories as $issueID => $story)
         {
-            $storySpec['title'] = $story['title'];
-            $storySpec['spec']  = $story['spec'];
-            unset($story['title']);
-            unset($story['spec']);
+            $storySpec->title = $story->title;
+            $storySpec->spec  = $story->spec;
+            unset($story->id);
+            unset($story->spec);
 
             /* Insert story into table story */
-            $story['product'] = $this->map['products'][$story['product']];
-            $story['module']  = 0;
-            $story['plan']    = $this->map['planOfProduct'][$story['plan']];
-            $story['fromBug'] = 0;
-            $story['pri']     = $priTypes['story'][$story['pri']];
-            $story['status']  = $statusTypes['story'][$story['status']];
-            $story['toBug']   = 0;
-            $story['duplicateStory'] = 0;
+            $story->product = $this->map['products'][$story->product];
+            $story->module  = 0;
+            $story->plan    = $this->map['planOfProduct'][$story->product];
+            $story->fromBug = 0;
+            $story->pri     = $priTypes['story'][$story->pri];
+            $story->status  = $statusTypes['story'][$story->status];
+            $story->toBug   = 0;
+            $story->duplicateStory = 0;
             $this->dao->dbh($this->dbh)->insert(TABLE_STORY)->data($story)->exec();
             $this->map['issueID'][$issueID] = $this->dao->lastInsertID();
             $this->map['issueType'][$issueID] = 'story';
 
             /* Insert data into table storySpec */
-            $storySpec['story'] = $this->map['issueID'][$issueID];
-            $storySpec['version'] = 1;
+            $storySpec->story = $this->map['issueID'][$issueID];
+            $storySpec->version = 1;
             $this->dao->dbh($this->dbh)->insert(TABLE_STORYSPEC)->data($storySpec)->exec();
         }
-        $convertStoryCount += count($storyes);
+        redmine11ConvertModel::$convertStoryCount += count($stories);
     }
 
     /**
@@ -571,28 +661,38 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get task list */
         $tasks = $this->dao->dbh($this->sourceDBH)
-            ->select('t1.project_id as product, t1.subject as name, t1.description as desc, t1.due_date as deadline, t1.status_id as status, t2.login as assignedTo, t1.priority_id as pri, t3.login as openedBy, t1.created_on as openedDate, t1.estimated_hours as estimate, t1.updated_on as lastEditedDate')
-            ->form(REDMINE_TABLE_ISSUES)->alias('t1')
+            ->select("t1.id, t1.project_id as product, t1.fixed_version_id as project, t1.subject as name, t1.description, t1.due_date as deadline, t1.status_id as status, t2.login as assignedTo, t1.priority_id as pri, t3.login as openedBy, t1.created_on as openedDate, t1.estimated_hours as estimate, t1.updated_on as lastEditedDate")
+            ->from(REDMINE_TABLE_ISSUES)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
-            ->where('t1.category_id')->eq($issueType)
+            ->where('t1.tracker_id')->eq($issueType)
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
         foreach($tasks as $issueID => $task)
         {
-            $task['project']      = $this->map['projectOfProduct'][$task['product']];
-            $task['story']        = 0;
-            $task['storyVersion'] = 0;
-            $task['type']         = 'misc';
-            $task['pri']          = $priTypes['task'][$task['pri']];
-            $task['status']       = $statusTypes['task'][$task['status']];
-            unset($task['product']);
+            $task->story        = 0;
+            $task->storyVersion = 0;
+            $task->type         = 'misc';
+            $task->pri          = $priTypes['task'][$task->pri];
+            $task->desc         = $task->description;
+            $task->status       = $statusTypes['task'][$task->status];
+            if($task->project == 0)
+            {  
+                $task->project = $this->map['projectOfProduct'][$task->product];
+            }
+            else
+            {
+                $task->project      = $this->map['project'][$task->project];
+            }
+            unset($task->id);
+            unset($task->product);
+            unset($task->description);
             $this->dao->dbh($this->dbh)->insert(TABLE_TASK)->data($task)->exec();
             $this->map['issueID'][$issueID] = $this->dao->lastInsertID();
             $this->map['issueType'][$issueID] = 'task';
         }
-        $convertTaskCount += count($tasks);
+        redmine11ConvertModel::$convertTaskCount += count($tasks);
     }
 
     /**
@@ -608,35 +708,43 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get bug list */
         $bugs = $this->dao->dbh($this->sourceDBH)
-            ->select('t1.project_id as product, t1.subject as title, t1.description as steps, t1.status_id as status, t2.login as assignedTo, t1.priority_id ad pri, t3.login as openedBy, t1.created_on as openedDate, t1.updated_on as lastEditedDate')
-            ->form(REDMINE_TABLE_ISSUES)->alias('t1')
+            ->select("t1.id, t1.project_id as product, t1.fixed_version_id project, t1.subject as title, t1.description as steps, t1.status_id as status, t2.login as assignedTo, t1.priority_id as pri, t3.login as openedBy, t1.created_on as openedDate, t1.updated_on as lastEditedDate")
+            ->from(REDMINE_TABLE_ISSUES)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
-            ->where('t1.category_id')->eq($issueType)
+            ->where('t1.tracker_id')->eq($issueType)
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
         foreach($bugs as $issueID => $bug)
         {
-            $bug['project'] = $this->map['projectOfProduct'][$bug['product']];
-            $bug['product'] = $this->map['products'][$bug['product']];
-            $bug['module']  = 0;
-            $bug['story']   = 0;
-            $bug['storyVersion'] = 1;
-            $bug['task']         = 0;
-            $bug['severity']     = 3;
-            $bug['type']         = 'others';
-            $bug['status']       = $statusTypes['bug'][$bug['status']];
-            $bug['openedBuild']  = 'trunk';
-            $bug['duplicateBug'] = 0;
-            $bug['case']         = 0;
-            $bug['caseVersion']  = 1;
-            $bug['result']       = 0;
+            $bug->product = $this->map['products'][$bug->product];
+            $bug->module  = 0;
+            $bug->story   = 0;
+            $bug->storyVersion = 1;
+            $bug->task         = 0;
+            $bug->severity     = 3;
+            $bug->type         = 'others';
+            $bug->status       = $statusTypes['bug'][$bug->status];
+            $bug->openedBuild  = 'trunk';
+            $bug->duplicateBug = 0;
+            $bug->case         = 0;
+            $bug->caseVersion  = 1;
+            $bug->result       = 0;
+            if($bug->project == 0)
+            {  
+                $bug->project = $this->map['projectOfProduct'][$bug->product];
+            }
+            else
+            {
+                $bug->project = $this->map['project'][$bug->project];
+            }
+            unset($bug->id);
             $this->dao->dbh($this->dbh)->insert(TABLE_BUG)->data($bug)->exec(); 
             $this->map['issueID'][$issueID] = $this->dao->lastInsertID();
             $this->map['issueType'][$issueID] = 'bug';
         }
-        $convertGugCount += count($bugs);
+        redmine11ConvertModel::$convertBugCount += count($bugs);
    }
 
     /**
@@ -651,64 +759,65 @@ class redmine11ConvertModel extends redmineConvertModel
 
         /* Get file list */
         $files = $this->dao->dbh($this->sourceDBH)
-            ->select('t1.container_id as objectID, t1.container_type as objectType, t1.filename as title, t1.disk_filename as pathname, t1.filesize as size, t2.login as addedBy, t1.created_on as addedDate, description')
-            ->from(REDMINT_TABLE_ATTACHMENTS)->alias('t1')
-            ->leftJoin(REDMIN_TABLE_USERS)->alias('t2')->on('t1.author_id = t2.id')
+            ->select('t1.id, t1.container_id as objectID, t1.container_type as objectType, t1.filename as title, t1.disk_filename as pathname, t1.filesize as size, t2.login as addedBy, t1.created_on as addedDate, description')
+            ->from(REDMINE_TABLE_ATTACHMENTS)->alias('t1')
+            ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.author_id = t2.id')
             ->fetchAll('id', $autoCompany = false);
 
         /* Insert into zentao */
         foreach($files as $fileID => $file)
         {
-            if($file['description'] != '')
+            if($file->description != '')
             {
-                $file['title'] = $file['description'];
-                unset($file['description']);
+                $file->title = $file->description;
+                unset($file->description);
             }
             else
             {
-                unset($file['description']);
+                unset($file->description);
             }
 
             /* Transform objectType and objectID */
-            if($file['objectType'] == 'Issue')
+            if($file->objectType == 'Issue')
             {
-                $file['objectType'] = $this->map['issueType'][$file['objectID']]; 
-                $file['objectID']   = $this->map['issueID'][$file['objectID']];
+                $file->objectType = $this->map['issueType'][$file->objectID]; 
+                $file->objectID   = $this->map['issueID'][$file->objectID];
             }
-            elseif($file['objectType'] == 'Document')
+            elseif($file->objectType == 'Document')
             {
-                $file['objectType'] = 'doc' ;
-                $file['objectID']   = $this->map['docs'][$file['objectID']];
+                $file->objectType = 'doc' ;
+                $file->objectID   = $this->map['docs'][$file->objectID];
             }
-            elseif($file['objectType'] == 'WikiPage')
+            elseif($file->objectType == 'WikiPage')
             {
                 continue;
             }
-            elseif($file['objectType'] == 'Version')
+            elseif($file->objectType == 'Version')
             {
-                $doc['project'] = $this->map['project'][$file['objectID']];
-                $doc = $this->dao->dbh($this->dbh)->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($doc['project'])->fetch();
-                $doc['lib'] = 'project';
-                $doc['module'] = 0;
-                $doc['title']  = $file['title'];
-                $doc['type']   = 'file';
-                $doc['addedBy']   = $file['addedBy'];
-                $doc['addedDate'] = $file['addedDate'];
+                $doc->project = $this->map['project'][$file->objectID];
+                $doc = $this->dao->dbh($this->dbh)->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($doc->project)->fetch();
+                $doc->lib = 'project';
+                $doc->module = 0;
+                $doc->title  = $file->title;
+                $doc->type   = 'file';
+                $doc->addedBy   = $file->addedBy;
+                $doc->addedDate = $file->addedDate;
                 $this->dao->dbh($this->dbh)->insert(TABLE_DOC)->data($doc)->exec();
-                $convertDocCount += 1;
+                redmine11ConvertModel::$convertDocCount += 1;
 
-                $file['objectType'] = 'doc';
-                $file['objectID']   = $this->dao->lastInsertID();
+                $file->objectType = 'doc';
+                $file->objectID   = $this->dao->lastInsertID();
             }
 
-            $pathname = pathinfo($file['pathname']);
-            $file['extension'] = $pathname["extension"];
+            $pathname = pathinfo($file->pathname);
+            $file->extension = $pathname["extension"];
+            unset($file->id);
 
             /* Insert into database. */
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
             /* Copy file. */
-            $soureFile = $this->filePath . 'files/' . $file->pathname;
+            $soureFile = $this->filePath . $file->pathname;
             if(!file_exists($soureFile))
             {
                 self::$info['files'][] = sprintf($this->lang->convert->errorFileNotExits, $soureFile);
@@ -722,7 +831,7 @@ class redmine11ConvertModel extends redmineConvertModel
                 self::$info['files'][] = sprintf($this->lang->convert->errorCopyFailed, $targetFile);
             }
         }
-        $convertFileCount += count($files);
+        redmine11ConvertModel::$convertFileCount += count($files);
     }
 
     /**
