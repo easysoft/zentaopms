@@ -46,6 +46,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -62,6 +63,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -76,7 +78,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_2To1_3();
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
-            $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '0_6beta')
         {
@@ -90,7 +92,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_2To1_3();
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
-            $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_0beta')
         {
@@ -104,6 +106,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_0rc1')
         {
@@ -116,6 +119,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_0rc2')
         {
@@ -127,6 +131,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_0')
         {
@@ -137,6 +142,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_0_1')
         {
@@ -146,6 +152,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_1')
         {
@@ -154,6 +161,7 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_2')
         {
@@ -161,21 +169,29 @@ class upgradeModel extends model
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_3')
         {
             $this->upgradeFrom1_3To1_4();
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_4')
         {
             $this->upgradeFrom1_4To1_5();
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
         }
         elseif($fromVersion == '1_5')
         {
             $this->upgradeFrom1_5To2_0();
+            $this->upgradeFrom2_0To2_1();
+        }
+        elseif($fromVersion == '2_0')
+        {
+            $this->upgradeFrom2_0To2_1();
         }
 
         $this->setting->setSN();
@@ -205,6 +221,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -219,6 +236,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -232,6 +250,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '0_6beta')
         {
@@ -244,6 +263,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '1_0beta')
         {
@@ -255,6 +275,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '1_0rc1')
         {
@@ -265,6 +286,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '1_0rc2' || $fromVersion == '1_0' || $fromVersion == '1_0_1')
         {
@@ -274,6 +296,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '1_1')
         {
@@ -282,6 +305,7 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '1_2')
         {
@@ -289,21 +313,29 @@ class upgradeModel extends model
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '1_3')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '1_4')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
         elseif($fromVersion == '1_5')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
+        }
+        elseif($fromVersion == '2_0')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
 
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
@@ -478,6 +510,18 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('1.5'));
         if(!$this->isError()) $this->setting->updateVersion('2.0');
+    }
+
+    /**
+     * Upgrade from 2.0 to 2.1.
+     * 
+     * @access private
+     * @return void
+     */
+    private function upgradeFrom2_0To2_1()
+    {
+        $this->execSQL($this->getUpgradeFile('2.0'));
+        if(!$this->isError()) $this->setting->updateVersion('2.1');
     }
 
     /**
