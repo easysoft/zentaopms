@@ -304,7 +304,7 @@ class projectModel extends model
             SUM(`left`) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
-            ->andWhere('status')->notin('cancel,closed')
+            ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
             ->fetch();
         $project->totalEstimate = round($total->totalEstimate, 1);
