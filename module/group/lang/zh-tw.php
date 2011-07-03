@@ -48,5 +48,6 @@ $lang->group->versions['1.3']   = '禪道1.3';
 $lang->group->versions['1.4']   = '禪道1.4';
 $lang->group->versions['1.5']   = '禪道1.5';
 $lang->group->versions['2.0']   = '禪道2.0';
+$lang->group->versions['2.1']   = '禪道2.1';
 
 include (dirname(__FILE__) . '/resource.php');
