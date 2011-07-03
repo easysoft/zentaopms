@@ -1394,6 +1394,7 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 1, 'extension', 'deactivate'),
 (1, 1, 'extension', 'upload'),
 (1, 1, 'extension', 'erase'),
+(1, 1, 'extension', 'upgrade'),
 (1, 1, 'api', 'getModel'),
 (1, 1, 'file', 'download'),
 (1, 1, 'file', 'delete'),
