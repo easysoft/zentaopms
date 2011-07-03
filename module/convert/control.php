@@ -153,33 +153,25 @@ class convert extends control
         $checkInfo['db'] = $converter->connectDB();
         $checkInfo['path'] = $converter->checkPath();
 
+        $this->view->trackers = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('trackers')->fetchAll('id', $autoCompany = false);
+        $this->view->statuses = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('issue_statuses')->fetchAll('id', $autoCompany = false);
+        $this->view->pries    = $this->dao->dbh($converter->sourceDBH)->select('id, name')->from('enumerations')->where('type')->eq('IssuePriority')->fetchAll('id', $autoCompany = false);
         /* Compute the checking result. */
         $result = 'pass';
         if(!is_object($checkInfo['db']) or !$checkInfo['path']) $result = 'fail';
+
+        $this->app->loadLang('bug');
+        $this->app->loadLang('story');
+        $this->app->loadLang('task');
+        $this->view->aimTypeList['bug']   = 'bug';
+        $this->view->aimTypeList['task']  = 'task';
+        $this->view->aimTypeList['story'] = 'story';
 
         /* Assign. */
         $this->view->version   = $version;
         $this->view->source    = 'Redmine';
         $this->view->result    = $result;
         $this->view->checkInfo = $checkInfo;
-        $this->display();
-    }
-
-    public function setParam()
-    {
-        if(!empty($_POST))
-        {
-            foreach($this->post as $issueType => $aimType)
-            {
-                if('bug' == $aimType) convertBug($issueType);
-                elseif('task' == $aimType) convertTask($issueType);
-                elseif('story' == $aimType) convertStory($issueType);
-                else die('errer');
-            }
-        }
-        $trackers = $this->dao->dbh($this->sourceDBH)->select('name')->from('trackers')->fetchAll('id', $autoCompany = false);
-
-        $this->view->trackers = $trackers;
         $this->display();
     }
 
@@ -195,6 +187,7 @@ class convert extends control
         $this->view->header->title = $this->lang->convert->execute;
         $this->view->source        = $this->post->source;
         $this->view->version       = $this->post->version;
+
         $this->view->executeResult = $this->fetch('convert', $convertFunc, "version={$this->post->version}");
         $this->display();
     }
@@ -230,7 +223,15 @@ class convert extends control
         helper::import('./converter/redmine.php');
         helper::import("./converter/redmine$version.php");
         $className = "redmine11ConvertModel";
-        $converter = new $className();
+        $redmine->aimTypes             = $this->post->aimTypes;
+        $redmine->statusTypes['bug']   = $this->post->statusTypesOfBug;
+        $redmine->statusTypes['story'] = $this->post->statusTypesOfStory;
+        $redmine->statusTypes['task']  = $this->post->statusTypesOfTask;
+        $redmine->priTypes['bug']      = $this->post->priTypesOfBug;
+        $redmine->priTypes['story']    = $this->post->priTypesOfStory;
+        $redmine->priTypes['task']     = $this->post->priTypesOfTask;
+
+        $converter = new $className($redmine);
         $this->view->version = $version;
         $this->view->result  = $converter->execute($version);
         $this->view->info    = redmineConvertModel::$info;

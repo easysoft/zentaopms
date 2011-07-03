@@ -198,7 +198,7 @@ $lang->bug->typeList['performance']  = '性能问题';
 $lang->bug->typeList['standard']     = '标准规范';
 $lang->bug->typeList['automation']   = '测试脚本';
 $lang->bug->typeList['trackthings']  = '事务跟踪';
-$lang->bug->typeList['Others']       = '其他';
+$lang->bug->typeList['others']       = '其他';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = '激活';

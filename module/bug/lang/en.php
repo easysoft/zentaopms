@@ -198,7 +198,7 @@ $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'Standard';
 $lang->bug->typeList['automation']   = 'Automation';
 $lang->bug->typeList['trackthings']  = 'Tracking';
-$lang->bug->typeList['Others']       = 'Others';
+$lang->bug->typeList['others']       = 'Others';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';

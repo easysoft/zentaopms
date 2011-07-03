@@ -93,3 +93,17 @@ $lang->convert->errorGroupExists   = 'Group %s exits already.';
 $lang->convert->errorBuildExists   = 'Build %s exits already.';
 $lang->convert->errorReleaseExists = 'Release %s exits already.';
 $lang->convert->errorCopyFailed    = 'file %s copy failed.';
+
+$lang->convert->setParam = 'Please set params';
+
+$lang->convert->aimType           = 'Issue types goto';
+$lang->convert->statusType->bug   = '状态类型转换(Bug状态)';
+$lang->convert->statusType->story = '状态类型转换(Story状态)';
+$lang->convert->statusType->task  = '状态类型转换(Task状态)';
+$lang->convert->priType->bug      = '优先级类型转换(Bug状态)';
+$lang->convert->priType->story    = '优先级类型转换(Story状态)';
+$lang->convert->priType->task     = '优先级类型转换(Task状态)';
+
+$lang->convert->issue->redmine = 'Redmine';
+$lang->convert->issue->zentao  = '禅道';
+$lang->convert->issue->goto    = '转换为';

@@ -93,3 +93,17 @@ $lang->convert->errorGroupExists   = '分组 %s 已存在';
 $lang->convert->errorBuildExists   = 'Build %s 已存在';
 $lang->convert->errorReleaseExists = '发布 %s 已存在';
 $lang->convert->errorCopyFailed    = '文件 %s 拷贝失败';
+
+$lang->convert->setParam = '请设置转换参数';
+
+$lang->convert->aimType           = '问题类型转换';
+$lang->convert->statusType->bug   = '状态类型转换(Bug状态)';
+$lang->convert->statusType->story = '状态类型转换(Story状态)';
+$lang->convert->statusType->task  = '状态类型转换(Task状态)';
+$lang->convert->priType->bug      = '优先级类型转换(Bug状态)';
+$lang->convert->priType->story    = '优先级类型转换(Story状态)';
+$lang->convert->priType->task     = '优先级类型转换(Task状态)';
+
+$lang->convert->issue->redmine = 'Redmine';
+$lang->convert->issue->zentao  = '禅道';
+$lang->convert->issue->goto    = '转换为';

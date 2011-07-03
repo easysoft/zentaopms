@@ -25,7 +25,13 @@ class redmine11ConvertModel extends redmineConvertModel
     static $convertDocLibCount         = 0;
     static $convertDocCount            = 0;
     static $convertFileCount           = 0;
+    public $issueType;
 
+    public function __construct($issueType)
+    {
+        parent::__construct();
+        $this->issueType = $issueType;
+    }
     /**
      * Execute the converter.
      * 
@@ -53,20 +59,20 @@ class redmine11ConvertModel extends redmineConvertModel
         $this->dao->dbh($this->dbh);
         $this->loadModel('tree')->fixModulePath();
 
-        $result['groups']       = redmine11ConvertModel::$convertGroupCount;
-        $result['users']        = redmine11ConvertModel::$convertUserCount ;
-        $result['products']     = redmine11ConvertModel::$convertProductCount ;
-        $result['projects']     = redmine11ConvertModel::$convertProjectCount ;
-        $result['stories']      = redmine11ConvertModel::$convertStoryCount;
-        $result['tasks']        = redmine11ConvertModel::$convertTaskCount ;
-        $result['bugs']         = redmine11ConvertModel::$convertBugCount ;
-        $result['productPlans'] = redmine11ConvertModel::$convertProductPlanCount;
-        $result['teams']        = redmine11ConvertModel::$convertTeamCount;
-        $result['releases']     = redmine11ConvertModel::$convertReleaseCount;
-        $result['builds']       = redmine11ConvertModel::$convertBuildCount;
-        $result['docLibs']      = redmine11ConvertModel::$convertDocLibCount ;
-        $result['docs']         = redmine11ConvertModel::$convertDocCount;
-        $result['files']        = redmine11ConvertModel::$convertFileCount;
+        $result['groups']       = self::$convertGroupCount;
+        $result['users']        = self::$convertUserCount ;
+        $result['products']     = self::$convertProductCount ;
+        $result['projects']     = self::$convertProjectCount ;
+        $result['stories']      = self::$convertStoryCount;
+        $result['tasks']        = self::$convertTaskCount ;
+        $result['bugs']         = self::$convertBugCount ;
+        $result['productPlans'] = self::$convertProductPlanCount;
+        $result['teams']        = self::$convertTeamCount;
+        $result['releases']     = self::$convertReleaseCount;
+        $result['builds']       = self::$convertBuildCount;
+        $result['docLibs']      = self::$convertDocLibCount ;
+        $result['docs']         = self::$convertDocCount;
+        $result['files']        = self::$convertFileCount;
         return $result;
     }                       
                                
@@ -388,7 +394,7 @@ class redmine11ConvertModel extends redmineConvertModel
         /* Create a same plan with product */
         foreach($this->map['products'] as $productID)
         {
-            $productPlan = $this->dao->dbh($this->dbh)->select('name as title')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+            $productPlan = $this->dao->dbh($this->dbh)->select("name as title, createdDate as begin")->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
             $productPlan->product = $productID;
             $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCTPLAN)->data($productPlan)->exec();
             $this->map['planOfProduct'][$productID] = $this->dao->lastinsertID();
@@ -546,33 +552,10 @@ class redmine11ConvertModel extends redmineConvertModel
      */
     public function convertIssue()
     {
-        $aimTypes[1] = 'bug';
-        $aimTypes[2] = 'story';
-        $aimTypes[3] = 'task';
-        $statusTypes['task'][1] = 'wait'; 
-        $statusTypes['task'][2] = 'wait'; 
-        $statusTypes['task'][3] = 'wait'; 
-        $statusTypes['bug'][1] = 'active'; 
-        $statusTypes['bug'][2] = 'active'; 
-        $statusTypes['bug'][3] = 'active'; 
-        $statusTypes['story'][1] = 'active'; 
-        $statusTypes['story'][2] = 'active'; 
-        $statusTypes['story'][3] = 'active'; 
-        $priTypes['task'][1] = 1;
-        $priTypes['task'][2] = 1;
-        $priTypes['task'][3] = 1;
-        $priTypes['task'][4] = 1;
-        $priTypes['task'][5] = 1;
-        $priTypes['bug'][1] = 1;
-        $priTypes['bug'][2] = 1;
-        $priTypes['bug'][3] = 1;
-        $priTypes['bug'][4] = 1;
-        $priTypes['bug'][5] = 1;
-        $priTypes['story'][1] = 1;
-        $priTypes['story'][2] = 1;
-        $priTypes['story'][3] = 1;
-        $priTypes['story'][4] = 1;
-        $priTypes['story'][5] = 1;
+        $aimTypes    = $this->issueType->aimTypes;
+        $statusTypes = $this->issueType->statusTypes;
+        $priTypes    = $this->issueType->priTypes;
+
         foreach($aimTypes as $issueType => $aimType)
         {
             if('story' == $aimType)

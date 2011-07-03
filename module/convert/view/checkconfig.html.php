@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <form method='post' action='<?php echo inlink('execute');?>'>
-<table align='center' class='table-5 f-14px'>
+<table align='center' class='w-p65 f-14px'>
   <caption><?php echo $lang->convert->checkConfig . $lang->colon . strtoupper($source);?></caption>
   <?php echo $checkResult;?>
 </table>
