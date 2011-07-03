@@ -25,8 +25,8 @@ $lang->editor->extendConfirm = 'Would you reuse the code.';
 $lang->editor->repeatFile    = 'File name repeat';
 $lang->editor->repeatPage    = 'This page has extisted. Is override?';
 
-$lang->editor->notWritable   = "Can't writable, maybe no power. please try chmod 777 -R ";
-$lang->editor->notDelete     = "Can't delete, please check power!";
+$lang->editor->notWritable   = "Can not writable, maybe no power. please try chmod 777 -R ";
+$lang->editor->notDelete     = "Can not delete, please check power!";
 $lang->editor->emptyFileName = 'Please write file name';
 
 $lang->editor->translate['config.php']  = 'Config file';
