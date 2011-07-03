@@ -97,13 +97,13 @@ $lang->convert->errorCopyFailed    = 'file %s copy failed.';
 $lang->convert->setParam = 'Please set params';
 
 $lang->convert->aimType           = 'Issue types goto';
-$lang->convert->statusType->bug   = '状态类型转换(Bug状态)';
-$lang->convert->statusType->story = '状态类型转换(Story状态)';
-$lang->convert->statusType->task  = '状态类型转换(Task状态)';
-$lang->convert->priType->bug      = '优先级类型转换(Bug状态)';
-$lang->convert->priType->story    = '优先级类型转换(Story状态)';
-$lang->convert->priType->task     = '优先级类型转换(Task状态)';
+$lang->convert->statusType->bug   = 'Status types goto(status of Bug)';
+$lang->convert->statusType->story = 'Status types goto(status of story)';
+$lang->convert->statusType->task  = 'Status types goto(status of task)';
+$lang->convert->priType->bug      = 'Priority types goto(priority of Bug)';
+$lang->convert->priType->story    = 'Priority types goto(priority of story)';
+$lang->convert->priType->task     = 'Priority types goto(priority of task)';
 
 $lang->convert->issue->redmine = 'Redmine';
-$lang->convert->issue->zentao  = '禅道';
-$lang->convert->issue->goto    = '转换为';
+$lang->convert->issue->zentao  = 'ZenTao';
+$lang->convert->issue->goto    = 'Goto';
