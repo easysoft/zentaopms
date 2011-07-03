@@ -9,5 +9,5 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->qa->common  = 'QA视图';
-$lang->qa->index   = "QA首页";
+$lang->qa->common  = '测试视图';
+$lang->qa->index   = "测试首页";

@@ -9,5 +9,5 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->qa->common  = 'QA';
+$lang->qa->common  = 'Test';
 $lang->qa->index   = "Index";
