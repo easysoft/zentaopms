@@ -42,6 +42,7 @@ class installModel extends model
      */
     public function getLatestRelease()
     {
+        if(!function_exists('json_decode')) return false;
         $snoopy = $this->app->loadClass('snoopy');
         if(@$snoopy->fetchText('http://www.zentao.net/misc-getlatestrelease.json'))
         {
