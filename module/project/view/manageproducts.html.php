@@ -15,7 +15,7 @@
   <table align='center' class='table-4'> 
     <caption><?php echo $lang->project->manageProducts;?></caption>
     <tr>
-      <td><?php echo html::checkbox("products", $allProducts, $linkedProducts);?></td>
+      <td><?php echo html::checkbox("products", $allProducts, $linkedProducts);?><?php echo html::hidden("post", 'post');?></td>
     </tr>
     <tr><td class='a-center'><?php echo html::submitButton();?></td></tr>
   </table>
