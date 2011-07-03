@@ -2,11 +2,11 @@
 /**
  * The convert module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 青島易軟天創網絡科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
- * @version     $Id: zh-tw.php 1429 2011-02-21 14:35:26Z wwccss $
+ * @version     $Id: zh-tw.php 1994 2011-07-02 08:30:24Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->convert->common  = '從其他系統導入';
@@ -26,7 +26,16 @@ $lang->convert->source           = '來源系統';
 $lang->convert->version          = '版本';
 $lang->convert->mustSelectSource = "必須選擇一個來源。";
 
+$lang->convert->direction              = '請選擇項目問題轉換方向';
+$lang->convert->questionTypeOfRedmine  = 'Redmine中問題類型';
+$lang->convert->aimTypeOfZentao        = '轉化為Zentao中的類型';
+
+$lang->convert->directionList['bug']     = 'Bug';
+$lang->convert->directionList['task']    = '任務';
+$lang->convert->directionList['story']   = '需求';
+
 $lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x', 'bugfree_2' => '2.x');
+$lang->convert->sourceList['Redmine'] = array('Redmine_1.1' => '1.1');
 
 $lang->convert->setting     = '設置';
 $lang->convert->checkConfig = '檢查配置';
@@ -62,7 +71,25 @@ $lang->convert->bugfree->results  = '測試結果';
 $lang->convert->bugfree->actions  = '歷史記錄';
 $lang->convert->bugfree->files    = '附件';
 
+$lang->convert->redmine->users        = '用戶';
+$lang->convert->redmine->groups       = '用戶分組';
+$lang->convert->redmine->products     = '產品';
+$lang->convert->redmine->projects     = '項目';
+$lang->convert->redmine->stories      = '需求';
+$lang->convert->redmine->tasks        = '任務';
+$lang->convert->redmine->bugs         = 'Bug';
+$lang->convert->redmine->productPlans = '產品計劃';
+$lang->convert->redmine->teams        = '團隊';
+$lang->convert->redmine->releases     = '發佈';
+$lang->convert->redmine->builds       = 'Build';
+$lang->convert->redmine->docLibs      = '文檔庫';
+$lang->convert->redmine->docs         = '文檔';
+$lang->convert->redmine->files        = '附件';
+
 $lang->convert->errorConnectDB     = '資料庫連接失敗 ';
 $lang->convert->errorFileNotExits  = '檔案 %s 不存在';
 $lang->convert->errorUserExists    = '用戶 %s 已存在';
+$lang->convert->errorGroupExists   = '分組 %s 已存在';
+$lang->convert->errorBuildExists   = 'Build %s 已存在';
+$lang->convert->errorReleaseExists = '發佈 %s 已存在';
 $lang->convert->errorCopyFailed    = '檔案 %s 拷貝失敗';

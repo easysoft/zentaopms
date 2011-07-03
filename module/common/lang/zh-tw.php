@@ -2,11 +2,11 @@
 /**
  * The common simplified chinese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 青島易軟天創網絡科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 1829 2011-05-02 06:42:18Z wwccss $
+ * @version     $Id: zh-tw.php 1991 2011-07-02 06:11:37Z yidong@cnezsoft.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -16,7 +16,7 @@ $lang->dot          = '。';
 $lang->at           = ' 于 ';
 $lang->downArrow    = '↓';
 
-$lang->ZenTaoPMS     = '禪道管理';
+$lang->ZenTaoPMS    = '禪道管理';
 $lang->welcome      = "歡迎使用『%s』{$lang->colon} {$lang->ZenTaoPMS}";
 $lang->myControl    = "我的地盤";
 $lang->currentPos   = '當前位置：';
@@ -73,14 +73,14 @@ $lang->openedByAB   = '創建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '類型';
 
+$lang->common->common = '公有模組';
+
 /* 主導航菜單。*/
-$lang->menu->index   = '首頁|index|index';
 $lang->menu->my      = '我的地盤|my|index';
 $lang->menu->product = '產品視圖|product|index';
 $lang->menu->project = '項目視圖|project|index';
-$lang->menu->qa      = '测试視圖|qa|index';
+$lang->menu->qa      = '測試視圖|qa|index';
 $lang->menu->doc     = '文檔視圖|doc|index';
-//$lang->menu->forum   = '討論視圖|doc|index';
 $lang->menu->company = '組織視圖|company|index';
 $lang->menu->admin   = '後台管理|admin|index';
 
@@ -114,16 +114,17 @@ $lang->index->menu->product = '瀏覽產品|product|browse';
 $lang->index->menu->project = '瀏覽項目|project|browse';
 
 /* 我的地盤菜單設置。*/
-$lang->my->menu->account  = '%s' . $lang->arrow;
-$lang->my->menu->todo     = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
-$lang->my->menu->task     = '我的任務|my|task|';
-$lang->my->menu->bug      = '我的Bug|my|bug|';
-$lang->my->menu->testask  = '我的測試|my|testtask|';
-$lang->my->menu->story    = '我的需求|my|story|';
-$lang->my->menu->project  = '我的項目|my|project|';
-$lang->my->menu->dynamic  = '我的動態|my|dynamic|';
-$lang->my->menu->profile  = array('link' => '我的檔案|my|profile|', 'alias' => 'editprofile');
-$lang->todo->menu         = $lang->my->menu;
+$lang->my->menu->account   = '%s' . $lang->arrow;
+$lang->my->menu->index     = '首頁|my|index';
+$lang->my->menu->todo      = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
+$lang->my->menu->task      = '我的任務|my|task|';
+$lang->my->menu->bug       = '我的Bug|my|bug|';
+$lang->my->menu->testtask  = '我的測試|my|testtask|';
+$lang->my->menu->story     = '我的需求|my|story|';
+$lang->my->menu->project   = '我的項目|my|project|';
+$lang->my->menu->dynamic   = '我的動態|my|dynamic|';
+$lang->my->menu->profile   = array('link' => '我的檔案|my|profile|', 'alias' => 'editprofile');
+$lang->todo->menu          = $lang->my->menu;
 
 /* 產品視圖設置。*/
 $lang->product->menu->list   = '%s';
@@ -207,10 +208,12 @@ $lang->user->menu->browse   = array('link' => '用戶管理|company|browse|', 'f
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
 $lang->admin->menu->convert   = array('link' => '從其他系統導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->editor    = array('link' => '在綫擴展|editor|index', 'subModule' => 'editor');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
 $lang->extension->menu      = $lang->admin->menu;
+$lang->editor->menu         = $lang->admin->menu;
 
 /*菜單設置：分組設置。*/
 $lang->menugroup->release     = 'product';
@@ -230,6 +233,7 @@ $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
+$lang->menugroup->editor      = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
@@ -257,8 +261,8 @@ $lang->pager->last      = "末頁";
 $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方網站";
-$lang->scrum          = "<a href='http://www.chinascrum.org' target='_blank'>Scrum社区</a> ";
-$lang->training       = "<a href='http://www.zentao.net/article-view-79371.html' target='_blank'>敏捷培训</a> ";
+$lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社區</a> ";
+$lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>敏捷培訓</a> ";
 $lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=comemind' target='_blank'>Comemind贊助</a>";
 $lang->zentaoKeywords = "開源項目管理軟件,項目管理,項目管理軟件,pmp,pms,php框架，國產php框架，scrum工具,scrum管理工具,scrum管理軟件,敏捷項目管理,禪道";
 $lang->zentaoDESC     = "禪道項目管理軟件(ZenTaoPMS)是一款國產的，基于LGPL協議，開源免費的項目管理軟件(工具、系統)，同時也是一款scrum管理工具。

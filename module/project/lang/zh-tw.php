@@ -2,11 +2,11 @@
 /**
  * The project module zh-tw file of ZenTaoMS.
  *
- * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 青島易軟天創網絡科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 1830 2011-05-02 06:50:14Z wwccss $
+ * @version     $Id: zh-tw.php 1943 2011-06-28 15:32:41Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -90,6 +90,7 @@ $lang->project->statusDoing         = '進行中';
 $lang->project->statusDone          = '已完成';
 $lang->project->statusClosed        = '已關閉';
 $lang->project->delayed             = '已延期';
+$lang->project->groups['']          = '分組查看';
 $lang->project->groups['story']     = '需求分組';
 $lang->project->groups['status']    = '狀態分組';
 $lang->project->groups['pri']       = '優先順序分組';

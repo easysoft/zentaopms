@@ -2,7 +2,7 @@
 /**
  * The extension module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 青島易軟天創網絡科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
@@ -22,6 +22,7 @@ $lang->extension->download     = '下載插件';
 $lang->extension->downloadAB   = '下載';
 $lang->extension->upload       = '上傳插件';
 $lang->extension->erase        = '清除';
+$lang->extension->upgrade      = '升級';
 
 $lang->extension->installed   = '已安裝';
 $lang->extension->deactivated = '已禁用';

@@ -2,11 +2,11 @@
 /**
  * The action module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 青島易軟天創網絡科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 1825 2011-05-02 05:54:29Z wwccss $
+ * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
