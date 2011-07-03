@@ -22,7 +22,7 @@ $lang->extension->download     = 'Download';
 $lang->extension->downloadAB   = 'Down';
 $lang->extension->upload       = 'Upload';
 $lang->extension->erase        = 'Erase';
-$lang->extension->upgrad       = 'Upgrade';
+$lang->extension->upgrade      = 'Upgrade';
 
 $lang->extension->installed   = 'Installed';
 $lang->extension->deactivated = 'Deactivated';
