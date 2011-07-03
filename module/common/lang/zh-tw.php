@@ -208,7 +208,7 @@ $lang->user->menu->browse   = array('link' => '用戶管理|company|browse|', 'f
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
 $lang->admin->menu->convert   = array('link' => '從其他系統導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->editor    = array('link' => '在綫擴展|editor|index', 'subModule' => 'editor');
+$lang->admin->menu->editor    = array('link' => '擴展編輯器|editor|index', 'subModule' => 'editor');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;

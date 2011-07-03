@@ -115,6 +115,7 @@ $lang->index->menu->project = 'Projects|project|browse';
 
 /* Dashboard menu. */
 $lang->my->menu->account  = '%s' . $lang->arrow;
+$lang->my->menu->index     = 'Index|my|index';
 $lang->my->menu->todo     = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task     = 'Task|my|task|';
 $lang->my->menu->bug      = 'Bug|my|bug|';
@@ -207,7 +208,7 @@ $lang->user->menu->browse   = array('link' => 'Manage user|company|browse|', 'fl
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->editor    = array('link' => 'Extend online|editor|index', 'subModule' => 'editor');
+$lang->admin->menu->editor    = array('link' => 'Extension editor|editor|index', 'subModule' => 'editor');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
