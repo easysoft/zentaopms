@@ -246,6 +246,7 @@ $lang->resource->extension->activate   = 'activate';
 $lang->resource->extension->deactivate = 'deactivate';
 $lang->resource->extension->upload     = 'upload';
 $lang->resource->extension->erase      = 'erase';
+$lang->resource->extension->upgrade    = 'upgrade';
 
 /* Others. */
 $lang->resource->api->getModel     = 'getModel';
@@ -313,3 +314,5 @@ $lang->changelog['2.0'][]   = 'extension-activate';
 $lang->changelog['2.0'][]   = 'extension-deactivate';
 $lang->changelog['2.0'][]   = 'extension-upload';
 $lang->changelog['2.0'][]   = 'extension-erase';
+
+$lang->changelog['2.1'][]   = 'extension-upgrade';
