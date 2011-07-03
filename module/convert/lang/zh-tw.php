@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
- * @version     $Id: zh-tw.php 1994 2011-07-02 08:30:24Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2001 2011-07-03 05:50:54Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->convert->common  = '從其他系統導入';
@@ -93,3 +93,17 @@ $lang->convert->errorGroupExists   = '分組 %s 已存在';
 $lang->convert->errorBuildExists   = 'Build %s 已存在';
 $lang->convert->errorReleaseExists = '發佈 %s 已存在';
 $lang->convert->errorCopyFailed    = '檔案 %s 拷貝失敗';
+
+$lang->convert->setParam = '請設置轉換參數';
+
+$lang->convert->aimType           = '問題類型轉換';
+$lang->convert->statusType->bug   = '狀態類型轉換(Bug狀態)';
+$lang->convert->statusType->story = '狀態類型轉換(Story狀態)';
+$lang->convert->statusType->task  = '狀態類型轉換(Task狀態)';
+$lang->convert->priType->bug      = '優先順序類型轉換(Bug狀態)';
+$lang->convert->priType->story    = '優先順序類型轉換(Story狀態)';
+$lang->convert->priType->task     = '優先順序類型轉換(Task狀態)';
+
+$lang->convert->issue->redmine = 'Redmine';
+$lang->convert->issue->zentao  = '禪道';
+$lang->convert->issue->goto    = '轉換為';

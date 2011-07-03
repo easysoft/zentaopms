@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2001 2011-07-03 05:50:54Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -198,7 +198,7 @@ $lang->bug->typeList['performance']  = '性能問題';
 $lang->bug->typeList['standard']     = '標準規範';
 $lang->bug->typeList['automation']   = '測試腳本';
 $lang->bug->typeList['trackthings']  = '事務跟蹤';
-$lang->bug->typeList['Others']       = '其他';
+$lang->bug->typeList['others']       = '其他';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = '激活';
