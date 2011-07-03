@@ -252,7 +252,7 @@ function switchProject(projectID, module, method)
     }
 
     /* Process task and build modules. */
-    if(module == 'task' && method == 'view')
+    if(module == 'task' && (method == 'view' || method == 'edit'))
     {
         module = 'project';
         method = 'task';
