@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 1991 2011-07-02 06:11:37Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2015 2011-07-03 09:46:53Z yidong@cnezsoft.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';

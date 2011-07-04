@@ -27,8 +27,8 @@ $lang->convert->version          = 'Version';
 $lang->convert->mustSelectSource = "Must select a source system";
 
 $lang->convert->direction              = 'Please select the direction of issue in Redmine';
-$lang->convert->questionTypeInRedmine  = 'Types of issue in Redmine';
-$lang->convert->aimTypeInZentao        = 'Aim type in Zentao';
+$lang->convert->questionTypeOfRedmine  = 'Types of issue in Redmine';
+$lang->convert->aimTypeOfZentao        = 'Aim type in Zentao';
 
 $lang->convert->directionList['bug']     = 'Bug';
 $lang->convert->directionList['task']    = 'Task';
