@@ -64,3 +64,6 @@ UPDATE zt_action, zt_testTask SET
     zt_action.product = zt_testTask.product WHERE
     zt_action.objectID = zt_testTask.id AND 
     zt_action.objectType = 'testtask';
+
+-- 2011-07-04 add type field to extension.
+ALTER TABLE `zt_extension` ADD `type` VARCHAR( 20 ) NOT NULL DEFAULT 'extension' AFTER `license` ;
