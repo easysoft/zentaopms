@@ -230,6 +230,7 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   `author` varchar(100) NOT NULL,
   `desc` text NOT NULL,
   `license` text NOT NULL,
+  `type` VARCHAR( 20 ) NOT NULL DEFAULT 'extension',
   `site` varchar(150) NOT NULL,
   `zentaoVersion` varchar(100) NOT NULL,
   `installedTime` datetime NOT NULL,
