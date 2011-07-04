@@ -46,7 +46,7 @@
           <th class='w-150px'><?php echo $lang->extension->name;?></th>
           <th class='w-50px'><?php echo $lang->extension->code;?></th>
           <th class='w-50px'><?php echo $lang->extension->version;?></th>
-          <th><?php echo $lang->extension->desc;?></th>
+          <th><?php echo $lang->extension->abstract;?></th>
           <th><?php echo $lang->extension->author;?></th>
           <th class='w-id'><?php echo $lang->extension->downloads;?></th>
           <th class='w-80px'><?php echo $lang->extension->public;?></th>
@@ -58,27 +58,27 @@
         <?php foreach($extensions as $extension):?>
         <tr class='a-center'>
           <td class='strong'><?php echo $extension->id;?></td>
-          <td class='a-left'><?php echo html::a($extension->viewLink, $extension->name, '_blank');?></td>
-          <td><?php echo $extension->code;?></td>
-          <td><?php echo $extension->version;?></td>
-          <td class='a-left'><?php echo $extension->desc;?></td>
+          <td class='a-left'><?php echo html::a($extension->viewLink, $extension->name, '', 'class=extension');?></td>
+          <td class='a-left'><?php echo $extension->code;?></td>
+          <td><?php echo $extension->releaseVersion;?></td>
+          <td class='a-left'><?php echo $extension->abstract;?></td>
           <td><?php echo $extension->author;?></td>
           <td><?php echo $extension->downloads;?></td>
           <td><?php echo $lang->extension->publicList[$extension->public];?></td>
           <td><?php echo $lang->extension->compatibleList[$extension->compatible];?></td>
           <td class='a-right'>
             <?php 
-            $installLink   = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&overridePackage=no&ignoreCompitable=yes");
+            $installLink   = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&type=$extension->type&&overridePackage=no&ignoreCompitable=yes");
             $downLinkClass = 'manual';
             if($extension->public)
             {
-                if($extension->function != 'computer' and $extension->function != 'mobile')
+                if($extension->type != 'computer' and $extension->type != 'mobile')
                 {
                     if(isset($installeds[$extension->code]))
                     {
-                        if($installeds[$extension->code]->version != $extension->version)
+                        if($installeds[$extension->code]->version != $extension->releaseVersion)
                         {
-                            $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5");
+                            $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&type=$extension->type");
                             echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe button-c"');
                         }
                         else

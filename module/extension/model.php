@@ -12,6 +12,11 @@
 class extensionModel extends model
 {
     /**
+     * The extension manager version. Don't change it. 
+     */
+    const EXT_MANAGER_VERSION = '1.1';
+
+    /**
      * The api agent(use snoopy).
      * 
      * @var object   
@@ -72,8 +77,10 @@ class extensionModel extends model
      */
     public function fetchAPI($url)
     {
+        $url .= '?lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $this->config->version;
         $this->agent->fetch($url);
         $result = json_decode($this->agent->results);
+
         if(!isset($result->status)) return false;
         if($result->status != 'success') return false;
         if(isset($result->data) and md5($result->data) != $result->md5) return false;
@@ -84,14 +91,13 @@ class extensionModel extends model
      * Get extension modules from the api.
      * 
      * @access public
-     * @return void
+     * @return string|bool
      */
     public function getModulesByAPI()
     {
         $requestType = $this->config->requestType;
         $webRoot     = helper::safe64Encode($this->config->webRoot);
-        $requestLang = str_replace('-', '_', $this->cookie->lang);
-        $apiURL      = $this->apiRoot . 'apiGetmodules-' . $requestType . '-' . $webRoot . '-' . $requestLang . '.json';
+        $apiURL      = $this->apiRoot . 'apiGetmodules-' . $requestType . '-' . $webRoot . '.json';
         $data = $this->fetchAPI($apiURL);
         if(isset($data->modules)) return $data->modules;
         return false;
@@ -101,14 +107,14 @@ class extensionModel extends model
      * Get extensions by some condition.
      * 
      * @param  string    $type 
-     * @param  mixe d    $param 
+     * @param  mixed     $param 
      * @access public
-     * @return void
+     * @return array|bool
      */
-    public function getExtensionsByAPI($type, $param)
+    public function getExtensionsByAPI($type, $param, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $requestLang = str_replace('-', '_', $this->cookie->lang);
-        $apiURL = $this->apiRoot . 'apiGetExtensions-' . $type . '-' . $param . '-' . $requestLang . '.json';
+        $apiURL = $this->apiRoot . "apiGetExtensions-$type-$param-$recTotal-$recPerPage-$pageID.json";
+
         $data = $this->fetchAPI($apiURL);
         if(isset($data->extensions))
         {
@@ -118,6 +124,22 @@ class extensionModel extends model
             }
             return $data;
         }
+        return false;
+    }
+
+    /**
+     * Get versions for some extensions.
+     * 
+     * @param  string    $extensions 
+     * @access public
+     * @return array|bool
+     */
+    public function getVersionsByAPI($extensions)
+    {
+        $extensions = helper::safe64Encode($extensions);
+        $apiURL = $this->apiRoot . 'apiGetVersions-' . $extensions . '.json';
+        $data = $this->fetchAPI($apiURL);
+        if(isset($data->versions)) return (array)$data->versions;
         return false;
     }
 
@@ -585,16 +607,18 @@ class extensionModel extends model
     /**
      * Save the extension to database.
      * 
-     * @param  int    $extension 
+     * @param  string    $extension     the extension code
+     * @param  string    $type          the extension type
      * @access public
      * @return void
      */
-    public function saveExtension($extension)
+    public function saveExtension($extension, $type)
     {
         $code      = $extension;
         $extension = $this->getInfoFromPackage($extension);
         $extension->status = 'available';
         $extension->code   = $code;
+        $extension->type   = $type;
         $this->dao->replace(TABLE_EXTENSION)->data($extension)->exec();
     }
 

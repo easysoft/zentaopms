@@ -15,9 +15,9 @@
   <thead>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->extension->name;?></th>
-    <th class='w-50px'><?php echo $lang->extension->code;?></th>
+    <th class='w-100px'><?php echo $lang->extension->code;?></th>
     <th class='w-50px'><?php echo $lang->extension->version;?></th>
-    <th><?php echo $lang->extension->desc;?></th>
+    <th><?php echo $lang->extension->abstract;?></th>
     <th class='w-100px'><?php echo $lang->extension->author;?></th>
     <th class='w-200px'><?php echo $lang->actions;?></th>
   </tr>
@@ -30,14 +30,21 @@
     <td class='a-center'><?php echo $extension->version;?></td>
     <td><?php echo $extension->desc;?></td>
     <td><?php echo $extension->author;?></td>
-    <td class='a-center'>
+    <td class='a-right'>
       <?php
+
       $deactivateCode = html::a(inlink('deactivate', "extension=$extension->code"), $lang->extension->deactivate, '', "class='button-c iframe'");
       $activateCode   = html::a(inlink('activate',   "extension=$extension->code"), $lang->extension->activate, '',   "class='button-c iframe'");
       $uninstallCode  = html::a(inlink('uninstall',  "extension=$extension->code"), $lang->extension->uninstall, '',  "class='button-c iframe'");
       $installCode    = html::a(inlink('install',    "extension=$extension->code"), $lang->extension->install, '',    "class='button-c iframe'");
       $eraseCode      = html::a(inlink('erase',      "extension=$extension->code"), $lang->extension->erase, '',      "class='button-c iframe'");
-      if($extension->function != 'patch')
+
+      if($extension->status == 'installed' and !empty($extension->upgradeLink))
+      {
+          echo html::a($extension->upgradeLink, $lang->extension->upgrade, '', "class='button-c iframe'");
+      }
+
+      if($extension->type != 'patch')
       {
           if($extension->status == 'installed')   echo $deactivateCode . $uninstallCode;
           if($extension->status == 'deactivated') echo $activateCode   . $uninstallCode;
