@@ -526,7 +526,7 @@ class project extends control
             die(js::locate($this->createLink('project', 'create', "projectID=$projectID"), 'parent'));
         }
 
-        $this->project->setMenu($this->projects, '');
+        $this->project->setMenu($this->projects, key($this->projects));
 
         $this->view->header->title = $this->lang->project->create;
         $this->view->position[]    = $this->view->header->title;

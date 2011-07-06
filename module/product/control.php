@@ -169,7 +169,7 @@ class product extends control
             die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
         }
 
-        $this->product->setMenu($this->products, '');
+        $this->product->setMenu($this->products, key($this->products));
 
         $this->view->header->title = $this->lang->product->create;
         $this->view->position[]    = $this->view->header->title;

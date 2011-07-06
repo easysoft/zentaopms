@@ -25,7 +25,7 @@ class productModel extends model
     public function setMenu($products, $productID, $extra = '')
     {
         /* Has access privilege?. */
-        if(!isset($products[$productID]) and !$this->checkPriv($this->getById($productID)))
+        if($products and !isset($products[$productID]) and !$this->checkPriv($this->getById($productID)))
         {
             echo(js::alert($this->lang->product->accessDenied));
             die(js::locate('back'));

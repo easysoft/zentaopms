@@ -66,7 +66,7 @@ class projectModel extends model
     public function setMenu($projects, $projectID)
     {
         /* Check the privilege. */
-        if(!isset($projects[$projectID]) and !$this->checkPriv($this->getById($projectID)))
+        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($this->getById($projectID)))
         {
             echo(js::alert($this->lang->project->accessDenied));
             die(js::locate('back'));
