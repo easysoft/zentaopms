@@ -10,11 +10,15 @@
  * @version     $Id$
  * @link        http://www.ZenTaoPMS.com
  */
-error_reporting(0);
+//error_reporting(0);
 define('IN_SHELL', true);
 
 /* Judge the args. */
 if($argc != 2) die('Usage: ' . basename(__FILE__) . " <request>\n");
+
+/* Parse the request into params. */
+$request = parse_url(trim($argv[1]));
+$_SERVER['HTTP_HOST'] = $request['host'];
 
 /* Load the framework. */
 chdir(dirname(__FILE__));
@@ -24,9 +28,6 @@ include '../framework/model.class.php';
 include '../framework/helper.class.php';
 include '../config/config.php';
 
-/* Parse the request into params. */
-$request = parse_url(trim($argv[1]));
-$_SERVER['HTTP_HOST'] = $request['host'];
 if($config->requestType == 'PATH_INFO')
 {
     $_SERVER['PATH_INFO'] = str_replace($config->webRoot, '', $request['path']);
