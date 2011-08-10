@@ -1,8 +1,7 @@
 var JSON_URL = '../../php/file_manager_json.php';
 
 var KE = parent.KindEditor;
-location.href.match(/\?id=([\w-]+)/i);
-var id = RegExp.$1;
+var id = KE.util.getParam(location.href, 'id');
 var fileManagerJson = (typeof KE.g[id].fileManagerJson == 'undefined') ? JSON_URL : KE.g[id].fileManagerJson;
 var lang = KE.lang.plugins.file_manager;
 KE.event.ready(function() {
@@ -44,7 +43,7 @@ KE.event.ready(function() {
 	}
 	var insertImage = function(url, title) {
 		if (!insertLink(url)) {
-			KE.util.insertHtml(id, '<img src="' + url + '" alt="' + title + '" border="0" />');
+			KE.util.insertHtml(id, '<img src="' + url + '" alt="' + title + '" />');
 		}
 	};
 	var insertFile = function(url, title) {
@@ -193,8 +192,11 @@ KE.event.ready(function() {
 		KE.util.showLoadingPage(id);
 		var req = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
 		var url = fileManagerJson;
-		url += param;
-		url += (url.match(/\?/) ? "&" : "?") + (new Date()).getTime()
+		if (!url.match(/\?/)) {
+			url += '?';
+			param = param.substr(1);
+		}
+		url += param + '&' + (new Date()).getTime();
 		req.open('GET', url, true);
 		req.onreadystatechange = function () {
 			if (req.readyState == 4) {
@@ -208,7 +210,7 @@ KE.event.ready(function() {
 		req.send(null);
 	};
 	var reloadPage = function (path, order, func) {
-		httpRequest('?path=' + path + '&order=' + order, func);
+		httpRequest('&path=' + path + '&order=' + order, func);
 	};
 	changeType('VIEW');
 	viewType.value = 'VIEW';

@@ -3,12 +3,13 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Link</title>
+		<link href="../../skins/default.css" rel="stylesheet" />
 		<style type="text/css" rel="stylesheet">
 			body {
 				margin: 0;
 				font:12px/1.5 "sans serif",tahoma,verdana,helvetica;
 				background-color:#F0F0EE;
-				color:#222222;
+				color:#333;
 				overflow:hidden;
 			}
 			label {
@@ -34,17 +35,10 @@
 			.table li label {
 				font-weight:bold;
 			}
-			.table li input {
-				vertical-align:middle;
-			}
-			.table li img {
-				vertical-align:middle;
-			}
 		</style>
 		<script type="text/javascript">
 			var KE = parent.KindEditor;
-			location.href.match(/\?id=([\w-]+)/i);
-			var id = RegExp.$1;
+			var id = KE.util.getParam(location.href, 'id');
 			KE.event.ready(function() {
 				var hyperLink = KE.$('hyperLink', document);
 				var linkType = KE.$('linkType', document);
@@ -66,6 +60,8 @@
 				}
 				KE.util.pluginLang('link', document);
 				KE.util.hideLoadingPage(id);
+				hyperLink.focus();
+				hyperLink.select();
 			}, window, document);
 		</script>
 	</head>
@@ -73,12 +69,12 @@
 		<div class="main">
 			<ul class="table">
 				<li>
-					<label for="hyperLink"><span id="lang.url"></span></label>
-					<input type="text" id="hyperLink" name="hyperLink" value="http://" style="width:90%;" />
+					<label for="hyperLink" class="ke-inline-block"><span id="lang.url"></span></label>
+					<input type="text" id="hyperLink" name="hyperLink" value="http://" class="ke-inline-block ke-text-input" style="width:90%;" />
 				</li>
 				<li>
-					<label for="linkType"><span id="lang.linkType"></span></label>&nbsp;
-					<select id="linkType" name="linkType"></select>
+					<label for="linkType" class="ke-inline-block"><span id="lang.linkType"></span></label>&nbsp;
+					<select id="linkType" name="linkType" class="ke-inline-block"></select>
 				</li>
 			</ul>
 		</div>

@@ -8,13 +8,13 @@
 				margin: 0;
 				font:12px/1 "sans serif",tahoma,verdana,helvetica;
 				background-color:#F0F0EE;
-				color:#222222;
+				color:#333;
 				text-align:center;
 			}
 			#wordIframe {
 				width:98%;
 				height:260px;
-				border:1px solid #222222;
+				border:1px solid #A5A5A5;
 			}
 			.comment {
 				margin-bottom: 10px;
@@ -23,8 +23,7 @@
 		</style>
 		<script type="text/javascript">
 			var KE = parent.KindEditor;
-			location.href.match(/\?id=([\w-]+)/i);
-			var id = RegExp.$1;
+			var id = KE.util.getParam(location.href, 'id');
 			KE.event.ready(function() {
 				var iframe = KE.$('wordIframe', document);
 				var iframeDoc = KE.util.getIframeDoc(iframe);
@@ -39,6 +38,7 @@
 				window.setTimeout(function() {
 					if (KE.browser.IE) iframeDoc.body.contentEditable = 'true';
 					else iframeDoc.designMode = 'on';
+					iframe.contentWindow.focus();
 				}, 0);
 			}, window, document);
 		</script>
