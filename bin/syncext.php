@@ -77,6 +77,3 @@ function syncFiles($files, $from, $target)
         copy($file, $targetFile);
     }
 }
-/**
- *  
- */
