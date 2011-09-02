@@ -10,7 +10,7 @@
     <?php foreach($trackers as $tracker):?>
     <tr>
       <th class='rowhead'><?php echo $tracker->name;?></th>
-      <td><?php html::select("$tracker->name", $lang->convert->directionList, '', class='select-3');?></td>
+      <td><?php html::select("$tracker->name", $lang->convert->directionList, '', "class='select-3'");?></td>
     </tr>
     <?php endforeach;?>
     <tr>
