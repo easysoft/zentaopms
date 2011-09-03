@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <table class='table-1 fixed colored tablesorter datatable'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->project->story;?></div>
@@ -22,16 +22,16 @@
   <thead>
     <tr class='colhead'>
     <?php $vars = "projectID={$project->id}&orderBy=%s"; ?>
-      <th class='w-id'>     <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
-      <th class='w-pri'>    <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-      <th>                  <?php common::printOrderLink('title',        $orderBy, $vars, $lang->story->title);?></th>
-      <th class='w-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-      <th class='w-hour'>   <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
-      <th class='w-hour'>   <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
-      <th class='w-hour'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
-      <th class='w-status'> <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
-      <th class='w-50px'>   <?php echo $lang->story->taskCount;?></th>
-      <th class='w-100px'>  <?php echo $lang->actions;?></th>
+      <th class='w-id  {sorter:false}'>    <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+      <th class='{sorter:false}'>          <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+      <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+      <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+      <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
+      <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+      <th class='w-status {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+      <th class='w-50px'>                  <?php echo $lang->story->taskCount;?></th>
+      <th class='w-100px {sorter:false}'>  <?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>
@@ -66,8 +66,6 @@
     </tr>
     <?php endforeach;?>
   </tbody>
-  <tfoot>
-    <tr><td colspan='10' class='a-right'><?php printf($lang->product->storySummary, count($stories), $totalEstimate);?></td></tr>
-  </tfoot>
+  <tfoot><tr><td colspan='10' class='a-right'><?php printf($lang->product->storySummary, count($stories), $totalEstimate);?></td></tr></tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>
