@@ -1362,8 +1362,6 @@ class router
         if($moduleName == 'common')
         {
             $mainConfigFile = $this->configRoot . 'config.php';
-            $myConfig       = $this->configRoot . 'my.php';
-            if(is_file($myConfig)) $extConfigFiles[] = $myConfig;
         }
         else
         {
