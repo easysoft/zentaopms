@@ -34,8 +34,9 @@ class task extends control
      */
     public function create($projectID = 0, $storyID = 0)
     {
-        $project = $this->project->getById($projectID); 
-        $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
+        $project   = $this->project->getById($projectID); 
+        $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
+        $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $project->id);
@@ -61,18 +62,18 @@ class task extends control
             }
             elseif($this->post->after == 'toTastList')
             {
-                die(js::locate($browseProjectLink, 'parent'));
+                die(js::locate($taskLink, 'parent'));
             }
             elseif($this->post->after == 'toStoryList')
             {
-                die(js::locate($this->createLink('project', 'story', "projectID=$projectID"), 'parent'));
+                die(js::locate($storyLink, 'parent'));
             }
         }
 
         $stories = $this->story->getProjectStoryPairs($projectID);
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
-        $position[]      = html::a($browseProjectLink, $project->name);
+        $position[]      = html::a($taskLink, $project->name);
         $position[]      = $this->lang->task->create;
 
         $this->view->header   = $header;
