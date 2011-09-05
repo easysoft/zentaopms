@@ -97,6 +97,7 @@ class bugModel extends model
             ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
             ->where('t1.id')->eq((int)$bugID)->fetch();
         if(!$bug) return false;
+        $bug->steps = $this->loadModel('file')->setImgSize($bug->steps);
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
         if($bug->mailto)
         {

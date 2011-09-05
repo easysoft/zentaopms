@@ -22,13 +22,15 @@ class releaseModel extends model
      */
     public function getByID($releaseID)
     {
-        return $this->dao->select('t1.*, t2.name as buildName, t3.name as productName')
+        $release = $this->dao->select('t1.*, t2.name as buildName, t3.name as productName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.id')->eq((int)$releaseID)
             ->orderBy('t1.id DESC')
             ->fetch();
+        $release->desc = $this->loadModel('file')->setImgSize($release->desc);
+        return $release;
     }
 
     /**

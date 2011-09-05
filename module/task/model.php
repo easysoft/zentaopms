@@ -286,6 +286,7 @@ class taskModel extends model
             ->where('t1.id')->eq((int)$taskID)
             ->fetch();
         if(!$task) return false;
+        $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
         foreach($task as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
         if($task->mailto)

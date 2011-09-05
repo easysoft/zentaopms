@@ -224,6 +224,7 @@ class product extends control
         $this->product->setMenu($this->products, $productID);
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->view->header->title = $this->lang->product->view . $this->lang->colon . $product->name;

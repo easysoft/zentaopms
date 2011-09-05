@@ -22,7 +22,9 @@ class productplanModel extends model
      */
     public function getByID($planID)
     {
-        return $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
+        $plan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
+        $plan->desc = $this->loadModel('file')->setImgSize($plan->desc);
+        return $plan;
     }
 
     /**

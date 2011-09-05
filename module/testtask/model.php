@@ -80,12 +80,14 @@ class testtaskModel extends model
      */
     public function getById($taskID)
     {
-        return $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
+        $task = $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->where('t1.id')->eq((int)$taskID)->fetch();
+        $task->desc = $this->loadModel('file')->setImgSize($task->desc);
+        return $task;
     }
 
     /**

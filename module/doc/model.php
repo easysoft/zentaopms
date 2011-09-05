@@ -141,6 +141,7 @@ class docModel extends model
             ->where('id')->eq((int)$docID)
             ->fetch();
         if(!$doc) return false;
+        $doc->content = $this->loadModel('file')->setImgSize($doc->content);
         $doc->files = $this->loadModel('file')->getByObject('doc', $docID);
 
         $doc->libName     = '';

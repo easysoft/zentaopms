@@ -22,13 +22,15 @@ class buildModel extends model
      */
     public function getByID($buildID)
     {
-        return $this->dao->select('t1.*, t2.name as projectName, t3.name as productName')
+        $build = $this->dao->select('t1.*, t2.name as projectName, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.id')->eq((int)$buildID)
             ->orderBy('t1.id DESC')
             ->fetch();
+        $build->desc = $this->loadModel('file')->setImgSize($build->desc);
+        return $build;
     }
 
     /**

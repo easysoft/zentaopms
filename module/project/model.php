@@ -310,6 +310,8 @@ class projectModel extends model
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
         $project->totalLeft     = round($total->totalLeft, 1);
+        $project->desc = $this->loadModel('file')->setImgSize($project->desc);
+        $project->goal = $this->loadModel('file')->setImgSize($project->goal);
         return $project;
     }
 

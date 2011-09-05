@@ -455,11 +455,15 @@ function setForm()
  * @access public
  * @return void
  */
-function setImageSize()
+function setImageSize(image, maxWidth)
 {
-    bodyWidth = $('body').width();
-    maxWidth = bodyWidth - 420; // The side bar's width is 336, and add some margins.
-    $('.content image').each(function()
+    /* If not set maxWidth, set it auto. */
+    if(!maxWidth)
+    {
+        bodyWidth = $('body').width();
+        maxWidth  = bodyWidth - 420; // The side bar's width is 336, and add some margins.
+    }
+    $('.content img').each(function()
     {
         if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
     });
@@ -682,7 +686,6 @@ $(document).ready(function()
     saveProject();
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minus, begin ping.
     setForm();
-    setImageSize();
     autoCheck();
     togglesearch();
 });

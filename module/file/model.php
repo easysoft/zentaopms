@@ -194,4 +194,17 @@ class fileModel extends model
     {
         $this->webPath = $this->app->getWebRoot() . "data/upload/{$this->app->company->id}/";
     }
+
+    /**
+     * Insert the set image size code.
+     * 
+     * @param  string    $content 
+     * @param  int       $maxSize 
+     * @access public
+     * @return string
+     */
+    public function setImgSize($content, $maxSize = 0)
+    {
+        return str_replace('src="data/upload', 'onload="setImageSize(this,' . $maxSize . ' )" src="data/upload', $content);
+    }
 }

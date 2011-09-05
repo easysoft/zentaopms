@@ -29,7 +29,7 @@ class storyModel extends model
         if($version == 0) $version = $story->version;
         $spec = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
         $story->title  = isset($spec->title)  ? $spec->title  : '';
-        $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
+        $story->spec   = isset($spec->spec)   ? $this->loadModel('file')->setImgSize($spec->spec)   : '';
         $story->verify = isset($spec->verify) ? $spec->verify : '';
         $story->projects = $this->dao->select('t1.project, t2.name, t2.status')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
