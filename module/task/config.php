@@ -1,4 +1,13 @@
 <?php
+$config->task->create->requiredFields   = 'name,estimate,type,pri';
+$config->task->edit->requiredFields     = $config->task->create->requiredFields;
+$config->task->start->requiredFields    = 'estimate';
+$config->task->finish->requiredFields   = 'consumed';
+$config->task->activate->requiredFields = 'left';
+
+$config->task->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->task->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+
 $config->task->exportFields = '
     id, project, story,
     name, desc,
