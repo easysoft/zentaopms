@@ -296,6 +296,7 @@ class bug extends control
      */
     public function create($productID, $extras = '')
     {
+        $this->view->users = $this->user->getPairs('noletter');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         if(!empty($_POST))
@@ -376,7 +377,6 @@ class bug extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->view->stories          = $stories;
-        $this->view->users            = $this->user->getPairs('noclosed,nodeleted');
         $this->view->projects         = $this->product->getProjectPairs($productID);
         $this->view->builds           = $builds;
         $this->view->tasks            = $this->loadModel('task')->getProjectTaskPairs($projectID);
@@ -512,6 +512,7 @@ class bug extends control
      */
     public function resolve($bugID)
     {
+        $this->view->users   = $this->user->getPairs('noletter');
         if(!empty($_POST))
         {
             $this->bug->resolve($bugID);
@@ -530,7 +531,6 @@ class bug extends control
         $this->view->position[]      = $this->lang->bug->resolve;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('nodeleted');
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
@@ -545,6 +545,7 @@ class bug extends control
      */
     public function activate($bugID)
     {
+        $this->view->users           = $this->user->getPairs('noletter');
         if(!empty($_POST))
         {
             $this->bug->activate($bugID);
@@ -564,7 +565,6 @@ class bug extends control
         $this->view->position[]      = $this->lang->bug->activate;
 
         $this->view->bug             = $bug;
-        $this->view->users           = $this->user->getPairs('nodeleted');
         $this->view->builds          = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         $this->view->actions         = $this->action->getList('bug', $bugID);
 
@@ -580,6 +580,7 @@ class bug extends control
      */
     public function close($bugID)
     {
+        $this->view->users   = $this->user->getPairs('noletter');
         if(!empty($_POST))
         {
             $this->bug->close($bugID);
@@ -598,7 +599,6 @@ class bug extends control
         $this->view->position[]    = $this->lang->bug->close;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs();
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
