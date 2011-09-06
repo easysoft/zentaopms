@@ -229,4 +229,27 @@ class file extends control
         $this->view->fieldset = $fieldset;
         $this->display();
     }
+
+    /**
+     * Edit file's name. 
+     * 
+     * @param  int    $fileID 
+     * @access public
+     * @return void
+     */
+    public function edit($fileID)
+    {
+        if($_POST)
+        {
+            $this->app->loadLang('action');
+            $file = $this->file->getByID($fileID);
+            $comment = sprintf($this->lang->action->desc->diff3, $file->title, $this->post->fileName);
+
+            $this->dao->update(TABLE_FILE)->set('title')->eq($this->post->fileName)->where('id')->eq($fileID)->exec();
+            $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', $comment, $file->title);
+            die(js::reload('parent.parent'));
+        }
+
+        $this->display();
+    }
 }

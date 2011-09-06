@@ -55,6 +55,7 @@ $lang->action->desc->edited      = '$date, Edited by <strong>$actor</strong>.';
 $lang->action->desc->closed      = '$date, Closed by <strong>$actor</strong>.';
 $lang->action->desc->deleted     = '$date, Deleted by <strong>$actor</strong>.';
 $lang->action->desc->deletedfile = '$date, Deleted file by <strong>$actor</strong>, the file is <strong><i>$extra</i></strong>';
+$lang->action->desc->editfile    = '$date, Edit file by <strong>$actor</strong>, the file is <strong><i>$extra</i></strong>';
 $lang->action->desc->erased      = '$date, Erased by <strong>$actor</strong>.';
 $lang->action->desc->undeleted   = '$date, Restored by <strong>$actor</strong>.';
 $lang->action->desc->commented   = '$date, Commented by <strong>$actor</strong>.';
@@ -65,7 +66,8 @@ $lang->action->desc->started     = '$date, Started by <strong>$actor</strong>.';
 $lang->action->desc->canceled    = '$date, Canceled by <strong>$actor</strong>.';
 $lang->action->desc->finished    = '$date, Finished by <strong>$actor</strong>.';
 $lang->action->desc->diff1       = 'Changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
-$lang->action->desc->diff2       = 'Changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>';
+$lang->action->desc->diff2       = 'Changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>' . "\n";
+$lang->action->desc->diff3       = "Changed file's name %s to %s ';
 
 /* The action labels. */
 $lang->action->label->created             = 'created';
@@ -75,6 +77,7 @@ $lang->action->label->edited              = 'edited';
 $lang->action->label->closed              = 'closed';
 $lang->action->label->deleted             = 'deleted';
 $lang->action->label->deletedfile         = 'deleted file';
+$lang->action->label->editfile            = 'edit file name';
 $lang->action->label->erased              = 'deleted';
 $lang->action->label->undeleted           = 'restore';
 $lang->action->label->commented           = 'commented';

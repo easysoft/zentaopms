@@ -55,6 +55,7 @@ $lang->action->desc->edited      = '$date, 由 <strong>$actor</strong> 编辑。
 $lang->action->desc->closed      = '$date, 由 <strong>$actor</strong> 关闭。' . "\n";
 $lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 删除。' . "\n";
 $lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 删除了附件：<strong><i>$extra</i></strong>' . "\n";
+$lang->action->desc->editfile    = '$date, 由 <strong>$actor</strong> 编辑了附件：<strong><i>$extra</i></strong>' . "\n";
 $lang->action->desc->erased      = '$date, 由 <strong>$actor</strong> 删除。' . "\n";
 $lang->action->desc->undeleted   = '$date, 由 <strong>$actor</strong> 还原。' . "\n";
 $lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 添加备注。' . "\n";
@@ -66,6 +67,7 @@ $lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。
 $lang->action->desc->finished    = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
 $lang->action->desc->diff1       = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
 $lang->action->desc->diff2       = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . '<blockquote>%s</blockquote>' . "\n";
+$lang->action->desc->diff3       = '将文件名 %s 改为 %s ' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label->created             = '创建了';
@@ -75,6 +77,7 @@ $lang->action->label->edited              = '编辑了';
 $lang->action->label->closed              = '关闭了';
 $lang->action->label->deleted             = '删除了';
 $lang->action->label->deletedfile         = '删除附件';
+$lang->action->label->editfile            = '编辑附件';
 $lang->action->label->erased              = '删除了';
 $lang->action->label->undeleted           = '还原了';
 $lang->action->label->commented           = '评论了';
