@@ -431,7 +431,7 @@ class treeModel extends model
             if(is_numeric($moduleID))
             {
                 $module->root    = $rootID;
-                $module->name    = $moduleName;
+                $module->name    = strip_tags($moduleName);
                 $module->parent  = $parentModuleID;
                 $module->grade   = $grade;
                 $module->type    = $type;
@@ -445,7 +445,7 @@ class treeModel extends model
             else
             {
                 $moduleID = str_replace('id', '', $moduleID);
-                $this->dao->update(TABLE_MODULE)->set('name')->eq($moduleName)->where('id')->eq($moduleID)->limit(1)->exec();
+                $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags($moduleName))->where('id')->eq($moduleID)->limit(1)->exec();
             }
         }
     }

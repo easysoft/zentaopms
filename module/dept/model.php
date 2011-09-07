@@ -256,7 +256,7 @@ class deptModel extends model
             if(empty($deptName)) continue;
             if(is_numeric($deptID))
             {
-                $dept->name   = $deptName;
+                $dept->name   = strip_tags($deptName);
                 $dept->parent = $parentDeptID;
                 $dept->grade  = $grade;
                 $this->dao->insert(TABLE_DEPT)->data($dept)->exec();
@@ -267,7 +267,7 @@ class deptModel extends model
             else
             {
                 $deptID = str_replace('id', '', $deptID);
-                $this->dao->update(TABLE_DEPT)->set('name')->eq($deptName)->where('id')->eq($deptID)->exec();
+                $this->dao->update(TABLE_DEPT)->set('name')->eq(strip_tags($deptName))->where('id')->eq($deptID)->exec();
             }
         }
     }
