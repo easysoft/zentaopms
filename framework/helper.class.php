@@ -324,20 +324,6 @@ class helper
             chdir($cwd);
         }
     }
-
-    /**
-     * Judge the os is centos or not.
-     * 
-     * @access private
-     * @return bool
-     */
-    static public function isCentOS()
-    {
-        if(PHP_OS != 'Linux') return false;
-        $issueFile = '/etc/issue';
-        if(!file_exists($issueFile) or !is_readable($issueFile)) return false;
-        return stripos(file_get_contents($issueFile), 'centos') !== false;
-    }
 }
 
 /**
