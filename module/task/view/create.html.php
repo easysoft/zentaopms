@@ -14,7 +14,13 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/colorbox.html.php';?>
 <script language='javascript'> var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
+<script language='Javascript'>
+$(function(){
+     $("#preview").colorbox({width:1000, height:700, iframe:true, transition:'elastic', speed:350, scrolling:true});
+})
+</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table align='center' class='table-1 a-left'> 
     <caption><?php echo $lang->task->create;?></caption>
@@ -30,7 +36,7 @@
       <th class='rowhead'><?php echo $lang->task->story;?></th>
       <td>
         <?php echo html::select('story', $stories, $storyID, 'class=select-1 onchange=setPreview();');?>
-        <a href='' id='preview' class='iframe' target='_blank'><?php echo $lang->preview;?></a>
+        <a href='' id='preview' class='iframe'><?php echo $lang->preview;?></a>
       </td>
     </tr>  
     <tr>
