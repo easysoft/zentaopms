@@ -1488,15 +1488,14 @@ class router
         try 
         {
             $dbh = new PDO($dsn, $params->user, $params->password, array(PDO::ATTR_PERSISTENT => $params->persistant));
+            $dbh->exec("SET NAMES {$params->encoding}");
+
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->exec("SET NAMES {$params->encoding}");
             if(isset($params->strictMode) and $params->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
-            if(isset($params->checkCentOS) and $params->checkCentOS and helper::isCentOS())
-            {
-                $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
-                $dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            }
+            if(isset($params->emulatePrepare)) $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, $params->emulatePrepare);
+            if(isset($params->bufferQuery))    $dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $params->bufferQuery);
+
             return $dbh;
         }
         catch (PDOException $exception)

@@ -48,11 +48,12 @@ $config->file->dangers = 'php,jsp,py,rb,asp,'; // Dangerous files.
 $config->file->maxSize = 1024 * 1024;          // Max size.
 
 /* Master database settings. */
-$config->db->persistant = false;     // Pconnect or not.
-$config->db->driver     = 'mysql';   // Must be MySQL. Don't support other database server yet.
-$config->db->encoding   = 'UTF8';    // Encoding of database.
-$config->db->strictMode = false;     // Turn off the strict mode of MySQL.
-$config->db->checkCentOS= true;      // Whether check is centos or not, thus to fix the error of pdo in centos.
+$config->db->persistant     = false;     // Pconnect or not.
+$config->db->driver         = 'mysql';   // Must be MySQL. Don't support other database server yet.
+$config->db->encoding       = 'UTF8';    // Encoding of database.
+$config->db->strictMode     = false;     // Turn off the strict mode of MySQL.
+//$config->db->emulatePrepare = true;    // PDO::ATTR_EMULATE_PREPARES
+//$config->db->bufferQuery    = true;     // PDO::MYSQL_ATTR_USE_BUFFERED_QUERY
 
 /* Slave database settings. */
 $config->slaveDB->persistant = false;      
