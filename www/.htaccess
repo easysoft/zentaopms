@@ -5,3 +5,6 @@ Options +FollowSymLinks +SymLinksIfOwnerMatch
   RewriteCond %{REQUEST_FILENAME} !-f 
   RewriteRule (.*)$ index.php/$1 [L]
 </IfModule>
+  php_value post_max_size 30M 
+  php_flag  file_uploads On
+  php_value upload_max_filesize 20M
