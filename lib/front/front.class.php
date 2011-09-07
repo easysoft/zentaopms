@@ -497,6 +497,13 @@ EOT;
      */
     static public function locate($url, $target = "self")
     {
+        /* If the url if empty, goto the home page. */
+        if(!$url)
+        {
+            global $config;
+            $url = $config->webRoot;
+        }
+
         $js  = self::start();
         if(strtolower($url) == "back")
         {
