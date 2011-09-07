@@ -8,3 +8,4 @@ Options +FollowSymLinks +SymLinksIfOwnerMatch
   php_value post_max_size 30M 
   php_flag  file_uploads On
   php_value upload_max_filesize 20M
+  php_value display_errors 1
