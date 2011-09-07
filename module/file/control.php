@@ -48,15 +48,22 @@ class file extends control
         $file = $file[0];
         if($file)
         {
-            move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']);
-            $url =  $this->file->webPath . $file['pathname'];
+            if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']))
+            {
+                $url =  $this->file->webPath . $file['pathname'];
 
-            $file['addedBy']    = $this->app->user->account;
-            $file['addedDate']  = helper::today();
-            unset($file['tmpname']);
-            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                $file['addedBy']    = $this->app->user->account;
+                $file['addedDate']  = helper::today();
+                unset($file['tmpname']);
+                $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
-            die(json_encode(array('error' => 0, 'url' => $url)));
+                die(json_encode(array('error' => 0, 'url' => $url)));
+            }
+            else
+            {
+                $error = strip_tags(sprintf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath));
+                die(json_encode(array('error' => 1, 'message' => $error)));
+            }
         }
     }
 
