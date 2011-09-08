@@ -1,7 +1,9 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<link rel='stylesheet' href='<?php echo $defaultTheme;?>datepicker.css' type='text/css' />
-<script src='<?php echo $jsRoot;?>jquery/datepicker/min.js'  type='text/javascript'></script>
-<script src='<?php echo $jsRoot;?>jquery/datepicker/date.js' type='text/javascript'></script>
+<?php
+css::import($defaultTheme . 'datepicker.css');
+js::import($jsRoot . 'jquery/datepicker/min.js'); 
+js::import($jsRoot . 'jquery/datepicker/date.js');
+?>
 <script language='javascript'>
 Date.firstDayOfWeek = 1;
 Date.format = 'yyyy-mm-dd';

@@ -1,6 +1,8 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<script src='<?php echo $jsRoot;?>jquery/tablesorter/min.js' type='text/javascript'></script>
-<script src='<?php echo $jsRoot;?>jquery/tablesorter/metadata.js' type='text/javascript'></script>
+<?php 
+js::import($jsRoot . 'jquery/tablesorter/min.js');
+js::import($jsRoot . 'jquery/tablesorter/metadata.js');
+?>
 <script language='javascript'>
 $(function() {
 

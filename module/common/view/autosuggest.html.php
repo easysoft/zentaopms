@@ -1,6 +1,8 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<link rel='stylesheet' href='<?php echo $defaultTheme;?>autosuggest.css' />
-<script src='<?php echo $jsRoot;?>jquery/autosuggest/min.js' type='text/javascript'></script>
+<?php
+css::import($defaultTheme . 'autosuggest.css');
+js::import($jsRoot . 'jquery/autosuggest/min.js');
+?>
 <script language='javascript'>
 $(function() {
     var data = {items: [

@@ -1,4 +1,6 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<link rel='stylesheet' href='<?php echo $defaultTheme;?>treeview.css' type='text/css' />
-<script src='<?php echo $jsRoot;?>jquery/treeview/min.js' type='text/javascript'></script>
+<?php
+css::import($defaultTheme . 'treeview.css');
+js::import($jsRoot . 'jquery/treeview/min.js');
+?>
 <script language='javascript'>$(function() { $("#tree").treeview({ persist: "cookie", collapsed: true, unique: true }) })</script>

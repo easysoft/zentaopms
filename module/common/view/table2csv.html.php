@@ -1,4 +1,6 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<link rel="stylesheet" href="<?php echo $defaultTheme;?>alert.css" />
-<script src="<?php echo $jsRoot;?>jquery/alert/raw.js" type="text/javascript"></script>
-<script src="<?php echo $jsRoot;?>jquery/table2csv/raw.js" type="text/javascript"></script>
+<?php
+css::import($defaultTheme . 'alert.css');
+js::import($jsRoot . 'jquery/alert/raw.js');
+js::import($jsRoot . 'jquery/table2csv/raw.js');
+?>
