@@ -18,7 +18,7 @@
 <script language='javascript'> var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
 <script language='Javascript'>
 $(function(){
-     $("#preview").colorbox({width:1000, height:700, iframe:true, transition:'elastic', speed:350, scrolling:true});
+     $("#preview").colorbox({width:960, height:500, iframe:true, transition:'elastic', speed:350, scrolling:true});
 })
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
