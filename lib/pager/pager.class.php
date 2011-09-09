@@ -105,6 +105,7 @@ class pager
      */
     public function __construct($recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if(isset($_COOKIE['recPerPage'])) $recPerPage = $_COOKIE['recPerPage'];
         $this->setRecTotal($recTotal);
         $this->setRecPerPage($recPerPage);
         $this->setPageTotal();
@@ -402,6 +403,7 @@ class pager
             pageID     = document.getElementById('_pageID').value;
             recPerPage = document.getElementById('_recPerPage').value;
             recTotal   = document.getElementById('_recTotal').value;
+            $.cookie('recPerPage', recPerPage, {expires:config.cookieLife, path:config.webRoot});
             if(mode == 'changePageID')
             {
                 if(pageID > pageTotal) pageID = pageTotal;
