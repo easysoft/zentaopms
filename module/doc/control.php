@@ -122,11 +122,12 @@ class doc extends control
         /* Build the search form. */
         $this->config->doc->search['actionURL'] = $this->createLink('doc', 'browse', "libID=$libID&moduleID=$moduleID&procuctID=$productID&projectID=$projectID&browseType=bySearch&queryID=myQueryID");
         $this->config->doc->search['queryID']   = $queryID;
-        $this->config->doc->search['params']['product']['values']       = array(''=>'') + $this->product->getPairs() + array('all'=>$this->lang->doc->allProduct);
-        $this->config->doc->search['params']['project']['values']       = array(''=>'') + $this->project->getPairs() + array('all'=>$this->lang->doc->allProject);
-        $this->config->doc->search['params']['lib']['values']           = array(''=>'') + $this->libs;
-        $this->config->doc->search['params']['type']['values']           = array(''=>'') + $this->config->doc->search['params']['type']['values'];
-                /* Get the modules. */
+        $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->product->getPairs() + array('all'=>$this->lang->doc->allProduct);
+        $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->project->getPairs() + array('all'=>$this->lang->doc->allProject);
+        $this->config->doc->search['params']['lib']['values']     = array(''=>'') + $this->libs;
+        $this->config->doc->search['params']['type']['values']    = array(''=>'') + $this->config->doc->search['params']['type']['values'];
+
+        /* Get the modules. */
         if($libID == 'product' or $libID == 'project')
         {
             $moduleOptionMenu = $this->tree->getOptionMenu(0, $libID . 'doc', $startModuleID = 0);
@@ -145,7 +146,7 @@ class doc extends control
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->docs          = $docs;
         $this->view->pager         = $pager;
-        //$this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy       = $orderBy;
         $this->view->productID     = $productID;
         $this->view->projectID     = $projectID;
