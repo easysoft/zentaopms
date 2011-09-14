@@ -301,6 +301,7 @@ class task extends control
 
             foreach($tasks as $taskID)
             {
+                $this->commonAction($taskID);
                 $task = $this->task->getById($taskID);
                 if($task->status == 'wait' or $task->status == 'doing') continue;
 
