@@ -17,11 +17,11 @@
 var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='featurebar'>
-   <div class='f-left'>
-   <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></span>
+  <div class='f-left'>
+    <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></span>
     <span id='bysearchTab'><a href='#'><?php echo $lang->doc->searchDoc;?></a></span>
   </div>
- <div class='f-right'>
+  <div class='f-right'>
     <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>
   </div>
 </div>
@@ -62,7 +62,7 @@ var browseType = '<?php echo $browseType;?>';
             <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $doc->id)); else printf('%03d', $doc->id);?></td>
             <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $doc->title);?></nobr></td>
             <td><?php echo $lang->doc->types[$doc->type];?></td>
-            <td><?php echo $doc->addedBy;?></td>
+            <td><?php isset($users[$doc->addedBy]) ? print($users[$doc->addedBy]) : print($doc->addedBy);?></td>
             <td><?php echo date("m-d H:i", strtotime($doc->addedDate));?></td>
             <td>
               <?php 
