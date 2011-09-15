@@ -412,12 +412,12 @@ class bug extends control
         $bug = $this->bug->getById($bugID);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        /* Set menu. */
+        $this->bug->setMenu($this->products, $bug->product);
+
         /* Get product info. */
         $productID   = $bug->product;
         $productName = $this->products[$productID];
-        
-        /* Set menu. */
-        $this->bug->setMenu($this->products, $productID);
 
         /* Header and positon. */
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->view;

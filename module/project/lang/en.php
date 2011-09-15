@@ -40,6 +40,7 @@ $lang->project->teamname     = 'Team name';
 $lang->project->products     = 'Products';
 $lang->project->childProjects= 'Child projects';
 $lang->project->whitelist    = 'Whitelist';
+$lang->project->noProduct    = 'No product';
 
 $lang->team->account     = 'Account';
 $lang->team->role        = 'Role';

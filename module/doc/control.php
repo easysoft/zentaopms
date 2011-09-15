@@ -371,7 +371,12 @@ class doc extends control
         /* Get doc. */
         $doc = $this->doc->getById($docID);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
-        
+        if(!$this->project->checkPriv($this->project->getById($doc->project)))
+        {
+            echo(js::alert($this->lang->error->accessDenied));
+            die(js::locate('back'));
+        }
+
         /* Get library. */
         $lib = $doc->libName;
         if($doc->lib == 'product') $lib = $doc->productName;

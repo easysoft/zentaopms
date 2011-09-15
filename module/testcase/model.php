@@ -23,6 +23,7 @@ class testcaseModel extends model
      */
     public function setMenu($products, $productID)
     {
+        $this->loadModel('product')->setMenu($products, $productID);
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testcase', 'browse');\"");
         foreach($this->lang->testcase->menu as $key => $menu)
         {

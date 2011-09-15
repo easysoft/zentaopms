@@ -40,6 +40,7 @@ $lang->project->teamname     = '团队名称';
 $lang->project->products     = '相关产品';
 $lang->project->childProjects= '子项目';
 $lang->project->whitelist    = '分组白名单';
+$lang->project->noProduct    = '无产品项目';
 
 $lang->team->account     = '用户';
 $lang->team->role        = '角色';

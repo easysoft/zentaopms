@@ -218,6 +218,15 @@ class treeModel extends model
         $products = $this->loadModel('product')->getPairs();
         $projects = $this->loadModel('project')->getProductGroupList();
         $modules  = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
+        $products[0] = $this->lang->project->noProduct;
+        foreach($projects as $id => $project)
+        {
+            if($id == '') 
+            {
+                $projects[0] = $projects[''];
+                unset($projects['']);
+            }
+        }
 
         foreach($products as $productID => $productName)
         {

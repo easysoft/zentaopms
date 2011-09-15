@@ -113,11 +113,16 @@ class docModel extends model
      */
     public function getDocs($libID, $productID, $projectID, $module, $orderBy, $pager)
     {
+        $products = $this->loadModel('product')->getPairs();
+        $projects = $this->loadModel('project')->getPairs();
+        $keysOfProducts = array_keys($products);
+        $keysOfProjects = array_keys($projects);
+
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->beginIF(is_numeric($libID))->andWhere('lib')->eq($libID)->fi()
-            ->beginIF($libID == 'product')->andWhere('product')->gt(0)->fi()
-            ->beginIF($libID == 'project')->andWhere('project')->gt(0)->fi()
+            ->beginIF($libID == 'product')->andWhere('product')->in($keysOfProducts)->andWhere('project')->in($keysOfProjects)->fi()
+            ->beginIF($libID == 'project')->andWhere('project')->in($keysOfProjects)->fi()
             ->beginIF($productID > 0)->andWhere('product')->eq($productID)->fi()
             ->beginIF($projectID > 0)->andWhere('project')->eq($projectID)->fi()
             ->beginIF((string)$projectID == 'int')->andWhere('project')->gt(0)->fi()

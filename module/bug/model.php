@@ -23,6 +23,7 @@ class bugModel extends model
      */
     public function setMenu($products, $productID)
     {
+        $this->loadModel('product')->setMenu($products, $productID);
         $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'bug', 'browse');\"");
         foreach($this->lang->bug->menu as $key => $menu)
         {

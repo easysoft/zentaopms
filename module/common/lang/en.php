@@ -250,6 +250,7 @@ $lang->error->date            = "『%s』should be date";
 $lang->error->account         = "『%s』should be a valid account.";
 $lang->error->passwordsame    = "Two passwords must be the same";
 $lang->error->passwordrule    = "Password should more than six letters.";
+$lang->error->accessDenied    = 'No purview';
 
 /* Pager. */
 $lang->pager->noRecord  = "No records yet.";
