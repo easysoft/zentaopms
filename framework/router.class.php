@@ -748,10 +748,6 @@ class router
         if(!empty($this->clientTheme))
         {
             $this->clientTheme = strtolower($this->clientTheme);
-            if(strpos($this->config->themes, $this->clientTheme) === false)
-            {
-                $this->clientTheme = $this->config->default->theme;
-            }
         }    
         else
         {
