@@ -1,0 +1,18 @@
+/* Designed by silver, www.yanhonglu.com. */
+
+#header{background:url(./images/bg.header.gif) repeat; border:none}
+
+#topbar   {color:black}
+#topbar a {color:black; text-decoration:none}
+#topbar select {color:black; background:#efefef url(./images/bg.header.gif) repeat-x}
+#topbar .w-p50 {padding-left:8px}
+
+#mainmenu   ul{background:none}
+#modulemenu ul{background:none}
+#mainmenu   .active a{color: #324F7C}
+#modulemenu .active a{color: #324F7C} 
+
+#mainmenu li{border:none; height:36px; line-height:36px;}
+#mainmenu .active {background:url(./images/bg.menu.gif) no-repeat center 5px; width:85px;}
+
+#modulemenu select{border:1px solid #e4e4e4; background:#fff}

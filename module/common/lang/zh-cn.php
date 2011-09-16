@@ -105,9 +105,10 @@ $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
 /* 风格列表。*/
-$lang->themes['default'] = '默认';
-$lang->themes['green']   = '绿色';
-$lang->themes['red']     = '红色';
+$lang->themes['default']   = '默认';
+$lang->themes['green']     = '绿色';
+$lang->themes['red']       = '红色';
+$lang->themes['classblue'] = '经典蓝';
 
 /* 首页菜单设置。*/
 $lang->index->menu->product = '浏览产品|product|browse';

@@ -105,9 +105,10 @@ $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
 /* Themes. */
-$lang->themes['default'] = 'Default';
-$lang->themes['green']   = 'Green';
-$lang->themes['red']     = 'Red';
+$lang->themes['default']   = 'Default';
+$lang->themes['green']     = 'Green';
+$lang->themes['red']       = 'Red';
+$lang->themes['classblue'] = 'Blue';
 
 /* Index mododule menu. */
 $lang->index->menu->product = 'Products|product|browse';
