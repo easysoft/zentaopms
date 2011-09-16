@@ -27,9 +27,8 @@ $config->methodVar   = 'f';               // requestType=GET: the method var nam
 $config->viewVar     = 't';               // requestType=GET: the view var name.
 $config->sessionVar  = 'sid';             // requestType=GET: the session var name.
 
-/* Views and themes. */
-$config->views  = ',html,json,';          // Supported view formats.
-$config->themes = 'default,green,red';    // Supported themes.
+/* Supported views. */
+$config->views  = ',html,json,'; 
 
 /* Supported languages. */
 $config->langs['zh-cn'] = '中文简体';
