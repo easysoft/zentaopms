@@ -67,7 +67,7 @@ $lang->action->desc->canceled    = '$date, Canceled by <strong>$actor</strong>.'
 $lang->action->desc->finished    = '$date, Finished by <strong>$actor</strong>.';
 $lang->action->desc->diff1       = 'Changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
 $lang->action->desc->diff2       = 'Changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>' . "\n";
-$lang->action->desc->diff3       = "Changed file's name %s to %s ';
+$lang->action->desc->diff3       = "Changed file's name %s to %s ";
 
 /* The action labels. */
 $lang->action->label->created             = 'created';
