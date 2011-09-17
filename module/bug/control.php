@@ -377,7 +377,7 @@ class bug extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0);
         $this->view->stories          = $stories;
-        $this->view->projects         = $this->product->getProjectPairs($productID);
+        $this->view->projects         = $this->loadModel('project')->filterDeleted($this->product->getProjectPairs($productID));
         $this->view->builds           = $builds;
         $this->view->tasks            = $this->loadModel('task')->getProjectTaskPairs($projectID);
         $this->view->moduleID         = $moduleID;
