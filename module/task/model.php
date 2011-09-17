@@ -506,7 +506,15 @@ class taskModel extends model
         {
             if($task->deadline != '0000-00-00')
             {
-                $delay = helper::diffDate($today, $task->deadline);
+                if($task->status == 'closed' && $task->closedReason == 'done')
+                {
+                    if($task->finishedDate == '') $delay = helper::diffDate(substr($task->closedDate, 0, 10), $task->deadline);
+                    if($task->finishedDate != '') $delay = helper::diffDate(substr($task->finishedDate, 0, 10), $task->deadline);
+                }
+                else
+                {
+                    $delay = helper::diffDate($today, $task->deadline);
+                }
             	if($delay > 0) $task->delay = $delay;            
 	        } 
 	    }
