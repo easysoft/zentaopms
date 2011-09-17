@@ -1,0 +1,9 @@
+.closed   {background:#fff;}
+.closed a {text-decoration:none}
+.resolved {background:#8EC21F;}
+.active1  {background:#E70014;}
+.active2  {background:#EA5407;}
+.active3  {background:#F39801;}
+.active4  {background:#FFF100;}
+.resolved a, .active1 a, .active2 a, .active3 a{color:white; text-decoration:none}
+.active4 a {color:blue; text-decoration:none}

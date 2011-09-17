@@ -64,9 +64,9 @@ var customed   = <?php echo (int)$customed;?>;
       <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
         <tr class='colhead'>
-          <th class='w-id'>      <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-severity'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-          <th class='w-pri'>     <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-id'>       <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-severity'> <?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='w-pri'>      <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
           <?php if($browseType == 'needconfirm'):?>
           <th class='w-p40'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
@@ -84,7 +84,8 @@ var customed   = <?php echo (int)$customed;?>;
         <?php foreach($bugs as $bug):?>
         <?php $bugLink = inlink('view', "bugID=$bug->id");?>
         <tr class='a-center'>
-          <td class='linkbox'><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
+          <?php $class = $bug->status == 'active' ? $bug->status . $bug->severity : $bug->status;?>
+          <td class='linkbox <?php echo $class;?>'><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
           <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
           <td><?php echo $lang->bug->priList[$bug->pri]?></td>
           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title);?></td>
