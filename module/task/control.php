@@ -592,7 +592,7 @@ class task extends control
                 if(isset($users[$task->lastEditedBy])) $task->lastEditedBy = $users[$task->lastEditedBy];
 
                 $task->openedDate     = substr($task->openedDate,     0, 10);
-                $task->assignedDate   = substr($task->assignedTo,     0, 10);
+                $task->assignedDate   = substr($task->assignedDate,   0, 10);
                 $task->finishedDate   = substr($task->finishedDate,   0, 10);
                 $task->canceledDate   = substr($task->canceledDate,   0, 10);
                 $task->closedDate     = substr($task->closedDate,     0, 10);
