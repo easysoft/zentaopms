@@ -273,36 +273,69 @@ class projectModel extends model
     {
         $this->loadModel('report');
 
-        $this->lang->project->charts->burn->graph->caption = '';
-        $this->lang->project->charts->burn->graph->xAxisName = "";
-        $this->lang->project->charts->burn->graph->yAxisName = "";
-
-        $burns    = array();
         $projects = $this->getList(',wait, doing');
-        $charts   = array();
-        $i        = 1;
+        $stats    = array();
+        $i = 1;
+
+        /* Get total estimate, consumed and left hours of project. */
+        $emptyHour = (object)array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $hours = $this->dao->select('project, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')
+            ->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('status')->ne('cancel')
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project')
+            ->fetchAll('project');
+
+        /* Round them. */
+        foreach($hours as $hour)
+        {
+            $hour->totalEstimate = round($hour->totalEstimate, 1);
+            $hour->totalConsumed = round($hour->totalConsumed, 1);
+            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->progress      = round($hour->totalConsumed / ($hour->totalConsumed + $hour->totalLeft), 3) * 100;
+        }
+
+        /* Get tasks stats group by status. */
+        $tasks = $this->dao->select('project, status, count(status) AS count')
+            ->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project, status')
+            ->fetchGroup('project', 'status');
+
+        /* Process projects. */
         foreach($projects as $key => $project)
         {
             if($this->checkPriv($project))
             {
                 if($i <= $counts and $project->status == 'doing')
                 {
-                    /* By flash.*/
-                    $dataXML = $this->report->createSingleXML($this->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
-                    $charts[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 210);
+                    // Process the end time.
+                    $project->end = date(DT_DATE4, strtotime($project->end));
 
-                    /* By flot.*/
-                    //$dataXML = $this->report->createSingleXMLFlot($this->getBurnData($project->id));
-                    //$charts[$project->id] = $this->report->createJSChartFlot($project->name, $dataXML, 'auto', 210);
+                    /* Process the burns. */
+                    $project->burns = array();
+                    $burnData       = $this->getBurnData($project->id);
+                    foreach($burnData as $data) $project->burns[] = $data->value;
+                    $stats[] = $project;
+
+                    /* Process the hours. */
+                    $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : $emptyHour;
+
+                    /* Process the tasks. */
+                    $project->tasks = isset($tasks[$project->id]) ? $tasks[$project->id] : array();
                 }
             }
             else
             {
                 unset($projects[$key]);
             }
+
+            $i ++;
         }
 
-        return array('projects' => $projects, 'charts' => $charts);
+        return $stats;
     }
 
     /**

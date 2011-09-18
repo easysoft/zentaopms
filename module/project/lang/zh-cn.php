@@ -40,6 +40,10 @@ $lang->project->teamname     = '团队名称';
 $lang->project->products     = '相关产品';
 $lang->project->childProjects= '子项目';
 $lang->project->whitelist    = '分组白名单';
+$lang->project->totalEstimate= '总预计';
+$lang->project->totalConsumed= '总消耗';
+$lang->project->totalLeft    = '总剩余';
+$lang->project->progess      = '进度';
 $lang->project->noProduct    = '无产品项目';
 
 $lang->team->account     = '用户';

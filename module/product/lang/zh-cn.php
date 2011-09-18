@@ -18,8 +18,10 @@ $lang->product->create = "新增产品";
 $lang->product->read   = "产品详情";
 $lang->product->delete = "删除产品";
 
-$lang->product->roadmap   = '路线图';
-$lang->product->doc       = '文档列表';
+$lang->product->plans    = '计划数';
+$lang->product->releases = '发布数';
+$lang->product->roadmap  = '路线图';
+$lang->product->doc      = '文档列表';
 
 $lang->product->selectProduct   = "请选择产品";
 $lang->product->saveButton      = " 保存 (S) ";

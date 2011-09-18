@@ -40,9 +40,8 @@ class my extends control
         $productStats = $this->loadModel('product')->getStats($this->config->my->productCounts);
 
         /* Set the dynamic pager. */
-        $maxCounts = max(count($projectStats['charts']), count($productStats['charts']));   // Get the max counts of projects and products, thus to get more dynamics to keep smae high.
         $this->app->loadClass('pager', true);
-        $pager = new pager(0, $this->config->my->dynamicCounts + $maxCounts);
+        $pager = new pager(0, $this->config->my->dynamicCounts);
 
         $this->view->projectStats  = $projectStats;
         $this->view->productStats  = $productStats;

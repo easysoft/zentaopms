@@ -18,8 +18,10 @@ $lang->product->create = "Create";
 $lang->product->read   = "Info";
 $lang->product->delete = "Delete";
 
-$lang->product->roadmap   = 'Roadmap';
-$lang->product->doc       = 'Coc';
+$lang->product->plans    = 'Plans';
+$lang->product->releases = 'Releases';
+$lang->product->roadmap  = 'Roadmap';
+$lang->product->doc      = 'Doc';
 
 $lang->product->selectProduct   = "Select product";
 $lang->product->saveButton      = " Save (S) ";

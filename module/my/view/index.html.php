@@ -10,12 +10,14 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/jquerytools.html.php';?>
+<?php include '../../common/view/sparkline.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <table class='cont' id='row1'>
   <tr valign='top'>
-    <td width='33%' style='padding-right:20px'><?php include './blockprojects.html.php';?></td>
-    <td width='33%' style='padding-right:20px'><?php include './blockproducts.html.php';?></td>
+    <td width='66%' style='padding-right:20px'>
+      <?php include './blockprojects.html.php';?> <br />
+      <?php include './blockproducts.html.php';?>
+    </td>
     <td width='33%'><?php include './blockdynamic.html.php';?></td>
   </tr>
 </table>
@@ -26,10 +28,4 @@
     <td width='33%'><?php include './blockbugs.html.php';?></td>
   </tr>
 </table>
-<script language='Javascript'>
-var projectCounts = <?php echo count($projectStats['charts']);?>;
-var productCounts = <?php echo count($productStats['charts']);?>;
-<?php for($i = 1;  $i <= count($projectStats['charts']); $i ++) echo "createChart$i();"; ?>
-<?php for($j = $i; $j <  count($productStats['charts']) + $i; $j ++) echo "createChart$j();"; ?>
-</script>
 <?php include '../../common/view/footer.html.php';?>

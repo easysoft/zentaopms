@@ -301,17 +301,59 @@ class productModel extends model
         $this->loadModel('story');
 
         $products = $this->getList(',normal');
-        $charts   = array();
-        $i = 1;
+        $stats    = array();
+        $i        = 1;
+
+        $stories = $this->dao->select('product, status, count(status) AS count')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
+            ->groupBy('product, status')
+            ->fetchGroup('product', 'status');
+
+        /* Padding the stories to sure all products have records. */
+        $emptyStory = array_keys($this->lang->story->statusList);
+        foreach(array_keys($products) as $productID)
+        {
+            if(!isset($stories[$productID])) $stories[$productID] = $emptyStory;
+        }
+
+        /* Padding the stories to sure all status have records. */
+        foreach($stories as $key => $story)
+        {
+            foreach(array_keys($this->lang->story->statusList) as $status)
+            {
+                $story[$status] = isset($story[$status]) ? $story[$status]->count : 0;
+            }
+            $stories[$key] = $story;
+        }
+
+        $plans = $this->dao->select('product, count(*) AS count')
+            ->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('end')->gt(helper::now())
+            ->groupBy('product')
+            ->fetchPairs();
+
+        $releases = $this->dao->select('product, count(*) AS count')
+            ->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
+            ->groupBy('product')
+            ->fetchPairs();
+        
         foreach($products as $key => $product)
         {
             if($this->checkPriv($product))
             {
-                if($i <= $counts and $product->status == 'normal')
+                if($i <= $counts and $product->status != 'closed')
                 {
-                    $this->session->set('storyReport', "product = '{$product->id}' AND deleted = '0'");
-                    $dataXML = $this->report->createSingleXML($this->story->getDataOfStorysPerStatus($product->id), $this->lang->story->report->options->graph);
-                    $charts[$product->id] = $this->report->createJSChart('pie2d', $dataXML, 'auto', 210);
+                    $product->stories = $stories[$product->id];
+                    $product->plans   = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
+                    $product->releases= isset($releases[$product->id]) ? $releases[$product->id] : 0;
+
+                    $stats[] = $product;
                     $i ++;
                 }
             }
@@ -321,6 +363,6 @@ class productModel extends model
             }
         }
 
-        return array('products' => $products, 'charts' => $charts);
+        return $stats;
     }
 }

@@ -40,6 +40,10 @@ $lang->project->teamname     = 'Team name';
 $lang->project->products     = 'Products';
 $lang->project->childProjects= 'Child projects';
 $lang->project->whitelist    = 'Whitelist';
+$lang->project->totalEstimate= 'Est';
+$lang->project->totalConsumed= 'Done';
+$lang->project->totalLeft    = 'Left';
+$lang->project->progess      = 'Progess';
 $lang->project->noProduct    = 'No product';
 
 $lang->team->account     = 'Account';
