@@ -12,7 +12,7 @@
   </tr>
 </table>
 <?php else:?>
-  <table class='table-1 colored fixed' height='100%'>
+  <table class='table-1 colored fixed'>
     <tr class='colhead'>
       <th class='w-150px'><?php echo $lang->product->name;?></th>
       <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
