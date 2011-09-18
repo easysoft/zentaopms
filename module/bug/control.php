@@ -485,7 +485,7 @@ class bug extends control
         $this->view->position[]    = $this->lang->bug->edit;
 
         /* Assign. */
-        if($project)
+        if($projectID)
         {
             $this->view->openedBuilds     = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
         }
