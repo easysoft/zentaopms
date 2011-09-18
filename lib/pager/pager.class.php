@@ -40,6 +40,14 @@ class pager
     public $recPerPage;
 
     /**
+     * The cookie name of recPerPage.
+     * 
+     * @var string
+     * @access public
+     */
+    public $pageCookie;
+
+    /**
      * Page count.
      * 
      * @var string
@@ -105,15 +113,15 @@ class pager
      */
     public function __construct($recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(isset($_COOKIE['recPerPage'])) $recPerPage = $_COOKIE['recPerPage'];
-        $this->setRecTotal($recTotal);
-        $this->setRecPerPage($recPerPage);
-        $this->setPageTotal();
-        $this->setPageID($pageID);
         $this->setApp();
         $this->setLang();
         $this->setModuleName();
         $this->setMethodName();
+
+        $this->setRecTotal($recTotal);
+        $this->setRecPerPage($recPerPage);
+        $this->setPageTotal();
+        $this->setPageID($pageID);
     }
 
     /**
@@ -151,6 +159,10 @@ class pager
      */
     public function setRecPerPage($recPerPage)
     {
+        /* Set the cookie name. */
+        $this->pageCookie = $this->app->getModuleName() . $this->app->getMethodName();
+
+        if(isset($_COOKIE[$this->pageCookie])) $recPerPage = $_COOKIE[$this->pageCookie];
         $this->recPerPage = ($recPerPage > 0) ? $recPerPage : PAGER::DEFAULT_REC_PRE_PAGE;
     }
 
@@ -397,13 +409,14 @@ class pager
         $js  = <<<EOT
         <script language='Javascript'>
         vars = '$vars';
+        pageCookie = '$this->pageCookie';
         function submitPage(mode)
         {
             pageTotal  = parseInt(document.getElementById('_pageTotal').value);
             pageID     = document.getElementById('_pageID').value;
             recPerPage = document.getElementById('_recPerPage').value;
             recTotal   = document.getElementById('_recTotal').value;
-            $.cookie('recPerPage', recPerPage, {expires:config.cookieLife, path:config.webRoot});
+            $.cookie(pageCookie, recPerPage, {expires:config.cookieLife, path:config.webRoot});
             if(mode == 'changePageID')
             {
                 if(pageID > pageTotal) pageID = pageTotal;
