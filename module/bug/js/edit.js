@@ -95,6 +95,7 @@ function loadProjectRelated(projectID)
     {
         $('#taskIdBox').get(0).innerHTML = emptySelect;
         loadProductStories($('#product').get(0).value);
+        loadProductBuilds($('#product').get(0).value);
     }
 }
 

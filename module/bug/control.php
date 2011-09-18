@@ -485,6 +485,14 @@ class bug extends control
         $this->view->position[]    = $this->lang->bug->edit;
 
         /* Assign. */
+        if($project)
+        {
+            $this->view->openedBuilds     = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
+        }
+        else
+        {
+            $this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+        }
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
@@ -494,8 +502,6 @@ class bug extends control
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
         $this->view->users            = $this->user->appendDeleted($this->user->getPairs('nodeleted'), "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy");
-        $this->view->openedBuilds     = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID, 'noempty');
-        //$this->view->openedBuilds     = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
         $this->view->resolvedBuilds   = array('' => '') + $this->view->openedBuilds;
         $this->view->actions          = $this->action->getList('bug', $bugID);
         $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
