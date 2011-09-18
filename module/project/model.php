@@ -821,26 +821,4 @@ class projectModel extends model
              ->fetchAll();
         return $tasks;
     }
-
-    /**
-     * Filter deleted projects
-     * 
-     * @param  array $projects 
-     * @access public
-     * @return void
-     */
-    public function filterDeleted($projects)
-    {
-        $unDeletedProjects = array();
-        foreach($projects as $projectID => $project)
-        {
-            if($projectID == '') $unDeletedProjects[''] = '';
-            else
-            {
-                $isDeleted = $this->dao->select('deleted')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch(false);
-                if($isDeleted->deleted == '0') $unDeletedProjects[$projectID] = $project;
-            }
-        }
-        return $unDeletedProjects;
-    }
 }

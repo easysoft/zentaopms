@@ -99,7 +99,7 @@ class testtask extends control
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->create;
 
-        $this->view->projects  = $this->loadModel('project')->filterDeleted($this->product->getProjectPairs($productID));
+        $this->view->projects  = $this->product->getProjectPairs($productID, $params = 'nodeleted');
         $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 

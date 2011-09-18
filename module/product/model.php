@@ -221,15 +221,17 @@ class productModel extends model
      * Get projects of a product in pairs.
      * 
      * @param  int    $productID 
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getProjectPairs($productID)
+    public function getProjectPairs($productID, $param = 'all')
     {
         $projects = $this->dao->select('t2.id, t2.name')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->where('t1.product')->eq((int)$productID)
+            ->beginIF($param == 'nodeleted')->andWhere('t2.deleted')->eq('0')->fi()
             ->orderBy('t1.project desc')
             ->fetchPairs();
         $projects = array('' => '') +  $projects;
