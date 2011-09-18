@@ -293,7 +293,8 @@ class projectModel extends model
             $hour->totalEstimate = round($hour->totalEstimate, 1);
             $hour->totalConsumed = round($hour->totalConsumed, 1);
             $hour->totalLeft     = round($hour->totalLeft, 1);
-            $hour->progress      = round($hour->totalConsumed / ($hour->totalConsumed + $hour->totalLeft), 3) * 100;
+            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
+            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
         }
 
         /* Get tasks stats group by status. */

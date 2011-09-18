@@ -18,5 +18,4 @@
   printf($lang->project->howToUpdateBurn, $this->createLink('help', 'field', 'module=project&method-burn&field=updateburn'));
   ?>
 </div>
-<script language='Javascript'>createChart1();</script>
 <?php include '../../common/view/footer.html.php';?>

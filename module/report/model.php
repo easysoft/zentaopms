@@ -85,14 +85,13 @@ EOT;
         $height = $height . 'px';
 return <<<EOT
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/excanvas.min.js"></script><![endif]-->
-<script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.js"></script>
-<script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.flot.min.js"></script>
 <h1>$projectName  {$this->lang->project->burn}</h1>
 <div id="placeholder" style="width:$width;height:$height;margin:0 auto"></div>
 <script type="text/javascript">
 $(function () 
 {
-    var data = [{data: $dataXML},];
+    var data = [{data: $dataXML}];
     function showTooltip(x, y, contents) 
     {
         $('<div id="tooltip">' + contents + '</div>').css
@@ -118,7 +117,7 @@ $(function ()
 
     placeholder.bind("plotselected", function (event, ranges) 
     {
-     plot = $.plot(placeholder, data, $.extend(true, {}, options, {xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to } }));
+        plot = $.plot(placeholder, data, $.extend(true, {}, options, {xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to } }));
     });
     var plot = $.plot(placeholder, data, options);
     var previousPoint = null;
