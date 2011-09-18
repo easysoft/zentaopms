@@ -160,7 +160,7 @@ class pager
     public function setRecPerPage($recPerPage)
     {
         /* Set the cookie name. */
-        $this->pageCookie = $this->app->getModuleName() . $this->app->getMethodName();
+        $this->pageCookie = 'pager' . ucfirst($this->app->getModuleName()) . ucfirst($this->app->getMethodName());
 
         if(isset($_COOKIE[$this->pageCookie])) $recPerPage = $_COOKIE[$this->pageCookie];
         $this->recPerPage = ($recPerPage > 0) ? $recPerPage : PAGER::DEFAULT_REC_PRE_PAGE;
