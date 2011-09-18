@@ -279,5 +279,6 @@ define('DT_MONTHTIME2', 'n月d日 H:i');
 define('DT_DATE1',     'Y-m-d');
 define('DT_DATE2',     'Ymd');
 define('DT_DATE3',     'Y年m月d日');
+define('DT_DATE4',     'n月j日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
