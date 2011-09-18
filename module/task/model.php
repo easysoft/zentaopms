@@ -25,6 +25,7 @@ class taskModel extends model
     public function create($projectID)
     {
         $tasksID = array();
+        $taskFile = '';
         foreach($this->post->assignedTo as $assignedTo)
         {
             $task = fixer::input('post')
@@ -55,7 +56,17 @@ class taskModel extends model
             {
                 $taskID = $this->dao->lastInsertID();
                 if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
-                $this->loadModel('file')->saveUpload('task', $taskID);
+                if(!empty($taskFile))
+                {
+                    $taskFile->objectID = $taskID;
+                    $this->dao->insert(TABLE_FILE)->data($taskFile)->exec();
+                }
+                else
+                {
+                    $taskFileTitle = $this->loadModel('file')->saveUpload('task', $taskID);
+                    $taskFile = $this->dao->select('*')->from(TABLE_FILE)->where('id')->eq(key($taskFileTitle))->fetch();
+                    unset($taskFile->id);
+                }
                 $tasksID[$assignedTo] = $taskID;
             }
             else
