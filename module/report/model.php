@@ -77,6 +77,74 @@ $chartID.render("$divID");
 EOT;
     }
 
+    public function createJSChartFlot($projectName, $dataXML, $width = 'auto', $height = 500)
+    {
+        $this->app->loadLang('project');
+        $jsRoot = $this->app->getWebRoot() . 'js/';
+        $width  = $width . 'px';
+        $height = $height . 'px';
+return <<<EOT
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.flot.js"></script>
+<h1>$projectName  {$this->lang->project->burn}</h1>
+<div id="placeholder" style="width:$width;height:$height;margin:0 auto"></div>
+<script type="text/javascript">
+$(function () 
+{
+    var data = [{data: $dataXML},];
+    function showTooltip(x, y, contents) 
+    {
+        $('<div id="tooltip">' + contents + '</div>').css
+        ({
+            position: 'absolute',
+            display: 'none',
+            top: y + 5,
+            left: x + 5,
+            border: '1px solid #fdd',
+            padding: '2px',
+            'background-color': '#fee',
+            opacity: 0.80
+        }).appendTo("body").fadeIn(200);
+    } 
+    var options = {
+        series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
+        legend: {noColumns: 1},
+        grid: { hoverable: true, clickable: true },
+        xaxis: {mode: "time", timeformat: "%m-%d", tickSize:[1, "day"]},
+        yaxis: {min: 0, minTickSize: 1}};
+
+    var placeholder = $("#placeholder");
+
+    placeholder.bind("plotselected", function (event, ranges) 
+    {
+     plot = $.plot(placeholder, data, $.extend(true, {}, options, {xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to } }));
+    });
+    var plot = $.plot(placeholder, data, options);
+    var previousPoint = null;
+    $("#placeholder").bind("plothover", function (event, pos, item) 
+    {
+        $("#x").text(pos.x.toFixed(2));
+        $("#y").text(pos.y.toFixed(2));
+
+        if (item) 
+        {
+            if (previousPoint != item.dataIndex)    
+            {
+                previousPoint = item.dataIndex;
+
+                $("#tooltip").remove();
+                var x = item.datapoint[0].toFixed(2), y = item.datapoint[1].toFixed(2);
+
+                showTooltip(item.pageX, item.pageY, y);
+            }
+        }
+    });
+});
+</script>
+EOT;
+    }
+
     /**
      * Create xml data of single charts.
      * 
@@ -106,6 +174,18 @@ EOT;
             $data .= "<set name='$set->name' value='$set->value' color='$color' />";
         }
         $data .= "</graph>";
+        return $data;
+    }
+
+    public function createSingleXMLFlot($sets)
+    {
+        $data = '[';
+        foreach($sets as $set)
+        {
+            $data .= " [$set->name, $set->value],";
+        }
+        $data = rtrim($data, ',');
+        $data .= ']';
         return $data;
     }
 

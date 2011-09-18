@@ -416,9 +416,13 @@ class project extends control
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[]      = $this->lang->project->burn;
 
-        /* Create charts. */
-        $dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
-        $charts  = $this->report->createJSChart('line', $dataXML, 700, 350);
+        /* Create charts by flash. */
+        //$dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
+        //$charts  = $this->report->createJSChart('line', $dataXML, 700, 350);
+
+        /* Create charts by flot. */
+        $dataXML= $this->report->createSingleXMLFlot($this->project->getBurnDataFlot($project->id));
+        $charts = $this->report->createJSChartFlot($project->name, $dataXML, 700, 350);
 
         /* Assign. */
         $this->view->header   = $header;

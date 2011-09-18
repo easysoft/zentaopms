@@ -287,8 +287,13 @@ class projectModel extends model
             {
                 if($i <= $counts and $project->status == 'doing')
                 {
+                    /* By flash.*/
                     $dataXML = $this->report->createSingleXML($this->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
                     $charts[$project->id] = $this->report->createJSChart('line', $dataXML, 'auto', 210);
+
+                    /* By flot.*/
+                    //$dataXML = $this->report->createSingleXMLFlot($this->getBurnData($project->id));
+                    //$charts[$project->id] = $this->report->createJSChartFlot($project->name, $dataXML, 'auto', 210);
                 }
             }
             else
@@ -737,6 +742,53 @@ class projectModel extends model
             }
         }
         foreach($sets as $set) $set->name = substr($set->name, 5);
+        return $sets;
+    }
+
+    public function getBurnDataFlot($projectID = 0, $itemCounts = 30)
+    {
+        /* Get project and burn counts. */
+        $project    = $this->getById($projectID);
+        $burnCounts = $this->dao->select('count(*) AS counts')->from(TABLE_BURN)->where('project')->eq($projectID)->fetch('counts');
+
+        /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
+        $sql = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
+        if($burnCounts > $itemCounts)
+        {
+            $sets = $sql->orderBy('date DESC')->limit($itemCounts)->fetchAll('name');
+            $sets = array_reverse($sets);
+        }
+        else
+        {
+            /* The burnCounts < itemCounts, after getting from the db, padding left dates. */
+            $sets    = $sql->orderBy('date ASC')->fetchAll('name');
+            $current = helper::today();
+            if($project->end != '0000-00-00')
+            {
+                $period = helper::diffDate($project->end, $project->begin) + 1;
+                $counts = $period > $itemCounts ? $itemCounts : $period;
+            }
+            else
+            {
+                $counts = $itemCounts;
+            }
+
+            for($i = 0; $i < $counts - $burnCounts; $i ++)
+            {
+                if(helper::diffDate($current, $project->end) > 0) break;
+                if(!isset($sets[$current]))
+                {
+                    $sets[$current]->name = $current;
+                    $sets[$current]->value = '';
+                }
+                $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
+                $current = $nextDay;
+            }
+        }
+        foreach($sets as $set) 
+        {
+            $set->name = (string)strtotime("$set->name UTC") . '000';
+        }
         return $sets;
     }
 
