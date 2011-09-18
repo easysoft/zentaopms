@@ -192,7 +192,7 @@ class file extends control
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
 
         header("Content-type: $contentType");
-        header("Content-Disposition: attachment; filename=$fileName");
+        header("Content-Disposition: attachment; filename=\"$fileName\"");
         header("Pragma: no-cache");
         header("Expires: 0");
         die($content);
