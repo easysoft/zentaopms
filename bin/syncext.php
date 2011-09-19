@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * This file is used to sync extension files to the target pms directory.
@@ -73,6 +74,14 @@ function syncFiles($files, $from, $target)
         $relativePath = str_replace($from, '', $file); 
         $targetFile   = $target . $relativePath;
         $targetPath   = dirname($targetFile);
+
+        /* If file not exists, remove the targe. */
+        if(!is_file($file))
+        {
+            @unlink($targetFile);
+            continue;
+        }
+
         if(!is_dir($targetPath)) mkdir($targetPath, 0755, true);
         copy($file, $targetFile);
     }
