@@ -95,7 +95,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function task($projectID = 0, $status = 'all', $param=0, $orderBy = 'status_asc,id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($projectID = 0, $status = 'all', $param=0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {   
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
@@ -108,6 +108,10 @@ class project extends control
         $this->app->session->set('taskList',    $uri);
         $this->app->session->set('storyList',   $uri);
         $this->app->session->set('projectList', $uri);
+
+        /* Process the order by field. */
+        if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
+        setcookie('projectTaskOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         /* Header and position. */
         $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->task;
@@ -292,7 +296,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function story($projectID = 0, $orderBy = 'pri_asc')
+    public function story($projectID = 0, $orderBy = '')
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -301,6 +305,10 @@ class project extends control
 
         /* Save session. */
         $this->app->session->set('storyList', $this->app->getURI(true));
+
+        /* Process the order by field. */
+        if(!$orderBy) $orderBy = $this->cookie->projectStoryOrder ? $this->cookie->projectStoryOrder : 'pri';
+        setcookie('projectStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         $project = $this->commonAction($projectID);
 

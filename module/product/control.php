@@ -59,7 +59,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -75,6 +75,10 @@ class product extends control
 
         /* Set menu. */
         $this->product->setMenu($this->products, $productID);
+
+        /* Process the order by field. */
+        if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
+        setcookie('productStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         /* Set header and position. */
         $this->view->header->title = $this->lang->product->index . $this->lang->colon . $this->products[$productID];

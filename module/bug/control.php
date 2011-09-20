@@ -61,7 +61,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $browseType = 'byModule', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
@@ -72,6 +72,10 @@ class bug extends control
         /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID);
         $this->session->set('bugList',    $this->app->getURI(true));
+
+        /* Process the order by field. */
+        if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
+        setcookie('qaBugOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
