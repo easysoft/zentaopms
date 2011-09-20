@@ -10,12 +10,12 @@
   <table class='table-1 fixed colored'>
     <tr class='colhead'>
       <th class='w-150px'><?php echo $lang->project->name;?></th>
-      <th class='w-date'><?php echo $lang->project->end;?></th>
-      <th class='w-50px'><?php echo $lang->project->totalEstimate;?></th>
-      <th class='w-50px'><?php echo $lang->project->totalConsumed;?></th>
-      <th class='w-50px'><?php echo $lang->project->totalLeft;?></th>
+      <th><?php echo $lang->project->end;?></th>
+      <th><?php echo $lang->project->totalEstimate;?></th>
+      <th><?php echo $lang->project->totalConsumed;?></th>
+      <th><?php echo $lang->project->totalLeft;?></th>
       <th class='w-150px'><?php echo $lang->project->progess;?></th>
-      <th><?php echo $lang->project->burn;?></th>
+      <th class='w-100px'><?php echo $lang->project->burn;?></th>
     </tr>
     <?php foreach($projectStats as $project):?>
     <tr class='a-center'>
