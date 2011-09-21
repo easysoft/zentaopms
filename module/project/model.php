@@ -279,7 +279,14 @@ class projectModel extends model
 
         /* Get total estimate, consumed and left hours of project. */
         $emptyHour = (object)array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-        $hours = $this->dao->select('project, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')
+        $hours = $this->dao->select('project, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed')
+            ->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project')
+            ->fetchAll('project');
+
+        $lefts = $this->dao->select('project, SUM(`left`) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('closedReason')->ne('cancel')
@@ -287,6 +294,7 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->groupBy('project')
             ->fetchAll('project');
+        foreach($lefts as $projectID => $projectLefts) $hours[$projectID]->totalLeft = $projectLefts->totalLeft;
 
         /* Round them. */
         foreach($hours as $hour)

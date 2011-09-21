@@ -52,22 +52,22 @@ var browseType = '<?php echo $browseType;?>';
   <?php  
   $totalEstimate  += $task->estimate;
   $totalConsumed  += $task->consumed;
-  $totalLeft      += ($task->status == 'cancel' ? 0 : $task->left);
+  $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
   if($task->status == 'wait')
   {
-      $statusWait++;
+      $statusWait ++;
   }
   elseif($task->status == 'doing')
   {
-      $statusDoing++;
+      $statusDoing ++;
   }
   elseif($task->status == 'done')
   {
-      $statusDone++;
+      $statusDone ++;
   }
   elseif($task->status == 'closed')
   {
-      $statusClosed++;
+      $statusClosed ++;
   }
   ?>
   <tr class='a-center'>
