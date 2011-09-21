@@ -109,7 +109,30 @@ var customed   = <?php echo (int)$customed;?>;
         </tr>
         <?php endforeach;?>
         </tbody>
-        <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
+        <tfoot>
+          <tr>
+            <td colspan='9'>
+              <div class='f-left'>
+                <?php 
+                foreach($lang->bug->statusList as $status => $label)
+                {
+                    if($status != 'active')
+                    {
+                        echo "<span class='$status'> $label </span> ";
+                        continue;
+                    }
+                    rsort($this->lang->bug->severityList);
+                    foreach($this->lang->bug->severityList as $severity) 
+                    {
+                        echo "<span class='$status$severity'> {$lang->bug->severity}:$severity </span> ";
+                    }
+                }
+                ?>
+              </div>
+              <div class='f-right'><?php $pager->show();?></div>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </td>
   </tr>

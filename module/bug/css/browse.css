@@ -1,5 +1,5 @@
-.closed   {background:#fff;}
-.closed a {text-decoration:none}
+.closed   {background:#efefef; text-decoration:line-through;}
+.closed a {text-decoration:none;}
 .resolved {background:#8EC21F;}
 .active1  {background:#E70014;}
 .active2  {background:#EA5407;}
