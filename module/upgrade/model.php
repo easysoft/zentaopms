@@ -356,6 +356,10 @@ class upgradeModel extends model
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
         }
+        elseif($fromVersion == '2_1')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('2.1'));
+        }
 
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
