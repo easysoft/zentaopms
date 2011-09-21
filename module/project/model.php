@@ -819,10 +819,13 @@ class projectModel extends model
                 $current = $nextDay;
             }
         }
+        $count = 0;
         foreach($sets as $set) 
         {
             $set->name = (string)strtotime("$set->name UTC") . '000';
+            $count ++;
         }
+        $sets['count'] = $count;
         return $sets;
     }
 

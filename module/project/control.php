@@ -429,8 +429,11 @@ class project extends control
         //$charts  = $this->report->createJSChart('line', $dataXML, 700, 350);
 
         /* Create charts by flot. */
-        $dataXML= $this->report->createSingleXMLFlot($this->project->getBurnDataFlot($project->id));
-        $charts = $this->report->createJSChartFlot($project->name, $dataXML, 700, 350);
+        $sets   = $this->project->getBurnDataFlot($project->id);
+        $count  = $sets['count'];
+        unset($sets['count']);
+        $dataJSON = $this->report->createSingleXMLFlot($sets);
+        $charts   = $this->report->createJSChartFlot($project->name, $dataJSON, $count, 700, 350);
 
         /* Assign. */
         $this->view->header   = $header;

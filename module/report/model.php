@@ -77,7 +77,7 @@ $chartID.render("$divID");
 EOT;
     }
 
-    public function createJSChartFlot($projectName, $dataXML, $width = 'auto', $height = 500)
+    public function createJSChartFlot($projectName, $dataJSON, $count, $width = 'auto', $height = 500)
     {
         $this->app->loadLang('project');
         $jsRoot = $this->app->getWebRoot() . 'js/';
@@ -91,7 +91,7 @@ return <<<EOT
 <script type="text/javascript">
 $(function () 
 {
-    var data = [{data: $dataXML}];
+    var data = [{data: $dataJSON}];
     function showTooltip(x, y, contents) 
     {
         $('<div id="tooltip">' + contents + '</div>').css
@@ -113,6 +113,10 @@ $(function ()
         xaxis: {mode: "time", timeformat: "%m-%d", tickSize:[1, "day"]},
         yaxis: {min: 0, minTickSize: 1}};
 
+        if($count > 20)
+        {
+            var options = {xaxis: {mode: "time", timeformat: "%m-%d", minTickSize:[1, "day"]}};
+        }
     var placeholder = $("#placeholder");
 
     placeholder.bind("plotselected", function (event, ranges) 
