@@ -282,6 +282,7 @@ class projectModel extends model
         $hours = $this->dao->select('project, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed, SUM(`left`) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
+            ->andWhere('closedReason')->ne('cancel')
             ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
             ->groupBy('project')
