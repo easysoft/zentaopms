@@ -180,7 +180,7 @@ EOT;
         return $data;
     }
 
-    public function createSingleXMLFlot($sets)
+    public function createSingleJSON($sets)
     {
         $data = '[';
         foreach($sets as $set)

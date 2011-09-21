@@ -432,7 +432,7 @@ class project extends control
         $sets   = $this->project->getBurnDataFlot($project->id);
         $count  = $sets['count'];
         unset($sets['count']);
-        $dataJSON = $this->report->createSingleXMLFlot($sets);
+        $dataJSON = $this->report->createSingleJSON($sets);
         $charts   = $this->report->createJSChartFlot($project->name, $dataJSON, $count, 700, 350);
 
         /* Assign. */
