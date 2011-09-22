@@ -14,8 +14,8 @@
  *
  */
 $i = 1;
-$config->svn->client = '/usr/bin/svn';
-$config->svn->repos[$i]['path']     = 'http://zentaoms.googlecode.com/svn/ ';
+$config->svn->client = '';
+$config->svn->repos[$i]['path']     = '';
 $config->svn->repos[$i]['username'] = '';
 $config->svn->repos[$i]['password'] = '';
 
