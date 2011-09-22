@@ -20,7 +20,7 @@ $lang->extension->deactivate   = 'Deactivate';
 $lang->extension->obtain       = 'Obtain';
 $lang->extension->download     = 'Download';
 $lang->extension->downloadAB   = 'Down';
-$lang->extension->upload       = 'Upload';
+$lang->extension->upload       = 'Upload and install';
 $lang->extension->erase        = 'Erase';
 $lang->extension->upgrade      = 'Upgrade';
 

@@ -59,7 +59,7 @@ class extension extends control
      * @access public
      * @return void
      */
-    public function obtain($type = 'byDownloads', $param = '', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function obtain($type = 'byAddedTime', $param = '', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         /* Init vars. */
         $type       = strtolower($type);
