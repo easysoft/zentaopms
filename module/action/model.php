@@ -100,7 +100,7 @@ class actionModel extends model
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq($objectID)
-            ->orderBy('id')->fetchAll('id');
+            ->orderBy('date')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
         foreach($actions as $actionID => $action)
         {
@@ -258,7 +258,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null)
     {
         $period = $this->computeBeginAndEnd($period);
         extract($period);
