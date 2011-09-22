@@ -11,6 +11,7 @@
  */
 $lang->file->common        = 'File';
 $lang->file->download      = 'Download';
+$lang->file->edit          = 'Edit file name';
 $lang->file->inputFileName = 'Input file name';
 $lang->file->delete        = 'Delete';
 $lang->file->export2CSV    = 'Export CSV';
