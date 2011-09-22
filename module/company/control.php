@@ -148,7 +148,7 @@ class company extends control
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);

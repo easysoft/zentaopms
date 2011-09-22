@@ -45,7 +45,7 @@ class my extends control
 
         $this->view->projectStats  = $projectStats;
         $this->view->productStats  = $productStats;
-        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 'all', 'id_desc', $pager);
+        $this->view->actions       = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
         $this->view->todos         = $this->loadModel('todo')->getList('all', $account, 'wait, doing', $this->config->my->todoCounts);
         $this->view->tasks         = $this->loadModel('task')->getUserTasks($account, 'assignedTo', $this->config->my->taskCounts);
         $this->view->bugs          = $this->loadModel('bug')->getUserBugPairs($account, false, $this->config->my->bugCounts);
@@ -344,7 +344,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($type = 'today', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);

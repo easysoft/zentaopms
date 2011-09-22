@@ -450,7 +450,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function dynamic($period = 'today', $account = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($period = 'today', $account = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
