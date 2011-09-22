@@ -249,13 +249,14 @@ $lang->resource->extension->erase      = 'erase';
 $lang->resource->extension->upgrade    = 'upgrade';
 
 /* Others. */
-$lang->resource->api->getModel     = 'getModel';
-$lang->resource->file->download    = 'download';
-$lang->resource->file->delete      = 'delete';
-$lang->resource->file->ajaxUpload  = 'ajaxUpload';
-$lang->resource->misc->ping        = 'ping';
-$lang->resource->action->trash     = 'trash';
-$lang->resource->action->undelete  = 'undelete';
+$lang->resource->api->getModel    = 'getModel';
+$lang->resource->file->download   = 'download';
+$lang->resource->file->edit       = 'edit';
+$lang->resource->file->delete     = 'delete';
+$lang->resource->file->ajaxUpload = 'ajaxUpload';
+$lang->resource->misc->ping       = 'ping';
+$lang->resource->action->trash    = 'trash';
+$lang->resource->action->undelete = 'undelete';
 
 /* Every version of new privilege. */
 $lang->changelog['1.0.1'][] = 'project-computeBurn';
@@ -316,3 +317,5 @@ $lang->changelog['2.0'][]   = 'extension-upload';
 $lang->changelog['2.0'][]   = 'extension-erase';
 
 $lang->changelog['2.1'][]   = 'extension-upgrade';
+
+$lang->changelog['2.2'][]   = 'file-edit';

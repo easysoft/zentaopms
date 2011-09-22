@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2047 2011-09-06 09:17:22Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -55,6 +55,7 @@ $lang->action->desc->edited      = '$date, 由 <strong>$actor</strong> 編輯。
 $lang->action->desc->closed      = '$date, 由 <strong>$actor</strong> 關閉。' . "\n";
 $lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 刪除。' . "\n";
 $lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 刪除了附件：<strong><i>$extra</i></strong>' . "\n";
+$lang->action->desc->editfile    = '$date, 由 <strong>$actor</strong> 編輯了附件：<strong><i>$extra</i></strong>' . "\n";
 $lang->action->desc->erased      = '$date, 由 <strong>$actor</strong> 刪除。' . "\n";
 $lang->action->desc->undeleted   = '$date, 由 <strong>$actor</strong> 還原。' . "\n";
 $lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 添加備註。' . "\n";
@@ -66,6 +67,7 @@ $lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。
 $lang->action->desc->finished    = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
 $lang->action->desc->diff1       = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />' . "\n";
 $lang->action->desc->diff2       = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . '<blockquote>%s</blockquote>' . "\n";
+$lang->action->desc->diff3       = '將檔案名 %s 改為 %s ' . "\n";
 
 /* 用來顯示動態信息。*/
 $lang->action->label->created             = '創建了';
@@ -75,6 +77,7 @@ $lang->action->label->edited              = '編輯了';
 $lang->action->label->closed              = '關閉了';
 $lang->action->label->deleted             = '刪除了';
 $lang->action->label->deletedfile         = '刪除附件';
+$lang->action->label->editfile            = '編輯附件';
 $lang->action->label->erased              = '刪除了';
 $lang->action->label->undeleted           = '還原了';
 $lang->action->label->commented           = '評論了';

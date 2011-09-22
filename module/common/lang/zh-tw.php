@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2015 2011-07-03 09:46:53Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2088 2011-09-18 07:47:27Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -105,9 +105,10 @@ $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
 /* 風格列表。*/
-$lang->themes['default'] = '預設';
-$lang->themes['green']   = '綠色';
-$lang->themes['red']     = '紅色';
+$lang->themes['default']   = '預設';
+$lang->themes['green']     = '綠色';
+$lang->themes['red']       = '紅色';
+$lang->themes['classblue'] = '經典藍';
 
 /* 首頁菜單設置。*/
 $lang->index->menu->product = '瀏覽產品|product|browse';
@@ -250,6 +251,7 @@ $lang->error->date            = "『%s』應當為合法的日期。";
 $lang->error->account         = "『%s』應當為合法的用戶名。";
 $lang->error->passwordsame    = "兩次密碼應當相等。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
+$lang->error->accessDenied    = '您沒有訪問權限';
 
 /* 分頁信息。*/
 $lang->pager->noRecord  = "暫時沒有記錄";
@@ -277,5 +279,6 @@ define('DT_MONTHTIME2', 'n月d日 H:i');
 define('DT_DATE1',     'Y-m-d');
 define('DT_DATE2',     'Ymd');
 define('DT_DATE3',     'Y年m月d日');
+define('DT_DATE4',     'n月j日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');

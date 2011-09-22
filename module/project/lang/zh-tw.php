@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 1943 2011-06-28 15:32:41Z wwccss $
+ * @version     $Id: zh-tw.php 2089 2011-09-18 07:48:31Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -40,6 +40,11 @@ $lang->project->teamname     = '團隊名稱';
 $lang->project->products     = '相關產品';
 $lang->project->childProjects= '子項目';
 $lang->project->whitelist    = '分組白名單';
+$lang->project->totalEstimate= '總預計';
+$lang->project->totalConsumed= '總消耗';
+$lang->project->totalLeft    = '總剩餘';
+$lang->project->progess      = '進度';
+$lang->project->noProduct    = '無產品項目';
 
 $lang->team->account     = '用戶';
 $lang->team->role        = '角色';

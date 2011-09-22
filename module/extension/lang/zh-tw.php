@@ -20,7 +20,7 @@ $lang->extension->deactivate   = '禁用';
 $lang->extension->obtain       = '獲得插件';
 $lang->extension->download     = '下載插件';
 $lang->extension->downloadAB   = '下載';
-$lang->extension->upload       = '上傳插件';
+$lang->extension->upload       = '上傳安裝';
 $lang->extension->erase        = '清除';
 $lang->extension->upgrade      = '升級';
 
