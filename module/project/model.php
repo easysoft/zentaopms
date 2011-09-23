@@ -273,7 +273,7 @@ class projectModel extends model
     {
         $this->loadModel('report');
 
-        $projects = $this->getList(',wait, doing');
+        $projects = $this->getList('wait, doing');
         $stats    = array();
         $i = 1;
 
