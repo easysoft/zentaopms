@@ -117,11 +117,13 @@ class docModel extends model
         $projects = $this->loadModel('project')->getPairs();
         $keysOfProducts = array_keys($products);
         $keysOfProjects = array_keys($projects);
+        $allKeysOfProjects = $keysOfProjects;
+        $allKeysOfProjects[] = 0;
 
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->beginIF(is_numeric($libID))->andWhere('lib')->eq($libID)->fi()
-            ->beginIF($libID == 'product')->andWhere('product')->in($keysOfProducts)->andWhere('project')->in($keysOfProjects)->fi()
+            ->beginIF($libID == 'product')->andWhere('product')->in($keysOfProducts)->andWhere('project')->in($allKeysOfProjects)->fi()
             ->beginIF($libID == 'project')->andWhere('project')->in($keysOfProjects)->fi()
             ->beginIF($productID > 0)->andWhere('product')->eq($productID)->fi()
             ->beginIF($projectID > 0)->andWhere('project')->eq($projectID)->fi()
