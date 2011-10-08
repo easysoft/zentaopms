@@ -210,11 +210,13 @@ $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => 'Extension editor|editor|index', 'subModule' => 'editor');
+$lang->admin->menu->email     = array('link' => 'ConfigEmail|mail|set', 'subModule' => 'mail');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
 $lang->extension->menu      = $lang->admin->menu;
 $lang->editor->menu         = $lang->admin->menu;
+$lang->mail->menu           = $lang->admin->menu;
 
 /* Groups. */
 $lang->menugroup->release     = 'product';
@@ -235,6 +237,7 @@ $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->editor      = 'admin';
+$lang->menugroup->mail        = 'admin';
 
 /* Error info. */
 $lang->error->companyNotFound = "The domain %s does not exist.";

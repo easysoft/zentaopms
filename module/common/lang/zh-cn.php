@@ -210,11 +210,13 @@ $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subMo
 $lang->admin->menu->convert   = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => '扩展编辑器|editor|index', 'subModule' => 'editor');
+$lang->admin->menu->mail      = array('link' => 'Email配置|mail|set', 'subModule' => 'mail');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
 $lang->extension->menu      = $lang->admin->menu;
 $lang->editor->menu         = $lang->admin->menu;
+$lang->mail->menu           = $lang->admin->menu;
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release     = 'product';
@@ -235,6 +237,7 @@ $lang->menugroup->todo        = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->editor      = 'admin';
+$lang->menugroup->mail        = 'admin';
 
 /* 错误提示信息。*/
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";
