@@ -388,6 +388,20 @@ function selectTheme(theme)
 }
 
 /**
+ * Get the screen size and save to cookie.
+ * 
+ * @access public
+ * @return void
+ */
+function saveScreenSize()
+{
+    width  = $(window).width(); 
+    height = $(window).height();
+    $.cookie('winWidth',  width)
+    $.cookie('winHeight', height)
+}
+
+/**
  * Set the about link. 
  * 
  * @access public
@@ -686,10 +700,11 @@ $(document).ready(function()
     setAbout();
     saveProduct();
     saveProject();
-    if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minus, begin ping.
     setForm();
     autoCheck();
     togglesearch();
+    saveScreenSize();
+    if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minutes, begin ping.
 });
 
 /* CTRL+g, auto focus on the search box. */
