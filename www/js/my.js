@@ -604,33 +604,34 @@ function selectItem(SelectID)
  */
 function autoCheck()
 {
-  $('.tablesorter tr :checkbox').click(function()
-      {
-          if($(this).attr('checked'))
-          {
-              $(this).attr('checked', false);
-          }
-          else
-          {
-              $(this).attr('checked', true);
-          }
-          return;
-      });
-  $('.tablesorter tr').click(function()
-      {
-          if($(this).find(':checkbox').attr('checked'))
-          {
-              $(this).find(':checkbox').attr('checked', false);
-          }
-          else
-          {
-              $(this).find(':checkbox').attr('checked', true);
-          }
-      });
+    $('.tablesorter tr :checkbox').click(function()
+    {
+        if($(this).attr('checked'))
+        {
+            $(this).attr('checked', false);
+        }
+        else
+        {
+            $(this).attr('checked', true);
+        }
+        return;
+    });
+
+    $('.tablesorter tr').click(function()
+    {
+        if($(this).find(':checkbox').attr('checked'))
+        {
+            $(this).find(':checkbox').attr('checked', false);
+        }
+        else
+        {
+            $(this).find(':checkbox').attr('checked', true);
+        }
+    });
 }
 
 /**
- * Show the search or reduction the style. 
+ * Toogle the search form.
  * 
  * @access public
  * @return void
@@ -670,6 +671,7 @@ function togglesearch()
       } 
     );
 }
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
