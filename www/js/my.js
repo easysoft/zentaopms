@@ -130,7 +130,7 @@ function setProductSwitcher()
     }
     else
     {
-      $("#productID").append($("<option value='all' id='switcher'>" + config.lblShowAll + "</option>"));
+        $("#productID").append($("<option value='all' id='switcher'>" + config.lblShowAll + "</option>"));
     }
 }
 
@@ -229,7 +229,7 @@ function setProjectSwitcher()
     }
     else
     {
-      $("#projectID").append($("<option value='all' id='switcher'>" + config.lblShowAll + "</option>"));
+        $("#projectID").append($("<option value='all' id='switcher'>" + config.lblShowAll + "</option>"));
     }
 }
 
@@ -337,16 +337,15 @@ function setHelpLink()
     className = $.cookie('help') == 'off' ? 'hidden' : '';
 
     $('form input[id], form select[id], form textarea[id]').each(function()
-        {
-            if($(this).attr('type') == 'hidden' || $(this).attr('type') == 'file') return;
-            currentFieldName = $(this).attr('name') ? $(this).attr('name') : $(this).attr('id');
-            if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
-            if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
-            currentFieldName = currentFieldName.toLowerCase();
-            helpLink = createLink('help', 'field', 'module=' + config.currentModule + '&method=' + config.currentMethod + '&field=' + currentFieldName);
-            $(this).after(' <a class="helplink ' + className + '" href=' + helpLink + ' target="_blank">?</a> ');
-        }
-    );
+    {
+        if($(this).attr('type') == 'hidden' || $(this).attr('type') == 'file') return;
+        currentFieldName = $(this).attr('name') ? $(this).attr('name') : $(this).attr('id');
+        if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
+        if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
+        currentFieldName = currentFieldName.toLowerCase();
+        helpLink = createLink('help', 'field', 'module=' + config.currentModule + '&method=' + config.currentMethod + '&field=' + currentFieldName);
+        $(this).after(' <a class="helplink ' + className + '" href=' + helpLink + ' target="_blank">?</a> ');
+    });
 
     if($('a.helplink').size()) $("a.helplink").colorbox({width:600, height:240, iframe:true, transition:'elastic', speed:350, scrolling:false});
 }
@@ -467,6 +466,83 @@ function setImageSize(image, maxWidth)
     {
         if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
     });
+}
+
+/**
+ * Auto checked the checkbox of a row. 
+ * 
+ * @access public
+ * @return void
+ */
+function autoCheck()
+{
+    $('.tablesorter tr :checkbox').click(function()
+    {
+        if($(this).attr('checked'))
+        {
+            $(this).attr('checked', false);
+        }
+        else
+        {
+            $(this).attr('checked', true);
+        }
+        return;
+    });
+
+    $('.tablesorter tr').click(function()
+    {
+        if($(this).find(':checkbox').attr('checked'))
+        {
+            $(this).find(':checkbox').attr('checked', false);
+        }
+        else
+        {
+            $(this).find(':checkbox').attr('checked', true);
+        }
+    });
+}
+
+/**
+ * Toogle the search form.
+ * 
+ * @access public
+ * @return void
+ */
+function togglesearch()
+{
+    $("#bysearchTab").toggle
+    (
+        function()
+        {
+            if(browseType == 'bymodule')
+            {
+                $('#treebox').addClass('hidden');
+                $('.divider').addClass('hidden');
+                $('#bymoduleTab').removeClass('active');
+            }
+            else
+            {
+                $('#' + browseType + 'Tab').removeClass('active');
+            }
+            $('#bysearchTab').addClass('active');
+            $('#querybox').removeClass('hidden');
+        },
+        function()
+        {
+            if(browseType == 'bymodule')
+            {
+                $('#treebox').removeClass('hidden');
+                $('.divider').removeClass('hidden');
+                $('#bymoduleTab').addClass('active');
+            }
+            else
+            {
+                $('#' + browseType +'Tab').addClass('active');
+            }
+            $('#bysearchTab').removeClass('active');
+            $('#querybox').addClass('hidden');
+        } 
+    );
 }
 
 /**
@@ -594,82 +670,6 @@ function selectItem(SelectID)
         var opt = ItemList.options[x];
         opt.selected = true;
     }
-}
-
-/**
- * Auto checked the checkbox of a row. 
- * 
- * @access public
- * @return void
- */
-function autoCheck()
-{
-    $('.tablesorter tr :checkbox').click(function()
-    {
-        if($(this).attr('checked'))
-        {
-            $(this).attr('checked', false);
-        }
-        else
-        {
-            $(this).attr('checked', true);
-        }
-        return;
-    });
-
-    $('.tablesorter tr').click(function()
-    {
-        if($(this).find(':checkbox').attr('checked'))
-        {
-            $(this).find(':checkbox').attr('checked', false);
-        }
-        else
-        {
-            $(this).find(':checkbox').attr('checked', true);
-        }
-    });
-}
-
-/**
- * Toogle the search form.
- * 
- * @access public
- * @return void
- */
-function togglesearch()
-{
-    $("#bysearchTab").toggle(
-      function()
-      {
-          if(browseType == 'bymodule')
-          {
-              $('#treebox').addClass('hidden');
-              $('.divider').addClass('hidden');
-              $('#bymoduleTab').removeClass('active');
-          }
-          else
-          {
-              $('#' + browseType + 'Tab').removeClass('active');
-          }
-          $('#bysearchTab').addClass('active');
-          $('#querybox').removeClass('hidden');
-      },
-      function()
-      {
-          if(browseType == 'bymodule')
-          {
-              $('#treebox').removeClass('hidden');
-              $('.divider').removeClass('hidden');
-              $('#bymoduleTab').addClass('active');
-          }
-          else
-          {
-              $('#' + browseType +'Tab').addClass('active');
-          }
-          $('#bysearchTab').removeClass('active');
-          $('#querybox').addClass('hidden');
-      } 
-    );
 }
 
 /* Ping the server every some minutes to keep the session. */
