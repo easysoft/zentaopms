@@ -30,6 +30,7 @@ $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
 $lang->story->product        = 'Product';
 $lang->story->module         = 'Module';
+$lang->story->origin         = 'Origin';
 $lang->story->release        = 'Release';
 $lang->story->bug            = 'Related Bug';
 $lang->story->title          = 'Title';
@@ -100,6 +101,15 @@ $lang->story->reviewResultList['pass']   = 'Pass';
 $lang->story->reviewResultList['revert'] = 'Revert';
 $lang->story->reviewResultList['clarify']= 'Clarify';
 $lang->story->reviewResultList['reject'] = 'Reject';
+
+$lang->story->originList['']           = '';
+$lang->story->originList['custom']     = 'Custom';
+$lang->story->originList['PO']         = 'PO';
+$lang->story->originList['market']     = 'Market';
+$lang->story->originList['service']    = 'Service';
+$lang->story->originList['competitor'] = 'Competitor';
+$lang->story->originList['partner']    = 'Partner';
+$lang->story->originList['other']      = 'Other';
 
 $lang->story->priList[]   = '';
 $lang->story->priList[3]  = '3';

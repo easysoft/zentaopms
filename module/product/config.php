@@ -7,6 +7,7 @@ $config->product->search['fields']['id']             = $lang->story->id;
 $config->product->search['fields']['keywords']       = $lang->story->keywords;
 $config->product->search['fields']['pri']            = $lang->story->pri;
 $config->product->search['fields']['plan']           = $lang->story->plan;
+$config->product->search['fields']['origin']         = $lang->story->origin;
 $config->product->search['fields']['assignedTo']     = $lang->story->assignedTo;
 $config->product->search['fields']['product']        = $lang->story->product;
 $config->product->search['fields']['openedBy']       = $lang->story->openedBy;
@@ -21,6 +22,7 @@ $config->product->search['params']['title']        = array('operator' => 'includ
 $config->product->search['params']['keywords']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->search['params']['pri']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->priList);
 $config->product->search['params']['plan']         = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->product->search['params']['origin']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->originList);
 $config->product->search['params']['product']      = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['assignedTo']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['resolvedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');

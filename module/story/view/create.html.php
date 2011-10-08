@@ -26,7 +26,11 @@
       <th class='rowhead'><?php echo $lang->story->plan;?></th>
       <td><span id='planIdBox'><?php echo html::select('plan', $plans, $planID, 'class=select-3');?></span></td>
     </tr>
-   <tr>
+    <tr>
+      <th class='rowhead'><?php echo $lang->story->origin;?></th>
+      <td><?php echo html::select('origin', $lang->story->originList, '', 'class=select-3');?></td>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->story->title;?></th>
       <td><?php echo html::input('title', $title, "class='text-1'");?></td>
     </tr>  

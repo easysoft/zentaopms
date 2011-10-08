@@ -92,6 +92,10 @@
             <td><?php if(isset($story->planTitle)) if(!common::printLink('productplan', 'view', "planID=$story->plan", $story->planTitle)) echo $story->planTitle;?>
           </tr>
           <tr>
+            <td class='rowhead'><?php echo $lang->story->origin;?></td>
+            <td><?php echo $lang->story->originList[$story->origin];?></td>
+          </tr>
+          <tr>
             <td class='rowhead'><?php echo $lang->story->status;?></td>
             <td><?php echo $lang->story->statusList[$story->status];?></td>
           </tr>
