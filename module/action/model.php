@@ -424,6 +424,93 @@ class actionModel extends model
     }
 
     /**
+     * Get project's actions as dynamic.
+     * 
+     * @param  string $objectType 
+     * @param  int    $count 
+     * @access public
+     * @return array
+     */
+    public function getProjectDynamic($projectID = 0, $account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null)
+    {
+        $period = $this->computeBeginAndEnd($period);
+        extract($period);
+
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('date')->gt($begin)
+            ->andWhere('date')->lt($end)
+            ->andWhere('project')->eq($projectID)
+            ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+
+        if(!$actions) return array();
+
+        /* Group actions by objectType, and get there name field. */
+        foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
+        foreach($objectTypes as $objectType => $objectIds)
+        {
+            if(!isset($this->config->action->objectTables[$objectType])) continue;    // If no defination for this type, omit it.
+
+            $objectIds   = array_unique($objectIds);
+            $table       = $this->config->action->objectTables[$objectType];
+            $field       = $this->config->action->objectNameFields[$objectType];
+            if($table != 'zt_todo')
+            {
+                $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
+            }
+            else
+            {
+                $todos = $this->dao->select("id, $field AS name, account, private")->from($table)->where('id')->in($objectIds)->fetchAll('id');
+                foreach($todos as $id => $todo)
+                {
+                    if($todo->private == 1 and $todo->account != $this->app->user->account) 
+                    {
+                       $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
+                    }
+                    else
+                    {
+                       $objectNames[$objectType][$id] = $todo->name;
+                    }
+                }
+            } 
+        }
+        $objectNames['user'][0] = 'guest';    // Add guest account.
+
+        foreach($actions as $action)
+        {
+            /* Add name field to the actions. */
+            $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
+
+            $actionType = strtolower($action->action);
+            $objectType = strtolower($action->objectType);
+            $action->date        = date(DT_MONTHTIME2, strtotime($action->date));
+            $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
+            $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
+
+            /* If action type is login or logout, needn't link. */
+            if($actionType == 'login' or $actionType == 'logout')
+            {
+                $action->objectLink  = '';
+                $action->objectLabel = '';
+                continue;
+            }
+
+            /* Other actions, create a link. */
+            if(strpos($action->objectLabel, '|') !== false)
+            {
+                list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
+                $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                $action->objectLabel = $objectLabel;
+            }
+            else
+            {
+                $action->objectLink = '';
+            }
+        }
+        return $actions;
+    }
+
+    /**
      * Compute the begin date and end date of a period.
      * 
      * @param  string    $period 

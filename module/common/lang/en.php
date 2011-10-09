@@ -156,6 +156,7 @@ $lang->project->menu->product   = 'Link Product|project|manageproducts|projectID
 $lang->project->menu->linkstory = array('link' => 'Link Story|project|linkstory|projectID=%s');
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->edit      = 'Edit|project|edit|projectID=%s';
+$lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->create = array('link' => 'New Project|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
