@@ -67,16 +67,32 @@ var customed   = <?php echo (int)$customed;?>;
           <th class='w-id'>       <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
           <th class='w-severity'> <?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
           <th class='w-pri'>      <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+
+          <?php if($this->cookie->windowWidth >= 1250):?>
+          <th class='w-status'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->statusAB);?></th>
+          <?php endif;?>
+
           <?php if($browseType == 'needconfirm'):?>
           <th class='w-p40'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
           <th class='w-50px'><?php echo $lang->actions;?></th>
           <?php else:?>
           <th class='w-user'><?php common::printOrderLink('openedBy',         $orderBy, $vars, $lang->openedByAB);?></th>
+
+          <?php if($this->cookie->windowWidth >= 1250):?>
+          <th class='w-date'>  <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+          <?php endif;?>
+
           <th class='w-user'><?php common::printOrderLink('assignedTo',       $orderBy, $vars, $lang->assignedToAB);?></th>
           <th class='w-user'><?php common::printOrderLink('resolvedBy',       $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+
+          <?php if($this->cookie->windowWidth >= 1250):?>
+          <th class='w-date'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+          <?php endif;?>
+
+          <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
         </thead>
@@ -88,21 +104,38 @@ var customed   = <?php echo (int)$customed;?>;
           <td class='linkbox <?php echo $class;?>'><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
           <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
           <td><?php echo $lang->bug->priList[$bug->pri]?></td>
+
           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title);?></td>
+
+          <?php if($this->cookie->windowWidth >= 1250):?>
+          <td><?php echo $lang->bug->statusList[$bug->status]?></td>
+          <?php endif;?>
+
           <?php if($browseType == 'needconfirm'):?>
           <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
           <td><?php echo html::a(inlink('confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin')?></td>
           <?php else:?>
           <td><?php echo $users[$bug->openedBy];?></td>
+
+          <?php if($this->cookie->windowWidth >= 1250):?>
+          <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+          <?php endif;?>
+
           <td <?php if($bug->assignedTo == $this->app->user->account) echo 'class="red"';?>><?php echo $users[$bug->assignedTo];?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
           <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+
+          <?php if($this->cookie->windowWidth >= 1250):?>
+          <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+          <?php endif;?>
+
           <td>
             <?php
             $params = "bugID=$bug->id";
             if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
             if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, $lang->bug->buttonClose)))   echo $lang->bug->buttonClose . ' ';
             common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+            if($this->cookie->windowWidth >= 1250) common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", $lang->bug->buttonCopy);
             ?>
           </td>
           <?php endif;?>
