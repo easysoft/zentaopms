@@ -90,16 +90,9 @@ class product extends control
 
         /* Get stories. */
         $stories = array();
-        if($browseType == 'all')
-        {
-            $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
-        }
-        elseif($browseType == 'bymodule')
-        {
-            $childModuleIds = $this->tree->getAllChildID($moduleID);
-            $stories = $this->story->getProductStories($productID, $childModuleIds, 'all', $orderBy, $pager);
-        }
-        elseif($browseType == 'bysearch')
+        if($browseType == 'all')      $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
+        if($browseType == 'bymodule') $stories = $this->story->getProductStories($productID, $this->tree->getAllChildID($moduleID), 'all', $orderBy, $pager);
+        if($browseType == 'bysearch')
         {
             if($queryID)
             {
