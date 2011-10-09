@@ -300,7 +300,7 @@ class bug extends control
      */
     public function create($productID, $extras = '')
     {
-        $this->view->users = $this->user->getPairs('noletter');
+        $this->view->users = $this->user->getPairs('nodeleted');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         if(!empty($_POST))
