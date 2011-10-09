@@ -161,7 +161,7 @@ class svnModel extends model
     {
         if($this->config->svn->client == '') die("You must set the svn client file.\n");
         $this->client = $this->config->svn->client . " --non-interactive";
-        if(isset($repo->username)) $this->client .= " --username $repo->username --password $repo->password --no-auth-cache";
+        if(isset($repo->username)) $this->client .= " --username '$repo->username' --password '$repo->password' --no-auth-cache";
     }
 
     /**
@@ -277,7 +277,9 @@ class svnModel extends model
             $products = $this->getStoryProducts($objects['stories']);
             foreach($objects['stories'] as $storyID)
             {
+                $storyID = (int)$storyID;
                 if(!isset($products[$storyID])) continue;
+
                 $action->objectType = 'story';
                 $action->objectID   = $storyID;
                 $action->product    = $products[$storyID];
@@ -292,6 +294,7 @@ class svnModel extends model
             $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);
             foreach($objects['tasks'] as $taskID)
             {
+                $taskID = (int)$taskID;
                 if(!isset($productsAndProjects[$taskID])) continue;
 
                 $action->objectType = 'task';
@@ -309,6 +312,7 @@ class svnModel extends model
 
             foreach($objects['bugs'] as $bugID)
             {
+                $bugID = (int)$bugID;
                 if(!isset($productsAndProjects[$bugID])) continue;
 
                 $action->objectType = 'bug';
