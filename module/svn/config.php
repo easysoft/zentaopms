@@ -13,16 +13,16 @@
  * $config->svn->repos['pms']['password'] = 'pass';
  *
  */
-$i = 1;
 $config->svn->client = '';
+
+$i = 1;
 $config->svn->repos[$i]['path']     = '';
 $config->svn->repos[$i]['username'] = '';
 $config->svn->repos[$i]['password'] = '';
 
 /*
 $i ++;
-$config->svn->client = '';
 $config->svn->repos[$i]['path']     = '';
 $config->svn->repos[$i]['username'] = '';
 $config->svn->repos[$i]['password'] = '';
- */
+*/
