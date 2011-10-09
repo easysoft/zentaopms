@@ -128,19 +128,20 @@ $lang->my->menu->profile   = array('link' => '我的档案|my|profile|', 'alias'
 $lang->todo->menu          = $lang->my->menu;
 
 /* 产品视图设置。*/
-$lang->product->menu->list   = '%s';
-$lang->product->menu->story  = array('link' => '需求|product|browse|productID=%s',     'subModule' => 'story');
-$lang->product->menu->plan   = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
-$lang->product->menu->release= array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->roadmap= '路线图|product|roadmap|productID=%s';
-$lang->product->menu->doc    = array('link' => '文档|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view   = '概况|product|view|productID=%s';
-$lang->product->menu->edit   = '编辑|product|edit|productID=%s';
-$lang->product->menu->module = '模块|tree|browse|productID=%s&view=story';
-$lang->product->menu->create = array('link' => '新增产品|product|create', 'float' => 'right');
-$lang->story->menu           = $lang->product->menu;
-$lang->productplan->menu     = $lang->product->menu;
-$lang->release->menu         = $lang->product->menu;
+$lang->product->menu->list    = '%s';
+$lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s',     'subModule' => 'story');
+$lang->product->menu->plan    = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
+$lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
+$lang->product->menu->doc     = array('link' => '文档|product|doc|productID=%s', 'subModule' => 'doc');
+$lang->product->menu->view    = '概况|product|view|productID=%s';
+$lang->product->menu->edit    = '编辑|product|edit|productID=%s';
+$lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
+$lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
+$lang->product->menu->create  = array('link' => '新增产品|product|create', 'float' => 'right');
+$lang->story->menu            = $lang->product->menu;
+$lang->productplan->menu      = $lang->product->menu;
+$lang->release->menu          = $lang->product->menu;
 
 /* 项目视图菜单设置。*/
 $lang->project->menu->list      = '%s';

@@ -128,19 +128,20 @@ $lang->my->menu->profile  = array('link' => 'Profile|my|profile|', 'alias' => 'e
 $lang->todo->menu         = $lang->my->menu;
 
 /* Product menu. */
-$lang->product->menu->list   = '%s';
-$lang->product->menu->story  = array('link' => 'Story|product|browse|productID=%s',     'subModule' => 'story');
-$lang->product->menu->plan   = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
-$lang->product->menu->release= array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->roadmap= 'Roadmap|product|roadmap|productID=%s';
-$lang->product->menu->doc    = array('link' => 'Doc|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view   = 'Info|product|view|productID=%s';
-$lang->product->menu->edit   = 'Edit|product|edit|productID=%s';
-$lang->product->menu->module = 'Modules|tree|browse|productID=%s&view=story';
-$lang->product->menu->create = array('link' => 'New Product|product|create', 'float' => 'right');
-$lang->story->menu           = $lang->product->menu;
-$lang->productplan->menu     = $lang->product->menu;
-$lang->release->menu         = $lang->product->menu;
+$lang->product->menu->list    = '%s';
+$lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s',     'subModule' => 'story');
+$lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
+$lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->menu->roadmap = 'Roadmap|product|roadmap|productID=%s';
+$lang->product->menu->doc     = array('link' => 'Doc|product|doc|productID=%s', 'subModule' => 'doc');
+$lang->product->menu->view    = 'Info|product|view|productID=%s';
+$lang->product->menu->edit    = 'Edit|product|edit|productID=%s';
+$lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
+$lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
+$lang->product->menu->create  = array('link' => 'New Product|product|create', 'float' => 'right');
+$lang->story->menu            = $lang->product->menu;
+$lang->productplan->menu      = $lang->product->menu;
+$lang->release->menu          = $lang->product->menu;
 
 /* Project menu. */
 $lang->project->menu->list      = '%s';

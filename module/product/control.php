@@ -311,6 +311,57 @@ class product extends control
     }
 
     /**
+     * Product dynamic.
+     * 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save session. */
+        $uri   = $this->app->getURI(true);
+        $this->session->set('productList',     $uri);
+        $this->session->set('productPlanList', $uri);
+        $this->session->set('releaseList',     $uri);
+        $this->session->set('storyList',       $uri);
+        $this->session->set('projectList',     $uri);
+        $this->session->set('taskList',        $uri);
+        $this->session->set('buildList',       $uri);
+        $this->session->set('bugList',         $uri);
+        $this->session->set('caseList',        $uri);
+        $this->session->set('testtaskList',    $uri);
+
+        $this->product->setMenu($this->products, $productID);
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
+
+        /* Set the user and type. */
+        $account = $type == 'account' ? $param : 'all';
+        $period  = $type == 'account' ? 'all'  : $type;
+
+        /* The header and position. */
+        $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
+        $this->view->position[]    = $this->lang->company->dynamic;
+
+        /* Assign. */
+        $this->view->productID = $productID;
+        $this->view->type      = $type;
+        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter');
+        $this->view->account   = $account;
+        $this->view->actions   = $this->loadModel('action')->getProductDynamic($productID, $account, $period, $orderBy, $pager);
+        $this->display();
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      * 
      * @param  int    $productID 
