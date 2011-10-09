@@ -42,7 +42,7 @@ $lang->user->dynamic     = 'Dynamic';
 $lang->user->editProfile = 'Edit profile';
 
 $lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
-$lang->user->loginFailed = "Login failed, please check you account and password.";
+$lang->user->loginFailed = "Login failed, please check your account and password.";
 
 $lang->user->gendarList->m = 'Male';
 $lang->user->gendarList->f = 'Female';
@@ -56,7 +56,7 @@ $lang->user->dept      = 'Department';
 $lang->user->account   = 'Account';
 $lang->user->password  = 'Password';
 $lang->user->password2 = 'Repeat password';
-$lang->user->realname  = 'Realname';
+$lang->user->realname  = 'Fullname';
 $lang->user->nickname  = 'Nickname';
 $lang->user->avatar    = 'Avatar';
 $lang->user->birthyear = 'Birth year';
