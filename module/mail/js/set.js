@@ -8,6 +8,7 @@ function setMtaType(type)
     $('#smtpDebug').hide();
     $('#smtpUsername').hide();
     $('#smtpPassword').hide();
+    $('#smtpHost').hide();
     $('#smtpAuth').hide();
     $('#smtpSecure').hide();
     $('#smtpPort').hide();
@@ -20,6 +21,7 @@ function setMtaType(type)
     $('#smtpDebug').show();
     $('#smtpUsername').show();
     $('#smtpPassword').show();
+    $('#smtpHost').show();
     $('#smtpAuth').show();
     $('#smtpSecure').show();
     $('#smtpPort').show();
@@ -32,6 +34,7 @@ function setMtaType(type)
     $('#smtpDebug').hide();
     $('#smtpUsername').hide();
     $('#smtpPassword').hide();
+    $('#smtpHost').hide();
     $('#smtpAuth').hide();
     $('#smtpSecure').hide();
     $('#smtpPort').hide();

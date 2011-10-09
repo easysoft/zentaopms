@@ -44,6 +44,14 @@ else
 {
     $smtpPassword = '';
 }
+if(!empty($mailConfig->smtp->host)) 
+{
+    $smtpHost = $mailConfig->smtp->host;
+}
+else 
+{
+    $smtpHost = '';
+}
 if(!empty($mailConfig->smtp->secure)) 
 {
     $smtpSecure = $mailConfig->smtp->secure;
@@ -99,6 +107,10 @@ else
   <tr id='gmailPassword' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->gmail->password; ?></th>
     <td><?php echo html::input('gmailPassword', $gmailPassword) ?></td>
+  </tr>
+  <tr id='smtpHost' class='hidden'>
+    <th class='rowhead'><?php echo $lang->mail->smtp->host; ?></th>
+    <td><?php echo html::input('smtpHost', $smtpHost); echo $lang->mail->smtp->hostInfo;?></td>
   </tr>
   <tr id='smtpDebug' class='hidden'>
     <th><?php echo $lang->mail->smtp->debug; ?></th>

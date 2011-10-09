@@ -49,7 +49,14 @@ EOT;
             elseif('smtp' == $this->post->mta)
             {
                 $position = strpos($this->post->fromAddress, '@');
-                $host = 'smtp.' . substr($this->post->fromAddress, $position + 1); 
+                if($this->post->smtpHost == '')
+                {
+                    $host = 'smtp.' . substr($this->post->fromAddress, $position + 1); 
+                }
+                else
+                {
+                    $host = $this->post->smtpHost;
+                }
 
                 $config = <<<EOT
 <?php
