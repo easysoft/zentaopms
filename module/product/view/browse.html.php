@@ -13,10 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<link rel="stylesheet" href="<?php echo $defaultTheme;?>alert.css" />
-<script src="<?php echo $jsRoot;?>jquery/alert/raw.js" type="text/javascript"></script>
-<script src="<?php echo $jsRoot;?>jquery/table2csv/raw.js" type="text/javascript"></script>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
 </script>
