@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/colorbox.html.php';?>
 <form method='post' class='mt-20px'>
   <table class='table-4' align='center'> 
     <caption class='caption-tl'><?php echo $lang->bug->customFields;?></caption>
