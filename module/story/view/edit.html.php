@@ -54,8 +54,8 @@
             <td><span id='planIdBox'><?php echo html::select('plan', $plans, $story->plan, 'class=select-1');?></span></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->story->origin;?></th>
-            <td><?php echo html::select('origin', $lang->story->originList, $lang->story->originList[$story->origin], 'class=select-1');?></td>
+            <th class='rowhead'><?php echo $lang->story->source;?></th>
+            <td><?php echo html::select('source', $lang->story->sourceList, $lang->story->sourceList[$story->source], 'class=select-1');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->status;?></td>

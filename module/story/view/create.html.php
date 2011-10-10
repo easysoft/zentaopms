@@ -27,8 +27,8 @@
       <td><span id='planIdBox'><?php echo html::select('plan', $plans, $planID, 'class=select-3');?></span></td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->story->origin;?></th>
-      <td><?php echo html::select('origin', $lang->story->originList, '', 'class=select-3');?></td>
+      <th class='rowhead'><?php echo $lang->story->source;?></th>
+      <td><?php echo html::select('source', $lang->story->sourceList, '', 'class=select-3');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->title;?></th>

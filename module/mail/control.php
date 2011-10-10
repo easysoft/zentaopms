@@ -88,7 +88,7 @@ EOT;
             $configPath = $this->app->getModuleExtPath('mail', 'config');
             if(is_writable($configPath))
             {
-                if(file_put_contents($configPath . 'zzzmail.php', $config))
+                if(file_put_contents($configPath . 'zzzemail.php', $config))
                 {
                     /* Send test mail */
                     $this->mail->send($this->app->user->account, $this->lang->mail->subject, $this->lang->mail->content,"");

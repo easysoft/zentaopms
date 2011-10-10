@@ -9,7 +9,7 @@ $config->story->editor->create = array('id' => 'spec,verify', 'tools' => 'simple
 $config->story->editor->change = array('id' => 'spec,verify', 'tools' => 'simpleTools');
 
 $config->story->list->exportFields = '
-    id, product, module, plan, origin, title, spec, verify, keywords, 
+    id, product, module, plan, source, title, spec, verify, keywords, 
     pri, estimate, status, stage,
     openedBy, openedDate, assignedTo, assignedDate, mailto, 
     reviewedBy, reviewedDate, 
