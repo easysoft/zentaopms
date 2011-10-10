@@ -203,10 +203,11 @@ $lang->bug->typeList['automation']   = 'Automation';
 $lang->bug->typeList['trackthings']  = 'Tracking';
 $lang->bug->typeList['others']       = 'Others';
 
-$lang->bug->statusList['']         = '';
-$lang->bug->statusList['active']   = 'Active';
-$lang->bug->statusList['resolved'] = 'Resolved';
-$lang->bug->statusList['closed']   = 'Closed';
+$lang->bug->statusList['']            = '';
+$lang->bug->statusList['active']      = 'Active';
+$lang->bug->statusList['resolved']    = 'Resolved';
+$lang->bug->statusList['closed']      = 'Closed';
+$lang->bug->statusList['reactivated'] = 'Reactivated';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'By design';

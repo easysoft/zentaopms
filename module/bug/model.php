@@ -208,7 +208,7 @@ class bugModel extends model
             ->setDefault('assignedTo', $oldBug->resolvedBy)
             ->add('assignedDate', $now)
             ->add('resolution', '')
-            ->add('status', 'active')
+            ->add('status', 'reactivated')
             ->add('resolvedDate', '0000-00-00')
             ->add('resolvedBy', '')
             ->add('resolvedBuild', '')
@@ -222,6 +222,7 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+        $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
     }
 
     /**

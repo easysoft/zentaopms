@@ -203,10 +203,11 @@ $lang->bug->typeList['automation']   = '测试脚本';
 $lang->bug->typeList['trackthings']  = '事务跟踪';
 $lang->bug->typeList['others']       = '其他';
 
-$lang->bug->statusList['']         = '';
-$lang->bug->statusList['active']   = '激活';
-$lang->bug->statusList['resolved'] = '已解决';
-$lang->bug->statusList['closed']   = '已关闭';
+$lang->bug->statusList['']          = '';
+$lang->bug->statusList['active']    = '激活';
+$lang->bug->statusList['resolved']  = '已解决';
+$lang->bug->statusList['closed']    = '已关闭';
+$lang->bug->statusList['reactivated'] = '重新激活';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '设计如此';

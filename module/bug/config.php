@@ -62,7 +62,7 @@ $config->bug->resolve->requiredFields = 'resolution';
 
 $config->bug->list->allFields = 'id, module, project, story, task, 
     title, keywords, severity, pri, type, os, browser, hardware,
-    found, steps, status, mailto,
+    found, steps, status, activatedCount, mailto,
     openedBy, openedDate, openedBuild, 
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
@@ -71,11 +71,11 @@ $config->bug->list->allFields = 'id, module, project, story, task,
     case,
     lastEditedBy,
     lastEditedDate';
-$config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
+$config->bug->list->defaultFields = 'id,severity,pri,title, activatedCount,openedBy,assignedTo,resolvedBy,resolution';
 
 $config->bug->list->exportFields = 'id, product, module, project, story, task, 
     title, keywords, severity, pri, type, os, browser,
-    steps, status, mailto,
+    steps, status, activatedCount, mailto,
     openedBy, openedDate, openedBuild, 
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
