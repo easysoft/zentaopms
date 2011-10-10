@@ -69,7 +69,7 @@ var customed   = <?php echo (int)$customed;?>;
 
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
 
-          <?php if($this->cookie->windowWidth >= 1250):?>
+          <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
           <th class='w-status'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->statusAB);?></th>
           <?php endif;?>
 
@@ -79,7 +79,7 @@ var customed   = <?php echo (int)$customed;?>;
           <?php else:?>
           <th class='w-user'><?php common::printOrderLink('openedBy',         $orderBy, $vars, $lang->openedByAB);?></th>
 
-          <?php if($this->cookie->windowWidth >= 1250):?>
+          <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
           <th class='w-date'>  <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
           <?php endif;?>
 
@@ -87,7 +87,7 @@ var customed   = <?php echo (int)$customed;?>;
           <th class='w-user'><?php common::printOrderLink('resolvedBy',       $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
 
-          <?php if($this->cookie->windowWidth >= 1250):?>
+          <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
           <th class='w-date'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
           <?php endif;?>
 
@@ -106,7 +106,7 @@ var customed   = <?php echo (int)$customed;?>;
 
           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title);?></td>
 
-          <?php if($this->cookie->windowWidth >= 1250):?>
+          <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
           <td><?php echo $lang->bug->statusList[$bug->status]?></td>
           <?php endif;?>
 
@@ -116,7 +116,7 @@ var customed   = <?php echo (int)$customed;?>;
           <?php else:?>
           <td><?php echo $users[$bug->openedBy];?></td>
 
-          <?php if($this->cookie->windowWidth >= 1250):?>
+          <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
           <td><?php echo substr($bug->openedDate, 5, 11)?></td>
           <?php endif;?>
 
@@ -124,7 +124,7 @@ var customed   = <?php echo (int)$customed;?>;
           <td><?php echo $users[$bug->resolvedBy];?></td>
           <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
 
-          <?php if($this->cookie->windowWidth >= 1250):?>
+          <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
           <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
           <?php endif;?>
 
@@ -134,7 +134,7 @@ var customed   = <?php echo (int)$customed;?>;
             if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
             if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, $lang->bug->buttonClose)))   echo $lang->bug->buttonClose . ' ';
             common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
-            if($this->cookie->windowWidth >= 1250) common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", $lang->bug->buttonCopy);
+            if($this->cookie->windowWidth >= $this->config->wideSize) common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", $lang->bug->buttonCopy);
             ?>
           </td>
           <?php endif;?>
@@ -143,7 +143,8 @@ var customed   = <?php echo (int)$customed;?>;
         </tbody>
         <tfoot>
           <tr>
-            <td colspan='9'>
+            <?php $columns = $this->cookie->windowWidth > $this->config->wideSize ? 12 : 9;?>
+            <td colspan='<?php echo $columns;?>'>
               <div class='f-left'>
                 <?php 
                 foreach($lang->bug->statusList as $status => $label)
