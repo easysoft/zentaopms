@@ -159,6 +159,8 @@ class common extends control
         global $lang, $app;
         if(empty($module)) $module= $app->getModuleName();
         if(empty($method)) $method= $app->getMethodName();
+        $className = 'header';
+
         if(strpos($orderBy, $fieldName) !== false)
         {
             if(stripos($orderBy, 'desc') !== false)
