@@ -3,10 +3,9 @@ function browseByModule()
 {
     $('#treebox').removeClass('hidden');
     $('.divider').removeClass('hidden');
-    $('#bymoduleTab').addClass('active');
-    $('#allTab').removeClass('active');
-    $('#bysearchTab').removeClass('active');
     $('#querybox').addClass('hidden');
+    $('#featurebar .active').removeClass('active');
+    $('#bymoduleTab').addClass('active');
 }
 
 $(document).ready(function() 

@@ -445,8 +445,7 @@ class storyModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         
-        /* Set session for report query. */
-        $this->session->set('storyReport', $this->dao->get());
+        $this->saveReportQuery($this->dao->get());
         
         return $stories;
     }
@@ -477,26 +476,163 @@ class storyModel extends model
     }
 
     /**
-     * Get stories by a query id.
+     * Get stories by assignedTo.
      * 
      * @param  int    $productID 
-     * @param  string $query 
+     * @param  string $account 
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getByQuery($productID, $query, $orderBy, $pager = null)
+    public function getByAssignedTo($productID, $account, $orderBy, $pager)
     {
-        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($query)
+        return $this->getByField($productID, 'assignedTo', $account, $orderBy, $pager);
+    }
+
+    /**
+     * Get stories by openedBy.
+     * 
+     * @param  int    $productID 
+     * @param  string $account 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByOpenedBy($productID, $account, $orderBy, $pager)
+    {
+        return $this->getByField($productID, 'openedBy', $account, $orderBy, $pager);
+    }
+
+    /**
+     * Get stories by reviewedBy.
+     * 
+     * @param  int    $productID 
+     * @param  string $account 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByReviewedBy($productID, $account, $orderBy, $pager)
+    {
+        return $this->getByField($productID, 'reviewedBy', $account, $orderBy, $pager, 'include');
+    }
+
+    /**
+     * Get stories by closedBy.
+     * 
+     * @param  int    $productID 
+     * @param  string $account 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @return array
+     */
+    public function getByClosedBy($productID, $account, $orderBy, $pager)
+    {
+        return $this->getByField($productID, 'closedBy', $account, $orderBy, $pager);
+    }
+
+    /**
+     * Get stories by status.
+     * 
+     * @param  int    $productID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @param  string $status 
+     * @access public
+     * @return array
+     */
+    public function getByStatus($productID, $status, $orderBy, $pager)
+    {
+        return $this->getByField($productID, 'status', $status, $orderBy, $pager);
+    }
+
+    /**
+     * Get stories by a field.
+     * 
+     * @param  int    $productID 
+     * @param  string $fieldName 
+     * @param  mixed  $fieldValue 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @param  string $operator     equal|include
+     * @access public
+     * @return array
+     */
+    public function getByField($productID, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
+    {
+        $stories = $this->dao->select('t1.*, t2.title as planTitle')
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
+            ->where('t1.product')->in($productID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($operator == 'equal')->andWhere($fieldName)->eq($fieldValue)->fi()
+            ->beginIF($operator == 'include')->andWhere($fieldName)->like("%$fieldValue%")->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+        $this->saveReportQuery($this->dao->get());
+
+        return $stories;
+    }
+
+    /**
+     * Get stories through search.
+     * 
+     * @access public
+     * @param  int    $productID 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getBySearch($productID, $queryID, $orderBy, $pager)
+    {
+        $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
+
+        /* Get the sql and form status from the query. */
+        if($query)
+        {
+            $this->session->set('storyQuery', $query->sql);
+            $this->session->set('storyForm', $query->form);
+        }
+        if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
+
+        $allProduct     = "`product` = 'all'";
+        $storyQuery     = $this->session->storyQuery;
+        $queryProductID = $productID;
+        if(strpos($this->session->storyQuery, $allProduct) !== false)
+        {
+            $storyQuery     = str_replace($allProduct, '1', $this->session->storyQuery);
+            $queryProductID = 'all';
+        }
+
+        return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager);
+    }
+
+    /**
+     * Get stories by a sql.
+     * 
+     * @param  int    $productID 
+     * @param  string $sql 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getBySQL($productID, $sql, $orderBy, $pager = null)
+    {
+        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($sql)
             ->beginIF($productID != 'all')->andWhere('product')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchGroup('plan');
 
-        /* Set session for report query. */
-        $this->session->set('storyReport', $this->dao->get());
+        $this->saveReportQuery($this->dao->get());
 
         if(!$tmpStories) return array();
         $plans   = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($tmpStories))->fetchPairs();
@@ -510,6 +646,21 @@ class storyModel extends model
             }
         }
         return $stories;
+    }
+
+    /**
+     * Save one executed query as report query, thus when create report chart to make use the condition is the same.
+     * 
+     * @param  string    $sql 
+     * @access public
+     * @return void
+     */
+    public function saveReportQuery($sql)
+    {
+        $sql = explode('WHERE', $sql);
+        $sql = explode('ORDER', $sql[1]);
+        $sql = str_replace('t1.', '', $sql[0]);
+        $this->session->set('storyReport', $sql);
     }
 
     /**

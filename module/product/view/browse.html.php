@@ -19,13 +19,13 @@ var browseType = '<?php echo $browseType;?>';
 <div id='featurebar'>
   <div class='f-left'>
     <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>
-    <span id='assigntomeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assigntome"),   $lang->product->assignToMe);?></span>
+    <span id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></span>
     <span id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></span>
     <span id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></span>
     <span id='closedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedByMe"),   $lang->product->closedByMe);?></span>
     <span id='draftstoryTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=draftStory"),   $lang->product->draftStory);?></span>
     <span id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=activeStory"),  $lang->product->activeStory);?></span>
-    <span id='changedsotryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></span>
+    <span id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></span>
     <span id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></span>
     <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
     <span id='bysearchTab' ><a href='#'><?php echo $lang->product->searchStory;?></a></span>

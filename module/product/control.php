@@ -90,43 +90,16 @@ class product extends control
 
         /* Get stories. */
         $stories = array();
-        if($browseType == 'all')      $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
-        if($browseType == 'bymodule') $stories = $this->story->getProductStories($productID, $this->tree->getAllChildID($moduleID), 'all', $orderBy, $pager);
-        if($browseType == 'bysearch')
-        {
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('storyQuery', $query->sql);
-                    $this->session->set('storyForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('storyQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->storyQuery == false) $this->session->set('storyQuery', ' 1 = 1');
-            }
-
-            $allProduct     = "`product` = 'all'";
-            $storyQuery     = $this->session->storyQuery;
-            $queryProductID = $productID;
-            if(strpos($this->session->storyQuery, $allProduct) !== false)
-            {
-                $storyQuery     = str_replace($allProduct, '1', $this->session->storyQuery);
-                $queryProductID = 'all';
-            }
-            $stories = $this->story->getByQuery($queryProductID, $storyQuery, $orderBy, $pager);
-        }
-
-        /* Set session for report query. */
-        $sql = explode('WHERE', $this->session->storyReport);
-        $sql = explode('ORDER', $sql[1]);
-        $this->session->set('storyReport', str_replace(array('t1.','t2.'), '', $sql[0]));
+        if($browseType == 'allstory')    $stories = $this->story->getProductStories($productID, 0, 'all', $orderBy, $pager);
+        if($browseType == 'bymodule')    $stories = $this->story->getProductStories($productID, $this->tree->getAllChildID($moduleID), 'all', $orderBy, $pager);
+        if($browseType == 'bysearch')    $stories = $this->story->getBySearch($productID, $queryID, $orderBy, $pager);
+        if($browseType == 'assignedtome')$stories = $this->story->getByAssignedTo($productID, $this->app->user->account, $orderBy, $pager);
+        if($browseType == 'openedbyme')  $stories = $this->story->getByOpenedBy($productID, $this->app->user->account, $orderBy, $pager);
+        if($browseType == 'reviewedbyme')$stories = $this->story->getByReviewedBy($productID, $this->app->user->account, $orderBy, $pager);
+        if($browseType == 'closedbyme')  $stories = $this->story->getByClosedBy($productID, $this->app->user->account, $orderBy, $pager);
+        if($browseType == 'draftstory')  $stories = $this->story->getByStatus($productID, 'draft', $orderBy, $pager);
+        if($browseType == 'activestory') $stories = $this->story->getByStatus($productID, 'active', $orderBy, $pager);
+        if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, 'changed', $orderBy, $pager);
 
         /* Build search form. */
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
