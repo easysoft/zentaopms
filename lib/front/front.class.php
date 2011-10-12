@@ -359,7 +359,7 @@ class js
      * @var string
      * @access public
      */
-    static $version = '$Id';
+    static $version = '$Id$';
 
     /**
      * Import a js file.
