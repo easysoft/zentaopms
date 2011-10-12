@@ -168,6 +168,19 @@ class bugModel extends model
      * @access public
      * @return void
      */
+    public function confirm($bugID)
+    {
+        $now = helper::now();
+        $this->dao->update(TABLE_BUG)->set('confirm')->eq(1)->set('confirmedBy')->eq($this->app->user->account)->set('confirmedDate')->eq($now)->where('id')->eq($bugID)->exec();
+    }
+
+    /**
+     * Resolve a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
     public function resolve($bugID)
     {
         $oldBug = $this->getById($bugID);
@@ -176,6 +189,7 @@ class bugModel extends model
             ->add('resolvedBy',     $this->app->user->account)
             ->add('resolvedDate',   $now)
             ->add('status',         'resolved')
+            ->add('confirm',        1)
             ->add('assignedDate',   $now)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -208,7 +222,7 @@ class bugModel extends model
             ->setDefault('assignedTo', $oldBug->resolvedBy)
             ->add('assignedDate', $now)
             ->add('resolution', '')
-            ->add('status', 'reactivated')
+            ->add('status', 'active')
             ->add('resolvedDate', '0000-00-00')
             ->add('resolvedBy', '')
             ->add('resolvedBuild', '')
@@ -539,6 +553,20 @@ class bugModel extends model
         $datas = $this->dao->select('status AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $status => $data) if(isset($this->lang->bug->statusList[$status])) $data->name = $this->lang->bug->statusList[$status];
+        return $datas;
+    }
+
+    /**
+     * Get report data of bugs per status.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerActivatedCount()
+    {
+        $datas = $this->dao->select('activatedCount AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        foreach($datas as $data) $data->name = $this->lang->bug->report->bugsPerActivatedCount->graph->xAxisName . ':' . $data->name; 
         return $datas;
     }
 

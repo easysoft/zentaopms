@@ -98,6 +98,10 @@ userList               = "<?php echo join(',', array_keys($users));?>".split(','
             <td><?php echo html::select('status', $lang->bug->statusList, $bug->status, 'class=select-3');?></td>
           </tr>
           <tr>
+            <td class='rowhead'><?php echo $lang->bug->confirm;?></td>
+            <td><?php echo $lang->bug->confirmList[$bug->confirm];?></td>
+          </tr>
+          <tr>
             <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
             <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, 'class=select-3');?></td>
           </tr>

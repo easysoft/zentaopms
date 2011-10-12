@@ -514,6 +514,37 @@ class bug extends control
     }
 
     /**
+     * confirm a bug.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
+    public function confirmBug($bugID)
+    {
+        if(!empty($_POST))
+        {
+            $this->bug->confirm($bugID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
+            $this->sendmail($bugID, $actionID);
+            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+        }
+
+        $bug             = $this->bug->getById($bugID);
+        $productID       = $bug->product;
+        $this->bug->setMenu($this->products, $productID);
+
+        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]      = $this->lang->bug->confirm;
+
+        $this->view->bug     = $bug;
+        $this->view->actions = $this->action->getList('bug', $bugID);
+        $this->display();
+    }
+    
+    /**
      * Resolve a bug.
      * 
      * @param  int    $bugID 
@@ -884,6 +915,7 @@ class bug extends control
                 if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
                 if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
                 if(isset($bugLang->statusList[$bug->status]))         $bug->status     = $bugLang->statusList[$bug->status];
+                if(isset($bugLang->confirmList[$bug->confirm]))       $bug->confirm    = $bugLang->confirmList[$bug->confirm];
                 if(isset($bugLang->resolutionList[$bug->resolution])) $bug->resolution = $bugLang->resolutionList[$bug->resolution];
                 
                 if(isset($users[$bug->openedBy]))     $bug->openedBy     = $users[$bug->openedBy];

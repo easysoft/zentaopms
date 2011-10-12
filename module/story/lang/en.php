@@ -104,7 +104,7 @@ $lang->story->reviewResultList['reject'] = 'Reject';
 
 $lang->story->sourceList['']           = '';
 $lang->story->sourceList['custom']     = 'Custom';
-$lang->story->sourceList['PO']         = 'PO';
+$lang->story->sourceList['po']         = 'PO';
 $lang->story->sourceList['market']     = 'Market';
 $lang->story->sourceList['service']    = 'Service';
 $lang->story->sourceList['competitor'] = 'Competitor';

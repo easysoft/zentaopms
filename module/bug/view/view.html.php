@@ -20,6 +20,7 @@
     $copyParams = "productID=$productID&extra=bugID=$bug->id";
     if(!$bug->deleted)
     {
+        if(!($bug->status == 'active' and $bug->confirm == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
         common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
         if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
@@ -45,6 +46,7 @@
       <?php
       if(!$bug->deleted)
       {
+          if(!($bug->status == 'active'  and $bug->confirm == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
           common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
           if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
           if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
@@ -92,6 +94,10 @@
           <tr>
             <td class='rowhead'><?php echo $lang->bug->status;?></td>
             <td><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->bug->confirm;?></td>
+            <td><strong><?php echo $lang->bug->confirmList[$bug->confirm];?></strong></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->lblAssignedTo;?></td>

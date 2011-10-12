@@ -62,6 +62,7 @@ $lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 添加备
 $lang->action->desc->activated   = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->moved       = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"' . "\n";
 $lang->action->desc->confirmed   = '$date, 由 <strong>$actor</strong> 确认需求变动，最新版本为<strong>#$extra</strong>' . "\n";
+$lang->action->desc->bugconfirmed= '$date, 由 <strong>$actor</strong> 确认Bug' . "\n";
 $lang->action->desc->started     = '$date, 由 <strong>$actor</strong> 启动。' . "\n";
 $lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。' . "\n";
 $lang->action->desc->svncommited = '$date, <strong>$actor</strong> 提交了Subversion，最新版本为<strong>#$extra</strong>' . "\n";

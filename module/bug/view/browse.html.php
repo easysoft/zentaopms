@@ -70,7 +70,7 @@ var customed   = <?php echo (int)$customed;?>;
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
 
           <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-          <th class='w-status'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->statusAB);?></th>
+          <th class='w-80px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->statusAB);?></th>
           <?php endif;?>
 
           <?php if($browseType == 'needconfirm'):?>
@@ -107,7 +107,7 @@ var customed   = <?php echo (int)$customed;?>;
           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title);?></td>
 
           <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-          <td><?php echo $lang->bug->statusList[$bug->status]?></td>
+          <td><?php echo $lang->bug->statusList[$bug->status];echo '[' . $lang->bug->confirmList[$bug->confirm] . ']';?></td>
           <?php endif;?>
 
           <?php if($browseType == 'needconfirm'):?>

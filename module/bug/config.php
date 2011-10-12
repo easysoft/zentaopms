@@ -14,6 +14,8 @@ $config->bug->search['fields']['project']        = $lang->bug->project;
 $config->bug->search['fields']['closedBy']       = $lang->bug->closedBy;
 $config->bug->search['fields']['lastEditedBy']   = $lang->bug->lastEditedByAB;
 $config->bug->search['fields']['status']         = $lang->bug->status;
+$config->bug->search['fields']['activatedCount'] = $lang->bug->activatedCount;
+$config->bug->search['fields']['confirm']        = $lang->bug->confirm;
 $config->bug->search['fields']['severity']       = $lang->bug->severity;
 $config->bug->search['fields']['pri']            = $lang->bug->pri;
 $config->bug->search['fields']['type']           = $lang->bug->type;
@@ -41,6 +43,8 @@ $config->bug->search['params']['openedBy']      = array('operator' => '=',      
 $config->bug->search['params']['closedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['lastEditedBy']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['status']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->statusList);
+$config->bug->search['params']['activatedCount']= array('operator' => '=',       'control' => 'input',  'values' => '');
+$config->bug->search['params']['confirm']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->confirmList);
 $config->bug->search['params']['severity']      = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->severityList);
 $config->bug->search['params']['pri']           = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->priList);
 $config->bug->search['params']['type']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->typeList);
@@ -62,7 +66,7 @@ $config->bug->resolve->requiredFields = 'resolution';
 
 $config->bug->list->allFields = 'id, module, project, story, task, 
     title, keywords, severity, pri, type, os, browser, hardware,
-    found, steps, status, activatedCount, mailto,
+    found, steps, status, activatedCount, confirm, mailto,
     openedBy, openedDate, openedBuild, 
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
@@ -71,11 +75,11 @@ $config->bug->list->allFields = 'id, module, project, story, task,
     case,
     lastEditedBy,
     lastEditedDate';
-$config->bug->list->defaultFields = 'id,severity,pri,title, activatedCount,openedBy,assignedTo,resolvedBy,resolution';
+$config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
 
 $config->bug->list->exportFields = 'id, product, module, project, story, task, 
     title, keywords, severity, pri, type, os, browser,
-    steps, status, activatedCount, mailto,
+    steps, status, activatedCount, confirm, mailto,
     openedBy, openedDate, openedBuild, 
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
