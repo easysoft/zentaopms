@@ -780,6 +780,26 @@ class upgradeModel extends model
     }
 
     /**
+     * Update activated count of Bug. 
+     * 
+     * @access public
+     * @return void
+     */
+    private function updateActivatedCountOfBug()
+    {
+        $bugActivatedActions = $this->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->eq('bug')->fetchAll();
+        foreach($bugActivatedActions as $action)
+        {
+            if(!isset($counts[$action->objectID]))  $counts[$action->objectID] = 0;
+            $counts[$action->objectID] ++;
+        }
+        foreach($counts as $key => $count)
+        {
+            $this->dao->update(TABLE_BUG)->set('activatedCount')->eq($count)->where('id')->eq($key)->exec();
+        }
+    }
+
+    /**
      * Get the upgrade sql file.
      * 
      * @param  string $version 
