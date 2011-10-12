@@ -352,16 +352,7 @@ class html
  */
 class js
 {
-    /**
-     * Use the svn revision to get the version id.
-     * 
-     * @static
-     * @var string
-     * @access public
-     */
-    static $version = '$Rev$';
-
-    /**
+   /**
      * Import a js file.
      * 
      * @param  string $url 
@@ -371,7 +362,7 @@ class js
      */
     public static function import($url, $version = '')
     {
-        if(!$version) $version = self::$version;
+        if(!$version) $version = filemtime(__FILE__);
         echo "<script src='$url?v=$version' type='text/javascript'></script>\n";
     }
 
@@ -637,15 +628,6 @@ EOT;
 class css
 {
     /**
-     * Use the svn revision to get the version id.
-     * 
-     * @static
-     * @var string
-     * @access public
-     */
-    static $version = '$Id';
-
-    /**
      * Import a css file.
      * 
      * @param  string $url 
@@ -655,7 +637,7 @@ class css
      */
     public static function import($url, $version = '')
     {
-        if(!$version) $version = self::$version;
+        if(!$version) $version = filemtime(__FILE__);
         echo "<link rel='stylesheet' href='$url?v=$version' type='text/css' media='screen' />\n";
     }
 

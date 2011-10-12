@@ -28,6 +28,11 @@ tgz:
 	cp bin/ztc* bin/computeburn.php bin/getbugs.php bin/initext.php bin/todo.php bin/convertopt.php zentaopms/bin
 	cp -fr db zentaopms/
 	cp -fr doc/* zentaopms/
+	# create my.min.js
+	rm zentaopms/www/js/my.min.js
+	java -jar ~/bin/yuicompressor/build/yuicompressor-2.4.6.jar www/js/my.full.js > zentaopms/www/js/my.in.js
+	# touch the front.class.php to make it's mtime to new.
+	touch zentaopms/lib/front/front.class.php
 	# delee the unused files.
 	find zentaopms -name .svn |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
