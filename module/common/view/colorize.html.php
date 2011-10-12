@@ -1,5 +1,5 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<?php js::import($jsRoot . 'jquery/colorize/full.js');?>
+<?php js::import($jsRoot . 'jquery/colorize/min.js');?>
 <script language='javascript'>
 $(function()
 {
