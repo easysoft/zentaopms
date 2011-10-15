@@ -46,7 +46,7 @@ $lang->extension->compatible  = '兼容性';
 $lang->extension->publicList[0] = '手工下载';
 $lang->extension->publicList[1] = '直接下载';
 
-$lang->extension->compatibleList[0] = '不兼容';
+$lang->extension->compatibleList[0] = '未知';
 $lang->extension->compatibleList[1] = '兼容';
 
 $lang->extension->byDownloads   = '最多下载';

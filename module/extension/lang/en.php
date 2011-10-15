@@ -46,7 +46,7 @@ $lang->extension->compatible  = 'Compatible';
 $lang->extension->publicList[0] = 'Manually';
 $lang->extension->publicList[1] = 'Auto';
 
-$lang->extension->compatibleList[0] = 'Incompatible';
+$lang->extension->compatibleList[0] = 'Unknow';
 $lang->extension->compatibleList[1] = 'Compatible';
 
 $lang->extension->byDownloads   = 'Downloads';
