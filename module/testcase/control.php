@@ -153,10 +153,11 @@ class testcase extends control
      * @param  int   $productID 
      * @param  int   $moduleID 
      * @param  int   $testcaseID
+     * @param  string $extras others params, forexample, bugID=10
      * @access public
      * @return void
      */
-    public function create($productID, $moduleID = 0, $testcaseID = 0)
+    public function create($productID, $moduleID = 0, $testcaseID = 0, $extras = '')
     {
         $this->loadModel('story');
         if(!empty($_POST))
@@ -197,7 +198,24 @@ class testcase extends control
             $keywords  = $testcase->keywords;
             $steps     = $testcase->steps;
         }
+               
+        /* Parse the extras. */
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras);
 
+        /* If bugID setted, use this bug as template. */
+        if(isset($bugID))
+        {
+            $bug      = $this->loadModel('bug')->getById($bugID);
+
+            $type     = $bug->type;
+            $pri      = $bug->severity;
+            $storyID  = $bug->story;
+            $title    = $bug->title;
+            $keywords = $bug->keywords;
+            $steps[]  = (object)array('desc'=>strip_tags($bug->steps), 'expect'=>'');
+        }
+       
         /* Padding the steps to the default steps count. */
         if(count($steps) < $this->config->testcase->defaultSteps)
         {

@@ -15,9 +15,10 @@
   <div id='main' <?php if($bug->deleted) echo "class='deleted'";?>>BUG #<?php echo $bug->id . $lang->colon . $bug->title;?></div>
   <div>
     <?php
-    $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
-    $params     = "bugID=$bug->id";
-    $copyParams = "productID=$productID&extra=bugID=$bug->id";
+    $browseLink    = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
+    $params        = "bugID=$bug->id";
+    $copyParams    = "productID=$productID&extras=bugID=$bug->id";
+    $convertParams = "productID=$productID&moduleID=0&testcaseID=0&extras=bugID=$bug->id";
     if(!$bug->deleted)
     {
         if(!($bug->status == 'active' and $bug->confirm == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
@@ -26,6 +27,7 @@
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
         if(!(($bug->status == 'closed' or $bug->status == 'resolved') and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
         common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
+        common::printLink('testcase', 'create', $convertParams, $lang->bug->buttonConvertToTestcase);
         common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
     }
     echo html::a($browseLink, $lang->goback);

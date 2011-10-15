@@ -134,6 +134,7 @@ $lang->bug->buttonActivate = '激活';
 $lang->bug->buttonResolve  = '解决';
 $lang->bug->buttonClose    = '关闭';
 $lang->bug->buttonToList   = '返回';
+$lang->bug->buttonConvertToTestcase  = '转为用例';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';
