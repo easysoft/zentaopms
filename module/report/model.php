@@ -106,17 +106,24 @@ $(function ()
             opacity: 0.80
         }).appendTo("body").fadeIn(200);
     } 
-    var options = {
-        series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
-        legend: {noColumns: 1},
-        grid: { hoverable: true, clickable: true },
-        xaxis: {mode: "time", timeformat: "%m-%d", tickSize:[1, "day"]},
-        yaxis: {min: 0, minTickSize: 1}};
-
-        if($count > 20)
-        {
-            var options = {xaxis: {mode: "time", timeformat: "%m-%d", minTickSize:[1, "day"]}};
-        }
+    if($count < 20)
+    {
+        var options = {
+            series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
+            legend: {noColumns: 1},
+            grid: { hoverable: true, clickable: true },
+            xaxis: {mode: "time", timeformat: "%m-%d", tickSize:[1, "day"]},
+            yaxis: {mode: null, min: 0, minTickSize: [1, "day"]}};
+    }
+    else
+    {
+        var options = {
+            series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
+            legend: {noColumns: 1},
+            grid: { hoverable: true, clickable: true },
+            xaxis: {mode: "time", timeformat: "%m-%d", ticks:20, minTickSize:[1, "day"]},
+            yaxis: {mode: null, min: 0, minTickSize: [1, "day"]}};
+    }
     var placeholder = $("#placeholder");
 
     placeholder.bind("plotselected", function (event, ranges) 

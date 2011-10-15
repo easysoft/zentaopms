@@ -788,7 +788,7 @@ class projectModel extends model
         return $sets;
     }
 
-    public function getBurnDataFlot($projectID = 0, $itemCounts = 30)
+    public function getBurnDataFlot($projectID = 0, $itemCounts = 20)
     {
         /* Get project and burn counts. */
         $project    = $this->getById($projectID);
@@ -828,13 +828,11 @@ class projectModel extends model
                 $current = $nextDay;
             }
         }
-        $count = 0;
         foreach($sets as $set) 
         {
             $set->name = (string)strtotime("$set->name UTC") . '000';
-            $count ++;
         }
-        $sets['count'] = $count;
+        $sets['count'] = $counts;
         return $sets;
     }
 
