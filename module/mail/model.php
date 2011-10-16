@@ -115,7 +115,12 @@ class mailModel extends model
 
         /* Get realname and email of users. */
         $this->loadModel('user');
-        $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
+        $list = $toList . ',' . $ccList;
+        $listArray = explode(",", $list);
+        unset($list);
+        $list = '';
+        foreach($listArray as $data) if($data != $this->app->user->account) $list = $list . $data . ',';
+        $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $list));
         
         $this->clear();
 
