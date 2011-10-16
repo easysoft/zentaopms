@@ -178,25 +178,27 @@ class testcase extends control
         $this->testcase->setMenu($this->products, $productID);
 
         /* Init vars. */
-        $type     = 'feature';
-        $stage    = '';
-        $pri      = 0;
-        $storyID  = 0;
-        $title    = '';
-        $keywords = '';
-        $steps    = array();
+        $type         = 'feature';
+        $stage        = '';
+        $pri          = 0;
+        $storyID      = 0;
+        $title        = '';
+        $precondition = '';
+        $keywords     = '';
+        $steps        = array();
 
         if($testcaseID > 0)
         {
-            $testcase  = $this->testcase->getById($testcaseID);
-            $productID = $testcase->product;
-            $type      = $testcase->type ? $testcase->type : 'feature';
-            $stage     = $testcase->stage;
-            $pri       = $testcase->pri;
-            $storyID   = $testcase->story;
-            $title     = $testcase->title;
-            $keywords  = $testcase->keywords;
-            $steps     = $testcase->steps;
+            $testcase     = $this->testcase->getById($testcaseID);
+            $productID    = $testcase->product;
+            $type         = $testcase->type ? $testcase->type : 'feature';
+            $stage        = $testcase->stage;
+            $pri          = $testcase->pri;
+            $storyID      = $testcase->story;
+            $title        = $testcase->title;
+            $precondition = $testcase->precondition;
+            $keywords     = $testcase->keywords;
+            $steps        = $testcase->steps;
         }
                
         /* Parse the extras. */
@@ -243,6 +245,7 @@ class testcase extends control
         $this->view->pri              = $pri;
         $this->view->storyID          = $storyID;
         $this->view->title            = $title;
+        $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
 

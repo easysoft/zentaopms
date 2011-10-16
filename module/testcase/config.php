@@ -33,7 +33,7 @@ $config->testcase->edit->requiredFields   = 'title,type';
 
 $config->testcase->exportFields = '
     id, product, module, story,
-    title, steps, keywords,
+    title, precondition, steps, keywords,
     pri, type, stage, status, frequency,
     openedBy, openedDate, lastEditedBy, lastEditedDate, 
     version,linkCase';

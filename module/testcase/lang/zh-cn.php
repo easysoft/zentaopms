@@ -15,6 +15,7 @@ $lang->testcase->module         = '所属模块';
 $lang->testcase->story          = '相关需求';
 $lang->testcase->storyVersion   = '需求版本';
 $lang->testcase->title          = '用例标题';
+$lang->testcase->precondition   = '前置条件';
 $lang->testcase->pri            = '优先级';
 $lang->testcase->type           = '用例类型';
 $lang->testcase->status         = '用例状态';

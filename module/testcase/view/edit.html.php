@@ -24,6 +24,10 @@
   <tr valign='top'>
     <td>
       <table class='table-1'>
+        <fieldset>
+          <legend><?php echo $lang->testcase->precondition;?></legend>
+          <?php echo html::textarea('precondition', $case->precondition, "rows='4' class='w-p100'");?>
+        </fieldset>
         <tr class='colhead'>
           <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
           <th><?php echo $lang->testcase->stepDesc;?></th>

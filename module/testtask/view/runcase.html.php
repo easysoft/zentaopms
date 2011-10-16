@@ -14,6 +14,10 @@
 <form method='post'>
   <table class='table-1'>
     <caption class='caption-tl'>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></caption>
+    <fieldset>
+      <legend><?php echo $lang->testcase->precondition;?></legend>
+      <?php echo $run->case->precondition;?>
+    </fieldset>
     <tr class='colhead'>
       <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
       <th class='w-p40'><?php  echo $lang->testcase->stepDesc;?></th>

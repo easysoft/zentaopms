@@ -42,6 +42,10 @@
       <td><?php echo html::input('title', $title, "class='text-1'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->testcase->precondition;?></th>
+      <td><?php echo html::textarea('precondition', $precondition, " rows='4' class='w-p100'");?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->testcase->steps;?></th>
       <td>
         <table class='w-p90'>

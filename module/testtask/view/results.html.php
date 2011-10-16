@@ -12,6 +12,10 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <h1>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></h1>
+<fieldset>
+  <legend><?php echo $lang->testcase->precondition;?></legend>
+  <?php echo $run->case->precondition;?>
+</fieldset>
 <?php foreach($results as $result):?>
 <table class='table-1'>
 <caption>RESULT#<?php echo $result->id . ' ' . $result->date . " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></caption>
