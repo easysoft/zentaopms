@@ -197,10 +197,11 @@ class testtaskModel extends model
      * Create test result 
      * 
      * @param  int   $runID 
+     * @param  string $extras       others params, forexample, caseID=10
      * @access public
      * @return void
      */
-    public function createResult($runID)
+    public function createResult($runID, $extras)
     {
         /* Compute the test result. */
         $caseResult = 'pass';
@@ -224,6 +225,12 @@ class testtaskModel extends model
             $stepResults[$stepID] = $step;
         }
 
+        /* Pares the extras */
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras);
+
+        if(isset($caseID)) $runID = 0;
+
         /* Insert into testResult table. */
         $now = helper::now();
         $result = fixer::input('post')
@@ -235,16 +242,19 @@ class testtaskModel extends model
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
 
-        /* Update testRun's status. */
-        if(!dao::isError())
+        if(!isset($caseID))
         {
-            $runStatus = $caseResult == 'blocked' ? 'blocked' : 'done';
-            $this->dao->update(TABLE_TESTRUN)
-                ->set('lastResult')->eq($caseResult)
-                ->set('status')->eq($runStatus)
-                ->set('lastRun')->eq($now)
-                ->where('id')->eq($runID)
-                ->exec();
+            /* Update testRun's status. */
+            if(!dao::isError())
+            {
+                $runStatus = $caseResult == 'blocked' ? 'blocked' : 'done';
+                $this->dao->update(TABLE_TESTRUN)
+                    ->set('lastResult')->eq($caseResult)
+                    ->set('status')->eq($runStatus)
+                    ->set('lastRun')->eq($now)
+                    ->where('id')->eq($runID)
+                    ->exec();
+            }
         }
     }
 

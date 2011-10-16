@@ -19,6 +19,7 @@
     $browseLink = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
     if(!$case->deleted)
     {
+        common::printLink('testtask', 'runCase', "runID=0&extras=version=$currentVersion,caseID=$case->id", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
         common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&testcaseID=$case->id", $lang->copy);
         common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
@@ -32,10 +33,14 @@
   <tr valign='top'>
     <td>
       <table class='table-1 colored'>
+        <fieldset>
+          <legend><?php echo $lang->testcase->precondition;?></legend>
+          <?php echo $case->precondition;?>
+        </fieldset>
         <tr class='colhead'>
-        <th class='w-30px'><?php echo $lang->testcase->stepID;?></td>
-        <th class='w-p70'><?php echo $lang->testcase->stepDesc;?></td>
-        <th><?php echo $lang->testcase->stepExpect;?></td>
+          <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
+          <th class='w-p70'><?php echo $lang->testcase->stepDesc;?></th>
+          <th><?php echo $lang->testcase->stepExpect;?></th>
         </tr> 
       <?php
       foreach($case->steps as $stepID => $step)

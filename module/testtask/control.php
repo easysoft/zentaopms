@@ -315,20 +315,40 @@ class testtask extends control
      * Run case.
      * 
      * @param  int    $runID 
+     * @param  String $extras   others params, forexample, caseID=10, version=3
      * @access public
      * @return void
      */
-    public function runCase($runID)
+    public function runCase($runID, $extras = '')
     {
         if(!empty($_POST))
         {
-            $this->testtask->createResult($runID);
+            $this->testtask->createResult($runID, $extras);
             if(dao::isError()) die(js::error(dao::getError()));
             echo js::reload('parent');
             die(js::closeWindow());
         }
 
-        $this->view->run = $this->testtask->getRunById($runID);
+
+        /* Pares the extras */
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras);
+
+        if(!isset($caseID))
+        {
+            $this->view->run = $this->testtask->getRunById($runID);
+        }
+        else
+        {
+            if(isset($version))
+            {
+                $this->view->run->case           = $this->loadModel('testcase')->getById($caseID, $version);
+                $this->view->run->case->version  = $version;
+            }
+            else
+                $this->view->run->case = $this->loadModel('testcase')->getById($caseID);
+        }
+
         die($this->display());
     }
 

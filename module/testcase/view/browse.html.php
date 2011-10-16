@@ -61,7 +61,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
             <th class='w-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='w-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
             <?php endif;?>
           </tr>
           <?php foreach($cases as $case):?>
@@ -81,6 +81,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               <?php
               common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
               common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
+              common::printLink('testtask', 'runCase', "runID=0&extras=caseID=$case->id", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
               ?>
             </td>
             <?php endif;?>

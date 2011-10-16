@@ -272,11 +272,12 @@ class testcase extends control
         $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testcase->view;
 
-        $this->view->case        = $case;
-        $this->view->productName = $this->products[$productID];
-        $this->view->modulePath  = $this->tree->getParents($case->module);
-        $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->actions     = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->case           = $case;
+        $this->view->productName    = $this->products[$productID];
+        $this->view->modulePath     = $this->tree->getParents($case->module);
+        $this->view->users          = $this->user->getPairs('noletter');
+        $this->view->actions        = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->currentVersion = $version;
 
         $this->display();
     }

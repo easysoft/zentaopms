@@ -22,6 +22,7 @@ function browseBySearch(active)
 
 $(document).ready(function()
 {
+    $("a.runcase").colorbox({width:900, height:600, iframe:true, transition:'none'});
     $('#' + browseType + 'Tab').addClass('active');
     $('#module' + moduleID).addClass('active'); 
 });
