@@ -30,6 +30,7 @@ $lang->user->asGuest         = "Guest";
 $lang->user->goback          = "Back";
 $lang->user->allUsers        = 'All users';
 $lang->user->deleted         = '(deleted)';
+$lang->user->select          = '--select user--';
 
 $lang->user->profile     = 'Profile';
 $lang->user->project     = 'Project';

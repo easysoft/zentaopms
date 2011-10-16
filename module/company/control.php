@@ -150,6 +150,8 @@ class company extends control
      */
     public function dynamic($type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->app->loadLang('user');
+        $this->app->loadLang('project');
         /* Save session. */
         $uri   = $this->app->getURI(true);
         $this->session->set('productList',     $uri);
@@ -171,17 +173,28 @@ class company extends control
 
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
-        $period  = $type == 'account' ? 'all'  : $type;
+        $project = $type == 'project' ? $param : 'all';
+        $period  = ($type == 'account' or $type == 'project') ? 'all'  : $type;
+
+        /* Get projects' list.*/
+        $projects = $this->loadModel('project')->getPairs();
+        $projects[0] = $this->lang->project->select;
+        ksort($projects);
+
+        $users = $this->loadModel('user')->getPairs('nodeleted|noletter');
+        $users[''] = $this->lang->user->select;
 
         /* The header and position. */
         $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
         $this->view->position[]    = $this->lang->company->dynamic;
 
         /* Assign. */
-        $this->view->type    = $type;
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
-        $this->view->account = $account;
-        $this->view->actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager);
+        $this->view->type     = $type;
+        $this->view->users    = $users; 
+        $this->view->projects = $projects; 
+        $this->view->account  = $account;
+        $this->view->project  = $project;
+        $this->view->actions  = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $project);
         $this->display();
     }
 

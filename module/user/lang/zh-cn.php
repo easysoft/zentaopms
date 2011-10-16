@@ -30,6 +30,7 @@ $lang->user->asGuest         = "游客访问";
 $lang->user->goback          = "返回前一页";
 $lang->user->allUsers        = '全部用户';
 $lang->user->deleted         = '(已删除)';
+$lang->user->select          = '--请选择用户--';
 
 $lang->user->profile     = '用户档案';
 $lang->user->project     = '用户项目';

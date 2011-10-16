@@ -45,6 +45,7 @@ $lang->project->totalConsumed= 'Done';
 $lang->project->totalLeft    = 'Left';
 $lang->project->progess      = 'Progess';
 $lang->project->noProduct    = 'No product';
+$lang->project->select       = '--select project--';
 
 $lang->team->account     = 'Account';
 $lang->team->role        = 'Role';
