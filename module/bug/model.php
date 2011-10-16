@@ -368,7 +368,11 @@ class bugModel extends model
             $title       = $run->case->title;
             $caseSteps   = $run->case->steps;
             $stepResults = unserialize($result->stepResults);
-            $bugSteps = $this->lang->bug->tplStep;
+            if($run->case->precondition != '')
+            {
+                $bugSteps = "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition;
+            }
+            $bugSteps .= $this->lang->bug->tplStep;
             foreach($caseSteps as $key => $step)
             {
                 $bugSteps .= ($key + 1) . '. '  .$step->desc . "\n";
