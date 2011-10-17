@@ -247,7 +247,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #navbar a:hover {color:#ff3600;}
 
 /* Main menu. */
-#mainmenu ul {background-color:#1d64ad; height:30px; line-height:30px}
+#mainmenu ul {background-color:#1d64ad; height:31px; line-height:31px}
 #mainmenu li {padding:0 8px 0 8px; border-right:3px solid #002242; color:white; font-size:14px;}
 #mainmenu a  {color:white; font-weight:normal;}
 #mainmenu .active   {background-color:#EDEFF4;}
