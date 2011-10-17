@@ -101,7 +101,7 @@ var browseType = '<?php echo $browseType;?>';
         </tbody>
         <tfoot>
         <tr>
-          <td colspan='10' class='a-right'>
+          <td colspan='11' class='a-right'>
             <div class='f-left'><?php printf($lang->product->storySummary, count($stories), $totalEstimate);?></div>
             <?php $pager->show();?>
           </td>
