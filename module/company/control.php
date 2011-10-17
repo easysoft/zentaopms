@@ -173,14 +173,21 @@ class company extends control
 
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
+        $product = $type == 'product' ? $param : 'all';
         $project = $type == 'project' ? $param : 'all';
-        $period  = ($type == 'account' or $type == 'project') ? 'all'  : $type;
+        $period  = ($type == 'account' or $type == 'product' or $type == 'project') ? 'all'  : $type;
+
+        /* Get products' list.*/
+        $products    = $this->loadModel('product')->getPairs();
+        $products[0] = $this->lang->product->select; 
+        ksort($products);
 
         /* Get projects' list.*/
-        $projects = $this->loadModel('project')->getPairs();
+        $projects    = $this->loadModel('project')->getPairs();
         $projects[0] = $this->lang->project->select;
         ksort($projects);
 
+        /* Get users.*/
         $users = $this->loadModel('user')->getPairs('nodeleted|noletter');
         $users[''] = $this->lang->user->select;
 
@@ -191,10 +198,12 @@ class company extends control
         /* Assign. */
         $this->view->type     = $type;
         $this->view->users    = $users; 
+        $this->view->products = $products;
         $this->view->projects = $projects; 
         $this->view->account  = $account;
+        $this->view->product  = $product;
         $this->view->project  = $project;
-        $this->view->actions  = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $project);
+        $this->view->actions  = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $product, $project);
         $this->display();
     }
 

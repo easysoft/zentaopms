@@ -17,6 +17,7 @@ $lang->product->edit   = "Edit";
 $lang->product->create = "Create";
 $lang->product->read   = "Info";
 $lang->product->delete = "Delete";
+$lang->product->select = '--select product--';
 
 $lang->product->plans    = 'Plans';
 $lang->product->releases = 'Releases';

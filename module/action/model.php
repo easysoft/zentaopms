@@ -258,7 +258,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $projectID = 0)
+    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all')
     {
         $period = $this->computeBeginAndEnd($period);
         extract($period);
@@ -267,7 +267,8 @@ class actionModel extends model
             ->where('date')->gt($begin)
             ->andWhere('date')->lt($end)
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
-            ->beginIF($projectID != 0)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($productID != 'all')->andWhere('product')->eq($productID)->fi()
+            ->beginIF($projectID != 'all')->andWhere('project')->eq($projectID)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();

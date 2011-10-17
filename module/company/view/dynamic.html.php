@@ -23,6 +23,7 @@
   echo '<span id="lastmonth">'  . html::a(inlink('dynamic', "type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</span>';
   echo '<span id="all">'        . html::a(inlink('dynamic', "type=all"),        $lang->action->dynamic->all)        . '</span>';
   echo "<span id='account'>"    . html::select('account', $users, $account, 'onchange=changeUser(this.value)') . '</span>';
+  echo "<span id='product'>"    . html::select('product', $products, $product, 'onchange=changeProduct(this.value)') . '</span>';
   echo "<span id='project'>"    . html::select('project', $projects, $project, 'onchange=changeProject(this.value)') . '</span>';
   ?>
 </div>
