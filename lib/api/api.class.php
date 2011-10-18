@@ -209,6 +209,37 @@ class ztclient
     }
 
     /**
+     * Fetch one method of a module's control. 
+     * 
+     * @param  string $module   the module name 
+     * @param  string $method   the methhod name
+     * @param  array  $vars     the vars to passwd
+     * @access public
+     * @return void
+     */
+    public function post($module, $method = 'index', $vars = array())
+    {
+        return $this->httpPost($this->setControlAPI($module, $method), $vars);
+    }
+
+    /**
+     * Post.
+     * 
+     * @param  string $url 
+     * @access private
+     * @return bool
+     */
+    private function httpPost($url, $vars)
+    {
+        $this->agent->submit($url, $vars);
+        $result = json_decode($this->agent->results);
+        if($result->status != 'success') return false;
+        if(isset($result->data) and md5($result->data) != $result->md5) return false;
+        if(isset($result->data)) return json_decode($result->data);
+        return true;
+    }
+
+    /**
      * Append session param to the url.
      * 
      * @param  string $url 
