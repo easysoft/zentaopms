@@ -38,6 +38,14 @@ class svnModel extends model
     public $logRoot = '';
 
     /**
+     * The restart file.
+     * 
+     * @var string
+     * @access public
+     */
+    public $restartFile = '';
+
+    /**
      * The root path of a repo
      * 
      * @var string
@@ -54,30 +62,6 @@ class svnModel extends model
     public $users = array();
 
     /**
-     * Set the repos.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setRepos()
-    {
-        if(!$this->config->svn->repos) die("You must set one svn repo.\n");
-        $this->repos = $this->config->svn->repos;
-    }
-
-    /**
-     * Set the log root.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setLogRoot()
-    {
-        $this->logRoot = $this->app->getTmpRoot() . 'svn/';
-        if(!is_dir($this->logRoot)) mkdir($this->logRoot);
-    }
-
-    /**
      * Run. 
      * 
      * @access public
@@ -87,6 +71,7 @@ class svnModel extends model
     {
         $this->setRepos();
         $this->setLogRoot();
+        $this->setRestartFile();
         $this->loadModel('action');
 
         foreach($this->repos as $name => $repo)
@@ -130,8 +115,55 @@ class svnModel extends model
             }
             $this->saveLastRevision($savedRevision);
             $this->printLog("save revision $savedRevision");
+            $this->deleteRestartFile();
             $this->printLog("\n\nrepo $name finished");
         }
+    }
+
+    /**
+     * Set the log root.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setLogRoot()
+    {
+        $this->logRoot = $this->app->getTmpRoot() . 'svn/';
+        if(!is_dir($this->logRoot)) mkdir($this->logRoot);
+    }
+
+    /**
+     * Set the restart file.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setRestartFile()
+    {
+        $this->restartFile = dirname(__FILE__) . '/restart';
+    }
+
+    /**
+     * Delete the restart file.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deleteRestartFile()
+    {
+        if(is_file($this->restartFile)) unlink($this->restartFile);
+    }
+
+    /**
+     * Set the repos.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setRepos()
+    {
+        if(!$this->config->svn->repos) die("You must set one svn repo.\n");
+        $this->repos = $this->config->svn->repos;
     }
 
     /**
@@ -524,6 +556,7 @@ class svnModel extends model
     public function getSavedRevision()
     {
         if(!file_exists($this->logFile)) return 0;
+        if(file_exists($this->restartFile)) return 0;
         return (int)trim(file_get_contents($this->logFile));
     }
 
