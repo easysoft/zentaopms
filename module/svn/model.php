@@ -38,27 +38,20 @@ class svnModel extends model
     public $logRoot = '';
 
     /**
+     * The root path of a repo
+     * 
+     * @var string
+     * @access public
+     */
+    public $repoRoot = '';
+
+    /**
      * Users 
      * 
      * @var array 
      * @access public
      */
     public $users = array();
-
-
-    /**
-     * The construct function.
-     * 
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setRepos();
-        $this->setLogRoot();
-        $this->loadModel('action');
-    }
 
     /**
      * Set the repos.
@@ -92,6 +85,10 @@ class svnModel extends model
      */
     public function run()
     {
+        $this->setRepos();
+        $this->setLogRoot();
+        $this->loadModel('action');
+
         foreach($this->repos as $name => $repo)
         {
             $this->printLog("begin repo $name");
@@ -104,10 +101,10 @@ class svnModel extends model
             $logs = $this->getRepoLogs($repo, $savedRevision);
             $this->printLog("get " . count($logs) . " logs");
 
-            $this->printLog('begin parse logs');
+            $this->printLog('begin parsing logs');
             foreach($logs as $log)
             {
-                $this->printLog("paring log {$log->revision}");
+                $this->printLog("parsing log {$log->revision}");
                 if($log->revision == $savedRevision)
                 {
                     $this->printLog("{$log->revision} alread parsed, ommit it");
@@ -119,9 +116,9 @@ class svnModel extends model
                 if($objects)
                 {
                     $this->printLog('extract' . 
-                        'story' . join(' ', $objects['stories']) . 
-                        ' task' . join(' ', $objects['tasks']) . 
-                        ' bug'  . join(',', $objects['bugs']));
+                        'story:' . join(' ', $objects['stories']) . 
+                        ' task:' . join(' ', $objects['tasks']) . 
+                        ' bug:'  . join(',', $objects['bugs']));
 
                     $this->saveAction2PMS($objects, $log);
                 }
@@ -148,6 +145,7 @@ class svnModel extends model
     {
         $this->setClient($repo);
         $this->setLogFile($repo->name);
+        $this->setRepoRoot($repo);
     }
 
     /**
@@ -174,6 +172,22 @@ class svnModel extends model
     public function setLogFile($repoName)
     {
         $this->logFile = $this->logRoot . $repoName;
+    }
+
+    /**
+     * set the root path of a repo.
+     * 
+     * @param  object    $repo 
+     * @access public
+     * @return void 
+     */
+    public function setRepoRoot($repo)
+    {
+        $cmd  = $this->client . " info --xml $repo->path";
+        $info = `$cmd`;
+        $info = simplexml_load_string($info);
+        $repoRoot = $info->entry->repository->root;
+        $this->repoRoot = $repoRoot;
     }
 
     /**
@@ -252,6 +266,60 @@ class svnModel extends model
 
         if(!$stories and !$tasks and !$bugs) return array();
         return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs);
+    }
+
+    /**
+     * Diff a url.
+     * 
+     * @param  string $url 
+     * @param  int    $revision 
+     * @access public
+     * @return string|bool
+     */
+    public function diff($url, $revision)
+    {
+        $repo = $this->getRepoByURL($url);
+        if(!$repo) return false;
+
+        $this->setClient($repo);
+
+        $oldRevision = $revision - 1;
+        $cmd = $this->client . " diff --old=$url@$oldRevision --new=$url@$revision";
+        $diff = `$cmd`;
+        return $diff;
+    }
+
+    /**
+     * Cat a url.
+     * 
+     * @param  string $url 
+     * @param  int    $revision 
+     * @access public
+     * @return string|bool
+     */
+    public function cat($url, $revision)
+    {
+        $repo = $this->getRepoByURL($url);
+        if(!$repo) return false;
+
+        $this->setClient($repo);
+
+        $cmd  = $this->client . " cat $url@$revision";
+        $code = `$cmd`;
+        return $code;
+    }
+
+    /**
+     * Get repo by url.
+     * 
+     * @param  string    $url 
+     * @access public
+     * @return object|bool
+     */
+    public function getRepoByURL($url)
+    {
+        foreach($this->config->svn->repos as $repo) if(strpos($url, $repo['path']) !== false) return (object)$repo;
+        return false;
     }
 
     /**
@@ -373,15 +441,26 @@ class svnModel extends model
         if(!$log->files) return array();
         $diff = '';
 
+        $oldSelf = $this->server->PHP_SELF;
+        $this->server->set('PHP_SELF', $this->config->webRoot);
+
         foreach($log->files as $action => $actionFiles)
         {
-            foreach($actionFiles as $file) $diff .= $action . " " . $file . "\n";
+            foreach($actionFiles as $file)
+            {
+                $param = array('url' => helper::safe64Encode($this->repoRoot . $file), 'revision' => $log->revision);
+                $catLink  = trim(html::a(helper::createLink('svn', 'cat',  $param), 'view', '', "class='svnlink'"));
+                $diffLink = trim(html::a(helper::createLink('svn', 'diff', $param), 'diff', '', "class='svnlink'"));
+                $diff .= $action . " " . $file . " $catLink ";
+                $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
+            }
         }
-        $changes->field = 'svncode';
+        $changes->field = 'subversion';
         $changes->old   = '';
         $changes->new   = '';
         $changes->diff  = trim($diff);
 
+        $this->server->set('PHP_SELF', $oldSelf);
         return (array)$changes;
     }
 

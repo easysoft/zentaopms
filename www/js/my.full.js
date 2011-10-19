@@ -31,7 +31,7 @@ function loadFixedCSS()
 
     if(cssFile != '')
     {
-        document.write("<link rel='stylesheet' href='" + cssFile + "' type='text/css' media='screen' />");
+        $('body').append("<link rel='stylesheet' href='" + cssFile + "' type='text/css' media='screen' />");
     }
 }
 
@@ -483,6 +483,17 @@ function setImageSize(image, maxWidth)
 }
 
 /**
+ * Set the subversion link.
+ * 
+ * @access public
+ * @return void
+ */
+function setSubversionLink()
+{
+    $('.svnlink').colorbox({width:960, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
+}
+
+/**
  * Auto checked the checkbox of a row. 
  * 
  * @access public
@@ -701,9 +712,11 @@ $(document).ready(function()
     saveProduct();
     saveProject();
     setForm();
+    setSubversionLink();
     autoCheck();
     togglesearch();
     saveWindowSize();
+    loadFixedCSS();
     $(window).resize(function(){saveWindowSize()});       // When window resized, call it again.
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minutes, begin ping.
 });

@@ -33,6 +33,5 @@ $clientTheme  = $this->app->getClientTheme();
 
   echo html::icon($webRoot . 'favicon.ico');
   ?>
-<script type="text/javascript">loadFixedCSS();</script>
 </head>
 <body>

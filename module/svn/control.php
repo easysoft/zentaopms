@@ -11,8 +11,50 @@
  */
 class svn extends control
 {
+    /**
+     * Sync svn. 
+     * 
+     * @access public
+     * @return void
+     */
     public function run()
     {
         $this->svn->run();
+    }
+
+    /**
+     * Diff a file.
+     * 
+     * @param  string $url 
+     * @param  int    $revision 
+     * @access public
+     * @return void
+     */
+    public function diff($url, $revision)
+    {
+        $url = helper::safe64Decode($url);
+        $this->view->url      = $url;
+        $this->view->revision = $revision;
+        $this->view->diff     = $this->svn->diff($url, $revision);
+        
+        $this->display();
+    }
+
+    /**
+     * Cat a file.
+     * 
+     * @param  string $url 
+     * @param  int    $revision 
+     * @access public
+     * @return void
+     */
+    public function cat($url, $revision)
+    {
+        $url = helper::safe64Decode($url);
+        $this->view->url      = $url;
+        $this->view->revision = $revision;
+        $this->view->code     = $this->svn->cat($url, $revision);
+        
+       $this->display(); 
     }
 }

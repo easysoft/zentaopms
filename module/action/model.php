@@ -577,7 +577,7 @@ class actionModel extends model
             if($history->diff != '')
             {
                 $history->diff = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
-                $history->diff = htmlspecialchars($history->diff);
+                $history->diff = $history->field != 'subversion' ? htmlspecialchars($history->diff) : $history->diff;   // Keep the diff link.
                 $history->diff = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
                 $history->diff = nl2br($history->diff);
                 printf($this->lang->action->desc->diff2, $history->fieldLabel, $history->diff);
