@@ -104,10 +104,11 @@ var customed   = <?php echo (int)$customed;?>;
           <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
           <td><?php echo $lang->bug->priList[$bug->pri]?></td>
 
-          <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title);?></td>
+          <?php $class = 'confirm' . $bug->confirm;?>
+          <td class='a-left nobr <?php echo $class;?>'><?php echo '[' . $lang->bug->confirmList[$bug->confirm] . ']'; echo html::a($bugLink, $bug->title);?></td>
 
           <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-          <td><?php echo $lang->bug->statusList[$bug->status];echo '[' . $lang->bug->confirmList[$bug->confirm] . ']';?></td>
+          <td><?php echo $lang->bug->statusList[$bug->status];?></td>
           <?php endif;?>
 
           <?php if($browseType == 'needconfirm'):?>
