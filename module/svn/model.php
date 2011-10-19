@@ -62,6 +62,18 @@ class svnModel extends model
     public $users = array();
 
     /**
+     * Construct function.
+     * 
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadModel('action');
+    }
+
+    /**
      * Run. 
      * 
      * @access public
@@ -72,7 +84,6 @@ class svnModel extends model
         $this->setRepos();
         $this->setLogRoot();
         $this->setRestartFile();
-        $this->loadModel('action');
 
         foreach($this->repos as $name => $repo)
         {
@@ -240,32 +251,40 @@ class svnModel extends model
         $logs = simplexml_load_string($logs);    // Convert it to object.
 
         /* Process logs. */
-        foreach($logs->logentry as $entry)
-        {
-            /* Get author, revision, msg, date attributes. */
-            $parsedLog = new stdClass();
-            $parsedLog->author   = (string)$entry->author; 
-            $parsedLog->revision = (int)$entry['revision']; 
-            $parsedLog->msg      = trim((string)$entry->msg);
-            $parsedLog->date     = date('Y-m-d H:i:s', strtotime($entry->date));
-
-            /* Process files. */
-            $parsedLog->files = array();
-            foreach ($entry->paths as $key => $paths)
-            {
-                $parsedFiles = array();
-                foreach($paths as $path)
-                {
-                    $action = (string)$path['action'];
-                    $parsedFiles[$action][] = (string)$path;
-                }
-            }
-            $parsedLog->files = $parsedFiles;
-
-            /* Appended to the $parsedLogs. */
-            $parsedLogs[] = $parsedLog;
-        }
+        foreach($logs->logentry as $entry) $parsedLogs[] = $this->convertLog($entry);
         return $parsedLogs;
+    }
+
+    /**
+     * Convert log from xml format to object.
+     * 
+     * @param  object    $log 
+     * @access public
+     * @return ojbect
+     */
+    public function convertLog($log)
+    {
+        /* Get author, revision, msg, date attributes. */
+        $parsedLog = new stdClass();
+        $parsedLog->author   = (string)$log->author; 
+        $parsedLog->revision = (int)$log['revision']; 
+        $parsedLog->msg      = trim((string)$log->msg);
+        $parsedLog->date     = date('Y-m-d H:i:s', strtotime($log->date));
+
+        /* Process files. */
+        $parsedLog->files = array();
+        foreach ($log->paths as $key => $paths)
+        {
+            $parsedFiles = array();
+            foreach($paths as $path)
+            {
+                $action = (string)$path['action'];
+                $parsedFiles[$action][] = (string)$path;
+            }
+        }
+        $parsedLog->files = $parsedFiles;
+
+        return $parsedLog;
     }
 
     /**
@@ -359,10 +378,11 @@ class svnModel extends model
      * 
      * @param  array    $objects 
      * @param  object   $log 
+     * @param  string   $repoRoot 
      * @access public
      * @return void
      */
-    public function saveAction2PMS($objects, $log)
+    public function saveAction2PMS($objects, $log, $repoRoot = '')
     {
         $action->actor   = $log->author;
         $action->action  = 'svncommited';
@@ -370,7 +390,7 @@ class svnModel extends model
         $action->comment = $log->msg;
         $action->extra   = $log->revision;
 
-        $changes = $this->createActionChanges($log);
+        $changes = $this->createActionChanges($log, $repoRoot);
 
         if($objects['stories'])
         {
@@ -465,10 +485,11 @@ class svnModel extends model
      * Create changes for action from a log.
      * 
      * @param  object    $log 
+     * @param  string    $repoRoot 
      * @access public
      * @return array
      */
-    public function createActionChanges($log)
+    public function createActionChanges($log, $repoRoot)
     {
         if(!$log->files) return array();
         $diff = '';
@@ -476,13 +497,15 @@ class svnModel extends model
         $oldSelf = $this->server->PHP_SELF;
         $this->server->set('PHP_SELF', $this->config->webRoot);
 
+        if(!$repoRoot) $repoRoot = $this->repoRoot;
+
         foreach($log->files as $action => $actionFiles)
         {
             foreach($actionFiles as $file)
             {
-                $param = array('url' => helper::safe64Encode($this->repoRoot . $file), 'revision' => $log->revision);
-                $catLink  = trim(html::a(helper::createLink('svn', 'cat',  $param), 'view', '', "class='svnlink'"));
-                $diffLink = trim(html::a(helper::createLink('svn', 'diff', $param), 'diff', '', "class='svnlink'"));
+                $param = array('url' => helper::safe64Encode($repoRoot . $file), 'revision' => $log->revision);
+                $catLink  = trim(html::a(helper::createLink('svn', 'cat',  $param, 'html'), 'view', '', "class='svnlink'"));
+                $diffLink = trim(html::a(helper::createLink('svn', 'diff', $param, 'html'), 'diff', '', "class='svnlink'"));
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }

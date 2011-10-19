@@ -57,4 +57,42 @@ class svn extends control
         
        $this->display(); 
     }
+
+    /**
+     * Sync from the syncer by api.
+     * 
+     * @access public
+     * @return void
+     */
+    public function apiSync()
+    {
+        if($this->post->logs)
+        {
+            $repoRoot = $this->post->repoRoot;
+            $logs = stripslashes($this->post->logs);
+            $logs = simplexml_load_string($logs);
+            foreach($logs->logentry as $entry)
+            {
+                $parsedLogs[] = $this->svn->convertLog($entry);
+            }
+            $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
+            foreach($parsedLogs as $log)
+            {
+                $objects = $this->svn->parseComment($log->msg);
+                if($objects)
+                {
+                    $this->svn->saveAction2PMS($objects, $log, $repoRoot);
+                    if($objects['stories']) $parsedObjects['stories'] = array_merge($parsedObjects['stories'], $objects['stories']);
+                    if($objects['tasks'])   $parsedObjects['tasks'  ] = array_merge($parsedObjects['tasks'],   $objects['tasks']);
+                    if($objects['bugs'])    $parsedObjects['bugs']    = array_merge($parsedObjects['bugs'],    $objects['bugs']);
+                }
+            }
+            $parsedObjects['stories'] = array_unique($parsedObjects['stories']);
+            $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
+            $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
+            $this->view->parsedObjects = $parsedObjects;
+            $this->display();
+            exit;
+        }
+    }
 }

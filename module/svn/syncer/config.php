@@ -16,7 +16,7 @@
 $config->svn->client = '/usr/bin/svn';
 
 $i = 1;
-$config->svn->repos[$i]['path']     = 'http://zentaoms.googlecode.com/svn/trunk/';
+$config->svn->repos[$i]['path']     = '';
 $config->svn->repos[$i]['username'] = '';
 $config->svn->repos[$i]['password'] = '';
 
@@ -27,6 +27,6 @@ $config->svn->repos[$i]['username'] = '';
 $config->svn->repos[$i]['password'] = '';
 */
 
-$config->zentao->path = 'http://pms.5upm.com/';
-$config->zentao->user = 'wwccss';
-$config->zentao->password = '123456';
+$config->zentao->path = '';
+$config->zentao->user = '';
+$config->zentao->password = '';

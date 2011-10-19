@@ -123,6 +123,7 @@ class syncer
             $this->printLog("begin repo $name");
             $repo = (object)$repo;
             $repo->name = $name;
+
             $this->setRepo($repo);
 
             $savedRevision = $this->getSavedRevision();
@@ -131,7 +132,15 @@ class syncer
             $this->printLog("get " . count($logs) . " logs");
 
             $this->printLog('begin posting logs');
-            print_r($this->zentaoClient->post('svn', 'apiSync', array('logs' => $logs)));
+            $objects = $this->zentaoClient->post('svn', 'apiSync', array('logs' => $logs, 'repoRoot' => $this->repoRoot));
+            $objects = $objects->parsedObjects;
+
+            $this->printLog('parsed objects:');
+            echo 'story: ' . join(',', (array)$objects->stories) . "\n";
+            echo 'task: '  . join(',', (array)$objects->tasks) . "\n";
+            echo 'bugs: '  . join(',', (array)$objects->bugs) . "\n";
+
+            echo "----------------------\n";
         }
     }
 
@@ -146,6 +155,7 @@ class syncer
     {
         $this->setClient($repo);
         $this->setLogFile($repo->name);
+        $this->setRepoRoot($repo);
     }
 
     /**
@@ -172,6 +182,22 @@ class syncer
     public function setLogFile($repoName)
     {
         $this->logFile = $this->logRoot . $repoName;
+    }
+
+    /**
+     * set the root path of a repo.
+     * 
+     * @param  object    $repo 
+     * @access public
+     * @return void 
+     */
+    public function setRepoRoot($repo)
+    {
+        $cmd  = $this->svnClient . " info --xml $repo->path";
+        $info = `$cmd`;
+        $info = simplexml_load_string($info);
+        $repoRoot = (string)$info->entry->repository->root;
+        $this->repoRoot = $repoRoot;
     }
 
     /**
