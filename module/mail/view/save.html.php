@@ -17,7 +17,7 @@ include '../../common/view/header.html.php';
 <td><? echo html::textArea('', $config, "rows='15' class='area-1 f-12px'");?>
 </tr>
 <tr>
-<td><?php echo $lang->mail->saveConfig . $configPath . 'config.php' ?></td>
+<td><?php echo $lang->mail->saveConfig . $configPath . 'zzzemail.php' ?></td>
 </tr>
 <tr>
 <td><?php echo $lang->mail->createFile ?></td>

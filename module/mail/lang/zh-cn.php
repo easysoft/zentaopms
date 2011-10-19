@@ -51,4 +51,4 @@ $lang->mail->content     = '邮箱设置成功';
 /* Save config information */
 $lang->mail->configInfo  = '配置信息';
 $lang->mail->saveConfig  = '请将该配置信息保存到： ';
-$lang->mail->createFile  = '如果zzz.php文件不存在，请手动创建该文件，将以上配置保存即可。';
+$lang->mail->createFile  = '如果zzzemail.php文件不存在，请手动创建该文件，将以上配置保存即可。';

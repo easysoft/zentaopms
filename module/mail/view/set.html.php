@@ -77,7 +77,7 @@ else
     $smtpPort = '';
 }
 ?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' action='<?php echo inlink('save');?>'>
+<form method='post' enctype='multipart/form-data' action='<?php echo inlink('save');?>'>
   <table align='center' class='table-1'>
   <caption><?php echo $lang->mail->setParam; ?></caption>
   <tr>

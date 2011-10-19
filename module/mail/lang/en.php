@@ -51,4 +51,4 @@ $lang->mail->content     = "The email's param is setted";
 /* Save config information */
 $lang->mail->configInfo  = 'Config information';
 $lang->mail->saveConfig  = 'Please save Config information to:';
-$lang->mail->createFile  = 'If the zzz.php is not exist, please create it.';
+$lang->mail->createFile  = 'If the zzzemail.php is not exist, please create it.';

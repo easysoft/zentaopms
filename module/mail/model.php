@@ -109,14 +109,14 @@ class mailModel extends model
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '')
+    public function send($toList, $subject, $body = '', $ccList = '', $test = '')
     {
         if(!$this->config->mail->turnon) return;
 
         /* Get realname and email of users. */
         $this->loadModel('user');
         $list = $toList . ',' . $ccList;
-        if(substr_count($list, $this->app->user->account) != 0)
+        if(substr_count($list, $this->app->user->account) != 0 and $test != 'test')
         {
             $listArray = explode(",", $list);
             unset($list);

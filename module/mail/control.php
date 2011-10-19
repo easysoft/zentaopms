@@ -91,7 +91,7 @@ EOT;
                 if(file_put_contents($configPath . 'zzzemail.php', $config))
                 {
                     /* Send test mail */
-                    $this->mail->send($this->app->user->account, $this->lang->mail->subject, $this->lang->mail->content,"");
+                    $this->mail->send($this->app->user->account, $this->lang->mail->subject, $this->lang->mail->content,"",'test');
                     if($this->mail->isError()) echo js::error($this->mail->getError());
                     echo js::confirm($this->lang->mail->confirmSave,$this->createLink('mail', 'set'));
                 }
