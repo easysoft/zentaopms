@@ -16,3 +16,8 @@
 #mainmenu .active {background:url(./images/bg.menu.gif) no-repeat center 5px; width:85px;}
 
 #modulemenu select{border:1px solid #e4e4e4; background:#fff}
+
+#searchType  {background:#43618B}
+#searchQuery {background:#43618B}
+#modulemenu {background:#EAEAEA}
+#productID  {background:#EAEAEA}

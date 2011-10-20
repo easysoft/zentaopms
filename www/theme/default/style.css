@@ -239,6 +239,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #topbar, #topbar a {color:#fff}
 #topbar {margin-bottom:2px}
 #topbar select {border:none; color:white; background:#16528b}
+#topbar a {text-decoration:none;}
 
 /* The nav bar. */
 #navbar ul {margin:0; padding:0;} 
@@ -256,6 +257,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #mainmenu #searchbox{float:right; border:none;}
 #mainmenu .button-s{border:none; padding:2px}
 
+#searchType  {margin-top:2px; border:1px solid gray; color:#e4e4e4; background:#1d64ad}
+#searchQuery {height:18px; border:1px solid gray; color:#e4e4e4; background:#1d64ad}
+
 /* Module menu. */
 #modulemenu    {color:#F30; margin-bottom:0px; font-size:14px;}
 #modulemenu ul {background-color:#EDEFF4; height:28px; line-height:28px;}
@@ -264,6 +268,13 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #modulemenu .active a {color:#009900; font-weight:bold;}
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a {color:red; font-weight:bold}
+
+/* Product, project and objects switcher. */
+#productID {background:#EDEFF4; border:1px solid #e4e4e4}
+#projectID {background:#EDEFF4; border:1px solid #e4e4e4}
+#productSwitcher{padding:0; width:35px}
+#projectSwitcher{padding:0; width:35px}
+#objectSwitcher {padding:0; width:35px}
 
 /* Feature bar. */
 #featurebar {margin: 0 0 5px 0; background-color:#EDF3FE; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}

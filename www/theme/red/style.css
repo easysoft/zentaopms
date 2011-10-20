@@ -4,3 +4,6 @@
 #mainmenu a:hover {color:yellow;}
 #mainmenu .active a{color:#990000}
 #topbar select{background:#990000}
+
+#searchType  {background:#cc0000}
+#searchQuery {background:#cc0000}
