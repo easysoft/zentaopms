@@ -490,7 +490,7 @@ function setImageSize(image, maxWidth)
  */
 function setSubversionLink()
 {
-    $('.svnlink').colorbox({width:960, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
+    if($('.svnlink').size()) $('.svnlink').colorbox({width:960, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
 }
 
 /**
