@@ -14,7 +14,7 @@
 class projectModel extends model
 {
     /* The members every linking. */
-    const LINK_MEMBERS_ONE_TIME = 10;
+    const LINK_MEMBERS_ONE_TIME = 20;
 
     /**
      * Check the privilege. 
@@ -74,12 +74,34 @@ class projectModel extends model
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
-        $selectHtml = html::select('projectID', $projects, $projectID, "onchange=\"switchProject(this.value, '$moduleName', '$methodName');\"");
+        $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName);
         foreach($this->lang->project->menu as $key => $menu)
         {
             $replace = $key == 'list' ? $selectHtml . $this->lang->arrow : $projectID;
             common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
+    }
+
+    /**
+     * Create the select code of projects. 
+     * 
+     * @param  array     $projects 
+     * @param  int       $projectID 
+     * @param  string    $currentModule 
+     * @param  string    $currentMethod 
+     * @access public
+     * @return string
+     */
+    public function select($projects, $projectID, $currentModule, $currentMethod)
+    {
+        /* See product's model method:select. */
+        $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod');";
+        $onchange    = "onchange=\"$switchCode\""; 
+        $onkeypress  = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
+        $onclick     = "onclick=\"eventKeyCode = 13; $switchCode\""; 
+        $selectHtml  = html::select('projectID', $projects, $projectID, "tabindex=2 $onchange $onkeypress");
+        $selectHtml .= html::commonButton($this->lang->go, "id='projectSwitcher' tabindex=3 $onclick");
+        return $selectHtml;
     }
 
     /**
@@ -193,17 +215,25 @@ class projectModel extends model
      */
     public function getPairs($mode = '')
     {
-        if($mode == '') $mode = $this->cookie->projectMode ? $this->cookie->projectMode : 'noclosed';
+        $mode .= $this->cookie->projectMode;
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('status, end desc')
+            ->orderBy('status, code')
             ->fetchAll();
         $pairs = array();
         foreach($projects as $project)
         {
-            if($mode == 'noclosed' and $project->status == 'done') continue;
-            if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
+            if(strpos($mode, 'noclosed') !== false and $project->status == 'done') continue;
+            if($this->checkPriv($project))
+            {
+                if(strpos($mode, 'nocode') === false and $project->code)
+                {
+                    $firstChar = strtoupper(substr($project->code, 0, 1));
+                    if(ord($firstChar) < 127) $project->name =  $firstChar . ':' . $project->name;
+                }
+                $pairs[$project->id] = $project->name;
+            }
         }
 
         /* If the pairs is empty, to make sure there's an project in the pairs. */
