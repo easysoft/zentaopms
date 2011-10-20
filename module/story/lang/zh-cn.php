@@ -11,6 +11,7 @@
  */
 $lang->story->browse      = "需求列表";
 $lang->story->create      = "新增需求";
+$lang->story->batchCreate = "批量新增需求";
 $lang->story->change      = "变更";
 $lang->story->changed     = '需求变更';
 $lang->story->review      = '评审';
@@ -69,6 +70,12 @@ $lang->story->reviewResult   = '评审结果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '关键词';
 
+$lang->story->use  = '是否使用';
+$lang->story->same = '同上';
+
+$lang->story->useList[0] = '不使用';
+$lang->story->useList[1] = '使用';
+
 $lang->story->statusList['']          = '';
 $lang->story->statusList['draft']     = '草稿';
 $lang->story->statusList['active']    = '激活';
@@ -101,6 +108,9 @@ $lang->story->reviewResultList['pass']   = '确认通过';
 $lang->story->reviewResultList['revert'] = '撤销变更';
 $lang->story->reviewResultList['clarify']= '有待明确';
 $lang->story->reviewResultList['reject'] = '拒绝';
+
+$lang->story->reviewList[0] = '否';
+$lang->story->reviewList[1] = '是';
 
 $lang->story->sourceList['']           = '';
 $lang->story->sourceList['custom']     = '客户';
@@ -141,6 +151,7 @@ $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
 
 $lang->story->specTemplate          = "建议参考的模板：作为一名<<i class='red'>某种类型的用户</i>>，我希望<<i class='red'>达成某些目的</i>>，这样可以<<i class='red'>开发的价值</i>>。";
+$lang->story->needReview            = '是否需要评审';
 $lang->story->needNotReview         = '不需要评审';
 $lang->story->confirmDelete         = "您确认删除该需求吗?";
 $lang->story->errorFormat           = '需求数据有误';

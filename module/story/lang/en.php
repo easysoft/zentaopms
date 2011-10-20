@@ -11,6 +11,7 @@
  */
 $lang->story->browse      = "Browse";
 $lang->story->create      = "Create";
+$lang->story->batchCreate = "Batch create";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Changed';
 $lang->story->review      = 'Review';
@@ -69,6 +70,12 @@ $lang->story->reviewResult   = 'Reviewed result';
 $lang->story->preVersion     = 'Pre version';
 $lang->story->keywords       = 'Keyword';
 
+$lang->story->use  = 'Use or not';
+$lang->story->same = 'The same up';
+
+$lang->story->useList[0] = 'No use';
+$lang->story->useList[1] = 'Use';
+
 $lang->story->statusList['']          = '';
 $lang->story->statusList['draft']     = 'Draft';
 $lang->story->statusList['active']    = 'Active';
@@ -101,6 +108,9 @@ $lang->story->reviewResultList['pass']   = 'Pass';
 $lang->story->reviewResultList['revert'] = 'Revert';
 $lang->story->reviewResultList['clarify']= 'Clarify';
 $lang->story->reviewResultList['reject'] = 'Reject';
+
+$lang->story->reviewList[0] = 'No';
+$lang->story->reviewList[1] = 'Yes';
 
 $lang->story->sourceList['']           = '';
 $lang->story->sourceList['custom']     = 'Custom';
@@ -141,6 +151,7 @@ $lang->story->affectedBugs         = 'Affected bugs';
 $lang->story->affectedCases        = 'Affected cases';
 
 $lang->story->specTemplate          = "Recommend template:：As <<i class='red'>a type of user</i>>,I want <<i class='red'>some goals</i>>,so that <<i class='red'>some reason</i>>.";
+$lang->story->needReview            = 'Need review';
 $lang->story->needNotReview         = "needn't review";
 $lang->story->confirmDelete         = "Are you sure to delete this story?";
 $lang->story->errorFormat           = 'Error format';

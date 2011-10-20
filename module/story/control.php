@@ -99,6 +99,64 @@ class story extends control
 
         $this->display();
     }
+    
+    /**
+     * Create a batch stories.
+     * 
+     * @param  int    $productID 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function batchCreate($productID = 0, $moduleID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $mails = $this->story->batchCreate($productID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            foreach($mails as $mail)
+            {
+                $this->sendMail($mail->storyID, $mail->actionID);
+            }
+            die(js::locate($this->createLink('product', 'browse', "productID=$productID"), 'parent'));
+        }
+
+        /* Set products, users and module. */
+        $product  = $this->product->getById($productID);
+        $products = $this->product->getPairs();
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
+
+        /* Set menu. */
+        $this->product->setMenu($products, $product->id);
+
+        /* Init vars. */
+        $planID     = 0;
+        $pri        = 0;
+        $estimate   = '';
+        $title      = '';
+        $spec       = '';
+
+        $moduleOptionMenu['same'] = $this->lang->story->same;
+        $plans = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
+        $plans['same'] = $this->lang->story->same;
+
+        $this->view->header->title    = $product->name . $this->lang->colon . $this->lang->story->create;
+        $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
+        $this->view->position[]       = $this->lang->story->create;
+        $this->view->products         = $products;
+        $this->view->moduleID         = $moduleID;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->plans            = $plans; 
+        $this->view->planID           = $planID;
+        $this->view->pri              = $pri;
+        $this->view->productID        = $productID;
+        $this->view->estimate         = $estimate;
+        $this->view->title            = $title;
+        $this->view->spec             = $spec;
+
+        $this->display();
+    }
 
     /**
      * The common action when edit or change a story.
@@ -450,7 +508,7 @@ class story extends control
     private function sendmail($storyID, $actionID)
     {
         /* Get actions. */
-        $action          = $this->action->getById($actionID);
+        $action          = $this->loadModel('action')->getById($actionID);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
         if(strtolower($action->action) == 'opened') $action->comment = $story->spec;

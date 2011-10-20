@@ -131,6 +131,69 @@ class storyModel extends model
         }
         return false;
     }
+    /**
+     * Create a batch stories.
+     * 
+     * @access public
+     * @return int|bool the id of the created story or false when error.
+     */
+    public function batchCreate($productID = 0)
+    {
+        $now   = helper::now();
+        $stories = fixer::input('post')->get();
+        for($i = 0; $i < $this->config->story->batchCreate; $i++)
+        {
+            if($stories->use[$i] == 1)
+            {
+                $data[$i]->module     = $stories->module[$i] != 'same' ? $stories->module[$i] : ($i == 0 ? 0 : $data[$i-1]->module);
+                $data[$i]->plan       = $stories->plan[$i] == 'same' ? ($i != 0 ? $data[$i-1]->plan : 0) : ($stories->plan[$i] != '' ?     $stories->plan[$i] : 0);
+                $data[$i]->title      = $stories->title[$i] != '' ?    $stories->title[$i] : '';
+                $data[$i]->pri        = $stories->pri[$i] != '' ?      $stories->pri[$i] : 0;
+                $data[$i]->estimate   = $stories->estimate[$i] != '' ? $stories->estimate[$i] : 0;
+                $data[$i]->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
+                $data[$i]->product    = $productID;
+                $data[$i]->openedBy   = $this->app->user->account;
+                $data[$i]->openedDate = $now;
+                $data[$i]->version    = 1;
+
+                $this->dao->insert(TABLE_STORY)
+                    ->data($data[$i])
+                    ->autoCheck()
+                    ->batchCheck($this->config->story->create->requiredFields, 'notempty')
+                    ->exec();
+                if(dao::isError()) 
+                {
+                    echo js::error(dao::getError());
+                    die(js::reload('parent'));
+                }
+
+                $storyID = $this->dao->lastInsertID();
+
+                $specData[$i]->story   = $storyID;
+                $specData[$i]->version = 1;
+                $specData[$i]->title   = $stories->title[$i];
+                if($stories->spec[$i] != '')     $specData[$i]->spec = $stories->spec[$i];
+                $this->dao->insert(TABLE_STORYSPEC)->data($specData[$i])->exec();
+
+                $this->loadModel('action');
+                $actionID = $this->action->create('story', $storyID, 'Opened', '');
+                $mails[$i]->storyID  = $storyID;
+                $mails[$i]->actionID = $actionID;
+            }
+            else
+            {
+                unset($stories->use[$i]);
+                unset($stories->module[$i]);
+                unset($stories->plan[$i]);
+                unset($stories->title[$i]);
+                unset($stories->spec[$i]);
+                unset($stories->pri[$i]);
+                unset($stories->estimate[$i]);
+                unset($stories->needReview[$i]);
+            }
+        }
+        return $mails;
+    }
 
     /**
      * Change a story.
