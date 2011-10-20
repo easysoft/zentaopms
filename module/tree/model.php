@@ -169,7 +169,7 @@ class treeModel extends model
     public function getProductDocTreeMenu()
     {
         $menu = "<ul id='tree'>";
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('nocode');
         $modules  = $this->dao->findByType('productdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
         $projectModules = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
 
@@ -215,7 +215,7 @@ class treeModel extends model
     public function getProjectDocTreeMenu()
     {
         $menu     = "<ul id='tree'>";
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('nocode');
         $projects = $this->loadModel('project')->getProductGroupList();
         $modules  = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
         $products[0] = $this->lang->project->noProduct;

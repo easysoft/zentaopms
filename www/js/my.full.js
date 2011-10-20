@@ -146,6 +146,9 @@ function setProductSwitcher()
  */
 function switchProduct(productID, module, method, extra)
 {
+    if(typeof(eventKeyCode) == 'undefined') eventKeyCode = 0;
+    if(eventKeyCode > 0 && eventKeyCode != 13) return false;
+
     /* If the product id is a string, use it as the product browse mode. */
     if(isNaN(productID))
     {
@@ -719,6 +722,8 @@ $(document).ready(function()
     loadFixedCSS();
     $(window).resize(function(){saveWindowSize()});       // When window resized, call it again.
     if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minutes, begin ping.
+    if($('#productID')) $('#productID').focus();
+    if($('#projectID')) $('#projectID').focus();
 });
 
 /* CTRL+g, auto focus on the search box. */

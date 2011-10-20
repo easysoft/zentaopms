@@ -42,7 +42,7 @@ $lang->save         = 'Save';
 $lang->confirm      = 'Confirm';
 $lang->preview      = 'Preview';
 $lang->goback       = 'Back';
-$lang->go           = 'GO!';
+$lang->go           = 'GO';
 $lang->more         = 'More';
 
 $lang->actions      = 'Actions';

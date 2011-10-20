@@ -42,7 +42,7 @@ $lang->save         = '保存';
 $lang->confirm      = '确认';
 $lang->preview      = '预览';
 $lang->goback       = '返回';
-$lang->go           = 'GO!';
+$lang->go           = 'GO';
 $lang->more         = '更多';
 
 $lang->actions      = '操作';

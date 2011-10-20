@@ -38,12 +38,40 @@ class productModel extends model
         if($currentModule == 'story')  $currentModule = 'product';
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, '$currentModule', '$currentMethod', '$extra');\"");
+        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra);
         foreach($this->lang->product->menu as $key => $menu)
         {
             $replace = $key == 'list' ? $selectHtml . $this->lang->arrow : $productID;
             common::setMenuVars($this->lang->product->menu, $key, $replace);
         }
+    }
+
+    /**
+     * Create the select code of products. 
+     * 
+     * @param  array     $products 
+     * @param  int       $productID 
+     * @param  string    $currentModule 
+     * @param  string    $currentMethod 
+     * @param  string    $extra 
+     * @access public
+     * @return string
+     */
+    public function select($products, $productID, $currentModule, $currentMethod, $extra = '')
+    {
+        /**
+         * 1. if user selected by mouse, reload it. 
+         * 2. if the user select by keyboard, save the event.keyCode, thus the switchProduct() can judge whether reload or not.
+         * 3. if user press enter key in the select, reload it.
+         * 4. if user click the go button, reload it.
+         * */
+        $switchCode  = "switchProduct($('#productID').val(), '$currentModule', '$currentMethod', '$extra');";
+        $onchange    = "onchange=\"$switchCode\""; 
+        $onkeypress  = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
+        $onclick     = "onclick=\"eventKeyCode = 13; $switchCode\""; 
+        $selectHtml  = html::select('productID', $products, $productID, "tabindex=2 $onchange $onkeypress");
+        $selectHtml .= html::commonButton($this->lang->go, "id='productSwitcher' tabindex=3 $onclick");
+        return $selectHtml;
     }
 
     /**
@@ -134,12 +162,11 @@ class productModel extends model
     /**
      * Get product pairs. 
      * 
-     * @access public
+     * @param  string $mode 
      * @return array
      */
-    public function getPairs()
+    public function getPairs($mode = 'noclosed')
     {
-        $mode = $this->cookie->productMode ? $this->cookie->productMode : 'noclosed';
         $products = $this->dao->select('*')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
@@ -148,7 +175,11 @@ class productModel extends model
         $pairs = array();
         foreach($products as $product)
         {
-            if($this->checkPriv($product)) $pairs[$product->id] = $product->name;
+            if($this->checkPriv($product))
+            {
+                if(strpos($mode, 'nocode') === false and $product->code) $product->name = $product->code . ':' . $product->name;
+                $pairs[$product->id] = $product->name;
+            }
         }
         return $pairs;
     }

@@ -23,7 +23,8 @@ class testtaskModel extends model
      */
     public function setMenu($products, $productID)
     {
-        $selectHtml = html::select('productID', $products, $productID, "onchange=\"switchProduct(this.value, 'testtask', 'browse');\"");
+        $this->loadModel('product')->setMenu($products, $productID);
+        $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse');
         foreach($this->lang->testtask->menu as $key => $value)
         {
             $replace = ($key == 'product') ? $selectHtml . $this->lang->arrow: $productID;
