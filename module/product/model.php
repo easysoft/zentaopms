@@ -165,19 +165,21 @@ class productModel extends model
      * @param  string $mode 
      * @return array
      */
-    public function getPairs($mode = 'noclosed')
+    public function getPairs($mode = '')
     {
+        $mode .= $this->cookie->productMode;
         $products = $this->dao->select('*')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->beginIF($mode == 'noclosed')->andWhere('status')->ne('closed')->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+            ->orderBy('code')
             ->fetchAll();
         $pairs = array();
         foreach($products as $product)
         {
             if($this->checkPriv($product))
             {
-                if(strpos($mode, 'nocode') === false and $product->code) $product->name = $product->code . ':' . $product->name;
+                if(strpos($mode, 'nocode') === false and $product->code) $product->name = strtoupper(substr($product->code, 0, 1)) . ':' . $product->name;
                 $pairs[$product->id] = $product->name;
             }
         }
