@@ -619,6 +619,7 @@ class upgradeModel extends model
     private function upgradeFrom2_2To2_3()
     {
         $this->execSQL($this->getUpgradeFile('2.2'));
+        $this->updateCases();
         if(!$this->isError()) $this->setting->updateVersion('2.3');
     }
 
@@ -871,6 +872,25 @@ class upgradeModel extends model
     public function updateConfirmOfBug()
     {
         $this->dao->update(TABLE_BUG)->set('confirm')->eq(1)->where('status')->eq('resolved')->exec();
+    }
+
+    /**
+     * Update lastRun and lastResult field in zt_case
+     * 
+     * @access public
+     * @return void
+     */
+    public function updateCases()
+    {
+        $results = $this->dao->select('`case`, date, caseResult')->from(TABLE_TESTRESULT)->orderBy('id desc')->fetchGroup('case');
+        foreach($results as $result)
+        {
+            $this->dao->update(TABLE_CASE)
+                ->set('lastRun')->eq($result[0]->date)
+                ->set('lastResult')->eq($result[0]->caseResult)
+                ->where('id')->eq($result[0]->case)
+                ->exec();
+        }
     }
 
     /**
