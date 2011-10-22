@@ -353,16 +353,21 @@ class bugModel extends model
      * Get bug info from a result.
      * 
      * @param  int    $resultID 
+     * @param  int    $caseID
+     * @param  int    $version
      * @access public
      * @return array
      */
-    public function getBugInfoFromResult($resultID)
+    public function getBugInfoFromResult($resultID, $caseID = 0, $version = 0)
     {
         $title    = '';
         $bugSteps = '';
 
         $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
-        $run    = $this->loadModel('testtask')->getRunById($result->run);
+        if($caseID > 0)
+            $run->case = $this->loadModel('testcase')->getById($caseID, $version);
+        else
+            $run = $this->loadModel('testtask')->getRunById($result->run);
         if($result and $result->caseResult == 'fail')
         {
             $title       = $run->case->title;

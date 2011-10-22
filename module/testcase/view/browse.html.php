@@ -63,7 +63,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-user'><?php common::printOrderLink('lastRun', $orderBy, $vars, $lang->testtask->lastRun);?></th>
             <th class='w-80px'><?php common::printOrderLink('lastResult',$orderBy, $vars, $lang->testtask->lastResult);?></th>
             <th class='w-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='w-200px {sorter:false}'><?php echo $lang->actions;?></th>
             <?php endif;?>
           </tr>
           <?php foreach($cases as $case):?>
@@ -87,6 +87,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
               common::printLink('testtask', 'runCase', "runID=0&extras=caseID=$case->id", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
               common::printLink('testtask', 'results', "runID=0&extras=caseID=$case->id,version=$case->version", $lang->testtask->results, '', 'class="results"');
+              if($case->lastResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
               ?>
             </td>
             <?php endif;?>
