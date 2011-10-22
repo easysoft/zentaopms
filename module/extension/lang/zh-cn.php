@@ -24,6 +24,7 @@ $lang->extension->downloadAB   = '下载';
 $lang->extension->upload       = '本地安装';
 $lang->extension->erase        = '清除';
 $lang->extension->upgrade      = '升级';
+$lang->extension->agreeLicense = '我同意该授权';
 
 $lang->extension->installed   = '已安装';
 $lang->extension->deactivated = '被禁用';

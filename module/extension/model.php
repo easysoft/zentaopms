@@ -14,7 +14,7 @@ class extensionModel extends model
     /**
      * The extension manager version. Don't change it. 
      */
-    const EXT_MANAGER_VERSION = '1.1';
+    const EXT_MANAGER_VERSION = '1.2';
 
     /**
      * The api agent(use snoopy).
@@ -167,7 +167,12 @@ class extensionModel extends model
      */
     public function getLocalExtensions($status)
     {
-        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('status')->eq($status)->fi()->fetchAll('code');
+        $extensions = $this->dao->select('*')->from(TABLE_EXTENSION)->where('status')->eq($status)->fi()->fetchAll('code');
+        foreach($extensions as $extension)
+        {
+            if($extension->site and stripos(strtolower($extension->site), 'http') === false) $extension->site = 'http://' . $extension->site;
+        }
+        return $extensions;
     }
 
     /**
@@ -291,6 +296,23 @@ class extensionModel extends model
         if(isset($info['zentaoversion'])) return $info['zentaoversion'];
 
         return $zentaoVersion;
+    }
+
+    /**
+     * Process license. If is opensource return the full text of it.
+     * 
+     * @param  string    $license 
+     * @access public
+     * @return string
+     */
+    public function processLicense($license)
+    {
+        if(strlen($license) > 10) return $license;    // more then 10 letters, not gpl, lgpl, apache, bsd or mit.
+
+        $licenseFile = dirname(__FILE__) . '/license/' . strtolower($license) . '.txt';
+        if(file_exists($licenseFile)) return file_get_contents($licenseFile);
+
+        return $license;
     }
 
     /**

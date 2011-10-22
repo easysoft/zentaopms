@@ -21,6 +21,12 @@
         echo "<p>$error</p>";
         echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');
         ?>
+      <?php elseif(isset($license)):?>
+        <?php
+        echo "<h3 class='a-center'>{$lang->extension->license}</h3>"; 
+        echo html::textarea('license', $license) . '<br />';
+        echo '<h3>' . html::a($agreeLink, $lang->extension->agreeLicense) . '</h3>';
+        ?>
       <?php else:?>
         <?php
         if($downloadedPackage) echo  "<h3 class='success'>{$lang->extension->successDownloadedPackage}</h3>";

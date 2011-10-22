@@ -24,7 +24,7 @@
         ?>
       </div>
     </td>
-    <td class='w-150px a-left'>
+    <td class='w-150px a-right'>
     <?php
     $deactivateCode = html::a(inlink('deactivate', "extension=$extension->code"), $lang->extension->deactivate, '', "class='button-c iframe'");
     $activateCode   = html::a(inlink('activate',   "extension=$extension->code"), $lang->extension->activate, '',   "class='button-c iframe'");

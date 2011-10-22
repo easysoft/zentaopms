@@ -53,7 +53,7 @@
                 ?>
               </div>
             </td>
-            <td class='w-200px a-left'>
+            <td class='w-200px a-right'>
               <?php 
               $installLink   = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&type=$extension->type&&overridePackage=no&ignoreCompitable=yes");
               echo html::a($extension->viewLink, $lang->extension->view, '', 'class="button-c extension"');

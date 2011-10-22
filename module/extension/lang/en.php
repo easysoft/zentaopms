@@ -24,6 +24,7 @@ $lang->extension->downloadAB   = 'Down';
 $lang->extension->upload       = 'Upload and install';
 $lang->extension->erase        = 'Erase';
 $lang->extension->upgrade      = 'Upgrade';
+$lang->extension->agreeLicense = 'I agree the license';
 
 $lang->extension->installed   = 'Installed';
 $lang->extension->deactivated = 'Deactivated';

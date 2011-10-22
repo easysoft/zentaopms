@@ -99,10 +99,11 @@ class extension extends control
      * @param  string $overridePackage 
      * @param  string $ignoreCompatible 
      * @param  string $overrideFile
+     * @param  string $agreeLicense
      * @access public
      * @return void
      */
-    public function install($extension, $downLink = '', $md5 = '', $type = '', $overridePackage = 'no', $ignoreCompatible = 'no', $overrideFile = 'no')
+    public function install($extension, $downLink = '', $md5 = '', $type = '', $overridePackage = 'no', $ignoreCompatible = 'no', $overrideFile = 'no', $agreeLicense = 'no')
     {
         $this->view->error = '';
         $this->view->header->title = $this->lang->extension->install . $this->lang->colon . $extension;
@@ -189,6 +190,18 @@ class extension extends control
                 $this->view->error = sprintf($this->lang->extension->errorFileConflicted, $return->error, $overrideLink, $returnLink);
                 die($this->display());
             }
+        }
+
+        /* Print the license form. */
+        if($agreeLicense == 'no')
+        {
+            $extensionInfo = $this->extension->getInfoFromPackage($extension);
+            $license       = $this->extension->processLicense($extensionInfo->license);
+            $agreeLink     = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&type=$type&overridePackage=$overridePackage&ignoreCompatible=$ignoreCompatible&overrideFile=$overrideFile&agreeLicense=yes");
+            $this->view->license   = $license;
+            $this->view->author    = $extensionInfo->author;
+            $this->view->agreeLink = $agreeLink;
+            die($this->display());
         }
 
         /* Save to database. */
