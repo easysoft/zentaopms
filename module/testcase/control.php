@@ -68,6 +68,9 @@ class testcase extends control
         $this->session->set('browseType', $browseType);
         $this->session->set('orderBy', $orderBy);
 
+        /* Load lang. */
+        $this->app->loadLang('testtask');
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);

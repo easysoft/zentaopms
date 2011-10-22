@@ -30,4 +30,5 @@ $(document).ready(function()
 $(document).ready(function() 
 {
     if($('a.export').size()) $("a.export").colorbox({width:400, height:200, iframe:true, transition:'elastic', speed:350, scrolling:true});
+    $(".results").colorbox({width:900, height:600, iframe:true, transition:'none'});
 })

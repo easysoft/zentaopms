@@ -356,13 +356,27 @@ class testtask extends control
      * View test results of a test run.
      * 
      * @param  int    $runID 
+     * @param  string $extras others params, forexample, caseID=10
      * @access public
      * @return void
      */
-    public function results($runID)
+    public function results($runID, $extras = '')
     {
-        $this->view->run     = $this->testtask->getRunById($runID);
-        $this->view->results = $this->testtask->getRunResults($runID);
+        /* Pares the extras */
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras);
+
+        if(isset($caseID))
+        {
+            $this->view->run->case = $this->loadModel('testcase')->getById($caseID, $version);
+            $this->view->results   = $this->testtask->getResults(0, $caseID);
+        }
+        else
+        {
+            $this->view->run     = $this->testtask->getRunById($runID);
+            $this->view->results = $this->testtask->getResults($runID);
+        }
+
         die($this->display());
     }
 

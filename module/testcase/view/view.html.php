@@ -20,6 +20,7 @@
     if(!$case->deleted)
     {
         common::printLink('testtask', 'runCase', "runID=0&extras=version=$currentVersion,caseID=$case->id", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
+        common::printLink('testtask', 'results', "runID=0&extras=caseID=$case->id,version=$case->version", $lang->testtask->results, '', 'class="results"');
         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
         common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&testcaseID=$case->id", $lang->copy);
         common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
@@ -128,6 +129,14 @@
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->status;?></td>
             <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+          </tr>
+           <tr>
+            <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastRun;?></td>
+            <td><?php if(!helper::isZeroDate($case->lastRun)) echo $case->lastRun;?></td>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastResult;?></td>
+            <td><?php if($case->lastResult) echo $lang->testcase->resultList[$case->lastResult];?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>

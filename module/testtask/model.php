@@ -242,6 +242,7 @@ class testtaskModel extends model
             ->remove('steps,reals,passall')
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+        $this->dao->update(TABLE_CASE)->set('lastRun')->eq($now)->set('lastResult')->eq($caseResult)->where('id')->eq($this->post->case)->exec();
 
         if(!isset($caseID))
         {
@@ -260,15 +261,23 @@ class testtaskModel extends model
     }
 
     /**
-     * Get results of a test run.
+     * Get results by runID or caseID
      * 
      * @param  int   $runID 
      * @access public
      * @return array
      */
-    public function getRunResults($runID)
+    public function getResults($runID, $caseID = 0)
     {
-        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
+        if($caseID != 0)
+        {
+            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('id desc')->fetchAll('id');
+        }
+        else
+        {
+            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
+        }
+
         if(!$results) return array();
         foreach($results as $resultID => $result)
         {
