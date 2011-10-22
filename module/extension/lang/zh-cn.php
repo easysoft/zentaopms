@@ -26,8 +26,8 @@ $lang->extension->erase        = '清除';
 $lang->extension->upgrade      = '升级';
 
 $lang->extension->installed   = '已安装';
-$lang->extension->deactivated = '已禁用';
-$lang->extension->available   = '可安装';
+$lang->extension->deactivated = '被禁用';
+$lang->extension->available   = '已下载';
 
 $lang->extension->id          = '编号';
 $lang->extension->name        = '名称';

@@ -3,6 +3,7 @@
 .error    {color:red; font-size:14px}
 .success  {color:green; font-size:14px}
 
-.table-1 td {padding:10px 0 0 10px}
-.table-1 caption{background:#e4e4e4; border-color:gray; margin-left:0}
-.table-1{border-color:gray; border-top:none;}
+.exttable td {padding:10px 0 0 10px}
+.exttable caption{background:#efefef; border-color:#CCC9C9; margin-left:0}
+.exttable {border-color:#CCC9C9; border-top:none;}
+.exttable td{border-color:#CCC9C9}

@@ -38,7 +38,7 @@
     <td> 
       <?php if($extensions):?>
       <?php foreach($extensions as $extension):?>
-        <table class='table-1'>
+        <table class='table-1 exttable'>
           <caption><?php echo "#$extension->id $extension->name";?></caption> 
           <tr valign='middle'>
             <td>

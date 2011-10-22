@@ -27,7 +27,7 @@ $lang->extension->upgrade      = 'Upgrade';
 
 $lang->extension->installed   = 'Installed';
 $lang->extension->deactivated = 'Deactivated';
-$lang->extension->available   = 'Available';
+$lang->extension->available   = 'Downloaded';
 
 $lang->extension->id          = 'ID';
 $lang->extension->name        = 'Name';
