@@ -8,10 +8,10 @@ $lang->mail->mta          = 'The style of send email';
 $lang->mail->debugExample = '0:close,1 and 2 :open,2 is more infomation than 1';
 
 $lang->mail->mtaList['']         = '';
-$lang->mail->mtaList['gmail']    = 'gmail';
-$lang->mail->mtaList['smtp']     = 'smtp';
-$lang->mail->mtaList['phpmail']  = 'phpmail';
-$lang->mail->mtaList['sendmail'] = 'sendmail';
+$lang->mail->mtaList['gmail']    = 'Gmail sever';
+$lang->mail->mtaList['smtp']     = 'Smtp server';
+$lang->mail->mtaList['phpmail']  = 'Mail function build in php';
+$lang->mail->mtaList['sendmail'] = 'Sendmail on localhost';
 
 /* Trun on email feature or not */
 $lang->mail->turnonList['true']  = 'open';
