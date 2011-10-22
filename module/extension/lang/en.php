@@ -18,6 +18,7 @@ $lang->extension->uninstall    = 'Uninstall';
 $lang->extension->activate     = 'Activate';
 $lang->extension->deactivate   = 'Deactivate';
 $lang->extension->obtain       = 'Obtain';
+$lang->extension->view         = 'Info';
 $lang->extension->download     = 'Download';
 $lang->extension->downloadAB   = 'Down';
 $lang->extension->upload       = 'Upload and install';
@@ -71,6 +72,7 @@ $lang->extension->viewInstalled            = 'View installed extensions.';
 $lang->extension->viewAvailable            = 'View available extensions';
 $lang->extension->viewDeactivated          = 'View deactivated extensions';
 
+$lang->extension->errorOccurs                  = 'Error:';
 $lang->extension->errorGetModules              = "Get extensions' categories data from the www.zentao.net failed. ";
 $lang->extension->errorGetExtensions           = 'Get extensions from www.zentao.net failed. You can visit <a href="http://www.zentao.net/extension/" target="_blank">www.zentao.net</a> to find your extensions, download it manually and then upload to zentaopms to install it.';
 $lang->extension->errorDownloadPathNotFound    = 'The save path of package file <strong>%s</strong>does not exists.<br />For linux users, can execute <strong>mkdir -p %s</strong> to fix it.';

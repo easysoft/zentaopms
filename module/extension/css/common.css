@@ -2,3 +2,7 @@
 .button-c {padding:1px 3px; border:1px solid gray; background:#e4e4ef; color:black; text-decoration:none}
 .error    {color:red; font-size:14px}
 .success  {color:green; font-size:14px}
+
+.table-1 td {padding:10px 0 0 10px}
+.table-1 caption{background:#e4e4e4; border-color:gray; margin-left:0}
+.table-1{border-color:gray; border-top:none;}

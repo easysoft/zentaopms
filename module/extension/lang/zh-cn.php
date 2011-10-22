@@ -18,9 +18,10 @@ $lang->extension->uninstall    = '卸载';
 $lang->extension->activate     = '激活';
 $lang->extension->deactivate   = '禁用';
 $lang->extension->obtain       = '获得插件';
+$lang->extension->view         = '详情';
 $lang->extension->download     = '下载插件';
 $lang->extension->downloadAB   = '下载';
-$lang->extension->upload       = '上传安装';
+$lang->extension->upload       = '本地安装';
 $lang->extension->erase        = '清除';
 $lang->extension->upgrade      = '升级';
 
@@ -40,7 +41,7 @@ $lang->extension->site        = '官网';
 $lang->extension->addedTime   = '添加时间';
 $lang->extension->updatedTime = '更新时间';
 $lang->extension->downloads   = '下载量';
-$lang->extension->public      = '直接下载';
+$lang->extension->public      = '下载方式';
 $lang->extension->compatible  = '兼容性';
 
 $lang->extension->publicList[0] = '手工下载';
@@ -71,6 +72,7 @@ $lang->extension->viewInstalled            = '查看已安装插件';
 $lang->extension->viewAvailable            = '查看可安装插件';
 $lang->extension->viewDeactivated          = '查看已禁用插件';
 
+$lang->extension->errorOccurs                  = '错误：';
 $lang->extension->errorGetModules              = '从www.zentao.net获得插件分类失败。可能是因为网络方面的原因，请检查后重新刷新页面。';
 $lang->extension->errorGetExtensions           = '从www.zentao.net获得插件失败。可能是因为网络方面的原因，您可以到<a href="http://www.zentao.net/extension/" target="_blank">www.zentao.net</a>手工下载插件，然后上传安装。';
 $lang->extension->errorDownloadPathNotFound    = '插件下载存储路径<strong>%s</strong>不存在。<br />linux下面请执行命令：<strong>mkdir -p %s</strong>来修正。';
