@@ -19,6 +19,6 @@ class admin extends control
      */
     public function index()
     {
-        $this->locate($this->createLink('action', 'trash'));
+        $this->locate($this->createLink('extension', 'browse'));
     }
 }

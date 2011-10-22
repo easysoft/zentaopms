@@ -208,11 +208,11 @@ $lang->user->menu->profile  = array('link' => '用户信息|user|profile|account
 $lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
 
 /* 后台管理菜单设置。*/
-$lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
-$lang->admin->menu->convert   = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => '扩展编辑器|editor|index', 'subModule' => 'editor');
 $lang->admin->menu->mail      = array('link' => 'Email配置|mail|set', 'subModule' => 'mail');
+$lang->admin->menu->convert   = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
+$lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
 $lang->convert->menu        = $lang->admin->menu;
 $lang->upgrade->menu        = $lang->admin->menu;
 $lang->action->menu         = $lang->admin->menu;
