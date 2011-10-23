@@ -6,3 +6,7 @@ ALTER TABLE `zt_bug` ADD `confirmedBy` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE 
 
  -- 2011-10-16 add precondition field in zt_case
 ALTER TABLE `zt_case` ADD `precondition` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `title`;
+
+ -- 2011-10-22 add lastRun and lastResult field in zt_case
+ALTER TABLE `zt_case` ADD `lastRun` DATETIME NOT NULL;
+ALTER TABLE `zt_case` ADD `lastResult` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
