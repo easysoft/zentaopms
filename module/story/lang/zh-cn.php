@@ -70,7 +70,6 @@ $lang->story->reviewResult   = '评审结果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '关键词';
 
-$lang->story->use  = '是否使用';
 $lang->story->same = '同上';
 
 $lang->story->useList[0] = '不使用';
@@ -151,7 +150,7 @@ $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
 
 $lang->story->specTemplate          = "建议参考的模板：作为一名<<i class='red'>某种类型的用户</i>>，我希望<<i class='red'>达成某些目的</i>>，这样可以<<i class='red'>开发的价值</i>>。";
-$lang->story->needReview            = '是否需要评审';
+$lang->story->notes                 = '(注：如果“需求标题”为空，则表示不使用此行)';
 $lang->story->needNotReview         = '不需要评审';
 $lang->story->confirmDelete         = "您确认删除该需求吗?";
 $lang->story->errorFormat           = '需求数据有误';

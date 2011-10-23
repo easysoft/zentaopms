@@ -70,7 +70,6 @@ $lang->story->reviewResult   = 'Reviewed result';
 $lang->story->preVersion     = 'Pre version';
 $lang->story->keywords       = 'Keyword';
 
-$lang->story->use  = 'Use or not';
 $lang->story->same = 'The same up';
 
 $lang->story->useList[0] = 'No use';
@@ -151,7 +150,7 @@ $lang->story->affectedBugs         = 'Affected bugs';
 $lang->story->affectedCases        = 'Affected cases';
 
 $lang->story->specTemplate          = "Recommend template:：As <<i class='red'>a type of user</i>>,I want <<i class='red'>some goals</i>>,so that <<i class='red'>some reason</i>>.";
-$lang->story->needReview            = 'Need review';
+$lang->story->notes                 = "(notes:if the title is empty, it is no use)";
 $lang->story->needNotReview         = "needn't review";
 $lang->story->confirmDelete         = "Are you sure to delete this story?";
 $lang->story->errorFormat           = 'Error format';

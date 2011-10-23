@@ -12,6 +12,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/tablesorter.html.php';?>
 <?php
+$mta           = 'smtp';
 $gmailUsername = '';
 $gmailPassword = '';
 $smtpUsername  = '';
@@ -20,6 +21,7 @@ $smtpHost      = '';
 $smtpSecure    = '';
 $smtpAuth      = '';
 $smtpPort      = '';
+if(!empty($mailConfig->mta))             $mta           = $mailConfig->mta;
 if(!empty($mailConfig->gmail->username)) $gmailUsername = $mailConfig->gmail->username;
 if(!empty($mailConfig->gmail->password)) $gmailPassword = $mailConfig->gmail->password;
 if(!empty($mailConfig->smtp->username))  $smtpUsername  = $mailConfig->smtp->username;
@@ -38,7 +40,7 @@ if(!empty($mailConfig->smtp->port))      $smtpPort      = $mailConfig->smtp->por
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->mail->mta; ?></th>
-    <td><?php echo html::select('mta', $lang->mail->mtaList, $mailConfig->mta, 'class=select-3 onchange=setMtaType(this.value)'); ?></td>
+    <td><?php echo html::select('mta', $lang->mail->mtaList, $mta, 'class=select-3 onchange=setMtaType(this.value)'); ?></td>
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->mail->fromAddress; ?></th>

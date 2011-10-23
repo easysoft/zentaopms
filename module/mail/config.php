@@ -2,7 +2,7 @@
 $config->mail->turnon         = false;   // trun on email feature or not.
 $config->mail->fromAddress    = '';      // The from address.
 $config->mail->fromName       = '';      // The from name.
-$config->mail->mta            = 'gmail'; // phpmail|sendmail|smtp|gmail
+$config->mail->mta            = 'smtp'; // phpmail|sendmail|smtp|gmail
 
 /* SMTP settings. */
 if($config->mail->mta == 'smtp')
