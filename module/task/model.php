@@ -78,6 +78,70 @@ class taskModel extends model
     }
 
     /**
+     * Create a batch task.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function batchCreate($projectID)
+    {
+        $now   = helper::now();
+        $tasks = fixer::input('post')->get();
+        for($i = 0; $i < $this->config->task->batchCreate; $i++)
+        {
+            if($tasks->type[$i] != '' and $tasks->name[$i] != '' and $tasks->pri[$i] != 0 and $tasks->estimate[$i] != '')
+            {
+                $data[$i]->story        = $tasks->story[$i];
+                $data[$i]->type         = $tasks->type[$i];
+                $data[$i]->name         = $tasks->name[$i];
+                $data[$i]->desc         = $tasks->desc[$i];
+                $data[$i]->assignedTo   = $tasks->assignedTo[$i];
+                $data[$i]->pri          = $tasks->pri[$i];
+                $data[$i]->estimate     = $tasks->estimate[$i];
+                $data[$i]->left         = $tasks->estimate[$i];
+                $data[$i]->project      = $projectID;
+                $data[$i]->deadline     = '0000-00-00';
+                $data[$i]->status       = 'wait';
+                $data[$i]->openedBy     = $this->app->user->account;
+                $data[$i]->openedDate   = $now;
+                $data[$i]->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, 'wait') + 1;
+                if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($tasks->story[$i]);
+                if($tasks->assignedTo[$i] != '') $data[$i]->assignedDate = $now;
+
+                $this->dao->insert(TABLE_TASK)->data($data[$i])
+                    ->autoCheck()
+                    ->batchCheck($this->config->task->create->requiredFields, 'notempty')
+                    ->checkIF($data[$i]->estimate != '', 'estimate', 'float')
+                    ->exec();
+
+                if(dao::isError()) 
+                {
+                    echo js::error(dao::getError());
+                    die(js::reload('parent'));
+                }
+
+                $taskID = $this->dao->lastInsertID();
+                if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
+                $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+                $mails[$i]->taskID  = $taskID;
+                $mails[$i]->actionID = $actionID;
+            }
+            else
+            {
+                unset($tasks->story[$i]);
+                unset($tasks->type[$i]);
+                unset($tasks->name[$i]);
+                unset($tasks->desc[$i]);
+                unset($tasks->assignedTo[$i]);
+                unset($tasks->pri[$i]);
+                unset($tasks->estimate[$i]);
+            }
+        }
+        return $mails;
+    }
+
+    /**
      * Update a task.
      * 
      * @param  int    $taskID 

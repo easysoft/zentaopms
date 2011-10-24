@@ -9,21 +9,22 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->task->index     = "任务一览";
-$lang->task->create    = "新增任务";
-$lang->task->import    = "导入之前未完任务";
-$lang->task->edit      = "更新任务";
-$lang->task->delete    = "删除任务";
-$lang->task->view      = "查看任务";
-$lang->task->logEfforts= "记录工时";
-$lang->task->start     = "开始任务";
-$lang->task->finish    = "完成任务";
-$lang->task->close     = "关闭任务";
-$lang->task->batchClose= "批量关闭";
-$lang->task->cancel    = "取消任务";
-$lang->task->activate  = "激活任务";
-$lang->task->export    = "导出数据";
-$lang->task->reportChart        = "报表统计";
+$lang->task->index       = "任务一览";
+$lang->task->create      = "新增任务";
+$lang->task->batchCreate = "批量添加任务";
+$lang->task->import      = "导入之前未完任务";
+$lang->task->edit        = "更新任务";
+$lang->task->delete      = "删除任务";
+$lang->task->view        = "查看任务";
+$lang->task->logEfforts  = "记录工时";
+$lang->task->start       = "开始任务";
+$lang->task->finish      = "完成任务";
+$lang->task->close       = "关闭任务";
+$lang->task->batchClose  = "批量关闭";
+$lang->task->cancel      = "取消任务";
+$lang->task->activate    = "激活任务";
+$lang->task->export      = "导出数据";
+$lang->task->reportChart = "报表统计";
 $lang->task->confirmStoryChange = "确认需求变动";
 
 $lang->task->common         = '任务';
@@ -36,6 +37,7 @@ $lang->task->type           = '任务类型';
 $lang->task->pri            = '优先级';
 $lang->task->mailto         = '抄送给';
 $lang->task->estimate       = '最初预计';
+$lang->task->estimateBatch  = '预计工时';
 $lang->task->estimateAB     = '预';
 $lang->task->left           = '预计剩余';
 $lang->task->leftAB         = '剩';
@@ -65,6 +67,8 @@ $lang->task->closedReason   = '关闭原因';
 $lang->task->lastEditedBy   = '最后修改';
 $lang->task->lastEditedDate = '最后修改日期';
 $lang->task->lastEdited     = '最后编辑';
+
+$lang->task->notes = '(注：“任务类型”、“任务名称”、“优先级”和“预计工时”必需填写，否则此行无效)';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未开始';

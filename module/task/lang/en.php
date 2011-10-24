@@ -9,21 +9,22 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->task->index     = "Index";
-$lang->task->create    = "Create";
-$lang->task->import    = "Import undone";
-$lang->task->edit      = "Update";
-$lang->task->delete    = "Delete";
-$lang->task->view      = "Info";
-$lang->task->logEfforts= "Efforts";
-$lang->task->start     = "Start";
-$lang->task->finish    = "Finish";
-$lang->task->close     = "Close";
-$lang->task->batchClose= "Batch close";
-$lang->task->cancel    = "Cancel";
-$lang->task->activate  = "Activate";
-$lang->task->export    = "Export";
-$lang->task->reportChart        = "Report chart";
+$lang->task->index       = "Index";
+$lang->task->create      = "Create";
+$lang->task->batchCreate = "Batch create";
+$lang->task->import      = "Import undone";
+$lang->task->edit        = "Update";
+$lang->task->delete      = "Delete";
+$lang->task->view        = "Info";
+$lang->task->logEfforts  = "Efforts";
+$lang->task->start       = "Start";
+$lang->task->finish      = "Finish";
+$lang->task->close       = "Close";
+$lang->task->batchClose  = "Batch close";
+$lang->task->cancel      = "Cancel";
+$lang->task->activate    = "Activate";
+$lang->task->export      = "Export";
+$lang->task->reportChart = "Report chart";
 $lang->task->confirmStoryChange = "Confirm story change";
 
 $lang->task->common         = 'Task';
@@ -36,6 +37,7 @@ $lang->task->type           = 'Type';
 $lang->task->pri            = 'Pri';
 $lang->task->mailto         = 'Mailto';
 $lang->task->estimate       = 'Estimate';
+$lang->task->estimateBatch  = 'Estimate';
 $lang->task->estimateAB     = 'Est';
 $lang->task->left           = 'Left';
 $lang->task->leftAB         = 'Left';
@@ -65,6 +67,8 @@ $lang->task->closedReason   = 'Closed Reason';
 $lang->task->lastEditedBy   = 'Last Edited By';
 $lang->task->lastEditedDate = 'Last Edited Date';
 $lang->task->lastEdited     = 'Last Edited';
+
+$lang->task->notes = '(Notes: the name, type, pri and estimate must be written, otherwise it is no use)';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Waiting';

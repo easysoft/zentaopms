@@ -33,8 +33,8 @@ var browseType = '<?php echo $browseType;?>';
   <div class='f-right'>
     <?php common::printLink('story', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
     <?php common::printLink('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->story->report->common); ?>
-    <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
     <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&moduleID=$moduleID"), $lang->story->batchCreate); ?>
+    <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), $lang->story->create); ?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>

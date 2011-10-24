@@ -87,6 +87,53 @@ class task extends control
     }
 
     /**
+     * Create a task.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
+    public function batchCreate($projectID = 0, $storyID = 0)
+    {
+        $project   = $this->project->getById($projectID); 
+        $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
+        $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+
+        /* Set menu. */
+        $this->project->setMenu($this->project->getPairs(), $project->id);
+
+        if(!empty($_POST))
+        {
+            $mails = $this->task->batchCreate($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            foreach($mails as $mail)
+            {
+                $this->sendmail($mail->taskID, $mail->actionID);
+            }            
+
+            /* Locate the browser. */
+            die(js::locate($taskLink, 'parent'));
+        }
+
+        $stories = $this->story->getProjectStoryPairs($projectID);
+        $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
+        $position[]      = html::a($taskLink, $project->name);
+        $position[]      = $this->lang->task->create;
+
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->project  = $project;
+        $this->view->stories  = $stories;
+        $this->view->storyID  = $storyID;
+        $this->view->members  = $members;
+        $this->display();
+    }
+
+    /**
      * Common actions of task module.
      * 
      * @param  int    $taskID 

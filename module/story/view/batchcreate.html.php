@@ -15,6 +15,7 @@
   <table align='center' class='table-1'> 
     <caption><?php echo $lang->story->product . $lang->colon . $lang->story->batchCreate; echo "<span class='star'><small>{$lang->story->notes}</small></span>";?></caption>
     <tr>
+      <th class='w-id'><?php echo $lang->idAB;?></th> 
       <th><?php echo $lang->story->module;?></th>
       <th><?php echo $lang->story->plan;?></th>
       <th><?php echo $lang->story->title;?></th>
@@ -27,6 +28,7 @@
     <?php $moduleID = $i == 0 ? 0 : 'same';?>
     <?php $planID   = $i == 0 ? '' : 'same';?>
     <tr class='a-center'>
+      <td><?php echo $i+1;?></td>
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, 'class=select-2');?></td>
       <td><?php echo html::select("plan[$i]", $plans, $planID, 'class=select-2');?></td>
       <td><?php echo html::input("title[$i]", $title, "class='text-1'"); echo "<span class='star'>*</span>";?></td>
