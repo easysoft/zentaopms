@@ -70,7 +70,7 @@ $lang->story->reviewResult   = 'Reviewed result';
 $lang->story->preVersion     = 'Pre version';
 $lang->story->keywords       = 'Keyword';
 
-$lang->story->same = 'The same up';
+$lang->story->same = 'The same as above';
 
 $lang->story->useList[0] = 'No use';
 $lang->story->useList[1] = 'Use';

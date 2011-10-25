@@ -119,6 +119,7 @@ class task extends control
         }
 
         $stories = $this->story->getProjectStoryPairs($projectID);
+        $stories['same'] = $this->lang->task->same;
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[]      = html::a($taskLink, $project->name);
@@ -489,7 +490,7 @@ class task extends control
         }
 
         /* Get action info. */
-        $action          = $this->action->getById($actionID);
+        $action          = $this->loadModel('action')->getById($actionID);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
 

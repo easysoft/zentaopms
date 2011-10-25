@@ -25,13 +25,14 @@
       <th><?php echo $lang->task->estimateBatch;?></th>
     </tr>
     <?php for($i = 0; $i < $config->task->batchCreate; $i++):?>
-    <?php $moduleID = $i == 0 ? 0 : 'same';?>
-    <?php $planID   = $i == 0 ? '' : 'same';?>
+    <?php $story = $i == 0 ? '' : 'same';?>
+    <?php $lang->task->typeList['same'] = $lang->task->same; $type = $i == 0 ? '' : 'same';?>
+
     <?php $pri = 3;?>
     <tr class='a-center'>
       <td><?php echo $i+1;?></td>
-      <td><?php echo html::select("story[$i]", $stories, '', 'class=select-2');?></td>
-      <td><?php echo html::select("type[$i]", $lang->task->typeList, '', "class=select-2"); echo "<span class='star'>*</span>";?></td>
+      <td><?php echo html::select("story[$i]", $stories, $story, 'class=select-2');?></td>
+      <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, "class=select-2"); echo "<span class='star'>*</span>";?></td>
       <td><?php echo html::input("name[$i]", '', "class='text-1'"); echo "<span class='star'>*</span>";?></td>
       <td><?php echo html::textarea("desc[$i]", '', "rows='1' class='text-1'");?></td>
       <td><?php echo html::select("assignedTo[$i]", $members, '', "class=select-2");?></td>

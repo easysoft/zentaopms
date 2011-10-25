@@ -68,6 +68,7 @@ $lang->task->lastEditedBy   = 'Last Edited By';
 $lang->task->lastEditedDate = 'Last Edited Date';
 $lang->task->lastEdited     = 'Last Edited';
 
+$lang->task->same  = 'The same as above';
 $lang->task->notes = '(Notes: the name, type, pri and estimate must be written, otherwise it is no use)';
 
 $lang->task->statusList['']        = '';
