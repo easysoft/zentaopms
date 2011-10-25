@@ -68,6 +68,7 @@ $lang->project->task           = 'Task';
 $lang->project->groupTask      = 'View task by group';
 $lang->project->story          = 'Story';
 $lang->project->bug            = 'Bug';
+$lang->project->dynamic        = 'Dynamic';
 $lang->project->build          = 'Build';
 $lang->project->burn           = 'Burndown chart';
 $lang->project->computeBurn    = 'Update burndown';

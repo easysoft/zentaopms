@@ -266,14 +266,29 @@ class productModel extends model
      */
     public function getProjectPairs($productID, $param = 'all')
     {
-        $projects = $this->dao->select('t2.id, t2.name')
-            ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
-            ->where('t1.product')->eq((int)$productID)
-            ->beginIF($param == 'nodeleted')->andWhere('t2.deleted')->eq('0')->fi()
-            ->orderBy('t1.project desc')
-            ->fetchPairs();
-        $projects = array('' => '') +  $projects;
+        if($param == 'nodeleted')
+        {
+            $datas = $this->dao->select('t2.id, t2.name,t2.deleted')
+                ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
+                ->on('t1.project = t2.id')
+                ->where('t1.product')->eq((int)$productID)
+                ->orderBy('t1.project desc')
+                ->fetchAll();
+            foreach($datas as $data)
+            {
+                if($data->deleted == 0) $projects[$data->id] = $data->name;
+            }
+        }
+        else
+        {
+            $projects = $this->dao->select('t2.id, t2.name')
+                ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
+                ->on('t1.project = t2.id')
+                ->where('t1.product')->eq((int)$productID)
+                ->orderBy('t1.project desc')
+                ->fetchPairs();
+            $projects = array('' => '') +  $projects;
+        }
         return $projects;
     }
 

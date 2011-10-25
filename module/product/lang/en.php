@@ -12,6 +12,7 @@
 $lang->product->common = 'Product';
 $lang->product->index  = "Index";
 $lang->product->browse = "Browse";
+$lang->product->dynamic= "Dynamic";
 $lang->product->view   = "Info";
 $lang->product->edit   = "Edit";
 $lang->product->create = "Create";

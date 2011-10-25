@@ -315,8 +315,8 @@ class product extends control
         $period  = $type == 'account' ? 'all'  : $type;
 
         /* The header and position. */
-        $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
-        $this->view->position[]    = $this->lang->company->dynamic;
+        $this->view->header->title = $this->lang->product->dynamic;
+        $this->view->position[]    = $this->lang->product->dynamic;
 
         /* Assign. */
         $this->view->productID = $productID;

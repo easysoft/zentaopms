@@ -916,8 +916,9 @@ class project extends control
         $period  = $type == 'account' ? 'all'  : $type;
 
         /* The header and position. */
-        $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
-        $this->view->position[]    = $this->lang->company->dynamic;
+        $project = $this->project->getByID($projectID);
+        $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->dynamic;
+        $this->view->position[]    = $this->lang->project->dynamic;
 
         /* Assign. */
         $this->view->projectID = $projectID;
