@@ -254,7 +254,12 @@ class actionModel extends model
      * Get actions as dynamic.
      * 
      * @param  string $objectType 
-     * @param  int    $count 
+     * @param  string $count 
+     * @param  string $period 
+     * @param  string $orderBy 
+     * @param  object $pager
+     * @param  string|int $productID   all|int(like 123)|notzero   all => include zeror, notzero, great than 0
+     * @param  string|int $projectID   same as productID
      * @access public
      * @return array
      */
@@ -267,8 +272,10 @@ class actionModel extends model
             ->where('date')->gt($begin)
             ->andWhere('date')->lt($end)
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
-            ->beginIF($productID != 'all')->andWhere('product')->eq($productID)->fi()
-            ->beginIF($projectID != 'all')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(is_numeric($productID))->andWhere('product')->eq($productID)->fi()
+            ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->fi()
+            ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();
