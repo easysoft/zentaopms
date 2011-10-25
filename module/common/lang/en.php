@@ -130,6 +130,7 @@ $lang->todo->menu         = $lang->my->menu;
 /* Product menu. */
 $lang->product->menu->list    = '%s';
 $lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s',     'subModule' => 'story');
+$lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = 'Roadmap|product|roadmap|productID=%s';
@@ -137,7 +138,6 @@ $lang->product->menu->doc     = array('link' => 'Doc|product|doc|productID=%s', 
 $lang->product->menu->view    = 'Info|product|view|productID=%s';
 $lang->product->menu->edit    = 'Edit|product|edit|productID=%s';
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
-$lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->create  = array('link' => 'New Product|product|create', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
@@ -148,6 +148,7 @@ $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
 $lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
+$lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->burn      = 'Burn|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
@@ -156,7 +157,6 @@ $lang->project->menu->product   = 'Link Product|project|manageproducts|projectID
 $lang->project->menu->linkstory = array('link' => 'Link Story|project|linkstory|projectID=%s');
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->edit      = 'Edit|project|edit|projectID=%s';
-$lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->create = array('link' => 'New Project|project|create', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
@@ -202,8 +202,8 @@ $lang->user->menu->account  = '%s' . $lang->arrow;
 $lang->user->menu->todo     = array('link' => 'Todo|user|todo|account=%s', 'subModule' => 'todo');
 $lang->user->menu->task     = 'Task|user|task|account=%s';
 $lang->user->menu->bug      = 'Bug|user|bug|account=%s';
-$lang->user->menu->project  = 'Project|user|project|account=%s';
 $lang->user->menu->dynamic  = 'Dynamic|user|dynamic|type=today&account=%s';
+$lang->user->menu->project  = 'Project|user|project|account=%s';
 $lang->user->menu->profile  = array('link' => 'Profile|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse   = array('link' => 'Manage user|company|browse|', 'float' => 'right');
 
