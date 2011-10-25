@@ -7,5 +7,5 @@
 .active4  {background:#FFF100;}
 .resolved a, .active1 a, .active2 a, .active3 a{color:white; text-decoration:none}
 .active4 a {color:blue; text-decoration:none}
-.confirm0 {color:red}
-.confirm1 {color:green}
+.confirm0 {color:gray;  font-size:9px}
+.confirm1 {color:green; font-size:9px}
