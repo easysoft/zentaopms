@@ -88,6 +88,7 @@ $lang->action->label->resolved            = '解决了';
 $lang->action->label->reviewed            = '评审了';
 $lang->action->label->moved               = '移动了';
 $lang->action->label->confirmed           = '确认了需求，';
+$lang->action->label->bugconfirmed        = '确认了Bug，';
 $lang->action->label->svncommited         = '提交Svn';
 $lang->action->label->linked2plan         = '关联计划';
 $lang->action->label->unlinkedfromplan    = '移除计划';

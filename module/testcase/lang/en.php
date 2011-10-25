@@ -15,6 +15,7 @@ $lang->testcase->module         = 'Module';
 $lang->testcase->story          = 'Story';
 $lang->testcase->storyVersion   = 'Story version';
 $lang->testcase->title          = 'Title';
+$lang->testcase->precondition   = 'precondition';
 $lang->testcase->pri            = 'Priority';
 $lang->testcase->type           = 'Type';
 $lang->testcase->status         = 'Status';
@@ -50,6 +51,7 @@ $lang->testcase->common         = 'Case';
 $lang->testcase->index          = "Index";
 $lang->testcase->create         = "Create";
 $lang->testcase->delete         = "Delete";
+$lang->testcase->batchCreate    = "Batch create";
 $lang->testcase->view           = "Info";
 $lang->testcase->edit           = "Edit";
 $lang->testcase->delete         = "Delete";
@@ -93,7 +95,9 @@ $lang->testcase->legendComment     = 'Comment';
 $lang->testcase->legendProduct     = 'Product & module';
 $lang->testcase->legendVersion     = 'Versions';
 
-$lang->testcase->confirmDelete     = 'Are you sure to delete this case?';
+$lang->testcase->confirmDelete = 'Are you sure to delete this case?';
+$lang->testcase->same          = 'The same as above';
+$lang->testcase->notes         = '(Notes: the type and title must be written, otherwise it is no use)';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

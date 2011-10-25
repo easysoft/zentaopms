@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <form method='post' enctype='multipart/form-data'>
   <table align='center' class='table-1'> 
-    <caption><?php echo $lang->task->project . $lang->colon . $lang->task->batchCreate; echo "<span class='star'><small>{$lang->task->notes}</small></span>";?></caption>
+    <caption><?php echo $lang->task->project . $lang->colon . $lang->task->batchCreate;?></caption>
     <tr>
       <th class='w-id'><?php echo $lang->idAB;?></th> 
       <th><?php echo $lang->task->story;?></th>
@@ -40,7 +40,10 @@
       <td><?php echo html::input("estimate[$i]", '', "class='w-50px'"); echo "<span class='star'>*</span>";?></td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
+    <tr>
+      <td colspan='4' class='a-center'><?php echo "<span class='star'><small>{$lang->task->notes}</small></span>";?></td>
+      <td colspan='4' class='a-left'><?php echo html::submitButton() . html::resetButton();?></td>
+    </tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

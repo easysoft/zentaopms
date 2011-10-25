@@ -165,7 +165,7 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $caseID = $this->testcase->create();
+            $this->testcase->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
@@ -251,6 +251,56 @@ class testcase extends control
         $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
+
+        $this->display();
+    }
+    
+    /**
+     * Create a batch test case.
+     * 
+     * @param  int   $productID 
+     * @param  int   $moduleID 
+     * @param  int   $testcaseID
+     * @access public
+     * @return void
+     */
+    public function batchCreate($productID, $moduleID = 0)
+    {
+        $this->loadModel('story');
+        if(!empty($_POST))
+        {
+            $caseID = $this->testcase->batchCreate($productID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate($this->createLink('testcase', 'browse', "productID=$_POST[product]&browseType=byModule&param=$_POST[module]"), 'parent'));
+        }
+        if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+
+        /* Set productID and currentModuleID. */
+        $productID       = $this->product->saveState($productID, $this->products);
+        $currentModuleID = (int)$moduleID;
+
+        /* Set menu. */
+        $this->testcase->setMenu($this->products, $productID);
+
+        /* Init vars. */
+        $type         = 'feature';
+        $title        = '';
+
+        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
+        $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $position[]      = $this->lang->testcase->batchCreate;
+
+        $users = $this->user->getPairs();
+        $this->view->header           = $header;
+        $this->view->position         = $position;
+        $this->view->productID        = $productID;
+        $this->view->users            = $users;           
+        $this->view->productName      = $this->products[$productID];
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
+        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->stories          = $this->story->getProductStoryPairs($productID);
+        $this->view->type             = $type;
+        $this->view->title            = $title;
 
         $this->display();
     }

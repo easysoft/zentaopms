@@ -27,6 +27,7 @@ $config->testcase->search['params']['type']         = array('operator' => '=',  
 $config->testcase->search['params']['stage']        = array('operator' => 'include', 'control' => 'select', 'values' => $lang->testcase->stageList);
 
 $config->testcase->defaultSteps = 3;
+$config->testcase->batchCreate  = 10;
 
 $config->testcase->create->requiredFields = 'title,type';
 $config->testcase->edit->requiredFields   = 'title,type';

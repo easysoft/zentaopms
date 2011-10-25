@@ -13,7 +13,7 @@
 <?php include './header.html.php';?>
 <form method='post' enctype='multipart/form-data'>
   <table align='center' class='table-1'> 
-    <caption><?php echo $lang->story->product . $lang->colon . $lang->story->batchCreate; echo "<span class='star'><small>{$lang->story->notes}</small></span>";?></caption>
+    <caption><?php echo $lang->story->product . $lang->colon . $lang->story->batchCreate;?></caption>
     <tr>
       <th class='w-id'><?php echo $lang->idAB;?></th> 
       <th><?php echo $lang->story->module;?></th>
@@ -38,7 +38,10 @@
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, '');?></td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
+    <tr>
+      <td colspan='3' class='a-center'><?php echo "<span class='star'><small>{$lang->story->notes}</small></span>";?></td>
+      <td colspan='5' class='a-left'><?php echo html::submitButton() . html::resetButton();?></td>
+    </tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

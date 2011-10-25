@@ -69,6 +69,55 @@ class testcaseModel extends model
             return $caseID;
         }
     }
+    
+    /**
+     * Create a batch case.
+     * 
+     * @access public
+     * @return void
+     */
+    function batchCreate($productID)
+    {
+        $now   = helper::now();
+        $cases = fixer::input('post')->get();
+        for($i = 0; $i < $this->config->testcase->batchCreate; $i++)
+        {
+            if($cases->type[$i] != '' and $cases->title[$i] != '')
+            {
+                $data[$i]->product    = $productID;
+                $data[$i]->module     = $cases->module[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->module) : $cases->module[$i];
+                $data[$i]->type       = $cases->type[$i] == 'same' ? ($i == 0 ? '' : $data[$i-1]->type) : $cases->type[$i]; 
+                $data[$i]->story      = $cases->story[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->story) : $cases->story[$i]; 
+                $data[$i]->title      = $cases->title[$i];
+                $data[$i]->openedBy   = $this->app->user->account;
+                $data[$i]->openedDate = $now;
+                $data[$i]->status     = 'normal';
+                $data[$i]->version    = 1;
+                if($data[$i]->story != 0) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($this->post->story);
+
+                $this->dao->insert(TABLE_CASE)->data($data[$i])
+                    ->autoCheck()
+                    ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
+                    ->exec();
+
+                if(dao::isError()) 
+                {
+                    echo js::error(dao::getError());
+                    die(js::reload('parent'));
+                }
+
+                $caseID = $this->dao->lastInsertID();
+                $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
+            }
+            else
+            {
+                unset($cases->module[$i]);
+                unset($cases->type[$i]);
+                unset($cases->story[$i]);
+                unset($cases->title[$i]);
+            }
+        }
+    }
 
     /**
      * Get cases of a module.

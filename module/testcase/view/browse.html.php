@@ -29,6 +29,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
   <div class='f-right'>
     <?php if($browseType != 'needconfirm') common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
+    <?php common::printLink('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID", $lang->testcase->batchCreate); ?>
     <?php common::printLink('testcase', 'create', "productID=$productID&moduleID=$moduleID", $lang->testcase->create); ?>
   </div>
 </div>
