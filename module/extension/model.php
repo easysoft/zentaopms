@@ -316,6 +316,21 @@ class extensionModel extends model
     }
 
     /**
+     * Get hook file for install or uninstall.
+     * 
+     * @param  string    $extension 
+     * @param  string    $hook      preinstall|postinstall|preuninstall|postuninstall 
+     * @access public
+     * @return string|bool
+     */
+    public function getHookFile($extension, $hook)
+    {
+        $hookFile = "ext/$extension/hook/$hook.php";
+        if(file_exists($hookFile)) return $hookFile;
+        return false;
+    }
+
+    /**
      * Get the install db file.
      * 
      * @param  string    $extension 
@@ -382,7 +397,7 @@ class extensionModel extends model
         $pathes  = $this->getPathesFromPackage($extension);
         foreach($pathes as $path)
         {
-            if($path == 'db' or $path == 'doc') continue;
+            if($path == 'db' or $path == 'doc' or $path == 'hook') continue;
             $path = $appRoot . $path;
             if(is_dir($path))
             {
@@ -492,7 +507,7 @@ class extensionModel extends model
 
         foreach($pathes as $path)
         {
-            if($path == 'db' or $path == 'doc' or $path == '..' or $path == '.') continue;
+            if($path == 'db' or $path == 'doc' or $path == 'hook' or $path == '..' or $path == '.') continue;
             $copiedFiles = $this->classFile->copyDir($extensionDir . $path, $appRoot . $path);
         }
         foreach($copiedFiles as $key => $copiedFile)

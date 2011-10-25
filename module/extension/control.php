@@ -204,6 +204,8 @@ class extension extends control
             die($this->display());
         }
 
+        if($preInstallHook = $this->extension->getHookFile($extension, 'preinstall')) include $preInstallHook;
+
         /* Save to database. */
         $this->extension->saveExtension($extension, $type);
 
@@ -224,14 +226,11 @@ class extension extends control
                 $this->view->error = sprintf($this->lang->extension->errorInstallDB, $return->error);
                 die($this->display());
             }
-            $this->extension->updateExtension($extension, $data);
         }
-        else
-        {
-            $this->extension->updateExtension($extension, $data);
-        }
-
+        $this->extension->updateExtension($extension, $data);
         $this->view->downloadedPackage = !empty($downLink);
+
+        if($postInstallHook = $this->extension->getHookFile($extension, 'postinstall')) include $postInstallHook;
 
         $this->display();
     }
@@ -245,10 +244,14 @@ class extension extends control
      */
     public function uninstall($extension)
     {
+        if($preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall')) include $preUninstallHook;
+
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
         $this->view->removeCommands = $this->extension->removePackage($extension);
         $this->view->header->title  = $this->lang->extension->uninstallFinished;
+
+        if($postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
         $this->display();
     }
 
