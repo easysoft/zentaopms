@@ -219,11 +219,18 @@ class testtaskModel extends model
         }
 
         /* Create result of every step. */
-        foreach($this->post->steps as $stepID =>$stepResult)
+        if(isset($this->post->steps))
         {
-            $step['result'] = $stepResult;
-            $step['real']   = $this->post->reals[$stepID];
-            $stepResults[$stepID] = $step;
+            foreach($this->post->steps as $stepID =>$stepResult)
+            {
+                $step['result'] = $stepResult;
+                $step['real']   = $this->post->reals[$stepID];
+                $stepResults[$stepID] = $step;
+            }
+        }
+        else
+        {
+            $stepResults = array();
         }
 
         /* Pares the extras */

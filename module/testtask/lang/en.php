@@ -50,6 +50,7 @@ $lang->testtask->unlinkedCases = 'Unlinked cases';
 $lang->testtask->linkedCases   = 'Linked cases';
 $lang->testtask->confirmDelete = 'Are you sure to delete this test task?';
 $lang->testtask->passAll       = 'Pass all';
+$lang->testtask->pass          = 'Pass';
 
 $lang->testtask->byModule      = 'By module';
 $lang->testtask->assignedToMe  = 'Assgined to me';

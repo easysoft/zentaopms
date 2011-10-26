@@ -38,8 +38,15 @@
     <tr class='a-center'>
       <td colspan='5'>
         <?php
-        echo html::submitButton();
-        echo html::submitButton($lang->testtask->passAll, "onclick=$('#passall').val(1)");
+        if(empty($run->case->steps))
+        {
+            echo html::submitButton($lang->testtask->pass, "onclick=$('#passall').val(1)");
+        }
+        else
+        {
+            echo html::submitButton();
+            echo html::submitButton($lang->testtask->passAll, "onclick=$('#passall').val(1)");
+        }
         echo html::hidden('case', $run->case->id);
         echo html::hidden('version', $run->case->version);
         echo html::hidden('passall', 0);
