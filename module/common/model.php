@@ -206,7 +206,7 @@ class commonModel extends model
             if(common::hasPriv($module, $method))
             {
                 $link  = helper::createLink($module, $method);
-                echo "<li $active><nobr><a href='$link'>$menuLabel</a></nobr></li>\n";
+                echo "<li $active><nobr><a href='$link' id='menu$menuKey'>$menuLabel</a></nobr></li>\n";
             }
         }
 
@@ -270,7 +270,7 @@ class commonModel extends model
         echo "<ul>\n";
 
         /* Cycling to print every sub menus. */
-        foreach($submenus as $submenu)
+        foreach($submenus as $subMenuKey => $submenu)
         {
             /* Init the these vars. */
             $link      = $submenu;
@@ -294,12 +294,10 @@ class commonModel extends model
                 $vars = isset($link[3]) ? $link[3] : '';
                 if(common::hasPriv($module, $method))
                 {
-                    global $app;
-
                     /* Is the currentModule active? */
                     if($currentModule == $subModule) $active = 'active';
                     if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false)) $active = 'active';
-                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target) . "</li>\n";
+                    echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target, "id=submenu$subMenuKey") . "</li>\n";
                 }
             }
         }
