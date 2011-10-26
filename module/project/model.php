@@ -248,7 +248,7 @@ class projectModel extends model
     /**
      * Get project lists.
      * 
-     * @param  string $status 
+     * @param  string $status  all|undone|wait|running
      * @param  int    $limit 
      * @access public
      * @return array
@@ -256,9 +256,10 @@ class projectModel extends model
     public function getList($status = 'all', $limit = 0)
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
-            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
+            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy('status, end DESC')
+            ->orderBy('status, code')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
     }
@@ -295,15 +296,15 @@ class projectModel extends model
      * Get project stats.
      * 
      * @param  int    $counts 
-     *
+     * @param  string $status 
      * @access public
      * @return array
      */
-    public function getProjectStats($counts)
+    public function getProjectStats($counts, $status = 'undone')
     {
         $this->loadModel('report');
 
-        $projects = $this->getList('wait, doing');
+        $projects = $this->getList($status);
         $stats    = array();
         $i = 1;
 
@@ -349,7 +350,7 @@ class projectModel extends model
         {
             if($this->checkPriv($project))
             {
-                if($i <= $counts and $project->status == 'doing')
+                if($i <= $counts)
                 {
                     // Process the end time.
                     $project->end = date(DT_DATE4, strtotime($project->end));

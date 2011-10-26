@@ -1,122 +1,56 @@
 <?php
 /**
- * The index view file of project module of ZenTaoPMS.
+ * The html template file of index method of index module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     project
+ * @package     ZenTaoPMS
  * @version     $Id$
- * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<div class='yui-d0'>
-<table class='table-1'>
-  <caption>
-    <?php echo $lang->project->selectProject;?>
-    <?php echo html::select('projectID', $projects, $project->id, 'onchange="selectProject(this.value);" style="width:200px"');?>
-  </caption>
+<?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/sparkline.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
+<?php if(count($projectStats) == 0):?>
+<table class='table-1 a-center' height='100%'>
+  <caption><?php echo $lang->my->home->projects;?></caption>
   <tr>
-    <th width='60'><?php echo $lang->project->name;?></th>
-    <td><?php echo $project->name;?></td>
+    <td valign='middle'><?php printf($lang->my->home->noProjectsTip, $this->createLink('project', 'create'));?></td>
   </tr>
-  <tr>
-    <th><?php echo $lang->project->code;?></th>
-    <td><?php echo $project->code;?></td>
-  </tr>
-  <tr>
-    <th><?php echo $lang->project->beginAndEnd;?></th>
-    <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
-  </tr>
-  <tr>
-    <th><?php echo $lang->project->goal;?></th>
-    <td><?php echo nl2br($project->goal);?></td>
-  </tr>
-  <tr>
-    <th><?php echo $lang->project->desc;?></th>
-    <td><?php echo nl2br($project->desc);?></td>
-  </tr>
-  <tr>
+</table>
+<?php else:?>
+<h3>
+  <?php echo html::a(inlink("index", "locate=no&status=undone"), $lang->project->unDoneProjects);?>
+  <?php echo html::a(inlink("index", "locate=no&status=done"), $lang->project->doneProjects);?>
+</h3>
+<table class='table-1 fixed colored'>
+  <tr class='colhead'>
+    <th class='w-150px'><?php echo $lang->project->name;?></th>
+    <th><?php echo $lang->project->end;?></th>
     <th><?php echo $lang->project->status;?></th>
-    <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
+    <th><?php echo $lang->project->totalEstimate;?></th>
+    <th><?php echo $lang->project->totalConsumed;?></th>
+    <th><?php echo $lang->project->totalLeft;?></th>
+    <th class='w-150px'><?php echo $lang->project->progess;?></th>
+    <th class='w-100px'><?php echo $lang->project->burn;?></th>
   </tr>
-  <tr>
-    <th><?php echo $lang->project->lblStats;?></th>
-    <td><?php printf($lang->project->stats, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?></td>
-  </tr>
-  <tr>
-    <td colspan='2' class='a-right'>
-    <?php
-    if(common::hasPriv('project', 'edit'))   echo html::a($this->createLink('project', 'edit',   "projectID=$project->id"), $lang->project->edit);
-    if(common::hasPriv('project', 'delete')) echo html::a($this->createLink('project', 'delete', "projectID=$project->id"), $lang->project->delete, 'hiddenwin');
-    //echo html::a($this->createLink('tree',    'browse', "productID=$productID&view=product"), $lang->tree->manage);
-    ?>
-    </td>
-  </tr>
-</table>
-<table align='center' class='table-1'>
-  <caption>
-    <?php echo $lang->project->products;?>
-  </caption>
-  <tr>
-    <td>
-      <?php foreach($products as $productID => $productName) echo html::a($this->createLink('product', 'browse', "productID=$productID"), $productName) . '<br />';?>
-      <div class='a-right'>
-      <?php
-      if(common::hasPriv('project', 'manageproducts')) echo html::a($this->createLink('project', 'manageproducts', "projectID=$project->id"), $lang->project->manageProducts);
-      if(common::hasPriv('project', 'linkstory'))      echo html::a($this->createLink('project', 'linkstory',      "projectID=$project->id"), $lang->project->linkStory);
-      ?>
-      </div>
-    </td>
-  </tr>
-</table>
-<!--
-<table align='center' class='table-1'>
-  <caption>
-    <?php echo $lang->project->childProjects;?>
-  </caption>
-  <tr>
-    <td>
-      <?php foreach($childProjects as $childProjectID => $childProjectName) echo html::a($this->createLink('project', 'browse', "projectID=$childProjectID"), $childProjectName) . '<br />';?>
-      <div class='a-right'>
-      <?php echo html::a($this->createLink('project', 'managechilds', "projectID=$project->id"), $lang->project->manageChilds) . '<br />';?>
-      </div>
-    </td>
-  </tr>
-</table>-->
-<table align='center' class='table-1'>
-  <caption>
-    <?php echo $lang->project->team . $lang->colon . $project->team; ?>
-  </caption>
-  <thead>
-  <tr>
-    <th><?php echo $lang->team->account;?></th>
-    <th><?php echo $lang->team->role;?></th>
-    <th><?php echo $lang->team->joinDate;?></th>
-    <th><?php echo $lang->team->workingHour;?></th>
-    <?php if(common::hasPriv('project', 'unlinkmember')) echo "<th>$lang->actions</th>";?>
-  </tr>
-  </thead>
-  <tbody>
-  <?php foreach($teamMembers as $member):?>
+  <?php foreach($projectStats as $project):?>
   <tr class='a-center'>
-    <td>
-    <?php 
-    if(common::hasPriv('user', 'view')) echo html::a($this->createLink('user', 'view', "account=$member->account"), $member->realname);
-    else echo $member->realname;
-    ?>
+    <td class='a-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '_parent');?></td>
+    <td><?php echo $project->end;?></td>
+    <td><?php echo $lang->project->statusList[$project->status];?></td>
+    <td><?php echo $project->hours->totalEstimate;?></td>
+    <td><?php echo $project->hours->totalConsumed;?></td>
+    <td><?php echo $project->hours->totalLeft;?></td>
+    <td class='a-left w-150px'>
+      <img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: />
+      <small><?php echo $project->hours->progress;?>%</small>
     </td>
-    <td><?php echo $member->role;?></td>
-    <td><?php echo substr($member->joinDate, 2);?></td>
-    <td><?php echo $member->workingHour;?></td>
-    <?php if(common::hasPriv('project', 'unlinkmember')) echo "<td>" . html::a($this->createLink('project', 'unlinkmember', "projectID=$project->id&account=$member->account"), $lang->project->unlinkMember, 'hiddenwin') . '</td>';?>
-  </tr>
-  <?php endforeach;?>
-  </tbody>     
+    <td class='projectline a-left' values='<?php echo join(',', $project->burns);?>'></td>
+ </tr>
+ <?php endforeach;?>
 </table>
-<div class='a-right'>
-  <?php if(common::hasPriv('project', 'managemembers')) echo html::a($this->createLink('project', 'managemembers', "projectID=$project->id"), $lang->project->manageMembers) . '<br />';?>
+<?php endif;?>
 </div>
-</div>  
-<?php include '../../common/view/footer.html.php';?>
+<?php include '../../common/view/footer.lite.html.php';?>

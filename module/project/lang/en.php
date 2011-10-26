@@ -117,17 +117,20 @@ $lang->project->byQuery             = 'Search';
 $lang->project->allProject          = 'All projects';
 
 /* Notcie. */
-$lang->project->selectProject  = "Select project";
-$lang->project->beginAndEnd    = 'Begin and end';
-$lang->project->lblStats       = 'Stats';
-$lang->project->stats          = 'Total estimate is『%s』hours,<br />confused『%s』hours<br />left『%s』hours';
-$lang->project->oneLineStats   = "Project『%s』, code is『%s』, products is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
-$lang->project->taskSummary    = "<strong>%s</strong> tasks this page, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
-$lang->project->groupSummary   = "<strong>%s</strong> tasks this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
-$lang->project->wbs            = "WBS";
-$lang->project->largeBurnChart = 'View large';
-$lang->project->howToUpdateBurn= "<a href='%s' class='helplink'><i>How?</i></a>";
-$lang->project->whyNoStories   = "There no active stories to added to this project. Please check the linked product.";
+$lang->project->selectProject   = "Select project";
+$lang->project->beginAndEnd     = 'Begin and end';
+$lang->project->lblStats        = 'Stats';
+$lang->project->stats           = 'Total estimate is『%s』hours,<br />confused『%s』hours<br />left『%s』hours';
+$lang->project->oneLineStats    = "Project『%s』, code is『%s』, products is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
+$lang->project->taskSummary     = "<strong>%s</strong> tasks this page, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
+$lang->project->groupSummary    = "<strong>%s</strong> tasks this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
+$lang->project->wbs             = "WBS";
+$lang->project->largeBurnChart  = 'View large';
+$lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>How?</i></a>";
+$lang->project->whyNoStories    = "There no active stories to added to this project. Please check the linked product.";
+$lang->project->doneProjects    = 'Done';
+$lang->project->unDoneProjects  = 'Undone';
+
 
 /* Confirm. */
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';

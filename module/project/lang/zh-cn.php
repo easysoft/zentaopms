@@ -117,17 +117,19 @@ $lang->project->byQuery             = '搜索';
 $lang->project->allProject          = '所有项目';
 
 /* 页面提示。*/
-$lang->project->selectProject  = "请选择项目";
-$lang->project->beginAndEnd    = '起止时间';
-$lang->project->lblStats       = '工时统计';
-$lang->project->stats          = '总共预计<strong>%s</strong>工时<br />已经消耗<strong>%s</strong>工时<br />预计剩余<strong>%s</strong>工时';
-$lang->project->oneLineStats   = "项目<strong>%s</strong>, 代号为<strong>%s</strong>, 相关产品为<strong>%s</strong>，<strong>%s</strong>开始，<strong>%s</strong>结束，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，预计剩余<strong>%s</strong>工时。";
-$lang->project->taskSummary    = "本页共 <strong>%s</strong> 个任务，未开始<strong>%s</strong>，进行中<strong>%s</strong>，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，剩余<strong>%s</strong>工时。";
-$lang->project->groupSummary   = "本组共 <strong>%s</strong> 个任务，未开始<strong>%s</strong>，进行中<strong>%s</strong>，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，剩余<strong>%s</strong>工时。";
-$lang->project->wbs            = "分解任务";
-$lang->project->largeBurnChart = '点击查看大图';
-$lang->project->howToUpdateBurn= "<a href='%s' class='helplink'><i>如何更新?</i></a>";
-$lang->project->whyNoStories   = "看起来没有需求可以关联。请检查下项目关联的产品中有没有需求，而且要确保它们已经审核通过。";
+$lang->project->selectProject   = "请选择项目";
+$lang->project->beginAndEnd     = '起止时间';
+$lang->project->lblStats        = '工时统计';
+$lang->project->stats           = '总共预计<strong>%s</strong>工时<br />已经消耗<strong>%s</strong>工时<br />预计剩余<strong>%s</strong>工时';
+$lang->project->oneLineStats    = "项目<strong>%s</strong>, 代号为<strong>%s</strong>, 相关产品为<strong>%s</strong>，<strong>%s</strong>开始，<strong>%s</strong>结束，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，预计剩余<strong>%s</strong>工时。";
+$lang->project->taskSummary     = "本页共 <strong>%s</strong> 个任务，未开始<strong>%s</strong>，进行中<strong>%s</strong>，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，剩余<strong>%s</strong>工时。";
+$lang->project->groupSummary    = "本组共 <strong>%s</strong> 个任务，未开始<strong>%s</strong>，进行中<strong>%s</strong>，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，剩余<strong>%s</strong>工时。";
+$lang->project->wbs             = "分解任务";
+$lang->project->largeBurnChart  = '点击查看大图';
+$lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>如何更新?</i></a>";
+$lang->project->whyNoStories    = "看起来没有需求可以关联。请检查下项目关联的产品中有没有需求，而且要确保它们已经审核通过。";
+$lang->project->doneProjects    = '已结束';
+$lang->project->unDoneProjects  = '未结束';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';

@@ -31,13 +31,20 @@ class project extends control
     /**
      * The index page.
      * 
+     * @param  string $locate  yes|no locate to the browse page or not.
+     * @param  string $status  the projects status, if locate is no, then get projects by the $status.
      * @access public
      * @return void
      */
-    public function index()
+    public function index($locate = 'yes', $status = 'undone')
     {
         if(empty($this->projects)) $this->locate($this->createLink('project', 'create'));
-        $this->locate($this->createLink('project', 'browse'));
+        if($locate == 'yes') $this->locate($this->createLink('project', 'browse'));
+
+        $this->app->loadLang('my');
+        $this->view->projectStats  = $this->project->getProjectStats($this->config->project->projectCounts, $status);
+
+        $this->display();
     }
 
     /**
@@ -903,7 +910,15 @@ class project extends control
         $this->session->set('caseList',        $uri);
         $this->session->set('testtaskList',    $uri);
 
+        /* Set the menu. If the projectID = 0, use the indexMenu instead. */
         $this->project->setMenu($this->projects, $projectID);
+        if($projectID == 0)
+        {
+            $this->projects = array('0' => $this->lang->project->selectProject) + $this->projects;
+            unset($this->lang->project->menu);
+            $this->lang->project->menu = $this->lang->project->indexMenu;
+            $this->lang->project->menu->list = $this->project->select($this->projects, 0, 'project', 'dynamic');
+        }
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);

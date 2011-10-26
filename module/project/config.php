@@ -1,4 +1,6 @@
 <?php
+$config->project->projectCounts = 50;
+
 global $lang, $app;
 $app->loadLang('task');
 $config->project->create->requiredFields = 'name,code,team,begin,end';
