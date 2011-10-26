@@ -11,16 +11,18 @@
     <tr class='colhead'>
       <th class='w-150px'><?php echo $lang->project->name;?></th>
       <th><?php echo $lang->project->end;?></th>
+      <th><?php echo $lang->statusAB;?></th>
       <th><?php echo $lang->project->totalEstimate;?></th>
       <th><?php echo $lang->project->totalConsumed;?></th>
       <th><?php echo $lang->project->totalLeft;?></th>
-      <th class='w-150px'><?php echo $lang->project->progess;?></th>
+      <th class='w-120px'><?php echo $lang->project->progess;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
     </tr>
     <?php foreach($projectStats as $project):?>
     <tr class='a-center'>
       <td class='a-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name);?></td>
       <td><?php echo $project->end;?></td>
+      <td><?php echo $lang->project->statusList[$project->status];?></td>
       <td><?php echo $project->hours->totalEstimate;?></td>
       <td><?php echo $project->hours->totalConsumed;?></td>
       <td><?php echo $project->hours->totalLeft;?></td>
