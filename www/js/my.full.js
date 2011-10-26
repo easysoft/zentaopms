@@ -500,6 +500,17 @@ function setSubversionLink()
 }
 
 /**
+ * Set the link of the project list menu.
+ * 
+ * @access public
+ * @return void
+ */
+function setProjectListLink()
+{
+   if($('#submenuall').size()) $("#submenuall").colorbox({width:1000, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
+}
+
+/**
  * Auto checked the checkbox of a row. 
  * 
  * @access public
@@ -719,6 +730,7 @@ $(document).ready(function()
     saveProject();
     setForm();
     setSubversionLink();
+    setProjectListLink();
     autoCheck();
     togglesearch();
     saveWindowSize();
