@@ -289,7 +289,7 @@ class todoModel extends model
      * @access public
      * @return string the current time period, like 0915
      */
-    public function now($delta = 15)
+    public function now($delta = 10)
     {
         $range  = range($delta, 60 - $delta, $delta);
         $hour   = date('H', time());
