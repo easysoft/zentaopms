@@ -212,13 +212,12 @@ class testcase extends control
         if(isset($bugID))
         {
             $bug      = $this->loadModel('bug')->getById($bugID);
-
             $type     = $bug->type;
             $pri      = $bug->severity;
             $storyID  = $bug->story;
             $title    = $bug->title;
             $keywords = $bug->keywords;
-            $steps[]  = (object)array('desc'=>strip_tags($bug->steps), 'expect'=>'');
+            $steps[]  = (object)array('desc' => strip_tags(str_replace(array('<br />', '<br>'), "\n",  $bug->steps)), 'expect' => '');
         }
        
         /* Padding the steps to the default steps count. */
