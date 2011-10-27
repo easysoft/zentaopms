@@ -233,6 +233,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_2To2_3();
         }
 
+        $this->deletePatch();
         $this->setting->setSN();
     }
 
@@ -891,6 +892,18 @@ class upgradeModel extends model
                 ->where('id')->eq($result[0]->case)
                 ->exec();
         }
+    }
+
+    /**
+     * Delete the patch record.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deletePatch()
+    {
+        $this->dao->delete()->from(TABLE_EXTENSION)->where('type')->eq('patch')->exec(false);
+        $this->dao->delete()->from(TABLE_EXTENSION)->where('code')->in('zentaopatch,patch')->exec(false);
     }
 
     /**
