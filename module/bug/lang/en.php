@@ -128,13 +128,14 @@ $lang->bug->legendLife        = 'Lifetime';
 $lang->bug->legendMisc        = 'Misc';
 
 /* Action buttons. */
-$lang->bug->buttonConfirm  = 'Confirm';
-$lang->bug->buttonCopy     = 'Copy';
-$lang->bug->buttonEdit     = 'Edit';
-$lang->bug->buttonActivate = 'Activate';
-$lang->bug->buttonResolve  = 'Resolve';
-$lang->bug->buttonClose    = 'Close';
-$lang->bug->buttonToList   = 'Back';
+$lang->bug->buttonConfirm        = 'Confirm';
+$lang->bug->buttonCopy           = 'Copy';
+$lang->bug->buttonEdit           = 'Edit';
+$lang->bug->buttonActivate       = 'Activate';
+$lang->bug->buttonResolve        = 'Resolve';
+$lang->bug->buttonClose          = 'Close';
+$lang->bug->buttonToList         = 'Back';
+$lang->bug->buttonCreateTestcase = 'Create case';
 
 /* Confirm messags. */
 $lang->bug->confirmChangeProduct = 'Change product will change project, task and story also, are you sure?';
@@ -212,6 +213,9 @@ $lang->bug->statusList['']            = '';
 $lang->bug->statusList['active']      = 'Active';
 $lang->bug->statusList['resolved']    = 'Resolved';
 $lang->bug->statusList['closed']      = 'Closed';
+
+$lang->bug->confirmList[1] = 'Confirmed';
+$lang->bug->confirmList[0] = 'Unconfirm';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'By design';

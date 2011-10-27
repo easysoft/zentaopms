@@ -131,7 +131,6 @@ $lang->project->whyNoStories    = "There no active stories to added to this proj
 $lang->project->doneProjects    = 'Done';
 $lang->project->unDoneProjects  = 'Undone';
 
-
 /* Confirm. */
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';
 $lang->project->confirmUnlinkMember   = 'Are you sure to remove this user from this project?';

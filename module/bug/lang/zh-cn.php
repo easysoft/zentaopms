@@ -128,14 +128,14 @@ $lang->bug->legendLife        = 'BUG的一生';
 $lang->bug->legendMisc        = '其相关他';
 
 /* 功能按钮。*/
-$lang->bug->buttonConfirm  = '确认';
-$lang->bug->buttonCopy     = '复制';
-$lang->bug->buttonEdit     = '编辑';
-$lang->bug->buttonActivate = '激活';
-$lang->bug->buttonResolve  = '解决';
-$lang->bug->buttonClose    = '关闭';
-$lang->bug->buttonToList   = '返回';
-$lang->bug->buttonCreateTestcase  = '创建用例';
+$lang->bug->buttonConfirm        = '确认';
+$lang->bug->buttonCopy           = '复制';
+$lang->bug->buttonEdit           = '编辑';
+$lang->bug->buttonActivate       = '激活';
+$lang->bug->buttonResolve        = '解决';
+$lang->bug->buttonClose          = '关闭';
+$lang->bug->buttonToList         = '返回';
+$lang->bug->buttonCreateTestcase = '创建用例';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';
