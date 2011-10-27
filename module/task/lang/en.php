@@ -9,22 +9,25 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->task->index       = "Index";
-$lang->task->create      = "Create";
-$lang->task->batchCreate = "Batch create";
-$lang->task->import      = "Import undone";
-$lang->task->edit        = "Update";
-$lang->task->delete      = "Delete";
-$lang->task->view        = "Info";
-$lang->task->logEfforts  = "Efforts";
-$lang->task->start       = "Start";
-$lang->task->finish      = "Finish";
-$lang->task->close       = "Close";
-$lang->task->batchClose  = "Batch close";
-$lang->task->cancel      = "Cancel";
-$lang->task->activate    = "Activate";
-$lang->task->export      = "Export";
-$lang->task->reportChart = "Report chart";
+$lang->task->index              = "Index";
+$lang->task->create             = "Create";
+$lang->task->batchCreate        = "Batch create";
+$lang->task->import             = "Import undone";
+$lang->task->edit               = "Update";
+$lang->task->delete             = "Delete";
+$lang->task->view               = "Info";
+$lang->task->logEfforts         = "Efforts";
+$lang->task->start              = "Start";
+$lang->task->finish             = "Finish";
+$lang->task->close              = "Close";
+$lang->task->batchClose         = "Batch close";
+$lang->task->cancel             = "Cancel";
+$lang->task->activate           = "Activate";
+$lang->task->export             = "Export";
+$lang->task->reportChart        = "Report chart";
+$lang->task->fromBug            = 'From Bug';
+$lang->task->importBug          = 'Import';
+$lang->task->importFromBug      = 'Import tasks from Bug';
 $lang->task->confirmStoryChange = "Confirm story change";
 
 $lang->task->common         = 'Task';
@@ -68,8 +71,21 @@ $lang->task->lastEditedBy   = 'Last Edited By';
 $lang->task->lastEditedDate = 'Last Edited Date';
 $lang->task->lastEdited     = 'Last Edited';
 
+$lang->task->bug->assignToMe     = 'MyBugs';
+$lang->task->bug->openedByMe     = 'MyOpen';
+$lang->task->bug->resolvedByMe   = 'MyResolve';
+$lang->task->bug->closedByMe     = 'MyClose';
+$lang->task->bug->assignToNull   = 'Unassigned';
+$lang->task->bug->unResolved     = 'Unresolved';
+$lang->task->bug->longLifeBugs   = 'Longlife';
+$lang->task->bug->postponedBugs  = 'Postponed';
+$lang->task->bug->moduleBugs     = 'ByModule';
+$lang->task->bug->byQuery        = 'Search';
+$lang->task->bug->needConfirm    = 'StoryChanged';
+
 $lang->task->same  = 'The same as above';
 $lang->task->notes = '(Notes: the name, type, pri and estimate must be written, otherwise it is no use)';
+$lang->task->descFromBug = 'ResolveBug:';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Waiting';

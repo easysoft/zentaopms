@@ -116,6 +116,17 @@ class bugModel extends model
     }
 
     /**
+     * Get active Bugs. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function getActiveBugs($pager)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)->where('status')->eq('active')->andWhere('toTask')->eq(0)->page($pager)->fetchAll();
+    }
+
+    /**
      * Update a bug.
      * 
      * @param  int    $bugID 

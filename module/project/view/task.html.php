@@ -62,7 +62,13 @@ var browseType = '<?php echo $browseType;?>';
   <tr class='a-center'>
     <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
     <td><?php echo $lang->task->priList[$task->pri];?></td>
-    <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
+    <td class='a-left nobr'>
+      <?php 
+      if($task->fromBug != 0) echo "<span class='bug'>[BUG] </span>";
+      else echo "<span class='task'>[TASK] </span>";
+      if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
+      ?>
+    </td>
     <td class=<?php echo $task->status;?> >
       <?php
       $storyChanged = ($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
