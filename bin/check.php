@@ -16,6 +16,10 @@ $whiteList[] = 'company-create';
 $whiteList[] = 'company-delete';
 $whiteList[] = 'file-buildform';
 $whiteList[] = 'file-printfiles';
+$whiteList[] = 'file-export2csv';
+$whiteList[] = 'file-export2xml';
+$whiteList[] = 'file-export2html';
+$whiteList[] = 'file-senddownheader';
 $whiteList[] = 'help-field';
 $whiteList[] = 'index-testext';
 $whiteList[] = 'productplan-commonaction';
@@ -26,13 +30,16 @@ $whiteList[] = 'task-commonaction';
 $whiteList[] = 'user-login';
 $whiteList[] = 'user-deny';
 $whiteList[] = 'user-logout';
+$whiteList[] = 'mail-set';
+$whiteList[] = 'mail-save';
+$whiteList[] = 'svn-run';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
 foreach(glob($moduleRoot . '*') as $modulePath)
 {
     $moduleName  = basename($modulePath);
-    if(strpos('install|upgrade|convert|common|misc', $moduleName) !== false) continue;
+    if(strpos('install|upgrade|convert|common|misc|editor', $moduleName) !== false) continue;
     $controlFile = $modulePath . '/control.php';
     if(file_exists($controlFile))
     {
@@ -48,14 +55,13 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                 {
                     $methodName = $method->name;
                     if(in_array($moduleName . '-' . strtolower($method->name), $whiteList)) continue;
-                    if(!isset($lang->resource->$moduleName->$methodName))
+
+                    $exits = false;
+                    foreach($lang->resource->$moduleName as $key => $label)
                     {
-                        $methodName = strtolower($methodName);
-                        if(!isset($lang->resource->$moduleName->$methodName))
-                        {
-                            echo $moduleName . "\t" . $methodName . " not in the list. \n";
-                        }
+                        if(strtolower($methodName) == strtolower($key)) $exits = true;
                     }
+                    if(!$exits) echo $moduleName . "\t" . $methodName . " not in the list. \n";
                 }
             }
         }
