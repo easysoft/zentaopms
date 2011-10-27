@@ -871,7 +871,7 @@ class upgradeModel extends model
      */
     public function updateConfirmOfBug()
     {
-        $this->dao->update(TABLE_BUG)->set('confirm')->eq(1)->where('status')->eq('resolved')->exec();
+        $this->dao->update(TABLE_BUG)->set('confirm')->eq(1)->where('status')->in('resolved,closed')->exec();
     }
 
     /**
