@@ -260,35 +260,26 @@ class productModel extends model
      * Get projects of a product in pairs.
      * 
      * @param  int    $productID 
-     * @param  string $param
+     * @param  string $param    all|nodeleted
      * @access public
      * @return array
      */
     public function getProjectPairs($productID, $param = 'all')
     {
-        if($param == 'nodeleted')
+        $projects = array();
+        $datas = $this->dao->select('t2.id, t2.name, t2.deleted')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->orderBy('t1.project desc')
+            ->fetchAll();
+
+        foreach($datas as $data)
         {
-            $datas = $this->dao->select('t2.id, t2.name,t2.deleted')
-                ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
-                ->on('t1.project = t2.id')
-                ->where('t1.product')->eq((int)$productID)
-                ->orderBy('t1.project desc')
-                ->fetchAll();
-            foreach($datas as $data)
-            {
-                if($data->deleted == 0) $projects[$data->id] = $data->name;
-            }
+            if($param == 'nodeleted' and $data->deleted) continue;
+            $projects[$data->id] = $data->name;
         }
-        else
-        {
-            $projects = $this->dao->select('t2.id, t2.name')
-                ->from(TABLE_PROJECTPRODUCT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')
-                ->on('t1.project = t2.id')
-                ->where('t1.product')->eq((int)$productID)
-                ->orderBy('t1.project desc')
-                ->fetchPairs();
-            $projects = array('' => '') +  $projects;
-        }
+        $projects = array('' => '') +  $projects;
         return $projects;
     }
 
