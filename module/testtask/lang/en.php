@@ -21,7 +21,7 @@ $lang->testtask->unlinkCase     = "Remove";
 $lang->testtask->batchAssign    = "Batch Assign";
 $lang->testtask->runCase        = "Run";
 $lang->testtask->results        = "Result";
-$lang->testtask->createBug      = "Add bug";
+$lang->testtask->createBug      = "Create bug";
 $lang->testtask->assign         = 'Assign';
 $lang->testtask->cases          = 'Cases';
 

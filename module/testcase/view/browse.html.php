@@ -59,12 +59,12 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->testcase->story);?></th>
             <th class='w-50px'><?php echo $lang->actions;?></th>
             <?php else:?>
-            <th class='w-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
-            <th class='w-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='w-user'><?php common::printOrderLink('lastRun', $orderBy, $vars, $lang->testtask->lastRun);?></th>
-            <th class='w-80px'><?php common::printOrderLink('lastResult',$orderBy, $vars, $lang->testtask->lastResult);?></th>
-            <th class='w-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-200px {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='w-type'>  <?php common::printOrderLink('type',      $orderBy, $vars, $lang->typeAB);?></th>
+            <th class='w-user'>  <?php common::printOrderLink('openedBy',  $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='w-date'>  <?php common::printOrderLink('lastRun',   $orderBy, $vars, $lang->testtask->lastRun);?></th>
+            <th class='w-80px'>  <?php common::printOrderLink('lastResult',$orderBy, $vars, $lang->testtask->lastResult);?></th>
+            <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
+            <th class='w-240px {sorter:false}'><?php echo $lang->actions;?></th>
             <?php endif;?>
           </tr>
           <?php foreach($cases as $case):?>
@@ -82,10 +82,11 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td><?php if(!helper::isZeroDate($case->lastRun)) echo date(DT_MONTHTIME1, strtotime($case->lastRun));?></td>
             <td><?php if($case->lastResult) echo $lang->testcase->resultList[$case->lastResult];?></td>
             <td><?php echo $lang->testcase->statusList[$case->status];?></td>
-            <td>
+            <td class='a-left'>
               <?php
-              common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-              common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
+              common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&testcaseID=$case->id", $lang->copy);
+              common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
+              common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
               common::printLink('testtask', 'runCase', "runID=0&extras=caseID=$case->id", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
               common::printLink('testtask', 'results', "runID=0&extras=caseID=$case->id,version=$case->version", $lang->testtask->results, '', 'class="results"');
               if($case->lastResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
