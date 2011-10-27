@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2174 2011-10-16 06:16:13Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->user->common        = '用戶';
@@ -30,6 +30,7 @@ $lang->user->asGuest         = "遊客訪問";
 $lang->user->goback          = "返回前一頁";
 $lang->user->allUsers        = '全部用戶';
 $lang->user->deleted         = '(已刪除)';
+$lang->user->select          = '--請選擇用戶--';
 
 $lang->user->profile     = '用戶檔案';
 $lang->user->project     = '用戶項目';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2224 2011-10-25 07:41:54Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id             = '用例編號';
@@ -15,6 +15,7 @@ $lang->testcase->module         = '所屬模組';
 $lang->testcase->story          = '相關需求';
 $lang->testcase->storyVersion   = '需求版本';
 $lang->testcase->title          = '用例標題';
+$lang->testcase->precondition   = '前置條件';
 $lang->testcase->pri            = '優先順序';
 $lang->testcase->type           = '用例類型';
 $lang->testcase->status         = '用例狀態';
@@ -49,6 +50,7 @@ $lang->testcase->stepExpect = '預期';
 $lang->testcase->common         = '用例管理';
 $lang->testcase->index          = "用例管理首頁";
 $lang->testcase->create         = "創建用例";
+$lang->testcase->batchCreate    = "批量添加用例";
 $lang->testcase->delete         = "刪除用例";
 $lang->testcase->view           = "用例詳情";
 $lang->testcase->edit           = "編輯用例";
@@ -93,7 +95,9 @@ $lang->testcase->legendComment     = '備註';
 $lang->testcase->legendProduct     = '產品模組';
 $lang->testcase->legendVersion     = '版本歷史';
 
-$lang->testcase->confirmDelete     = '您確認要刪除該測試用例嗎？';
+$lang->testcase->confirmDelete = '您確認要刪除該測試用例嗎？';
+$lang->testcase->same          = '同上';
+$lang->testcase->notes         = '(註：“用例類型”和“用例標題”必須填寫，否則此行無效)';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

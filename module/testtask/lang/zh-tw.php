@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2230 2011-10-26 02:17:49Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -50,6 +50,7 @@ $lang->testtask->unlinkedCases = '未關聯用例列表';
 $lang->testtask->linkedCases   = '已關聯用例列表';
 $lang->testtask->confirmDelete = '您確認要刪除該測試任務嗎？';
 $lang->testtask->passAll       = '全部通過';
+$lang->testtask->pass          = '通過';
 
 $lang->testtask->byModule      = '按模組';
 $lang->testtask->assignedToMe  = '指派給我';

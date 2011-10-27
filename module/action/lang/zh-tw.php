@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 2111 2011-09-22 05:16:18Z wwccss $
+ * @version     $Id: zh-tw.php 2224 2011-10-25 07:41:54Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -62,6 +62,7 @@ $lang->action->desc->commented   = '$date, 由 <strong>$actor</strong> 添加備
 $lang->action->desc->activated   = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->moved       = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"' . "\n";
 $lang->action->desc->confirmed   = '$date, 由 <strong>$actor</strong> 確認需求變動，最新版本為<strong>#$extra</strong>' . "\n";
+$lang->action->desc->bugconfirmed= '$date, 由 <strong>$actor</strong> 確認Bug' . "\n";
 $lang->action->desc->started     = '$date, 由 <strong>$actor</strong> 啟動。' . "\n";
 $lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。' . "\n";
 $lang->action->desc->svncommited = '$date, <strong>$actor</strong> 提交了Subversion，最新版本為<strong>#$extra</strong>' . "\n";
@@ -87,6 +88,7 @@ $lang->action->label->resolved            = '解決了';
 $lang->action->label->reviewed            = '評審了';
 $lang->action->label->moved               = '移動了';
 $lang->action->label->confirmed           = '確認了需求，';
+$lang->action->label->bugconfirmed        = '確認了Bug，';
 $lang->action->label->svncommited         = '提交Svn';
 $lang->action->label->linked2plan         = '關聯計劃';
 $lang->action->label->unlinkedfromplan    = '移除計劃';

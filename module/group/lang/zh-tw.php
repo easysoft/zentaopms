@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 2010 2011-07-03 08:40:05Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2238 2011-10-27 06:03:38Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->group->common             = '權限分組';
@@ -49,5 +49,7 @@ $lang->group->versions['1.4']   = '禪道1.4';
 $lang->group->versions['1.5']   = '禪道1.5';
 $lang->group->versions['2.0']   = '禪道2.0';
 $lang->group->versions['2.1']   = '禪道2.1';
+$lang->group->versions['2.2']   = '禪道2.2';
+$lang->group->versions['2.3']   = '禪道2.3';
 
 include (dirname(__FILE__) . '/resource.php');

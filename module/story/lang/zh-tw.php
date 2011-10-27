@@ -6,11 +6,12 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2217 2011-10-24 07:14:34Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
 $lang->story->create      = "新增需求";
+$lang->story->batchCreate = "批量添加需求";
 $lang->story->change      = "變更";
 $lang->story->changed     = '需求變更';
 $lang->story->review      = '評審';
@@ -30,6 +31,7 @@ $lang->story->common         = '需求';
 $lang->story->id             = '編號';
 $lang->story->product        = '所屬產品';
 $lang->story->module         = '所屬模組';
+$lang->story->source         = '來源';
 $lang->story->release        = '發佈計劃';
 $lang->story->bug            = '相關bug';
 $lang->story->title          = '需求名稱';
@@ -68,6 +70,11 @@ $lang->story->reviewResult   = '評審結果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '關鍵詞';
 
+$lang->story->same = '同上';
+
+$lang->story->useList[0] = '不使用';
+$lang->story->useList[1] = '使用';
+
 $lang->story->statusList['']          = '';
 $lang->story->statusList['draft']     = '草稿';
 $lang->story->statusList['active']    = '激活';
@@ -101,6 +108,18 @@ $lang->story->reviewResultList['revert'] = '撤銷變更';
 $lang->story->reviewResultList['clarify']= '有待明確';
 $lang->story->reviewResultList['reject'] = '拒絶';
 
+$lang->story->reviewList[0] = '否';
+$lang->story->reviewList[1] = '是';
+
+$lang->story->sourceList['']           = '';
+$lang->story->sourceList['custom']     = '客戶';
+$lang->story->sourceList['po']         = '產品經理';
+$lang->story->sourceList['market']     = '市場';
+$lang->story->sourceList['service']    = '客服';
+$lang->story->sourceList['competitor'] = '競爭對手';
+$lang->story->sourceList['partner']    = '合作夥伴';
+$lang->story->sourceList['other']      = '其他';
+
 $lang->story->priList[]   = '';
 $lang->story->priList[3]  = '3';
 $lang->story->priList[1]  = '1';
@@ -131,6 +150,7 @@ $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
 $lang->story->specTemplate          = "建議參考的模板：作為一名<<i class='red'>某種類型的用戶</i>>，我希望<<i class='red'>達成某些目的</i>>，這樣可以<<i class='red'>開發的價值</i>>。";
+$lang->story->notes                 = '(註：如果“需求標題”為空，則表示不使用此行)';
 $lang->story->needNotReview         = '不需要評審';
 $lang->story->confirmDelete         = "您確認刪除該需求嗎?";
 $lang->story->errorFormat           = '需求數據有誤';

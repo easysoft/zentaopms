@@ -1,8 +1,8 @@
 <?php
 /**
- * The svn module zh-cn file of ZenTaoPMS.
+ * The svn module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2011 青島易軟天創網絡科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     svn
@@ -11,6 +11,6 @@
  */
 /* 方法列表。*/
 $lang->svn->common  = 'Subversion';
-$lang->svn->cat     = '查看源代码';
-$lang->svn->diff    = '比较源代码';
-$lang->svn->apiSync = '接口：同步svn日志';
+$lang->svn->cat     = '查看原始碼';
+$lang->svn->diff    = '比較原始碼';
+$lang->svn->apiSync = '介面：同步svn日誌';

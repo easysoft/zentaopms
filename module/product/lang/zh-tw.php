@@ -6,17 +6,19 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: zh-tw.php 2089 2011-09-18 07:48:31Z wwccss $
+ * @version     $Id: zh-tw.php 2225 2011-10-25 09:06:53Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->product->common = '產品視圖';
 $lang->product->index  = "產品首頁";
 $lang->product->browse = "瀏覽產品";
+$lang->product->dynamic= "動態";
 $lang->product->view   = "產品信息";
 $lang->product->edit   = "編輯產品";
 $lang->product->create = "新增產品";
 $lang->product->read   = "產品詳情";
 $lang->product->delete = "刪除產品";
+$lang->product->select = '--請選擇產品--';
 
 $lang->product->plans    = '計劃數';
 $lang->product->releases = '發佈數';
@@ -50,6 +52,15 @@ $lang->product->whitelist = '分組白名單';
 
 $lang->product->moduleStory = '按模組瀏覽';
 $lang->product->searchStory = '搜索';
+$lang->product->assignedToMe= '指派給我';
+$lang->product->openedByMe  = '由我創建';
+$lang->product->reviewedByMe= '由我評審';
+$lang->product->closedByMe  = '由我關閉';
+$lang->product->draftStory  = '草稿';
+$lang->product->activeStory = '激活';
+$lang->product->changedStory= '已變更';
+$lang->product->closedStory = '已關閉';
+
 $lang->product->allStory    = '全部需求';
 $lang->product->allProduct  = '全部產品';
 

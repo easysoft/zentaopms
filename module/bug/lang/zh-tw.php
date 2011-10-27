@@ -6,59 +6,66 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2001 2011-07-03 05:50:54Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2240 2011-10-27 06:49:21Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
-$lang->bug->common         = '缺陷管理';
-$lang->bug->id             = 'Bug編號';
-$lang->bug->product        = '所屬產品';
-$lang->bug->module         = '所屬模組';
-$lang->bug->path           = '模組路徑';
-$lang->bug->project        = '所屬項目';
-$lang->bug->story          = '相關需求';
-$lang->bug->storyVersion   = '需求版本';
-$lang->bug->task           = '相關任務';
-$lang->bug->title          = 'Bug標題';
-$lang->bug->severity       = '嚴重程度';
-$lang->bug->severityAB     = '級別';
-$lang->bug->pri            = '優先順序';
-$lang->bug->type           = 'Bug類型';
-$lang->bug->os             = '操作系統';
-$lang->bug->hardware       = '硬件平台';
-$lang->bug->browser        = '瀏覽器';
-$lang->bug->machine        = '機器硬件';
-$lang->bug->found          = '如何發現';
-$lang->bug->steps          = '重現步驟';
-$lang->bug->status         = 'Bug狀態';
-$lang->bug->mailto         = '抄送給';
-$lang->bug->openedBy       = '由誰創建';
-$lang->bug->openedByAB     = '創建';
-$lang->bug->openedDate     = '創建日期';
-$lang->bug->openedBuild    = '影響版本';
-$lang->bug->assignedTo     = '指派給';
-$lang->bug->assignedDate   = '指派日期';
-$lang->bug->resolvedBy     = '解決者';
-$lang->bug->resolvedByAB   = '解決';
-$lang->bug->resolution     = '解決方案';
-$lang->bug->resolutionAB   = '方案';
-$lang->bug->resolvedBuild  = '解決版本';
-$lang->bug->resolvedDate   = '解決日期';
-$lang->bug->closedBy       = '由誰關閉';
-$lang->bug->closedDate     = '關閉日期';
-$lang->bug->duplicateBug   = '重複Bug';
-$lang->bug->lastEditedBy   = '最後修改者';
-$lang->bug->lastEditedDate = '最後修改日期';
-$lang->bug->linkBug        = '相關Bug';
-$lang->bug->case           = '相關用例';
-$lang->bug->files          = '附件';
-$lang->bug->keywords       = '關鍵詞';
+$lang->bug->common           = '缺陷管理';
+$lang->bug->id               = 'Bug編號';
+$lang->bug->product          = '所屬產品';
+$lang->bug->module           = '所屬模組';
+$lang->bug->path             = '模組路徑';
+$lang->bug->project          = '所屬項目';
+$lang->bug->story            = '相關需求';
+$lang->bug->storyVersion     = '需求版本';
+$lang->bug->task             = '相關任務';
+$lang->bug->title            = 'Bug標題';
+$lang->bug->severity         = '嚴重程度';
+$lang->bug->severityAB       = '級別';
+$lang->bug->pri              = '優先順序';
+$lang->bug->type             = 'Bug類型';
+$lang->bug->os               = '操作系統';
+$lang->bug->hardware         = '硬件平台';
+$lang->bug->browser          = '瀏覽器';
+$lang->bug->machine          = '機器硬件';
+$lang->bug->found            = '如何發現';
+$lang->bug->steps            = '重現步驟';
+$lang->bug->status           = 'Bug狀態';
+$lang->bug->statusAB         = '狀態';
+$lang->bug->activatedCount   = '激活次數';
+$lang->bug->activatedCountAB = '激活次數';
+$lang->bug->confirm          = '確認狀態';
+$lang->bug->mailto           = '抄送給';
+$lang->bug->openedBy         = '由誰創建';
+$lang->bug->openedByAB       = '創建';
+$lang->bug->openedDate       = '創建日期';
+$lang->bug->openedDateAB     = '創建日期';
+$lang->bug->openedBuild      = '影響版本';
+$lang->bug->assignedTo       = '指派給';
+$lang->bug->assignedDate     = '指派日期';
+$lang->bug->resolvedBy       = '解決者';
+$lang->bug->resolvedByAB     = '解決';
+$lang->bug->resolution       = '解決方案';
+$lang->bug->resolutionAB     = '方案';
+$lang->bug->resolvedBuild    = '解決版本';
+$lang->bug->resolvedDate     = '解決日期';
+$lang->bug->resolvedDateAB   = '解決日期';
+$lang->bug->closedBy         = '由誰關閉';
+$lang->bug->closedDate       = '關閉日期';
+$lang->bug->duplicateBug     = '重複Bug';
+$lang->bug->lastEditedBy     = '最後修改者';
+$lang->bug->lastEditedDate   = '最後修改日期';
+$lang->bug->linkBug          = '相關Bug';
+$lang->bug->case             = '相關用例';
+$lang->bug->files            = '附件';
+$lang->bug->keywords         = '關鍵詞';
 $lang->bug->lastEditedByAB   = '修改者';
 $lang->bug->lastEditedDateAB = '修改日期';
 
 /* 方法列表。*/
 $lang->bug->index          = '首頁';
 $lang->bug->create         = '創建Bug';
+$lang->bug->confirmBug     = '確認Bug';
 $lang->bug->edit           = '編輯Bug';
 $lang->bug->browse         = 'Bug列表';
 $lang->bug->view           = 'Bug詳情';
@@ -121,12 +128,14 @@ $lang->bug->legendLife        = 'BUG的一生';
 $lang->bug->legendMisc        = '其相關他';
 
 /* 功能按鈕。*/
-$lang->bug->buttonCopy     = '複製';
-$lang->bug->buttonEdit     = '編輯';
-$lang->bug->buttonActivate = '激活';
-$lang->bug->buttonResolve  = '解決';
-$lang->bug->buttonClose    = '關閉';
-$lang->bug->buttonToList   = '返回';
+$lang->bug->buttonConfirm        = '確認';
+$lang->bug->buttonCopy           = '複製';
+$lang->bug->buttonEdit           = '編輯';
+$lang->bug->buttonActivate       = '激活';
+$lang->bug->buttonResolve        = '解決';
+$lang->bug->buttonClose          = '關閉';
+$lang->bug->buttonToList         = '返回';
+$lang->bug->buttonCreateTestcase = '創建用例';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改產品會導致相應的項目、需求和任務發生變化，確定嗎？';
@@ -200,10 +209,13 @@ $lang->bug->typeList['automation']   = '測試腳本';
 $lang->bug->typeList['trackthings']  = '事務跟蹤';
 $lang->bug->typeList['others']       = '其他';
 
-$lang->bug->statusList['']         = '';
-$lang->bug->statusList['active']   = '激活';
-$lang->bug->statusList['resolved'] = '已解決';
-$lang->bug->statusList['closed']   = '已關閉';
+$lang->bug->statusList['']            = '';
+$lang->bug->statusList['active']      = '激活';
+$lang->bug->statusList['resolved']    = '已解決';
+$lang->bug->statusList['closed']      = '已關閉';
+
+$lang->bug->confirmList[1] = '已確認';
+$lang->bug->confirmList[0] = '未確認';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '設計如此';
@@ -221,19 +233,20 @@ $lang->bug->report->create        = '生成報表';
 $lang->bug->report->selectAll     = '全選';
 $lang->bug->report->selectReverse = '反選';
 
-$lang->bug->report->charts['bugsPerProject']     = '項目Bug數量';
-$lang->bug->report->charts['bugsPerModule']      = '模組Bug數量';
-$lang->bug->report->charts['openedBugsPerDay']   = '每天新增Bug數';
-$lang->bug->report->charts['resolvedBugsPerDay'] = '每天解決Bug數';
-$lang->bug->report->charts['closedBugsPerDay']   = '每天關閉的Bug數';
-$lang->bug->report->charts['openedBugsPerUser']  = '每人提交的Bug數';
-$lang->bug->report->charts['resolvedBugsPerUser']= '每人解決的Bug數';
-$lang->bug->report->charts['closedBugsPerUser']  = '每人關閉的Bug數';
-$lang->bug->report->charts['bugsPerSeverity']    = 'Bug嚴重程度統計';
-$lang->bug->report->charts['bugsPerResolution']  = 'Bug解決方案統計';
-$lang->bug->report->charts['bugsPerStatus']      = 'Bug狀態統計';
-$lang->bug->report->charts['bugsPerType']        = 'Bug類型統計';
-$lang->bug->report->charts['bugsPerAssignedTo']  = '指派給統計';
+$lang->bug->report->charts['bugsPerProject']        = '項目Bug數量';
+$lang->bug->report->charts['bugsPerModule']         = '模組Bug數量';
+$lang->bug->report->charts['openedBugsPerDay']      = '每天新增Bug數';
+$lang->bug->report->charts['resolvedBugsPerDay']    = '每天解決Bug數';
+$lang->bug->report->charts['closedBugsPerDay']      = '每天關閉的Bug數';
+$lang->bug->report->charts['openedBugsPerUser']     = '每人提交的Bug數';
+$lang->bug->report->charts['resolvedBugsPerUser']   = '每人解決的Bug數';
+$lang->bug->report->charts['closedBugsPerUser']     = '每人關閉的Bug數';
+$lang->bug->report->charts['bugsPerSeverity']       = 'Bug嚴重程度統計';
+$lang->bug->report->charts['bugsPerResolution']     = 'Bug解決方案統計';
+$lang->bug->report->charts['bugsPerStatus']         = 'Bug狀態統計';
+$lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug激活次數統計';
+$lang->bug->report->charts['bugsPerType']           = 'Bug類型統計';
+$lang->bug->report->charts['bugsPerAssignedTo']     = '指派給統計';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug處理時間統計';
 //$lang->bug->report->charts['bugHistories']       = 'Bug處理步驟統計';
 
@@ -272,13 +285,14 @@ $lang->bug->report->openedBugsPerUser->graph->xAxisName  = '用戶';
 $lang->bug->report->resolvedBugsPerUser->graph->xAxisName= '用戶';
 $lang->bug->report->closedBugsPerUser->graph->xAxisName  = '用戶';
 
-$lang->bug->report->bugsPerSeverity->graph->xAxisName    = '嚴重程度';
-$lang->bug->report->bugsPerResolution->graph->xAxisName  = '解決方案';
-$lang->bug->report->bugsPerStatus->graph->xAxisName      = '狀態';
-$lang->bug->report->bugsPerType->graph->xAxisName        = '類型';
-$lang->bug->report->bugsPerAssignedTo->graph->xAxisName  = '指派給';
-$lang->bug->report->bugLiveDays->graph->xAxisName        = '處理時間';
-$lang->bug->report->bugHistories->graph->xAxisName       = '處理步驟';
+$lang->bug->report->bugsPerSeverity->graph->xAxisName       = '嚴重程度';
+$lang->bug->report->bugsPerResolution->graph->xAxisName     = '解決方案';
+$lang->bug->report->bugsPerStatus->graph->xAxisName         = '狀態';
+$lang->bug->report->bugsPerActivatedCount->graph->xAxisName = '激活次數';
+$lang->bug->report->bugsPerType->graph->xAxisName           = '類型';
+$lang->bug->report->bugsPerAssignedTo->graph->xAxisName     = '指派給';
+$lang->bug->report->bugLiveDays->graph->xAxisName           = '處理時間';
+$lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 
 /* 操作記錄。*/
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
