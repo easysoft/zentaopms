@@ -271,7 +271,7 @@ $lang->pager->locate    = "GO!";
 $lang->zentaoSite     = "官方網站";
 $lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社區</a> ";
 $lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>敏捷培訓</a> ";
-$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=comemind' target='_blank'>Comemind贊助</a>";
+$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=yeetec' target='_blank'>以太科技贊助</a>";
 $lang->zentaoKeywords = "開源項目管理軟件,項目管理,項目管理軟件,pmp,pms,php框架，國產php框架，scrum工具,scrum管理工具,scrum管理軟件,敏捷項目管理,禪道";
 $lang->zentaoDESC     = "禪道項目管理軟件(ZenTaoPMS)是一款國產的，基于LGPL協議，開源免費的項目管理軟件(工具、系統)，同時也是一款scrum管理工具。
     它集產品管理、項目管理、測試管理於一體，同時還包含了事務管理、組織管理等諸多功能，是中小型企業項目管理的首選。禪道項目管理軟件使用PHP + MySQL開發，

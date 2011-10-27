@@ -271,7 +271,7 @@ $lang->pager->locate    = "GO!";
 $lang->zentaoSite     = "Official Site";
 $lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum community</a> ";
 $lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>Agile training</a> ";
-$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=comemind' target='_blank'>Sponsor:Comemind</a>";
+$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=yeetec' target='_blank'>Sponsor:yeetec </a> ";
 $lang->zentaoKeywords = "Open Source Project Management System";
 $lang->zentaoDESC     = "ZenTaoPMS is an open sourced project management system."; 
 
