@@ -43,21 +43,23 @@ $lang->resource->product->edit   = 'edit';
 $lang->resource->product->delete = 'delete';
 $lang->resource->product->roadmap= 'roadmap';
 $lang->resource->product->doc    = 'doc';
+$lang->resource->product->dynamic= 'dynamic';
 $lang->resource->product->ajaxGetProjects = 'ajaxGetProjects';
 $lang->resource->product->ajaxGetPlans    = 'ajaxGetPlans';
 
 /* Story. */
-$lang->resource->story->create  = 'create';
-$lang->resource->story->edit    = 'edit';
-$lang->resource->story->export  = 'export';
-$lang->resource->story->delete  = 'delete';
-$lang->resource->story->view    = 'view';
-$lang->resource->story->change  = 'lblChange';
-$lang->resource->story->review  = 'lblReview';
-$lang->resource->story->close   = 'lblClose';
-$lang->resource->story->activate= 'lblActivate';
-$lang->resource->story->tasks   = 'tasks';
-$lang->resource->story->report  = 'reportChart';
+$lang->resource->story->create      = 'create';
+$lang->resource->story->batchCreate = 'batchCreate';
+$lang->resource->story->edit        = 'edit';
+$lang->resource->story->export      = 'export';
+$lang->resource->story->delete      = 'delete';
+$lang->resource->story->view        = 'view';
+$lang->resource->story->change      = 'lblChange';
+$lang->resource->story->review      = 'lblReview';
+$lang->resource->story->close       = 'lblClose';
+$lang->resource->story->activate    = 'lblActivate';
+$lang->resource->story->tasks       = 'tasks';
+$lang->resource->story->report      = 'reportChart';
 $lang->resource->story->ajaxGetProjectStories = 'ajaxGetProjectStories';
 $lang->resource->story->ajaxGetProductStories = 'ajaxGetProductStories';
 
@@ -95,6 +97,7 @@ $lang->resource->project->computeBurn    = 'computeBurn';
 $lang->resource->project->burnData       = 'burnData';
 $lang->resource->project->team           = 'team';
 $lang->resource->project->doc            = 'doc';
+$lang->resource->project->dynamic        = 'dynamic';
 $lang->resource->project->manageProducts = 'manageProducts';
 //$lang->resource->project->manageChilds   = 'manageChilds';
 $lang->resource->project->manageMembers  = 'manageMembers';
@@ -105,6 +108,7 @@ $lang->resource->project->ajaxGetProducts= 'ajaxGetProducts';
 
 /* Task. */
 $lang->resource->task->create              = 'create';
+$lang->resource->task->batchCreate         = 'batchCreate';
 $lang->resource->task->edit                = 'edit';
 $lang->resource->task->start               = 'start';
 $lang->resource->task->finish              = 'finish';
@@ -135,6 +139,7 @@ $lang->resource->qa->index = 'index';
 $lang->resource->bug->index               = 'index';
 $lang->resource->bug->browse              = 'browse';
 $lang->resource->bug->create              = 'create';
+$lang->resource->bug->confirmBug          = 'confirmBug';
 $lang->resource->bug->view                = 'view';
 $lang->resource->bug->edit                = 'edit';
 $lang->resource->bug->resolve             = 'resolve';
@@ -154,6 +159,7 @@ $lang->resource->bug->ajaxGetModuleOwner  = 'ajaxGetModuleOwner';
 $lang->resource->testcase->index              = 'index';
 $lang->resource->testcase->browse             = 'browse';
 $lang->resource->testcase->create             = 'create';
+$lang->resource->testcase->batchCreate        = 'batchCreate';
 $lang->resource->testcase->view               = 'view';
 $lang->resource->testcase->edit               = 'edit';
 $lang->resource->testcase->delete             = 'delete';
@@ -184,6 +190,11 @@ $lang->resource->doc->create    = 'create';
 $lang->resource->doc->view      = 'view';
 $lang->resource->doc->edit      = 'edit';
 $lang->resource->doc->delete    = 'delete';
+
+/* Subversion. */
+$lang->resource->svn->diff    = 'diff';
+$lang->resource->svn->cat     = 'cat';
+$lang->resource->svn->apiSync = 'apiSync';
 
 /* Company. */
 $lang->resource->company->index  = 'index';
@@ -319,3 +330,13 @@ $lang->changelog['2.0'][]   = 'extension-erase';
 $lang->changelog['2.1'][]   = 'extension-upgrade';
 
 $lang->changelog['2.2'][]   = 'file-edit';
+
+$lang->changelog['2.3'][]   = 'product-dynamic';
+$lang->changelog['2.3'][]   = 'project-dynamic';
+$lang->changelog['2.3'][]   = 'story-batchCreate';
+$lang->changelog['2.3'][]   = 'task-batchCreate';
+$lang->changelog['2.3'][]   = 'testcase-batchCreate';
+$lang->changelog['2.3'][]   = 'bug-confirmBug';
+$lang->changelog['2.3'][]   = 'svn-diff';
+$lang->changelog['2.3'][]   = 'svn-cat';
+$lang->changelog['2.3'][]   = 'svn-apiSync';

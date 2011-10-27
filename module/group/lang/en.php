@@ -49,5 +49,7 @@ $lang->group->versions['1.4']   = '1.4';
 $lang->group->versions['1.5']   = '1.5';
 $lang->group->versions['2.0']   = '2.0';
 $lang->group->versions['2.1']   = '2.1';
+$lang->group->versions['2.2']   = '2.2';
+$lang->group->versions['2.3']   = '2.3';
 
 include (dirname(__FILE__) . '/resource.php');

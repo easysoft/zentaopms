@@ -65,6 +65,7 @@ $lang->bug->lastEditedDateAB = '修改日期';
 /* 方法列表。*/
 $lang->bug->index          = '首页';
 $lang->bug->create         = '创建Bug';
+$lang->bug->confirmBug     = '确认Bug';
 $lang->bug->edit           = '编辑Bug';
 $lang->bug->browse         = 'Bug列表';
 $lang->bug->view           = 'Bug详情';

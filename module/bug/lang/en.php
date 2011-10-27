@@ -65,6 +65,7 @@ $lang->bug->lastEditedDateAB = 'Edited Date';
 /* Actions. */
 $lang->bug->index          = 'Index';
 $lang->bug->create         = 'Create Bug';
+$lang->bug->confirmBug     = 'Confirm Bug';
 $lang->bug->edit           = 'Edit Bug';
 $lang->bug->browse         = 'Browse Bug';
 $lang->bug->view           = 'Bug Info';
