@@ -98,8 +98,12 @@
             <td><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
           </tr>
           <tr>
+            <td class='rowhead'><?php echo $lang->bug->activatedCount;?></td>
+            <td><?php echo $bug->activatedCount;?></td>
+          </tr>
+          <tr>
             <td class='rowhead'><?php echo $lang->bug->confirmed;?></td>
-            <td><strong><?php echo $lang->bug->confirmedList[$bug->confirmed];?></strong></td>
+            <td><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->lblAssignedTo;?></td>
