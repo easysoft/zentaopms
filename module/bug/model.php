@@ -173,7 +173,7 @@ class bugModel extends model
     }
 
     /**
-     * Resolve a bug.
+     * Confirm a bug.
      * 
      * @param  int    $bugID 
      * @access public
