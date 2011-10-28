@@ -124,7 +124,7 @@ class extension extends control
             /* Check file exists or not. */
             if(file_exists($packageFile) and $overridePackage == 'no')
             {
-                $overrideLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&type=$type&overridePackage=yes&ignoreCompatible=$ignoreCompatible");
+                $overrideLink = inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&type=$type&overridePackage=yes&ignoreCompatible=$ignoreCompatible&overrideFile=$overrideFile&agreeLicense=$agreeLicense");
                 $this->view->error = sprintf($this->lang->extension->errorPackageFileExists, $packageFile, $overrideLink);
                 die($this->display());
             }
