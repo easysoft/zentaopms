@@ -27,6 +27,7 @@
 <table class='table-1 fixed colored'>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->project->name;?></th>
+    <th><?php echo $lang->project->code;?></th>
     <th><?php echo $lang->project->end;?></th>
     <th><?php echo $lang->project->status;?></th>
     <th><?php echo $lang->project->totalEstimate;?></th>
@@ -38,6 +39,7 @@
   <?php foreach($projectStats as $project):?>
   <tr class='a-center'>
     <td class='a-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '_parent');?></td>
+    <td><?php echo $project->code;?></td>
     <td><?php echo $project->end;?></td>
     <td><?php echo $lang->project->statusList[$project->status];?></td>
     <td><?php echo $project->hours->totalEstimate;?></td>
