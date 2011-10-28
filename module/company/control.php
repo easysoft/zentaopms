@@ -178,14 +178,12 @@ class company extends control
         $period  = ($type == 'account' or $type == 'product' or $type == 'project') ? 'all'  : $type;
 
         /* Get products' list.*/
-        $products    = $this->loadModel('product')->getPairs();
-        $products[0] = $this->lang->product->select; 
-        ksort($products);
+        $products = $this->loadModel('product')->getPairs();
+        $products = array_merge(array($this->lang->product->select), $products);
 
         /* Get projects' list.*/
-        $projects    = $this->loadModel('project')->getPairs();
-        $projects[0] = $this->lang->project->select;
-        ksort($projects);
+        $projects = $this->loadModel('project')->getPairs();
+        $projects = array_merge(array($this->lang->project->select), $projects);
 
         /* Get users.*/
         $users = $this->loadModel('user')->getPairs('nodeleted|noletter');
