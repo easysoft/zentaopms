@@ -922,7 +922,7 @@ class bug extends control
                 if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
                 if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
                 if(isset($bugLang->statusList[$bug->status]))         $bug->status     = $bugLang->statusList[$bug->status];
-                if(isset($bugLang->confirmList[$bug->confirm]))       $bug->confirm    = $bugLang->confirmList[$bug->confirm];
+                if(isset($bugLang->confirmedList[$bug->confirmed]))   $bug->confirmed  = $bugLang->confirmedList[$bug->confirmed];
                 if(isset($bugLang->resolutionList[$bug->resolution])) $bug->resolution = $bugLang->resolutionList[$bug->resolution];
                 
                 if(isset($users[$bug->openedBy]))     $bug->openedBy     = $users[$bug->openedBy];
