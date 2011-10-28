@@ -51,6 +51,7 @@ $lang->testtask->linkedCases   = '已关联用例列表';
 $lang->testtask->confirmDelete = '您确认要删除该测试任务吗？';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
+$lang->testtask->fail          = '失败';
 
 $lang->testtask->byModule      = '按模块';
 $lang->testtask->assignedToMe  = '指派给我';

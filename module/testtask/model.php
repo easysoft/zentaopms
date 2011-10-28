@@ -208,13 +208,20 @@ class testtaskModel extends model
         $caseResult = 'pass';
         if(!$this->post->passall)
         {
-            foreach($this->post->steps as $stepID => $stepResult)
+            if(isset($this->post->steps))
             {
-                if($stepResult != 'pass' and $stepResult != 'n/a')
+                foreach($this->post->steps as $stepID => $stepResult)
                 {
-                    $caseResult = $stepResult;
-                    break;
+                    if($stepResult != 'pass' and $stepResult != 'n/a')
+                    {
+                        $caseResult = $stepResult;
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                $caseResult = 'fail';
             }
         }
 

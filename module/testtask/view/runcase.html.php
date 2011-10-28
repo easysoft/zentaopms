@@ -40,6 +40,7 @@
         if(empty($run->case->steps))
         {
             echo html::submitButton($lang->testtask->pass, "onclick=$('#passall').val(1)");
+            echo html::submitButton($lang->testtask->fail, "onclick=$('#passall').val(0)");
         }
         else
         {
