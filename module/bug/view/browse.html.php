@@ -99,7 +99,7 @@ var customed   = <?php echo (int)$customed;?>;
         <?php foreach($bugs as $bug):?>
         <?php $bugLink = inlink('view', "bugID=$bug->id");?>
         <tr class='a-center'>
-          <?php $class = ($bug->status == 'active' or $bug->status == 'reactivated') ? 'active' . $bug->severity : $bug->status;?>
+          <?php $class = $bug->status == 'active' ? 'active' . $bug->severity : $bug->status;?>
           <td class='linkbox <?php echo $class;?>'><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
           <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
           <td><?php echo $lang->bug->priList[$bug->pri]?></td>
