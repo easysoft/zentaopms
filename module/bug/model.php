@@ -44,7 +44,6 @@ class bugModel extends model
         $bug = fixer::input('post')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
-            ->add('status', 'active')
             ->setDefault('project,story,task', 0)
             ->setDefault('openedBuild', '')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
