@@ -22,7 +22,7 @@
     <td>
       <fieldset>
         <legend><?php echo $lang->story->legendSpec;?></legend>
-        <div class='content'><?php echo nl2br($story->spec);?></div>
+        <div class='content'><?php echo $story->spec;?></div>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->comment;?></legend>
