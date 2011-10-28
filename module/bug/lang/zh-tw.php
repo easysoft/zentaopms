@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2240 2011-10-27 06:49:21Z wwccss $
+ * @version     $Id: zh-tw.php 2257 2011-10-28 06:04:42Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -34,7 +34,7 @@ $lang->bug->status           = 'Bug狀態';
 $lang->bug->statusAB         = '狀態';
 $lang->bug->activatedCount   = '激活次數';
 $lang->bug->activatedCountAB = '激活次數';
-$lang->bug->confirm          = '確認狀態';
+$lang->bug->confirmed        = '是否確認';
 $lang->bug->mailto           = '抄送給';
 $lang->bug->openedBy         = '由誰創建';
 $lang->bug->openedByAB       = '創建';
@@ -65,7 +65,7 @@ $lang->bug->lastEditedDateAB = '修改日期';
 /* 方法列表。*/
 $lang->bug->index          = '首頁';
 $lang->bug->create         = '創建Bug';
-$lang->bug->confirmBug     = '確認Bug';
+$lang->bug->confirmBug     = '確認';
 $lang->bug->edit           = '編輯Bug';
 $lang->bug->browse         = 'Bug列表';
 $lang->bug->view           = 'Bug詳情';
@@ -214,8 +214,8 @@ $lang->bug->statusList['active']      = '激活';
 $lang->bug->statusList['resolved']    = '已解決';
 $lang->bug->statusList['closed']      = '已關閉';
 
-$lang->bug->confirmList[1] = '已確認';
-$lang->bug->confirmList[0] = '未確認';
+$lang->bug->confirmedList[1] = '已確認';
+$lang->bug->confirmedList[0] = '未確認';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '設計如此';
