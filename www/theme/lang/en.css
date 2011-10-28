@@ -1,3 +1,6 @@
 .colhead th, .colhead th a {font-size:13px}
 .w-hour {width:85px}
 .w-resolution {width:85px}
+.side .rowhead {width:100px}
+#titlebar #main{width:60%}
+#titlebar div{width:40%}
