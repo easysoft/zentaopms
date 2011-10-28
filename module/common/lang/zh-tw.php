@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2228 2011-10-26 01:53:19Z wwccss $
+ * @version     $Id: zh-tw.php 2246 2011-10-27 08:54:27Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -170,7 +170,7 @@ $lang->bug->menu->testtask = array('link' => '測試任務|testtask|browse|produ
 
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit', 'subModule' => 'tree');
+$lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '測試任務|testtask|browse|productID=%s');
 
 $lang->testtask->menu->product  = '%s';

@@ -6,25 +6,28 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 2220 2011-10-25 02:23:22Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2246 2011-10-27 08:54:27Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
-$lang->task->index       = "任務一覽";
-$lang->task->create      = "新增任務";
-$lang->task->batchCreate = "批量添加任務";
-$lang->task->import      = "導入之前未完任務";
-$lang->task->edit        = "更新任務";
-$lang->task->delete      = "刪除任務";
-$lang->task->view        = "查看任務";
-$lang->task->logEfforts  = "記錄工時";
-$lang->task->start       = "開始任務";
-$lang->task->finish      = "完成任務";
-$lang->task->close       = "關閉任務";
-$lang->task->batchClose  = "批量關閉";
-$lang->task->cancel      = "取消任務";
-$lang->task->activate    = "激活任務";
-$lang->task->export      = "導出數據";
-$lang->task->reportChart = "報表統計";
+$lang->task->index              = "任務一覽";
+$lang->task->create             = "新增任務";
+$lang->task->batchCreate        = "批量添加任務";
+$lang->task->import             = "導入之前未完任務";
+$lang->task->edit               = "更新任務";
+$lang->task->delete             = "刪除任務";
+$lang->task->view               = "查看任務";
+$lang->task->logEfforts         = "記錄工時";
+$lang->task->start              = "開始任務";
+$lang->task->finish             = "完成任務";
+$lang->task->close              = "關閉任務";
+$lang->task->batchClose         = "批量關閉";
+$lang->task->cancel             = "取消任務";
+$lang->task->activate           = "激活任務";
+$lang->task->export             = "導出數據";
+$lang->task->reportChart        = "報表統計";
+$lang->task->fromBug            = '來源Bug';
+$lang->task->importBug          = '導入';
+$lang->task->importFromBug      = '導入Bug';
 $lang->task->confirmStoryChange = "確認需求變動";
 
 $lang->task->common         = '任務';
@@ -68,8 +71,21 @@ $lang->task->lastEditedBy   = '最後修改';
 $lang->task->lastEditedDate = '最後修改日期';
 $lang->task->lastEdited     = '最後編輯';
 
+$lang->task->bug->assignToMe     = '指派給我';
+$lang->task->bug->openedByMe     = '由我創建';
+$lang->task->bug->resolvedByMe   = '由我解決';
+$lang->task->bug->closedByMe     = '由我關閉';
+$lang->task->bug->assignToNull   = '未指派';
+$lang->task->bug->unResolved     = '未解決';
+$lang->task->bug->longLifeBugs   = '久未處理';
+$lang->task->bug->postponedBugs  = '被延期';
+$lang->task->bug->allBugs        = '所有Bug';
+$lang->task->bug->byQuery        = '搜索';
+$lang->task->bug->needConfirm    = '需求變動';
+
 $lang->task->same  = '同上';
 $lang->task->notes = '(註：“任務類型”、“任務名稱”、“優先順序”和“預計工時”必需填寫，否則此行無效)';
+$lang->task->descFromBug = '解決Bug:';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未開始';

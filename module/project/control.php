@@ -940,7 +940,7 @@ class project extends control
         $this->view->type      = $type;
         $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter');
         $this->view->account   = $account;
-        $this->view->actions   = $this->loadModel('action')->getProjectDynamic($projectID, $account, $period, $orderBy, $pager);
+        $this->view->actions   = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', $projectID);
         $this->display();
     }
 

@@ -24,7 +24,7 @@
       <th class='w-80px'><?php echo $lang->bug->statusAB;?></th>
       <th class='w-80px'><?php echo $lang->task->pri;?></th>
       <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
-      <th class='w-50px'><?php echo $lang->task->estimateBatch;?></th>
+      <th class='w-80px nobr'><?php echo $lang->task->estimateBatch;?></th>
     </tr>
     <?php foreach($bugs as $bug):?>
     <tr class='a-center'>

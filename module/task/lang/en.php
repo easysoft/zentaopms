@@ -79,7 +79,7 @@ $lang->task->bug->assignToNull   = 'Unassigned';
 $lang->task->bug->unResolved     = 'Unresolved';
 $lang->task->bug->longLifeBugs   = 'Longlife';
 $lang->task->bug->postponedBugs  = 'Postponed';
-$lang->task->bug->moduleBugs     = 'ByModule';
+$lang->task->bug->allBugs        = 'All Bugs';
 $lang->task->bug->byQuery        = 'Search';
 $lang->task->bug->needConfirm    = 'StoryChanged';
 

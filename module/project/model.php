@@ -358,7 +358,7 @@ class projectModel extends model
                     /* Process the burns. */
                     $project->burns = array();
                     $burnData       = $this->getBurnData($project->id);
-                    foreach($burnData as $data) if($data->value != '') $project->burns[] = $data->value;
+                    foreach($burnData as $data) $project->burns[] = $data->value;
                     $stats[] = $project;
 
                     /* Process the hours. */

@@ -123,6 +123,7 @@ $lang->resource->task->confirmStoryChange  = 'confirmStoryChange';
 $lang->resource->task->ajaxGetUserTasks    = 'ajaxGetUserTasks';
 $lang->resource->task->ajaxGetProjectTasks = 'ajaxGetProjectTasks';
 $lang->resource->task->report              = 'reportChart';
+$lang->resource->task->importFromBug       = 'importFromBug';
 
 /* Build. */
 $lang->resource->build->create               = 'create';
@@ -335,6 +336,7 @@ $lang->changelog['2.3'][]   = 'product-dynamic';
 $lang->changelog['2.3'][]   = 'project-dynamic';
 $lang->changelog['2.3'][]   = 'story-batchCreate';
 $lang->changelog['2.3'][]   = 'task-batchCreate';
+$lang->changelog['2.3'][]   = 'task-importFromBug';
 $lang->changelog['2.3'][]   = 'testcase-batchCreate';
 $lang->changelog['2.3'][]   = 'bug-confirmBug';
 $lang->changelog['2.3'][]   = 'svn-diff';

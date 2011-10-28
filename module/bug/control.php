@@ -542,7 +542,7 @@ class bug extends control
         $productID       = $bug->product;
         $this->bug->setMenu($this->products, $productID);
 
-        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->confirmBug;
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->bug->confirm;
 
