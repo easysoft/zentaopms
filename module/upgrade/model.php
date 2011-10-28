@@ -865,17 +865,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Update confirm of Bug. 
-     * 
-     * @access public
-     * @return void
-     */
-    public function updateConfirmOfBug()
-    {
-        $this->dao->update(TABLE_BUG)->set('confirm')->eq(1)->where('status')->in('resolved,closed')->exec();
-    }
-
-    /**
      * Update lastRun and lastResult field in zt_case
      * 
      * @access public
