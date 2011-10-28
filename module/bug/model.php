@@ -157,7 +157,8 @@ class bugModel extends model
             ->setIF($this->post->closedBy    != '' or  $this->post->closedDate   != '', 'status',       'closed') 
             ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedTo', $oldBug->openedBy) 
             ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedDate', $now)
-            ->setIF($this->post->resolution == '' and $this->post->resolvedDate =='', 'status', 'active')
+            ->setIF($this->post->resolution  == '' and $this->post->resolvedDate =='', 'status', 'active')
+            ->setIF($this->post->resolution  != '', 'confirmed', 1)
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->get();
 
@@ -182,7 +183,10 @@ class bugModel extends model
     public function confirm($bugID)
     {
         $now = helper::now();
-        $this->dao->update(TABLE_BUG)->set('confirm')->eq(1)->set('confirmedBy')->eq($this->app->user->account)->set('confirmedDate')->eq($now)->where('id')->eq($bugID)->exec();
+        $bug->confirmed = 1;
+        $bug->lastEditedBy = $this->app->user->account;
+        $bug->lastEditedDate = $now;
+        $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
     }
 
     /**
@@ -200,7 +204,7 @@ class bugModel extends model
             ->add('resolvedBy',     $this->app->user->account)
             ->add('resolvedDate',   $now)
             ->add('status',         'resolved')
-            ->add('confirm',        1)
+            ->add('confirmed',      1)
             ->add('assignedDate',   $now)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -269,6 +273,7 @@ class bugModel extends model
             ->add('closedDate',     $now)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->add('confirmed',      1)
             ->remove('comment')
             ->get();
 

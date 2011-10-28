@@ -38,7 +38,7 @@
             {
                 echo $users[$bug->$fieldName];
             }
-            elseif(preg_match('/^(severity|pri|resolution|os|type|browse|status|confirm)$/i', $fieldName))
+            elseif(preg_match('/^(severity|pri|resolution|os|type|browse|status|confirmed)$/i', $fieldName))
             {
                 $key = $fieldName . 'List';
                 $list = $lang->bug->$key;

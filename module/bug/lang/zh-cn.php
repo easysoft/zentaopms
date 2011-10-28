@@ -34,7 +34,7 @@ $lang->bug->status           = 'Bug状态';
 $lang->bug->statusAB         = '状态';
 $lang->bug->activatedCount   = '激活次数';
 $lang->bug->activatedCountAB = '激活次数';
-$lang->bug->confirm          = '确认状态';
+$lang->bug->confirmed        = '是否确认';
 $lang->bug->mailto           = '抄送给';
 $lang->bug->openedBy         = '由谁创建';
 $lang->bug->openedByAB       = '创建';
@@ -65,7 +65,7 @@ $lang->bug->lastEditedDateAB = '修改日期';
 /* 方法列表。*/
 $lang->bug->index          = '首页';
 $lang->bug->create         = '创建Bug';
-$lang->bug->confirmBug     = '确认Bug';
+$lang->bug->confirmBug     = '确认';
 $lang->bug->edit           = '编辑Bug';
 $lang->bug->browse         = 'Bug列表';
 $lang->bug->view           = 'Bug详情';
@@ -214,8 +214,8 @@ $lang->bug->statusList['active']      = '激活';
 $lang->bug->statusList['resolved']    = '已解决';
 $lang->bug->statusList['closed']      = '已关闭';
 
-$lang->bug->confirmList[1] = '已确认';
-$lang->bug->confirmList[0] = '未确认';
+$lang->bug->confirmedList[1] = '已确认';
+$lang->bug->confirmedList[0] = '未确认';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '设计如此';

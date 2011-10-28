@@ -21,7 +21,7 @@
     $convertParams = "productID=$productID&moduleID=0&testcaseID=0&extras=bugID=$bug->id";
     if(!$bug->deleted)
     {
-        if(!($bug->status == 'active' and $bug->confirm == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
+        if(!($bug->status == 'active' and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm))) echo $lang->bug->buttonConfirm . ' ';
         common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
         if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
@@ -48,7 +48,7 @@
       <?php
       if(!$bug->deleted)
       {
-          if(!($bug->status == 'active'  and $bug->confirm == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
+          if(!($bug->status == 'active'  and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
           common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
           if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
           if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
@@ -98,8 +98,8 @@
             <td><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $lang->bug->confirm;?></td>
-            <td><strong><?php echo $lang->bug->confirmList[$bug->confirm];?></strong></td>
+            <td class='rowhead'><?php echo $lang->bug->confirmed;?></td>
+            <td><strong><?php echo $lang->bug->confirmedList[$bug->confirmed];?></strong></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->lblAssignedTo;?></td>

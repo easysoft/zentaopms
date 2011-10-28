@@ -34,7 +34,7 @@ $lang->bug->status           = 'Status';
 $lang->bug->statusAB         = 'Status';
 $lang->bug->activatedCount   = 'Activated count';
 $lang->bug->activatedCountAB = 'Activated count';
-$lang->bug->confirm          = 'Confirm';
+$lang->bug->confirmed        = 'Confirmed';
 $lang->bug->mailto           = 'Mailto';
 $lang->bug->openedBy         = 'Opened By';
 $lang->bug->openedByAB       = 'Opened';
@@ -214,8 +214,8 @@ $lang->bug->statusList['active']      = 'Active';
 $lang->bug->statusList['resolved']    = 'Resolved';
 $lang->bug->statusList['closed']      = 'Closed';
 
-$lang->bug->confirmList[1] = 'Confirmed';
-$lang->bug->confirmList[0] = 'Unconfirm';
+$lang->bug->confirmedList[1] = 'Confirmed';
+$lang->bug->confirmedList[0] = 'Unconfirmed';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'By design';

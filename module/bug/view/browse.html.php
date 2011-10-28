@@ -104,8 +104,8 @@ var customed   = <?php echo (int)$customed;?>;
           <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
           <td><?php echo $lang->bug->priList[$bug->pri]?></td>
 
-          <?php $class = 'confirm' . $bug->confirm;?>
-          <td class='a-left nobr'><?php echo "<span class='$class'>[{$lang->bug->confirmList[$bug->confirm]}] </span>" . html::a($bugLink, $bug->title);?></td>
+          <?php $class = 'confirm' . $bug->confirmed;?>
+          <td class='a-left nobr'><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
 
           <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
           <td><?php echo $lang->bug->statusList[$bug->status];?></td>
