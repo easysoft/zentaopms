@@ -122,7 +122,7 @@ class bugModel extends model
      */
     public function getActiveBugs($pager)
     {
-        return $this->dao->select('*')->from(TABLE_BUG)->where('status')->eq('active')->andWhere('toTask')->eq(0)->page($pager)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_BUG)->where('status')->eq('active')->andWhere('toTask')->eq(0)->orderBy('id desc')->page($pager)->fetchAll();
     }
 
     /**
