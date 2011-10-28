@@ -82,14 +82,14 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td><?php if(!helper::isZeroDate($case->lastRun)) echo date(DT_MONTHTIME1, strtotime($case->lastRun));?></td>
             <td><?php if($case->lastResult) echo $lang->testcase->resultList[$case->lastResult];?></td>
             <td><?php echo $lang->testcase->statusList[$case->status];?></td>
-            <td class='a-left'>
+            <td class='a-right'>
               <?php
               common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&testcaseID=$case->id", $lang->copy);
               common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
               common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
               common::printLink('testtask', 'runCase', "runID=0&extras=caseID=$case->id", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
               common::printLink('testtask', 'results', "runID=0&extras=caseID=$case->id,version=$case->version", $lang->testtask->results, '', 'class="results"');
-              if($case->lastResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
+              if(!($case->lastResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))) echo $lang->testtask->createBug;
               ?>
             </td>
             <?php endif;?>
