@@ -27,15 +27,21 @@
     <th class='w-p20'><?php echo $lang->testcase->real;?></th>
   </tr>
   <?php foreach($run->case->steps as $key => $step):?>
-  <?php $stepResult = (object)$result->stepResults[$step->id];?>
+  <?php $stepResult = ''; if(!empty($result->stepResults)) $stepResult = (object)$result->stepResults[$step->id];?>
   <tr>
     <th><?php echo $key + 1;?></th>
     <td><?php echo nl2br($step->desc);?></td>
     <td><?php echo nl2br($step->expect);?></td>
+    <?php if(!empty($result->stepResults)):?>
     <td class='<?php echo $stepResult->result;?> a-center'><?php echo $lang->testcase->resultList[$stepResult->result];?></td>
     <td><?php echo $stepResult->real;?></td>
   </tr>
   <?php if($stepResult->result == 'blocked' or $stepResult->result == 'fail') break;?>
+    <?php else:?>
+    <td></td>
+    <td></td>
+  </tr>
+    <?php endif;?>
   <?php endforeach;?>
 </table>
 <?php endforeach;?>

@@ -208,7 +208,7 @@ class testtaskModel extends model
         $caseResult = 'pass';
         if(!$this->post->passall)
         {
-            if(isset($this->post->steps))
+            if($this->post->steps)
             {
                 foreach($this->post->steps as $stepID => $stepResult)
                 {
@@ -226,7 +226,7 @@ class testtaskModel extends model
         }
 
         /* Create result of every step. */
-        if(isset($this->post->steps))
+        if($this->post->steps)
         {
             foreach($this->post->steps as $stepID =>$stepResult)
             {

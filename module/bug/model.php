@@ -394,17 +394,25 @@ class bugModel extends model
                 $bugSteps = "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition;
             }
             $bugSteps .= $this->lang->bug->tplStep;
-            foreach($caseSteps as $key => $step)
+            if(!empty($stepResults))
             {
-                $bugSteps .= ($key + 1) . '. '  .$step->desc . "\n";
-                if($stepResults[$step->id]['result'] == 'fail')
+                foreach($caseSteps as $key => $step)
                 {
-                    $bugSteps .= $this->lang->bug->tplResult;
-                    $bugSteps .= $stepResults[$step->id]['real'] . "\n";
-                    $bugSteps .= $this->lang->bug->tplExpect;
-                    $bugSteps .= $step->expect;
-                    break;
+                    $bugSteps .= ($key + 1) . '. '  .$step->desc . "<br />";
+                    if($stepResults[$step->id]['result'] == 'fail')
+                    {
+                        $bugSteps .= $this->lang->bug->tplResult;
+                        $bugSteps .= $stepResults[$step->id]['real'] . "<br />";
+                        $bugSteps .= $this->lang->bug->tplExpect;
+                        $bugSteps .= $step->expect;
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                $bugSteps .= $this->lang->bug->tplResult;
+                $bugSteps .= $this->lang->bug->tplExpect;
             }
         }
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story);
