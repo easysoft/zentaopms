@@ -10,3 +10,6 @@ ALTER TABLE `zt_case` ADD `precondition` TEXT CHARACTER SET utf8 COLLATE utf8_ge
  -- 2011-10-22 add lastRun and lastResult field in zt_case
 ALTER TABLE `zt_case` ADD `lastRun` DATETIME NOT NULL;
 ALTER TABLE `zt_case` ADD `lastResult` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+ALTER TABLE `zt_bug` ADD `toTask` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0' AFTER `task` ;
+ALTER TABLE `zt_task` ADD `fromBug` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0' AFTER `storyVersion` ;
