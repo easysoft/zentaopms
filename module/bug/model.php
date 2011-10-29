@@ -381,7 +381,7 @@ class bugModel extends model
 
         $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
         if($caseID > 0)
-            $run->case = $this->loadModel('testcase')->getById($caseID, $version);
+            $run->case = $this->loadModel('testcase')->getById($caseID, $result->version);
         else
             $run = $this->loadModel('testtask')->getRunById($result->run);
         if($result and $result->caseResult == 'fail')
