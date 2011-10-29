@@ -42,8 +42,8 @@
     <?php endfor;?>
     <tr>
       <td colspan='8'>
-        <div class='f-left red'><?php echo $lang->task->notes;?></div>
-        <div class='f-right a-left'><?php echo html::submitButton() . html::resetButton();?></div>
+        <div class='half-left red'><?php echo $lang->task->notes;?></div>
+        <div class='half-right'><?php echo html::submitButton() . html::resetButton();?></div>
       </td>
     </tr>
   </table>
