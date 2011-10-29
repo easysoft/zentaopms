@@ -330,7 +330,6 @@ class testcase extends control
         $this->view->modulePath     = $this->tree->getParents($case->module);
         $this->view->users          = $this->user->getPairs('noletter');
         $this->view->actions        = $this->loadModel('action')->getList('case', $caseID);
-        $this->view->currentVersion = $version;
 
         $this->display();
     }
