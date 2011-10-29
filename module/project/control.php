@@ -313,29 +313,26 @@ class project extends control
             $mails = $this->project->importBug($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail)
-            {
-                $this->sendmail($mail->taskID, $mail->actionID);
-            }            
+            foreach($mails as $mail) $this->sendmail($mail->taskID, $mail->actionID);
 
             /* Locate the browser. */
             die(js::locate($this->createLink('project', 'task', "projectID=$projectID"), 'parent'));
         }
+
         $this->loadModel('bug');
-
         $projects = $this->project->getPairs();
-        $users = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $users    = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $this->project->setMenu($projects, $projectID);
 
-        /* Load pager and get tasks. */
+        /* Load pager and get bugs. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+        $bugs  = $this->bug->getActiveBugs($pager);
 
-        $this->project->setMenu($projects, $projectID);
         $header['title'] = $projects[$projectID] . $this->lang->colon . $this->lang->project->importBug;
         $position[]      = html::a($this->createLink('project', 'task', "projectID=$projectID"), $projects[$projectID]);
         $position[]      = $this->lang->project->importBug;
 
-        $bugs = $this->bug->getActiveBugs($pager);
         $this->view->header    = $header;
         $this->view->pager     = $pager;
         $this->view->bugs      = $bugs;
