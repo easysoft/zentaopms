@@ -621,6 +621,7 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('2.2'));
         $this->updateCases();
+        $this->updateActivatedCountOfBug();
         if(!$this->isError()) $this->setting->updateVersion('2.3');
     }
 
