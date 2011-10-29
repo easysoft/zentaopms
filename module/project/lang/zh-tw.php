@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 2228 2011-10-26 01:53:19Z wwccss $
+ * @version     $Id: zh-tw.php 2270 2011-10-29 03:35:05Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -85,7 +85,8 @@ $lang->project->edit           = "編輯項目";
 $lang->project->manageMembers  = '團隊管理';
 $lang->project->unlinkMember   = '移除成員';
 $lang->project->unlinkStory    = '移除需求';
-$lang->project->importTask     = '導入之前未完';
+$lang->project->importTask     = '導入任務';
+$lang->project->importBug      = '導入Bug';
 $lang->project->ajaxGetProducts= '介面：獲得項目產品列表';
 
 /* 分組瀏覽。*/

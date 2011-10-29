@@ -6,12 +6,12 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 2217 2011-10-24 07:14:34Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2270 2011-10-29 03:35:05Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
 $lang->story->create      = "新增需求";
-$lang->story->batchCreate = "批量添加需求";
+$lang->story->batchCreate = "批量添加";
 $lang->story->change      = "變更";
 $lang->story->changed     = '需求變更';
 $lang->story->review      = '評審';
