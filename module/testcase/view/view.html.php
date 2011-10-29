@@ -19,7 +19,7 @@
     $browseLink = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
     if(!$case->deleted)
     {
-        common::printLink('testtask', 'runCase', "runID=0&extras=version=$currentVersion,caseID=$case->id", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
+        common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
         common::printLink('testtask', 'results', "runID=0&extras=caseID=$case->id,version=$case->version", $lang->testtask->results, '', 'class="results"');
         if($case->lastResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);

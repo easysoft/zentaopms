@@ -198,15 +198,20 @@ class testtaskModel extends model
      * Create test result 
      * 
      * @param  int   $runID 
-     * @param  string $extras       others params, forexample, caseID=10
      * @access public
      * @return void
      */
-    public function createResult($runID, $extras)
+    public function createResult($runID = 0)
     {
-        /* Compute the test result. */
-        $caseResult = 'pass';
-        if(!$this->post->passall)
+        /* Compute the test result. 
+         *
+         * 1. if there result in the post, use it.
+         * 2. if no result, set default is pass.
+         * 3. then check the steps to compute result.
+         * 
+         * */
+        $caseResult = $this->post->result ? $this->post->result : 'pass';
+        if(isset($_POST['passall']) and $this->post->passall == false)
         {
             if($this->post->steps)
             {
@@ -218,10 +223,6 @@ class testtaskModel extends model
                         break;
                     }
                 }
-            }
-            else
-            {
-                $caseResult = 'fail';
             }
         }
 
@@ -240,12 +241,6 @@ class testtaskModel extends model
             $stepResults = array();
         }
 
-        /* Pares the extras */
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras);
-
-        if(isset($caseID)) $runID = 0;
-
         /* Insert into testResult table. */
         $now = helper::now();
         $result = fixer::input('post')
@@ -253,12 +248,12 @@ class testtaskModel extends model
             ->add('caseResult', $caseResult)
             ->setForce('stepResults', serialize($stepResults))
             ->add('date', $now)
-            ->remove('steps,reals,passall')
+            ->remove('steps,reals,passall,result')
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
         $this->dao->update(TABLE_CASE)->set('lastRun')->eq($now)->set('lastResult')->eq($caseResult)->where('id')->eq($this->post->case)->exec();
 
-        if(!isset($caseID))
+        if($runID)
         {
             /* Update testRun's status. */
             if(!dao::isError())

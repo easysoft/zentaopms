@@ -39,17 +39,18 @@
         <?php
         if(empty($run->case->steps))
         {
-            echo html::submitButton($lang->testtask->pass, "onclick=$('#passall').val(1)");
-            echo html::submitButton($lang->testtask->fail, "onclick=$('#passall').val(0)");
+            echo html::submitButton($lang->testtask->pass, "onclick=$('#result').val('pass')");
+            echo html::submitButton($lang->testtask->fail, "onclick=$('#result').val('fail')");
         }
         else
         {
             echo html::submitButton();
             echo html::submitButton($lang->testtask->passAll, "onclick=$('#passall').val(1)");
         }
-        echo html::hidden('case', $run->case->id);
+        echo html::hidden('case',    $run->case->id);
         echo html::hidden('version', $run->case->version);
-        echo html::hidden('passall', 0);
+        if($run->case->steps)  echo html::hidden('passall', 0);
+        if(!$run->case->steps) echo html::hidden('result', '');
         ?>
       </td>
     </tr>
