@@ -28,7 +28,7 @@
     <?php foreach($bugs as $bug):?>
     <tr class='a-center'>
       <td><?php echo html::checkbox("import[$bug->id]", '');?> </td>
-      <td><?php echo sprintf('%03d', $bug->id); echo html::input("id[$bug->id]", $bug->id, "class=hidden");?></td>
+      <td><?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?></td>
       <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
       <td><?php echo $lang->bug->priList[$bug->pri]?></td>
       <td class='a-left nobr'><?php echo $bug->title;?></td>
