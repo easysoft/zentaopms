@@ -580,6 +580,8 @@ class projectModel extends model
         $bugLang = $this->app->loadLang('bug');
         $this->loadModel('task');
         $this->loadModel('story');
+        $bugPath = $this->app->getModulePath('bug', 'config');
+
         $now = helper::now();
         $BugToTasks = fixer::input('post')->get();
         foreach($BugToTasks->import as $key => $value)
@@ -595,7 +597,7 @@ class projectModel extends model
             $task->consumed     = 0;
             $task->status       = 'wait';
             $task->statusCustom = 1;
-            $task->desc         = $bugLang->bug->resolve . ':' . sprintf('%03d', $key);
+            $task->desc         = $bugLang->bug->resolve . ':' . '#' . html::a(helper::createLink('bug', 'view', "bugID=$key"), sprintf('%03d', $key));
             $task->openedDate   = $now;
             $task->openedBy     = $this->app->user->account;
             if(!empty($BugToTasks->estimate[$key]))

@@ -12,8 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
-  <table class='table-1 colored'>
+  <table class='table-1 colored tablesorter'>
+    <thead>
     <tr class='colhead'>
       <th class='w-id'>       <?php echo $lang->import;?></th>
       <th class='w-id'>       <?php echo $lang->idAB;?></th>
@@ -23,8 +25,10 @@
       <th class='w-80px'><?php echo $lang->bug->statusAB;?></th>
       <th class='w-80px'><?php echo $lang->task->pri;?></th>
       <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
-      <th class='w-80px nobr'><?php echo $lang->task->estimate;?></th>
+      <th class='w-80px nobr {sorter:false}'><?php echo $lang->task->estimate;?></th>
     </tr>
+    </thead>
+    <tbody>
     <?php foreach($bugs as $bug):?>
     <tr class='a-center'>
       <td><?php echo html::checkbox("import[$bug->id]", '');?> </td>
@@ -38,8 +42,9 @@
       <td><?php echo html::input("estimate[$bug->id]", '', 'size=4');?></td>
     </tr>
     <?php endforeach;?>
+    </tbody>
     <tr><td colspan='9'><div class='f-right'><?php $pager->show();?></div></td></tr>
-    <tr><td colspan='9' class='a-center'><?php echo html::submitButton($lang->import) . html::resetButton();?></td></tr>
   </table>
+    <div class='a-center'><?php echo html::submitButton($lang->import) . html::resetButton();?></div>
 </form>
 <?php include '../../common/view/footer.html.php';?>
