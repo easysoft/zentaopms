@@ -1486,6 +1486,10 @@ class router
             $dbh = new PDO($dsn, $params->user, $params->password, array(PDO::ATTR_PERSISTENT => $params->persistant));
             $dbh->exec("SET NAMES {$params->encoding}");
 
+            /* If run on linux, set emulatePrepare and bufferQuery to true. */
+            if(!isset($params->emulatePrepare) and PHP_OS == 'Linux') $params->emulatePrepare = true;
+            if(!isset($params->bufferQuery) and PHP_OS == 'Linux')    $params->bufferQuery = true;
+
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             if(isset($params->strictMode) and $params->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
