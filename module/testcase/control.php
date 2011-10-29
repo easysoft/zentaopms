@@ -155,12 +155,12 @@ class testcase extends control
      * 
      * @param  int   $productID 
      * @param  int   $moduleID 
-     * @param  int   $testcaseID
-     * @param  string $extras others params, forexample, bugID=10
+     * @param  string $from
+     * @param  int   $param
      * @access public
      * @return void
      */
-    public function create($productID, $moduleID = 0, $testcaseID = 0, $extras = '')
+    public function create($productID, $moduleID = 0, $from = '', $param = 0)
     {
         $this->loadModel('story');
         if(!empty($_POST))
@@ -185,11 +185,17 @@ class testcase extends control
         $stage        = '';
         $pri          = 0;
         $storyID      = 0;
+        $testcaseID   = 0;
+        $bugID        = 0;
         $title        = '';
         $precondition = '';
         $keywords     = '';
         $steps        = array();
 
+        if($from == 'testcase') $testcaseID = $param;
+        if($from == 'bug')      $bugID      = $param;
+
+        /* If testcaseID large than 0, use this testcase as template. */
         if($testcaseID > 0)
         {
             $testcase     = $this->testcase->getById($testcaseID);
@@ -204,12 +210,8 @@ class testcase extends control
             $steps        = $testcase->steps;
         }
                
-        /* Parse the extras. */
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras);
-
-        /* If bugID setted, use this bug as template. */
-        if(isset($bugID))
+        /* If bugID large than 0, use this bug as template. */
+        if($bugID > 0)
         {
             $bug      = $this->loadModel('bug')->getById($bugID);
             $type     = $bug->type;

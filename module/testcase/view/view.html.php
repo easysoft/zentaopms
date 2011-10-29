@@ -23,7 +23,7 @@
         common::printLink('testtask', 'results', "runID=0&extras=caseID=$case->id,version=$case->version", $lang->testtask->results, '', 'class="results"');
         if($case->lastResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-        common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&testcaseID=$case->id", $lang->copy);
+        common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&testcaseID=$case->id", $lang->copy);
         common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
     }
     echo html::a($browseLink, $lang->goback);

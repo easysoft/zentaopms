@@ -18,7 +18,7 @@
     $browseLink    = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
     $params        = "bugID=$bug->id";
     $copyParams    = "productID=$productID&extras=bugID=$bug->id";
-    $convertParams = "productID=$productID&moduleID=0&testcaseID=0&extras=bugID=$bug->id";
+    $convertParams = "productID=$productID&moduleID=0&from=bug&bugID=$bug->id";
     if(!$bug->deleted)
     {
         if(!($bug->status == 'active' and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm))) echo $lang->bug->buttonConfirm . ' ';
