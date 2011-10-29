@@ -113,17 +113,22 @@ class mailModel extends model
     {
         if(!$this->config->mail->turnon) return;
 
+        /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
+        $account = $this->app->user->account;
+        $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
+        $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
+
+        foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
+        foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
+
+        if(!$toList and !$ccList) return;
+        if(!$toList and $ccList) $toList = array(array_shift($ccList));
+        $toList = join(',', $toList);
+        $ccList = join(',', $ccList);
+
         /* Get realname and email of users. */
         $this->loadModel('user');
-        $list = $toList . ',' . $ccList;
-        if(substr_count($list, $this->app->user->account) != 0 and $test != 'test')
-        {
-            $listArray = explode(",", $list);
-            unset($list);
-            $list = '';
-            foreach($listArray as $data) if($data != $this->app->user->account) $list = $list . $data . ',';
-        }
-        $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $list));
+        $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
         
         $this->clear();
 
