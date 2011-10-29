@@ -168,7 +168,7 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $this->testcase->create($bugID);
+            $caseID = $this->testcase->create($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
