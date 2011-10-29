@@ -260,4 +260,39 @@ class testcaseModel extends model
         foreach($steps as $step) $return .= $step->desc . ' EXPECT:' . $step->expect . "\n";
         return $return;
     }
+
+    /**
+     * Create case steps from a bug's step.
+     * 
+     * @param  string    $steps 
+     * @access public
+     * @return array
+     */
+    function createStepsFromBug($steps)
+    {
+        $steps        = strip_tags($steps);
+        $caseSteps    = array((object)array('desc' => $steps, 'expect' => ''));   // the default steps before parse.
+        $lblStep      = strip_tags($this->lang->bug->tplStep);
+        $lblResult    = strip_tags($this->lang->bug->tplResult);
+        $lblExpect    = strip_tags($this->lang->bug->tplExpect);
+        $lblStepPos   = strpos($steps, $lblStep);
+        $lblResultPos = strpos($steps, $lblResult);
+        $lblExpectPos = strpos($steps, $lblExpect);
+
+        if($lblStepPos === false or $lblResultPos === false or $lblExpectPos === false) return $caseSteps;
+
+        $caseSteps  = substr($steps, $lblStepPos + strlen($lblStep), $lblResultPos - strlen($lblStep));
+        $caseExpect = substr($steps, $lblExpectPos + strlen($lblExpect)); 
+        $caseSteps  = trim($caseSteps);
+        $caseExpect = trim($caseExpect);
+
+        $caseSteps = explode("\n", trim($caseSteps));
+        $stepCount = count($caseSteps);
+        foreach($caseSteps as $key => $caseStep)
+        {
+            $expect = $key + 1 == $stepCount ? $caseExpect : '';
+            $caseSteps[$key] = (object)array('desc' => trim($caseStep), 'expect' => $expect);
+        }
+        return $caseSteps;
+    }
 }

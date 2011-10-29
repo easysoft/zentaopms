@@ -215,9 +215,9 @@ class testcase extends control
             $type     = $bug->type;
             $pri      = $bug->pri ? $bug->pri : $bug->severity;
             $storyID  = $bug->story;
-            $title    = $bug->title;
+            $title    = "[Bug#$bugID]" . $bug->title;
             $keywords = $bug->keywords;
-            $steps[]  = (object)array('desc' => strip_tags(str_replace(array('<br />', '<br>'), "\n",  $bug->steps)), 'expect' => '');
+            $steps    = $this->testcase->createStepsFromBug($bug->steps);
         }
        
         /* Padding the steps to the default steps count. */
@@ -253,7 +253,8 @@ class testcase extends control
 
         $this->display();
     }
-    
+
+   
     /**
      * Create a batch test case.
      * 
