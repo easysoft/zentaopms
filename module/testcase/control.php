@@ -213,7 +213,7 @@ class testcase extends control
         {
             $bug      = $this->loadModel('bug')->getById($bugID);
             $type     = $bug->type;
-            $pri      = $bug->severity;
+            $pri      = $bug->pri ? $bug->pri : $bug->severity;
             $storyID  = $bug->story;
             $title    = $bug->title;
             $keywords = $bug->keywords;
