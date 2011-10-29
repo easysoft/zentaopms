@@ -368,8 +368,18 @@ class testtask extends control
 
         if(isset($caseID))
         {
-            $this->view->run->case = $this->loadModel('testcase')->getById($caseID, $version);
-            $this->view->results   = $this->testtask->getResults(0, $caseID);
+            $results = $this->testtask->getResults(0, $caseID);
+            foreach($results as $result)
+            {
+                $relatedVersions[] = $result->version;
+            }
+            $relatedVersions = array_unique($relatedVersions);
+
+            $run->case = $this->loadModel('testcase')->getById($caseID, 1);
+            $run->case->steps =  $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->in($relatedVersions)->fetchAll();
+
+            $this->view->results = $results;
+            $this->view->run     = $run;
         }
         else
         {

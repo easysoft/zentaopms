@@ -26,7 +26,17 @@
     <th><?php echo $lang->testcase->result;?></th>
     <th class='w-p20'><?php echo $lang->testcase->real;?></th>
   </tr>
-  <?php foreach($run->case->steps as $key => $step):?>
+  <?php 
+  $relatedCaseSteps = array();
+  foreach($run->case->steps as $key => $step)
+  {
+    if($result->version == $step->version)
+    {
+        $relatedCaseSteps[] = $step;
+    }
+  }
+  foreach($relatedCaseSteps as $key => $step):
+  ?>
   <?php $stepResult = ''; if(!empty($result->stepResults)) $stepResult = (object)$result->stepResults[$step->id];?>
   <tr>
     <th><?php echo $key + 1;?></th>
