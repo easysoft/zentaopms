@@ -106,25 +106,29 @@ class mailModel extends model
      * @param  string  $subject 
      * @param  string  $body 
      * @param  array   $ccList 
+     * @param  bool    $includeMe 
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '', $test = '')
+    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false)
     {
         if(!$this->config->mail->turnon) return;
 
         /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
-        $account = $this->app->user->account;
-        $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
-        $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
+        if($includeMe == false)
+        {
+            $account = $this->app->user->account;
+            $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
+            $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
 
-        foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
-        foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
+            foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
+            foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
 
-        if(!$toList and !$ccList) return;
-        if(!$toList and $ccList) $toList = array(array_shift($ccList));
-        $toList = join(',', $toList);
-        $ccList = join(',', $ccList);
+            if(!$toList and !$ccList) return;
+            if(!$toList and $ccList) $toList = array(array_shift($ccList));
+            $toList = join(',', $toList);
+            $ccList = join(',', $ccList);
+        }
 
         /* Get realname and email of users. */
         $this->loadModel('user');
