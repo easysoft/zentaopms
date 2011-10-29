@@ -35,10 +35,11 @@ class testcaseModel extends model
     /**
      * Create a case.
      * 
+     * @param int $bugID
      * @access public
      * @return void
      */
-    function create()
+    function create($bugID)
     {
         $now  = helper::now();
         $case = fixer::input('post')
@@ -46,6 +47,7 @@ class testcaseModel extends model
             ->add('openedDate', $now)
             ->add('status', 'normal')
             ->add('version', 1)
+            ->add('fromBug', $bugID)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->remove('steps,expects,files,labels')
             ->setDefault('story', 0)

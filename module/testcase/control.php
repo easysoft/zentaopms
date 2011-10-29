@@ -162,10 +162,13 @@ class testcase extends control
      */
     public function create($productID, $moduleID = 0, $from = '', $param = 0)
     {
+        $testcaseID = $from == 'testcase' ? $param : 0;
+        $bugID      = $from == 'bug' ? $param : 0;
+        
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $this->testcase->create();
+            $this->testcase->create($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
@@ -185,15 +188,10 @@ class testcase extends control
         $stage        = '';
         $pri          = 0;
         $storyID      = 0;
-        $testcaseID   = 0;
-        $bugID        = 0;
         $title        = '';
         $precondition = '';
         $keywords     = '';
         $steps        = array();
-
-        if($from == 'testcase') $testcaseID = $param;
-        if($from == 'bug')      $bugID      = $param;
 
         /* If testcaseID large than 0, use this testcase as template. */
         if($testcaseID > 0)
