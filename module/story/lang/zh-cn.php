@@ -11,7 +11,7 @@
  */
 $lang->story->browse      = "需求列表";
 $lang->story->create      = "新增需求";
-$lang->story->batchCreate = "批量添加需求";
+$lang->story->batchCreate = "批量添加";
 $lang->story->change      = "变更";
 $lang->story->changed     = '需求变更';
 $lang->story->review      = '评审';

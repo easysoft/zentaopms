@@ -142,63 +142,6 @@ class taskModel extends model
     }
 
     /**
-     * Import task from Bug. 
-     * 
-     * @param  int    $projectID 
-     * @access public
-     * @return void
-     */
-    public function importFromBug($projectID)
-    {
-        $this->loadModel('bug');
-        $this->loadModel('task');
-        $now = helper::now();
-        $BugToTasks = fixer::input('post')->get();
-        foreach($BugToTasks->import as $key => $value)
-        {
-            $bug = $this->bug->getById($key);
-            $task->project      = $projectID;
-            $task->story        = $bug->story;
-            $task->storyVersion = $bug->story;
-            $task->fromBug      = $key;
-            $task->name         = $bug->title;
-            $task->type         = 'devel';
-            $task->pri          = $BugToTasks->pri[$key];
-            $task->consumed     = 0;
-            $task->status       = 'wait';
-            $task->statusCustom = 1;
-            $task->desc         = $this->lang->task->descFromBug . sprintf('%03d', $key);
-            $task->openedDate   = $now;
-            $task->openedBy     = $this->app->user->account;
-            if(!empty($BugToTasks->estimate[$key]))
-            {
-                $task->estimate     = $BugToTasks->estimate[$key];
-                $task->left         = $task->estimate;
-            }
-            if(!empty($BugToTasks->assignedTo[$key]))
-            {
-                $task->assignedTo   = $BugToTasks->assignedTo[$key];
-                $task->assignedDate = $now;
-            }
-            $this->dao->insert(TABLE_TASK)->data($task)->checkIF($task->estimate != '', 'estimate', 'float')->exec();
-
-            if(dao::isError()) 
-            {
-                echo js::error(dao::getError());
-                die(js::reload('parent'));
-            }
-
-            $taskID = $this->dao->lastInsertID();
-            if($task->story != false) $this->story->setStage($tasks->story[$i]);
-            $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
-            $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($key)->exec();
-            $mails[$key]->taskID  = $taskID;
-            $mails[$key]->actionID = $actionID;
-        }
-        return $mails;
-    }
-
-    /**
      * Update a task.
      * 
      * @param  int    $taskID 

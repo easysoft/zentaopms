@@ -11,7 +11,7 @@
  */
 $lang->task->index              = "任务一览";
 $lang->task->create             = "新增任务";
-$lang->task->batchCreate        = "批量添加任务";
+$lang->task->batchCreate        = "批量添加";
 $lang->task->import             = "导入之前未完任务";
 $lang->task->edit               = "编辑任务";
 $lang->task->delete             = "删除任务";
@@ -26,8 +26,6 @@ $lang->task->activate           = "激活任务";
 $lang->task->export             = "导出数据";
 $lang->task->reportChart        = "报表统计";
 $lang->task->fromBug            = '来源Bug';
-$lang->task->importBug          = '导入';
-$lang->task->importFromBug      = '导入Bug';
 $lang->task->confirmStoryChange = "确认需求变动";
 
 $lang->task->common         = '任务';
@@ -40,7 +38,6 @@ $lang->task->type           = '任务类型';
 $lang->task->pri            = '优先级';
 $lang->task->mailto         = '抄送给';
 $lang->task->estimate       = '最初预计';
-$lang->task->estimateBatch  = '预计工时';
 $lang->task->estimateAB     = '预';
 $lang->task->left           = '预计剩余';
 $lang->task->leftAB         = '剩';
@@ -71,21 +68,8 @@ $lang->task->lastEditedBy   = '最后修改';
 $lang->task->lastEditedDate = '最后修改日期';
 $lang->task->lastEdited     = '最后编辑';
 
-$lang->task->bug->assignToMe     = '指派给我';
-$lang->task->bug->openedByMe     = '由我创建';
-$lang->task->bug->resolvedByMe   = '由我解决';
-$lang->task->bug->closedByMe     = '由我关闭';
-$lang->task->bug->assignToNull   = '未指派';
-$lang->task->bug->unResolved     = '未解决';
-$lang->task->bug->longLifeBugs   = '久未处理';
-$lang->task->bug->postponedBugs  = '被延期';
-$lang->task->bug->allBugs        = '所有Bug';
-$lang->task->bug->byQuery        = '搜索';
-$lang->task->bug->needConfirm    = '需求变动';
-
 $lang->task->same  = '同上';
 $lang->task->notes = '(注：“任务类型”、“任务名称”、“优先级”和“预计工时”必需填写，否则此行无效)';
-$lang->task->descFromBug = '解决Bug:';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未开始';

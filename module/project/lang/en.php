@@ -86,6 +86,7 @@ $lang->project->manageMembers  = 'Manage team members';
 $lang->project->unlinkMember   = 'Remove member';
 $lang->project->unlinkStory    = 'Remove story';
 $lang->project->importTask     = 'Import Task';
+$lang->project->importBug      = 'Import tasks from Bugs';
 $lang->project->ajaxGetProducts= "API: get project's products";
 
 /* Browse. */
