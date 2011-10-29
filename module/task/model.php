@@ -425,18 +425,18 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getProjectTaskPairs($projectID, $status = 'all', $orderBy = 'id_desc')
+    public function getProjectTaskPairs($projectID, $status = 'all', $orderBy = 'finishedBy, id_desc')
     {
         $tasks = array('' => '');
-        $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS assignedToRealName')
+        $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS finishedByRealName')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.finishedBy = t2.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->orderBy($orderBy)
             ->query();
-        while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->assignedToRealName:$task->name";
+        while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->finishedByRealName:$task->name";
         return $tasks;
     }
 
