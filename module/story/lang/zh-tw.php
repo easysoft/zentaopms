@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 2270 2011-10-29 03:35:05Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2296 2011-10-30 01:05:27Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -176,6 +176,7 @@ $lang->story->report->selectReverse = '反選';
 
 $lang->story->report->charts['storysPerProduct']        = '產品需求數量';
 $lang->story->report->charts['storysPerModule']         = '模組需求數量';
+$lang->story->report->charts['storysPerSource']         = '需求來源統計';
 $lang->story->report->charts['storysPerPlan']           = '計划進行統計';
 $lang->story->report->charts['storysPerStatus']         = '狀態進行統計';
 $lang->story->report->charts['storysPerStage']          = '所處階段進行統計';
@@ -201,6 +202,7 @@ $lang->story->report->options->graph->showColumnShadow = 0;   // 是否顯示柱
 
 $lang->story->report->storysPerProduct->graph->xAxisName      = '產品';
 $lang->story->report->storysPerModule->graph->xAxisName       = '模組';
+$lang->story->report->storysPerSource->graph->xAxisName       = '來源';
 $lang->story->report->storysPerPlan->graph->xAxisName         = '產品計劃';
 $lang->story->report->storysPerStatus->graph->xAxisName       = '狀態';
 $lang->story->report->storysPerStage->graph->xAxisName        = '所處階段';
