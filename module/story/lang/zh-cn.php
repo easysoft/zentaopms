@@ -176,6 +176,7 @@ $lang->story->report->selectReverse = '反选';
 
 $lang->story->report->charts['storysPerProduct']        = '产品需求数量';
 $lang->story->report->charts['storysPerModule']         = '模块需求数量';
+$lang->story->report->charts['storysPerSource']         = '需求来源统计';
 $lang->story->report->charts['storysPerPlan']           = '计划进行统计';
 $lang->story->report->charts['storysPerStatus']         = '状态进行统计';
 $lang->story->report->charts['storysPerStage']          = '所处阶段进行统计';
@@ -201,6 +202,7 @@ $lang->story->report->options->graph->showColumnShadow = 0;   // 是否显示柱
 
 $lang->story->report->storysPerProduct->graph->xAxisName      = '产品';
 $lang->story->report->storysPerModule->graph->xAxisName       = '模块';
+$lang->story->report->storysPerSource->graph->xAxisName       = '来源';
 $lang->story->report->storysPerPlan->graph->xAxisName         = '产品计划';
 $lang->story->report->storysPerStatus->graph->xAxisName       = '状态';
 $lang->story->report->storysPerStage->graph->xAxisName        = '所处阶段';

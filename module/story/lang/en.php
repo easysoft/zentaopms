@@ -176,6 +176,7 @@ $lang->story->report->selectReverse = 'Reverse';
 
 $lang->story->report->charts['storysPerProduct']        = 'Product storys';
 $lang->story->report->charts['storysPerModule']         = 'Module storys';
+$lang->story->report->charts['storysPerSource']         = 'Source storys';
 $lang->story->report->charts['storysPerPlan']           = 'Plan storys';
 $lang->story->report->charts['storysPerStatus']         = 'Sotrys of status';
 $lang->story->report->charts['storysPerStage']          = 'Storys of stage';
@@ -201,6 +202,7 @@ $lang->story->report->options->graph->showColumnShadow = 0;
 
 $lang->story->report->storysPerProduct->graph->xAxisName      = 'Product';
 $lang->story->report->storysPerModule->graph->xAxisName       = 'Module';
+$lang->story->report->storysPerSource->graph->xAxisName       = 'Source';
 $lang->story->report->storysPerPlan->graph->xAxisName         = 'Plan';
 $lang->story->report->storysPerStatus->graph->xAxisName       = 'Status';
 $lang->story->report->storysPerStage->graph->xAxisName        = 'Stage';

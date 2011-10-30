@@ -984,6 +984,23 @@ class storyModel extends model
     }
 
     /**
+     * Get report data of storys per source 
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDataOfStorysPerSource()
+    {
+        $datas = $this->dao->select('source as name, count(source) as value')->from(TABLE_STORY)
+            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->groupBy('source')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        $this->lang->story->sourceList[''] = $this->lang->report->undefined;
+        foreach($datas as $key => $data) $data->name = isset($this->lang->story->sourceList[$key]) ? $this->lang->story->sourceList[$key] : $this->lang->report->undefined;
+        return $datas;
+    }
+
+    /**
      * Get report data of storys per plan 
      * 
      * @access public
