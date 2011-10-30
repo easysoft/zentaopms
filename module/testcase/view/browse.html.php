@@ -88,7 +88,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
               common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
               common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
-              common::printLink('testtask', 'results', "runID=0&extras=caseID=$case->id,version=$case->version", $lang->testtask->results, '', 'class="results"');
+              common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
               if(!($case->lastResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))) echo $lang->testtask->createBug;
               ?>
             </td>

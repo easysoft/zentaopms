@@ -341,34 +341,20 @@ class testtask extends control
      * View test results of a test run.
      * 
      * @param  int    $runID 
-     * @param  string $extras others params, forexample, caseID=10
+     * @param  int    $caseID 
      * @access public
      * @return void
      */
-    public function results($runID, $extras = '')
+    public function results($runID, $caseID = 0)
     {
-        /* Pares the extras */
-        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras);
-
-        if(isset($caseID))
+        if($caseID)
         {
-            $results = $this->testtask->getResults(0, $caseID);
-            foreach($results as $result)
-            {
-                $relatedVersions[] = $result->version;
-            }
-            $relatedVersions = array_unique($relatedVersions);
-
-            $run->case = $this->loadModel('testcase')->getById($caseID, 1);
-            $run->case->steps =  $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->in($relatedVersions)->fetchAll();
-
-            $this->view->results = $results;
-            $this->view->run     = $run;
+            $this->view->case    = $this->loadModel('testcase')->getByID($caseID);
+            $this->view->results = $this->testtask->getResults(0, $caseID);
         }
         else
         {
-            $this->view->run     = $this->testtask->getRunById($runID);
+            $this->view->case    = $this->testtask->getRunById($runID)->case;
             $this->view->results = $this->testtask->getResults($runID);
         }
 

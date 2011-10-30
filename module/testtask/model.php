@@ -273,13 +273,14 @@ class testtaskModel extends model
      * Get results by runID or caseID
      * 
      * @param  int   $runID 
+     * @param  int   $caseID 
      * @access public
      * @return array
      */
     public function getResults($runID, $caseID = 0)
     {
-        if($caseID != 0)
-        {
+        if($caseID > 0)
+        {  
             $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('id desc')->fetchAll('id');
         }
         else
@@ -288,11 +289,36 @@ class testtaskModel extends model
         }
 
         if(!$results) return array();
+
+        $relatedVersions = array();
+        foreach($results as $result)
+        {
+            $relatedVersions[] = $result->version;
+            $runCaseID         = $result->case;
+        }
+        $relatedVersions = array_unique($relatedVersions);
+
+        $relatedSteps =  $this->dao->select('*')->from(TABLE_CASESTEP)
+            ->beginIF($caseID)->where('`case`')->eq($caseID)->fi()
+            ->beginIF($runID)->where('`case`')->eq($runCaseID)->fi()
+            ->andWhere('version')->in($relatedVersions)
+            ->fetchAll();
+
         foreach($results as $resultID => $result)
         {
             $result->stepResults = unserialize($result->stepResults);
             $results[$resultID] = $result;
+
+            foreach($relatedSteps as $key => $step)
+            {
+                if($result->version == $step->version)
+                {
+                    $result->stepResults[$step->id]['desc']   = $step->desc;
+                    $result->stepResults[$step->id]['expect'] = $step->expect;
+                }
+            }
         }
+
         return $results;
     }
 }

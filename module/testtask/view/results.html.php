@@ -1,6 +1,6 @@
 <?php
 /**
- * The runrun view file of testtask of ZenTaoPMS.
+ * The resutls view file of testtask of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2011 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
@@ -11,10 +11,10 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<h1>CASE#<?php echo $run->case->id. $lang->colon . $run->case->title;?></h1>
+<h1>CASE#<?php echo $case->id. $lang->colon . $case->title;?></h1>
 <fieldset>
   <legend><?php echo $lang->testcase->precondition;?></legend>
-  <?php echo $run->case->precondition;?>
+  <?php echo $case->precondition;?>
 </fieldset>
 <?php foreach($results as $result):?>
 <table class='table-1'>
@@ -27,31 +27,23 @@
     <th class='w-p20'><?php echo $lang->testcase->real;?></th>
   </tr>
   <?php 
-  $relatedCaseSteps = array();
-  foreach($run->case->steps as $key => $step)
-  {
-    if($result->version == $step->version)
-    {
-        $relatedCaseSteps[] = $step;
-    }
-  }
-  foreach($relatedCaseSteps as $key => $step):
+  $i = 1;
+  foreach($result->stepResults as $key => $stepResult):
   ?>
-  <?php $stepResult = ''; if(!empty($result->stepResults)) $stepResult = (object)$result->stepResults[$step->id];?>
   <tr>
-    <th><?php echo $key + 1;?></th>
-    <td><?php echo nl2br($step->desc);?></td>
-    <td><?php echo nl2br($step->expect);?></td>
+    <th><?php echo $i;?></th>
+    <td><?php echo nl2br($stepResult['desc']);?></td>
+    <td><?php echo nl2br($stepResult['expect']);?></td>
     <?php if(!empty($result->stepResults)):?>
-    <td class='<?php echo $stepResult->result;?> a-center'><?php echo $lang->testcase->resultList[$stepResult->result];?></td>
-    <td><?php echo $stepResult->real;?></td>
+    <td class='<?php echo $stepResult['result'];?> a-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
+    <td><?php echo $stepResult['real'];?></td>
   </tr>
-  <?php if($stepResult->result == 'blocked' or $stepResult->result == 'fail') break;?>
+  <?php if($stepResult['result'] == 'blocked' or $stepResult['result'] == 'fail') break;?>
     <?php else:?>
     <td></td>
     <td></td>
   </tr>
-    <?php endif;?>
+    <?php endif; $i++;?>
   <?php endforeach;?>
 </table>
 <?php endforeach;?>
