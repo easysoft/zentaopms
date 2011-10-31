@@ -69,12 +69,12 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td><?php if(!helper::isZeroDate($run->lastRun)) echo date(DT_MONTHTIME1, strtotime($run->lastRun));?></td>
             <td class='<?php echo $run->lastResult;?>'><?php if($run->lastResult) echo $lang->testcase->resultList[$run->lastResult];?></td>
             <td class='<?php echo $run->status;?>'><?php echo $lang->testtask->statusList[$run->status];?></td>
-            <td>
+            <td class='a-left'>
               <?php
               common::printLink('testtask', 'runcase',    "id=$run->id", $lang->testtask->runCase, '', 'class="iframe"');
               common::printLink('testtask', 'results',    "id=$run->id", $lang->testtask->results, '', 'class="iframe"');
-              if($run->lastResult == 'fail') common::printLink('bug', 'create', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $lang->testtask->createBug);
               common::printLink('testtask', 'unlinkcase', "id=$run->id", $lang->testtask->unlinkCase, 'hiddenwin');
+              if($run->lastResult == 'fail') common::printLink('bug', 'create', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $lang->testtask->createBug);
               ?>
             </td>
           </tr>
