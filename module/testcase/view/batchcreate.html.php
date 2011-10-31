@@ -23,7 +23,7 @@
     </tr>
     <?php for($i = 0; $i < $config->testcase->batchCreate; $i++):?>
     <?php $moduleOptionMenu['same'] = $lang->testcase->same; if($i != 0) $currentModuleID = 'same';?>
-    <?php $lang->testcase->typeList['same'] = $lang->testcase->same; $type = $i == 0 ? '' : 'same';?>
+    <?php $lang->testcase->typeList['same'] = $lang->testcase->same; $type = ($i == 0 ? 'feature' : 'same');?>
     <?php $stories['same'] = $lang->testcase->same; $story = $i == 0 ? '' : 'same';?>
     <?php $pri = 3;?>
     <tr class='a-center'>
