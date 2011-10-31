@@ -30,7 +30,7 @@ tgz:
 	cp -fr doc/* zentaopms/
 	# create my.min.js
 	rm zentaopms/www/js/my.min.js
-	java -jar ~/bin/yuicompressor/build/yuicompressor-2.4.6.jar www/js/my.full.js > zentaopms/www/js/my.in.js
+	java -jar ~/bin/yuicompressor/build/yuicompressor-2.4.6.jar www/js/my.full.js > zentaopms/www/js/my.min.js
 	# create the restart file for svn.
 	touch zentaopms/module/svn/restart
 	# touch the front.class.php to make it's mtime to new.
