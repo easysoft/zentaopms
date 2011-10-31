@@ -215,7 +215,7 @@ class testcase extends control
             $type     = $bug->type;
             $pri      = $bug->pri ? $bug->pri : $bug->severity;
             $storyID  = $bug->story;
-            $title    = "[Bug#$bugID]" . $bug->title;
+            $title    = $bug->title;
             $keywords = $bug->keywords;
             $steps    = $this->testcase->createStepsFromBug($bug->steps);
         }
