@@ -327,7 +327,7 @@ class project extends control
         /* Load pager and get bugs. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $bugs  = $this->bug->getActiveBugs($pager);
+        $bugs  = $this->bug->getActiveBugs($pager, $projectID);
 
         $header['title'] = $projects[$projectID] . $this->lang->colon . $this->lang->project->importBug;
         $position[]      = html::a($this->createLink('project', 'task', "projectID=$projectID"), $projects[$projectID]);
