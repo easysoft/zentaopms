@@ -560,7 +560,8 @@ class bug extends control
      */
     public function resolve($bugID)
     {
-        $this->view->users   = $this->user->getPairs('noletter');
+        $this->view->users = $this->user->getPairs('nodeleted');
+
         if(!empty($_POST))
         {
             $this->bug->resolve($bugID);
@@ -593,7 +594,8 @@ class bug extends control
      */
     public function activate($bugID)
     {
-        $this->view->users           = $this->user->getPairs('noletter');
+        $this->view->users = $this->user->getPairs('nodeleted');
+
         if(!empty($_POST))
         {
             $this->bug->activate($bugID);
