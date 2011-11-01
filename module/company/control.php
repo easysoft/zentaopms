@@ -179,11 +179,11 @@ class company extends control
 
         /* Get products' list.*/
         $products = $this->loadModel('product')->getPairs();
-        $products = array_merge(array($this->lang->product->select), $products);
+        $products = array($this->lang->product->select) + $products;
 
         /* Get projects' list.*/
         $projects = $this->loadModel('project')->getPairs();
-        $projects = array_merge(array($this->lang->project->select), $projects);
+        $projects = array($this->lang->project->select) + $projects;
 
         /* Get users.*/
         $users = $this->loadModel('user')->getPairs('nodeleted|noletter');
