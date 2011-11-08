@@ -130,6 +130,7 @@ class bugModel extends model
             ->where('status')->eq('active')
             ->andWhere('toTask')->eq(0)
             ->andWhere('product')->in($products)
+            ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
             ->fetchAll();
