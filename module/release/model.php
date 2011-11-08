@@ -48,7 +48,7 @@ class releaseModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->where('t1.product')->eq((int)$productID)
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.id DESC')
+            ->orderBy('t1.date DESC')
             ->fetchAll();
     }
 
