@@ -60,7 +60,7 @@ if(!empty($mailConfig->smtp->port))      $smtpPort      = $mailConfig->smtp->por
   </tr>
   <tr id='gmailPassword' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->gmail->password; ?></th>
-    <td><?php echo html::input('gmailPassword', $gmailPassword, 'class=text-3') ?></td>
+    <td><?php echo html::password('gmailPassword', $gmailPassword, 'class="text-3" autocomplete="off"') ?></td>
   </tr>
   <tr id='smtpHost' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->smtp->host; ?></th>
@@ -80,7 +80,7 @@ if(!empty($mailConfig->smtp->port))      $smtpPort      = $mailConfig->smtp->por
   </tr>
   <tr id='smtpPassword' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->smtp->password; ?></th>
-    <td><?php echo html::input('smtpPassword', $smtpPassword, 'class=text-3') ?></td>
+    <td><?php echo html::password('smtpPassword', $smtpPassword, 'class="text-3" autocomplete="off"') ?></td>
   </tr>
   <tr id='smtpSecure' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->smtp->secure; ?></th>
