@@ -19,7 +19,12 @@
  * $config->zentao->password = '123456';
  *
  */
-$config->svn->client = '/usr/bin/svn';
+/* System settings. */
+$config->timezone = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
+$config->sleep    = 0;               // The seconds to sleep.
+
+/* Subversion settings. */
+$config->svn->client = '';
 
 $i = 1;
 $config->svn->repos[$i]['path']     = '';
@@ -33,6 +38,7 @@ $config->svn->repos[$i]['username'] = '';
 $config->svn->repos[$i]['password'] = '';
 */
 
+/* ZenTaoPMS settings. */
 $config->zentao->path = '';
 $config->zentao->user = '';
 $config->zentao->password = '';
