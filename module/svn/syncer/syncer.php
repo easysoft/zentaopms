@@ -106,6 +106,7 @@ class syncer
      */
     public function loginZentao()
     {
+        if(!$this->config->zentao->path or !$this->config->zentao->user) die("You must set the zentao path and user.\n");
         $zentaoConfig = $this->config->zentao;
         $this->zentaoClient = new ztclient($zentaoConfig->path, $zentaoConfig->user, $zentaoConfig->password);
     }
