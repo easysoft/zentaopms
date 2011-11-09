@@ -9,8 +9,11 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+error_reporting(E_ALL ^ E_STRICT ^ E_WARNING);
+
 include './config.php';
 include './api.class.php';
+
 $syncer = new syncer($config);
 $syncer->run();
 
@@ -57,6 +60,7 @@ class syncer
     public function __construct($config)
     {
         $this->setConfig($config);
+        $this->setTimeZone();
         $this->setRepos();
         $this->setLogRoot();
         $this->loginZentao();
@@ -72,6 +76,17 @@ class syncer
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+   /**
+   * Set timezone.
+   * 
+   * @access public
+   * @return void
+   */
+    public function setTimeZone()
+    {
+        date_default_timezone_set($this->config->timezone);
     }
 
     /**
@@ -119,29 +134,41 @@ class syncer
      */
     public function run()
     {
-        foreach($this->repos as $name => $repo)
+        while(true)
         {
-            $this->printLog("begin repo $name");
-            $repo = (object)$repo;
-            $repo->name = $name;
+            foreach($this->repos as $name => $repo)
+            {
+                $this->printLog("begin repo $name");
+                $repo = (object)$repo;
+                $repo->name = $name;
 
-            $this->setRepo($repo);
+                $this->setRepo($repo);
 
-            $savedRevision = $this->getSavedRevision();
-            $this->printLog("start from revision $savedRevision");
-            $logs = $this->getRepoLogs($repo, $savedRevision);
-            $this->printLog("get " . count($logs) . " logs");
+                $savedRevision = $this->getSavedRevision();
+                $this->printLog("start from revision $savedRevision");
+                $logs = $this->getRepoLogs($repo, $savedRevision);
+                $revisions = $this->getRevisionsFromLogs($logs);
+                if(!$revisions) 
+                {
+                    $this->printLog("no logs");
+                    continue;
+                }
+                $this->printLog('fetched ' . count($revisions) . ' logs');
 
-            $this->printLog('begin posting logs');
-            $objects = $this->zentaoClient->post('svn', 'apiSync', array('logs' => $logs, 'repoRoot' => $this->repoRoot));
-            $objects = $objects->parsedObjects;
+                $this->printLog('begin posting logs');
+                $objects = $this->zentaoClient->post('svn', 'apiSync', array('logs' => $logs, 'repoRoot' => $this->repoRoot));
+                $objects = $objects->parsedObjects;
 
-            $this->printLog('parsed objects:');
-            echo 'story: ' . join(',', (array)$objects->stories) . "\n";
-            echo 'task: '  . join(',', (array)$objects->tasks) . "\n";
-            echo 'bugs: '  . join(',', (array)$objects->bugs) . "\n";
+                $this->printLog('parsed objects:');
+                echo 'story: ' . join(',', (array)$objects->stories) . "\n";
+                echo 'task: '  . join(',', (array)$objects->tasks) . "\n";
+                echo 'bugs: '  . join(',', (array)$objects->bugs) . "\n";
 
-            echo "----------------------\n";
+                $this->saveLastRevision(max($revisions));
+                echo "----------------------\n";
+            }
+            $this->printLog("sleeping {$this->config->sleep} seconds");
+            sleep($this->config->sleep);
         }
     }
 
@@ -170,7 +197,7 @@ class syncer
     {
         if($this->config->svn->client == '') die("You must set the svn svnClient file.\n");
         $this->svnClient = $this->config->svn->client . " --non-interactive";
-        if(isset($repo->username)) $this->svnClient .= " --username '$repo->username' --password '$repo->password' --no-auth-cache";
+        if(isset($repo->username)) $this->svnClient .= " --username $repo->username --password $repo->password --no-auth-cache";
     }
 
     /**
@@ -230,6 +257,20 @@ class syncer
     {
         if(!file_exists($this->logFile)) return 0;
         return (int)trim(file_get_contents($this->logFile));
+    }
+
+    /**
+     * Get revisons from logs.
+     * 
+     * @param  string    $logs 
+     * @access public
+     * @return array|bool
+     */
+    public function getRevisionsFromLogs($logs)
+    {
+        if(!preg_match_all('|revision="(.*)"|', $logs, $results)) return false;
+        $revisions = $results[1];
+        return $revisions;
     }
 
     /**
