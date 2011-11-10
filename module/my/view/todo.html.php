@@ -51,7 +51,7 @@
         echo $todo->id;
         ?>
       </td>
-      <td><?php echo $todo->date;?></td>
+      <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFeature : $todo->date;?></td>
       <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
       <td><?php echo $todo->pri;?></td>
       <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my"), $todo->name);?></td>
