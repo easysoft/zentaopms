@@ -38,8 +38,9 @@ function closeWindow()
 <form method='post' target='hiddenwin' onsubmit='setDownloading();'>
   <table class='table-1'>
     <caption><?php echo $lang->export;?></caption>
+    <tr><td class='a-left' style='padding-top:25px;'><?php echo $lang->setFileName;?></td></tr>
     <tr>
-      <td class='a-center' style='padding-top:30px;'>
+      <td class='a-center'>
         <?php echo html::input('fileName');?>
         <?php echo html::select('fileType', $lang->exportFileTypeList);?> 
         <?php echo html::submitButton();?>
