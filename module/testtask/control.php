@@ -255,7 +255,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function linkCase($taskID)
+    public function linkCase($taskID, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(!empty($_POST))
         {
@@ -269,6 +269,10 @@ class testtask extends control
         /* Get task and product id. */
         $task      = $this->testtask->getById($taskID);
         $productID = $this->product->saveState($task->product, $this->products);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
         $this->loadModel('testcase');
@@ -292,8 +296,11 @@ class testtask extends control
             ->andWhere('product')->eq($productID)
             ->andWhere('id')->notIN($linkedCases)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')->fetchAll();
+            ->orderBy('id desc')
+            ->page($pager)
+            ->fetchAll();
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager = $pager;
 
         $this->display();
     }
