@@ -13,6 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<script language='Javascript'>
+$(function(){
+     $(".preview").colorbox({width:1000, height:700, iframe:true, transition:'elastic', speed:350, scrolling:true});
+})
+</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1 colored tablesorter'>
     <thead>
@@ -35,7 +40,7 @@
       <td><?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?></td>
       <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
       <td><?php echo $lang->bug->priList[$bug->pri]?></td>
-      <td class='a-left nobr'><?php echo $bug->title;?></td>
+      <td class='a-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'");?></td>
       <td><?php echo $lang->bug->statusList[$bug->status];?></td>
       <td><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3);?></td>
       <td><?php echo html::select("assignedTo[$bug->id]", $users, '');?></td>
