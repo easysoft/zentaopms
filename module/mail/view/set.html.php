@@ -12,6 +12,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/tablesorter.html.php';?>
 <?php
+$turnon        = 'false';
 $mta           = 'smtp';
 $gmailUsername = '';
 $gmailPassword = '';
@@ -21,6 +22,7 @@ $smtpHost      = '';
 $smtpSecure    = '';
 $smtpAuth      = '';
 $smtpPort      = '';
+if($mailConfig->turnon == 1)             $turnon        = 'ture';
 if(!empty($mailConfig->mta))             $mta           = $mailConfig->mta;
 if(!empty($mailConfig->gmail->username)) $gmailUsername = $mailConfig->gmail->username;
 if(!empty($mailConfig->gmail->password)) $gmailPassword = $mailConfig->gmail->password;
@@ -36,7 +38,7 @@ if(!empty($mailConfig->smtp->port))      $smtpPort      = $mailConfig->smtp->por
   <caption><?php echo $lang->mail->setParam; ?></caption>
   <tr>
     <th class='rowhead w-200px'><?php echo $lang->mail->turnon; ?></th>
-    <td><?php echo html::select('turnon', $lang->mail->turnonList, $mailConfig->turnon, 'class=select-3'); ?></td>
+    <td><?php echo html::select('turnon', $lang->mail->turnonList, $turnon, 'class=select-3'); ?></td>
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->mail->mta; ?></th>
