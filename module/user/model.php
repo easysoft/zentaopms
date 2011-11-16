@@ -237,7 +237,7 @@ class userModel extends model
 
         if($user)
         {
-            $ip   = $this->server->remove_addr;
+            $ip   = $this->server->remote_addr;
             $last = $this->server->request_time;
             $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
             $user->last = date(DT_DATETIME1, $user->last);
