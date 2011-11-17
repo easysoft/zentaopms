@@ -364,6 +364,7 @@ class testtask extends control
             $this->view->case    = $this->testtask->getRunById($runID)->case;
             $this->view->results = $this->testtask->getResults($runID);
         }
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         die($this->display());
     }

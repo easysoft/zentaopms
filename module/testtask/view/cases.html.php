@@ -50,8 +50,9 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-pri'><?php echo $lang->priAB;?></th>
             <th><?php echo $lang->testcase->title;?></th>
             <th><?php echo $lang->testcase->type;?></th>
-            <th><?php echo $lang->testtask->assignedTo;?></th>
-            <th class='w-user'><?php echo $lang->testtask->lastRun;?></th>
+            <th class='w-100px'><?php echo $lang->testtask->assignedTo;?></th>
+            <th class='w-100px'><?php echo $lang->testtask->lastRunAccount;?></th>
+            <th class='w-100px'><?php echo $lang->testtask->lastRunTime;?></th>
             <th class='w-80px'><?php echo $lang->testtask->lastResult;?></th>
             <th class='w-status'><?php echo $lang->statusAB;?></th>
             <th class='w-160px {sorter: false}'><?php echo $lang->actions;?></th>
@@ -66,6 +67,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             </td>
             <td><?php echo $lang->testcase->typeList[$run->type];?></td>
             <td><?php $assignedTo = $users[$run->assignedTo]; echo substr($assignedTo, strpos($assignedTo, ':') + 1);?></td>
+            <td><?php $runAccount = $users[$run->runAccount]; echo substr($runAccount, strpos($runAccount, ':') + 1);?></td>
             <td><?php if(!helper::isZeroDate($run->lastRun)) echo date(DT_MONTHTIME1, strtotime($run->lastRun));?></td>
             <td class='<?php echo $run->lastResult;?>'><?php if($run->lastResult) echo $lang->testcase->resultList[$run->lastResult];?></td>
             <td class='<?php echo $run->status;?>'><?php echo $lang->testtask->statusList[$run->status];?></td>

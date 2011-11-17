@@ -38,7 +38,8 @@ $lang->testtask->desc           = 'Desc';
 $lang->testtask->status         = 'Status';
 $lang->testtask->assignedTo     = 'Assigned to';
 $lang->testtask->linkVersion    = 'Link(version)';
-$lang->testtask->lastRun        = 'Last run';
+$lang->testtask->lastRunAccount = "Run account";
+$lang->testtask->lastRunTime    = 'Last run';
 $lang->testtask->lastResult     = 'Last result';
 
 $lang->testtask->statusList['wait']    = 'Waiting';

@@ -18,7 +18,7 @@
 </fieldset>
 <?php foreach($results as $result):?>
 <table class='table-1'>
-<caption>RESULT#<?php echo $result->id . ' ' . $result->date . " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></caption>
+<caption>RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->runAccount] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></caption>
   <tr>
     <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
     <th class='w-p40'><?php echo $lang->testcase->stepDesc;?></th>

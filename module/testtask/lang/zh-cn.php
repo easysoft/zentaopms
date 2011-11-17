@@ -38,7 +38,8 @@ $lang->testtask->desc           = '任务描述';
 $lang->testtask->status         = '当前状态';
 $lang->testtask->assignedTo     = '指派给';
 $lang->testtask->linkVersion    = '关联(版本)';
-$lang->testtask->lastRun        = '最后执行';
+$lang->testtask->lastRunAccount = '最后执行人';
+$lang->testtask->lastRunTime    = '最后执行时间';
 $lang->testtask->lastResult     = '最终结果';
 
 $lang->testtask->statusList['wait']    = '未开始';

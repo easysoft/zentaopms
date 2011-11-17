@@ -61,7 +61,8 @@ var moduleID   = '<?php echo $moduleID;?>';
             <?php else:?>
             <th class='w-type'>  <?php common::printOrderLink('type',      $orderBy, $vars, $lang->typeAB);?></th>
             <th class='w-user'>  <?php common::printOrderLink('openedBy',  $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='w-date'>  <?php common::printOrderLink('lastRun',   $orderBy, $vars, $lang->testtask->lastRun);?></th>
+            <th class='w-100px'>  <?php common::printOrderLink('runAccount',  $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
+            <th class='w-100px'>  <?php common::printOrderLink('lastRun',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
             <th class='w-80px'>  <?php common::printOrderLink('lastResult',$orderBy, $vars, $lang->testtask->lastResult);?></th>
             <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
             <th class='w-240px {sorter:false}'><?php echo $lang->actions;?></th>
@@ -79,6 +80,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <?php else:?>
             <td><?php echo $lang->testcase->typeList[$case->type];?></td>
             <td><?php echo $users[$case->openedBy];?></td>
+            <td><?php echo $users[$case->runAccount];?></td>
             <td><?php if(!helper::isZeroDate($case->lastRun)) echo date(DT_MONTHTIME1, strtotime($case->lastRun));?></td>
             <td><?php if($case->lastResult) echo $lang->testcase->resultList[$case->lastResult];?></td>
             <td><?php echo $lang->testcase->statusList[$case->status];?></td>
