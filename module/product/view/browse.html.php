@@ -67,7 +67,7 @@ var browseType = '<?php echo $browseType;?>';
           <th class='w-hour'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <th><?php common::printOrderLink('stage',  $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+          <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
@@ -92,6 +92,7 @@ var browseType = '<?php echo $browseType;?>';
           <td>
             <?php 
             $vars = "story={$story->id}";
+            if(!common::printLink('testcase', 'create', "productID=$story->product&module=0&from=&param=0&$vars", $lang->story->createCase)) echo $lang->story->createCase . ' ';
             if(!($story->status != 'closed' and common::printLink('story', 'change', $vars, $lang->story->change))) echo $lang->story->change . ' ';
             if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', $vars, $lang->story->review))) echo $lang->story->review . ' ';
             if(!common::printLink('story', 'edit',   $vars, $lang->edit)) echo $lang->edit;
