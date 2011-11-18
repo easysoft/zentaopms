@@ -86,8 +86,20 @@
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-            <td><?php echo $task->assignedToRealName . $lang->at . $task->assignedDate;?> 
+            <td><?php echo $task->assignedToRealName . $lang->at . $task->assignedDate;?></td> 
           </tr>  
+          <tr>
+            <th>
+            <?php 
+                $assignedTo = empty($task->assignedTo) ? '' : $task->assignedTo; 
+                if(common::hasPriv('task', 'assignedTo')) 
+                {
+                    echo html::a("javascript:assign($task->id, \"$assignedTo\")", $lang->task->assign, '');
+                }
+            ?>
+            </th>
+            <td class='assign'></td> 
+          </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->task->type;?></th>
             <td><?php echo $lang->task->typeList[$task->type];?></td>

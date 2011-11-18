@@ -111,6 +111,7 @@ $lang->resource->project->ajaxGetProducts= 'ajaxGetProducts';
 $lang->resource->task->create              = 'create';
 $lang->resource->task->batchCreate         = 'batchCreate';
 $lang->resource->task->edit                = 'edit';
+$lang->resource->task->assignedTo          = 'assign';
 $lang->resource->task->start               = 'start';
 $lang->resource->task->finish              = 'finish';
 $lang->resource->task->cancel              = 'cancel';
@@ -219,16 +220,17 @@ $lang->resource->group->managePriv   = 'managePriv';
 $lang->resource->group->manageMember = 'manageMember';
 
 /* User. */
-$lang->resource->user->create = 'create';
-$lang->resource->user->view   = 'view';
-$lang->resource->user->edit   = 'edit';
-$lang->resource->user->delete = 'delete';
-$lang->resource->user->todo   = 'todo';
-$lang->resource->user->task   = 'task';
-$lang->resource->user->bug    = 'bug';
-$lang->resource->user->project= 'project';
-$lang->resource->user->dynamic= 'dynamic';
-$lang->resource->user->profile= 'profile';
+$lang->resource->user->create      = 'create';
+$lang->resource->user->view        = 'view';
+$lang->resource->user->edit        = 'edit';
+$lang->resource->user->delete      = 'delete';
+$lang->resource->user->todo        = 'todo';
+$lang->resource->user->task        = 'task';
+$lang->resource->user->bug         = 'bug';
+$lang->resource->user->project     = 'project';
+$lang->resource->user->dynamic     = 'dynamic';
+$lang->resource->user->profile     = 'profile';
+$lang->resource->user->ajaxGetUser = 'ajaxGetUser';
 
 /* Tree. */
 $lang->resource->tree->browse            = 'browse';
@@ -342,3 +344,6 @@ $lang->changelog['2.3'][]   = 'bug-confirmBug';
 $lang->changelog['2.3'][]   = 'svn-diff';
 $lang->changelog['2.3'][]   = 'svn-cat';
 $lang->changelog['2.3'][]   = 'svn-apiSync';
+
+$lang->changelog['2.4'][]   = 'user-ajaxGetUser';
+$lang->changelog['2.4'][]   = 'task-assignedTo';

@@ -48,6 +48,7 @@ $lang->task->deadlineAB     = 'Deadline';
 $lang->task->status         = 'Status';
 $lang->task->statusCustom   = 'Status Order';
 $lang->task->desc           = 'Desc';
+$lang->task->assigne        = 'Assign';
 $lang->task->assignedTo     = 'Assigned To';
 $lang->task->assignedToAB   = 'Assign';
 $lang->task->assignedDate   = 'Assigned Date';

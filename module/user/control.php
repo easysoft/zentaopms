@@ -486,5 +486,22 @@ class user extends control
         $this->display();
     }
 
+    /**
+     * Get user for ajax
+     *
+     * @param  string $requestID
+     * @param  string $assignedTo
+     * @access public
+     * @return void
+     */
+    public function ajaxGetUser($taskID = '', $assignedTo = '')
+    {
+        $users = $this->user->getPairs('noletter, noclosed');
+        $html = "<form method='post' target='hiddenwin' action='" . $this->createLink('task', 'assignedTo', "taskID=$taskID&assignedTo=$assignedTo") . "'>";
+        $html .= html::select('assignedTo', $users, $assignedTo);
+        $html .= html::submitButton();
+        $html .= '</form>';
+        echo $html;
+    }
 
 }

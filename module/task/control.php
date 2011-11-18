@@ -194,6 +194,34 @@ class task extends control
     }
 
     /**
+     * Update assignedTo of task 
+     *
+     * @param  int    $requestID
+     * @access public
+     * @return void
+     */
+    public function assignedTo($taskID, $assignedTo)
+    {
+        $now = helper::now();
+        $this->dao->update(TABLE_TASK)
+            ->set('assignedTo')->eq($this->post->assignedTo)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->set('lastEditedDate')->eq($now)
+            ->where('id')->eq($taskID)->exec();
+
+        $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
+        $this->dao->insert(TABLE_HISTORY)
+            ->set('company')->eq(1)
+            ->set('action')->eq($actionID)
+            ->set('field')->eq('assignedTo')
+            ->set('old')->eq($assignedTo)
+            ->set('new')->eq($this->post->assignedTo)
+            ->exec();
+
+        die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+    }
+
+    /**
      * View a task.
      * 
      * @param  int    $taskID 
