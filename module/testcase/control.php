@@ -160,7 +160,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function create($productID, $moduleID = 0, $from = '', $param = 0)
+    public function create($productID, $moduleID = 0, $from = '', $param = 0, $storyID = 0)
     {
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
@@ -187,7 +187,6 @@ class testcase extends control
         $type         = 'feature';
         $stage        = '';
         $pri          = 0;
-        $storyID      = 0;
         $title        = '';
         $precondition = '';
         $keywords     = '';

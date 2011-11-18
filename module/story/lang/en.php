@@ -11,6 +11,7 @@
  */
 $lang->story->browse      = "Browse";
 $lang->story->create      = "Create";
+$lang->story->createCase  = "Create case";
 $lang->story->batchCreate = "Batch create";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Changed';

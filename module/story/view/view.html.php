@@ -22,7 +22,8 @@
       if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
       if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
       if(!($story->status == 'closed' and $story->closedReason == 'postponed' and common::printLink('story', 'activate', "storyID=$story->id", $lang->story->activate))) echo $lang->story->activate . ' ';
-      if(!common::printLink('story', 'edit',    "storyID=$story->id", $lang->edit)) echo $lang->edit . ' ';
+      if(!common::printLink('story', 'edit', "storyID=$story->id", $lang->edit)) echo $lang->edit . ' ';
+      if(!common::printLink('testcase', 'create', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", $lang->story->createCase)) echo $lang->story->createCase . ' ';
       common::printLink('story', 'create', "productID=$story->product&moduleID=$story->module&storyID=$story->id", $lang->copy);
       common::printLink('story', 'delete', "storyID=$story->id", $lang->delete, 'hiddenwin');
   }
