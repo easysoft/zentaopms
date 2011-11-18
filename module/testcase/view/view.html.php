@@ -132,7 +132,7 @@
             <td><?php echo $lang->testcase->statusList[$case->status];?></td>
           </tr>
            <tr>
-            <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastRun;?></td>
+            <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastRunTime;?></td>
             <td><?php if(!helper::isZeroDate($case->lastRun)) echo $case->lastRun;?></td>
           </tr>
           <tr>

@@ -181,6 +181,38 @@
       </fieldset>
 
       <fieldset>
+        <legend><?php echo $lang->story->legendBugs;?></legend>
+        <table class='table-1 fixed'>
+          <tr>
+            <td>
+              <?php
+              foreach($bugs as $bug)
+              {
+                  echo '<span class="nobr">' . html::a($this->createLink('bug', 'view', "bugID=$bug->id"), "#$bug->id $bug->title") . '</span><br />';
+              }
+              ?>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+
+      <fieldset>
+        <legend><?php echo $lang->story->legendCases;?></legend>
+        <table class='table-1 fixed'>
+          <tr>
+            <td>
+              <?php
+              foreach($cases as $case)
+              {
+                  echo '<span class="nobr">' . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</span><br />';
+              }
+              ?>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+
+      <fieldset>
         <legend><?php echo $lang->story->legendLinkStories;?></legend>
         <div>
           <?php
