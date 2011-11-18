@@ -13,10 +13,10 @@
 <?php
 class mailModel extends model
 {
-    private static $instance;
-    private $mta;
-    private $mtaType;
-    private $errors = array();
+    public static $instance;
+    public $mta;
+    public $mtaType;
+    public $errors = array();
 
     public function __construct()
     {
@@ -44,10 +44,10 @@ class mailModel extends model
     /**
      * Set smtp.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setSMTP()
+    public function setSMTP()
     {
         $this->mta->isSMTP();
         $this->mta->SMTPDebug = $this->config->mail->smtp->debug;
@@ -62,10 +62,10 @@ class mailModel extends model
     /**
      * PHPmail.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setPhpMail()
+    public function setPhpMail()
     {
         $this->mta->isMail();
     }
@@ -73,10 +73,10 @@ class mailModel extends model
     /**
      * Sendmail.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setSendMail()
+    public function setSendMail()
     {
         $this->mta->isSendmail();
     }
@@ -84,10 +84,10 @@ class mailModel extends model
     /**
      * Gmail.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setGMail()
+    public function setGMail()
     {
         $this->mta->isSMTP();
         $this->mta->SMTPDebug  = $this->config->mail->gmail->debug;
@@ -161,10 +161,10 @@ class mailModel extends model
      * 
      * @param  array    $toList 
      * @param  array    $emails 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setTO($toList, $emails)
+    public function setTO($toList, $emails)
     {
         $toList = explode(',', str_replace(' ', '', $toList));
         foreach($toList as $account)
@@ -180,10 +180,10 @@ class mailModel extends model
      * 
      * @param  array    $ccList 
      * @param  array    $emails 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setCC($ccList, $emails)
+    public function setCC($ccList, $emails)
     {
         $ccList = explode(',', str_replace(' ', '', $ccList));
         if(!is_array($ccList)) return;
@@ -199,10 +199,10 @@ class mailModel extends model
      * Set subject 
      * 
      * @param  string    $subject 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setSubject($subject)
+    public function setSubject($subject)
     {
         $this->mta->Subject = stripslashes($subject);
     }
@@ -211,10 +211,10 @@ class mailModel extends model
      * Set body.
      * 
      * @param  string    $body 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setBody($body)
+    public function setBody($body)
     {
         $this->mta->msgHtml("$body");
     }
@@ -222,10 +222,10 @@ class mailModel extends model
     /**
      * Set error lang. 
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setErrorLang()
+    public function setErrorLang()
     {
         $this->mta->SetLanguage($this->app->getClientLang());
     }
@@ -233,10 +233,10 @@ class mailModel extends model
     /**
      * Clear.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function clear()
+    public function clear()
     {
         $this->mta->clearAddresses();
         $this->mta->clearAttachments();
