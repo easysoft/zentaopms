@@ -221,6 +221,7 @@ $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'By design';
 $lang->bug->resolutionList['duplicate']  = 'Duplicate';
 $lang->bug->resolutionList['external']   = 'External';
+$lang->bug->resolutionList['tostory']    = 'To story';
 $lang->bug->resolutionList['fixed']      = 'Fixed';
 $lang->bug->resolutionList['notrepro']   = 'Not reproduce';
 $lang->bug->resolutionList['postponed']  = 'Postponed';
@@ -296,3 +297,4 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Histories';
 
 /* 操作记录。*/
 $lang->bug->action->resolved = array('main' => '$date, Resolved by <strong>$actor</strong>, resolution is <strong>$extra</strong>.', 'extra' => $lang->bug->resolutionList);
+$lang->bug->action->tostory  = array('main' => '$date, To story by <strong>$actor</strong>, ID is <strong>$extra</strong>。');

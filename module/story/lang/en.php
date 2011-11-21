@@ -119,6 +119,9 @@ $lang->story->sourceList['market']     = 'Market';
 $lang->story->sourceList['service']    = 'Service';
 $lang->story->sourceList['competitor'] = 'Competitor';
 $lang->story->sourceList['partner']    = 'Partner';
+$lang->story->sourceList['dev']        = 'Developer';
+$lang->story->sourceList['tester']     = 'Tester';
+$lang->story->sourceList['bug']        = 'FromBug';
 $lang->story->sourceList['other']      = 'Other';
 
 $lang->story->priList[]   = '';

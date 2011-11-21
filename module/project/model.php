@@ -580,7 +580,6 @@ class projectModel extends model
         $bugLang = $this->app->loadLang('bug');
         $this->loadModel('task');
         $this->loadModel('story');
-        $bugPath = $this->app->getModulePath('bug', 'config');
 
         $now = helper::now();
         $BugToTasks = fixer::input('post')->get();

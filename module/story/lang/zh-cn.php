@@ -119,6 +119,9 @@ $lang->story->sourceList['market']     = '市场';
 $lang->story->sourceList['service']    = '客服';
 $lang->story->sourceList['competitor'] = '竞争对手';
 $lang->story->sourceList['partner']    = '合作伙伴';
+$lang->story->sourceList['dev']        = '开发人员';
+$lang->story->sourceList['tester']     = '测试人员';
+$lang->story->sourceList['bug']        = 'Bug转化';
 $lang->story->sourceList['other']      = '其他';
 
 $lang->story->priList[]   = '';

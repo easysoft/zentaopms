@@ -564,9 +564,16 @@ class bug extends control
 
         if(!empty($_POST))
         {
-            $this->bug->resolve($bugID);
+            $storyID = $this->bug->resolve($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->action->create('bug', $bugID, 'Resolved', $this->post->comment, $this->post->resolution);
+            if($this->post->resolution == 'tostory') 
+            {
+                $actionID = $this->action->create('bug', $bugID, 'ToStory', $this->post->comment, $storyID);
+            }
+            else
+            {
+                $actionID = $this->action->create('bug', $bugID, 'Resolved', $this->post->comment, $this->post->resolution);
+            }
             $this->sendmail($bugID, $actionID);
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
