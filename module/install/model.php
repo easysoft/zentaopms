@@ -89,6 +89,17 @@ class installModel extends model
     }
 
     /**
+     * Check json extension.
+     * 
+     * @access public
+     * @return string   ok|fail
+     */
+    public function checkJSON()
+    {
+        return $result = extension_loaded('json') ? 'ok' : 'fail';
+    }
+
+    /**
      * Get tempRoot info.
      * 
      * @access public

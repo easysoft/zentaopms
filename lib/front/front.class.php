@@ -568,6 +568,8 @@ EOT;
      */
     static public function exportConfigVars()
     {
+        if(!function_exists('json_encode')) return false;
+
         global $app, $config, $lang;
         $defaultViewType = $app->getViewType();
         $themeRoot       = $app->getWebRoot() . 'theme/';

@@ -54,6 +54,7 @@ class install extends control
         $this->view->phpResult      = $this->install->checkPHP();
         $this->view->pdoResult      = $this->install->checkPDO();
         $this->view->pdoMySQLResult = $this->install->checkPDOMySQL();
+        $this->view->jsonResult     = $this->install->checkJSON();
         $this->view->tmpRootInfo    = $this->install->getTmpRoot();
         $this->view->tmpRootResult  = $this->install->checkTmpRoot();
         $this->view->dataRootInfo   = $this->install->getDataRoot();

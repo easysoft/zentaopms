@@ -37,6 +37,12 @@
     <td class='a-left f-12px'><?php if($pdoMySQLResult == 'fail') echo $lang->install->pdoMySQLFail;?></td>
   </tr>
   <tr>
+    <th><?php echo $lang->install->json;?></th>
+    <td><?php $jsonResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+    <td class='<?php echo $jsonResult;?>'><?php echo $lang->install->$jsonResult;?></td>
+    <td class='a-left f-12px'><?php if($jsonResult == 'fail') echo $lang->install->jsonFail;?></td>
+  </tr>
+  <tr>
     <th><?php echo $lang->install->tmpRoot;?></th>
     <td>
       <?php
