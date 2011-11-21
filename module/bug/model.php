@@ -210,9 +210,10 @@ class bugModel extends model
     public function resolve($bugID)
     {
         $now = helper::now();
+        $oldBug = $this->getById($bugID);
+        $storyID = 0;
         if($this->post->resolution == 'tostory')
         {
-            $oldBug = $this->getById($bugID);
             $story->product      = $oldBug->product;
             $story->module       = $oldBug->module;
             $story->source       = 'bug';

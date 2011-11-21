@@ -470,6 +470,18 @@ class bug extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($bugID, $actionID);
             }
+
+            $bug = $this->bug->getById($bugID);
+            if($bug->toTask != 0) 
+            {
+                foreach($changes as $change)
+                {
+                    if($change['field'] == 'status') 
+                    {
+                        echo js::alert($this->lang->bug->remindTask . $bug->toTask);
+                    }
+                }
+            } 
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -575,6 +587,12 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, 'Resolved', $this->post->comment, $this->post->resolution);
             }
             $this->sendmail($bugID, $actionID);
+
+            $bug = $this->bug->getById($bugID);
+            if($bug->toTask != 0) 
+            {
+                echo js::alert($this->lang->bug->remindTask . $bug->toTask);
+            } 
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -685,6 +703,7 @@ class bug extends control
      */
     public function delete($bugID, $confirm = 'no')
     {
+        $bug = $this->bug->getById($bugID);
         if($confirm == 'no')
         {
             die(js::confirm($this->lang->bug->confirmDelete, inlink('delete', "bugID=$bugID&confirm=yes")));
@@ -692,6 +711,7 @@ class bug extends control
         else
         {
             $this->bug->delete(TABLE_BUG, $bugID);
+            if($bug->toTask != 0) echo js::alert($this->lang->bug->remindTask . $bug->toTask);
             die(js::locate($this->session->bugList, 'parent'));
         }
     }

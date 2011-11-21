@@ -173,6 +173,7 @@ class task extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $files = $this->loadModel('file')->saveUpload('task', $taskID);
 
+            $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';
@@ -181,6 +182,17 @@ class task extends control
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
+            }
+
+            if($task->fromBug != 0)
+            {
+                foreach($changes as $change)
+                {
+                    if($change['field'] == 'status')
+                    {
+                        echo js::alert($this->lang->task->remindBug . $task->fromBug);
+                    }
+                }
             }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -313,11 +325,23 @@ class task extends control
             $changes = $this->task->finish($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
 
+            $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes))
             {
                 $actionID = $this->action->create('task', $taskID, 'Finished', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
+            }
+
+            if($task->fromBug != 0)
+            {
+                foreach($changes as $change)
+                {
+                    if($change['field'] == 'status')
+                    {
+                        echo js::alert($this->lang->task->remindBug . $task->fromBug);
+                    }
+                }
             }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -468,6 +492,7 @@ class task extends control
      */
     public function delete($projectID, $taskID, $confirm = 'no')
     {
+        $task = $this->task->getById($taskID);
         if($confirm == 'no')
         {
             die(js::confirm($this->lang->task->confirmDelete, inlink('delete', "projectID=$projectID&taskID=$taskID&confirm=yes")));
@@ -476,6 +501,7 @@ class task extends control
         {
             $story = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
             $this->task->delete(TABLE_TASK, $taskID);
+            if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
             if($story) $this->loadModel('story')->setStage($story);
             die(js::locate($this->session->taskList, 'parent'));
         }
