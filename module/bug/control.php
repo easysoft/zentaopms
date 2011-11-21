@@ -775,8 +775,10 @@ class bug extends control
      */
     public function ajaxGetModuleOwner($moduleID, $productID = 0)
     {
-        if($moduleID) die($this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch('owner'));
-        die($this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QM'));
+        $owner = '';
+        if($moduleID) $owner = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch('owner');
+        if(!$owner)   $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QM');
+        die($owner);
     }
 
     /**
