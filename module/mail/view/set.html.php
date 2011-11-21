@@ -54,7 +54,12 @@ if(!empty($mailConfig->smtp->port))      $smtpPort      = $mailConfig->smtp->por
   </tr>
   <tr id='gmailDebug' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->gmail->debug; ?></th>
-    <td><?php echo html::select('gmailDebug', $lang->mail->debugList, '', 'class=select-3'); echo $lang->mail->debugExample; ?></td>
+    <td>
+      <?php 
+      echo html::select('gmailDebug', $lang->mail->debugList, isset($mailConfig->gmail->debug) ? $mailConfig->gmail->debug : '', 'class=select-3'); 
+      echo $lang->mail->debugExample; 
+      ?>
+    </td>
   </tr>
   <tr id='gmailUsername' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->gmail->username; ?></th>
@@ -70,7 +75,12 @@ if(!empty($mailConfig->smtp->port))      $smtpPort      = $mailConfig->smtp->por
   </tr>
   <tr id='smtpDebug' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->smtp->debug; ?></th>
-    <td><?php echo html::select('smtpDebug', $lang->mail->debugList, '', 'class=select-3'); echo $lang->mail->debugExample; ?></td>
+    <td>
+      <?php
+      echo html::select('smtpDebug', $lang->mail->debugList, isset($mailConfig->smtp->debug) ? $mailConfig->smtp->debug : '', 'class=select-3'); 
+      echo $lang->mail->debugExample; 
+      ?>
+    </td>
   </tr>
   <tr id='smtpAuth' class='hidden'>
     <th class='rowhead'><?php echo $lang->mail->smtp->auth; ?></th>
