@@ -378,7 +378,7 @@ function toggleHelpLink()
 function selectLang(lang)
 {
     $.cookie('lang', lang, {expires:config.cookieLife, path:config.webRoot});
-    location.href = location.href;
+    location.href = removeAnchor(location.href);
 }
 
 /**
@@ -390,7 +390,21 @@ function selectLang(lang)
 function selectTheme(theme)
 {
     $.cookie('theme', theme, {expires:config.cookieLife, path:config.webRoot});
-    location.href = location.href;
+    location.href = removeAnchor(location.href);
+}
+
+/**
+ * Remove anchor from the url.
+ * 
+ * @param  string $url 
+ * @access public
+ * @return string
+ */
+function removeAnchor(url)
+{
+    pos = url.indexOf('#');
+    if(pos) return url.substring(0, pos);
+    return url;
 }
 
 /**
