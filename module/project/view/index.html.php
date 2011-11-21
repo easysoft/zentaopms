@@ -12,14 +12,6 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<?php if(count($projectStats) == 0):?>
-<table class='table-1 a-center' height='100%'>
-  <caption><?php echo $lang->my->home->projects;?></caption>
-  <tr>
-    <td valign='middle'><?php printf($lang->my->home->noProjectsTip, $this->createLink('project', 'create'));?></td>
-  </tr>
-</table>
-<?php else:?>
 <h3>
   <?php echo html::a(inlink("index", "locate=no&status=undone"), $lang->project->unDoneProjects);?>
   <?php echo html::a(inlink("index", "locate=no&status=done"), $lang->project->doneProjects);?>
@@ -53,6 +45,4 @@
  </tr>
  <?php endforeach;?>
 </table>
-<?php endif;?>
-</div>
 <?php include '../../common/view/footer.lite.html.php';?>
