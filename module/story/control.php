@@ -33,11 +33,11 @@ class story extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $moduleID = 0, $storyID = 0)
+    public function create($productID = 0, $moduleID = 0, $storyID = 0, $projectID = 0)
     {
         if(!empty($_POST))
         {
-            $storyID = $this->story->create();
+            $storyID = $this->story->create($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
             $actionID = $this->action->create('story', $storyID, 'Opened', '');
@@ -46,8 +46,21 @@ class story extends control
         }
 
         /* Set products, users and module. */
-        $product  = $this->product->getById($productID);
-        $products = $this->product->getPairs();
+        if($productID != 0) 
+        {
+            $product  = $this->product->getById($productID);
+            $products = $this->product->getPairs();
+            a($products);
+        }
+        else
+        {
+            $products = $this->product->getProductsByProject($projectID); 
+            foreach($products as $key => $title)
+            {
+                $product = $this->product->getById($key);
+                break;
+            }
+        }
         $users    = $this->user->getPairs('nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
 

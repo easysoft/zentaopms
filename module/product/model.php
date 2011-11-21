@@ -192,6 +192,16 @@ class productModel extends model
         return $pairs;
     }
 
+    public function getProductsByProject($projectID)
+    {
+        return $this->dao->select('t1.product, t2.name')
+            ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')
+            ->on('t1.product = t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->fetchPairs();
+    }
+
     /**
      * Get grouped products.
      * 

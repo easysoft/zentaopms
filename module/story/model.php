@@ -97,7 +97,7 @@ class storyModel extends model
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
-    public function create()
+    public function create($projectID = 0)
     {
         $now   = helper::now();
         $story = fixer::input('post')
@@ -127,6 +127,17 @@ class storyModel extends model
             $data->spec    = $this->post->spec;
             $data->verify  = $this->post->verify;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+
+            if($projectID != 0) 
+            {
+                $this->dao->insert(TABLE_PROJECTSTORY)
+                    ->set('company')->eq(1)
+                    ->set('project')->eq($projectID)
+                    ->set('product')->eq($this->post->product)
+                    ->set('story')->eq($storyID)
+                    ->set('version')->eq(1)
+                    ->exec();
+            }
             return $storyID;
         }
         return false;
