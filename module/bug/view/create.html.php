@@ -23,10 +23,14 @@ userList = "<?php echo join(',', array_keys($users));?>".split(',');
     <tr>
       <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
       <td>
-        <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='select-2'");?>
-        <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='setAssignedTo()' class='select-3'");?></span>
+        <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='select-3'");?>
+        <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='setAssignedTo()'");?></span>
       </td>
      </tr>  
+     <tr>
+      <th class='rowhead'><?php echo $lang->bug->project;?></th>
+      <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'class=select-3 onchange=loadProjectRelated(this.value)');?></span></td>
+     </tr>
      <tr>
       <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
       <td>
@@ -53,19 +57,15 @@ userList = "<?php echo join(',', array_keys($users));?>".split(',');
       </td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->bug->lblProjectAndTask;?></th>
-      <td>
-        <span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, 'onchange=loadProjectRelated(this.value)');?></span>
-        <span id='taskIdBox'><?php echo html::select('task', $tasks, $taskID);?></span>
-      </td>
-     </tr>
-
-    <tr>
       <th class='rowhead'><?php echo $lang->bug->lblStory;?></th>
       <td>
         <span id='storyIdBox'><?php echo html::select('story', $stories, $storyID);?></span>
       </td>
     </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->bug->task;?></th>
+      <td><span id='taskIdBox'><?php echo html::select('task', $tasks, $taskID);?></span></td>
+    </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->lblTypeAndSeverity;?></th>
       <td> 
