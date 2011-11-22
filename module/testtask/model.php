@@ -320,7 +320,6 @@ class testtaskModel extends model
                 }
             }
         }
-
         return $results;
     }
 }

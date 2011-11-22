@@ -38,7 +38,6 @@
     <td class='<?php echo $stepResult['result'];?> a-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
     <td><?php echo $stepResult['real'];?></td>
   </tr>
-  <?php if($stepResult['result'] == 'blocked' or $stepResult['result'] == 'fail') break;?>
     <?php else:?>
     <td></td>
     <td></td>
