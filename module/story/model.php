@@ -704,20 +704,22 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchGroup('plan');
-
+            ->fetchAll('id');
         $this->saveReportQuery($this->dao->get());
 
         if(!$tmpStories) return array();
-        $plans   = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($tmpStories))->fetchPairs();
+
+        /* Get plans. */
+        $plans = array();
+        foreach($tmpStories as $story) $plans[$story->plan] = $story->plan;
+        $plans   = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($plans))->fetchPairs();
+
+        /* Process plans. */
         $stories = array();
-        foreach($tmpStories as $planID => $planStories)
+        foreach($tmpStories as $story)
         {
-            foreach($planStories as $story)
-            {
-                $story->planTitle = isset($plans[$planID]) ? $plans[$planID] : '';
-                $stories[] = $story;
-            }
+            $story->planTitle = isset($plans[$story->plan]) ? $plans[$story->plan] : '';
+            $stories[] = $story;
         }
         return $stories;
     }
