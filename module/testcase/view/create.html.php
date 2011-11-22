@@ -11,6 +11,11 @@
  */
 ?>
 <?php include './header.html.php';?>
+<script language='Javascript'>
+$(function(){
+     $("#preview").colorbox({width:960, height:500, iframe:true, transition:'elastic', speed:350, scrolling:true});
+})
+</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'> 
     <caption><?php echo $lang->testcase->create;?></caption>
@@ -35,7 +40,10 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testcase->lblStory;?></th>
-      <td><span id='storyIdBox'><?php echo html::select('story', $stories, $storyID, 'class=select-3');?></span></td>
+      <td>
+        <?php echo html::select('story', $stories, $storyID, 'class="text-1" onchange=setPreview();');?>
+        <a href='' id='preview' class='iframe'><?php echo $lang->preview;?></a>
+      </td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testcase->title;?></th>

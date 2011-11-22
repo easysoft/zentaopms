@@ -1,11 +1,9 @@
 <?php include '../../common/view/header.html.php';?>
 <style>
-#produc{width:90%}
 #story {width:90%}
 .delbutton{font-size:12px; color:red; width:80px; padding:0}
 .addbutton{font-size:12px; color:darkgreen; width:80px; padding:0}
 .searchleft{width:220px}
-#story{width:100%}
 </style>
 <script language='Javascript'>
 var newRowID = 0;
