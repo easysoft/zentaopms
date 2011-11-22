@@ -250,13 +250,17 @@ class file extends control
         {
             $this->app->loadLang('action');
             $file = $this->file->getByID($fileID);
-            $comment = sprintf($this->lang->action->desc->diff3, $file->title, $this->post->fileName);
-
             $this->dao->update(TABLE_FILE)->set('title')->eq($this->post->fileName)->where('id')->eq($fileID)->exec();
-            $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', $comment, $file->title);
+
+            $extension = "." . $file->extension;
+            $actionID = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $this->post->fileName . $extension);
+            $changes[] = array('field' => 'fileName', 'old' => $file->title . $extension, 'new' => $this->post->fileName . $extension);
+            $this->action->logHistory($actionID, $changes);
+
             die(js::reload('parent.parent'));
         }
 
+        $this->view->file = $this->file->getById($fileID);
         $this->display();
     }
 }

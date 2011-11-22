@@ -32,7 +32,7 @@ function closeWindow()
     <caption><?php echo $lang->file->inputFileName;?></caption>
     <tr>
       <td class='a-center' style='padding-top:30px;'>
-        <?php echo html::input('fileName');?>
+        <?php echo html::input('fileName', $file->title) . "<strong>.{$file->extension}</strong>";?>
         <?php echo html::submitButton();?>
       </td>
     </tr>
