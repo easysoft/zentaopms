@@ -139,6 +139,7 @@ $lang->product->menu->view    = '概况|product|view|productID=%s';
 $lang->product->menu->edit    = '编辑|product|edit|productID=%s';
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->create  = array('link' => '新增产品|product|create', 'float' => 'right');
+$lang->product->menu->project = array('link' => '项目列表|product|index|locate=false&status=all&productID=%s', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;

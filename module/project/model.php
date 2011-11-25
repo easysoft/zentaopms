@@ -253,15 +253,33 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $limit = 0)
+    public function getList($status = 'all', $limit = 0, $productID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
-            ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
-            ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('status, code')
-            ->beginIF($limit)->limit($limit)->fi()
-            ->fetchAll('id');
+        if($productID != 0)
+        {
+            return $this->dao->select('t2.*')
+                ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')
+                ->on('t1.project = t2.id')
+                ->where('t1.product')->eq($productID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.iscat')->eq(0)
+                ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->orderBy('status, code')
+                ->beginIF($limit)->limit($limit)->fi()
+                ->fetchAll('id');
+        }
+        else
+        {
+            return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
+                ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
+                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('status, code')
+                ->beginIF($limit)->limit($limit)->fi()
+                ->fetchAll('id');
+        }
     }
 
     /**
@@ -300,11 +318,11 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStats($counts, $status = 'undone')
+    public function getProjectStats($counts, $status = 'undone', $productID = 0)
     {
         $this->loadModel('report');
 
-        $projects = $this->getList($status);
+        $projects = $this->getList($status, 0, $productID);
         $stats    = array();
         $i = 1;
 

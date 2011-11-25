@@ -519,6 +519,17 @@ function setSubversionLink()
  * @access public
  * @return void
  */
+function setProductListLink()
+{
+   if($('#submenuproject').size()) $("#submenuproject").colorbox({width:1000, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
+}
+
+/**
+ * Set the link of the project list menu.
+ * 
+ * @access public
+ * @return void
+ */
 function setProjectListLink()
 {
    if($('#submenuall').size()) $("#submenuall").colorbox({width:1000, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
@@ -744,6 +755,7 @@ $(document).ready(function()
     saveProject();
     setForm();
     setSubversionLink();
+    setProductListLink();
     setProjectListLink();
     autoCheck();
     togglesearch();

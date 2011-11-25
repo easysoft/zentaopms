@@ -41,9 +41,15 @@ class product extends control
      * @access public
      * @return void
      */
-    public function index()
+    public function index($locate = 'yes', $status = 'undone', $productID)
     {
-        $this->locate($this->createLink($this->moduleName, 'browse'));
+        if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
+
+        $this->app->loadLang('my');
+        $this->view->projectStats  = $this->loadModel('project')->getProjectStats($this->config->project->projectCounts, $status, $productID);
+
+        $this->view->productID = $productID;
+        $this->display();
     }
 
     /**
