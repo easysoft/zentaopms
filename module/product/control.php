@@ -41,7 +41,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $status = 'undone', $productID)
+    public function index($locate = 'yes', $status = 'undone', $productID = 0)
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
