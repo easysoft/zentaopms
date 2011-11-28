@@ -246,9 +246,10 @@ class svnModel extends model
         $parsedLogs = array();
 
         /* The svn log command. */
-        $cmd  = $this->client . " log -r $fromRevision:HEAD -v --xml $repo->path";
-        $logs = `$cmd`;
-        $logs = simplexml_load_string($logs);    // Convert it to object.
+        $cmd     = $this->client . " log -r $fromRevision:HEAD -v --xml $repo->path";
+        $rawLogs = `$cmd`;
+        $logs    = @simplexml_load_string($rawLogs);    // Convert it to object.
+        if(!$logs) die("Some error occers: \nThe command is $cmd\n the svn logs is $rawLogs\n");
 
         /* Process logs. */
         foreach($logs->logentry as $entry) $parsedLogs[] = $this->convertLog($entry);
