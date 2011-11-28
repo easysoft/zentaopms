@@ -86,7 +86,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td><?php echo $lang->testcase->statusList[$case->status];?></td>
             <td class='a-right'>
               <?php
-              common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&testcaseID=$case->id", $lang->copy);
+              common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
               common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
               common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
               common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');

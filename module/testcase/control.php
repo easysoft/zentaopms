@@ -153,10 +153,10 @@ class testcase extends control
     /**
      * Create a test case.
      * 
-     * @param  int   $productID 
-     * @param  int   $moduleID 
+     * @param  int    $productID 
+     * @param  int    $moduleID 
      * @param  string $from
-     * @param  int   $param
+     * @param  int    $param
      * @access public
      * @return void
      */
