@@ -219,7 +219,7 @@ class projectModel extends model
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('status, code')
+            ->orderBy('status, id desc')
             ->fetchAll();
         $pairs = array();
         foreach($projects as $project)
