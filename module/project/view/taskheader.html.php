@@ -25,7 +25,6 @@
     common::printLink('task', 'report', "project=$project->id&browseType=$browseType", $lang->task->report->common);
     common::printLink('task', 'batchCreate', "projectID=$project->id", $lang->task->batchCreate);
     common::printLink('task', 'create', "project=$project->id", $lang->task->create);
-    common::printLink('story', 'create', "productID=0&moduleID=0&story=0&project=$project->id", $lang->story->create);
     ?>
   </div>
 </div>
