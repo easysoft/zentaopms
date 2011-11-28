@@ -14,12 +14,17 @@
 <?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 fixed colored tablesorter'>
   <caption class='caption-tl'>
-    <div class='f-left'><?php echo $lang->project->bug;?></div>
+    <div class='f-left'>
+    <?php 
+        if($build != 0) echo $lang->project->bug . '<span class="star">(Build:' . $build . ')</span>';
+        else echo $lang->project->bug;
+    ?>
+    </div>
     <div class='f-right'><?php common::printLink('bug', 'create', "productID=$productID&extra=projectID=$project->id", $lang->bug->create);?></div>
   </caption>
   <thead>
   <tr class='colhead'>
-    <?php $vars = "projectID={$project->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+    <?php $vars = "projectID={$project->id}&orderBy=%s&build=$build&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <th class='w-id'>      <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
     <th class='w-severity'><?php common::printOrderLink('severity',     $orderBy, $vars, $lang->bug->severityAB);?></th>
     <th class='w-pri'>     <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>

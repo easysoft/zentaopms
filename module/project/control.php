@@ -549,7 +549,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function bug($projectID = 0, $orderBy = 'status,id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
@@ -570,7 +570,7 @@ class project extends control
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $bugs  = $this->bug->getProjectBugs($projectID, $orderBy, $pager);
+        $bugs  = $this->bug->getProjectBugs($projectID, $orderBy, $pager, $build);
         $users = $this->user->getPairs('noletter');
 
         /* Assign. */
@@ -578,6 +578,7 @@ class project extends control
         $this->view->position  = $position;
         $this->view->bugs      = $bugs;
         $this->view->tabID     = 'bug';
+        $this->view->build     = $build;
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $users;
@@ -595,6 +596,7 @@ class project extends control
      */
     public function build($projectID = 0)
     {
+        $this->loadModel('testtask');
         $this->session->set('buildList', $this->app->getURI(true));
 
         $project = $this->commonAction($projectID);

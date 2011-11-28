@@ -44,6 +44,7 @@ $lang->project->totalEstimate= 'Est';
 $lang->project->totalConsumed= 'Done';
 $lang->project->totalLeft    = 'Left';
 $lang->project->progess      = 'Progess';
+$lang->project->viewBug      = 'View bug';
 $lang->project->noProduct    = 'No product';
 $lang->project->select       = '--select project--';
 

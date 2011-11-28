@@ -39,10 +39,9 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    function create($productID)
+    function create()
     {
         $task = fixer::input('post')
-            ->add('product', $productID)
             ->stripTags('name')
             ->get();
         $this->dao->insert(TABLE_TESTTASK)->data($task)->autoCheck()->batchcheck($this->config->testtask->create->requiredFields, 'notempty')->exec();

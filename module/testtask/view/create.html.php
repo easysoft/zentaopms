@@ -16,6 +16,17 @@
 <form method='post' target='hiddenwin'>
   <table class='table-1'> 
     <caption><?php echo $lang->testtask->create;?></caption>
+    <?php if(isset($projectID)):?>
+    <tr>
+      <th class='rowhead'><?php echo $lang->testtask->product;?></th>
+      <td><?php echo html::select('product', $products, '', 'class=select-3');?></td>
+    </tr>  
+    <?php else:?>
+    <tr class='hidden'>
+      <th><?php echo $lang->testtask->product;?></th>
+      <td><?php echo html::input('product', $productID, 'class=select-3');?></td>
+    </tr>  
+    <?php endif;?>
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->project;?></th>
       <td><?php echo html::select('project', $projects, '', 'class=select-3');?></td>

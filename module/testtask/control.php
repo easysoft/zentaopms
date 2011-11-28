@@ -81,14 +81,39 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function create($productID)
+    public function create($productID, $projectID = 0, $build = 0)
     {
         if(!empty($_POST))
         {
-            $taskID = $this->testtask->create($productID);
+            $taskID = $this->testtask->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
             die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
+        }
+
+        if($projectID != 0 and $build != 0)
+        {
+            $products = $this->dao->select('t2.id, t2.name')
+                ->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')
+                ->on('t1.product = t2.id')
+                ->where('t1.project')->eq($projectID)
+                ->fetchPairs('id');
+
+            foreach($products as $key => $value)
+            {
+                $productID = $key;
+                break;
+            }
+
+            $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetchPairs('id');
+            $builds   = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->eq($build)->fetchPairs('id');
+        }
+
+        if($projectID == 0)
+        {
+            $projects = $this->product->getProjectPairs($productID, $params = 'nodeleted');
+            $builds   = $this->loadModel('build')->getProductBuildPairs($productID);
         }
 
         /* Set menu. */
@@ -99,8 +124,14 @@ class testtask extends control
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->create;
 
-        $this->view->projects  = $this->product->getProjectPairs($productID, $params = 'nodeleted');
-        $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID);
+        if($projectID != 0) 
+        {
+            $this->view->products  = $products;
+            $this->view->projectID = $projectID;
+        }
+        $this->view->projects  = $projects;
+        $this->view->productID = $productID;
+        $this->view->builds    = $builds; 
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         $this->display();

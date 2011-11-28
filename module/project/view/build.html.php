@@ -26,7 +26,7 @@
     <th><?php echo $lang->build->filePath;?></th>
     <th class='w-date'><?php echo $lang->build->date;?></th>
     <th class='w-user'><?php echo $lang->build->builder;?></th>
-    <th class='w-60px'><?php echo $lang->actions;?></th>
+    <th class='w-200px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -41,6 +41,8 @@
     <td><?php echo $users[$build->builder]?></td>
     <td>
       <?php 
+      common::printLink('testtask', 'create', "product=0&project=$project->id&build=$build->id", $lang->testtask->create);
+      common::printLink('project', 'bug', "project=$project->id&orderBy=status&build=$build->id", $lang->project->viewBug);
       common::printLink('build', 'edit',   "buildID=$build->id", $lang->edit);
       common::printLink('build', 'delete', "buildID=$build->id", $lang->delete, 'hiddenwin');
       ?>
