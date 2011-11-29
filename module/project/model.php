@@ -535,9 +535,10 @@ class projectModel extends model
      */
     public function importTask($projectID)
     {
-        $tasks = $this->dao->select('id, project, assignedTo, story, consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $this->loadModel('task');
 
         /* Update tasks. */
+        $tasks = $this->dao->select('id, project, assignedTo, story, consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to project. */
@@ -553,10 +554,12 @@ class projectModel extends model
                 $data->canceledDate = NULL;
             }
 
-            $data->status  = $task->consumed > 0 ? 'doing' : 'wait';
+            $data->status       = $task->consumed > 0 ? 'doing' : 'wait';
+            $data->statusCustom = strpos(TASKMODEL::CUSTOM_STATUS_ORDER, $data->status) + 1;
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->in($this->post->tasks)->exec();
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
         }
+
         /* Remove empty story. */
         unset($stories[0]);
 
@@ -613,7 +616,7 @@ class projectModel extends model
             $task->pri          = $BugToTasks->pri[$key];
             $task->consumed     = 0;
             $task->status       = 'wait';
-            $task->statusCustom = 1;
+            $task->statusCustom = strpos(taskModel::CUSTOM_STATUS_ORDER, 'wait') + 1;
             $task->desc         = $bugLang->bug->resolve . ':' . '#' . html::a(helper::createLink('bug', 'view', "bugID=$key"), sprintf('%03d', $key));
             $task->openedDate   = $now;
             $task->openedBy     = $this->app->user->account;
