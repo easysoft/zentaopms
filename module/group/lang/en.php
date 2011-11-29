@@ -51,5 +51,6 @@ $lang->group->versions['2.0']   = '2.0';
 $lang->group->versions['2.1']   = '2.1';
 $lang->group->versions['2.2']   = '2.2';
 $lang->group->versions['2.3']   = '2.3';
+$lang->group->versions['2.4']   = '2.4';
 
 include (dirname(__FILE__) . '/resource.php');
