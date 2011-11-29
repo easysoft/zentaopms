@@ -71,6 +71,7 @@ $lang->project->story          = 'Story';
 $lang->project->bug            = 'Bug';
 $lang->project->dynamic        = 'Dynamic';
 $lang->project->build          = 'Build';
+$lang->project->testtask       = 'Testtask';
 $lang->project->burn           = 'Burndown chart';
 $lang->project->computeBurn    = 'Update burndown';
 $lang->project->burnData       = 'Burndown data';

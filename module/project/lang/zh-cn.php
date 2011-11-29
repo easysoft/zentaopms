@@ -71,6 +71,7 @@ $lang->project->story          = '需求列表';
 $lang->project->bug            = 'Bug列表';
 $lang->project->dynamic        = '动态';
 $lang->project->build          = 'Build列表';
+$lang->project->testtask       = '测试任务';
 $lang->project->burn           = '燃尽图';
 $lang->project->computeBurn    = '更新燃尽图';
 $lang->project->burnData       = '燃尽图数据';

@@ -92,6 +92,7 @@ $lang->resource->project->importtask     = 'importTask';
 $lang->resource->project->importBug      = 'importBug';
 $lang->resource->project->story          = 'story';
 $lang->resource->project->build          = 'build';
+$lang->resource->project->testtask       = 'testtask';
 $lang->resource->project->bug            = 'bug';
 $lang->resource->project->burn           = 'burn';
 $lang->resource->project->computeBurn    = 'computeBurn';
@@ -347,3 +348,4 @@ $lang->changelog['2.3'][]   = 'svn-apiSync';
 
 $lang->changelog['2.4'][]   = 'user-ajaxGetUser';
 $lang->changelog['2.4'][]   = 'task-assignedTo';
+$lang->changelog['2.4'][]   = 'project-testtask';
