@@ -214,13 +214,13 @@ class project extends control
         $users = $this->loadModel('user')->getPairs('noletter');
         foreach($tasks as $task)
         {
-            if($groupBy == 'story')
-            { 
+            if($groupBy == '')
+            {
                 $groupTasks[$task->story][] = $task;
                 $groupByList[$task->story]  = $task->storyTitle;
             }
-            elseif($groupBy == '')
-            {
+            elseif($groupBy == 'story')
+            { 
                 $groupTasks[$task->story][] = $task;
                 $groupByList[$task->story]  = $task->storyTitle;
             }
@@ -255,6 +255,7 @@ class project extends control
         }
 
         /* Assign. */
+        $this->view->members     = $this->project->getTeamMembers($projectID);
         $this->view->tasks       = $groupTasks;
         $this->view->tabID       = 'task';
         $this->view->groupByList = $groupByList;

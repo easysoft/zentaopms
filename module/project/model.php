@@ -423,6 +423,7 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetch();
         $project->days          = $project->days ? $project->days : '';
+        $project->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('project')->eq($project->id)->fetch('totalHours');
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
         $project->totalLeft     = round($total->totalLeft, 1);
@@ -735,11 +736,11 @@ class projectModel extends model
      */
     public function getTeamMembers($projectID)
     {
-        return $this->dao->select('t1.*, t2.realname')->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select('t1.*, t1.hours * t1.days AS totalHours, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWHere('t2.company')->eq($this->app->company->id)
-            ->fetchAll();
+            ->fetchAll('account');
     }
 
     /**

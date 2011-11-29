@@ -106,7 +106,12 @@
       </td>
     </tr>
     <?php endforeach;?>
-    <tr class='child-of-node-<?php echo $groupKey;?> <?php echo $groupClass;?>'><td colspan='12' class='a-right'><?php printf($lang->project->groupSummary, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?></td></tr>
+    <tr class='child-of-node-<?php echo $groupKey;?> <?php echo $groupClass;?>'>
+      <td colspan='12' class='a-right groupdivider'>
+        <?php if($groupBy == 'assignedto' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
+        <?php printf($lang->project->groupSummary, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?></div>
+      </td>
+    </tr>
   <?php endforeach;?>
 </table>
 <script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>

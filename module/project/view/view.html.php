@@ -59,7 +59,7 @@
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->project->lblStats;?></th>
-    <td><?php printf($lang->project->stats, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?></td>
+    <td><?php printf($lang->project->stats, $project->totalHours, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?></td>
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->project->products;?></th>
