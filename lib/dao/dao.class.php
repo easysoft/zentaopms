@@ -752,7 +752,7 @@ class dao
 
         /* Set the field label and value. */
         global $lang, $config, $app;
-        $table      = strtolower(str_replace($config->db->prefix, '', $this->table));
+        $table      = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));
         $fieldLabel = isset($lang->$table->$fieldName) ? $lang->$table->$fieldName : $fieldName;
         $value = $this->sqlobj->data->$fieldName;
         
