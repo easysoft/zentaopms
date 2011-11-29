@@ -1,5 +1,6 @@
 <?php
-$config->project->projectCounts = 50;
+$config->project->projectCounts    = 50;
+$config->project->defaultWorkhours = 7;
 
 global $lang, $app;
 $app->loadLang('task');

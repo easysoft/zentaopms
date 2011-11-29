@@ -44,11 +44,15 @@ $(document).ready(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->begin;?></th>
-      <td><?php echo html::input('begin', '', "class='text-3 date'");?></td>
+      <td><?php echo html::input('begin', '', "class='text-3 date' onchange='computeDays()'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->end;?></th>
-      <td><?php echo html::input('end', '', "class='text-3 date'");?></td>
+      <td><?php echo html::input('end', '', "class='text-3 date' onchange='computeDays()'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->project->days;?></th>
+      <td><?php echo html::input('days', '', "class='text-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->teamname;?></th>

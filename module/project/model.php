@@ -152,7 +152,9 @@ class projectModel extends model
             $projectID = $this->dao->lastInsertId();
             $member->project  = $projectID;
             $member->account  = $this->app->user->account;
-            $member->joinDate = helper::today();
+            $member->join     = helper::today();
+            $member->days     = $project->days;
+            $member->hours    = $this->config->project->defaultWorkhours;
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             return $projectID;
         } 
@@ -196,11 +198,12 @@ class projectModel extends model
             {
                 if(!empty($value) and !isset($team[$value]))
                 {
-                    $member->project     = (int)$projectID;
-                    $member->account     = $value;
-                    $member->joinDate    = helper::today();
-                    $member->role        = $fieldName;
-                    $member->workingHour = '';
+                    $member->project = (int)$projectID;
+                    $member->account = $value;
+                    $member->join    = helper::today();
+                    $member->role    = $fieldName;
+                    $member->days    = $project->days;
+                    $member->hours   = $this->config->project->defaultWorkhours;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                 }
             }
@@ -419,6 +422,7 @@ class projectModel extends model
             ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
             ->fetch();
+        $project->days          = $project->days ? $project->days : '';
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
         $project->totalLeft     = round($total->totalLeft, 1);
@@ -779,26 +783,21 @@ class projectModel extends model
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
-            $role        = $roles[$key];
-            $workingHour = $workingHours[$key];
+
+            $member->role  = $roles[$key];
+            $member->days  = $days[$key];
+            $member->hours = $hours[$key];
             $mode        = $modes[$key];
 
             if($mode == 'update')
             {
-                $this->dao->update(TABLE_TEAM)
-                    ->set('role')->eq($role)
-                    ->set('workingHour')->eq($workingHour)
-                    ->where('project')->eq((int)$projectID)
-                    ->andWhere('account')->eq($account)
-                    ->exec();
+                $this->dao->update(TABLE_TEAM)->data($member)->where('project')->eq((int)$projectID)->andWhere('account')->eq($account)->exec();
             }
             else
             {
-                $member->project     = (int)$projectID;
-                $member->account     = $account;
-                $member->joinDate    = helper::today();
-                $member->role        = $role;
-                $member->workingHour = $workingHour;
+                $member->project = (int)$projectID;
+                $member->account = $account;
+                $member->join    = helper::today();
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
         }        

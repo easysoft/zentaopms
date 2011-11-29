@@ -26,6 +26,10 @@
     <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
   </tr>
   <tr>
+    <th class='rowhead'><?php echo $lang->project->days;?></th>
+    <td><?php echo $project->days;?></td>
+  </tr>
+  <tr>
     <th class='rowhead'><?php echo $lang->project->goal;?></th>
     <td class='content'><?php echo $project->goal;?></td>
   </tr>

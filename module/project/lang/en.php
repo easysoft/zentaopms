@@ -20,6 +20,7 @@ $lang->project->name         = 'Name';
 $lang->project->code         = 'Code';
 $lang->project->begin        = 'Begin';
 $lang->project->end          = 'End';
+$lang->project->days         = 'Workdays';
 $lang->project->status       = 'Status';
 $lang->project->statge       = 'Stage';
 $lang->project->pri          = 'Priority';
@@ -48,10 +49,12 @@ $lang->project->viewBug      = 'View bug';
 $lang->project->noProduct    = 'No product';
 $lang->project->select       = '--select project--';
 
-$lang->team->account     = 'Account';
-$lang->team->role        = 'Role';
-$lang->team->joinDate    = 'Join date';
-$lang->team->workingHour = 'Hour/Day';
+$lang->team->account    = 'Account';
+$lang->team->role       = 'Role';
+$lang->team->join       = 'Join date';
+$lang->team->hours      = 'Hour/Day';
+$lang->team->days       = 'Workdays';
+$lang->team->totalHours = 'Total';
 
 /* Lists. */
 $lang->project->statusList['']      = '';

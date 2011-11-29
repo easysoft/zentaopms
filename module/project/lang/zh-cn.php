@@ -20,6 +20,7 @@ $lang->project->name         = '项目名称';
 $lang->project->code         = '项目代号';
 $lang->project->begin        = '开始日期';
 $lang->project->end          = '结束日期';
+$lang->project->days         = '可用工作日';
 $lang->project->status       = '项目状态';
 $lang->project->statge       = '所处阶段';
 $lang->project->pri          = '优先级';
@@ -48,10 +49,12 @@ $lang->project->viewBug      = '查看bug';
 $lang->project->noProduct    = '无产品项目';
 $lang->project->select       = '--请选择项目--';
 
-$lang->team->account     = '用户';
-$lang->team->role        = '角色';
-$lang->team->joinDate    = '加盟日';
-$lang->team->workingHour = '工时/天';
+$lang->team->account    = '用户';
+$lang->team->role       = '角色';
+$lang->team->join       = '加盟日';
+$lang->team->hours      = '可用工时/天';
+$lang->team->days       = '可用工日';
+$lang->team->totalHours = '总计';
 
 /* 字段取值列表。*/
 $lang->project->statusList['']      = '';
