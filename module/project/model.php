@@ -141,6 +141,7 @@ class projectModel extends model
             ->batchcheck($this->config->project->create->requiredFields, 'notempty')
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
+            ->check('end', 'gt', $project->begin)
             ->check('name', 'unique')
             ->check('code', 'unique')
             ->exec();
