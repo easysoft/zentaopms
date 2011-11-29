@@ -51,5 +51,6 @@ $lang->group->versions['2.0']   = '禅道2.0';
 $lang->group->versions['2.1']   = '禅道2.1';
 $lang->group->versions['2.2']   = '禅道2.2';
 $lang->group->versions['2.3']   = '禅道2.3';
+$lang->group->versions['2.4']   = '禅道2.4';
 
 include (dirname(__FILE__) . '/resource.php');
