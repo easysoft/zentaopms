@@ -72,6 +72,27 @@ class testtaskModel extends model
     }
 
     /**
+     * Get test tasks of a project.
+     * 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getProjectTasks($projectID, $orderBy = 'id_desc', $pager = null)
+    {
+        return $this->dao->select('t1.*, t2.name AS buildName')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
+            ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
      * Get test task info by id.
      * 
      * @param  int   $taskID 

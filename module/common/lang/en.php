@@ -151,6 +151,7 @@ $lang->project->menu->story     = array('link' => 'Story|project|story|projectID
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->testtask  = 'Testtask|project|testtask|projectID=%s';
 $lang->project->menu->burn      = 'Burn|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s', 'subModule' => 'doc');

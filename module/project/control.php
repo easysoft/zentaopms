@@ -614,6 +614,42 @@ class project extends control
     }
 
     /**
+     * Browse test tasks of project. 
+     * 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function testtask($projectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('testtask');
+        /* Save session. */
+        $this->session->set('testtaskList', $this->app->getURI(true));
+
+        $project = $this->commonAction($projectID);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $this->view->header->title = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->position[]    = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
+        $this->view->position[]    = $this->lang->testtask->common;
+        $this->view->projectID     = $projectID;
+        $this->view->projectName   = $this->projects[$projectID];
+        $this->view->pager         = $pager;
+        $this->view->orderBy       = $orderBy;
+        $this->view->tasks         = $this->testtask->getProjectTasks($projectID);
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
+
+        $this->display();
+    }
+
+    /**
      * Browse burndown chart of a project.
      * 
      * @param  int    $projectID 
