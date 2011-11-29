@@ -141,7 +141,9 @@ function setAssignedTo()
  */
 function loadProjectBuilds(projectID)
 {
-    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=openedBuild');
+    selectedBuilds = $('#openedBuild').val();
+    if(!selectedBuilds) selectedBuilds = 0;
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=openedBuild&builds=' + selectedBuilds);
     $('#buildBox').load(link);
 }
 
