@@ -187,4 +187,66 @@ class todo extends control
         $this->dao->update(TABLE_TODO)->set('date')->eq($today)->where('id')->in($todos)->exec();
         die(js::reload('parent'));
     }
+
+    /**
+     * Get data to export 
+     * 
+     * @param  string $productID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function export($account, $orderBy)
+    {
+        if($_POST)
+        {
+            $todoLang   = $this->lang->todo;
+            $todoConfig = $this->config->todo;
+
+            /* Create field lists. */
+            $fields = explode(',', $todoConfig->list->exportFields);
+            foreach($fields as $key => $fieldName)
+            {
+                $fieldName = trim($fieldName);
+                $fields[$fieldName] = isset($todoLang->$fieldName) ? $todoLang->$fieldName : $fieldName;
+                unset($fields[$key]);
+            }
+            unset($fields['idvalue']);
+            unset($fields['private']);
+
+            /* Get bugs. */
+            $todos = $this->dao->select('*')->from(TABLE_TODO)->where($this->session->todoReportCondition)->orderBy($orderBy)->fetchAll('id');
+
+            /* Get users, bugs, tasks and times. */
+            $users    = $this->loadModel('user')->getPairs('noletter');
+            $bugs     = $this->loadModel('bug')->getUserBugPairs($account);
+            $tasks    = $this->loadModel('task')->getUserTaskPairs($account);
+            $times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+
+            foreach($todos as $todo)
+            {
+                /* fill some field with useful value. */
+                if(isset($users[$todo->account]))               $todo->account = $users[$todo->account];
+                if(isset($times[$todo->begin]))                 $todo->begin   = $times[$todo->begin];
+                if(isset($times[$todo->end]))                   $todo->end     = $times[$todo->end];
+                if($todo->type == 'bug')                        $todo->name    = $bugs[$todo->idvalue];
+                if($todo->type == 'task')                       $todo->name    = $tasks[$todo->idvalue];
+                if(isset($todoLang->typeList->{$todo->type}))   $todo->type    = $todoLang->typeList->{$todo->type};
+                if(isset($todoLang->priList[$todo->pri]))       $todo->pri     = $todoLang->priList[$todo->pri];
+                if(isset($todoLang->statusList[$todo->status])) $todo->status  = $todoLang->statusList[$todo->status];
+                if($todo->private == 1)                         $todo->desc    = $this->lang->todo->thisIsPrivate;
+
+                /* drop some field that is not needed. */
+                unset($todo->company);
+                unset($todo->idvalue);
+                unset($todo->private);
+            }
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $todos);
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+        }
+
+        $this->display();
+    }
 }

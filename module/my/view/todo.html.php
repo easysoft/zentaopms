@@ -25,7 +25,12 @@
       ?>
       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
-    <div class='f-right'><?php echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);?></div>
+    <div class='f-right'>
+    <?php 
+        common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="export"');
+        echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
+    ?>
+    </div>
   </div>
   <table class='table-1 tablesorter'>
     <thead>

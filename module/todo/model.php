@@ -159,6 +159,12 @@ class todoModel extends model
             ->orderBy('date, status, begin')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->query();
+        
+        /* Set session. */
+        $sql = explode('WHERE', $this->dao->get());
+        $sql = explode('ORDER', $sql[1]);
+        $this->session->set('todoReportCondition', $sql[0]);
+
         while($todo = $stmt->fetch())
         {
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');

@@ -8,3 +8,5 @@ $config->todo->times->delta           = 10;
 
 $config->todo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->todo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+
+$config->todo->list->exportFields = 'id, account, date, begin, end, type, idvalue, pri, name, desc, status, private'; 

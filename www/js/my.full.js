@@ -535,6 +535,12 @@ function setProjectListLink()
    if($('#submenuall').size()) $("#submenuall").colorbox({width:1000, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
 }
 
+/* Set the colorbox of export. */
+function setExport()
+{
+   if($('.export').size()) $(".export").colorbox({width:400, height:200, iframe:true, transition:'elastic', speed:350, scrolling:true});
+}
+
 /**
  * Auto checked the checkbox of a row. 
  * 
@@ -757,6 +763,7 @@ $(document).ready(function()
     setSubversionLink();
     setProductListLink();
     setProjectListLink();
+    setExport();
     autoCheck();
     togglesearch();
     saveWindowSize();

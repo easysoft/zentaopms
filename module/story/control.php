@@ -50,7 +50,6 @@ class story extends control
         {
             $product  = $this->product->getById($productID);
             $products = $this->product->getPairs();
-            a($products);
         }
         else
         {
