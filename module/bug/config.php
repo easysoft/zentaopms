@@ -16,6 +16,8 @@ $config->bug->search['fields']['lastEditedBy']   = $lang->bug->lastEditedByAB;
 $config->bug->search['fields']['status']         = $lang->bug->status;
 $config->bug->search['fields']['activatedCount'] = $lang->bug->activatedCount;
 $config->bug->search['fields']['confirmed']      = $lang->bug->confirmed;
+$config->bug->search['fields']['toTask']         = $lang->bug->toTask;
+$config->bug->search['fields']['toStory']        = $lang->bug->toStory;
 $config->bug->search['fields']['severity']       = $lang->bug->severity;
 $config->bug->search['fields']['pri']            = $lang->bug->pri;
 $config->bug->search['fields']['type']           = $lang->bug->type;
@@ -45,6 +47,8 @@ $config->bug->search['params']['lastEditedBy']  = array('operator' => '=',      
 $config->bug->search['params']['status']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->statusList);
 $config->bug->search['params']['activatedCount']= array('operator' => '>=',      'control' => 'input',  'values' => '');
 $config->bug->search['params']['confirmed']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->confirmedList);
+$config->bug->search['params']['toTask']        = array('operator' => '=',       'control' => 'input',  'values' => '');
+$config->bug->search['params']['toStory']       = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->bug->search['params']['severity']      = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->severityList);
 $config->bug->search['params']['pri']           = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->priList);
 $config->bug->search['params']['type']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->typeList);

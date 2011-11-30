@@ -113,6 +113,8 @@ class storyModel extends model
             ->add('status', 'draft')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview, 'status', 'active')
+            ->setIF($this->post->plan > 0, 'stage', 'planned')
+            ->setIF($projectID > 0, 'stage', 'projected')
             ->remove('files,labels,spec,verify,needNotReview')
             ->get();
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
