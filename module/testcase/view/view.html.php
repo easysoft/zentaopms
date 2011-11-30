@@ -20,8 +20,8 @@
     if(!$case->deleted)
     {
         common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
-        common::printLink('testtask', 'results', "runID=0&extras=caseID=$case->id,version=$case->version", $lang->testtask->results, '', 'class="results"');
-        if($case->lastResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
+        common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
+        if($case->lastRunResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
         common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
         common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
@@ -133,11 +133,11 @@
           </tr>
            <tr>
             <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastRunTime;?></td>
-            <td><?php if(!helper::isZeroDate($case->lastRun)) echo $case->lastRun;?></td>
+            <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo $case->lastRunDate;?></td>
           </tr>
           <tr>
-            <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastResult;?></td>
-            <td><?php if($case->lastResult) echo $lang->testcase->resultList[$case->lastResult];?></td>
+            <td class='rowhead'><?php echo $this->app->loadLang('testtask')->testtask->lastRunResult;?></td>
+            <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->keywords;?></td>

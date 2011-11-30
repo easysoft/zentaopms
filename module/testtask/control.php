@@ -405,11 +405,11 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function results($runID, $caseID = 0)
+    public function results($runID, $caseID = 0, $version = 0)
     {
-        if($caseID)
+        if($caseID and $version)
         {
-            $this->view->case    = $this->loadModel('testcase')->getByID($caseID);
+            $this->view->case    = $this->loadModel('testcase')->getByID($caseID, $version);
             $this->view->results = $this->testtask->getResults(0, $caseID);
         }
         else

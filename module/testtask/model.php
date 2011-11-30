@@ -267,12 +267,12 @@ class testtaskModel extends model
             ->add('run', $runID)
             ->add('caseResult', $caseResult)
             ->setForce('stepResults', serialize($stepResults))
-            ->add('runAccount', $this->app->user->account)
+            ->add('lastRunner', $this->app->user->account)
             ->add('date', $now)
             ->remove('steps,reals,passall,result')
             ->get();
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
-        $this->dao->update(TABLE_CASE)->set('runAccount')->eq($this->app->user->account)->set('lastRun')->eq($now)->set('lastResult')->eq($caseResult)->where('id')->eq($this->post->case)->exec();
+        $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($this->post->case)->exec();
 
         if($runID)
         {
@@ -281,10 +281,10 @@ class testtaskModel extends model
             {
                 $runStatus = $caseResult == 'blocked' ? 'blocked' : 'done';
                 $this->dao->update(TABLE_TESTRUN)
-                    ->set('lastResult')->eq($caseResult)
+                    ->set('lastRunResult')->eq($caseResult)
                     ->set('status')->eq($runStatus)
-                    ->set('runAccount')->eq($this->app->user->account)
-                    ->set('lastRun')->eq($now)
+                    ->set('lastRunner')->eq($this->app->user->account)
+                    ->set('lastRunDate')->eq($now)
                     ->where('id')->eq($runID)
                     ->exec();
             }

@@ -61,9 +61,9 @@ var moduleID   = '<?php echo $moduleID;?>';
             <?php else:?>
             <th class='w-type'>  <?php common::printOrderLink('type',      $orderBy, $vars, $lang->typeAB);?></th>
             <th class='w-user'>  <?php common::printOrderLink('openedBy',  $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='w-100px'>  <?php common::printOrderLink('runAccount',  $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-            <th class='w-100px'>  <?php common::printOrderLink('lastRun',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
-            <th class='w-80px'>  <?php common::printOrderLink('lastResult',$orderBy, $vars, $lang->testtask->lastResult);?></th>
+            <th class='w-100px'>  <?php common::printOrderLink('lastRunner',  $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
+            <th class='w-100px'>  <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+            <th class='w-80px'>  <?php common::printOrderLink('lastRunResult',$orderBy, $vars, $lang->testtask->lastRunResult);?></th>
             <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
             <th class='w-240px {sorter:false}'><?php echo $lang->actions;?></th>
             <?php endif;?>
@@ -80,9 +80,9 @@ var moduleID   = '<?php echo $moduleID;?>';
             <?php else:?>
             <td><?php echo $lang->testcase->typeList[$case->type];?></td>
             <td><?php echo $users[$case->openedBy];?></td>
-            <td><?php echo $users[$case->runAccount];?></td>
-            <td><?php if(!helper::isZeroDate($case->lastRun)) echo date(DT_MONTHTIME1, strtotime($case->lastRun));?></td>
-            <td><?php if($case->lastResult) echo $lang->testcase->resultList[$case->lastResult];?></td>
+            <td><?php echo $users[$case->lastRunner];?></td>
+            <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+            <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
             <td><?php echo $lang->testcase->statusList[$case->status];?></td>
             <td class='a-right'>
               <?php
@@ -91,7 +91,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
               common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
               common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
-              if(!($case->lastResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))) echo $lang->testtask->createBug;
+              if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))) echo $lang->testtask->createBug;
               ?>
             </td>
             <?php endif;?>

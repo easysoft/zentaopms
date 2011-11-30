@@ -40,7 +40,7 @@ $lang->testtask->assignedTo     = 'Assigned to';
 $lang->testtask->linkVersion    = 'Link(version)';
 $lang->testtask->lastRunAccount = "Run account";
 $lang->testtask->lastRunTime    = 'Last run';
-$lang->testtask->lastResult     = 'Last result';
+$lang->testtask->lastRunResult  = 'Last result';
 
 $lang->testtask->statusList['wait']    = 'Waiting';
 $lang->testtask->statusList['doing']   = 'Doing';

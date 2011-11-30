@@ -53,7 +53,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-100px'><?php echo $lang->testtask->assignedTo;?></th>
             <th class='w-100px'><?php echo $lang->testtask->lastRunAccount;?></th>
             <th class='w-100px'><?php echo $lang->testtask->lastRunTime;?></th>
-            <th class='w-80px'><?php echo $lang->testtask->lastResult;?></th>
+            <th class='w-80px'><?php echo $lang->testtask->lastRunResult;?></th>
             <th class='w-status'><?php echo $lang->statusAB;?></th>
             <th class='w-160px {sorter: false}'><?php echo $lang->actions;?></th>
           </tr>
@@ -67,16 +67,16 @@ var moduleID   = '<?php echo $moduleID;?>';
             </td>
             <td><?php echo $lang->testcase->typeList[$run->type];?></td>
             <td><?php $assignedTo = $users[$run->assignedTo]; echo substr($assignedTo, strpos($assignedTo, ':') + 1);?></td>
-            <td><?php $runAccount = $users[$run->runAccount]; echo substr($runAccount, strpos($runAccount, ':') + 1);?></td>
-            <td><?php if(!helper::isZeroDate($run->lastRun)) echo date(DT_MONTHTIME1, strtotime($run->lastRun));?></td>
-            <td class='<?php echo $run->lastResult;?>'><?php if($run->lastResult) echo $lang->testcase->resultList[$run->lastResult];?></td>
+            <td><?php $lastRunner = $users[$run->lastRunner]; echo substr($lastRunner, strpos($lastRunner, ':') + 1);?></td>
+            <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
+            <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
             <td class='<?php echo $run->status;?>'><?php echo $lang->testtask->statusList[$run->status];?></td>
             <td class='a-left'>
               <?php
               common::printLink('testtask', 'runcase',    "id=$run->id", $lang->testtask->runCase, '', 'class="iframe"');
               common::printLink('testtask', 'results',    "id=$run->id", $lang->testtask->results, '', 'class="iframe"');
               common::printLink('testtask', 'unlinkcase', "id=$run->id", $lang->testtask->unlinkCase, 'hiddenwin');
-              if($run->lastResult == 'fail') common::printLink('bug', 'create', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $lang->testtask->createBug);
+              if($run->lastRunResult == 'fail') common::printLink('bug', 'create', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $lang->testtask->createBug);
               ?>
             </td>
           </tr>
