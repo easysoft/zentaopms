@@ -106,7 +106,7 @@ class taskModel extends model
                 $data[$i]->openedBy     = $this->app->user->account;
                 $data[$i]->openedDate   = $now;
                 $data[$i]->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, 'wait') + 1;
-                if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($tasks->story[$i]);
+                if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
                 if($tasks->assignedTo[$i] != '') $data[$i]->assignedDate = $now;
 
                 $this->dao->insert(TABLE_TASK)->data($data[$i])

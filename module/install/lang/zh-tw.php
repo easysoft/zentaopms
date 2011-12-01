@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2341 2011-11-21 05:17:32Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -58,6 +58,8 @@ $lang->install->pdo          = 'PDO擴展';
 $lang->install->pdoFail      = '修改PHP配置檔案，加載PDO擴展。';
 $lang->install->pdoMySQL     = 'PDO_MySQL擴展';
 $lang->install->pdoMySQLFail = '修改PHP配置檔案，加載pdo_mysql擴展。';
+$lang->install->json         = 'JSON擴展';
+$lang->install->jsonFail     = '修改PHP配置檔案，加載JSON擴展。';
 $lang->install->tmpRoot      = '臨時檔案目錄';
 $lang->install->dataRoot     = '上傳檔案目錄';
 $lang->install->mkdir        = '<p>需要創建目錄%s。<br /> linux下面命令為：<br /> mkdir -p %s</p>';

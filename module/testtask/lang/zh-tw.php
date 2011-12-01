@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 2255 2011-10-28 05:51:57Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2379 2011-11-30 05:35:57Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -38,8 +38,9 @@ $lang->testtask->desc           = '任務描述';
 $lang->testtask->status         = '當前狀態';
 $lang->testtask->assignedTo     = '指派給';
 $lang->testtask->linkVersion    = '關聯(版本)';
-$lang->testtask->lastRun        = '最後執行';
-$lang->testtask->lastResult     = '最終結果';
+$lang->testtask->lastRunAccount = '最後執行人';
+$lang->testtask->lastRunTime    = '最後執行時間';
+$lang->testtask->lastRunResult  = '最終結果';
 
 $lang->testtask->statusList['wait']    = '未開始';
 $lang->testtask->statusList['doing']   = '進行中';

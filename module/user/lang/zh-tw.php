@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 2174 2011-10-16 06:16:13Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2335 2011-11-18 01:19:32Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->user->common        = '用戶';
@@ -40,6 +40,7 @@ $lang->user->todo        = '用戶TODO';
 $lang->user->story       = '用戶需求';
 $lang->user->team        = '用戶團隊';
 $lang->user->dynamic     = '用戶動態';
+$lang->user->ajaxGetUser = '介面:獲得用戶';
 $lang->user->editProfile = '修改信息';
 
 $lang->user->errorDeny   = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";

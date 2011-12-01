@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2246 2011-10-27 08:54:27Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2372 2011-11-29 02:57:12Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -139,6 +139,7 @@ $lang->product->menu->view    = '概況|product|view|productID=%s';
 $lang->product->menu->edit    = '編輯|product|edit|productID=%s';
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->create  = array('link' => '新增產品|product|create', 'float' => 'right');
+$lang->product->menu->project = array('link' => '項目列表|product|index|locate=false&status=all&productID=%s', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
@@ -150,6 +151,7 @@ $lang->project->menu->story     = array('link' => '需求|project|story|projectI
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '動態|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->testtask  = '測試任務|project|testtask|projectID=%s';
 $lang->project->menu->burn      = '燃盡圖|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=%s', 'subModule' => 'doc');
@@ -247,6 +249,7 @@ $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。"
 $lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且不小於『%s』。");
 $lang->error->reg             = "『%s』不符合格式，應當為:『%s』。";
 $lang->error->unique          = "『%s』已經有『%s』這條記錄了。";
+$lang->error->gt              = "『%s』應當大於『%s』。";
 $lang->error->notempty        = "『%s』不能為空。";
 $lang->error->empty           = "『%s』必須為空。";
 $lang->error->equal           = "『%s』必須為『%s』。";

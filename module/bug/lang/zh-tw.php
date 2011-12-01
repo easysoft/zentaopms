@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2257 2011-10-28 06:04:42Z wwccss $
+ * @version     $Id: zh-tw.php 2380 2011-11-30 07:46:01Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -35,6 +35,8 @@ $lang->bug->statusAB         = '狀態';
 $lang->bug->activatedCount   = '激活次數';
 $lang->bug->activatedCountAB = '激活次數';
 $lang->bug->confirmed        = '是否確認';
+$lang->bug->toTask           = '轉為任務ID';
+$lang->bug->toStory          = '轉為需求ID';
 $lang->bug->mailto           = '抄送給';
 $lang->bug->openedBy         = '由誰創建';
 $lang->bug->openedByAB       = '創建';
@@ -141,6 +143,7 @@ $lang->bug->buttonCreateTestcase = '創建用例';
 $lang->bug->confirmChangeProduct = '修改產品會導致相應的項目、需求和任務發生變化，確定嗎？';
 $lang->bug->confirmDelete        = '您確認要刪除該Bug嗎？';
 $lang->bug->setTemplateTitle     = '請輸入bug模板標題（保存之前請先填寫bug重現步驟）：';
+$lang->bug->remindTask           = '該Bug已經轉化為任務，請及時更新任務狀態。任務：';
 
 /* 模板。*/
 $lang->bug->tplStep        = "<p>[步驟]</p>";
@@ -221,6 +224,7 @@ $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '設計如此';
 $lang->bug->resolutionList['duplicate']  = '重複Bug';
 $lang->bug->resolutionList['external']   = '外部原因';
+$lang->bug->resolutionList['tostory']    = '轉為需求';
 $lang->bug->resolutionList['fixed']      = '已解決';
 $lang->bug->resolutionList['notrepro']   = '無法重現';
 $lang->bug->resolutionList['postponed']  = '延期處理';
@@ -296,3 +300,4 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 
 /* 操作記錄。*/
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
+$lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 轉化為<strong>需求</strong>，編號為 <strong>$extra</strong>。');

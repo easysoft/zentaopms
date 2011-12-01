@@ -17,9 +17,9 @@ $lang->mail->mtaList['sendmail'] = '本機sendmail';
 $lang->mail->turnonList['true']  = '打開';
 $lang->mail->turnonList['false'] = '關閉';
 
+$lang->mail->debugList[2] = '2';
 $lang->mail->debugList[0] = '0';
 $lang->mail->debugList[1] = '1';
-$lang->mail->debugList[2] = '2';
 
 $lang->mail->smtp->authList['true']  = '是';
 $lang->mail->smtp->authList['false'] = '否';

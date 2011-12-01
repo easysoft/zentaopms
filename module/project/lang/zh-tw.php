@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 2270 2011-10-29 03:35:05Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2376 2011-11-29 13:24:10Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -20,6 +20,7 @@ $lang->project->name         = '項目名稱';
 $lang->project->code         = '項目代號';
 $lang->project->begin        = '開始日期';
 $lang->project->end          = '結束日期';
+$lang->project->days         = '可用工作日';
 $lang->project->status       = '項目狀態';
 $lang->project->statge       = '所處階段';
 $lang->project->pri          = '優先順序';
@@ -44,13 +45,16 @@ $lang->project->totalEstimate= '總預計';
 $lang->project->totalConsumed= '總消耗';
 $lang->project->totalLeft    = '總剩餘';
 $lang->project->progess      = '進度';
+$lang->project->viewBug      = '查看bug';
 $lang->project->noProduct    = '無產品項目';
 $lang->project->select       = '--請選擇項目--';
 
-$lang->team->account     = '用戶';
-$lang->team->role        = '角色';
-$lang->team->joinDate    = '加盟日';
-$lang->team->workingHour = '工時/天';
+$lang->team->account    = '用戶';
+$lang->team->role       = '角色';
+$lang->team->join       = '加盟日';
+$lang->team->hours      = '可用工時/天';
+$lang->team->days       = '可用工日';
+$lang->team->totalHours = '總計';
 
 /* 欄位取值列表。*/
 $lang->project->statusList['']      = '';
@@ -70,6 +74,7 @@ $lang->project->story          = '需求列表';
 $lang->project->bug            = 'Bug列表';
 $lang->project->dynamic        = '動態';
 $lang->project->build          = 'Build列表';
+$lang->project->testtask       = '測試任務';
 $lang->project->burn           = '燃盡圖';
 $lang->project->computeBurn    = '更新燃盡圖';
 $lang->project->burnData       = '燃盡圖數據';
@@ -121,9 +126,10 @@ $lang->project->allProject          = '所有項目';
 $lang->project->selectProject   = "請選擇項目";
 $lang->project->beginAndEnd     = '起止時間';
 $lang->project->lblStats        = '工時統計';
-$lang->project->stats           = '總共預計<strong>%s</strong>工時<br />已經消耗<strong>%s</strong>工時<br />預計剩餘<strong>%s</strong>工時';
+$lang->project->stats           = '可用工時<strong>%s</strong>工時<br />總共預計<strong>%s</strong>工時<br />已經消耗<strong>%s</strong>工時<br />預計剩餘<strong>%s</strong>工時';
 $lang->project->oneLineStats    = "項目<strong>%s</strong>, 代號為<strong>%s</strong>, 相關產品為<strong>%s</strong>，<strong>%s</strong>開始，<strong>%s</strong>結束，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，預計剩餘<strong>%s</strong>工時。";
 $lang->project->taskSummary     = "本頁共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
+$lang->project->memberHours     = "%s共有 <strong>%s</strong> 個可用工時，";
 $lang->project->groupSummary    = "本組共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
 $lang->project->wbs             = "分解任務";
 $lang->project->largeBurnChart  = '點擊查看大圖';

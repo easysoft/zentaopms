@@ -6,11 +6,12 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 2296 2011-10-30 01:05:27Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2346 2011-11-21 06:09:08Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
 $lang->story->create      = "新增需求";
+$lang->story->createCase  = "創建用例";
 $lang->story->batchCreate = "批量添加";
 $lang->story->change      = "變更";
 $lang->story->changed     = '需求變更';
@@ -118,6 +119,9 @@ $lang->story->sourceList['market']     = '市場';
 $lang->story->sourceList['service']    = '客服';
 $lang->story->sourceList['competitor'] = '競爭對手';
 $lang->story->sourceList['partner']    = '合作夥伴';
+$lang->story->sourceList['dev']        = '開發人員';
+$lang->story->sourceList['tester']     = '測試人員';
+$lang->story->sourceList['bug']        = 'Bug轉化';
 $lang->story->sourceList['other']      = '其他';
 
 $lang->story->priList[]   = '';
@@ -132,6 +136,8 @@ $lang->story->legendRelated        = '相關信息';
 $lang->story->legendMailto         = '抄送給';
 $lang->story->legendAttatch        = '附件';
 $lang->story->legendProjectAndTask = '項目任務';
+$lang->story->legendBugs           = '相關Bug';
+$lang->story->legendCases          = '相關用例';
 $lang->story->legendLinkStories    = '相關需求';
 $lang->story->legendChildStories   = '細分需求';
 $lang->story->legendSpec           = '需求描述';

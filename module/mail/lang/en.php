@@ -17,9 +17,9 @@ $lang->mail->mtaList['sendmail'] = 'Sendmail on localhost';
 $lang->mail->turnonList['true']  = 'open';
 $lang->mail->turnonList['false'] = 'close';
 
+$lang->mail->debugList[2] = '2';
 $lang->mail->debugList[0] = '0';
 $lang->mail->debugList[1] = '1';
-$lang->mail->debugList[2] = '2';
 
 $lang->mail->smtp->authList['true']  = 'yes';
 $lang->mail->smtp->authList['false'] = 'no';

@@ -19,6 +19,7 @@ $lang->todo->markDone  = "未完成";
 $lang->todo->markWait  = "已完成";
 $lang->todo->markDoing = "已完成";
 $lang->todo->mark      = "更改状态";
+$lang->todo->export    = "导出";
 $lang->todo->delete    = "删除TODO";
 $lang->todo->browse    = "浏览TODO";
 $lang->todo->import2Today = "导入到今天";

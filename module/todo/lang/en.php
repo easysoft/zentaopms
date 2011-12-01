@@ -19,6 +19,7 @@ $lang->todo->markDone  = "Undone";
 $lang->todo->markWait  = "Done";
 $lang->todo->markDoing = "Done";
 $lang->todo->mark      = "Change status";
+$lang->todo->export    = "Export";
 $lang->todo->delete    = "Delete";
 $lang->todo->browse    = "Browse";
 $lang->todo->import2Today = "Import to today";

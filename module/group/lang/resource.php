@@ -31,6 +31,7 @@ $lang->resource->todo->create    = 'create';
 $lang->resource->todo->edit      = 'edit';
 $lang->resource->todo->view      = 'view';
 $lang->resource->todo->delete    = 'delete';
+$lang->resource->todo->export    = 'export';
 $lang->resource->todo->mark      = 'mark';
 $lang->resource->todo->import2Today = 'import2Today';
 
@@ -349,3 +350,4 @@ $lang->changelog['2.3'][]   = 'svn-apiSync';
 $lang->changelog['2.4'][]   = 'user-ajaxGetUser';
 $lang->changelog['2.4'][]   = 'task-assignedTo';
 $lang->changelog['2.4'][]   = 'project-testtask';
+$lang->changelog['2.4'][]   = 'todo-export';

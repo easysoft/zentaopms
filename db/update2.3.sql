@@ -13,3 +13,5 @@ ALTER TABLE `zt_case` CHANGE `lastRun` `lastRunDate` DATETIME NOT NULL ,
 CHANGE `lastResult` `lastRunResult` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL; 
 ALTER TABLE `zt_testRun` CHANGE `lastRun` `lastRunDate` DATETIME NOT NULL ,
 CHANGE `lastResult` `lastRunResult` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+update `zt_task` set `storyVersion` = 1  WHERE `storyVersion` = 0;
