@@ -407,7 +407,7 @@ class testtask extends control
      */
     public function results($runID, $caseID = 0, $version = 0)
     {
-        if($caseID and $version)
+        if($caseID)
         {
             $this->view->case    = $this->loadModel('testcase')->getByID($caseID, $version);
             $this->view->results = $this->testtask->getResults(0, $caseID);
