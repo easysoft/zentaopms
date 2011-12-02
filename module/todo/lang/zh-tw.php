@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2383 2011-12-01 07:17:55Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->todo->common    = 'TODO';
@@ -19,6 +19,7 @@ $lang->todo->markDone  = "未完成";
 $lang->todo->markWait  = "已完成";
 $lang->todo->markDoing = "已完成";
 $lang->todo->mark      = "更改狀態";
+$lang->todo->export    = "導出";
 $lang->todo->delete    = "刪除TODO";
 $lang->todo->browse    = "瀏覽TODO";
 $lang->todo->import2Today = "導入到今天";
