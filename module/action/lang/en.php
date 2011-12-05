@@ -63,6 +63,7 @@ $lang->action->desc->activated   = '$date, Activated by <strong>$actor</strong>.
 $lang->action->desc->moved       = '$date, Moved by <strong>$actor</strong>, previouse is "$extra"';
 $lang->action->desc->confirmed   = '$date, Confirmed by <strong>$actor</strong>, version is<strong>#$extra</strong>';
 $lang->action->desc->bugconfirmed= '$date, Confirmed by <strong>$actor</strong>';
+$lang->action->desc->frombug     = '$date, From Bug by <strong>$actor</strong> BugID:<strong>$extra</strong>。';
 $lang->action->desc->started     = '$date, Started by <strong>$actor</strong>.';
 $lang->action->desc->canceled    = '$date, Canceled by <strong>$actor</strong>.';
 $lang->action->desc->svncommited = '$date, <strong>$actor</strong> commited to svn，revision is <strong>#$extra</strong>' . "\n";

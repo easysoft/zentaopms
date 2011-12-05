@@ -242,6 +242,14 @@ class bugModel extends model
             $storySpec->title   = $oldBug->title;
             $storySpec->spec    = $oldBug->steps;
             $this->dao->insert(TABLE_STORYSPEC)->data($storySpec)->exec();
+
+            $actionID = $this->loadModel('action')->create('story', $storyID, 'Frombug', '', $bugID);
+
+            $file = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->eq($bugID)->fetch();
+            $file->objectType = 'story';
+            $file->objectID   = $storyID;
+            unset($file->id);
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
         }
 
         $bug = fixer::input('post')

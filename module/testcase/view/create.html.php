@@ -42,7 +42,11 @@ $(function(){
       <th class='rowhead'><?php echo $lang->testcase->lblStory;?></th>
       <td>
         <?php echo html::select('story', $stories, $storyID, 'class="text-1" onchange=setPreview();');?>
+        <?php if($storyID == 0): ?>
         <a href='' id='preview' class='iframe'><?php echo $lang->preview;?></a>
+        <?php else:?>
+        <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $lang->preview, '', "class='iframe' id='preview'");?>
+        <?php endif;?>
       </td>
     </tr>  
     <tr>
@@ -51,7 +55,7 @@ $(function(){
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testcase->precondition;?></th>
-      <td><?php echo html::textarea('precondition', $precondition, " rows='4' class='w-p100'");?></td>
+      <td><?php echo html::textarea('precondition', $precondition, " rows='4' class='text-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testcase->steps;?></th>
