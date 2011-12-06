@@ -648,6 +648,7 @@ class projectModel extends model
             $taskID = $this->dao->lastInsertID();
             if($task->story != false) $this->story->setStage($task->story);
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+            $this->action->create('bug', $key, 'Totask', '', $taskID);
             $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($key)->exec();
             $mails[$key]->taskID  = $taskID;
             $mails[$key]->actionID = $actionID;

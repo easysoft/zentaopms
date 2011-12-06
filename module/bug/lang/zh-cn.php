@@ -301,3 +301,4 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '处理步骤';
 /* 操作记录。*/
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
 $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 转化为<strong>需求</strong>，编号为 <strong>$extra</strong>。');
+$lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
