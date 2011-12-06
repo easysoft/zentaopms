@@ -200,9 +200,9 @@ $lang->bug->browserList['opera9']   = 'opera9';
 $lang->bug->browserList['oprea10']  = 'opera10';
 $lang->bug->browserList['oprea11']  = 'opera11';
 $lang->bug->browserList['safari']   = 'safari';
-$lang->bug->browserList['other']    = 'Others';
 $lang->bug->browserList['maxthon']  = '傲游';
 $lang->bug->browserList['uc']       = 'UC';
+$lang->bug->browserList['other']    = 'Others';
 
 $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = 'Code error';
