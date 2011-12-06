@@ -65,8 +65,15 @@ $config->slaveDB->strictMode = false;
 $config->slaveDB->checkCentOS= true;       
 
 /* Include the custom config file. */
-$myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
+$configRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+$myConfig   = $configRoot . 'my.php';
 if(file_exists($myConfig)) include $myConfig;
+
+/* Include extension config files. */
+$extConfigFiles = glob($configRoot . 'ext/*.php');
+foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
+
+/* Set default table prefix. */
 if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
 /* Define the tables. */
