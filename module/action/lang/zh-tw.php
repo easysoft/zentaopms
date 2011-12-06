@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 2377 2011-11-29 13:24:37Z wwccss $
+ * @version     $Id: zh-tw.php 2385 2011-12-05 09:23:40Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -63,6 +63,7 @@ $lang->action->desc->activated   = '$date, 由 <strong>$actor</strong> 激活。
 $lang->action->desc->moved       = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"' . "\n";
 $lang->action->desc->confirmed   = '$date, 由 <strong>$actor</strong> 確認需求變動，最新版本為<strong>#$extra</strong>' . "\n";
 $lang->action->desc->bugconfirmed= '$date, 由 <strong>$actor</strong> 確認Bug' . "\n";
+$lang->action->desc->frombug     = '$date, 由 <strong>$actor</strong> Bug轉化而來，Bug編號為 <strong>$extra</strong>。';
 $lang->action->desc->started     = '$date, 由 <strong>$actor</strong> 啟動。' . "\n";
 $lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。' . "\n";
 $lang->action->desc->svncommited = '$date, <strong>$actor</strong> 提交代碼，版本為<strong>#$extra</strong>' . "\n";

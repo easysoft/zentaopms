@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2380 2011-11-30 07:46:01Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2390 2011-12-06 06:12:29Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -173,6 +173,10 @@ $lang->bug->osList['win2003'] = 'Windows 2003';
 $lang->bug->osList['win2008'] = 'Windows 2008';
 $lang->bug->osList['winnt']   = 'Windows NT';
 $lang->bug->osList['win98']   = 'Windows 98';
+$lang->bug->osList['adriod']  = 'Andriod';
+$lang->bug->osList['ios']     = 'IOS';
+$lang->bug->osList['wp7']     = 'WP7';
+$lang->bug->osList['symbian'] = 'Symbian';
 $lang->bug->osList['linux']   = 'Linux';
 $lang->bug->osList['freebsd'] = 'FreeBSD';
 $lang->bug->osList['mac']     = 'Mac OS';
@@ -182,19 +186,22 @@ $lang->bug->osList['others']  = '其他';
 $lang->bug->browserList['']         = '';
 $lang->bug->browserList['all']      = '全部';
 $lang->bug->browserList['ie']       = 'IE系列';
+$lang->bug->browserList['ie8']      = 'IE8';
+$lang->bug->browserList['ie9']      = 'IE9';
 $lang->bug->browserList['ie6']      = 'IE6';
 $lang->bug->browserList['ie7']      = 'IE7';
-$lang->bug->browserList['ie8']      = 'IE8';
+$lang->bug->browserList['chrome']   = 'chrome';
 $lang->bug->browserList['firefox']  = 'firefox系列';
 $lang->bug->browserList['firefox2'] = 'firefox2';
-$lang->bug->browserList['firefox3']  = 'firefox3';
-$lang->bug->browserList['firefox4']  = 'firefox4';
+$lang->bug->browserList['firefox3'] = 'firefox3';
+$lang->bug->browserList['firefox4'] = 'firefox4';
 $lang->bug->browserList['opera']    = 'opera系列';
 $lang->bug->browserList['opera9']   = 'opera9';
 $lang->bug->browserList['oprea10']  = 'opera10';
 $lang->bug->browserList['oprea11']  = 'opera11';
 $lang->bug->browserList['safari']   = 'safari';
-$lang->bug->browserList['chrome']   = 'chrome';
+$lang->bug->browserList['maxthon']  = '傲游';
+$lang->bug->browserList['uc']       = 'UC';
 $lang->bug->browserList['other']    = '其他';
 
 $lang->bug->typeList['']             = '';
@@ -301,3 +308,4 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 /* 操作記錄。*/
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
 $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 轉化為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
