@@ -42,7 +42,14 @@ class story extends control
             $this->loadModel('action');
             $actionID = $this->action->create('story', $storyID, 'Opened', '');
             $this->sendMail($storyID, $actionID);
-            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            if($projectID == 0)
+            {
+                die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            }
+            else
+            {
+                die(js::locate($this->createLink('project', 'story', "projectID=$projectID"), 'parent'));
+            }
         }
 
         /* Set products, users and module. */
