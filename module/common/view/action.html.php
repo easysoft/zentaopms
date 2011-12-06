@@ -27,7 +27,7 @@ function switchChange(historyID,type)
     <span onclick='$(".changes").toggle();' class='hand'><?php echo $lang->switchDisplay;?></span>
   </legend>
 <?php else:?>
-<table class='table-1'>
+<table class='table-1' id='actionbox'>
   <caption>
     <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . $lang->reverse;?></span>
     <span onclick='$(".changes").toggle();' class='hand'><?php echo $lang->switchDisplay;?></span>
