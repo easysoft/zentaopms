@@ -47,7 +47,7 @@
   <tfoot>
   <tr>
     <td colspan='7'>
-      <div class='f-left'><?php echo $lang->team->totalHours . $lang->comma .  "<strong>$totalHours</strong>";?></div>
+      <div class='f-left'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours</strong>";?></div>
       <div class='f-right'><?php common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers);?></div>
     </td>
   </tr>
