@@ -211,7 +211,7 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function assignedTo($taskID)
+    public function assign($taskID)
     {
         $now = helper::now();
         $oldTask = $this->getById($taskID);

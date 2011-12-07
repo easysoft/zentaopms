@@ -206,28 +206,28 @@ class task extends control
     }
 
     /**
-     * Update assignedTo of task 
+     * Update assign of task 
      *
      * @param  int    $requestID
      * @access public
      * @return void
      */
-    public function assignedTo($projectID, $taskID)
+    public function assignTo($projectID, $taskID)
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $actionID = $this->task->assignedTo($taskID);
+            $actionID = $this->task->assign($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->sendmail($taskID, $actionID);
 
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon . $this->lang->task->assignedTo;
-        $this->view->position[]    = $this->lang->task->assignedTo;
+        $this->view->header->title = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
+        $this->view->position[]    = $this->lang->task->assign;
 
         $this->view->users = $this->project->getTeamMemberPairs($projectID);
         $this->display();

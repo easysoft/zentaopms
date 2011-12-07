@@ -28,7 +28,7 @@
       if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
       if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
       if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
-      if(!common::printLink('task', 'assignedTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
+      if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
       if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
       if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
   }
@@ -55,7 +55,7 @@
             if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
             if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
             if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
-            if(!common::printLink('task', 'assignedTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
+            if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
             if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
             if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
         }
