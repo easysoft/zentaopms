@@ -29,6 +29,7 @@ class buildModel extends model
             ->where('t1.id')->eq((int)$buildID)
             ->orderBy('t1.id DESC')
             ->fetch();
+        if(!$build) return false;
         $build->desc = $this->loadModel('file')->setImgSize($build->desc);
         return $build;
     }
