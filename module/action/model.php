@@ -100,7 +100,7 @@ class actionModel extends model
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq($objectID)
-            ->orderBy('date')->fetchAll('id');
+            ->orderBy('date, id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
         foreach($actions as $actionID => $action)
         {
