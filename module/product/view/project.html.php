@@ -12,10 +12,6 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<h3>
-  <?php echo html::a(inlink("index", "locate=no&status=undone&productID=$productID"), $lang->project->unDoneProjects);?>
-  <?php echo html::a(inlink("index", "locate=no&status=done&productID=$productID"), $lang->project->doneProjects);?>
-</h3>
 <table class='table-1 fixed colored'>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->project->name;?></th>
