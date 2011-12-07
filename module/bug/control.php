@@ -578,9 +578,11 @@ class bug extends control
         {
             $storyID = $this->bug->resolve($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
+
             if($this->post->resolution == 'tostory') 
             {
                 $actionID = $this->action->create('bug', $bugID, 'ToStory', $this->post->comment, $storyID);
+                $this->action->create('bug', $bugID, 'Closed');
             }
             else
             {

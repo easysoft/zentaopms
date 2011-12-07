@@ -261,8 +261,11 @@ class bugModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('duplicateBug', 0)
             ->setDefault('assignedTo', $oldBug->openedBy)
-            ->setIF($this->post->resolution == 'tostory', 'toStory', $storyID)
-            ->setIF($this->post->resolution == 'tostory', 'status', 'closed')
+            ->setIF($this->post->resolution == 'tostory', 'toStory',  $storyID)
+            ->setIF($this->post->resolution == 'tostory', 'status',   'closed')
+            ->setIF($this->post->resolution == 'tostory', 'closedBy',   $this->app->user->account)
+            ->setIF($this->post->resolution == 'tostory', 'closedDate', $now)
+            ->setIF($this->post->resolution == 'tostory', 'assignedTo', 'closed')
             ->setIF($this->post->resolution != 'tostory', 'status', 'resolved')
             ->remove('comment')
             ->get();
