@@ -229,8 +229,8 @@ class todo extends control
                 if(isset($users[$todo->account]))               $todo->account = $users[$todo->account];
                 if(isset($times[$todo->begin]))                 $todo->begin   = $times[$todo->begin];
                 if(isset($times[$todo->end]))                   $todo->end     = $times[$todo->end];
-                if($todo->type == 'bug')                        $todo->name    = $bugs[$todo->idvalue];
-                if($todo->type == 'task')                       $todo->name    = $tasks[$todo->idvalue];
+                if($todo->type == 'bug')                        $todo->name    = isset($bugs[$todo->idvalue])  ? $bugs[$todo->idvalue]  : '';
+                if($todo->type == 'task')                       $todo->name    = isset($tasks[$todo->idvalue]) ? $tasks[$todo->idvalue] : '';
                 if(isset($todoLang->typeList->{$todo->type}))   $todo->type    = $todoLang->typeList->{$todo->type};
                 if(isset($todoLang->priList[$todo->pri]))       $todo->pri     = $todoLang->priList[$todo->pri];
                 if(isset($todoLang->statusList[$todo->status])) $todo->status  = $todoLang->statusList[$todo->status];
