@@ -577,8 +577,8 @@ class projectModel extends model
             if(!isset($teamMembers[$account]))
             {
                 $role = $this->dao->select('*')->from(TABLE_TEAM)->where('project')->eq($preProjectID)->andWhere('account')->eq($account)->fetch();
-                $role->project  = $projectID;
-                $role->joinDate = helper::today();
+                $role->project = $projectID;
+                $role->join    = helper::today();
                 $this->dao->insert(TABLE_TEAM)->data($role)->exec();
             }
         }
