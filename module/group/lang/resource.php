@@ -45,6 +45,7 @@ $lang->resource->product->delete = 'delete';
 $lang->resource->product->roadmap= 'roadmap';
 $lang->resource->product->doc    = 'doc';
 $lang->resource->product->dynamic= 'dynamic';
+$lang->resource->product->project= 'project';
 $lang->resource->product->ajaxGetProjects = 'ajaxGetProjects';
 $lang->resource->product->ajaxGetPlans    = 'ajaxGetPlans';
 
