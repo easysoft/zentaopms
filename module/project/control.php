@@ -376,9 +376,15 @@ class project extends control
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
 
+        /* Get project's product. */
+        $productID = 0;
+        $products = $this->loadModel('product')->getProductsByProject($projectID);
+        if($products) $productID = key($products);
+
         /* Assign. */
         $this->view->header     = $header;
         $this->view->position   = $position;
+        $this->view->productID  = $productID;
         $this->view->stories    = $stories;
         $this->view->orderBy    = $orderBy;
         $this->view->storyTasks = $storyTasks;

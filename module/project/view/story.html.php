@@ -17,7 +17,7 @@
     <div class='f-left'><?php echo $lang->project->story;?></div>
     <div class='f-right'>
       <?php 
-      common::printLink('story', 'create', "productID=0&moduleID=0&story=0&project=$project->id", $lang->story->create);
+      if($productID) common::printLink('story', 'create', "productID=0&moduleID=0&story=0&project=$project->id", $lang->story->create);
       if(common::hasPriv('project', 'linkstory')) echo html::a($this->createLink('project', 'linkstory', "project=$project->id"), $lang->project->linkStory);
       ?>
     </div>
