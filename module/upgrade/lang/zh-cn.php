@@ -24,11 +24,14 @@ $lang->upgrade->warnningContent = <<<EOT
    要将上面红色的部分分别替换成对应的用户名和禅道系统的数据库名。<br />
    比如： mysqldump -u root -p zentao >zentao.bak
 EOT;
-$lang->upgrade->setStatusFile = '<p>基于安全考虑，升级之间需要检查这个文件：<strong>%s</strong><br />
-                                 该文件不存在或者已经过期，请用下面的命令来创建或者更新它。<br />
-                                 linux下面的命令：<strong>touch %s;</strong> <br />
-                                 windows下面的命令：<strong>echo ok > %s</strong></p>
-                                 我已经完成上面的工作，<a href="upgrade.php">继续更新</a>';
+$lang->upgrade->setStatusFile = '<h4>基于安全考虑，升级程序会检查<strong>%s</strong>文件的最后更新时间, 以确保安全！</h4>
+                                 <strong style="color:red">该文件不存在或者已经过期，请用下面的命令来创建或者更新它。</strong>
+                                 <ul>
+                                 <li>linux下面的命令：<strong>touch %s;</strong></li>
+                                 <li>windows打开命令行，执行<strong>echo ok > %s</strong></li>
+                                 <li>或者删掉原来的ok文件，重新创建一个ok文件，不需要扩展名，不需要内容。</li>
+                                 </ul>
+                                 <strong style="color:red">我已经仔细阅读上面提示且完成上述工作，<a href="upgrade.php">继续更新</a></strong>';
 $lang->upgrade->selectVersion = '选择版本';
 $lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
 $lang->upgrade->fromVersion   = '原来的版本';
