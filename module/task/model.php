@@ -221,7 +221,7 @@ class taskModel extends model
             ->set('lastEditedDate')->eq($now)
             ->where('id')->eq($taskID)->exec();
 
-        $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment);
+        $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
         $this->dao->insert(TABLE_HISTORY)
             ->set('company')->eq(1)
             ->set('action')->eq($actionID)

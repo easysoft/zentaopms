@@ -41,6 +41,7 @@ function switchChange(historyID,type)
     <li value='<?php echo $i ++;?>'>
       <?php
       if(isset($users[$action->actor])) $action->actor = $users[$action->actor];
+      if($action->action == 'assigned' and isset($users[$action->extra]) ) $action->extra = $users[$action->extra];
       if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
       ?>
       <span>
