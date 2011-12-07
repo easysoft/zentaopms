@@ -24,6 +24,7 @@ $lang->product->plans    = '计划数';
 $lang->product->releases = '发布数';
 $lang->product->roadmap  = '路线图';
 $lang->product->doc      = '文档列表';
+$lang->product->project  = '项目列表';
 
 $lang->product->selectProduct   = "请选择产品";
 $lang->product->saveButton      = " 保存 (S) ";

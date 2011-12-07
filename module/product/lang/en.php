@@ -24,6 +24,7 @@ $lang->product->plans    = 'Plans';
 $lang->product->releases = 'Releases';
 $lang->product->roadmap  = 'Roadmap';
 $lang->product->doc      = 'Doc';
+$lang->product->project  = 'Projects';
 
 $lang->product->selectProduct   = "Select product";
 $lang->product->saveButton      = " Save (S) ";
