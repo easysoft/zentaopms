@@ -570,7 +570,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function resolve($bugID)
+    public function resolve($bugID, $toStory = false)
     {
         $this->view->users = $this->user->getPairs('nodeleted');
 
@@ -606,6 +606,7 @@ class bug extends control
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->bug->resolve;
 
+        $this->view->toStory = $toStory;
         $this->view->bug     = $bug;
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);
