@@ -428,7 +428,7 @@ class project extends control
         $this->view->position  = $position;
         $this->view->bugs      = $bugs;
         $this->view->tabID     = 'bug';
-        $this->view->build     = $build;
+        $this->view->build     = $this->loadModel('build')->getById($build);
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $users;
