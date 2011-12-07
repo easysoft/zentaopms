@@ -12,3 +12,7 @@ function setPreview()
         $('#preview').attr('href', storyLink);
     }
 }
+$(function()
+{
+     $("#preview").colorbox({width:1000, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
+})

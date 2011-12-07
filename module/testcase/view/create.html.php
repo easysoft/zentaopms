@@ -11,11 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<script language='Javascript'>
-$(function(){
-     $("#preview").colorbox({width:960, height:500, iframe:true, transition:'elastic', speed:350, scrolling:true});
-})
-</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'> 
     <caption><?php echo $lang->testcase->create;?></caption>
@@ -43,9 +38,9 @@ $(function(){
       <td>
         <?php echo html::select('story', $stories, $storyID, 'class="text-1" onchange=setPreview();');?>
         <?php if($storyID == 0): ?>
-        <a href='' id='preview' class='iframe'><?php echo $lang->preview;?></a>
+          <a href='' id='preview' class='iframe hidden'><?php echo $lang->preview;?></a>
         <?php else:?>
-        <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $lang->preview, '', "class='iframe' id='preview'");?>
+          <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $lang->preview, '', "class='iframe' id='preview'");?>
         <?php endif;?>
       </td>
     </tr>  
