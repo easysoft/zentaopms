@@ -34,14 +34,14 @@ function closeWindow()
     i ++;
 }
 </script>
-
+<br /><br />
 <form method='post' target='hiddenwin' onsubmit='setDownloading();'>
   <table class='table-1'>
     <caption><?php echo $lang->export;?></caption>
-    <tr><td class='a-left' style='padding-top:25px;'><?php echo $lang->setFileName;?></td></tr>
     <tr>
       <td class='a-center'>
-        <?php echo html::input('fileName');?>
+        <?php echo $lang->setFileName;?>
+        <?php echo html::input('fileName', '', 'size=15');?>
         <?php echo html::select('fileType', $lang->exportFileTypeList);?> 
         <?php echo html::submitButton();?>
       </td>
