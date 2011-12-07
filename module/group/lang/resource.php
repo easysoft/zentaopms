@@ -114,7 +114,7 @@ $lang->resource->project->ajaxGetProducts= 'ajaxGetProducts';
 $lang->resource->task->create              = 'create';
 $lang->resource->task->batchCreate         = 'batchCreate';
 $lang->resource->task->edit                = 'edit';
-$lang->resource->task->assignedTo          = 'assign';
+$lang->resource->task->assign              = 'assign';
 $lang->resource->task->start               = 'start';
 $lang->resource->task->finish              = 'finish';
 $lang->resource->task->cancel              = 'cancel';
@@ -349,6 +349,7 @@ $lang->changelog['2.3'][]   = 'svn-cat';
 $lang->changelog['2.3'][]   = 'svn-apiSync';
 
 $lang->changelog['2.4'][]   = 'user-ajaxGetUser';
-$lang->changelog['2.4'][]   = 'task-assignedTo';
+$lang->changelog['2.4'][]   = 'task-assign';
 $lang->changelog['2.4'][]   = 'project-testtask';
 $lang->changelog['2.4'][]   = 'todo-export';
+$lang->changelog['2.4'][]   = 'product-project';
