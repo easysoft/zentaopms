@@ -249,9 +249,8 @@ class upgradeModel extends model
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
         }
-        elseif($fromVersion == '2_2')
+        elseif($fromVersion == '2_3')
         {
-            $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
         }
 
