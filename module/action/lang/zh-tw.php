@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 2385 2011-12-05 09:23:40Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2409 2011-12-07 03:01:02Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -52,6 +52,7 @@ $lang->action->desc->opened      = '$date, 由 <strong>$actor</strong> 創建。
 $lang->action->desc->created     = '$date, 由 <strong>$actor</strong> 創建。' . "\n";
 $lang->action->desc->changed     = '$date, 由 <strong>$actor</strong> 變更。' . "\n";
 $lang->action->desc->edited      = '$date, 由 <strong>$actor</strong> 編輯。' . "\n";
+$lang->action->desc->assignedto  = '$date, 由 <strong>$actor</strong> 重新指派。' . "\n";
 $lang->action->desc->closed      = '$date, 由 <strong>$actor</strong> 關閉。' . "\n";
 $lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 刪除。' . "\n";
 $lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 刪除了附件：<strong><i>$extra</i></strong>' . "\n";
@@ -77,6 +78,7 @@ $lang->action->label->created             = '創建了';
 $lang->action->label->opened              = '創建了';
 $lang->action->label->changed             = '變更了';
 $lang->action->label->edited              = '編輯了';
+$lang->action->label->assignedto          = '重新指派了';
 $lang->action->label->closed              = '關閉了';
 $lang->action->label->deleted             = '刪除了';
 $lang->action->label->deletedfile         = '刪除附件';
@@ -90,6 +92,9 @@ $lang->action->label->reviewed            = '評審了';
 $lang->action->label->moved               = '移動了';
 $lang->action->label->confirmed           = '確認了需求，';
 $lang->action->label->bugconfirmed        = '確認了';
+$lang->action->label->tostory             = '轉需求';
+$lang->action->label->frombug             = '轉需求';
+$lang->action->label->totask              = '轉任務';
 $lang->action->label->svncommited         = '提交Svn';
 $lang->action->label->linked2plan         = '關聯計劃';
 $lang->action->label->unlinkedfromplan    = '移除計劃';

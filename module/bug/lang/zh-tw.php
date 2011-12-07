@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2390 2011-12-06 06:12:29Z wwccss $
+ * @version     $Id: zh-tw.php 2399 2011-12-07 01:24:16Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -307,5 +307,5 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 
 /* 操作記錄。*/
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
-$lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 轉化為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');

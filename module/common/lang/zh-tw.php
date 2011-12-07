@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2372 2011-11-29 02:57:12Z wwccss $
+ * @version     $Id: zh-tw.php 2407 2011-12-07 02:49:24Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -35,7 +35,7 @@ $lang->link         = '關聯';
 $lang->unlink       = '移除';
 $lang->import       = '導入';
 $lang->export       = '導出';
-$lang->setFileName  = '請輸入檔案名：';
+$lang->setFileName  = '檔案名：';
 $lang->activate     = '激活';
 $lang->submitting   = '稍候...';
 $lang->save         = '保存';
@@ -139,7 +139,7 @@ $lang->product->menu->view    = '概況|product|view|productID=%s';
 $lang->product->menu->edit    = '編輯|product|edit|productID=%s';
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->create  = array('link' => '新增產品|product|create', 'float' => 'right');
-$lang->product->menu->project = array('link' => '項目列表|product|index|locate=false&status=all&productID=%s', 'float' => 'right');
+$lang->product->menu->project = array('link' => '項目列表|product|project|status=all&productID=%s', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
@@ -160,7 +160,7 @@ $lang->project->menu->linkstory = array('link' => '關聯需求|project|linkstor
 $lang->project->menu->view      = '概況|project|view|projectID=%s';
 $lang->project->menu->edit      = '編輯|project|edit|projectID=%s';
 $lang->project->menu->create    = array('link' => '新增項目|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '項目列表|project|index|locate=false', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '所有項目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
 

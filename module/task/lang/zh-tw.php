@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 2350 2011-11-21 09:02:13Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2409 2011-12-07 03:01:02Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
@@ -126,7 +126,7 @@ $lang->task->copyStoryTitle      = "同需求";
 $lang->task->afterSubmit         = "添加之後";
 $lang->task->successSaved        = "成功添加，";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天 </strong>";
-$lang->task->remindBug           = "該需求為Bug轉化得到，請及時更新相關Bug。來源Bug：";
+$lang->task->remindBug           = "該任務為Bug轉化得到，請及時更新相關Bug。來源Bug：";
 
 /* 統計報表。*/
 $lang->task->report->common        = '統計報表';
