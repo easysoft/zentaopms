@@ -143,7 +143,7 @@ class task extends control
      */
     public function commonAction($taskID)
     {
-        $this->view->task    = $this->task->getByID($taskID);
+        $this->view->task    = $this->loadModel('task')->getByID($taskID);
         $this->view->project = $this->project->getById($this->view->task->project);
         $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id ,'nodeleted');
         $this->view->users   = $this->loadModel('user')->getPairs('noletter'); 
@@ -212,25 +212,25 @@ class task extends control
      * @access public
      * @return void
      */
-    public function assignedTo($taskID, $assignedTo)
+    public function assignedTo($projectID, $taskID)
     {
-        $now = helper::now();
-        $this->dao->update(TABLE_TASK)
-            ->set('assignedTo')->eq($this->post->assignedTo)
-            ->set('lastEditedBy')->eq($this->app->user->account)
-            ->set('lastEditedDate')->eq($now)
-            ->where('id')->eq($taskID)->exec();
+        $this->commonAction($taskID);
 
-        $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
-        $this->dao->insert(TABLE_HISTORY)
-            ->set('company')->eq(1)
-            ->set('action')->eq($actionID)
-            ->set('field')->eq('assignedTo')
-            ->set('old')->eq($assignedTo)
-            ->set('new')->eq($this->post->assignedTo)
-            ->exec();
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $actionID = $this->task->assignedTo($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $this->sendmail($taskID, $actionID);
 
-        die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->view->project->name . $this->lang->colon . $this->lang->task->assignedTo;
+        $this->view->position[]    = $this->lang->task->assignedTo;
+
+        $this->view->users = $this->project->getTeamMemberPairs($projectID);
+        $this->display();
     }
 
     /**

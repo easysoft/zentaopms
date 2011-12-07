@@ -205,6 +205,34 @@ class taskModel extends model
     }
 
     /**
+     * Assign a task to a user again.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function assignedTo($taskID)
+    {
+        $now = helper::now();
+        $oldTask = $this->getById($taskID);
+        $this->dao->update(TABLE_TASK)
+            ->set('assignedTo')->eq($this->post->assignedTo)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->set('lastEditedDate')->eq($now)
+            ->where('id')->eq($taskID)->exec();
+
+        $actionID = $this->loadModel('action')->create('task', $taskID, 'AssignedTo', $this->post->comment);
+        $this->dao->insert(TABLE_HISTORY)
+            ->set('company')->eq(1)
+            ->set('action')->eq($actionID)
+            ->set('field')->eq('assignedTo')
+            ->set('old')->eq($oldTask->assignedTo)
+            ->set('new')->eq($this->post->assignedTo)
+            ->exec();
+        return $actionID;
+    }
+
+    /**
      * Start a task.
      * 
      * @param  int      $taskID 
