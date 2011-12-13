@@ -129,6 +129,7 @@ class bugModel extends model
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->andWhere('toTask')->eq(0)
+            ->andWhere('tostory')->eq(0)
             ->andWhere('product')->in($products)
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
