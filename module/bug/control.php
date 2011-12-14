@@ -570,24 +570,15 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function resolve($bugID, $toStory = false)
+    public function resolve($bugID)
     {
         $this->view->users = $this->user->getPairs('nodeleted');
 
         if(!empty($_POST))
         {
-            $storyID = $this->bug->resolve($bugID);
+            $this->bug->resolve($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-
-            if($this->post->resolution == 'tostory') 
-            {
-                $actionID = $this->action->create('bug', $bugID, 'ToStory', $this->post->comment, $storyID);
-                $this->action->create('bug', $bugID, 'Closed');
-            }
-            else
-            {
-                $actionID = $this->action->create('bug', $bugID, 'Resolved', $this->post->comment, $this->post->resolution);
-            }
+            $actionID = $this->action->create('bug', $bugID, 'Resolved', $this->post->comment, $this->post->resolution);
             $this->sendmail($bugID, $actionID);
 
             $bug = $this->bug->getById($bugID);
@@ -606,7 +597,6 @@ class bug extends control
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->bug->resolve;
 
-        $this->view->toStory = $toStory;
         $this->view->bug     = $bug;
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->view->actions = $this->action->getList('bug', $bugID);

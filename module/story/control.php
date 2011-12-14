@@ -33,14 +33,21 @@ class story extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $moduleID = 0, $storyID = 0, $projectID = 0)
+    public function create($productID = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0)
     {
         if(!empty($_POST))
         {
-            $storyID = $this->story->create($projectID);
+            $storyID = $this->story->create($projectID, $bugID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action');
-            $actionID = $this->action->create('story', $storyID, 'Opened', '');
+            if($bugID == 0)
+            {
+                $actionID = $this->action->create('story', $storyID, 'Opened', '');
+            }
+            else
+            {
+                $actionID = $this->action->create('story', $storyID, 'Frombug', '', $bugID);
+            }
             $this->sendMail($storyID, $actionID);
             if($projectID == 0)
             {
@@ -75,6 +82,7 @@ class story extends control
 
         /* Init vars. */
         $planID     = 0;
+        $source     = '';
         $pri        = 0;
         $estimate   = '';
         $title      = '';
@@ -87,6 +95,7 @@ class story extends control
         {
             $story      = $this->story->getByID($storyID);
             $planID     = $story->plan;
+            $source     = $story->source;
             $pri        = $story->pri;
             $productID  = $story->product;
             $moduleID   = $story->module;
@@ -98,6 +107,17 @@ class story extends control
             $mailto     = $story->mailto;
         }
 
+        if($bugID > 0)
+        {
+            $oldBug    = $this->loadModel('bug')->getById($bugID);
+            $productID = $oldBug->product;
+            $source    = 'bug';
+            $title     = $oldBug->title;
+            $keywords  = $oldBug->keywords;
+            $pri       = $oldBug->pri;
+            $mailto    = $oldBug->mailto;
+        }
+
         $this->view->header->title    = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID"), $product->name);
         $this->view->position[]       = $this->lang->story->create;
@@ -107,6 +127,7 @@ class story extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
         $this->view->planID           = $planID;
+        $this->view->source           = $source;
         $this->view->pri              = $pri;
         $this->view->productID        = $productID;
         $this->view->estimate         = $estimate;

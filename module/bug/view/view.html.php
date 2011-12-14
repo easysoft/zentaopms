@@ -25,9 +25,9 @@
         common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
         if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
-        if($bug->status == 'active' and common::hasPriv('bug', 'resolve')) 
+        if($bug->status == 'active' and common::hasPriv('story', 'create')) 
         {
-            common::printLink('bug', 'resolve', "$params&toStory=true", $lang->bug->resolutionList['tostory']) . ' ';
+            common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->resolutionList['tostory']) . ' ';
         }
         else
         {
@@ -62,7 +62,7 @@
             if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
             if($bug->status == 'active' and common::hasPriv('bug', 'resolve')) 
             {
-                common::printLink('bug', 'resolve', "$params&toStory=true", $lang->bug->resolutionList['tostory']) . ' ';
+                common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->resolutionList['tostory']) . ' ';
             }
             else
             {

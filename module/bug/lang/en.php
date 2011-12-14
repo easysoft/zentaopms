@@ -231,7 +231,6 @@ $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'By design';
 $lang->bug->resolutionList['duplicate']  = 'Duplicate';
 $lang->bug->resolutionList['external']   = 'External';
-$lang->bug->resolutionList['tostory']    = 'To story';
 $lang->bug->resolutionList['fixed']      = 'Fixed';
 $lang->bug->resolutionList['notrepro']   = 'Not reproduce';
 $lang->bug->resolutionList['postponed']  = 'Postponed';

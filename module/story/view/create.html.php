@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' >
   <table align='center' class='table-1'> 
     <caption><?php echo $lang->story->create;?></caption>
     <tr>
@@ -28,7 +28,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->source;?></th>
-      <td><?php echo html::select('source', $lang->story->sourceList, '', 'class=select-3');?></td>
+      <td><?php echo html::select('source', $lang->story->sourceList, $source, 'class=select-3');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->title;?></th>

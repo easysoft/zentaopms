@@ -211,66 +211,16 @@ class bugModel extends model
     public function resolve($bugID)
     {
         $now = helper::now();
-        $oldBug = $this->getById($bugID);
-        $storyID = 0;
-        if($this->post->resolution == 'tostory')
-        {
-            $story->product      = $oldBug->product;
-            $story->module       = $oldBug->module;
-            $story->source       = 'bug';
-            $story->fromBug      = $bugID;
-            $story->title        = $oldBug->title;
-            $story->keywords     = $oldBug->keywords;
-            $story->pri          = $oldBug->pri;
-            $story->status       = 'active';
-            $story->mailto       = $oldBug->mailto;
-            $story->openedBy     = $this->app->user->account;
-            $story->openedDate   = $now;
-            $story->assignedDate = 0;
-            $story->version      = 1;
-
-            $this->dao->insert(TABLE_STORY)->data($story)->exec();
-            if(dao::isError())
-            {
-                echo js::error(dao::getError());
-                die(js::reload('parent'));
-            }
-
-            $storyID = $this->dao->lastInsertID();
-
-            $storySpec->story = $storyID;
-            $storySpec->version = 1;
-            $storySpec->title   = $oldBug->title;
-            $storySpec->spec    = $oldBug->steps;
-            $this->dao->insert(TABLE_STORYSPEC)->data($storySpec)->exec();
-
-            $actionID = $this->loadModel('action')->create('story', $storyID, 'Frombug', '', $bugID);
-
-            $file = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->eq($bugID)->fetch();
-            if(!empty($file))
-            {
-                $file->objectType = 'story';
-                $file->objectID   = $storyID;
-                unset($file->id);
-                $this->dao->insert(TABLE_FILE)->data($file)->exec();
-            }
-        }
-
         $bug = fixer::input('post')
             ->add('resolvedBy',     $this->app->user->account)
             ->add('resolvedDate',   $now)
+            ->add('status',         'resolved')
             ->add('confirmed',      1)
             ->add('assignedDate',   $now)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('duplicateBug', 0)
             ->setDefault('assignedTo', $oldBug->openedBy)
-            ->setIF($this->post->resolution == 'tostory', 'toStory',  $storyID)
-            ->setIF($this->post->resolution == 'tostory', 'status',   'closed')
-            ->setIF($this->post->resolution == 'tostory', 'closedBy',   $this->app->user->account)
-            ->setIF($this->post->resolution == 'tostory', 'closedDate', $now)
-            ->setIF($this->post->resolution == 'tostory', 'assignedTo', 'closed')
-            ->setIF($this->post->resolution != 'tostory', 'status', 'resolved')
             ->remove('comment')
             ->get();
 
@@ -281,9 +231,7 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
-        return $storyID;
     }
-
 
     /**
      * Activate a bug.

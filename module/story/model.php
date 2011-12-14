@@ -97,7 +97,7 @@ class storyModel extends model
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
-    public function create($projectID = 0)
+    public function create($projectID = 0, $bugID = 0)
     {
         $now   = helper::now();
         $story = fixer::input('post')
@@ -115,8 +115,10 @@ class storyModel extends model
             ->setIF($this->post->needNotReview, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($projectID > 0, 'stage', 'projected')
+            ->setIF($bugID > 0, 'fromBug', $bugID)
             ->remove('files,labels,spec,verify,needNotReview')
             ->get();
+
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
@@ -139,6 +141,19 @@ class storyModel extends model
                     ->set('story')->eq($storyID)
                     ->set('version')->eq(1)
                     ->exec();
+            }
+            
+            if($bugID > 0)
+            {
+                $bug->toStory = $storyID;
+                $bug->status  = 'closed';
+                $bug->closedBy = $this->app->user->account;
+                $bug->closedDate = $now;
+                $bug->assignedTo = 'closed';
+                $this->dao->update(TABLE_BUG)->data($bug)->exec();
+    
+                $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
+                $this->action->create('bug', $bugID, 'Closed');
             }
             return $storyID;
         }

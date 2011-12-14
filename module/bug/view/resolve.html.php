@@ -16,11 +16,7 @@
     <caption><?php echo $bug->title;?></caption>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->resolution;?></td>
-      <?php if($toStory == false):?>
       <td><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=select-3 onchange=setDuplicate(this.value)');?></td>
-      <?php else:?>
-      <td><?php echo $lang->bug->resolutionList['tostory'];echo html::input('resolution', 'tostory', 'class=select-3 hidden');?></td>
-      <?php endif;?>
     </tr>
     <tr id='duplicateBugBox' style='display:none'>
       <td class='rowhead'><?php echo $lang->bug->duplicateBug;?></td>
