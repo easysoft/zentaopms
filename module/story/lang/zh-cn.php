@@ -114,6 +114,7 @@ $lang->story->reviewList[1] = '是';
 
 $lang->story->sourceList['']           = '';
 $lang->story->sourceList['custom']     = '客户';
+$lang->story->sourceList['user']       = '用户';
 $lang->story->sourceList['po']         = '产品经理';
 $lang->story->sourceList['market']     = '市场';
 $lang->story->sourceList['service']    = '客服';
@@ -121,7 +122,7 @@ $lang->story->sourceList['competitor'] = '竞争对手';
 $lang->story->sourceList['partner']    = '合作伙伴';
 $lang->story->sourceList['dev']        = '开发人员';
 $lang->story->sourceList['tester']     = '测试人员';
-$lang->story->sourceList['bug']        = 'Bug转化';
+$lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = '其他';
 
 $lang->story->priList[]   = '';
