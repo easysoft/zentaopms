@@ -114,6 +114,7 @@ class story extends control
             $source    = 'bug';
             $title     = $oldBug->title;
             $keywords  = $oldBug->keywords;
+            $spec      = $oldBug->steps;
             $pri       = $oldBug->pri;
             $mailto    = $oldBug->mailto;
         }
