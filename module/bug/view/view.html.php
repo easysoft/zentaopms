@@ -27,11 +27,11 @@
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
         if($bug->status == 'active' and common::hasPriv('story', 'create')) 
         {
-            common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->resolutionList['tostory']) . ' ';
+            common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory) . ' ';
         }
         else
         {
-            echo $lang->bug->resolutionList['tostory'] . ' ';
+            echo $lang->bug->toStory . ' ';
         }
         if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
         common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
@@ -62,11 +62,11 @@
             if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
             if($bug->status == 'active' and common::hasPriv('bug', 'resolve')) 
             {
-                common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->resolutionList['tostory']) . ' ';
+                common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory) . ' ';
             }
             else
             {
-                echo $lang->bug->resolutionList['tostory'] . ' ';
+                echo $lang->bug->toStory . ' ';
             }
             if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
             common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
@@ -242,6 +242,14 @@
           <tr>
             <td class='rowhead'><?php echo $lang->bug->case;?></td>
             <td><?php if(isset($bug->caseTitle)) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->bug->toStory;?></td>
+            <td><?php if($bug->toStory != 0) echo html::a($this->createLink('story', 'view', "storyID=$bug->toStory"), "#$bug->toStory $bug->toStoryTitle", '_blank');?></td>
+          </tr>
+          <tr>
+            <td class='rowhead'><?php echo $lang->bug->toTask;?></td>
+            <td><?php if($bug->toTask != 0) echo html::a($this->createLink('bug', 'view', "bugID=$bug->toTask"), "#$bug->toTask $bug->toTaskTitle", '_blank');?></td>
           </tr>
         </table>
       </fieldset>
