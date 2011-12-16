@@ -138,6 +138,7 @@ $lang->story->legendMailto         = 'Maitto';
 $lang->story->legendAttatch        = 'Files';
 $lang->story->legendProjectAndTask = 'Project & task';
 $lang->story->legendBugs           = 'Related Bug';
+$lang->story->legendFromBug        = 'From Bug';
 $lang->story->legendCases          = 'Related Case';
 $lang->story->legendLinkStories    = 'Related story';
 $lang->story->legendChildStories   = 'Child story';

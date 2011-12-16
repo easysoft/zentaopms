@@ -350,6 +350,7 @@ class story extends control
         $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->fetchAll();
+        $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
         $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchAll();
         $modulePath   = $this->tree->getParents($story->module);
         $users        = $this->user->getPairs('noletter');
@@ -366,6 +367,7 @@ class story extends control
         $this->view->product    = $product;
         $this->view->plan       = $plan;
         $this->view->bugs       = $bugs;
+        $this->view->fromBug    = $fromBug;
         $this->view->cases      = $cases;
         $this->view->story      = $story;
         $this->view->users      = $users;

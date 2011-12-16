@@ -239,6 +239,14 @@
         </div>
       </fieldset>
       <fieldset>
+        <legend><?php echo $lang->story->legendFromBug;?></legend>
+        <div>
+          <?php
+          if(!empty($fromBug)) echo '<span class="nobr">' . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</span><br />';
+          ?>
+        </div>
+      </fieldset>
+      <fieldset>
         <legend><?php echo $lang->story->legendMailto;?></legend>
         <div><?php $mailto = explode(',', $story->mailto); foreach($mailto as $account) echo ' ' . $users[trim($account)]; ?></div>
       </fieldset>

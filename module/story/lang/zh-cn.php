@@ -138,6 +138,7 @@ $lang->story->legendMailto         = '抄送给';
 $lang->story->legendAttatch        = '附件';
 $lang->story->legendProjectAndTask = '项目任务';
 $lang->story->legendBugs           = '相关Bug';
+$lang->story->legendFromBug        = '来源Bug';
 $lang->story->legendCases          = '相关用例';
 $lang->story->legendLinkStories    = '相关需求';
 $lang->story->legendChildStories   = '细分需求';
