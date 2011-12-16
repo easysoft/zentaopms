@@ -40,7 +40,7 @@ include '../../common/view/tablesorter.html.php';
           <th><?php echo $lang->user->account;?></th>
           <?php // echo $lang->user->nickname;?>
           <th><?php echo $lang->user->email;?></th>
-          <th><?php echo $lang->user->gendar;?></th>
+          <th><?php echo $lang->user->gender;?></th>
           <th><?php echo $lang->user->phone;?></th>
           <th><?php echo $lang->user->join;?></th>
           <th><?php echo $lang->user->last;?></th>
@@ -56,7 +56,7 @@ include '../../common/view/tablesorter.html.php';
           <td><?php echo $user->account;?></td>
           <?php // echo $user->nickname;?>
           <td><?php echo html::mailto($user->email);?></td>
-          <td><?php if(isset($lang->user->gendarList->{$user->gendar})) echo $lang->user->gendarList->{$user->gendar};?></td>
+          <td><?php if(isset($lang->user->genderList->{$user->gender})) echo $lang->user->genderList->{$user->gender};?></td>
           <td><?php echo $user->phone;?></td>
           <td><?php echo $user->join;?></td>
           <td><?php echo date('Y-m-d', $user->last);?></td>

@@ -32,8 +32,8 @@
       <td><?php echo html::input('email', $user->email);?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->user->gendar;?></th>
-      <td><?php echo html::radio('gendar', $lang->user->gendarList, $user->gendar);?></td>
+      <th class='rowhead'><?php echo $lang->user->gender;?></th>
+      <td><?php echo html::radio('gender', $lang->user->genderList, $user->gender);?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->password;?></th>

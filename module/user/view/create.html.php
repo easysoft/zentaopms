@@ -36,8 +36,8 @@
       <td><?php echo html::input('join', '', "class='text-3 date'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->user->gendar;?></th>
-      <td><?php echo html::radio('gendar', (array)$lang->user->gendarList, 'm');?></td>
+      <th class='rowhead'><?php echo $lang->user->gender;?></th>
+      <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->password;?></th>
