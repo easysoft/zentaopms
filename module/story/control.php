@@ -552,6 +552,9 @@ class story extends control
      */
     private function sendmail($storyID, $actionID)
     {
+        $story       = $this->story->getById($storyID);
+        $productName = $this->product->getById($story->product)->name;
+
         /* Get actions. */
         $action          = $this->loadModel('action')->getById($actionID);
         $history         = $this->action->getHistory($actionID);
@@ -559,8 +562,6 @@ class story extends control
         if(strtolower($action->action) == 'opened') $action->comment = $story->spec;
 
         /* Set toList and ccList. */
-        $story       = $this->story->getById($storyID);
-        $productName = $this->product->getById($story->product)->name;
         $toList      = $story->assignedTo;
         $ccList      = str_replace(' ', '', trim($story->mailto, ','));
 

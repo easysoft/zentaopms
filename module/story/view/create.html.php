@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<form method='post' enctype='multipart/form-data' >
+<form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table align='center' class='table-1'> 
     <caption><?php echo $lang->story->create;?></caption>
     <tr>
