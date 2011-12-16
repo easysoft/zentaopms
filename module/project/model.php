@@ -726,6 +726,14 @@ class projectModel extends model
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->limit(1)->exec();
         $this->loadModel('story')->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromproject', '', $projectID);
+        $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('project')->eq($projectID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
+        $this->dao->update(TABLE_TASK)->set('status')->eq('cancel')->where('id')->in($tasks)->exec();
+        foreach($tasks as $taskID)
+        {
+            $changes  = $this->loadModel('task')->cancel($taskID);
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'Canceled');
+            $this->action->logHistory($actionID, $changes);
+        }
     }
 
     /**
