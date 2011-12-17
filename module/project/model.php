@@ -731,7 +731,7 @@ class projectModel extends model
         foreach($tasks as $taskID)
         {
             $changes  = $this->loadModel('task')->cancel($taskID);
-            $actionID = $this->loadModel('action')->create('task', $taskID, 'Canceled');
+            $actionID = $this->action->create('task', $taskID, 'Canceled');
             $this->action->logHistory($actionID, $changes);
         }
     }

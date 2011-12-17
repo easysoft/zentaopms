@@ -55,7 +55,7 @@
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->story->source;?></th>
-            <td><?php echo html::select('source', $lang->story->sourceList, $lang->story->sourceList[$story->source], 'class=select-1');?></td>
+            <td><?php echo html::select('source', $lang->story->sourceList, $story->source, 'class=select-1');?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->status;?></td>
