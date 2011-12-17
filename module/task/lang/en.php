@@ -126,7 +126,7 @@ $lang->task->copyStoryTitle      = "Same as story";
 $lang->task->afterSubmit         = "After created";
 $lang->task->successSaved        = "Success saved";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> Postponed %s days </strong>";
-$lang->task->remindBug           = "This task from Bug, please update the Bug:";
+$lang->task->remindBug           = "This task from Bug, update the Bug:%s or not?";
 
 /* Report. */
 $lang->task->report->common        = 'Report';

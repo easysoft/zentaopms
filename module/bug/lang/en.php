@@ -143,7 +143,7 @@ $lang->bug->buttonCreateTestcase = 'Create case';
 $lang->bug->confirmChangeProduct = 'Change product will change project, task and story also, are you sure?';
 $lang->bug->confirmDelete        = 'Are you sure to delete this bug?';
 $lang->bug->setTemplateTitle     = 'Please input the template title:';
-$lang->bug->remindTask           = 'This bug has been to be a task, please update the task:';
+$lang->bug->remindTask           = 'This bug has been to be a task, update the task:%s or not?';
 
 /* Templates. */
 $lang->bug->tplStep        = "<p>[Steps]</p>";

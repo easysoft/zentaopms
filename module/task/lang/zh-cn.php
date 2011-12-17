@@ -126,7 +126,7 @@ $lang->task->copyStoryTitle      = "同需求";
 $lang->task->afterSubmit         = "添加之后";
 $lang->task->successSaved        = "成功添加，";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天 </strong>";
-$lang->task->remindBug           = "该任务为Bug转化得到，请及时更新相关Bug。来源Bug：";
+$lang->task->remindBug           = "该任务为Bug转化得到，是否更新Bug:%s ?";
 
 /* 统计报表。*/
 $lang->task->report->common        = '统计报表';
