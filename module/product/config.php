@@ -1,4 +1,6 @@
 <?php
+$config->product->productCounts = 50;
+
 global $lang, $app;
 $app->loadLang('story');
 $config->product->search['module']                   = 'story';

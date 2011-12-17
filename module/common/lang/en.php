@@ -140,6 +140,7 @@ $lang->product->menu->edit    = 'Edit|product|edit|productID=%s';
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
 $lang->product->menu->create  = array('link' => 'New Product|product|create', 'float' => 'right');
 $lang->product->menu->project = array('link' => 'Project list|product|project|status=all&productID=%s', 'float' => 'right');
+$lang->product->menu->all     = array('link' => 'All product|product|index|locate=false', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;

@@ -41,9 +41,13 @@ class product extends control
      * @access public
      * @return void
      */
-    public function index()
+    public function index($locate = 'yes')
     {
-        $this->locate($this->createLink($this->moduleName, 'browse'));
+        if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
+        
+        $this->app->loadLang('my');
+        $this->view->productStats = $this->product->getStats($this->config->product->productCounts);
+        $this->display();
     }
 
     /**
