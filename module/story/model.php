@@ -304,7 +304,6 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
-            ->setIF($oldStory->status == 'draft', 'stage', '')
             ->remove('files,labels,comment')
             ->get();
 
@@ -317,6 +316,8 @@ class storyModel extends model
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'subdivided', 'childStories', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
+
+        $this->setStage($storyID);
         if(!dao::isError()) return common::createChanges($oldStory, $story);
     }
 
@@ -481,7 +482,7 @@ class storyModel extends model
             return true;
         }
 
-        /* If have test task, the stage is tested or testing. */
+        /* If have test task, the stage is tested, testing or developing. */
         if(isset($tasks['test']))
         {
             $stage = 'tested';
@@ -491,6 +492,21 @@ class storyModel extends model
                 {
                     $stage = 'testing';
                     break;
+                }
+            }
+            if($stage != 'testing')
+            {
+                unset($tasks['test']);
+                foreach($tasks as $type => $typeTasks)
+                {
+                    foreach($typeTasks as $task)
+                    {
+                        if($task->status != 'done')
+                        {
+                            $stage = 'developing';
+                            break;
+                        }
+                    }
                 }
             }
         }

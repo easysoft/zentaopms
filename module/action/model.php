@@ -29,6 +29,7 @@ class actionModel extends model
      */
     public function create($objectType, $objectID, $actionType, $comment = '', $extra = '')
     {
+        $objectType = str_replace('`', '', $objectType);
         $action->objectType = strtolower($objectType);
         $action->objectID   = $objectID;
         $action->actor      = $this->app->user->account;
@@ -139,7 +140,11 @@ class actionModel extends model
         if(!$trashes) return array();
         
         /* Group trashes by objectType, and get there name field. */
-        foreach($trashes as $object) $typeTrashes[$object->objectType][] = $object->objectID;
+        foreach($trashes as $object) 
+        {
+            $object->objectType = str_replace('`', '', $object->objectType);
+            $typeTrashes[$object->objectType][] = $object->objectID;
+        }
         foreach($typeTrashes as $objectType => $objectIds)
         {
             $objectIds   = array_unique($objectIds);
