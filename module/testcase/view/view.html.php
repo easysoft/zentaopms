@@ -22,6 +22,7 @@
         common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
         common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
         if($case->lastRunResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
+        if(common::hasPriv('testcase', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
         common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
         common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
@@ -61,11 +62,23 @@
        <?php
         if(!$case->deleted)
         {
+            if(common::hasPriv('testcase', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
             common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
             common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
         }
         echo html::a($browseLink, $lang->goback);
        ?>
+      </div>
+      <div id='comment' class='hidden'>
+        <fieldset>
+          <legend><?php echo $lang->comment;?></legend>
+            <form method='post' enctype='multipart/form-data'  action='<?php echo inlink('edit', "caseID=$case->id&comment=true")?>'>
+              <table align='center'>
+              <tr><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></tr>
+              <tr><td><?php echo html::submitButton() . html::resetButton();?></td></tr>
+              </table>
+          </form>
+        </fieldset>
       </div>
     </td>
     <td class='divider'></td>

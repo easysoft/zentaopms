@@ -22,6 +22,7 @@
     if(!$bug->deleted)
     {
         if(!($bug->status == 'active' and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm))) echo $lang->bug->buttonConfirm . ' ';
+        echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
         common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
         if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
@@ -57,6 +58,7 @@
         if(!$bug->deleted)
         {
             if(!($bug->status == 'active'  and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
+            if(common::hasPriv('bug', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
             common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
             if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
             if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
@@ -75,6 +77,17 @@
         }
         echo html::a($browseLink, $lang->goback);
         ?>
+      </div>
+      <div id='comment' class='hidden'>
+        <fieldset>
+          <legend><?php echo $lang->comment;?></legend>
+            <form method='post' enctype='multipart/form-data'  action='<?php echo inlink('edit', "bugID=$bug->id&comment=true")?>'>
+              <table align='center'>
+              <tr><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></tr>
+              <tr><td><?php echo html::submitButton() . html::resetButton();?></td></tr>
+              </table>
+          </form>
+        </fieldset>
       </div>
     </td>
     <td class='divider'></td>

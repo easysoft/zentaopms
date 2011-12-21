@@ -236,13 +236,17 @@ class story extends control
      * @access public
      * @return void
      */
-    public function edit($storyID)
+    public function edit($storyID, $comment = false)
     {
         $this->loadModel('action');
         if(!empty($_POST))
         {
-            $changes = $this->story->update($storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            $changes = array();
+            if($comment == false)
+            {
+                $changes = $this->story->update($storyID);
+                if(dao::isError()) die(js::error(dao::getError()));
+            }
             if($this->post->comment != '' or !empty($changes))
             {
                 $action   = !empty($changes) ? 'Edited' : 'Commented';

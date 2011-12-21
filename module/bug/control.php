@@ -454,13 +454,18 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function edit($bugID)
+    public function edit($bugID, $comment = false)
     {
         if(!empty($_POST))
         {
-            $changes  = $this->bug->update($bugID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('bug', $bugID);
+            $changes = array();
+            $files   = array();
+            if($comment == false)
+            {
+                $changes  = $this->bug->update($bugID);
+                if(dao::isError()) die(js::error(dao::getError()));
+                $files = $this->loadModel('file')->saveUpload('bug', $bugID);
+            }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = !empty($changes) ? 'Edited' : 'Commented';

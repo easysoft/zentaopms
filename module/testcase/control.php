@@ -340,15 +340,20 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function edit($caseID)
+    public function edit($caseID, $comment = false)
     {
         $this->loadModel('story');
 
         if(!empty($_POST))
         {
-            $changes = $this->testcase->update($caseID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
+            $changes = array();
+            $files   = array();
+            if($comment == false)
+            {
+                $changes = $this->testcase->update($caseID);
+                if(dao::isError()) die(js::error(dao::getError()));
+                $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
+            }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $this->loadModel('action');

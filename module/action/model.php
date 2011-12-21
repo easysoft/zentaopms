@@ -41,7 +41,7 @@ class actionModel extends model
         /* Get product and project for this object. */
         $productAndProject  = $this->getProductAndProject($objectType, $objectID);
         $action->product    = $productAndProject['product'];
-        $action->project    = $productAndProject['project'];
+        if($objectType != 'case')$action->project    = $productAndProject['project'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         return $this->dbh->lastInsertID();

@@ -24,6 +24,7 @@
   {
       //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
       if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
+      if(common::hasPriv('task', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
       if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
       if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
       if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
@@ -51,6 +52,7 @@
         if(!$task->deleted)
         {
             if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
+            if(common::hasPriv('task', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
             if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
             if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
             if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
@@ -61,6 +63,17 @@
         }
         echo html::a($browseLink,  $lang->goback);
         ?>
+      </div>
+      <div id='comment' class='hidden'>
+        <fieldset>
+          <legend><?php echo $lang->comment;?></legend>
+            <form method='post' enctype='multipart/form-data'  action='<?php echo inlink('edit', "taskID=$task->id&comment=true")?>'>
+              <table align='center'>
+              <tr><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></tr>
+              <tr><td><?php echo html::submitButton() . html::resetButton();?></td></tr>
+              </table>
+          </form>
+        </fieldset>
       </div>
     </td>
     <td class='divider'></td>

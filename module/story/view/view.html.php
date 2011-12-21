@@ -20,6 +20,7 @@
   {
       if(!($story->status != 'closed' and common::printLink('story', 'change', "storyID=$story->id", $lang->story->change))) echo $lang->story->change . ' ';
       if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
+      if(common::hasPriv('story', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
       if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
       if(!($story->status == 'closed' and $story->closedReason == 'postponed' and common::printLink('story', 'activate', "storyID=$story->id", $lang->story->activate))) echo $lang->story->activate . ' ';
       if(!common::printLink('story', 'edit', "storyID=$story->id", $lang->edit)) echo $lang->edit . ' ';
@@ -51,6 +52,7 @@
       {
           if(!($story->status != 'closed' and common::printLink('story', 'change', "storyID=$story->id", $lang->story->change))) echo $lang->story->change . ' ';
           if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
+          if(common::hasPriv('story', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
           if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
           if(!($story->status == 'closed' and $story->closedReason == 'postponed' and common::printLink('story', 'activate', "storyID=$story->id", $lang->story->activate))) echo $lang->story->activate . ' ';
           if(!common::printLink('testcase', 'create', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", $lang->story->createCase)) echo $lang->story->createCase . ' ';
@@ -59,6 +61,17 @@
       }
       echo html::a($browseLink, $lang->goback);
       ?>
+      </div>
+      <div id='comment' class='hidden'>
+        <fieldset>
+          <legend><?php echo $lang->comment;?></legend>
+            <form method='post' enctype='multipart/form-data'  action='<?php echo inlink('edit', "storyID=$story->id&comment=true")?>'>
+              <table align='center'>
+              <tr><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></tr>
+              <tr><td><?php echo html::submitButton() . html::resetButton();?></td></tr>
+              </table>
+          </form>
+        </fieldset>
       </div>
     </td>
     <td class='divider'></div>

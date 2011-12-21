@@ -162,16 +162,21 @@ class task extends control
      * @access public
      * @return void
      */
-    public function edit($taskID)
+    public function edit($taskID, $comment = false)
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->update($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('task', $taskID);
+            $changes = array();
+            $files   = array();
+            if($comment == false)
+            {
+                $changes = $this->task->update($taskID);
+                if(dao::isError()) die(js::error(dao::getError()));
+                $files = $this->loadModel('file')->saveUpload('task', $taskID);
+            }
 
             $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes) or !empty($files))
