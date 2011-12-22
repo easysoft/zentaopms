@@ -167,12 +167,13 @@ class productModel extends model
      */
     public function getPairs($mode = '')
     {
-        $mode .= $this->cookie->productMode;
+        $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'code';
+        $mode    .= $this->cookie->productMode;
         $products = $this->dao->select('*')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->orderBy('code')
+            ->orderBy($orderBy)
             ->fetchAll();
         $pairs = array();
         foreach($products as $product)
