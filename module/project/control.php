@@ -102,7 +102,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function task($projectID = 0, $status = 'all', $param=0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($projectID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {   
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
@@ -307,7 +307,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function importBug($projectID = 0, $pager = '', $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importBug($projectID = 0, $browseType = 'all', $param = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
     {
         if(!empty($_POST))
         {
@@ -320,25 +320,138 @@ class project extends control
             die(js::locate($this->createLink('project', 'importBug', "projectID=$projectID"), 'parent'));
         }
 
+        /* Set browseType, productID, moduleID and queryID. */
+        $browseType = strtolower($browseType);
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        /* Save to session. */
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('bugList',    $uri);
+        $this->app->session->set('storyList',   $uri);
+        $this->app->session->set('projectList', $uri);
+
         $this->loadModel('bug');
         $projects = $this->project->getPairs();
-        $users    = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $this->project->setMenu($projects, $projectID);
 
-        /* Load pager and get bugs. */
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $bugs  = $this->bug->getActiveBugs($pager, $projectID);
 
         $header['title'] = $projects[$projectID] . $this->lang->colon . $this->lang->project->importBug;
         $position[]      = html::a($this->createLink('project', 'task', "projectID=$projectID"), $projects[$projectID]);
         $position[]      = $this->lang->project->importBug;
+        
+        /* Get users, products and projects.*/
+        $users    = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $products = $this->dao->select('t1.product, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')
+            ->on('t1.product = t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->fetchPairs('product');
+        if(!empty($products))
+        {
+            unset($projects);
+            $projects = $this->dao->select('t1.project, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')
+                ->on('t1.project = t2.id')
+                ->where('t1.product')->in(array_keys($products))
+                ->fetchPairs('project');
+        }
+        else
+        {
+            $projectName = $projects[$projectID];
+            unset($projects);
+            $projects[$projectID] = $projectName;
+        }
 
-        $this->view->header    = $header;
-        $this->view->pager     = $pager;
-        $this->view->bugs      = $bugs;
-        $this->view->users     = $users;
-        $this->view->projectID = $projectID;
+        /* Get bugs.*/
+        $bugs = array();
+        if($browseType != "bysearch")
+        {
+            $bugs = $this->bug->getActiveBugs($pager, $projectID, array_keys($products));
+        }
+        else
+        {   
+            $this->session->set('importBugQuery', '');
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('importBugQuery', $query->sql);
+                    $this->session->set('importBugForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('importBugQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->imporyBugQuery == false) $this->session->set('importBugQuery', ' 1 = 1');
+            }
+            $varQuery = 'AND (`toTask` = 0) AND (`toStory` = 0)';
+            if(!empty($products) and strpos($this->session->importBugQuery,'`product`') === false)
+            {
+                $varQuery = $varQuery . ' AND (`product` ' .  helper::dbIN($products) . ')';
+            }
+            elseif(empty($products) and strpos($this->session->importBugQuery,'`project`') === false)
+            {
+                $varQuery = "$varQuery AND (`project` = $projectID)";
+            }
+            a($this->session->importBugQuery);
+            $this->session->set('importBugQuery', $this->session->importBugQuery . $varQuery);
+            a($this->session->importBugQuery);
+            $importBugQuery = str_replace("`product` = 'all'", helper::dbIN($products), $this->session->importBugQuery); // Search all project.
+            a($importBugQuery);
+            //$bugs = $this->project->getSearchBugs($bugQuery, $pager, 'id_desc');
+        }
+
+       /* Build the search form. */
+        $this->config->bug->search['actionURL'] = $this->createLink('project', 'importBug', "projectID=$projectID&browseType=bySearch&param=myQueryID");
+        $this->config->bug->search['queryID']   = $queryID;
+        if(!empty($products))
+        {
+            $this->config->bug->search['params']['product']['values'] = array(''=>'') + $products + array('all'=>$this->lang->project->aboveAllProduct);
+        }
+        else
+        {
+            $this->config->bug->search['params']['product']['values'] = array(''=>'');
+        }
+        $this->config->bug->search['params']['project']['values'] = array(''=>'') + $projects + array('all'=>$this->lang->project->aboveAllProject);
+        unset($this->config->bug->search['fields']['resolvedBy']); 
+        unset($this->config->bug->search['fields']['closedBy']);    
+        unset($this->config->bug->search['fields']['status']);      
+        unset($this->config->bug->search['fields']['toTask']);      
+        unset($this->config->bug->search['fields']['toStory']);     
+        unset($this->config->bug->search['fields']['severity']);    
+        unset($this->config->bug->search['fields']['resolution']);  
+        unset($this->config->bug->search['fields']['resolvedBuild']);
+        unset($this->config->bug->search['fields']['resolvedDate']);
+        unset($this->config->bug->search['fields']['closedDate']);   
+        unset($this->config->bug->search['params']['resolvedBy']); 
+        unset($this->config->bug->search['params']['closedBy']);    
+        unset($this->config->bug->search['params']['status']);      
+        unset($this->config->bug->search['params']['toTask']);      
+        unset($this->config->bug->search['params']['toStory']);     
+        unset($this->config->bug->search['params']['severity']);    
+        unset($this->config->bug->search['params']['resolution']);  
+        unset($this->config->bug->search['params']['resolvedBuild']);
+        unset($this->config->bug->search['params']['resolvedDate']);
+        unset($this->config->bug->search['params']['closedDate']);   
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
+
+        /* Assign. */
+        $this->view->header     = $header;
+        $this->view->pager      = $pager;
+        $this->view->bugs       = $bugs;
+        $this->view->recTotal   = $pager->recTotal;
+        $this->view->recPerPage = $pager->recPerPage;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->users      = $users;
+        $this->view->projectID  = $projectID;
         $this->display();
     }
 

@@ -124,15 +124,14 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getActiveBugs($pager, $projectID)
+    public function getActiveBugs($pager, $projectID, $products)
     {
-        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-        if(!$products) return array();
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->andWhere('toTask')->eq(0)
             ->andWhere('tostory')->eq(0)
-            ->andWhere('product')->in($products)
+            ->beginIF(!empty($products))->andWhere('product')->in($products)
+            ->beginIF(empty($products))->andWhere('project')->eq($projectID)
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)

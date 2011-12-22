@@ -17,7 +17,13 @@
 $(function(){
      $(".preview").colorbox({width:1000, height:700, iframe:true, transition:'elastic', speed:350, scrolling:true});
 })
+var browseType = '<?php echo $browseType;?>';
 </script>
+<div id='featurebar'>
+<?php /* echo "<span id='bysearchTab'><a href='#'>{$lang->project->byQuery}</a></span> ";*/?>
+</div>
+<div id='querybox' class='<?php /*if($browseType !='bysearch')*/ echo 'hidden';?>'><?php echo $searchForm;?></div>
+<div>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1 colored tablesorter'>
     <thead>
@@ -52,4 +58,5 @@ $(function(){
   </table>
     <div class='a-center'><?php echo html::submitButton($lang->import) . html::resetButton();?></div>
 </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -120,7 +120,9 @@ $lang->project->listTaskNeedConfrim = 'Story changed';
 $lang->project->byQuery             = 'Search';
 
 /* Browse tabs. */
-$lang->project->allProject          = 'All projects';
+$lang->project->allProject      = 'All projects';
+$lang->project->aboveAllProduct = 'Above all products';
+$lang->project->aboveAllProject = 'Above all projects';
 
 /* Notcie. */
 $lang->project->selectProject   = "Select project";

@@ -120,7 +120,9 @@ $lang->project->listTaskNeedConfrim = '需求变动';
 $lang->project->byQuery             = '搜索';
 
 /* 查询条件列表。*/
-$lang->project->allProject          = '所有项目';
+$lang->project->allProject      = '所有项目';
+$lang->project->aboveAllProduct = '以上所有产品';
+$lang->project->aboveAllProject = '以上所有项目';
 
 /* 页面提示。*/
 $lang->project->selectProject   = "请选择项目";
