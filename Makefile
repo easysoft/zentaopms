@@ -2,12 +2,14 @@ VERSION=$(shell head -n 1 VERSION)
 
 all: tgz
 sae: tgz build4sae
+linux: tgz build4linux
 
 clean:
 	rm -fr zentaopms
 	rm -fr *.tar.gz
 	rm -fr *.zip
 	rm -fr api*
+	rm -fr build/linux/lampp
 tgz:
 	# make the directories.
 	mkdir -p zentaopms/lib
@@ -28,6 +30,7 @@ tgz:
 	cp bin/ztc* bin/computeburn.php bin/getbugs.php bin/initext.php bin/todo.php bin/convertopt.php zentaopms/bin
 	cp -fr db zentaopms/
 	cp -fr doc/* zentaopms/
+	cp VERSION zentaopms/
 	# create my.min.js
 	rm zentaopms/www/js/my.min.js
 	java -jar ~/bin/yuicompressor/build/yuicompressor-2.4.6.jar www/js/my.full.js > zentaopms/www/js/my.min.js
@@ -87,3 +90,11 @@ build4sae:
 	zip -r -9 ZenTaoPMS.$(VERSION).sae.zip 10
 	rm -fr sae
 	rm -fr 10
+build4linux:	
+	unzip ZenTaoPMS.$(VERSION).zip
+	rm -fr ZenTaoPMS.$(VERSION).zip
+	sed -e 's/index.php/\/zentao\/index.php/g' zentaopms/www/.htaccess >zentaopms/www/.htaccess.new
+	mv zentaopms/www/.htaccess.new zentaopms/www/.htaccess
+	# build xmapp.
+	cd ./build/linux/ && ./buildxmapp.sh $(xampp)
+	mv ./build/linux/lampp ./
