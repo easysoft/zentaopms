@@ -76,5 +76,7 @@ cp ../zentao.conf etc/extra/httpd-xampp.conf
 # copy the zentao code.
 mv ../../../zentaopms ./zentao
 
-# copy the makefile
+# copy needed files.
 cp ../Makefile .
+cp ../start .
+cp ../stop .
