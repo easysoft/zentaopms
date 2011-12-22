@@ -220,11 +220,12 @@ class projectModel extends model
      */
     public function getPairs($mode = '')
     {
-        $mode .= $this->cookie->projectMode;
+        $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'status, id desc';
+        $mode    .= $this->cookie->projectMode;
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('status, id desc')
+            ->orderBy($orderBy)
             ->fetchAll();
         $pairs = array();
         foreach($projects as $project)
