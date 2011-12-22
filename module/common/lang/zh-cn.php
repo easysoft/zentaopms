@@ -22,7 +22,7 @@ $lang->myControl    = "我的地盘";
 $lang->currentPos   = '当前位置：';
 $lang->logout       = '退出';
 $lang->login        = '登录';
-$lang->aboutZenTao  = '关于禅道';
+$lang->aboutZenTao  = '关于';
 $lang->todayIs      = '今天是%s，';
 $lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 
@@ -274,8 +274,8 @@ $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方网站";
 $lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a> ";
-$lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>敏捷培训</a> ";
-$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=yeetec' target='_blank'>以太科技赞助</a>";
+$lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
+$lang->donate         = "<a href='http://www.zentao.net/goto.php?item=donate' target='_blank'>捐助禅道</a> ";
 $lang->zentaoKeywords = "开源项目管理软件,项目管理,项目管理软件,pmp,pms,php框架，国产php框架，scrum工具,scrum管理工具,scrum管理软件,敏捷项目管理,禅道";
 $lang->zentaoDESC     = "禅道项目管理软件(ZenTaoPMS)是一款国产的，基于LGPL协议，开源免费的项目管理软件(工具、系统)，同时也是一款scrum管理工具。
     它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。禅道项目管理软件使用PHP + MySQL开发，

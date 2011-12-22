@@ -323,7 +323,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #divider   {margin-bottom:30px}
 #footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background-color:#FBF5C6; border-top:1px solid #F4BF20;}
 #crumbs    {padding:5px 0 5px 10px;}
-#poweredby {margin-top:5px;} 
+#poweredby {padding-right:10px} 
 
 /* Debug. */
 .debugwin  {display:block; width:200px; height:20px; position:fixed; bottom:27px; border-left:10px solid red}
