@@ -73,11 +73,12 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getModuleBugs($productID, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
+    public function getModuleBugs($productID, $moduleIds = 0, $projects, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi()
+            ->andWhere('project')->in($projects)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }

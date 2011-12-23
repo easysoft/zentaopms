@@ -81,57 +81,67 @@ class bug extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $projects = $this->loadModel('project')->getPairs();
+
         $bugs = array();
         if($browseType == 'all')
         {
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == "bymodule")
         {
             $childModuleIds = $this->tree->getAllChildId($moduleID);
-            $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $orderBy, $pager);
+            $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $projects, $orderBy, $pager);
         }
         elseif($browseType == 'assigntome')
         {
             $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'openedbyme')
         {
             $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'resolvedbyme')
         {
             $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'assigntonull')
         {
             $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'unresolved')
         {
             $bugs = $this->dao->findByStatus('active')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'unclosed')
         {
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')->andWhere('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'longlifebugs')
         {
             $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->andWhere('openedDate')->lt(date(DT_DATE1,strtotime('-7 days')))
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
@@ -139,6 +149,7 @@ class bug extends control
         elseif($browseType == 'postponedbugs')
         {
             $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+                ->andWhere('project')->in($projects)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($browseType == 'needconfirm')
@@ -147,6 +158,7 @@ class bug extends control
                 ->where("t2.status = 'active'")
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
+                ->andWhere('t1.project')->in($projects)
                 ->orderBy($orderBy)
                 ->fetchAll();
         }
@@ -169,6 +181,14 @@ class bug extends control
             {
                 if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
             }
+
+            /* check the purview of projects.*/
+            if(strpos('`project`', $this->session->bugQuery) === false) 
+            {
+                $var = $this->session->bugQuery . 'AND `project`' . helper::dbIN(array_keys($projects));
+                $this->session->set('bugQuery', "$var");
+            }
+
             $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
                 ->andWhere('deleted')->eq(0)
