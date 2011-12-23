@@ -117,7 +117,7 @@ class mailModel extends model
         /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
         if($includeMe == false)
         {
-            $account = $this->app->user->account;
+            $account = isset($this->app->user->account) ? $this->app->user->account : '';
             $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
             $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
 
