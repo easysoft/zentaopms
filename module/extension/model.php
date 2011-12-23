@@ -407,11 +407,14 @@ class extensionModel extends model
                     $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 }
             }
-            elseif(!mkdir($path, 0755, true))
+            else
             {
-                $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
-                $return->mkdirCommands .= "mkdir -p $path<br />";
-                $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                if(!@mkdir($path, 0755, true))
+                {
+                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
+                    $return->mkdirCommands .= "mkdir -p $path<br />";
+                    $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                }
                 $return->dirs2Created[] = $path;
             }
         }
@@ -533,14 +536,7 @@ class extensionModel extends model
         $appRoot = $this->app->getAppRoot();
         $removeCommands = array();
 
-        if($dirs)
-        {
-            foreach($dirs as $dir)
-            {
-                if(!@rmdir($appRoot . $dir)) $removeCommands[] = "rmdir $appRoot$dir";
-            }
-        }
-
+        /* Remove files first. */
         if($files)
         {
             foreach($files as $file => $savedMd5)
@@ -558,6 +554,17 @@ class extensionModel extends model
                 }
             }
         }
+
+        /* Then remove dirs. */
+        if($dirs)
+        {
+            rsort($dirs);    // remove from the lower level directory.
+            foreach($dirs as $dir)
+            {
+                if(!@rmdir($appRoot . $dir)) $removeCommands[] = "rmdir $appRoot$dir";
+            }
+        }
+
         return $removeCommands;
     }
 

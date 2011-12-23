@@ -153,10 +153,9 @@ class extension extends control
 
         /* Checking the extension pathes. */
         $return = $this->extension->checkExtensionPathes($extension);
+        if($this->session->dirs2Created == false) $this->session->set('dirs2Created', $return->dirs2Created);    // Save the dirs to be created.
         if($return->result != 'ok')
         {
-            $this->session->set('dirs2Created', $return->dirs2Created);   // Save the dirs to be created.
-
             $this->view->error = $return->errors;
             die($this->display());
         }
@@ -204,6 +203,7 @@ class extension extends control
             die($this->display());
         }
 
+        /* The preInstall hook file. */
         if($preInstallHook = $this->extension->getHookFile($extension, 'preinstall')) include $preInstallHook;
 
         /* Save to database. */
@@ -217,7 +217,9 @@ class extension extends control
         $data->dirs   = $this->session->dirs2Created;
         $data->files  = $this->view->files;
         $data->installedTime = helper::now();
+        $this->session->set('dirs2Created', array());   // clean the session.
 
+        /* Execute the install.sql. */
         if($this->extension->needExecuteDB($extension, 'install'))
         {
             $return = $this->extension->executeDB($extension, 'install');
@@ -227,9 +229,12 @@ class extension extends control
                 die($this->display());
             }
         }
+
+        /* Update status, dirs, files and installed time. */
         $this->extension->updateExtension($extension, $data);
         $this->view->downloadedPackage = !empty($downLink);
 
+        /* The postInstall hook file. */
         if($postInstallHook = $this->extension->getHookFile($extension, 'postinstall')) include $postInstallHook;
 
         $this->display();
