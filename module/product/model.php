@@ -193,6 +193,13 @@ class productModel extends model
         return $pairs;
     }
 
+    /**
+     * Get products by project. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getProductsByProject($projectID)
     {
         return $this->dao->select('t1.product, t2.name')

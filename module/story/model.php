@@ -701,6 +701,7 @@ class storyModel extends model
      */
     public function getBySearch($productID, $queryID, $orderBy, $pager)
     {
+        $products = $this->loadModel('product')->getPairs();
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
         /* Get the sql and form status from the query. */
@@ -719,6 +720,7 @@ class storyModel extends model
             $storyQuery     = str_replace($allProduct, '1', $this->session->storyQuery);
             $queryProductID = 'all';
         }
+        $storyQuery = $storyQuery . 'AND `product`' . helper::dbIN(array_keys($products));
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager);
     }
