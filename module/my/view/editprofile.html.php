@@ -17,15 +17,15 @@
     <caption><?php echo $lang->my->editProfile;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->user->account;?></th>
-      <td><?php //echo html::input('account', $user->account, "readonly");
-                echo $user->account;
-                echo html::hidden('account',$user->account);
-          ?>
-      </td>
+      <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->realname;?></th>
       <td><?php echo html::input('realname', $user->realname);?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->user->commiter;?></th>
+      <td><?php echo html::input('commiter', $user->commiter);?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->email;?></th>

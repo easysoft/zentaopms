@@ -42,6 +42,10 @@
     <th class='rowhead'><?php echo $lang->user->realname;?></th>
     <td><?php echo $user->realname;?></td>
   </tr>
+  <tr>
+    <th class='rowhead'><?php echo $lang->user->commiter;?></th>
+    <td><?php echo $user->commiter;?></td>
+  </tr>
   <!--
   <tr>
     <?php //echo $lang->user->nickname;?>

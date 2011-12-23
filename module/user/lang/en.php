@@ -60,6 +60,7 @@ $lang->user->password  = 'Password';
 $lang->user->password2 = 'Repeat password';
 $lang->user->realname  = 'Fullname';
 $lang->user->nickname  = 'Nickname';
+$lang->user->commiter  = 'Commit account';
 $lang->user->avatar    = 'Avatar';
 $lang->user->birthyear = 'Birth year';
 $lang->user->gender    = 'Gender';

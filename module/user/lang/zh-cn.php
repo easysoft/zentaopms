@@ -60,6 +60,7 @@ $lang->user->password  = '密码';
 $lang->user->password2 = '请重复密码';
 $lang->user->realname  = '真实姓名';
 $lang->user->nickname  = '昵称';
+$lang->user->commiter  = '源代码提交帐号';
 $lang->user->avatar    = '头像';
 $lang->user->birthyear = '出生年';
 $lang->user->gender    = '性别';
