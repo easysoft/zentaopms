@@ -123,6 +123,12 @@ class bug extends control
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
+        elseif($browseType == 'unclosed')
+        {
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')->andWhere('product')->eq($productID)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
         elseif($browseType == 'longlifebugs')
         {
             $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
