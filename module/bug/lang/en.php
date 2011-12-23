@@ -235,6 +235,7 @@ $lang->bug->resolutionList['fixed']      = 'Fixed';
 $lang->bug->resolutionList['notrepro']   = 'Not reproduce';
 $lang->bug->resolutionList['postponed']  = 'Postponed';
 $lang->bug->resolutionList['willnotfix'] = "Won't fix";
+$lang->bug->resolutionList['tostory']    = 'To story';
 
 /* Report. */
 $lang->bug->report->common        = 'Report';
