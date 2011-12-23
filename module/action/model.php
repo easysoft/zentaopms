@@ -98,13 +98,15 @@ class actionModel extends model
      */
     public function getList($objectType, $objectID)
     {
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+        $commiters = $this->dao->select('commiter, realname')->from(TABLE_USER)->where("commiter != ''")->fetchPairs();
+        $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq($objectID)
             ->orderBy('date, id')->fetchAll('id');
         $histories = $this->getHistory(array_keys($actions));
         foreach($actions as $actionID => $action)
         {
+            if(strtolower($action->action) == 'svncommited' and isset($commiters[$action->actor])) $action->actor = $commiters[$action->actor];
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
             $actions[$actionID] = $action;
         }
