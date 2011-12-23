@@ -407,7 +407,7 @@ class extensionModel extends model
                     $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 }
             }
-            elseif(!is_writable(dirname($path)))
+            elseif(!mkdir($path, 0755, true))
             {
                 $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
                 $return->mkdirCommands .= "mkdir -p $path<br />";
