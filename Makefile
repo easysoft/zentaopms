@@ -44,7 +44,8 @@ tgz:
 	# change mode.
 	chmod 777 -R zentaopms/tmp/
 	chmod 777 -R zentaopms/www/data
-	chmod 777 zentaopms/config
+	chmod 777 -R zentaopms/config
+	chmod 777 zentaopms/module
 	chmod a+rx zentaopms/bin/*
 	find zentaopms/ -name ext |xargs chmod -R 777
 	# zip it.
