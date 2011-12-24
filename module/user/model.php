@@ -68,6 +68,23 @@ class userModel extends model
         if(strpos($params, 'withguest') !== false) $users = $users + array('guest' => 'Guest');
         return $users;
     }
+
+    /**
+     * Get commiters from the user table.
+     * 
+     * @access public
+     * @return array 
+     */
+    public function getCommiters()
+    {
+        $rawCommiters = $this->dao->select('commiter, account, realname')->from(TABLE_USER)->where('commiter')->ne('')->fetchAll();
+        if(!$rawCommiters) return array();
+
+        $commiters = array();
+        foreach($rawCommiters as $commiter) $commiters[$commiter->commiter] = $commiter->realname ? $commiter->realname : $commiter->account;
+
+        return $commiters;
+    }
     
     /**
      * Appened deleted users to the user list.
