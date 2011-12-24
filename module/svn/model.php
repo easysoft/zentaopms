@@ -321,6 +321,30 @@ class svnModel extends model
     }
 
     /**
+     * Convert the comment to uft-8.
+     * 
+     * @param  string    $comment 
+     * @access public
+     * @return string
+     */
+    public function iconvComment($comment)
+    {
+        /* Get encodings. */
+        $encodings = str_replace(' ', '', trim($comment));
+        if($encodings == '') return $comment;
+        $encodings = explode(',', $encodings);
+
+        /* Try convert. */
+        foreach($encodings as $encoding)
+        {
+            $result = @iconv($encoding, 'utf-8', $comment);
+            if($result) return $result;
+        }
+
+        return $comment;
+    }
+
+    /**
      * Diff a url.
      * 
      * @param  string $url 
@@ -388,7 +412,7 @@ class svnModel extends model
         $action->actor   = $log->author;
         $action->action  = 'svncommited';
         $action->date    = $log->date;
-        $action->comment = $log->msg;
+        $action->comment = $this->iconvComment($log->msg);
         $action->extra   = $log->revision;
 
         $changes = $this->createActionChanges($log, $repoRoot);
