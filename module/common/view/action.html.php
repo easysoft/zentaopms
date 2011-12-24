@@ -52,7 +52,6 @@ function switchChange(historyID,type)
       <?php if(!empty($action->comment)) echo "<div class='history'>";?>
         <div class='changes hidden' id='changeBox<?php echo $i;?>'>
         <?php echo $this->action->printChanges($action->objectType, $action->history);?>
-        <?php if($action->comment) echo '<br />';?>
         </div>
         <?php if($action->comment) echo nl2br($action->comment);?>
       <?php if(!empty($action->comment)) echo "</div>";?>
