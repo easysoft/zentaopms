@@ -98,7 +98,7 @@ class actionModel extends model
      */
     public function getList($objectType, $objectID)
     {
-        $commiters = $this->dao->select('commiter, realname')->from(TABLE_USER)->where("commiter != ''")->fetchPairs();
+        $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq($objectID)
@@ -272,9 +272,11 @@ class actionModel extends model
      */
     public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all')
     {
+        /* Computer the begin and end date of a period. */
         $period = $this->computeBeginAndEnd($period);
         extract($period);
 
+        /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('date')->gt($begin)
             ->andWhere('date')->lt($end)
@@ -286,6 +288,9 @@ class actionModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();
+
+        /* Get commiters. */
+        $commiters = $this->loadModel('user')->getCommiters();
 
         /* Group actions by objectType, and get there name field. */
         foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
@@ -335,6 +340,10 @@ class actionModel extends model
                 $action->objectLink  = '';
                 $action->objectLabel = '';
                 continue;
+            }
+            elseif($actionType == 'svncommited')
+            {
+                $action->actor = isset($commiters[$action->actor]) ? $commiters[$action->actor] : $action->actor;
             }
 
             /* Other actions, create a link. */
