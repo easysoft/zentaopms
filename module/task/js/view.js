@@ -6,5 +6,5 @@ function assign(taskID, assignedTo)
 }
 function setComment()
 {
-  $('#comment').show();
+  $('#comment').toggle();
 }

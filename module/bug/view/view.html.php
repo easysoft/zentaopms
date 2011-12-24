@@ -22,10 +22,12 @@
     if(!$bug->deleted)
     {
         if(!($bug->status == 'active' and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm))) echo $lang->bug->buttonConfirm . ' ';
-        echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
-        common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
         if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+        common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+        if(common::hasPriv('bug', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
+        if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+        common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
         if($bug->status == 'active' and common::hasPriv('story', 'create')) 
         {
             common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory) . ' ';
@@ -34,8 +36,6 @@
         {
             echo $lang->bug->toStory . ' ';
         }
-        if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
-        common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
         common::printLink('testcase', 'create', $convertParams, $lang->bug->buttonCreateTestcase);
         common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
     }
@@ -58,10 +58,12 @@
         if(!$bug->deleted)
         {
             if(!($bug->status == 'active'  and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
-            if(common::hasPriv('bug', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
-            common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
             if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+            common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+            if(common::hasPriv('bug', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
             if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
+            if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+            common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
             if($bug->status == 'active' and common::hasPriv('bug', 'resolve')) 
             {
                 common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory) . ' ';
@@ -70,8 +72,6 @@
             {
                 echo $lang->bug->toStory . ' ';
             }
-            if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
-            common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
             common::printLink('testcase', 'create', $convertParams, $lang->bug->buttonCreateTestcase);
             common::printLink('bug', 'delete', $params, $lang->delete, 'hiddenwin');
         }

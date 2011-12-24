@@ -35,8 +35,8 @@ $lang->bug->statusAB         = '状态';
 $lang->bug->activatedCount   = '激活次数';
 $lang->bug->activatedCountAB = '激活次数';
 $lang->bug->confirmed        = '是否确认';
-$lang->bug->toTask           = '转为任务';
-$lang->bug->toStory          = '转为需求';
+$lang->bug->toTask           = '转任务';
+$lang->bug->toStory          = '转需求';
 $lang->bug->mailto           = '抄送给';
 $lang->bug->openedBy         = '由谁创建';
 $lang->bug->openedByAB       = '创建';
@@ -138,7 +138,7 @@ $lang->bug->buttonActivate       = '激活';
 $lang->bug->buttonResolve        = '解决';
 $lang->bug->buttonClose          = '关闭';
 $lang->bug->buttonToList         = '返回';
-$lang->bug->buttonCreateTestcase = '创建用例';
+$lang->bug->buttonCreateTestcase = '建用例';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';

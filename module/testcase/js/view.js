@@ -5,5 +5,5 @@ $(document).ready(function()
 })
 function setComment()
 {
-  $('#comment').show();
+  $('#comment').toggle();
 }

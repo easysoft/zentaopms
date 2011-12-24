@@ -1,4 +1,4 @@
 function setComment()
 {
-  $('#comment').show();
+  $('#comment').toggle();
 }
