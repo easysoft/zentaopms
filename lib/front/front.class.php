@@ -343,6 +343,29 @@ class html
     {
         return " <input type='button' value='$label' class='button-c' $misc onclick='location.href=\"$link\"' /> ";
     }
+
+    /**
+     * Print the star images.
+     * 
+     * @param  float    $stars 0 1 1.5 2 2.5 3 3.5 4 4.5 5
+     * @access public
+     * @return void
+     */
+    public static function printStars($stars)
+    {
+        $redStars   = 0;
+        $halfStars  = 0;
+        $whiteStars = 5; 
+        if($stars)
+        {
+            $redStars  = floor($stars);
+            $halfStars = $stars - $redStars ? 1 : 0;
+            $whiteStars = 5 - ceil($stars);
+        }
+        for($i = 1; $i <= $redStars;   $i ++) echo "<img src='theme/default/images/raty/star-on.png' />";
+        for($i = 1; $i <= $halfStars;  $i ++) echo "<img src='theme/default/images/raty/star-half.png' />";
+        for($i = 1; $i <= $whiteStars; $i ++) echo "<img src='theme/default/images/raty/star-off.png' />";
+    }
 }
 
 /**
