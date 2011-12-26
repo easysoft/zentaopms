@@ -14,7 +14,7 @@ class extensionModel extends model
     /**
      * The extension manager version. Don't change it. 
      */
-    const EXT_MANAGER_VERSION = '1.2';
+    const EXT_MANAGER_VERSION = '1.3';
 
     /**
      * The api agent(use snoopy).
@@ -114,13 +114,13 @@ class extensionModel extends model
     public function getExtensionsByAPI($type, $param, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $apiURL = $this->apiRoot . "apiGetExtensions-$type-$param-$recTotal-$recPerPage-$pageID.json";
-
-        $data = $this->fetchAPI($apiURL);
+        $data   = $this->fetchAPI($apiURL);
         if(isset($data->extensions))
         {
             foreach($data->extensions as $extension)
             {
-                $extension->compatible = $this->checkVersion($extension->zentaoVersion);
+                $extension->currentRelease = isset($extension->compatibleRelease) ? $extension->compatibleRelease : $extension->latestRelease;
+                $extension->currentRelease->compatible = isset($extension->compatibleRelease);
             }
             return $data;
         }

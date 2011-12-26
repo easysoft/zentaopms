@@ -38,34 +38,46 @@
     <td> 
       <?php if($extensions):?>
       <?php foreach($extensions as $extension):?>
+        <?php 
+        $currentRelease = $extension->currentRelease;
+        $latestRelease  = $extension->latestRelease;
+        ?>
         <table class='table-1 exttable'>
-          <caption><?php echo "#$extension->id $extension->name";?></caption> 
+          <caption>
+            <div class='f-left'><?php echo $extension->name;?></div>
+            <div class='f-right'>
+              <?php 
+              if($latestRelease->releaseVersion != $currentRelease->releaseVersion) 
+              {
+                  printf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoVersion);
+              }?>
+            </div>
+          </caption> 
           <tr valign='middle'>
             <td>
               <div class='mb-10px'><?php echo $extension->abstract;?></div>
               <div>
                 <?php
-                echo "{$lang->extension->version}:    <i>{$extension->releaseVersion}</i> ";
-                echo "{$lang->extension->author}:     <i>{$extension->author}</i> ";
-                echo "{$lang->extension->downloads}:  <i><strong>{$extension->downloads}</strong></i> ";
-                echo "{$lang->extension->public}:     <i>{$lang->extension->publicList[$extension->public]}</i> ";
-                echo "{$lang->extension->compatible}: <i><strong>{$lang->extension->compatibleList[$extension->compatible]}</strong></i> ";
+                echo "{$lang->extension->author}:     {$extension->author} ";
+                echo "{$lang->extension->downloads}:  {$extension->downloads} ";
+                echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
+                echo "{$lang->extension->grade}: ",   html::printStars($extension->stars);
                 ?>
               </div>
             </td>
             <td class='w-200px a-right'>
               <?php 
-              $installLink   = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&type=$extension->type&&overridePackage=no&ignoreCompitable=yes");
+              $installLink = inlink('install',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5={$currentRelease->md5}&type=$extension->type&&overridePackage=no&ignoreCompitable=yes");
               echo html::a($extension->viewLink, $lang->extension->view, '', 'class="button-c extension"');
-              if($extension->public)
+              if($currentRelease->public)
               {
                   if($extension->type != 'computer' and $extension->type != 'mobile')
                   {
                       if(isset($installeds[$extension->code]))
                       {
-                          if($installeds[$extension->code]->version != $extension->releaseVersion)
+                          if($installeds[$extension->code]->version != $extension->latestRelease->releaseVersion)
                           {
-                              $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($extension->downLink) . "&md5=$extension->md5&type=$extension->type");
+                              $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5=$currentRelease->md5&type=$extension->type");
                               echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe button-c"');
                           }
                           else
@@ -75,12 +87,12 @@
                       }
                       else
                       {
-                          $label = $extension->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
+                          $label = $currentRelease->compatible ? $lang->extension->installAuto : $lang->extension->installForce;
                           echo html::a($installLink, $label, '', 'class="iframe button-c"');
                       }
                   }
               }
-              echo html::a($extension->downLink, $lang->extension->downloadAB, '', 'class="manual button-c"');
+              echo html::a($currentRelease->downLink, $lang->extension->downloadAB, '', 'class="manual button-c"');
               echo html::a($extension->site, $lang->extension->site, '_blank', 'class=button-c');
             ?>
           </td></tr>

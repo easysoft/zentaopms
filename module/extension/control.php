@@ -35,7 +35,7 @@ class extension extends control
                     if(!isset($extensions[$release->code])) continue;
 
                     $extension = $extensions[$release->code];
-                    if($extension->version != $release->releaseVersion and $this->extension->checkVersion($release->zentaoVersion))
+                    if($extension->version != $release->latestRelease->releaseVersion and $this->extension->checkVersion($release->latestRelease->zentaoVersion))
                     {
                         $extension->upgradeLink = inlink('upgrade', "extension=$release->code&downLink=" . helper::safe64Encode($release->downLink) . "&md5=$release->md5&type=$release->type");
                     }
