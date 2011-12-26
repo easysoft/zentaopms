@@ -209,7 +209,6 @@ class user extends control
         {
             $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
         }
-        $this->referer = htmlspecialchars($this->referer);
     }
 
     /**
