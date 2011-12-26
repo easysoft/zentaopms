@@ -34,6 +34,8 @@ $lang->extension->id          = 'ID';
 $lang->extension->name        = 'Name';
 $lang->extension->code        = 'Code';
 $lang->extension->version     = 'Version';
+$lang->extension->compatible  = 'Compatible';
+$lang->extension->latest      = '<small>Latest:<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，need zentao <a href="http://www.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
 $lang->extension->author      = 'Author';
 $lang->extension->license     = 'License';
 $lang->extension->intro       = 'Description';
@@ -44,6 +46,7 @@ $lang->extension->updatedTime = 'Updated Time';
 $lang->extension->downloads   = 'Downloads';
 $lang->extension->public      = 'Public';
 $lang->extension->compatible  = 'Compatible';
+$lang->extension->grade       = 'Grade';
 
 $lang->extension->publicList[0] = 'Manually';
 $lang->extension->publicList[1] = 'Auto';

@@ -34,6 +34,8 @@ $lang->extension->id          = '编号';
 $lang->extension->name        = '名称';
 $lang->extension->code        = '插件代号';
 $lang->extension->version     = '版本';
+$lang->extension->compatible  = '适用版本';
+$lang->extension->latest      = '<small>最新版本<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，兼容禅道<a href="http://www.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
 $lang->extension->author      = '作者';
 $lang->extension->license     = '授权';
 $lang->extension->intro       = '详情';
@@ -44,6 +46,7 @@ $lang->extension->updatedTime = '更新时间';
 $lang->extension->downloads   = '下载量';
 $lang->extension->public      = '下载方式';
 $lang->extension->compatible  = '兼容性';
+$lang->extension->grade       = '评分';
 
 $lang->extension->publicList[0] = '手工下载';
 $lang->extension->publicList[1] = '直接下载';
