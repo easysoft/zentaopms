@@ -288,7 +288,88 @@ class actionModel extends model
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();
+        return $this->transformActions($actions);
+    }
 
+    /**
+     * Get dynamic by search. 
+     * 
+     * @param  array  $products 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array 
+     */
+    public function getDynamicBySearch($products, $projects, $queryID, $orderBy = 'date_desc', $pager)
+    {
+        $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
+
+        /* Get the sql and form status from the query. */
+        if($query)
+        {
+            $this->session->set('actionQuery', $query->sql);
+            $this->session->set('actionForm', $query->form);
+        }
+        if($this->session->actionQuery == false) $this->session->set('actionQuery', ' 1 = 1');
+
+        $allProduct          = "`product` = 'all'";
+        $allProject          = "`project` = 'all'";
+        $actionQuery = $this->session->actionQuery;
+
+        /* If the sql not include 'product', add check purview for product. */
+        if(strpos($actionQuery, $allProduct) === false)
+        {
+            $actionQuery = $actionQuery . 'AND `product`' . helper::dbIN(array_keys($products));
+        }
+        else
+        {
+            $actionQuery = str_replace($allProduct, '1', $actionQuery);
+        }
+
+        /* If the sql not include 'project', add check purview for project. */
+        if(strpos($actionQuery, $allProject) === false)
+        {
+            $actionQuery = $actionQuery . 'AND `project`' . helper::dbIN(array_keys($projects));
+        }
+        else
+        {
+            $actionQuery = str_replace($allProduct, '1', $actionQuery);
+        }
+
+        $actions = $this->getBySQL($actionQuery, $orderBy, $pager);
+        if(!$actions) return array();
+        return $this->transformActions($actions);
+    }
+
+    /**
+     * Get actions by SQL. 
+     * 
+     * @param  string $sql 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array 
+     */
+    public function getBySQL($sql, $orderBy, $pager = null)
+    {
+         return $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where($sql)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Transform the actions for display.
+     * 
+     * @param  int    $actions 
+     * @access public
+     * @return void
+     */
+    public function transformActions($actions)
+    {
         /* Get commiters. */
         $commiters = $this->loadModel('user')->getCommiters();
 

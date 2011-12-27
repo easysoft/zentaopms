@@ -152,6 +152,8 @@ class company extends control
     {
         $this->app->loadLang('user');
         $this->app->loadLang('project');
+        $this->loadModel('action');
+
         /* Save session. */
         $uri   = $this->app->getURI(true);
         $this->session->set('productList',     $uri);
@@ -176,33 +178,59 @@ class company extends control
         $product = $type == 'product' ? $param : 'all';
         $project = $type == 'project' ? $param : 'all';
         $period  = ($type == 'account' or $type == 'product' or $type == 'project') ? 'all'  : $type;
+        $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         /* Get products' list.*/
         $products = $this->loadModel('product')->getPairs();
         $products = array($this->lang->product->select) + $products;
+        $this->view->products = $products;
 
         /* Get projects' list.*/
         $projects = $this->loadModel('project')->getPairs();
         $projects = array($this->lang->project->select) + $projects;
+        $this->view->projects = $projects; 
 
         /* Get users.*/
-        $users = $this->loadModel('user')->getPairs('nodeleted|noletter');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noletter|noclosed');
         $users[''] = $this->lang->user->select;
+        $this->view->users    = $users; 
 
         /* The header and position. */
         $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
         $this->view->position[]    = $this->lang->company->dynamic;
 
+        /* Get actions. */
+        if($type != 'bysearch') 
+        {
+            $actions = $this->action->getDynamic($account, $period, $orderBy, $pager, $product, $project);
+        }
+        else
+        {
+            $actions = $this->action->getDynamicBySearch($products, $projects, $queryID, $orderBy, $pager); 
+        }
+
+        /* Build search form. */
+        $projects[0] = '';
+        $products[0] = '';
+        $users['']   = '';
+        ksort($projects);
+        ksort($products);
+        $projects['all'] = $this->lang->project->allProject;
+        $products['all'] = $this->lang->product->allProduct;
+        $this->config->company->dynamic->search['actionURL'] = $this->createLink('company', 'dynamic', "type=bysearch&param=myQueryID");
+        $this->config->company->dynamic->search['queryID']   = $queryID;
+        $this->config->company->dynamic->search['params']['project']['values'] = $projects;
+        $this->config->company->dynamic->search['params']['product']['values'] = $products; 
+        $this->config->company->dynamic->search['params']['actor']['values']   = $users; 
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->company->dynamic->search);
+
         /* Assign. */
         $this->view->type     = $type;
-        $this->view->users    = $users; 
-        $this->view->products = $products;
-        $this->view->projects = $projects; 
         $this->view->account  = $account;
         $this->view->product  = $product;
         $this->view->project  = $project;
-        $this->view->actions  = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $product, $project);
+        $this->view->queryID  = $queryID; 
+        $this->view->actions  = $actions;
         $this->display();
     }
-
 }

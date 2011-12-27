@@ -13,13 +13,33 @@ $lang->action->common   = '系统日志';
 $lang->action->trash    = '回收站';
 $lang->action->undelete = '还原';
 
+$lang->action->product    = '产品';
+$lang->action->project    = '项目';
 $lang->action->objectType = '对象类型';
 $lang->action->objectID   = '对象ID';
 $lang->action->objectName = '对象名称';
 $lang->action->actor      = '操作者';
 $lang->action->action     = '动作';
+$lang->action->actionID   = '记录ID';
 $lang->action->date       = '日期';
 $lang->action->trashTips  = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
+
+/* Object type. */
+$lang->action->search->objectTypeList['']            = '';    
+$lang->action->search->objectTypeList['product']     = '产品';    
+$lang->action->search->objectTypeList['project']     = '项目';    
+$lang->action->search->objectTypeList['bug']         = 'Bug';
+$lang->action->search->objectTypeList['case']        = '用例'; 
+$lang->action->search->objectTypeList['story']       = '需求';  
+$lang->action->search->objectTypeList['task']        = '任务'; 
+$lang->action->search->objectTypeList['testtask']    = '测试任务';     
+$lang->action->search->objectTypeList['user']        = '用户'; 
+$lang->action->search->objectTypeList['doc']         = '文档';
+$lang->action->search->objectTypeList['doclib']      = '文档库';   
+$lang->action->search->objectTypeList['todo']        = 'TODO'; 
+$lang->action->search->objectTypeList['build']       = 'Build';  
+$lang->action->search->objectTypeList['release']     = '发布';    
+$lang->action->search->objectTypeList['productplan'] = '计划';        
 
 $lang->action->dynamic->today     = '今天';
 $lang->action->dynamic->yesterday = '昨天';
@@ -29,6 +49,7 @@ $lang->action->dynamic->lastWeek  = '上周';
 $lang->action->dynamic->thisMonth = '本月';
 $lang->action->dynamic->lastMonth = '上月';
 $lang->action->dynamic->all       = '所有';
+$lang->action->dynamic->search    = '搜索';
 
 $lang->action->objectTypes['product']     = '产品';
 $lang->action->objectTypes['story']       = '需求';
@@ -124,3 +145,37 @@ $lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户';
 
 $lang->action->label->space     = '　';
+
+/* 用来在动态显示中显示动作 */
+$lang->action->search->label->created             = $lang->action->label->created;            
+$lang->action->search->label->opened              = $lang->action->label->opened;             
+$lang->action->search->label->changed             = $lang->action->label->changed;            
+$lang->action->search->label->edited              = $lang->action->label->edited;             
+$lang->action->search->label->assigned            = $lang->action->label->assigned;           
+$lang->action->search->label->closed              = $lang->action->label->closed;             
+$lang->action->search->label->deleted             = $lang->action->label->deleted;            
+$lang->action->search->label->deletedfile         = $lang->action->label->deletedfile;        
+$lang->action->search->label->editfile            = $lang->action->label->editfile;           
+$lang->action->search->label->erased              = $lang->action->label->erased;             
+$lang->action->search->label->undeleted           = $lang->action->label->undeleted;          
+$lang->action->search->label->commented           = $lang->action->label->commented;          
+$lang->action->search->label->activated           = $lang->action->label->activated;          
+$lang->action->search->label->resolved            = $lang->action->label->resolved;           
+$lang->action->search->label->reviewed            = $lang->action->label->reviewed;           
+$lang->action->search->label->moved               = $lang->action->label->moved;              
+$lang->action->search->label->confirmed           = $lang->action->label->confirmed;   
+$lang->action->search->label->bugconfirmed        = $lang->action->label->bugconfirmed;       
+$lang->action->search->label->tostory             = $lang->action->label->tostory;            
+$lang->action->search->label->frombug             = $lang->action->label->frombug;            
+$lang->action->search->label->totask              = $lang->action->label->totask;             
+$lang->action->search->label->svncommited         = $lang->action->label->svncommited;        
+$lang->action->search->label->linked2plan         = $lang->action->label->linked2plan;        
+$lang->action->search->label->unlinkedfromplan    = $lang->action->label->unlinkedfromplan;   
+$lang->action->search->label->linked2project      = $lang->action->label->linked2project;     
+$lang->action->search->label->unlinkedfromproject = $lang->action->label->unlinkedfromproject;
+$lang->action->search->label->marked              = $lang->action->label->marked;             
+$lang->action->search->label->started             = $lang->action->label->started;            
+$lang->action->search->label->canceled            = $lang->action->label->canceled;           
+$lang->action->search->label->finished            = $lang->action->label->finished;           
+$lang->action->search->label->login               = $lang->action->label->login;              
+$lang->action->search->label->logout              = $lang->action->label->logout;             

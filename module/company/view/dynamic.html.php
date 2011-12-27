@@ -12,22 +12,26 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<script language='Javascript'>
+var browseType = '<?php echo $type;?>';
+</script>
 <div id='featurebar'>
   <?php 
-  echo '<span id="today">'      . html::a(inlink('dynamic', "type=today"),      $lang->action->dynamic->today)      . '</span>';
-  echo '<span id="yesterday">'  . html::a(inlink('dynamic', "type=yesterday"),  $lang->action->dynamic->yesterday)  . '</span>';
-  echo '<span id="twodaysago">' . html::a(inlink('dynamic', "type=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</span>';
-  echo '<span id="thisweek">'   . html::a(inlink('dynamic', "type=thisweek"),   $lang->action->dynamic->thisWeek)   . '</span>';
-  echo '<span id="lastweek">'   . html::a(inlink('dynamic', "type=lastweek"),   $lang->action->dynamic->lastWeek)   . '</span>';
-  echo '<span id="thismonth">'  . html::a(inlink('dynamic', "type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</span>';
-  echo '<span id="lastmonth">'  . html::a(inlink('dynamic', "type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</span>';
-  echo '<span id="all">'        . html::a(inlink('dynamic', "type=all"),        $lang->action->dynamic->all)        . '</span>';
-  echo "<span id='account'>"    . html::select('account', $users, $account, 'onchange=changeUser(this.value)') . '</span>';
-  echo "<span id='product'>"    . html::select('product', $products, $product, 'onchange=changeProduct(this.value)') . '</span>';
-  echo "<span id='project'>"    . html::select('project', $projects, $project, 'onchange=changeProject(this.value)') . '</span>';
+  echo '<span id="today">'       . html::a(inlink('dynamic', "type=today"),      $lang->action->dynamic->today)      . '</span>';
+  echo '<span id="yesterday">'   . html::a(inlink('dynamic', "type=yesterday"),  $lang->action->dynamic->yesterday)  . '</span>';
+  echo '<span id="twodaysago">'  . html::a(inlink('dynamic', "type=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</span>';
+  echo '<span id="thisweek">'    . html::a(inlink('dynamic', "type=thisweek"),   $lang->action->dynamic->thisWeek)   . '</span>';
+  echo '<span id="lastweek">'    . html::a(inlink('dynamic', "type=lastweek"),   $lang->action->dynamic->lastWeek)   . '</span>';
+  echo '<span id="thismonth">'   . html::a(inlink('dynamic', "type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</span>';
+  echo '<span id="lastmonth">'   . html::a(inlink('dynamic', "type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</span>';
+  echo '<span id="all">'         . html::a(inlink('dynamic', "type=all"),        $lang->action->dynamic->all)        . '</span>';
+  echo "<span id='account'>"     . html::select('account', $users, $account, 'onchange=changeUser(this.value)') . '</span>';
+  echo "<span id='product'>"     . html::select('product', $products, $product, 'onchange=changeProduct(this.value)') . '</span>';
+  echo "<span id='project'>"     . html::select('project', $projects, $project, 'onchange=changeProject(this.value)') . '</span>';
+  echo "<span id='bysearchTab'>" . html::a('#', $lang->action->dynamic->search) . "</span>";
   ?>
 </div>
-
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 <table class='table-1 colored tablesorter'>
   <thead>
   <tr class='colhead'>

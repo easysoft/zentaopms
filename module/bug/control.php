@@ -82,6 +82,7 @@ class bug extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $projects = $this->loadModel('project')->getPairs();
+        $projects[0] = '';
 
         $bugs = array();
         if($browseType == 'all')
@@ -183,7 +184,7 @@ class bug extends control
             }
 
             /* check the purview of projects.*/
-            if(strpos('`project`', $this->session->bugQuery) === false) 
+            if(strpos($this->session->bugQuery, '`project`') === false) 
             {
                 $var = $this->session->bugQuery . 'AND `project`' . helper::dbIN(array_keys($projects));
                 $this->session->set('bugQuery', "$var");

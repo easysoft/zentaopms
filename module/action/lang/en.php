@@ -13,13 +13,33 @@ $lang->action->common   = 'Logs';
 $lang->action->trash    = 'Trash';
 $lang->action->undelete = 'Restore';
 
+$lang->action->product    = 'Product';
+$lang->action->project    = 'Project';
 $lang->action->objectType = 'Object';
 $lang->action->objectID   = 'ID';
 $lang->action->objectName = 'Name';
 $lang->action->actor      = 'Actor';
 $lang->action->action     = 'Action';
+$lang->action->actionID   = 'ActionID';
 $lang->action->date       = 'Date';
 $lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic";
+
+/* Object type. */
+$lang->action->search->objectTypeList['']            = '';    
+$lang->action->search->objectTypeList['product']     = 'product';   
+$lang->action->search->objectTypeList['project']     = 'project';   
+$lang->action->search->objectTypeList['bug']         = 'bug';       
+$lang->action->search->objectTypeList['case']        = 'case';      
+$lang->action->search->objectTypeList['story']       = 'story';     
+$lang->action->search->objectTypeList['task']        = 'task';      
+$lang->action->search->objectTypeList['testtask']    = 'testtask';       
+$lang->action->search->objectTypeList['user']        = 'user';      
+$lang->action->search->objectTypeList['doc']         = 'doc';       
+$lang->action->search->objectTypeList['doclib']      = 'doclib';     
+$lang->action->search->objectTypeList['todo']        = 'todo';      
+$lang->action->search->objectTypeList['build']       = 'build';     
+$lang->action->search->objectTypeList['release']     = 'release';   
+$lang->action->search->objectTypeList['productplan'] = 'productplan';    
 
 $lang->action->dynamic->today     = 'Today';
 $lang->action->dynamic->yesterday = 'Yesterday';
@@ -29,6 +49,7 @@ $lang->action->dynamic->lastWeek  = 'Last week';
 $lang->action->dynamic->thisMonth = 'This month';
 $lang->action->dynamic->lastMonth = 'Last month';
 $lang->action->dynamic->all       = 'All';
+$lang->action->dynamic->search    = 'Search';
 
 $lang->action->objectTypes['product']     = 'PRODUCT';
 $lang->action->objectTypes['story']       = 'STORY';
@@ -124,3 +145,37 @@ $lang->action->label->doc         = 'doc|doc|view|docID=%s';
 $lang->action->label->user        = 'user';
 
 $lang->action->label->space     = ' ';
+
+/* Display action for search. */
+$lang->action->search->label->created             = $lang->action->label->created;            
+$lang->action->search->label->opened              = $lang->action->label->opened;             
+$lang->action->search->label->changed             = $lang->action->label->changed;            
+$lang->action->search->label->edited              = $lang->action->label->edited;             
+$lang->action->search->label->assigned            = $lang->action->label->assigned;           
+$lang->action->search->label->closed              = $lang->action->label->closed;             
+$lang->action->search->label->deleted             = $lang->action->label->deleted;            
+$lang->action->search->label->deletedfile         = $lang->action->label->deletedfile;        
+$lang->action->search->label->editfile            = $lang->action->label->editfile;           
+$lang->action->search->label->erased              = $lang->action->label->erased;             
+$lang->action->search->label->undeleted           = $lang->action->label->undeleted;          
+$lang->action->search->label->commented           = $lang->action->label->commented;          
+$lang->action->search->label->activated           = $lang->action->label->activated;          
+$lang->action->search->label->resolved            = $lang->action->label->resolved;           
+$lang->action->search->label->reviewed            = $lang->action->label->reviewed;           
+$lang->action->search->label->moved               = $lang->action->label->moved;              
+$lang->action->search->label->confirmed           = $lang->action->label->confirmed;   
+$lang->action->search->label->bugconfirmed        = $lang->action->label->bugconfirmed;       
+$lang->action->search->label->tostory             = $lang->action->label->tostory;            
+$lang->action->search->label->frombug             = $lang->action->label->frombug;            
+$lang->action->search->label->totask              = $lang->action->label->totask;             
+$lang->action->search->label->svncommited         = $lang->action->label->svncommited;        
+$lang->action->search->label->linked2plan         = $lang->action->label->linked2plan;        
+$lang->action->search->label->unlinkedfromplan    = $lang->action->label->unlinkedfromplan;   
+$lang->action->search->label->linked2project      = $lang->action->label->linked2project;     
+$lang->action->search->label->unlinkedfromproject = $lang->action->label->unlinkedfromproject;
+$lang->action->search->label->marked              = $lang->action->label->marked;             
+$lang->action->search->label->started             = $lang->action->label->started;            
+$lang->action->search->label->canceled            = $lang->action->label->canceled;           
+$lang->action->search->label->finished            = $lang->action->label->finished;           
+$lang->action->search->label->login               = $lang->action->label->login;              
+$lang->action->search->label->logout              = $lang->action->label->logout;             
