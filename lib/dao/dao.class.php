@@ -1495,6 +1495,20 @@ class sql
     }
 
     /**
+     * Create the not like by part.
+     * 
+     * @param  string $string 
+     * @access public
+     * @return object the sql object.
+     */
+    public function notLike($string)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= "NOT LIKE " . $this->quote($string);
+        return $this;
+    }
+
+    /**
      * Create the order by part.
      * 
      * @param  string $order 
