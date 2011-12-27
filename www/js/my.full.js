@@ -564,13 +564,16 @@ function autoCheck()
 
     $('.tablesorter tr').click(function()
     {
-        if($(this).find(':checkbox').attr('checked'))
+        if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
         {
-            $(this).find(':checkbox').attr('checked', false);
-        }
-        else
-        {
-            $(this).find(':checkbox').attr('checked', true);
+            if($(this).find(':checkbox').attr('checked'))
+            {
+                $(this).find(':checkbox').attr('checked', false);
+            }
+            else
+            {
+                $(this).find(':checkbox').attr('checked', true);
+            }
         }
     });
 }
