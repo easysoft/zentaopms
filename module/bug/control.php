@@ -84,117 +84,24 @@ class bug extends control
         $projects = $this->loadModel('project')->getPairs();
         $projects[0] = '';
 
+        /* Get bugs. */
         $bugs = array();
-        if($browseType == 'all')
-        {
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
+        if($browseType == 'all') $bugs = $this->bug->getAllBugs($productID, $projects, $orderBy, $pager);
         elseif($browseType == "bymodule")
         {
             $childModuleIds = $this->tree->getAllChildId($moduleID);
             $bugs = $this->bug->getModuleBugs($productID, $childModuleIds, $projects, $orderBy, $pager);
         }
-        elseif($browseType == 'assigntome')
-        {
-            $bugs = $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'openedbyme')
-        {
-            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'resolvedbyme')
-        {
-            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'assigntonull')
-        {
-            $bugs = $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'unresolved')
-        {
-            $bugs = $this->dao->findByStatus('active')->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'unclosed')
-        {
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')->andWhere('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'longlifebugs')
-        {
-            $bugs = $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->andWhere('openedDate')->lt(date(DT_DATE1,strtotime('-7 days')))
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'postponedbugs')
-        {
-            $bugs = $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)
-                ->andWhere('project')->in($projects)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($browseType == 'needconfirm')
-        {
-            $bugs = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where("t2.status = 'active'")
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t2.version > t1.storyVersion')
-                ->andWhere('t1.project')->in($projects)
-                ->orderBy($orderBy)
-                ->fetchAll();
-        }
-        elseif($browseType == 'bysearch')
-        {
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('bugQuery', $query->sql);
-                    $this->session->set('bugForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('bugQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
-            }
-
-            /* check the purview of projects.*/
-            if(strpos($this->session->bugQuery, '`project`') === false) 
-            {
-                $var = $this->session->bugQuery . 'AND `project`' . helper::dbIN(array_keys($projects));
-                $this->session->set('bugQuery', "$var");
-            }
-
-            $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
+        elseif($browseType == 'assigntome')    $bugs = $this->bug->getByAssigntome($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'openedbyme')    $bugs = $this->bug->getByOpenedbyme($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'resolvedbyme')  $bugs = $this->bug->getByResolvedbyme($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'assigntonull')  $bugs = $this->bug->getByAssigntonull($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'unresolved')    $bugs = $this->bug->getByUnresolved($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'unclosed')      $bugs = $this->bug->getByUnclosed($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'longlifebugs')  $bugs = $this->bug->getByLonglifebugs($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'postponedbugs') $bugs = $this->bug->getByPostponedbugs($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'needconfirm')   $bugs = $this->bug->getByNeedconfirm($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'bysearch')      $bugs = $this->bug->getBySearch($productID, $projects, $queryID, $orderBy, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. Thus the report page can use the same condition. */
         if($browseType != 'needconfirm')
@@ -209,38 +116,7 @@ class bug extends control
         $customed     = !($customFields == $this->config->bug->list->defaultFields);
  
         /* If customed, get related name or titles. */
-        if($customed)
-        {
-            /* Get related objects id lists. */
-            $relatedModuleIdList   = array();
-            $relatedStoryIdList    = array();
-            $relatedTaskIdList     = array();
-            $relatedCaseIdList     = array();
-            $relatedProjectIdList  = array();
-
-            foreach($bugs as $bug)
-            {
-                $relatedModuleIdList[$bug->module]   = $bug->module;
-                $relatedStoryIdList[$bug->story]     = $bug->story;
-                $relatedTaskIdList[$bug->task]       = $bug->task;
-                $relatedCaseIdList[$bug->case]       = $bug->case;
-                $relatedProjectIdList[$bug->project] = $bug->project;
-
-                /* Get related objects title or names. */
-                $relatedModules   = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
-                $relatedStories   = $this->dao->select('id, title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
-                $relatedTasks     = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
-                $relatedCases     = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-                $relatedProjects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->in($relatedProjectIdList)->fetchPairs();
-
-                /* fill some field with useful value. */
-                if(isset($relatedModules[$bug->module]))    $bug->module       = $relatedModules[$bug->module];
-                if(isset($relatedStories[$bug->story]))     $bug->story        = $relatedStories[$bug->story];
-                if(isset($relatedTasks[$bug->task]))        $bug->task         = $relatedTasks[$bug->task];
-                if(isset($relatedCases[$bug->case]))        $bug->case         = $relatedCases[$bug->case];
-                if(isset($relatedProjects[$bug->project]))  $bug->project      = $relatedProjects[$bug->project];
-            }
-        }
+        if($customed) $bugs = $this->bug->formCustomedBugs($bugs);
 
         /* Build the search form. */
         $this->config->bug->search['actionURL'] = $this->createLink('bug', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");

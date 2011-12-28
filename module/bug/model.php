@@ -78,7 +78,7 @@ class bugModel extends model
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi()
-            ->andWhere('project')->in($projects)
+            ->andWhere('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
@@ -720,5 +720,284 @@ class bugModel extends model
             unset($fields[$key]);
         }
         return $fields;
+    }
+
+    /**
+     * Get all bugs.
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getAllBugs($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)->where('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get bugs of assign to me. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByAssigntome($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get bugs of opened by me. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByOpenedbyme($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get bugs of resolved by me. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByResolvedbyme($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get bugs of nobody to do. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByAssigntonull($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get unsolved bugs. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByUnresolved($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->findByStatus('active')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get unclosed bugs. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByUnclosed($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get unresolve bugs for long time. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByLonglifebugs($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->findByLastEditedDate("<", date(DT_DATE1, strtotime('-7 days')))->from(TABLE_BUG)->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->andWhere('openedDate')->lt(date(DT_DATE1,strtotime('-7 days')))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get postponed bugs. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByPostponedbugs($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->eq($productID)
+            ->andWhere('project')->in(array_keys($projects))
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get bugs need confirm. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByNeedconfirm($productID, $projects, $orderBy, $pager)
+    {
+        return $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where("t2.status = 'active'")
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.version > t1.storyVersion')
+            ->andWhere('t1.project')->in(array_keys($projects))
+            ->orderBy($orderBy)
+            ->fetchAll();
+    }
+
+    /**
+     * Get bugs by search. 
+     * 
+     * @param  int    $productID 
+     * @param  array  $projects 
+     * @param  int    $queryID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getBySearch($productID, $projects, $queryID, $orderBy, $pager)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('bugQuery', $query->sql);
+                $this->session->set('bugForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('bugQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
+        }
+
+        /* check the purview of projects.*/
+        if(strpos($this->session->bugQuery, '`project`') === false) 
+        {
+            $var = $this->session->bugQuery . 'AND `project`' . helper::dbIN(array_keys($projects));
+            $this->session->set('bugQuery', "$var");
+        }
+
+        $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+        return $bugs;
+    }
+
+    /**
+     * Form customed bugs. 
+     * 
+     * @param  array    $bugs 
+     * @access public
+     * @return array
+     */
+    public function formCustomedBugs($bugs)
+    {
+        /* Get related objects id lists. */
+        $relatedModuleIdList   = array();
+        $relatedStoryIdList    = array();
+        $relatedTaskIdList     = array();
+        $relatedCaseIdList     = array();
+        $relatedProjectIdList  = array();
+
+        foreach($bugs as $bug)
+        {
+            $relatedModuleIdList[$bug->module]   = $bug->module;
+            $relatedStoryIdList[$bug->story]     = $bug->story;
+            $relatedTaskIdList[$bug->task]       = $bug->task;
+            $relatedCaseIdList[$bug->case]       = $bug->case;
+            $relatedProjectIdList[$bug->project] = $bug->project;
+
+            /* Get related objects title or names. */
+            $relatedModules   = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
+            $relatedStories   = $this->dao->select('id, title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+            $relatedTasks     = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
+            $relatedCases     = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
+            $relatedProjects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->in($relatedProjectIdList)->fetchPairs();
+
+            /* fill some field with useful value. */
+            if(isset($relatedModules[$bug->module]))    $bug->module       = $relatedModules[$bug->module];
+            if(isset($relatedStories[$bug->story]))     $bug->story        = $relatedStories[$bug->story];
+            if(isset($relatedTasks[$bug->task]))        $bug->task         = $relatedTasks[$bug->task];
+            if(isset($relatedCases[$bug->case]))        $bug->case         = $relatedCases[$bug->case];
+            if(isset($relatedProjects[$bug->project]))  $bug->project      = $relatedProjects[$bug->project];
+        }
+        return $bugs;
     }
 }
