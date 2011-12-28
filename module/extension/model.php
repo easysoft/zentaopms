@@ -206,17 +206,48 @@ class extensionModel extends model
         $data->license = 'unknown';
         $data->zentaoVersion = '';
 
-        /* Redad the info file of the package. */
-        $infoFile = "ext/$extension/doc/copyright.txt";
-        if(!file_exists($infoFile)) return $data;
-
-        $info = (object)parse_ini_file($infoFile);
-        foreach($info as $key => $value)
-        {
-            if(isset($data->$key)) $data->$key = $value;
-        }
+        $info = $this->parseExtensionCFG($extension);
+        foreach($info as $key => $value) if(isset($data->$key)) $data->$key = $value;
         if(isset($info->zentaoversion)) $data->zentaoVersion = $info->zentaoversion;
+
         return $data;
+    }
+
+    /**
+     * Parse extension's config file.
+     * 
+     * @param  string    $extension 
+     * @access public
+     * @return object
+     */
+    public function parseExtensionCFG($extension)
+    {
+        $info = new stdclass();
+
+        /* First, try ini file. before 2.5 version. */
+        $infoFile = "ext/$extension/doc/copyright.txt";
+        if(file_exists($infoFile)) return (object)parse_ini_file($infoFile);
+
+        /**
+         * Then try parse yaml file. since 2.5 version.  
+         */
+
+        /* Try the yaml of current lang, then try en. */
+        $lang = $this->app->getClientLang();
+        $infoFile = "ext/$extension/doc/$lang.yaml";
+        if(!file_exists($infoFile)) $infoFile = "ext/$extension/doc/en.yaml";
+        if(!file_exists($infoFile)) return $info;
+
+        /* Load the yaml file and parse it into object. */
+        $this->app->loadClass('spyc', true);
+        $info = (object)spyc_load(file_get_contents($infoFile));
+        if(isset($info->releases))
+        {
+            krsort($info->releases);
+            $info->version = key($info->releases);
+            foreach($info->releases[$info->version] as $key => $value) $info->$key = $value;
+        }
+        return $info;
     }
 
     /**
@@ -287,15 +318,11 @@ class extensionModel extends model
      */
     public function getZentaoVersion($extension)
     {
-        $zentaoVersion = '';
-        $infoFile      = "ext/$extension/doc/copyright.txt";
-        if(!file_exists($infoFile)) return $zentaoVersion;
+        $info = $this->parseExtensionCFG($extension);
+        if(isset($info->zentaoVersion)) return $info->zentaoVersion;
+        if(isset($info->zentaoversion)) return $info->zentaoversion;
 
-        $info = parse_ini_file($infoFile);
-        if(isset($info['zentaoVersion'])) return $info['zentaoVersion'];
-        if(isset($info['zentaoversion'])) return $info['zentaoversion'];
-
-        return $zentaoVersion;
+        return '';
     }
 
     /**
@@ -480,6 +507,10 @@ class extensionModel extends model
         $return->result = 'ok';
         $return->error  = '';
 
+        /* try remove pre extracted files. */
+        $this->classFile->removeDir("ext/$extension");
+
+        /* Extract files. */
         $packageFile = $this->getPackageFile($extension);
         $this->app->loadClass('pclzip', true);
         $zip = new pclzip($packageFile);

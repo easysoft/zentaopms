@@ -13,7 +13,7 @@
 <?php include 'header.html.php';?>
 <?php foreach($extensions as $extension):?>
 <table class='table-1 exttable'>
-  <caption><?php echo "#$extension->id $extension->name";?></caption> 
+  <caption><?php echo "$extension->name";?></caption> 
   <tr valign='middle'>
     <td>
       <div class='mb-10px'><?php echo $extension->desc;?></div>

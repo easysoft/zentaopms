@@ -44,7 +44,7 @@
         ?>
         <table class='table-1 exttable'>
           <caption>
-            <div class='f-left'><?php echo $extension->name;?></div>
+            <div class='f-left'><?php echo $extension->name . "($currentRelease->releaseVersion)";?></div>
             <div class='f-right'>
               <?php 
               if($latestRelease->releaseVersion != $currentRelease->releaseVersion) 

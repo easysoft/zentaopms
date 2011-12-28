@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <form method='post' enctype='multipart/form-data' class='a-center'>
   <input type='file' name='file' class='text-5' /></td>
-  <?php echo html::submitButton($lang->extension->upload);?>
+  <?php echo html::submitButton($lang->extension->install);?>
 </form>
 </body>
 </html>
