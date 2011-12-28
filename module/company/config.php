@@ -11,7 +11,6 @@ $config->company->dynamic->search['fields']['objectID']   = $lang->action->objec
 $config->company->dynamic->search['fields']['project']    = $lang->action->project;
 $config->company->dynamic->search['fields']['objectType'] = $lang->action->objectType;
 $config->company->dynamic->search['fields']['date']       = $lang->action->date;
-$config->company->dynamic->search['fields']['actionID']   = $lang->action->actionID; 
 $config->company->dynamic->search['fields']['action']     = $lang->action->action;
 
 $config->company->dynamic->search['params']['product']    = array('operator' => '=',  'control' => 'select', 'values' => '');
@@ -20,5 +19,4 @@ $config->company->dynamic->search['params']['objectID']   = array('operator' => 
 $config->company->dynamic->search['params']['project']    = array('operator' => '=',  'control' => 'select', 'values' => '');
 $config->company->dynamic->search['params']['objectType'] = array('operator' => '=',  'control' => 'select', 'values' => $lang->action->search->objectTypeList);
 $config->company->dynamic->search['params']['date']       = array('operator' => '>=', 'control' => 'input',  'values' => '');
-$config->company->dynamic->search['params']['actionID']   = array('operator' => '>=', 'control' => 'input',  'values' => '');
 $config->company->dynamic->search['params']['action']     = array('operator' => '=',  'control' => 'select', 'values' => $lang->action->search->label);

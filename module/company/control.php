@@ -140,7 +140,7 @@ class company extends control
     /**
      * Company dynamic.
      * 
-     * @param  string $type 
+     * @param  string $browseType 
      * @param  string $orderBy 
      * @param  int    $recTotal 
      * @param  int    $recPerPage 
@@ -148,7 +148,7 @@ class company extends control
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($browseType = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadLang('user');
         $this->app->loadLang('project');
@@ -174,11 +174,11 @@ class company extends control
         $this->view->pager   = $pager;
 
         /* Set the user and type. */
-        $account = $type == 'account' ? $param : 'all';
-        $product = $type == 'product' ? $param : 'all';
-        $project = $type == 'project' ? $param : 'all';
-        $period  = ($type == 'account' or $type == 'product' or $type == 'project') ? 'all'  : $type;
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $account = $browseType == 'account' ? $param : 'all';
+        $product = $browseType == 'product' ? $param : 'all';
+        $project = $browseType == 'project' ? $param : 'all';
+        $period  = ($browseType == 'account' or $browseType == 'product' or $browseType == 'project') ? 'all'  : $browseType;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Get products' list.*/
         $products = $this->loadModel('product')->getPairs();
@@ -200,7 +200,7 @@ class company extends control
         $this->view->position[]    = $this->lang->company->dynamic;
 
         /* Get actions. */
-        if($type != 'bysearch') 
+        if($browseType != 'bysearch') 
         {
             $actions = $this->action->getDynamic($account, $period, $orderBy, $pager, $product, $project);
         }
@@ -217,7 +217,7 @@ class company extends control
         ksort($products);
         $projects['all'] = $this->lang->project->allProject;
         $products['all'] = $this->lang->product->allProduct;
-        $this->config->company->dynamic->search['actionURL'] = $this->createLink('company', 'dynamic', "type=bysearch&param=myQueryID");
+        $this->config->company->dynamic->search['actionURL'] = $this->createLink('company', 'dynamic', "browseType=bysearch&param=myQueryID");
         $this->config->company->dynamic->search['queryID']   = $queryID;
         $this->config->company->dynamic->search['params']['project']['values'] = $projects;
         $this->config->company->dynamic->search['params']['product']['values'] = $products; 
@@ -225,12 +225,12 @@ class company extends control
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->company->dynamic->search);
 
         /* Assign. */
-        $this->view->type     = $type;
-        $this->view->account  = $account;
-        $this->view->product  = $product;
-        $this->view->project  = $project;
-        $this->view->queryID  = $queryID; 
-        $this->view->actions  = $actions;
+        $this->view->browseType = $browseType;
+        $this->view->account    = $account;
+        $this->view->product    = $product;
+        $this->view->project    = $project;
+        $this->view->queryID    = $queryID; 
+        $this->view->actions    = $actions;
         $this->display();
     }
 }

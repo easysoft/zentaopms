@@ -157,6 +157,22 @@ class storyModel extends model
     
                 $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
                 $this->action->create('bug', $bugID, 'Closed');
+
+                /* add files to story from bug. */
+                $files = $this->dao->select('*')->from(TABLE_FILE)
+                    ->where('objectType')->eq('bug')
+                    ->andWhere('objectID')->eq($bugID)
+                    ->fetchAll();
+                if(!empty($files)) 
+                { 
+                    foreach($files as $file)
+                    {
+                        $file->objectType = 'story';
+                        $file->objectID = $storyID; 
+                        unset($file->id); 
+                        $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                    }
+                }
             }
             return $storyID;
         }
