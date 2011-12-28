@@ -373,39 +373,25 @@ class project extends control
         }
         else
         {   
-            $this->session->set('importBugQuery', '');
             if($queryID)
             {
                 $query = $this->loadModel('search')->getQuery($queryID);
                 if($query)
                 {
-                    $this->session->set('importBugQuery', $query->sql);
-                    $this->session->set('importBugForm', $query->form);
+                    $this->session->set('bugQuery', $query->sql);
+                    $this->session->set('bugForm', $query->form);
                 }
                 else
                 {
-                    $this->session->set('importBugQuery', ' 1 = 1');
+                    $this->session->set('bugQuery', ' 1 = 1');
                 }
             }
             else
             {
-                if($this->session->imporyBugQuery == false) $this->session->set('importBugQuery', ' 1 = 1');
+                if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
             }
-            $varQuery = 'AND (`toTask` = 0) AND (`toStory` = 0)';
-            if(!empty($products) and strpos($this->session->importBugQuery,'`product`') === false)
-            {
-                $varQuery = $varQuery . ' AND (`product` ' .  helper::dbIN($products) . ')';
-            }
-            elseif(empty($products) and strpos($this->session->importBugQuery,'`project`') === false)
-            {
-                $varQuery = "$varQuery AND (`project` = $projectID)";
-            }
-            a($this->session->importBugQuery);
-            $this->session->set('importBugQuery', $this->session->importBugQuery . $varQuery);
-            a($this->session->importBugQuery);
-            $importBugQuery = str_replace("`product` = 'all'", helper::dbIN($products), $this->session->importBugQuery); // Search all project.
-            a($importBugQuery);
-            //$bugs = $this->project->getSearchBugs($bugQuery, $pager, 'id_desc');
+            $bugQuery = str_replace("`product` = 'all'", helper::dbIN($products), $this->session->bugQuery); // Search all project.
+            $bugs = $this->project->getSearchBugs($products, $projectID, $bugQuery, $pager, 'id_desc');
         }
 
        /* Build the search form. */

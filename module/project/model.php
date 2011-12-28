@@ -991,4 +991,30 @@ class projectModel extends model
              ->fetchAll();
         return $tasks;
     }
+
+    /**
+     * Get bugs by search in project. 
+     * 
+     * @param  int    $products 
+     * @param  int    $projectID 
+     * @param  int    $sql 
+     * @param  int    $pager 
+     * @param  int    $orderBy 
+     * @access public
+     * @return void
+     */
+    public function getSearchBugs($products, $projectID, $sql, $pager, $orderBy)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where($sql)
+            ->andWhere('status')->eq('active')
+            ->andWhere('toTask')->eq(0)
+            ->andWhere('tostory')->eq(0)
+            ->beginIF(!empty($products))->andWhere('product')->in(array_keys($products))
+            ->beginIF(empty($products))->andWhere('project')->eq($projectID)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
 }
