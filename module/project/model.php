@@ -1017,4 +1017,20 @@ class projectModel extends model
             ->page($pager)
             ->fetchAll();
     }
+
+    /**
+     * Get resolved bugs of a project
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getResolvedBugs($projectID)
+    {
+        $project = $this->findById($projectID);
+        return $this->dao->select('id, title, status')->from(TABLE_BUG)
+            ->where('status')->eq('resovled')
+            ->andWhere('resovledDate')->ge($project->begin)
+            ->fetchAll();
+    }
 }
