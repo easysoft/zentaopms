@@ -471,7 +471,7 @@ class project extends control
         $position[]      = $this->lang->project->story;
 
         /* The pager. */
-        $stories    = $this->story->getProjectStories($projectID, 'all', $orderBy);
+        $stories    = $this->story->getProjectStories($projectID, $orderBy);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
 

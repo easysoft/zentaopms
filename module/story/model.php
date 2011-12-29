@@ -797,17 +797,15 @@ class storyModel extends model
      * Get stories list of a project.
      * 
      * @param  int    $projectID 
-     * @param  string $stage 
      * @param  string $orderBy 
      * @access public
      * @return array
      */
-    public function getProjectStories($projectID = 0, $stage = 'all', $orderBy = 'pri_asc,id_desc')
+    public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc')
     {
         return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->eq((int)$projectID)
-            ->beginIF($stage != 'all')->andWhere('stage')->in($stage)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');
