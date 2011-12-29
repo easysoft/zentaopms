@@ -113,7 +113,13 @@ class buildModel extends model
      */
     public function create($projectID)
     {
-        $build = fixer::input('post')->stripTags('name')->add('project', (int)$projectID)->get();
+        $build->stories = '';
+        $build->bugs    = '';
+
+        $build = fixer::input('post')->stripTags('name')
+            ->join('stories', ',')
+            ->join('bugs', ',')
+            ->add('project', (int)$projectID)->get();
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name','unique')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }

@@ -28,13 +28,29 @@ class build extends control
             die(js::locate($this->createLink('project', 'build', "project=$projectID"), 'parent'));
         }
 
+        /* Load these models. */
+        $this->loadModel('story');
+        $this->loadModel('bug');
+        $this->loadModel('task');
+        $this->loadModel('project');
+        $this->loadModel('user');
+
         /* Set menu. */
-        $this->loadModel('project')->setMenu($this->project->getPairs(), $projectID);
+        $this->project->setMenu($this->project->getPairs(), $projectID);
+
+        /* Get stories. */
+        $orderBy = 'status_asc, stage_asc, id_desc';
+        $stories = $this->story->getProjectStories($projectID, $orderBy);
+        $bugs    = $this->project->getResolvedBugs($projectID); 
 
         /* Assign. */
         $this->view->header->title = $this->lang->build->create;
-        $this->view->products = $this->project->getProducts($projectID);
-        $this->view->users    = $this->loadModel('user')->getPairs();
+        $this->view->products  = $this->project->getProducts($projectID);
+        $this->view->projectID = $projectID;
+        $this->view->users     = $this->user->getPairs();
+        $this->view->stories   = $stories;
+        $this->view->bugs      = $bugs;
+        $this->view->orderBy   = $orderBy;
         $this->display();
     }
 

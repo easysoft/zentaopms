@@ -28,3 +28,4 @@ $lang->build->builder   = 'Builder';
 $lang->build->scmPath   = 'Source code path';
 $lang->build->filePath  = 'Package file path';
 $lang->build->desc      = 'Desc';
+$lang->build->linkStoriesAndBugs  = 'stories and bugs';

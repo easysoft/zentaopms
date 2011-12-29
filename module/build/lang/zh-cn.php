@@ -28,3 +28,4 @@ $lang->build->builder   = '构建者';
 $lang->build->scmPath   = '源代码地址';
 $lang->build->filePath  = '存储地址';
 $lang->build->desc      = '描述';
+$lang->build->linkStoriesAndBugs  = '关联需求和Bug';
