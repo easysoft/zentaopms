@@ -1422,6 +1422,20 @@ class sql
     }
 
     /**
+     * Create '>='.
+     * 
+     * @param  string $value 
+     * @access public
+     * @return object the sql object.
+     */
+    public function ge($value)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= " >= " . $this->quote($value);
+        return $this;
+    }
+
+    /**
      * Create '<'.
      * 
      * @param  mixed  $value 
@@ -1432,6 +1446,20 @@ class sql
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql .= " < " . $this->quote($value);
+        return $this;
+    }
+
+    /**
+     * Create '<='.
+     * 
+     * @param  mixed  $value 
+     * @access public
+     * @return object the sql object.
+     */
+    public function le($value)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= " <= " . $this->quote($value);
         return $this;
     }
 
