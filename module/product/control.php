@@ -121,6 +121,7 @@ class product extends control
         if($browseType == 'draftstory')  $stories = $this->story->getByStatus($productID, 'draft', $orderBy, $pager);
         if($browseType == 'activestory') $stories = $this->story->getByStatus($productID, 'active', $orderBy, $pager);
         if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, 'changed', $orderBy, $pager);
+        if($browseType == 'closedstory') $stories = $this->story->getByStatus($productID, 'closed', $orderBy, $pager);
 
         /* Build search form. */
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
