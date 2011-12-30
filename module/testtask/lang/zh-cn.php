@@ -49,6 +49,8 @@ $lang->testtask->statusList['blocked'] = '被阻塞';
 
 $lang->testtask->unlinkedCases = '未关联用例列表';
 $lang->testtask->linkedCases   = '已关联用例列表';
+$lang->testtask->linkByStory   = '按需求关联用例';
+$lang->testtask->linkByBug     = '按Bug关联用例';
 $lang->testtask->confirmDelete = '您确认要删除该测试任务吗？';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';

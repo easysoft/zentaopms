@@ -308,7 +308,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function linkCase($taskID, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkCase($taskID, $param = 'all', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(!empty($_POST))
         {
@@ -345,15 +345,44 @@ class testtask extends control
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $query = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // If search all product, replace product = all to 1=1
         $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
-        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
-            ->andWhere('product')->eq($productID)
-            ->andWhere('id')->notIN($linkedCases)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
-            ->page($pager)
-            ->fetchAll();
-        $this->view->users = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager = $pager;
+        if($param == 'all')
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->andWhere('id')->notIN($linkedCases)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+        if($param == 'bystory')
+        {
+            $build = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->andWhere('id')->notIN($linkedCases)
+                ->andWhere('story')->in($build->stories)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+        if($param == 'bybug')
+        {
+            $build = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->andWhere('id')->notIN($linkedCases)
+                ->andWhere('fromBug')->in($build->bugs)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->cases  = $cases;
+        $this->view->taskID = $taskID;
+        $this->view->pager  = $pager;
 
         $this->display();
     }

@@ -49,6 +49,8 @@ $lang->testtask->statusList['blocked'] = 'Blocked';
 
 $lang->testtask->unlinkedCases = 'Unlinked cases';
 $lang->testtask->linkedCases   = 'Linked cases';
+$lang->testtask->linkByStory   = 'Link by story';
+$lang->testtask->linkByBug     = 'Link by bug';
 $lang->testtask->confirmDelete = 'Are you sure to delete this test task?';
 $lang->testtask->passAll       = 'Pass all';
 $lang->testtask->pass          = 'Pass';

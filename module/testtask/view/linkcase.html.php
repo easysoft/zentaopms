@@ -18,6 +18,8 @@
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->unlinkedCases;?></div>
     <div class='f-right'><?php echo html::a($this->session->testtaskList, $lang->goback);?></div>
+    <div class='f-right'><?php echo html::a($this->createLink('testtask', 'linkcase', "taskID=$taskID&param=bybug"), $lang->testtask->linkByBug);?></div>
+    <div class='f-right'><?php echo html::a($this->createLink('testtask', 'linkcase', "taskID=$taskID&param=bystory"), $lang->testtask->linkByStory);?></div>
   </caption>
   <thead>
   <tr class='colhead'>
