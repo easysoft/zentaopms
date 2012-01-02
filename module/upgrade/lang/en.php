@@ -29,6 +29,9 @@ $lang->upgrade->setStatusFile = "<p>For security reason, we will check file <str
                                  For linux:<strong>touch %s;</strong> <br />
                                  For windows:<strong>echo ok > %s</strong></p>
                                  I have done this work, <a href='upgrade.php'>continue upgrade</a>";
+
+
+
 $lang->upgrade->selectVersion = 'Select version';
 $lang->upgrade->noteVersion   = "Must select the correct version";
 $lang->upgrade->fromVersion   = 'From version';
