@@ -29,7 +29,6 @@ $lang->install->desc             = <<<EOT
 技术支持: <a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
 新浪微博：<a href='http://t.sina.com.cn/zentaopms' target='_blank'>t.sina.com.cn/zentaopms</a>
 腾讯微博：<a href='http://t.qq.com/zentaopms/' target='_blank'>t.qq.com/zentaopms</a>
-QQ交流群：102807460
 
 您现在正在安装的版本是 <strong class='red'>%s</strong>。
 EOT;
