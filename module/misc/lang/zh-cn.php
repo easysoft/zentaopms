@@ -26,6 +26,7 @@ $lang->misc->zentao->about['license']      = "授权协议";
 $lang->misc->zentao->about['contributors'] = "贡献者";
 $lang->misc->zentao->about['thirdparty']   = "第三方代码";
 $lang->misc->zentao->about['sourcecode']   = "源代码";
+$lang->misc->zentao->about['extension']    = "插件平台";
 
 $lang->misc->zentao->support['manual']     = "用户手册";
 $lang->misc->zentao->support['faq']        = "常见问题";
