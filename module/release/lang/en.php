@@ -29,3 +29,4 @@ $lang->release->linkStories        = 'Stories';
 $lang->release->linkBugs           = 'Bugs';
 $lang->release->linkedStories      = 'Linked stories';
 $lang->release->linkedBugs         = 'Linked bugs';
+$lang->release->ajaxGetStoriesAndBugs = 'API: Get storeis and bugs';

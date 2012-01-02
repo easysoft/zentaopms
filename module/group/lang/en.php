@@ -41,16 +41,17 @@ $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
 
 $lang->group->versions['']      = 'Show methods added in every release';
-$lang->group->versions['1.0.1'] = '1.0.1';
-$lang->group->versions['1.1']   = '1.1';
-$lang->group->versions['1.2']   = '1.2';
-$lang->group->versions['1.3']   = '1.3';
-$lang->group->versions['1.4']   = '1.4';
-$lang->group->versions['1.5']   = '1.5';
-$lang->group->versions['2.0']   = '2.0';
-$lang->group->versions['2.1']   = '2.1';
-$lang->group->versions['2.2']   = '2.2';
-$lang->group->versions['2.3']   = '2.3';
+$lang->group->versions['2.5']   = '2.5';
 $lang->group->versions['2.4']   = '2.4';
+$lang->group->versions['2.3']   = '2.3';
+$lang->group->versions['2.2']   = '2.2';
+$lang->group->versions['2.1']   = '2.1';
+$lang->group->versions['2.0']   = '2.0';
+$lang->group->versions['1.5']   = '1.5';
+$lang->group->versions['1.4']   = '1.4';
+$lang->group->versions['1.3']   = '1.3';
+$lang->group->versions['1.2']   = '1.2';
+$lang->group->versions['1.1']   = '1.1';
+$lang->group->versions['1.0.1'] = '1.0.1';
 
 include (dirname(__FILE__) . '/resource.php');

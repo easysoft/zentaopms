@@ -80,6 +80,7 @@ $lang->resource->release->create = 'create';
 $lang->resource->release->edit   = 'edit';
 $lang->resource->release->delete = 'delete';
 $lang->resource->release->view   = 'view';
+$lang->resource->release->ajaxGetStoriesAndBugs = 'ajaxGetStoriesAndBugs';
 
 /* Project. */
 $lang->resource->project->index          = 'index';
@@ -353,3 +354,5 @@ $lang->changelog['2.4'][]   = 'task-assign';
 $lang->changelog['2.4'][]   = 'project-testtask';
 $lang->changelog['2.4'][]   = 'todo-export';
 $lang->changelog['2.4'][]   = 'product-project';
+
+$lang->changelog['2.5'][]   = 'release-ajaxGetStoriesAndBugs';
