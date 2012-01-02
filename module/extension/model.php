@@ -570,12 +570,12 @@ class extensionModel extends model
         /* Remove files first. */
         if($files)
         {
-            foreach($files as $file => $savedMd5)
+            foreach($files as $file => $savedMD5)
             {
                 $file = $appRoot . $file;
                 if(!file_exists($file)) continue;
 
-                if(md5_file($file) != $savedMd5)
+                if(md5_file($file) != $savedMD5)
                 {
                     $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file #changed" : "del $file :changed";
                 }
@@ -596,7 +596,22 @@ class extensionModel extends model
             }
         }
 
+        /* Clean model cache files. */
+        $this->cleanModelCache();
+
         return $removeCommands;
+    }
+
+    /**
+     * Clean model cache files.
+     * 
+     * @access public
+     * @return void
+     */
+    public function cleanModelCache()
+    {
+        $modelCacheFiles = glob($this->app->getTmpRoot() . 'model/*');
+        foreach($modelCacheFiles as $cacheFile) @unlink($cacheFile);
     }
 
     /**
