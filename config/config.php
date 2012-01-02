@@ -31,7 +31,7 @@ $config->sessionVar  = 'sid';             // requestType=GET: the session var na
 $config->views  = ',html,json,'; 
 
 /* Set the wide window size. */
-$config->wideSize = 1250;
+$config->wideSize = 1400;
 
 /* Supported languages. */
 $config->langs['zh-cn'] = '中文简体';
