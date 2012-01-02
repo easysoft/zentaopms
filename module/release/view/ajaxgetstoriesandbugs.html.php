@@ -1,15 +1,13 @@
-<?php $stories = $stories;?>
 <th class='rowhead'><?php echo $lang->release->linkStoriesAndBugs;?></th>
 <td>
   <div class="w-p90">
     <div class='half-left' style="height:225px; overflow-y:auto">
       <table class='table-1'>
-        <caption>story</caption>
-        <tr class='colhead'>
-        <?php $vars = "productID=$productID&orderBy=%s"; ?>
-          <th class='w-id {sorter:false}'>    <?php common::printOrderLink('id',     "$orderBy", $vars, $lang->idAB);?></th>
-          <th class= '{sorter:false}'>        <?php common::printOrderLink('title',  "$orderBy", $vars, $lang->story->title);?></th>
-          <th class='w-100px {sorter:false}'> <?php common::printOrderLink('stage',  "$orderBy", $vars, $lang->story->stageAB);?></th>
+        <caption><?php echo $lang->release->linkStories;?></caption>
+        <tr>
+          <th class='w-id'><?php echo $lang->idAB;?></th>
+          <th><?php echo $lang->story->title;?></th>
+          <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
         </tr>
         <?php foreach($stories as $storyID => $story):?>
         <?php $storyLink = $this->createLink('story', 'view', "storyID=$storyID");?>
@@ -23,15 +21,17 @@
     </div>
     <div class='half-right' style="height:225px; overflow-y:auto">
       <table class='table-1'>
-        <caption>bug</caption>
-        <tr class='colhead'>
+        <caption><?php echo $lang->release->linkBugs;?></caption>
+        <tr>
           <th class='w-id'>       <?php echo $lang->idAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
+          <th class='w-100px'><?php echo $lang->bug->status;?></th>
         </tr>
-        <?php foreach($bugs[$key] as $bug):?>
+        <?php foreach($bugs as $bug):?>
         <tr class='a-center'>
           <td><input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" checked> <?php echo sprintf('%03d', $bug->id);?></td>
           <td class='a-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'");?></td>
+          <td><?php echo $lang->bug->statusList[$bug->status];?></td>
         </tr>
         <?php endforeach;?>
       </table>

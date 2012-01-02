@@ -112,14 +112,20 @@ class release extends control
      */
     public function view($releaseID)
     {
+        $this->loadModel('story');
+        $this->loadModel('bug');
         $release = $this->release->getById((int)$releaseID);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->fetchAll();
+        $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->fetchAll();
 
         $this->commonAction($release->product);
 
         $this->view->header->title = $this->lang->release->view;
         $this->view->position[]    = $this->lang->release->view;
         $this->view->release       = $release;
+        $this->view->stories       = $stories;
+        $this->view->bugs          = $bugs;
         $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->display();

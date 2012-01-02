@@ -25,3 +25,7 @@ $lang->release->name      = '发布名称';
 $lang->release->date      = '发布日期';
 $lang->release->desc      = '描述';
 $lang->release->linkStoriesAndBugs = '需求和Bugs';
+$lang->release->linkStories        = '相关需求';
+$lang->release->linkBugs           = '相关Bugs';
+$lang->release->linkedStories      = '已关联需求';
+$lang->release->linkedBugs         = '已关联Bugs';

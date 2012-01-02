@@ -29,3 +29,7 @@ $lang->build->scmPath   = 'Source code path';
 $lang->build->filePath  = 'Package file path';
 $lang->build->desc      = 'Desc';
 $lang->build->linkStoriesAndBugs  = 'stories and bugs';
+$lang->build->linkStories        = 'Stories';
+$lang->build->linkBugs           = 'Bugs';
+$lang->build->linkedStories      = 'Linked stories';
+$lang->build->linkedBugs         = 'Linked bugs';

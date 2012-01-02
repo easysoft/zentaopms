@@ -25,3 +25,7 @@ $lang->release->name      = 'Name';
 $lang->release->date      = 'Date';
 $lang->release->desc      = 'Desc';
 $lang->release->linkStoriesAndBugs = 'Stories and bugs';
+$lang->release->linkStories        = 'Stories';
+$lang->release->linkBugs           = 'Bugs';
+$lang->release->linkedStories      = 'Linked stories';
+$lang->release->linkedBugs         = 'Linked bugs';

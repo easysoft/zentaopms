@@ -29,3 +29,7 @@ $lang->build->scmPath   = '源代码地址';
 $lang->build->filePath  = '存储地址';
 $lang->build->desc      = '描述';
 $lang->build->linkStoriesAndBugs  = '关联需求和Bug';
+$lang->build->linkStories        = '相关需求';
+$lang->build->linkBugs           = '相关Bugs';
+$lang->build->linkedStories      = '已关联需求';
+$lang->build->linkedBugs         = '已关联Bugs';
