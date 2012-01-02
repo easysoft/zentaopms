@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 2376 2011-11-29 13:24:10Z wwccss $
+ * @version     $Id: zh-tw.php 2446 2011-12-22 01:54:20Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -120,7 +120,9 @@ $lang->project->listTaskNeedConfrim = '需求變動';
 $lang->project->byQuery             = '搜索';
 
 /* 查詢條件列表。*/
-$lang->project->allProject          = '所有項目';
+$lang->project->allProject      = '所有項目';
+$lang->project->aboveAllProduct = '以上所有產品';
+$lang->project->aboveAllProject = '以上所有項目';
 
 /* 頁面提示。*/
 $lang->project->selectProject   = "請選擇項目";

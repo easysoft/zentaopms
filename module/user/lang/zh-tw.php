@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 2335 2011-11-18 01:19:32Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2464 2011-12-23 12:38:47Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->user->common        = '用戶';
@@ -46,8 +46,8 @@ $lang->user->editProfile = '修改信息';
 $lang->user->errorDeny   = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
 $lang->user->loginFailed = "登錄失敗，請檢查您的用戶名或密碼是否填寫正確。";
 
-$lang->user->gendarList->m = '男';
-$lang->user->gendarList->f = '女';
+$lang->user->genderList->m = '男';
+$lang->user->genderList->f = '女';
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
 $lang->user->keepLogin['on']      = '保持登錄';
@@ -60,9 +60,10 @@ $lang->user->password  = '密碼';
 $lang->user->password2 = '請重複密碼';
 $lang->user->realname  = '真實姓名';
 $lang->user->nickname  = '暱稱';
+$lang->user->commiter  = '原始碼提交帳號';
 $lang->user->avatar    = '頭像';
 $lang->user->birthyear = '出生年';
-$lang->user->gendar    = '性別';
+$lang->user->gender    = '性別';
 $lang->user->email     = '郵箱';
 $lang->user->msn       = 'MSN';
 $lang->user->qq        = 'QQ';

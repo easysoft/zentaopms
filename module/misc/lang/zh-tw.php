@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2500 2012-01-02 02:54:23Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->misc->common  = '雜項';
@@ -26,6 +26,7 @@ $lang->misc->zentao->about['license']      = "授權協議";
 $lang->misc->zentao->about['contributors'] = "貢獻者";
 $lang->misc->zentao->about['thirdparty']   = "第三方代碼";
 $lang->misc->zentao->about['sourcecode']   = "原始碼";
+$lang->misc->zentao->about['extension']    = "插件平台";
 
 $lang->misc->zentao->support['manual']     = "用戶手冊";
 $lang->misc->zentao->support['faq']        = "常見問題";

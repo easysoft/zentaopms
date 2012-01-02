@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2399 2011-12-07 01:24:16Z wwccss $
+ * @version     $Id: zh-tw.php 2484 2011-12-27 08:45:57Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -35,8 +35,8 @@ $lang->bug->statusAB         = '狀態';
 $lang->bug->activatedCount   = '激活次數';
 $lang->bug->activatedCountAB = '激活次數';
 $lang->bug->confirmed        = '是否確認';
-$lang->bug->toTask           = '轉為任務ID';
-$lang->bug->toStory          = '轉為需求ID';
+$lang->bug->toTask           = '轉任務';
+$lang->bug->toStory          = '轉需求';
 $lang->bug->mailto           = '抄送給';
 $lang->bug->openedBy         = '由誰創建';
 $lang->bug->openedByAB       = '創建';
@@ -94,6 +94,7 @@ $lang->bug->resolvedByMe   = '由我解決';
 $lang->bug->closedByMe     = '由我關閉';
 $lang->bug->assignToNull   = '未指派';
 $lang->bug->unResolved     = '未解決';
+$lang->bug->unclosed       = '未關閉';
 $lang->bug->longLifeBugs   = '久未處理';
 $lang->bug->postponedBugs  = '被延期';
 $lang->bug->allBugs        = '所有Bug';
@@ -137,13 +138,13 @@ $lang->bug->buttonActivate       = '激活';
 $lang->bug->buttonResolve        = '解決';
 $lang->bug->buttonClose          = '關閉';
 $lang->bug->buttonToList         = '返回';
-$lang->bug->buttonCreateTestcase = '創建用例';
+$lang->bug->buttonCreateTestcase = '建用例';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改產品會導致相應的項目、需求和任務發生變化，確定嗎？';
 $lang->bug->confirmDelete        = '您確認要刪除該Bug嗎？';
 $lang->bug->setTemplateTitle     = '請輸入bug模板標題（保存之前請先填寫bug重現步驟）：';
-$lang->bug->remindTask           = '該Bug已經轉化為任務，請及時更新任務狀態。任務：';
+$lang->bug->remindTask           = '該Bug已經轉化為任務，是否更新任務(編號:%s)狀態 ?';
 
 /* 模板。*/
 $lang->bug->tplStep        = "<p>[步驟]</p>";
@@ -173,7 +174,7 @@ $lang->bug->osList['win2003'] = 'Windows 2003';
 $lang->bug->osList['win2008'] = 'Windows 2008';
 $lang->bug->osList['winnt']   = 'Windows NT';
 $lang->bug->osList['win98']   = 'Windows 98';
-$lang->bug->osList['adriod']  = 'Andriod';
+$lang->bug->osList['andriod'] = 'Andriod';
 $lang->bug->osList['ios']     = 'IOS';
 $lang->bug->osList['wp7']     = 'WP7';
 $lang->bug->osList['symbian'] = 'Symbian';
@@ -231,11 +232,11 @@ $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '設計如此';
 $lang->bug->resolutionList['duplicate']  = '重複Bug';
 $lang->bug->resolutionList['external']   = '外部原因';
-$lang->bug->resolutionList['tostory']    = '轉為需求';
 $lang->bug->resolutionList['fixed']      = '已解決';
 $lang->bug->resolutionList['notrepro']   = '無法重現';
 $lang->bug->resolutionList['postponed']  = '延期處理';
 $lang->bug->resolutionList['willnotfix'] = "不予解決";
+$lang->bug->resolutionList['tostory']    = '轉為需求';
 
 /* 統計報表。*/
 $lang->bug->report->common        = '統計報表';

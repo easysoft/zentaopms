@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2407 2011-12-07 02:49:24Z wwccss $
+ * @version     $Id: zh-tw.php 2507 2012-01-02 08:37:23Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -22,7 +22,7 @@ $lang->myControl    = "我的地盤";
 $lang->currentPos   = '當前位置：';
 $lang->logout       = '退出';
 $lang->login        = '登錄';
-$lang->aboutZenTao  = '關於禪道';
+$lang->aboutZenTao  = '關於';
 $lang->todayIs      = '今天是%s，';
 $lang->runInfo      = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
 
@@ -40,7 +40,7 @@ $lang->activate     = '激活';
 $lang->submitting   = '稍候...';
 $lang->save         = '保存';
 $lang->confirm      = '確認';
-$lang->preview      = '預覽';
+$lang->preview      = '查看';
 $lang->goback       = '返回';
 $lang->go           = 'GO';
 $lang->more         = '更多';
@@ -137,9 +137,11 @@ $lang->product->menu->roadmap = '路線圖|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文檔|product|doc|productID=%s', 'subModule' => 'doc');
 $lang->product->menu->view    = '概況|product|view|productID=%s';
 $lang->product->menu->edit    = '編輯|product|edit|productID=%s';
+$lang->product->menu->delete  = array('link' => '刪除|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->create  = array('link' => '新增產品|product|create', 'float' => 'right');
 $lang->product->menu->project = array('link' => '項目列表|product|project|status=all&productID=%s', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '所有產品|product|index|locate=false', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
@@ -159,6 +161,7 @@ $lang->project->menu->product   = '產品|project|manageproducts|projectID=%s';
 $lang->project->menu->linkstory = array('link' => '關聯需求|project|linkstory|projectID=%s');
 $lang->project->menu->view      = '概況|project|view|projectID=%s';
 $lang->project->menu->edit      = '編輯|project|edit|projectID=%s';
+$lang->project->menu->delete    = array('link' => '刪除|project|delete|projectID=%s', 'target' => 'hiddenwin');
 $lang->project->menu->create    = array('link' => '新增項目|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '所有項目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
@@ -273,8 +276,8 @@ $lang->pager->locate    = "GO!";
 
 $lang->zentaoSite     = "官方網站";
 $lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社區</a> ";
-$lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>敏捷培訓</a> ";
-$lang->sponser        = "<a href='http://www.zentao.net/goto.php?item=yeetec' target='_blank'>以太科技贊助</a>";
+$lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>培訓</a> ";
+$lang->donate         = "<a href='http://www.zentao.net/goto.php?item=donate' target='_blank'>捐助禪道</a> ";
 $lang->zentaoKeywords = "開源項目管理軟件,項目管理,項目管理軟件,pmp,pms,php框架，國產php框架，scrum工具,scrum管理工具,scrum管理軟件,敏捷項目管理,禪道";
 $lang->zentaoDESC     = "禪道項目管理軟件(ZenTaoPMS)是一款國產的，基于LGPL協議，開源免費的項目管理軟件(工具、系統)，同時也是一款scrum管理工具。
     它集產品管理、項目管理、測試管理於一體，同時還包含了事務管理、組織管理等諸多功能，是中小型企業項目管理的首選。禪道項目管理軟件使用PHP + MySQL開發，

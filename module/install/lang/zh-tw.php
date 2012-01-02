@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 2341 2011-11-21 05:17:32Z wwccss $
+ * @version     $Id: zh-tw.php 2503 2012-01-02 06:10:54Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -29,7 +29,6 @@ $lang->install->desc             = <<<EOT
 技術支持: <a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
 新浪微博：<a href='http://t.sina.com.cn/zentaopms' target='_blank'>t.sina.com.cn/zentaopms</a>
 騰訊微博：<a href='http://t.qq.com/zentaopms/' target='_blank'>t.qq.com/zentaopms</a>
-QQ交流群：102807460
 
 您現在正在安裝的版本是 <strong class='red'>%s</strong>。
 EOT;

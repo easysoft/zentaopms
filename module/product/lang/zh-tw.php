@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: zh-tw.php 2225 2011-10-25 09:06:53Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2411 2011-12-07 05:14:21Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->product->common = '產品視圖';
@@ -24,6 +24,7 @@ $lang->product->plans    = '計劃數';
 $lang->product->releases = '發佈數';
 $lang->product->roadmap  = '路線圖';
 $lang->product->doc      = '文檔列表';
+$lang->product->project  = '項目列表';
 
 $lang->product->selectProduct   = "請選擇產品";
 $lang->product->saveButton      = " 保存 (S) ";

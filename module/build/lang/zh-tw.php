@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2494 2011-12-29 08:05:55Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->build->common    = 'Build';
@@ -28,3 +28,4 @@ $lang->build->builder   = '構建者';
 $lang->build->scmPath   = '原始碼地址';
 $lang->build->filePath  = '存儲地址';
 $lang->build->desc      = '描述';
+$lang->build->linkStoriesAndBugs  = '關聯需求和Bug';

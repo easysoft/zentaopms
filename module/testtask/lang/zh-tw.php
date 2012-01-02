@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 2379 2011-11-30 05:35:57Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2497 2011-12-30 02:48:03Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -49,6 +49,8 @@ $lang->testtask->statusList['blocked'] = '被阻塞';
 
 $lang->testtask->unlinkedCases = '未關聯用例列表';
 $lang->testtask->linkedCases   = '已關聯用例列表';
+$lang->testtask->linkByStory   = '按需求關聯用例';
+$lang->testtask->linkByBug     = '按Bug關聯用例';
 $lang->testtask->confirmDelete = '您確認要刪除該測試任務嗎？';
 $lang->testtask->passAll       = '全部通過';
 $lang->testtask->pass          = '通過';

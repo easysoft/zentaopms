@@ -6,20 +6,40 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 2409 2011-12-07 03:01:02Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2488 2011-12-28 06:23:44Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
 $lang->action->trash    = '資源回收筒';
 $lang->action->undelete = '還原';
 
+$lang->action->product    = '產品';
+$lang->action->project    = '項目';
 $lang->action->objectType = '對象類型';
 $lang->action->objectID   = '對象ID';
 $lang->action->objectName = '對象名稱';
 $lang->action->actor      = '操作者';
 $lang->action->action     = '動作';
+$lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
 $lang->action->trashTips  = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
+
+/* Object type. */
+$lang->action->search->objectTypeList['']            = '';    
+$lang->action->search->objectTypeList['product']     = '產品';    
+$lang->action->search->objectTypeList['project']     = '項目';    
+$lang->action->search->objectTypeList['bug']         = 'Bug';
+$lang->action->search->objectTypeList['case']        = '用例'; 
+$lang->action->search->objectTypeList['story']       = '需求';  
+$lang->action->search->objectTypeList['task']        = '任務'; 
+$lang->action->search->objectTypeList['testtask']    = '測試任務';     
+$lang->action->search->objectTypeList['user']        = '用戶'; 
+$lang->action->search->objectTypeList['doc']         = '文檔';
+$lang->action->search->objectTypeList['doclib']      = '文檔庫';   
+$lang->action->search->objectTypeList['todo']        = 'TODO'; 
+$lang->action->search->objectTypeList['build']       = 'Build';  
+$lang->action->search->objectTypeList['release']     = '發佈';    
+$lang->action->search->objectTypeList['productplan'] = '計劃';        
 
 $lang->action->dynamic->today     = '今天';
 $lang->action->dynamic->yesterday = '昨天';
@@ -29,6 +49,7 @@ $lang->action->dynamic->lastWeek  = '上周';
 $lang->action->dynamic->thisMonth = '本月';
 $lang->action->dynamic->lastMonth = '上月';
 $lang->action->dynamic->all       = '所有';
+$lang->action->dynamic->search    = '搜索';
 
 $lang->action->objectTypes['product']     = '產品';
 $lang->action->objectTypes['story']       = '需求';
@@ -52,7 +73,7 @@ $lang->action->desc->opened      = '$date, 由 <strong>$actor</strong> 創建。
 $lang->action->desc->created     = '$date, 由 <strong>$actor</strong> 創建。' . "\n";
 $lang->action->desc->changed     = '$date, 由 <strong>$actor</strong> 變更。' . "\n";
 $lang->action->desc->edited      = '$date, 由 <strong>$actor</strong> 編輯。' . "\n";
-$lang->action->desc->assignedto  = '$date, 由 <strong>$actor</strong> 重新指派。' . "\n";
+$lang->action->desc->assigned    = '$date, 由 <strong>$actor</strong> 指派給 <strong>$extra</strong>' . "\n";
 $lang->action->desc->closed      = '$date, 由 <strong>$actor</strong> 關閉。' . "\n";
 $lang->action->desc->deleted     = '$date, 由 <strong>$actor</strong> 刪除。' . "\n";
 $lang->action->desc->deletedfile = '$date, 由 <strong>$actor</strong> 刪除了附件：<strong><i>$extra</i></strong>' . "\n";
@@ -67,7 +88,7 @@ $lang->action->desc->bugconfirmed= '$date, 由 <strong>$actor</strong> 確認Bug
 $lang->action->desc->frombug     = '$date, 由 <strong>$actor</strong> Bug轉化而來，Bug編號為 <strong>$extra</strong>。';
 $lang->action->desc->started     = '$date, 由 <strong>$actor</strong> 啟動。' . "\n";
 $lang->action->desc->canceled    = '$date, 由 <strong>$actor</strong> 取消。' . "\n";
-$lang->action->desc->svncommited = '$date, <strong>$actor</strong> 提交代碼，版本為<strong>#$extra</strong>' . "\n";
+$lang->action->desc->svncommited = '$date, 由 <strong>$actor</strong> 提交代碼，版本為<strong>#$extra</strong>' . "\n";
 $lang->action->desc->finished    = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
 $lang->action->desc->diff1       = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />' . "\n";
 $lang->action->desc->diff2       = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . '<blockquote>%s</blockquote>' . "\n";
@@ -78,7 +99,7 @@ $lang->action->label->created             = '創建了';
 $lang->action->label->opened              = '創建了';
 $lang->action->label->changed             = '變更了';
 $lang->action->label->edited              = '編輯了';
-$lang->action->label->assignedto          = '重新指派了';
+$lang->action->label->assigned            = '指派了';
 $lang->action->label->closed              = '關閉了';
 $lang->action->label->deleted             = '刪除了';
 $lang->action->label->deletedfile         = '刪除附件';
@@ -95,7 +116,7 @@ $lang->action->label->bugconfirmed        = '確認了';
 $lang->action->label->tostory             = '轉需求';
 $lang->action->label->frombug             = '轉需求';
 $lang->action->label->totask              = '轉任務';
-$lang->action->label->svncommited         = '提交Svn';
+$lang->action->label->svncommited         = '提交代碼';
 $lang->action->label->linked2plan         = '關聯計劃';
 $lang->action->label->unlinkedfromplan    = '移除計劃';
 $lang->action->label->linked2project      = '關聯項目';
@@ -124,3 +145,38 @@ $lang->action->label->doc         = '文檔|doc|view|docID=%s';
 $lang->action->label->user        = '用戶';
 
 $lang->action->label->space     = '　';
+
+/* 用來在動態顯示中顯示動作 */
+$lang->action->search->label['']                    = '';
+$lang->action->search->label['created']             = $lang->action->label->created;            
+$lang->action->search->label['opened']              = $lang->action->label->opened;             
+$lang->action->search->label['changed']             = $lang->action->label->changed;            
+$lang->action->search->label['edited']              = $lang->action->label->edited;             
+$lang->action->search->label['assigned']            = $lang->action->label->assigned;           
+$lang->action->search->label['closed']              = $lang->action->label->closed;             
+$lang->action->search->label['deleted']             = $lang->action->label->deleted;            
+$lang->action->search->label['deletedfile']         = $lang->action->label->deletedfile;        
+$lang->action->search->label['editfile']            = $lang->action->label->editfile;           
+$lang->action->search->label['erased']              = $lang->action->label->erased;             
+$lang->action->search->label['undeleted']           = $lang->action->label->undeleted;          
+$lang->action->search->label['commented']           = $lang->action->label->commented;          
+$lang->action->search->label['activated']           = $lang->action->label->activated;          
+$lang->action->search->label['resolved']            = $lang->action->label->resolved;           
+$lang->action->search->label['reviewed']            = $lang->action->label->reviewed;           
+$lang->action->search->label['moved']               = $lang->action->label->moved;              
+$lang->action->search->label['confirmed']           = $lang->action->label->confirmed;   
+$lang->action->search->label['bugconfirmed']        = $lang->action->label->bugconfirmed;       
+$lang->action->search->label['tostory']             = $lang->action->label->tostory;            
+$lang->action->search->label['frombug']             = $lang->action->label->frombug;            
+$lang->action->search->label['totask']              = $lang->action->label->totask;             
+$lang->action->search->label['svncommited']         = $lang->action->label->svncommited;        
+$lang->action->search->label['linked2plan']         = $lang->action->label->linked2plan;        
+$lang->action->search->label['unlinkedfromplan']    = $lang->action->label->unlinkedfromplan;   
+$lang->action->search->label['linked2project']      = $lang->action->label->linked2project;     
+$lang->action->search->label['unlinkedfromproject'] = $lang->action->label->unlinkedfromproject;
+$lang->action->search->label['marked']              = $lang->action->label->marked;             
+$lang->action->search->label['started']             = $lang->action->label->started;            
+$lang->action->search->label['canceled']            = $lang->action->label->canceled;           
+$lang->action->search->label['finished']            = $lang->action->label->finished;           
+$lang->action->search->label['login']               = $lang->action->label->login;              
+$lang->action->search->label['logout']              = $lang->action->label->logout;             
