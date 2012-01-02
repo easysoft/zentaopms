@@ -202,7 +202,7 @@ class svnModel extends model
     {
         if($this->config->svn->client == '') die("You must set the svn client file.\n");
         $this->client = $this->config->svn->client . " --non-interactive";
-        if(isset($repo->username)) $this->client .= " --username '$repo->username' --password '$repo->password' --no-auth-cache";
+        if(isset($repo->username)) $this->client .= " --username $repo->username --password $repo->password --no-auth-cache";
     }
 
     /**
