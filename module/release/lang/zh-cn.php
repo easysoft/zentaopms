@@ -24,3 +24,4 @@ $lang->release->build     = 'Build';
 $lang->release->name      = '发布名称';
 $lang->release->date      = '发布日期';
 $lang->release->desc      = '描述';
+$lang->release->linkStoriesAndBugs = '需求和Bugs';

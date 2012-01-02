@@ -61,7 +61,12 @@ class releaseModel extends model
      */
     public function create($productID)
     {
-        $release = fixer::input('post')->stripTags('name')->add('product', (int)$productID)->get();
+        $release = fixer::input('post')
+            ->stripTags('name')
+            ->add('product', (int)$productID)
+            ->join('stories', ',')
+            ->join('bugs', ',')
+            ->get();
         $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
     }

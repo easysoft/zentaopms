@@ -60,11 +60,14 @@ class release extends control
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }
 
+        $builds  = $this->loadModel('build')->getProductBuildPairs($productID);
+        unset($builds['trunk']);
+
         $this->commonAction($productID);
         $this->view->header->title = $this->lang->release->create;
         $this->view->position[]    = $this->lang->release->create;
-        $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($productID);
-        unset($this->view->builds['trunk']);
+        $this->view->builds        = $builds;
+        $this->view->productID     = $productID;
         $this->display();
     }
 
@@ -141,5 +144,31 @@ class release extends control
             $this->release->delete(TABLE_RELEASE, $releaseID);
             die(js::locate($this->session->releaseList, 'parent'));
         }
+    }
+
+    /**
+     * Ajax get stories and bugs 
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetStoriesAndBugs($buildID, $productID)
+    {
+        $orderBy = 'status_asc,stage_asc,id_desc';
+        $stories = array();
+        $bugs    = array();
+        $this->loadModel('bug');
+        $build = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch(); 
+        if(!empty($build))
+        {
+            $stories = $this->loadModel('story')->getProjectStories($build->project, $orderBy);
+            $bugs    = $this->loadModel('project')->getResolvedBugs($build->project);
+        }
+        $this->view->productID = $productID;
+        $this->view->stories   = $stories;
+        $this->view->bugs      = $bugs;
+        $this->view->orderBy   = $orderBy;
+        die($this->display());
     }
 }

@@ -22,13 +22,14 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->release->build;?></th>
-      <td><?php echo html::select('build', $builds, '', 'class="select-3"');?></td>
+      <td><?php echo html::select('build', $builds, '', "class='select-3' onchange=loadStoriesAndBugs(this.value,$productID)");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->release->date;?></th>
       <td><?php echo html::input('date', helper::today(), "class='text-3 date'");?></td>
     </tr>  
-    </tr>  
+    <tr id='linkStoriesAndBugs'>
+    </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->release->desc;?></th>
       <td><?php echo html::textarea('desc', '', "rows='20' class='area-1'");?></td>

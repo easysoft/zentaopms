@@ -24,3 +24,4 @@ $lang->release->build     = 'Build';
 $lang->release->name      = 'Name';
 $lang->release->date      = 'Date';
 $lang->release->desc      = 'Desc';
+$lang->release->linkStoriesAndBugs = 'Stories and bugs';
