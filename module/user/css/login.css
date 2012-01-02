@@ -15,3 +15,4 @@ table, tr, td, th, input{ border:none;}
 #keeplogin   {color:white; font-size:14px}
 .button-s, .button-c {padding:3px 5px 3px 5px;height:30px; width:80px; font-size:14px; font-weight:bold; border:none}
 .debugwin, .helplink{display:none}
+#updater {width:500px; height:30px; border:none; overflow:hidden;}
