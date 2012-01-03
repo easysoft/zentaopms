@@ -32,7 +32,8 @@ function syncProduct(obj)
             $('#productModule').append('<option value=' + key + '>' + value + '</option')
         }); 
     })
-    $('#copyModule').attr('onclick', 'syncModule('+obj.value+')');
+    $('#copyModule').attr('onclick', null);
+    $('#copyModule').bind('click', function(){syncModule(obj.value)});
 }
 $(document).ready(function()
 {
