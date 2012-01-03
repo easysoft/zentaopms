@@ -81,7 +81,7 @@ class releaseModel extends model
     public function update($releaseID)
     {
         $oldRelease = $this->getByID($releaseID);
-        $release = fixer::input('post')->stripTags('name')->get();
+        $release = fixer::input('post')->stripTags('name')->join('stories', ',')->join('bugs', ',')->get();
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')

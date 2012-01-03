@@ -91,13 +91,27 @@ class release extends control
             }
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }
+        $this->loadModel('story');
+        $this->loadModel('bug');
+        $this->loadModel('project');
+        $this->loadModel('build');
 
+        /* Get release and build. */
         $release = $this->release->getById((int)$releaseID);
         $this->commonAction($release->product);
+        $build = $this->build->getById($release->build);
+
+        /* Get stories and bugs. */
+        $orderBy = 'status_asc, stage_asc, id_desc';
+        $stories = $this->story->getProjectStories($build->project, $orderBy);
+        $bugs    = $this->project->getResolvedBugs($build->project); 
 
         $this->view->header->title = $this->lang->release->edit;
         $this->view->position[]    = $this->lang->release->edit;
         $this->view->release       = $release;
+        $this->view->build         = $build;
+        $this->view->stories       = $stories;
+        $this->view->bugs          = $bugs;
         $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($release->product);
         unset($this->view->builds['trunk']);
         $this->display();
