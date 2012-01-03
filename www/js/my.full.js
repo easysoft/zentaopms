@@ -31,7 +31,10 @@ function loadFixedCSS()
 
     if(cssFile != '')
     {
-        $('body').append("<link rel='stylesheet' href='" + cssFile + "' type='text/css' media='screen' />");
+        /* Thanks ekerner, please visit ekerner.com. The code is from: 
+         * http://stackoverflow.com/questions/1184950/dynamically-loading-css-stylesheet-doesnt-work-on-ie. 
+         */
+        $("<link>").appendTo($('head')).attr({type: 'text/css', rel: 'stylesheet'}).attr('href', cssFile);
     }
 }
 
