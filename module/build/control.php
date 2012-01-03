@@ -38,7 +38,7 @@ class build extends control
         /* Set menu. */
         $this->project->setMenu($this->project->getPairs(), $projectID);
 
-        /* Get stories. */
+        /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
         $stories = $this->story->getProjectStories($projectID, $orderBy);
         $bugs    = $this->project->getResolvedBugs($projectID); 
@@ -75,9 +75,18 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
         }
 
+        $this->loadModel('story');
+        $this->loadModel('bug');
+        $this->loadModel('project');
+
         /* Set menu. */
         $build = $this->build->getById((int)$buildID);
-        $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
+        $this->project->setMenu($this->project->getPairs(), $build->project);
+
+        /* Get stories and bugs. */
+        $orderBy = 'status_asc, stage_asc, id_desc';
+        $stories = $this->story->getProjectStories($build->project, $orderBy);
+        $bugs    = $this->project->getResolvedBugs($build->project); 
 
         /* Assign. */
         $this->view->header->title = $this->lang->build->edit;
@@ -85,6 +94,9 @@ class build extends control
         $this->view->products      = $this->project->getProducts($build->project);
         $this->view->users         = $this->loadModel('user')->getPairs();
         $this->view->build         = $build;
+        $this->view->stories       = $stories;
+        $this->view->bugs          = $bugs;
+        $this->view->orderBy       = $orderBy;
         $this->display();
     }
                                                           

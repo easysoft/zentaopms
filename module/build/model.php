@@ -134,7 +134,7 @@ class buildModel extends model
     public function update($buildID)
     {
         $oldBuild = $this->getByID($buildID);
-        $build = fixer::input('post')->stripTags('name')->get();
+        $build = fixer::input('post')->stripTags('name')->join('stories', ',')->join('bugs', ',')->get();
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
