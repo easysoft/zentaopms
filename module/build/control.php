@@ -97,9 +97,14 @@ class build extends control
      */
     public function view($buildID)
     {
+        $this->loadModel('story');
+        $this->loadModel('bug');
+
         /* Set menu. */
         $build = $this->build->getById((int)$buildID);
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchAll();
+        $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
 
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
 
@@ -109,6 +114,8 @@ class build extends control
         $this->view->products      = $this->project->getProducts($build->project);
         $this->view->users         = $this->loadModel('user')->getPairs();
         $this->view->build         = $build;
+        $this->view->stories       = $stories;
+        $this->view->bugs          = $bugs;
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->display();
     }

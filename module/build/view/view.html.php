@@ -37,7 +37,49 @@
     <th class='rowhead'><?php echo $lang->build->filePath;?></th>
     <td><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
   </tr>  
-
+  <tr>
+    <th class='rowhead'><?php echo $lang->build->linkedStories;?></th>
+    <td>
+      <div style="height:225px; overflow-y:auto">
+        <table class='table-1'>
+          <tr>
+            <th class='w-id'><?php echo $lang->idAB;?></th>
+            <th><?php echo $lang->story->title;?></th>
+            <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
+          </tr>
+          <?php foreach($stories as $storyID => $story):?>
+          <?php $storyLink = $this->createLink('story', 'view', "storyID=$storyID");?>
+          <tr class='a-center'>
+            <td><?php echo sprintf('%03d', $story->id);?></td>
+            <td class='a-left nobr'><?php echo html::a($storyLink,$story->title);?></td>
+            <td><?php echo $lang->story->stageList[$story->stage];?></td>
+          </tr>
+          <?php endforeach;?>
+        </table>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <th class='rowhead'><?php echo $lang->build->linkedBugs;?></th>
+    <td>
+      <div style="height:225px; overflow-y:auto">
+        <table class='table-1'>
+          <tr>
+            <th class='w-id'>       <?php echo $lang->idAB;?></th>
+            <th><?php echo $lang->bug->title;?></th>
+            <th class='w-100px'><?php echo $lang->bug->status;?></th>
+          </tr>
+          <?php foreach($bugs as $bug):?>
+          <tr class='a-center'>
+            <td><?php echo sprintf('%03d', $bug->id);?></td>
+            <td class='a-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'");?></td>
+            <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+          </tr>
+          <?php endforeach;?>
+        </table>
+      </div>
+    </td>
+  </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->build->desc;?></th>
     <td class='content'><?php echo $build->desc;?></td>
