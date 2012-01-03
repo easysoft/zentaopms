@@ -30,20 +30,28 @@
     <td><?php echo $release->date;?></td>
   </tr>  
   <tr>
-    <th class='rowhead'><?php echo $lang->release->linkedStories;?></th>
+    <th class='rowhead'><?php echo $lang->release->stories;?></th>
     <td>
       <div style="height:225px; overflow-y:auto">
         <table class='table-1'>
           <tr>
             <th class='w-id'><?php echo $lang->idAB;?></th>
+            <th class='w-pri'><?php echo $lang->priAB;?></th>
             <th><?php echo $lang->story->title;?></th>
+            <th class='w-user'><?php echo $lang->openedByAB;?></th>
+            <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
+            <th class='w-hour'><?php echo $lang->statusAB;?></th>
             <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
           </tr>
           <?php foreach($stories as $storyID => $story):?>
           <?php $storyLink = $this->createLink('story', 'view', "storyID=$storyID");?>
           <tr class='a-center'>
             <td><?php echo sprintf('%03d', $story->id);?></td>
+            <td><?php echo $lang->story->priList[$story->pri];?></td>
             <td class='a-left nobr'><?php echo html::a($storyLink,$story->title);?></td>
+            <td><?php echo $users[$story->openedBy];?></td>
+            <td><?php echo $story->estimate;?></td>
+            <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
             <td><?php echo $lang->story->stageList[$story->stage];?></td>
           </tr>
           <?php endforeach;?>
@@ -52,7 +60,7 @@
     </td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->release->linkedBugs;?></th>
+    <th class='rowhead'><?php echo $lang->release->bugs;?></th>
     <td>
       <div style="height:225px; overflow-y:auto">
         <table class='table-1'>
@@ -60,12 +68,20 @@
             <th class='w-id'>       <?php echo $lang->idAB;?></th>
             <th><?php echo $lang->bug->title;?></th>
             <th class='w-100px'><?php echo $lang->bug->status;?></th>
+            <th class='w-user'><?php echo $lang->openedByAB;?></th>
+            <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
+            <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
+            <th class='w-date'><?php echo $lang->bug->resolvedDateAB;?></th>
           </tr>
           <?php foreach($bugs as $bug):?>
           <tr class='a-center'>
             <td><?php echo sprintf('%03d', $bug->id);?></td>
             <td class='a-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'");?></td>
             <td><?php echo $lang->bug->statusList[$bug->status];?></td>
+            <td><?php echo $users[$bug->openedBy];?></td>
+            <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+            <td><?php echo $users[$bug->resolvedBy];?></td>
+            <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
           </tr>
           <?php endforeach;?>
         </table>

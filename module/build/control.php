@@ -124,7 +124,7 @@ class build extends control
         $this->view->header->title = $this->lang->build->view;
         $this->view->position[]    = $this->lang->build->view;
         $this->view->products      = $this->project->getProducts($build->project);
-        $this->view->users         = $this->loadModel('user')->getPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;
         $this->view->stories       = $stories;
         $this->view->bugs          = $bugs;

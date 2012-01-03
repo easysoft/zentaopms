@@ -1031,6 +1031,7 @@ class projectModel extends model
         return $this->dao->select('id, title, status')->from(TABLE_BUG)
             ->where('status')->eq('resolved')
             ->andWhere('resolvedDate')->ge($project->begin)
+            ->andWhere('resolution')->eq('fixed')
             ->fetchAll();
     }
 }
