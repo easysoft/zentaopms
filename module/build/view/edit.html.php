@@ -50,6 +50,7 @@
               <tr>
                 <th class='w-id'><?php echo $lang->idAB;?></th>
                 <th><?php echo $lang->story->title;?></th>
+                <th class='w-hour'><?php echo $lang->statusAB;?></th>
                 <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
               </tr>
               <?php foreach($stories as $key => $story):?>
@@ -59,6 +60,7 @@
               <tr class='a-center'>
                 <td><input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if(strpos($build->stories, $story->id) !== false) echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?></td>
                 <td class='a-left nobr'><?php echo html::a($storyLink,$story->title);?></td>
+                <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
               </tr>
               <?php endforeach;?>

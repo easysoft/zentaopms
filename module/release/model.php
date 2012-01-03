@@ -68,7 +68,9 @@ class releaseModel extends model
             ->join('bugs', ',')
             ->get();
         $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
-        if(!dao::isError()) return $this->dao->lastInsertID();
+        $releaseID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
+        if(!dao::isError()) return $releaseID;
     }
 
     /**
@@ -90,6 +92,7 @@ class releaseModel extends model
             ->check('name','unique', "id != $releaseID")
             ->where('id')->eq((int)$releaseID)
             ->exec();
+        $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
         if(!dao::isError()) return common::createChanges($oldRelease, $release);
     }
 }
