@@ -41,7 +41,7 @@ class actionModel extends model
         /* Get product and project for this object. */
         $productAndProject  = $this->getProductAndProject($objectType, $objectID);
         $action->product    = $productAndProject['product'];
-        if($objectType != 'case')$action->project    = $productAndProject['project'];
+        $action->project    = $productAndProject['project'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         return $this->dbh->lastInsertID();
@@ -82,7 +82,14 @@ class actionModel extends model
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
             if($objectType == 'task')    $record->product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetch('product');
 
-            if($record) return (array)$record;
+            if($record)
+            {
+                $record = (array)$record;
+                if(!isset($record['product'])) $record['product'] = 0;
+                if(!isset($record['project'])) $record['project'] = 0;
+                return $record;
+            }
+
             return $emptyRecord;
         }
         return $emptyRecord;
