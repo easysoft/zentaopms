@@ -355,4 +355,4 @@ $lang->changelog['2.4'][]   = 'project-testtask';
 $lang->changelog['2.4'][]   = 'todo-export';
 $lang->changelog['2.4'][]   = 'product-project';
 
-$lang->changelog['2.5'][]   = 'release-ajaxGetStoriesAndBugs';
+$lang->changelog['3.0.beta1'][] = 'release-ajaxGetStoriesAndBugs';
