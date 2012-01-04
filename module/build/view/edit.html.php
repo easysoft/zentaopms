@@ -44,8 +44,8 @@
       <th class='rowhead'><?php echo $lang->build->linkStoriesAndBugs;?></th>
       <td>
         <div class="w-p90">
-          <div class='half-left' style="height:225px; overflow-y:auto">
-            <table class='table-1'>
+          <div class='half-left linkbox'>
+            <table class='table-1 fixed'>
             <caption><?php echo $lang->build->linkStories;?></caption>
               <tr>
                 <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -66,8 +66,8 @@
               <?php endforeach;?>
             </table>
           </div>
-          <div class='half-right' style="height:225px; overflow-y:auto">
-            <table class='table-1'>
+          <div class='half-right linkbox'>
+            <table class='table-1 fixed'>
               <caption><?php echo $lang->build->linkBugs;?></caption>
               <tr>
                 <th class='w-id'>       <?php echo $lang->idAB;?></th>
