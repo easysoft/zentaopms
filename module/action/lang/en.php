@@ -24,23 +24,6 @@ $lang->action->actionID   = 'ActionID';
 $lang->action->date       = 'Date';
 $lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic";
 
-/* Object type. */
-$lang->action->search->objectTypeList['']            = '';    
-$lang->action->search->objectTypeList['product']     = 'product';   
-$lang->action->search->objectTypeList['project']     = 'project';   
-$lang->action->search->objectTypeList['bug']         = 'bug';       
-$lang->action->search->objectTypeList['case']        = 'case';      
-$lang->action->search->objectTypeList['story']       = 'story';     
-$lang->action->search->objectTypeList['task']        = 'task';      
-$lang->action->search->objectTypeList['testtask']    = 'testtask';       
-$lang->action->search->objectTypeList['user']        = 'user';      
-$lang->action->search->objectTypeList['doc']         = 'doc';       
-$lang->action->search->objectTypeList['doclib']      = 'doclib';     
-$lang->action->search->objectTypeList['todo']        = 'todo';      
-$lang->action->search->objectTypeList['build']       = 'build';     
-$lang->action->search->objectTypeList['release']     = 'release';   
-$lang->action->search->objectTypeList['productplan'] = 'productplan';    
-
 $lang->action->dynamic->today     = 'Today';
 $lang->action->dynamic->yesterday = 'Yesterday';
 $lang->action->dynamic->twoDaysAgo= 'Two days ago';
@@ -143,8 +126,24 @@ $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = 'doc library|doc|browse|libID=%s';
 $lang->action->label->doc         = 'doc|doc|view|docID=%s';
 $lang->action->label->user        = 'user';
+$lang->action->label->space       = ' ';
 
-$lang->action->label->space     = ' ';
+/* Object type. */
+$lang->action->search->objectTypeList['']            = '';    
+$lang->action->search->objectTypeList['product']     = 'product';   
+$lang->action->search->objectTypeList['project']     = 'project';   
+$lang->action->search->objectTypeList['bug']         = 'bug';       
+$lang->action->search->objectTypeList['case']        = 'case';      
+$lang->action->search->objectTypeList['story']       = 'story';     
+$lang->action->search->objectTypeList['task']        = 'task';      
+$lang->action->search->objectTypeList['testtask']    = 'testtask';       
+$lang->action->search->objectTypeList['user']        = 'user';      
+$lang->action->search->objectTypeList['doc']         = 'doc';       
+$lang->action->search->objectTypeList['doclib']      = 'doclib';     
+$lang->action->search->objectTypeList['todo']        = 'todo';      
+$lang->action->search->objectTypeList['build']       = 'build';     
+$lang->action->search->objectTypeList['release']     = 'release';   
+$lang->action->search->objectTypeList['productplan'] = 'productplan';    
 
 /* Display action for search. */
 $lang->action->search->label['']                    = '';

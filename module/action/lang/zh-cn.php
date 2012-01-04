@@ -24,23 +24,6 @@ $lang->action->actionID   = '记录ID';
 $lang->action->date       = '日期';
 $lang->action->trashTips  = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
 
-/* Object type. */
-$lang->action->search->objectTypeList['']            = '';    
-$lang->action->search->objectTypeList['product']     = '产品';    
-$lang->action->search->objectTypeList['project']     = '项目';    
-$lang->action->search->objectTypeList['bug']         = 'Bug';
-$lang->action->search->objectTypeList['case']        = '用例'; 
-$lang->action->search->objectTypeList['story']       = '需求';  
-$lang->action->search->objectTypeList['task']        = '任务'; 
-$lang->action->search->objectTypeList['testtask']    = '测试任务';     
-$lang->action->search->objectTypeList['user']        = '用户'; 
-$lang->action->search->objectTypeList['doc']         = '文档';
-$lang->action->search->objectTypeList['doclib']      = '文档库';   
-$lang->action->search->objectTypeList['todo']        = 'TODO'; 
-$lang->action->search->objectTypeList['build']       = 'Build';  
-$lang->action->search->objectTypeList['release']     = '发布';    
-$lang->action->search->objectTypeList['productplan'] = '计划';        
-
 $lang->action->dynamic->today     = '今天';
 $lang->action->dynamic->yesterday = '昨天';
 $lang->action->dynamic->twoDaysAgo= '前天';
@@ -143,8 +126,24 @@ $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户';
+$lang->action->label->space       = '　';
 
-$lang->action->label->space     = '　';
+/* Object type. */
+$lang->action->search->objectTypeList['']            = '';    
+$lang->action->search->objectTypeList['product']     = '产品';    
+$lang->action->search->objectTypeList['project']     = '项目';    
+$lang->action->search->objectTypeList['bug']         = 'Bug';
+$lang->action->search->objectTypeList['case']        = '用例'; 
+$lang->action->search->objectTypeList['story']       = '需求';  
+$lang->action->search->objectTypeList['task']        = '任务'; 
+$lang->action->search->objectTypeList['testtask']    = '测试任务';     
+$lang->action->search->objectTypeList['user']        = '用户'; 
+$lang->action->search->objectTypeList['doc']         = '文档';
+$lang->action->search->objectTypeList['doclib']      = '文档库';   
+$lang->action->search->objectTypeList['todo']        = 'TODO'; 
+$lang->action->search->objectTypeList['build']       = 'Build';  
+$lang->action->search->objectTypeList['release']     = '发布';    
+$lang->action->search->objectTypeList['productplan'] = '计划';        
 
 /* 用来在动态显示中显示动作 */
 $lang->action->search->label['']                    = '';
