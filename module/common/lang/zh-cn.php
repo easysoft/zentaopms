@@ -122,7 +122,7 @@ $lang->my->menu->task      = '我的任务|my|task|';
 $lang->my->menu->bug       = '我的Bug|my|bug|';
 $lang->my->menu->testtask  = '我的测试|my|testtask|';
 $lang->my->menu->story     = '我的需求|my|story|';
-$lang->my->menu->project   = '我的项目|my|project|';
+$lang->my->menu->myProject = '我的项目|my|project|';
 $lang->my->menu->dynamic   = '我的动态|my|dynamic|';
 $lang->my->menu->profile   = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu          = $lang->my->menu;
@@ -204,14 +204,14 @@ $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
 /* 用户信息菜单设置。*/
-$lang->user->menu->account  = '%s' . $lang->arrow;
-$lang->user->menu->todo     = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
-$lang->user->menu->task     = '任务列表|user|task|account=%s';
-$lang->user->menu->bug      = 'Bug列表|user|bug|account=%s';
-$lang->user->menu->dynamic  = '用户动态|user|dynamic|type=today&account=%s';
-$lang->user->menu->project  = '项目列表|user|project|account=%s';
-$lang->user->menu->profile  = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse   = array('link' => '用户管理|company|browse|', 'float' => 'right');
+$lang->user->menu->account     = '%s' . $lang->arrow;
+$lang->user->menu->todo        = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
+$lang->user->menu->task        = '任务列表|user|task|account=%s';
+$lang->user->menu->bug         = 'Bug列表|user|bug|account=%s';
+$lang->user->menu->dynamic     = '用户动态|user|dynamic|type=today&account=%s';
+$lang->user->menu->projectList = '项目列表|user|project|account=%s';
+$lang->user->menu->profile     = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
+$lang->user->menu->browse      = array('link' => '用户管理|company|browse|', 'float' => 'right');
 
 /* 后台管理菜单设置。*/
 $lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');

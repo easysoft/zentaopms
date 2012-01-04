@@ -22,8 +22,8 @@
     <th class='w-date'><?php echo $lang->project->end;?></th>
     <th class='w-status'><?php echo $lang->statusAB;?></th>
     <th class='w-user'><?php echo $lang->team->role;?></th>
-    <th class='w-date'><?php echo $lang->team->joinDate;?></th>
-    <th class='w-date'><?php echo $lang->team->workingHour;?></th>
+    <th class='w-date'><?php echo $lang->team->join;?></th>
+    <th class='w-date'><?php echo $lang->team->hours;?></th>
   </tr>
   </thead>
   <tbody>
@@ -37,8 +37,8 @@
     <td><?php echo $project->end;?></td>
     <td><?php echo $lang->project->statusList[$project->status];?></td>
     <td><?php echo $project->role;?></td>
-    <td><?php echo $project->joinDate;?></td>
-    <td><?php echo $project->workingHour;?></td>
+    <td><?php echo $project->join;?></td>
+    <td><?php echo $project->hours;?></td>
   </tr>
   <?php endforeach;?>
   </tbody>

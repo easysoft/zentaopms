@@ -59,7 +59,7 @@
           echo "<li><nobr>{$user->realname}</nobr></li>";
           echo "<li id='tasktab'><nobr>"   . html::a($this->createLink('user', 'view', "account=$user->account&tabID=task"),    $lang->my->task)    . "</nobr></li>";
           //echo "<li id='todotab'><nobr>"   . html::a($this->createLink('user', 'view', "account=$user->account&tabID=todo"),    $lang->my->todo)    . "</nobr></li>";
-          echo "<li id='projecttab'><nobr>". html::a($this->createLink('user', 'view', "account=$user->account&tabID=project"), $lang->my->project) . "</nobr></li>";
+          echo "<li id='projecttab'><nobr>". html::a($this->createLink('user', 'view', "account=$user->account&tabID=project"), $lang->my->myProject) . "</nobr></li>";
           //echo "<li id='storytab'><nobr>"  . html::a($this->createLink('user', 'view', "account=$user->account&tabID=story"),   $lang->my->story)   . "</nobr></li>";
           echo "<li id='bugtab'><nobr>"    . html::a($this->createLink('user', 'view', "account=$user->account&tabID=bug"),     $lang->my->bug)     . "</nobr></li>";
           //echo "<li id='teamtab'><nobr>"   . html::a($this->createLink('user', 'view', "account=$user->account&tabID=team"),    $lang->my->team)    . "</nobr></li>";

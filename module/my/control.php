@@ -285,8 +285,8 @@ class my extends control
     {
         $this->app->loadLang('project');
 
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
-        $this->view->position[]    = $this->lang->my->project;
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProject;
+        $this->view->position[]    = $this->lang->my->myProject;
         $this->view->tabID         = 'project';
         $this->view->projects      = @array_reverse($this->user->getProjects($this->app->user->account));
 
