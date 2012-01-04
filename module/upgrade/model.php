@@ -50,7 +50,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '0_4beta')
         {
@@ -71,7 +71,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '0_5beta')
         {
@@ -90,7 +90,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '0_6beta')
         {
@@ -108,7 +108,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_0beta')
         {
@@ -126,7 +126,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_0rc1')
         {
@@ -143,7 +143,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_0rc2')
         {
@@ -159,7 +159,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_0')
         {
@@ -174,7 +174,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_0_1')
         {
@@ -188,7 +188,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_1')
         {
@@ -201,7 +201,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_2')
         {
@@ -213,7 +213,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_3')
         {
@@ -224,7 +224,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_4')
         {
@@ -234,7 +234,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '1_5')
         {
@@ -243,7 +243,7 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '2_0')
         {
@@ -251,29 +251,29 @@ class upgradeModel extends model
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '2_1')
         {
             $this->upgradeFrom2_1To2_2();
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '2_2')
         {
             $this->upgradeFrom2_2To2_3();
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '2_3')
         {
             $this->upgradeFrom2_3To2_4();
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
         elseif($fromVersion == '2_4')
         {
-            $this->upgradeFrom2_4To3_0beta1();
+            $this->upgradeFrom2_4To3_0_beta1();
         }
 
         $this->deletePatch();
@@ -720,15 +720,15 @@ class upgradeModel extends model
     }
 
     /**
-     * Upgrade from 2.4 to 3.0beta1.
+     * Upgrade from 2.4 to 3.0.beta1.
      * 
      * @access private
      * @return void
      */
-    private function upgradeFrom2_4To3_0beta1()
+    private function upgradeFrom2_4To3_0_beta1()
     {
         $this->execSQL($this->getUpgradeFile('2.4'));
-        if(!$this->isError()) $this->setting->updateVersion('3.0beta1');
+        if(!$this->isError()) $this->setting->updateVersion('3.0.beta1');
     }
 
     /**
