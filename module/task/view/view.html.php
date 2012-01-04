@@ -67,11 +67,11 @@
       <div id='comment' class='hidden'>
         <fieldset>
           <legend><?php echo $lang->comment;?></legend>
-            <form method='post' enctype='multipart/form-data'  action='<?php echo inlink('edit', "taskID=$task->id&comment=true")?>'>
-              <table align='center'>
-              <tr><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></tr>
-              <tr><td><?php echo html::submitButton() . html::resetButton();?></td></tr>
-              </table>
+          <form method='post' action='<?php echo inlink('edit', "taskID=$task->id&comment=true")?>'>
+            <table align='center' class='table-1'>
+            <tr><td><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></td></tr>
+            <tr><td><?php echo html::submitButton() . html::resetButton();?></td></tr>
+            </table>
           </form>
         </fieldset>
       </div>
