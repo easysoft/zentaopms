@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 2510 2012-01-02 12:58:58Z wwccss $
+ * @version     $Id: zh-tw.php 2530 2012-01-04 05:38:07Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->group->common             = '權限分組';
@@ -40,18 +40,18 @@ $lang->group->outside  = '組外用戶';
 $lang->group->copyOptions['copyPriv'] = '複製權限';
 $lang->group->copyOptions['copyUser'] = '複製用戶';
 
-$lang->group->versions['']      = '顯示各版本新增權限';
-$lang->group->versions['2.5']   = '禪道2.5';
-$lang->group->versions['2.4']   = '禪道2.4';
-$lang->group->versions['2.3']   = '禪道2.3';
-$lang->group->versions['2.2']   = '禪道2.2';
-$lang->group->versions['2.1']   = '禪道2.1';
-$lang->group->versions['2.0']   = '禪道2.0';
-$lang->group->versions['1.5']   = '禪道1.5';
-$lang->group->versions['1.4']   = '禪道1.4';
-$lang->group->versions['1.3']   = '禪道1.3';
-$lang->group->versions['1.2']   = '禪道1.2';
-$lang->group->versions['1.1']   = '禪道1.1';
-$lang->group->versions['1.0.1'] = '禪道1.0.1';
+$lang->group->versions['']          = '顯示各版本新增權限';
+$lang->group->versions['3.0.beta1'] = '禪道3.0.beta1';
+$lang->group->versions['2.4']       = '禪道2.4';
+$lang->group->versions['2.3']       = '禪道2.3';
+$lang->group->versions['2.2']       = '禪道2.2';
+$lang->group->versions['2.1']       = '禪道2.1';
+$lang->group->versions['2.0']       = '禪道2.0';
+$lang->group->versions['1.5']       = '禪道1.5';
+$lang->group->versions['1.4']       = '禪道1.4';
+$lang->group->versions['1.3']       = '禪道1.3';
+$lang->group->versions['1.2']       = '禪道1.2';
+$lang->group->versions['1.1']       = '禪道1.1';
+$lang->group->versions['1.0.1']     = '禪道1.0.1';
 
 include (dirname(__FILE__) . '/resource.php');

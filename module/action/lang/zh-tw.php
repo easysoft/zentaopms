@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 2488 2011-12-28 06:23:44Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2528 2012-01-04 00:33:25Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -23,23 +23,6 @@ $lang->action->action     = '動作';
 $lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
 $lang->action->trashTips  = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
-
-/* Object type. */
-$lang->action->search->objectTypeList['']            = '';    
-$lang->action->search->objectTypeList['product']     = '產品';    
-$lang->action->search->objectTypeList['project']     = '項目';    
-$lang->action->search->objectTypeList['bug']         = 'Bug';
-$lang->action->search->objectTypeList['case']        = '用例'; 
-$lang->action->search->objectTypeList['story']       = '需求';  
-$lang->action->search->objectTypeList['task']        = '任務'; 
-$lang->action->search->objectTypeList['testtask']    = '測試任務';     
-$lang->action->search->objectTypeList['user']        = '用戶'; 
-$lang->action->search->objectTypeList['doc']         = '文檔';
-$lang->action->search->objectTypeList['doclib']      = '文檔庫';   
-$lang->action->search->objectTypeList['todo']        = 'TODO'; 
-$lang->action->search->objectTypeList['build']       = 'Build';  
-$lang->action->search->objectTypeList['release']     = '發佈';    
-$lang->action->search->objectTypeList['productplan'] = '計劃';        
 
 $lang->action->dynamic->today     = '今天';
 $lang->action->dynamic->yesterday = '昨天';
@@ -143,8 +126,24 @@ $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文檔庫|doc|browse|libID=%s';
 $lang->action->label->doc         = '文檔|doc|view|docID=%s';
 $lang->action->label->user        = '用戶';
+$lang->action->label->space       = '　';
 
-$lang->action->label->space     = '　';
+/* Object type. */
+$lang->action->search->objectTypeList['']            = '';    
+$lang->action->search->objectTypeList['product']     = '產品';    
+$lang->action->search->objectTypeList['project']     = '項目';    
+$lang->action->search->objectTypeList['bug']         = 'Bug';
+$lang->action->search->objectTypeList['case']        = '用例'; 
+$lang->action->search->objectTypeList['story']       = '需求';  
+$lang->action->search->objectTypeList['task']        = '任務'; 
+$lang->action->search->objectTypeList['testtask']    = '測試任務';     
+$lang->action->search->objectTypeList['user']        = '用戶'; 
+$lang->action->search->objectTypeList['doc']         = '文檔';
+$lang->action->search->objectTypeList['doclib']      = '文檔庫';   
+$lang->action->search->objectTypeList['todo']        = 'TODO'; 
+$lang->action->search->objectTypeList['build']       = 'Build';  
+$lang->action->search->objectTypeList['release']     = '發佈';    
+$lang->action->search->objectTypeList['productplan'] = '計劃';        
 
 /* 用來在動態顯示中顯示動作 */
 $lang->action->search->label['']                    = '';
