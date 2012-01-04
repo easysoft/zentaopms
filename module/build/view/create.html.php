@@ -59,7 +59,7 @@
               ?>
               <tr class='a-center'>
                 <td><input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if($story->stage == 'developed') echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?></td>
-                <td class='a-left nobr'><?php echo html::a($storyLink,$story->title);?></td>
+                <td class='a-left nobr'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
                 <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
               </tr>
@@ -75,9 +75,10 @@
                 <th class='w-100px'><?php echo $lang->bug->status;?></th>
               </tr>
               <?php foreach($bugs as $bug):?>
+              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id");?>
               <tr class='a-center'>
                 <td><input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" checked> <?php echo sprintf('%03d', $bug->id);?></td>
-                <td class='a-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'");?></td>
+                <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td><?php echo $lang->bug->statusList[$bug->status];?></td>
               </tr>
               <?php endforeach;?>

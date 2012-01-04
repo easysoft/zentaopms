@@ -33,7 +33,7 @@
       <td>
         <div class="w-p90">
           <div class='half-left' style="height:225px; overflow-y:auto">
-            <table class='table-1'>
+            <table class='table-1 fixed'>
             <caption><?php echo $lang->release->linkStories;?></caption>
               <tr>
                 <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -47,7 +47,7 @@
               ?>
               <tr class='a-center'>
                 <td><input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if(strpos($release->stories, $story->id) !== false) echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?></td>
-                <td class='a-left nobr'><?php echo html::a($storyLink,$story->title);?></td>
+                <td class='a-left nobr'><?php echo html::a($storyLink, $story->title, '', "class='preview'");?></td>
                 <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
               </tr>
@@ -55,7 +55,7 @@
             </table>
           </div>
           <div class='half-right' style="height:225px; overflow-y:auto">
-            <table class='table-1'>
+            <table class='table-1 fixed'>
               <caption><?php echo $lang->release->linkBugs;?></caption>
               <tr>
                 <th class='w-id'>       <?php echo $lang->idAB;?></th>
@@ -63,9 +63,10 @@
                 <th class='w-100px'><?php echo $lang->bug->status;?></th>
               </tr>
               <?php foreach($bugs as $bug):?>
+              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id");?>
               <tr class='a-center'>
                 <td><input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if(strpos($release->bugs, $bug->id) !== false) echo 'checked';?>> <?php echo sprintf('%03d', $bug->id);?></td>
-                <td class='a-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'");?></td>
+                <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td><?php echo $lang->bug->statusList[$bug->status];?></td>
               </tr>
               <?php endforeach;?>
