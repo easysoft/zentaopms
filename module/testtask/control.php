@@ -357,11 +357,12 @@ class testtask extends control
         }
         if($param == 'bystory')
         {
-            $build = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
+            $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
+
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('product')->eq($productID)
-                ->andWhere('id')->notIN($linkedCases)
-                ->andWhere('story')->in($build->stories)
+                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                ->andWhere('story')->in($stories)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
                 ->page($pager)
@@ -369,11 +370,11 @@ class testtask extends control
         }
         if($param == 'bybug')
         {
-            $build = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch();
+            $bugs  = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('product')->eq($productID)
-                ->andWhere('id')->notIN($linkedCases)
-                ->andWhere('fromBug')->in($build->bugs)
+                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                ->andWhere('fromBug')->in($bugs)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
                 ->page($pager)
