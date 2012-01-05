@@ -153,7 +153,7 @@ class storyModel extends model
                 $bug->closedBy     = $this->app->user->account;
                 $bug->closedDate   = $now;
                 $bug->assignedTo   = 'closed';
-                $this->dao->update(TABLE_BUG)->data($bug)->exec();
+                $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
     
                 $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
                 $this->action->create('bug', $bugID, 'Closed');
