@@ -1027,11 +1027,13 @@ class projectModel extends model
      */
     public function getResolvedBugs($projectID)
     {
-        $project = $this->getById($projectID);
+        $project  = $this->getById($projectID);
+        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product');
         return $this->dao->select('id, title, status')->from(TABLE_BUG)
             ->where('status')->eq('resolved')
             ->andWhere('resolvedDate')->ge($project->begin)
             ->andWhere('resolution')->eq('fixed')
+            ->andWhere('product')->in($products)
             ->fetchAll();
     }
 }
