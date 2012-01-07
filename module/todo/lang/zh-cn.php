@@ -9,19 +9,19 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->todo->common    = 'TODO';
-$lang->todo->index     = "todo一览";
-$lang->todo->create    = "新增TODO";
-$lang->todo->edit      = "更新TODO";
-$lang->todo->view      = "TODO详情";
-$lang->todo->viewAB    = "详情";
-$lang->todo->markDone  = "未完成";
-$lang->todo->markWait  = "已完成";
-$lang->todo->markDoing = "已完成";
-$lang->todo->mark      = "更改状态";
-$lang->todo->export    = "导出";
-$lang->todo->delete    = "删除TODO";
-$lang->todo->browse    = "浏览TODO";
+$lang->todo->common       = 'TODO';
+$lang->todo->index        = "todo一览";
+$lang->todo->create       = "新增TODO";
+$lang->todo->edit         = "更新TODO";
+$lang->todo->view         = "TODO详情";
+$lang->todo->viewAB       = "详情";
+$lang->todo->markDone     = "未完成";
+$lang->todo->markWait     = "已完成";
+$lang->todo->markDoing    = "已完成";
+$lang->todo->mark         = "更改状态";
+$lang->todo->export       = "导出";
+$lang->todo->delete       = "删除TODO";
+$lang->todo->browse       = "浏览TODO";
 $lang->todo->import2Today = "导入到今天";
 $lang->todo->changeStatus = "更改";
 
@@ -41,8 +41,8 @@ $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事务';
 $lang->todo->idvalue     = '任务或Bug';
 
-$lang->todo->week  = '星期';
-$lang->todo->today = '今天';
+$lang->todo->week         = '星期';
+$lang->todo->today        = '今天';
 $lang->todo->weekDateList = '一,二,三,四,五,六,天';
 $lang->todo->dayInFeature = '暂不指定';
 $lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';

@@ -9,20 +9,20 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->user->common        = 'User';
-$lang->user->index         = "Index";
-$lang->user->view          = "Info";
-$lang->user->create        = "Add";
-$lang->user->read          = "Info";
-$lang->user->edit          = "Edit";
-$lang->user->update        = "Upgrade";
-$lang->user->delete        = "Delete";
-$lang->user->browse        = "Browse";
-$lang->user->login         = "Login";
-$lang->user->userView      = "User view";
-$lang->user->editProfile   = "Edit profile";
-$lang->user->editPassword  = "Change password";
-$lang->user->deny          = "Denied";
+$lang->user->common          = 'User';
+$lang->user->index           = "Index";
+$lang->user->view            = "Info";
+$lang->user->create          = "Add";
+$lang->user->read            = "Info";
+$lang->user->edit            = "Edit";
+$lang->user->update          = "Upgrade";
+$lang->user->delete          = "Delete";
+$lang->user->browse          = "Browse";
+$lang->user->login           = "Login";
+$lang->user->userView        = "User view";
+$lang->user->editProfile     = "Edit profile";
+$lang->user->editPassword    = "Change password";
+$lang->user->deny            = "Denied";
 $lang->user->confirmDelete   = "Are you sure to delete this user?";
 $lang->user->confirmActivate = "Are you sure to activate this user?";
 $lang->user->relogin         = "Relogin";
@@ -48,6 +48,7 @@ $lang->user->loginFailed = "Login failed, please check your account and password
 
 $lang->user->genderList->m = 'Male';
 $lang->user->genderList->f = 'Female';
+
 $lang->user->statusList['active'] = 'Activate';
 $lang->user->statusList['delete'] = 'Deleted';
 $lang->user->keepLogin['on']      = 'Keep login';

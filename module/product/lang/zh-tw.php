@@ -51,16 +51,16 @@ $lang->product->RM        = '發佈負責人';
 $lang->product->acl       = '訪問控制';
 $lang->product->whitelist = '分組白名單';
 
-$lang->product->moduleStory = '按模組瀏覽';
-$lang->product->searchStory = '搜索';
-$lang->product->assignedToMe= '指派給我';
-$lang->product->openedByMe  = '由我創建';
-$lang->product->reviewedByMe= '由我評審';
-$lang->product->closedByMe  = '由我關閉';
-$lang->product->draftStory  = '草稿';
-$lang->product->activeStory = '激活';
-$lang->product->changedStory= '已變更';
-$lang->product->closedStory = '已關閉';
+$lang->product->moduleStory  = '按模組瀏覽';
+$lang->product->searchStory  = '搜索';
+$lang->product->assignedToMe = '指派給我';
+$lang->product->openedByMe   = '由我創建';
+$lang->product->reviewedByMe = '由我評審';
+$lang->product->closedByMe   = '由我關閉';
+$lang->product->draftStory   = '草稿';
+$lang->product->activeStory  = '激活';
+$lang->product->changedStory = '已變更';
+$lang->product->closedStory  = '已關閉';
 
 $lang->product->allStory    = '全部需求';
 $lang->product->allProduct  = '全部產品';

@@ -9,20 +9,20 @@
  * @version     $Id: zh-tw.php 2464 2011-12-23 12:38:47Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->user->common        = '用戶';
-$lang->user->index         = "用戶視圖首頁";
-$lang->user->view          = "用戶詳情";
-$lang->user->create        = "添加用戶";
-$lang->user->read          = "查看用戶";
-$lang->user->edit          = "編輯用戶";
-$lang->user->update        = "編輯用戶";
-$lang->user->delete        = "刪除用戶";
-$lang->user->browse        = "瀏覽用戶";
-$lang->user->login         = "用戶登錄";
-$lang->user->userView      = "人員視圖";
-$lang->user->editProfile   = "修改個人信息";
-$lang->user->editPassword  = "修改密碼";
-$lang->user->deny          = "訪問受限";
+$lang->user->common          = '用戶';
+$lang->user->index           = "用戶視圖首頁";
+$lang->user->view            = "用戶詳情";
+$lang->user->create          = "添加用戶";
+$lang->user->read            = "查看用戶";
+$lang->user->edit            = "編輯用戶";
+$lang->user->update          = "編輯用戶";
+$lang->user->delete          = "刪除用戶";
+$lang->user->browse          = "瀏覽用戶";
+$lang->user->login           = "用戶登錄";
+$lang->user->userView        = "人員視圖";
+$lang->user->editProfile     = "修改個人信息";
+$lang->user->editPassword    = "修改密碼";
+$lang->user->deny            = "訪問受限";
 $lang->user->confirmDelete   = "您確認刪除該用戶嗎？";
 $lang->user->confirmActivate = "您確認激活該用戶嗎？";
 $lang->user->relogin         = "重新登錄";
@@ -48,6 +48,7 @@ $lang->user->loginFailed = "登錄失敗，請檢查您的用戶名或密碼是�
 
 $lang->user->genderList->m = '男';
 $lang->user->genderList->f = '女';
+
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
 $lang->user->keepLogin['on']      = '保持登錄';

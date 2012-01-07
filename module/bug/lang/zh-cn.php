@@ -65,22 +65,22 @@ $lang->bug->lastEditedByAB   = '修改者';
 $lang->bug->lastEditedDateAB = '修改日期';
 
 /* 方法列表。*/
-$lang->bug->index          = '首页';
-$lang->bug->create         = '创建Bug';
-$lang->bug->confirmBug     = '确认';
-$lang->bug->edit           = '编辑Bug';
-$lang->bug->browse         = 'Bug列表';
-$lang->bug->view           = 'Bug详情';
-$lang->bug->resolve        = '解决Bug';
-$lang->bug->close          = '关闭Bug';
-$lang->bug->activate       = '激活Bug';
-$lang->bug->reportChart    = '报表统计';
-$lang->bug->export         = '导出数据';
-$lang->bug->delete         = '删除Bug';
-$lang->bug->saveTemplate   = '保存模板';
-$lang->bug->deleteTemplate = '删除模板';
-$lang->bug->customFields   = '自定义字段';
-$lang->bug->restoreDefault = '恢复默认';
+$lang->bug->index              = '首页';
+$lang->bug->create             = '创建Bug';
+$lang->bug->confirmBug         = '确认';
+$lang->bug->edit               = '编辑Bug';
+$lang->bug->browse             = 'Bug列表';
+$lang->bug->view               = 'Bug详情';
+$lang->bug->resolve            = '解决Bug';
+$lang->bug->close              = '关闭Bug';
+$lang->bug->activate           = '激活Bug';
+$lang->bug->reportChart        = '报表统计';
+$lang->bug->export             = '导出数据';
+$lang->bug->delete             = '删除Bug';
+$lang->bug->saveTemplate       = '保存模板';
+$lang->bug->deleteTemplate     = '删除模板';
+$lang->bug->customFields       = '自定义字段';
+$lang->bug->restoreDefault     = '恢复默认';
 $lang->bug->ajaxGetUserBugs    = '接口:我的Bug';
 $lang->bug->ajaxGetModuleOwner = '接口:获得模块的默认指派人';
 $lang->bug->confirmStoryChange = '确认需求变动';
@@ -117,18 +117,18 @@ $lang->bug->lblAllFields                = '所有字段';
 $lang->bug->lblCustomFields             = '自定义字段';
 
 /* legend列表。*/
-$lang->bug->legendBasicInfo   = '基本信息';
-$lang->bug->legendMailto      = '抄送给';
-$lang->bug->legendAttatch     = '附件';
-$lang->bug->legendLinkBugs    = '相关Bug';
-$lang->bug->legendPrjStoryTask= '项目/需求/任务';
-$lang->bug->legendCases       = '相关用例';
-$lang->bug->legendSteps       = '重现步骤';
-$lang->bug->legendAction      = '操作';
-$lang->bug->legendHistory     = '历史记录';
-$lang->bug->legendComment     = '备注';
-$lang->bug->legendLife        = 'BUG的一生';
-$lang->bug->legendMisc        = '其相关他';
+$lang->bug->legendBasicInfo    = '基本信息';
+$lang->bug->legendMailto       = '抄送给';
+$lang->bug->legendAttatch      = '附件';
+$lang->bug->legendLinkBugs     = '相关Bug';
+$lang->bug->legendPrjStoryTask = '项目/需求/任务';
+$lang->bug->legendCases        = '相关用例';
+$lang->bug->legendSteps        = '重现步骤';
+$lang->bug->legendAction       = '操作';
+$lang->bug->legendHistory      = '历史记录';
+$lang->bug->legendComment      = '备注';
+$lang->bug->legendLife         = 'BUG的一生';
+$lang->bug->legendMisc         = '其相关他';
 
 /* 功能按钮。*/
 $lang->bug->buttonConfirm        = '确认';
@@ -147,9 +147,9 @@ $lang->bug->setTemplateTitle     = '请输入bug模板标题（保存之前请�
 $lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
 
 /* 模板。*/
-$lang->bug->tplStep        = "<p>[步骤]</p>";
-$lang->bug->tplResult      = "<p>[结果]</p>";
-$lang->bug->tplExpect      = "<p>[期望]</p>";
+$lang->bug->tplStep   = "<p>[步骤]</p>";
+$lang->bug->tplResult = "<p>[结果]</p>";
+$lang->bug->tplExpect = "<p>[期望]</p>";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[3] = '3';
@@ -220,10 +220,10 @@ $lang->bug->typeList['automation']   = '测试脚本';
 $lang->bug->typeList['trackthings']  = '事务跟踪';
 $lang->bug->typeList['others']       = '其他';
 
-$lang->bug->statusList['']            = '';
-$lang->bug->statusList['active']      = '激活';
-$lang->bug->statusList['resolved']    = '已解决';
-$lang->bug->statusList['closed']      = '已关闭';
+$lang->bug->statusList['']         = '';
+$lang->bug->statusList['active']   = '激活';
+$lang->bug->statusList['resolved'] = '已解决';
+$lang->bug->statusList['closed']   = '已关闭';
 
 $lang->bug->confirmedList[1] = '已确认';
 $lang->bug->confirmedList[0] = '未确认';

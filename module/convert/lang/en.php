@@ -30,9 +30,9 @@ $lang->convert->direction              = 'Please select the direction of issue i
 $lang->convert->questionTypeOfRedmine  = 'Types of issue in Redmine';
 $lang->convert->aimTypeOfZentao        = 'Aim type in Zentao';
 
-$lang->convert->directionList['bug']     = 'Bug';
-$lang->convert->directionList['task']    = 'Task';
-$lang->convert->directionList['story']   = 'Story';
+$lang->convert->directionList['bug']   = 'Bug';
+$lang->convert->directionList['task']  = 'Task';
+$lang->convert->directionList['story'] = 'Story';
 
 $lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x', 'bugfree_2' => '2.x');
 $lang->convert->sourceList['Redmine'] = array('Redmine_1_1' => '1.1');
@@ -43,15 +43,15 @@ $lang->convert->checkConfig = 'Check setting';
 $lang->convert->ok         = 'Check passed(√)';
 $lang->convert->fail       = 'Check failed(×)';
 
-$lang->convert->settingDB  = 'Set database';
-$lang->convert->dbHost     = 'Database server';
-$lang->convert->dbPort     = 'Server port';
-$lang->convert->dbUser     = 'Database user';
-$lang->convert->dbPassword = 'Database password';
-$lang->convert->dbName     = '%s database';
-$lang->convert->dbCharset  = '%s charset';
-$lang->convert->dbPrefix   = '%s table prefix';
-$lang->convert->installPath= '%s installed path';
+$lang->convert->settingDB   = 'Set database';
+$lang->convert->dbHost      = 'Database server';
+$lang->convert->dbPort      = 'Server port';
+$lang->convert->dbUser      = 'Database user';
+$lang->convert->dbPassword  = 'Database password';
+$lang->convert->dbName      = '%s database';
+$lang->convert->dbCharset   = '%s charset';
+$lang->convert->dbPrefix    = '%s table prefix';
+$lang->convert->installPath = '%s installed path';
 
 $lang->convert->checkDB    = 'Database';
 $lang->convert->checkTable = 'Table';

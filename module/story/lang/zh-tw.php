@@ -103,11 +103,11 @@ $lang->story->reasonList['cancel']     = '已取消';
 $lang->story->reasonList['bydesign']   = '設計如此';
 //$lang->story->reasonList['isbug']      = '是個Bug';
 
-$lang->story->reviewResultList['']       = '';
-$lang->story->reviewResultList['pass']   = '確認通過';
-$lang->story->reviewResultList['revert'] = '撤銷變更';
-$lang->story->reviewResultList['clarify']= '有待明確';
-$lang->story->reviewResultList['reject'] = '拒絶';
+$lang->story->reviewResultList['']        = '';
+$lang->story->reviewResultList['pass']    = '確認通過';
+$lang->story->reviewResultList['revert']  = '撤銷變更';
+$lang->story->reviewResultList['clarify'] = '有待明確';
+$lang->story->reviewResultList['reject']  = '拒絶';
 
 $lang->story->reviewList[0] = '否';
 $lang->story->reviewList[1] = '是';

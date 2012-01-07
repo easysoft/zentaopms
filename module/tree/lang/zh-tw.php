@@ -30,9 +30,9 @@ $lang->tree->ajaxGetSonModules = '介面:獲得子菜單列表';
 $lang->tree->confirmDelete = '您確定刪除該模組嗎？';
 $lang->tree->successSave   = '成功保存';
 
-$lang->tree->name   = '模組名稱';
-$lang->tree->parent = '上級模組';
-$lang->tree->child  = '子模組';
-$lang->tree->owner  = '負責人';
-$lang->tree->order  = '排序';
+$lang->tree->name       = '模組名稱';
+$lang->tree->parent     = '上級模組';
+$lang->tree->child      = '子模組';
+$lang->tree->owner      = '負責人';
+$lang->tree->order      = '排序';
 $lang->tree->projectDoc = '項目文檔';

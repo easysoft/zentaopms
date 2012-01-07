@@ -103,11 +103,11 @@ $lang->story->reasonList['cancel']     = 'Canceled';
 $lang->story->reasonList['bydesign']   = 'By design';
 //$lang->story->reasonList['isbug']      = '是个Bug';
 
-$lang->story->reviewResultList['']       = '';
-$lang->story->reviewResultList['pass']   = 'Pass';
-$lang->story->reviewResultList['revert'] = 'Revert';
-$lang->story->reviewResultList['clarify']= 'Clarify';
-$lang->story->reviewResultList['reject'] = 'Reject';
+$lang->story->reviewResultList['']        = '';
+$lang->story->reviewResultList['pass']    = 'Pass';
+$lang->story->reviewResultList['revert']  = 'Revert';
+$lang->story->reviewResultList['clarify'] = 'Clarify';
+$lang->story->reviewResultList['reject']  = 'Reject';
 
 $lang->story->reviewList[0] = 'No';
 $lang->story->reviewList[1] = 'Yes';

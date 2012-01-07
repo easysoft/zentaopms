@@ -30,9 +30,9 @@ $lang->tree->ajaxGetSonModules = 'API: Get son modules';
 $lang->tree->confirmDelete = 'Are you sure to delete this module?';
 $lang->tree->successSave   = 'Success saved';
 
-$lang->tree->name   = 'Name';
-$lang->tree->parent = 'Parent';
-$lang->tree->child  = 'Child';
-$lang->tree->owner  = 'Owner';
-$lang->tree->order  = 'Order';
+$lang->tree->name       = 'Name';
+$lang->tree->parent     = 'Parent';
+$lang->tree->child      = 'Child';
+$lang->tree->owner      = 'Owner';
+$lang->tree->order      = 'Order';
 $lang->tree->projectDoc = 'Project doc';

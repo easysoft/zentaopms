@@ -65,22 +65,22 @@ $lang->bug->lastEditedByAB   = 'Edited';
 $lang->bug->lastEditedDateAB = 'Edited Date';
 
 /* Actions. */
-$lang->bug->index          = 'Index';
-$lang->bug->create         = 'Create Bug';
-$lang->bug->confirmBug     = 'Confirm Bug';
-$lang->bug->edit           = 'Edit Bug';
-$lang->bug->browse         = 'Browse Bug';
-$lang->bug->view           = 'Bug Info';
-$lang->bug->resolve        = 'Resolve Bug';
-$lang->bug->close          = 'Close Bug';
-$lang->bug->activate       = 'Activate Bug';
-$lang->bug->reportChart    = 'Report';
-$lang->bug->export         = 'Export data';
-$lang->bug->delete         = 'Delete Bug';
-$lang->bug->saveTemplate   = 'Save template';
-$lang->bug->deleteTemplate = 'Delete template';
-$lang->bug->customFields   = 'Custom';
-$lang->bug->restoreDefault = 'Default';
+$lang->bug->index              = 'Index';
+$lang->bug->create             = 'Create Bug';
+$lang->bug->confirmBug         = 'Confirm Bug';
+$lang->bug->edit               = 'Edit Bug';
+$lang->bug->browse             = 'Browse Bug';
+$lang->bug->view               = 'Bug Info';
+$lang->bug->resolve            = 'Resolve Bug';
+$lang->bug->close              = 'Close Bug';
+$lang->bug->activate           = 'Activate Bug';
+$lang->bug->reportChart        = 'Report';
+$lang->bug->export             = 'Export data';
+$lang->bug->delete             = 'Delete Bug';
+$lang->bug->saveTemplate       = 'Save template';
+$lang->bug->deleteTemplate     = 'Delete template';
+$lang->bug->customFields       = 'Custom';
+$lang->bug->restoreDefault     = 'Default';
 $lang->bug->ajaxGetUserBugs    = 'API: My Bugs';
 $lang->bug->ajaxGetModuleOwner = 'API: Get module default owner';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
@@ -117,18 +117,18 @@ $lang->bug->lblAllFields                = 'All Fields';
 $lang->bug->lblCustomFields             = 'Custom Fields';
 
 /* Legends. */
-$lang->bug->legendBasicInfo   = 'Basic info';
-$lang->bug->legendMailto      = 'Mailto';
-$lang->bug->legendAttatch     = 'Files';
-$lang->bug->legendLinkBugs    = 'Related bug';
-$lang->bug->legendPrjStoryTask= 'Project, story & task';
-$lang->bug->legendCases       = 'Related case';
-$lang->bug->legendSteps       = 'Steps';
-$lang->bug->legendAction      = 'Action';
-$lang->bug->legendHistory     = 'History';
-$lang->bug->legendComment     = 'Comment';
-$lang->bug->legendLife        = 'Lifetime';
-$lang->bug->legendMisc        = 'Misc';
+$lang->bug->legendBasicInfo    = 'Basic info';
+$lang->bug->legendMailto       = 'Mailto';
+$lang->bug->legendAttatch      = 'Files';
+$lang->bug->legendLinkBugs     = 'Related bug';
+$lang->bug->legendPrjStoryTask = 'Project, story & task';
+$lang->bug->legendCases        = 'Related case';
+$lang->bug->legendSteps        = 'Steps';
+$lang->bug->legendAction       = 'Action';
+$lang->bug->legendHistory      = 'History';
+$lang->bug->legendComment      = 'Comment';
+$lang->bug->legendLife         = 'Lifetime';
+$lang->bug->legendMisc         = 'Misc';
 
 /* Action buttons. */
 $lang->bug->buttonConfirm        = 'Confirm';
@@ -147,9 +147,9 @@ $lang->bug->setTemplateTitle     = 'Please input the template title:';
 $lang->bug->remindTask           = 'This bug has been to be a task, update the task:%s or not?';
 
 /* Templates. */
-$lang->bug->tplStep        = "<p>[Steps]</p>";
-$lang->bug->tplResult      = "<p>[Result]</p>";
-$lang->bug->tplExpect      = "<p>[Expect]</p>";
+$lang->bug->tplStep   = "<p>[Steps]</p>";
+$lang->bug->tplResult = "<p>[Result]</p>";
+$lang->bug->tplExpect = "<p>[Expect]</p>";
 
 /* Field options lists. */
 $lang->bug->severityList[3] = '3';
@@ -220,10 +220,10 @@ $lang->bug->typeList['automation']   = 'Automation';
 $lang->bug->typeList['trackthings']  = 'Tracking';
 $lang->bug->typeList['others']       = 'Others';
 
-$lang->bug->statusList['']            = '';
-$lang->bug->statusList['active']      = 'Active';
-$lang->bug->statusList['resolved']    = 'Resolved';
-$lang->bug->statusList['closed']      = 'Closed';
+$lang->bug->statusList['']         = '';
+$lang->bug->statusList['active']   = 'Active';
+$lang->bug->statusList['resolved'] = 'Resolved';
+$lang->bug->statusList['closed']   = 'Closed';
 
 $lang->bug->confirmedList[1] = 'Confirmed';
 $lang->bug->confirmedList[0] = 'Unconfirmed';

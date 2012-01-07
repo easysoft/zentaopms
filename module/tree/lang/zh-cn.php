@@ -30,9 +30,9 @@ $lang->tree->ajaxGetSonModules = '接口:获得子菜单列表';
 $lang->tree->confirmDelete = '您确定删除该模块吗？';
 $lang->tree->successSave   = '成功保存';
 
-$lang->tree->name   = '模块名称';
-$lang->tree->parent = '上级模块';
-$lang->tree->child  = '子模块';
-$lang->tree->owner  = '负责人';
-$lang->tree->order  = '排序';
+$lang->tree->name       = '模块名称';
+$lang->tree->parent     = '上级模块';
+$lang->tree->child      = '子模块';
+$lang->tree->owner      = '负责人';
+$lang->tree->order      = '排序';
 $lang->tree->projectDoc = '项目文档';

@@ -9,19 +9,19 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->todo->common    = 'TODO';
-$lang->todo->index     = "Index";
-$lang->todo->create    = "Create";
-$lang->todo->edit      = "Edit";
-$lang->todo->view      = "Info";
-$lang->todo->viewAB    = "Info";
-$lang->todo->markDone  = "Undone";
-$lang->todo->markWait  = "Done";
-$lang->todo->markDoing = "Done";
-$lang->todo->mark      = "Change status";
-$lang->todo->export    = "Export";
-$lang->todo->delete    = "Delete";
-$lang->todo->browse    = "Browse";
+$lang->todo->common       = 'TODO';
+$lang->todo->index        = "Index";
+$lang->todo->create       = "Create";
+$lang->todo->edit         = "Edit";
+$lang->todo->view         = "Info";
+$lang->todo->viewAB       = "Info";
+$lang->todo->markDone     = "Undone";
+$lang->todo->markWait     = "Done";
+$lang->todo->markDoing    = "Done";
+$lang->todo->mark         = "Change status";
+$lang->todo->export       = "Export";
+$lang->todo->delete       = "Delete";
+$lang->todo->browse       = "Browse";
 $lang->todo->import2Today = "Import to today";
 $lang->todo->changeStatus = "Change";
 
@@ -41,8 +41,8 @@ $lang->todo->desc        = 'Desc';
 $lang->todo->private     = 'Private';
 $lang->todo->idvalue     = 'Task or bug';
 
-$lang->todo->week  = '(l)';  // date function's param.
-$lang->todo->today = 'Today';
+$lang->todo->week         = '(l)';  // date function's param.
+$lang->todo->today        = 'Today';
 $lang->todo->weekDateList = '';
 $lang->todo->dayInFeature = 'Feature';
 $lang->todo->confirmBug   = 'This todo linked to bug #%s，chang it also?';

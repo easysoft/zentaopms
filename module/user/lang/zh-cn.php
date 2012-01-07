@@ -9,20 +9,20 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->user->common        = '用户';
-$lang->user->index         = "用户视图首页";
-$lang->user->view          = "用户详情";
-$lang->user->create        = "添加用户";
-$lang->user->read          = "查看用户";
-$lang->user->edit          = "编辑用户";
-$lang->user->update        = "编辑用户";
-$lang->user->delete        = "删除用户";
-$lang->user->browse        = "浏览用户";
-$lang->user->login         = "用户登录";
-$lang->user->userView      = "人员视图";
-$lang->user->editProfile   = "修改个人信息";
-$lang->user->editPassword  = "修改密码";
-$lang->user->deny          = "访问受限";
+$lang->user->common          = '用户';
+$lang->user->index           = "用户视图首页";
+$lang->user->view            = "用户详情";
+$lang->user->create          = "添加用户";
+$lang->user->read            = "查看用户";
+$lang->user->edit            = "编辑用户";
+$lang->user->update          = "编辑用户";
+$lang->user->delete          = "删除用户";
+$lang->user->browse          = "浏览用户";
+$lang->user->login           = "用户登录";
+$lang->user->userView        = "人员视图";
+$lang->user->editProfile     = "修改个人信息";
+$lang->user->editPassword    = "修改密码";
+$lang->user->deny            = "访问受限";
 $lang->user->confirmDelete   = "您确认删除该用户吗？";
 $lang->user->confirmActivate = "您确认激活该用户吗？";
 $lang->user->relogin         = "重新登录";
@@ -48,6 +48,7 @@ $lang->user->loginFailed = "登录失败，请检查您的用户名或密码是�
 
 $lang->user->genderList->m = '男';
 $lang->user->genderList->f = '女';
+
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
 $lang->user->keepLogin['on']      = '保持登录';

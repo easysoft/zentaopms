@@ -26,13 +26,13 @@ $lang->convert->source           = '來源系統';
 $lang->convert->version          = '版本';
 $lang->convert->mustSelectSource = "必須選擇一個來源。";
 
-$lang->convert->direction              = '請選擇項目問題轉換方向';
-$lang->convert->questionTypeOfRedmine  = 'Redmine中問題類型';
-$lang->convert->aimTypeOfZentao        = '轉化為Zentao中的類型';
+$lang->convert->direction             = '請選擇項目問題轉換方向';
+$lang->convert->questionTypeOfRedmine = 'Redmine中問題類型';
+$lang->convert->aimTypeOfZentao       = '轉化為Zentao中的類型';
 
-$lang->convert->directionList['bug']     = 'Bug';
-$lang->convert->directionList['task']    = '任務';
-$lang->convert->directionList['story']   = '需求';
+$lang->convert->directionList['bug']   = 'Bug';
+$lang->convert->directionList['task']  = '任務';
+$lang->convert->directionList['story'] = '需求';
 
 $lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x', 'bugfree_2' => '2.x');
 $lang->convert->sourceList['Redmine'] = array('Redmine_1.1' => '1.1');
@@ -40,18 +40,18 @@ $lang->convert->sourceList['Redmine'] = array('Redmine_1.1' => '1.1');
 $lang->convert->setting     = '設置';
 $lang->convert->checkConfig = '檢查配置';
 
-$lang->convert->ok         = '檢查通過(√)';
-$lang->convert->fail       = '檢查失敗(×)';
+$lang->convert->ok          = '檢查通過(√)';
+$lang->convert->fail        = '檢查失敗(×)';
 
-$lang->convert->settingDB  = '設置資料庫';
-$lang->convert->dbHost     = '資料庫伺服器';
-$lang->convert->dbPort     = '伺服器連接埠';
-$lang->convert->dbUser     = '資料庫用戶名';
-$lang->convert->dbPassword = '資料庫密碼';
-$lang->convert->dbName     = '%s使用的庫';
-$lang->convert->dbCharset  = '%s資料庫編碼';
-$lang->convert->dbPrefix   = '%s表首碼';
-$lang->convert->installPath= '%s安裝的根目錄';
+$lang->convert->settingDB   = '設置資料庫';
+$lang->convert->dbHost      = '資料庫伺服器';
+$lang->convert->dbPort      = '伺服器連接埠';
+$lang->convert->dbUser      = '資料庫用戶名';
+$lang->convert->dbPassword  = '資料庫密碼';
+$lang->convert->dbName      = '%s使用的庫';
+$lang->convert->dbCharset   = '%s資料庫編碼';
+$lang->convert->dbPrefix    = '%s表首碼';
+$lang->convert->installPath = '%s安裝的根目錄';
 
 $lang->convert->checkDB    = '資料庫';
 $lang->convert->checkTable = '表';

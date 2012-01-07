@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2507 2012-01-02 08:37:23Z wwccss $
+ * @version     $Id: zh-tw.php 2538 2012-01-04 07:25:59Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -122,7 +122,7 @@ $lang->my->menu->task      = '我的任務|my|task|';
 $lang->my->menu->bug       = '我的Bug|my|bug|';
 $lang->my->menu->testtask  = '我的測試|my|testtask|';
 $lang->my->menu->story     = '我的需求|my|story|';
-$lang->my->menu->project   = '我的項目|my|project|';
+$lang->my->menu->myProject = '我的項目|my|project|';
 $lang->my->menu->dynamic   = '我的動態|my|dynamic|';
 $lang->my->menu->profile   = array('link' => '我的檔案|my|profile|', 'alias' => 'editprofile');
 $lang->todo->menu          = $lang->my->menu;
@@ -204,14 +204,14 @@ $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
 /* 用戶信息菜單設置。*/
-$lang->user->menu->account  = '%s' . $lang->arrow;
-$lang->user->menu->todo     = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
-$lang->user->menu->task     = '任務列表|user|task|account=%s';
-$lang->user->menu->bug      = 'Bug列表|user|bug|account=%s';
-$lang->user->menu->dynamic  = '用戶動態|user|dynamic|type=today&account=%s';
-$lang->user->menu->project  = '項目列表|user|project|account=%s';
-$lang->user->menu->profile  = array('link' => '用戶信息|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse   = array('link' => '用戶管理|company|browse|', 'float' => 'right');
+$lang->user->menu->account     = '%s' . $lang->arrow;
+$lang->user->menu->todo        = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
+$lang->user->menu->task        = '任務列表|user|task|account=%s';
+$lang->user->menu->bug         = 'Bug列表|user|bug|account=%s';
+$lang->user->menu->dynamic     = '用戶動態|user|dynamic|type=today&account=%s';
+$lang->user->menu->projectList = '項目列表|user|project|account=%s';
+$lang->user->menu->profile     = array('link' => '用戶信息|user|profile|account=%s', 'alias' => 'edit');
+$lang->user->menu->browse      = array('link' => '用戶管理|company|browse|', 'float' => 'right');
 
 /* 後台管理菜單設置。*/
 $lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');

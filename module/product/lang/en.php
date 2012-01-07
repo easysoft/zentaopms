@@ -51,16 +51,16 @@ $lang->product->RM        = 'Release manager';
 $lang->product->acl       = 'Access limitation';
 $lang->product->whitelist = 'Whitelist';
 
-$lang->product->moduleStory = 'By module';
-$lang->product->searchStory = 'By search';
-$lang->product->assignedToMe= 'To me';
-$lang->product->openedByMe  = 'Opened by me';
-$lang->product->reviewedByMe= 'Reviewed by me';
-$lang->product->closedByMe  = 'Closed by me';
-$lang->product->draftStory  = 'Draft story';
-$lang->product->activeStory = 'Active story';
-$lang->product->changedStory= 'Changed story';
-$lang->product->closedStory = 'Closed story';
+$lang->product->moduleStory  = 'By module';
+$lang->product->searchStory  = 'By search';
+$lang->product->assignedToMe = 'To me';
+$lang->product->openedByMe   = 'Opened by me';
+$lang->product->reviewedByMe = 'Reviewed by me';
+$lang->product->closedByMe   = 'Closed by me';
+$lang->product->draftStory   = 'Draft story';
+$lang->product->activeStory  = 'Active story';
+$lang->product->changedStory = 'Changed story';
+$lang->product->closedStory  = 'Closed story';
 
 $lang->product->allStory    = 'All story';
 $lang->product->allProduct  = 'All products';

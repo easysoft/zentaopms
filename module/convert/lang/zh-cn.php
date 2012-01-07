@@ -26,13 +26,13 @@ $lang->convert->source           = '来源系统';
 $lang->convert->version          = '版本';
 $lang->convert->mustSelectSource = "必须选择一个来源。";
 
-$lang->convert->direction              = '请选择项目问题转换方向';
-$lang->convert->questionTypeOfRedmine  = 'Redmine中问题类型';
-$lang->convert->aimTypeOfZentao        = '转化为Zentao中的类型';
+$lang->convert->direction             = '请选择项目问题转换方向';
+$lang->convert->questionTypeOfRedmine = 'Redmine中问题类型';
+$lang->convert->aimTypeOfZentao       = '转化为Zentao中的类型';
 
-$lang->convert->directionList['bug']     = 'Bug';
-$lang->convert->directionList['task']    = '任务';
-$lang->convert->directionList['story']   = '需求';
+$lang->convert->directionList['bug']   = 'Bug';
+$lang->convert->directionList['task']  = '任务';
+$lang->convert->directionList['story'] = '需求';
 
 $lang->convert->sourceList['BugFree'] = array('bugfree_1' => '1.x', 'bugfree_2' => '2.x');
 $lang->convert->sourceList['Redmine'] = array('Redmine_1.1' => '1.1');
@@ -40,18 +40,18 @@ $lang->convert->sourceList['Redmine'] = array('Redmine_1.1' => '1.1');
 $lang->convert->setting     = '设置';
 $lang->convert->checkConfig = '检查配置';
 
-$lang->convert->ok         = '检查通过(√)';
-$lang->convert->fail       = '检查失败(×)';
+$lang->convert->ok          = '检查通过(√)';
+$lang->convert->fail        = '检查失败(×)';
 
-$lang->convert->settingDB  = '设置数据库';
-$lang->convert->dbHost     = '数据库服务器';
-$lang->convert->dbPort     = '服务器端口';
-$lang->convert->dbUser     = '数据库用户名';
-$lang->convert->dbPassword = '数据库密码';
-$lang->convert->dbName     = '%s使用的库';
-$lang->convert->dbCharset  = '%s数据库编码';
-$lang->convert->dbPrefix   = '%s表前缀';
-$lang->convert->installPath= '%s安装的根目录';
+$lang->convert->settingDB   = '设置数据库';
+$lang->convert->dbHost      = '数据库服务器';
+$lang->convert->dbPort      = '服务器端口';
+$lang->convert->dbUser      = '数据库用户名';
+$lang->convert->dbPassword  = '数据库密码';
+$lang->convert->dbName      = '%s使用的库';
+$lang->convert->dbCharset   = '%s数据库编码';
+$lang->convert->dbPrefix    = '%s表前缀';
+$lang->convert->installPath = '%s安装的根目录';
 
 $lang->convert->checkDB    = '数据库';
 $lang->convert->checkTable = '表';
