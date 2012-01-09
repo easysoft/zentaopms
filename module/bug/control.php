@@ -96,8 +96,8 @@ class bug extends control
         elseif($browseType == 'openedbyme')    $bugs = $this->bug->getByOpenedbyme($productID, $projects, $orderBy, $pager);
         elseif($browseType == 'resolvedbyme')  $bugs = $this->bug->getByResolvedbyme($productID, $projects, $orderBy, $pager);
         elseif($browseType == 'assigntonull')  $bugs = $this->bug->getByAssigntonull($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'unresolved')    $bugs = $this->bug->getByUnresolved($productID, $projects, $orderBy, $pager);
-        elseif($browseType == 'unclosed')      $bugs = $this->bug->getByUnclosed($productID, $projects, $orderBy, $pager);
+        elseif($browseType == 'unresolved')    $bugs = $this->bug->getByStatus($productID, $projects, 'unresolved', $orderBy, $pager);
+        elseif($browseType == 'unclosed')      $bugs = $this->bug->getByStatus($productID, $projects, 'unclosed', $orderBy, $pager);
         elseif($browseType == 'longlifebugs')  $bugs = $this->bug->getByLonglifebugs($productID, $projects, $orderBy, $pager);
         elseif($browseType == 'postponedbugs') $bugs = $this->bug->getByPostponedbugs($productID, $projects, $orderBy, $pager);
         elseif($browseType == 'needconfirm')   $bugs = $this->bug->getByNeedconfirm($productID, $projects, $orderBy, $pager);

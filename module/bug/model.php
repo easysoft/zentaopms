@@ -818,39 +818,24 @@ class bugModel extends model
     }
 
     /**
-     * Get unsolved bugs. 
+     * Get bugs the status is active or unclosed. 
      * 
      * @param  int    $productID 
      * @param  array  $projects 
+     * @param  string $status 
      * @param  int    $queryID 
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getByUnresolved($productID, $projects, $orderBy, $pager)
+    public function getByStatus($productID, $projects, $status, $orderBy, $pager)
     {
-        return $this->dao->findByStatus('active')->from(TABLE_BUG)->andWhere('product')->eq($productID)
-            ->andWhere('project')->in(array_keys($projects))
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-    }
-
-    /**
-     * Get unclosed bugs. 
-     * 
-     * @param  int    $productID 
-     * @param  array  $projects 
-     * @param  int    $queryID 
-     * @param  string $orderBy 
-     * @param  object $pager 
-     * @access public
-     * @return array
-     */
-    public function getByUnclosed($productID, $projects, $orderBy, $pager)
-    {
-        return $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')->andWhere('product')->eq($productID)
-            ->andWhere('project')->in(array_keys($projects))
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('product')->eq($productID)
+            ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')
+            ->beginIF($status == 'unresolved')->andWhere('status')->eq('active')
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }

@@ -178,6 +178,7 @@ class storyModel extends model
         }
         return false;
     }
+
     /**
      * Create a batch stories.
      * 
