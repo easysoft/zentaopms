@@ -791,6 +791,7 @@ class projectModel extends model
     {
         extract($_POST);
 
+        $accounts = array_unique($accounts);
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
