@@ -1015,11 +1015,6 @@ class project extends control
         foreach($members as $account => $member)
         {
             if(!@$users[$member->account]) $member->account .= $this->lang->user->deleted;
-            if(isset($users[$member->account])) 
-            {
-                $member->account = substr($users[$member->account], 2);
-                unset($users[$account]);
-            }
         }
 
         /* Set menu. */

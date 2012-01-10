@@ -21,9 +21,11 @@
       <th><?php echo $lang->team->hours;?></th>
     </tr>
     <?php foreach($members as $key => $member):?>
+    <?php $realname = substr($users[$member->account], 2);?>
     <?php unset($users[$member->account]);?>
     <tr>
-      <td><input type='text' name='accounts[]' id='account<?php echo $key;?>' value='<?php echo $member->account;?>' readonly class='text-2' /></td>
+      <td><input type='text' name='realnames[]' id='account<?php echo $key;?>' value='<?php echo $realname;?>' readonly class='text-2' /></td>
+      <td class='hidden'><input type='text' name='accounts[]' id='account<?php echo $key;?>' value='<?php echo $member->account;?>' readonly class='text-2' /></td>
       <td><input type='text' name='roles[]'    id='role<?php echo $key;?>'    value='<?php echo $member->role;?>' class='text-2' /></td>
       <td><input type='text'   name='days[] '  id='days<?php echo $key;?>'    value='<?php echo $member->days;?>' class='text-2' /></td>
       <td>
