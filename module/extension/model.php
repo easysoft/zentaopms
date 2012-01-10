@@ -508,7 +508,8 @@ class extensionModel extends model
         $return->error  = '';
 
         /* try remove pre extracted files. */
-        $this->classFile->removeDir("ext/$extension");
+        $extensionPath = "ext/$extension";
+        if(is_dir($extensionPath)) $this->classFile->removeDir($extensionPath);
 
         /* Extract files. */
         $packageFile = $this->getPackageFile($extension);
@@ -516,7 +517,7 @@ class extensionModel extends model
         $zip = new pclzip($packageFile);
         $files = $zip->listContent();
         $removePath = $files[0]['filename'];
-        if($zip->extract(PCLZIP_OPT_PATH, "ext/$extension", PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
+        if($zip->extract(PCLZIP_OPT_PATH, $extensionPath, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
         {
             $return->result = 'fail';
             $return->error  = $zip->errorInfo(true);
@@ -636,7 +637,7 @@ class extensionModel extends model
 
         /* Remove the extracted files. */
         $extractedDir = realpath("ext/$extension");
-        if(!$this->classFile->removeDir($extractedDir))
+        if($extractedDir != '/' and !$this->classFile->removeDir($extractedDir))
         {
             $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $extractedDir" : "rmdir $extractedDir /s";
         }
