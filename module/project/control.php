@@ -1012,10 +1012,9 @@ class project extends control
         $members = $this->project->getTeamMembers($projectID);
 
         /* The deleted members. */
-        foreach($members as $member)
+        foreach($members as $account => $member)
         {
             if(!@$users[$member->account]) $member->account .= $this->lang->user->deleted;
-            if(isset($users[$member->account])) $member->account = substr($users[$member->account], 2);
         }
 
         /* Set menu. */

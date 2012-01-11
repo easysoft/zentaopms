@@ -58,6 +58,7 @@ class file
     public function removeDir($dir)
     {
         $dir = realpath($dir) . '/';
+        if($dir == '/') return false;
 
         if(!is_writable($dir)) return false;
         if(!is_dir($dir)) return true;
