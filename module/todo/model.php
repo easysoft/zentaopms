@@ -133,6 +133,11 @@ class todoModel extends model
         {
             extract($this->getLastWeek());
         }
+        elseif($date == 'future')
+        {
+            $begin = '2030-01-01';
+            $end   = $begin;
+        }
         elseif($date == 'all')
         {
             $begin = '1970-01-01';

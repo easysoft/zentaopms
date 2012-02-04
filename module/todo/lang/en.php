@@ -70,6 +70,7 @@ $lang->todo->lblDisableDate = 'Set time lately';
 
 $lang->todo->thisWeekTodos = 'This week';
 $lang->todo->lastWeekTodos = 'Last week';
+$lang->todo->futureTodos   = 'Future';
 $lang->todo->allDaysTodos  = 'All todo';
 $lang->todo->allUndone     = 'Undone';
 $lang->todo->todayTodos    = 'Today';
