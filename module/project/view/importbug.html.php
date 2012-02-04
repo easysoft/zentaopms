@@ -22,7 +22,7 @@ var browseType = '<?php echo $browseType;?>';
 <div id='featurebar'>
 <?php echo "<span id='bysearchTab'><a href='#'>{$lang->project->byQuery}</a></span> ";?>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+<div id='querybox'><?php echo $searchForm;?></div>
 <div>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1 colored tablesorter'>
