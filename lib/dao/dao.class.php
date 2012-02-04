@@ -1537,6 +1537,20 @@ class sql
     }
 
     /**
+     * Create the find_in_set by part. 
+     * 
+     * @param  int    $str 
+     * @param  int    $strList 
+     * @access public
+     * @return object the sql object.
+     */
+    public function findInSet($str, $strList)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql .= "FIND_IN_SET(" . $str . "," . $strList . ")";
+    }
+    
+    /**
      * Create the order by part.
      * 
      * @param  string $order 
