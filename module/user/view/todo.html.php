@@ -45,7 +45,7 @@
     <?php foreach($todos as $todo):?>
     <tr class='a-center'>
       <td><?php echo $todo->id;?></td>
-      <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFeature : $todo->date;?></td>
+      <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFuture : $todo->date;?></td>
       <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
       <td><?php echo $todo->pri;?></td>
       <td class='a-left'><?php if(!common::printLink('todo', 'view', "todo=$todo->id", $todo->name)) echo $todo->name;?></td>

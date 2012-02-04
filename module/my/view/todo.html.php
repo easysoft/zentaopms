@@ -53,11 +53,11 @@
     <tr class='a-center'>
       <td class='a-left'>
         <?php
-        if($importFeature) echo "<input type='checkbox' name='todos[]' value='$todo->id' /> ";
+        if($importFuture) echo "<input type='checkbox' name='todos[]' value='$todo->id' /> ";
         echo $todo->id;
         ?>
       </td>
-      <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFeature : $todo->date;?></td>
+      <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFuture : $todo->date;?></td>
       <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
       <td><?php echo $todo->pri;?></td>
       <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my"), $todo->name);?></td>
@@ -75,7 +75,7 @@
     </tr>
     <?php endforeach;?>
     </tbody>
-    <?php if($importFeature):?>
+    <?php if($importFuture):?>
     <tfoot>
     <tr>
       <td colspan='9'>

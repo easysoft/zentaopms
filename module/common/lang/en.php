@@ -62,7 +62,7 @@ $lang->notFound     = 'Sorry, the object not found.';
 $lang->showAll      = '++ Show All ++';
 $lang->hideClosed   = '-- Hide Closed--';
 
-$lang->feature      = 'Feature';
+$lang->future       = 'Future';
 $lang->year         = 'Year';
 $lang->workingHour  = 'Hour';
 

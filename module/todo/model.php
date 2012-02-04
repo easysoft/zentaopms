@@ -13,7 +13,7 @@
 <?php
 class todoModel extends model
 {
-    const DAY_IN_FEATURE = 20300101;
+    const DAY_IN_FUTURE = 20300101;
 
     /**
      * Create a todo.
@@ -221,7 +221,7 @@ class todoModel extends model
             $date   = date(DT_DATE2, $time);
             $dates[$date] = $label;
         }
-        $dates[self::DAY_IN_FEATURE] = $this->lang->todo->dayInFeature;
+        $dates[self::DAY_IN_FUTURE] = $this->lang->todo->dayInFuture;
         return $dates;
     }
 
@@ -370,7 +370,7 @@ class todoModel extends model
     /**
      * Get the time at the middle of this week.
      * 
-     * If today in week is 1, move it one day in feature. Else is 7, move it back one day. To keep the time geted in this week.
+     * If today in week is 1, move it one day in future. Else is 7, move it back one day. To keep the time geted in this week.
      *
      * @access private
      * @return time
