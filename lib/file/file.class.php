@@ -92,29 +92,93 @@ class file
      */
     public function readDir($dir, $exceptions = array())
     {
-         static $files = array();
+        static $files = array();
 
-         if(!is_dir($dir)) return $files;
+        if(!is_dir($dir)) return $files;
 
-         $dir    = realpath($dir) . '/';
-         $entries = scandir($dir);
- 
-         foreach($entries as $entry)
-         {
-             if($entry == '.' or $entry == '..' or $entry == '.svn') continue;
-             if(in_array($entry, $exceptions)) continue;
+        $dir    = realpath($dir) . '/';
+        $entries = scandir($dir);
 
-             $fullEntry = $dir . $entry;
-             if(is_file($fullEntry))
-             {
-                 $files[] = $dir . $entry;
-             }
-             else
-             {
-                 $nextDir = $dir . $entry;
-                 $this->readDir($nextDir);
-             }
-         }
-         return $files;
+        foreach($entries as $entry)
+        {
+            if($entry == '.' or $entry == '..' or $entry == '.svn') continue;
+            if(in_array($entry, $exceptions)) continue;
+
+            $fullEntry = $dir . $entry;
+            if(is_file($fullEntry))
+            {
+                $files[] = $dir . $entry;
+            }
+            else
+            {
+                $nextDir = $dir . $entry;
+                $this->readDir($nextDir);
+            }
+        }
+        return $files;
+    }
+
+    /**
+     * Make a dir.
+     * 
+     * @param  string    $dir 
+     * @access public
+     * @return bool
+     */
+    public function mkdir($dir)
+    {
+        return mkdir($dir);
+    }
+
+    /**
+     * Remove a file
+     * 
+     * @param  string    $file 
+     * @access public
+     * @return bool
+     */
+    public function removeFile($file)
+    {
+        if(!file_exists($file)) return true;
+        return @unlink($file);
+    }
+
+   /**
+    * Batch remove files. use glob function.
+    * 
+    * @param  string    $patern
+    * @access public
+    * @return avoid
+    */
+    public function batchRemoveFile($patern)
+    {
+        $files = glob($patern);
+        foreach($files as $file) @unlink($file);
+    }
+
+    /**
+     * Remove a file
+     * 
+     * @param  string    from
+     * @param  string    to
+     * @access public
+     * @return bool
+     */
+    public function copyFile($from, $to)
+    {
+        return @copy($from, $to);
+    }
+
+    /**
+     * Rename a file or directory.
+     * 
+     * @param  string    from
+     * @param  string    to
+     * @access public
+     * @return bool
+     */
+    public function rename($from, $to)
+    {
+        return rename($from, $to);
     }
 }
