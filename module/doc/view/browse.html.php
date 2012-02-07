@@ -34,7 +34,7 @@ var browseType = '<?php echo $browseType;?>';
       <div class='box-content'>
         <?php echo $moduleTree;?>
         <div class='a-right'>
-          <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->tree->manage);?>
+          <?php common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->tree->docManage);?>
         </div>
       </div>
     </td>
