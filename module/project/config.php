@@ -1,5 +1,4 @@
 <?php
-$config->project->projectCounts    = 50;
 $config->project->defaultWorkhours = 7;
 $config->project->orderBy          = 'status, id desc';
 

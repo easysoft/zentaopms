@@ -353,19 +353,16 @@ class productModel extends model
     /**
      * Get product stats.
      * 
-     * @param  int    $counts 
-     *
      * @access public
      * @return array
      */
-    public function getStats($counts)
+    public function getStats()
     {
         $this->loadModel('report');
         $this->loadModel('story');
 
         $products = $this->getList(',normal');
         $stats    = array();
-        $i        = 1;
 
         $stories = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
@@ -410,14 +407,13 @@ class productModel extends model
         {
             if($this->checkPriv($product))
             {
-                if($i <= $counts and $product->status != 'closed')
+                if($product->status != 'closed')
                 {
                     $product->stories = $stories[$product->id];
                     $product->plans   = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
                     $product->releases= isset($releases[$product->id]) ? $releases[$product->id] : 0;
 
                     $stats[] = $product;
-                    $i ++;
                 }
             }
             else

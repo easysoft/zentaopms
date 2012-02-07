@@ -1,5 +1,4 @@
 <?php
-$config->product->productCounts = 50;
 $config->product->orderBy       = 'code';
 
 global $lang, $app;

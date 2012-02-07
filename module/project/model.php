@@ -319,18 +319,16 @@ class projectModel extends model
     /**
      * Get project stats.
      * 
-     * @param  int    $counts 
      * @param  string $status 
      * @access public
      * @return array
      */
-    public function getProjectStats($counts, $status = 'undone', $productID = 0)
+    public function getProjectStats($status = 'undone', $productID = 0)
     {
         $this->loadModel('report');
 
         $projects = $this->getList($status, 0, $productID);
         $stats    = array();
-        $i = 1;
 
         /* Get total estimate, consumed and left hours of project. */
         $emptyHour = (object)array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
@@ -374,30 +372,25 @@ class projectModel extends model
         {
             if($this->checkPriv($project))
             {
-                if($i <= $counts)
-                {
-                    // Process the end time.
-                    $project->end = date(DT_DATE4, strtotime($project->end));
+                // Process the end time.
+                $project->end = date(DT_DATE4, strtotime($project->end));
 
-                    /* Process the burns. */
-                    $project->burns = array();
-                    $burnData       = $this->getBurnData($project->id);
-                    foreach($burnData as $data) $project->burns[] = $data->value;
-                    $stats[] = $project;
+                /* Process the burns. */
+                $project->burns = array();
+                $burnData       = $this->getBurnData($project->id);
+                foreach($burnData as $data) $project->burns[] = $data->value;
+                $stats[] = $project;
 
-                    /* Process the hours. */
-                    $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : $emptyHour;
+                /* Process the hours. */
+                $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : $emptyHour;
 
-                    /* Process the tasks. */
-                    $project->tasks = isset($tasks[$project->id]) ? $tasks[$project->id] : array();
-                }
+                /* Process the tasks. */
+                $project->tasks = isset($tasks[$project->id]) ? $tasks[$project->id] : array();
             }
             else
             {
                 unset($projects[$key]);
             }
-
-            $i ++;
         }
 
         return $stats;

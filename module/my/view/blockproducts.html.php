@@ -1,4 +1,4 @@
-<div class='block' id='productbox'>
+<div class='block' id='productbox' style="height:180px; overflow-y:auto">
 <?php if(empty($productStats)):?>
 <table class='table-1 a-center' height='100%'>
   <caption><?php echo $lang->my->home->products;?></caption>
@@ -34,6 +34,5 @@
     </tr>
     <?php endforeach;?>
   </table>
-</div>
 <?php endif;?>
 </div>

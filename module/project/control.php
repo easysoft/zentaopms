@@ -42,7 +42,7 @@ class project extends control
         if($locate == 'yes') $this->locate($this->createLink('project', 'browse'));
 
         $this->app->loadLang('my');
-        $this->view->projectStats  = $this->project->getProjectStats($this->config->project->projectCounts, $status);
+        $this->view->projectStats  = $this->project->getProjectStats($status);
 
         $this->display();
     }

@@ -46,7 +46,7 @@ class product extends control
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
         
         $this->app->loadLang('my');
-        $this->view->productStats = $this->product->getStats($this->config->product->productCounts);
+        $this->view->productStats = $this->product->getStats();
         $this->display();
     }
 
@@ -61,7 +61,7 @@ class product extends control
     public function project($status = 'all', $productID = 0)
     {
         $this->app->loadLang('my');
-        $this->view->projectStats  = $this->loadModel('project')->getProjectStats($this->config->project->projectCounts, $status, $productID);
+        $this->view->projectStats  = $this->loadModel('project')->getProjectStats($status, $productID);
 
         $this->view->productID = $productID;
         $this->display();
