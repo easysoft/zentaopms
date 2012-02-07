@@ -1,0 +1,35 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: xampp_control - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\yangyang\LOCALS~1\Temp\RSPDB.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib /nologo /subsystem:windows /incremental:yes /pdb:"Debug/xampp_control.pdb" /debug /machine:I386 /out:"Debug/xampp_control.exe" /pdbtype:sept 
+".\Debug\XAMPP.OBJ"
+".\Debug\XAMPP.res"
+]
+Creating command line "link.exe @C:\DOCUME~1\yangyang\LOCALS~1\Temp\RSPDB.tmp"
+<h3>Output Window</h3>
+Linking...
+Creating temporary file "C:\DOCUME~1\yangyang\LOCALS~1\Temp\RSPDD.bat" with contents
+[
+@echo off
+copy debug\xampp_control.exe C:\xampp1\xampp\xampp.exe
+]
+Creating command line "C:\DOCUME~1\yangyang\LOCALS~1\Temp\RSPDD.bat"
+
+系统找不到指定的路径。
+已复制         0 个文件。
+执行 c:\windows\system32\cmd.exe 时出错.
+
+
+
+<h3>Results</h3>
+xampp_control.exe - 1 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
