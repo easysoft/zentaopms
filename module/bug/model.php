@@ -131,8 +131,8 @@ class bugModel extends model
             ->where('status')->eq('active')
             ->andWhere('toTask')->eq(0)
             ->andWhere('tostory')->eq(0)
-            ->beginIF(!empty($products))->andWhere('product')->in($products)
-            ->beginIF(empty($products))->andWhere('project')->eq($projectID)
+            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
+            ->beginIF(empty($products))->andWhere('project')->eq($projectID)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
@@ -834,8 +834,8 @@ class bugModel extends model
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('project')->in(array_keys($projects))
             ->andWhere('product')->eq($productID)
-            ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')
-            ->beginIF($status == 'unresolved')->andWhere('status')->eq('active')
+            ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
+            ->beginIF($status == 'unresolved')->andWhere('status')->eq('active')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }

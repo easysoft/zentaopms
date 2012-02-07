@@ -390,7 +390,7 @@ class project extends control
             {
                 if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
             }
-            $bugQuery = str_replace("`product` = 'all'", helper::dbIN($products), $this->session->bugQuery); // Search all project.
+            $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->bugQuery); // Search all project.
             $bugs = $this->project->getSearchBugs($products, $projectID, $bugQuery, $pager, 'id_desc');
         }
 
