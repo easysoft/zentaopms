@@ -5,6 +5,18 @@ then
   exit
 fi
 
+sed -e 's/88/80/g' etc/httpd.conf > etc/httpd.conf.80
+mv etc/httpd.conf.80 etc/httpd.conf
+
+sed -e 's/88/80/g' etc/extra/httpd-vhosts.conf > etc/extra/httpd-vhosts.conf.80
+mv etc/extra/httpd-vhosts.conf.80 etc/extra/httpd-vhosts.conf
+
+sed -e 's/3308/3306/g' etc/my.cnf > etc/my.cnf.3306
+mv etc/my.cnf.3306 etc/my.cnf
+
+sed -e 's/3308/3306/g' zentao/config/my.php > zentao/config/my.php.3306
+mv zentao/config/my.php.3306 zentao/config/my.php
+
 chown nobody -R var/mysql
 chmod 777 tmp
 ./lampp start

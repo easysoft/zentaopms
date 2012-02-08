@@ -1,4 +1,3 @@
-<?php $fromLocal = $_SERVER['REMOTE_ADDR'] == $_SERVER['SERVER_ADDR'];?>
 <?php if(isset($_GET['mode']) and $_GET['mode'] == 'phpinfo') die(phpinfo());?>
 
 <html xmlns='http://www.w3.org/1999/xhtml'>
@@ -12,13 +11,11 @@
 该集成环境基于xampp usb lite版本精简而成，同时内置了禅道的应用程序。
 xampp是非常优秀的apache, mysql, php集成运行环境，官方网站是：<a href='http://www.apachefriends.org/zh_cn/xampp.html' target='_blank'>http://www.apachefriends.org/zh_cn/xampp.html</a>
 
-<?php if($fromLocal):?>
 <h3>常用链接</h3>
 <ul>
   <li><a href='/sqlbuddy/'    target='_blank'>数据库管理</a></li>
   <li><a href='?mode=phpinfo' target='_blank'>PHP运行信息</a></li>
 </ul>
-<?php endif;?>
 
 <h1 align='center'><a href='/zentao/'>访问禅道</a></h1>
 </body>
