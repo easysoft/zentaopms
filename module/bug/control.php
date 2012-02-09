@@ -718,10 +718,10 @@ class bug extends control
      * 
      * @param  int    $bugID 
      * @param  int    $actionID 
-     * @access private
+     * @access public
      * @return void
      */
-    private function sendmail($bugID, $actionID)
+    public function sendmail($bugID, $actionID)
     {
         /* Set toList and ccList. */
         $bug         = $this->bug->getByID($bugID);

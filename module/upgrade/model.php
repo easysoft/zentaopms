@@ -501,10 +501,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 0.3 to 0.4
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom0_3To0_4()
+    public function upgradeFrom0_3To0_4()
     {
         $this->execSQL($this->getUpgradeFile('0.3'));
         if(!$this->isError()) $this->setting->updateVersion('0.4 beta');
@@ -513,10 +513,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 0.4 to 0.5
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom0_4To0_5()
+    public function upgradeFrom0_4To0_5()
     {
         $this->execSQL($this->getUpgradeFile('0.4'));
         if(!$this->isError()) $this->setting->updateVersion('0.5 beta');
@@ -525,10 +525,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 0.5 to 0.6.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom0_5To0_6()
+    public function upgradeFrom0_5To0_6()
     {
         $this->execSQL($this->getUpgradeFile('0.5'));
         if(!$this->isError()) $this->setting->updateVersion('0.6 beta');
@@ -537,10 +537,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 0.6 to 1.0 beta.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom0_6To1_0_B()
+    public function upgradeFrom0_6To1_0_B()
     {
         $this->execSQL($this->getUpgradeFile('0.6'));
         if(!$this->isError()) $this->setting->updateVersion('1.0beta');
@@ -549,10 +549,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.0 beta to 1.0 rc1.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_0betaTo1_0rc1()
+    public function upgradeFrom1_0betaTo1_0rc1()
     {
         $this->execSQL($this->getUpgradeFile('1.0.beta'));
         $this->updateCompany();
@@ -562,10 +562,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.0 rc1 to 1.0 rc2.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_0rc1To1_0rc2()
+    public function upgradeFrom1_0rc1To1_0rc2()
     {
         $this->execSQL($this->getUpgradeFile('1.0.rc1'));
         if(!$this->isError()) $this->setting->updateVersion('1.0rc2');
@@ -574,10 +574,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.0 rc2 to 1.0 stable.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_0rc2To1_0stable()
+    public function upgradeFrom1_0rc2To1_0stable()
     {
         $this->setting->updateVersion('1.0');
     }
@@ -585,10 +585,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.0 stable to 1.0.1.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_0stableTo1_0_1()
+    public function upgradeFrom1_0stableTo1_0_1()
     {
         $this->setting->updateVersion('1.0.1');
     }
@@ -596,10 +596,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.0.1 to 1.1.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_0_1To1_1()
+    public function upgradeFrom1_0_1To1_1()
     {
         $this->execSQL($this->getUpgradeFile('1.0.1'));
         if(!$this->isError()) $this->setting->updateVersion('1.1');
@@ -608,10 +608,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.1 to 1.2.
      *
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_1To1_2()
+    public function upgradeFrom1_1To1_2()
     {
         $this->execSQL($this->getUpgradeFile('1.1'));
         if(!$this->isError()) $this->setting->updateVersion('1.2');
@@ -620,10 +620,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.2 to 1.3.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_2To1_3()
+    public function upgradeFrom1_2To1_3()
     {
         $this->execSQL($this->getUpgradeFile('1.2'));
         $this->updateUBB();
@@ -634,10 +634,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.3 to 1.4.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_3To1_4()
+    public function upgradeFrom1_3To1_4()
     {
         $this->execSQL($this->getUpgradeFile('1.3'));
         $this->updateNL1_3();
@@ -648,10 +648,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.4 to 1.5.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_4To1_5()
+    public function upgradeFrom1_4To1_5()
     {
         $this->execSQL($this->getUpgradeFile('1.4'));
         if(!$this->isError()) $this->setting->updateVersion('1.5');
@@ -660,10 +660,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 1.5 to 2.0.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom1_5To2_0()
+    public function upgradeFrom1_5To2_0()
     {
         $this->execSQL($this->getUpgradeFile('1.5'));
         if(!$this->isError()) $this->setting->updateVersion('2.0');
@@ -672,10 +672,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 2.0 to 2.1.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom2_0To2_1()
+    public function upgradeFrom2_0To2_1()
     {
         $this->execSQL($this->getUpgradeFile('2.0'));
         if(!$this->isError()) $this->setting->updateVersion('2.1');
@@ -684,10 +684,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 2.1 to 2.2.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom2_1To2_2()
+    public function upgradeFrom2_1To2_2()
     {
         $this->execSQL($this->getUpgradeFile('2.1'));
         if(!$this->isError()) $this->setting->updateVersion('2.2');
@@ -696,10 +696,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 2.2 to 2.3.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom2_2To2_3()
+    public function upgradeFrom2_2To2_3()
     {
         $this->execSQL($this->getUpgradeFile('2.2'));
         $this->updateCases();
@@ -710,10 +710,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 2.3 to 2.4.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom2_3To2_4()
+    public function upgradeFrom2_3To2_4()
     {
         $this->execSQL($this->getUpgradeFile('2.3'));
         if(!$this->isError()) $this->setting->updateVersion('2.4');
@@ -722,10 +722,10 @@ class upgradeModel extends model
     /**
      * Upgrade from 2.4 to 3.0.beta1.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function upgradeFrom2_4To3_0_beta1()
+    public function upgradeFrom2_4To3_0_beta1()
     {
         $this->execSQL($this->getUpgradeFile('2.4'));
         if(!$this->isError()) $this->setting->updateVersion('3.0.beta1');
@@ -736,10 +736,10 @@ class upgradeModel extends model
      *
      * This method is used to update since 1.0 beta. Any new tables added after 1.0 beta should skip.
      *
-     * @access private
+     * @access public
      * @return void
      */
-    private function updateCompany()
+    public function updateCompany()
     {
         /* Get user defined constants. */
         $constants     = get_defined_constants(true);
@@ -763,10 +763,10 @@ class upgradeModel extends model
     /**
      * Update ubb code in bug table and user Templates table to html.
      * 
-     * @access private
+     * @access public
      * @return void
      */
-    private function updateUBB()
+    public function updateUBB()
     {
         $this->app->loadClass('ubb', true);
 
@@ -957,7 +957,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    private function updateActivatedCountOfBug()
+    public function updateActivatedCountOfBug()
     {
         $bugActivatedActions = $this->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->eq('bug')->fetchAll();
         if(!empty($bugActivatedActions))
@@ -1009,10 +1009,10 @@ class upgradeModel extends model
      * Get the upgrade sql file.
      * 
      * @param  string $version 
-     * @access private
+     * @access public
      * @return string
      */
-    private function getUpgradeFile($version)
+    public function getUpgradeFile($version)
     {
         return $this->app->getAppRoot() . 'db' . $this->app->getPathFix() . 'update' . $version . '.sql';
     }
@@ -1021,10 +1021,10 @@ class upgradeModel extends model
      * Execute a sql.
      * 
      * @param  string  $sqlFile 
-     * @access private
+     * @access public
      * @return void
      */
-    private function execSQL($sqlFile)
+    public function execSQL($sqlFile)
     {
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
 

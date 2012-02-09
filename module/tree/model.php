@@ -31,10 +31,10 @@ class treeModel extends model
      * @param  int    $rootID 
      * @param  string $type 
      * @param  int    $startModule 
-     * @access private
+     * @access public
      * @return void
      */
-    private function buildMenuQuery($rootID, $type, $startModule)
+    public function buildMenuQuery($rootID, $type, $startModule)
     {
         /* Set the start module. */
         $startModulePath = '';
@@ -263,10 +263,10 @@ class treeModel extends model
      * Create link of a story.
      * 
      * @param  object   $module 
-     * @access private
+     * @access public
      * @return string
      */
-    private function createStoryLink($module)
+    public function createStoryLink($module)
     {
         $linkHtml = html::a(helper::createLink('product', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -276,10 +276,10 @@ class treeModel extends model
      * Create link of a doc.
      * 
      * @param  object   $module 
-     * @access private
+     * @access public
      * @return string
      */
-    private function createDocLink($module)
+    public function createDocLink($module)
     {
         $linkHtml = html::a(helper::createLink('doc', 'browse', "libID={$module->root}&&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -289,10 +289,10 @@ class treeModel extends model
      * Create the manage link of a module.
      * 
      * @param  object   $module 
-     * @access private
+     * @access public
      * @return string
      */
-    private function createManageLink($module)
+    public function createManageLink($module)
     {
         static $users;
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
@@ -309,10 +309,10 @@ class treeModel extends model
      * Create link of a bug.
      * 
      * @param  object  $module 
-     * @access private
+     * @access public
      * @return string
      */
-    private function createBugLink($module)
+    public function createBugLink($module)
     {
         $linkHtml = html::a(helper::createLink('bug', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -322,10 +322,10 @@ class treeModel extends model
      * Create link of a test case.
      * 
      * @param  object  $module 
-     * @access private
+     * @access public
      * @return string
      */
-    private function createCaseLink($module)
+    public function createCaseLink($module)
     {
         $linkHtml = html::a(helper::createLink('testcase', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -335,10 +335,10 @@ class treeModel extends model
      * Create link of a test task.
      * 
      * @param  object  $module 
-     * @access private
+     * @access public
      * @return string
      */
-    private function createTestTaskLink($module, $extra)
+    public function createTestTaskLink($module, $extra)
     {
         $linkHtml = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;

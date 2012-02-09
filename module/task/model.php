@@ -570,7 +570,7 @@ class taskModel extends model
      * @access private
      * @return void
      */
-    private function processTasks($tasks)
+    public function processTasks($tasks)
     {
         $today = helper::today();
         foreach($tasks as $task)
@@ -602,7 +602,7 @@ class taskModel extends model
      * @access private
      * @return object
      */
-    private function processTask($task)
+    public function processTask($task)
     {
         $today = helper::today();
        
@@ -640,7 +640,7 @@ class taskModel extends model
      * @access private
      * @return void
      */
-    private function setStatus($task)
+    public function setStatus($task)
     {
         $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
     }

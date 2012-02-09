@@ -372,10 +372,10 @@ class todoModel extends model
      * 
      * If today in week is 1, move it one day in future. Else is 7, move it back one day. To keep the time geted in this week.
      *
-     * @access private
+     * @access public
      * @return time
      */
-    private function getMiddleOfThisWeek()
+    public function getMiddleOfThisWeek()
     {
         $baseTime = time();
         $weekDay  = date('N');
@@ -387,10 +387,10 @@ class todoModel extends model
     /**
      * Get middle of last week 
      * 
-     * @access private
+     * @access public
      * @return time
      */
-    private function getMiddleOfLastWeek()
+    public function getMiddleOfLastWeek()
     {
         $baseTime = time();
         $weekDay  = date('N');

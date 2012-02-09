@@ -254,10 +254,10 @@ class searchModel extends model
      * 
      * @param  array    $results 
      * @param  string   $module 
-     * @access private
+     * @access public
      * @return array
      */
-    private function formatResults($results, $module)
+    public function formatResults($results, $module)
     {
         /* Get title field. */
         $title = ($module == 'story') ? 'title' : 'name';

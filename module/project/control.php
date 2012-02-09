@@ -63,10 +63,10 @@ class project extends control
      * Common actions.
      * 
      * @param  int    $projectID 
-     * @access private
+     * @access public
      * @return object current object
      */
-    private function commonAction($projectID = 0)
+    public function commonAction($projectID = 0)
     {
         $this->loadModel('product');
 
@@ -860,10 +860,10 @@ class project extends control
      * 
      * @param  int    $taskID 
      * @param  int    $actionID 
-     * @access private
+     * @access public
      * @return void
      */
-    private function sendmail($taskID, $actionID)
+    public function sendmail($taskID, $actionID)
     {
         /* Set toList and ccList. */
         $task        = $this->loadModel('task')->getById($taskID);

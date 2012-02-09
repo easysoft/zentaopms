@@ -29,10 +29,10 @@ class deptModel extends model
      * Build the query.
      * 
      * @param  int    $rootDeptID 
-     * @access private
+     * @access public
      * @return string
      */
-    private function buildMenuQuery($rootDeptID)
+    public function buildMenuQuery($rootDeptID)
     {
         $rootDept = $this->getByID($rootDeptID);
         if(!$rootDept) $rootDept->path = '';

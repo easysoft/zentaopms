@@ -453,10 +453,10 @@ class actionModel extends model
      * Compute the begin date and end date of a period.
      * 
      * @param  string    $period 
-     * @access private
+     * @access public
      * @return array
      */
-    private function computeBeginAndEnd($period)
+    public function computeBeginAndEnd($period)
     {
         $this->loadModel('todo');
 

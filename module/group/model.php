@@ -64,10 +64,10 @@ class groupModel extends model
      * 
      * @param  string    $fromGroup 
      * @param  string    $toGroup 
-     * @access private
+     * @access public
      * @return void
      */
-    private function copyPriv($fromGroup, $toGroup)
+    public function copyPriv($fromGroup, $toGroup)
     {
         $privs = $this->dao->findByGroup($fromGroup)->from(TABLE_GROUPPRIV)->fetchAll();
         foreach($privs as $priv)
@@ -82,10 +82,10 @@ class groupModel extends model
      * 
      * @param  string    $fromGroup 
      * @param  string    $toGroup 
-     * @access private
+     * @access public
      * @return void
      */
-    private function copyUser($fromGroup, $toGroup)
+    public function copyUser($fromGroup, $toGroup)
     {
         $users = $this->dao->findByGroup($fromGroup)->from(TABLE_USERGROUP)->fetchAll();
         foreach($users as $user)

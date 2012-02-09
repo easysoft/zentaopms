@@ -196,10 +196,10 @@ class user extends control
      * Set the rerferer.
      * 
      * @param  string   $referer 
-     * @access private
+     * @access public
      * @return void
      */
-    private function setReferer($referer = '')
+    public function setReferer($referer = '')
     {
         if(!empty($referer))
         {

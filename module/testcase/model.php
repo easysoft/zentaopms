@@ -254,10 +254,10 @@ class testcaseModel extends model
      * Join steps to a string, thus can diff them.
      * 
      * @param  array   $steps 
-     * @access private
+     * @access public
      * @return string
      */
-    private function joinStep($steps)
+    public function joinStep($steps)
     {
         $retrun = '';
         foreach($steps as $step) $return .= $step->desc . ' EXPECT:' . $step->expect . "\n";

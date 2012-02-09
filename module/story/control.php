@@ -203,10 +203,10 @@ class story extends control
      * The common action when edit or change a story.
      * 
      * @param  int    $storyID 
-     * @access private
+     * @access public
      * @return void
      */
-    private function commonAction($storyID)
+    public function commonAction($storyID)
     {
         /* Get datas. */
         $story    = $this->story->getById($storyID);
@@ -549,10 +549,10 @@ class story extends control
      * 
      * @param  int    $storyID 
      * @param  int    $actionID 
-     * @access private
+     * @access public
      * @return void
      */
-    private function sendmail($storyID, $actionID)
+    public function sendmail($storyID, $actionID)
     {
         $story       = $this->story->getById($storyID);
         $productName = $this->product->getById($story->product)->name;

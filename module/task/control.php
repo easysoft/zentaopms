@@ -521,10 +521,10 @@ class task extends control
      * 
      * @param  int    $taskID 
      * @param  int    $actionID 
-     * @access private
+     * @access public
      * @return void
      */
-    private function sendmail($taskID, $actionID)
+    public function sendmail($taskID, $actionID)
     {
         /* Set toList and ccList. */
         $task        = $this->task->getById($taskID);
