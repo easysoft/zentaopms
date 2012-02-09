@@ -26,13 +26,14 @@ $lang->search->storyTitle    = '需求名称';
 $lang->search->taskTitle     = '任务名称';
 $lang->search->select        = '需求/任务筛选';
 
-$lang->search->operators['=']       = '=';
-$lang->search->operators['!=']      = '!=';
-$lang->search->operators['>']       = '>';
-$lang->search->operators['>=']      = '>=';
-$lang->search->operators['<']       = '<';
-$lang->search->operators['<=']      = '<=';
-$lang->search->operators['include'] = '包含';
+$lang->search->operators['=']          = '=';
+$lang->search->operators['!=']         = '!=';
+$lang->search->operators['>']          = '>';
+$lang->search->operators['>=']         = '>=';
+$lang->search->operators['<']          = '<';
+$lang->search->operators['<=']         = '<=';
+$lang->search->operators['include']    = '包含';
+$lang->search->operators['notinclude'] = '不包含';
 
 $lang->search->andor['and']         = '并且';
 $lang->search->andor['or']          = '或者';

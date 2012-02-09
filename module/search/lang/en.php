@@ -26,13 +26,14 @@ $lang->search->storyTitle    = 'Story title';
 $lang->search->taskTitle     = 'Task title';
 $lang->search->select        = 'Stories/Tasks filter';
 
-$lang->search->operators['=']       = '=';
-$lang->search->operators['!=']      = '!=';
-$lang->search->operators['>']       = '>';
-$lang->search->operators['>=']      = '>=';
-$lang->search->operators['<']       = '<';
-$lang->search->operators['<=']      = '<=';
-$lang->search->operators['include'] = 'include';
+$lang->search->operators['=']          = '=';
+$lang->search->operators['!=']         = '!=';
+$lang->search->operators['>']          = '>';
+$lang->search->operators['>=']         = '>=';
+$lang->search->operators['<']          = '<';
+$lang->search->operators['<=']         = '<=';
+$lang->search->operators['include']    = 'include';
+$lang->search->operators['notinclude'] = 'not include';
 
 $lang->search->andor['and']         = 'And';
 $lang->search->andor['or']          = 'Or';

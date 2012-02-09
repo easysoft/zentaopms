@@ -59,6 +59,10 @@ class searchModel extends model
             {
                 $where .= ' LIKE ' . $this->dbh->quote("%$value%");
             }
+            elseif($operator == "notinclude")
+            {
+                $where .= ' NOT LIKE ' . $this->dbh->quote("%$value%"); 
+            }
             else
             {
                 $where .= $operator . ' ' . $this->dbh->quote($value) . ' ';
@@ -221,6 +225,10 @@ class searchModel extends model
         if($operator == "include")
         {
             $query .= ' LIKE ' . $this->dbh->quote("%$value%");
+        }
+        elseif($operator == "notinclude")
+        {
+            $where .= ' NOT LIKE ' . $this->dbh->quote("%$value%"); 
         }
         else
         {
