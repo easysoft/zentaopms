@@ -14,8 +14,8 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
-    <div class='f-left'><?php echo $lang->testtask->browse;?></div>
-    <div class='f-right'><?php common::printLink('testtask', 'create', "product=0&project=$projectID", $lang->testtask->create);?></div>
+    <div class='f-left'><?php echo $lang->project->testtaskBrowse;?></div>
+    <div class='f-right'><?php common::printLink('testtask', 'create', "product=0&project=$projectID", $lang->project->createTesttask);?></div>
   </caption>
   <thead>
   <tr class='colhead'>
@@ -32,8 +32,8 @@
   <tbody>
   <?php foreach($tasks as $task):?>
   <tr class='a-center'>
-    <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-    <td class='a-left nobr'><?php echo html::a(inlink('view', "taskID=$task->id"), $task->name);?></td>
+    <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+    <td class='a-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
     <td class='nobr'><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
     <td><?php echo $users[$task->owner];?></td>
     <td><?php echo $task->begin?></td>

@@ -46,6 +46,8 @@ $lang->project->totalConsumed = '总消耗';
 $lang->project->totalLeft     = '总剩余';
 $lang->project->progess       = '进度';
 $lang->project->viewBug       = '查看bug';
+$lang->project->testtaskBrowse= '待测列表';
+$lang->project->createTesttask= '提交测试';
 $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
 
@@ -74,7 +76,7 @@ $lang->project->story           = '需求列表';
 $lang->project->bug             = 'Bug列表';
 $lang->project->dynamic         = '动态';
 $lang->project->build           = 'Build列表';
-$lang->project->testtask        = '测试任务';
+$lang->project->testtask        = '测试申请';
 $lang->project->burn            = '燃尽图';
 $lang->project->computeBurn     = '更新燃尽图';
 $lang->project->burnData        = '燃尽图数据';

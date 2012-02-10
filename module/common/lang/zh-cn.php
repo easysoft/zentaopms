@@ -153,7 +153,7 @@ $lang->project->menu->story     = array('link' => '需求|project|story|projectI
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '动态|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = '测试任务|project|testtask|projectID=%s';
+$lang->project->menu->testtask  = '测试申请|project|testtask|projectID=%s';
 $lang->project->menu->burn      = '燃尽图|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=%s', 'subModule' => 'doc');
