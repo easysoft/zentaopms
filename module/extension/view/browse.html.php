@@ -24,14 +24,19 @@
         ?>
       </div>
     </td>
-    <td class='w-150px a-right'>
+    <td class='w-200px a-right'>
     <?php
+    $structureCode  = html::a(inlink('structure',  "extension=$extension->code"), $lang->extension->structure, '',  "class='button-c extension'");
     $deactivateCode = html::a(inlink('deactivate', "extension=$extension->code"), $lang->extension->deactivate, '', "class='button-c iframe'");
     $activateCode   = html::a(inlink('activate',   "extension=$extension->code"), $lang->extension->activate, '',   "class='button-c iframe'");
     $uninstallCode  = html::a(inlink('uninstall',  "extension=$extension->code"), $lang->extension->uninstall, '',  "class='button-c iframe'");
     $installCode    = html::a(inlink('install',    "extension=$extension->code"), $lang->extension->install, '',    "class='button-c iframe'");
     $eraseCode      = html::a(inlink('erase',      "extension=$extension->code"), $lang->extension->erase, '',      "class='button-c iframe'");
-
+    
+    if($extension->status == 'installed')
+    {
+        echo $structureCode;
+    }
     if($extension->status == 'installed' and !empty($extension->upgradeLink))
     {
         echo html::a($extension->upgradeLink, $lang->extension->upgrade, '', "class='button-c iframe'");

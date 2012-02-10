@@ -350,4 +350,17 @@ class extension extends control
         $this->extension->removePackage($extension);
         $this->locate(inlink('install', "extension=$extension&downLink=$downLink&md5=$md5&type=$type&overridePackage=no&ignoreCompatible=yes"));
     }
+
+    /**
+     * Browse the structure of extension.
+     * 
+     * @param  int    $extension 
+     * @access public
+     * @return void
+     */
+    public function structure($extension)
+    {
+        $this->view->structures = $this->extension->structure($extension);
+        $this->display();
+    }
 }

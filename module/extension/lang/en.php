@@ -26,6 +26,7 @@ $lang->extension->erase        = 'Erase';
 $lang->extension->upgrade      = 'Upgrade';
 $lang->extension->agreeLicense = 'I agree the license';
 
+$lang->extension->structure   = 'Structure';
 $lang->extension->installed   = 'Installed';
 $lang->extension->deactivated = 'Deactivated';
 $lang->extension->available   = 'Downloaded';
