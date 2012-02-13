@@ -73,8 +73,8 @@ $lang->task->same  = 'The same as above';
 $lang->task->notes = '(Notes: the name, type, pri and estimate must be written, otherwise it is no use)';
 
 $lang->task->statusList['']        = '';
-$lang->task->statusList['wait']    = 'Waiting';
-$lang->task->statusList['doing']   = 'Doing';
+$lang->task->statusList['wait']    = 'Pending';
+$lang->task->statusList['doing']   = 'In progress';
 $lang->task->statusList['done']    = 'Done';
 $lang->task->statusList['cancel']  = 'Canceled';
 $lang->task->statusList['closed']  = 'Closed';
@@ -99,9 +99,9 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Done';
 $lang->task->reasonList['cancel'] = 'Canceled';
 
-$lang->task->afterChoices['continueAdding'] = 'Continue add task for this story';
-$lang->task->afterChoices['toTastList']     = 'To task list';
-$lang->task->afterChoices['toStoryList']    = 'To story list';
+$lang->task->afterChoices['continueAdding'] = 'Continue to add task for this story. ';
+$lang->task->afterChoices['toTastList']     = 'To task list. ';
+$lang->task->afterChoices['toStoryList']    = 'To story list. ';
 
 $lang->task->buttonEdit       = 'Edit';
 $lang->task->buttonClose      = 'Close';
@@ -121,10 +121,10 @@ $lang->task->legendAction = 'Action';
 
 $lang->task->ajaxGetUserTasks    = "API:My tasks";
 $lang->task->ajaxGetProjectTasks = "API:Project tasks";
-$lang->task->confirmDelete       = "Are you sure to delete this task?";
+$lang->task->confirmDelete       = "Are you sure you want to delete this task?";
 $lang->task->copyStoryTitle      = "Same as story";
 $lang->task->afterSubmit         = "After created";
-$lang->task->successSaved        = "Success saved";
+$lang->task->successSaved        = "Successfully saved";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> Postponed %s days </strong>";
 $lang->task->remindBug           = "This task from Bug, update the Bug:%s or not?";
 

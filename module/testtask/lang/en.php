@@ -42,8 +42,8 @@ $lang->testtask->lastRunAccount = "Run account";
 $lang->testtask->lastRunTime    = 'Last run';
 $lang->testtask->lastRunResult  = 'Last result';
 
-$lang->testtask->statusList['wait']    = 'Waiting';
-$lang->testtask->statusList['doing']   = 'Doing';
+$lang->testtask->statusList['wait']    = 'Pending';
+$lang->testtask->statusList['doing']   = 'In progress';
 $lang->testtask->statusList['done']    = 'Done';
 $lang->testtask->statusList['blocked'] = 'Blocked';
 

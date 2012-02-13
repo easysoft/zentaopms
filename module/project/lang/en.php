@@ -60,8 +60,8 @@ $lang->team->totalHours = 'Total';
 
 /* Lists. */
 $lang->project->statusList['']      = '';
-$lang->project->statusList['wait']  = 'Waitting';
-$lang->project->statusList['doing'] = 'Doing';
+$lang->project->statusList['wait']  = 'Pending';
+$lang->project->statusList['doing'] = 'Progressing';
 $lang->project->statusList['done']  = 'Done';
 
 $lang->project->aclList['open']    = 'Default(Having the priviledge of project module can visit this project)';
@@ -100,8 +100,8 @@ $lang->project->ajaxGetProducts = "API: get project's products";
 $lang->project->allTasks             = 'All';
 $lang->project->assignedToMe         = 'To me';
 $lang->project->finishedByMe         = 'My done';
-$lang->project->statusWait           = 'Wait';
-$lang->project->statusDoing          = 'Doing';
+$lang->project->statusWait           = 'Pending';
+$lang->project->statusDoing          = 'Progressing';
 $lang->project->statusDone           = 'Done';
 $lang->project->statusClosed         = 'Closed';
 $lang->project->delayed              = 'Delayed';
@@ -132,7 +132,7 @@ $lang->project->beginAndEnd     = 'Begin and end';
 $lang->project->lblStats        = 'Stats';
 $lang->project->stats           = 'Total work hours is 『%s』hours, <br />Total estimate is『%s』hours,<br />Total confused is『%s』hours<br />Total left is『%s』hours';
 $lang->project->oneLineStats    = "Project『%s』, code is『%s』, products is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
-$lang->project->taskSummary     = "<strong>%s</strong> tasks this page, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
+$lang->project->taskSummary     = "Total tasks shown: <strong>%s</strong>. Pending: <strong>%s</strong>. In progress: <strong>%s</strong>. Estimate: <strong>%s</strong> hrs. Consumed: <strong>%s</strong> hrs. Hours left: <strong>%s</strong>.";
 $lang->project->memberHours     = "%s has <strong>%s</strong> workhours, ";
 $lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
 $lang->project->wbs             = "WBS";

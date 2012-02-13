@@ -113,11 +113,11 @@ $lang->story->reviewList[0] = 'No';
 $lang->story->reviewList[1] = 'Yes';
 
 $lang->story->sourceList['']           = '';
-$lang->story->sourceList['custom']     = 'Custom';
+$lang->story->sourceList['customer']   = 'Customer';
 $lang->story->sourceList['user']       = 'User';
-$lang->story->sourceList['po']         = 'PO';
+$lang->story->sourceList['po']         = 'Product Owner';
 $lang->story->sourceList['market']     = 'Market';
-$lang->story->sourceList['service']    = 'Service';
+$lang->story->sourceList['service']    = 'Customer service';
 $lang->story->sourceList['competitor'] = 'Competitor';
 $lang->story->sourceList['partner']    = 'Partner';
 $lang->story->sourceList['dev']        = 'Developer';

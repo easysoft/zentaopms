@@ -113,7 +113,7 @@ $lang->story->reviewList[0] = '否';
 $lang->story->reviewList[1] = '是';
 
 $lang->story->sourceList['']           = '';
-$lang->story->sourceList['custom']     = '客户';
+$lang->story->sourceList['customer']   = '客户';
 $lang->story->sourceList['user']       = '用户';
 $lang->story->sourceList['po']         = '产品经理';
 $lang->story->sourceList['market']     = '市场';
