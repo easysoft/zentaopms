@@ -24,7 +24,7 @@
         ?>
       </div>
     </td>
-    <td class='w-200px a-right'>
+    <td class='w-220px a-right'>
     <?php
     $structureCode  = html::a(inlink('structure',  "extension=$extension->code"), $lang->extension->structure, '',  "class='button-c extension'");
     $deactivateCode = html::a(inlink('deactivate', "extension=$extension->code"), $lang->extension->deactivate, '', "class='button-c iframe'");
@@ -33,6 +33,10 @@
     $installCode    = html::a(inlink('install',    "extension=$extension->code"), $lang->extension->install, '',    "class='button-c iframe'");
     $eraseCode      = html::a(inlink('erase',      "extension=$extension->code"), $lang->extension->erase, '',      "class='button-c iframe'");
     
+    if(isset($extension->viewLink))
+    {
+        echo html::a($extension->viewLink, $lang->extension->view, '', "class='button-c iframe'");
+    }
     if($extension->status == 'installed')
     {
         echo $structureCode;
