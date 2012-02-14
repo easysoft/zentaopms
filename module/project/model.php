@@ -127,7 +127,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function create()
+    public function create($copyProjectID = '')
     {
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
@@ -150,12 +150,29 @@ class projectModel extends model
         if(!dao::isError())
         {
             $projectID = $this->dao->lastInsertId();
-            $member->project  = $projectID;
-            $member->account  = $this->app->user->account;
-            $member->join     = helper::today();
-            $member->days     = $project->days;
-            $member->hours    = $this->config->project->defaultWorkhours;
-            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+            $today = helper::today();
+
+            if($copyProjectID == '')
+            {
+                $member->project  = $projectID;
+                $member->account  = $this->app->user->account;
+                $member->join     = $today;
+                $member->days     = $project->days;
+                $member->hours    = $this->config->project->defaultWorkhours;
+                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+            }
+            else
+            {
+                $members = $this->dao->select('*')->from(TABLE_TEAM)->where('project')->eq($copyProjectID)->fetchAll();
+                foreach($members as $member)
+                {
+                    unset($member->company);
+                    $member->project = $projectID;
+                    $member->join    = $today;
+                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                }
+            }
+
             return $projectID;
         } 
     }

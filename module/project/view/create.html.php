@@ -56,28 +56,27 @@ $(document).ready(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->teamname;?></th>
-      <td><?php echo html::input('team', '', "class='text-3'");?></td>
+      <td><?php echo html::input('team', $teamname, "class='text-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
-      <td><?php echo html::checkbox("products", $allProducts, '');?></td>
+      <td><?php echo html::checkbox("products", $allProducts, $products);?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->goal;?></th>
       <td><?php echo html::textarea('goal', '', "rows='6' class='area-1'");?></td>
     </tr>  
-
     <tr>
       <th class='rowhead'><?php echo $lang->project->desc;?></th>
       <td><?php echo html::textarea('desc', '', "rows='6' class='area-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->acl;?></th>
-      <td><?php echo nl2br(html::radio('acl', $lang->project->aclList, 'open', "onclick='setWhite(this.value);'"));?></td>
+      <td><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'"));?></td>
     </tr>  
-    <tr id='whitelistBox' class='hidden'>
+    <tr id='whitelistBox' <?php if($acl != 'custom') echo "class='hidden'";?>>
       <th class='rowhead'><?php echo $lang->project->whitelist;?></th>
-      <td><?php echo html::checkbox('whitelist', $groups);?></td>
+      <td><?php echo html::checkbox('whitelist', $groups, $whitelist);?></td>
     </tr>  
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>

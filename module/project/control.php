@@ -720,7 +720,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function create($projectID = '')
+    public function create($projectID = '', $copyProjectID = '')
     {
         if($projectID)
         {
@@ -730,9 +730,23 @@ class project extends control
             exit;
         }
 
+        $teamname  = '';
+        $products  = '';
+        $whitelist = '';
+        $acl       = '';
+
+        if($copyProjectID)
+        {
+            $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
+            $teamname    = $copyProject->team;
+            $acl         = $copyProject->acl;
+            $whitelist   = $copyProject->whitelist;
+            $products    = join(',', array_keys($this->project->getProducts($copyProjectID))); 
+        }
+
         if(!empty($_POST))
         {
-            $projectID = $this->project->create();
+            $projectID = $copyProjectID == '' ? $this->project->create() : $this->project->create($copyProjectID);
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('project', $projectID, 'opened');
@@ -746,6 +760,10 @@ class project extends control
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->allProducts   = $this->loadModel('product')->getPairs();
+        $this->view->teamname      = $teamname ;
+        $this->view->products      = $products ;
+        $this->view->whitelist     = $whitelist;
+        $this->view->acl           = $acl      ;
         $this->display();
     }
 
