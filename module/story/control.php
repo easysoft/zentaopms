@@ -574,7 +574,7 @@ class story extends control
             if($prjMembers)
             {
                 $ccList .= ',' . join(',', $prjMembers);
-                $ccList = ltrim(',', $ccList);
+                $ccList = ltrim($ccList, ',');
             }
         }
 
