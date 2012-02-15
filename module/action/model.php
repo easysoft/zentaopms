@@ -62,7 +62,12 @@ class actionModel extends model
 
         /* If objectType is product or project, return the objectID. */
         if($objectType == 'product') return array('product' => $objectID, 'project' => 0);
-        if($objectType == 'project') return array('project' => $objectID, 'product' => 0);
+        if($objectType == 'project') 
+        {
+            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
+            $productList = join(',', array_keys($products));
+            return array('project' => $objectID, 'product' => $productList);
+        }
 
         /* Only process these object types. */
         if(strpos('story, productplan, release, task, build. bug, case, testtask, doc', $objectType) !== false)
@@ -80,7 +85,18 @@ class actionModel extends model
             /* Process story, release and task. */
             if($objectType == 'story')   $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
-            if($objectType == 'task')    $record->product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetch('product');
+            if($objectType == 'task')    
+            {
+                if($record->story != 0)
+                {
+                    $record->product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetch('product');
+                }
+                else
+                {
+                    $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($record->project)->fetchPairs('product');
+                    $record->product = join(',', array_keys($products));
+                }
+            }
 
             if($record)
             {
