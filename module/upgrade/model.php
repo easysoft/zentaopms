@@ -994,6 +994,41 @@ class upgradeModel extends model
     }
 
     /**
+     * Update the data of action. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function updateTableAction()
+    {
+        $projectActions = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('project')->fetchPairs('objectID');
+        $taskActions    = $this->dao->select('objectID,project')->from(TABLE_ACTION)->where('objectType')->eq('task')->fetchPairs('objectID');
+
+        foreach($projectActions as $key => $projectID)
+        {
+            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product');
+            $productList = join(',', array_keys($products));
+            $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('project')->andWhere('objectID')->eq($projectID)->exec();
+        }
+
+        foreach($taskActions as $taskID => $projectID)
+        {
+            $task = $this->dao->select('id,story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetchPairs('id');
+            if($task[$taskID] != 0)
+            {
+                $product     = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($task[$taskID])->fetchPairs('product');
+                $productList = join(',', array_keys($product));
+            }
+            else
+            {
+                $products    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product');
+                $productList = join(',', array_keys($products));
+            }
+            $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('task')->andWhere('objectID')->eq($taskID)->andWhere('project')->eq($projectID)->exec();
+        }
+    }
+
+    /**
      * Delete the patch record.
      * 
      * @access public

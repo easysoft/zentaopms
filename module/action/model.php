@@ -89,7 +89,8 @@ class actionModel extends model
             {
                 if($record->story != 0)
                 {
-                    $record->product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetch('product');
+                    $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetchPairs('product');
+                    $record->product = join(',', array_keys($product));
                 }
                 else
                 {
