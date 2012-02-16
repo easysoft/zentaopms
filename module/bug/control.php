@@ -388,7 +388,7 @@ class bug extends control
                     {
                         $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                         $cancelURL  = $this->server->HTTP_REFERER;
-                        die(js::confirm(sprintf($this->lang->task->remindTask, $bug->Task), $confirmURL, $cancelURL, 'parent', 'parent'));
+                        die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->Task), $confirmURL, $cancelURL, 'parent', 'parent'));
                     }
                 }
             } 
