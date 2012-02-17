@@ -65,7 +65,7 @@ class actionModel extends model
         if($objectType == 'project') 
         {
             $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
-            $productList = join(',', array_keys($products));
+            $productList = ',' . join(',', array_keys($products)) . ',';
             return array('project' => $objectID, 'product' => $productList);
         }
 
@@ -90,12 +90,12 @@ class actionModel extends model
                 if($record->story != 0)
                 {
                     $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetchPairs('product');
-                    $record->product = join(',', array_keys($product));
+                    $record->product = ',' . join(',', array_keys($product)) . ',';
                 }
                 else
                 {
                     $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($record->project)->fetchPairs('product');
-                    $record->product = join(',', array_keys($products));
+                    $record->product = ',' . join(',', array_keys($products)) . ',';
                 }
             }
 
