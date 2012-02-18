@@ -9,22 +9,23 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->extension->common       = 'Extension';
-$lang->extension->browse       = 'Browse';
-$lang->extension->install      = 'Install';
-$lang->extension->installAuto  = 'AutoInstall';
-$lang->extension->installForce = 'ForceInstall';
-$lang->extension->uninstall    = 'Uninstall';
-$lang->extension->activate     = 'Activate';
-$lang->extension->deactivate   = 'Deactivate';
-$lang->extension->obtain       = 'Obtain';
-$lang->extension->view         = 'Info';
-$lang->extension->download     = 'Download';
-$lang->extension->downloadAB   = 'Down';
-$lang->extension->upload       = 'Upload and install';
-$lang->extension->erase        = 'Erase';
-$lang->extension->upgrade      = 'Upgrade';
-$lang->extension->agreeLicense = 'I agree the license';
+$lang->extension->common        = 'Extension';
+$lang->extension->browse        = 'Browse';
+$lang->extension->install       = 'Install';
+$lang->extension->installAuto   = 'AutoInstall';
+$lang->extension->installForce  = 'ForceInstall';
+$lang->extension->uninstall     = 'Uninstall';
+$lang->extension->activate      = 'Activate';
+$lang->extension->deactivate    = 'Deactivate';
+$lang->extension->obtain        = 'Obtain';
+$lang->extension->view          = 'Info';
+$lang->extension->download      = 'Download';
+$lang->extension->downloadAB    = 'Down';
+$lang->extension->upload        = 'Upload and install';
+$lang->extension->uploadUpgrade = 'Upload and upgrade';
+$lang->extension->erase         = 'Erase';
+$lang->extension->upgrade       = 'Upgrade';
+$lang->extension->agreeLicense  = 'I agree the license';
 
 $lang->extension->structure   = 'Structure';
 $lang->extension->installed   = 'Installed';

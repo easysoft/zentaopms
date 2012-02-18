@@ -184,7 +184,7 @@ class extensionModel extends model
      */
     public function getInfoFromDB($extension)
     {
-        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('code')->eq($extension)->fi()->fetch();
+        return $this->dao->select('*')->from(TABLE_EXTENSION)->where('code')->eq($extension)->fetch();
     }
 
     /**

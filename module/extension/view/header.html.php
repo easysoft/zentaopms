@@ -8,6 +8,7 @@
   echo '<span id="available">'  . html::a(inlink('browse', "type=available"),   $lang->extension->available )  . '</span>';
   echo '<span id="obtain">  '   . html::a(inlink('obtain'), $lang->extension->obtain) . '</span>';
   echo '<span id="upload" >'    . html::a(inlink('upload'), $lang->extension->upload, '', "class='iframe'") . '</span>';
+  echo '<span id="upload" >'    . html::a(inlink('upload', 'type=upgrade'), $lang->extension->uploadUpgrade, '', "class='iframe'") . '</span>';
   ?>
   </div>
   <script>$('#<?php echo $tab;?>').addClass('active')</script>
