@@ -305,7 +305,7 @@ class actionModel extends model
             ->where('date')->gt($begin)
             ->andWhere('date')->lt($end)
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
-            ->beginIF(is_numeric($productID))->andWhere('product')->findInSet($productID)->fi()
+            ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
@@ -342,10 +342,15 @@ class actionModel extends model
         $allProject          = "`project` = 'all'";
         $actionQuery = $this->session->actionQuery;
 
+        $productID = 0;
+        if(preg_match("/`product` = '(\d*)'/", $actionQuery, $out))
+        {
+            $productID = $out[1];
+        }
         /* If the sql not include 'product', add check purview for product. */
         if(strpos($actionQuery, $allProduct) === false)
         {
-            $actionQuery = $actionQuery . 'AND `product`' . helper::dbIN(array_keys($products));
+            if(!in_array($productID, array_keys($products))) return array();
         }
         else
         {
@@ -361,6 +366,8 @@ class actionModel extends model
         {
             $actionQuery = str_replace($allProduct, '1', $actionQuery);
         }
+
+        $actionQuery = str_replace("`product` = '$productID'", "`product` LIKE '%,$productID,%'", $actionQuery);
 
         $actions = $this->getBySQL($actionQuery, $orderBy, $pager);
         if(!$actions) return array();
