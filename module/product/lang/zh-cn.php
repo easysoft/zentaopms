@@ -20,8 +20,16 @@ $lang->product->read   = "产品详情";
 $lang->product->delete = "删除产品";
 $lang->product->select = '--请选择产品--';
 
+$lang->product->basicInfo = '基本信息';
+$lang->product->otherInfo = '其他信息';
+
 $lang->product->plans    = '计划数';
 $lang->product->releases = '发布数';
+$lang->product->docs     = '文档数';
+$lang->product->bugs     = '相关BUG';
+$lang->product->projects = '关联项目数';
+$lang->product->cases    = '用例数';
+$lang->product->bulids   = 'BULID数';
 $lang->product->roadmap  = '路线图';
 $lang->product->doc      = '文档列表';
 $lang->product->project  = '项目列表';

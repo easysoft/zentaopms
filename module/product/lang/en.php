@@ -20,8 +20,16 @@ $lang->product->read   = "Info";
 $lang->product->delete = "Delete";
 $lang->product->select = '--select product--';
 
+$lang->product->basicInfo = 'Basic info';
+$lang->product->otherInfo = 'Other info';
+
 $lang->product->plans    = 'Plans';
 $lang->product->releases = 'Releases';
+$lang->product->docs     = 'Documents';
+$lang->product->bugs     = 'Bugs';
+$lang->product->projects = 'Projects';
+$lang->product->cases    = 'Cases';
+$lang->product->bulids   = 'Bulids';
 $lang->product->roadmap  = 'Roadmap';
 $lang->product->doc      = 'Doc';
 $lang->product->project  = 'Projects';

@@ -351,6 +351,48 @@ class productModel extends model
     }
 
     /**
+     * Get product stat by id 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return object|bool
+     */
+    public function getStatByID($productID)
+    {
+        $product = $this->getById($productID);
+        if(!$this->checkPriv($product)) return false;
+        $stories = $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->groupBy('product, status')->fetchAll('status');
+        /* Padding the stories to sure all status have records. */
+        foreach(array_keys($this->lang->story->statusList) as $status)
+        {
+            $stories[$status] = isset($stories[$status]) ? $stories[$status]->count : 0;
+        }
+
+        $plans    = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('end')->gt(helper::now())->fetch();
+        $bulids   = $this->dao->select('count(*) AS count')->from(TABLE_BUILD)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
+        $cases    = $this->dao->select('count(*) AS count')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
+        $bugs     = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
+        $docs     = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
+        $releases = $this->dao->select('count(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
+        $projects = $this->dao->select('count("t1.*") AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.product')->eq($productID)
+            ->fetch();
+
+        $product->stories  = $stories;
+        $product->plans    = $plans    ? $plans->count : 0;
+        $product->releases = $releases ? $releases->count : 0;
+        $product->bulids   = $bulids   ? $bulids->count : 0;
+        $product->cases    = $cases    ? $cases->count : 0;
+        $product->projects = $projects ? $projects->count : 0;
+        $product->bugs     = $bugs     ? $bugs->count : 0;
+        $product->docs     = $docs     ? $docs->count : 0;
+
+        return $product;
+    }
+
+    /**
      * Get product stats.
      * 
      * @access public
