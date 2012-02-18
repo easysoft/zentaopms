@@ -14,6 +14,59 @@
 class adminModel extends model
 {
     /**
+     * The api agent(use snoopy).
+     * 
+     * @var object   
+     * @access public
+     */
+    public $agent;
+
+    /**
+     * The api root.
+     * 
+     * @var string
+     * @access public
+     */
+    public $apiRoot;
+
+    /**
+     * The construct function.
+     * 
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setAgent();
+    }
+
+    /**
+     * Set the api agent.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setAgent()
+    {
+        $this->agent = $this->app->loadClass('snoopy');
+    }
+
+    /**
+     * Post data form  API 
+     * 
+     * @param  string $url 
+     * @param  string $formvars 
+     * @access public
+     * @return void
+     */
+    public function postAPI($url, $formvars = "")
+    {
+        $this->agent->submit($url, $formvars);
+		return  $this->agent->results;
+    }
+
+    /**
      * Get status of zentaopms.
      * 
      * @access public
@@ -44,5 +97,111 @@ class adminModel extends model
      */
     public function getStatOfSys()
     {
+
     }
+
+	/**
+	 * Register zentao by API. 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function registerByAPI()
+	{
+		$data = urlencode(json_encode($_POST));	
+		$apiURL = 'http://www.zentao.com/user-apiRegister.html';
+		$response = $this->postAPI($apiURL, $data);
+		switch($response)
+		{
+		case 'success':
+			$this->dao->insert(TABLE_CONFIG)
+				->set('owner')->eq($this->app->user->account)
+				->set('`key`')->eq('account')
+				->set('section')->eq('global')
+				->set('value')->eq($this->post->account)
+				->exec(false);
+			echo js::alert($this->lang->admin->register->notice->success);	
+			die(js::locate(inlink('index'), 'parent'));
+			break;
+		case 'failed':
+			echo js::alert($this->lang->admin->register->notice->failed);
+			break;
+		case 'userError':
+			echo js::alert($this->lang->admin->register->notice->account);
+			break;
+		case 'passwordError':
+			echo js::alert($this->lang->admin->register->notice->password);
+			break;
+		case 'realnameError':
+			echo js::alert($this->lang->admin->register->notice->realname);
+			break;
+		case 'emailError':
+			echo js::alert($this->lang->admin->register->notice->email);
+			break;
+		case 'notEqual':
+			echo js::alert($this->lang->admin->register->notice->notEqual);
+			break;
+		case 'registered':
+			echo js::alert($this->lang->admin->register->notice->registered);
+			break;
+		default:
+			echo js::alert($this->lang->admin->register->notice->failed);
+		}
+	}
+
+	/**
+	 * Login zentao by API.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function loginByAPI()
+	{
+		$data = urlencode(json_encode($_POST));	
+		$apiURL = 'http://www.zentao.com/user-apiLogin.html';
+		$response = $this->postAPI($apiURL, $data);
+		switch($response)
+		{
+		case 'success':
+			$this->dao->insert(TABLE_CONFIG)
+				->set('owner')->eq($this->app->user->account)
+				->set('`key`')->eq('account')
+				->set('section')->eq('global')
+				->set('value')->eq($this->post->account)
+				->exec(false);
+			echo js::alert($this->lang->admin->login->notice->success);	
+			die(js::locate(inlink('index'), 'parent'));
+			break;
+		case 'userError':
+			echo js::alert($this->lang->admin->login->notice->account);
+			break;
+		case 'passwordError':
+			echo js::alert($this->lang->admin->login->notice->password);
+			break;
+		case 'failed':
+			echo js::alert($this->lang->admin->login->notice->failed);
+			break;
+		default:
+			echo js::alert($this->lang->admin->login->notice->failed);
+		}
+	}
+
+	/**
+	 * Get pms sn. 
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function getSN()
+	{
+		$sn = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('sn')->fetch('', false);	
+		if($sn)
+		{
+			return $sn->value;	
+		}
+		else
+		{
+			return '';	
+		}
+	}
 }

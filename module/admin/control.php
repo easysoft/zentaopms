@@ -12,13 +12,78 @@
 class admin extends control
 {
     /**
-     * Index page of admin module. Locate to action's trash page.
-     * 
+	 * Index page.
      * @access public
      * @return void
      */
     public function index()
     {
-        $this->locate($this->createLink('extension', 'browse'));
+		$user = $this->dao->select('value')->from(TABLE_CONFIG)
+			->where('owner')->eq($this->app->user->account)
+			->andWhere('`key`')->eq('account')
+			->fetch('', false);
+		if($user)
+		{
+			$this->view->login   = true;
+			$this->view->account = $user->value;
+		}
+		else
+		{
+			$this->view->login   = false;
+			$this->view->account = '';
+		}
+		if($this->cookie->notice == 'ignore')
+		{
+			$this->view->ignore = true;
+		}
+		else
+		{
+			$this->view->ignore = false;	
+		}
+		$this->display();
     }
+
+	/**
+	 * Ignore notice of register and login.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function ignoreNotice()
+	{
+		setcookie('notice', 'ignore');	
+		die(js::locate(inlink('index')));
+	}
+
+	/**
+	 * Register zentao.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function register()
+	{
+		if($_POST)
+		{
+			$this->admin->registerByAPI();
+		}
+		$this->view->sn = $this->admin->getSN();
+		$this->display();	
+	}
+
+	/**
+	 * Login zentao.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function login()
+	{
+		if($_POST)	
+		{
+			$this->admin->loginByAPI();	
+		}
+		$this->view->sn = $this->admin->getSN();
+		$this->display();
+	}
 }

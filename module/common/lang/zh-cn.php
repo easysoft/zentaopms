@@ -215,6 +215,7 @@ $lang->user->menu->profile     = array('link' => '用户信息|user|profile|acco
 $lang->user->menu->browse      = array('link' => '用户管理|company|browse|', 'float' => 'right');
 
 /* 后台管理菜单设置。*/
+$lang->admin->menu->index     = array('link' => '首页|admin|index', 'subModule' => 'admin');
 $lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => '扩展编辑器|editor|index', 'subModule' => 'editor');
 $lang->admin->menu->mail      = array('link' => 'Email配置|mail|set', 'subModule' => 'mail');
