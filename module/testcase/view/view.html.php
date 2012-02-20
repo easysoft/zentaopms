@@ -72,7 +72,7 @@
       <div id='comment' class='hidden'>
         <fieldset>
           <legend><?php echo $lang->comment;?></legend>
-          <form method='post' action='<?php echo inlink('edit', "caseID=$case->id")?>'>
+          <form method='post' action='<?php echo inlink('edit', "caseID=$case->id&comment=true")?>'>
             <table align='center' class='table-1'>
             <tr><td><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></td></tr>
             <tr><td><?php echo html::submitButton() . html::resetButton();?></td></tr>
