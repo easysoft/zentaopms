@@ -65,7 +65,8 @@ class admin extends control
 	{
 		if($_POST)
 		{
-			$this->admin->registerByAPI();
+			$response = $this->admin->registerByAPI();
+			if($response == 'success') die(js::locate(inlink('index'), 'parent'));
 		}
 		$this->view->sn = $this->admin->getSN();
 		$this->display();	
@@ -81,7 +82,8 @@ class admin extends control
 	{
 		if($_POST)	
 		{
-			$this->admin->loginByAPI();	
+			$response = $this->admin->loginByAPI();	
+			if($response == 'success') die(js::locate(inlink('index'), 'parent'));
 		}
 		$this->view->sn = $this->admin->getSN();
 		$this->display();

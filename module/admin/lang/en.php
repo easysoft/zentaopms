@@ -45,7 +45,7 @@ $lang->admin->register->notice->realname   = 'The realname must not be empty';
 $lang->admin->register->notice->email      = 'Please input your correct email address';
 $lang->admin->register->notice->notEqual   = 'The password and confirm password is not equal';
 $lang->admin->register->notice->registered = 'The username has been registered';
-$lang->admin->register->notice->success    = 'Register success';
+$lang->admin->register->notice->success    = 'Register successfully';
 $lang->admin->register->notice->failed     = 'Register failed';
 
 $lang->admin->login->caption = 'Login zentao community';
@@ -53,5 +53,5 @@ $lang->admin->login->join    = 'login';
 
 $lang->admin->login->notice->account    = 'The account must be a series of letters and/or numbers, at least three';
 $lang->admin->login->notice->password   = 'The password must be a series of letters and/or numbers, at least six';
-$lang->admin->login->notice->success    = 'Login success';
+$lang->admin->login->notice->success    = 'Login successfully';
 $lang->admin->login->notice->failed     = 'Login failed';

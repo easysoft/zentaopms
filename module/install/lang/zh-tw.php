@@ -102,5 +102,12 @@ $lang->install->account  = '管理員帳號';
 $lang->install->password = '管理員密碼';
 $lang->install->errorEmptyPassword = '密碼不能為空';
 
-$lang->install->success = "安裝成功！請刪除install.php，登錄禪道管理系統，設置用戶及分組！";
+$lang->install->success = "安裝成功";
 
+$lang->install->joinZentao = <<<EOT
+您已經成功安裝禪道管理系統%s，<strong class='red'>請及時刪除install.php</strong>。現在，您可以：
+
+<a href=%s>註冊</a>或<a href=%s>登錄</a>禪道社區，反饋建議並獲得技術支持。
+
+<a href='/'>登錄</a>禪道管理系統，設置用戶及分組！
+EOT;

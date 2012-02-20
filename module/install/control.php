@@ -21,6 +21,8 @@ class install extends control
     {
         if(!defined('IN_INSTALL')) die();
         parent::__construct();
+		$this->loadModel('admin');
+		$this->loadModel('user');
         $this->config->webRoot = $this->install->getWebRoot();
     }
 
@@ -119,14 +121,16 @@ class install extends control
     {
         if(!empty($_POST))
         {
+			$this->session->set('account', $this->post->account);
             $this->install->grantPriv();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('setting')->updateVersion($this->config->version);
             $this->setting->setSN();
-            echo (js::alert($this->lang->install->success));
-            unset($_SESSION['installing']);
-            session_destroy();
-            die(js::locate('index.php', 'parent'));
+            //echo (js::alert($this->lang->install->success));
+            //unset($_SESSION['installing']);
+            //session_destroy();
+            //die(js::locate('index.php', 'parent'));
+			die(js::locate(inlink('step5'), 'parent'));
         }
 
         $this->view->header->title = $this->lang->install->getPriv;
@@ -141,4 +145,51 @@ class install extends control
             $this->display();
         }
     }
+
+	/**
+	 * Join zentao community or login pms.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function step5()
+	{
+		$this->display();	
+	}
+
+	/**
+	 * Register zentao.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function register()
+	{
+		if($_POST)
+		{
+			$this->app->user->account = $this->session->account;
+			$response = $this->admin->registerByAPI();	
+			if($response == 'success') die(js::locate('index.php', 'parent'));
+		}
+		$this->view->sn = $this->admin->getSN();
+		$this->display();	
+	}
+
+	/**
+	 * Login zentao.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function login()
+	{
+		if($_POST)	
+		{
+			$this->app->user->account = $this->session->account;
+			$response = $this->admin->loginByAPI();	
+			if($response == 'success') die(js::locate('index.php', 'parent'));
+		}
+		$this->view->sn = $this->admin->getSN();
+		$this->display();
+	}
 }

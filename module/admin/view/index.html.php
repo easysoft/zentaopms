@@ -26,7 +26,7 @@
 <table align='center' class='table-1'>
 <caption><?php echo $lang->admin->info->caption;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->admin->info->currentVersion;?></th>
+    <th class='rowhead w-100px'><?php echo $lang->admin->info->currentVersion;?></th>
 	<td><?php echo $config->version;?></td>
   </tr>
   <tr>

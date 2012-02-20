@@ -121,7 +121,6 @@ class adminModel extends model
 				->set('value')->eq($this->post->account)
 				->exec(false);
 			echo js::alert($this->lang->admin->register->notice->success);	
-			die(js::locate(inlink('index'), 'parent'));
 			break;
 		case 'failed':
 			echo js::alert($this->lang->admin->register->notice->failed);
@@ -147,6 +146,7 @@ class adminModel extends model
 		default:
 			echo js::alert($this->lang->admin->register->notice->failed);
 		}
+		return $response;
 	}
 
 	/**
@@ -170,7 +170,6 @@ class adminModel extends model
 				->set('value')->eq($this->post->account)
 				->exec(false);
 			echo js::alert($this->lang->admin->login->notice->success);	
-			die(js::locate(inlink('index'), 'parent'));
 			break;
 		case 'userError':
 			echo js::alert($this->lang->admin->login->notice->account);
@@ -184,6 +183,7 @@ class adminModel extends model
 		default:
 			echo js::alert($this->lang->admin->login->notice->failed);
 		}
+		return $response;
 	}
 
 	/**
