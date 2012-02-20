@@ -337,7 +337,6 @@ class storyModel extends model
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'subdivided', 'childStories', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
 
-        $this->setStage($storyID);
         if(!dao::isError()) return common::createChanges($oldStory, $story);
     }
 
