@@ -126,10 +126,6 @@ class install extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('setting')->updateVersion($this->config->version);
             $this->setting->setSN();
-            //echo (js::alert($this->lang->install->success));
-            //unset($_SESSION['installing']);
-            //session_destroy();
-            //die(js::locate('index.php', 'parent'));
 			die(js::locate(inlink('step5'), 'parent'));
         }
 
@@ -169,7 +165,12 @@ class install extends control
 		{
 			$this->app->user->account = $this->session->account;
 			$response = $this->admin->registerByAPI();	
-			if($response == 'success') die(js::locate('index.php', 'parent'));
+			if($response == 'success')
+			{
+				unset($_SESSION['installing']);
+				session_destroy();
+				die(js::locate('index.php', 'parent'));
+			}
 		}
 		$this->view->sn = $this->admin->getSN();
 		$this->display();	
@@ -187,7 +188,12 @@ class install extends control
 		{
 			$this->app->user->account = $this->session->account;
 			$response = $this->admin->loginByAPI();	
-			if($response == 'success') die(js::locate('index.php', 'parent'));
+			if($response == 'success')
+			{
+				unset($_SESSION['installing']);
+				session_destroy();
+				die(js::locate('index.php', 'parent'));
+			}
 		}
 		$this->view->sn = $this->admin->getSN();
 		$this->display();

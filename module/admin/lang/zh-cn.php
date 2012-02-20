@@ -31,7 +31,7 @@ $lang->admin->info->donation       = '捐助禅道';
 $lang->admin->info->service        = '收费服务';
 $lang->admin->info->account        = '社区账号';
 
-$lang->admin->notice->join         = "您可以点击%s或%s禅道社区。";
+$lang->admin->notice->join         = "您的账号未关联到禅道社区，点击%s可以新建社区账号，系统赠送200积分。您还可以点击%s社区账号，系统赠送150积分。";
 $lang->admin->notice->ignore       = "不再提示";
 
 $lang->admin->register->caption    = '注册禅道社区';
@@ -48,10 +48,10 @@ $lang->admin->register->notice->registered = '用户名已注册';
 $lang->admin->register->notice->success    = '注册成功';
 $lang->admin->register->notice->failed     = '注册失败';
 
-$lang->admin->login->caption = '登录禅道社区';
-$lang->admin->login->join    = '登录';
+$lang->admin->login->caption = '关联社区账号';
+$lang->admin->login->join    = '关联';
 
 $lang->admin->login->notice->account    = '用户名必须是数字和字母组合，三位以上';
 $lang->admin->login->notice->password   = '密码必须是数字和字母组合，六位以上';
-$lang->admin->login->notice->success    = '登录成功';
-$lang->admin->login->notice->failed     = '登录失败';
+$lang->admin->login->notice->success    = '关联账户成功';
+$lang->admin->login->notice->failed     = '关联账户失败';

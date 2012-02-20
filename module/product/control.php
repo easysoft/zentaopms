@@ -31,7 +31,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs();
-        if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and strpos('create', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
 

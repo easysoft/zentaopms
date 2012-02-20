@@ -7,7 +7,6 @@ $lang->mail->fromName     = '发信人名称';
 $lang->mail->mta          = '请选择发信方式';
 $lang->mail->debugExample = '0表示关闭调试信息,1和2表示打开调试信息，但2比1调试信息显示更详细';
 
-$lang->mail->mtaList['']         = '';
 $lang->mail->mtaList['gmail']    = 'Gmail服务器方式';
 $lang->mail->mtaList['smtp']     = 'SMTP服务器方式';
 $lang->mail->mtaList['phpmail']  = 'PHP内置mail函数';

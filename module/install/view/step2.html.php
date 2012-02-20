@@ -44,7 +44,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->install->dbPassword;?></th>
-      <td><?php echo html::input('dbPassword', '', 'class=text-3');?></td>
+      <td><?php echo html::password('dbPassword', '', 'class=text-3');?></td>
     </tr>
     <tr>
       <th><?php echo $lang->install->dbName;?></th>

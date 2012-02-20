@@ -15,9 +15,7 @@
   <tr><td><?php echo nl2br(sprintf($lang->install->desc, $config->version));?></td></tr>
   <tr>
     <td>
-    <?php if(!isset($latestRelease)):?>
-    <h3 class='a-center'><?php echo html::a($this->createLink('install', 'step1'), $lang->install->start);?></h3>
-    <?php else:?>
+    <?php if(isset($latestRelease) and (version_compare($latestRelease->version, $config->version) > 0)):?>
     <?php vprintf($lang->install->newReleased, $latestRelease);?>
     <h3 class='a-center'>
       <?php 
@@ -26,6 +24,8 @@
       echo html::a($this->createLink('install', 'step1'), $lang->install->keepInstalling);
       ?>
     </h3>
+	<?php else:?>
+      <h3 class='a-center'><?php echo html::a($this->createLink('install', 'step1'), $lang->install->start);?></h3>
     <?php endif;?>
     </td>
   </tr>

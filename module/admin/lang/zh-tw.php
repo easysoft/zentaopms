@@ -31,7 +31,7 @@ $lang->admin->info->donation       = '捐助禪道';
 $lang->admin->info->service        = '收費服務';
 $lang->admin->info->account        = '社區賬號';
 
-$lang->admin->notice->join         = "您可以點擊%s或%s禪道社區。";
+$lang->admin->notice->join         = "您的賬號未關聯到禪道社區，點擊%s可以新建社區賬號，系統贈送200積分。您還可以點擊%s社區賬號，系統贈送150積分。";
 $lang->admin->notice->ignore       = "不再提示";
 
 $lang->admin->register->caption    = '註冊禪道社區';
@@ -48,10 +48,10 @@ $lang->admin->register->notice->registered = '用戶名已註冊';
 $lang->admin->register->notice->success    = '註冊成功';
 $lang->admin->register->notice->failed     = '註冊失敗';
 
-$lang->admin->login->caption = '登錄禪道社區';
-$lang->admin->login->join    = '登錄';
+$lang->admin->login->caption = '關聯社區賬號';
+$lang->admin->login->join    = '關聯';
 
 $lang->admin->login->notice->account    = '用戶名必須是數字和字母組合，三位以上';
 $lang->admin->login->notice->password   = '密碼必須是數字和字母組合，六位以上';
-$lang->admin->login->notice->success    = '登錄成功';
-$lang->admin->login->notice->failed     = '登錄失敗';
+$lang->admin->login->notice->success    = '關聯賬戶成功';
+$lang->admin->login->notice->failed     = '關聯賬戶失敗';

@@ -31,12 +31,12 @@ $lang->admin->info->donation       = 'Donation';
 $lang->admin->info->service        = 'Service fee';
 $lang->admin->info->account        = 'Community account';
 
-$lang->admin->notice->join         = "You can click %s or %s to join zentao community.";
+$lang->admin->notice->join         = "Your account is not associated with zentao community. You can %s a community account, and get 200 scores. If you have an account, just %s it with community, and you can get 150 scores.";
 $lang->admin->notice->ignore       = "ignore";
 
 $lang->admin->register->caption    = 'Register zentao community';
-$lang->admin->register->join       = 'register';
-$lang->admin->register->lblAccount = 'The account must be a series of letters and/or numbers, at least three';
+$lang->admin->register->join       = 'create';
+$lang->admin->register->lblAccount = 'Numbers and letters, at least three';
 $lang->admin->register->lblPasswd  = 'Numbers and letters, at least six';
 
 $lang->admin->register->notice->account    = 'The account must be a series of letters and/or numbers, at least three';
@@ -48,10 +48,10 @@ $lang->admin->register->notice->registered = 'The username has been registered';
 $lang->admin->register->notice->success    = 'Register successfully';
 $lang->admin->register->notice->failed     = 'Register failed';
 
-$lang->admin->login->caption = 'Login zentao community';
-$lang->admin->login->join    = 'login';
+$lang->admin->login->caption = 'Associated with community account';
+$lang->admin->login->join    = 'associate';
 
 $lang->admin->login->notice->account    = 'The account must be a series of letters and/or numbers, at least three';
 $lang->admin->login->notice->password   = 'The password must be a series of letters and/or numbers, at least six';
-$lang->admin->login->notice->success    = 'Login successfully';
-$lang->admin->login->notice->failed     = 'Login failed';
+$lang->admin->login->notice->success    = 'Associate successfully';
+$lang->admin->login->notice->failed     = 'Associate failed';

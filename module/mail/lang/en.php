@@ -7,7 +7,6 @@ $lang->mail->fromName     = 'The from name';
 $lang->mail->mta          = 'The style of send email';
 $lang->mail->debugExample = '0:close,1 and 2 :open,2 is more infomation than 1';
 
-$lang->mail->mtaList['']         = '';
 $lang->mail->mtaList['gmail']    = 'Gmail sever';
 $lang->mail->mtaList['smtp']     = 'Smtp server';
 $lang->mail->mtaList['phpmail']  = 'Mail function build in php';
