@@ -145,7 +145,7 @@ var customed   = <?php echo (int)$customed;?>;
         </tbody>
         <tfoot>
           <tr>
-            <?php $columns = $this->cookie->windowWidth > $this->config->wideSize ? 12 : 9;?>
+            <?php $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 12 : 9;?>
             <td colspan='<?php echo $columns;?>'>
               <div class='f-left'>
                 <?php 
