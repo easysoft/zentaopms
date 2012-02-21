@@ -785,6 +785,7 @@ class upgradeModel extends model
     {
         $this->execSQL($this->getUpgradeFile('3.0.beta1'));
         $this->updateTableAction();
+        $this->setOrderData();
         if(!$this->isError()) $this->setting->updateVersion('3.0');
     }
 
@@ -1089,6 +1090,26 @@ class upgradeModel extends model
         {
             $product = ',' . $product . ',';
             $this->dao->update(TABLE_ACTION)->set('product')->eq($product)->exec();
+        }
+    }
+
+    /**
+     * Init the data of product and project order field. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function setOrderData()
+    {
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->orderBy('code')->fetchAll('id');
+        foreach(array_keys($products) as $key => $productID)
+        {
+            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq(($key + 1) * 10)->where('id')->eq($productID)->exec();
+        }
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andWhere('deleted')->eq(0)->orderBy('status, id desc')->fetchAll('id');
+        foreach(array_keys($projects) as $key => $projectID)
+        {
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq(($key + 1) * 10)->where('id')->eq($projectID)->exec();
         }
     }
 

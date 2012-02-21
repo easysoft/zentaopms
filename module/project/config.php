@@ -1,6 +1,6 @@
 <?php
 $config->project->defaultWorkhours = 7;
-$config->project->orderBy          = 'status, id desc';
+$config->project->orderBy          = 'isDone, `order`, status';
 
 global $lang, $app;
 $app->loadLang('task');

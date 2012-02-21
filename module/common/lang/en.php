@@ -139,6 +139,7 @@ $lang->product->menu->view    = 'Info|product|view|productID=%s';
 $lang->product->menu->edit    = 'Edit|product|edit|productID=%s';
 $lang->product->menu->delete  = array('link' => 'Delete|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
+$lang->product->menu->order   = 'Order|product|order|productID=%s';
 $lang->product->menu->create  = array('link' => 'New Product|product|create', 'float' => 'right');
 $lang->product->menu->project = array('link' => 'Project list|product|project|status=all&productID=%s', 'float' => 'right');
 $lang->product->menu->all     = array('link' => 'All product|product|index|locate=false', 'float' => 'right');
@@ -162,6 +163,7 @@ $lang->project->menu->linkstory = array('link' => 'Link Story|project|linkstory|
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->edit      = 'Edit|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => 'Delete|project|delete|projectID=%s', 'target' => 'hiddenwin');
+$lang->project->menu->order     = 'Order|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => 'New Project|project|create', 'float' => 'right');
 $lang->project->menu->toCopy    = array('link' => 'Copy Project|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => 'Project list|project|index|locate=no', 'float' => 'right');

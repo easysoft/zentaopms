@@ -139,6 +139,7 @@ $lang->product->menu->view    = '概况|product|view|productID=%s';
 $lang->product->menu->edit    = '编辑|product|edit|productID=%s';
 $lang->product->menu->delete  = array('link' => '删除|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
+$lang->product->menu->order   = '排序|product|order|productID=%s';
 $lang->product->menu->create  = array('link' => '新增产品|product|create', 'float' => 'right');
 $lang->product->menu->project = array('link' => '项目列表|product|project|status=all&productID=%s', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '所有产品|product|index|locate=false', 'float' => 'right');
@@ -162,6 +163,7 @@ $lang->project->menu->linkstory = array('link' => '关联需求|project|linkstor
 $lang->project->menu->view      = '概况|project|view|projectID=%s';
 $lang->project->menu->edit      = '编辑|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => '删除|project|delete|projectID=%s', 'target' => 'hiddenwin');
+$lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '新增项目|project|create', 'float' => 'right');
 $lang->project->menu->toCopy    = array('link' => '复制项目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '所有项目|project|index|locate=false', 'float' => 'right');

@@ -874,6 +874,27 @@ class project extends control
     }
 
     /**
+     * Order project 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function order($projectID)
+    {
+        if($_POST)
+        {
+            $this->project->saveOrder();
+            die(js::reload('parent'));
+        }
+        $project   = $this->commonAction($projectID);
+        $this->project->setMenu($this->projects, $project->id);
+        $this->view->projects  = $this->project->getList();
+        $this->view->projectID = $project->id;
+        $this->display();
+    }
+
+    /**
      * Send email.
      * 
      * @param  int    $taskID 

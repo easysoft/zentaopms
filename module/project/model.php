@@ -122,6 +122,20 @@ class projectModel extends model
     }
 
     /**
+     * Save order 
+     * 
+     * @access public
+     * @return void
+     */
+    public function saveOrder()
+    {
+        foreach($_POST as $projectID => $order)
+        {
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($projectID)->exec();
+        }
+    }
+
+    /**
      * Create a project. 
      * 
      * @access public
@@ -237,9 +251,10 @@ class projectModel extends model
      */
     public function getPairs($mode = '')
     {
-        $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'status, id desc';
+        $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, `order`, status';
         $mode    .= $this->cookie->projectMode;
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+        /* Order by status's content whether or not done */
+        $projects = $this->dao->select('*, IF(INSTR(" done", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
@@ -289,17 +304,17 @@ class projectModel extends model
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->orderBy('status, id desc')
+                ->orderBy($this->config->project->orderBy)
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
         else
         {
-            return $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)
+            return $this->dao->select('*, IF(INSTR(" done", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->where('iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->andWhere('deleted')->eq(0)
-                ->orderBy('status, id')
+                ->orderBy($this->config->project->orderBy)
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
