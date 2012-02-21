@@ -10,8 +10,17 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php echo $structures['name'] . '[' . $structures['code'] . '] ' .$lang->extension->structure . ':';?> <br /><br />
-<?php unset($structures['name']); unset($structures['code']);?>
-<?php foreach($structures as $structure):?>
-<?php echo $structure;?> <br />
-<?php endforeach;?>
+<?php include '../../common/view/header.lite.html.php';?>
+<table class='table-1'>
+  <caption><?php echo $extension->name . '[' . $extension->code . '] ' .$lang->extension->structure . ':';?></cation>
+  <tr>
+    <td>
+      <?php 
+      $appRoot = $this->app->getAppRoot();
+      $files   = json_decode($extension->files);
+      foreach($files as $file => $md5) echo $appRoot . $file . "<br />";
+      ?>
+    </td>
+  </tr>
+</table>
+<?php include '../../common/view/footer.lite.html.php';?>

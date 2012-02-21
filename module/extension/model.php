@@ -751,28 +751,4 @@ class extensionModel extends model
         }
         return $this->dao->update(TABLE_EXTENSION)->data($data)->where('code')->eq($extension)->exec();
     }
-
-    /**
-     * Get the structure of extension. 
-     * 
-     * @param  int    $extension 
-     * @access public
-     * @return void
-     */
-    public function structure($extension)
-    {
-        $extension = $this->getInfoFromDB($extension);
-        $files = json_decode($extension->files);
-        $appRoot = $this->app->getAppRoot();
-
-        $structures = array();
-        foreach($files as $struct => $value)
-        {
-            $structures[] = $appRoot . $struct;
-        }
-
-        $structures['name'] = $extension->name;
-        $structures['code'] = $extension->code;
-        return $structures;
-    }
 }
