@@ -20,7 +20,7 @@ Date.abbrDayNames   = ['星期天', '星期一', '星期二', '星期三', '星�
 Date.monthNames     = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
  
 $(function() {
-    startDate = new Date(2011, 1, 1);
+    startDate = new Date(1970, 1, 1);
     $(".date").datePicker({createButton:true, startDate:startDate})
     .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
 });
