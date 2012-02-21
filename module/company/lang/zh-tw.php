@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2568 2012-02-09 06:56:35Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->company->common   = '組織視圖';

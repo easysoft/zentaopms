@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2568 2012-02-09 06:56:35Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';
@@ -26,13 +26,14 @@ $lang->search->storyTitle    = '需求名稱';
 $lang->search->taskTitle     = '任務名稱';
 $lang->search->select        = '需求/任務篩選';
 
-$lang->search->operators['=']       = '=';
-$lang->search->operators['!=']      = '!=';
-$lang->search->operators['>']       = '>';
-$lang->search->operators['>=']      = '>=';
-$lang->search->operators['<']       = '<';
-$lang->search->operators['<=']      = '<=';
-$lang->search->operators['include'] = '包含';
+$lang->search->operators['=']          = '=';
+$lang->search->operators['!=']         = '!=';
+$lang->search->operators['>']          = '>';
+$lang->search->operators['>=']         = '>=';
+$lang->search->operators['<']          = '<';
+$lang->search->operators['<=']         = '<=';
+$lang->search->operators['include']    = '包含';
+$lang->search->operators['notinclude'] = '不包含';
 
 $lang->search->andor['and']         = '並且';
 $lang->search->andor['or']          = '或者';

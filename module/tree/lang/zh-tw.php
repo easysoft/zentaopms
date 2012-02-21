@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
- * @version     $Id: zh-tw.php 2007 2011-07-03 08:18:16Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2568 2012-02-09 06:56:35Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->tree->common            = '模組維護';
@@ -16,13 +16,15 @@ $lang->tree->addChild          = '添加子模組';
 $lang->tree->delete            = '刪除模組';
 $lang->tree->browse            = '模組維護';
 $lang->tree->manage            = '維護模組';
+$lang->tree->docManage         = '分類';
 $lang->tree->manageProduct     = '維護產品視圖模組';
 $lang->tree->manageProject     = '維護項目視圖模組';
 $lang->tree->manageBug         = '維護測試視圖模組';
 $lang->tree->manageCase        = '維護用例視圖模組';
-$lang->tree->manageCustomDoc   = '維護文檔庫模組';
+$lang->tree->manageCustomDoc   = '維護文檔庫分類';
 $lang->tree->updateOrder       = '更新排序';
 $lang->tree->manageChild       = '維護子模組';
+$lang->tree->manageDocChild    = '維護分類';
 $lang->tree->syncFromProduct   = '複製產品視圖模組';
 $lang->tree->ajaxGetOptionMenu = '介面:獲取下拉列表';
 $lang->tree->ajaxGetSonModules = '介面:獲得子菜單列表';

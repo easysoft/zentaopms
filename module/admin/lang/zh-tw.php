@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
- * @version     $Id: zh-tw.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
+ * @version     $Id: zh-tw.php 2594 2012-02-20 09:06:53Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->admin->common  = '後台管理';
@@ -19,7 +19,7 @@ $lang->admin->welcome = '歡迎使用禪道管理軟件後台管理系統';
 $lang->admin->browseCompany = '瀏覽公司';
 
 $lang->admin->info->caption        = '禪道系統信息';
-$lang->admin->info->urls           = '相關鏈接';
+$lang->admin->info->urls           = '相關連結';
 $lang->admin->info->currentVersion = '當前版本';
 $lang->admin->info->community      = '禪道主頁';
 $lang->admin->info->ask            = '禪道問答';
@@ -36,7 +36,7 @@ $lang->admin->notice->ignore       = "不再提示";
 
 $lang->admin->register->caption    = '註冊禪道社區';
 $lang->admin->register->join       = '註冊';
-$lang->admin->register->lblAccount = '請設置您的用戶名。字母和數字的組合，三位以上。';
+$lang->admin->register->lblAccount = '請設置您的用戶名，英文字母和數字的組合。';
 $lang->admin->register->lblPasswd  = '請設置您的密碼。數字和字母的組合，六位以上。';
 
 $lang->admin->register->notice->account    = '用戶名必須是數字和字母組合，三位以上';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 2471 2011-12-24 01:40:31Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2572 2012-02-13 03:28:39Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -113,7 +113,7 @@ $lang->story->reviewList[0] = '否';
 $lang->story->reviewList[1] = '是';
 
 $lang->story->sourceList['']           = '';
-$lang->story->sourceList['custom']     = '客戶';
+$lang->story->sourceList['customer']   = '客戶';
 $lang->story->sourceList['user']       = '用戶';
 $lang->story->sourceList['po']         = '產品經理';
 $lang->story->sourceList['market']     = '市場';

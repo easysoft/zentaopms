@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
- * @version     $Id: zh-tw.php 2535 2012-01-04 06:39:54Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2583 2012-02-17 07:25:56Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->upgrade->common  = '升級';
@@ -58,3 +58,4 @@ $lang->upgrade->fromVersions['2_1']       = '2.1';
 $lang->upgrade->fromVersions['2_2']       = '2.2';
 $lang->upgrade->fromVersions['2_3']       = '2.3';
 $lang->upgrade->fromVersions['2_4']       = '2.4';
+$lang->upgrade->fromVersions['3_0_beta1'] = '3.0.beta1';

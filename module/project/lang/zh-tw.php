@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 2446 2011-12-22 01:54:20Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2600 2012-02-21 04:35:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -38,6 +38,7 @@ $lang->project->QM            = '測試負責人';
 $lang->project->RM            = '發佈負責人';
 $lang->project->acl           = '訪問控制';
 $lang->project->teamname      = '團隊名稱';
+$lang->project->order         = '項目排序';
 $lang->project->products      = '相關產品';
 $lang->project->childProjects = '子項目';
 $lang->project->whitelist     = '分組白名單';
@@ -46,6 +47,8 @@ $lang->project->totalConsumed = '總消耗';
 $lang->project->totalLeft     = '總剩餘';
 $lang->project->progess       = '進度';
 $lang->project->viewBug       = '查看bug';
+$lang->project->testtaskBrowse= '待測列表';
+$lang->project->createTesttask= '提交測試';
 $lang->project->noProduct     = '無產品項目';
 $lang->project->select        = '--請選擇項目--';
 
@@ -74,7 +77,7 @@ $lang->project->story           = '需求列表';
 $lang->project->bug             = 'Bug列表';
 $lang->project->dynamic         = '動態';
 $lang->project->build           = 'Build列表';
-$lang->project->testtask        = '測試任務';
+$lang->project->testtask        = '測試申請';
 $lang->project->burn            = '燃盡圖';
 $lang->project->computeBurn     = '更新燃盡圖';
 $lang->project->burnData        = '燃盡圖數據';
@@ -100,6 +103,7 @@ $lang->project->assignedToMe         = '指派給我';
 $lang->project->finishedByMe         = '由我完成';
 $lang->project->statusWait           = '未開始';
 $lang->project->statusDoing          = '進行中';
+$lang->project->statusUndone         = '未完成';
 $lang->project->statusDone           = '已完成';
 $lang->project->statusClosed         = '已關閉';
 $lang->project->delayed              = '已延期';

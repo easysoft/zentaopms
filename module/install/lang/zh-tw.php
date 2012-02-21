@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 2503 2012-01-02 06:10:54Z wwccss $
+ * @version     $Id: zh-tw.php 2594 2012-02-20 09:06:53Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -109,5 +109,5 @@ $lang->install->joinZentao = <<<EOT
 
 <a href=%s>註冊</a>禪道社區，反饋建議並獲得技術支持，系統贈送200積分。如果您已經擁有社區賬號，只需<a href=%s>關聯</a>賬號，系統將贈送150積分。
 
-<a href='/'>登錄</a>禪道管理系統，設置用戶及分組！
+直接<a href='/'>登錄</a>禪道管理系統，設置用戶及分組！
 EOT;

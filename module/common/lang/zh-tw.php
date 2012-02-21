@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2538 2012-01-04 07:25:59Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2600 2012-02-21 04:35:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -62,7 +62,7 @@ $lang->notFound     = '抱歉，您訪問的對象並不存在！';
 $lang->showAll      = '++ 全部顯示 ++';
 $lang->hideClosed   = '-- 隱藏已結束 --';
 
-$lang->feature      = '未來';
+$lang->future       = '未來';
 $lang->year         = '年';
 $lang->workingHour  = '工時';
 
@@ -139,6 +139,7 @@ $lang->product->menu->view    = '概況|product|view|productID=%s';
 $lang->product->menu->edit    = '編輯|product|edit|productID=%s';
 $lang->product->menu->delete  = array('link' => '刪除|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
+$lang->product->menu->order   = '排序|product|order|productID=%s';
 $lang->product->menu->create  = array('link' => '新增產品|product|create', 'float' => 'right');
 $lang->product->menu->project = array('link' => '項目列表|product|project|status=all&productID=%s', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '所有產品|product|index|locate=false', 'float' => 'right');
@@ -153,7 +154,7 @@ $lang->project->menu->story     = array('link' => '需求|project|story|projectI
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '動態|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = '測試任務|project|testtask|projectID=%s';
+$lang->project->menu->testtask  = '測試申請|project|testtask|projectID=%s';
 $lang->project->menu->burn      = '燃盡圖|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=%s', 'subModule' => 'doc');
@@ -162,7 +163,9 @@ $lang->project->menu->linkstory = array('link' => '關聯需求|project|linkstor
 $lang->project->menu->view      = '概況|project|view|projectID=%s';
 $lang->project->menu->edit      = '編輯|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => '刪除|project|delete|projectID=%s', 'target' => 'hiddenwin');
+$lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '新增項目|project|create', 'float' => 'right');
+$lang->project->menu->toCopy    = array('link' => '複製項目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '所有項目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;

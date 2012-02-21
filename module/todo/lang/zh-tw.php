@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 2383 2011-12-01 07:17:55Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2568 2012-02-09 06:56:35Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->todo->common       = 'TODO';
@@ -44,7 +44,7 @@ $lang->todo->idvalue     = '任務或Bug';
 $lang->todo->week         = '星期';
 $lang->todo->today        = '今天';
 $lang->todo->weekDateList = '一,二,三,四,五,六,天';
-$lang->todo->dayInFeature = '暫不指定';
+$lang->todo->dayInFuture  = '暫不指定';
 $lang->todo->confirmBug   = '該Todo關聯的是Bug #%s，需要修改它嗎？';
 $lang->todo->confirmTask  = '該Todo關聯的是Task #%s，需要修改它嗎？';
 
@@ -70,6 +70,7 @@ $lang->todo->lblDisableDate = '暫時不設定時間';
 
 $lang->todo->thisWeekTodos = '本週計劃';
 $lang->todo->lastWeekTodos = '上周總結';
+$lang->todo->futureTodos   = '暫不指定';
 $lang->todo->allDaysTodos  = '所有TODO';
 $lang->todo->allUndone     = '之前未完';
 $lang->todo->todayTodos    = '今日安排';
