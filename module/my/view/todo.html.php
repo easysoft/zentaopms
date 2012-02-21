@@ -27,10 +27,10 @@
       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
     <div class='f-right'>
-    <?php 
-        common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="export"');
-        echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
-    ?>
+      <?php 
+      common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="export"');
+      echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
+      ?>
     </div>
   </div>
   <table class='table-1 tablesorter'>
@@ -77,11 +77,7 @@
     </tbody>
     <?php if($importFuture):?>
     <tfoot>
-    <tr>
-      <td colspan='9'>
-        <input type='submit' value='<?php echo $lang->todo->import2Today;?>' />
-      </td>
-    </tr>
+    <tr><td colspan='9'><input type='submit' value='<?php echo $lang->todo->import2Today;?>' /></td></tr>
     <?php endif;?>
     </tfoot>
   </table>

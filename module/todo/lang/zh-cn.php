@@ -69,7 +69,7 @@ $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';
 
 $lang->todo->thisWeekTodos = '本周计划';
-$lang->todo->lastWeekTodos = '上周总结';
+$lang->todo->lastWeekTodos = '上周工作';
 $lang->todo->futureTodos   = '暂不指定';
 $lang->todo->allDaysTodos  = '所有TODO';
 $lang->todo->allUndone     = '之前未完';

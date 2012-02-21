@@ -20,6 +20,7 @@
        echo '<span id="today">'    . html::a(inlink('todo', "account=$account&date=today"),     $lang->todo->todayTodos)    . '</span>';
        echo '<span id="thisweek">' . html::a(inlink('todo', "account=$account&date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
        echo '<span id="lastweek">' . html::a(inlink('todo', "account=$account&date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
+      echo '<span id="future" >'   . html::a(inlink('todo', "account=$account&date=future"),    $lang->todo->futureTodos)   . '</span>';
        echo '<span id="all">'      . html::a(inlink('todo', "account=$account&date=all"),       $lang->todo->allDaysTodos)  . '</span>';
        echo '<span id="before">'   . html::a(inlink('todo', "account=$account&date=before&status=undone"), $lang->todo->allUndone) . '</span>';
        echo "<span id='$date'>"    . html::select('date', $dates, $date, 'onchange=changeDate(this.value)') . '</span>';
