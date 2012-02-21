@@ -92,6 +92,20 @@ class productModel extends model
     }
 
     /**
+     * Save order 
+     * 
+     * @access public
+     * @return void
+     */
+    public function saveOrder()
+    {
+        foreach($_POST as $productID => $order)
+        {
+            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($order)->where('id')->eq($productID)->exec();
+        }
+    }
+
+    /**
      * Check privilege.
      * 
      * @param  int    $product 
@@ -154,8 +168,10 @@ class productModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF($status = 'noclosed')->andWhere('status')->ne('closed')->fi()
+            ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->in($status)->fi()
             ->beginIF($limit > 0)->limit($limit)->fi()
+            ->orderBy('`order` asc')
             ->fetchAll('id');
     }
 
@@ -167,9 +183,9 @@ class productModel extends model
      */
     public function getPairs($mode = '')
     {
-        $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'code';
+        $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed, `order`';
         $mode    .= $this->cookie->productMode;
-        $products = $this->dao->select('*')
+        $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()

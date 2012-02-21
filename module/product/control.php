@@ -351,6 +351,25 @@ class product extends control
     }
 
     /**
+     * order product 
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function order($productID)
+    {
+        if($_POST)
+        {
+            $this->product->saveOrder();
+            die(js::reload('parent'));
+        }
+        $this->product->setMenu($this->products, $productID);
+        $this->view->products = $this->product->getList('noclosed');
+        $this->display();
+    }
+
+    /**
      * AJAX: get projects of a product in html select.
      * 
      * @param  int    $productID 

@@ -1,5 +1,5 @@
 <?php
-$config->product->orderBy       = 'code';
+$config->product->orderBy       = 'isClosed, `order`';
 
 global $lang, $app;
 $app->loadLang('story');
