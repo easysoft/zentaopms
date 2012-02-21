@@ -37,14 +37,25 @@ function computeDaysDelta(date1, date2)
     return (date2 - date1) / (1000 * 60 * 60 * 24)
 }
 
+/**
+ * Compute work days.
+ * 
+ * @access public
+ * @return void
+ */
+function computeWorkDays()
+{
+    beginDate = $('#begin').val();
+    endDate   = $('#end').val();
+    if(beginDate && endDate) $('#days').val(computeDaysDelta(beginDate, endDate));
+}
+
 /* Auto compute the work days. */
 $(function() 
 {
     $(".date").bind('dateSelected', function()
     {
-        beginDate = $('#begin').val();
-        endDate   = $('#end').val();
-        if(beginDate && endDate) $('#days').val(computeDaysDelta(beginDate, endDate));
+        computeWorkDays();
     })
 });
 

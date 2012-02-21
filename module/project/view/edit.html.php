@@ -26,11 +26,11 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->begin;?></th>
-      <td><?php echo html::input('begin', $project->begin, "class='text-3 date' onchange='computeDays()'");?></td>
+      <td><?php echo html::input('begin', $project->begin, "class='text-3 date' onchange='computeWorkDays()'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->end;?></th>
-      <td><?php echo html::input('end', $project->end, "class='text-3 date' onchange='computeDays()'");?></td>
+      <td><?php echo html::input('end', $project->end, "class='text-3 date' onchange='computeWorkDays()'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->days;?></th>
