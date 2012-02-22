@@ -191,7 +191,7 @@ class company extends control
         $this->view->projects = $projects; 
 
         /* Get users.*/
-        $users = $this->loadModel('user')->getPairs('nodeleted|noletter|noclosed');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $users[''] = $this->lang->user->select;
         $this->view->users    = $users; 
 
