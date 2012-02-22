@@ -16,10 +16,6 @@ $lang->admin->user    = '用户管理';
 $lang->admin->group   = '分组管理';
 $lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
 
-$lang->admin->register     = '注册';
-$lang->admin->bind         = '绑定';
-$lang->admin->ignoreNotice = '不再提示';
-
 $lang->admin->browseCompany = '浏览公司';
 
 $lang->admin->info->caption        = '禅道系统信息';

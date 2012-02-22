@@ -16,10 +16,6 @@ $lang->admin->user    = 'User';
 $lang->admin->group   = 'Group';
 $lang->admin->welcome = 'Welcome to ZenTaoPMS.';
 
-$lang->admin->register     = 'Register';
-$lang->admin->bind         = 'Bind';
-$lang->admin->ignoreNotice = 'Ignore notice';
-
 $lang->admin->browseCompany = 'Browse Company';
 
 $lang->admin->info->caption        = 'ZentaoPMS information';
