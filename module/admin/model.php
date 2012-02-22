@@ -119,7 +119,7 @@ class adminModel extends model
 	 * @access public
 	 * @return void
 	 */
-	public function loginByAPI()
+	public function bindByAPI()
 	{
 		$apiURL = 'http://www.zentao.net/user-login.json';
 		return $this->postAPI($apiURL, $_POST);

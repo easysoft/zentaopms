@@ -47,7 +47,7 @@
 	  <td colspan="2" class="a-center">
       <?php 
         echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn);
-        echo sprintf($lang->admin->register->login, html::a(inlink('login'), $lang->admin->register->join));
+        echo sprintf($lang->admin->register->login, html::a(inlink('bind'), $lang->admin->register->join));
       ?>
 	  </td>
     </th>

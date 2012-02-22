@@ -189,16 +189,16 @@ class install extends control
 	}
 
 	/**
-	 * Login zentao.
+	 * Bind zentao.
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	public function login()
+	public function bind()
 	{
 		if($_POST)	
 		{
-			$response = $this->load('admin')->loginByAPI();	
+			$response = $this->load('admin')->bindByAPI();	
 			if($response == 'success') 
 			{
 				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
