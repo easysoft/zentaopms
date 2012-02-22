@@ -13,18 +13,18 @@
 <?php include '../../common/view/header.html.php';?>
 <form method="post" target="hiddenwin">
 <table align='center' class='table-6'>
-<caption><?php echo $lang->admin->reg->caption;?></caption>
+<caption><?php echo $lang->admin->register->caption;?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->user->account;?></th>
-	<td><?php echo html::input('account', '', "class='text-3'") . '<font color="red">*</font>' . $lang->admin->reg->lblAccount;?></td>
+	<td><?php echo html::input('account', '', "class='text-3'") . '<span class="star">*</span>' . $lang->admin->register->lblAccount;?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->realname;?></th>
-    <td><?php echo html::input('realname', '', "class='text-3'") . '<font color="red">*</font>';?></td>
+    <td><?php echo html::input('realname', '', "class='text-3'") . '<span class="star">*</span>';?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->company;?></th>
-    <td><?php echo html::input('company', $reg->company, "class='text-3'");?></td>
+    <td><?php echo html::input('company', $register->company, "class='text-3'");?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->phone;?></th>
@@ -32,23 +32,23 @@
   </tr>  
   <tr>
     <th class="rowhead"><?php echo $lang->user->email;?></td>
-    <td><?php echo html::input('email', $reg->email, "class='text-3'") . '<font color="red">*</font>';?></td>
+    <td><?php echo html::input('email', $register->email, "class='text-3'") . '<span class="star">*</span>';?></td>
   </tr>  
   <tr>
     <th class="rowhead"><?php echo $lang->user->password;?></th>
-    <td><?php echo html::password('password1', '', "class='text-3'") . '<font color="red">*</font>' . $lang->admin->reg->lblPasswd;?></td>
+    <td><?php echo html::password('password1', '', "class='text-3'") . '<span class="star">*</span>' . $lang->admin->register->lblPasswd;?></td>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->user->password2;?></td>
-    <td><?php echo html::password('password2', '', "class='text-3'") . '<font color="red">*</font>';?></td>
+    <td><?php echo html::password('password2', '', "class='text-3'") . '<span class="star">*</span>';?></td>
   </tr> 
   <tr>
     <th>
 	  <td colspan="2" class="a-center">
-      <?php 
-        echo html::submitButton($lang->admin->reg->submit) . html::hidden('sn', $sn);
-        echo sprintf($lang->admin->reg->login, html::a(inlink('bind'), $lang->admin->reg->join));
-      ?>
+        <?php 
+        echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn);
+        echo "<span class='star'>" . sprintf($lang->admin->register->bind, html::a(inlink('bind'), $lang->admin->register->click)) . "</span>";
+        ?>
 	  </td>
     </th>
   </tr>

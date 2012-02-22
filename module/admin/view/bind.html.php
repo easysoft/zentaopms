@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <form method="post" target="hiddenwin">
 <table align='center' class='table-6'>
-<caption><?php echo $lang->admin->login->caption;?></caption>
+<caption><?php echo $lang->admin->bind->caption;?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->user->account;?></th>
 	<td><?php echo html::input('account', '', "class='text-3'");?></td>

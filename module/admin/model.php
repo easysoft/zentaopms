@@ -132,7 +132,7 @@ class adminModel extends model
 	 * @return object
 	 */
 	public function getRegisterInfo()
-	{
+    {
 		$company = $this->dao->select('name')->from(TABLE_COMPANY)->fetch('', false);
 		$user    = $this->dao->select('email')->from(TABLE_USER)
 			->where('account')->eq($this->app->user->account)
