@@ -784,7 +784,7 @@ class upgradeModel extends model
     public function upgradeFrom3_0_beta1To3_0_beta2()
     {
         $this->execSQL($this->getUpgradeFile('3.0.beta1'));
-        $this->updateTableAction();
+        $this->updateAction();
         $this->setOrderData();
         if(!$this->isError()) $this->setting->updateVersion('3.0.beta2');
     }
@@ -1057,30 +1057,37 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function updateTableAction()
+    public function updateAction()
     {
-        $projectActions = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('project')->fetchPairs('objectID');
-        $taskActions    = $this->dao->select('objectID,project')->from(TABLE_ACTION)->where('objectType')->eq('task')->fetchPairs('objectID');
+        /* Get projects and tasks from action table. */
+        $projects = $this->dao->select('id')->from(TABLE_PROJECT)->fetchPairs('id');
+        $tasks    = $this->dao->select('id, project')->from(TABLE_TASK)->fetchPairs('id');
 
-        foreach($projectActions as $key => $projectID)
+        /* Get products of projects and tasks. */
+        $projectProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($projects))->fetchGroup('project', 'product');
+        $taskProducts    = $this->dao->select('t1.id, t2.product')->from(TABLE_TASK)->alias('t1')
+                                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                                ->where('t1.id')->in(array_keys($tasks))
+                                ->fetchPairs('id');
+
+        /* Process project actions. */
+        foreach($projects as $projectID)
         {
-            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product');
-            $productList = join(',', array_keys($products));
+            $productList = isset($projectProducts[$projectID]) ? join(',', array_keys($projectProducts[$projectID])) : '';
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('project')->andWhere('objectID')->eq($projectID)->exec();
         }
 
-        foreach($taskActions as $taskID => $projectID)
+        /* Process task actions. */
+        foreach($tasks as $taskID => $projectID)
         {
-            $task = $this->dao->select('id,story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetchPairs('id');
-            if($task[$taskID] != 0)
+            $productList = '';
+            if($taskProducts[$taskID])
             {
-                $product     = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($task[$taskID])->fetchPairs('product');
-                $productList = join(',', array_keys($product));
+                $productList = $taskProducts[$taskID];
             }
             else
             {
-                $products    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product');
-                $productList = join(',', array_keys($products));
+                $productList = isset($projectProducts[$projectID]) ? join(',', array_keys($projectProducts[$projectID])) : '';
             }
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('task')->andWhere('objectID')->eq($taskID)->andWhere('project')->eq($projectID)->exec();
         }
@@ -1089,7 +1096,7 @@ class upgradeModel extends model
         foreach($actions as $id => $product)
         {
             $product = ',' . $product . ',';
-            $this->dao->update(TABLE_ACTION)->set('product')->eq($product)->exec();
+            $this->dao->update(TABLE_ACTION)->set('product')->eq($product)->where('id')->eq($id)->exec();
         }
     }
 
