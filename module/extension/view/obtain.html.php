@@ -75,7 +75,7 @@
                   {
                       if(isset($installeds[$extension->code]))
                       {
-                          if($installeds[$extension->code]->version != $extension->latestRelease->releaseVersion)
+                          if($installeds[$extension->code]->version != $extension->latestRelease->releaseVersion and $this->extension->checkVersion($extension->latestRelease->releaseVersion))
                           {
                               $upgradeLink = inlink('upgrade',  "extension=$extension->code&downLink=" . helper::safe64Encode($currentRelease->downLink) . "&md5=$currentRelease->md5&type=$extension->type");
                               echo html::a($upgradeLink, $lang->extension->upgrade, '', 'class="iframe button-c"');
