@@ -1,4 +1,4 @@
-<div class='block' id='projectbox' style="height:180px; overflow-y:auto">
+<div class='block linkbox1' id='projectbox'>
 <?php if(count($projectStats) == 0):?>
 <table class='table-1 a-center' height='145px'>
   <caption><?php echo $lang->my->home->projects;?></caption>

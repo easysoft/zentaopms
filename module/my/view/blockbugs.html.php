@@ -1,4 +1,4 @@
-<div class='block'>
+<div class='block linkbox2'>
 <table class='table-1 fixed colored'>
   <caption>
     <div class='f-left'> <?php echo $lang->my->bug;?></div>
