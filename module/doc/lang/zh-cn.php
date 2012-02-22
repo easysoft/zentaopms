@@ -29,6 +29,8 @@ $lang->doc->addedBy        = '由谁添加';
 $lang->doc->addedDate      = '添加时间';
 $lang->doc->editedBy       = '由谁编辑';
 $lang->doc->editedDate     = '编辑时间';
+$lang->doc->manage         = '文档分类';
+$lang->doc->manageChild    = '维护分类';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';

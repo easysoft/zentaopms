@@ -15,6 +15,7 @@ $lang->testtask->delete         = "删除测试任务";
 $lang->testtask->view           = "详情";
 $lang->testtask->edit           = "编辑测试任务";
 $lang->testtask->browse         = "测试任务列表";
+$lang->testtask->waitBrowse     = "待测列表";
 $lang->testtask->linkCase       = "关联用例";
 $lang->testtask->linkCaseAB     = "关联";
 $lang->testtask->unlinkCase     = "移除";

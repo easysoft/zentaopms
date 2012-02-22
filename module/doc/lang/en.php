@@ -29,6 +29,8 @@ $lang->doc->addedBy        = 'Added by';
 $lang->doc->addedDate      = 'Added date';
 $lang->doc->editedBy       = 'Edited by';
 $lang->doc->editedDate     = 'Edited date';
+$lang->doc->manage         = 'Doc type';
+$lang->doc->manageType     = 'Manage type';
 
 $lang->doc->moduleDoc      = 'By module';
 $lang->doc->searchDoc      = 'By search';

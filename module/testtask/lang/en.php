@@ -15,6 +15,7 @@ $lang->testtask->delete         = "Delete";
 $lang->testtask->view           = "Info";
 $lang->testtask->edit           = "Edit";
 $lang->testtask->browse         = "Browse";
+$lang->testtask->waitBrowse     = "Testtask browse";
 $lang->testtask->linkCase       = "Link case";
 $lang->testtask->linkCaseAB     = "Link";
 $lang->testtask->unlinkCase     = "Remove";

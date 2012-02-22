@@ -33,7 +33,7 @@
     <td>
       <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=$viewType");?>'>
         <table align='center' class='table-1'>
-          <caption><?php echo strpos($viewType, 'doc') !== false ? $lang->tree->manageDocChild : $lang->tree->manageChild;?></caption>
+          <caption><?php echo strpos($viewType, 'doc') !== false ? $lang->doc->manageChild : $lang->tree->manageChild;?></caption>
           <tr>
             <td width='10%'>
               <nobr>
