@@ -381,7 +381,7 @@ class extension extends control
      */
     public function structure($extension)
     {
-        $this->view->structures = $this->extension->structure($extension);
+        $this->view->extension = $this->extension->getInfoFromDB($extension);
         $this->display();
     }
 }
