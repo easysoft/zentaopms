@@ -13,10 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <form method="post" target="hiddenwin">
 <table align='center' class='table-6'>
-<caption><?php echo $lang->admin->register->caption;?></caption>
+<caption><?php echo $lang->admin->reg->caption;?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->user->account;?></th>
-	<td><?php echo html::input('account', '', "class='text-3'") . '<font color="red">*</font>' . $lang->admin->register->lblAccount;?></td>
+	<td><?php echo html::input('account', '', "class='text-3'") . '<font color="red">*</font>' . $lang->admin->reg->lblAccount;?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->realname;?></th>
@@ -36,7 +36,7 @@
   </tr>  
   <tr>
     <th class="rowhead"><?php echo $lang->user->password;?></th>
-    <td><?php echo html::password('password1', '', "class='text-3'") . '<font color="red">*</font>' . $lang->admin->register->lblPasswd;?></td>
+    <td><?php echo html::password('password1', '', "class='text-3'") . '<font color="red">*</font>' . $lang->admin->reg->lblPasswd;?></td>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->user->password2;?></td>
@@ -46,8 +46,8 @@
     <th>
 	  <td colspan="2" class="a-center">
       <?php 
-        echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn);
-        echo sprintf($lang->admin->register->login, html::a(inlink('bind'), $lang->admin->register->join));
+        echo html::submitButton($lang->admin->reg->submit) . html::hidden('sn', $sn);
+        echo sprintf($lang->admin->reg->login, html::a(inlink('bind'), $lang->admin->reg->join));
       ?>
 	  </td>
     </th>

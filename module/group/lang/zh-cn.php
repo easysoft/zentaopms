@@ -41,6 +41,7 @@ $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
 $lang->group->versions['']          = '显示各版本新增权限';
+$lang->group->versions['3.0.beta2'] = '禅道3.0.beta2';
 $lang->group->versions['3.0.beta1'] = '禅道3.0.beta1';
 $lang->group->versions['2.4']       = '禅道2.4';
 $lang->group->versions['2.3']       = '禅道2.3';

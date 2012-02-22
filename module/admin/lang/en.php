@@ -16,6 +16,10 @@ $lang->admin->user    = 'User';
 $lang->admin->group   = 'Group';
 $lang->admin->welcome = 'Welcome to ZenTaoPMS.';
 
+$lang->admin->register     = 'Register';
+$lang->admin->bind         = 'Bind';
+$lang->admin->ignoreNotice = 'Ignore notice';
+
 $lang->admin->browseCompany = 'Browse Company';
 
 $lang->admin->info->caption        = 'ZentaoPMS information';
@@ -34,13 +38,13 @@ $lang->admin->info->account        = 'Community account';
 $lang->admin->notice->join         = "Tips: You have not registered in Zentao community (www.zentao.net), %s to register and get the latest information about ZentaoPMS.";
 $lang->admin->notice->ignore       = "ignore";
 
-$lang->admin->register->caption    = 'Register zentao community';
-$lang->admin->register->join       = 'click';
-$lang->admin->register->lblAccount = 'Numbers and letters, at least three';
-$lang->admin->register->lblPasswd  = 'Numbers and letters, at least six';
-$lang->admin->register->submit     = 'Register';
-$lang->admin->register->login      = "If you have community account, %s to associate it";
-$lang->admin->register->success    = "Register success";
+$lang->admin->reg->caption    = 'Register zentao community';
+$lang->admin->reg->join       = 'click';
+$lang->admin->reg->lblAccount = 'Numbers and letters, at least three';
+$lang->admin->reg->lblPasswd  = 'Numbers and letters, at least six';
+$lang->admin->reg->submit     = 'Register';
+$lang->admin->reg->login      = "If you have community account, %s to associate it";
+$lang->admin->reg->success    = "Register success";
 
 $lang->admin->login->caption = 'Associated with community account';
 $lang->admin->login->join    = 'associate';

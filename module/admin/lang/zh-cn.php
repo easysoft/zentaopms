@@ -16,6 +16,10 @@ $lang->admin->user    = '用户管理';
 $lang->admin->group   = '分组管理';
 $lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
 
+$lang->admin->register     = '注册';
+$lang->admin->bind         = '绑定';
+$lang->admin->ignoreNotice = '不再提示';
+
 $lang->admin->browseCompany = '浏览公司';
 
 $lang->admin->info->caption        = '禅道系统信息';
@@ -34,13 +38,13 @@ $lang->admin->info->account        = '社区账号';
 $lang->admin->notice->join         = "友情提示：您还未在禅道社区(www.zentao.net)登记，%s进行登记，以及时获得禅道最新信息。";
 $lang->admin->notice->ignore       = "不再提示";
 
-$lang->admin->register->caption    = '禅道社区登记';
-$lang->admin->register->join       = '点击此处';
-$lang->admin->register->lblAccount = '请设置您的用户名，英文字母和数字的组合，三位以上。';
-$lang->admin->register->lblPasswd  = '请设置您的密码。数字和字母的组合，六位以上。';
-$lang->admin->register->submit     = '登记';
-$lang->admin->register->login      = "如果您已经拥有社区账号，%s关联账户";
-$lang->admin->register->success    = "登记账户成功";
+$lang->admin->reg->caption    = '禅道社区登记';
+$lang->admin->reg->join       = '点击此处';
+$lang->admin->reg->lblAccount = '请设置您的用户名，英文字母和数字的组合，三位以上。';
+$lang->admin->reg->lblPasswd  = '请设置您的密码。数字和字母的组合，六位以上。';
+$lang->admin->reg->submit     = '登记';
+$lang->admin->reg->login      = "如果您已经拥有社区账号，%s关联账户";
+$lang->admin->reg->success    = "登记账户成功";
 
 $lang->admin->login->caption = '关联社区账号';
 $lang->admin->login->join    = '关联';

@@ -41,6 +41,7 @@ $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
 
 $lang->group->versions['']          = 'Show methods added in every release';
+$lang->group->versions['3.0.beta2'] = '3.0.beta2';
 $lang->group->versions['3.0.beta1'] = '3.0.beta1';
 $lang->group->versions['2.4']       = '2.4';
 $lang->group->versions['2.3']       = '2.3';

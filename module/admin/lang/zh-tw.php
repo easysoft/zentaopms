@@ -34,11 +34,11 @@ $lang->admin->info->account        = '社區賬號';
 $lang->admin->notice->join         = "您的賬號未關聯到禪道社區，點擊%s可以新建社區賬號，系統贈送200積分。您還可以點擊%s社區賬號，系統贈送150積分。";
 $lang->admin->notice->ignore       = "不再提示";
 
-$lang->admin->register->caption    = '註冊禪道社區';
-$lang->admin->register->join       = '註冊';
-$lang->admin->register->lblAccount = '請設置您的用戶名，英文字母和數字的組合。';
-$lang->admin->register->lblPasswd  = '請設置您的密碼。數字和字母的組合，六位以上。';
-$lang->admin->register->success    = "登記成功";
+$lang->admin->reg->caption    = '註冊禪道社區';
+$lang->admin->reg->join       = '註冊';
+$lang->admin->reg->lblAccount = '請設置您的用戶名，英文字母和數字的組合。';
+$lang->admin->reg->lblPasswd  = '請設置您的密碼。數字和字母的組合，六位以上。';
+$lang->admin->reg->success    = "登記成功";
 
 $lang->admin->login->caption = '關聯社區賬號';
 $lang->admin->login->join    = '關聯';
