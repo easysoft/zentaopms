@@ -163,9 +163,9 @@ class projectModel extends model
         /* Add the creater to the team. */
         if(!dao::isError())
         {
-            $projectID = $this->dao->lastInsertId();
-            $today = helper::today();
-            $existAccount = 0;
+            $projectID     = $this->dao->lastInsertId();
+            $today         = helper::today();
+            $creatorExists = false;
 
             /* Copy team of project. */
             if($copyProjectID != '') 
@@ -173,16 +173,15 @@ class projectModel extends model
                 $members = $this->dao->select('*')->from(TABLE_TEAM)->where('project')->eq($copyProjectID)->fetchAll();
                 foreach($members as $member)
                 {
-                    unset($member->company);
                     $member->project = $projectID;
                     $member->join    = $today;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                    if($member->account == $this->app->user->account) $existAccount = 1;
+                    if($member->account == $this->app->user->account) $creatorExists = true;
                 }
             }
 
-            /* Include account into the team. */
-            if($copyProjectID == '' or !$existAccount)
+            /* Add the creator to team. */
+            if($copyProjectID == '' or !$creatorExists)
             {
                 $member->project  = $projectID;
                 $member->account  = $this->app->user->account;
