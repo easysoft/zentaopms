@@ -109,7 +109,7 @@ class adminModel extends model
 	 */
 	public function registerByAPI()
 	{
-		$apiURL = 'http://www.zentao.com/user-register.json';
+		$apiURL = 'http://www.zentao.net/user-register.json';
 		return $this->postAPI($apiURL, $_POST);
 	}
 
@@ -121,7 +121,7 @@ class adminModel extends model
 	 */
 	public function loginByAPI()
 	{
-		$apiURL = 'http://www.zentao.com/user-login.json';
+		$apiURL = 'http://www.zentao.net/user-login.json';
 		return $this->postAPI($apiURL, $_POST);
 	}
 
