@@ -21,8 +21,8 @@ class install extends control
     {
         if(!defined('IN_INSTALL')) die();
         parent::__construct();
-		$this->app->loadLang('user');
-		$this->app->loadLang('admin');
+        $this->app->loadLang('user');
+        $this->app->loadLang('admin');
         $this->config->webRoot = $this->install->getWebRoot();
     }
 
@@ -121,14 +121,10 @@ class install extends control
     {
         if(!empty($_POST))
         {
-			$this->session->set('account', $this->post->account);
-			$this->session->set('company', $this->post->company);
             $this->install->grantPriv();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('setting')->updateVersion($this->config->version);
             $this->setting->setSN();
-			//unset($_SESSION['installing']);
-			//session_destroy();
 			die(js::locate(inlink('step5'), 'parent'));
         }
 
@@ -154,62 +150,7 @@ class install extends control
 	public function step5()
 	{
 		$this->display();
-	}
-
-	public function step6()
-	{
 		unset($_SESSION['installing']);
 		session_destroy();
-		die(js::locate('index.php', 'parent'));
-	}
-
-	/**
-	 * Register zentao.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function register()
-	{
-		if($_POST)
-		{
-			$response = $this->loadModel('admin')->registerByAPI();
-			if($response == 'success') 
-			{
-				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
-				echo js::alert($this->lang->admin->register->success);
-				unset($_SESSION['installing']);
-				session_destroy();
-				die(js::locate('index.php', 'parent'));
-			}
-			die($response);
-		}
-		$this->view->sn      = $this->loadModel('setting')->getItem('system', 'global', 'sn');
-		$this->display();	
-	}
-
-	/**
-	 * Bind zentao.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function bind()
-	{
-		if($_POST)	
-		{
-			$response = $this->load('admin')->bindByAPI();	
-			if($response == 'success') 
-			{
-				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
-				echo js::alert($this->lang->admin->login->success);
-				unset($_SESSION['installing']);
-				session_destroy();
-				die(js::locate('index.php', 'parent'));
-			}
-			die($response);
-		}
-		$this->view->sn = $this->loadModel('setting')->getItem('system', 'global', 'sn');
-		$this->display();
 	}
 }
