@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 2600 2012-02-21 04:35:05Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 2615 2012-02-22 07:20:56Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -47,7 +47,6 @@ $lang->project->totalConsumed = '總消耗';
 $lang->project->totalLeft     = '總剩餘';
 $lang->project->progess       = '進度';
 $lang->project->viewBug       = '查看bug';
-$lang->project->testtaskBrowse= '待測列表';
 $lang->project->createTesttask= '提交測試';
 $lang->project->noProduct     = '無產品項目';
 $lang->project->select        = '--請選擇項目--';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: zh-tw.php 2588 2012-02-18 03:04:35Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->product->common = '產品視圖';

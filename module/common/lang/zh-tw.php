@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2600 2012-02-21 04:35:05Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 2612 2012-02-22 06:15:07Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = ' » ';
@@ -165,7 +165,7 @@ $lang->project->menu->edit      = '編輯|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => '刪除|project|delete|projectID=%s', 'target' => 'hiddenwin');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '新增項目|project|create', 'float' => 'right');
-$lang->project->menu->toCopy    = array('link' => '複製項目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
+$lang->project->menu->copy      = array('link' => '複製項目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '所有項目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;

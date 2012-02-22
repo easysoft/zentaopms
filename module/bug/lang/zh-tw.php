@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2568 2012-02-09 06:56:35Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/

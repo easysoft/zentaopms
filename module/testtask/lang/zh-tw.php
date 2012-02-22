@@ -6,15 +6,15 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 2570 2012-02-10 01:31:52Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2630 2012-02-22 09:58:39Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
-$lang->testtask->create         = "創建測試任務";
+$lang->testtask->create         = "提交測試";
 $lang->testtask->delete         = "刪除測試任務";
 $lang->testtask->view           = "詳情";
 $lang->testtask->edit           = "編輯測試任務";
-$lang->testtask->browse         = "測試任務列表";
+$lang->testtask->browse         = "待測列表";
 $lang->testtask->linkCase       = "關聯用例";
 $lang->testtask->linkCaseAB     = "關聯";
 $lang->testtask->unlinkCase     = "移除";

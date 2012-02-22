@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 2568 2012-02-09 06:56:35Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2609 2012-02-21 13:40:19Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->todo->common       = 'TODO';
@@ -69,7 +69,7 @@ $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
 $lang->todo->lblDisableDate = '暫時不設定時間';
 
 $lang->todo->thisWeekTodos = '本週計劃';
-$lang->todo->lastWeekTodos = '上周總結';
+$lang->todo->lastWeekTodos = '上周工作';
 $lang->todo->futureTodos   = '暫不指定';
 $lang->todo->allDaysTodos  = '所有TODO';
 $lang->todo->allUndone     = '之前未完';
