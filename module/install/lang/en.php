@@ -105,9 +105,6 @@ $lang->install->errorEmptyPassword = "Can't be empty";
 $lang->install->success = "Success installed";
 
 $lang->install->joinZentao = <<<EOT
-You have installed ZentaoPMS %s successfully. <strong class='red'>Please remove install.php in time</strong>。Now, you can:
-
-<a href=%s>Register</a> or <a href=%s>login</a> into Zetao community, feed back and get support. 
-
-<a href=%s>Login</a> into ZenTaoPMS, create groups and grant priviledges.
+You have installed ZentaoPMS %s successfully. <strong class='red'>Please remove install.php in time</strong>。Now you can <a href='index.php'>login ZenTaoPMS</a>, create groups and grant priviledges.
+<i>Tips: For you get zentao news in time, please register Zetao community(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>).</i> 
 EOT;
