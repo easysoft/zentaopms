@@ -1,4 +1,4 @@
-<div style="height:180px; overflow-y:auto">
+<div class='linkbox'>
   <table class='table-1 mt-10px'>
     <caption><?php echo $lang->story->affectedProjects;?></caption>
 
@@ -34,7 +34,7 @@
     <?php endforeach;?>
   </table>
 </div>
-<div style="height:180px; overflow-y:auto">
+<div class='linkbox'>
   <table class='table-1'>
     <caption><?php echo $lang->story->affectedBugs;?></caption>
     <tr>
@@ -59,7 +59,7 @@
     <?php endforeach;?>
   </table>
 </div>
-<div style="height:180px; overflow-y:auto">
+<div class='linkbox'>
   <table class='table-1'>
     <caption><?php echo $lang->story->affectedCases;?></caption>
     <tr>
