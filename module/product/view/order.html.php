@@ -21,7 +21,7 @@
   <?php foreach($products as $product):?>
   <tr class='a-center'>
     <td><?php echo $product->id?></td>
-    <td><?php echo $product->name?></td>
+    <td class='a-left'><?php echo $product->name?></td>
     <td><?php echo html::input($product->id, $product->order, "size='5'")?></td>
   </tr>
   <?php endforeach;?>

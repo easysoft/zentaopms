@@ -309,7 +309,7 @@ class projectModel extends model
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->orderBy($this->config->project->orderBy)
+                ->orderBy('`order`, status')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }

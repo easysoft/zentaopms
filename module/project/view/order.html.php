@@ -14,7 +14,7 @@
 <form method='post' target='hiddenwin'>
 <table align='center' class='table-5'>
   <caption><?php echo $lang->project->statusUndone?></caption>
-  <tr class='colhead'>
+  <tr>
     <th class='w-80px'><?php echo $lang->project->id?></th>
     <th><?php echo $lang->project->name?></th>
     <th class='w-80px'><?php echo $lang->project->status?></th>
@@ -24,7 +24,7 @@
   <?php if($project->status == 'done') continue;?>
   <tr class='a-center'>
     <td><?php echo $project->id?></td>
-    <td><?php echo $project->name?></td>
+    <td class='a-left'><?php echo $project->name?></td>
     <td><?php echo $lang->project->statusList[$project->status]?></td>
     <td><?php echo html::input($project->id, $project->order, "size='5'")?></td>
   </tr>
@@ -35,7 +35,7 @@
 <form method='post' target='hiddenwin'>
 <table align='center' class='table-5'>
   <caption><?php echo $lang->project->statusDone?></caption>
-  <tr class='colhead'>
+  <tr>
     <th class='w-80px'><?php echo $lang->project->id?></th>
     <th><?php echo $lang->project->name?></th>
     <th class='w-80px'><?php echo $lang->project->order?></th>
@@ -44,7 +44,7 @@
   <?php if($project->status != 'done') continue;?>
   <tr class='a-center'>
     <td><?php echo $project->id?></td>
-    <td><?php echo $project->name?></td>
+    <td class='a-left'><?php echo $project->name?></td>
     <td><?php echo html::input($project->id, $project->order, "size='5'")?></td>
   </tr>
   <?php endforeach;?>
