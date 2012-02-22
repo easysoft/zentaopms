@@ -379,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `team` varchar(30) NOT NULL,
   `acl` enum('open','private','custom') NOT NULL default 'open',
   `whitelist` varchar(255) NOT NULL,
-  `order` tinyint(4) NOT NULL,
+  `order` smallint(5) unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `company` (`company`,`type`,`parent`,`begin`,`end`,`status`,`statge`,`pri`)
