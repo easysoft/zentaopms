@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
-    <div class='f-left'><?php echo $lang->testtask->waitBrowse;?></div>
+    <div class='f-left'><?php echo $lang->testtask->browse;?></div>
     <div class='f-right'><?php common::printLink('testtask', 'create', "product=0&project=$projectID", $lang->project->createTesttask);?></div>
   </caption>
   <thead>
