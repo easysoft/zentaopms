@@ -256,9 +256,6 @@ $lang->resource->search->select       = 'select';
 
 /* Admin. */
 $lang->resource->admin->index        = 'index';
-$lang->resource->admin->register     = 'register';
-$lang->resource->admin->bind         = 'bind';
-$lang->resource->admin->ignoreNotice = 'ignoreNotice';
 
 /* Extension. */
 $lang->resource->extension->browse     = 'browse';
@@ -366,6 +363,3 @@ $lang->changelog['3.0.beta1'][] = 'release-ajaxGetStoriesAndBugs';
 $lang->changelog['3.0.beta2'][] = 'extension-structure';
 $lang->changelog['3.0.beta2'][] = 'product-order';
 $lang->changelog['3.0.beta2'][] = 'project-order';
-$lang->changelog['3.0.beta2'][] = 'admin-register';
-$lang->changelog['3.0.beta2'][] = 'admin-bind';
-$lang->changelog['3.0.beta2'][] = 'admin-ignoreNotice';
