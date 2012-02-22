@@ -334,7 +334,7 @@ class extension extends control
             $fileName  = $_FILES['file']['name'];
             $extension = basename($fileName, '.zip');
             move_uploaded_file($tmpName, $this->app->getTmpRoot() . "/extension/$fileName");
-            $info = $this->extension->getByExtension($extension);
+            $info = $this->extension->getInfoFromDB($extension);
             $type = $info->status == 'installed' ? 'upgrade' : 'install';
             $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");
             $this->locate($link);
