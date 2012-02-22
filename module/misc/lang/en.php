@@ -31,7 +31,7 @@ $lang->misc->zentao->about['extension']    = "Extensions";
 $lang->misc->zentao->support['manual']     = "Manual";
 $lang->misc->zentao->support['faq']        = "FAQ";
 $lang->misc->zentao->support['forum']      = "Forum";
-$lang->misc->zentao->support['qqgroup']    = "QQ Grup";
+$lang->misc->zentao->support['qqgroup']    = "QQ Group";
 $lang->misc->zentao->support['howask']     = "How to ask";
 $lang->misc->zentao->support['vip']        = "Business";
 
