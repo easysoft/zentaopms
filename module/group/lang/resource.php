@@ -41,6 +41,7 @@ $lang->resource->product->browse = 'browse';
 $lang->resource->product->create = 'create';
 $lang->resource->product->view   = 'view';
 $lang->resource->product->edit   = 'edit';
+$lang->resource->product->order  = 'order';
 $lang->resource->product->delete = 'delete';
 $lang->resource->product->roadmap= 'roadmap';
 $lang->resource->product->doc    = 'doc';
@@ -88,6 +89,7 @@ $lang->resource->project->view           = 'view';
 $lang->resource->project->browse         = 'browse';
 $lang->resource->project->create         = 'create';
 $lang->resource->project->edit           = 'edit';
+$lang->resource->project->order          = 'order';
 $lang->resource->project->delete         = 'delete';
 $lang->resource->project->task           = 'task';
 $lang->resource->project->grouptask      = 'groupTask';
@@ -253,11 +255,15 @@ $lang->resource->search->deleteQuery  = 'deleteQuery';
 $lang->resource->search->select       = 'select';
 
 /* Admin. */
-$lang->resource->admin->index         = 'index';
+$lang->resource->admin->index        = 'index';
+$lang->resource->admin->register     = 'register';
+$lang->resource->admin->bind         = 'bind';
+$lang->resource->admin->ignoreNotice = 'ignoreNotice';
 
 /* Extension. */
 $lang->resource->extension->browse     = 'browse';
 $lang->resource->extension->obtain     = 'obtain';
+$lang->resource->extension->structure  = 'structure';
 $lang->resource->extension->install    = 'install';
 $lang->resource->extension->uninstall  = 'uninstall';
 $lang->resource->extension->activate   = 'activate';
@@ -356,3 +362,10 @@ $lang->changelog['2.4'][]   = 'todo-export';
 $lang->changelog['2.4'][]   = 'product-project';
 
 $lang->changelog['3.0.beta1'][] = 'release-ajaxGetStoriesAndBugs';
+
+$lang->changelog['3.0.beta2'][] = 'extension-structure';
+$lang->changelog['3.0.beta2'][] = 'product-order';
+$lang->changelog['3.0.beta2'][] = 'project-order';
+$lang->changelog['3.0.beta2'][] = 'admin-register';
+$lang->changelog['3.0.beta2'][] = 'admin-bind';
+$lang->changelog['3.0.beta2'][] = 'admin-ignoreNotice';
