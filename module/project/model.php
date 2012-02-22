@@ -165,17 +165,10 @@ class projectModel extends model
         {
             $projectID = $this->dao->lastInsertId();
             $today = helper::today();
+            $existAccount = 0;
 
-            if($copyProjectID == '')
-            {
-                $member->project  = $projectID;
-                $member->account  = $this->app->user->account;
-                $member->join     = $today;
-                $member->days     = $project->days;
-                $member->hours    = $this->config->project->defaultWorkhours;
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-            }
-            else
+            /* Copy team of project. */
+            if($copyProjectID != '') 
             {
                 $members = $this->dao->select('*')->from(TABLE_TEAM)->where('project')->eq($copyProjectID)->fetchAll();
                 foreach($members as $member)
@@ -184,7 +177,19 @@ class projectModel extends model
                     $member->project = $projectID;
                     $member->join    = $today;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                    if($member->account == $this->app->user->account) $existAccount = 1;
                 }
+            }
+
+            /* Include account into the team. */
+            if($copyProjectID == '' or !$existAccount)
+            {
+                $member->project  = $projectID;
+                $member->account  = $this->app->user->account;
+                $member->join     = $today;
+                $member->days     = $project->days;
+                $member->hours    = $this->config->project->defaultWorkhours;
+                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
 
             return $projectID;

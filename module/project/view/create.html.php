@@ -56,7 +56,7 @@ $(document).ready(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->teamname;?></th>
-      <td><?php echo html::input('team', $teamname, "class='text-3'");?></td>
+      <td><?php echo html::input('team', $team, "class='text-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>

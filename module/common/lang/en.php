@@ -165,7 +165,7 @@ $lang->project->menu->edit      = 'Edit|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => 'Delete|project|delete|projectID=%s', 'target' => 'hiddenwin');
 $lang->project->menu->order     = 'Order|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => 'New Project|project|create', 'float' => 'right');
-$lang->project->menu->toCopy    = array('link' => 'Copy Project|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
+$lang->project->menu->copy      = array('link' => 'Copy Project|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => 'Project list|project|index|locate=no', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;

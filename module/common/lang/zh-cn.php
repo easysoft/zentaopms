@@ -165,7 +165,7 @@ $lang->project->menu->edit      = '编辑|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => '删除|project|delete|projectID=%s', 'target' => 'hiddenwin');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '新增项目|project|create', 'float' => 'right');
-$lang->project->menu->toCopy    = array('link' => '复制项目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
+$lang->project->menu->copy      = array('link' => '复制项目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '所有项目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
