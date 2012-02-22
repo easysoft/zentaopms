@@ -36,11 +36,11 @@ $(document).ready(function()
     <caption><?php echo $lang->project->create;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->project->name;?></th>
-      <td><?php echo html::input('name', '', "class='text-3'");?></td>
+      <td><?php echo html::input('name', $name, "class='text-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->code;?></th>
-      <td><?php echo html::input('code', '', "class='text-3'");?></td>
+      <td><?php echo html::input('code', $code, "class='text-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->begin;?></th>

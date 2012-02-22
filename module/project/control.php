@@ -730,6 +730,8 @@ class project extends control
             exit;
         }
 
+        $name      = '';
+        $code      = '';
         $team      = '';
         $products  = '';
         $whitelist = '';
@@ -738,6 +740,8 @@ class project extends control
         if($copyProjectID)
         {
             $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
+            $name        = $copyProject->name;
+            $code        = $copyProject->code;
             $team        = $copyProject->team;
             $acl         = $copyProject->acl;
             $whitelist   = $copyProject->whitelist;
@@ -760,6 +764,8 @@ class project extends control
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->allProducts   = $this->loadModel('product')->getPairs();
+        $this->view->name          = $name;
+        $this->view->code          = $code;
         $this->view->team          = $team;
         $this->view->products      = $products ;
         $this->view->whitelist     = $whitelist;
