@@ -58,10 +58,10 @@ class actionModel extends model
     public function getProductAndProject($objectType, $objectID)
     {
         $objectType  = strtolower($objectType);
-        $emptyRecord = array('product' => 0, 'project' => 0);
+        $emptyRecord = array('product' => ',0,', 'project' => 0);
 
         /* If objectType is product or project, return the objectID. */
-        if($objectType == 'product') return array('product' => $objectID, 'project' => 0);
+        if($objectType == 'product') return array('product' => ",$objectID,", 'project' => 0);
         if($objectType == 'project') 
         {
             $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
@@ -90,19 +90,19 @@ class actionModel extends model
                 if($record->story != 0)
                 {
                     $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetchPairs('product');
-                    $record->product = ',' . join(',', array_keys($product)) . ',';
+                    $record->product = join(',', array_keys($product));
                 }
                 else
                 {
                     $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($record->project)->fetchPairs('product');
-                    $record->product = ',' . join(',', array_keys($products)) . ',';
+                    $record->product = join(',', array_keys($products));
                 }
             }
 
             if($record)
             {
                 $record = (array)$record;
-                if(!isset($record['product'])) $record['product'] = 0;
+                $record['product'] = isset($record['product']) ? ',' . $record['product'] . ',' : ',0,';
                 if(!isset($record['project'])) $record['project'] = 0;
                 return $record;
             }
@@ -364,7 +364,7 @@ class actionModel extends model
         }
         else
         {
-            $actionQuery = str_replace($allProduct, '1', $actionQuery);
+            $actionQuery = str_replace($allProject, '1', $actionQuery);
         }
 
         $actionQuery = str_replace("`product` = '$productID'", "`product` LIKE '%,$productID,%'", $actionQuery);
