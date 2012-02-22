@@ -38,15 +38,7 @@ $lang->admin->register->caption    = '註冊禪道社區';
 $lang->admin->register->join       = '註冊';
 $lang->admin->register->lblAccount = '請設置您的用戶名，英文字母和數字的組合。';
 $lang->admin->register->lblPasswd  = '請設置您的密碼。數字和字母的組合，六位以上。';
-
-$lang->admin->register->notice->account    = '用戶名必須是數字和字母組合，三位以上';
-$lang->admin->register->notice->password   = '密碼必須是數字和字母組合，六位以上';
-$lang->admin->register->notice->realname   = '真實姓名不能為空';
-$lang->admin->register->notice->email      = '請填寫正確的郵箱地址';
-$lang->admin->register->notice->notEqual   = '密碼和確認密碼不相等';
-$lang->admin->register->notice->registered = '用戶名已註冊';
-$lang->admin->register->notice->success    = '註冊成功';
-$lang->admin->register->notice->failed     = '註冊失敗';
+$lang->admin->register->success    = "登記成功";
 
 $lang->admin->login->caption = '關聯社區賬號';
 $lang->admin->login->join    = '關聯';

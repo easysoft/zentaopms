@@ -12,34 +12,32 @@
 class admin extends control
 {
     /**
-	 * Index page.
+     * Index page.
      * @access public
      * @return void
      */
     public function index()
     {
-		$user = $this->dao->select('value')->from(TABLE_CONFIG)
-			->where('owner')->eq($this->app->user->account)
-			->andWhere('`key`')->eq('account')
-			->fetch('', false);
-		if($user)
+		$user = $this->loadModel('setting')->getItem('system', 'global', 'community');
+		if($user != '' and $user != 'na')
 		{
 			$this->view->login   = true;
-			$this->view->account = $user->value;
+			$this->view->account = $user;
 		}
 		else
 		{
 			$this->view->login   = false;
 			$this->view->account = '';
 		}
-		if($this->cookie->notice == 'ignore')
+		if($this->loadModel('setting')->getItem('system', 'global', 'community') != '')
 		{
 			$this->view->ignore = true;
 		}
 		else
 		{
-			$this->view->ignore = false;	
+			$this->view->ignore = false;
 		}
+		$this->view->latestRelease = $this->loadModel('install')->getLatestRelease();
 		$this->display();
     }
 
@@ -51,8 +49,8 @@ class admin extends control
 	 */
 	public function ignoreNotice()
 	{
-		setcookie('notice', 'ignore');	
-		die(js::locate(inlink('index')));
+		$this->loadModel('setting')->setItem('system', 'global', 'community', 'na');
+		die(js::locate(inlink('index'), 'parent'));
 	}
 
 	/**
@@ -66,10 +64,17 @@ class admin extends control
 		if($_POST)
 		{
 			$response = $this->admin->registerByAPI();
-			if($response == 'success') die(js::locate(inlink('index'), 'parent'));
+			if($response == 'success') 
+			{
+				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
+				echo js::alert($this->lang->admin->register->success);
+				die(js::locate(inlink('index'), 'parent'));
+			}
+			die($response);
 		}
-		$this->view->sn = $this->admin->getSN();
-		$this->display();	
+		$this->view->reg = $this->admin->getRegisterInfo();
+		$this->view->sn  = $this->loadModel('setting')->getItem('system', 'global', 'sn');
+		$this->display();
 	}
 
 	/**
@@ -80,12 +85,18 @@ class admin extends control
 	 */
 	public function login()
 	{
-		if($_POST)	
+		if($_POST)
 		{
 			$response = $this->admin->loginByAPI();	
-			if($response == 'success') die(js::locate(inlink('index'), 'parent'));
+			if($response == 'success') 
+			{
+				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
+				echo js::alert($this->lang->admin->login->success);
+				die(js::locate(inlink('index'), 'parent'));
+			}
+			die($response);
 		}
-		$this->view->sn = $this->admin->getSN();
+		$this->view->sn = $this->loadModel('setting')->getItem('system', 'global', 'sn');
 		$this->display();
 	}
 }

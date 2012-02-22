@@ -109,5 +109,5 @@ You have installed ZentaoPMS %s successfully. <strong class='red'>Please remove 
 
 <a href=%s>Register</a> or <a href=%s>login</a> into Zetao community, feed back and get support. 
 
-<a href='/'>Login</a> into ZenTaoPMS, create groups and grant priviledges.
+<a href=%s>Login</a> into ZenTaoPMS, create groups and grant priviledges.
 EOT;

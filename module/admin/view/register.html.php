@@ -24,7 +24,7 @@
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->company;?></th>
-    <td><?php echo html::input('company', '', "class='text-3'");?></td>
+    <td><?php echo html::input('company', $reg->company, "class='text-3'");?></td>
   </tr>
   <tr>
     <th class="rowhead"><?php echo $lang->user->phone;?></th>
@@ -32,7 +32,7 @@
   </tr>  
   <tr>
     <th class="rowhead"><?php echo $lang->user->email;?></td>
-    <td><?php echo html::input('email', '', "class='text-3'") . '<font color="red">*</font>';?></td>
+    <td><?php echo html::input('email', $reg->email, "class='text-3'") . '<font color="red">*</font>';?></td>
   </tr>  
   <tr>
     <th class="rowhead"><?php echo $lang->user->password;?></th>
@@ -43,8 +43,14 @@
     <td><?php echo html::password('password2', '', "class='text-3'") . '<font color="red">*</font>';?></td>
   </tr> 
   <tr>
-    <th><td colspan="2" class="a-center"><?php echo html::submitButton() . html::hidden('sn', $sn);?></td></th>
-  </tr>
+    <th>
+	  <td colspan="2" class="a-center">
+      <?php 
+        echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn);
+        echo sprintf($lang->admin->register->login, html::a(inlink('login'), $lang->admin->register->join));
+      ?>
+	  </td>
+    </th>
   </tr>
 </table>
 </form>

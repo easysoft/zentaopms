@@ -14,7 +14,7 @@
   <caption><?php echo $lang->install->success;?></caption>
   <tr>
 	<td>
-	  <?php echo nl2br(sprintf($lang->install->joinZentao, $config->version, inlink('register'), inlink('login')));?>
+	  <?php echo nl2br(sprintf($lang->install->joinZentao, $config->version, inlink('register'), inlink('login'), inlink('step6')));?>
 	</td>
   </tr>
 </table>

@@ -62,8 +62,9 @@ class adminModel extends model
      */
     public function postAPI($url, $formvars = "")
     {
-        $this->agent->submit($url, $formvars);
-		return  $this->agent->results;
+		$this->agent->cookies['lang'] = $this->cookie->lang;
+    	$this->agent->submit($url, $formvars);
+		return $this->agent->results;
     }
 
     /**
@@ -108,45 +109,8 @@ class adminModel extends model
 	 */
 	public function registerByAPI()
 	{
-		$data = urlencode(json_encode($_POST));	
-		$apiURL = 'http://www.zentao.net/user-apiRegister.html';
-		$response = $this->postAPI($apiURL, $data);
-		switch($response)
-		{
-		case 'success':
-			$this->dao->insert(TABLE_CONFIG)
-				->set('owner')->eq($this->app->user->account)
-				->set('`key`')->eq('account')
-				->set('section')->eq('global')
-				->set('value')->eq($this->post->account)
-				->exec(false);
-			echo js::alert($this->lang->admin->register->notice->success);	
-			break;
-		case 'failed':
-			echo js::alert($this->lang->admin->register->notice->failed);
-			break;
-		case 'userError':
-			echo js::alert($this->lang->admin->register->notice->account);
-			break;
-		case 'passwordError':
-			echo js::alert($this->lang->admin->register->notice->password);
-			break;
-		case 'realnameError':
-			echo js::alert($this->lang->admin->register->notice->realname);
-			break;
-		case 'emailError':
-			echo js::alert($this->lang->admin->register->notice->email);
-			break;
-		case 'notEqual':
-			echo js::alert($this->lang->admin->register->notice->notEqual);
-			break;
-		case 'registered':
-			echo js::alert($this->lang->admin->register->notice->registered);
-			break;
-		default:
-			echo js::alert($this->lang->admin->register->notice->failed);
-		}
-		return $response;
+		$apiURL = 'http://www.zentao.com/user-register.json';
+		return $this->postAPI($apiURL, $_POST);
 	}
 
 	/**
@@ -157,51 +121,24 @@ class adminModel extends model
 	 */
 	public function loginByAPI()
 	{
-		$data = urlencode(json_encode($_POST));	
-		$apiURL = 'http://www.zentao.net/user-apiLogin.html';
-		$response = $this->postAPI($apiURL, $data);
-		switch($response)
-		{
-		case 'success':
-			$this->dao->insert(TABLE_CONFIG)
-				->set('owner')->eq($this->app->user->account)
-				->set('`key`')->eq('account')
-				->set('section')->eq('global')
-				->set('value')->eq($this->post->account)
-				->exec(false);
-			echo js::alert($this->lang->admin->login->notice->success);	
-			break;
-		case 'userError':
-			echo js::alert($this->lang->admin->login->notice->account);
-			break;
-		case 'passwordError':
-			echo js::alert($this->lang->admin->login->notice->password);
-			break;
-		case 'failed':
-			echo js::alert($this->lang->admin->login->notice->failed);
-			break;
-		default:
-			echo js::alert($this->lang->admin->login->notice->failed);
-		}
-		return $response;
+		$apiURL = 'http://www.zentao.com/user-login.json';
+		return $this->postAPI($apiURL, $_POST);
 	}
 
 	/**
-	 * Get pms sn. 
+	 * Get register information. 
 	 * 
 	 * @access public
-	 * @return void
+	 * @return object
 	 */
-	public function getSN()
+	public function getRegisterInfo()
 	{
-		$sn = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('sn')->fetch('', false);	
-		if($sn)
-		{
-			return $sn->value;	
-		}
-		else
-		{
-			return '';	
-		}
+		$company = $this->dao->select('name')->from(TABLE_COMPANY)->fetch('', false);
+		$user    = $this->dao->select('email')->from(TABLE_USER)
+			->where('account')->eq($this->app->user->account)
+			->fetch('', false);
+		$reg->company = $company->name;
+		$reg->email   = $user->email;
+		return $reg;
 	}
 }

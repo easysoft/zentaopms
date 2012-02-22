@@ -47,6 +47,40 @@ class settingModel extends model
     }
 
     /**
+     * Set value of an item. 
+     * 
+     * @param  string $owner 
+     * @param  string $section 
+     * @param  string $key 
+     * @param  string $value 
+     * @access public
+     * @return void
+     */
+    public function setItem($owner, $section, $key, $value = '')
+    {
+        $item->company = 0;
+        $item->owner   = $owner;
+        $item->section = $section;
+        $item->key     = $key;
+        $item->value   = $value;
+
+        $config = $this->dao->select('`value`')->from(TABLE_CONFIG)
+            ->where('company')->eq(0)
+            ->andWhere('owner')->eq($owner)
+            ->andWhere('section')->eq($section)
+            ->andWhere('`key`')->eq($key)
+            ->fetch('', $autoComapny = false);
+        if(!$config)
+        {
+            $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
+        }
+        else
+        {
+            $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($config->id)->exec($autoCompany = false);
+        }
+    }
+
+    /**
      * Compute a SN. Use the server ip, and server software string as seed, and an rand number, two micro time
      * 
      * Note: this sn just to unique this zentaopms. No any private info. 

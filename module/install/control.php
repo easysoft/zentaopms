@@ -21,8 +21,8 @@ class install extends control
     {
         if(!defined('IN_INSTALL')) die();
         parent::__construct();
-		$this->loadModel('admin');
-		$this->loadModel('user');
+		$this->app->loadLang('user');
+		$this->app->loadLang('admin');
         $this->config->webRoot = $this->install->getWebRoot();
     }
 
@@ -122,10 +122,13 @@ class install extends control
         if(!empty($_POST))
         {
 			$this->session->set('account', $this->post->account);
+			$this->session->set('company', $this->post->company);
             $this->install->grantPriv();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('setting')->updateVersion($this->config->version);
             $this->setting->setSN();
+			//unset($_SESSION['installing']);
+			//session_destroy();
 			die(js::locate(inlink('step5'), 'parent'));
         }
 
@@ -150,7 +153,14 @@ class install extends control
 	 */
 	public function step5()
 	{
-		$this->display();	
+		$this->display();
+	}
+
+	public function step6()
+	{
+		unset($_SESSION['installing']);
+		session_destroy();
+		die(js::locate('index.php', 'parent'));
 	}
 
 	/**
@@ -163,16 +173,16 @@ class install extends control
 	{
 		if($_POST)
 		{
-			$this->app->user->account = $this->session->account;
-			$response = $this->admin->registerByAPI();	
-			if($response == 'success')
+			$response = $this->loadModel('admin')->registerByAPI();
+			if($response == 'success') 
 			{
-				unset($_SESSION['installing']);
-				session_destroy();
+				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
+				echo js::alert($this->lang->admin->register->success);
 				die(js::locate('index.php', 'parent'));
 			}
+			die($response);
 		}
-		$this->view->sn = $this->admin->getSN();
+		$this->view->sn      = $this->loadModel('setting')->getItem('system', 'global', 'sn');
 		$this->display();	
 	}
 
@@ -186,16 +196,16 @@ class install extends control
 	{
 		if($_POST)	
 		{
-			$this->app->user->account = $this->session->account;
-			$response = $this->admin->loginByAPI();	
-			if($response == 'success')
+			$response = $this->load('admin')->loginByAPI();	
+			if($response == 'success') 
 			{
-				unset($_SESSION['installing']);
-				session_destroy();
+				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
+				echo js::alert($this->lang->admin->login->success);
 				die(js::locate('index.php', 'parent'));
 			}
+			die($response);
 		}
-		$this->view->sn = $this->admin->getSN();
+		$this->view->sn = $this->loadModel('setting')->getItem('system', 'global', 'sn');
 		$this->display();
 	}
 }

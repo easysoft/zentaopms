@@ -31,27 +31,37 @@ $lang->admin->info->donation       = 'Donation';
 $lang->admin->info->service        = 'Service fee';
 $lang->admin->info->account        = 'Community account';
 
-$lang->admin->notice->join         = "Your account is not associated with zentao community. You can %s a community account, and get 200 scores. If you have an account, just %s it with community, and you can get 150 scores.";
+$lang->admin->notice->join         = "Tips: You have not registered in Zentao community (www.zentao.net), %s to register and get the latest information about ZentaoPMS.";
 $lang->admin->notice->ignore       = "ignore";
 
 $lang->admin->register->caption    = 'Register zentao community';
-$lang->admin->register->join       = 'create';
+$lang->admin->register->join       = 'click';
 $lang->admin->register->lblAccount = 'Numbers and letters, at least three';
 $lang->admin->register->lblPasswd  = 'Numbers and letters, at least six';
-
-$lang->admin->register->notice->account    = 'The account must be a series of letters and/or numbers, at least three';
-$lang->admin->register->notice->password   = 'The password must be a series of letters and/or numbers, at least six';
-$lang->admin->register->notice->realname   = 'The realname must not be empty';
-$lang->admin->register->notice->email      = 'Please input your correct email address';
-$lang->admin->register->notice->notEqual   = 'The password and confirm password is not equal';
-$lang->admin->register->notice->registered = 'The username has been registered';
-$lang->admin->register->notice->success    = 'Register successfully';
-$lang->admin->register->notice->failed     = 'Register failed';
+$lang->admin->register->submit     = 'Register';
+$lang->admin->register->login      = "If you have community account, %s to associate it";
+$lang->admin->register->success    = "Register success";
 
 $lang->admin->login->caption = 'Associated with community account';
 $lang->admin->login->join    = 'associate';
+$lang->admin->login->success = "Associate success";
 
 $lang->admin->login->notice->account    = 'The account must be a series of letters and/or numbers, at least three';
 $lang->admin->login->notice->password   = 'The password must be a series of letters and/or numbers, at least six';
 $lang->admin->login->notice->success    = 'Associate successfully';
 $lang->admin->login->notice->failed     = 'Associate failed';
+
+$lang->admin->info->version = 'The current version of the system is %s,';
+$lang->admin->info->latest  = 'latest version is %s, please download and upgrade.';
+$lang->admin->info->new     = "it's the latest verion.";
+$lang->admin->info->links   = 'You can visit the following link:';
+$lang->admin->info->account = 'Your account in zentao community is';
+
+$lang->admin->desc->community = ':Log on the official website of the Zentao, get the latest news';
+$lang->admin->desc->ask       = ':Resolve the problems encountered in the process of using zentao, and get technical support';
+$lang->admin->desc->document  = ':The document about using zentao and developing extension';
+$lang->admin->desc->feedback  = ':Give your suggestion, let us do better';
+$lang->admin->desc->faq       = ':The FAQ in the process of using zentao';
+$lang->admin->desc->extension = ':The list of zentao extension';
+$lang->admin->desc->donation  = ':Click the link, donate to us';
+$lang->admin->desc->service   = ':itechnical support, agility training and customized development';

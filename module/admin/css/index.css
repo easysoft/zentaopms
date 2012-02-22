@@ -1,0 +1,11 @@
+#info li{
+  padding-left:20px;
+  height:20px;
+}
+#info a{
+  font-weight:bold;
+}
+#info p{
+  padding-left:10px;
+  padding-top:20px;
+}

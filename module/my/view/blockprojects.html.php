@@ -1,6 +1,6 @@
 <div class='block' id='projectbox' style="height:180px; overflow-y:auto">
 <?php if(count($projectStats) == 0):?>
-<table class='table-1 a-center' height='145'>
+<table class='table-1 a-center' height='145px'>
   <caption><?php echo $lang->my->home->projects;?></caption>
   <tr>
     <td valign='middle'><?php printf($lang->my->home->noProjectsTip, $this->createLink('project', 'create'));?></td>
