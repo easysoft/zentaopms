@@ -42,8 +42,3 @@ $lang->admin->register->success    = "登記成功";
 
 $lang->admin->login->caption = '關聯社區賬號';
 $lang->admin->login->join    = '關聯';
-
-$lang->admin->login->notice->account    = '用戶名必須是數字和字母組合，三位以上';
-$lang->admin->login->notice->password   = '密碼必須是數字和字母組合，六位以上';
-$lang->admin->login->notice->success    = '關聯賬戶成功';
-$lang->admin->login->notice->failed     = '關聯賬戶失敗';

@@ -23,7 +23,6 @@ include '../framework/helper.class.php';
 $app = router::createApp('pms', dirname(dirname(__FILE__)));
 
 /* Check installed or not. */
-a($config);
 if(!isset($_SESSION['installing']) and isset($config->installed) and $config->installed) die(header('location: index.php'));
 
 /* Reset the config params to make sure the install program will be lauched. */

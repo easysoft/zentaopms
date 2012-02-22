@@ -46,11 +46,6 @@ $lang->admin->login->caption = '关联社区账号';
 $lang->admin->login->join    = '关联';
 $lang->admin->login->success = "关联账户成功";
 
-$lang->admin->login->notice->account    = '用户名必须是数字和字母组合，三位以上';
-$lang->admin->login->notice->password   = '密码必须是数字和字母组合，六位以上';
-$lang->admin->login->notice->success    = '关联账户成功';
-$lang->admin->login->notice->failed     = '关联账户失败';
-
 $lang->admin->info->version = '当前系统的版本是%s，';
 $lang->admin->info->latest  = '最新版本为%s，请及时下载升级。';
 $lang->admin->info->new     = '为最新版本。';

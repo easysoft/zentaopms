@@ -46,11 +46,6 @@ $lang->admin->login->caption = 'Associated with community account';
 $lang->admin->login->join    = 'associate';
 $lang->admin->login->success = "Associate success";
 
-$lang->admin->login->notice->account    = 'The account must be a series of letters and/or numbers, at least three';
-$lang->admin->login->notice->password   = 'The password must be a series of letters and/or numbers, at least six';
-$lang->admin->login->notice->success    = 'Associate successfully';
-$lang->admin->login->notice->failed     = 'Associate failed';
-
 $lang->admin->info->version = 'The current version of the system is %s,';
 $lang->admin->info->latest  = 'latest version is %s, please download and upgrade.';
 $lang->admin->info->new     = "it's the latest verion.";

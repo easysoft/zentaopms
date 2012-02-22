@@ -178,6 +178,8 @@ class install extends control
 			{
 				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
 				echo js::alert($this->lang->admin->register->success);
+				unset($_SESSION['installing']);
+				session_destroy();
 				die(js::locate('index.php', 'parent'));
 			}
 			die($response);
@@ -201,6 +203,8 @@ class install extends control
 			{
 				$this->loadModel('setting')->setItem('system', 'global', 'community', $this->post->account);
 				echo js::alert($this->lang->admin->login->success);
+				unset($_SESSION['installing']);
+				session_destroy();
 				die(js::locate('index.php', 'parent'));
 			}
 			die($response);
