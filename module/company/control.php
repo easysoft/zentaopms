@@ -155,7 +155,7 @@ class company extends control
         $this->loadModel('action');
 
         /* Save session. */
-        $uri   = $this->app->getURI(true);
+        $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri);
         $this->session->set('productPlanList', $uri);
         $this->session->set('releaseList',     $uri);
