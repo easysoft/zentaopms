@@ -19,7 +19,6 @@ $lang->admin->welcome = 'Welcome to ZenTaoPMS.';
 $lang->admin->browseCompany = 'Browse Company';
 
 $lang->admin->info->caption        = 'ZentaoPMS information';
-$lang->admin->info->currentVersion = 'Current version';
 $lang->admin->info->version 	   = 'The current version of the system is %s,';
 $lang->admin->info->links          = 'You can visit the following link:';
 $lang->admin->info->account        = 'Your account in zentao community is %s. ';
