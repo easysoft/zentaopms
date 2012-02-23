@@ -735,7 +735,7 @@ class project extends control
         $team      = '';
         $products  = '';
         $whitelist = '';
-        $acl       = '';
+        $acl       = 'open';
 
         if($copyProjectID)
         {
