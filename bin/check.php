@@ -33,6 +33,16 @@ $whiteList[] = 'user-logout';
 $whiteList[] = 'mail-set';
 $whiteList[] = 'mail-save';
 $whiteList[] = 'svn-run';
+$whiteList[] = 'admin-ignore';
+$whiteList[] = 'admin-register';
+$whiteList[] = 'admin-bind';
+$whiteList[] = 'bug-sendmail';
+$whiteList[] = 'project-commonaction';
+$whiteList[] = 'project-sendmail';
+$whiteList[] = 'story-commonaction';
+$whiteList[] = 'story-sendmail';
+$whiteList[] = 'task-sendmail';
+$whiteList[] = 'user-setreferer';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
