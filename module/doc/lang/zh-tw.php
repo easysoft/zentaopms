@@ -30,7 +30,7 @@ $lang->doc->addedDate      = '添加時間';
 $lang->doc->editedBy       = '由誰編輯';
 $lang->doc->editedDate     = '編輯時間';
 $lang->doc->manage         = '文檔分類';
-$lang->doc->manageChild    = '維護分類';
+$lang->doc->manageType     = '維護分類';
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';
