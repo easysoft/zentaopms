@@ -1186,6 +1186,7 @@ BOOL APIENTRY MyDlgProc (HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     if (job[1].state == 0)
 					{
 						system("copy .\\mysql\\bin\\my3306.ini .\\mysql\\bin\\my.ini");
+						system("copy .\\zentao\\config\\my3306.php .\\zentao\\config\\my.php");
                         do_job(1, 1);
 					}
                     else
@@ -1210,6 +1211,7 @@ BOOL APIENTRY MyDlgProc (HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     if (job[3].state == 0)
 					{
 						system("copy .\\mysql\\bin\\my3308.ini .\\mysql\\bin\\my.ini");
+						system("copy .\\zentao\\config\\my3308.php .\\zentao\\config\\my.php");
                         do_job(3, 1);
 					}
                     else
