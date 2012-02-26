@@ -49,6 +49,11 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, 'Frombug', '', $bugID);
             }
             $this->sendMail($storyID, $actionID);
+            if($this->post->newStory)
+            {
+                echo js::alert($this->lang->story->successSaved . $this->lang->story->newStory);
+                die(js::locate($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID&story=$storyID&projectID=$projectID&bugID=$bugID"), 'parent'));
+            }
             if($projectID == 0)
             {
                 die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));

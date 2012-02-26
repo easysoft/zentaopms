@@ -70,6 +70,7 @@ $lang->story->duplicateStory = '重复需求';
 $lang->story->reviewResult   = '评审结果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '关键词';
+$lang->story->newStory       = '继续添加需求';
 
 $lang->story->same = '同上';
 
@@ -160,6 +161,8 @@ $lang->story->affectedCases        = '影响的用例';
 $lang->story->specTemplate          = "建议参考的模板：作为一名<<i class='red'>某种类型的用户</i>>，我希望<<i class='red'>达成某些目的</i>>，这样可以<<i class='red'>开发的价值</i>>。";
 $lang->story->notes                 = '(注：如果“需求标题”为空，则表示不使用此行)';
 $lang->story->needNotReview         = '不需要评审';
+$lang->story->afterSubmit           = "添加之后";
+$lang->story->successSaved          = "需求成功添加，";
 $lang->story->confirmDelete         = "您确认删除该需求吗?";
 $lang->story->errorFormat           = '需求数据有误';
 $lang->story->errorEmptyTitle       = '标题不能为空';

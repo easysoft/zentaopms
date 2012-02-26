@@ -116,7 +116,7 @@ class storyModel extends model
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($projectID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
-            ->remove('files,labels,spec,verify,needNotReview')
+            ->remove('files,labels,spec,verify,needNotReview,newStory')
             ->get();
 
         $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();

@@ -70,6 +70,7 @@ $lang->story->duplicateStory = 'Duplicate story';
 $lang->story->reviewResult   = 'Reviewed result';
 $lang->story->preVersion     = 'Pre version';
 $lang->story->keywords       = 'Keyword';
+$lang->story->newStory       = 'Continue to add story.';
 
 $lang->story->same = 'The same as above';
 
@@ -160,6 +161,8 @@ $lang->story->affectedCases        = 'Affected cases';
 $lang->story->specTemplate          = "Recommend template:：As <<i class='red'>a type of user</i>>,I want <<i class='red'>some goals</i>>,so that <<i class='red'>some reason</i>>.";
 $lang->story->notes                 = "(notes:if the title is empty, it is no use)";
 $lang->story->needNotReview         = "needn't review";
+$lang->story->afterSubmit           = "After created";
+$lang->story->successSaved          = "Successfully saved";
 $lang->story->confirmDelete         = "Are you sure to delete this story?";
 $lang->story->errorFormat           = 'Error format';
 $lang->story->errorEmptyTitle       = "Title can't be empty";

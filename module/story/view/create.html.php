@@ -58,15 +58,18 @@
       <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
       <td><?php echo html::input('mailto', $mailto, 'class="text-1"');?></td>
     </tr>
-
     <tr>
       <th class='rowhead'><nobr><?php echo $lang->story->keywords;?></nobr></th>
       <td><?php echo html::input('keywords', $keywords, 'class="text-1"');?></td>
     </tr>
-   <tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->story->legendAttatch;?></th>
       <td><?php echo $this->fetch('file', 'buildform');?></td>
     </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->story->afterSubmit;?></th>
+      <td><?php echo html::checkbox('newStory', $lang->story->newStory);?></td> 
+    </tr>
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>
 </form>
