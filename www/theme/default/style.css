@@ -295,7 +295,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #titlebar {font-size:14px; font-weight:bold; background-color:#efefef; padding:0px 5px; margin:10px 0; height:30px; line-height:30px;}
 #titlebar #main {float:left;  width:70%; clear:none; text-align:left}
 #titlebar div   {float:right; width:30%; clear:none; text-align:right}
-#titlebar #main input {font-size:14px}
+#titlebar #main input {font-size:14px; margin-top:5px}
 #titlebar .text-1 {width:80%}
 
 /* Product, project switcher. */
