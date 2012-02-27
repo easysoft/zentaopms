@@ -27,7 +27,7 @@
       <td><?php echo $project->hours->totalConsumed;?></td>
       <td><?php echo $project->hours->totalLeft;?></td>
       <td class='a-left w-150px'>
-        <img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: />
+        <?php if($project->hours->progress):?><img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: /><?php endif;?>
         <small><?php echo $project->hours->progress;?>%</small>
       </td>
       <td class='projectline a-left' values='<?php echo join(',', $project->burns);?>'></td>
