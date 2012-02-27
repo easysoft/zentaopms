@@ -13,8 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <div id='titlebar' <?php if($case->deleted) echo "class='deleted'";?>>
-  CASE #<?php echo $case->id . $lang->colon . $case->title;?>
-  <div class='f-right'>
+  <div id='main'>CASE #<?php echo $case->id . $lang->colon . $case->title;?></div>
+  <div>
     <?php
     $browseLink = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
     if(!$case->deleted)
@@ -35,26 +35,26 @@
 <table class='cont-rt5'>
   <tr valign='top'>
     <td>
+      <fieldset>
+        <legend><?php echo $lang->testcase->precondition;?></legend>
+        <?php echo $case->precondition;?>
+      </fieldset>
       <table class='table-1 colored'>
-        <fieldset>
-          <legend><?php echo $lang->testcase->precondition;?></legend>
-          <?php echo $case->precondition;?>
-        </fieldset>
         <tr class='colhead'>
           <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
           <th class='w-p70'><?php echo $lang->testcase->stepDesc;?></th>
           <th><?php echo $lang->testcase->stepExpect;?></th>
         </tr> 
-      <?php
-      foreach($case->steps as $stepID => $step)
-      {
-          $stepID += 1;
-          echo "<tr><th class='rowhead w-id a-center strong'>$stepID</th>";
-          echo "<td>" . nl2br($step->desc) . "</td>";
-          echo "<td>" . nl2br($step->expect) . "</td>";
-          echo "</tr>";
-      }
-      ?>
+        <?php
+        foreach($case->steps as $stepID => $step)
+        {
+            $stepID += 1;
+            echo "<tr><th class='rowhead w-id a-center strong'>$stepID</th>";
+            echo "<td>" . nl2br($step->desc) . "</td>";
+            echo "<td>" . nl2br($step->expect) . "</td>";
+            echo "</tr>";
+        }
+        ?>
       </table>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
