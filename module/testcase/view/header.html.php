@@ -103,7 +103,7 @@ function createRow()
     newRow += "<th class='stepID'></th>";
     newRow += "<td class='w-p50'><textarea name='steps[]' rows=3 class='w-p100'></textarea></td>";
     newRow += "<td><textarea name='expects[]' rows=3 class='w-p100'></textarea></td>";
-    newRow += "<td class='a-center w-100px'><nobr>";
+    newRow += "<td class='a-left w-100px'><nobr>";
     newRow += "<input type='button' tabindex='-1' class='addbutton' value='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' /><br />";
     newRow += "<input type='button' tabindex='-1' class='addbutton' value='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' /><br />";
     newRow += "<input type='button' tabindex='-1' class='delbutton' value='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' /><br />";
