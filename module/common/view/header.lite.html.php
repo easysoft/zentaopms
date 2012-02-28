@@ -23,7 +23,7 @@ $clientTheme  = $this->app->getClientTheme();
 
   js::exportConfigVars();
   js::import($jsRoot . 'jquery/lib.js', $config->version);
-  js::import($jsRoot . 'my.min.js',     $config->version);
+  js::import($jsRoot . 'my.full.js',     $config->version);
 
   css::import($defaultTheme . 'yui.css',   $config->version);
   css::import($defaultTheme . 'style.css', $config->version);

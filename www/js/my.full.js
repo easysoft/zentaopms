@@ -425,6 +425,25 @@ function saveWindowSize()
 }
 
 /**
+ * Set content height 
+ * 
+ * @access public
+ * @return void
+ */
+function setContentHeight()
+{
+    var winHeight = $(window).height();
+    var docHeight = $(document.body).height();
+    var headerH   = $('#header').height();
+    var footerH   = $('#footer').height();
+    if(docHeight < winHeight)
+    {
+        var outerH = winHeight - headerH - footerH - 75;
+        $('.outer').height(outerH);
+    } 
+}
+
+/**
  * Set the about link. 
  * 
  * @access public
@@ -770,6 +789,7 @@ $(document).ready(function()
     setProductListLink();
     setProjectListLink();
     setExport();
+    setContentHeight();
     autoCheck();
     togglesearch();
     saveWindowSize();

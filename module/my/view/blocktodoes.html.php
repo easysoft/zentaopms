@@ -1,8 +1,8 @@
 <div class='block linkbox2'>
 <table class='table-1 fixed colored'>
   <caption>
-    <div class='f-left'><?php echo $lang->my->todo;?></div>
-    <div class='f-right'><?php echo html::a($this->createLink('my', 'todo'), $lang->more);?></div>
+    <div class='f-left'><span class='icon-todo'></span><?php echo $lang->my->todo;?></div>
+    <div class='f-right'><?php echo html::a($this->createLink('my', 'todo'), $lang->more . "<span class='icon-g'></span>");?></div>
   </caption>
   <?php 
   foreach($todos as $todo)

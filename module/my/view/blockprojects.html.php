@@ -1,9 +1,20 @@
 <div class='block linkbox1' id='projectbox'>
 <?php if(count($projectStats) == 0):?>
-<table class='table-1 a-center' height='145px'>
-  <caption><?php echo $lang->my->home->projects;?></caption>
+<table class='table-1 a-center emptybg' height='140px'>
+  <caption><span class='icon-title'></span><?php echo $lang->my->home->projects;?></caption>
   <tr>
-    <td valign='middle'><?php printf($lang->my->home->noProjectsTip, $this->createLink('project', 'create'));?></td>
+    <td valign='middle'>
+      <table class='a-left bd-none' align='center'>
+        <tr>
+          <td valign='top'><span class='icon-t'></span></td>
+          <td><?php printf($lang->my->home->noProjectsTip, $this->createLink('project', 'create'));?></td>
+        </tr>
+        <tr>
+          <td><span class='icon-w'></span></td>
+          <td><?php echo $lang->my->home->help; ?></td>
+        </tr>
+      </table>
+    </td>
   </tr>
 </table>
 <?php else:?>

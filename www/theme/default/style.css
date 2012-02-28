@@ -9,7 +9,7 @@
 * @link        http://www.ZenTaoPMS.com
 */
 /*-----------------------BASE SETTING----------------------------*/
-body     {margin:0; text-align:left; color:#141414; font-family:"ËÎÌו"}
+body     {margin:0; text-align:left; color:#141414; font-family:"ËÎÌו";}
 fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
 del{background:#fcc;}
@@ -17,7 +17,7 @@ ins{background:#cfc; text-decoration:none}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 15px; background:#e5e5e5;}
-.outer {margin:0 10px; text-align:left; background:#fff;}
+.outer {padding:18px; text-align:left; background:#fff; border:1px solid #ddd;}
 .cont, .cont-lt1, .cont-lt2, .cont-lt3, .cont-lt4, .cont-lt5, .cont-rt1, .cont-rt2, .cont-rt3, .cont-rt4, .cont-rt5 {width:100%; margin:0; border:none; text-align:left}
 .cont tr, .cont td {border:none; padding:0}
 .cont-lt1 tr, .cont-lt2 tr, .cont-lt3 tr, .cont-lt4 tr, .cont-lt5 tr {border:none; padding:0}
@@ -109,7 +109,7 @@ table      {border:1px solid #e4e4e4;}
 td, tr, th {border:none; border-bottom:1px solid #e4e4e4}
 tfoot      {border-top:1px solid #e4e4e4}
 
-caption     {border:1px solid #e4e4e4; background:#efefef; margin:0; padding:2px 2px 2px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:14px;}
+caption     {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px 2px 6px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:13px;}
 .caption-tr {caption-side:top; text-align:right; border:none; background:none;}
 .caption-tl {caption-side:top; text-align:left;  border:none; background:none;}
 
@@ -234,7 +234,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /*-----------------------SPECIAL PART SETTING--------------------*/
 /* Header. */
-#header{padding:2px 25px 0 25px; background:#003366; border-bottom:1px solid #e4e4e4;}
+#header{padding:2px 15px 0 15px; background:#003366; border-bottom:1px solid #e4e4e4;}
 
 /* Top bar. */
 #topbar, #topbar a {color:#fff}
@@ -249,8 +249,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #navbar a:hover {color:#ff3600;}
 
 /* Main menu. */
-#mainmenu ul { height:25px; line-height:25px}
-#mainmenu li {padding:0 8px 0 8px; border-right:3px solid #002242; color:white; font-size:14px; background:#1A4F85}
+#mainmenu ul { height:30px; line-height:30px}
+#mainmenu li {padding:0 10px; border-right:3px solid #002242; color:white; font-size:12px; background:#1A4F85}
 #mainmenu a  {color:white; font-weight:normal;}
 #mainmenu .active   {background-color:#e5e5e5;}
 #mainmenu .active a {color:#33a52e; font-weight:bold;}
@@ -264,18 +264,18 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #searchbox #objectSwitcher{ border:none; padding:2px;; width:20px; height:100%; background:url(images/main/ui-gray.png); background-position:-110px 52px;}
 
 /* Module menu. */
-#modulemenu    {margin-bottom:0px; font-size:14px;}
-#modulemenu ul {background-color:#E5e5e5; height:28px; line-height:28px; padding-left:25px;}
+#modulemenu    {margin-bottom:0px; font-size:12px; border:2px solid #e5e5e5;}
+#modulemenu ul {background-color:#E5e5e5; height:28px; line-height:28px; padding:5px 10px;}
 #modulemenu li {padding:0 5px; color:#0033cc;}
-#modulemenu a  { font-weight:normal; font-size:14px; color:#0033cc}
-#modulemenu .active a {color:#fff; font-weight:bold; background:#33a52e; padding:2px 4px;}
+#modulemenu a  { font-weight:normal; font-size:12px; color:#0033cc}
+#modulemenu .active a {color:#fff; background:#33a52e; padding:4px 4px 2px 4px;}
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a {color:red; font-weight:bold}
-#modulemenu #mybg{ padding-left:16px; background:url(images/main/ui-gray.png); background-position:-146px 144px;}
+#modulemenu #mybg{ padding-left:16px; background:url(images/main/ui-gray.png); background-position:-146px 142px;}
 
 /* Product, project and objects switcher. */
-#productID {background:#EDEFF4; border:1px solid #e4e4e4}
-#projectID {background:#EDEFF4; border:1px solid #e4e4e4}
+#productID {background:#EDEFF4; border:1px solid #e5e5e5}
+#projectID {background:#EDEFF4; border:1px solid #e5e5e5}
 #productSwitcher{padding:0; width:35px}
 #projectSwitcher{padding:0; width:35px}
 
@@ -324,7 +324,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .tabs a.current {background:green; color:white}
 
 /* Footer. */
-#divider   {margin-bottom:30px}
+#divider   {margin-bottom:30px;width:100%; position:fixed; bottom:34px; left:0; margin:0; color:#333; background:#e5e5e5; height:15px;}
 #footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background:url(images/main/status_x_bg.gif) repeat-x; height:34px; line-height:20px;}
 #crumbs    {padding:5px 0 5px 10px;}
 #poweredby {padding-right:10px} 
@@ -336,7 +336,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .pager {margin-bottom:0}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
-.box-title  {border:1px solid #e4e4e4; background-color:#efefef; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
+.box-title  {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
 .box-content{border:1px solid #e4e4e4; padding:5px}
 .done      {color:#078F0E;}
 .wait      {color:#888;}
@@ -350,3 +350,5 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .deleted   {text-decoration:line-through}
 .linkbox a {display:block}
 .owner     {background:#e4e4e4; font-size:smaller}
+.emptybg { background:#efefef;}
+a { text-decoration:none;}

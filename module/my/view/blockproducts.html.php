@@ -1,13 +1,19 @@
 <div class='block linkbox1' id='productbox'>
 <?php if(empty($productStats)):?>
-<table class='table-1 a-center' height='145px'>
-  <caption><?php echo $lang->my->home->products;?></caption>
+<table class='table-1 a-center emptybg' height='140px'>
+  <caption><span class='icon-title'></span><?php echo $lang->my->home->products;?></caption>
   <tr>
     <td valign='middle'>
-    <?php 
-    $productLink = $this->createLink('product', 'create');
-    printf($lang->my->home->noProductsTip, $productLink);
-    ?>
+      <table class='a-left bd-none' align='center'>
+        <tr>
+          <td valign='top'><span class='icon-t'></span></td>
+          <td><?php printf($lang->my->home->noProductsTip, $this->createLink('product', 'create'));?></td>
+        </tr>
+        <tr>
+          <td><span class='icon-w'></span></td>
+          <td><?php echo $lang->my->home->help; ?></td>
+        </tr>
+      </table>
     </td>
   </tr>
 </table>

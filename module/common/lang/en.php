@@ -76,7 +76,7 @@ $lang->typeAB       = 'Type';
 $lang->common->common = 'Common module';
 
 /* The main menu. */
-$lang->menu->my      = 'Dashboard|my|index';
+$lang->menu->my      = '<span id="mainbg"></span>Dashboard|my|index';
 $lang->menu->product = 'Product|product|index';
 $lang->menu->project = 'Project|project|index';
 $lang->menu->qa      = 'Test|qa|index';
@@ -115,7 +115,7 @@ $lang->index->menu->product = 'Products|product|browse';
 $lang->index->menu->project = 'Projects|project|browse';
 
 /* Dashboard menu. */
-$lang->my->menu->account   = '%s' . $lang->arrow;
+$lang->my->menu->account   = '<span id="mybg"></span>%s' . $lang->arrow;
 $lang->my->menu->index     = 'Index|my|index';
 $lang->my->menu->todo      = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task      = 'Task|my|task|';
