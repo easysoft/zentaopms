@@ -13,6 +13,7 @@
     </tr>
   </table>
 </div>
+</div>
 <script laguage='Javascript'>
 $().ready(function(){setDebugWin('white')})
 <?php if(isset($pageJS)) echo $pageJS;?>

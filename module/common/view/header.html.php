@@ -21,7 +21,10 @@ include 'colorbox.html.php';
   </table>
   <table class='cont' id='navbar'>
     <tr><td id='mainmenu'><?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?></td></tr>
-    <tr><td id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></td></tr>
   </table>
 </div>
+<table class='cont' id='navbar'>
+   <tr><td id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></td></tr>
+</table>
+<div id='wrap'>
 <div class='outer'>

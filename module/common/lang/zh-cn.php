@@ -76,7 +76,7 @@ $lang->typeAB       = '类型';
 $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
-$lang->menu->my      = '我的地盘|my|index';
+$lang->menu->my      = '<span id="mainbg"></span>我的地盘|my|index';
 $lang->menu->product = '产品视图|product|index';
 $lang->menu->project = '项目视图|project|index';
 $lang->menu->qa      = '测试视图|qa|index';
@@ -115,7 +115,7 @@ $lang->index->menu->product = '浏览产品|product|browse';
 $lang->index->menu->project = '浏览项目|project|browse';
 
 /* 我的地盘菜单设置。*/
-$lang->my->menu->account   = '%s' . $lang->arrow;
+$lang->my->menu->account   = '<span id="mybg"></span>%s' . $lang->arrow;
 $lang->my->menu->index     = '首页|my|index';
 $lang->my->menu->todo      = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task      = '我的任务|my|task|';

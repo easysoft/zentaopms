@@ -242,7 +242,7 @@ class commonModel extends model
         echo "<li id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject);
         echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-60px'");
-        echo html::commonButton($lang->go, 'id="objectSwitcher" onclick="shortcut()"');
+		echo "<button type='button' id='objectSwitcher' onclick='shortcut()'></button>";
         echo "</li>";
         echo "</ul>\n";
     }
