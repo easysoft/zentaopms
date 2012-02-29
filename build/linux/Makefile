@@ -12,6 +12,7 @@ all: 7z
 	sudo mv lampp/Makefile .
 	sudo 7z a -sfx ZenTaoPMS.${VERSION}.linux.7z lampp
 clean:
-	sudo mv lampp/* .
+	sudo mv lampp lampp.bak
+	sudo mv lampp.bak/* .
 	sudo rm -fr *.7z
-	sudo rm -fr lampp
+	sudo rm -fr lampp.bak
