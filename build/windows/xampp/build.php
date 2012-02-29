@@ -24,7 +24,6 @@ $file->removeDir('./xampp/cgi-bin');
 $file->removeDir('./xampp/contrib');
 $file->removeDir('./xampp/contrib');
 $file->removeDir('./xampp/install');
-$file->removeDir('./xampp/licenses');
 $file->removeDir('./xampp/nsi');
 $file->removeDir('./xampp/perl');
 $file->removeDir('./xampp/phpmyadmin');
