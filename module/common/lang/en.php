@@ -140,9 +140,9 @@ $lang->product->menu->edit    = 'Edit|product|edit|productID=%s';
 $lang->product->menu->delete  = array('link' => 'Delete|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
 $lang->product->menu->order   = 'Order|product|order|productID=%s';
-$lang->product->menu->create  = array('link' => 'New Product|product|create', 'float' => 'right');
-$lang->product->menu->project = array('link' => 'Project list|product|project|status=all&productID=%s', 'float' => 'right');
-$lang->product->menu->all     = array('link' => 'All product|product|index|locate=false', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<span class="icon-add1"></span>New Product|product|create', 'float' => 'right');
+$lang->product->menu->project = array('link' => '<span class="icon-title"></span>Project list|product|project|status=all&productID=%s', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<span class="icon-all"></span>All product|product|index|locate=false', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
@@ -164,9 +164,9 @@ $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->edit      = 'Edit|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => 'Delete|project|delete|projectID=%s', 'target' => 'hiddenwin');
 $lang->project->menu->order     = 'Order|project|order|projectID=%s';
-$lang->project->menu->create    = array('link' => 'New Project|project|create', 'float' => 'right');
-$lang->project->menu->copy      = array('link' => 'Copy Project|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
-$lang->project->menu->all       = array('link' => 'Project list|project|index|locate=no', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<span class="icon-add1"></span>New Project|project|create', 'float' => 'right');
+$lang->project->menu->copy      = array('link' => '<span class="icon-copy"></span>Copy Project|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<span class="icon-all"></span>Project list|project|index|locate=no', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
 
@@ -192,7 +192,7 @@ $lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s');
 $lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
 $lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
-$lang->doc->menu->create  = array('link' => 'New Library|doc|createLib', 'float' => 'right');
+$lang->doc->menu->create  = array('link' => '<span class="icon-add1"></span>New Library|doc|createLib', 'float' => 'right');
 
 /* Company menu. */
 $lang->company->menu->name        = '%s' . $lang->arrow;
@@ -201,8 +201,8 @@ $lang->company->menu->dept        = array('link' => 'Department|dept|browse', 's
 $lang->company->menu->browseGroup = array('link' => 'Group|group|browse', 'subModule' => 'group');
 $lang->company->menu->edit        = array('link' => 'Company|company|edit');
 $lang->company->menu->dynamic     = 'Dynamic|company|dynamic|';
-$lang->company->menu->addGroup    = array('link' => 'Add Group|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => 'Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup    = array('link' => '<span class="icon-add1"></span>Add Group|group|create', 'float' => 'right');
+$lang->company->menu->addUser     = array('link' => '<span class="icon-add1"></span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
@@ -214,7 +214,7 @@ $lang->user->menu->bug         = 'Bug|user|bug|account=%s';
 $lang->user->menu->dynamic     = 'Dynamic|user|dynamic|type=today&account=%s';
 $lang->user->menu->projectList = 'Project|user|project|account=%s';
 $lang->user->menu->profile     = array('link' => 'Profile|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse      = array('link' => 'Manage user|company|browse|', 'float' => 'right');
+$lang->user->menu->browse      = array('link' => '<span class="icon-title"></span>Manage user|company|browse|', 'float' => 'right');
 
 /* Admin menu. */
 $lang->admin->menu->index     = array('link' => 'Index|admin|index', 'subModule' => 'admin');

@@ -9,7 +9,7 @@
 * @link        http://www.ZenTaoPMS.com
 */
 /*-----------------------BASE SETTING----------------------------*/
-body     {margin:0; text-align:left; color:#141414; font-family:"ËÎÌו";}
+body     {margin:0; text-align:left; color:#141414;}
 fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
 del{background:#fcc;}
@@ -17,7 +17,7 @@ ins{background:#cfc; text-decoration:none}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 15px; background:#e5e5e5;}
-.outer {text-align:left; background:#fff; border:1px solid #ddd;}
+.outer {text-align:left; background:#fff; border:1px solid #ddd; padding:15px;}
 .cont, .cont-lt1, .cont-lt2, .cont-lt3, .cont-lt4, .cont-lt5, .cont-rt1, .cont-rt2, .cont-rt3, .cont-rt4, .cont-rt5 {width:100%; margin:0; border:none; text-align:left}
 .cont tr, .cont td {border:none; padding:0}
 .cont-lt1 tr, .cont-lt2 tr, .cont-lt3 tr, .cont-lt4 tr, .cont-lt5 tr {border:none; padding:0}
@@ -108,6 +108,8 @@ ins{background:#cfc; text-decoration:none}
 table      {border:1px solid #e4e4e4;}
 td, tr, th {border:none; border-bottom:1px solid #e4e4e4}
 tfoot      {border-top:1px solid #e4e4e4}
+tfoot .f-left{ color:gray}
+tfoot .f-left strong{ color:#141414}
 
 caption     {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px 2px 6px 10px; border-bottom:none; text-align:left; font-weight:bold; font-size:13px;}
 .caption-tr {caption-side:top; text-align:right; border:none; background:none;}
@@ -125,7 +127,7 @@ caption     {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px
 .table-1 th, .table-2 th, .table-3 th, .table-4 th, .table-5 th {padding:3px 3px 3px 3px}
 
 .colhead td  {text-align:center; background-color:#efefef;}
-.colhead th  {text-align:center; background-color:#efefef; font-size:12px; font-weight:bold; border-bottom:1px solid #e4e4e4}
+.colhead th  {text-align:center; background-color:#efefef; font-size:12px; font-weight:bold; border-bottom:1px solid #e4e4e4; height:24px;}
 .colhead a   {text-decoration:none; display:block;}
 .colhead th a{color:#333; font-size:12px;}
 .colhead th a:hover{color:#F30;}
@@ -269,7 +271,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /* Main menu. */
 #mainmenu ul { height:30px; line-height:30px}
-#mainmenu li {padding:0 10px; border-right:3px solid #002242; color:white; font-size:12px; background:#1A4F85}
+#mainmenu li {padding:0 10px; border-right:3px solid #002242; color:white; font-size:14px; background:#1A4F85}
 #mainmenu a  {color:white; font-weight:normal;}
 #mainmenu .active   {background-color:#e5e5e5;}
 #mainmenu .active a {color:#33a52e; font-weight:bold;}
@@ -283,10 +285,10 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #searchbox #objectSwitcher{ border:none; padding:2px;; width:20px; height:100%; background:url(images/main/ui-gray.png); background-position:-110px 52px;}
 
 /* Module menu. */
-#modulemenu    {margin-bottom:0px; font-size:12px; border:2px solid #e5e5e5;}
+#modulemenu    {margin-bottom:0px; font-size:14px; border:2px solid #e5e5e5;}
 #modulemenu ul {background-color:#E5e5e5; height:28px; line-height:28px; padding:5px 10px;}
 #modulemenu li {padding:0 5px; color:#0033cc;}
-#modulemenu a  { font-weight:normal; font-size:12px; color:#0033cc}
+#modulemenu a  { font-weight:normal; font-size:14px; color:#0033cc}
 #modulemenu .active a {color:#fff; background:#33a52e; padding:4px 4px 2px 4px;}
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a {color:red; font-weight:bold}
@@ -299,11 +301,11 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #projectSwitcher{padding:0; width:35px}
 
 /* Feature bar. */
-#featurebar {margin: 0 0 5px 0; background-color:#EDF3FE; height:28px; line-height:28px; cursor:pointer; padding-top:0px;}
-#featurebar a              {text-decoration:none; color:#000; margin-right:3px;}
-#featurebar a:hover        {color:#ff3600; border-color:#F30;}
-#featurebar .f-right a     {color:red; font-weight:bold;}
-#featurebar #bysearchTab a {padding-left:10px; padding-right:10px}
+#featurebar                {background-color:#EDF3FE; height:28px; line-height:28px; cursor:pointer; padding:6px 8px; margin: -15px -15px 10px -15px;}
+#featurebar a              {text-decoration:none; border-right:1px solid #ddd; padding:4px 10px 4px 4px;}
+#featurebar a:hover        {color:#ff3600;}
+#featurebar .f-right a     {color:red; font-weight:bold; border-right:none; padding:0px;}
+#featurebar #bysearchTab a {border:none;}
 #featurebar select         {font-size:12px; height:22px; margin-top:3px;}
 
 #featurebar .active a       {color:#009900; font-weight:bold;}
@@ -345,6 +347,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Footer. */
 #divider   {margin-bottom:40px;}
 #footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background:#e5e5e5 url(images/main/status_x_bg.gif) repeat-x bottom; height:34px; line-height:20px; padding-top:15px;}
+#footer
 #crumbs    {padding:5px 0 5px 10px;}
 #poweredby {padding-right:10px} 
 
@@ -371,3 +374,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .owner     {background:#e4e4e4; font-size:smaller}
 .emptybg { background:#efefef;}
 a { text-decoration:none;}
+.icon-search{ padding-left:18px; background:url(images/main/ui-gray.png) -160px 128px; border:0px;}
+.icon-add1   { padding-left:18px; background:url(images/main/ui-gray.png) -32px 112px;}
+.icon-title  { padding-left:16px; padding-bottom:2px; background:url(images/main/ui-gray.png); background-position:-0px 144px;}
+.icon-all    { padding-left:18px; background:url(images/main/ui-gray.png) -176px 112px;}
+.icon-copy   { padding-left:18px; background:url(images/main/ui-gray.png) -48px 160px;}

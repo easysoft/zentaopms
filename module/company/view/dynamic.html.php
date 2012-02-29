@@ -28,7 +28,7 @@ var browseType = '<?php echo $browseType;?>';
   echo "<span id='account'>"     . html::select('account', $users, $account, 'onchange=changeUser(this.value)') . '</span>';
   echo "<span id='product'>"     . html::select('product', $products, $product, 'onchange=changeProduct(this.value)') . '</span>';
   echo "<span id='project'>"     . html::select('project', $projects, $project, 'onchange=changeProject(this.value)') . '</span>';
-  echo "<span id='bysearchTab'>" . html::a('#', $lang->action->dynamic->search) . "</span>";
+  echo "<span id='bysearchTab'>" . html::a('#', '<span class="icon-search"></span>' . $lang->action->dynamic->search) . "</span>";
   ?>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>

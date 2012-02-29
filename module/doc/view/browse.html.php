@@ -19,7 +19,7 @@ var browseType = '<?php echo $browseType;?>';
 <div id='featurebar'>
   <div class='f-left'>
     <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->doc->moduleDoc;?></a></span>
-    <span id='bysearchTab'><a href='#'><?php echo $lang->doc->searchDoc;?></a></span>
+    <span id='bysearchTab'><a href='#'><span class='icon-search'></span><?php echo $lang->doc->searchDoc;?></a></span>
   </div>
   <div class='f-right'>
     <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>

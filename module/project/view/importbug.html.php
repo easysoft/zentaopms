@@ -20,7 +20,7 @@ $(function(){
 var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='featurebar'>
-<?php echo "<span id='bysearchTab'><a href='#'>{$lang->project->byQuery}</a></span> ";?>
+<?php echo "<span id='bysearchTab'><a href='#'><span class='icon-search'></span>{$lang->project->byQuery}</a></span> ";?>
 </div>
 <div id='querybox'><?php echo $searchForm;?></div>
 <div>

@@ -140,9 +140,9 @@ $lang->product->menu->edit    = '编辑|product|edit|productID=%s';
 $lang->product->menu->delete  = array('link' => '删除|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->order   = '排序|product|order|productID=%s';
-$lang->product->menu->create  = array('link' => '新增产品|product|create', 'float' => 'right');
-$lang->product->menu->project = array('link' => '项目列表|product|project|status=all&productID=%s', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '所有产品|product|index|locate=false', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<span class="icon-add1"></span>新增产品|product|create', 'float' => 'right');
+$lang->product->menu->project = array('link' => '<span class="icon-title"></span>项目列表|product|project|status=all&productID=%s', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<span class="icon-all"></span>所有产品|product|index|locate=false', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
@@ -164,9 +164,9 @@ $lang->project->menu->view      = '概况|project|view|projectID=%s';
 $lang->project->menu->edit      = '编辑|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => '删除|project|delete|projectID=%s', 'target' => 'hiddenwin');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
-$lang->project->menu->create    = array('link' => '新增项目|project|create', 'float' => 'right');
-$lang->project->menu->copy      = array('link' => '复制项目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '所有项目|project|index|locate=false', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<span class="icon-add1"></span>新增项目|project|create', 'float' => 'right');
+$lang->project->menu->copy      = array('link' => '<span class="icon-copy"></span>复制项目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<span class="icon-all"></span>所有项目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
 
@@ -192,7 +192,7 @@ $lang->doc->menu->browse  = array('link' => '文档列表|doc|browse|libID=%s');
 $lang->doc->menu->edit    = '编辑文档库|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '维护模块|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
-$lang->doc->menu->create  = array('link' => '新增文档库|doc|createLib', 'float' => 'right');
+$lang->doc->menu->create  = array('link' => '<span class="icon-add1"></span>新增文档库|doc|createLib', 'float' => 'right');
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;
@@ -201,8 +201,8 @@ $lang->company->menu->dept        = array('link' => '部门维护|dept|browse', 
 $lang->company->menu->browseGroup = array('link' => '权限分组|group|browse', 'subModule' => 'group');
 $lang->company->menu->edit        = array('link' => '公司管理|company|edit');
 $lang->company->menu->dynamic     = '组织动态|company|dynamic|';
-$lang->company->menu->addGroup    = array('link' => '添加分组|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => '添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup    = array('link' => '<span class="icon-add1"></span>添加分组|group|create', 'float' => 'right');
+$lang->company->menu->addUser     = array('link' => '<span class="icon-add1"></span>添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
@@ -214,7 +214,7 @@ $lang->user->menu->bug         = 'Bug列表|user|bug|account=%s';
 $lang->user->menu->dynamic     = '用户动态|user|dynamic|type=today&account=%s';
 $lang->user->menu->projectList = '项目列表|user|project|account=%s';
 $lang->user->menu->profile     = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse      = array('link' => '用户管理|company|browse|', 'float' => 'right');
+$lang->user->menu->browse      = array('link' => '<span class="icon-title"></span>用户管理|company|browse|', 'float' => 'right');
 
 /* 后台管理菜单设置。*/
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'subModule' => 'admin');

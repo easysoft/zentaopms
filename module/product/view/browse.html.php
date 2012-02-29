@@ -28,7 +28,7 @@ var browseType = '<?php echo $browseType;?>';
     <span id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></span>
     <span id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></span>
     <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
-    <span id='bysearchTab' ><a href='#'><?php echo $lang->product->searchStory;?></a></span>
+    <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
     <?php common::printLink('story', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
