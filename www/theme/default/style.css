@@ -17,7 +17,7 @@ ins{background:#cfc; text-decoration:none}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 15px; background:#e5e5e5;}
-.outer {padding:18px; text-align:left; background:#fff; border:1px solid #ddd;}
+.outer {text-align:left; background:#fff; border:1px solid #ddd;}
 .cont, .cont-lt1, .cont-lt2, .cont-lt3, .cont-lt4, .cont-lt5, .cont-rt1, .cont-rt2, .cont-rt3, .cont-rt4, .cont-rt5 {width:100%; margin:0; border:none; text-align:left}
 .cont tr, .cont td {border:none; padding:0}
 .cont-lt1 tr, .cont-lt2 tr, .cont-lt3 tr, .cont-lt4 tr, .cont-lt5 tr {border:none; padding:0}
@@ -156,6 +156,25 @@ table.tablesorter thead tr .headerSortDown a, table.tablesorter thead tr .header
 table.tablesorter thead tr .header         {background-image: url(./images/tablesorter/bg.gif);   background-repeat: no-repeat; background-position: center right; cursor: pointer;}
 table.tablesorter thead tr .headerSortUp   {background-image: url(./images/tablesorter/asc.gif);  background-repeat: no-repeat; background-position: center right; cursor: pointer;}
 table.tablesorter thead tr .headerSortDown {background-image: url(./images/tablesorter/desc.gif); background-repeat: no-repeat; background-position: center right; cursor: pointer;}
+
+/*-----------------------HEIGHT SETTING--------------------------*/
+.h-5px   {height:5px}
+.h-10px  {height:10px}
+.h-20px  {height:20px}
+.h-30px  {height:30px}
+.h-35px  {height:35px}
+.h-40px  {height:40px}
+.h-45px  {height:45px}
+.h-50px  {height:50px}
+.h-60px  {height:60px}
+.h-70px  {height:70px}
+.h-80px  {height:80px}
+.h-100px {height:100px}
+.h-120px {height:120px}
+.h-130px {height:130px}
+.h-140px {height:140px}
+.h-150px {height:150px}
+.h-200px {height:200px}
 
 /*-----------------------WIDTH SETTING--------------------------*/
 .w-p5  {width: 5%}
@@ -324,8 +343,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .tabs a.current {background:green; color:white}
 
 /* Footer. */
-#divider   {margin-bottom:30px;width:100%; position:fixed; bottom:34px; left:0; margin:0; color:#333; background:#e5e5e5; height:15px;}
-#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background:url(images/main/status_x_bg.gif) repeat-x; height:34px; line-height:20px;}
+#divider   {margin-bottom:40px;}
+#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background:#e5e5e5 url(images/main/status_x_bg.gif) repeat-x bottom; height:34px; line-height:20px; padding-top:15px;}
 #crumbs    {padding:5px 0 5px 10px;}
 #poweredby {padding-right:10px} 
 
