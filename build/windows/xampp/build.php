@@ -15,7 +15,7 @@ $sevenz   = $argv[2];
 chdir('c:/');
 /* extract the xampp package. */
 echo "extracting xampp package ...";
-//echo `$sevenz x -y $xampp`;
+echo `$sevenz x -y $xampp`;
 
 /* rm useless files. */
 error_reporting(E_ALL);
@@ -130,6 +130,10 @@ $httpdConf = join("\n", $httpdConf);
 file_put_contents('./xampp/apache/conf/httpd.conf',   str_replace('88', '80', $httpdConf));
 file_put_contents('./xampp/apache/conf/httpd80.conf', str_replace('88', '80', $httpdConf));
 file_put_contents('./xampp/apache/conf/httpd88.conf', str_replace('80', '88', $httpdConf));
+
+/* Move .htacces to .ztaccess. */
+$httpdDefaultConfig = './xampp/apache/conf/extra/httpd-default.conf';
+file_put_contents($httpdDefaultConfig, str_replace('.htaccess', '.ztaccess', file_get_contents($httpdDefaultConfig)));
 
 /* Remove useless config files. */
 $file->removeDir('./xampp/apache/conf/ssl.crl');
@@ -252,6 +256,7 @@ foreach($phpConfig as $key => $line)
     if(substr($line, 0, 1) == ';') unset($phpConfig[$key]);
 }
 $phpConfig = join("\n", $phpConfig);
+$phpConfig = 'zend_extension = "\xampp\php\ext\ioncube_loader_win_5.3.dll"' . "\n" . $phpConfig;
 
 file_put_contents('./xampp/php/php.ini', $phpConfig);
 
@@ -287,3 +292,6 @@ $file->copyFile($buildDir . '/index.php', './xampp/htdocs/index.php');
 
 /* Copy zentao.conf. */
 $file->copyFile($buildDir . '/zentao.conf', './xampp/apache/conf/extra/httpd-xampp.conf');
+
+/* Copy ioncube loader. */
+$file->copyFile($buildDir . '/ioncube_loader_win_5.3.dll', './xampp/php/ext/ioncube_loader_win_5.3.dll');
