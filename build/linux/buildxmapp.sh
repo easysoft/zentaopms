@@ -7,7 +7,6 @@ rm -fr  error
 rm -fr icons
 rm -fr logs/*
 rm -fr htdocs/*
-rm -fr licenses
 rm -fr phpmyadmin
 rm -fr cgi-bin
 rm -fr libexec
@@ -84,17 +83,21 @@ grep -v 'multilang-errordoc' > etc/httpd.conf.lite
 mv etc/httpd.conf.lite etc/httpd.conf
 
 # process my.cnf
-grep -v '^#' etc/my.cnf|grep -v '^$' etc/my.cnf > etc/my.cnf.new 
+grep -v '^innodb' etc/my.cnf| \
+sed -e 's/#skip-innodb/default-storage-engine=MyISAM\nskip-innodb/' | \
+grep -v '^#' | \
+grep -v '^$' > etc/my.cnf.new
 mv etc/my.cnf.new etc/my.cnf
 
 # process php.ini
+echo 'zend_extension = /opt/lampp/lib/php/extensions/no-debug-non-zts-20090626/ioncube_loader_lin_5.3.so' > etc/php.ini.new
 grep -v '^;' etc/php.ini |\
 grep -v '^$' |\
 grep -v 'sqlite.so' |\
 grep -v 'radius.so' |\
 grep -v 'pgsql.so' |\
 grep -v 'ming.so' |\
-grep -v 'ncurses.so' > etc/php.ini.new 
+grep -v 'ncurses.so' >> etc/php.ini.new 
 mv etc/php.ini.new etc/php.ini
 
 # rm useless binaries.
@@ -242,7 +245,7 @@ rm -fr modules/mod_version.so
 cp ../zentao.conf etc/extra/httpd-xampp.conf
 
 # copy the zentao code.
-#mv ../../../zentaopms ./zentao
+mv ../../../zentaopms ./zentao
 
 # copy needed files.
 cp ../Makefile .
@@ -260,3 +263,6 @@ mv sqlbuddy admin/
 mkdir auth
 touch auth/users
 echo 'use htpasswd users username password to add a new user.' > auth/readme
+
+# copy the ioncube loader.
+cp ../ioncube_loader_lin_5.3.so lib/php/extensions/no-debug-non-zts-20090626/
