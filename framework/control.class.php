@@ -317,9 +317,14 @@ class control
         $methodCssFile = $modulePath . 'css' . $this->pathFix . $methodName . '.css';
         if(file_exists($mainCssFile))   $css .= file_get_contents($mainCssFile);
         if(is_file($methodCssFile))     $css .= file_get_contents($methodCssFile);
-        foreach(glob($cssExtPath . '*.css') as $cssFile)
+
+        $cssExtFiles = glob($cssExtPath . '*.css');
+        if(is_array($cssExtFiles))
         {
-            $css .= file_get_contents($cssFile);
+            foreach($cssExtFiles as $cssFile)
+            {
+                $css .= file_get_contents($cssFile);
+            }
         }
         return $css;
     }
@@ -344,9 +349,14 @@ class control
         $methodJsFile = $modulePath . 'js' . $this->pathFix . $methodName . '.js';
         if(file_exists($mainJsFile))   $js .= file_get_contents($mainJsFile);
         if(is_file($methodJsFile))     $js .= file_get_contents($methodJsFile);
-        foreach(glob($jsExtPath . '*.js') as $jsFile)
+
+        $jsExtFiles = glob($jsExtPath . '*.js');
+        if(is_array($jsExtFiles))
         {
-            $js .= file_get_contents($jsFile);
+            foreach($jsExtFiles as $jsFile)
+            {
+                $js .= file_get_contents($jsFile);
+            }
         }
         return $js;
     }
