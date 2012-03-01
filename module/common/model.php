@@ -105,6 +105,7 @@ class commonModel extends model
         if($module == 'user' and strpos('login|logout|deny', $method) !== false) return true;
         if($module == 'api'  and $method == 'getsessionid') return true;
         if($module == 'misc' and $method == 'about') return true;
+        if($module == 'misc' and $method == 'checkupdate') return true;
         if($module == 'help' and $method == 'field') return true;
         return false;
     }

@@ -55,4 +55,19 @@ class misc extends control
     {
         $this->loadModel('upgrade')->updateNL();
     }
+
+    /**
+     * Check current version is latest or not.
+     * 
+     * @param  string $latestNote 
+     * @param  string $browser 
+     * @access public
+     * @return void
+     */
+    public function checkUpdate($latestNote = '', $browser = '')
+    {
+        $this->view->latestNote = urldecode(helper::safe64Decode($latestNote));
+        $this->view->browser    = $browser;
+        $this->display();
+    }
 }
