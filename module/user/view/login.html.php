@@ -41,7 +41,7 @@ include '../../common/view/colorbox.html.php';
     powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>)
     <?php echo $lang->donate;?>
     <br />
-    <iframe id='updater' frameborder='0' scrolling='no' allowtransparency='true' src="http://www.zentao.net/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html"></iframe>
+    <iframe id='updater' class='hidden' frameborder='0' scrolling='no' allowtransparency='true' src="http://www.zentao.net/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html"></iframe>
   </div>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

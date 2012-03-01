@@ -59,15 +59,16 @@ class misc extends control
     /**
      * Check current version is latest or not.
      * 
-     * @param  string $latestNote 
-     * @param  string $browser 
      * @access public
      * @return void
      */
-    public function checkUpdate($latestNote = '', $browser = '')
+    public function checkUpdate()
     {
-        $this->view->latestNote = urldecode(helper::safe64Decode($latestNote));
-        $this->view->browser    = $browser;
+        $note    = isset($_GET['note'])    ? $_GET['note'] : '';
+        $browser = isset($_GET['browser']) ? $_GET['browser'] : '';
+
+        $this->view->note    = urldecode(helper::safe64Decode($note));
+        $this->view->browser = $browser;
         $this->display();
     }
 }
