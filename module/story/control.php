@@ -52,7 +52,7 @@ class story extends control
             if($this->post->newStory)
             {
                 echo js::alert($this->lang->story->successSaved . $this->lang->story->newStory);
-                die(js::locate($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID&story=$storyID&projectID=$projectID&bugID=$bugID"), 'parent'));
+                die(js::locate($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID"), 'parent'));
             }
             if($projectID == 0)
             {
