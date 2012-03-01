@@ -197,7 +197,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .w-p80 {width: 80%}
 .w-p85 {width: 85%}
 .w-p90 {width: 90%}
-.w-p100 {width: 100%}
+.w-p100{width: 100%}
+.w-p98 {width: 98%}
+.w-p99 {width: 99%}
 
 .w-20px {width:20px}
 .w-30px {width:30px}
@@ -260,7 +262,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Top bar. */
 #topbar, #topbar a {color:#fff}
 #topbar {margin-bottom:8px}
-#topbar select {border:none; color:white; background:#16528b}
+#topbar select {border:none; color:white; background:#003366}
 #topbar a {text-decoration:none;}
 
 /* The nav bar. */
@@ -275,14 +277,15 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #mainmenu a  {color:white; font-weight:normal;}
 #mainmenu .active   {background-color:#e5e5e5;}
 #mainmenu .active a {color:#33a52e; font-weight:bold;}
-#mainmenu #mainbg{ padding-left:16px; background:url(images/main/ui-gray.png); background-position:-3px 125px;}
+#mainmenu #mainbg{ padding-left:16px; background:url(images/main/index_bg.png) left bottom;}
+#mainmenu .active #mainbg{ padding-left:16px; background:url(images/main/index_bg.png) left top;}
 
-#mainmenu #searchbox{float:right; border:none; background:#E5E5E5; height:100%;}
+#mainmenu #searchbox{float:right; border:none; background:#E5E5E5 url(images/main/search_bg.png) repeat-x bottom; height:100%;}
 #mainmenu .button-s{border:none; padding:2px}
 
-#searchType  {margin-top:2px; border:none; background:#E5E5E5}
-#searchQuery {height:18px; border:1px solid #ccc; color:grey;}
-#searchbox #objectSwitcher{ border:none; padding:2px;; width:20px; height:100%; background:url(images/main/ui-gray.png); background-position:-110px 52px;}
+#searchType  { border:none; background:#E5E5E5; margin-bottom:2px;}
+#searchQuery {height:16px; border:1px solid #ccc; color:grey;}
+#searchbox #objectSwitcher{ border:none; width:16px; height:18px; background:url(images/main/enter.png) center bottom;}
 
 /* Module menu. */
 #modulemenu    {margin-bottom:0px; font-size:14px; border:2px solid #e5e5e5;}
@@ -291,7 +294,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #modulemenu a  { font-weight:normal; font-size:14px; color:#0033cc}
 #modulemenu .active a {color:#fff; background:#33a52e; padding:4px 4px 2px 4px;}
 #modulemenu .right    {float:right; font-weight:bold;}
-#modulemenu .right  a {color:red; font-weight:bold}
+#modulemenu .right  a { font-weight:bold}
 #modulemenu #mybg{ padding-left:16px; background:url(images/main/ui-gray.png); background-position:-146px 142px;}
 
 /* Product, project and objects switcher. */
@@ -358,7 +361,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .pager {margin-bottom:0}
 
 /*-----------------------OTHERS SETTINGS --------------------*/
-.box-title  {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:4px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
+.box-title  {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:6px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
 .box-content{border:1px solid #e4e4e4; padding:5px}
 .done      {color:#078F0E;}
 .wait      {color:#888;}
@@ -374,8 +377,19 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .owner     {background:#e4e4e4; font-size:smaller}
 .emptybg { background:#efefef;}
 a { text-decoration:none;}
-.icon-search{ padding-left:18px; background:url(images/main/ui-gray.png) -160px 128px; border:0px;}
-.icon-add1   { padding-left:18px; background:url(images/main/ui-gray.png) -32px 112px;}
-.icon-title  { padding-left:16px; padding-bottom:2px; background:url(images/main/ui-gray.png); background-position:-0px 144px;}
-.icon-all    { padding-left:18px; background:url(images/main/ui-gray.png) -176px 112px;}
-.icon-copy   { padding-left:18px; background:url(images/main/ui-gray.png) -48px 160px;}
+.icon-search { padding-left:18px; background:url(images/main/ui-green.png) -160px 128px; border:0px;}
+.icon-add1   { padding-left:18px; background:url(images/main/ui-green.png) -32px 112px;}
+.icon-title  { padding-left:16px; background:url(images/main/ui-green.png) 0px 144px;}
+.icon-all    { padding-left:18px; background:url(images/main/ui-green.png) -176px 112px;}
+.icon-copy   { padding-left:18px; background:url(images/main/ui-green.png) -48px 160px;}
+.icon-add2   { padding-left:18px; background:url(images/main/ui-gray.png) 0px 48px;}
+.icon-notice { padding-left:16px;  background:url(images/main/ui-gray.png); background-position:-18px 96px;}
+.icon-file   { padding-left:16px;  background:url(images/main/ui-gray.png); background-position:-32px 144px;}
+.icon-arrow  { padding-left:16px;  background:url(images/main/ui-gray.png); background-position:-32px 0px;}
+
+#form-content { margin:5px 25px; border:none;}
+#form-content .button-s{ background:url(images/main/button_95x36.png) left top; border:none; height:36px; width:95px; color:#f1f1f1;}
+#form-content .button-r{ background:url(images/main/button_95x36.png) 96px top; border:none; height:36px; width:95px;}
+#form-content hr{ color:#ddd; margin:15px 0;}
+.notice { background-color:#ffffcc; border:1px solid #ffcc00; padding:15px 25px;}
+.form-item { background-color:#e5e5e5; padding:8px; margin-bottom:15px; margin-top:5px;}

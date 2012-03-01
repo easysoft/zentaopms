@@ -171,6 +171,12 @@ $lang->story->mustChoosePreVersion  = 'Must select an version to revert';
 $lang->story->ajaxGetProjectStories = 'API:Project stories';
 $lang->story->ajaxGetProductStories = 'API:Product stories';
 
+$lang->story->form->titleNote = 'A word to briefly express story content';
+$lang->story->form->area      = 'The story of their respective range';
+$lang->story->form->desc      = 'Description and standards, what stories? How to acceptance?';
+$lang->story->form->resource  = 'Allocation of resources, who completed? How long does it take?';
+$lang->story->form->file      = 'Attachments, if the demand for related documents, please click here to upload.';
+
 $lang->story->action->reviewed            = array('main' => '$date, Reviewed by <strong>$actor</strong>, result is <strong>$extra</strong>.', 'extra' => $lang->story->reviewResultList);
 $lang->story->action->closed              = array('main' => '$date, Closed by <strong>$actor</strong>, reason is <strong>$extra</strong>.', 'extra' => $lang->story->reasonList);
 $lang->story->action->linked2plan         = array('main' => '$date, Linked to plan <strong>$extra</strong> by <strong>$actor</strong>.'); 

@@ -433,12 +433,12 @@ function saveWindowSize()
 function setContentHeight()
 {
     var winHeight = $(window).height();
-    var docHeight = $(document.body).height();
+    var docHeight = $(document).height();
     var headerH   = $('#header').height();
     var footerH   = $('#footer').height();
-    if(docHeight < winHeight)
+    if(docHeight <= winHeight)
     {
-        var outerH = winHeight - headerH - footerH - 75;
+        var outerH = winHeight - headerH - footerH - 85;
         $('.outer').height(outerH);
     } 
 }

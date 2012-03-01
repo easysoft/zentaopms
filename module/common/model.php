@@ -242,7 +242,7 @@ class commonModel extends model
         echo "<li id='searchbox'>"; 
         echo html::select('searchType', $lang->searchObjects, $searchObject);
         echo html::input('searchQuery', $lang->searchTips, "onclick=this.value='' onkeydown='if(event.keyCode==13) shortcut()' class='w-60px'");
-		echo "<button type='button' id='objectSwitcher' onclick='shortcut()'></button>";
+		echo "<input type='button' id='objectSwitcher' onclick='shortcut()' />";
         echo "</li>";
         echo "</ul>\n";
     }
@@ -296,7 +296,7 @@ class commonModel extends model
                 {
                     /* Is the currentModule active? */
                     if($currentModule == $subModule) $active = 'active';
-                    if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false)) $active = 'active';
+                    if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false) and $float != 'right') $active = 'active';
                     echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target, "id=submenu$subMenuKey") . "</li>\n";
                 }
             }
