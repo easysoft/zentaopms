@@ -16,3 +16,5 @@ table, tr, td, th, input{ border:none;}
 .button-s, .button-c {padding:3px 5px 3px 5px;height:30px; width:80px; font-size:14px; font-weight:bold; border:none}
 .debugwin, .helplink{display:none}
 #updater {width:500px; height:30px; border:none; overflow:hidden;}
+
+.hidden{display:none}   /* Add it to avoid the white flash when load css later for the updater. */
