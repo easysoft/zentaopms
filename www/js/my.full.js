@@ -789,7 +789,6 @@ $(document).ready(function()
     setProductListLink();
     setProjectListLink();
     setExport();
-    setContentHeight();
     autoCheck();
     togglesearch();
     saveWindowSize();

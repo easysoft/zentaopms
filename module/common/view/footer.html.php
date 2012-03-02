@@ -15,7 +15,10 @@
   </table>
 </div>
 <script laguage='Javascript'>
-$().ready(function(){setDebugWin('white')})
+$().ready(function(){
+    setDebugWin('white');
+    setContentHeight();
+})
 <?php if(isset($pageJS)) echo $pageJS;?>
 </script>
 <?php 
