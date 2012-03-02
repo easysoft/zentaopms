@@ -11,10 +11,12 @@
 #mainmenu   ul li{background:none}
 #modulemenu ul{background:none}
 
-#mainmenu li{border:none; height:30px; line-height:35px;}
-#mainmenu .active {background:url(./images/bg.menu.gif) no-repeat center 5px; width:85px;}
+#mainmenu li{border:none; height:30px; line-height:30px;}
+#mainmenu .active {background:url(./images/bg.menu.gif) no-repeat center top; width:85px;}
 
 #modulemenu select{border:1px solid #e4e4e4; background:#fff}
 
 #modulemenu #projectID   {background:#EAEAEA}
 #modulemenu #productID   {background:#EAEAEA}
+
+#mainmenu #searchbox{height:28px; margin-top:2px;}
