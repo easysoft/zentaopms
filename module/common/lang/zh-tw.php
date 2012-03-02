@@ -6,10 +6,10 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2612 2012-02-22 06:15:07Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2686 2012-03-02 05:45:14Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->arrow        = ' » ';
+$lang->arrow        = '<span class="icon-arrow">&nbsp;</span>';
 $lang->colon        = '::';
 $lang->comma        = '，';
 $lang->dot          = '。';
@@ -76,7 +76,7 @@ $lang->typeAB       = '類型';
 $lang->common->common = '公有模組';
 
 /* 主導航菜單。*/
-$lang->menu->my      = '我的地盤|my|index';
+$lang->menu->my      = '<span id="mainbg">&nbsp;</span>我的地盤|my|index';
 $lang->menu->product = '產品視圖|product|index';
 $lang->menu->project = '項目視圖|project|index';
 $lang->menu->qa      = '測試視圖|qa|index';
@@ -115,7 +115,7 @@ $lang->index->menu->product = '瀏覽產品|product|browse';
 $lang->index->menu->project = '瀏覽項目|project|browse';
 
 /* 我的地盤菜單設置。*/
-$lang->my->menu->account   = '%s' . $lang->arrow;
+$lang->my->menu->account   = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index     = '首頁|my|index';
 $lang->my->menu->todo      = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task      = '我的任務|my|task|';
@@ -140,9 +140,9 @@ $lang->product->menu->edit    = '編輯|product|edit|productID=%s';
 $lang->product->menu->delete  = array('link' => '刪除|product|delete|productID=%s', 'target' => 'hiddenwin');
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->order   = '排序|product|order|productID=%s';
-$lang->product->menu->create  = array('link' => '新增產品|product|create', 'float' => 'right');
-$lang->product->menu->project = array('link' => '項目列表|product|project|status=all&productID=%s', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '所有產品|product|index|locate=false', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>新增產品|product|create', 'float' => 'right');
+$lang->product->menu->project = array('link' => '<span class="icon-title">&nbsp;</span>項目列表|product|project|status=all&productID=%s', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<span class="icon-all">&nbsp;</span>所有產品|product|index|locate=false', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
@@ -164,9 +164,9 @@ $lang->project->menu->view      = '概況|project|view|projectID=%s';
 $lang->project->menu->edit      = '編輯|project|edit|projectID=%s';
 $lang->project->menu->delete    = array('link' => '刪除|project|delete|projectID=%s', 'target' => 'hiddenwin');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
-$lang->project->menu->create    = array('link' => '新增項目|project|create', 'float' => 'right');
-$lang->project->menu->copy      = array('link' => '複製項目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '所有項目|project|index|locate=false', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>新增項目|project|create', 'float' => 'right');
+$lang->project->menu->copy      = array('link' => '<span class="icon-copy">&nbsp;</span>複製項目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;</span>所有項目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu            = $lang->project->menu;
 $lang->build->menu           = $lang->project->menu;
 
@@ -192,7 +192,7 @@ $lang->doc->menu->browse  = array('link' => '文檔列表|doc|browse|libID=%s');
 $lang->doc->menu->edit    = '編輯文檔庫|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '維護模組|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '刪除文檔庫|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
-$lang->doc->menu->create  = array('link' => '新增文檔庫|doc|createLib', 'float' => 'right');
+$lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>新增文檔庫|doc|createLib', 'float' => 'right');
 
 /* 組織結構視圖菜單設置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;
@@ -201,8 +201,8 @@ $lang->company->menu->dept        = array('link' => '部門維護|dept|browse', 
 $lang->company->menu->browseGroup = array('link' => '權限分組|group|browse', 'subModule' => 'group');
 $lang->company->menu->edit        = array('link' => '公司管理|company|edit');
 $lang->company->menu->dynamic     = '組織動態|company|dynamic|';
-$lang->company->menu->addGroup    = array('link' => '添加分組|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => '添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup    = array('link' => '<span class="icon-add1">&nbsp;</span>添加分組|group|create', 'float' => 'right');
+$lang->company->menu->addUser     = array('link' => '<span class="icon-add1">&nbsp;</span>添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
@@ -214,7 +214,7 @@ $lang->user->menu->bug         = 'Bug列表|user|bug|account=%s';
 $lang->user->menu->dynamic     = '用戶動態|user|dynamic|type=today&account=%s';
 $lang->user->menu->projectList = '項目列表|user|project|account=%s';
 $lang->user->menu->profile     = array('link' => '用戶信息|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse      = array('link' => '用戶管理|company|browse|', 'float' => 'right');
+$lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp;</span>用戶管理|company|browse|', 'float' => 'right');
 
 /* 後台管理菜單設置。*/
 $lang->admin->menu->index     = array('link' => '首頁|admin|index', 'subModule' => 'admin');

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
+ * @version     $Id: zh-tw.php 2678 2012-03-01 06:24:54Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -70,6 +70,7 @@ $lang->story->duplicateStory = '重複需求';
 $lang->story->reviewResult   = '評審結果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '關鍵詞';
+$lang->story->newStory       = '繼續添加需求';
 
 $lang->story->same = '同上';
 
@@ -160,6 +161,8 @@ $lang->story->affectedCases        = '影響的用例';
 $lang->story->specTemplate          = "建議參考的模板：作為一名<<i class='red'>某種類型的用戶</i>>，我希望<<i class='red'>達成某些目的</i>>，這樣可以<<i class='red'>開發的價值</i>>。";
 $lang->story->notes                 = '(註：如果“需求標題”為空，則表示不使用此行)';
 $lang->story->needNotReview         = '不需要評審';
+$lang->story->afterSubmit           = "添加之後";
+$lang->story->successSaved          = "需求成功添加，";
 $lang->story->confirmDelete         = "您確認刪除該需求嗎?";
 $lang->story->errorFormat           = '需求數據有誤';
 $lang->story->errorEmptyTitle       = '標題不能為空';
@@ -167,6 +170,12 @@ $lang->story->mustChooseResult      = '必須選擇評審結果';
 $lang->story->mustChoosePreVersion  = '必須選擇回溯的版本';
 $lang->story->ajaxGetProjectStories = '介面:獲取項目需求列表';
 $lang->story->ajaxGetProductStories = '介面:獲取產品需求列表';
+
+$lang->story->form->titleNote = '一句話簡要表達需求內容';
+$lang->story->form->area      = '該需求所屬範圍';
+$lang->story->form->desc      = '描述及標準，什麼需求？如何驗收？';
+$lang->story->form->resource  = '資源分配，有誰完成？需要多少時間？';
+$lang->story->form->file      = '附件，如果該需求有相關檔案，請點此上傳。';
 
 $lang->story->action->reviewed            = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>。', 'extra' => $lang->story->reviewResultList);
 $lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong>。', 'extra' => $lang->story->reasonList);
