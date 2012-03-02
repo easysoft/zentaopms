@@ -425,13 +425,14 @@ function saveWindowSize()
 }
 
 /**
- * Set content height 
+ * Set Outer box's width and height.
  * 
  * @access public
  * @return void
  */
-function setContentHeight()
+function setOuterBox()
 {
+    var winWidth  = window.screen.width;
     var winHeight = $(window).height();
     var headerH   = $('#header').height();
     var footerH   = $('#footer').height();
@@ -441,6 +442,11 @@ function setContentHeight()
         if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
         $('.outer').height(outerH);
     } 
+    if($.browser.msie && ($.browser.version == "6.0") && !$.support.style)
+    {
+        winWidth -= 49;
+        $('#wrap').width(winWidth);
+    }
 }
 
 /**

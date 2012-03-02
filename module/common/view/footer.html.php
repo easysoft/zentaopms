@@ -17,7 +17,7 @@
 <script laguage='Javascript'>
 $().ready(function(){
     setDebugWin('white');
-    setContentHeight();
+    setOuterBox();
 })
 <?php if(isset($pageJS)) echo $pageJS;?>
 </script>
