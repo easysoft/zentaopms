@@ -351,8 +351,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /* Footer. */
 #divider   {margin-bottom:40px;}
-#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background:#e5e5e5 url(images/main/status_x_bg.gif) repeat-x bottom; height:34px; line-height:20px; padding-top:15px;}
-#footer
+#footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background:#e5e5e5 url(images/main/status_x_bg.gif) repeat-x bottom; height:34px; line-height:34px; padding-top:15px;}
 #crumbs    {padding:5px 0 5px 10px;}
 #poweredby {padding-right:10px} 
 
