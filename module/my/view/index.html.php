@@ -12,6 +12,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php css::import($defaultTheme . 'index.css',   $config->version);?>
 <table class='cont' id='row1'>
   <tr valign='top'>
     <td width='66%' style='padding-right:20px'>
