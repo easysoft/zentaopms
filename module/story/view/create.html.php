@@ -89,7 +89,7 @@
       <table class='table-1'>
         <tr>
           <th class='rowhead' valign='top'><?php echo $lang->story->legendAttatch;?></th>
-          <td><?php echo $this->fetch('file', 'buildform', "fileConte=2&precent=0.94");?></td>
+          <td><?php echo $this->fetch('file', 'buildform', "fileConte=2&precent=0.99");?></td>
         </tr>  
       </table>
     </div>
