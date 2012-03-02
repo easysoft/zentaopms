@@ -12,7 +12,7 @@ echo Are you sure you wan't this?
 echo now stopping Apache2.2 when it runs
 net stop apachezt
 echo Time to say good bye to apache2.2 :(
-bin\httpd -k uninstall -n apachezt
+apache\bin\httpd -k uninstall -n apachezt
 
 :exit
 pause
