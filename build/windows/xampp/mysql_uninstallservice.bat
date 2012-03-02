@@ -4,17 +4,14 @@ if "%OS%" == "Windows_NT" goto WinNT
 
 :Win9X
 echo Don't be stupid! Win9x don't know Services
-echo Please use mysql_stop.bat instead
+echo Please use apache_stop.bat instead
 goto exit
 
 :WinNT
-echo now stopping MySQL when it runs
-net stop mysql
-echo Uninstalling MySql-Service
-bin\mysqld.exe --remove mysql
-if not exist %windir%\my.ini GOTO exit
-echo Remove %windir%\my.ini
-del %windir%\my.ini
+echo Are you sure you wan't this?
+echo now stopping mysql when it runs
+net stop mysqlzt
+mysql\bin\mysqld.exe --remove mysqlzt
 
 :exit
 pause

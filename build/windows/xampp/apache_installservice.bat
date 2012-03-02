@@ -9,9 +9,9 @@ goto exit
 
 :WinNT
 echo Installing Apache2.2 as an Service
-bin\httpd -k install
-echo Now we Start Apache2.2 :)
-net start Apache2.2
+apache\bin\httpd -k install -n apachezt
+echo Now we Start Apache
+net start apachezt
 
 :exit
 pause
