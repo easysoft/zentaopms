@@ -27,4 +27,4 @@ include 'colorbox.html.php';
    <tr><td id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></td></tr>
 </table>
 <div id='wrap'>
-<div class='outer'>
+  <div class='outer'>

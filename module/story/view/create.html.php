@@ -15,7 +15,7 @@
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div class='box-title'><span class='icon-add2'></span><?php echo $lang->story->create;?></div>
 <div class='box-content' id='form-content'>
-  <div>
+  <div class='form-item'>
     <p><strong class='a-14px'><?php echo $lang->story->title;?></strong> <span class='gray'><?php echo $lang->story->form->titleNote?></span></p>
     <p><?php echo html::input('title', $title, "class='w-p98'");?></p>
   </div>

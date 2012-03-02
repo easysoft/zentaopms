@@ -8,16 +8,13 @@
 #topbar .w-p50 {padding-left:8px}
 
 #mainmenu   ul{background:none}
+#mainmenu   ul li{background:none}
 #modulemenu ul{background:none}
-#mainmenu   .active a{color: #324F7C}
-#modulemenu .active a{color: #324F7C} 
 
-#mainmenu li{border:none; height:36px; line-height:36px;}
+#mainmenu li{border:none; height:30px; line-height:35px;}
 #mainmenu .active {background:url(./images/bg.menu.gif) no-repeat center 5px; width:85px;}
 
 #modulemenu select{border:1px solid #e4e4e4; background:#fff}
 
-#searchType  {background:#43618B}
-#searchQuery {background:#43618B}
 #modulemenu #projectID   {background:#EAEAEA}
 #modulemenu #productID   {background:#EAEAEA}

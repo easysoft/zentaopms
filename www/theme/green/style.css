@@ -1,8 +1,7 @@
 #header {background:#195d00}
 #mainmenu ul{background:#217a00}
+#mainmenu ul li {background:#217a00}
 #mainmenu a {color:#d1eeff}
 #mainmenu .active a{color:black}
 #topbar select{background:#195d00}
 
-#searchType  {background:#217a00}
-#searchQuery {background:#217a00}

@@ -383,9 +383,9 @@ a { text-decoration:none;}
 .icon-all    { padding-left:18px; background:url(images/main/ui-green.png) -176px 112px;}
 .icon-copy   { padding-left:18px; background:url(images/main/ui-green.png) -48px 160px;}
 .icon-add2   { padding-left:18px; background:url(images/main/ui-gray.png) 0px 48px;}
-.icon-notice { padding-left:16px;  background:url(images/main/ui-gray.png); background-position:-18px 96px;}
-.icon-file   { padding-left:16px;  background:url(images/main/ui-gray.png); background-position:-32px 144px;}
-.icon-arrow  { padding-left:16px;  background:url(images/main/ui-gray.png); background-position:-32px 0px;}
+.icon-notice { padding-left:16px;  background:url(images/main/ui-gray.png) -18px 96px;}
+.icon-file   { padding-left:16px;  background:url(images/main/ui-gray.png) -32px 144px;}
+.icon-arrow  { padding-left:8px;  background:url(images/main/ui-gray.png) -32px 0px;}
 
 #form-content { margin:5px 25px; border:none;}
 #form-content .button-s{ background:url(images/main/button_95x36.png) left top; border:none; height:36px; width:95px; color:#f1f1f1;}
