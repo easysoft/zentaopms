@@ -296,7 +296,7 @@ class commonModel extends model
                 if(common::hasPriv($module, $method))
                 {
                     /* Is the currentModule active? */
-                    if($currentModule == $subModule) $active = 'active';
+                    if($currentModule == $subModule and $float != 'right') $active = 'active';
                     if($module == $currentModule and ($method == $currentMethod or strpos($alias, $currentMethod) !== false) and $float != 'right') $active = 'active';
                     echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target, "id=submenu$subMenuKey") . "</li>\n";
                 }

@@ -1,6 +1,6 @@
 <div class='block linkbox1' id='projectbox'>
 <?php if(count($projectStats) == 0):?>
-<table class='table-1 a-center emptybg' height='140px'>
+<table class='table-1 a-center emptybg' height='138px'>
   <caption><span class='icon-title'></span><?php echo $lang->my->home->projects;?></caption>
   <tr>
     <td valign='middle'>
@@ -9,10 +9,10 @@
           <td><span class='icon-notice'></span></td>
           <td><?php printf($lang->my->home->noProjectsTip, $this->createLink('project', 'create'));?></td>
         </tr>
-<tr>
-<td></td>
-<td class='h-30px'><?php echo $lang->my->home->otherNoTip;?></td>
-</tr>
+        <tr>
+          <td></td>
+          <td class='h-30px'><?php echo $lang->my->home->otherNoTip;?></td>
+        </tr>
         <tr>
           <td><span class='icon-help'></span></td>
           <td><?php echo $lang->my->home->help; ?></td>

@@ -437,7 +437,7 @@ function setContentHeight()
     var footerH   = $('#footer').height();
     if(document.documentElement.clientHeight >= document.documentElement.scrollHeight)
     {
-        var outerH = winHeight - headerH - footerH - 85;
+        var outerH = winHeight - headerH - footerH - 90;
         if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
         $('.outer').height(outerH);
     } 

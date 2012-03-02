@@ -277,8 +277,10 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #mainmenu a  {color:white; font-weight:normal;}
 #mainmenu .active   {background-color:#e5e5e5;}
 #mainmenu .active a {color:#33a52e; font-weight:bold;}
-#mainmenu #mainbg{ padding-left:16px; background:url(images/main/index_bg.png) left bottom;}
-#mainmenu .active #mainbg{ padding-left:16px; background:url(images/main/index_bg.png) left top;}
+#mainmenu #mainbg{ padding-left:12px; background:url(images/main/index_bg.png) left bottom;}
+/* For IE 6*/
+*html #mainmenu #mainbg{ background:none;}
+#mainmenu .active #mainbg{background-position: left top;}
 
 #mainmenu #searchbox{float:right; border:none; background:#E5E5E5 url(images/main/search_bg.png) repeat-x bottom; height:100%;}
 #mainmenu .button-s{border:none; padding:2px}
@@ -295,7 +297,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #modulemenu .active a {color:#fff; background:#33a52e; padding:4px 4px 2px 4px;}
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a { font-weight:bold}
-#modulemenu #mybg{ padding-left:16px; background:url(images/main/ui-gray.png); background-position:-146px 142px;}
+#modulemenu #mybg{ padding-left:10px; background:url(images/main/ui-gray.png); background-position:-146px 144px;}
 
 /* Product, project and objects switcher. */
 #productID {background:#EDEFF4; border:1px solid #e5e5e5}
@@ -377,15 +379,15 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .owner     {background:#e4e4e4; font-size:smaller}
 .emptybg { background:#efefef;}
 a { text-decoration:none;}
-.icon-search { padding-left:18px; background:url(images/main/ui-green.png) -160px 128px; border:0px;}
-.icon-add1   { padding-left:18px; background:url(images/main/ui-green.png) -32px 112px;}
-.icon-title  { padding-left:16px; background:url(images/main/ui-green.png) 0px 144px;}
-.icon-all    { padding-left:18px; background:url(images/main/ui-green.png) -176px 112px;}
-.icon-copy   { padding-left:18px; background:url(images/main/ui-green.png) -48px 160px;}
-.icon-add2   { padding-left:18px; background:url(images/main/ui-gray.png) 0px 48px;}
+.icon-search { padding-left:16px; background:url(images/main/ui-green.png) -160px 128px; border:0px;}
+.icon-add1   { padding-left:16px; background:url(images/main/ui-green.png) -32px 112px;}
+.icon-title  { padding-left:15px; background:url(images/main/ui-green.png) 2px 144px;}
+.icon-all    { padding-left:16px; background:url(images/main/ui-green.png) -173px 112px;}
+.icon-copy   { padding-left:16px; background:url(images/main/ui-green.png) -48px 160px;}
+.icon-add2   { padding-left:16px; background:url(images/main/ui-gray.png) 0px 48px;}
 .icon-notice { padding-left:16px;  background:url(images/main/ui-gray.png) -18px 96px;}
 .icon-file   { padding-left:16px;  background:url(images/main/ui-gray.png) -32px 144px;}
-.icon-arrow  { padding-left:8px;  background:url(images/main/ui-gray.png) -32px 0px;}
+.icon-arrow  { padding-left:10px;  background:url(images/main/ui-gray.png) -32px 0px;}
 
 #form-content { margin:5px 25px; border:none;}
 #form-content .button-s{ background:url(images/main/button_95x36.png) left top; border:none; height:36px; width:95px; color:#f1f1f1;}
