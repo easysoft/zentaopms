@@ -390,7 +390,7 @@ class projectModel extends model
         {
             $hour->totalEstimate = round($hour->totalEstimate, 1);
             $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = round($hour->totalLeft, 1);
+            $hour->totalLeft     = isset($hour->totalLeft) ? round($hour->totalLeft, 1) : $emptyHour->totalLeft;
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
         }
