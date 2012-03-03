@@ -387,10 +387,10 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /*-----------------------ICONS --------------------*/
 .icon-search { padding-left:16px; background:url(images/main/ui-green.png) -160px 128px; border:0px;}
 .icon-add1   { padding-left:16px; background:url(images/main/ui-green.png) -32px 112px;}
+.icon-add2   { padding-left:16px; background:url(images/main/ui-gray.png) 0px 48px;}
 .icon-title  { padding-left:15px; background:url(images/main/ui-green.png) 2px 144px;}
 .icon-all    { padding-left:16px; background:url(images/main/ui-green.png) -173px 112px;}
 .icon-copy   { padding-left:16px; background:url(images/main/ui-green.png) -48px 160px;}
-.icon-add2   { padding-left:16px; background:url(images/main/ui-gray.png) 0px 48px;}
 .icon-notice { padding-left:16px;  background:url(images/main/ui-gray.png) -18px 96px;}
 .icon-file   { padding-left:16px;  background:url(images/main/ui-gray.png) -32px 144px;}
 .icon-arrow  { padding-left:10px;  background:url(images/main/ui-gray.png) -32px 0px;}
