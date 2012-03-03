@@ -1,6 +1,6 @@
 <div class='block linkbox1' id='projectbox'>
 <?php if(count($projectStats) == 0):?>
-<table class='table-1 a-center emptybg' height='138px'>
+<table class='table-1 a-center bg-gray' height='138px'>
   <caption><span class='icon-title'></span><?php echo $lang->my->home->projects;?></caption>
   <tr>
     <td valign='middle'>
