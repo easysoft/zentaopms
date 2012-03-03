@@ -14,6 +14,7 @@ fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px
 legend   {font-weight:bold;}
 del{background:#fcc;}
 ins{background:#cfc; text-decoration:none}
+a  {text-decoration:none;}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 15px; background:#e5e5e5;}
@@ -325,6 +326,13 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #titlebar #main input {font-size:14px; margin-top:5px}
 #titlebar .text-1 {width:80%}
 
+/* Form settings */
+#form-content { margin:5px 25px; border:none;}
+#form-content .button-s{ background:url(images/main/button_95x36.png) left top; border:none; height:36px; width:95px; color:#f1f1f1;}
+#form-content .button-r{ background:url(images/main/button_95x36.png) 96px top; border:none; height:36px; width:95px;}
+#form-content hr{ color:#ddd; margin:15px 0;}
+.form-item { background-color:#e5e5e5; padding:8px; margin-bottom:15px; margin-top:5px;}
+
 /* Product, project switcher. */
 #switcher {color:white; font-style:bold; background:red; cursor:pointer;}
 
@@ -374,21 +382,15 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .deleted   {text-decoration:line-through}
 .linkbox a {display:block}
 .owner     {background:#e4e4e4; font-size:smaller}
-.emptybg { background:#efefef;}
-a { text-decoration:none;}
+.notice    { background-color:#ffffcc; border:1px solid #ffcc00; padding:15px 25px;}
+
+/*-----------------------ICONS --------------------*/
 .icon-search { padding-left:16px; background:url(images/main/ui-green.png) -160px 128px; border:0px;}
 .icon-add1   { padding-left:16px; background:url(images/main/ui-green.png) -32px 112px;}
+.icon-add2   { padding-left:16px; background:url(images/main/ui-gray.png) 0px 48px;}
 .icon-title  { padding-left:15px; background:url(images/main/ui-green.png) 2px 144px;}
 .icon-all    { padding-left:16px; background:url(images/main/ui-green.png) -173px 112px;}
 .icon-copy   { padding-left:16px; background:url(images/main/ui-green.png) -48px 160px;}
-.icon-add2   { padding-left:16px; background:url(images/main/ui-gray.png) 0px 48px;}
 .icon-notice { padding-left:16px;  background:url(images/main/ui-gray.png) -18px 96px;}
 .icon-file   { padding-left:16px;  background:url(images/main/ui-gray.png) -32px 144px;}
 .icon-arrow  { padding-left:10px;  background:url(images/main/ui-gray.png) -32px 0px;}
-
-#form-content { margin:5px 25px; border:none;}
-#form-content .button-s{ background:url(images/main/button_95x36.png) left top; border:none; height:36px; width:95px; color:#f1f1f1;}
-#form-content .button-r{ background:url(images/main/button_95x36.png) 96px top; border:none; height:36px; width:95px;}
-#form-content hr{ color:#ddd; margin:15px 0;}
-.notice { background-color:#ffffcc; border:1px solid #ffcc00; padding:15px 25px;}
-.form-item { background-color:#e5e5e5; padding:8px; margin-bottom:15px; margin-top:5px;}
