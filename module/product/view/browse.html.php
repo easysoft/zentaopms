@@ -80,7 +80,7 @@ var browseType = '<?php echo $browseType;?>';
         ?>
         <tr class='a-center'>
           <td><?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?></td>
-          <td><?php echo $story->pri;?></td>
+          <td><?php echo $lang->story->priList[$story->pri];?></td>
           <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $story->title);?></nobr></td>
           <td class='nobr'><?php echo $story->planTitle;?></td>
           <td><?php echo $lang->story->sourceList[$story->source];?></td>
