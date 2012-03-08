@@ -1128,6 +1128,7 @@ class upgradeModel extends model
         }
 
         $this->dao->update(TABLE_ACTION)->set("product = concat(',',product,',')")->exec();
+        return true;
     }
 
     /**
@@ -1148,6 +1149,7 @@ class upgradeModel extends model
         {
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq(($key + 1) * 10)->where('id')->eq($projectID)->exec();
         }
+        return true;
     }
 
     /**
