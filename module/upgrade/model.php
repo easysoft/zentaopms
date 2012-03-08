@@ -1127,12 +1127,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('task')->andWhere('objectID')->eq($taskID)->andWhere('project')->eq($projectID)->exec();
         }
 
-        $actions = $this->dao->select('id,product')->from(TABLE_ACTION)->fetchPairs('id');
-        foreach($actions as $id => $product)
-        {
-            $product = ',' . $product . ',';
-            $this->dao->update(TABLE_ACTION)->set('product')->eq($product)->where('id')->eq($id)->exec();
-        }
+        $this->dao->update(TABLE_ACTION)->set("product = concat(',',product,',')")->exec();
     }
 
     /**
