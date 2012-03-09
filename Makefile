@@ -99,3 +99,10 @@ build4linux:
 	# build xmapp.
 	cd ./build/linux/ && ./buildxmapp.sh $(xampp)
 	mv ./build/linux/lampp ./
+saas:	
+	mkdir backup
+	mkdir tmp/model
+	mkdir www/data/upload -p
+	chmod 777 backup
+	chmod 777 -R tmp
+	chmod 777 -R www/data
