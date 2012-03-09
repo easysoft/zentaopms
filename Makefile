@@ -102,6 +102,7 @@ build4linux:
 saas:	
 	mkdir backup
 	mkdir tmp/model
+	mkdir tmp/extension
 	mkdir www/data/upload -p
 	chmod 777 backup
 	chmod 777 -R tmp
