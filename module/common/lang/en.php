@@ -217,7 +217,7 @@ $lang->user->menu->profile     = array('link' => 'Profile|user|profile|account=%
 $lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp;</span>Manage user|company|browse|', 'float' => 'right');
 
 /* Admin menu. */
-$lang->admin->menu->index     = array('link' => 'Index|admin|index', 'subModule' => 'admin');
+$lang->admin->menu->index     = array('link' => 'Index|admin|index');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => 'Extension editor|editor|index', 'subModule' => 'editor');
 $lang->admin->menu->mail      = array('link' => 'ConfigEmail|mail|set', 'subModule' => 'mail');
