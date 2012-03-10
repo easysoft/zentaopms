@@ -106,7 +106,7 @@ class router
     private $moduleRoot;
 
     /**
-     * The root directory of them.
+     * The root directory of theme.
      * 
      * @var string
      * @access private
@@ -1581,7 +1581,7 @@ class super
     /**
      * Construct, set the var scope.
      * 
-     * @param   string $scope  the score, can be server, post, get, cookie, session, global
+     * @param   string $scope  the scope, can be server, post, get, cookie, session, global
      * @access  public
      * @return  void
      */
