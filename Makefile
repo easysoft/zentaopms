@@ -63,11 +63,11 @@ build4sae:
 	unzip ZenTaoPMS.$(VERSION).zip
 	rm -fr ZenTaoPMS.$(VERSION).zip
 	mv zentaopms/www/* zentaopms
-	rm -fr zentaopms/data
+	rm -fr zentaopms/data zentaopms/www zentaopms/tmp
 	# replace the directory of index.php, install.php, upgrade.php.
 	sed -e 's/..\/framework/framework/g' zentaopms/index.php |sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/index.php.new
 	sed -e 's/..\/framework/framework/g' zentaopms/install.php |sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/install.php.new
-	sed -e 's/..\/framework/framework/g' zentaopms/upgrade.php |sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/upgrade.php.new
+	sed -e 's/..\/framework/framework/g' zentaopms/upgrade.php |sed "/checkUpgradeStatus/d"|sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/upgrade.php.new
 	mv zentaopms/index.php.new zentaopms/index.php
 	mv zentaopms/install.php.new zentaopms/install.php
 	mv zentaopms/upgrade.php.new zentaopms/upgrade.php
@@ -78,15 +78,12 @@ build4sae:
 	# change the logic of merge model file in helper.class.php.
 	sed -e 's/\$$app->getTmpRoot/"saemc:\/\/" . \$$app\-\>getTmpRoot/g' zentaopms/framework/helper.class.php >zentaopms/framework/helper.class.new
 	mv zentaopms/framework/helper.class.new zentaopms/framework/helper.class.php
-	# touch the my.php.
-	touch zentaopms/config/my.php
 	# get the extension files.
 	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/sae
 	mv sae/lib/saestorage zentaopms/lib/
 	cp -fr sae/* zentaopms/module/
 	# create the package.
-	mkdir 10
-	mv zentaopms 10/code
+	mv zentaopms 10
 	cp build/sae/config.yaml 10/
 	zip -r -9 ZenTaoPMS.$(VERSION).sae.zip 10
 	rm -fr sae
