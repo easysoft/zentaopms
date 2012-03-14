@@ -69,13 +69,15 @@ function syncFiles($files, $from, $target)
 {
     $from   = realpath($from);
     $target = realpath($target);
+    static $copied = array();
+
     foreach($files as $file)
     {
         $relativePath = str_replace($from, '', $file); 
         $targetFile   = $target . $relativePath;
         $targetPath   = dirname($targetFile);
 
-        /* If file not exists, remove the targe. */
+        /* If file not exists, remove the target. */
         if(!is_file($file))
         {
             @unlink($targetFile);
@@ -83,6 +85,12 @@ function syncFiles($files, $from, $target)
         }
 
         if(!is_dir($targetPath)) mkdir($targetPath, 0755, true);
-        copy($file, $targetFile);
+        $ctime = filectime($file);
+        if(!isset($copied[$file]) or $copied[$file] != $ctime)
+        {
+            copy($file, $targetFile);
+            $copied[$file] = $ctime;
+            echo "$file copyed\n";
+        }
     }
 }
