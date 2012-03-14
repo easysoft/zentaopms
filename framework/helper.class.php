@@ -439,3 +439,14 @@ function a($var)
     print_r($var);
     echo "</xmp>";
 }
+
+/**
+ * Judge the server ip is local or not.
+ *
+ * @access public
+ * @return void
+ */
+function isLocalIP()
+{
+    return !filter_var($_SERVER['SERVER_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE);
+}
