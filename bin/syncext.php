@@ -8,9 +8,9 @@
  */
 
 /* Get params from argvs. */
-if(!isset($argv[2])) die("php syncext.php from target sleep\n");
+if(!isset($argv[1])) die("php syncext.php from target sleep\n");
 $from   = $argv[1];
-$target = $argv[2];
+$target = isset($argv[2]) ? $argv[2] : '/home/z/zentaopms';
 $sleep  = isset($argv[3]) ? $argv[3] : 5;
 
 /* sync files.  */
