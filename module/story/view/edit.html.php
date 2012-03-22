@@ -92,13 +92,10 @@
             <td class='rowhead'><?php echo $lang->story->assignedTo;?></td>
             <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="select-1"');?></td>
           </tr>
-          <?php if($story->reviewedBy):?>
           <tr>
             <td class='rowhead'><?php echo $lang->story->reviewedBy;?></td>
             <td><?php echo html::textarea('reviewedBy', $story->reviewedBy, 'class="area-1"');?></td>
           </tr>
-          <?php endif;?>
-          <?php if($story->closedBy):?>
           <tr>
             <td class='rowhead'><?php echo $lang->story->closedBy;?></td>
             <td><?php echo html::select('closedBy', $users, $story->closedBy, 'class="select-1"');?></td>
@@ -107,7 +104,6 @@
             <td class='rowhead'><?php echo $lang->story->closedReason;?></td>
             <td><?php echo html::select('closedReason', $lang->story->reasonList, $story->closedReason, 'class="select-1"');?></td>
           </tr>
-          <?php endif;?>
         </table>
       </fieldset>
 
