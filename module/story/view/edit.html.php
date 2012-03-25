@@ -98,7 +98,7 @@
             <td><?php echo html::textarea('reviewedBy', $story->reviewedBy, 'class="area-1"');?></td>
           </tr>
           <?php endif;?>
-          <?php if($story->closedBy):?>
+          <?php if($story->status == 'closed'):?>
           <tr>
             <td class='rowhead'><?php echo $lang->story->closedBy;?></td>
             <td><?php echo html::select('closedBy', $users, $story->closedBy, 'class="select-1"');?></td>
