@@ -11,7 +11,7 @@
  */
 class testtask extends control
 {
-    private $products = array();
+    public $products = array();
 
     /**
      * Construct function, load product module, assign products to view auto.

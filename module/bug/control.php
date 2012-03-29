@@ -11,7 +11,7 @@
  */
 class bug extends control
 {
-    private $products = array();
+    public $products = array();
 
     /**
      * Construct function, load some modules auto.

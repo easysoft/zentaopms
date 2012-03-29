@@ -11,7 +11,7 @@
  */
 class testcase extends control
 {
-    private $products = array();
+    public $products = array();
 
     /**
      * Construct function, load product, tree, user auto.

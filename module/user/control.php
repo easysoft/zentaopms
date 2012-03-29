@@ -11,7 +11,7 @@
  */
 class user extends control
 {
-    private $referer;
+    public $referer;
 
     /**
      * Construct 
