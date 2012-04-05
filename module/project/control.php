@@ -10,7 +10,7 @@
  */
 class project extends control
 {
-    private $projects;
+    public $projects;
 
     /**
      * Construct function, Set projects.
