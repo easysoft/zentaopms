@@ -11,13 +11,14 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+ <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <form method='post' target='hiddenwin'>
   <table class='table-1'> 
     <caption><?php echo $lang->todo->create;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->todo->date;?></th>
-      <td><?php echo html::select('date', $dates, $date, 'class=select-3');?></td>
+      <td><?php echo html::input('date',' ',"class='select-3 date'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->type;?></th>
