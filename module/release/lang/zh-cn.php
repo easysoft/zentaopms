@@ -20,7 +20,7 @@ $lang->release->confirmDelete = "您确认删除该release吗？";
 
 $lang->release->id        = 'ID';
 $lang->release->product   = '产品';
-$lang->release->build     = 'Build';
+$lang->release->build     = '版本';
 $lang->release->name      = '发布名称';
 $lang->release->date      = '发布日期';
 $lang->release->desc      = '描述';

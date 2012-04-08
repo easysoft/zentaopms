@@ -92,7 +92,7 @@ $lang->searchObjects['testcase']    = 'C:用例';
 $lang->searchObjects['project']     = 'P:项目';
 $lang->searchObjects['product']     = 'P:产品';
 $lang->searchObjects['user']        = 'U:用户';
-$lang->searchObjects['build']       = 'B:Build';
+$lang->searchObjects['build']       = 'B:版本';
 $lang->searchObjects['release']     = 'R:发布';
 $lang->searchObjects['productplan'] = 'P:产品计划';
 $lang->searchObjects['testtask']    = 'T:测试任务';
@@ -153,7 +153,7 @@ $lang->project->menu->task      = array('link' => '任务|project|task|projectID
 $lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '动态|project|dynamic|projectID=%s';
-$lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->testtask  = '测试申请|project|testtask|projectID=%s';
 $lang->project->menu->burn      = '燃尽图|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');

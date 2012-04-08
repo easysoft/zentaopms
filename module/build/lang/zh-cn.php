@@ -9,21 +9,21 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->build->common    = 'Build';
-$lang->build->create    = "创建Build";
-$lang->build->edit      = "编辑Build";
-$lang->build->delete    = "删除Build";
-$lang->build->view      = "Build详情";
-$lang->build->ajaxGetProductBuilds = '接口:产品Build列表';
-$lang->build->ajaxGetProjectBuilds = '接口:项目Build列表';
+$lang->build->common    = "Build";
+$lang->build->create    = "创建版本";
+$lang->build->edit      = "编辑版本";
+$lang->build->delete    = "删除版本";
+$lang->build->view      = "版本详情";
+$lang->build->ajaxGetProductBuilds = '接口:产品版本列表';
+$lang->build->ajaxGetProjectBuilds = '接口:项目版本列表';
 
-$lang->build->confirmDelete = "您确认删除该build吗？";
+$lang->build->confirmDelete = "您确认删除该版本吗？";
 
 $lang->build->id        = 'ID';
 $lang->build->product   = '产品';
 $lang->build->project   = '项目';
 $lang->build->name      = '名称编号';
-$lang->build->date      = 'Build日期';
+$lang->build->date      = '打包日期';
 $lang->build->builder   = '构建者';
 $lang->build->scmPath   = '源代码地址';
 $lang->build->filePath  = '存储地址';
