@@ -55,7 +55,7 @@ class productplanModel extends model
         return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq((int)$product)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($expired = 'unexpired')
+            ->beginIF($expired == 'unexpired')
             ->andWhere('end')->gt($date)
             ->fi()
             ->orderBy('begin')->fetchPairs();
