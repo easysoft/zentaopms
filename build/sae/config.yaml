@@ -1,7 +1,7 @@
 name: zentao
 version: 1
 cron:
-  - description: cron test
+  - description: cron
     url: project-computeburn-admin.html
     schedule: every day of month 00:00
     timezone: Beijing
@@ -15,4 +15,3 @@ handle:
   - expire: if(path ~ "\.png$") time 360000
   - expire: if(path ~ "\.ico$") time 360000
   - expire: if(path ~ "\.jpg$") time 360000
-
