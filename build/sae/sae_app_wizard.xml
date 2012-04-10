@@ -1,0 +1,47 @@
+<appwizard>
+    <introduction> 
+        <name>禅道项目管理软件SAE版本</name>
+        <author>青岛易软天创网络科技有限公司</author>
+        <icon>default_app_icon</icon>
+        <homepage>http://www.zentao.net/</homepage>
+        <description>
+        <![CDATA[
+        <p>禅道项目管理软件(ZenTaoPMS)是一款国产的，基于LGPL协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。</p>
+        ]]>
+        </description>
+    </introduction>
+    <platform> 
+        <services> 
+            <service name="zentao"  params="禅道数据存储">Storage</service>
+            <service size="12M">Memcache</service>
+            <service>Mysql</service> 
+        </services>
+        <appconfig> 
+            <tpl>
+            <![CDATA[
+name: <<appname>>
+version: <<version>>
+cron:
+  - description: cron
+    url: project-computeburn-admin.html
+    schedule: every day of month 00:00
+    timezone: Beijing
+handle:
+  - rewrite: if(!is_dir() && !is_file()) goto "index.php/%{REQUEST_URI}"
+  - compress: if(out_header["Content-Type"] ~ "text") compress
+  - compress: if(out_header["Content-Type"] ~ "javascript") compress
+  - expire: if(path ~ "\.js$") time 360000
+  - expire: if(path ~ "\.css$") time 360000
+  - expire: if(path ~ "\.gif$") time 360000
+  - expire: if(path ~ "\.png$") time 360000
+  - expire: if(path ~ "\.ico$") time 360000
+  - expire: if(path ~ "\.jpg$") time 360000
+            ]]>
+            </tpl>
+        </appconfig>
+    </platform>
+    <code> 
+    <initScript>index.php</initScript>
+    </code>
+</appwizard>
+
