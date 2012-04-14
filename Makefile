@@ -2,6 +2,7 @@ VERSION=$(shell head -n 1 VERSION)
 
 all: tgz
 sae: tgz build4sae
+edu: tgz build4edu
 linux: tgz build4linux
 
 clean:
@@ -106,3 +107,12 @@ saas:
 	chmod 777 backup
 	chmod 777 -R tmp
 	chmod 777 -R www/data
+build4edu:	
+	unzip ZenTaoPMS.$(VERSION).zip
+	rm -fr ZenTaoPMS.$(VERSION).zip
+	# get the extension files.
+	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/edu
+	cp -fr edu/* zentaopms/
+	# create the package.
+	zip -rm -9 ../ZenTaoPMS.$(VERSION).edu.zip zentaopms
+	rm -fr edu
