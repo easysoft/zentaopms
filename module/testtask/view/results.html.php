@@ -23,6 +23,7 @@
     <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
     <th class='w-p40'><?php echo $lang->testcase->stepDesc;?></th>
     <th class='w-p20'><?php echo $lang->testcase->stepExpect;?></th>
+    <th><?php echo $lang->testtask->build;?></th>
     <th><?php echo $lang->testcase->result;?></th>
     <th class='w-p20'><?php echo $lang->testcase->real;?></th>
   </tr>
