@@ -114,5 +114,5 @@ build4edu:
 	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/edu
 	cp -fr edu/* zentaopms/
 	# create the package.
-	zip -rm -9 ../ZenTaoPMS.$(VERSION).edu.zip zentaopms
+	zip -rm -9 ZenTaoPMS.$(VERSION).edu.zip zentaopms
 	rm -fr edu
