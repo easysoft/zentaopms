@@ -110,7 +110,7 @@
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->task->finishedBy;?></th>
-            <td><?php echo html::select('finishedBy', $users, $task->finishedBy, 'class="select-1"');?></td>
+            <td><?php echo html::select('assignedTo', $members, $task->assignedTo, 'class=select-1');?></td>
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->task->finishedDate;?></th>
