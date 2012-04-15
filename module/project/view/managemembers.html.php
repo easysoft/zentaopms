@@ -43,9 +43,9 @@
     <tr>
       <td><?php echo html::select('accounts[]', $users, '', 'class=select-2');?></td>
       <td><input type='text' name='roles[]' id='role<?php echo ($key + $i);?>' class='text-2' /></td>
-      <td><input type='text'   name='days[]'  id='days<?php echo  ($key + $i);?>' class='text-2' /></td>
+      <td><input type='text'   name='days[]'  id='days<?php echo  ($key + $i);?>' class='text-2' value='<?php echo $project->days?>'/></td>
       <td>
-        <input type='text'   name='hours[]' id='hours<?php echo ($key + $i);?>' class='text-2' />
+        <input type='text'   name='hours[]' id='hours<?php echo ($key + $i);?>' class='text-2' value='7' />
         <input type='hidden' name='modes[]' value='create' />
       </td>
     </tr>
