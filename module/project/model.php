@@ -452,7 +452,7 @@ class projectModel extends model
             ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
             ->fetch();
-        $project->days          = $project->days ? "$project->days"+1: '';
+        $project->days          = $project->days ? $project->days : '';
         $project->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('project')->eq($project->id)->fetch('totalHours');
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
