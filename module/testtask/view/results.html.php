@@ -18,12 +18,14 @@
 </fieldset>
 <?php foreach($results as $result):?>
 <table class='table-1'>
-<caption>RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->lastRunner] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></caption>
+  <caption>
+    <div class='f-left'>RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->lastRunner] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></div>
+    <div class='f-right'><?php echo $lang->testtask->build . ':#' . $result->version;?></div>
+  </caption>
   <tr>
     <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
     <th class='w-p40'><?php echo $lang->testcase->stepDesc;?></th>
     <th class='w-p20'><?php echo $lang->testcase->stepExpect;?></th>
-    <th><?php echo $lang->testtask->build;?></th>
     <th><?php echo $lang->testcase->result;?></th>
     <th class='w-p20'><?php echo $lang->testcase->real;?></th>
   </tr>
