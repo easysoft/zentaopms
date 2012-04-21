@@ -177,12 +177,12 @@ $lang->story->form->desc      = 'Description and standards, what stories? How to
 $lang->story->form->resource  = 'Allocation of resources, who completed? How long does it take?';
 $lang->story->form->file      = 'Attachments, if the demand for related documents, please click here to upload.';
 
-$lang->story->action->reviewed            = array('main' => '$date, Reviewed by <strong>$actor</strong>, result is <strong>$extra</strong>.', 'extra' => $lang->story->reviewResultList);
-$lang->story->action->closed              = array('main' => '$date, Closed by <strong>$actor</strong>, reason is <strong>$extra</strong>.', 'extra' => $lang->story->reasonList);
-$lang->story->action->linked2plan         = array('main' => '$date, Linked to plan <strong>$extra</strong> by <strong>$actor</strong>.'); 
-$lang->story->action->unlinkedfromplan    = array('main' => '$date, Removed from <stong>$extra></strong> by <strong>$actor</strong>'); 
-$lang->story->action->linked2project      = array('main' => '$date, Linked to project <strong>$extra</strong> by <strong>$actor</strong>.'); 
-$lang->story->action->unlinkedfromproject = array('main' => '$date, Removed from project <strontg>$extra</strong> by <strong>$actor</strong>.');
+$lang->story->action->reviewed            = array('main' => '$date, reviewed by <strong>$actor</strong>, result is <strong>$extra</strong>.', 'extra' => $lang->story->reviewResultList);
+$lang->story->action->closed              = array('main' => '$date, closed by <strong>$actor</strong>, reason is <strong>$extra</strong>.', 'extra' => $lang->story->reasonList);
+$lang->story->action->linked2plan         = array('main' => '$date, linked to plan <strong>$extra</strong> by <strong>$actor</strong>.'); 
+$lang->story->action->unlinkedfromplan    = array('main' => '$date, removed from <stong>$extra></strong> by <strong>$actor</strong>'); 
+$lang->story->action->linked2project      = array('main' => '$date, linked to project <strong>$extra</strong> by <strong>$actor</strong>.'); 
+$lang->story->action->unlinkedfromproject = array('main' => '$date, removed from project <strontg>$extra</strong> by <strong>$actor</strong>.');
 
 /* Report*/
 $lang->story->report->common        = 'Report';
