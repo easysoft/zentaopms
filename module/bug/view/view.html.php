@@ -262,7 +262,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->toTask;?></td>
-            <td><?php if($bug->toTask != 0) echo html::a($this->createLink('bug', 'view', "bugID=$bug->toTask"), "#$bug->toTask $bug->toTaskTitle", '_blank');?></td>
+            <td><?php if($bug->toTask != 0) echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask"), "#$bug->toTask $bug->toTaskTitle", '_blank');?></td>
           </tr>
         </table>
       </fieldset>
