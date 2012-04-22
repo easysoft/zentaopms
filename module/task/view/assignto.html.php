@@ -19,6 +19,10 @@
       <td><?php echo html::select('assignedTo', $users, '', "class='text-3'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->task->left;?></th>
+      <td><?php echo html::input('left', $task->left, "class='text-3'");?></td>
+    </tr>  
+    <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
     </tr>

@@ -215,11 +215,13 @@ class taskModel extends model
     {
         $now = helper::now();
         $oldTask = $this->getById($taskID);
-        $this->dao->update(TABLE_TASK)
-            ->set('assignedTo')->eq($this->post->assignedTo)
-            ->set('lastEditedBy')->eq($this->app->user->account)
-            ->set('lastEditedDate')->eq($now)
-            ->where('id')->eq($taskID)->exec();
+        $task = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_TASK)->data($task) ->where('id')->eq($taskID)->exec(); 
 
         $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
         $this->dao->insert(TABLE_HISTORY)
