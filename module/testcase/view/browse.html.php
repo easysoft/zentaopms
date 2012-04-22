@@ -54,7 +54,7 @@ var moduleID   = '<?php echo $moduleID;?>';
           <tr class='colhead'>
             <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
             <th class='w-pri'><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
-            <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
+            <th class='w-p20'><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
             <?php if($browseType == 'needconfirm'):?>
             <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->testcase->story);?></th>
             <th class='w-50px'><?php echo $lang->actions;?></th>
@@ -62,7 +62,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-type'>  <?php common::printOrderLink('type',      $orderBy, $vars, $lang->typeAB);?></th>
             <th class='w-user'>  <?php common::printOrderLink('openedBy',  $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='w-80px'>  <?php common::printOrderLink('lastRunner',  $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-            <th class='w-80px'>  <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+            <th><?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
             <th class='w-80px'>  <?php common::printOrderLink('lastRunResult',$orderBy, $vars, $lang->testtask->lastRunResult);?></th>
             <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
             <th class='w-220px {sorter:false}'><?php echo $lang->actions;?></th>
