@@ -19,7 +19,7 @@
       <?php include './blockprojects.html.php';?> <br />
       <?php include './blockproducts.html.php';?>
     </td>
-    <td width='33%'><?php include './blockdynamic.html.php';?></td>
+    <td width='33%'><?php if(common::hasPriv('company', 'dynamic')) include './blockdynamic.html.php';?></td>
   </tr>
 </table>
 <table class='cont' id='row2'>
