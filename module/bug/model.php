@@ -811,6 +811,7 @@ class bugModel extends model
      */
     public function getByAssigntonull($productID, $projects, $orderBy, $pager)
     {
+        
         return $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->eq($productID)
             ->andWhere('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)

@@ -35,6 +35,9 @@
       <th><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
       <th><?php echo $lang->product->plans;?></th>
       <th><?php echo $lang->product->releases;?></th>
+      <th><?php echo $lang->product->bugs;?></th>
+      <th><?php echo $lang->bug->unResolved;?></th>
+      <th><?php echo $lang->bug->assignToNull;?></th>
     </tr>
     <?php foreach($productStats as $product):?>
     <tr class='a-center' style='height:30px'>
@@ -45,6 +48,9 @@
       <td><?php echo $product->stories['closed']?></td>
       <td><?php echo $product->plans?></td>
       <td><?php echo $product->releases?></td>
+      <td><?php echo $product->bugs?></td>
+      <td><?php echo $product->unResolved;?></td>
+      <td><?php echo $product->assignToNull;?></td>
     </tr>
     <?php endforeach;?>
   </table>

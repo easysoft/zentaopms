@@ -418,6 +418,7 @@ class productModel extends model
     {
         $this->loadModel('report');
         $this->loadModel('story');
+        $this->loadModel('bug');
 
         $products = $this->getList(',normal');
         $stats    = array();
@@ -460,7 +461,27 @@ class productModel extends model
             ->andWhere('product')->in(array_keys($products))
             ->groupBy('product')
             ->fetchPairs();
-        
+
+        $bugs = $this->dao->select('product,count(*) AS conut')
+          ->from(TABLE_BUG)
+          ->where('deleted')->eq(0)
+          ->andWhere('product')->in(array_keys($products))
+          ->groupBy('product')
+          ->fetchPairs(); 
+       $unResolved  = $this->dao->select('product,count(*) AS count')
+              ->from(TABLE_BUG)
+              ->where('status')->eq('active')
+              ->andwhere('deleted')->eq(0)
+              ->andWhere('product')->in(array_keys($products))
+              ->groupBy('product')
+              ->fetchPairs();
+        $assignToNull = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+             ->where('AssignedTo')->eq('')
+            ->andwhere('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
+            ->groupBy('product')
+            ->fetchPairs();
         foreach($products as $key => $product)
         {
             if($this->checkPriv($product))
@@ -471,6 +492,9 @@ class productModel extends model
                     $product->plans   = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
                     $product->releases= isset($releases[$product->id]) ? $releases[$product->id] : 0;
 
+                    $product->bugs = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
+                    $product->unResolved = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
+                    $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
                     $stats[] = $product;
                 }
             }
