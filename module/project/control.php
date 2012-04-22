@@ -802,10 +802,6 @@ class project extends control
         $projects = array('' => '') + $this->projects;
         $project  = $this->project->getById($projectID);
         $managers = $this->project->getDefaultManagers($projectID);
-        if(empty($project->PO)) $project->PO = $managers->PO;
-        if(empty($project->PM)) $project->PM = $this->app->user->account;
-        if(empty($project->QM)) $project->QM = $managers->QM;
-        if(empty($project->RM)) $project->RM = $managers->RM;
 
         /* Remove current project from the projects. */
         unset($projects[$projectID]);
