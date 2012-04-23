@@ -12,6 +12,7 @@
 $lang->todo->common       = 'TODO';
 $lang->todo->index        = "todo一覽";
 $lang->todo->create       = "新增TODO";
+$lang->todo->batchCreate  = "批量添加";
 $lang->todo->edit         = "更新TODO";
 $lang->todo->view         = "TODO詳情";
 $lang->todo->viewAB       = "詳情";

@@ -12,6 +12,7 @@
 $lang->todo->common       = 'TODO';
 $lang->todo->index        = "Index";
 $lang->todo->create       = "Create";
+$lang->todo->batchCreate  = "Batch create";
 $lang->todo->edit         = "Edit";
 $lang->todo->view         = "Info";
 $lang->todo->viewAB       = "Info";
