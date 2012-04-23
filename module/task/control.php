@@ -87,7 +87,7 @@ class task extends control
     }
 
     /**
-     * Create a task.
+     * Batch create task.
      * 
      * @param  int    $projectID 
      * @param  int    $storyID 
