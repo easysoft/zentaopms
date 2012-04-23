@@ -27,12 +27,13 @@ $lang->resource->my->dynamic     = 'dynamic';
 $lang->resource->my->editProfile = 'editProfile';
 
 /* Todo. */
-$lang->resource->todo->create    = 'create';
-$lang->resource->todo->edit      = 'edit';
-$lang->resource->todo->view      = 'view';
-$lang->resource->todo->delete    = 'delete';
-$lang->resource->todo->export    = 'export';
-$lang->resource->todo->mark      = 'mark';
+$lang->resource->todo->create       = 'create';
+$lang->resource->todo->batchCreate  = 'batchCreate';
+$lang->resource->todo->edit         = 'edit';
+$lang->resource->todo->view         = 'view';
+$lang->resource->todo->delete       = 'delete';
+$lang->resource->todo->export       = 'export';
+$lang->resource->todo->mark         = 'mark';
 $lang->resource->todo->import2Today = 'import2Today';
 
 /* Product. */
