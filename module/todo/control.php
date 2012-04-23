@@ -58,6 +58,37 @@ class todo extends control
     }
 
     /**
+     * Batch create todo
+     * 
+     * @param  string $date 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
+    public function batchCreate($date = 'today', $account = '')
+    {
+        if($date == 'today') $this->view->date = helper::today();
+        $todoLink = $this->createLink('my', 'todo', "date=all");
+
+        if(!empty($_POST))
+        {
+            $this->todo->batchCreate();
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            /* Locate the browser. */
+            die(js::locate($todoLink, 'parent'));
+        }
+
+        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
+        $position[]      = $this->lang->todo->create;
+
+        $this->view->header   = $header;
+        $this->view->position = $position;
+
+        $this->display();
+    }
+
+    /**
      * Edit a todo.
      * 
      * @param  int    $todoID 

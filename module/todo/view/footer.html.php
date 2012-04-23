@@ -1,8 +1,17 @@
 <script language='Javascript'>
 account='<?php echo $app->user->account;?>';
-customHtml = $('#nameBox').html();
 function loadList(type)
 {
+    if(arguments[1])
+    {
+        divID = '#nameBox' +  arguments[1];
+        customHtml = $('#nameBox' + arguments[1]).html();
+    }
+    else
+    {
+        divID = '#nameBox';
+        customHtml = $('#nameBox').html();
+    }
     if(type == 'bug')
     {
         link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account);
@@ -14,11 +23,11 @@ function loadList(type)
    
     if(type == 'bug' || type == 'task')
     {
-        $('#nameBox').load(link);
+        $(divID).load(link);
     }
      else if(type == 'custom')
     {
-        $('#nameBox').html(customHtml);
+        $(divID).html(customHtml);
     }
 }
 

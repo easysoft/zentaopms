@@ -48,6 +48,56 @@ class todoModel extends model
     }
 
     /**
+     * Create batch todo
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchCreate()
+    {
+        $now = helper::now();
+        $todos = fixer::input('post') ->get();
+
+        for($i = 0; $i < $this->config->todo->batchCreate; $i++)
+        {
+            if($todos->date[$i] != '' and $todos->name[$i] != '')
+            {
+                $data[$i]->account = $this->app->user->account;
+                $data[$i]->date    = $todos->date[$i];
+                $data[$i]->begin   = $todos->begin[$i];
+                $data[$i]->end     = $todos->end[$i];
+                $data[$i]->type    = $todos->type[$i];
+                $data[$i]->idvalue = 0;
+                $data[$i]->name    = $todos->name[$i];
+                $data[$i]->desc    = $todos->desc[$i];
+                $data[$i]->status  = "wait";
+                $data[$i]->private = 0;
+
+                $this->dao->insert(TABLE_TODO)->data($data[$i])
+                    ->autoCheck()
+                    ->checkIF($data->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
+                    ->checkIF($data->type == 'bug'  and $data->idvalue == 0, 'idvalue', 'notempty')
+                    ->checkIF($data->type == 'task' and $data->idvalue == 0, 'idvalue', 'notempty')
+                    ->exec();
+
+                if(dao::isError()) 
+                {
+                    echo js::error(dao::getError());
+                    die(js::reload('parent'));
+                }
+            }
+            else
+            {
+                unset($todos->date[$i]);
+                unset($todos->type[$i]);
+                unset($todos->pri[$i]);
+                unset($todos->name[$i]);
+                unset($todos->desc[$i]);
+            }
+        }
+    }
+
+    /**
      * update a todo.
      * 
      * @param  int    $todoID 
