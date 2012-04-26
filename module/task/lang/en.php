@@ -43,6 +43,7 @@ $lang->task->left           = 'Left';
 $lang->task->leftAB         = 'Left';
 $lang->task->consumed       = 'Consumed';
 $lang->task->consumedAB     = 'Use';
+$lang->task->hour           = 'Hour';
 $lang->task->deadline       = 'Deadline';
 $lang->task->deadlineAB     = 'Deadline';
 $lang->task->status         = 'Status';

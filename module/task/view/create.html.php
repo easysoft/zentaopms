@@ -56,7 +56,7 @@ $(function(){
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-      <td><?php echo html::input('estimate', '', "class='text-3'");?></td>
+      <td><?php echo html::input('estimate', '', "class='text-3'") . $lang->task->hour;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->deadline;?></th>

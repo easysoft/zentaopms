@@ -20,7 +20,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->left;?></th>
-      <td><?php echo html::input('left', $task->left, "class='text-3'");?></td>
+      <td><?php echo html::input('left', $task->left, "class='text-3'") . $lang->task->hour;?></td>
     </tr>  
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>

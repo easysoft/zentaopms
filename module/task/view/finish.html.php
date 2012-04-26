@@ -16,7 +16,7 @@
     <caption><?php echo $task->name;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-      <td><?php echo html::input('consumed', $task->consumed, "class='text-3'");?></td>
+      <td><?php echo html::input('consumed', $task->consumed, "class='text-3'") . $lang->task->hour;?></td>
     </tr>  
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>
