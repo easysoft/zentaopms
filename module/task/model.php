@@ -221,7 +221,10 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_TASK)->data($task) ->where('id')->eq($taskID)->exec(); 
+        $this->dao->update(TABLE_TASK)->data($task)
+            ->autoCheck()
+            ->check('`left`', 'float')
+            ->where('id')->eq($taskID)->exec(); 
 
         $actionID = $this->loadModel('action')->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
         $this->dao->insert(TABLE_HISTORY)
