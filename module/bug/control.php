@@ -129,6 +129,14 @@ class bug extends control
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->bug->search);
 
         $users = $this->user->getPairs('noletter');
+
+        /* Process the openedBuild and resolvedBuild fields. */
+        $builds = $this->loadModel('build')->getProductBuildPairs($productID);
+        foreach($bugs as $key => $bug)
+        {
+            $bugs[$key]->openedBuild   = $builds[$bug->openedBuild];
+            $bugs[$key]->resolvedBuild = $builds[$bug->resolvedBuild];
+        }
        
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
         $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
