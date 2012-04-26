@@ -47,7 +47,7 @@
     <?php $storyCount ++;?>
     <?php endforeach;?>
     </tbody>
-    <tfoot><tr><td colspan='8' class='f-14px'><?php print($storyCount? html::submitButton() : $lang->project->whyNoStories);?></td></tr></tfoot>
+    <tfoot><tr><td colspan='8' class='f-14px'><input type='checkbox' onclick='checkall(this);'><?php print($storyCount? ($lang->selectAll . html::submitButton()) : $lang->project->whyNoStories);?></td></tr></tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
