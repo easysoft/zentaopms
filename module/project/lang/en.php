@@ -21,6 +21,7 @@ $lang->project->code          = 'Code';
 $lang->project->begin         = 'Begin';
 $lang->project->end           = 'End';
 $lang->project->days          = 'Workdays';
+$lang->project->day           = 'day';
 $lang->project->status        = 'Status';
 $lang->project->statge        = 'Stage';
 $lang->project->pri           = 'Priority';

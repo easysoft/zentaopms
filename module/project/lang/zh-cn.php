@@ -21,6 +21,7 @@ $lang->project->code          = '项目代号';
 $lang->project->begin         = '开始日期';
 $lang->project->end           = '结束日期';
 $lang->project->days          = '可用工作日';
+$lang->project->day           = '天';
 $lang->project->status        = '项目状态';
 $lang->project->statge        = '所处阶段';
 $lang->project->pri           = '优先级';
