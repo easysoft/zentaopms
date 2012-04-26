@@ -34,7 +34,7 @@ $config->project->search['fields']['canceledDate']   = $lang->task->canceledDate
 $config->project->search['fields']['closedBy']       = $lang->task->closedBy;
 $config->project->search['fields']['closedDate']     = $lang->task->closedDate;
 $config->project->search['fields']['closedReason']   = $lang->task->closedReason;
-$config->project->search['fields']['lastEdited']     = $lang->task->lastEdited;
+$config->project->search['fields']['lastEditedBy']   = $lang->task->lastEditedBy;
 
 $config->project->search['params']['name']          = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->project->search['params']['desc']          = array('operator' => 'include', 'control' => 'input',  'values' => '');
@@ -43,7 +43,7 @@ $config->project->search['params']['assignedTo']    = array('operator' => '=',  
 $config->project->search['params']['openedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->project->search['params']['closedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->project->search['params']['cancelBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->project->search['params']['lastEdited']    = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->project->search['params']['lastEditedBy']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->project->search['params']['finishedBy']    = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->project->search['params']['mailto']        = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->project->search['params']['status']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->statusList);
