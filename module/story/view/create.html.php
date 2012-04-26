@@ -48,7 +48,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->estimate;?></th>
-      <td><?php echo html::input('estimate', $estimate, "class='text-3'");?></td>
+      <td><?php echo html::input('estimate', $estimate, "class='text-3'") . $lang->story->hour;?></td>
     </tr> 
     <tr>
       <th class='rowhead'><?php echo $lang->story->reviewedBy;?></th>

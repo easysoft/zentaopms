@@ -41,6 +41,7 @@ $lang->story->verify         = 'Verify';
 $lang->story->type           = 'Type ';
 $lang->story->pri            = 'Priority';
 $lang->story->estimate       = 'Estimate';
+$lang->story->hour           = 'Hour';
 $lang->story->estimateAB     = 'Estimate';
 $lang->story->status         = 'Status';
 $lang->story->stage          = 'Stage';

@@ -73,7 +73,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->estimate;?></td>
-            <td><?php echo html::input('estimate', $story->estimate, 'class=text-1');?></td>
+            <td><?php echo html::input('estimate', $story->estimate, 'class=estimate') . $lang->story->hour;?></td>
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->story->keywords;?></td>

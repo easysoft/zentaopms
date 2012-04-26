@@ -41,6 +41,7 @@ $lang->story->verify         = '验收标准';
 $lang->story->type           = '需求类型 ';
 $lang->story->pri            = '优先级';
 $lang->story->estimate       = '预计工时';
+$lang->story->hour           = '小时';
 $lang->story->estimateAB     = '预计';
 $lang->story->status         = '当前状态';
 $lang->story->stage          = '所处阶段';
