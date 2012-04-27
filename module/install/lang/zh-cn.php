@@ -105,6 +105,6 @@ $lang->install->errorEmptyPassword = '密码不能为空';
 $lang->install->success = "安装成功";
 
 $lang->install->joinZentao = <<<EOT
-您已经成功安装禅道管理系统%s，<strong class='red'>请及时删除install.php</strong>。现在您可以直接<a href='index.php'>登录禅道管理系统</a>，设置用户及分组！
+您已经成功安装禅道管理系统%s，<strong class='red'>请及时删除install.php</strong>。现在您可以直接<input type='button' value='登录禅道管理系统' onclick='location.href="index.php"'>，设置用户及分组！
 <i>友情提示：为了您及时获得禅道的最新动态，请在禅道社区(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>)进行登记。</i>
 EOT;
