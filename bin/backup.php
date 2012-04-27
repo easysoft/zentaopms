@@ -11,8 +11,8 @@ if(!isset($config->mysqldumpRoot))
 {
     echo "Please set the mysqldumpRoot in my.php:\n";
     echo "Just like: \n";
-    echo '$config->mysqldumpRoot = \'/user/bin/mysqldump\' for linux' . "\n";
-    echo '$config->mysqldumpRoot = \'D:\xampp\mysql\bin\' for windows';
+    echo '$config->mysqldumpRoot = \'/usr/bin/mysqldump\'; for linux' . "\n";
+    echo '$config->mysqldumpRoot = \'D:\xampp\mysql\bin\'; for windows';
     exit;
 }
 
@@ -32,25 +32,31 @@ else
     $command = "{$config->mysqldumpRoot} -u{$config->db->user} {$config->db->name} > {$dbSqlFile}";
 }
 echo "Backuping....\n";
-exec($command);
-
-$dbZipFile = str_replace("sql", "zip", $dbSqlFile);
-$archive = new PclZip($dbZipFile);
-$v_list = $archive->create($dbSqlFile);
-if ($v_list == 0) 
+system($command, $returnVar);
+if(!$returnVar)
 {
-    die("Error : ".$archive->errorInfo(true));
+    $dbZipFile = str_replace("sql", "zip", $dbSqlFile);
+    $archive = new PclZip($dbZipFile);
+    $v_list = $archive->create($dbSqlFile);
+    if ($v_list == 0) 
+    {
+        die("Error : ".$archive->errorInfo(true));
+    }
+    else
+    {
+        unlink($dbSqlFile);
+        echo "Backup DataBase Successfully!\n";
+    }
 }
 else
 {
-    unlink($dbSqlFile);
-    echo "Backup DataBase Successfully!\n";
+        echo "Failed to Backup DataBase!\n";
 }
 
 /* Backup the data. */
 $dataFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
 $archive = new PclZip($dataFile);
-echo "Backuping....\n";
+echo "\nBackuping....\n";
 $v_list = $archive->create(dirname(dirname(__FILE__)) . "/www/data");
 if ($v_list == 0) 
 {
