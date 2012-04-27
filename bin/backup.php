@@ -12,7 +12,7 @@ if(!isset($config->mysqldumpRoot))
     echo "Please set the mysqldumpRoot in my.php:\n";
     echo "Just like: \n";
     echo '$config->mysqldumpRoot = \'/usr/bin/mysqldump\'; for linux' . "\n";
-    echo '$config->mysqldumpRoot = \'D:\xampp\mysql\bin\'; for windows';
+    echo '$config->mysqldumpRoot = \'D:\xampp\mysql\bin\'; for windows' . "\n";
     exit;
 }
 
