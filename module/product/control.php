@@ -11,7 +11,7 @@
  */
 class product extends control
 {
-    private $products = array();
+    public $products = array();
 
     /**
      * Construct function.
