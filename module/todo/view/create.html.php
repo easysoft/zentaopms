@@ -18,7 +18,7 @@
     <caption><?php echo $lang->todo->create;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->todo->date;?></th>
-      <td><?php echo html::input('date',' ',"class='select-3 date'");?></td>
+      <td><?php echo html::input('date', $date, "class='select-3 date'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->type;?></th>
