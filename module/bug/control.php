@@ -134,8 +134,8 @@ class bug extends control
         $builds = $this->loadModel('build')->getProductBuildPairs($productID);
         foreach($bugs as $key => $bug)
         {
-            $bugs[$key]->openedBuild   = $builds[$bug->openedBuild];
-            $bugs[$key]->resolvedBuild = $builds[$bug->resolvedBuild];
+            $bugs[$key]->openedBuild   = isset($builds[$bug->openedBuild]) ? ($builds[$bug->openedBuild]) : '';
+            $bugs[$key]->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : '';
         }
        
         $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
