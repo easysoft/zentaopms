@@ -32,7 +32,6 @@ $lang->group->users    = 'Users';
 $lang->group->module   = 'Module';
 $lang->group->method   = 'Method';
 $lang->group->priv     = 'Priviledge';
-$lang->group->checkall = 'Select all';
 $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group users';
 $lang->group->outside  = 'Other users';

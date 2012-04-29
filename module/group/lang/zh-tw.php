@@ -32,7 +32,6 @@ $lang->group->users    = '用戶列表';
 $lang->group->module   = '模組';
 $lang->group->method   = '方法';
 $lang->group->priv     = '權限';
-$lang->group->checkall = '全選';
 $lang->group->option   = '選項';
 $lang->group->inside   = '組內用戶';
 $lang->group->outside  = '組外用戶';
