@@ -35,7 +35,7 @@ if($config->requestType == 'PATH_INFO')
 else
 {
     parse_str($request['query'], $_GET);
-    $_SERVER['SCRIPT_NAME'] = $_SERVER['PATH_INFO'] . 'index.php';
+    $_SERVER['SCRIPT_NAME'] = $_SERVER['HTTP_HOST'] . 'index.php';
     $_SERVER['REQUEST_URI'] = isset($request['query']) ? $request['query'] : '';
 }
 
