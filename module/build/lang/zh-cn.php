@@ -33,3 +33,6 @@ $lang->build->linkStories        = '相关需求';
 $lang->build->linkBugs           = '相关Bug';
 $lang->build->stories            = '已关联需求';
 $lang->build->bugs               = '已关联Bug';
+
+$lang->build->finishStories = '本次共完成需求%s个';
+$lang->build->resolvedBugs  = '本次共解决Bug%s个';
