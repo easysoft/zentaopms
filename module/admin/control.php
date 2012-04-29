@@ -99,4 +99,21 @@ class admin extends control
 		$this->view->sn = $this->loadModel('setting')->getItem('system', 'global', 'sn');
 		$this->display();
 	}
+
+    /**
+     * Repair all tables 
+     * 
+     * @access public
+     * @return void
+     */
+    public function checkDB()
+    {
+        $tables = $this->dbh->query('SHOW TABLES')->fetchAll();
+
+        foreach($tables as $table)
+        {
+            $result = $this->dbh->query("REPAIR TABLE `" . $table->Tables_in_zentao . "`")->fetch();
+            echo "Repairing TABLE: " . $result->Table . "\t" . $result->Msg_type . ":" . $result->Msg_text . "\n";
+        }
+    }
 }
