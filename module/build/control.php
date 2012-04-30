@@ -117,20 +117,6 @@ class build extends control
         if(!$build) die(js::error($this->lang->notFound) . js::locate('back'));
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchAll();
         $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->fetchAll();
-        $closedStories = $this->dao->select('count(*) AS number')
-            ->from(TABLE_STORY)
-            ->where('id')
-            ->in($build->stories)
-            ->andWhere('status')->eq('closed')
-            ->fetch();
-
-        $resolvedBugs = $this->dao->select('count(*) AS number')
-            ->from(TABLE_BUG)
-            ->where('id')
-            ->in($build->bugs)
-            ->andWhere('status')->eq('resolved')
-            ->fetch();
-
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
 
         /* Assign. */
@@ -140,9 +126,7 @@ class build extends control
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;
         $this->view->stories       = $stories;
-        $this->view->closedStories = $closedStories;
         $this->view->bugs          = $bugs;
-        $this->view->resolvedBugs  = $resolvedBugs;
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->display();
     }
