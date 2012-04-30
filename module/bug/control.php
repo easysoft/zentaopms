@@ -331,7 +331,7 @@ class bug extends control
     public function view($bugID)
     {
         /* Judge bug exits or not. */
-        $bug = $this->bug->getById($bugID);
+        $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Set menu. */

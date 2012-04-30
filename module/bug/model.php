@@ -87,10 +87,11 @@ class bugModel extends model
      * Get info of a bug.
      * 
      * @param  int    $bugID 
+     * @param  bool   $setImgSize
      * @access public
      * @return object
      */
-    public function getById($bugID)
+    public function getById($bugID, $setImgSize = false)
     {
         $bug = $this->dao->select('t1.*, t2.name AS projectName, t3.title AS storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, t4.name AS taskName')
             ->from(TABLE_BUG)->alias('t1')
@@ -99,8 +100,10 @@ class bugModel extends model
             ->leftJoin(TABLE_TASK)->alias('t4')->on('t1.task = t4.id')
             ->where('t1.id')->eq((int)$bugID)->fetch();
         if(!$bug) return false;
-        $bug->steps = $this->loadModel('file')->setImgSize($bug->steps);
+
+        if($setImgSize) $bug->steps = $this->loadModel('file')->setImgSize($bug->steps);
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
+
         if($bug->mailto)
         {
             $bug->mailto = ltrim(trim($bug->mailto), ',');  // Remove the first ,
@@ -108,12 +111,15 @@ class bugModel extends model
             $bug->mailto = rtrim($bug->mailto, ',') . ',';
             $bug->mailto = str_replace(',', ', ', $bug->mailto);
         }
+
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
         if($bug->case)         $bug->caseTitle         = $this->dao->findById($bug->case)->from(TABLE_CASE)->fields('title')->fetch('title');
         if($bug->linkBug)      $bug->linkBugTitles     = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->in($bug->linkBug)->fetchPairs();
         if($bug->toStory > 0)  $bug->toStoryTitle      = $this->dao->findById($bug->toStory)->from(TABLE_STORY)->fields('title')->fetch('title');
         if($bug->toTask > 0)   $bug->toTaskTitle       = $this->dao->findById($bug->toTask)->from(TABLE_TASK)->fields('name')->fetch('name');
+
         $bug->files = $this->loadModel('file')->getByObject('bug', $bugID);
+
         return $bug;
     }
 
