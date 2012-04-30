@@ -42,7 +42,8 @@ var moduleID   = '<?php echo $moduleID;?>';
     </td>
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
-      <form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'>
+      <?php $canBatchAssign = common::hasPriv('testtask', 'batchAssign');?>
+      <?php if($canBatchAssign):?><form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'><?php endif;?>
       <table class='table-1 tablesorter datatable mb-zero fixed'>
         <thead>
           <tr class='colhead'>
@@ -61,7 +62,7 @@ var moduleID   = '<?php echo $moduleID;?>';
         <tbody>
           <?php foreach($runs as $run):?>
           <tr class='a-center'>
-            <td class='a-left'><?php echo "<input type='checkbox' name='cases[]' value='$run->case' /> ";  printf('%03d', $run->case);?></td>
+            <td class='a-left'><?php if($canBatchAssign) echo "<input type='checkbox' name='cases[]' value='$run->case' /> ";  printf('%03d', $run->case);?></td>
             <td><?php echo $run->pri?></td>
             <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version"), $run->title, '_blank');?>
             </td>
@@ -82,19 +83,22 @@ var moduleID   = '<?php echo $moduleID;?>';
           </tr>
           <?php endforeach;?>
         </tbody>
+        <?php if($canBatchAssign):?>
+        <tfoot>
+          <tr>
+            <td colspan='9'>
+              <?php 
+              echo html::selectAll('selectall', $lang->selectAll);
+              echo html::selectReverse('selectreverse', $lang->selectReverse);
+              echo html::select('assignedTo', $users);
+              echo html::submitButton($lang->testtask->assign);
+              ?>
+            </td>
+          </tr>
+        <tfoot>
+        <?php endif;?>
       </table>
-      <table class='table-1'>
-        <tr>
-          <td><nobr><?php echo html::selectAll('selectall', $lang->selectAll) . html::selectReverse('selectreverse', $lang->selectReverse);?></nobr></td>
-          <td colspan='9'>
-            <?php
-            echo html::select('assignedTo', $users);
-            echo html::submitButton($lang->testtask->assign);
-            ?>
-          </td>
-        </tr>
-      </table>
-      </form>
+      <?php if($canBatchAssign) echo '</form>';?>
     </td>
   </tr>
 </table>
