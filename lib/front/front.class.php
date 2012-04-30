@@ -235,22 +235,25 @@ class html
 function checkAll(scope)
 { 
    if(scope)
-    {
+   {
         $('#' + scope + ' input').each(function() 
         {
             $(this).attr("checked", true)
         });
-    }
-   $('input').each(function() 
+   }
+   else
    {
-   $(this).attr("checked", true)
-   });
+        $('input').each(function() 
+        {
+            $(this).attr("checked", true)
+        });
+   }
 }
 </script>
 EOT;
         if($scope)
         {
-            $string .= "<span><input type='button' name='$name' value='$value' onclick='checkAll($scope)'";
+            $string .= "<span><input type='button' name='$name' value='$value' onclick='checkAll(\"$scope\")'";
         }
         else
         {
