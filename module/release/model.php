@@ -17,10 +17,11 @@ class releaseModel extends model
      * Get release by id.
      * 
      * @param  int    $releaseID 
+     * @param  bool   $setImgSize
      * @access public
      * @return object
      */
-    public function getByID($releaseID)
+    public function getByID($releaseID, $setImgSize = false)
     {
         $release = $this->dao->select('t1.*, t2.name as buildName, t3.name as productName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -29,7 +30,7 @@ class releaseModel extends model
             ->where('t1.id')->eq((int)$releaseID)
             ->orderBy('t1.id DESC')
             ->fetch();
-        $release->desc = $this->loadModel('file')->setImgSize($release->desc);
+        if($setImgSize) $release->desc = $this->loadModel('file')->setImgSize($release->desc);
         return $release;
     }
 
