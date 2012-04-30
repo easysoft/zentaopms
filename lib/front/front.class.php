@@ -220,6 +220,49 @@ class html
     }
 
     /**
+     * Create tags like "<input type='button' onclick='checkAll()'/>"
+     * 
+     * @param  string $name   the name of the button tag.
+     * @param  string $value  the value of the button tag.
+     * @param  string $scope  the scope of checkall.
+     * @param  string $attrib other attribs.
+     * @return string
+     */
+    static public function checkAll($name, $value, $scope = "", $attrib = "")
+    {
+        $string = <<<EOT
+<script type="text/javascript">
+function checkAll(scope)
+{ 
+   if(scope)
+    {
+        $('#' + scope + ' input').each(function() 
+        {
+            $(this).attr("checked", true)
+        });
+    }
+   $('input').each(function() 
+   {
+   $(this).attr("checked", true)
+   });
+}
+</script>
+EOT;
+        if($scope)
+        {
+            $string .= "<span><input type='button' name='$name' value='$value' onclick='checkAll($scope)'";
+        }
+        else
+        {
+            $string .= "<span><input type='button' name='$name' value='$value' onclick='checkAll()'";
+        }
+        $string .= $attrib;
+        $string .= " /> </span>\n";
+
+        return  $string;
+    }
+
+    /**
      * Create tags like "<input type='text' />"
      *
      * @param  string $name     the name of the text input tag.
