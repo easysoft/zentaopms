@@ -17,10 +17,11 @@ class buildModel extends model
      * Get build info.
      * 
      * @param  int    $buildID 
+     * @param  bool   $setImgSize
      * @access public
      * @return object
      */
-    public function getByID($buildID)
+    public function getByID($buildID, $setImgSize = false)
     {
         $build = $this->dao->select('t1.*, t2.name as projectName, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
@@ -30,7 +31,7 @@ class buildModel extends model
             ->orderBy('t1.id DESC')
             ->fetch();
         if(!$build) return false;
-        $build->desc = $this->loadModel('file')->setImgSize($build->desc);
+        if($setImgSize) $build->desc = $this->loadModel('file')->setImgSize($build->desc);
         return $build;
     }
 
