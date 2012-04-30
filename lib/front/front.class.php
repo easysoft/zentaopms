@@ -253,11 +253,11 @@ function selectAll(scope)
 EOT;
         if($scope)
         {
-            $string .= "<input type='button' name='$name' value='$value' onclick='selectAll(\"$scope\")'";
+            $string .= "<input type='button' name='{$name}[]' value='$value' onclick='selectAll(\"$scope\")'";
         }
         else
         {
-            $string .= "<input type='button' name='$name' value='$value' onclick='selectAll()'";
+            $string .= "<input type='button' name='{$name}[]' value='$value' onclick='selectAll()'";
         }
         $string .= $attrib;
         $string .= " />";
@@ -284,14 +284,14 @@ function selectReverse(scope)
    {
         $('#' + scope + ' input').each(function() 
         {
-            $(this).attr("checked", false)
+            $(this).attr("checked", !$(this).attr("checked"))
         });
    }
    else
    {
         $('input').each(function() 
         {
-            $(this).attr("checked", false)
+            $(this).attr("checked", !$(this).attr("checked"))
         });
    }
 }
@@ -299,17 +299,16 @@ function selectReverse(scope)
 EOT;
         if($scope)
         {
-            $string .= "<input type='button' name='$name' value='$value' onclick='selectReverse(\"$scope\")'";
+            $string .= "<input type='button' name='{$name}[]' value='$value' onclick='selectReverse(\"$scope\")'";
         }
         else
         {
-            $string .= "<input type='button' name='$name' value='$value' onclick='selectReverse()'";
+            $string .= "<input type='button' name='{$name}[]' value='$value' onclick='selectReverse()'";
         }
         $string .= $attrib;
         $string .= " /> ";
 
         return  $string;
-
     }
 
     /**
