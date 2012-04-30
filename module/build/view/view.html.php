@@ -63,7 +63,7 @@
             <td><?php echo $lang->story->stageList[$story->stage];?></td>
           </tr>
           <?php endforeach;?>
-         <tr><td colspan=7 class='a-center'><?php echo sprintf($lang->build->finishStories, $closedStories->number);?></td></tr>
+         <tr><td colspan=7 class='a-left strong'><?php echo sprintf($lang->build->finishStories, count($stories));?></td></tr>
         </table>
       </div>
     </td>
@@ -94,7 +94,7 @@
             <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
           </tr>
           <?php endforeach;?>
-         <tr><td colspan=7 class='a-center'><?php echo sprintf($lang->build->resolvedBugs, $resolvedBugs->number);?></td></tr>
+         <tr><td colspan=7 class='a-left strong'><?php echo sprintf($lang->build->resolvedBugs, count($bugs));?></td></tr>
         </table>
       </div>
     </td>

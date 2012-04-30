@@ -56,7 +56,7 @@
           </tr>
           <?php endforeach;?>
           <tr>
-            <td colspan="7" align="center"><?php echo sprintf($lang->release->finishStories, $closedStories->number);?></td>
+            <td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->finishStories, count($stories));?></td>
           </tr>
         </table>
       </div>
@@ -89,7 +89,7 @@
           </tr>
           <?php endforeach;?>
           <tr>
-            <td colspan="7" align="center"><?php echo sprintf($lang->release->resolvedBugs, $resolvedBugs->number);?></td>
+            <td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->resolvedBugs,count($bugs));?></td>
           </tr>
         </table>
       </div>
