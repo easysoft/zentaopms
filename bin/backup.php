@@ -21,7 +21,7 @@ $destDir = $backupDir . "/" . date('Ym', time());
 if(!file_exists($backupDir)) mkdir($backupDir, 0777);
 if(!file_exists($destDir))   mkdir($destDir, 0777);
 
-$dbSqlFile   = $destDir . "/" ."db." . date('Ymd', time()) . ".sql";
+$dbSqlFile   = "db." . date('Ymd', time()) . ".sql";
 
 if($config->db->password)
 {
@@ -35,7 +35,7 @@ echo "Backuping....\n";
 system($command, $returnVar);
 if(!$returnVar)
 {
-    $dbZipFile = str_replace("sql", "zip", $dbSqlFile);
+    $dbZipFile = $destDir . "/"  . str_replace("sql", "zip", $dbSqlFile);
     $archive = new PclZip($dbZipFile);
     $v_list = $archive->create($dbSqlFile);
     if ($v_list == 0) 
@@ -45,7 +45,7 @@ if(!$returnVar)
     else
     {
         unlink($dbSqlFile);
-        echo "Backup DataBase Successfully!\n";
+        echo "Backup DataBase Successfully! The destination file is $dbZipFile\n";
     }
 }
 else
@@ -55,16 +55,17 @@ else
 
 /* Backup the data. */
 $dataFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
+chdir(dirname(dirname(__FILE__)) . "/www");
 $archive = new PclZip($dataFile);
 echo "\nBackuping....\n";
-$v_list = $archive->create(dirname(dirname(__FILE__)) . "/www/data");
+$v_list = $archive->create("data/upload", PCLZIP_OPT_REMOVE_PATH, "data");
 if ($v_list == 0) 
 {
     die("Error : ".$archive->errorInfo(true));
 }
 else
 {
-    echo "Backup www/data Successfully!\n";
+    echo "Backup www/data Successfully! The destination file is $dataFile\n";
 }
 
 ?>
