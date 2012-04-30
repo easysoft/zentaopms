@@ -23,7 +23,7 @@
       <div class='box-content'>
         <form method='post'>
           <?php echo html::checkBox('charts', $lang->task->report->charts, $checkedCharts)?>
-          <input type='button' value='<?php echo $lang->task->report->selectAll;?>'     onclick='checkAll()' />
+          <?php echo html::checkAll('checkall', $lang->selectAll); ?>
           <input type='button' value='<?php echo $lang->task->report->selectReverse;?>' onclick='checkReverse()' />
           <br /><br />
           <?php echo html::submitButton($lang->task->report->create);?>

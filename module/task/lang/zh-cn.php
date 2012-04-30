@@ -133,7 +133,6 @@ $lang->task->remindBug           = "该任务为Bug转化得到，是否更新Bu
 $lang->task->report->common        = '统计报表';
 $lang->task->report->select        = '请选择报表类型';
 $lang->task->report->create        = '生成报表';
-$lang->task->report->selectAll     = '全选';
 $lang->task->report->selectReverse = '反选';
 
 $lang->task->report->charts['tasksPerProject']      = '项目任务数统计';

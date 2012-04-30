@@ -189,7 +189,6 @@ $lang->story->action->unlinkedfromproject = array('main' => '$date, removed from
 $lang->story->report->common        = 'Report';
 $lang->story->report->select        = 'Select';
 $lang->story->report->create        = 'Creat';
-$lang->story->report->selectAll     = 'All';
 $lang->story->report->selectReverse = 'Reverse';
 
 $lang->story->report->charts['storysPerProduct']        = 'Product storys';

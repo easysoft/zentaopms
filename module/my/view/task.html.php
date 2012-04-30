@@ -72,7 +72,7 @@
     <tfoot>
       <tr>
         <td colspan='11'>
-          <input type='checkbox' onclick='checkall(this);'><?php echo $lang->selectAll;?>
+          <?php echo html::checkAll('checkall', $lang->selectAll); ?>
           <?php echo html::submitButton($lang->close)?>
         </td>
       </tr>

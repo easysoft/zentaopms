@@ -242,7 +242,6 @@ $lang->bug->resolutionList['tostory']    = '转为需求';
 $lang->bug->report->common        = '统计报表';
 $lang->bug->report->select        = '请选择报表类型';
 $lang->bug->report->create        = '生成报表';
-$lang->bug->report->selectAll     = '全选';
 $lang->bug->report->selectReverse = '反选';
 
 $lang->bug->report->charts['bugsPerProject']        = '项目Bug数量';

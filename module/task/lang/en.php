@@ -133,7 +133,6 @@ $lang->task->remindBug           = "This task from Bug, update the Bug:%s or not
 $lang->task->report->common        = 'Report';
 $lang->task->report->select        = 'Select';
 $lang->task->report->create        = 'Create';
-$lang->task->report->selectAll     = 'All';
 $lang->task->report->selectReverse = 'Reverse';
 
 $lang->task->report->charts['tasksPerProject']      = 'Project tasks';

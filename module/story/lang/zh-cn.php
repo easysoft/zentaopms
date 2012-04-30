@@ -189,7 +189,6 @@ $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>
 $lang->story->report->common        = '统计报表';
 $lang->story->report->select        = '请选择报表类型';
 $lang->story->report->create        = '生成报表';
-$lang->story->report->selectAll     = '全选';
 $lang->story->report->selectReverse = '反选';
 
 $lang->story->report->charts['storysPerProduct']        = '产品需求数量';

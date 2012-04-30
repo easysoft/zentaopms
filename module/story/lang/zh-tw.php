@@ -188,7 +188,6 @@ $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>
 $lang->story->report->common        = '統計報表';
 $lang->story->report->select        = '請選擇報表類型';
 $lang->story->report->create        = '生成報表';
-$lang->story->report->selectAll     = '全選';
 $lang->story->report->selectReverse = '反選';
 
 $lang->story->report->charts['storysPerProduct']        = '產品需求數量';
