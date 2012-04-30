@@ -138,17 +138,18 @@ class docModel extends model
      * Get doc info by id.
      * 
      * @param  int    $docID 
+     * @param  bool   $setImgSize 
      * @access public
      * @return void
      */
-    public function getById($docID)
+    public function getById($docID, $setImgSize = false)
     {
         $doc = $this->dao->select('*')
             ->from(TABLE_DOC)
             ->where('id')->eq((int)$docID)
             ->fetch();
         if(!$doc) return false;
-        $doc->content = $this->loadModel('file')->setImgSize($doc->content);
+        if($setImgSize) $doc->content = $this->loadModel('file')->setImgSize($doc->content);
         $doc->files = $this->loadModel('file')->getByObject('doc', $docID);
 
         $doc->libName     = '';

@@ -369,7 +369,7 @@ class doc extends control
     public function view($docID)
     {
         /* Get doc. */
-        $doc = $this->doc->getById($docID);
+        $doc = $this->doc->getById($docID, true);
         if(!$doc) die(js::error($this->lang->notFound) . js::locate('back'));
         if($doc->project != 0 and !$this->project->checkPriv($this->project->getById($doc->project)))
         {

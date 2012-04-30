@@ -11,13 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<script language='javascript'>
-var type = '<?php echo $doc->type;?>';
-$(document).ready(function()
-{
-  setType(type);
-});
-</script>
 <table class='table-1'>
   <caption><?php echo $doc->title . $lang->colon . $lang->doc->view;?></caption>
   <tr>
@@ -43,11 +36,11 @@ $(document).ready(function()
     <th class='rowhead'><?php echo $lang->doc->keywords;?></th>
     <td><?php echo $doc->keywords;?></td>
   </tr>  
-  <tr id='urlBox' class='hidden'>
+  <tr id='urlBox' <?php if($doc->type != 'url') echo "class='hidden'";?>>
     <th class='rowhead'><?php echo $lang->doc->url;?></th>
     <td><?php echo html::a(urldecode($doc->url), '', '_blank');?></td>
   </tr>  
-  <tr id='contentBox' class='hidden'>
+  <tr id='contentBox' <?php if($doc->type != 'text') echo "class='hidden'";?>>
     <th class='rowhead'><?php echo $lang->doc->content;?></th>
     <td class='content'><?php echo $doc->content;?></td>
   </tr>  
@@ -55,7 +48,7 @@ $(document).ready(function()
     <th class='rowhead'><?php echo $lang->doc->digest;?></th>
     <td><?php echo nl2br($doc->digest);?></td>
   </tr>  
-  <tr id='fileBox' class='hidden'>
+  <tr id='fileBox' <?php if($doc->type != 'file') echo "class='hidden'";?>>
     <th class='rowhead'><?php echo $lang->files;?></th>
     <td><?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'false'));?></td>
   </tr>
