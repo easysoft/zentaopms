@@ -522,7 +522,7 @@ function setImageSize(image, maxWidth)
     if(!maxWidth)
     {
         bodyWidth = $('body').width();
-        maxWidth  = bodyWidth - 420; // The side bar's width is 336, and add some margins.
+        maxWidth  = bodyWidth - 450; // The side bar's width is 336, and add some margins.
     }
     $('.content img').each(function()
     {
