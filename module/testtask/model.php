@@ -96,10 +96,11 @@ class testtaskModel extends model
      * Get test task info by id.
      * 
      * @param  int   $taskID 
+     * @param  bool  $setImgSize
      * @access public
      * @return void
      */
-    public function getById($taskID)
+    public function getById($taskID, $setImgSize = false)
     {
         $task = $this->dao->select('t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -107,7 +108,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->where('t1.id')->eq((int)$taskID)->fetch();
-        $task->desc = $this->loadModel('file')->setImgSize($task->desc);
+        if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         return $task;
     }
 
