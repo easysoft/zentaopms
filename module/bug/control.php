@@ -477,6 +477,7 @@ class bug extends control
         $this->view->position[]      = $this->lang->bug->confirmBug;
 
         $this->view->bug     = $bug;
+        $this->view->users   = $this->user->getPairs('noletter');
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
