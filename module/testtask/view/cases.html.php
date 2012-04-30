@@ -85,7 +85,7 @@ var moduleID   = '<?php echo $moduleID;?>';
       </table>
       <table class='table-1'>
         <tr>
-          <td><nobr><?php echo "<input type='checkbox' onclick='checkall(this);'> " . $lang->selectAll;?></nobr></td>
+          <td><nobr><?php echo html::checkAll('checkall', $lang->selectAll);?></nobr></td>
           <td colspan='9'>
             <?php
             echo html::select('assignedTo', $users);
