@@ -73,6 +73,7 @@
       <tr>
         <td colspan='11'>
           <?php echo html::selectAll('selectall', $lang->selectAll); ?>
+          <?php echo html::selectReverse('selectreverse', $lang->selectReverse);?>
           <?php echo html::submitButton($lang->close)?>
         </td>
       </tr>

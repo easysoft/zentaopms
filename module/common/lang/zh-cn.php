@@ -57,10 +57,11 @@ $lang->files        = '附件 ';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
-$lang->selectAll    = '全选';
-$lang->notFound     = '抱歉，您访问的对象并不存在！';
-$lang->showAll      = '++ 全部显示 ++';
-$lang->hideClosed   = '-- 隐藏已结束 --';
+$lang->selectAll     = '全选';
+$lang->selectReverse = '反选';
+$lang->notFound      = '抱歉，您访问的对象并不存在！';
+$lang->showAll       = '++ 全部显示 ++';
+$lang->hideClosed    = '-- 隐藏已结束 --';
 
 $lang->future       = '未来';
 $lang->year         = '年';

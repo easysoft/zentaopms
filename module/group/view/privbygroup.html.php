@@ -39,7 +39,7 @@
     </tr>
     <?php endforeach;?>
     <tr>
-      <th class='rowhead'><?php echo html::selectAll('selectall', $lang->selectAll)?></th>
+      <th class='rowhead'><?php echo html::selectAll('selectall', $lang->selectAll) . html::selectReverse('selectreverse', $lang->selectReverse);?></th>
       <td class='a-center'>
         <?php 
         echo html::submitButton($lang->save);

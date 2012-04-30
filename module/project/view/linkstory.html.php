@@ -50,7 +50,8 @@
     <tfoot>
       <tr>
         <td colspan='8' class='f-14px'>
-        <?php echo html::selectAll('selectall', $lang->selectAll); ?>
+        <?php echo html::selectAll('selectall', $lang->selectAll);?>
+        <?php echo html::selectReverse('selectreverse', $lang->selectReverse);?>
         <?php print($storyCount? html::submitButton() : $lang->project->whyNoStories);?>
         </td>
       </tr>

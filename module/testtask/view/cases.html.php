@@ -85,7 +85,7 @@ var moduleID   = '<?php echo $moduleID;?>';
       </table>
       <table class='table-1'>
         <tr>
-          <td><nobr><?php echo html::selectAll('selectall', $lang->selectAll);?></nobr></td>
+          <td><nobr><?php echo html::selectAll('selectall', $lang->selectAll) . html::selectReverse('selectreverse', $lang->selectReverse);?></nobr></td>
           <td colspan='9'>
             <?php
             echo html::select('assignedTo', $users);

@@ -24,7 +24,7 @@
         <form method='post'>
         <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts);?>
         <?php echo html::selectAll('selectall', $lang->selectAll); ?>
-        <input type='button' value='<?php echo $lang->bug->report->selectReverse;?>' onclick='checkReverse()' />
+        <?php echo html::selectReverse('selectreverse', $lang->selectReverse); ?>
         <br /><br />
         <?php echo html::submitButton($lang->bug->report->create);?>
       </div>
