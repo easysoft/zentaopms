@@ -132,7 +132,18 @@ class release extends control
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->fetchAll();
         $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->fetchAll();
-
+        $closedStories = $this->dao->select('count(*) AS number')
+            ->from(TABLE_STORY)
+            ->where('id')
+            ->in($release->stories)
+            ->andWhere('status')->eq('closed')
+            ->fetch();
+        $resolvedBugs = $this->dao->select('count(*) AS number')
+            ->from(TABLE_BUG)
+            ->where('id')
+            ->in($release->bugs)
+            ->andWhere('status')->eq('resolved')
+            ->fetch();
         $this->commonAction($release->product);
 
         $this->view->header->title = $this->lang->release->view;
@@ -142,6 +153,8 @@ class release extends control
         $this->view->bugs          = $bugs;
         $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->closedStories = $closedStories;
+        $this->view->resolvedBugs  = $resolvedBugs;
         $this->display();
     }
  

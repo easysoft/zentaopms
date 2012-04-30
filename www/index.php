@@ -13,7 +13,6 @@
  */
 /* Set the error reporting. */
 error_reporting(0);
-
 /* Start output buffer. */
 ob_start();
 

@@ -19,17 +19,20 @@ $lang->build->ajaxGetProjectBuilds = 'API:Project builds';
 
 $lang->build->confirmDelete = "Are sure to delete this build?";
 
-$lang->build->id        = 'ID';
-$lang->build->product   = 'Product';
-$lang->build->project   = 'Project';
-$lang->build->name      = 'Name';
-$lang->build->date      = 'Build date';
-$lang->build->builder   = 'Builder';
-$lang->build->scmPath   = 'Source code path';
-$lang->build->filePath  = 'Package file path';
-$lang->build->desc      = 'Desc';
+$lang->build->id         = 'ID';
+$lang->build->product    = 'Product';
+$lang->build->project    = 'Project';
+$lang->build->name       = 'Name';
+$lang->build->date       = 'Build date';
+$lang->build->builder    = 'Builder';
+$lang->build->scmPath    = 'Source code path';
+$lang->build->filePath   = 'Package file path';
+$lang->build->desc       = 'Desc';
 $lang->build->linkStoriesAndBugs = 'stories and bugs';
 $lang->build->linkStories        = 'Stories';
 $lang->build->linkBugs           = 'Bugs';
 $lang->build->stories            = 'Linked stories';
 $lang->build->bugs               = 'Linked bugs';
+$lang->build->finishStories         = 'The total demand for a complete %s';
+$lang->build->resolvedBugs          = 'The total solution of bug%s';
+

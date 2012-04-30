@@ -9,27 +9,30 @@
  * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->build->common    = 'Build';
-$lang->build->create    = "創建Build";
-$lang->build->edit      = "編輯Build";
-$lang->build->delete    = "刪除Build";
-$lang->build->view      = "Build詳情";
+$lang->build->common               = 'Build';
+$lang->build->create               = "創建Build";
+$lang->build->edit                 = "編輯Build";
+$lang->build->delete               = "刪除Build";
+$lang->build->view                 = "Build詳情";
 $lang->build->ajaxGetProductBuilds = '介面:產品Build列表';
 $lang->build->ajaxGetProjectBuilds = '介面:項目Build列表';
 
 $lang->build->confirmDelete = "您確認刪除該build嗎？";
 
-$lang->build->id        = 'ID';
-$lang->build->product   = '產品';
-$lang->build->project   = '項目';
-$lang->build->name      = '名稱編號';
-$lang->build->date      = 'Build日期';
-$lang->build->builder   = '構建者';
-$lang->build->scmPath   = '原始碼地址';
-$lang->build->filePath  = '存儲地址';
-$lang->build->desc      = '描述';
-$lang->build->linkStoriesAndBugs = '關聯需求和Bug';
-$lang->build->linkStories        = '相關需求';
-$lang->build->linkBugs           = '相關Bug';
-$lang->build->stories            = '已關聯需求';
-$lang->build->bugs               = '已關聯Bug';
+$lang->build->id                    = 'ID';
+$lang->build->product               = '產品';
+$lang->build->project               = '項目';
+$lang->build->name                  = '名稱編號';
+$lang->build->date                  = 'Build日期';
+$lang->build->builder               = '構建者';
+$lang->build->scmPath               = '原始碼地址';
+$lang->build->filePath              = '存儲地址';
+$lang->build->desc                  = '描述';
+$lang->build->linkStoriesAndBugs    = '關聯需求和Bug';
+$lang->build->linkStories           = '相關需求';
+$lang->build->linkBugs              = '相關Bug';
+$lang->build->stories               = '已關聯需求';
+$lang->build->bugs                  = '已關聯Bug';
+$lang->build->finishStories         = '本次共完成需求%s個';
+$lang->build->resolvedBugs          = '本次共解抉bug%s個';
+

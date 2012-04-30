@@ -55,6 +55,9 @@
             <td><?php echo $lang->story->stageList[$story->stage];?></td>
           </tr>
           <?php endforeach;?>
+          <tr>
+            <td colspan="7" align="center"><?php echo sprintf($lang->release->finishStories, $closedStories->number);?></td>
+          </tr>
         </table>
       </div>
     </td>
@@ -85,6 +88,9 @@
             <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
           </tr>
           <?php endforeach;?>
+          <tr>
+            <td colspan="7" align="center"><?php echo sprintf($lang->release->resolvedBugs, $resolvedBugs->number);?></td>
+          </tr>
         </table>
       </div>
     </td>
