@@ -60,7 +60,7 @@
   <tfoot> 
   <tr><td colspan='7' class='a-right'><?php $pager->show();?></td></tr>
   <tr>
-    <td colspan='7' class='a-center'><?php echo html::checkAll('checkall', $lang->selectAll);?><?php echo html::submitButton();?></td>
+    <td colspan='7' class='a-center'><?php echo html::selectAll('selectall', $lang->selectAll);?><?php echo html::submitButton();?></td>
   </tr>
   </tfoot>
 </table>

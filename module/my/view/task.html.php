@@ -72,7 +72,7 @@
     <tfoot>
       <tr>
         <td colspan='11'>
-          <?php echo html::checkAll('checkall', $lang->selectAll); ?>
+          <?php echo html::selectAll('selectall', $lang->selectAll); ?>
           <?php echo html::submitButton($lang->close)?>
         </td>
       </tr>
