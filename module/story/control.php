@@ -348,7 +348,7 @@ class story extends control
     {
         $this->loadModel('action');
         $storyID = (int)$storyID;
-        $story   = $this->story->getById($storyID, $version);
+        $story   = $this->story->getById($storyID, $version, true);
         if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $story->files = $this->loadModel('file')->getByObject('story', $storyID);

@@ -18,10 +18,11 @@ class storyModel extends model
      * 
      * @param  int    $storyID 
      * @param  int    $version 
+     * @param  bool   $setImgSize
      * @access public
      * @return object|bool
      */
-    public function getById($storyID, $version = 0)
+    public function getById($storyID, $version = 0, $setImgSize = false)
     {
         $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
         if(!$story) return false;
@@ -29,8 +30,12 @@ class storyModel extends model
         if($version == 0) $version = $story->version;
         $spec = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
         $story->title  = isset($spec->title)  ? $spec->title  : '';
-        $story->spec   = isset($spec->spec)   ? $this->loadModel('file')->setImgSize($spec->spec)   : '';
+        $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
         $story->verify = isset($spec->verify) ? $spec->verify : '';
+
+        if($setImgSize) $story->spec   = $this->loadModel('file')->setImgSize($story->spec);
+        if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
+
         $story->projects = $this->dao->select('t1.project, t2.name, t2.status')
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
@@ -252,11 +257,14 @@ class storyModel extends model
      */
     public function change($storyID)
     {
-        $now         = helper::now();
-        $oldStory    = $this->getById($storyID);
         $specChanged = false;
-        if($this->post->spec != $oldStory->spec or $this->post->verify != $oldStory->verify or $this->post->title != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
+        $oldStory    = $this->getById($storyID);
+        $newTitle    = stripslashes($this->post->title);
+        $newSpec     = stripslashes($this->post->spec);
+        $newVerify   = stripslashes($this->post->verify);
+        if($newSpec != $oldStory->spec or $newVerify != $oldStory->verify or $newTitle != $oldStory->title or $this->loadModel('file')->getCount()) $specChanged = true;
 
+        $now = helper::now();
         $story = fixer::input('post')
             ->stripTags('title')
             ->callFunc('title', 'trim')
