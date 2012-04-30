@@ -143,14 +143,15 @@ class todoModel extends model
      * Get info of a todo.
      * 
      * @param  int    $todoID 
+     * @param  bool   $setImgSize
      * @access public
      * @return object|bool
      */
-    public function getById($todoID)
+    public function getById($todoID, $setImgSize = false)
     {
         $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
         if(!$todo) return false;
-        $todo->desc = $this->loadModel('file')->setImgSize($todo->desc);
+        if($setImgSize) $todo->desc = $this->loadModel('file')->setImgSize($todo->desc);
         if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);

@@ -15,7 +15,7 @@ class todo extends control
      * Construct function, load model of task, bug, my.
      * 
      * @access public
-     * @return voidzentaoms\www
+     * @return void
      */
     public function __construct()
     {
@@ -133,7 +133,7 @@ class todo extends control
      */
     public function view($todoID, $from = 'company')
     {
-        $todo = $this->todo->getById($todoID);
+        $todo = $this->todo->getById($todoID, true);
         if(!$todo) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Save the session. */
