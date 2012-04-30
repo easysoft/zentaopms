@@ -436,10 +436,11 @@ class projectModel extends model
      * Get project by id.
      * 
      * @param  int    $projectID 
+     * @param  bool   $setImgSize
      * @access public
      * @return void
      */
-    public function getById($projectID)
+    public function getById($projectID, $setImgSize = false)
     {
         $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
         if(!$project) return false;
@@ -457,8 +458,10 @@ class projectModel extends model
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
         $project->totalLeft     = round($total->totalLeft, 1);
-        $project->desc = $this->loadModel('file')->setImgSize($project->desc);
-        $project->goal = $this->loadModel('file')->setImgSize($project->goal);
+
+        if($setImgSize) $project->desc = $this->loadModel('file')->setImgSize($project->desc);
+        if($setImgSize) $project->goal = $this->loadModel('file')->setImgSize($project->goal);
+
         return $project;
     }
 

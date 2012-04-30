@@ -834,7 +834,7 @@ class project extends control
      */
     public function view($projectID)
     {
-        $project = $this->project->getById($projectID);
+        $project = $this->project->getById($projectID, true);
         if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Set menu. */
