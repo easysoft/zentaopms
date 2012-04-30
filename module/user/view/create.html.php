@@ -21,7 +21,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->account;?></th>
-      <td><?php echo html::input('account', '', "class='text-3'");?></td>
+      <td><?php echo html::input('account', '', "class='text-3' autocomplete='off'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->realname;?></th>
@@ -45,11 +45,11 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->password;?></th>
-      <td><?php echo html::password('password1', '', "class='text-3'");?></td>
+      <td><?php echo html::password('password1', '', "class='text-3' autocomplete='off'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->password2;?></th>
-      <td><?php echo html::password('password2', '', "class='text-3'");?></td>
+      <td><?php echo html::password('password2', '', "class='text-3' autocomplete='off'");?></td>
     </tr>  
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>
