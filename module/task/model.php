@@ -384,10 +384,11 @@ class taskModel extends model
      * Get task info by Id.
      * 
      * @param  int    $taskID 
+     * @param  bool   $setImgSize
      * @access public
      * @return object|bool
      */
-    public function getById($taskID)
+    public function getById($taskID, $setImgSize = false)
     {
         $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
@@ -398,7 +399,7 @@ class taskModel extends model
             ->where('t1.id')->eq((int)$taskID)
             ->fetch();
         if(!$task) return false;
-        $task->desc = $this->loadModel('file')->setImgSize($task->desc);
+        if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
         foreach($task as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
         if($task->mailto)
