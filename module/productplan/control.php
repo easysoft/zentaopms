@@ -128,7 +128,7 @@ class productplan extends control
     {
         $this->session->set('storyList', $this->app->getURI(true));
 
-        $plan = $this->productplan->getByID($planID);
+        $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->commonAction($plan->product);

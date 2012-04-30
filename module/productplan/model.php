@@ -17,13 +17,14 @@ class productplanModel extends model
      * Get plan by id.
      * 
      * @param  int    $planID 
+     * @param  bool   $setImgSize
      * @access public
      * @return object
      */
-    public function getByID($planID)
+    public function getByID($planID, $setImgSize = false)
     {
         $plan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
-        $plan->desc = $this->loadModel('file')->setImgSize($plan->desc);
+        if($setImgSize) $plan->desc = $this->loadModel('file')->setImgSize($plan->desc);
         return $plan;
     }
 
