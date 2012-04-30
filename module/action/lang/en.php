@@ -50,8 +50,8 @@ $lang->action->objectTypes['doclib']      = 'DocLib';
 $lang->action->objectTypes['todo']        = 'TODO';
 
 /* The desc of actions. */
-$lang->action->desc->common       = '$date, <strong>$action</strong> by <strong>$actor</strong>';
-$lang->action->desc->extra        = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>';
+$lang->action->desc->common       = '$date, <strong>$action</strong> by <strong>$actor</strong>.';
+$lang->action->desc->extra        = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>.';
 $lang->action->desc->opened       = '$date, opened by <strong>$actor</strong>.';
 $lang->action->desc->created      = '$date, created by <strong>$actor</strong>.';
 $lang->action->desc->changed      = '$date, changed by <strong>$actor</strong>.';
@@ -59,23 +59,23 @@ $lang->action->desc->edited       = '$date, edited by <strong>$actor</strong>.';
 $lang->action->desc->assigned     = '$date, <strong>$actor</strong> assigned task to <strong>$extra</strong>.' . "\n";
 $lang->action->desc->closed       = '$date, closed by <strong>$actor</strong>.';
 $lang->action->desc->deleted      = '$date, deleted by <strong>$actor</strong>.';
-$lang->action->desc->deletedfile  = '$date, deleted file by <strong>$actor</strong>, the file is <strong><i>$extra</i></strong>';
-$lang->action->desc->editfile     = '$date, edit file by <strong>$actor</strong>, the file is <strong><i>$extra</i></strong>';
+$lang->action->desc->deletedfile  = '$date, deleted file by <strong>$actor</strong>, the file is <strong><i>$extra</i></strong>.';
+$lang->action->desc->editfile     = '$date, edit file by <strong>$actor</strong>, the file is <strong><i>$extra</i></strong>.';
 $lang->action->desc->erased       = '$date, erased by <strong>$actor</strong>.';
 $lang->action->desc->undeleted    = '$date, restored by <strong>$actor</strong>.';
 $lang->action->desc->commented    = '$date, commented by <strong>$actor</strong>.';
 $lang->action->desc->activated    = '$date, activated by <strong>$actor</strong>.';
-$lang->action->desc->moved        = '$date, moved by <strong>$actor</strong>, previouse is "$extra"';
-$lang->action->desc->confirmed    = '$date, confirmed by <strong>$actor</strong>, version is<strong>#$extra</strong>';
-$lang->action->desc->bugconfirmed = '$date, confirmed by <strong>$actor</strong>';
-$lang->action->desc->frombug      = '$date, from Bug by <strong>$actor</strong> BugID:<strong>$extra</strong>。';
+$lang->action->desc->moved        = '$date, moved by <strong>$actor</strong>, previouse is "$extra".';
+$lang->action->desc->confirmed    = '$date, confirmed by <strong>$actor</strong>, version is<strong>#$extra</strong>.';
+$lang->action->desc->bugconfirmed = '$date, confirmed by <strong>$actor</strong>.';
+$lang->action->desc->frombug      = '$date, from Bug by <strong>$actor</strong> BugID:<strong>$extra</strong>.';
 $lang->action->desc->started      = '$date, started by <strong>$actor</strong>.';
 $lang->action->desc->canceled     = '$date, canceled by <strong>$actor</strong>.';
-$lang->action->desc->svncommited  = '$date, <strong>$actor</strong> commited to svn，revision is <strong>#$extra</strong>' . "\n";
+$lang->action->desc->svncommited  = '$date, <strong>$actor</strong> commited to svn，revision is <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->finished     = '$date, finished by <strong>$actor</strong>.';
 $lang->action->desc->diff1        = 'changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
 $lang->action->desc->diff2        = 'changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>' . "\n";
-$lang->action->desc->diff3        = "changed file's name %s to %s ";
+$lang->action->desc->diff3        = "changed file's name %s to %s.";
 
 /* The action labels. */
 $lang->action->label->created             = 'created';
