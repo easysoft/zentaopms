@@ -25,7 +25,10 @@
     ?>
   </div>
 </div>
+<?php $canBatchClose = common::hasPriv('task', 'batchClose');?>
+<?php if($canBatchClose):?>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
+<?php endif;?>
   <table class='table-1 tablesorter fixed' id='tasktable'>
     <thead>
     <tr class='colhead'>
@@ -46,7 +49,7 @@
     <?php foreach($tasks as $task):?>
     <tr class='a-center'>
       <td class='a-left'>
-        <input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' />
+        <?php if($canBatchClose):?><input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?>
       </td>
       <td><?php echo $lang->task->priList[$task->pri];?></td>
@@ -69,6 +72,7 @@
     </tr>
     <?php endforeach;?>
     </tbody>
+    <?php if($canBatchClose):?>
     <tfoot>
       <tr>
         <td colspan='11'>
@@ -78,6 +82,7 @@
         </td>
       </tr>
     </tfoot>
+    <?php endif;?>
   </table> 
-</form>
+<?php if($canBatchClose) echo '</form>';?>
 <?php include '../../common/view/footer.html.php';?>
