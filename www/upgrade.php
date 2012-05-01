@@ -9,9 +9,11 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-if(!file_exists("../config/my.php"))
+$myConfig = dirname(dirname(__FILE__)) . '/config/my.php';
+if(!file_exists($myConfig))
 {
-    echo dirname(dirname(__FILE__)) . "/config/my.php doesn't exists! Please don't rename zentao before override source code!";
+    echo "文件" . $myConfig . "不存在！ 提示：不要重命名zentao再覆盖！" . "<br />";
+    echo $myConfig . " doesn't exists! Please don't rename zentao before override source code!";
     exit;
 }
 
