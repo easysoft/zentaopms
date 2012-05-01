@@ -1,69 +1,66 @@
 <?php
 /* Backup the db. */
 error_reporting(E_ERROR);
-$pmsRoot   = dirname(dirname(__FILE__));
-$backupDir = $pmsRoot . "/backup";
 
+/* Include my.php and pclzip class. */
+$pmsRoot = dirname(dirname(__FILE__));
 include $pmsRoot . '/config/my.php';
 include $pmsRoot . '/lib/pclzip/pclzip.class.php';
 
-if(!isset($config->mysqldumpRoot))
+/* Judge mysqldump cmd setted or not. */
+if(!isset($config->mysqldump))
 {
-    echo "Please set the mysqldumpRoot in my.php:\n";
+    echo "Please set the mysqldump in my.php:\n";
     echo "Just like: \n";
-    echo '$config->mysqldumpRoot = \'/usr/bin/mysqldump\'; for linux' . "\n";
-    echo '$config->mysqldumpRoot = \'D:\xampp\mysql\bin\mysqldump.exe\'; for windows' . "\n";
+    echo '$config->mysqldump = \'/usr/bin/mysqldump\'; for linux' . "\n";
+    echo '$config->mysqldump = \'D:\xampp\mysql\bin\mysqldump.exe\'; for windows' . "\n";
     exit;
 }
 
-$destDir = $backupDir . "/" . date('Ym', time());
+/* Init the backupRoot and dest directory. */
+$backupRoot = $pmsRoot . "/backup";
+$destDir    = $backupRoot . "/" . date('Ym');
 
-if(!file_exists($backupDir)) mkdir($backupDir, 0777);
-if(!file_exists($destDir))   mkdir($destDir, 0777);
+if(!file_exists($backupRoot)) mkdir($backupRoot, 0777);
+if(!file_exists($destDir))    mkdir($destDir, 0777);
 
-$dbSqlFile   = "db." . date('Ymd', time()) . ".sql";
-
+/* Backup database. */
+$dbRawFile = "db." . date('Ymd') . ".sql";
 if($config->db->password)
 {
-    $command = "{$config->mysqldumpRoot} -u{$config->db->user} -p{$config->db->password} -P {$config->db->port} {$config->db->name} > {$dbSqlFile}";
+    $command = "{$config->mysqldump} -u{$config->db->user} -p{$config->db->password} -P {$config->db->port} {$config->db->name} > {$dbRawFile}";
 }
 else
 {
-    $command = "{$config->mysqldumpRoot} -u{$config->db->user} -P {$config->db->port} {$config->db->name} > {$dbSqlFile}";
+    $command = "{$config->mysqldump} -u{$config->db->user} -P {$config->db->port} {$config->db->name} > {$dbRawFile}";
 }
-echo "Backuping....\n";
-system($command, $returnVar);
-if(!$returnVar)
+echo "Backuping database,";
+system($command, $return);
+if(!$return)
 {
-    $dbZipFile = $destDir . "/"  . str_replace("sql", "zip", $dbSqlFile);
-    $archive = new PclZip($dbZipFile);
-    $v_list = $archive->create($dbSqlFile);
-    if ($v_list == 0) 
+    $dbZipFile = $destDir . "/"  . str_replace("sql", "zip", $dbRawFile);
+    $archive = new pclzip($dbZipFile);
+    if($archive->create($dbRawFile))
     {
-        die("Error : ".$archive->errorInfo(true));
+        unlink($dbRawFile);
+        echo " successfully saved to $dbZipFile\n";
     }
     else
     {
-        unlink($dbSqlFile);
-        echo "Backup DataBase Successfully! The destination file is $dbZipFile\n";
+        die("Error : " . $archive->errorInfo(true));
     }
 }
 else
 {
-        echo "Failed to Backup DataBase!\n";
+    echo "Failed to backup database!\n";
 }
 
 /* Backup the data. */
-$dataFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
 chdir(dirname(dirname(__FILE__)) . "/www");
-$archive = new PclZip($dataFile);
-echo "\nBackuping....\n";
-$v_list = $archive->create("data/upload", PCLZIP_OPT_REMOVE_PATH, "data");
-if ($v_list == 0) 
-{
-    die("Error : ".$archive->errorInfo(true));
-}
-else
-{
-    echo "Backup www/data Successfully! The destination file is $dataFile\n";
-}
+if(!is_dir('data/upload')) die(" No files needed backup.\n");
+
+$dataFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
+$archive  = new pclzip($dataFile);
+echo "Backuping files,";
+if($archive->create("data/upload", PCLZIP_OPT_REMOVE_PATH, "data")) die(" successfully saved to $dataFile\n");
+die("Error : ".$archive->errorInfo(true));
