@@ -24,11 +24,11 @@ $dbSqlFile   = "db." . date('Ymd', time()) . ".sql";
 
 if($config->db->password)
 {
-    $command = "{$config->mysqldumpRoot} -u{$config->db->user} -p{$config->db->password} {$config->db->name} > {$dbSqlFile}";
+    $command = "{$config->mysqldumpRoot} -u{$config->db->user} -p{$config->db->password} -P {$config->db->port} {$config->db->name} > {$dbSqlFile}";
 }
 else
 {
-    $command = "{$config->mysqldumpRoot} -u{$config->db->user} {$config->db->name} > {$dbSqlFile}";
+    $command = "{$config->mysqldumpRoot} -u{$config->db->user} -P {$config->db->port} {$config->db->name} > {$dbSqlFile}";
 }
 echo "Backuping....\n";
 system($command, $returnVar);
