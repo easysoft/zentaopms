@@ -50,13 +50,13 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-id'><nobr><?php echo $lang->idAB;?></nobr></th>
             <th class='w-pri'><?php echo $lang->priAB;?></th>
             <th><?php echo $lang->testcase->title;?></th>
-            <th><?php echo $lang->testcase->type;?></th>
-            <th class='w-100px'><?php echo $lang->testtask->assignedTo;?></th>
-            <th class='w-100px'><?php echo $lang->testtask->lastRunAccount;?></th>
+            <th class='w-type'><?php echo $lang->testcase->type;?></th>
+            <th class='w-user'><?php echo $lang->testtask->assignedTo;?></th>
+            <th class='w-user'><?php echo $lang->testtask->lastRunAccount;?></th>
             <th class='w-100px'><?php echo $lang->testtask->lastRunTime;?></th>
             <th class='w-80px'><?php echo $lang->testtask->lastRunResult;?></th>
             <th class='w-status'><?php echo $lang->statusAB;?></th>
-            <th class='w-160px {sorter: false}'><?php echo $lang->actions;?></th>
+            <th class='w-140px {sorter: false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -86,9 +86,11 @@ var moduleID   = '<?php echo $moduleID;?>';
         <?php if($canBatchAssign):?>
         <tfoot>
           <tr>
-            <td colspan='9'>
-              <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
-              <div class='half-right'><?php echo html::select('assignedTo', $users) . html::submitButton($lang->testtask->assign); ?></div>
+            <td colspan='10'>
+              <?php 
+              echo html::selectAll() . html::selectReverse();
+              echo html::select('assignedTo', $users) . html::submitButton($lang->testtask->assign); 
+              ?>
             </td>
           </tr>
         <tfoot>
