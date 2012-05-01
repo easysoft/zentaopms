@@ -101,7 +101,7 @@ class admin extends control
 	}
 
     /**
-     * Repair all tables 
+     * Check all tables.
      * 
      * @access public
      * @return void
@@ -109,10 +109,10 @@ class admin extends control
     public function checkDB()
     {
         $tables = $this->dbh->query('SHOW TABLES')->fetchAll();
-
         foreach($tables as $table)
         {
-            $result = $this->dbh->query("REPAIR TABLE `" . $table->Tables_in_zentao . "`")->fetch();
+            $tableName = current((array)$table);
+            $result = $this->dbh->query("REPAIR TABLE $tableName")->fetch();
             echo "Repairing TABLE: " . $result->Table . "\t" . $result->Msg_type . ":" . $result->Msg_text . "\n";
         }
     }
