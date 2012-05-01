@@ -1117,9 +1117,9 @@ class router
             {
                 $default = $param->getDefaultValue();
             }
-            elseif(isset($paramDefaultValue[$moduleName][$methodName][$name]))
+            elseif(isset($paramDefaultValue[$className][$methodName][$name]))
             {
-                $default = $paramDefaultValue[$moduleName][$methodName][$name];
+                $default = $paramDefaultValue[$className][$methodName][$name];
             }
 
             $defaultParams[$name] = $default;
