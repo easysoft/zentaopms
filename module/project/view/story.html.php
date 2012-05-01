@@ -69,6 +69,6 @@
     </tr>
     <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='10' class='a-right'><?php printf($lang->product->storySummary, count($stories), $totalEstimate);?></td></tr></tfoot>
+  <tfoot><tr><td colspan='10'><?php printf($lang->product->storySummary, count($stories), $totalEstimate);?></td></tr></tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>
