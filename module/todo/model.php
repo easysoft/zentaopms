@@ -60,26 +60,29 @@ class todoModel extends model
 
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
-            if($todos->date[$i] != '' and $todos->name[$i] != '')
+            if((isset($todos->names[$i]) && $todos->names[$i] != '') || (!isset($todos->names[$i]) && (isset($todos->bugs[$i+1]) || isset($todos->tasks[$i+1]))))
             {
-                $data[$i]->account = $this->app->user->account;
-                $data[$i]->date    = $todos->date[$i];
-                $data[$i]->begin   = $todos->begin[$i];
-                $data[$i]->end     = $todos->end[$i];
-                $data[$i]->type    = $todos->type[$i];
-                $data[$i]->idvalue = 0;
-                $data[$i]->name    = $todos->name[$i];
-                $data[$i]->desc    = $todos->desc[$i];
-                $data[$i]->status  = "wait";
-                $data[$i]->private = 0;
+                $data->account = $this->app->user->account;
+                $data->date    = helper::today();
+                $data->type    = $todos->types[$i];
+                $data->pri     = $todos->pris[$i];
+                $data->name    = isset($todos->names[$i]) ? $todos->names[$i] : '';
+                $data->desc    = $todos->descs[$i];
+                $data->begin   = $todos->begins[$i];
+                $data->end     = $todos->ends[$i];
+                $data->status  = "wait";
+                $data->private = 0;
+                $data->idvalue = 0;
+                if(isset($todos->bugs[$i+1]))
+                {
+                    $data->idvalue = $todos->bugs[$i+1];
+                }
+                elseif(isset($todos->tasks[$i+1]))
+                {
+                    $data->idvalue =  $todos->tasks[$i+1];
+                }
 
-                $this->dao->insert(TABLE_TODO)->data($data[$i])
-                    ->autoCheck()
-                    ->checkIF($data->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
-                    ->checkIF($data->type == 'bug'  and $data->idvalue == 0, 'idvalue', 'notempty')
-                    ->checkIF($data->type == 'task' and $data->idvalue == 0, 'idvalue', 'notempty')
-                    ->exec();
-
+                $this->dao->insert(TABLE_TODO)->data($data) ->exec();
                 if(dao::isError()) 
                 {
                     echo js::error(dao::getError());
@@ -88,11 +91,12 @@ class todoModel extends model
             }
             else
             {
-                unset($todos->date[$i]);
-                unset($todos->type[$i]);
-                unset($todos->pri[$i]);
-                unset($todos->name[$i]);
-                unset($todos->desc[$i]);
+                unset($todos->types[$i]);
+                unset($todos->pris[$i]);
+                unset($todos->names[$i]);
+                unset($todos->descs[$i]);
+                unset($todos->begins[$i]);
+                unset($todos->ends[$i]);
             }
         }
     }

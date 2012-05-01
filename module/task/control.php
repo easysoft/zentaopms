@@ -576,10 +576,12 @@ class task extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserTasks($account = '', $status = 'wait,doing')
+    public function ajaxGetUserTasks($account = '', $id = '', $status = 'wait,doing')
     {
         if($account == '') $account = $this->app->user->account;
         $tasks = $this->task->getUserTaskPairs($account, $status);
+
+        if($id) die(html::select("tasks[$id]", $tasks, '', 'class="select-1 f-left"'));
         die(html::select('task', $tasks, '', 'class=select-1'));
     }
 

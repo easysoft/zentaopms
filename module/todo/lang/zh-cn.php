@@ -42,7 +42,7 @@ $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事务';
 $lang->todo->idvalue     = '任务或Bug';
 
-$lang->todo->notes = '(注：“日期”、“名称”必需填写，否则此行无效)';
+$lang->todo->notes = '(注：“名称”必需填写，否则此行无效)';
 
 $lang->todo->week         = '星期';
 $lang->todo->today        = '今天';

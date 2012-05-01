@@ -42,7 +42,7 @@ $lang->todo->desc        = 'Desc';
 $lang->todo->private     = 'Private';
 $lang->todo->idvalue     = 'Task or bug';
 
-$lang->todo->notes = '(Notes: the date, name must be written, otherwise it is no use)';
+$lang->todo->notes = '(Notes: the name must be written, otherwise it is no use)';
 
 $lang->todo->week         = '(l)';  // date function's param.
 $lang->todo->today        = 'Today';

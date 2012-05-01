@@ -1,5 +1,5 @@
 <?php
-$config->todo->batchCreate  = 10;
+$config->todo->batchCreate  = 8;
 
 $config->todo->create->requiredFields = 'name';
 $config->todo->edit->requiredFields   = 'name';

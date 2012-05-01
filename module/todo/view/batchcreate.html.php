@@ -11,28 +11,27 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datepicker.html.php';?>
 <form method='post'>
   <table class='table-1 fixed'> 
-    <caption><?php echo $lang->todo->batchCreate;?></caption>
+    <caption><?php echo $lang->todo->batchCreate . $lang->colon . $date;?></caption>
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
-      <th class='w-150px'><?php echo $lang->todo->date;?></th>
       <th class='w-100px'><?php echo $lang->todo->type;?></th>
-      <th class='w-100px'><?php echo $lang->todo->pri;?></th>
-      <th class='w-400px'><?php echo $lang->todo->name;?></th>
-      <th class='w-300px'><?php echo $lang->todo->desc;?></th>
+      <th class='w-70px'><?php echo $lang->todo->pri;?></th>
+      <th class='w-p40'><?php echo $lang->todo->name;?></th>
+      <th class='w-p30'><?php echo $lang->todo->desc;?></th>
+      <th class='w-150px'><?php echo $lang->todo->beginAndEnd;?></th>
     </tr>
 
     <?php $pri = 3;?>
     <?php for($i = 0; $i < $config->todo->batchCreate; $i++):?>
     <tr class='a-center'>
       <td><?php echo $i+1;?></td>
-      <td><?php echo html::input("date[$i]", $date, "class='select-2 date'"); echo "<span class='star'>*</span>";?></td>
-      <td><?php echo html::select("type[$i]", $lang->todo->typeList, '', "onchange=loadList(this.value,$i+1) class='select-1'");?></td>
-      <td><?php echo html::select("pri[$i]", $lang->todo->priList, $pri, 'class=select-1');?></td>
-      <td><div id='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("name[$i]", '', 'class=text-1'); echo "<span class='star'>*</span>";?></div></td>
-      <td><?php echo html::textarea("desc[$i]", '', "rows='1' class='text-1'");?></td>
+      <td><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange=loadList(this.value,$i+1) class='select-1'");?></td>
+      <td><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=select-1');?></td>
+      <td><div id='<?php echo "nameBox" . ($i+1);?>' class='nameBox'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div></td>
+      <td><?php echo html::textarea("descs[$i]", '', "rows='2' class=text-1");?></td>
+      <td><?php echo html::select('begins[]', $times, '') . html::select('ends[]', $times, '');?><td>
     </tr>  
     <?php endfor;?>
     <tr>
@@ -45,4 +44,3 @@
 </form>
 <?php include './footer.html.php';?>
 <script language='Javascript'>selectNext();</script>
-<?php include '../../common/view/footer.html.php';?>

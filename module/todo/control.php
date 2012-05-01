@@ -67,7 +67,7 @@ class todo extends control
     public function batchCreate($date = 'today', $account = '')
     {
         if($date == 'today') $this->view->date = helper::today();
-        $todoLink = $this->createLink('my', 'todo', "date=all");
+        $todoLink = $this->createLink('my', 'todo', "date=today");
 
         if(!empty($_POST))
         {
@@ -83,6 +83,8 @@ class todo extends control
 
         $this->view->header   = $header;
         $this->view->position = $position;
+        $this->view->times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time     = $this->todo->now();
 
         $this->display();
     }

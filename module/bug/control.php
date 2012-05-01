@@ -699,10 +699,12 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserBugs($account = '')
+    public function ajaxGetUserBugs($account = '', $id = '')
     {
         if($account == '') $account = $this->app->user->account;
         $bugs = $this->bug->getUserBugPairs($account);
+
+        if($id) die(html::select("bugs[$id]", $bugs, '', 'class="select-1 f-left"'));
         die(html::select('bug', $bugs, '', 'class=select-1'));
     }
 

@@ -30,7 +30,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->name;?></th>
-      <td><div id='nameBox'><?php echo html::input('name', '', 'class=text-1');?></div></td>
+      <td><div id='nameBox' class='nameBox'><?php echo html::input('name', '', 'class=text-1');?></div></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->desc;?></th>

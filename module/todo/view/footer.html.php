@@ -1,31 +1,46 @@
 <script language='Javascript'>
 account='<?php echo $app->user->account;?>';
-function loadList(type)
+customHtml = $('.nameBox').html();
+function loadList(type, id)
 {
-    if(arguments[1])
+    if(id)
     {
-        divID = '#nameBox' +  arguments[1];
-        customHtml = $('#nameBox' + arguments[1]).html();
+        divID = '#nameBox' + id;
+        customHtml = customHtml.replace('nameBox', 'nameBox' + id);
     }
     else
     {
         divID = '#nameBox';
-        customHtml = $('#nameBox').html();
     }
+
     if(type == 'bug')
     {
-        link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account);
+        if(id)
+        {
+          link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account + '&id=' + id);
+        }
+        else
+        {
+          link = createLink('bug', 'ajaxGetUserBugs', 'account=' + account);
+        }
     }
     else if(type == 'task')
     {
-        link = createLink('task', 'ajaxGetUserTasks', 'account=' + account);
+        if(id)
+        {
+          link = createLink('task', 'ajaxGetUserTasks', 'account=' + account + '&id=' + id);
+        }
+        else
+        {
+          link = createLink('task', 'ajaxGetUserTasks', 'account=' + account);
+        }
     }
-   
+
     if(type == 'bug' || type == 'task')
     {
         $(divID).load(link);
     }
-     else if(type == 'custom')
+    else if(type == 'custom')
     {
         $(divID).html(customHtml);
     }
