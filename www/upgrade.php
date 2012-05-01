@@ -9,6 +9,12 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+if(!file_exists("../../config/my.php"))
+{
+    echo dirname(dirname(__FILE__)) . "/config/my.php doesn't exists! Please don't rename zentao before override source code!";
+    exit;
+}
+
 error_reporting(0);
 
 /* Load the framework. */
