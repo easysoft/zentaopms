@@ -173,17 +173,40 @@ class helper
             $modelClass    = $moduleName . 'Model';
             $extModelClass = 'ext' . $modelClass;
             $modelLines    = trim(file_get_contents($mainModelFile));
-            $modelLines    = rtrim($modelLines, '?>');     // To make sure the last end tag is removed.
-            $modelLines   .= "class $extModelClass extends $modelClass {\n";
+            $modelLines    = rtrim($modelLines, "?\>");     // To make sure the last end tag is removed.
+            $modelLines   .= " \n\nclass $extModelClass extends $modelClass {\n";
 
             /* Cycle all the extension files. */
+            $encryptFiles = array(); 
             foreach($extFiles as $extFile)
             {
+                $className  = $moduleName . str_replace('.php', '', basename($extFile));
                 $extLines = trim(file_get_contents($extFile));
-                if(strpos($extLines, '<?php') !== false) $extLines = ltrim($extLines, '<?php');
-                if(strpos($extLines, '?>')    !== false) $extLines = rtrim($extLines, '?>');
-                $modelLines .= $extLines . "\n";
+                if(preg_match('/function +/i', $extLines) == 1)
+                {
+                    $extLines = ltrim($extLines, '<?php');
+                    $extLines = rtrim($extLines, '?\>');
+                    $modelLines .= $extLines . "\n";
+                }
+                else
+                {
+                    $encryptFiles[$className] = $extFile; 
+                }
             }
+            $extClasses = '';
+            $modelLines .= "\tpublic function __call(\$method, \$params)\n\t{\n";
+            foreach($encryptFiles as $extClass => $encryptFile)
+            {
+                $modelLines .= "\t\tinclude '$encryptFile';\n";
+                $extClasses .= "'$extClass',";
+            }
+            $extClasses = rtrim($extClasses, ',');
+            $modelLines .= "\t\t\$extClasses = array($extClasses);\n";
+            $modelLines .= "\t\tforeach(\$extClasses as \$extClass)\n\t\t{\n";
+            $modelLines .= "\t\t\tif(method_exists(\$extClass, \$method))\n\t\t\t{\n";
+            $modelLines .= "\t\t\t\t\$class = new \$extClass();\n";
+            $modelLines .= "\t\t\t\treturn call_user_func_array(array(&\$class, \$method), \$params);\n";
+            $modelLines .= "\t\t\t}\n\t\t}\n\t}\n";
 
             /* Create the merged model file. */
             $modelLines .= "}";
