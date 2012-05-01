@@ -33,7 +33,7 @@ $file->removeDir('./xampp/security');
 $file->removeDir('./xampp/src');
 $file->batchRemoveFile('./xampp/tmp/*');
 $file->removeDir('./xampp/webdav');
-$file->removeDir('./xampp/setup_xampp.bat');
+$file->removeFile('./xampp/setup_xampp.bat');
 $file->batchRemoveFile('./xampp/*.txt');
 
 /* Process apache module. */
@@ -319,3 +319,8 @@ $file->copyFile($buildDir . '/apache_installservice.bat',   './xampp/apache_inst
 $file->copyFile($buildDir . '/apache_uninstallservice.bat', './xampp/apache_uninstallservice.bat');
 $file->copyFile($buildDir . '/mysql_installservice.bat',    './xampp/mysql_installservice.bat');
 $file->copyFile($buildDir . '/mysql_uninstallserivice.bat', './xampp/mysql_uninstallservice.bat');
+
+/* Copy the src of control panel and readme files. */
+$file->mkdir('./xampp/source');
+$file->copyDir($buildDir . "/src/xampp-usb-lite/", './xampp/source/zentaoamp');
+$file->copyFile($buildDir . "/readme.txt", './xampp/readme.txt');
