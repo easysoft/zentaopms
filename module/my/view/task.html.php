@@ -73,14 +73,7 @@
     <?php endforeach;?>
     </tbody>
     <?php if($canBatchClose):?>
-    <tfoot>
-      <tr>
-        <td colspan='11'>
-          <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
-          <div class='half-right'><?php echo html::submitButton($lang->close)?> </div>
-        </td>
-      </tr>
-    </tfoot>
+    <tfoot><tr><td colspan='11'><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->close)?></td></tr></tfoot>
     <?php endif;?>
   </table> 
 <?php if($canBatchClose) echo '</form>';?>
