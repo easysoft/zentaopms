@@ -14,5 +14,3 @@ if(!$requestVar)
 {
     echo "Check DataBase successfully!\n";
 }
-
-?>

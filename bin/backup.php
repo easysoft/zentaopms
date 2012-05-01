@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /* Backup the db. */
 $pmsRoot   = dirname(dirname(__FILE__));
@@ -67,6 +66,3 @@ else
 {
     echo "Backup www/data Successfully! The destination file is $dataFile\n";
 }
-
-?>
-
