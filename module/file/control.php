@@ -117,18 +117,15 @@ class file extends control
         $this->view->fields = $this->post->fields;
         $this->view->rows   = $this->post->rows;
         $output = $this->parse('file', 'export2csv');
-
-        /* If the language is zh-cn, convert to gbk. */
-        $clientLang = $this->app->getClientLang();
-        if($clientLang == 'zh-cn')
+        if( $this->post->CodeType != "utf-8")
         {
             if(function_exists('mb_convert_encoding'))
             {
-                $output = @mb_convert_encoding($output, 'gbk', 'utf-8');
+                $output = @mb_convert_encoding($output, $this->post->CodeType , 'utf-8');
             }
             elseif(function_exists('iconv'))
             {
-                $output = @iconv('utf-8', 'gbk', $output);
+                $output = @iconv('utf-8', $this->post->CodeType, $output);
             }
         }
 

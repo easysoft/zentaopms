@@ -119,7 +119,6 @@ class todo extends control
 
         $this->view->header   = $header;
         $this->view->position = $position;
-        $this->view->dates    = $this->todo->buildDateList();
         $this->view->times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->todo     = $todo;
         $this->display();

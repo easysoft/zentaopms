@@ -733,7 +733,6 @@ class story extends control
                     $story->verify = str_replace("<br />", "\n", $story->verify);
                     $story->verify = str_replace('"', '""', $story->verify);
                 }
-
                 /* fill some field with useful value. */
                 if(isset($products[$story->product]))              $story->product        = $products[$story->product];
                 if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module];

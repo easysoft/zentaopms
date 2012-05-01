@@ -33,6 +33,17 @@ function closeWindow()
     }
     i ++;
 }
+function switchCodeType(fileType)
+{
+    if(fileType == 'csv') 
+    {
+        $('#CodeType').removeAttr('hidden');
+    }
+    else
+    {
+        $('#CodeType').attr('hidden','hidden');
+    }
+}
 </script>
 <br /><br />
 <form method='post' target='hiddenwin' onsubmit='setDownloading();'>
@@ -42,7 +53,8 @@ function closeWindow()
       <td class='a-center'>
         <?php echo $lang->setFileName;?>
         <?php echo html::input('fileName', '', 'size=15');?>
-        <?php echo html::select('fileType', $lang->exportFileTypeList);?> 
+        <?php echo html::select('fileType', $lang->exportFileTypeList,'csv', 'onchange=switchCodeType(this.value)');?>
+        <?php echo html::select('CodeType', $lang->exportCodeTypeList, 'gbk');?> 
         <?php echo html::submitButton();?>
       </td>
     </tr>

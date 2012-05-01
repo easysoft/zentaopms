@@ -103,7 +103,9 @@ $lang->searchTips                   = '輸入編號';
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
-
+/*編碼*/
+$lang->exportCodeTypeList['gbk']  = 'gbk';
+$lang->exportCodeTyprList['utf-8']= 'utf-8;
 /* 風格列表。*/
 $lang->themes['default']   = '預設';
 $lang->themes['green']     = '綠色';

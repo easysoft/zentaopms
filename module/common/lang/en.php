@@ -104,7 +104,9 @@ $lang->searchTips                   = 'Id here';
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
-
+/*code*/
+$lang->exportCodeTypeList['gbk']  = 'gbk';
+$lang->exportCodeTypeList['utf-8']= 'utf-8';
 /* Themes. */
 $lang->themes['default']   = 'Default';
 $lang->themes['green']     = 'Green';
