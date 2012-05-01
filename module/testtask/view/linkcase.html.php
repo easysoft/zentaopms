@@ -59,8 +59,10 @@
   <?php endforeach;?>
   <tfoot> 
   <tr>
-    <td colspan='3'><?php echo html::selectAll() . html::selectReverse() . html::submitButton();?></td>
-    <td colspan='4' class='a-right'><?php $pager->show();?></td>
+    <td colspan='7'>
+      <div class='f-left'><?php echo html::selectAll() . html::selectReverse() . html::submitButton();?></div>
+      <div class='f-right'><?php $pager->show();?></div>
+    </td>
   </tr>
   </tfoot>
 </table>
