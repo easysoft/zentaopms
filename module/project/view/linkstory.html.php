@@ -48,9 +48,11 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='8' class='f-14px'>
-        <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
-        <div class='half-right'><?php print($storyCount? html::submitButton() : $lang->project->whyNoStories);?></div>
+        <td colspan='7' class='a-left'>
+          <?php 
+          if($storyCount)  echo html::selectAll() . html::selectReverse() . html::submitButton();
+          if(!$storyCount) echo $lang->project->whyNoStories;
+          ?>
         </td>
       </tr>
     </tfoot>
