@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 2609 2012-02-21 13:40:19Z wwccss $
+ * @version     $Id: zh-tw.php 2839 2012-05-01 00:54:21Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->todo->common       = 'TODO';
@@ -41,6 +41,8 @@ $lang->todo->status      = '狀態';
 $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事務';
 $lang->todo->idvalue     = '任務或Bug';
+
+$lang->todo->notes = '(註：“名稱”必需填寫，否則此行無效)';
 
 $lang->todo->week         = '星期';
 $lang->todo->today        = '今天';

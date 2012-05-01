@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 2678 2012-03-01 06:24:54Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 2809 2012-04-30 02:48:39Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -42,6 +42,7 @@ $lang->story->type           = '需求類型 ';
 $lang->story->pri            = '優先順序';
 $lang->story->estimate       = '預計工時';
 $lang->story->estimateAB     = '預計';
+$lang->story->hour           = '小時';
 $lang->story->status         = '當前狀態';
 $lang->story->stage          = '所處階段';
 $lang->story->stageAB        = '階段';

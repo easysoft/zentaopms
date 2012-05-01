@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 2630 2012-02-22 09:58:39Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2865 2012-05-01 14:11:22Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -21,7 +21,7 @@ $lang->testtask->unlinkCase     = "移除";
 $lang->testtask->batchAssign    = "批量指派";
 $lang->testtask->runCase        = "執行";
 $lang->testtask->results        = "結果";
-$lang->testtask->createBug      = "創建Bug";
+$lang->testtask->createBug      = "提Bug";
 $lang->testtask->assign         = '指派';
 $lang->testtask->cases          = '用例';
 
@@ -29,7 +29,7 @@ $lang->testtask->common         = '測試任務';
 $lang->testtask->id             = '任務編號';
 $lang->testtask->product        = '所屬產品';
 $lang->testtask->project        = '所屬項目';
-$lang->testtask->build          = 'Build';
+$lang->testtask->build          = '版本';
 $lang->testtask->owner          = '負責人';
 $lang->testtask->name           = '任務名稱';
 $lang->testtask->begin          = '開始日期';
@@ -37,20 +37,20 @@ $lang->testtask->end            = '結束日期';
 $lang->testtask->desc           = '任務描述';
 $lang->testtask->status         = '當前狀態';
 $lang->testtask->assignedTo     = '指派給';
-$lang->testtask->linkVersion    = '關聯(版本)';
-$lang->testtask->lastRunAccount = '最後執行人';
-$lang->testtask->lastRunTime    = '最後執行時間';
-$lang->testtask->lastRunResult  = '最終結果';
+$lang->testtask->linkVersion    = '版本';
+$lang->testtask->lastRunAccount = '執行人';
+$lang->testtask->lastRunTime    = '執行時間';
+$lang->testtask->lastRunResult  = '結果';
 
 $lang->testtask->statusList['wait']    = '未開始';
 $lang->testtask->statusList['doing']   = '進行中';
 $lang->testtask->statusList['done']    = '已完成';
 $lang->testtask->statusList['blocked'] = '被阻塞';
 
-$lang->testtask->unlinkedCases = '未關聯用例列表';
-$lang->testtask->linkedCases   = '已關聯用例列表';
-$lang->testtask->linkByStory   = '按需求關聯用例';
-$lang->testtask->linkByBug     = '按Bug關聯用例';
+$lang->testtask->unlinkedCases = '未關聯';
+$lang->testtask->linkedCases   = '已關聯';
+$lang->testtask->linkByStory   = '按需求關聯';
+$lang->testtask->linkByBug     = '按Bug關聯';
 $lang->testtask->confirmDelete = '您確認要刪除該測試任務嗎？';
 $lang->testtask->passAll       = '全部通過';
 $lang->testtask->pass          = '通過';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 2636 2012-02-22 12:06:51Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 2786 2012-04-27 01:35:33Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -105,6 +105,6 @@ $lang->install->errorEmptyPassword = '密碼不能為空';
 $lang->install->success = "安裝成功";
 
 $lang->install->joinZentao = <<<EOT
-您已經成功安裝禪道管理系統%s，<strong class='red'>請及時刪除install.php</strong>。現在您可以直接<a href='index.php'>登錄禪道管理系統</a>，設置用戶及分組！
+您已經成功安裝禪道管理系統%s，<strong class='red'>請及時刪除install.php</strong>。現在您可以直接<input type='button' value='登錄禪道管理系統' onclick='location.href="index.php"'>，設置用戶及分組！
 <i>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='http://www.zentao.net' target='_blank'>www.zentao.net</a>)進行登記。</i>
 EOT;

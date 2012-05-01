@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 2686 2012-03-02 05:45:14Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 2848 2012-05-01 06:42:22Z areyou123456 $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = '<span class="icon-arrow">&nbsp;</span>';
@@ -57,10 +57,11 @@ $lang->files        = '附件 ';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
-$lang->selectAll    = '全選';
-$lang->notFound     = '抱歉，您訪問的對象並不存在！';
-$lang->showAll      = '++ 全部顯示 ++';
-$lang->hideClosed   = '-- 隱藏已結束 --';
+$lang->selectAll     = '全選';
+$lang->selectReverse = '反選';
+$lang->notFound      = '抱歉，您訪問的對象並不存在！';
+$lang->showAll       = '++ 全部顯示 ++';
+$lang->hideClosed    = '-- 隱藏已結束 --';
 
 $lang->future       = '未來';
 $lang->year         = '年';
@@ -92,7 +93,7 @@ $lang->searchObjects['testcase']    = 'C:用例';
 $lang->searchObjects['project']     = 'P:項目';
 $lang->searchObjects['product']     = 'P:產品';
 $lang->searchObjects['user']        = 'U:用戶';
-$lang->searchObjects['build']       = 'B:Build';
+$lang->searchObjects['build']       = 'B:版本';
 $lang->searchObjects['release']     = 'R:發佈';
 $lang->searchObjects['productplan'] = 'P:產品計劃';
 $lang->searchObjects['testtask']    = 'T:測試任務';
@@ -105,7 +106,7 @@ $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 /*編碼*/
 $lang->exportCodeTypeList['gbk']  = 'gbk';
-$lang->exportCodeTyprList['utf-8']= 'utf-8;
+$lang->exportCodeTypeList['utf-8']= 'utf-8';
 /* 風格列表。*/
 $lang->themes['default']   = '預設';
 $lang->themes['green']     = '綠色';
@@ -155,7 +156,7 @@ $lang->project->menu->task      = array('link' => '任務|project|task|projectID
 $lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '動態|project|dynamic|projectID=%s';
-$lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->testtask  = '測試申請|project|testtask|projectID=%s';
 $lang->project->menu->burn      = '燃盡圖|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');

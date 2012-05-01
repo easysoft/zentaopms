@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 2615 2012-02-22 07:20:56Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 2783 2012-04-26 07:55:12Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -21,6 +21,7 @@ $lang->project->code          = '項目代號';
 $lang->project->begin         = '開始日期';
 $lang->project->end           = '結束日期';
 $lang->project->days          = '可用工作日';
+$lang->project->day           = '天';
 $lang->project->status        = '項目狀態';
 $lang->project->statge        = '所處階段';
 $lang->project->pri           = '優先順序';
@@ -75,7 +76,7 @@ $lang->project->groupTask       = '分組瀏覽任務';
 $lang->project->story           = '需求列表';
 $lang->project->bug             = 'Bug列表';
 $lang->project->dynamic         = '動態';
-$lang->project->build           = 'Build列表';
+$lang->project->build           = '版本列表';
 $lang->project->testtask        = '測試申請';
 $lang->project->burn            = '燃盡圖';
 $lang->project->computeBurn     = '更新燃盡圖';
