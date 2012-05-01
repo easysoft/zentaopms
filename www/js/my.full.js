@@ -406,7 +406,7 @@ function selectTheme(theme)
 function removeAnchor(url)
 {
     pos = url.indexOf('#');
-    if(pos) return url.substring(0, pos);
+    if(pos > 0) return url.substring(0, pos);
     return url;
 }
 
