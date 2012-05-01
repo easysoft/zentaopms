@@ -37,11 +37,11 @@ function switchCodeType(fileType)
 {
     if(fileType == 'csv') 
     {
-        $('#CodeType').removeAttr('hidden');
+        $('#CodeType').removeAttr('class');
     }
     else
     {
-        $('#CodeType').attr('hidden','hidden');
+        $('#CodeType').attr('class', 'hidden');
     }
 }
 </script>
