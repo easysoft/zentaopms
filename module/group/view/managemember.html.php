@@ -15,7 +15,7 @@
   <table align='center' class='table-1 a-left'> 
     <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->group->inside;?><?php echo html::selectAll('selectall', $lang->selectAll, 'group');?> </th>
+      <th class='rowhead'><?php echo $lang->group->inside;?><?php echo html::selectAll('group', 'checkbox');?> </th>
       <td id='group' class='f-14px pv-10px'><?php $i = 1;?>
         <?php foreach($groupUsers as $account => $realname):?>
         <div class='w-p10 f-left'><?php echo '<span>' . html::checkbox('members', array($account => $realname), $account) . '</span>';?></div>
@@ -24,7 +24,7 @@
       </td>
     </tr>
     <tr>
-      <th class='rowhead'><?php echo $lang->group->outside;?><?php echo html::selectAll('selectall', $lang->selectAll, 'other');?> </th>
+      <th class='rowhead'><?php echo $lang->group->outside;?><?php echo html::selectAll('other','checkbox');?> </th>
       <td id='other' class='f-14px pv-10px'><?php $i = 1;?>
         <?php foreach($otherUsers as $account => $realname):?>
         <div class='w-p10 f-left'><?php echo '<span>' . html::checkbox('members', array($account => $realname), '') . '</span>';?></div>

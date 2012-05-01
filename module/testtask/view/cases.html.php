@@ -87,12 +87,8 @@ var moduleID   = '<?php echo $moduleID;?>';
         <tfoot>
           <tr>
             <td colspan='9'>
-              <?php 
-              echo html::selectAll('selectall', $lang->selectAll);
-              echo html::selectReverse('selectreverse', $lang->selectReverse);
-              echo html::select('assignedTo', $users);
-              echo html::submitButton($lang->testtask->assign);
-              ?>
+              <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
+              <div class='half-right'><?php echo html::select('assignedTo', $users) . html::submitButton($lang->testtask->assign); ?></div>
             </td>
           </tr>
         <tfoot>

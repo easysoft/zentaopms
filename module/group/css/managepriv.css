@@ -1,2 +1,4 @@
 .table-6 select{width:200px; height:200px}
 #version {border:2px solid red; margin-left:10px;}
+.half-left{width:40%}
+.half-right {width:55%; text-align:left}

@@ -23,7 +23,6 @@
       <th><?php echo $lang->story->plan;?></th>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
       <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
-      <th class='w-50px'><?php echo $lang->link;?></th>
     </tr>
     </thead>
     <tbody>
@@ -32,17 +31,17 @@
     <?php if(isset($prjStories[$story->id])) continue;?>
     <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
     <tr>
-      <td><?php echo html::a($storyLink, $story->id);?></td>
+      <td class='a-left'>
+        <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
+        <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
+        <?php echo html::a($storyLink, $story->id);?>
+      </td>
       <td><?php echo $lang->story->priList[$story->pri];?></td>
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
       <td class='a-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
-      <td>
-        <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' />
-        <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
-      </td>
     </tr>
     <?php $storyCount ++;?>
     <?php endforeach;?>
@@ -50,9 +49,8 @@
     <tfoot>
       <tr>
         <td colspan='8' class='f-14px'>
-        <?php echo html::selectAll('selectall', $lang->selectAll);?>
-        <?php echo html::selectReverse('selectreverse', $lang->selectReverse);?>
-        <?php print($storyCount? html::submitButton() : $lang->project->whyNoStories);?>
+        <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
+        <div class='half-right'><?php print($storyCount? html::submitButton() : $lang->project->whyNoStories);?></div>
         </td>
       </tr>
     </tfoot>

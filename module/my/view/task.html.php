@@ -76,9 +76,8 @@
     <tfoot>
       <tr>
         <td colspan='11'>
-          <?php echo html::selectAll('selectall', $lang->selectAll); ?>
-          <?php echo html::selectReverse('selectreverse', $lang->selectReverse);?>
-          <?php echo html::submitButton($lang->close)?>
+          <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
+          <div class='half-right'><?php echo html::submitButton($lang->close)?> </div>
         </td>
       </tr>
     </tfoot>

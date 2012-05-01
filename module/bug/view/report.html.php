@@ -23,8 +23,8 @@
       <div class='box-content'>
         <form method='post'>
         <?php echo html::checkBox('charts', $lang->bug->report->charts, $checkedCharts);?>
-        <?php echo html::selectAll('selectall', $lang->selectAll); ?>
-        <?php echo html::selectReverse('selectreverse', $lang->selectReverse); ?>
+        <?php echo html::selectAll();?>
+        <?php echo html::selectReverse(); ?>
         <br /><br />
         <?php echo html::submitButton($lang->bug->report->create);?>
       </div>

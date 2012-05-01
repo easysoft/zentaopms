@@ -25,7 +25,7 @@
     </tr>  
     <?php foreach($lang->resource as $moduleName => $moduleActions):?>
     <tr class='f-14px <?php echo cycle('even, bg-yellow');?>'>
-      <th class='a-right'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll('selectall', $lang->selectAll, $moduleName)?></td>
+      <th class='a-right'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></td>
       <td id='<?php echo $moduleName;?>' class='pv-10px'>
         <?php $i = 1;?>
         <?php foreach($moduleActions as $action => $actionLabel):?>
@@ -39,13 +39,16 @@
     </tr>
     <?php endforeach;?>
     <tr>
-      <th class='rowhead'><?php echo html::selectAll('selectall', $lang->selectAll) . html::selectReverse('selectreverse', $lang->selectReverse);?></th>
+      <th class='rowhead'></th>
       <td class='a-center'>
+        <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
+        <div class='half-right'>
         <?php 
         echo html::submitButton($lang->save);
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
         echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.
         ?>
+        </div>
       </td>
     </tr>
   </table>

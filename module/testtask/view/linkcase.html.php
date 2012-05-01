@@ -35,7 +35,10 @@
   <tbody>
   <?php foreach($cases as $case):?>
   <tr class='a-center'>
-    <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
+    <td class='a-left'>
+      <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
+      <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
+    </td>
     <td><?php echo $case->pri?></td>
     <td class='a-left'>
       <?php
@@ -50,8 +53,7 @@
     <td><?php echo $lang->testcase->typeList[$case->type];?></td>
     <td><?php echo $users[$case->openedBy];?></td>
     <td><?php echo $lang->testcase->statusList[$case->status];?></td>
-    <td class='a-left'><nobr>
-      <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
+    <td class='a-center'><nobr>
       <?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'style=width:50px');?></nobr>
     </td>
   </tr>
@@ -60,7 +62,10 @@
   <tfoot> 
   <tr><td colspan='7' class='a-right'><?php $pager->show();?></td></tr>
   <tr>
-    <td colspan='7' class='a-center'><?php echo html::selectAll('selectall', $lang->selectAll) . html::selectReverse('selectreverse', $lang->selectReverse);?><?php echo html::submitButton();?></td>
+    <td colspan='7' class='a-center'>
+      <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
+      <div class='half-right'><?php echo html::submitButton();?></div>
+    </td>
   </tr>
   </tfoot>
 </table>

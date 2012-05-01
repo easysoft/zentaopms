@@ -220,47 +220,64 @@ class html
     }
 
     /**
-     * Create tags like "<input type='button' onclick='selectAll()'/>"
+     * Create tags like "<input type='$type' onclick='selectAll()'/>"
      * 
-     * @param  string $name   the name of the button tag.
-     * @param  string $value  the value of the button tag.
      * @param  string $scope  the scope of select all.
-     * @param  string $attrib other attribs.
+     * @param  string $type   the type of input tag.
      * @return string
      */
-    static public function selectAll($name, $value, $scope = "", $attrib = "")
+    static public function selectAll($scope = "", $type = "button")
     {
         $string = <<<EOT
 <script type="text/javascript">
-function selectAll(scope)
+function selectAll(self,scope,type)
 { 
-   if(scope)
-   {
-        $('#' + scope + ' input').each(function() 
+    if(scope)
+    {
+        if(type == 'button')
         {
-            $(this).attr("checked", true)
-        });
-   }
-   else
-   {
-        $('input').each(function() 
+            $('#' + scope + ' input').each(function() 
+            {
+                $(this).attr("checked", true)
+            });
+        }
+        else if(type == 'checkbox')
         {
-            $(this).attr("checked", true)
-        });
-   }
+            $('#' + scope + ' input').each(function() 
+            {
+                $(this).attr("checked", self.checked)
+            });
+         }
+    }
+    else
+    {
+        if(type == 'button')
+        {
+            $('input').each(function() 
+            {
+                $(this).attr("checked", true)
+            });
+        }
+        else if(type == 'checkbox')
+        { 
+            $('input').each(function() 
+            {
+                $(this).attr("checked", self.checked)
+            });
+        }
+    }
 }
 </script>
 EOT;
-        if($scope)
+        global $lang;
+        if($type == 'checkbox')
         {
-            $string .= "<input type='button' name='{$name}[]' value='$value' onclick='selectAll(\"$scope\")'";
+            $string .= "<input type='checkbox' name='selectAll[]' onclick='selectAll(this,\"$scope\",\"$type\")' />";
         }
-        else
+        elseif($type == 'button')
         {
-            $string .= "<input type='button' name='{$name}[]' value='$value' onclick='selectAll()'";
+            $string .= "<input type='button' name='selectAll[]' value='{$lang->selectAll}' class='button-s' onclick='selectAll(this,\"$scope\",\"$type\")' />";
         }
-        $string .= $attrib;
-        $string .= " />";
 
         return  $string;
     }
@@ -268,45 +285,34 @@ EOT;
     /**
      * Create tags like "<input type='button' onclick='selectReverse()'/>"
      * 
-       @param  string $name   the name of the button tag.
-     * @param  string $value  the value of the button tag.
      * @param  string $scope  the scope of select reverse.
-     * @param  string $attrib other attribs.
      * @return string
      */
-    static public function selectReverse($name, $value, $scope = "", $attrib = "")
+    static public function selectReverse($scope = "")
     {
         $string = <<<EOT
 <script type="text/javascript">
 function selectReverse(scope)
 { 
-   if(scope)
-   {
+    if(scope)
+    {
         $('#' + scope + ' input').each(function() 
         {
             $(this).attr("checked", !$(this).attr("checked"))
         });
-   }
-   else
-   {
+    }
+    else
+    {
         $('input').each(function() 
         {
             $(this).attr("checked", !$(this).attr("checked"))
         });
-   }
+    }
 }
 </script>
 EOT;
-        if($scope)
-        {
-            $string .= "<input type='button' name='{$name}[]' value='$value' onclick='selectReverse(\"$scope\")'";
-        }
-        else
-        {
-            $string .= "<input type='button' name='{$name}[]' value='$value' onclick='selectReverse()'";
-        }
-        $string .= $attrib;
-        $string .= " /> ";
+        global $lang;
+        $string .= "<input type='button' name='selectReverse[]' value='{$lang->selectReverse}' class='button-s' onclick='selectReverse(\"$scope\")'/>";
 
         return  $string;
     }
