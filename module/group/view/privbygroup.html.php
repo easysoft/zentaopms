@@ -12,12 +12,11 @@
 ?>
 <form method='post' target='hiddenwin'>
   <table class='table-1 a-left'> 
-    <caption class='caption-tl'><?php echo $group->name . $lang->colon . $lang->group->managePriv;?>
-      <span>
-        <?php 
-        echo html::select('version', $this->lang->group->versions, '', "onchange=showPriv(this.value)");
-        ?>
-      </span>
+    <caption class='caption-tl'>
+      <?php 
+      echo $group->name . $lang->colon . $lang->group->managePriv;
+      echo html::select('version', $this->lang->group->versions, '', "onchange=showPriv(this.value)");
+      ?>
     </caption>
     <tr class='colhead'>
       <th><?php echo $lang->group->module;?></th>
@@ -39,21 +38,18 @@
     </tr>
     <?php endforeach;?>
     <tr>
-      <th class='rowhead'></th>
+      <th class='rowhead'><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
       <td class='a-center'>
-        <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
-        <div class='half-right'>
         <?php 
         echo html::submitButton($lang->save);
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
         echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.
         ?>
-        </div>
       </td>
     </tr>
   </table>
 </form>
 <script type='text/javascript'>
-    var newPriv = <?php echo json_encode($changelogs)?>;
-    var version = "<?php echo $this->config->version?>";
+var newPriv = <?php echo json_encode($changelogs)?>;
+var version = "<?php echo $this->config->version?>";
 </script>
