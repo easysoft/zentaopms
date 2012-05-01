@@ -1,5 +1,6 @@
 <?php
 /* Backup the db. */
+error_reporting(E_ERROR);
 $pmsRoot   = dirname(dirname(__FILE__));
 $backupDir = $pmsRoot . "/backup";
 
