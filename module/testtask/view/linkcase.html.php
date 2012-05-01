@@ -24,12 +24,12 @@
   <thead>
   <tr class='colhead'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
+    <th class='w-60px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
     <th class='w-pri'><?php echo $lang->priAB;?></th>
     <th><?php echo $lang->testcase->title;?></th>
     <th class='w-type'><?php echo $lang->testcase->type;?></th>
     <th class='w-user'><?php echo $lang->openedByAB;?></th>
     <th class='w-status'><?php echo $lang->statusAB;?></th>
-    <th class='w-100px'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
   </tr>
   </thead>
   <tbody>
@@ -39,6 +39,7 @@
       <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
       <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
     </td>
+    <td class='a-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class=select-1');?> </td>
     <td><?php echo $case->pri?></td>
     <td class='a-left'>
       <?php
@@ -53,19 +54,13 @@
     <td><?php echo $lang->testcase->typeList[$case->type];?></td>
     <td><?php echo $users[$case->openedBy];?></td>
     <td><?php echo $lang->testcase->statusList[$case->status];?></td>
-    <td class='a-center'><nobr>
-      <?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'style=width:50px');?></nobr>
-    </td>
   </tr>
   </tbody>
   <?php endforeach;?>
   <tfoot> 
-  <tr><td colspan='7' class='a-right'><?php $pager->show();?></td></tr>
   <tr>
-    <td colspan='7' class='a-center'>
-      <div class='half-left'><?php echo html::selectAll() . html::selectReverse();?> </div>
-      <div class='half-right'><?php echo html::submitButton();?></div>
-    </td>
+    <td colspan='3'><?php echo html::selectAll() . html::selectReverse() . html::submitButton();?></td>
+    <td colspan='4' class='a-right'><?php $pager->show();?></td>
   </tr>
   </tfoot>
 </table>
