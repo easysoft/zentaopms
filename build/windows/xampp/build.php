@@ -13,6 +13,7 @@ $sqlbuddy = $argv[1] . '/sqlbuddy.zip';
 $sevenz   = $argv[2];
 
 chdir('c:/');
+
 /* extract the xampp package. */
 echo "extracting xampp package ...";
 echo `$sevenz x -y $xampp`;
@@ -111,6 +112,7 @@ $httpdConf = str_replace('LoadModule proxy_ajp_module modules/mod_proxy_ajp.so',
 $httpdConf = str_replace('LoadModule ssl_module modules/mod_ssl.so',                        '#LoadModule ssl_module modules/mod_ssl.so', $httpdConf);
 $httpdConf = str_replace('LoadModule status_module modules/mod_status.so',                  '#LoadModule status_module modules/mod_status.so', $httpdConf);
 $httpdConf = str_replace('#LoadModule deflate_module modules/mod_deflate.so',               'LoadModule deflate_module modules/mod_deflate.so', $httpdConf);
+$httpdConf = str_replace('#LoadModule expires_module modules/mod_expires.so',               'LoadModule expires_module modules/mod_expires.so', $httpdConf);
 
 $httpdConf = str_replace('Include "conf/extra/httpd-perl.conf"',               '#Include "conf/extra/httpd-perl.conf"', $httpdConf);
 $httpdConf = str_replace('Include "conf/extra/httpd-multilang-errordoc.conf"', '#Include "conf/extra/httpd-multilang-errordoc.conf"', $httpdConf);
@@ -166,6 +168,7 @@ $file->mkdir('./xampp/mysql/bin');
 $file->copyFile('./xampp/mysql/binold/mysql.exe',      './xampp/mysql/bin/mysql.exe');
 $file->copyFile('./xampp/mysql/binold/mysqld.exe',     './xampp/mysql/bin/mysqld.exe');
 $file->copyFile('./xampp/mysql/binold/mysqldump.exe',  './xampp/mysql/bin/mysqldump.exe');
+$file->copyFile('./xampp/mysql/binold/myisamchk.exe',  './xampp/mysql/bin/myisamchk.exe');
 $file->copyFile('./xampp/mysql/binold/my.ini',         './xampp/mysql/bin/my.ini');
 
 $file->removeDir('./xampp/mysql/binold');
@@ -193,13 +196,17 @@ $file->removeFile('./xampp/mysql/COPYING');
 /* Process mysql's conf file. */
 $myConf = file_get_contents('./xampp/mysql/bin/my.ini');
 $myConf = str_replace('#bind-address="127.0.0.1"', 'bind-address="127.0.0.1"', $myConf);
+$myConf = str_replace('#skip-innodb', "default-storage-engine=MyISAM\nskip-innodb\n", $myConf);
+
 $myConf = explode("\n", $myConf);
 foreach($myConf as $key => $line)
 {
     $line = trim($line);
     if(empty($line) or substr($line, 0, 1) == '#') unset($myConf[$key]);
+    if(stripos($line, 'innodb') === 0)             unset($myConf[$key]);
 }
 $myConf = join("\n", $myConf);
+$myConf = str_replace('', '', $myConf);
 file_put_contents('./xampp/mysql/bin/my.ini',     str_replace('3308', '3306', $myConf));
 file_put_contents('./xampp/mysql/bin/my3306.ini', str_replace('3308', '3306', $myConf));
 file_put_contents('./xampp/mysql/bin/my3308.ini', str_replace('3306', '3308', $myConf));
@@ -251,19 +258,30 @@ $phpConfig = explode("\n", $phpConfig);
 foreach($phpConfig as $key => $line)
 {
     $line = trim($line);
-    if(empty($line)) unset($phpConfig[$key]);
-    if(substr($line, 0, 1) == ';') unset($phpConfig[$key]);
+    if(empty($line))                             unset($phpConfig[$key]);
+    if(substr($line, 0, 1)            == ';')    unset($phpConfig[$key]);
+    if(stripos($line, 'odbc')         !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'interbase')    !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'ibase')        !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'oci8')         !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'postgresql')   !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'pgsql')        !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'sybase')       !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'sybct')        !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'mssql')        !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'soap')         !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'eaccelerator') !== false) unset($phpConfig[$key]);
+    if(stripos($line, 'xdebug')       !== false) unset($phpConfig[$key]);
 }
 $phpConfig = join("\n", $phpConfig);
 $phpConfig = 'zend_extension = "\xampp\php\ext\ioncube_loader_win_5.3.dll"' . "\n" . $phpConfig;
 
-file_put_contents('./xampp/php/php.ini', $phpConfig);
+file_put_contents('./xampp/php/php.ini', str_replace('', '', $phpConfig));
 
 /* Process php's ext directory. */
 $file->rename('./xampp/php/ext', './xampp/php/extold');
 $file->mkdir('./xampp/php/ext');
 $file->copyFile('./xampp/php/extold/php_bz2.dll',             './xampp/php/ext/php_bz2.dll');
-$file->copyFile('./xampp/php/extold/php_eaccelerator_ts.dll', './xampp/php/ext/php_eaccelerator_ts.dll');
 $file->copyFile('./xampp/php/extold/php_gd2.dll',             './xampp/php/ext/php_gd2.dll');
 $file->copyFile('./xampp/php/extold/php_imap.dll',            './xampp/php/ext/php_imap.dll');
 $file->copyFile('./xampp/php/extold/php_mbstring.dll',        './xampp/php/ext/php_mbstring.dll');
@@ -279,6 +297,7 @@ if(!is_dir('./xampp/admin/sqlbuddy'))
 {
     echo `$sevenz x -y $sqlbuddy`;
     $file->rename('./sqlbuddy', './xampp/admin/sqlbuddy');
+    $file->copyFile($buildDir . '/sqlbuddyconfig.php', './xampp/admin/sqlbuddy/config.php');
 }
 
 /* Process control panel. */
