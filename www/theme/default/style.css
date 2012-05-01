@@ -336,6 +336,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Product, project switcher. */
 #switcher {color:white; font-style:bold; background:red; cursor:pointer;}
 
+/* Select all and select reverse. */
+#allchecker, #reversechecker {padding:3px 5px}
+
 /* Other items. */
 #actionbox .button-c {font-size:9px; height:20px; padding:0 5px 0 5px}
 .history, .changes   {border:1px solid #ccc; background:#f2f2f2; padding:10px; margin-top:10px; margin-bottom:10px; color:#333; line-height:20px;}

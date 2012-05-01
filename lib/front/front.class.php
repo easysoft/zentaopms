@@ -230,7 +230,7 @@ class html
     {
         $string = <<<EOT
 <script type="text/javascript">
-function selectAll(self,scope,type)
+function selectAll(checker, scope, type)
 { 
     if(scope)
     {
@@ -245,7 +245,7 @@ function selectAll(self,scope,type)
         {
             $('#' + scope + ' input').each(function() 
             {
-                $(this).attr("checked", self.checked)
+                $(this).attr("checked", checker.checked)
             });
          }
     }
@@ -262,7 +262,7 @@ function selectAll(self,scope,type)
         { 
             $('input').each(function() 
             {
-                $(this).attr("checked", self.checked)
+                $(this).attr("checked", checker.checked)
             });
         }
     }
@@ -272,11 +272,11 @@ EOT;
         global $lang;
         if($type == 'checkbox')
         {
-            $string .= "<input type='checkbox' name='selectAll[]' onclick='selectAll(this,\"$scope\",\"$type\")' />";
+            $string .= " <input type='checkbox' name='allchecker[]' onclick='selectAll(this, \"$scope\", \"$type\")' />";
         }
         elseif($type == 'button')
         {
-            $string .= "<input type='button' name='selectAll[]' value='{$lang->selectAll}' class='button-s' onclick='selectAll(this,\"$scope\",\"$type\")' />";
+            $string .= "<input type='button' name='allchecker' id='allchecker' value='{$lang->selectAll}' onclick='selectAll(this, \"$scope\", \"$type\")' />";
         }
 
         return  $string;
@@ -312,7 +312,7 @@ function selectReverse(scope)
 </script>
 EOT;
         global $lang;
-        $string .= "<input type='button' name='selectReverse[]' value='{$lang->selectReverse}' class='button-s' onclick='selectReverse(\"$scope\")'/>";
+        $string .= "<input type='button' name='reversechecker' id='reversechecker' value='{$lang->selectReverse}' onclick='selectReverse(\"$scope\")'/>";
 
         return  $string;
     }
