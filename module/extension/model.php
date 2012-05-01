@@ -563,6 +563,7 @@ class extensionModel extends model
     public function removePackage($extension)
     {
         $extension = $this->getInfoFromDB($extension);
+        if($extension->type == 'patch') return true;
         $dirs  = json_decode($extension->dirs);
         $files = json_decode($extension->files);
         $appRoot = $this->app->getAppRoot();
