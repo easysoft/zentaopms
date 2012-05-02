@@ -183,8 +183,9 @@ class helper
                 $extLines = trim(file_get_contents($extFile));
                 if(preg_match('/function +/i', $extLines) == 1)
                 {
-                    $extLines = ltrim($extLines, '<?php');
-                    $extLines = rtrim($extLines, '?\>');
+                    $extLines = trim($extLines);
+                    if(strpos($extLines, '<?php') === 0) $extLines = ltrim($extLines, '<?php');
+                    if(strpos($extLines, '?>') !== false)$extLines = rtrim($extLines, '?\>');
                     $modelLines .= $extLines . "\n";
                 }
                 else
@@ -200,15 +201,20 @@ class helper
                 $extClasses .= "'$extClass',";
             }
             $extClasses = rtrim($extClasses, ',');
-            $modelLines .= "\t\t\$extClasses = array($extClasses);\n";
-            $modelLines .= "\t\tforeach(\$extClasses as \$extClass)\n\t\t{\n";
-            $modelLines .= "\t\t\tif(method_exists(\$extClass, \$method))\n\t\t\t{\n";
-            $modelLines .= "\t\t\t\t\$class = new \$extClass();\n";
-            $modelLines .= "\t\t\t\treturn call_user_func_array(array(&\$class, \$method), \$params);\n";
-            $modelLines .= "\t\t\t}\n\t\t}\n\t}\n";
-
+            $modelLines .=<<<EOD
+        \$extClasses = array($extClasses);
+        foreach(\$extClasses as \$extClass)
+        {
+            if(method_exists(\$extClass, \$method))
+            {
+                \$class = new \$extClass();
+                return call_user_func_array(array(&\$class, \$method), \$params);
+            }
+        }
+    }
+}
+EOD;
             /* Create the merged model file. */
-            $modelLines .= "}";
             file_put_contents($mergedModelFile, $modelLines);
 
             return $mergedModelFile;
