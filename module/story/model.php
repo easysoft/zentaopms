@@ -488,8 +488,8 @@ class storyModel extends model
         /* If no projects, in plan, stage is planned. No plan, wait. */
         if(!$projects)
         {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq((int)$storyID)->andWhere('plan')->gt(0)->exec();
             $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq((int)$storyID)->andWhere('plan')->eq(0)->andWhere('status')->eq('active')->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('planned')->where('id')->eq((int)$storyID)->andWhere('plan')->gt(0)->exec();
             return true;
         }
 
@@ -497,8 +497,8 @@ class storyModel extends model
         $tasks = $this->dao->select('type,status')->from(TABLE_TASK)
             ->where('project')->in($projects)
             ->andWhere('story')->eq($storyID)
+            ->andWhere('type')->in('devel,test')
             ->andWhere('status')->ne('cancel')
-            ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('type');
 
@@ -509,50 +509,43 @@ class storyModel extends model
             return true;
         }
 
-        /* If have test task, the stage is tested, testing or developing. */
-        if(isset($tasks['test']))
+        /* Get current stage and set as default value. */
+        $currentStage = $this->dao->findById($storyID)->from(TABLE_STORY)->fields('stage')->fetch('stage');
+        $stage = $currentStage;
+
+        /* Cycle all tasks, get counts of every type and every status. */
+        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done' => 0);
+        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done' => 0);
+        foreach($tasks as $type => $typeTasks)
         {
-            $stage = 'tested';
-            foreach($tasks['test'] as $task)
+            foreach($typeTasks as $task)
             {
-                if($task->status != 'done')
-                {
-                    $stage = 'testing';
-                    break;
-                }
-            }
-            if($stage != 'testing')
-            {
-                unset($tasks['test']);
-                foreach($tasks as $type => $typeTasks)
-                {
-                    foreach($typeTasks as $task)
-                    {
-                        if($task->status != 'done')
-                        {
-                            $stage = 'developing';
-                            break;
-                        }
-                    }
-                }
+                $status = $task->status ? $task->status : 'wait';
+                $status = $status == 'closed' ? 'done' : $status;
+
+                $statusList[$task->type][$status] ++;
             }
         }
-        /* No test taske, stage is done or developing. */
-        else
-        {
-            $stage = 'developed';
-            foreach($tasks as $type => $typeTasks)
-            {
-                foreach($typeTasks as $task)
-                {
-                    if($task->status != 'done')
-                    {
-                        $stage = 'developing';
-                        break;
-                    }
-                }
-            }
-        }
+
+        /* Get counts of every type tasks. */
+        $develTasks = isset($tasks['devel']) ? count($tasks['devel']) : 0;
+        $testTasks  = isset($tasks['test'])  ? count($tasks['test'])  : 0;
+
+        /**
+         * Judge stage according to the devel and test tasks' status. 
+         * 
+         * 1. one doing devel task, all test tasks waiting, set stage as developing.
+         * 2. all devel tasks done, all test tasks waiting, set stage as developed.
+         * 3. one test task doing, set stage as testing. 
+         * 4. all test tasks done, still some devel tasks not done(wait, doing), set stage as testing.
+         * 5. all test tasks done, all devel tasks done, set stage as tested.
+         */
+        if($statusList['devel']['doing'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing'; 
+        if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developed';
+        if($statusList['test']['doing'] > 0) $stage = 'testing';
+        if(($statusList['devel']['wait'] > 0 or $statusList['devel']['doing'] > 0) and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'testing';
+        if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['done'] == $testTasks and $testTasks > 0) $stage = 'tested';
+
         $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq((int)$storyID)->exec();
         return;
     }
