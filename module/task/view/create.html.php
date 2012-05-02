@@ -21,7 +21,7 @@ $(function()
      $("#preview").colorbox({width:960, height:500, iframe:true, transition:'elastic', speed:350, scrolling:true});
 })
 </script>
-<form method='post' enctype='multipart/form-data' target='hiddenwin2'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table align='center' class='table-1 a-left'> 
     <caption><?php echo $lang->task->create;?></caption>
     <tr>
