@@ -69,10 +69,7 @@ class storyModel extends model
         /* Remove closed projects. */
         if($story->projects)
         {
-            foreach($story->projects as $projectID => $project)
-            {
-                if($project->status != 'doing') unset($story->projects[$projectID]);
-            }
+            foreach($story->projects as $projectID => $project) if($project->status == 'done') unset($story->projects[$projectID]);
         }
 
         /* Get team members. */
