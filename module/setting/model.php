@@ -23,6 +23,7 @@ class settingModel extends model
     public function getVersion()
     {
         $version = $this->getItem('system', 'global', 'version');
+        if($version == '3.0.stable') $version = '3.0';   // convert 3.0.stable to 3.0.
         if($version) return $version;
         return '0.3 beta';
     }
