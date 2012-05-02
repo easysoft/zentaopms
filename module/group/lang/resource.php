@@ -364,3 +364,5 @@ $lang->changelog['3.0.beta1'][] = 'release-ajaxGetStoriesAndBugs';
 $lang->changelog['3.0.beta2'][] = 'extension-structure';
 $lang->changelog['3.0.beta2'][] = 'product-order';
 $lang->changelog['3.0.beta2'][] = 'project-order';
+
+$lang->changelog['3.1'][] = 'todo-batchCreate';
