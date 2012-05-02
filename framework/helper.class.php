@@ -172,9 +172,8 @@ class helper
         {
             $modelClass    = $moduleName . 'Model';
             $extModelClass = 'ext' . $modelClass;
-            $modelLines    = trim(file_get_contents($mainModelFile));
-            $modelLines    = rtrim($modelLines, "?\>");     // To make sure the last end tag is removed.
-            $modelLines   .= " \n\nclass $extModelClass extends $modelClass {\n";
+            $modelLines    = "<?php \ninclude '$mainModelFile';\n";
+            $modelLines   .= "class $extModelClass extends $modelClass {\n";
 
             /* Cycle all the extension files. */
             $encryptFiles = array(); 
