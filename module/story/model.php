@@ -326,6 +326,7 @@ class storyModel extends model
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
+            ->setIF($this->post->plan !== false and $this->post->plan == '', 'plan', 0)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
