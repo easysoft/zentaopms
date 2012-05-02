@@ -13,7 +13,7 @@
  */
 /* Basic settings. */
 $config->version     = '3.1';             // The version of zentaopms. Don't change it.
-$config->encoding    = 'UTF-8';           // The encoding of znetaopms.
+$config->encoding    = 'UTF-8';           // The encoding of zentaopms.
 $config->cookieLife  = time() + 2592000;  // The cookie life time.
 $config->timezone    = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
 $config->webRoot     = '';                // The root path of the pms.
