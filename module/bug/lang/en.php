@@ -242,7 +242,6 @@ $lang->bug->resolutionList['tostory']    = 'To story';
 $lang->bug->report->common        = 'Report';
 $lang->bug->report->select        = 'Select';
 $lang->bug->report->create        = 'Create';
-$lang->bug->report->selectReverse = 'Reverse';
 
 $lang->bug->report->charts['bugsPerProject']        = 'Project bugs';
 $lang->bug->report->charts['bugsPerModule']         = 'Module bugs';
