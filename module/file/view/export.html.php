@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/colorbox.html.php';?>
-
 <script>
 function setDownloading()
 {
@@ -33,15 +32,15 @@ function closeWindow()
     }
     i ++;
 }
-function switchCodeType(fileType)
+function switchEncode(fileType)
 {
     if(fileType == 'csv') 
     {
-        $('#CodeType').removeAttr('class');
+        $('#encode').removeAttr('class');
     }
     else
     {
-        $('#CodeType').attr('class', 'hidden');
+        $('#encode').attr('class', 'hidden');
     }
 }
 </script>
@@ -53,8 +52,8 @@ function switchCodeType(fileType)
       <td class='a-center'>
         <?php echo $lang->setFileName;?>
         <?php echo html::input('fileName', '', 'size=15');?>
-        <?php echo html::select('fileType', $lang->exportFileTypeList,'csv', 'onchange=switchCodeType(this.value)');?>
-        <?php echo html::select('CodeType', $lang->exportCodeTypeList, 'gbk');?> 
+        <?php echo html::select('fileType', $lang->exportFileTypeList,'csv', 'onchange=switchEncode(this.value)');?>
+        <?php echo html::select('encode', $lang->exportEncodeList, 'gbk');?> 
         <?php echo html::submitButton();?>
       </td>
     </tr>

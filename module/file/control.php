@@ -117,15 +117,15 @@ class file extends control
         $this->view->fields = $this->post->fields;
         $this->view->rows   = $this->post->rows;
         $output = $this->parse('file', 'export2csv');
-        if( $this->post->CodeType != "utf-8")
+        if( $this->post->encode != "utf-8")
         {
             if(function_exists('mb_convert_encoding'))
             {
-                $output = @mb_convert_encoding($output, $this->post->CodeType , 'utf-8');
+                $output = @mb_convert_encoding($output, $this->post->encode, 'utf-8');
             }
             elseif(function_exists('iconv'))
             {
-                $output = @iconv('utf-8', $this->post->CodeType, $output);
+                $output = @iconv('utf-8', $this->post->encode, $output);
             }
         }
 

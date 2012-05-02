@@ -104,9 +104,12 @@ $lang->searchTips                   = '输入编号';
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
-/*编码*/
-$lang->exportCodeTypeList['gbk']  = 'gbk';
-$lang->exportCodeTypeList['utf-8']= 'utf-8';
+
+/* 支持的编码格式。*/
+$lang->exportEncodeList['gbk']   = 'GBK';
+$lang->exportEncodeList['big5']  = 'BIG5';
+$lang->exportEncodeList['utf-8'] = 'UTF-8';
+
 /* 风格列表。*/
 $lang->themes['default']   = '默认';
 $lang->themes['green']     = '绿色';
