@@ -53,8 +53,8 @@ class userModel extends model
     public function getPairs($params = '')
     {
         $users = $this->dao->select('account, realname')->from(TABLE_USER)
-            ->where('deleted')->eq(0)
             ->beginIF(strpos($params, 'nodeleted') !== false)
+            ->where('deleted')->eq(0)
             ->fi()
             ->orderBy('account')->fetchPairs();
         foreach($users as $account => $realName)
