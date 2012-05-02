@@ -703,6 +703,7 @@ class bug extends control
      * AJAX: get bugs of a user in html select.
      * 
      * @param  string $account 
+     * @param  string $id       the id of the select control.
      * @access public
      * @return string
      */
