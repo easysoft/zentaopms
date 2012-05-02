@@ -22,7 +22,7 @@
         common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
         common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
         if($case->lastRunResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
-        if(common::hasPriv('testcase', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
+        if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
         common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
         common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
         common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
@@ -62,7 +62,7 @@
        <?php
         if(!$case->deleted)
         {
-            if(common::hasPriv('testcase', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
+            if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
             common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
             common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
         }

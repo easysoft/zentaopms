@@ -30,7 +30,7 @@
       if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
       if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
       if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
-      if(common::hasPriv('task', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
+      if(common::hasPriv('task', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
       if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
   }
   echo html::a($browseLink,  $lang->goback);
@@ -58,7 +58,7 @@
             if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
             if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
             if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
-            if(common::hasPriv('task', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
+            if(common::hasPriv('task', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
             if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
         }
         echo html::a($browseLink,  $lang->goback);

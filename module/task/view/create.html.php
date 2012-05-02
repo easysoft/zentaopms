@@ -16,11 +16,12 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <script language='javascript'> var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
 <script language='Javascript'>
-$(function(){
+$(function()
+{
      $("#preview").colorbox({width:960, height:500, iframe:true, transition:'elastic', speed:350, scrolling:true});
 })
 </script>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin2'>
   <table align='center' class='table-1 a-left'> 
     <caption><?php echo $lang->task->create;?></caption>
     <tr>

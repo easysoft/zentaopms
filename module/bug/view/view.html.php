@@ -24,7 +24,7 @@
         if(!($bug->status == 'active' and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm))) echo $lang->bug->buttonConfirm . ' ';
         if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
         common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
-        if(common::hasPriv('bug', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
+        if(common::hasPriv('bug', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
         if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
         common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
@@ -60,7 +60,7 @@
             if(!($bug->status == 'active'  and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
             if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
             common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
-            if(common::hasPriv('bug', 'edit')) echo html::a('#', $lang->comment, '', 'onclick=setComment()'). ' ';
+            if(common::hasPriv('bug', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
             if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
             if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
             common::printLink('bug', 'create', $copyParams, $lang->bug->buttonCopy);
