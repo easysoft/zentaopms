@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2809 2012-04-30 02:48:39Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 2889 2012-05-02 13:20:36Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -242,7 +242,6 @@ $lang->bug->resolutionList['tostory']    = '轉為需求';
 $lang->bug->report->common        = '統計報表';
 $lang->bug->report->select        = '請選擇報表類型';
 $lang->bug->report->create        = '生成報表';
-$lang->bug->report->selectReverse = '反選';
 
 $lang->bug->report->charts['bugsPerProject']        = '項目Bug數量';
 $lang->bug->report->charts['bugsPerModule']         = '模組Bug數量';
