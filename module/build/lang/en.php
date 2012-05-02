@@ -33,6 +33,6 @@ $lang->build->linkStories        = 'Stories';
 $lang->build->linkBugs           = 'Bugs';
 $lang->build->stories            = 'Linked stories';
 $lang->build->bugs               = 'Linked bugs';
-$lang->build->finishStories         = 'The total demand for a complete %s';
-$lang->build->resolvedBugs          = 'The total solution of bug%s';
 
+$lang->build->finishStories = 'The total demand for a complete %s';
+$lang->build->resolvedBugs  = 'The total solution of bug%s';
