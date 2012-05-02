@@ -19,8 +19,8 @@ class misc extends control
      */
     public function ping()
     {
-        if(mt_rand(0, 10) == 5) $this->loadModel('setting')->setSN();
-        die("<html><head><meta http-equiv='refresh' content='300' /></head><body></body></html>");
+        if(mt_rand(0, 1) == 1) $this->loadModel('setting')->setSN();
+        die("<html><head><meta http-equiv='refresh' content='60' /></head><body></body></html>");
     }
 
     /**

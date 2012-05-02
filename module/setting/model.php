@@ -119,7 +119,10 @@ class settingModel extends model
         {
             $this->dao->insert(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
         }
-        elseif($config->value == '281602d8ff5ee7533eeafd26eda4e776' or $config->value == '9bed3108092c94a0db2b934a46268b4a')
+        elseif($config->value == '281602d8ff5ee7533eeafd26eda4e776' or 
+               $config->value == '9bed3108092c94a0db2b934a46268b4a' or
+               $config->value == '8522dd4d76762a49d02261ddbe4ad432' or
+               $config->value == '13593e340ee2bdffed640d0c4eed8bec')
         {
             $this->dao->update(TABLE_CONFIG)->data($item)->where('id')->eq($config->id)->exec($autoCompany = false);
         }

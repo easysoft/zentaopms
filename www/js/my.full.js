@@ -800,7 +800,7 @@ $(document).ready(function()
     saveWindowSize();
     loadFixedCSS();
     $(window).resize(function(){saveWindowSize()});       // When window resized, call it again.
-    if(needPing) setTimeout('setPing()', 1000 * 60 * 5);  // After 5 minutes, begin ping.
+    if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
     if($('#productID')) $('#productID').focus();
     if($('#projectID')) $('#projectID').focus();
 });
