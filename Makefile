@@ -17,6 +17,7 @@ tgz:
 	mkdir -p zentaopms/db
 	mkdir -p zentaopms/bin
 	mkdir -p zentaopms/config
+	mkdir -p zentaopms/tmp
 	mkdir -p zentaopms/www/data/upload
 	# copy files.
 	cp -fr framework zentaopms/
