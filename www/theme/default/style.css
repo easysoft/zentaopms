@@ -18,7 +18,7 @@ a  {text-decoration:none;}
 
 /*-----------------------LAYOUT SETTING ----------------------------*/
 #wrap{ padding:0 15px; background:#e5e5e5;}
-.outer {text-align:left; background:#fff; border:1px solid #ddd; padding:15px; overflow:auto}
+.outer {text-align:left; background:#fff; border:1px solid #ddd; padding:15px;}
 .cont, .cont-lt1, .cont-lt2, .cont-lt3, .cont-lt4, .cont-lt5, .cont-rt1, .cont-rt2, .cont-rt3, .cont-rt4, .cont-rt5 {width:100%; margin:0; border:none; text-align:left}
 .cont tr, .cont td {border:none; padding:0}
 .cont-lt1 tr, .cont-lt2 tr, .cont-lt3 tr, .cont-lt4 tr, .cont-lt5 tr {border:none; padding:0}
