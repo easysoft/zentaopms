@@ -130,10 +130,9 @@ $lang->task->delayWarning        = " <strong class='delayed f-14px'> Postponed %
 $lang->task->remindBug           = "This task from Bug, update the Bug:%s or not?";
 
 /* Report. */
-$lang->task->report->common        = 'Report';
-$lang->task->report->select        = 'Select';
-$lang->task->report->create        = 'Create';
-$lang->task->report->selectReverse = 'Reverse';
+$lang->task->report->common = 'Report';
+$lang->task->report->select = 'Select';
+$lang->task->report->create = 'Create';
 
 $lang->task->report->charts['tasksPerProject']      = 'Project tasks';
 $lang->task->report->charts['tasksPerAssignedTo']   = 'Assigned To';
