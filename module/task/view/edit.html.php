@@ -89,15 +89,15 @@
           </tr>  
           <tr>
             <th class='rowhead w-p20'><?php echo $lang->task->estimate;?></th>
-            <td><?php echo html::input('estimate', $task->estimate, "class='text-1 hour'") . $lang->task->hour;?></td>
+            <td><?php echo html::input('estimate', $task->estimate, "class='text-1'");?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-            <td><?php echo html::input('consumed', $task->consumed, "class='text-1 hour'") . $lang->task->hour;?></td>
+            <td><?php echo html::input('consumed', $task->consumed, "class='text-1'");?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->left;?></th>
-            <td><?php echo html::input('left', $task->left, "class='text-1 hour'") . $lang->task->hour;?></td>
+            <td><?php echo html::input('left', $task->left, "class='text-1'");?></td>
           </tr>
         </table>
       </fieldset>
