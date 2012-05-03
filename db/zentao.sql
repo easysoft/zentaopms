@@ -1537,4 +1537,9 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 1, 'misc', 'ping'),
 (1, 1, 'action', 'trash'),
 (1, 1, 'action', 'undelete'),
-(1, 2, 'misc', 'ping');
+(1, 2, 'misc', 'ping'),
+(1, 1, 'todo', 'batchCreate'),
+(1, 2, 'todo', 'batchCreate'),
+(1, 3, 'todo', 'batchCreate'),
+(1, 4, 'todo', 'batchCreate'),
+(1, 5, 'todo', 'batchCreate');
