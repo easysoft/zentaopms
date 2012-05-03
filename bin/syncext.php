@@ -7,6 +7,10 @@
  * @version $Id$
  */
 
+sudo pecl install channel://pecl.php.net/inotify-0.1.5
+
+extension=inotify.so" to php.ini
+
 /* Get params from argvs. */
 if(!isset($argv[1])) die("php syncext.php from target sleep\n");
 $from   = $argv[1];
