@@ -186,10 +186,9 @@ $lang->story->action->linked2project      = array('main' => '$date, linked to pr
 $lang->story->action->unlinkedfromproject = array('main' => '$date, removed from project <strontg>$extra</strong> by <strong>$actor</strong>.');
 
 /* Report*/
-$lang->story->report->common        = 'Report';
-$lang->story->report->select        = 'Select';
-$lang->story->report->create        = 'Creat';
-$lang->story->report->selectReverse = 'Reverse';
+$lang->story->report->common = 'Report';
+$lang->story->report->select = 'Select';
+$lang->story->report->create = 'Create';
 
 $lang->story->report->charts['storysPerProduct']        = 'Product storys';
 $lang->story->report->charts['storysPerModule']         = 'Module storys';
