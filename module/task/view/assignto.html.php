@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post'>
+<form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>

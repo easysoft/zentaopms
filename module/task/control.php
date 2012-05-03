@@ -226,8 +226,10 @@ class task extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $actionID = $this->task->assign($taskID);
+            $changes = $this->task->assign($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+            $this->action->logHistory($actionID, $changes);
             $this->sendmail($taskID, $actionID);
 
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
