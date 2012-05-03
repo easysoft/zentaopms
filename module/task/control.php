@@ -572,6 +572,7 @@ class task extends control
      * AJAX: return tasks of a user in html select. 
      * 
      * @param  string $account 
+     * @param  string $id 
      * @param  string $status 
      * @access public
      * @return string
