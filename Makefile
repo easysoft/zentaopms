@@ -24,7 +24,7 @@ tgz:
 	cp -fr lib/ zentaopms/
 	cp -fr config/config.php zentaopms/config/
 	cp -fr module zentaopms/
-	cp -fr www/*.ico www/fusioncharts www/*.php www/js www/*.txt www/theme www/.htaccess zentaopms/www
+	cp -fr www/*.ico www/fusioncharts www/*.php www/js www/*.txt www/theme www/.htaccess www/.ztaccess zentaopms/www
 	cp bin/ztc* bin/computeburn.php bin/getbugs.php bin/initext.php bin/todo.php bin/convertopt.php zentaopms/bin
 	cp -fr db zentaopms/
 	cp -fr doc/* zentaopms/
