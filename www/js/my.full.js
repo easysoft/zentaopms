@@ -566,7 +566,7 @@ function setProjectListLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.export').size()) $(".export").colorbox({width:400, height:200, iframe:true, transition:'elastic', speed:350, scrolling:true});
+   if($('.export').size()) $(".export").colorbox({width:500, height:200, iframe:true, transition:'elastic', speed:350, scrolling:true});
 }
 
 /**
