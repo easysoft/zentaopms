@@ -20,7 +20,6 @@
 <table class='table-1'>
   <caption>
     <div class='f-left'>RESULT#<?php echo $result->id . ' ' . $result->date . ' ' . $users[$result->lastRunner] . ' ' . $lang->testtask->runCase . ':'. " <span class='$result->caseResult'>" . $lang->testcase->resultList[$result->caseResult] . '</span>';?></div>
-    <div class='f-right'><?php echo $lang->testtask->build . ':#' . $result->version;?></div>
   </caption>
   <tr>
     <th class='w-30px'><?php echo $lang->testcase->stepID;?></th>
