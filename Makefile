@@ -11,6 +11,7 @@ clean:
 	rm -fr *.zip
 	rm -fr api*
 	rm -fr build/linux/lampp
+	rm -fr sae
 tgz:
 	# make the directories.
 	mkdir -p zentaopms/lib
@@ -65,7 +66,8 @@ build4sae:
 	# replace the directory of index.php, install.php, upgrade.php.
 	sed -e 's/..\/framework/framework/g' zentaopms/index.php |sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/index.php.new
 	sed -e 's/..\/framework/framework/g' zentaopms/install.php |sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/install.php.new
-	sed -e 's/..\/framework/framework/g' zentaopms/upgrade.php |sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/upgrade.php.new
+	grep -v myConfig zentaopms/upgrade.php | grep -v '{' | grep -v '}' | grep -v 'exit' | grep -v checkUpgradeStatus | grep -v debug> zentaopms/upgrade.php.new    # remove the checking of myConfig.
+	sed -e 's/..\/framework/framework/g' zentaopms/upgrade.php.new | sed -e "s/dirname(//" |sed -e 's/)))/))/' > zentaopms/upgrade.php.new
 	mv zentaopms/index.php.new zentaopms/index.php
 	mv zentaopms/upgrade.php.new zentaopms/upgrade.php
 	cat zentaopms/install.php.new |grep -v 'setDebug' > zentaopms/install.php
