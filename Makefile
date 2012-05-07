@@ -17,7 +17,6 @@ tgz:
 	mkdir -p zentaopms/db
 	mkdir -p zentaopms/bin
 	mkdir -p zentaopms/config
-	mkdir -p zentaopms/tmp
 	mkdir -p zentaopms/www/data/upload
 	# copy files.
 	cp -fr framework zentaopms/
@@ -28,6 +27,7 @@ tgz:
 	cp bin/ztc* bin/computeburn.php bin/getbugs.php bin/initext.php bin/todo.php bin/convertopt.php zentaopms/bin
 	cp -fr db zentaopms/
 	cp -fr doc/* zentaopms/
+	cp -fr tmp zentaopms/
 	cp VERSION zentaopms/
 	# create my.min.js
 	rm zentaopms/www/js/my.min.js
