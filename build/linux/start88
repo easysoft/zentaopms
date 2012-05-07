@@ -19,4 +19,6 @@ mv zentao/config/my.php.3308 zentao/config/my.php
 
 chown nobody -R var/mysql
 chmod 777 tmp
+chmod 777 -R zentao/tmp
+chmod 777 -R zentao/www/data/upload
 ./lampp start
