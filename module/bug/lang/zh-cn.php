@@ -128,7 +128,7 @@ $lang->bug->legendAction       = '操作';
 $lang->bug->legendHistory      = '历史记录';
 $lang->bug->legendComment      = '备注';
 $lang->bug->legendLife         = 'BUG的一生';
-$lang->bug->legendMisc         = '其相关他';
+$lang->bug->legendMisc         = '其他相关';
 
 /* 功能按钮。*/
 $lang->bug->buttonConfirm        = '确认';
