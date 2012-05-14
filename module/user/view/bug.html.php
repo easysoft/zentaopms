@@ -39,5 +39,6 @@
   </tr>
   <?php endforeach;?>
   </tbody>
+  <tfoot><tr><td colspan='8'><?php echo $pager->show();?></td></tr></tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>

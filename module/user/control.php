@@ -120,13 +120,20 @@ class user extends control
      * User bugs. 
      * 
      * @param  string $account 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function bug($account)
+    public function bug($account, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('bugList', $this->app->getURI(true));
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
@@ -141,9 +148,10 @@ class user extends control
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->tabID    = 'bug';
-        $this->view->bugs     = $this->user->getBugs($account);
+        $this->view->bugs     = $this->user->getBugs($account, $pager);
         $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
         $this->view->users    = $this->user->getPairs('noletter');
+        $this->view->pager    = $pager;
 
         $this->display();
     }

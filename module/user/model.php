@@ -394,10 +394,11 @@ class userModel extends model
      * Get bugs assigned to a user.
      * 
      * @param  string $account 
+     * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getBugs($account)
+    public function getBugs($account, $pager = null)
     {
         return $this->dao->select('t1.*')
             ->from(TABLE_BUG)->alias('t1')
@@ -406,6 +407,8 @@ class userModel extends model
             ->where('t2.deleted')->eq(0)
             ->andwhere('t1.deleted')->eq(0)
             ->andwhere('t1.assignedTo')->eq($account)
+            ->orderBy('id desc')
+            ->page($pager)
             ->fetchAll();
     }
 }
