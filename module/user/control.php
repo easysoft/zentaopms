@@ -87,10 +87,14 @@ class user extends control
      * @access public
      * @return void
      */
-    public function task($account)
+    public function task($account, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('taskList', $this->app->getURI(true));
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set the menu. */
         $this->lang->set('menugroup.user', 'company');
@@ -102,8 +106,9 @@ class user extends control
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->tabID    = 'task';
-        $this->view->tasks    = $this->loadModel('task')->getUserTasks($account);
+        $this->view->tasks    = $this->loadModel('task')->getUserTasks($account, 'assignedto', 0, $pager);
         $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
+        $this->view->pager    = $pager;
 
         $this->display();
     }

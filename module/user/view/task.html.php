@@ -40,5 +40,6 @@
     <td class='<?php echo $task->status;?>'><?php echo $lang->task->statusList[$task->status];?></td>
   <?php endforeach;?>
   </tbody>
+  <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
 </table> 
 <?php include '../../common/view/footer.html.php';?>

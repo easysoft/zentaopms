@@ -115,19 +115,24 @@ class my extends control
      * @access public
      * @return void
      */
-    public function task($type = 'assignedto')
+    public function task($type = 'assignedto', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('taskList',  $this->app->getURI(true));
         $this->session->set('storyList', $this->app->getURI(true));
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         /* Assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[]    = $this->lang->my->task;
         $this->view->tabID         = 'task';
-        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, $type);
+        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager);
         $this->view->type          = $type;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager         = $pager;
         $this->display();
     }
 

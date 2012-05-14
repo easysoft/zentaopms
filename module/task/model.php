@@ -477,7 +477,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getUserTasks($account, $type = 'assignedto', $limit = 0)
+    public function getUserTasks($account, $type = 'assignedto', $limit = 0, $pager = null)
     {
         $type = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
@@ -494,6 +494,7 @@ class taskModel extends model
             ->beginIF($type == 'canceledby')->andWhere('t1.canceledby')->eq($account)->fi()
             ->orderBy('id desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
+            ->page($pager)
             ->fetchAll();
         if($tasks) return $this->processTasks($tasks);
         return array();
