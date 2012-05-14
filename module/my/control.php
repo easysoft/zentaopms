@@ -88,22 +88,31 @@ class my extends control
     }
 
     /**
-     * My stories.
-     * 
+     * My stories 
+      
+     * @param  string $type 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function story($type = 'assignedto')
+    public function story($type = 'assignedto', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true));
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         /* Assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[]    = $this->lang->my->story;
-        $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, $type);
+        $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, $type, 'id_desc', $pager);
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->type          = $type;
+        $this->view->pager         = $pager;
 
         $this->display();
     }
