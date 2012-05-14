@@ -55,8 +55,7 @@ class todoModel extends model
      */
     public function batchCreate()
     {
-        $now = helper::now();
-        $todos = fixer::input('post') ->get();
+        $todos = fixer::input('post')->cleanInt('date')->get();
 
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
@@ -82,7 +81,7 @@ class todoModel extends model
                     $data->idvalue =  $todos->tasks[$i+1];
                 }
 
-                $this->dao->insert(TABLE_TODO)->data($data) ->exec();
+                $this->dao->insert(TABLE_TODO)->data($data)->autoCheck()->exec();
                 if(dao::isError()) 
                 {
                     echo js::error(dao::getError());
