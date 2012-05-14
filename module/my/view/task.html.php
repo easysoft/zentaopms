@@ -72,18 +72,16 @@
     </tr>
     <?php endforeach;?>
     </tbody>
-    <?php if($canBatchClose):?>
     <tfoot>
       <tr>
         <td colspan='11'>
+        <?php if($canBatchClose):?>
         <div class='f-left'><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->close)?></div> 
+        <?php endif;?>
         <?php $pager->show();?>
         </td>
       </tr>
     </tfoot>
-    <?php else:?>
-    <tfoot><tr><td colspan='11'><?php $pager->show();?></td></tr></tfoot>
-    <?php endif;?>
   </table> 
 <?php if($canBatchClose) echo '</form>';?>
 <?php include '../../common/view/footer.html.php';?>
