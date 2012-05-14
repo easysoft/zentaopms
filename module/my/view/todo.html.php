@@ -76,6 +76,7 @@
     </tr>
     <?php endforeach;?>
     </tbody>
+    <?php if($importFuture || $type == 'all'):?>
     <tfoot>
       <tr>
         <td colspan='9'>
@@ -86,6 +87,7 @@
         </td>
       </tr>
     </tfoot>
+    <?php endif;?>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
