@@ -63,7 +63,7 @@ class todoModel extends model
             if((isset($todos->names[$i]) && $todos->names[$i] != '') || (!isset($todos->names[$i]) && (isset($todos->bugs[$i+1]) || isset($todos->tasks[$i+1]))))
             {
                 $data->account = $this->app->user->account;
-                $data->date    = helper::today();
+                $data->date    = $this->post->date;
                 $data->type    = $todos->types[$i];
                 $data->pri     = $todos->pris[$i];
                 $data->name    = isset($todos->names[$i]) ? $todos->names[$i] : '';

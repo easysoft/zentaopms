@@ -11,9 +11,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <form method='post'>
   <table class='table-1 fixed'> 
-    <caption><?php echo $lang->todo->batchCreate . $lang->colon . $date;?></caption>
+    <caption>
+      <div class='f-left'><?php echo $lang->todo->batchCreate . $lang->colon;?></div>
+      <?php echo html::input('date', $date, "class='select-2 date'");?>
+    </caption>
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
       <th class='w-100px'><?php echo $lang->todo->type;?></th>

@@ -67,7 +67,6 @@ class todo extends control
     public function batchCreate($date = 'today', $account = '')
     {
         if($date == 'today') $this->view->date = helper::today();
-        $todoLink = $this->createLink('my', 'todo', "date=today");
 
         if(!empty($_POST))
         {
@@ -75,7 +74,7 @@ class todo extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             /* Locate the browser. */
-            die(js::locate($todoLink, 'parent'));
+            die(js::locate($this->createLink('my', 'todo', "date={$this->post->date}"), 'parent'));
         }
 
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
