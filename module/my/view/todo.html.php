@@ -76,10 +76,15 @@
     </tr>
     <?php endforeach;?>
     </tbody>
-    <?php if($importFuture):?>
     <tfoot>
-    <tr><td colspan='9'><input type='submit' value='<?php echo $lang->todo->import2Today;?>' /></td></tr>
-    <?php endif;?>
+      <tr>
+        <td colspan='9'>
+        <?php if($importFuture):?>
+        <div class='f-left'><input type='submit' value='<?php echo $lang->todo->import2Today;?>' /></div>
+        <?php endif;?>
+        <?php if($type == 'all') $pager->show();?>
+        </td>
+      </tr>
     </tfoot>
   </table>
 </form>

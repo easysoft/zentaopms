@@ -56,15 +56,18 @@ class my extends control
     }
 
     /**
-     * My todos.
+     * My todos. 
      * 
      * @param  string $type 
      * @param  string $account 
      * @param  string $status 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function todo($type = 'today', $account = '', $status = 'all')
+    public function todo($type = 'today', $account = '', $status = 'all', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -72,16 +75,21 @@ class my extends control
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         /* The header and position. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $this->view->position[]    = $this->lang->my->todo;
 
         /* Assign. */
         $this->view->dates   = $this->loadModel('todo')->buildDateList();
-        $this->view->todos   = $this->todo->getList($type, $account, $status);
+        $this->view->todos   = $this->todo->getList($type, $account, $status, 0, $pager);
         $this->view->date    = (int)$type == 0 ? $this->todo->today() : $type;
         $this->view->type    = $type;
         $this->view->account = $this->app->user->account;
+        $this->view->pager   = $pager;
         $this->view->importFuture = ($type == 'before' or $type == 'future' or $type == TODOMODEL::DAY_IN_FUTURE);
 
         $this->display();
