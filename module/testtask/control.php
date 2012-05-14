@@ -189,17 +189,24 @@ class testtask extends control
     /**
      * Browse cases of a test task.
      * 
-     * @param  int    $taskID 
+     * @param  string $taskID 
      * @param  string $browseType  bymodule|all|assignedtome
      * @param  int    $param 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function cases($taskID, $browseType = 'byModule', $param = 0)
+    public function cases($taskID, $browseType = 'byModule', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
         $this->app->loadLang('testcase');
         $this->session->set('caseList', $this->app->getURI(true));
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set the browseType and moduleID. */
         $browseType = strtolower($browseType);
@@ -215,11 +222,11 @@ class testtask extends control
         {
             $modules = '';
             if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
-            $this->view->runs      = $this->testtask->getRuns($taskID, $modules);
+            $this->view->runs      = $this->testtask->getRuns($taskID, $modules, $pager);
         }
         elseif($browseType == 'assignedtome')
         {
-            $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account);
+            $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $pager);
         }
 
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
@@ -235,6 +242,7 @@ class testtask extends control
         $this->view->taskID      = $taskID;
         $this->view->moduleID    = $moduleID;
         $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
+        $this->view->pager       = $pager;
 
         $this->display();
     }

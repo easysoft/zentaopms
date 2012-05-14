@@ -170,34 +170,38 @@ class testtaskModel extends model
     /**
      * Get test runs of a test task.
      * 
-     * @param  int   $taskID 
-     * @param  int   $moduleID 
+     * @param  int    $taskID 
+     * @param  int    $moduleID 
+     * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getRuns($taskID, $moduleID)
+    public function getRuns($taskID, $moduleID, $pager = null)
     {
         return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq((int)$taskID)
             ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
-            ->fetchAll();
+            ->page($pager)
+            ->fetchAll('', false);
     }
 
     /**
      * Get test runs of a user.
      * 
-     * @param  int   $taskID 
-     * @param  int   $user 
+     * @param  int    $taskID 
+     * @param  int    $user 
+     * @param  obejct $pager 
      * @access public
      * @return array
      */
-    public function getUserRuns($taskID, $user)
+    public function getUserRuns($taskID, $user, $pager = null)
     {
         return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq((int)$taskID)
             ->andWhere('t1.assignedTo')->eq($user)
+            ->page($pager)
             ->fetchAll();
     }
 

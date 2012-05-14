@@ -83,18 +83,21 @@ var moduleID   = '<?php echo $moduleID;?>';
           </tr>
           <?php endforeach;?>
         </tbody>
-        <?php if($canBatchAssign):?>
         <tfoot>
           <tr>
             <td colspan='10'>
+              <?php if($canBatchAssign):?>
+              <div class='f-left'>
               <?php 
               echo html::selectAll() . html::selectReverse();
               echo html::select('assignedTo', $users) . html::submitButton($lang->testtask->assign); 
               ?>
+              </div>
+              <?php endif;?>
+              <?php echo $pager->show();?>
             </td>
           </tr>
         <tfoot>
-        <?php endif;?>
       </table>
       <?php if($canBatchAssign) echo '</form>';?>
     </td>
