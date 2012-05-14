@@ -39,15 +39,18 @@ class user extends control
     }
 
     /**
-     * Todos of a user.
+     * Todos of a user. 
      * 
      * @param  string $account 
      * @param  string $type         the tod type, today|lastweek|thisweek|all|undone, or a date.
      * @param  string $status 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function todo($account, $type = 'today', $status = 'all')
+    public function todo($account, $type = 'today', $status = 'all', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
@@ -55,13 +58,17 @@ class user extends control
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Get user, totos. */
         $user  = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-        $todos = $this->loadModel('todo')->getList($type, $account, $status);
+        $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager);
         $date  = (int)$type == 0 ? $this->todo->today() : $type;
 
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
@@ -76,6 +83,7 @@ class user extends control
         $this->view->user     = $user;
         $this->view->account  = $account;
         $this->view->type     = $type;
+        $this->view->pager    = $pager;
 
         $this->display();
     }

@@ -56,6 +56,7 @@
     </tr>
     <?php endforeach;?>
     </tbody>
+    <?php if($type == 'all'):?><tfoot><tr><td colspan='8'><?php $pager->show();?></td></tr></tfoot><?php endif;?>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
