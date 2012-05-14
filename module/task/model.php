@@ -474,6 +474,7 @@ class taskModel extends model
      * @param  string $account 
      * @param  string $type     the query type 
      * @param  int    $limit   
+     * @param  object $pager   
      * @access public
      * @return array
      */

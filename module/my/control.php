@@ -109,9 +109,12 @@ class my extends control
     }
 
     /**
-     * My tasks.
+     * My tasks
      * 
-     * @param  string $type the browse type
+     * @param  string $type 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */

@@ -81,9 +81,12 @@ class user extends control
     }
 
     /**
-     * Taskes of a user.
+     * Tasks of a user. 
      * 
      * @param  string $account 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
