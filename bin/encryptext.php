@@ -13,6 +13,38 @@ $defaultValue = "";
 $moduleDir    = $filePath . '/module/';
 $modules      = glob($moduleDir . '*');
 echo "Seting default value for control\n";
+$notice = <<<EOD
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dli'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+  <title>Error</title>
+</head>
+<body>
+您版本的用户数是{\$properties['user']}，已经超过该版本的人数限制，请联系我们<br>
+email：<a href='mailto:zentao@cnezsoft.com'>zentao@cnezsoft.com</a><br>
+电话：4006 889923<br>
+网址：<a href='http://www.zentao.net/goto.php?item=buypro'>www.zentao.net</a><br>
+<br><br>
+The number of users is {\$properties['user']} for the edition and has exceeded the limit, please contact us.<br>
+email:<a href='mailto:zentao@cnezsoft.com'>zentao@cnezsoft.com</a><br>
+tel:4006 889923<br>
+Web:<a href='http://www.zentao.net/goto.php?item=buypro'>www.zentao.net</a><br>
+</body>
+</html>
+EOD;
+$limitUser =<<<EOD
+if(function_exists('ioncube_file_properties')) \$properties = ioncube_file_properties();
+\$user = \$this->dao->select("COUNT('*') as count")->from(TABLE_USER)->where('deleted')->eq(0)->fetch();
+if(!empty(\$properties) and \$properties['user'] < \$user->count) die("$notice");
+EOD;
+$limitFunc =<<<EOD
+public function __construct()
+{
+    parent::__construct();
+    $limitUser;
+}
+EOD;
 foreach($modules as $module)
 {
     $controlPath = $module . '/control.php';
@@ -22,6 +54,26 @@ foreach($modules as $module)
         echo "Seting value for $className\n";
         include $controlPath;
         $reflection = new ReflectionClass($className);
+        if(method_exists($className, '__construct'))
+        {
+            $construct = new ReflectionMethod($className, '__construct');
+            $fileName  = $construct->getFileName();
+            $controlContent  = file_get_contents($controlPath);
+            $controlLines    = explode("\n", $controlContent);
+            if($controlPath == $fileName)
+            {
+                $endLine = $construct->getEndLine() - 1;
+                $controlLines[$endLine] = $limitUser . "\n" . $controlLines[$endLine];
+            }
+            else
+            {
+                $methods = $reflection->getMethods();
+                $startLine = $methods[0]->getStartLine() - 1;
+                $controlLines[$startLine] = $limitFunc . "\n" . $controlLines[$startLine];
+            }
+            $controlContent = join("\n", $controlLines);
+            file_put_contents($controlPath, $controlContent);
+        }
         foreach($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method)
         {
             $methodName = strtolower($method->name);
@@ -54,7 +106,7 @@ foreach($modules as $module)
                $line = trim($line);
                if(preg_match("/^class +($className) +extends +/i", $line, $class) == 1)   $extClassName = strtolower($class[1]);
                if(preg_match("/^class +(my$className) +extends +/i", $line, $class) == 1) $extClassName = strtolower($class[1]);
-               if(preg_match("/^public +function +$methodName/i", $line) == 1)
+               if(preg_match("/^(public)?\s+function\s+$methodName/i", $line) == 1)
                {
                    $params = strstr($line, '(');
                    if(preg_match('/^(.+)$/', $params) == 0) continue;
@@ -119,7 +171,7 @@ foreach(glob("$file/module/*/ext/model/*.php") as $fileName)
 /* encrypt file*/
 echo "Encrypting extension\n";
 if(!is_dir('/tmp/encrypt'))mkdir("/tmp/encrypt");
-exec("/home/z/ioncubeEncoder/ioncube_encoder$phpVersion --expire-in 30d --copy config.php --copy phpexcel/ --copy tmp/ --copy hook --copy framework/ --copy config/ --copy view/ --copy lang/ $file --update-target --into /tmp/encrypt/", $outError);
+exec("/home/z/ioncubeEncoder/ioncube_encoder$phpVersion --expire-in 180d --property user=3 --copy config.php --copy phpexcel/ --copy tmp/ --copy hook --copy framework/ --copy config/ --copy view/ --copy lang/ $file --update-target --into /tmp/encrypt/", $outError);
 foreach($outError as $error)
 {
     $errorFile    = substr($error, 0 , strpos($error, ':'));
