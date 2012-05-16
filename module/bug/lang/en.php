@@ -244,6 +244,7 @@ $lang->bug->report->select        = 'Select';
 $lang->bug->report->create        = 'Create';
 
 $lang->bug->report->charts['bugsPerProject']        = 'Project bugs';
+$lang->bug->report->charts['bugsPerBuild']          = 'Build bugs';
 $lang->bug->report->charts['bugsPerModule']         = 'Module bugs';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Opened bugs per day';
 $lang->bug->report->charts['resolvedBugsPerDay']    = 'Resolved bugs per day';
@@ -274,6 +275,7 @@ $lang->bug->report->options->graph->pieRadius        = 100;
 $lang->bug->report->options->graph->showColumnShadow = 0;
 
 $lang->bug->report->bugsPerProject->graph->xAxisName     = 'Project';
+$lang->bug->report->bugsPerBuild->graph->xAxisName       = 'Build';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = 'Module';
 
 $lang->bug->report->openedBugsPerDay->swf                = 'column2d';

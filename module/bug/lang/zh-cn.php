@@ -244,6 +244,7 @@ $lang->bug->report->select        = '请选择报表类型';
 $lang->bug->report->create        = '生成报表';
 
 $lang->bug->report->charts['bugsPerProject']        = '项目Bug数量';
+$lang->bug->report->charts['bugsPerBuild']          = '版本Bug数量';
 $lang->bug->report->charts['bugsPerModule']         = '模块Bug数量';
 $lang->bug->report->charts['openedBugsPerDay']      = '每天新增Bug数';
 $lang->bug->report->charts['resolvedBugsPerDay']    = '每天解决Bug数';
@@ -274,6 +275,7 @@ $lang->bug->report->options->graph->pieRadius        = 100; // 饼图直径。
 $lang->bug->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
 
 $lang->bug->report->bugsPerProject->graph->xAxisName     = '项目';
+$lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = '模块';
 
 $lang->bug->report->openedBugsPerDay->swf                = 'column2d';

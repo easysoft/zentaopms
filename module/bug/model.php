@@ -454,6 +454,47 @@ class bugModel extends model
     }
 
     /**
+     * Get report data of bugs per build.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getDataOfBugsPerBuild()
+    {
+        $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->session->bugReportCondition)->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        $builds = $this->loadModel('build')->getProductBuildPairs($this->session->product);
+
+        /* Deal with the situation that a bug maybe associate more than one openedBuild. */
+        foreach($datas as $buildIDList => $data) 
+        {
+            $openBuildIDList = explode(',', $buildIDList);
+            if(count($openBuildIDList) > 1)
+            {
+                foreach($openBuildIDList as $buildID)
+                {
+                    if(isset($datas[$buildID])) 
+                    {
+                        $datas[$buildID]->value++;
+                    }
+                    else
+                    {
+                        $datas[$buildID]->name  = $buildID;
+                        $datas[$buildID]->value = 1;
+                    }
+                }
+                unset($datas[$buildIDList]);
+            }
+        }
+
+        foreach($datas as $buildID => $data)
+        {
+            $data->name = isset($builds[$buildID]) ? $builds[$buildID] : $this->lang->report->undefined;
+        }
+        return $datas;
+    }
+
+    /**
      * Get report data of bugs per module 
      * 
      * @access public
