@@ -90,4 +90,7 @@
       </tr>
    </table>
  </fieldset>
+</td>
+</tr>
+</table>
 <?php include '../../common/view/footer.html.php';?>

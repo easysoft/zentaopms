@@ -11,28 +11,28 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<table class='table-1'> 
+<table class='cont-rt5'> 
   <caption><?php echo $lang->release->view;?></caption>
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->product;?></th>
-    <td><?php echo $release->productName;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->name;?></th>
-    <td class='<?php if($release->deleted) echo 'deleted';?>'><?php echo $release->name;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->build;?></th>
-    <td><?php echo $release->buildName;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->date;?></th>
-    <td><?php echo $release->date;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->stories;?></th>
+  <tr valign='top'>
     <td>
-      <table class='table-1 fixed'>
+      <fieldset>
+        <legend><?php echo $lang->release->desc;?></legend>
+        <div class='content'><?php echo $release->desc;?></div>
+      </fieldset>
+      <?php include '../../common/view/action.html.php';?>
+  <div class='a-center f-16px strong'>
+   <?php
+    $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
+    if(!$release->deleted)
+     { 
+        common::printLink('release', 'edit',   "releaseID=$release->id", $lang->edit);
+        common::printLink('release', 'delete', "releaseID=$release->id", $lang->delete, 'hiddenwin');
+     } 
+       echo html::a($browseLink, $lang->goback);
+     ?>
+  </div>
+   <table class='table-1 fixed'>
+    <caption class='caption-t1'><?php echo $lang->release->stories;?></caption>
         <tr>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
@@ -58,12 +58,8 @@
           <td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->finishStories, count($stories));?></td>
         </tr>
       </table>
-    </td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->bugs;?></th>
-    <td>
       <table class='table-1 fixed'>
+       <caption class='caption-t1'><?php echo $lang->release->bugs;?></caption>
         <tr>
           <th class='w-id'>       <?php echo $lang->idAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
@@ -89,23 +85,31 @@
           <td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->resolvedBugs, count($bugs));?></td>
         </tr>
       </table>
-    </td>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->desc;?></th>
-    <td class='content'><?php echo $release->desc;?></td>
+</td>
+<td class="divider"></td>
+<td class="side">
+  <fieldset>
+    <legend><?php echo $lang->release->basicInfo?></legend>
+    <table class='table-1 a-left'>
+      <tr>
+        <th width='25%' class='a-right'><?php echo $lang->release->product;?></th>
+        <td><?php echo $release->productName;?></td>
   </tr>  
-</table>
-<div class='a-center f-16px strong'>
-  <?php
-  $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
-  if(!$release->deleted)
-  {
-      common::printLink('release', 'edit',   "releaseID=$release->id", $lang->edit);
-      common::printLink('release', 'delete', "releaseID=$release->id", $lang->delete, 'hiddenwin');
-  }
-  echo html::a($browseLink, $lang->goback);
-  ?>
-</div>
-<?php include '../../common/view/action.html.php';?>
+  <tr>
+    <th class='rowhead'><?php echo $lang->release->name;?></th>
+    <td class='<?php if($release->deleted) echo 'deleted';?>'><?php echo $release->name;?></td>
+  </tr>  
+  <tr>
+    <th class='rowhead'><?php echo $lang->release->build;?></th>
+    <td><?php echo $release->buildName;?></td>
+  </tr>  
+  <tr>
+    <th class='rowhead'><?php echo $lang->release->date;?></th>
+    <td><?php echo $release->date;?></td>
+  </tr>
+ </table>
+</fieldset>
+</td>
+</tr>
+</table> 
 <?php include '../../common/view/footer.html.php';?>

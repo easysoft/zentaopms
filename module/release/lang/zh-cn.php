@@ -18,6 +18,8 @@ $lang->release->browse    = "浏览发布";
 
 $lang->release->confirmDelete = "您确认删除该release吗？";
 
+$lang->release->basicInfo='基本信息';
+
 $lang->release->id                    = 'ID';
 $lang->release->product               = '产品';
 $lang->release->build                 = '版本';

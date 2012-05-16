@@ -18,6 +18,8 @@ $lang->release->browse    = "Browse";
 
 $lang->release->confirmDelete = "Are sure to delete this release?";
 
+$lang->release->basicInfo ='Basic Info';
+
 $lang->release->id                    = 'ID';
 $lang->release->product               = 'Product';
 $lang->release->build                 = 'Build';
