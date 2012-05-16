@@ -121,17 +121,18 @@ $lang->index->menu->product = 'Products|product|browse';
 $lang->index->menu->project = 'Projects|project|browse';
 
 /* Dashboard menu. */
-$lang->my->menu->account   = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
-$lang->my->menu->index     = 'Index|my|index';
-$lang->my->menu->todo      = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
-$lang->my->menu->task      = 'Task|my|task|';
-$lang->my->menu->bug       = 'Bug|my|bug|';
-$lang->my->menu->testtask  = 'Test|my|testtask|';
-$lang->my->menu->story     = 'Story|my|story|';
-$lang->my->menu->myProject = 'Project|my|project|';
-$lang->my->menu->dynamic   = 'Dynamic|my|dynamic|';
-$lang->my->menu->profile   = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
-$lang->todo->menu          = $lang->my->menu;
+$lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
+$lang->my->menu->index          = 'Index|my|index';
+$lang->my->menu->todo           = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
+$lang->my->menu->task           = 'Task|my|task|';
+$lang->my->menu->bug            = 'Bug|my|bug|';
+$lang->my->menu->testtask       = 'Test|my|testtask|';
+$lang->my->menu->story          = 'Story|my|story|';
+$lang->my->menu->myProject      = 'Project|my|project|';
+$lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
+$lang->my->menu->profile        = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
+$lang->my->menu->changePassword = 'Change Password|my|changePassword|';
+$lang->todo->menu               = $lang->my->menu;
 
 /* Product menu. */
 $lang->product->menu->list    = '%s';

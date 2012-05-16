@@ -14,17 +14,18 @@
 $lang->resource->index->index = 'index';
 
 /* My module. */
-$lang->resource->my->index       = 'index';
-$lang->resource->my->todo        = 'todo';
-$lang->resource->my->task        = 'task';
-$lang->resource->my->bug         = 'bug';
-$lang->resource->my->testTask    = 'testTask';
-$lang->resource->my->testCase    = 'testCase';
-$lang->resource->my->story       = 'story';
-$lang->resource->my->project     = 'myProject';
-$lang->resource->my->profile     = 'profile';
-$lang->resource->my->dynamic     = 'dynamic';
-$lang->resource->my->editProfile = 'editProfile';
+$lang->resource->my->index          = 'index';
+$lang->resource->my->todo           = 'todo';
+$lang->resource->my->task           = 'task';
+$lang->resource->my->bug            = 'bug';
+$lang->resource->my->testTask       = 'testTask';
+$lang->resource->my->testCase       = 'testCase';
+$lang->resource->my->story          = 'story';
+$lang->resource->my->project        = 'myProject';
+$lang->resource->my->profile        = 'profile';
+$lang->resource->my->dynamic        = 'dynamic';
+$lang->resource->my->editProfile    = 'editProfile';
+$lang->resource->my->changePassword = 'changePassword';
 
 /* Todo. */
 $lang->resource->todo->create       = 'create';
@@ -366,3 +367,5 @@ $lang->changelog['3.0.beta2'][] = 'product-order';
 $lang->changelog['3.0.beta2'][] = 'project-order';
 
 $lang->changelog['3.1'][] = 'todo-batchCreate';
+
+$lang->changelog['3.2'][] = 'my-changePassword';

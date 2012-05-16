@@ -342,6 +342,29 @@ class my extends control
     }
 
     /**
+     * Change password 
+     * 
+     * @access public
+     * @return void
+     */
+    public function changePassword()
+    {
+        if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
+        if(!empty($_POST))
+        {
+            $this->user->updatePassword($this->app->user->id);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate($this->createLink('my', 'profile'), 'parent'));
+        }
+
+        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
+        $this->view->position[]    = $this->lang->my->changePassword;
+        $this->view->user          = $this->user->getById($this->app->user->id);
+
+        $this->display();
+    }
+
+    /**
      * View my profile.
      * 
      * @access public

@@ -206,6 +206,25 @@ class userModel extends model
     }
 
     /**
+     * Update password 
+     * 
+     * @param  string $userID 
+     * @access public
+     * @return void
+     */
+    public function updatePassword($userID)
+    {
+        if(!$this->checkPassword()) return;
+        
+        $user = fixer::input('post')
+            ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
+            ->remove('account, password1, password2')
+            ->get();
+
+        $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
+    }
+
+    /**
      * Check the passwds posted.
      * 
      * @access public

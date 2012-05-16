@@ -2,18 +2,19 @@
 $lang->my->common = 'Dashboard';
 
 /* Methods. */
-$lang->my->index       = 'Index';
-$lang->my->todo        = 'Todo';
-$lang->my->task        = 'Task';
-$lang->my->bug         = 'Bug';
-$lang->my->testTask    = 'Test task';
-$lang->my->testCase    = 'Test case';
-$lang->my->story       = 'Story';
-$lang->my->myProject   = 'Project';
-$lang->my->team        = 'Team';
-$lang->my->profile     = 'Profile';
-$lang->my->dynamic     = 'Dynamic';
-$lang->my->editProfile = 'Edit profile';
+$lang->my->index          = 'Index';
+$lang->my->todo           = 'Todo';
+$lang->my->task           = 'Task';
+$lang->my->bug            = 'Bug';
+$lang->my->testTask       = 'Test task';
+$lang->my->testCase       = 'Test case';
+$lang->my->story          = 'Story';
+$lang->my->myProject      = 'Project';
+$lang->my->team           = 'Team';
+$lang->my->profile        = 'Profile';
+$lang->my->dynamic        = 'Dynamic';
+$lang->my->editProfile    = 'Edit profile';
+$lang->my->changePassword = 'Change password';
 
 $lang->my->taskMenu->assignedToMe = 'To me';
 $lang->my->taskMenu->openedByMe   = 'My opened';

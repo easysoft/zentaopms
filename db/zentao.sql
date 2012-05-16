@@ -1542,4 +1542,9 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 2, 'todo', 'batchCreate'),
 (1, 3, 'todo', 'batchCreate'),
 (1, 4, 'todo', 'batchCreate'),
-(1, 5, 'todo', 'batchCreate');
+(1, 5, 'todo', 'batchCreate'),
+(1, 1, 'my', 'changePassword'),
+(1, 2, 'my', 'changePassword'),
+(1, 3, 'my', 'changePassword'),
+(1, 4, 'my', 'changePassword'),
+(1, 5, 'my', 'changePassword');
