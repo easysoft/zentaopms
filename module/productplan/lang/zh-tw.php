@@ -24,6 +24,8 @@ $lang->productplan->unlinkedStories = '未關聯需求列表';
 $lang->productplan->confirmDelete      = "您確認刪除該計劃嗎？";
 $lang->productplan->confirmUnlinkStory = "您確認移除該需求嗎？";
 
+$lang->productplan->basicInfo ='基本信息';
+
 $lang->productplan->id      = '編號';
 $lang->productplan->product = '產品';
 $lang->productplan->title   = '名稱';

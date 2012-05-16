@@ -12,39 +12,28 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<table class='table-1'>
+<table class='cont-rt5'>
   <caption><?php echo $plan->title . $lang->colon . $lang->productplan->view;?></caption>
-  <tr>
-    <th class='rowhead'><?php echo $lang->productplan->title;?></th>
-    <td <?php if($plan->deleted) echo "class='deleted'";?>><?php echo $plan->title;?></th>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->productplan->begin;?></th>
-    <td><?php echo $plan->begin;?></th>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->productplan->end;?></th>
-    <td><?php echo $plan->end;?></th>
-  </tr>
-  <tr>
-    <th class='rowhead'><?php echo $lang->productplan->desc;?></th>
-    <td class='content'><?php echo $plan->desc;?></th>
-  </tr>
-</table>
-<div class='a-center f-16px strong'>
- <?php
-  $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
-  if(!$plan->deleted)
-  {
-      common::printLink('productplan', 'edit',     "planID=$plan->id", $lang->edit);
-      common::printLink('productplan', 'linkstory',"planID=$plan->id", $lang->productplan->linkStory);
-      common::printLink('productplan', 'delete',   "planID=$plan->id", $lang->delete, 'hiddenwin');
-  }
-  echo html::a($browseLink, $lang->goback);
-  ?>
-</div>
-<?php include '../../common/view/action.html.php';?>
-<table class='table-1 tablesorter a-center'> 
+     <tr valign='top'>
+       <td>
+         <fieldset>
+           <legend><?php echo $lang->productplan->desc;?></legend>
+           <div class='content'><?php echo $product->desc;?></div>
+         </fieldset>
+         <?php include '../../common/view/action.html.php';?>
+         <div class='a-center f-16px strong'>
+         <?php          
+          $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
+          if(!$plan->deleted)
+      {
+         common::printLink('productplan', 'edit',     "planID=$plan->id", $lang->edit);
+         common::printLink('productplan', 'linkstory',"planID=$plan->id", $lang->productplan->linkStory);
+         common::printLink('productplan', 'delete',   "planID=$plan->id", $lang->delete, 'hiddenwin');
+      }
+       echo html::a($browseLink, $lang->goback);
+    ?>
+    </div>
+    <table class='table-1 tablesorter a-center'>
   <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
   <thead>
   <tr class='colhead'>
@@ -64,7 +53,7 @@
   <?php foreach($planStories as $story):?>
   <?php
      $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
-     $totalEstimate += $story->estimate; 
+     $totalEstimate += $story->estimate;
    ?>
  <tr>
     <td><?php echo html::a($viewLink, $story->id);?></td>
@@ -80,5 +69,25 @@
   <?php endforeach;?>
  </tbody>
  <tfoot><tr><td colspan='9' class='a-right'><?php printf($lang->product->storySummary, count($planStories), $totalEstimate);?> </td></tr></tfoot>
-</table>
+ </table>
+</td>
+  <td class="divider"></td>
+  <td class="side">
+    <fieldset>
+      <legend><?php echo $lang->productplan->basicInfo?></legend>
+      <table class='table-1 a-left'>
+        <tr>
+          <th width='25%' class='a-right'><?php echo $lang->productplan->title;?></th> 
+          <td <?php if($plan->deleted) echo "class='deleted'";?>><?php echo $plan->title;?></th>
+       </tr>
+       <tr>
+         <th class='rowhead'><?php echo $lang->productplan->begin;?></th>
+         <td><?php echo $plan->begin;?></th>
+      </tr>
+      <tr>
+        <th class='rowhead'><?php echo $lang->productplan->end;?></th>
+        <td><?php echo $plan->end;?></th>
+      </tr>
+   </table>
+ </fieldset>
 <?php include '../../common/view/footer.html.php';?>

@@ -24,6 +24,8 @@ $lang->productplan->unlinkedStories = 'Stories unlinked';
 $lang->productplan->confirmDelete      = "Are you sure to delete this plan?";
 $lang->productplan->confirmUnlinkStory = "Are you sure to remove this story?";
 
+$lang->productplan->basicInfo ='Basic Info';
+
 $lang->productplan->id      = 'ID';
 $lang->productplan->product = 'Product';
 $lang->productplan->title   = 'Title';
