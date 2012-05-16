@@ -59,6 +59,8 @@ $lang->team->hours      = '可用工時/天';
 $lang->team->days       = '可用工日';
 $lang->team->totalHours = '總計';
 
+$lang->project->basicInfo = '基本信息';
+$lang->project->otherInfo = '其他信息';
 /* 欄位取值列表。*/
 $lang->project->statusList['']      = '';
 $lang->project->statusList['wait']  = '未開始';

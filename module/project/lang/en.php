@@ -59,6 +59,8 @@ $lang->team->hours      = 'Hour/Day';
 $lang->team->days       = 'Workdays';
 $lang->team->totalHours = 'Total';
 
+$lang->project->basicInfo = 'Basic info';
+$lang->project->otherInfo = 'Other info';
 /* Lists. */
 $lang->project->statusList['']      = '';
 $lang->project->statusList['wait']  = 'Pending';
