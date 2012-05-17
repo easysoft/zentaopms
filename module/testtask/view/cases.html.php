@@ -28,6 +28,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
   <div class='f-right'>
     <?php
+    common::printLink('testcase', 'export', "productID=$productID&orderBy=id_asc&taskID=$task->id", $lang->export, '', 'class="export"');
     common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);
     echo html::a($this->session->testtaskList, $lang->goback);
     ?>

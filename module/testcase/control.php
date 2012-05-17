@@ -439,12 +439,13 @@ class testcase extends control
     /**
      * export 
      * 
-     * @param  string $productID 
+     * @param  int    $productID 
      * @param  string $orderBy 
+     * @param  int    $taskID 
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy)
+    public function export($productID, $orderBy, $taskID = 0)
     {
         if($_POST)
         {
@@ -461,7 +462,15 @@ class testcase extends control
             }
 
             /* Get cases. */
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')->where($this->session->testcaseReport)->orderBy($orderBy)->fetchAll('id');
+            if($taskID)
+            {
+                $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
+                $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')->where($this->session->testcaseReport)->andWhere('id')->in($caseIDList)->orderBy($orderBy)->fetchAll('id');
+            }
+            else
+            {
+                $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')->where($this->session->testcaseReport)->orderBy($orderBy)->fetchAll('id');
+            }
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
