@@ -28,7 +28,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->source;?></th>
-      <td><?php echo html::select('source', $lang->story->sourceList, '', 'class=select-3');?></td>
+      <td><?php echo html::select('source', $lang->story->sourceList, $source, 'class=select-3');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->title;?></th>
