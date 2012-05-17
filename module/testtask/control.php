@@ -447,15 +447,23 @@ class testtask extends control
     {
         if($caseID)
         {
-            $this->view->case    = $this->loadModel('testcase')->getByID($caseID, $version);
-            $this->view->results = $this->testtask->getResults(0, $caseID);
+            $case    = $this->loadModel('testcase')->getByID($caseID, $version);
+            $results = $this->testtask->getResults(0, $caseID);
         }
         else
         {
-            $this->view->case    = $this->testtask->getRunById($runID)->case;
-            $this->view->results = $this->testtask->getResults($runID);
+            $case    = $this->testtask->getRunById($runID)->case;
+            $results = $this->testtask->getResults($runID);
+
+            $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task', false);
+            $testtask   = $this->dao->select('build, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
+            $builds     = $this->loadModel('build')->getProductBuildPairs($testtask->product);
+            $this->view->build = isset($builds[$testtask->build]) ? $builds[$testtask->build] : '';
         }
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed, noletter');
+
+        $this->view->case    = $case;
+        $this->view->results = $results;
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         die($this->display());
     }
