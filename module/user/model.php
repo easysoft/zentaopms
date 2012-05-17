@@ -199,7 +199,7 @@ class userModel extends model
             $this->dao->update(TABLE_USERGROUP)->set('account')->eq($this->post->account)->where('account')->eq($oldUser->account)->exec();
             if(strpos($this->app->company->admins, ',' . $oldUser->account . ',') !== false)
             {
-                $admins = ',' . $this->post->account . ',';
+                $admins = str_replace(',' . $oldUser->account . ',', ',' . $this->post->account . ',', $this->app->company->admins);
                 $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec(false);
             }
         }
