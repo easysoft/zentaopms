@@ -29,11 +29,11 @@
     <?php endif;?>
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->project;?></th>
-      <td><?php echo html::select('project', $projects, '', 'class=select-3');?></td>
+      <td><?php echo html::select('project', $projects, '', 'class=select-3 onchange=loadProjectRelated(this.value)');?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->build;?></th>
-      <td><?php echo html::select('build', $builds, '', 'class=select-3');?></td>
+      <td><span id='buildBox'><?php echo html::select('build', $builds, '', 'class=select-3');?></span></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->owner;?></th>
