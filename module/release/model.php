@@ -67,6 +67,7 @@ class releaseModel extends model
             ->add('product', (int)$productID)
             ->join('stories', ',')
             ->join('bugs', ',')
+            ->remove('allchecker')
             ->get();
         $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
         $releaseID = $this->dao->lastInsertID();

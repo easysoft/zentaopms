@@ -120,6 +120,7 @@ class buildModel extends model
         $build = fixer::input('post')->stripTags('name')
             ->join('stories', ',')
             ->join('bugs', ',')
+            ->remove('allchecker')
             ->add('project', (int)$projectID)->get();
         $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->batchCheck($this->config->build->create->requiredFields, 'notempty')->check('name','unique')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
