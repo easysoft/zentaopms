@@ -15,7 +15,7 @@
   <table align='center' class='table-1 a-left'> 
     <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->group->inside;?><?php echo html::selectAll('group', 'checkbox');?> </th>
+      <th class='rowhead'><?php echo $lang->group->inside;?><?php echo html::selectAll('group', 'checkbox', true);?> </th>
       <td id='group' class='f-14px pv-10px'><?php $i = 1;?>
         <?php foreach($groupUsers as $account => $realname):?>
         <div class='w-p10 f-left'><?php echo '<span>' . html::checkbox('members', array($account => $realname), $account) . '</span>';?></div>
