@@ -212,7 +212,7 @@ class validater
      */
     public static function checkAccount($var)
     {
-        return self::checkREG($var, '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_]{1,}[a-zA-Z0-9_]{1}$|');
+        return self::checkREG($var, '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|');
     }
 
     /**
