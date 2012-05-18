@@ -222,11 +222,12 @@ class html
     /**
      * Create tags like "<input type='$type' onclick='selectAll()'/>"
      * 
-     * @param  string $scope  the scope of select all.
-     * @param  string $type   the type of input tag.
+     * @param  string  $scope  the scope of select all.
+     * @param  string  $type   the type of input tag.
+     * @param  boolean $checked if the type is checkbox, set the checked attribute.
      * @return string
      */
-    static public function selectAll($scope = "", $type = "button")
+    static public function selectAll($scope = "", $type = "button", $checked = false)
     {
         $string = <<<EOT
 <script type="text/javascript">
@@ -272,7 +273,14 @@ EOT;
         global $lang;
         if($type == 'checkbox')
         {
-            $string .= " <input type='checkbox' name='allchecker[]' onclick='selectAll(this, \"$scope\", \"$type\")' />";
+            if($checked)
+            {
+                $string .= " <input type='checkbox' name='allchecker[]' checked=$checked onclick='selectAll(this, \"$scope\", \"$type\")' />";
+            }
+            else
+            {
+                $string .= " <input type='checkbox' name='allchecker[]' onclick='selectAll(this, \"$scope\", \"$type\")' />";
+            }
         }
         elseif($type == 'button')
         {
