@@ -58,12 +58,13 @@
               $storyLink = $this->createLink('story', 'view', "storyID=$story->id");
               ?>
               <tr class='a-center'>
-                <td><input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if($story->stage == 'developed') echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?></td>
+                <td id='story'><input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if($story->stage == 'developed') echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?></td>
                 <td class='a-left nobr'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
                 <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
               </tr>
               <?php endforeach;?>
+              <tr class='a-center'><td><?php echo html::selectAll('story', 'checkbox') . $lang->selectAll;?></td>
             </table>
           </div>
           <div class='half-right linkbox'>
@@ -77,11 +78,12 @@
               <?php foreach($bugs as $bug):?>
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id");?>
               <tr class='a-center'>
-                <td><input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" checked> <?php echo sprintf('%03d', $bug->id);?></td>
+                <td id='bug'><input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" checked> <?php echo sprintf('%03d', $bug->id);?></td>
                 <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td><?php echo $lang->bug->statusList[$bug->status];?></td>
               </tr>
               <?php endforeach;?>
+              <tr class='a-center'><td><?php echo html::selectAll('bug', 'checkbox', true) . $lang->selectAll;?></td></tr>
             </table>
           </div>
         </div>
