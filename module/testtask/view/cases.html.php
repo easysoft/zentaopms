@@ -89,7 +89,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td colspan='10'>
               <?php if($canBatchAssign):?>
               <div class='f-left'>
-              <?php 
+             <?php 
               echo html::selectAll() . html::selectReverse();
               echo html::select('assignedTo', $users) . html::submitButton($lang->testtask->assign); 
               ?>

@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
   <div id='featurebar'>
@@ -22,7 +23,7 @@
       echo '<span id="future">'   . html::a(inlink('todo', "date=future"),    $lang->todo->futureTodos)   . '</span>';
       echo '<span id="all">'      . html::a(inlink('todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
       echo '<span id="before">'   . html::a(inlink('todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
-      echo "<span id='$date'>"    . html::select('date', $dates, $date, 'onchange=changeDate(this.value)') . '</span>';
+      echo "<span id='$date'>"    . html::input('date', $date,"class='select-2 date'") . '</span>';
       ?>
       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
@@ -48,7 +49,6 @@
       <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
-
     <tbody>
     <?php foreach($todos as $todo):?>
     <tr class='a-center'>

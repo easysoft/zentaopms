@@ -34,7 +34,6 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
-
 <table class='cont-lt1'>
   <tr valign='top'>
     <td class='side <?php echo $treeClass;?>'>
@@ -49,12 +48,12 @@ var moduleID   = '<?php echo $moduleID;?>';
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
       <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <table class='table-1 colored tablesorter datatable fixed'>
+      <table class='table-1 colored tablesorter datatable'>
         <thead>
           <tr class='colhead'>
             <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
             <th class='w-pri'><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
-            <th class='w-p20'><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
+            <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
             <?php if($browseType == 'needconfirm'):?>
             <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->testcase->story);?></th>
             <th class='w-50px'><?php echo $lang->actions;?></th>
@@ -62,7 +61,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-type'>  <?php common::printOrderLink('type',      $orderBy, $vars, $lang->typeAB);?></th>
             <th class='w-user'>  <?php common::printOrderLink('openedBy',  $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='w-80px'>  <?php common::printOrderLink('lastRunner',  $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-            <th><?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+            <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
             <th class='w-80px'>  <?php common::printOrderLink('lastRunResult',$orderBy, $vars, $lang->testtask->lastRunResult);?></th>
             <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
             <th class='w-220px {sorter:false}'><?php echo $lang->actions;?></th>
@@ -98,6 +97,7 @@ var moduleID   = '<?php echo $moduleID;?>';
           </tr>
         <?php endforeach;?>
         </thead>
+        </tbody>
         <tfoot><tr><td colspan='10' class='f-left'><?php $pager->show();?></td></tr></tfoot>
       </table>
     </td>              

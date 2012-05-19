@@ -207,7 +207,6 @@ class testtask extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-
         /* Set the browseType and moduleID. */
         $browseType = strtolower($browseType);
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : 0;
@@ -217,7 +216,6 @@ class testtask extends control
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID);
-
         if($browseType == 'bymodule' or $browseType == 'all')
         {
             $modules = '';
@@ -232,7 +230,6 @@ class testtask extends control
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->cases;
-
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->task        = $task;
