@@ -56,7 +56,7 @@ var browseType = '<?php echo $browseType;?>';
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
+  <tfoot><tr><td colspan='6' class='f-left'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <script>$('#<?php echo $browseType;?>').addClass('active')</script>
 <?php include '../../common/view/footer.html.php';?>
