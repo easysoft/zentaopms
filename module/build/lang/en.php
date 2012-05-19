@@ -19,6 +19,8 @@ $lang->build->ajaxGetProjectBuilds = 'API:Project builds';
 
 $lang->build->confirmDelete = "Are sure to delete this build?";
 
+$lang->build->basic Info='Basic Info';
+
 $lang->build->id         = 'ID';
 $lang->build->product    = 'Product';
 $lang->build->project    = 'Project';

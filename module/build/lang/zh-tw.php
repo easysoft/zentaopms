@@ -19,6 +19,8 @@ $lang->build->ajaxGetProjectBuilds = '介面:項目版本列表';
 
 $lang->build->confirmDelete = "您確認刪除該版本嗎？";
 
+$lang->build->basicInfo ='基本信息';
+
 $lang->build->id        = 'ID';
 $lang->build->product   = '產品';
 $lang->build->project   = '項目';
