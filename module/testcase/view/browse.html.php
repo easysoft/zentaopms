@@ -97,7 +97,6 @@ var moduleID   = '<?php echo $moduleID;?>';
           </tr>
         <?php endforeach;?>
         </thead>
-        </tbody>
         <tfoot><tr><td colspan='10' class='f-left'><?php $pager->show();?></td></tr></tfoot>
       </table>
     </td>              

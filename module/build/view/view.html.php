@@ -32,6 +32,7 @@
    ?>
  </div>
    <table class='table-1 fixed'>
+   <caption class='caption-t1'><?php echo $lang->build->stories;?></caption>
         <tr>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
@@ -56,6 +57,7 @@
        <tr><td colspan=7 class='a-left strong'><?php echo sprintf($lang->build->finishStories, count($stories));?></td></tr>
       </table>
       <table class='table-1 fixed'>
+      <caption class='caption-t1'><?php echo $lang->build->bugs;?></caption>
         <tr>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
