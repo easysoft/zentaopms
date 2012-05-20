@@ -76,7 +76,6 @@ class task extends control
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[]      = html::a($taskLink, $project->name);
         $position[]      = $this->lang->task->create;
-
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->project  = $project;
