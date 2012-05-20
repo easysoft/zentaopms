@@ -71,11 +71,15 @@ $lang->todo->successMarked  = "成功切换状态！";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';
 
-$lang->todo->thisWeekTodos = '本周计划';
-$lang->todo->lastWeekTodos = '上周工作';
-$lang->todo->futureTodos   = '暂不指定';
-$lang->todo->allDaysTodos  = '所有TODO';
-$lang->todo->allUndone     = '之前未完';
-$lang->todo->todayTodos    = '今日安排';
-
-$lang->todo->action->marked = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);
+$lang->todo->thisWeekTodos   = '本周计划';
+$lang->todo->lastWeekTodos   = '上周工作';
+$lang->todo->futureTodos     = '暂不指定';
+$lang->todo->allDaysTodos    = '所有TODO';
+$lang->todo->allUndone       = '之前未完';
+$lang->todo->todayTodos      = '今日安排';
+$lang->todo->yesterdayTodos  = '昨日安排';
+$lang->todo->lastmonthTodos  = '上月TODO';
+$lang->todo->thisseasonTodos = '本季TODO';
+$lang->todo->thisyearTodos   = '本年TODO';
+$lang->todo->thismonthTodos  = '本月TODO';
+$lang->todo->action->marked  = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);

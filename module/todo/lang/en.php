@@ -71,11 +71,15 @@ $lang->todo->successMarked  = "Successfully changed status";;
 $lang->todo->thisIsPrivate  = 'This is a private todo。:)';
 $lang->todo->lblDisableDate = 'Set time lately';
 
-$lang->todo->thisWeekTodos = 'This week';
-$lang->todo->lastWeekTodos = 'Last week';
-$lang->todo->futureTodos   = 'Future';
-$lang->todo->allDaysTodos  = 'All todo';
-$lang->todo->allUndone     = 'Undone';
-$lang->todo->todayTodos    = 'Today';
-
-$lang->todo->action->marked = array('main' => '$date, Change status to <stong>$extra</strong> by <strong>$actor</strong>。', 'extra' => $lang->todo->statusList);
+$lang->todo->thisWeekTodos   = 'This week';
+$lang->todo->lastWeekTodos   = 'Last week';
+$lang->todo->futureTodos     = 'Future';
+$lang->todo->allDaysTodos    = 'All todo';
+$lang->todo->allUndone       = 'Undone';
+$lang->todo->todayTodos      = 'Today';
+$lang->todo->yesterdayTodos  = 'Yesterday';
+$lang->todo->lastmonthTodos  = 'Last Month';
+$lang->todo->thisseasonTodos = 'This Season';
+$lang->todo->thisyearTodos   = 'This Year';
+$lang->todo->thismonthTodos  = 'This Month';
+$lang->todo->action->marked  = array('main' => '$date, Change status to <stong>$extra</strong> by <strong>$actor</strong>。', 'extra' => $lang->todo->statusList);

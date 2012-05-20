@@ -179,6 +179,11 @@ class todoModel extends model
             $begin = $this->today();
             $end   = $begin;
         }
+        if($date == 'yesterday') 
+        {
+            $begin = $this->yesterday();
+            $end   = $begin;
+        }
         elseif($date == 'thisweek')
         {
             extract($this->getThisWeek());
@@ -186,6 +191,22 @@ class todoModel extends model
         elseif($date == 'lastweek')
         {
             extract($this->getLastWeek());
+        }
+        elseif($date == 'thismonth')
+        {
+            extract($this->getThisMonth());
+        }
+        elseif($date == 'lastmonth')
+        {
+            extract($this->getLastMonth());
+        }
+        elseif($date == 'thisseason')
+        {
+            extract($this->getThisSeason());
+        }
+        elseif($date == 'thisyear')
+        {
+            extract($this->getThisYear());
         }
         elseif($date == 'future')
         {
@@ -478,6 +499,21 @@ class todoModel extends model
     {
         $begin = date('Y-m', strtotime('last month'));
         $end   = date('Y-m', strtotime('this month'));
+        return array('begin' => $begin, 'end' => $end);
+    }
+
+    public function getThisSeason()
+    {
+        $getMonthDays = date("t", mktime(0,0,0,date('n')-(date('n')-1)%3,1,date("Y")));
+        $begin = date('Y-m-d H:i:s', mktime(0,0,0,date('n')-(date('n')-1)%3,1,date("Y")));
+        $end   = date('Y-m-d H:i:s', mktime(23,59,59,date('n')+(date('n')-1)%3,$getMonthDays,date('Y')));
+        return array('begin' => $begin, 'end' => $end);
+    }
+
+    public function getThisYear()
+    {
+        $begin = date(DT_DATE1, strtotime('1/1 this year'));
+        $end   = date(DT_DATE1, strtotime('1/1 next year -1 day'));  
         return array('begin' => $begin, 'end' => $end);
     }
 }
