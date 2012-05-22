@@ -604,6 +604,7 @@ class story extends control
         }
 
         /* Get the mail content. */
+        if($action->action == 'opened') $action->comment = '';
         $this->view->story  = $story;
         $this->view->action = $action;
         $this->view->users  = $this->user->getPairs('noletter');

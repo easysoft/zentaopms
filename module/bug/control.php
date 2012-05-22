@@ -774,6 +774,7 @@ class bug extends control
         if(strtolower($action->action) == 'opened') $action->comment = $bug->steps;
 
         /* Create the mail content. */
+        if($action->action == 'opened') $action->comment = '';
         $this->view->bug    = $bug;
         $this->view->action = $action;
         $mailContent = $this->parse($this->moduleName, 'sendmail');

@@ -17,6 +17,22 @@
     </td>
   </tr>
   <tr>
+    <td>
+    <fieldset>
+      <legend><?php echo $lang->bug->legendSteps;?></legend>
+      <div class='content'>
+      <?php 
+      if(strpos($bug->steps, '<img src="data/upload'))
+      {
+        $bug->steps = str_replace('<img src="', '<img src="http://' . $this->server->http_host . $this->config->webRoot, $bug->steps);
+      }
+      echo $bug->steps;
+      ?>
+      </div>
+    </fieldset>
+    </td>
+  </tr>
+  <tr>
     <td><?php include '../../common/view/mail.html.php';?></td>
   </tr>
 </table>

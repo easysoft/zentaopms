@@ -17,6 +17,22 @@
     </td>
   </tr>
   <tr>
+    <td>
+    <fieldset>
+      <legend><?php echo $lang->story->legendSpec;?></legend>
+      <div class='content'>
+      <?php 
+      if(strpos($story->spec, '<img src="data/upload'))
+      {
+        $story->spec = str_replace('<img src="', '<img src="http://' . $this->server->http_host . $this->config->webRoot, $story->spec);
+      }
+      echo $story->spec;
+      ?>
+      </div>
+    </fieldset>
+    </td>
+  </tr>
+  <tr>
     <td><?php include '../../common/view/mail.html.php';?></td>
   </tr>
 </table>
