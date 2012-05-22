@@ -30,6 +30,7 @@ $lang->resource->my->changePassword = 'changePassword';
 /* Todo. */
 $lang->resource->todo->create       = 'create';
 $lang->resource->todo->batchCreate  = 'batchCreate';
+$lang->resource->todo->batchEdit    = 'batchEdit';
 $lang->resource->todo->edit         = 'edit';
 $lang->resource->todo->view         = 'view';
 $lang->resource->todo->delete       = 'delete';
@@ -369,3 +370,4 @@ $lang->changelog['3.0.beta2'][] = 'project-order';
 $lang->changelog['3.1'][] = 'todo-batchCreate';
 
 $lang->changelog['3.2'][] = 'my-changePassword';
+$lang->changelog['3.2'][] = 'todo-batchEdit';
