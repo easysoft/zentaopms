@@ -127,6 +127,57 @@ class todoModel extends model
     }
 
     /**
+     * Batch update todo.
+     * 
+     * @param  array $todoIDList 
+     * @access public
+     * @return void
+     */
+    public function batchUpdate($todoIDList)
+    {
+        $todos   = array();
+        $changes = array();
+
+        /* Initialize todos from the post data. */
+        foreach($todoIDList as $todoID)
+        {
+            $todo->date  = $this->post->dates[$todoID];
+            $todo->type  = $this->post->types[$todoID];
+            $todo->pri   = $this->post->pris[$todoID];
+            $todo->name  = $todo->type == 'custom' ? $this->post->names[$todoID] : '';
+            $todo->begin = $this->post->begins[$todoID];
+            $todo->end   = $this->post->ends[$todoID];
+            if($todo->type == 'task') $todo->idvalue = $this->post->tasks[$todoID];
+            if($todo->type == 'bug')  $todo->idvalue = $this->post->bugs[$todoID];
+
+            $todos[$todoID] = $todo;
+            unset($todo);
+        }
+
+        foreach($todos as $todoID => $todo)
+        {
+            $oldTodo = $this->getById($todoID);
+            if($oldTodo->type != 'custom') $oldTodo->name = '';
+            $this->dao->update(TABLE_TODO)->data($todo)
+                ->autoCheck()
+                ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')->where('id')->eq($todoID)
+                ->exec();
+
+            if(!dao::isError()) 
+            {
+                $changes[$todoID] = common::createChanges($oldTodo, $todo);
+            }
+            else
+            {
+                echo js::error(dao::getError());
+                die(js::reload('parent'));
+            }
+        }
+
+        return $changes;
+    }
+
+    /**
      * Change the status of a todo.
      * 
      * @param  string $todoID 

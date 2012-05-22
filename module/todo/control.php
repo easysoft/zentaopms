@@ -89,6 +89,61 @@ class todo extends control
     }
 
     /**
+     * Batch edit todo.
+     * 
+     * @param  string $type 
+     * @param  string $account 
+     * @param  string $status 
+     * @access public
+     * @return void
+     */
+    public function batchEdit($type = 'today', $account = '', $status = 'all')
+    {
+        if($account == '') $account = $this->app->user->account;
+        $bugs  = $this->bug->getUserBugPairs($account);
+        $tasks = $this->task->getUserTaskPairs($account, $status);
+        $todos = $this->todo->getList($type, $account, $status);
+
+        foreach($todos as $todo) 
+        {
+            if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
+            if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
+            $todo->date  = str_replace('-', '', $todo->date);
+            $todo->begin = str_replace(':', '', $todo->begin);
+            $todo->end   = str_replace(':', '', $todo->end);
+
+            $todoIDList[$todo->id] = $todo->id;
+        }
+
+        if(!empty($_POST))
+        {
+            $changes = $this->todo->batchUpdate($todoIDList);
+            foreach($changes as $todoID => $change)
+            {
+                if(!empty($change))
+                {
+                    $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
+                    $this->action->logHistory($actionID, $change);
+                }
+            }
+ 
+            die(js::locate($this->createLink('my', 'todo',"type=$type&account=$account&status=$status"), 'parent'));
+        }
+        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
+        $position[]      = $this->lang->todo->create;
+
+        $this->view->bugs     = $bugs;
+        $this->view->tasks    = $tasks;
+        $this->view->todos    = $todos;
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time     = $this->todo->now();
+
+        $this->display();
+    }
+
+    /**
      * Edit a todo.
      * 
      * @param  int    $todoID 

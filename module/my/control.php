@@ -88,6 +88,7 @@ class my extends control
         $this->view->todos   = $this->todo->getList($type, $account, $status, 0, $pager);
         $this->view->date    = (int)$type == 0 ? $this->todo->today() : $type;
         $this->view->type    = $type;
+        $this->view->status  = $status;
         $this->view->account = $this->app->user->account;
         $this->view->pager   = $pager;
         $this->view->importFuture = ($type == 'before' or $type == 'future' or $type == TODOMODEL::DAY_IN_FUTURE);

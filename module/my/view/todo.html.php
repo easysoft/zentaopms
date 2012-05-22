@@ -36,6 +36,7 @@
       <?php 
       common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="export"');
       common::printLink('todo', 'batchCreate', "", $lang->todo->batchCreate);
+      common::printLink('todo', 'batchEdit', "type=$type&account=$account&status=$status", $lang->todo->batchEdit);
       echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
       ?>
     </div>
