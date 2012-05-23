@@ -89,6 +89,41 @@ class todo extends control
     }
 
     /**
+     * Edit a todo.
+     * 
+     * @param  int    $todoID 
+     * @access public
+     * @return void
+     */
+    public function edit($todoID)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->todo->update($todoID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate(inlink('view', "todoID=$todoID"), 'parent'));
+        }
+
+        /* Judge a private todo or not, If private, die. */
+        $todo = $this->todo->getById($todoID);
+        if($todo->private and $this->app->user->account != $todo->account) die('private');
+
+        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
+        $position[]      = $this->lang->todo->edit;
+
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->todo     = $todo;
+        $this->display();
+    }
+
+    /**
      * Batch edit todo.
      * 
      * @param  string $type 
@@ -143,40 +178,6 @@ class todo extends control
         $this->display();
     }
 
-    /**
-     * Edit a todo.
-     * 
-     * @param  int    $todoID 
-     * @access public
-     * @return void
-     */
-    public function edit($todoID)
-    {
-        if(!empty($_POST))
-        {
-            $changes = $this->todo->update($todoID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
-            die(js::locate(inlink('view', "todoID=$todoID"), 'parent'));
-        }
-
-        /* Judge a private todo or not, If private, die. */
-        $todo = $this->todo->getById($todoID);
-        if($todo->private and $this->app->user->account != $todo->account) die('private');
-
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
-        $position[]      = $this->lang->todo->edit;
-
-        $this->view->header   = $header;
-        $this->view->position = $position;
-        $this->view->times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->todo     = $todo;
-        $this->display();
-    }
 
     /**
      * View a todo. 
