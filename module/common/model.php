@@ -364,4 +364,24 @@ class commonModel extends model
         ksort($diff);
         return implode("\n", $diff);
     }
+
+    /**
+     * Judge Suhosin Setting whether the actual size of post data is large than the setting size.
+     * 
+     * @param  int    $numberOfItems 
+     * @param  int    $columns 
+     * @access public
+     * @return void
+     */
+    public function judgeSuhosinSetting($numberOfItems, $columns)
+    {
+        if(extension_loaded('suhosin'))
+        {
+            $maxPostVars    = ini_get('suhosin.post.max_vars');
+            $maxRequestVars = ini_get('suhosin.request.max_vars');
+            if($numberOfItems * $columns > $maxPostVars or $numberOfItems * $columns > $maxRequestVars) return true;
+        }
+
+        return false;
+    }
 }

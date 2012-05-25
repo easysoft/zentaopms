@@ -119,6 +119,7 @@ $lang->resource->project->ajaxGetProducts= 'ajaxGetProducts';
 /* Task. */
 $lang->resource->task->create              = 'create';
 $lang->resource->task->batchCreate         = 'batchCreate';
+$lang->resource->task->batchEdit           = 'batchEdit';
 $lang->resource->task->edit                = 'edit';
 $lang->resource->task->assignTo            = 'assign';
 $lang->resource->task->start               = 'start';
@@ -371,3 +372,4 @@ $lang->changelog['3.1'][] = 'todo-batchCreate';
 
 $lang->changelog['3.2'][] = 'my-changePassword';
 $lang->changelog['3.2'][] = 'todo-batchEdit';
+$lang->changelog['3.2'][] = 'task-batchEdit';

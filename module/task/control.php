@@ -212,6 +212,129 @@ class task extends control
     }
 
     /**
+     * Batch edit task.
+     * 
+     * @param  int    $projectID 
+     * @param  string $from example:projectTask, taskBatchEdit
+     * @param  string $status 
+     * @param  int    $param 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function batchEdit($projectID = 0, $from = '', $status = 'all', $param = 0, $orderBy = '')
+    {
+        /* Initialize vars. */
+        $browseType      = strtolower($status);
+        $queryID         = ($browseType == 'bysearch') ? (int)$param : 0;
+        $showSuhosinInfo = false;
+        $parentLink      = $this->session->taskList;
+        $project         = $this->project->getById($projectID); 
+        $allTasks        = array();
+        $editedTasks     = array();
+        $taskIDList      = array();
+        $columns         = 13;
+        if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
+
+        /* Set project menu. */
+        $this->project->setMenu($this->project->getPairs(), $project->id);
+
+        /* Get all tasks. */
+        if($browseType != "bysearch")
+        {
+            $allTasks = $this->task->getProjectTasks($projectID, $status, $orderBy, null); 
+        }
+        else
+        {   
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('taskQuery', $query->sql);
+                    $this->session->set('taskForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('taskQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
+            }
+            $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
+            $allTasks  = $this->project->getSearchTasks($taskQuery, null, $orderBy);
+        }
+
+        /* Get form data for project-task. */
+        if($from == 'projectTask')
+        {
+            if($this->post->taskIDList) 
+            {
+                $taskIDList = $this->post->taskIDList;
+            }
+            elseif(!isset($this->post->taskIDList) and $this->session->taskIDList)
+            {
+                $taskIDList = $this->session->taskIDList;
+            }
+
+            /* Initialize the tasks whose need to edited. */
+            foreach($allTasks as $task) if(in_array($task->id, $taskIDList)) $editedTasks[$task->id] = $task;
+
+            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedTasks), $columns);
+
+            /* Set the sessions. */
+            $this->app->session->set('taskIDList', $taskIDList);
+            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+        }
+        /* Get form data for task-batchEdit. */
+        elseif($from == 'taskBatchEdit')
+        {
+            $allChanges = $this->task->batchUpdate();
+
+            if(!empty($allChanges))
+            {
+                foreach($allChanges as $taskID => $changes)
+                {
+                    if(!empty($changes))
+                    {
+                        $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
+                        $this->action->logHistory($actionID, $changes);
+                        $this->sendmail($taskID, $actionID);
+
+                        $task = $this->task->getById($taskID);
+                        if($task->fromBug != 0)
+                        {
+                            foreach($changes as $change)
+                            {
+                                if($change['field'] == 'status')
+                                {
+                                    $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
+                                    $cancelURL  = $this->server->HTTP_REFERER;
+                                    die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            die(js::locate($parentLink));
+        }
+
+        $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
+        $this->view->position[] = $this->lang->task->batchEdit;
+
+        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        $this->view->projectID   = $project->id;
+        $this->view->editedTasks = $editedTasks;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->members     = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+
+        $this->display();
+    }
+
+    /**
      * Update assign of task 
      *
      * @param  int    $requestID

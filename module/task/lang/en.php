@@ -12,6 +12,7 @@
 $lang->task->index              = "Index";
 $lang->task->create             = "Create";
 $lang->task->batchCreate        = "Batch create";
+$lang->task->batchEdit          = "Batch edit";
 $lang->task->import             = "Import undone";
 $lang->task->edit               = "Update";
 $lang->task->delete             = "Delete";

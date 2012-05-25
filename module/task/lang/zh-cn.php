@@ -12,6 +12,7 @@
 $lang->task->index              = "任务一览";
 $lang->task->create             = "新增任务";
 $lang->task->batchCreate        = "批量添加";
+$lang->task->batchEdit          = "批量编辑";
 $lang->task->import             = "导入之前未完任务";
 $lang->task->edit               = "编辑任务";
 $lang->task->delete             = "删除任务";

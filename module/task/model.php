@@ -205,6 +205,126 @@ class taskModel extends model
     }
 
     /**
+     * Batch update task.
+     * 
+     * @param  array $taskIDList 
+     * @access public
+     * @return void
+     */
+    public function batchUpdate()
+    {
+        $tasks      = array();
+        $allChanges = array();
+        $now        = helper::now();
+        $taskIDList = $this->post->taskIDList ? $this->post->taskIDList : array();
+
+        /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
+        if($this->session->showSuhosinInfo) array_pop($taskIDList);
+
+        /* Initialize tasks from the post data.*/
+        if(!empty($taskIDList))
+        {
+            foreach($taskIDList as $taskID)
+            {
+                $oldTask = $this->getById($taskID);
+
+                $task->name           = $this->post->names[$taskID];
+                $task->assignedTo     = $this->post->assignedTos[$taskID];
+                $task->type           = $this->post->types[$taskID];
+                $task->status         = $this->post->statuses[$taskID];
+                $task->pri            = $this->post->pris[$taskID];
+                $task->estimate       = $this->post->estimates[$taskID];
+                $task->consumed       = $this->post->consumeds[$taskID];
+                $task->left           = $this->post->lefts[$taskID];
+                $task->finishedBy     = $this->post->finishedBys[$taskID];
+                $task->canceledBy     = $this->post->canceledBys[$taskID];
+                $task->closedBy       = $this->post->closedBys[$taskID];
+                $task->closedReason   = $this->post->closedReasons[$taskID];
+                $task->finishedDate   = "";
+                $task->canceledDate   = "";
+                $task->closedDate     = "";
+                $task->lastEditedBy   = $this->app->user->account;
+                $task->lastEditedDate = $now;
+                if(isset($this->post->assignedTos[$taskID])) 
+                {
+                    $task->assignedDate   = $this->post->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
+                }
+
+                switch($task->status)
+                {
+                  case 'done':
+                  {
+                    $task->left = 0;
+                    if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
+                    if(!$task->finishedDate) $task->finishedDate = $now;
+                  }break;
+                  case 'cancel':
+                  {
+                    $task->assignedTo   = $oldTask->openedBy;
+                    $task->assignedDate = $now;
+
+                    if(!$task->canceledBy)   $task->canceledBy   = $this->app->user->account;
+                    if(!$task->canceledDate) $task->canceledDate = $now;
+                  }break;
+                  case 'closed':
+                  {
+                    if(!$task->closedBy)   $task->closedBy   = $this->app->user->account;
+                    if(!$task->closedDate) $task->closedDate = $now;
+                  }break;
+                  case 'wait':
+                  {
+                    if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
+                    if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
+                  }
+                  default:break;
+                }
+                if($task->assignedTo) $task->assignedDate = $now;
+
+                $tasks[$taskID] = $task;
+                unset($task);
+            }
+
+            /* Update task data. */
+            foreach($tasks as $taskID => $task)
+            {
+                $oldTask = $this->getById($taskID);
+                $this->dao->update(TABLE_TASK)->data($task)
+                    ->autoCheck()
+                    ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
+
+                    ->checkIF($task->estimate != false, 'estimate', 'float')
+                    ->checkIF($task->consumed != false, 'consumed', 'float')
+                    ->checkIF($task->left     != false, 'left',     'float')
+                    ->checkIF($task->left == 0 and $task->status != 'cancel' and $task->status != 'closed' and $task->consumed != 0, 'status', 'equal', 'done')
+
+                    ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
+
+                    ->checkIF($task->status == 'done', 'consumed', 'notempty')
+                    ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
+                    ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
+
+                    ->checkIF($task->status == 'closed', 'closedReason', 'notempty')
+                    ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
+                    ->where('id')->eq((int)$taskID)
+                    ->exec();
+
+                if($oldTask->story != false) $this->loadModel('story')->setStage($oldTask->story);
+                if(!dao::isError()) 
+                {
+                    $allChanges[$taskID] = common::createChanges($oldTask, $task);
+                }
+                else
+                {
+                    echo js::error(dao::getError());
+                    die(js::locate('back'));
+                }
+            }
+        }
+
+        return $allChanges;
+    }
+
+    /**
      * Assign a task to a user again.
      * 
      * @param  int    $taskID 
