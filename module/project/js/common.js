@@ -47,7 +47,54 @@ function computeWorkDays()
 {
     beginDate = $('#begin').val();
     endDate   = $('#end').val();
-    if(beginDate && endDate) $('#days').val(computeDaysDelta(beginDate, endDate));
+    if(beginDate && endDate) 
+    {
+      $('#days').val(computeDaysDelta(beginDate, endDate));
+    }
+    else if($('input[checked="true"]').val()) 
+    {
+      computeEndDate();
+    }
+}
+
+function computeEndDate()
+{
+  beginDate = $('#begin').val();
+  workDays  = $('input:checked').val();
+  beginDate = convertStringToDate(beginDate);
+  if(workDays == '2weeks')
+  {
+    begin   = beginDate.valueOf();
+    endDate = begin + 14 * 24 * 60 * 60 * 1000;
+    endDate = new Date(endDate);
+    year    = endDate.getFullYear();
+    month   = endDate.getMonth();
+    day     = endDate.getDate() - 1;
+  }
+  else if(workDays == '12') 
+  {
+    year  = beginDate.getFullYear() + 1;
+    month = beginDate.getMonth();
+    day   = beginDate.getDate() - 1;
+  }
+  else
+  {
+    year  = beginDate.getFullYear();
+    month = beginDate.getMonth() + Number(workDays);
+    if(month > 12)
+    {
+      year  = year + 1;
+      month = month - 12; 
+    }
+    day   = beginDate.getDate() - 1;
+  }
+  endDate = year + '-' + month + '-' + day;
+  if( month < 10) month = '0' + month;
+  if( day < 10)   day   = '0' + day;
+  end = year + '-' + month + '-' + day;
+  $('#end').val(end);
+  endDate =  convertStringToDate(endDate);
+  $('#days').val((endDate - beginDate) / (1000 * 60 * 60 * 24) + 1);
 }
 
 /* Auto compute the work days. */

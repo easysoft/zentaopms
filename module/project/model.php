@@ -148,7 +148,7 @@ class projectModel extends model
             ->stripTags('name, code, team')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')
-            ->remove('products')
+            ->remove('products, workDays')
             ->get();
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')

@@ -52,6 +52,14 @@ $lang->project->createTesttask= 'Create testtask';
 $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
 
+$lang->project->endList['2weeks'] = 'Two Weeks';
+$lang->project->endList['1']      = 'One Month';
+$lang->project->endList['2']      = 'Two Months';
+$lang->project->endList['3']      = 'Three Months';
+$lang->project->endList['6']      = 'Half Of Year';
+$lang->project->endList['12']     = 'One Year';
+
+
 $lang->team->account    = 'Account';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Join date';

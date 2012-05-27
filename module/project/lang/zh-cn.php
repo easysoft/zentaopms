@@ -52,6 +52,13 @@ $lang->project->createTesttask= '提交测试';
 $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
 
+$lang->project->endList['2weeks'] = '两星期';
+$lang->project->endList['1']      = '一个月';
+$lang->project->endList['2']      = '两个月';
+$lang->project->endList['3']      = '三个月';
+$lang->project->endList['6']      = '半年';
+$lang->project->endList['12']     = '一年';
+
 $lang->team->account    = '用户';
 $lang->team->role       = '角色';
 $lang->team->join       = '加盟日';

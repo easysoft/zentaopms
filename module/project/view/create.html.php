@@ -44,15 +44,16 @@ $(document).ready(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->begin;?></th>
-      <td><?php echo html::input('begin', '', "class='text-3 date' onchange='computeWorkDays()'");?></td>
+      <td><?php echo html::input('begin',date('Y-m-d'), "class='text-3 date' onchange='computeWorkDays()'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->end;?></th>
-      <td><?php echo html::input('end', '', "class='text-3 date' onchange='computeWorkDays()'");?></td>
-    </tr>  
+      <td><?php echo html::input('end', '', "class='text-3 date' onchange='computeWorkDays()'");?>
+      <span><?php echo html::radio('workDays',(array)$lang->project->endList , '', "onclick='computeEndDate()'");?></span></td>
+    </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->days;?></th>
-      <td><?php echo html::input('days', '', "class='text-3'") . $lang->project->day;?></td>
+      <td><?php echo html::input('days', '', "class='text-3'") . $lang->project->day;?>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->teamname;?></th>
