@@ -227,12 +227,12 @@ class task extends control
         /* Initialize vars. */
         $browseType      = strtolower($status);
         $queryID         = ($browseType == 'bysearch') ? (int)$param : 0;
-        $showSuhosinInfo = false;
         $project         = $this->project->getById($projectID); 
         $allTasks        = array();
         $editedTasks     = array();
         $taskIDList      = array();
         $columns         = 13;
+        $showSuhosinInfo = false;
         if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
 
         /* Set project menu. */
