@@ -126,54 +126,82 @@ class todo extends control
     /**
      * Batch edit todo.
      * 
+     * @param  string $from example:myTodo, todoBatchEdit.
      * @param  string $type 
      * @param  string $account 
      * @param  string $status 
      * @access public
      * @return void
      */
-    public function batchEdit($type = 'today', $account = '', $status = 'all')
+    public function batchEdit($from = '', $type = 'today', $account = '', $status = 'all')
     {
-        if($account == '') $account = $this->app->user->account;
-        $bugs  = $this->bug->getUserBugPairs($account);
-        $tasks = $this->task->getUserTaskPairs($account, $status);
-        $todos = $this->todo->getList($type, $account, $status);
+        /* Initialize vars. */
+        $bugs        = array();
+        $tasks       = array();
+        $editedTodos = array();
+        $todoIDList  = array();
+        $columns     = 7;
+        $showSuhosinInfo = false;
 
-        foreach($todos as $todo) 
+        /* Get form data for my-todo. */
+        if($from == 'myTodo')
         {
-            if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
-            if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-            $todo->date  = str_replace('-', '', $todo->date);
-            $todo->begin = str_replace(':', '', $todo->begin);
-            $todo->end   = str_replace(':', '', $todo->end);
+            if($account == '') $account = $this->app->user->account;
+            $bugs       = $this->bug->getUserBugPairs($account);
+            $tasks      = $this->task->getUserTaskPairs($account, $status);
+            $allTodos   = $this->todo->getList($type, $account, $status);
+            if($this->post->todoIDList)  $todoIDList = $this->post->todoIDList;
 
-            $todoIDList[$todo->id] = $todo->id;
+            foreach($allTodos as $todo) 
+            {
+                if(in_array($todo->id, $todoIDList))
+                {
+                    $editedTodos[$todo->id] = $todo;
+                }
+            }
+
+            foreach($editedTodos as $todo) 
+            {
+                if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
+                if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
+                $todo->date  = str_replace('-', '', $todo->date);
+                $todo->begin = str_replace(':', '', $todo->begin);
+                $todo->end   = str_replace(':', '', $todo->end);
+            }
+
+            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedTodos), $columns);
+
+            /* Set the sessions. */
+            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         }
 
-        if(!empty($_POST))
+        /* Get form data from todo-batchEdit. */
+        if($from == 'todoBatchEdit')
         {
-            $changes = $this->todo->batchUpdate($todoIDList);
-            foreach($changes as $todoID => $change)
+            $allChanges = $this->todo->batchUpdate();
+            foreach($allChanges as $todoID => $changes)
             {
-                if(!empty($change))
+                if(!empty($changes))
                 {
                     $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
-                    $this->action->logHistory($actionID, $change);
+                    $this->action->logHistory($actionID, $changes);
                 }
             }
  
-            die(js::locate($this->createLink('my', 'todo',"type=$type&account=$account&status=$status"), 'parent'));
+            die(js::locate($this->session->todoList));
         }
+
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
         $position[]      = $this->lang->todo->create;
 
-        $this->view->bugs     = $bugs;
-        $this->view->tasks    = $tasks;
-        $this->view->todos    = $todos;
-        $this->view->header   = $header;
-        $this->view->position = $position;
-        $this->view->times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time     = $this->todo->now();
+        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        $this->view->bugs        = $bugs;
+        $this->view->tasks       = $tasks;
+        $this->view->editedTodos = $editedTodos;
+        $this->view->times       = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time        = $this->todo->now();
+        $this->view->header      = $header;
+        $this->view->position    = $position;
 
         $this->display();
     }
@@ -268,10 +296,10 @@ class todo extends control
      */
     public function import2Today()
     {
-        $todos = $this->post->todos;
-        $today = $this->todo->today();
-        $this->dao->update(TABLE_TODO)->set('date')->eq($today)->where('id')->in($todos)->exec();
-        die(js::reload('parent'));
+        $todoIDList = $this->post->todoIDList;
+        $today      = $this->todo->today();
+        $this->dao->update(TABLE_TODO)->set('date')->eq($today)->where('id')->in($todoIDList)->exec();
+        die(js::locate($this->session->todoList));
     }
 
     /**
