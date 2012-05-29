@@ -1,17 +1,18 @@
 <script language='Javascript'>
 account='<?php echo $app->user->account;?>';
-customHtml = $('.nameBox').html();
 function loadList(type, id)
 {
     if(id)
     {
-        divID = '#nameBox' + id;
-        customHtml = customHtml.replace('nameBox', 'nameBox' + id);
+        divClass = '.nameBox' + id;
+        divID    = '#nameBox' + id;
     }
     else
     {
-        divID = '#nameBox';
+        divClass = '.nameBox';
+        divID    = '#nameBox';
     }
+    customHtml = $(divID).html();
 
     if(type == 'bug')
     {
@@ -38,11 +39,11 @@ function loadList(type, id)
 
     if(type == 'bug' || type == 'task')
     {
-        $(divID).load(link);
+        $(divClass).load(link);
     }
     else if(type == 'custom')
     {
-        $(divID).html(customHtml);
+        $(divClass).html(customHtml);
     }
 }
 

@@ -33,7 +33,10 @@
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange=loadList(this.value,$i+1) class='select-1'");?></td>
       <td><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=select-1');?></td>
-      <td><div id='<?php echo "nameBox" . ($i+1);?>' class='nameBox'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div></td>
+      <td>
+        <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div>
+        <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div>
+      </td>
       <td><?php echo html::textarea("descs[$i]", '', "rows='2' class=text-1");?></td>
       <td><?php echo html::select('begins[]', $times, '') . html::select('ends[]', $times, '');?><td>
     </tr>  
