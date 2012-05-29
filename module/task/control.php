@@ -228,7 +228,6 @@ class task extends control
         $browseType      = strtolower($status);
         $queryID         = ($browseType == 'bysearch') ? (int)$param : 0;
         $showSuhosinInfo = false;
-        $parentLink      = $this->session->taskList;
         $project         = $this->project->getById($projectID); 
         $allTasks        = array();
         $editedTasks     = array();
@@ -319,7 +318,7 @@ class task extends control
                     }
                 }
             }
-            die(js::locate($parentLink));
+            die(js::locate($this->session->taskList));
         }
 
         $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->task->batchEdit;

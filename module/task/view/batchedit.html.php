@@ -49,8 +49,7 @@
     <?php if(isset($suhosinInfo)):?>
     <tr><td colspan='13'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
     <?php endif;?>
-    <tr><td colspan='13' class='a-center'><?php echo html::submitButton();?></td>
-   </tr>
+    <tr><td colspan='13' class='a-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
