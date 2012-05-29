@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform'>
+<form method='post' name='todoform' id='todoform'>
   <div id='featurebar'>
     <div class='f-left'>
       <?php 
@@ -36,7 +36,6 @@
       <?php 
       common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="export"');
       common::printLink('todo', 'batchCreate', "", $lang->todo->batchCreate);
-      common::printLink('todo', 'batchEdit', "type=$type&account=$account&status=$status", $lang->todo->batchEdit);
       echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
       ?>
     </div>
@@ -58,12 +57,7 @@
     <tbody>
     <?php foreach($todos as $todo):?>
     <tr class='a-center'>
-      <td class='a-left'>
-        <?php
-        if($importFuture) echo "<input type='checkbox' name='todos[]' value='$todo->id' /> ";
-        echo $todo->id;
-        ?>
-      </td>
+      <td class='a-left'><input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' /> <?php echo $todo->id; ?></td>
       <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFuture : $todo->date;?></td>
       <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
       <td><?php echo $todo->pri;?></td>
@@ -82,13 +76,19 @@
     </tr>
     <?php endforeach;?>
     </tbody>
-    <?php if($importFuture || $type == 'all'):?>
+    <?php if(count($todos)):?>
     <tfoot>
       <tr>
         <td colspan='9'>
-        <?php if($importFuture):?>
-        <div class='f-left'><input type='submit' value='<?php echo $lang->todo->import2Today;?>' /></div>
+        <div class='f-left'>
+        <?php echo html::selectAll() . html::selectReverse();?>
+        <?php if(common::hasPriv('todo', 'batchEdit')):?>
+        <input class='button-s' value="<?php echo $lang->todo->batchEdit; ?>" type="button" onclick="todoform.action='<?php echo $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status"); ?>';todoform.submit();">
         <?php endif;?>
+        <? if($importFuture):?>
+        <input class='button-s' value="<?php echo $lang->todo->import2Today; ?>" type="button" onclick="todoform.action='<?php echo $this->createLink('todo', 'import2Today');?>';todoform.submit();">
+        <?php endif;?>
+        </div>
         <?php if($type == 'all') $pager->show();?>
         </td>
       </tr>
