@@ -269,14 +269,7 @@ class task extends control
         /* Get form data for project-task. */
         if($from == 'projectTask')
         {
-            if($this->post->taskIDList) 
-            {
-                $taskIDList = $this->post->taskIDList;
-            }
-            elseif(!isset($this->post->taskIDList) and $this->session->taskIDList)
-            {
-                $taskIDList = $this->session->taskIDList;
-            }
+            if($this->post->taskIDList) $taskIDList = $this->post->taskIDList;
 
             /* Initialize the tasks whose need to edited. */
             foreach($allTasks as $task) if(in_array($task->id, $taskIDList)) $editedTasks[$task->id] = $task;
@@ -284,7 +277,6 @@ class task extends control
             $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedTasks), $columns);
 
             /* Set the sessions. */
-            $this->app->session->set('taskIDList', $taskIDList);
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         }
         /* Get form data for task-batchEdit. */
