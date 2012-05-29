@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form method='post'>
+<form method='post' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->todo->batchEdit . $lang->colon;?></caption>
     <tr>
@@ -24,15 +24,15 @@
       <th class='w-120px'><?php echo $lang->todo->beginAndEnd;?></th>
     </tr>
 
-    <?php foreach($todos as $todo):?>
+    <?php foreach($editedTodos as $todo):?>
     <tr class='a-center'>
-      <td><?php echo $todo->id;?></td>
+      <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
       <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='text-1 date'");?></td>
       <td><?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange=loadList(this.value,$todo->id) class='select-1'");?></td>
       <td><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, 'class=select-1');?></td>
       <td>
-        <div class='nameBox hidden'><? echo html::input("names[$todo->id]", $todo->name, "class='f-left text-1 hiddenwin'"); echo "<span class='star'>*</span>";?></div>
-        <div id='<?php echo "nameBox" . $todo->id;?>' class='nameBox'>
+        <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='f-left text-1 hiddenwin'"); echo "<span class='star'>*</span>";?></div>
+        <div class='<?php echo "nameBox" . $todo->id;?>'>
         <?php 
         if($todo->type == 'custom')
         {
@@ -52,6 +52,9 @@
       <td><?php echo html::select("begins[$todo->id]", $times, $todo->begin) . html::select("ends[$todo->id]", $times, $todo->end);?><td>
     </tr>  
     <?php endforeach;?>
+    <?php if(isset($suhosinInfo)):?>
+    <tr><td colspan='6'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
+    <?php endif;?>
     <tr><td colspan='6' class='a-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
