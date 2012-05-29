@@ -59,29 +59,23 @@ class todoModel extends model
 
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
-            if((isset($todos->names[$i]) && $todos->names[$i] != '') || (!isset($todos->names[$i]) && (isset($todos->bugs[$i+1]) || isset($todos->tasks[$i+1]))))
+            if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]))
             {
-                $data->account = $this->app->user->account;
-                $data->date    = $this->post->date;
-                $data->type    = $todos->types[$i];
-                $data->pri     = $todos->pris[$i];
-                $data->name    = isset($todos->names[$i]) ? $todos->names[$i] : '';
-                $data->desc    = $todos->descs[$i];
-                $data->begin   = $todos->begins[$i];
-                $data->end     = $todos->ends[$i];
-                $data->status  = "wait";
-                $data->private = 0;
-                $data->idvalue = 0;
-                if(isset($todos->bugs[$i+1]))
-                {
-                    $data->idvalue = $todos->bugs[$i+1];
-                }
-                elseif(isset($todos->tasks[$i+1]))
-                {
-                    $data->idvalue =  $todos->tasks[$i+1];
-                }
+                $todo->account = $this->app->user->account;
+                $todo->date    = $this->post->date;
+                $todo->type    = $todos->types[$i];
+                $todo->pri     = $todos->pris[$i];
+                $todo->name    = isset($todos->names[$i]) ? $todos->names[$i] : '';
+                $todo->desc    = $todos->descs[$i];
+                $todo->begin   = $todos->begins[$i];
+                $todo->end     = $todos->ends[$i];
+                $todo->status  = "wait";
+                $todo->private = 0;
+                $todo->idvalue = 0;
+                if($todo->type == 'bug')  $todo->idvalue = isset($todos->bugs[$i + 1]) ? $todos->bugs[$i + 1] : 0;
+                if($todo->type == 'task') $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
 
-                $this->dao->insert(TABLE_TODO)->data($data)->autoCheck()->exec();
+                $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
                 if(dao::isError()) 
                 {
                     echo js::error(dao::getError());
@@ -129,52 +123,62 @@ class todoModel extends model
     /**
      * Batch update todo.
      * 
-     * @param  array $todoIDList 
      * @access public
      * @return void
      */
-    public function batchUpdate($todoIDList)
+    public function batchUpdate()
     {
-        $todos   = array();
-        $changes = array();
+        $todos      = array();
+        $allChanges = array();
+        $todoIDList = $this->post->todoIDList ? $this->post->todoIDList : array();
 
-        /* Initialize todos from the post data. */
-        foreach($todoIDList as $todoID)
+        /* Adjust whether the post data is complete, if not, remove the last element of $todoIDList. */
+        if($this->session->showSuhosinInfo) array_pop($taskIDList);
+
+
+        if(!empty($todoIDList))
         {
-            $todo->date  = $this->post->dates[$todoID];
-            $todo->type  = $this->post->types[$todoID];
-            $todo->pri   = $this->post->pris[$todoID];
-            $todo->name  = $todo->type == 'custom' ? $this->post->names[$todoID] : '';
-            $todo->begin = $this->post->begins[$todoID];
-            $todo->end   = $this->post->ends[$todoID];
-            if($todo->type == 'task') $todo->idvalue = $this->post->tasks[$todoID];
-            if($todo->type == 'bug')  $todo->idvalue = $this->post->bugs[$todoID];
+            /* Initialize todos from the post data. */
+            foreach($todoIDList as $todoID)
+            {
+                $todo->date  = $this->post->dates[$todoID];
+                $todo->type  = $this->post->types[$todoID];
+                $todo->pri   = $this->post->pris[$todoID];
+                $todo->name  = $todo->type == 'custom' ? $this->post->names[$todoID] : '';
+                $todo->begin = $this->post->begins[$todoID];
+                $todo->end   = $this->post->ends[$todoID];
+                if($todo->type == 'task') $todo->idvalue = isset($this->post->tasks[$todoID]) ? $this->post->tasks[$todoID] : 0;
+                if($todo->type == 'bug')  $todo->idvalue = isset($this->post->bugs[$todoID]) ? $this->post->bugs[$todoID] : 0;
 
-            $todos[$todoID] = $todo;
-            unset($todo);
+                $todos[$todoID] = $todo;
+                unset($todo);
+            }
+
+            foreach($todos as $todoID => $todo)
+            {
+                $oldTodo = $this->getById($todoID);
+                if($oldTodo->type != 'custom') $oldTodo->name = '';
+                $this->dao->update(TABLE_TODO)->data($todo)
+                    ->autoCheck()
+                    ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')               
+                    ->checkIF($todo->type == 'bug', 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'task', 'idvalue', 'notempty')
+                    ->where('id')->eq($todoID)
+                    ->exec();
+
+                if(!dao::isError()) 
+                {
+                    $allChanges[$todoID] = common::createChanges($oldTodo, $todo);
+                }
+                else
+                {
+                    echo js::error(dao::getError());
+                    die(js::locate('back'));
+                }
+            }
         }
 
-        foreach($todos as $todoID => $todo)
-        {
-            $oldTodo = $this->getById($todoID);
-            if($oldTodo->type != 'custom') $oldTodo->name = '';
-            $this->dao->update(TABLE_TODO)->data($todo)
-                ->autoCheck()
-                ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')->where('id')->eq($todoID)
-                ->exec();
-
-            if(!dao::isError()) 
-            {
-                $changes[$todoID] = common::createChanges($oldTodo, $todo);
-            }
-            else
-            {
-                echo js::error(dao::getError());
-                die(js::reload('parent'));
-            }
-        }
-
-        return $changes;
+        return $allChanges;
     }
 
     /**
