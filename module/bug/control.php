@@ -526,7 +526,7 @@ class bug extends control
                     }
                 } 
             }
-            die(js::locate($this->session->bugList));
+            die(js::locate($this->session->bugList, 'parent'));
         }
     }
 
