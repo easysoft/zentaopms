@@ -216,61 +216,28 @@ class task extends control
      * 
      * @param  int    $projectID 
      * @param  string $from example:projectTask, taskBatchEdit
-     * @param  string $status 
-     * @param  int    $param 
      * @param  string $orderBy 
      * @access public
      * @return void
      */
-    public function batchEdit($projectID = 0, $from = '', $status = 'all', $param = 0, $orderBy = '')
+    public function batchEdit($projectID = 0, $from = '', $orderBy = '')
     {
         /* Get form data for project-task. */
         if($from == 'projectTask')
         {
             /* Initialize vars. */
-            $browseType      = strtolower($status);
-            $queryID         = ($browseType == 'bysearch') ? (int)$param : 0;
+            if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
             $project         = $this->project->getById($projectID); 
-            $allTasks        = array();
-            $editedTasks     = array();
-            $taskIDList      = array();
+            $taskIDList      = $this->post->taskIDList ? $this->post->taskIDList : array();
             $columns         = 13;
             $showSuhosinInfo = false;
-            if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
 
             /* Set project menu. */
             $this->project->setMenu($this->project->getPairs(), $project->id);
 
             /* Get all tasks. */
-            if($browseType != "bysearch")
-            {
-                $allTasks = $this->task->getProjectTasks($projectID, $status, $orderBy, null); 
-            }
-            else
-            {   
-                if($queryID)
-                {
-                    $query = $this->loadModel('search')->getQuery($queryID);
-                    if($query)
-                    {
-                        $this->session->set('taskQuery', $query->sql);
-                        $this->session->set('taskForm', $query->form);
-                    }
-                    else
-                    {
-                        $this->session->set('taskQuery', ' 1 = 1');
-                    }
-                }
-                else
-                {
-                    if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
-                }
-                $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
-                $allTasks  = $this->project->getSearchTasks($taskQuery, null, $orderBy);
-            }
-
-            /* Get the list of task id. */
-            if($this->post->taskIDList) $taskIDList = $this->post->taskIDList;
+            $allTasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy($orderBy)->fetchAll('id');
+            if(!$allTasks) $allTasks = array();
 
             /* Initialize the tasks whose need to edited. */
             foreach($allTasks as $task) if(in_array($task->id, $taskIDList)) $editedTasks[$task->id] = $task;
@@ -324,7 +291,7 @@ class task extends control
                     }
                 }
             }
-            die(js::locate($this->session->taskList));
+            die(js::locate($this->session->bugList, 'parent'));
         }
     }
 

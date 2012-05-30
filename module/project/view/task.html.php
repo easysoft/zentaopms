@@ -17,7 +17,7 @@
 var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
-<form method='post' action='<?php echo $this->createLink('task', 'batchEdit', "projectID=$project->id&from=projectTask&status=$status&param=$param&orderBy=$orderBy");?>'>
+<form method='post' action='<?php echo $this->createLink('task', 'batchEdit', "projectID=$project->id&from=projectTask&orderBy=$orderBy");?>'>
   <table class='table-1 fixed colored tablesorter datatable'>
     <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>

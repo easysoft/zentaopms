@@ -227,7 +227,7 @@ class taskModel extends model
             {
                 $oldTask = $this->getById($taskID);
 
-                $task->name           = $this->post->names[$taskID];
+                $task->name           = htmlspecialchars($this->post->names[$taskID]);
                 $task->assignedTo     = $this->post->assignedTos[$taskID];
                 $task->type           = $this->post->types[$taskID];
                 $task->status         = $this->post->statuses[$taskID];
@@ -314,8 +314,7 @@ class taskModel extends model
                 }
                 else
                 {
-                    echo js::error(dao::getError());
-                    die(js::locate('back'));
+                    die(js::error('task#' . $taskID . dao::getError(true)));
                 }
             }
         }
