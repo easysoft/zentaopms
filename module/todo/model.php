@@ -135,7 +135,6 @@ class todoModel extends model
         /* Adjust whether the post data is complete, if not, remove the last element of $todoIDList. */
         if($this->session->showSuhosinInfo) array_pop($taskIDList);
 
-
         if(!empty($todoIDList))
         {
             /* Initialize todos from the post data. */
@@ -144,7 +143,7 @@ class todoModel extends model
                 $todo->date  = $this->post->dates[$todoID];
                 $todo->type  = $this->post->types[$todoID];
                 $todo->pri   = $this->post->pris[$todoID];
-                $todo->name  = $todo->type == 'custom' ? $this->post->names[$todoID] : '';
+                $todo->name  = $todo->type == 'custom' ? htmlspecialchars($this->post->names[$todoID]) : '';
                 $todo->begin = $this->post->begins[$todoID];
                 $todo->end   = $this->post->ends[$todoID];
                 if($todo->type == 'task') $todo->idvalue = isset($this->post->tasks[$todoID]) ? $this->post->tasks[$todoID] : 0;
@@ -172,8 +171,7 @@ class todoModel extends model
                 }
                 else
                 {
-                    echo js::error(dao::getError());
-                    die(js::locate('back'));
+                    die(js::error('todo#' . $todoID . dao::getError(true)));
                 }
             }
         }

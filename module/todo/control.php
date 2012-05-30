@@ -201,7 +201,7 @@ class todo extends control
                 }
             }
  
-            die(js::locate($this->session->todoList));
+            die(js::locate($this->session->todoList, 'parent'));
         }
     }
 

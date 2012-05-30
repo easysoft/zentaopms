@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form method='post' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
+<form method='post' target='hiddenwin' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->todo->batchEdit . $lang->colon;?></caption>
     <tr>
