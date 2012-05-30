@@ -477,7 +477,7 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($moduleID)->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
-        $this->fixModulePath();
+        $this->fixModulePath($self->root, $self->type);
     }
 
     /**
@@ -508,35 +508,25 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function fixModulePath()
+    public function fixModulePath($root, $type)
     {
         /* Get the max grade. */
-        $maxGrade = $this->dao->select('MAX(grade) AS grade')->from(TABLE_MODULE)->fetch('grade');
-        $modules  = array();
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->eq($type)->orderBy('parent')->fetchAll('id');
 
-        /* Cycle ervery grade. */
-        for($grade = 1; $grade <= $maxGrade; $grade ++)
-        {
-            /* Modules of current grade. */
-            $gradeModules = $this->dao->select('id, parent, grade')->from(TABLE_MODULE)->where('grade')->eq($grade)->fetchAll('id');
-            foreach($gradeModules as $moduleID => $module)
+            foreach($modules as $moduleID => $module)
             {
-                if($grade == 1)
+                if($module->parent == 0)
                 {
-                    $module->path = ",$moduleID,";
+                    $module->grade = 1;
+                    $module->path  = ",$moduleID,";
                 }
                 else
                 {
-                    /* Get the parent module to compute path and grade of my self. */
-                    if(isset($modules[$module->parent]))
-                    {
-                        $module->path  = $modules[$module->parent]->path . "$moduleID,";
-                        $module->grade = $modules[$module->parent]->grade + 1;
-                    }
+                    $parentModule = $modules[$module->parent];
+                    $module->path  = $parentModule->path . "$moduleID,";
+                    $module->grade = $parentModule->grade + 1;
                 }
             }
-            $modules += $gradeModules;
-        }
 
         /* Save modules to database. */
         foreach($modules as $moduleID => $module)
