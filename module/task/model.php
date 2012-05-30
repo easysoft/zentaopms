@@ -207,7 +207,6 @@ class taskModel extends model
     /**
      * Batch update task.
      * 
-     * @param  array $taskIDList 
      * @access public
      * @return void
      */
