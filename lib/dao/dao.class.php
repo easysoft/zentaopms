@@ -944,14 +944,26 @@ class dao
     /**
      * Get the errors.
      * 
+     * @param  boolean $join 
      * @access public
      * @return array
      */
-    public function getError()
+    public function getError($join = false)
     {
         $errors = dao::$errors;
         dao::$errors = array();     // Must clear it.
-        return $errors;
+
+        if(!$join) return $errors;
+
+        if(is_array($errors))
+        {
+            $message = '';
+            foreach($errors as $item)
+            {
+                is_array($item) ? $message .= join('\n', $item) . '\n' : $message .= $item . '\n';
+            }
+            return $message;
+        }
     }
 
     /**
