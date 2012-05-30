@@ -224,60 +224,74 @@ class task extends control
      */
     public function batchEdit($projectID = 0, $from = '', $status = 'all', $param = 0, $orderBy = '')
     {
-        /* Initialize vars. */
-        $browseType      = strtolower($status);
-        $queryID         = ($browseType == 'bysearch') ? (int)$param : 0;
-        $project         = $this->project->getById($projectID); 
-        $allTasks        = array();
-        $editedTasks     = array();
-        $taskIDList      = array();
-        $columns         = 13;
-        $showSuhosinInfo = false;
-        if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
-
-        /* Set project menu. */
-        $this->project->setMenu($this->project->getPairs(), $project->id);
-
-        /* Get all tasks. */
-        if($browseType != "bysearch")
-        {
-            $allTasks = $this->task->getProjectTasks($projectID, $status, $orderBy, null); 
-        }
-        else
-        {   
-            if($queryID)
-            {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('taskQuery', $query->sql);
-                    $this->session->set('taskForm', $query->form);
-                }
-                else
-                {
-                    $this->session->set('taskQuery', ' 1 = 1');
-                }
-            }
-            else
-            {
-                if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
-            }
-            $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
-            $allTasks  = $this->project->getSearchTasks($taskQuery, null, $orderBy);
-        }
-
         /* Get form data for project-task. */
         if($from == 'projectTask')
         {
+            /* Initialize vars. */
+            $browseType      = strtolower($status);
+            $queryID         = ($browseType == 'bysearch') ? (int)$param : 0;
+            $project         = $this->project->getById($projectID); 
+            $allTasks        = array();
+            $editedTasks     = array();
+            $taskIDList      = array();
+            $columns         = 13;
+            $showSuhosinInfo = false;
+            if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
+
+            /* Set project menu. */
+            $this->project->setMenu($this->project->getPairs(), $project->id);
+
+            /* Get all tasks. */
+            if($browseType != "bysearch")
+            {
+                $allTasks = $this->task->getProjectTasks($projectID, $status, $orderBy, null); 
+            }
+            else
+            {   
+                if($queryID)
+                {
+                    $query = $this->loadModel('search')->getQuery($queryID);
+                    if($query)
+                    {
+                        $this->session->set('taskQuery', $query->sql);
+                        $this->session->set('taskForm', $query->form);
+                    }
+                    else
+                    {
+                        $this->session->set('taskQuery', ' 1 = 1');
+                    }
+                }
+                else
+                {
+                    if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
+                }
+                $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
+                $allTasks  = $this->project->getSearchTasks($taskQuery, null, $orderBy);
+            }
+
+            /* Get the list of task id. */
             if($this->post->taskIDList) $taskIDList = $this->post->taskIDList;
 
             /* Initialize the tasks whose need to edited. */
             foreach($allTasks as $task) if(in_array($task->id, $taskIDList)) $editedTasks[$task->id] = $task;
 
+            /* Judge whether the editedTasks is too large. */
             $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedTasks), $columns);
 
             /* Set the sessions. */
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+    
+            /* Assign. */
+            $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->position[] = $this->lang->task->batchEdit;
+
+            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+            $this->view->projectID   = $project->id;
+            $this->view->editedTasks = $editedTasks;
+            $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+            $this->view->members     = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+
+            $this->display();
         }
         /* Get form data for task-batchEdit. */
         elseif($from == 'taskBatchEdit')
@@ -312,17 +326,6 @@ class task extends control
             }
             die(js::locate($this->session->taskList));
         }
-
-        $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
-        $this->view->position[] = $this->lang->task->batchEdit;
-
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
-        $this->view->projectID   = $project->id;
-        $this->view->editedTasks = $editedTasks;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members     = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-
-        $this->display();
     }
 
     /**
