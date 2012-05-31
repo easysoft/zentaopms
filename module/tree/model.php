@@ -495,7 +495,7 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('grade = grade - 1')->where('id')->in($childs)->exec();                 // Update grade of all childs.
         $this->dao->update(TABLE_MODULE)->set('parent')->eq($module->parent)->where('parent')->eq($moduleID)->exec(); // Update the parent of sons to my parent.
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->eq($moduleID)->exec();                                 // Delete my self.
-        $this->fixModulePath();
+        $this->fixModulePath($module->root, $module->type);
 
         if($module->type == 'story') $this->dao->update(TABLE_STORY)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
         if($module->type == 'bug')   $this->dao->update(TABLE_BUG)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
@@ -504,34 +504,33 @@ class treeModel extends model
 
     /**
      * Fix fieilds of all module, grade, parent, pathes and so on.
-     * 
+     *
+     * @param  string    $root 
+     * @param  string    $type 
      * @access public
      * @return void
      */
     public function fixModulePath($root, $type)
     {
-        /* Get the max grade. */
-        $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->eq($type)->orderBy('parent')->fetchAll('id');
+        /* Get all modules order by parent. Thus a parent module can be before a child. */
+        $modules = $this->dao->select('id, parent')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->eq($type)->orderBy('parent')->fetchAll('id');
 
-            foreach($modules as $moduleID => $module)
-            {
-                if($module->parent == 0)
-                {
-                    $module->grade = 1;
-                    $module->path  = ",$moduleID,";
-                }
-                else
-                {
-                    $parentModule = $modules[$module->parent];
-                    $module->path  = $parentModule->path . "$moduleID,";
-                    $module->grade = $parentModule->grade + 1;
-                }
-            }
-
-        /* Save modules to database. */
         foreach($modules as $moduleID => $module)
         {
-            $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->limit(1)->exec();
+            if($module->parent == 0)
+            {
+                $module->grade = 1;
+                $module->path  = ",$moduleID,";
+            }
+            else
+            {
+                $parentModule  = $modules[$module->parent];
+                $module->path  = $parentModule->path . "$moduleID,";
+                $module->grade = $parentModule->grade + 1;
+            }
         }
+
+        /* Save modules to database. */
+        foreach($modules as $module) $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->limit(1)->exec();
     }
 }
