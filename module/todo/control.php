@@ -174,8 +174,9 @@ class todo extends control
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
     
             /* Assign. */
-            $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
-            $position[]      = $this->lang->todo->create;
+            $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->batchEdit;
+            $position[]      = $this->lang->todo->common;
+            $position[]      = $this->lang->todo->batchEdit;
 
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->bugs        = $bugs;
