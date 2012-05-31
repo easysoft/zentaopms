@@ -19,21 +19,30 @@
       <th class='w-80px'><?php echo $lang->bug->type;?></th>
       <th class='w-50px'><?php echo $lang->bug->severityAB;?></th>
       <th class='w-50px'><?php echo $lang->bug->pri;?></th>
-      <th class='w-70px'><?php echo $lang->bug->status;?></th>
       <th> <?php echo $lang->bug->title;?></th>
       <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
+      <th class='w-70px'><?php echo $lang->bug->status;?></th>
       <th class='w-80px'><?php echo $lang->bug->resolvedByAB;?></th>
       <th class='w-150px'><?php echo $lang->bug->resolutionAB;?></th>
     </tr>
     <?php foreach($editedBugs as $bug):?>
+    <?
+    /**
+     * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task. 
+     * These thress types if upgrade from bugfree2.x.
+     */
+    if($bug->type != 'designchange') unset($this->lang->bug->typeList['designchange']);
+    if($bug->type != 'newfeature')   unset($this->lang->bug->typeList['newfeature']);
+    if($bug->type != 'trackthings')  unset($this->lang->bug->typeList['trackthings']);
+    ?>
     <tr class='a-center'>
       <td><?php echo $bug->id . html::hidden("bugIDList[$bug->id]", $bug->id);?></td>
       <td><?php echo html::select("types[$bug->id]",         $lang->bug->typeList, $bug->type, 'class=select-1');?></td>
       <td><?php echo html::select("severities[$bug->id]",   (array)$lang->bug->severityList, $bug->severity, 'class=select-1');?></td>
       <td><?php echo html::select("pris[$bug->id]",         (array)$lang->bug->priList, $bug->pri, 'class=select-1');?></td>
-      <td><?php echo html::select("statuses[$bug->id]",     (array)$lang->bug->statusList, $bug->status, 'class=select-1');?></td>
       <td><?php echo html::input("titles[$bug->id]",         $bug->title, 'class=text-1'); echo "<span class='star'>*</span>";?></td>
       <td><?php echo html::select("assignedTos[$bug->id]",   $users, $bug->assignedTo, 'class=select-1');?></td>
+      <td><?php echo html::select("statuses[$bug->id]",     (array)$lang->bug->statusList, $bug->status, 'class=select-1');?></td>
       <td><?php echo html::select("resolvedBys[$bug->id]",   $users, $bug->resolvedBy, 'class=select-1');?></td>
       <td>
         <div class='f-left'><?php echo html::select("resolutions[$bug->id]",   $this->lang->bug->resolutionList, $bug->resolution, "class=w-80px onchange=setDuplicate(this.value,$bug->id)");?></div>
