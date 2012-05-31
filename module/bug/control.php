@@ -493,6 +493,8 @@ class bug extends control
 
             /* Assign. */
             $this->view->header['title'] = $product->name . $this->lang->colon . $this->lang->bug->batchEdit;
+            $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+            $this->view->position[]      = $this->lang->bug->common;
             $this->view->position[]      = $this->lang->bug->batchEdit;
 
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
