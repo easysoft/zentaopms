@@ -250,6 +250,7 @@ class task extends control
     
             /* Assign. */
             $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->position[] = $this->lang->task->common;
             $this->view->position[] = $this->lang->task->batchEdit;
 
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
