@@ -34,72 +34,89 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
-<table class='cont-lt1'>
-  <tr valign='top'>
-    <td class='side <?php echo $treeClass;?>'>
-      <div class='box-title'><?php echo $productName;?></div>
-      <div class='box-content'>
-        <?php echo $moduleTree;?>
-        <div class='a-right'>
-          <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage);?>
+<form method='post' action='<?php echo $this->inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy");?>'>
+  <table class='cont-lt1'>
+    <tr valign='top'>
+      <td class='side <?php echo $treeClass;?>'>
+        <div class='box-title'><?php echo $productName;?></div>
+        <div class='box-content'>
+          <?php echo $moduleTree;?>
+          <div class='a-right'>
+            <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage);?>
+          </div>
         </div>
-      </div>
-    </td>
-    <td class='divider <?php echo $treeClass;?>'></td>
-    <td>
-      <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <table class='table-1 colored tablesorter datatable'>
-        <thead>
-          <tr class='colhead'>
-            <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
-            <th class='w-pri'><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
-            <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
-            <?php if($browseType == 'needconfirm'):?>
-            <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->testcase->story);?></th>
-            <th class='w-50px'><?php echo $lang->actions;?></th>
-            <?php else:?>
-            <th class='w-type'>  <?php common::printOrderLink('type',      $orderBy, $vars, $lang->typeAB);?></th>
-            <th class='w-user'>  <?php common::printOrderLink('openedBy',  $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='w-80px'>  <?php common::printOrderLink('lastRunner',  $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-            <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
-            <th class='w-80px'>  <?php common::printOrderLink('lastRunResult',$orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-            <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-220px {sorter:false}'><?php echo $lang->actions;?></th>
-            <?php endif;?>
-          </tr>
-          <?php foreach($cases as $case):?>
-          <tr class='a-center'>
-            <?php $viewLink = inlink('view', "caseID=$case->id");?>
-            <td><?php echo html::a($viewLink, sprintf('%03d', $case->id));?></td>
-            <td><?php echo $case->pri?></td>
-            <td class='a-left'><?php echo html::a($viewLink, $case->title);?></td>
-            <?php if($browseType == 'needconfirm'):?>
-            <td class='a-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
-            <td><?php echo html::a(inlink('confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');?></td>
-            <?php else:?>
-            <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-            <td><?php echo $users[$case->openedBy];?></td>
-            <td><?php echo $users[$case->lastRunner];?></td>
-            <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
-            <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-            <td><?php echo $lang->testcase->statusList[$case->status];?></td>
-            <td class='a-right'>
-              <?php
-              common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
-              common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
-              common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
-              common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
-              common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
-              if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))) echo $lang->testtask->createBug;
-              ?>
-            </td>
-            <?php endif;?>
-          </tr>
-        <?php endforeach;?>
-        </thead>
-        <tfoot><tr><td colspan='10'><?php $pager->show();?></td></tr></tfoot>
-      </table>
-    </td>              
-  </tr>              
-</table>              
+      </td>
+      <td class='divider <?php echo $treeClass;?>'></td>
+      <td>
+        <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+        <table class='table-1 colored tablesorter datatable'>
+          <thead>
+            <tr class='colhead'>
+              <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
+              <th class='w-pri'><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
+              <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
+              <?php if($browseType == 'needconfirm'):?>
+              <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->testcase->story);?></th>
+              <th class='w-50px'><?php echo $lang->actions;?></th>
+              <?php else:?>
+              <th class='w-type'>  <?php common::printOrderLink('type',      $orderBy, $vars, $lang->typeAB);?></th>
+              <th class='w-user'>  <?php common::printOrderLink('openedBy',  $orderBy, $vars, $lang->openedByAB);?></th>
+              <th class='w-80px'>  <?php common::printOrderLink('lastRunner',  $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
+              <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+              <th class='w-80px'>  <?php common::printOrderLink('lastRunResult',$orderBy, $vars, $lang->testtask->lastRunResult);?></th>
+              <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
+              <th class='w-220px {sorter:false}'><?php echo $lang->actions;?></th>
+              <?php endif;?>
+            </tr>
+            <?php foreach($cases as $case):?>
+            <tr class='a-center'>
+              <?php $viewLink = inlink('view', "caseID=$case->id");?>
+              <td>
+                <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
+                <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
+              </td>
+              <td><?php echo $case->pri?></td>
+              <td class='a-left'><?php echo html::a($viewLink, $case->title);?></td>
+              <?php if($browseType == 'needconfirm'):?>
+              <td class='a-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
+              <td><?php echo html::a(inlink('confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');?></td>
+              <?php else:?>
+              <td><?php echo $lang->testcase->typeList[$case->type];?></td>
+              <td><?php echo $users[$case->openedBy];?></td>
+              <td><?php echo $users[$case->lastRunner];?></td>
+              <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+              <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+              <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+              <td class='a-right'>
+                <?php
+                common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
+                common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
+                common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
+                common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
+                common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
+                if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))) echo $lang->testtask->createBug;
+                ?>
+              </td>
+              <?php endif;?>
+            </tr>
+          <?php endforeach;?>
+          </thead>
+          <tfoot>
+            <tr>
+              <td colspan='10'>
+                <div class='f-left'>
+                <?php 
+                echo html::selectAll() . html::selectReverse();
+                if(common::hasPriv('testcase', 'batchEdit')) echo html::submitButton($lang->testcase->batchEdit);
+                ?>
+                </div>
+              <?php $pager->show();?>
+              </td>
+            </tr>
+         </tfoot>
+        </table>
+      </td>              
+    </tr>              
+  </table>              
+</form>
 <?php include '../../common/view/footer.html.php';?>

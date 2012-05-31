@@ -54,6 +54,7 @@ $lang->testcase->batchCreate        = "批量添加";
 $lang->testcase->delete             = "删除用例";
 $lang->testcase->view               = "用例详情";
 $lang->testcase->edit               = "编辑用例";
+$lang->testcase->batchEdit          = "批量编辑 ";
 $lang->testcase->delete             = "删除用例";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->export             = "导出数据";
@@ -120,6 +121,13 @@ $lang->testcase->stageList['intergrate'] = '集成测试阶段';
 $lang->testcase->stageList['system']     = '系统测试阶段';
 $lang->testcase->stageList['smoke']      = '冒烟测试阶段';
 $lang->testcase->stageList['bvt']        = '版本验证阶段';
+
+$lang->testcase->stageListAB['unittest']   = '单元';
+$lang->testcase->stageListAB['feature']    = '功能';
+$lang->testcase->stageListAB['intergrate'] = '集成';
+$lang->testcase->stageListAB['system']     = '系统';
+$lang->testcase->stageListAB['smoke']      = '冒烟';
+$lang->testcase->stageListAB['bvt']        = '版本';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = '正常';

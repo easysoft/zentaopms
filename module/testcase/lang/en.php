@@ -54,6 +54,7 @@ $lang->testcase->batchCreate        = "Batch create";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->view               = "Info";
 $lang->testcase->edit               = "Edit";
+$lang->testcase->batchEdit          = "Batch edit";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->browse             = "Browse";
 $lang->testcase->export             = "Export";
@@ -120,6 +121,13 @@ $lang->testcase->stageList['intergrate']  = 'Integrate testing';
 $lang->testcase->stageList['system']      = 'System testing';
 $lang->testcase->stageList['smoke']       = 'Smoking testing';
 $lang->testcase->stageList['bvt']         = 'BVT testing';
+
+$lang->testcase->stageListAB['unittest']   = 'Unit';
+$lang->testcase->stageListAB['feature']    = 'Feature';
+$lang->testcase->stageListAB['intergrate'] = 'Integrate';
+$lang->testcase->stageListAB['system']     = 'System';
+$lang->testcase->stageListAB['smoke']      = 'Smoking';
+$lang->testcase->stageListAB['bvt']        = 'BVT';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = 'Normal';

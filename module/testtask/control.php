@@ -479,6 +479,6 @@ class testtask extends control
             ->where('task')->eq((int)$taskID)
             ->andWhere('`case`')->in($this->post->caseIDList)
             ->exec();
-        die(js::reload('parent'));
+        die(js::locate($this->session->caseList));
     }
 }

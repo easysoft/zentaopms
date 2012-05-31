@@ -35,7 +35,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
 </div>
 
-<form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'>
+<form method='post' name='casesform'>
 <table class='cont-lt1'>
   <tr valign='top'>
     <td class='side <?php echo $treeClass;?>'>
@@ -89,9 +89,14 @@ var moduleID   = '<?php echo $moduleID;?>';
               <div class='f-left'>
               <?php 
               echo html::selectAll() . html::selectReverse();
-              echo html::select('assignedTo', $users);
-              if(common::hasPriv('testtask', 'batchAssign')) echo html::submitButton($lang->testtask->assign); 
+              if(common::hasPriv('testcase', 'batchEdit')):
               ?>
+              <input class='button-s' value="<?php echo $lang->testcase->batchEdit; ?>" type="button" onclick="casesform.action='<?php echo $this->createLink('testcase', 'batchEdit', "from=testtaskCases&productID=$productID");?>';casesform.submit();">
+              <?php endif;?>
+              <?php if(common::hasPriv('testtask', 'batchAssign')):?>
+              <?php echo html::select('assignedTo', $users);?>
+              <input class='button-s' value="<?php echo $lang->testtask->batchAssign; ?>" type="button" onclick="casesform.action='<?php echo $this->inLink('batchAssign', "taskID=$task->id");?>';casesform.submit();">
+              <?php endif;?>
               </div>
               <?php echo $pager->show();?>
             </td>
