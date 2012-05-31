@@ -253,22 +253,31 @@ class userModel extends model
         if(!$account or !$password) return false;
   
         /* Get the user first. If $password length is 32, don't add the password condition.  */
-        $user = $this->dao->select('*')->from(TABLE_USER)
+        $record = $this->dao->select('*')->from(TABLE_USER)
             ->where('account')->eq($account)
             ->beginIF(strlen($password) < 32)->andWhere('password')->eq(md5($password))->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch();
 
         /* If the length of $password is 32 or 40, checking by the auth hash. */
-        if($user and strlen($password) == 32)
+        $user = false;
+        if($record)
         {
-            $hash = $this->session->rand ? md5($user->password . $this->session->rand) : $user->password;
-            $user = $password == $hash ? $user : '';
-        }
-        elseif($user and strlen($password) == 40)
-        {
-            $hash = sha1($user->account . $user->password . $user->last);
-            $user = $password == $hash ? $user : '';
+            $passwordLength = strlen($password);
+            if($passwordLength < 32)
+            {
+                $user = $record;
+            }
+            elseif($passwordLength == 32)
+            {
+                $hash = $this->session->rand ? md5($record->password . $this->session->rand) : $record->password;
+                $user = $password == $hash ? $record : '';
+            }
+            elseif($passwordLength == 40)
+            {
+                $hash = sha1($record->account . $record->password . $record->last);
+                $user = $password == $hash ? $record : '';
+            }
         }
 
         if($user)
