@@ -35,6 +35,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
 </div>
 
+<form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'>
 <table class='cont-lt1'>
   <tr valign='top'>
     <td class='side <?php echo $treeClass;?>'>
@@ -43,8 +44,6 @@ var moduleID   = '<?php echo $moduleID;?>';
     </td>
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
-      <?php $canBatchAssign = common::hasPriv('testtask', 'batchAssign');?>
-      <?php if($canBatchAssign):?><form method='post' action='<?php echo inlink('batchAssign', "task=$task->id");?>' target='hiddenwin'><?php endif;?>
       <table class='table-1 tablesorter datatable mb-zero fixed'>
         <thead>
           <tr class='colhead'>
@@ -63,7 +62,7 @@ var moduleID   = '<?php echo $moduleID;?>';
         <tbody>
           <?php foreach($runs as $run):?>
           <tr class='a-center'>
-            <td class='a-left'><?php if($canBatchAssign) echo "<input type='checkbox' name='cases[]' value='$run->case' /> ";  printf('%03d', $run->case);?></td>
+            <td class='a-left'><input type='checkbox' name='caseIDList[]' value='<?php echo $run->case;?>'/> <?php printf('%03d', $run->case);?></td>
             <td><?php echo $run->pri?></td>
             <td class='a-left nobr'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version"), $run->title, '_blank');?>
             </td>
@@ -87,21 +86,20 @@ var moduleID   = '<?php echo $moduleID;?>';
         <tfoot>
           <tr>
             <td colspan='10'>
-              <?php if($canBatchAssign):?>
               <div class='f-left'>
-             <?php 
+              <?php 
               echo html::selectAll() . html::selectReverse();
-              echo html::select('assignedTo', $users) . html::submitButton($lang->testtask->assign); 
+              echo html::select('assignedTo', $users);
+              if(common::hasPriv('testtask', 'batchAssign')) echo html::submitButton($lang->testtask->assign); 
               ?>
               </div>
-              <?php endif;?>
               <?php echo $pager->show();?>
             </td>
           </tr>
         <tfoot>
       </table>
-      <?php if($canBatchAssign) echo '</form>';?>
     </td>
   </tr>
 </table>
+</form>   
 <?php include '../../common/view/footer.html.php';?>

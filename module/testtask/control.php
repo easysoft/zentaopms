@@ -477,7 +477,7 @@ class testtask extends control
         $this->dao->update(TABLE_TESTRUN)
             ->set('assignedTo')->eq($this->post->assignedTo)
             ->where('task')->eq((int)$taskID)
-            ->andWhere('`case`')->in($this->post->cases)
+            ->andWhere('`case`')->in($this->post->caseIDList)
             ->exec();
         die(js::reload('parent'));
     }
