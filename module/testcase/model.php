@@ -271,8 +271,6 @@ class testcaseModel extends model
             /* Initialize cases from the post data.*/
             foreach($caseIDList as $caseID)
             {
-                $oldCase = $this->getByID($caseID);
-
                 $case->lastEditedBy   = $this->app->user->account;
                 $caee->lastEditedDate = $now;
                 $case->pri            = $this->post->pris[$caseID];
