@@ -346,6 +346,84 @@ class storyModel extends model
     }
 
     /**
+     * Batch update story.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchUpdate()
+    {
+        /* Init vars. */
+        $stories     = array();
+        $allChanges  = array();
+        $now         = helper::now();
+        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
+
+        /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
+        if($this->session->showSuhosinInfo) array_pop($storyIDList);
+
+        /* Init $stories. */
+        if(!empty($storyIDList))
+        {
+            foreach($storyIDList as $storyID)
+            {
+                $oldStory = $this->getById($storyID);
+
+                $story->lastEditedBy   = $this->app->user->account;
+                $story->lastEditedDate = $now;
+                $story->status         = $oldStory->status;
+                $story->title          = htmlspecialchars($this->post->titles[$storyID]);
+                $story->estimate       = $this->post->estimates[$storyID];
+                $story->pri            = $this->post->pris[$storyID];
+                $story->module         = $this->post->modules[$storyID];
+                $story->plan           = $this->post->plans[$storyID];
+                $story->source         = $this->post->sources[$storyID];
+                $story->stage          = isset($this->post->stages[$storyID])             ? $this->post->stages[$storyID]             : $oldStory->stage;
+                $story->closedBy       = isset($this->post->closedBys[$storyID])          ? $this->post->closedBys[$storyID]          : $oldStory->closedBy;
+                $story->closedReason   = isset($this->post->closedReasons[$storyID])      ? $this->post->closedReasons[$storyID]      : $oldStory->closedReason;
+                $story->duplicateStory = isset($this->post->duplicateStories[$storyID])   ? $this->post->duplicateStories[$storyID]   : $oldStory->duplicateStory;
+                $story->childStories   = isset($this->post->childStoriesIDList[$storyID]) ? $this->post->childStoriesIDList[$storyID] : $oldStory->childStories;
+
+                if($story->title        != $oldStory->title)                         $story->status     = 'changed';
+                if($story->plan         !== false and $story->plan == '')            $story->plan       = 0;
+                if($story->closedBy     != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
+                if($story->closedReason != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
+                if($story->closedBy     != false  or  $story->closedReason != false) $story->status     = 'closed';
+                if($story->closedReason != false  and $story->closedBy     == false) $story->closedBy   = $this->app->user->account;
+ 
+                $stories[$storyID] = $story;
+                unset($story);
+            }
+
+            foreach($stories as $storyID => $story)
+            {
+                $oldStory = $this->getById($storyID);
+
+                $this->dao->update(TABLE_STORY)->data($story)
+                    ->autoCheck()
+                    ->batchCheck($this->config->story->edit->requiredFields, 'notempty')
+                    ->checkIF($story->closedBy, 'closedReason', 'notempty')
+                    ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
+                    ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+                    ->checkIF($story->closedReason == 'subdivided', 'childStories', 'notempty')
+                    ->where('id')->eq((int)$storyID)
+                    ->exec();
+
+                if(!dao::isError()) 
+                {
+                    $allChanges[$storyID] = common::createChanges($oldStory, $story);
+                }
+                else
+                {
+                    die(js::error('story#' . $storyID . dao::getError(true)));
+                }
+            }
+        }
+
+        return $allChanges;
+    }
+
+    /**
      * Review a story.
      * 
      * @param  int    $storyID 

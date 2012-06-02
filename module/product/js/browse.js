@@ -7,3 +7,20 @@ function browseByModule()
     $('#featurebar .active').removeClass('active');
     $('#bymoduleTab').addClass('active');
 }
+
+/**
+ * Change form action.
+ * 
+ * @param  formName   $formName 
+ * @param  actionName $actionName 
+ * @param  actionLink $actionLink 
+ * @access public
+ * @return void
+ */
+function changeAction(formName, actionName, actionLink)
+{
+    if(actionName == 'batchEdit')  $('#' + formName).attr('target', '');
+    if(actionName == 'batchClose') $('#' + formName).attr('target', 'hiddenwin');
+    $('#' + formName).attr('action', actionLink).submit();
+}
+
