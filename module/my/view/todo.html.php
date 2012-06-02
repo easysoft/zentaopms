@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<form method='post' name='todoform' id='todoform'>
+<form method='post' id='todoform'>
   <div id='featurebar'>
     <div class='f-left'>
       <?php 
@@ -81,13 +81,20 @@
       <tr>
         <td colspan='9'>
         <div class='f-left'>
-        <?php echo html::selectAll() . html::selectReverse();?>
-        <?php if(common::hasPriv('todo', 'batchEdit')):?>
-        <input class='button-s' value="<?php echo $lang->todo->batchEdit; ?>" type="button" onclick="todoform.action='<?php echo $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status"); ?>';todoform.submit();">
-        <?php endif;?>
-        <? if($importFuture):?>
-        <input class='button-s' value="<?php echo $lang->todo->import2Today; ?>" type="button" onclick="todoform.action='<?php echo $this->createLink('todo', 'import2Today');?>';todoform.submit();">
-        <?php endif;?>
+        <?php 
+        echo html::selectAll() . html::selectReverse();
+        if(common::hasPriv('todo', 'batchEdit'))
+        {
+            $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
+            echo html::commonButton($lang->todo->batchEdit, "onclick=\"changeAction('todoform', 'batchEdit', '$actionLink')\"");
+
+        }
+        if(common::hasPriv('todo', 'import2Today') and $importFuture)
+        {
+            $actionLink = $this->createLink('todo', 'import2Today');
+            echo html::commonButton($lang->todo->import2Today, "onclick=\"changeAction('todoform', 'import2Today', '$actionLink')\"");
+        }
+        ?>
         </div>
         <?php if($type == 'all') $pager->show();?>
         </td>
