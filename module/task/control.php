@@ -229,6 +229,7 @@ class task extends control
             if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
             $project         = $this->project->getById($projectID); 
             $taskIDList      = $this->post->taskIDList ? $this->post->taskIDList : array();
+            $editedTasks     = array();
             $columns         = 13;
             $showSuhosinInfo = false;
 
@@ -292,7 +293,7 @@ class task extends control
                     }
                 }
             }
-            die(js::locate($this->session->bugList, 'parent'));
+            die(js::locate($this->session->taskList, 'parent'));
         }
     }
 
