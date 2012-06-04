@@ -122,7 +122,14 @@ class story extends control
             $keywords  = $oldBug->keywords;
             $spec      = $oldBug->steps;
             $pri       = $oldBug->pri;
-            $mailto    = $oldBug->mailto;
+            if(strpos($oldBug->mailto, $oldBug->openedBy) === false) 
+            {
+                $mailto = $oldBug->mailto . $oldBug->openedBy . ',';
+            }
+            else
+            {
+                $mailto = $oldBug->mailto;
+            }
         }
 
         $this->view->header->title    = $product->name . $this->lang->colon . $this->lang->story->create;
