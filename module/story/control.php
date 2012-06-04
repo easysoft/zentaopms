@@ -24,6 +24,7 @@ class story extends control
         $this->loadModel('project');
         $this->loadModel('tree');
         $this->loadModel('user');
+        $this->loadModel('action');
     }
 
     /**
@@ -40,7 +41,6 @@ class story extends control
         {
             $storyID = $this->story->create($projectID, $bugID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->loadModel('action');
             if($bugID == 0)
             {
                 $actionID = $this->action->create('story', $storyID, 'Opened', '');
@@ -244,7 +244,6 @@ class story extends control
      */
     public function edit($storyID)
     {
-        $this->loadModel('action');
         if(!empty($_POST))
         {
             $changes = $this->story->update($storyID);
@@ -348,7 +347,7 @@ class story extends control
                 {
                     foreach($allChanges as $storyID => $changes)
                     {
-                        $actionID = $this->loadModel('action')->create('story', $storyID, 'Edited');
+                        $actionID = $this->action->create('story', $storyID, 'Edited');
                         $this->action->logHistory($actionID, $changes);
                         $this->sendMail($storyID, $actionID);
                     }
@@ -367,7 +366,6 @@ class story extends control
      */
     public function change($storyID)
     {
-        $this->loadModel('action');
         if(!empty($_POST))
         {
             $changes = $this->story->change($storyID);
@@ -408,7 +406,6 @@ class story extends control
      */
     public function activate($storyID)
     {
-        $this->loadModel('action');
         if(!empty($_POST))
         {
             $this->story->activate($storyID);
@@ -437,7 +434,6 @@ class story extends control
      */
     public function view($storyID, $version = 0)
     {
-        $this->loadModel('action');
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
         if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
@@ -504,8 +500,6 @@ class story extends control
      */
     public function review($storyID)
     {
-        $this->loadModel('action');
-
         if(!empty($_POST))
         {
             $this->story->review($storyID);
@@ -561,8 +555,6 @@ class story extends control
      */
     public function close($storyID)
     {
-        $this->loadModel('action');
-
         if(!empty($_POST))
         {
             $this->story->close($storyID);
@@ -592,6 +584,96 @@ class story extends control
         $this->view->actions = $this->action->getList('story', $storyID);
         $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();
+    }
+
+    /**
+     * Batch close story.
+     * 
+     * @param  string $from productBrowse|projectStory|storyBatchClose
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function batchClose($from = '', $productID = 0, $projectID = 0, $orderBy = '')
+    {
+        /* Get post data for product-Browse or project-Story. */
+        if($from == 'productBrowse' or $from == 'projectStory')
+        {
+            /* Init vars. */
+            $editedStories   = array();
+            $storyIDList     = $this->post->storyIDList ? $this->post->storyIDList : array();
+            $columns         = 4;
+            $showSuhosinInfo = false;
+
+            /* Get all stories. */
+            if(!$projectID)
+            {
+                /* Set menu. */
+                $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
+                $allStories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyReport)->orderBy($orderBy)->fetchAll('id');
+            }
+            else
+            {
+                $this->lang->story->menu = $this->lang->project->menu;
+                $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
+                $this->lang->set('menugroup.story', 'project');
+                $allStories = $this->story->getProjectStories($projectID, $orderBy);
+            }
+            if(!$allStories) $allStories = array();
+
+            /* Initialize the stories whose need to edited. */
+            foreach($allStories as $story) if(in_array($story->id, $storyIDList)) $editedStories[$story->id] = $story;
+
+            /* Judge whether the editedStories is too large. */
+            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedStories), $columns);
+
+            /* Set the sessions. */
+            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+
+            /* Assign. */
+            if(!$projectID)
+            {
+                $product = $this->product->getByID($productID);
+                $this->view->header['title'] = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+            }
+            else
+            {
+                $project = $this->project->getByID($projectID);
+                $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->story->batchClose;
+            }
+            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+            $this->view->position[]       = $this->lang->story->common;
+            $this->view->position[]       = $this->lang->story->batchClose;
+            $this->view->users            = $this->loadModel('user')->getPairs('nodeleted');
+            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
+            $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
+            $this->view->productID        = $productID;
+            $this->view->editedStories    = $editedStories;
+
+            $this->display();
+        }
+        /* Get post data for story-batchClose. */
+        elseif($from == 'storyBatchClose')
+        {
+            if(!empty($_POST))
+            {
+
+                $allChanges = $this->story->batchClose();
+
+                if($allChanges)
+                {
+                    foreach($allChanges as $storyID => $changes)
+                    {
+                        $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comments[$storyID], ucfirst($this->post->closedReasons[$storyID]));
+                        $this->action->logHistory($actionID);
+                        $this->sendMail($storyID, $actionID);
+                    }
+                }
+            }
+            die(js::locate($this->session->storyList, 'parent'));
+        }
     }
 
     /**
@@ -654,7 +736,7 @@ class story extends control
         $productName = $this->product->getById($story->product)->name;
 
         /* Get actions. */
-        $action          = $this->loadModel('action')->getById($actionID);
+        $action          = $this->action->getById($actionID);
         $history         = $this->action->getHistory($actionID);
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
         if(strtolower($action->action) == 'opened') $action->comment = $story->spec;

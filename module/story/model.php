@@ -509,6 +509,72 @@ class storyModel extends model
     }
 
     /**
+     * Batch close story.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchClose()
+    {
+        /* Init vars. */
+        $stories     = array();
+        $allChanges  = array();
+        $now         = helper::now();
+        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
+
+        /* Adjust whether the post data is complete, if not, remove the last element of $storyIDList. */
+        if($this->session->showSuhosinInfo) array_pop($storyIDList);
+        if(!empty($storyIDList))
+        {
+            foreach($storyIDList as $storyID)
+            {
+                $oldStory = $this->getById($storyID);
+
+                $story->lastEditedBy   = $this->app->user->account;
+                $story->lastEditedDate = $now;
+                $story->closedBy       = $this->app->user->account;
+                $story->closedDate     = $now;
+                $story->assignedTo     = 'closed';
+                $story->assignedDate   = $now;
+                $story->status         = 'closed';
+
+                $story->closedReason   = $this->post->closedReasons[$storyID];
+                $story->duplicateStory = $this->post->duplicateStoryIDList[$storyID] ? $this->post->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
+                $story->childStories   = $this->post->childStoriesIDList[$storyID] ? $this->post->childStoriesIDList[$storyID] : $oldStory->childStories;
+
+                if($story->closedReason == 'done') $story->stage = 'released';
+                if($story->closedReason != 'done') $story->plan  = 0;
+
+                $stories[$storyID] = $story;
+                unset($story);
+            }
+
+            foreach($stories as $storyID => $story)
+            {
+                $oldStory = $this->getById($storyID);
+
+                $this->dao->update(TABLE_STORY)->data($story)
+                    ->autoCheck()
+                    ->batchCheck($this->config->story->close->requiredFields, 'notempty')
+                    ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+                    ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
+                    ->where('id')->eq($storyID)->exec();
+
+                if(!dao::isError()) 
+                {
+                    $allChanges[$storyID] = common::createChanges($oldStory, $story);
+                }
+                else
+                {
+                    die(js::error('story#' . $storyID . dao::getError(true)));
+                }
+            }
+        }
+
+        return $allChanges;
+    }
+
+    /**
      * Activate a story.
      * 
      * @param  int    $storyID 

@@ -89,7 +89,7 @@
               }
               if(common::hasPriv('story', 'batchClose'))
               {
-                  $actionLink = $this->createLink('story', 'batchClose', "from=projectStory&productID=0");
+                  $actionLink = $this->createLink('story', 'batchClose', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
                   echo html::commonButton($lang->story->batchClose, "onclick=\"changeAction('projectStoryForm', 'batchClose', '$actionLink')\"");
               }
           }

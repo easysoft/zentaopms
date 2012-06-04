@@ -14,7 +14,5 @@ $(document).ready(function()
  */
 function changeAction(formName, actionName, actionLink)
 {
-    if(actionName == 'batchEdit')  $('#' + formName).attr('target', '');
-    if(actionName == 'batchClose') $('#' + formName).attr('target', 'hiddenwin');
     $('#' + formName).attr('action', actionLink).submit();
 }

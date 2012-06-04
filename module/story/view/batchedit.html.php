@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit', "from=storyBatchEdit&productID=$productID")?>">
+<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit', "from=storyBatchEdit")?>">
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?></caption>
     <tr>
