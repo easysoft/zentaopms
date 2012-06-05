@@ -857,9 +857,16 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager)
+    public function getBySearch($productID, $queryID, $orderBy, $pager, $projectID = '')
     {
-        $products = $this->loadModel('product')->getPairs();
+        if($projectID != '') 
+        {
+            $products = $this->loadModel('project')->getProducts($projectID); 
+        }
+        else
+        {
+            $products = $this->loadModel('product')->getPairs();
+        }
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
         /* Get the sql and form status from the query. */
@@ -896,7 +903,7 @@ class storyModel extends model
     public function getBySQL($productID, $sql, $orderBy, $pager = null)
     {
         $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($sql)
-            ->beginIF($productID != 'all')->andWhere('product')->eq((int)$productID)->fi()
+            ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)

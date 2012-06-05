@@ -72,6 +72,7 @@ $lang->product->closedStory  = '已关闭';
 
 $lang->product->allStory    = '全部需求';
 $lang->product->allProduct  = '全部产品';
+$lang->product->allProductsOfProject = '全部关联产品';
 
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';

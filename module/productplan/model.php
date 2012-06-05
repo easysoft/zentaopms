@@ -63,6 +63,21 @@ class productplanModel extends model
     }
 
     /**
+     * Get plans for products 
+     * 
+     * @param  int    $products 
+     * @access public
+     * @return void
+     */
+    public function getForProducts($products)
+    {
+        return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in(array_keys($products))
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('begin')->fetchPairs();
+    }
+
+    /**
      * Create a plan.
      * 
      * @access public

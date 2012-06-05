@@ -1102,8 +1102,11 @@ class project extends control
      * @access public
      * @return void
      */
-    public function linkStory($projectID = 0)
+    public function linkStory($projectID = 0, $browseType = '', $param = 0)
     {
+        $this->loadModel('story');
+        $this->loadModel('product');
+
         /* Get projects and products. */
         $project    = $this->project->getById($projectID);
         $products   = $this->project->getProducts($projectID);
@@ -1125,13 +1128,28 @@ class project extends control
             exit;
         }
 
-        $this->loadModel('story');
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+
+        /* Build search form. */
+        unset($this->config->product->search['fields']['module']);
+        $this->config->product->search['actionURL'] = $this->createLink('project', 'linkStory', "projectID=$projectID&browseType=bySearch&queryID=myQueryID");
+        $this->config->product->search['queryID']   = $queryID;
+        $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
+        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->product->search);
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->linkStory;
         $position[]      = html::a($browseLink, $project->name);
         $position[]      = $this->lang->project->linkStory;
 
-        $allStories = $this->story->getProductStories(array_keys($products), $moduleID = '0', $status = 'active');
+        if($browseType == 'bySearch')
+        {    
+            $allStories = $this->story->getBySearch('', $queryID, 'id', null, $projectID);
+        }
+        else
+        {
+            $allStories = $this->story->getProductStories(array_keys($products), $moduleID = '0', $status = 'active');
+        }
         $prjStories = $this->story->getProjectStoryPairs($projectID);
 
         $this->view->header     = $header;
@@ -1140,6 +1158,7 @@ class project extends control
         $this->view->products   = $products;
         $this->view->allStories = $allStories;
         $this->view->prjStories = $prjStories;
+        $this->view->browseType = $browseType;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }

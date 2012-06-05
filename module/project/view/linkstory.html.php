@@ -12,7 +12,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<form method='post' target='hiddenwin'>
+<script language='Javascript'>
+var browseType = '<?php echo $browseType;?>';
+</script>
+<div id='featurebar'>
+  <div class='f-left'>
+    <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
+  </div>
+</div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+<form method='post'>
   <table align='center' class='table-1 tablesorter a-center'> 
     <thead>
     <tr class='colhead'>
