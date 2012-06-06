@@ -22,7 +22,13 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->release->build;?></th>
-      <td><?php echo html::select('build', $builds, '', "class='select-3' onchange=loadStoriesAndBugs(this.value,$productID)");?></td>
+      <td>
+      <?php  
+          echo html::select('build', $builds, '', "class='select-3' onchange=loadStoriesAndBugs(this.value,$productID)");
+          unset($builds['']);
+          if(empty($builds)) echo $lang->build->notice;
+      ?>
+      </td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->release->date;?></th>

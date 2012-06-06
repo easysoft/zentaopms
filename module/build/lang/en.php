@@ -38,3 +38,6 @@ $lang->build->bugs               = 'Linked bugs';
 
 $lang->build->finishStories = 'The total demand for a complete %s';
 $lang->build->resolvedBugs  = 'The total solution of bug%s';
+
+$lang->build->notice  = '(No build in your system, create it in build of project right now.)';
+$lang->build->notice2 = '(If the build is empty, please create it in build of project right now.)';

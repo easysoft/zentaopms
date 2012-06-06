@@ -34,7 +34,12 @@ userList = "<?php echo join(',', array_keys($users));?>".split(',');
      <tr>
       <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
       <td>
-        <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3');?></span>
+        <span id='buildBox'>
+        <?php 
+            echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3'); 
+            echo $lang->build->notice2;
+        ?>
+        </span>
       </td>
     </tr>
     <tr>
