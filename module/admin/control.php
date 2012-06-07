@@ -116,4 +116,44 @@ class admin extends control
             echo "Repairing TABLE: " . $result->Table . "\t" . $result->Msg_type . ":" . $result->Msg_text . "\n";
         }
     }
+
+    /**
+     * clear data.
+     * 
+     * @access public
+     * @return void
+     */
+    public function clearData()
+    {
+        if(!empty($_POST))
+        {
+            $this->confirmClearData();
+        }
+
+        $this->display();
+    }
+
+    /**
+     * Confirm clear data.
+     * 
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function confirmClearData($confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->admin->confirmClearData, inlink('confirmClearData', "confirm=yes")));
+        }
+        else
+        {
+            $result = $this->admin->clearData();
+            if($result)
+            {
+                die(js::alert($this->lang->admin->clearDataSucceed));
+            }
+            die(js::alert($this->lang->admin->clearDataFailed));
+        }
+    }
 }

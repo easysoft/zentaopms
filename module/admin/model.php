@@ -138,4 +138,46 @@ class adminModel extends model
 		$register->email   = $this->app->user->email;
 		return $register;
 	}
+
+    /**
+     * Clear data.
+     * 
+     * @access public
+     * @return void
+     */
+    public function clearData()
+    {
+        $result = $this->dbh->query('SHOW TABLES')->fetchAll();
+        $showDemoUsers = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('showDemoUsers')->fetch();
+        foreach($result as $item) 
+        {
+            $table = current((array)$item); 
+            if(strpos($table, 'company') !== false) continue;
+            if(strpos($table, 'group')   !== false) continue;
+            if(strpos($table, 'user')    !== false) 
+            {
+                if($showDemoUsers)
+                {
+                    $this->dao->delete()->from($table)
+                        ->where('account')->in(array('productManager', 'projectManager', 'testManager', 'dev1', 'dev2', 'dev3', 'tester1', 'tester2', 'tester3'))
+                        ->exec();
+                    if(dao::isError()) return false;
+                }
+                continue;
+            }
+            if(strpos($table, 'config')  !== false)
+            {
+                if($showDemoUsers)
+                {
+                    $this->dao->delete()->from($table)
+                        ->where('`key`')->eq('showDemoUsers')
+                        ->exec();
+                    if(dao::isError()) return false;
+                }
+                continue;
+            }
+            if(!$this->dbh->query("TRUNCATE TABLE `$table`")) return false;
+        }
+        return true;
+    }
 }

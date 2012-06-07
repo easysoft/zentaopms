@@ -18,6 +18,18 @@ $lang->admin->welcome = 'Welcome to ZenTaoPMS.';
 
 $lang->admin->browseCompany = 'Browse Company';
 
+$lang->admin->clearData        = 'Clear Data';
+$lang->admin->confirmClearData = 'Are you sure to clear data?';
+$lang->admin->clearDataFailed  = 'Failed to clear data!';
+$lang->admin->clearDataSucceed = 'Succeed to clear data!';
+$lang->admin->clearDataDesc    = <<<EOT
+<strong><font color='red'>Clear data is dangerous. Be sure to backup your database and other data files and sure nobody is using pms when importing.</font></strong>\n
+The impact of clearing data:
+1、Clearing data will have no effect on table company,table group,and table groupPriv.
+2、If you have choosed import demo data when installing,then clearing data will delete the item where key equals showDemoUsers on config table, and delete all demo users on user table.
+3、For others tables:clear all data.
+EOT;
+
 $lang->admin->info->caption        = 'ZentaoPMS information';
 $lang->admin->info->version 	   = 'The current version of the system is %s,';
 $lang->admin->info->links          = 'You can visit the following link:';

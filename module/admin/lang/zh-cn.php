@@ -18,6 +18,18 @@ $lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
 
 $lang->admin->browseCompany = '浏览公司';
 
+$lang->admin->clearData        = '清除数据';
+$lang->admin->confirmClearData = '您确认要清楚数据吗？';
+$lang->admin->clearDataFailed  = '清除数据失败！';
+$lang->admin->clearDataSucceed = '清除数据成功！';
+$lang->admin->clearDataDesc    = <<<EOT
+<strong><font color='red'>清除数据存在一定的风险，清楚数据之前，我们强烈建议您备份数据库及相应的数据文件，并保证清楚数据的时候，没有其他人进行操作。</font></strong>\n
+清除数据对数据库的影响如下：
+1、清楚数据不会对company, group, groupPriv表进行操作。
+2、如果安装的时候有导入demo数据，则会删除config表key=showDemoUsers的记录，并删除user表中的所有demo用户。
+3、对于其他表则进行全部清除操作。
+EOT;
+
 $lang->admin->info->caption        = '禅道系统信息';
 $lang->admin->info->version        = '当前系统的版本是%s，';
 $lang->admin->info->links          = '您可以访问以下链接：';

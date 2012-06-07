@@ -369,6 +369,7 @@ class installModel extends model
             $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
         }
+
         $config->company = '1';
         $config->owner   = 'system';
         $config->section = 'global';
