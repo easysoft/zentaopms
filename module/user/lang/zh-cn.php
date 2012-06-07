@@ -52,6 +52,7 @@ $lang->user->genderList->f = '女';
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
 $lang->user->keepLogin['on']      = '保持登录';
+$lang->user->loginWithDemoUser    = '使用demo账号登录：';
 
 $lang->user->id        = '用户编号';
 $lang->user->company   = '所属公司';

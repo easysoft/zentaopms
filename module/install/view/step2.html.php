@@ -52,7 +52,13 @@
     </tr>
     <tr>
       <th><?php echo $lang->install->dbPrefix;?></th>
-      <td><?php echo html::input('dbPrefix', 'zt_', 'class=text-3') . html::checkBox('clearDB', $lang->install->clearDB);?></td>
+      <td>
+      <?php 
+      echo html::input('dbPrefix', 'zt_', 'class=text-3');
+      echo html::checkBox('clearDB', $lang->install->clearDB);
+      echo html::checkBox('importDemoData', $lang->install->importDemoData);
+      ?>
+      </td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton();?></td>

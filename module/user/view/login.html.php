@@ -37,6 +37,18 @@ include '../../common/view/colorbox.html.php';
       </td>
     </tr>  
   </table>
+  <?php if($showDemoUsers):?>  
+  <div id='demoUsers'>  
+  <?php
+      echo $lang->user->loginWithDemoUser;
+      if(isset($demoUsers['productManager'])) echo html::a($this->inLink('login', "account=productManager&password=123456"), $demoUsers['productManager'], 'hiddenwin', "class='yellow'");
+      if(isset($demoUsers['projectManager'])) echo html::a($this->inLink('login', "account=projectManager&password=123456"), $demoUsers['projectManager'], 'hiddenwin', "class='yellow'");
+      if(isset($demoUsers['testManager']))    echo html::a($this->inLink('login', "account=testManager&password=123456"),    $demoUsers['testManager'],    'hiddenwin', "class='yellow'");
+      if(isset($demoUsers['dev1']))           echo html::a($this->inLink('login', "account=dev1&password=123456"),           $demoUsers['dev1'],           'hiddenwin', "class='yellow'");
+      if(isset($demoUsers['tester1']))        echo html::a($this->inLink('login', "account=tester1&password=123456"),        $demoUsers['tester1'],        'hiddenwin', "class='yellow'");
+  ?>  
+  </div>  
+  <?php endif;?>  
   <div id='poweredby'>
     powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>)
     <?php echo $lang->donate;?>
