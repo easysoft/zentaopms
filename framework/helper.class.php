@@ -172,49 +172,21 @@ class helper
         {
             $modelClass    = $moduleName . 'Model';
             $extModelClass = 'ext' . $modelClass;
-            $modelLines    = "<?php \ninclude '$mainModelFile';\n";
+            $modelLines    = trim(file_get_contents($mainModelFile));
+            $modelLines    = rtrim($modelLines, '?>');     // To make sure the last end tag is removed.
             $modelLines   .= "class $extModelClass extends $modelClass {\n";
 
             /* Cycle all the extension files. */
-            $encryptFiles = array(); 
             foreach($extFiles as $extFile)
             {
-                $className  = $moduleName . str_replace('.php', '', basename($extFile));
                 $extLines = trim(file_get_contents($extFile));
-                if(preg_match('/function +/i', $extLines) == 1)
-                {
-                    $extLines = trim($extLines);
-                    if(strpos($extLines, '<?php') === 0) $extLines = ltrim($extLines, '<?php');
-                    if(strpos($extLines, '?>') !== false)$extLines = rtrim($extLines, '?\>');
-                    $modelLines .= $extLines . "\n";
-                }
-                else
-                {
-                    $encryptFiles[$className] = $extFile; 
-                }
+                if(strpos($extLines, '<?php') !== false) $extLines = ltrim($extLines, '<?php');
+                if(strpos($extLines, '?>')    !== false) $extLines = rtrim($extLines, '?>');
+                $modelLines .= $extLines . "\n";
             }
-            $extClasses = '';
-            $modelLines .= "\tpublic function __call(\$method, \$params)\n\t{\n";
-            foreach($encryptFiles as $extClass => $encryptFile)
-            {
-                $modelLines .= "\t\tinclude '$encryptFile';\n";
-                $extClasses .= "'$extClass',";
-            }
-            $extClasses = rtrim($extClasses, ',');
-            $modelLines .=<<<EOD
-        \$extClasses = array($extClasses);
-        foreach(\$extClasses as \$extClass)
-        {
-            if(method_exists(\$extClass, \$method))
-            {
-                \$class = new \$extClass();
-                return call_user_func_array(array(&\$class, \$method), \$params);
-            }
-        }
-    }
-}
-EOD;
+
             /* Create the merged model file. */
+            $modelLines .= "}";
             file_put_contents($mergedModelFile, $modelLines);
 
             return $mergedModelFile;

@@ -185,6 +185,38 @@ class model
         return $this->$moduleName;
     }
 
+    /**
+     * Load extension class of a model. Saved to $moduleName/ext/model/class/$extensionName.class.php.
+     * 
+     * @param  string $extensionName 
+     * @param  string $moduleName 
+     * @access public
+     * @return void
+     */
+    public function loadExtension($extensionName, $moduleName = '')
+    {
+        if(empty($extensionName)) return false;
+
+        /* Set extenson name and extension file. */
+        $extensionName = strtolower($extensionName);
+        $moduleName    = $moduleName ? $moduleName : $this->getModuleName();
+        $extensionFile = $this->app->getModuleExtPath($moduleName, 'model') . 'class/' . $extensionName . '.class.php';
+
+        /* Try to import parent model file auto and then import the extension file. */
+        if(!class_exists($moduleName . 'Model')) helper::import($this->app->getModulePath($moduleName) . 'model.php');
+        if(!helper::import($extensionFile)) return false;
+
+        /* Set the extension class name. */
+        $extensionClass = $extensionName . ucfirst($moduleName);
+        if(!class_exists($extensionClass)) return false;
+
+        /* Create an instance of the extension class and return it. */
+        $extensionObject = new $extensionClass;
+        $extensionClass  = str_replace('Model', '', $extensionClass);
+        $this->$extensionClass = $extensionObject;
+        return $extensionObject;
+    }
+
     //-------------------- DAO related method s--------------------//
 
     /**
