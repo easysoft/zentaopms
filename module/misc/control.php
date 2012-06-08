@@ -71,4 +71,16 @@ class misc extends control
         $this->view->browser = $browser;
         $this->display();
     }
+
+    /**
+     * Check model extension logic
+     * 
+     * @access public
+     * @return void
+     */
+    public function checkExtension()
+    {
+        echo $this->misc->hello();
+        echo $this->misc->hello2();
+    }
 }
