@@ -82,11 +82,6 @@
           {
               echo html::selectAll() . html::selectReverse();
 
-              if(common::hasPriv('story', 'batchEdit'))
-              {
-                  $actionLink = $this->createLink('story', 'batchEdit', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
-                  echo html::commonButton($lang->story->batchEdit, "onclick=\"changeAction('projectStoryForm', 'batchEdit', '$actionLink')\"");
-              }
               if(common::hasPriv('story', 'batchClose'))
               {
                   $actionLink = $this->createLink('story', 'batchClose', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
