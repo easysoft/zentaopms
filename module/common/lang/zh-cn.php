@@ -157,7 +157,7 @@ $lang->release->menu          = $lang->product->menu;
 /* 项目视图菜单设置。*/
 $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
-$lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'batchedit');
+$lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '动态|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
@@ -179,13 +179,13 @@ $lang->build->menu           = $lang->project->menu;
 
 /* QA视图菜单设置。*/
 $lang->bug->menu->product  = '%s';
-$lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit', 'subModule' => 'tree');
+$lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
 
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit', 'subModule' => 'tree');
+$lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
 
 $lang->testtask->menu->product  = '%s';
