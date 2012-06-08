@@ -54,7 +54,6 @@ $lang->testcase->batchCreate        = "批量添加";
 $lang->testcase->delete             = "删除用例";
 $lang->testcase->view               = "用例详情";
 $lang->testcase->edit               = "编辑用例";
-$lang->testcase->batchEdit          = "批量编辑 ";
 $lang->testcase->delete             = "删除用例";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->export             = "导出数据";

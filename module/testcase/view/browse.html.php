@@ -71,10 +71,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <?php foreach($cases as $case):?>
             <tr class='a-center'>
               <?php $viewLink = inlink('view', "caseID=$case->id");?>
-              <td>
-                <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
-                <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
-              </td>
+              <td><?php echo html::a($viewLink, sprintf('%03d', $case->id));?></td>
               <td><?php echo $case->pri?></td>
               <td class='a-left'><?php echo html::a($viewLink, $case->title);?></td>
               <?php if($browseType == 'needconfirm'):?>
@@ -101,19 +98,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             </tr>
           <?php endforeach;?>
           </thead>
-          <tfoot>
-            <tr>
-              <td colspan='10'>
-                <div class='f-left'>
-                <?php 
-                echo html::selectAll() . html::selectReverse();
-                if(common::hasPriv('testcase', 'batchEdit')) echo html::submitButton($lang->testcase->batchEdit);
-                ?>
-                </div>
-              <?php $pager->show();?>
-              </td>
-            </tr>
-         </tfoot>
+          <tfoot><tr><td colspan='10'><?php $pager->show();?></td></tr></tfoot>
         </table>
       </td>              
     </tr>              
