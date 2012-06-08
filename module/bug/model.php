@@ -274,6 +274,31 @@ class bugModel extends model
     }
 
     /**
+     * Assign a bug to a user again.
+     * 
+     * @param  int    $bugID 
+     * @access public
+     * @return void
+     */
+    public function assign($bugID)
+    {
+        $now = helper::now();
+        $oldBug = $this->getById($bugID);
+        $bug = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_BUG)
+            ->data($bug)
+            ->autoCheck()
+            ->where('id')->eq($bugID)->exec(); 
+
+        if(!dao::isError()) return common::createChanges($oldBug, $bug);
+    }
+
+    /**
      * Confirm a bug.
      * 
      * @param  int    $bugID 

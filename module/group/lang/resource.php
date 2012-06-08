@@ -157,6 +157,7 @@ $lang->resource->bug->confirmBug          = 'confirmBug';
 $lang->resource->bug->view                = 'view';
 $lang->resource->bug->edit                = 'edit';
 $lang->resource->bug->batchEdit           = 'batchEdit';
+$lang->resource->bug->assignTo            = 'assignTo';
 $lang->resource->bug->resolve             = 'resolve';
 $lang->resource->bug->activate            = 'activate';
 $lang->resource->bug->close               = 'close';

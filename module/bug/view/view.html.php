@@ -23,6 +23,7 @@
     {
         if(!($bug->status == 'active' and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm))) echo $lang->bug->buttonConfirm . ' ';
         if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+        common::printLink('bug', 'assignTo', $params, $lang->bug->buttonAssign);
         common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
         if(common::hasPriv('bug', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
         if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
@@ -59,6 +60,7 @@
         {
             if(!($bug->status == 'active'  and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
             if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
+            common::printLink('bug', 'assignTo', $params, $lang->bug->buttonAssign);
             common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
             if(common::hasPriv('bug', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
             if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';

@@ -70,6 +70,7 @@ $lang->bug->create             = '创建Bug';
 $lang->bug->confirmBug         = '确认';
 $lang->bug->edit               = '编辑Bug';
 $lang->bug->batchEdit          = '批量编辑';
+$lang->bug->assignTo           = '指派';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug详情';
 $lang->bug->resolve            = '解决Bug';
@@ -134,6 +135,7 @@ $lang->bug->legendMisc         = '其他相关';
 /* 功能按钮。*/
 $lang->bug->buttonConfirm        = '确认';
 $lang->bug->buttonCopy           = '复制';
+$lang->bug->buttonAssign         = '指派';
 $lang->bug->buttonEdit           = '编辑';
 $lang->bug->buttonActivate       = '激活';
 $lang->bug->buttonResolve        = '解决';

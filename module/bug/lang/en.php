@@ -70,6 +70,7 @@ $lang->bug->create             = 'Create Bug';
 $lang->bug->confirmBug         = 'Confirm Bug';
 $lang->bug->edit               = 'Edit Bug';
 $lang->bug->batchEdit          = 'Batch edit';
+$lang->bug->assignTo           = 'Assign';
 $lang->bug->browse             = 'Browse Bug';
 $lang->bug->view               = 'Bug Info';
 $lang->bug->resolve            = 'Resolve Bug';
@@ -134,6 +135,7 @@ $lang->bug->legendMisc         = 'Misc';
 /* Action buttons. */
 $lang->bug->buttonConfirm        = 'Confirm';
 $lang->bug->buttonCopy           = 'Copy';
+$lang->bug->buttonAssign         = 'Assgin';
 $lang->bug->buttonEdit           = 'Edit';
 $lang->bug->buttonActivate       = 'Activate';
 $lang->bug->buttonResolve        = 'Resolve';

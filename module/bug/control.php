@@ -533,6 +533,42 @@ class bug extends control
     }
 
     /**
+     * Update assign of bug. 
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
+    public function assignTo($bugID)
+    {
+        $bug = $this->bug->getById($bugID);
+
+        /* Set menu. */
+        $this->bug->setMenu($this->products, $bug->product);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->bug->assign($bugID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+            $this->action->logHistory($actionID, $changes);
+            $this->sendmail($bugID, $actionID);
+
+            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
+        $this->view->position[]    = $this->lang->bug->assignedTo;
+
+        $this->view->users   = $this->user->getPairs('nodeleted');
+        $this->view->bug     = $bug;
+        $this->view->bugID   = $bugID;
+        $this->view->actions = $this->action->getList('bug', $bugID);
+        $this->display();
+    }
+
+    /**
      * confirm a bug.
      * 
      * @param  int    $bugID 
