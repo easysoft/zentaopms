@@ -142,55 +142,114 @@ class helper
     {
         global $app;
 
-        /* Set the main model file and extension path and files. */
+        /* Set the main model file and extension and hook pathes and files. */
         $mainModelFile = $app->getModulePath($moduleName) . 'model.php';
         $modelExtPath  = $app->getModuleExtPath($moduleName, 'model');
+        $modelHookPath = $modelExtPath . 'hook/';
         $extFiles      = helper::ls($modelExtPath, '.php');
+        $hookFiles     = helper::ls($modelHookPath, '.php');
 
-        /* If no extension file, return the main file directly. */
-        if(empty($extFiles)) return $mainModelFile;
+        /* If no extension files and no hook files, return the main file directly. */
+        if(empty($extFiles) and empty($hookFiles)) return $mainModelFile;
 
         /* Else, judge whether needed update or not .*/
-        $mergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . $moduleName . '.php';
         $needUpdate      = false;
+        $mergedModelFile = $app->getTmpRoot() . 'model' . $app->getPathFix() . $moduleName . '.php';
         $lastTime        = file_exists($mergedModelFile) ? filemtime($mergedModelFile) : 0;
-        foreach($extFiles as $extFile)
+
+        while(!$needUpdate)
         {
-            if(filemtime($extFile) > $lastTime)
-            {
-                $needUpdate = true;
-                break;
-            }
-        }
-        if(filemtime($mainModelFile) > $lastTime) $needUpdate = true;
+            foreach($extFiles  as $extFile) if(filemtime($extFile)  > $lastTime) break 2;
+            foreach($hookFiles as $hookFile) if(filemtime($hookFile) > $lastTime) break 2;
 
-        /* If need'nt update, return the cache file. */
-        if(!$needUpdate) return $mergedModelFile;
+            if(is_dir($modelExtPath ) and filemtime($modelExtPath)  > $lastTime) break;
+            if(is_dir($modelHookPath) and filemtime($modelHookPath) > $lastTime) break;
 
-        /* Update the cache file. */
-        if($needUpdate)
-        {
-            $modelClass    = $moduleName . 'Model';
-            $extModelClass = 'ext' . $modelClass;
-            $modelLines    = trim(file_get_contents($mainModelFile));
-            $modelLines    = rtrim($modelLines, '?>');     // To make sure the last end tag is removed.
-            $modelLines   .= "class $extModelClass extends $modelClass {\n";
-
-            /* Cycle all the extension files. */
-            foreach($extFiles as $extFile)
-            {
-                $extLines = trim(file_get_contents($extFile));
-                if(strpos($extLines, '<?php') !== false) $extLines = ltrim($extLines, '<?php');
-                if(strpos($extLines, '?>')    !== false) $extLines = rtrim($extLines, '?>');
-                $modelLines .= $extLines . "\n";
-            }
-
-            /* Create the merged model file. */
-            $modelLines .= "}";
-            file_put_contents($mergedModelFile, $modelLines);
+            if(filemtime($mainModelFile) > $lastTime) break;
 
             return $mergedModelFile;
         }
+
+        /* Update the cache file. */
+        $modelClass       = $moduleName . 'Model';
+        $extModelClass    = 'ext' . $modelClass;
+        $extTmpModelClass = 'tmpExt' . $modelClass;
+        $modelLines       = "<?php\n";
+        $modelLines      .= "helper::import('$mainModelFile');\n";
+        $modelLines      .= "class $extTmpModelClass extends $modelClass \n{\n";
+
+        /* Cycle all the extension files. */
+        foreach($extFiles as $extFile)
+        {
+            $extLines = self::removeTagsOfPHP($extFile);
+            $modelLines .= $extLines . "\n";
+        }
+
+        /* Create the merged model file and import it. */
+        $replaceMark = '//**//';    // This mark is for replacing code using.
+        $modelLines .= "$replaceMark\n}";
+        file_put_contents($mergedModelFile, $modelLines);
+        include $mergedModelFile;
+
+        /* Get hook codes need to merge. */
+        $hookCodes = array();
+        foreach($hookFiles as $hookFile)
+        {
+            $fileName = baseName($hookFile);
+            list($method) = explode('.', $fileName);
+            $hookCodes[$method][] = self::removeTagsOfPHP($hookFile);
+        }
+
+        /* Cycle the hook methods and merge hook codes. */
+        $hookedMethods    = array_keys($hookCodes);
+        $mainModelCodes   = file($mainModelFile);
+        $mergedModelCodes = file($mergedModelFile);
+        foreach($hookedMethods as $method)
+        {
+            /* Reflection the hooked method to get it's defined position. */
+            $methodRelfection = new reflectionMethod($extTmpModelClass, $method);
+            $definedFile = $methodRelfection->getFileName();
+            $startLine   = $methodRelfection->getStartLine() . ' ';
+            $endLine     = $methodRelfection->getEndLine() . ' ';
+
+            /* Merge hook codes. */
+            $oldCodes = $definedFile == $mergedModelFile ? $mergedModelCodes : $mainModelCodes;
+            $oldCodes = join("", array_slice($oldCodes, $startLine - 1, $endLine - $startLine + 1));
+            $openBrace = strpos($oldCodes, '{');
+            $newCodes = substr($oldCodes, 0, $openBrace + 1) . "\n" . join("\n", $hookCodes[$method]) . substr($oldCodes, $openBrace + 1);
+
+            /* Replace it. */
+            if($definedFile == $mergedModelFile)
+            {
+                $modelLines = str_replace($oldCodes, $newCodes, $modelLines);
+            }
+            else
+            {
+                $modelLines = str_replace($replaceMark, $newCodes . "\n$replaceMark", $modelLines);
+            }
+        }
+        
+        /* Save it. */
+        $modelLines = str_replace($extTmpModelClass, $extModelClass, $modelLines);
+        file_put_contents($mergedModelFile, $modelLines);
+
+        return $mergedModelFile;
+    }
+
+    /**
+     * Remove tags of PHP 
+     * 
+     * @param  string    $fileName 
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function removeTagsOfPHP($fileName)
+    {
+        $code = trim(file_get_contents($fileName));
+        if(strpos($code, '<?php') === 0)     $code = ltrim($code, '<?php');
+        if(strrpos($code, '?>')   !== false) $code = rtrim($code, '?>');
+        return trim($code);
     }
 
     /**
