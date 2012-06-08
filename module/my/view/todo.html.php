@@ -57,7 +57,12 @@
     <tbody>
     <?php foreach($todos as $todo):?>
     <tr class='a-center'>
-      <td class='a-left'><input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' /> <?php echo $todo->id; ?></td>
+      <td class='a-center'>
+        <?php if(common::hasPriv('todo', 'import2Today') and $importFuture): ?>  
+        <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />         
+        <?php endif;?>  
+        <?php echo $todo->id; ?>
+      </td>
       <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFuture : $todo->date;?></td>
       <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
       <td><?php echo $todo->pri;?></td>
@@ -82,15 +87,9 @@
         <td colspan='9'>
         <div class='f-left'>
         <?php 
-        echo html::selectAll() . html::selectReverse();
-        if(common::hasPriv('todo', 'batchEdit'))
-        {
-            $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
-            echo html::commonButton($lang->todo->batchEdit, "onclick=\"changeAction('todoform', 'batchEdit', '$actionLink')\"");
-
-        }
         if(common::hasPriv('todo', 'import2Today') and $importFuture)
         {
+            echo html::selectAll() . html::selectReverse();
             $actionLink = $this->createLink('todo', 'import2Today');
             echo html::commonButton($lang->todo->import2Today, "onclick=\"changeAction('todoform', 'import2Today', '$actionLink')\"");
         }
