@@ -154,7 +154,6 @@ var customed   = <?php echo (int)$customed;?>;
                 <div class='f-left'>
                   <?php 
                   echo html::selectAll() . html::selectReverse(); 
-                  if(common::hasPriv('bug', 'batchEdit')) echo html::submitButton($lang->bug->batchEdit);
                   foreach($lang->bug->statusList as $status => $label)
                   {
                       if($status != 'active')
