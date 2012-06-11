@@ -267,6 +267,18 @@ class commonModel extends model
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
 
+        /* Sort the subMenu according to menuOrder. */
+        if(isset($lang->$moduleName->menuOrder))
+        {
+            ksort($lang->project->menuOrder, SORT_ASC);
+            foreach($lang->$moduleName->menuOrder as $order)  
+            {
+                $subOrder = $submenus->$order;
+                unset($submenus->$order);  
+                $submenus->$order = $subOrder;
+            }
+        }
+
         /* The beginning of the menu. */
         echo "<ul>\n";
 
