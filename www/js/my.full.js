@@ -360,6 +360,24 @@ function setHelpLink()
 }
 
 /**
+ * Set paceholder 
+ * 
+ * @access public
+ * @return void
+ */
+function setPlaceholder()
+{
+    if(typeof(holders) != "undefined")
+    {
+        holders = JSON.parse(holders);
+        for(key in holders)
+        {
+            $("#"+key).attr('placeholder',holders[key]);
+        }
+    }
+}
+
+/**
  * Toggle the help links.
  * 
  * @access public
@@ -785,6 +803,7 @@ $(document).ready(function()
     setNowrapObjTitle();
     setRequiredFields();
     setHelpLink();
+    setPlaceholder();
     setProductSwitcher();
     setProjectSwitcher();
     setAbout();

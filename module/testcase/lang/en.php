@@ -140,3 +140,5 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonEdit   = 'Edit';
 $lang->testcase->buttonToList = 'Back';
+
+$lang->testcase->placeholder->keywords = 'keywords';

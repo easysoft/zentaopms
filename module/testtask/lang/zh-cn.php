@@ -64,3 +64,6 @@ $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';
 $lang->testtask->lblRunCase    = '执行用例';
 $lang->testtask->lblResults    = '执行结果';
+
+$lang->testtask->placeholder->begin = '开始日期';
+$lang->testtask->placeholder->end   = '结束日期';

@@ -64,3 +64,6 @@ $lang->testtask->lblCases      = 'Case list';
 $lang->testtask->lblUnlinkCase = 'Remove case';
 $lang->testtask->lblRunCase    = 'Run';
 $lang->testtask->lblResults    = 'Result';
+
+$lang->testtask->placeholder->begin = 'begin date';
+$lang->testtask->placeholder->end   = 'end date';

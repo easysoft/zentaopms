@@ -65,3 +65,5 @@ $lang->doc->types['text'] = 'Html';
 $lang->doc->confirmDelete      = "Are you sure to delete this doc?";
 $lang->doc->confirmDeleteLib   = " Are you sure to delete this doc library?";
 $lang->doc->errorEditSystemDoc = "System doc library needn't edit";
+
+$lang->doc->placeholder->url = 'url';

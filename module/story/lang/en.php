@@ -230,3 +230,6 @@ $lang->story->report->storysPerAssignedTo->graph->xAxisName   = 'Assigned to';
 $lang->story->report->storysPerClosedReason->graph->xAxisName = 'Closed reason';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = 'Estimate';
 $lang->story->report->storysPerChange->graph->xAxisName       = 'Change';
+
+$lang->story->placeholder->estimate = 'Estimate the story point.';
+$lang->story->placeholder->mailto   = 'Mail to';

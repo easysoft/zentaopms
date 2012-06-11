@@ -32,3 +32,7 @@ $lang->productplan->title   = '名称';
 $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '开始日期';
 $lang->productplan->end     = '结束日期';
+
+$lang->productplan->placeholder->title = "一般不要过长，简短好记";
+$lang->productplan->placeholder->begin = "计划开始的日期";
+$lang->productplan->placeholder->end   = "计划结束的日期";

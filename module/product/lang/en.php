@@ -82,3 +82,6 @@ $lang->product->aclList['private'] = 'Private(Only project team members can visi
 $lang->product->aclList['custom']  = 'Whitelist(Project team members and who belongs to the whilelist groups can visit)';
 
 $lang->product->storySummary = "Total <strong>%s</strong> stories in this page, estimate <strong>%s</strong> hours.";
+
+$lang->product->placeholder->name = 'Product name';
+$lang->product->placeholder->code = 'Product code';

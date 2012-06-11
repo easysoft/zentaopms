@@ -176,3 +176,9 @@ $lang->project->charts->burn->graph->formatNumber = 0;
 $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
+
+$lang->project->placeholder->name = 'Project name';
+$lang->project->placeholder->code = 'Project code';
+$lang->project->placeholder->end  = "If scrum it should no more than 30 days";
+$lang->project->placeholder->days = 'Decide by begin date and end day';
+$lang->project->placeholder->team = 'Team name';

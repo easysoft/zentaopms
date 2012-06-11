@@ -312,3 +312,6 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Histories';
 $lang->bug->action->resolved = array('main' => '$date, Resolved by <strong>$actor</strong>, resolution is <strong>$extra</strong>.', 'extra' => $lang->bug->resolutionList);
 $lang->bug->action->tostory  = array('main' => '$date, To story by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
 $lang->bug->action->totask   = array('main' => '$date, To task by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
+
+$lang->bug->placeholder->mailto   = 'you can input the user account to select users to mail to.';
+$lang->bug->placeholder->keywords = 'keywords';

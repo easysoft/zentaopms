@@ -81,3 +81,11 @@ $lang->user->visits    = 'Visits';
 $lang->user->ip        = 'Last IP';
 $lang->user->last      = 'Last login';
 $lang->user->status    = 'Status';
+
+$lang->user->placeholder->account   = 'Letters/underline/numbers, three above';
+$lang->user->placeholder->password1 = 'Six above';
+$lang->user->placeholder->password2 = 'Repeat password to confirm';
+$lang->user->placeholder->realname  = 'Realname';
+$lang->user->placeholder->email     = 'The default notify tool in zentao';
+$lang->user->placeholder->join      = 'The date the employee join the company';
+$lang->user->placeholder->last      = 'Last login time';

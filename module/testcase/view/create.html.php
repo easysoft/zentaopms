@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<script>var holders = '<?php echo json_encode($lang->testcase->placeholder);?>'</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table-1'> 
     <caption><?php echo $lang->testcase->create;?></caption>
