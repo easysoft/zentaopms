@@ -198,6 +198,25 @@ class commonModel extends model
         $mainMenu = $moduleName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
+        /* Sort menu according to menuOrder. */
+        if(isset($lang->menuOrder))
+        {
+            $menus = $lang->menu;
+            unset($lang->menu);
+            ksort($lang->menuOrder, SORT_ASC);
+            foreach($lang->menuOrder as $order)  
+            {
+                $menu = $menus->$order; 
+                unset($menus->$order);
+                $lang->menu->$order = $menu;
+            }
+            foreach($menus as $key => $menu)
+            {
+                $lang->menu->$key = $menu; 
+            }
+        }
+
+
         /* Print all main menus. */
         foreach($lang->menu as $menuKey => $menu)
         {
@@ -270,12 +289,26 @@ class commonModel extends model
         /* Sort the subMenu according to menuOrder. */
         if(isset($lang->$moduleName->menuOrder))
         {
-            ksort($lang->project->menuOrder, SORT_ASC);
+            $menus    = $submenus;
+            unset($submenus);
+            ksort($lang->$moduleName->menuOrder, SORT_ASC);
+            if(isset($menus->list)) 
+            {
+                $submenus->list = $menus->list; 
+                unset($menus->list);
+            }
             foreach($lang->$moduleName->menuOrder as $order)  
             {
-                $subOrder = $submenus->$order;
-                unset($submenus->$order);  
-                $submenus->$order = $subOrder;
+                if($order != 'list')
+                {
+                    $subOrder = $menus->$order;
+                    unset($menus->$order);
+                    $submenus->$order = $subOrder;
+                }
+            }
+            foreach($menus as $key => $menu)
+            {
+                $submenus->$key = $menu; 
             }
         }
 
