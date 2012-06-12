@@ -37,6 +37,11 @@ function setField(fieldName, fieldNO)
     $('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
     $('#valueBox' + fieldNO) .html($('#box' + fieldName).children().clone());
     $('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
+
+    if(fieldName.indexOf('Date') >= 0 || fieldName.indexOf('deadline') >= 0)
+    {
+        $("#value" + fieldNO).datePicker({createButton:true, startDate:startDate})
+    }
 }
 
 /**
@@ -139,7 +144,6 @@ function deleteQuery()
     if(!queryID) return;
     hiddenwin.location.href = createLink('search', 'deleteQuery', 'queryID=' + queryID);
 }
-
 </script>
 
 <div class='hidden'>
@@ -149,7 +153,7 @@ foreach($fieldParams as $fieldName => $param)
 {
     echo "<span id='box$fieldName'>";
     if($param['control'] == 'select') echo html::select($fieldName, $param['values'], '', 'class=select-2');
-    if($param['control'] == 'input') echo html::input($fieldName, '', 'class=text-2');
+    if($param['control'] == 'input')  echo html::input($fieldName, '', "class='text-2'");
     echo '</span>';
 }
 ?>
@@ -187,7 +191,19 @@ foreach($fieldParams as $fieldName => $param)
           /* Print value. */
           echo "<span id='valueBox$fieldNO'>";
           if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
-          if($param['control'] == 'input') echo html::input("value$fieldNO",  $formSession["value$fieldNO"], 'class=text-2');
+          if($param['control'] == 'input') 
+          {
+              $fieldName = $formSession["field$fieldNO"];
+              if(strpos($fieldName, 'Date') !== false or strpos($fieldName, 'deadline') !== false)
+              {
+
+                  echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 date'");
+              }
+              else
+              {
+                  echo html::input("value$fieldNO", $formSession["value$fieldNO"], 'class=text-2');
+              }
+          }
           echo '</span>';
 
           $fieldNO ++;
@@ -222,7 +238,18 @@ foreach($fieldParams as $fieldName => $param)
           /* Print value. */
           echo "<span id='valueBox$fieldNO'>";
           if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
-          if($param['control'] == 'input') echo html::input("value$fieldNO",  $formSession["value$fieldNO"], 'class=text-2');
+          if($param['control'] == 'input')
+          {
+              $fieldName = $formSession["field$fieldNO"];
+              if(strpos($fieldName, 'Date') !== false or strpos($fieldName, 'deadline') !== false)
+              {
+                  echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 date'");
+              }
+              else
+              {
+                  echo html::input("value$fieldNO",  $formSession["value$fieldNO"], 'class=text-2');
+              }
+          }
           echo '</span>';
 
           $fieldNO ++;
