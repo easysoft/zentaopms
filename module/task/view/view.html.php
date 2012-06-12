@@ -34,6 +34,14 @@
       if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
   }
   echo html::a($browseLink,  $lang->goback);
+  if($preAndNext->pre) 
+  {
+      echo "<abbr title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'>" . html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '<') . "</abbr>&nbsp;&nbsp;";
+  }
+  if($preAndNext->next) 
+  {
+      echo "<abbr title={$preAndNext->next->id}{$lang->colon}{$preAndNext->pre->name}>" . html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '>') . "</abbr>";
+  }
   ?>
   </div>
 </div>

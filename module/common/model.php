@@ -429,4 +429,44 @@ class commonModel extends model
 
         return false;
     }
+
+    /**
+     * Get the previous and next object.
+     * 
+     * @param  string $type story|task|bug|case
+     * @param  string $objectIDs 
+     * @param  string $objectID 
+     * @access public
+     * @return void
+     */
+    public function getPreAndNextObject($type, $objectIDs, $objectID)
+    {
+        $table = '';
+        switch($type)
+        {
+          case 'story' : $table = TABLE_STORY; break;
+          case 'task'  : $table = TABLE_TASK;  break;
+          case 'bug'   : $table = TABLE_BUG;   break;
+          case 'case'  : $table = TABLE_CASE;  break;
+          default:break;
+        }
+
+        $currentStart = strpos($objectIDs, ',' . $objectID . ',') + 1;
+        $currentEnd   = $currentStart + strlen($objectID) - 1;
+
+        /* Get the previous object. */
+        $tmp          = substr($objectIDs, 0, $currentStart - 1);
+        $preStart     = strrpos($tmp, ',', 0) +  1;
+        $preEnd       = $currentStart - 2;
+        $preID        = substr($objectIDs, $preStart, $preEnd - $preStart + 1);
+        $preAndNextObject->pre  = $this->dao->select('*')->from($table)->where('id')->eq($preID)->fetch();
+
+        /* Get the next object. */
+        $nextStart    = $currentEnd + 2;            
+        $nextEnd      = strpos($objectIDs, ',', $nextStart) - 1;
+        $nextID       = substr($objectIDs, $nextStart, $nextEnd - $nextStart + 1);
+        $preAndNextObject->next = $this->dao->select('*')->from($table)->where('id')->eq($nextID)->fetch();
+
+        return $preAndNextObject;
+    }
 }

@@ -343,6 +343,11 @@ class task extends control
         $project = $this->project->getById($task->project);
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
+        /* Get the previous and next task. */
+        $tmpTaskIDs = $this->dao->select('id')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->fetchPairs('id');
+        $taskIDs    = ',' . implode(',', $tmpTaskIDs) . ',';
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('task', $taskIDs, $taskID);
+
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->view;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
         $position[]      = $this->lang->task->view;

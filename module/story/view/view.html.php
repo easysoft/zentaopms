@@ -29,6 +29,14 @@
       common::printLink('story', 'delete', "storyID=$story->id", $lang->delete, 'hiddenwin');
   }
   echo html::a($browseLink, $lang->goback);
+  if($preAndNext->pre) 
+  {
+      echo "<abbr title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'>" . html::a($this->inLink('view', "storyID={$preAndNext->pre->id}&version={$preAndNext->pre->version}"), '<') . "</abbr>&nbsp;&nbsp;";
+  }
+  if($preAndNext->next) 
+  {
+      echo "<abbr title={$preAndNext->next->id}{$lang->colon}{$preAndNext->pre->title}>" . html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '>') . "</abbr>";
+  }
   ?>
   </div>
 </div>

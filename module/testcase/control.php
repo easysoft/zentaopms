@@ -320,6 +320,11 @@ class testcase extends control
         $productID = $case->product;
         $this->testcase->setMenu($this->products, $productID);
 
+        /* Get the previous and next testcase. */
+        $tmpCaseIDs = $this->dao->select('id')->from(TABLE_CASE)->where($this->session->testcaseReport)->fetchPairs('id');
+        $caseIDs    = ',' . implode(',', $tmpCaseIDs) . ',';
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('case', $caseIDs, $caseID);
+
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->view;
         $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testcase->view;

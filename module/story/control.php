@@ -367,6 +367,11 @@ class story extends control
         /* Set the menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
+        /* Get the previous and next story. */
+        $tmpStoryIDs = $this->dao->select('id')->from(TABLE_STORY)->where($this->session->storyReport)->fetchPairs('id');
+        $storyIDs    = ',' . implode(',', $tmpStoryIDs) . ',';
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('story', $storyIDs, $storyID);
+
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
         $position[]      = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $position[]      = $this->lang->story->view;
