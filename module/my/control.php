@@ -288,6 +288,7 @@ class my extends control
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase');
         
         /* Assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->testCase;

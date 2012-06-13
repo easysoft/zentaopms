@@ -120,10 +120,7 @@ class testcase extends control
         }
 
         /* save session .*/
-        $sql = $this->dao->get();
-        $sql = explode('WHERE', $sql);
-        $sql = explode('ORDER', $sql[1]);
-        $this->session->set('testcaseReport', $sql[0]);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase');
 
         /* Build the search form. */
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
@@ -320,21 +317,6 @@ class testcase extends control
         $productID = $case->product;
         $this->testcase->setMenu($this->products, $productID);
 
-        /* Get the previous and next testcase. */
-        if($this->session->testcaseReport)
-        {
-            $cases = $this->dao->select('id')->from(TABLE_CASE)->where($this->session->testcaseReport)->fetchAll();
-            $tmpCaseIDs = array();
-            foreach($cases as $tmpCase) $tmpCaseIDs[$tmpCase->id] = $tmpCase->id;
-            $caseIDs    = ',' . implode(',', $tmpCaseIDs) . ',';
-            $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('case', $caseIDs, $caseID);
-        }
-        else
-        {
-            $this->view->preAndNext->pre  = '';
-            $this->view->preAndNext->next = '';
-        }
-
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->view;
         $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testcase->view;
@@ -344,6 +326,7 @@ class testcase extends control
         $this->view->modulePath     = $this->tree->getParents($case->module);
         $this->view->users          = $this->user->getPairs('noletter');
         $this->view->actions        = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
 
         $this->display();
     }
@@ -480,11 +463,11 @@ class testcase extends control
             if($taskID)
             {
                 $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
-                $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')->where($this->session->testcaseReport)->andWhere('id')->in($caseIDList)->orderBy($orderBy)->fetchAll('id');
+                $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->andWhere('id')->in($caseIDList)->orderBy($orderBy)->fetchAll('id');
             }
             else
             {
-                $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')->where($this->session->testcaseReport)->orderBy($orderBy)->fetchAll('id');
+                $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->orderBy($orderBy)->fetchAll('id');
             }
 
             /* Get users, products and projects. */

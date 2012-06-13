@@ -444,10 +444,10 @@ class commonModel extends model
         $table = '';
         switch($type)
         {
-          case 'story' : $table = TABLE_STORY; break;
-          case 'task'  : $table = TABLE_TASK;  break;
-          case 'bug'   : $table = TABLE_BUG;   break;
-          case 'case'  : $table = TABLE_CASE;  break;
+          case 'story'    : $table = TABLE_STORY; break;
+          case 'task'     : $table = TABLE_TASK;  break;
+          case 'bug'      : $table = TABLE_BUG;   break;
+          case 'testcase' : $table = TABLE_CASE;  break;
           default:break;
         }
 

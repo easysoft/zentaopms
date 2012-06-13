@@ -34,7 +34,7 @@
     }
     if($preAndNext->next) 
     {
-        echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->pre->title}>" . html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '>') . "</abbr>";
+        echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}>" . html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '>') . "</abbr>";
     }
     ?>
   </div>
