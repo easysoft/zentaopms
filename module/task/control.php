@@ -237,7 +237,7 @@ class task extends control
             $this->project->setMenu($this->project->getPairs(), $project->id);
 
             /* Get all tasks. */
-            $allTasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy($orderBy)->fetchAll('id');
+            $allTasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)->orderBy($orderBy)->fetchAll('id');
             if(!$allTasks) $allTasks = array();
 
             /* Initialize the tasks whose need to edited. */
@@ -343,31 +343,17 @@ class task extends control
         $project = $this->project->getById($task->project);
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
-        /* Get the previous and next task. */
-        if($this->session->taskReportCondition)
-        {
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy($this->session->taskOrderBy)->fetchAll();
-            $tmpTaskIDs = array();
-            foreach($tasks as $tmpTask) $tmpTaskIDs[$tmpTask->id] = $tmpTask->id;
-            $taskIDs    = ',' . implode(',', $tmpTaskIDs) . ',';
-            $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('task', $taskIDs, $taskID);
-        }
-        else
-        {
-            $this->view->preAndNext->pre  = '';
-            $this->view->preAndNext->next = '';
-        }
-
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->view;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
         $position[]      = $this->lang->task->view;
 
-        $this->view->header   = $header;
-        $this->view->position = $position;
-        $this->view->project  = $project;
-        $this->view->task     = $task;
-        $this->view->actions  = $this->loadModel('action')->getList('task', $taskID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->header     = $header;
+        $this->view->position   = $position;
+        $this->view->project    = $project;
+        $this->view->task       = $task;
+        $this->view->actions    = $this->loadModel('action')->getList('task', $taskID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
         $this->display();
     }
 
@@ -768,7 +754,7 @@ class task extends control
             }
 
             /* Get tasks. */
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy($orderBy)->fetchAll('id');
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)->orderBy($orderBy)->fetchAll('id');
 
             /* Get users and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');

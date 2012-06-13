@@ -537,8 +537,6 @@ class taskModel extends model
      */
     public function getProjectTasks($projectID, $type = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
-        $this->session->set('taskOrderBy', $orderBy);
-
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
         $type    = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
@@ -556,9 +554,7 @@ class taskModel extends model
             ->page($pager)
             ->fetchAll();
 
-        $sql = explode('WHERE', $this->dao->get());
-        $sql = explode('ORDER', $sql[1]);
-        $this->session->set('taskReportCondition', $sql[0]);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
 
         if($tasks) return $this->processTasks($tasks);
         return array();
@@ -617,6 +613,9 @@ class taskModel extends model
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
             ->fetchAll();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
+
         if($tasks) return $this->processTasks($tasks);
         return array();
     }
@@ -656,7 +655,7 @@ class taskModel extends model
      */
     public function getStoryTaskPairs($storyID, $projectID = 0)
     {
-         return $this->dao->select('id, name')
+        return $this->dao->select('id, name')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
@@ -798,7 +797,7 @@ class taskModel extends model
     {
         $datas = $this->dao->select('project as name, count(*) as value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('project')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -818,7 +817,7 @@ class taskModel extends model
     {
         $datas = $this->dao->select('assignedTo AS name, count(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('assignedTo')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -838,7 +837,7 @@ class taskModel extends model
     {
         $datas = $this->dao->select('type AS  name, count(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('type')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -857,7 +856,7 @@ class taskModel extends model
     {
         return $this->dao->select('pri AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('pri')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -873,7 +872,7 @@ class taskModel extends model
     {
         return $this->dao->select('deadline AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('deadline')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -889,7 +888,7 @@ class taskModel extends model
     {
         return $this->dao->select('estimate AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('estimate')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -905,7 +904,7 @@ class taskModel extends model
     {
         return $this->dao->select('`left` AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('`left`')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -921,7 +920,7 @@ class taskModel extends model
     {
         return $this->dao->select('consumed AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('consumed')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -937,7 +936,7 @@ class taskModel extends model
     {
         $datas = $this->dao->select('finishedBy AS name, COUNT(finishedBy) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->andWhere('finishedBy')->ne('')
             ->groupBy('finishedBy')
             ->orderBy('value DESC')
@@ -958,7 +957,7 @@ class taskModel extends model
     {
         $datas = $this->dao->select('closedReason AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('closedReason')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -983,7 +982,7 @@ class taskModel extends model
     {
         $datas= $this->dao->select('DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('date')
             ->having('date != "0000-00-00"')
             ->orderBy('finishedDate')
@@ -1008,7 +1007,7 @@ class taskModel extends model
     {
         $datas = $this->dao->select('status AS name, COUNT(status) AS value')
             ->from(TABLE_TASK)->alias('t1')
-            ->where($this->session->taskReportCondition)
+            ->where($this->session->taskQueryCondition)
             ->groupBy('status')
             ->orderBy('value DESC')
             ->fetchAll('name');

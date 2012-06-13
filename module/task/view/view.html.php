@@ -40,7 +40,7 @@
   }
   if($preAndNext->next) 
   {
-      echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->pre->name}>" . html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '>') . "</abbr>";
+      echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->name}>" . html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '>') . "</abbr>";
   }
   ?>
   </div>

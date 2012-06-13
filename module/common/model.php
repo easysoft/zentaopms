@@ -439,7 +439,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public function getPreAndNextObject($type, $objectIDs, $objectID)
+    public function getPreAndNextObject($type, $objectID)
     {
         $table = '';
         switch($type)
@@ -451,6 +451,20 @@ class commonModel extends model
           default:break;
         }
 
+        /* Get objectIDs. */
+        $queryCondition = $type . 'QueryCondition';
+        $queryCondition = $this->session->$queryCondition;
+        $orderBy = $type . 'OrderBy';
+        $orderBy = $this->session->$orderBy;
+        $objects = $this->dao->select('*')->from($table)
+            ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+            ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
+            ->fetchAll();
+        $tmpObjectIDs = array();
+        foreach($objects as $object) $tmpObjectIDs[$object->id] = $object->id;
+        $objectIDs    = ',' . implode(',', $tmpObjectIDs) . ',';
+
+        /* Current object. */
         $currentStart = strpos($objectIDs, ',' . $objectID . ',') + 1;
         $currentEnd   = $currentStart + strlen($objectID) - 1;
 
@@ -482,5 +496,35 @@ class commonModel extends model
         }
 
         return $preAndNextObject;
+    }
+
+    /**
+     * Save one executed query.
+     * 
+     * @param  string    $sql 
+     * @param  string    $objectType story|task|bug|testcase 
+     * @access public
+     * @return void
+     */
+    public function saveQueryCondition($sql, $objectType)
+    {
+        /* Set the query condition session. */
+        $queryCondition = explode('WHERE', $sql);
+        $queryCondition = explode('ORDER', $queryCondition[1]);
+        $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+        $this->session->set($objectType . 'QueryCondition', $queryCondition);
+
+        /* Set the query condition session. */
+        $orderBy = explode('ORDER BY', $sql);
+        if(isset($orderBy[1]))
+        {
+            $orderBy = explode('limit', $orderBy[1]);
+            $orderBy = str_replace('t1.', '', $orderBy[0]);
+            $this->session->set($objectType . 'OrderBy', $orderBy);
+        }
+        else
+        {
+            $this->session->set($objectType . 'OrderBy', '');
+        }
     }
 }

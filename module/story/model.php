@@ -635,7 +635,7 @@ class storyModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         
-        $this->saveQueryCondition($this->dao->get());
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
         
         return $stories;
     }
@@ -763,7 +763,8 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-        $this->saveQueryCondition($this->dao->get());
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         return $stories;
     }
@@ -830,7 +831,8 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        $this->saveQueryCondition($this->dao->get());
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         if(!$tmpStories) return array();
 
@@ -848,36 +850,7 @@ class storyModel extends model
         }
         return $stories;
     }
-
-    /**
-     * Save one executed query.
-     * 
-     * @param  string    $sql 
-     * @access public
-     * @return void
-     */
-    public function saveQueryCondition($sql)
-    {
-        /* Set the query condition session. */
-        $queryCondition = explode('WHERE', $sql);
-        $queryCondition = explode('ORDER', $queryCondition[1]);
-        $queryCondition = str_replace('t1.', '', $queryCondition[0]);
-        $this->session->set('storyQueryCondition', $queryCondition);
-
-        /* Set the query condition session. */
-        $orderBy = explode('ORDER BY', $sql);
-        if(isset($orderBy[1]))
-        {
-            $orderBy = explode('limit', $orderBy[1]);
-            $orderBy = str_replace('t1.', '', $orderBy[0]);
-            $this->session->set('storyOrderBy', $orderBy);
-        }
-        else
-        {
-            $this->session->set('storyOrderBy', '');
-        }
-    }
-
+    
     /**
      * Get stories list of a project.
      * 
@@ -939,7 +912,7 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
         
-        $this->saveQueryCondition($this->dao->get());
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
         
         return $stories;
     }
@@ -987,11 +960,11 @@ class storyModel extends model
             ->beginIF($type == 'closedby')->andWhere('closedby')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
         
-        $this->saveQueryCondition($this->dao->get());
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
         
         return $stories;
     }
-
+    
     /**
      * Get doing projects' members of a story.
      * 

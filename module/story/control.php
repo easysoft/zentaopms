@@ -367,16 +367,6 @@ class story extends control
         /* Set the menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
-        /* Get the previous and next story. */
-        $stories = $this->dao->select('*')->from(TABLE_STORY)
-            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
-            ->beginIF($this->session->storyOrderBy !=  false)->orderBy($this->session->storyOrderBy)->fi()
-            ->fetchAll();
-        $tmpStoryIDs = array();
-        foreach($stories as $tmpStory) $tmpStoryIDs[$tmpStory->id] = $tmpStory->id;
-        $storyIDs    = ',' . implode(',', $tmpStoryIDs) . ',';
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('story', $storyIDs, $storyID);
-
         $header['title'] = $product->name . $this->lang->colon . $this->lang->story->view . $this->lang->colon . $story->title;
         $position[]      = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $position[]      = $this->lang->story->view;
@@ -393,6 +383,7 @@ class story extends control
         $this->view->actions    = $this->action->getList('story', $storyID);
         $this->view->modulePath = $modulePath;
         $this->view->version    = $version == 0 ? $story->version : $version;
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->display();
     }
 
