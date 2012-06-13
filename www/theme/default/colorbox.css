@@ -3,7 +3,7 @@
     The following rules are the styles that are consistant between themes.
     Avoid changing this area to maintain compatability with future versions of ColorBox.
 */
-#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; overflow:hidden;}
 #cboxOverlay{position:fixed; width:100%; height:100%;}
 #cboxMiddleLeft, #cboxBottomLeft{clear:left;}
 #cboxContent{position:relative; overflow:hidden;}
