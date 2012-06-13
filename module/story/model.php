@@ -635,7 +635,7 @@ class storyModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         
-        $this->saveReportQuery($this->dao->get());
+        $this->saveQueryCondition($this->dao->get());
         
         return $stories;
     }
@@ -763,7 +763,7 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-        $this->saveReportQuery($this->dao->get());
+        $this->saveQueryCondition($this->dao->get());
 
         return $stories;
     }
@@ -830,7 +830,7 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        $this->saveReportQuery($this->dao->get());
+        $this->saveQueryCondition($this->dao->get());
 
         if(!$tmpStories) return array();
 
@@ -850,18 +850,32 @@ class storyModel extends model
     }
 
     /**
-     * Save one executed query as report query, thus when create report chart to make use the condition is the same.
+     * Save one executed query.
      * 
      * @param  string    $sql 
      * @access public
      * @return void
      */
-    public function saveReportQuery($sql)
+    public function saveQueryCondition($sql)
     {
-        $sql = explode('WHERE', $sql);
-        $sql = explode('ORDER', $sql[1]);
-        $sql = str_replace('t1.', '', $sql[0]);
-        $this->session->set('storyReport', $sql);
+        /* Set the query condition session. */
+        $queryCondition = explode('WHERE', $sql);
+        $queryCondition = explode('ORDER', $queryCondition[1]);
+        $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+        $this->session->set('storyQueryCondition', $queryCondition);
+
+        /* Set the query condition session. */
+        $orderBy = explode('ORDER BY', $sql);
+        if(isset($orderBy[1]))
+        {
+            $orderBy = explode('limit', $orderBy[1]);
+            $orderBy = str_replace('t1.', '', $orderBy[0]);
+            $this->session->set('storyOrderBy', $orderBy);
+        }
+        else
+        {
+            $this->session->set('storyOrderBy', '');
+        }
     }
 
     /**
@@ -874,12 +888,13 @@ class storyModel extends model
      */
     public function getProjectStories($projectID = 0, $orderBy = 'pri_asc,id_desc')
     {
-        return $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $stories = $this->dao->select('t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');
+        return $stories;
     }
 
     /**
@@ -918,11 +933,15 @@ class storyModel extends model
      */
     public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_STORY)
+        $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('plan')->eq((int)$planID)
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        
+        $this->saveQueryCondition($this->dao->get());
+        
+        return $stories;
     }
 
     /**
@@ -957,7 +976,7 @@ class storyModel extends model
     public function getUserStories($account, $type = 'assignedto', $orderBy = 'id_desc', $pager = null)
     {
         $type = strtolower($type);
-        return $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
+        $stories = $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
@@ -967,6 +986,10 @@ class storyModel extends model
             ->beginIF($type == 'reviewedby')->andWhere('reviewedby')->like('%' . $this->app->user->account . '%')->fi()
             ->beginIF($type == 'closedby')->andWhere('closedby')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
+        
+        $this->saveQueryCondition($this->dao->get());
+        
+        return $stories;
     }
 
     /**
@@ -1097,7 +1120,7 @@ class storyModel extends model
     public function getDataOfStorysPerProduct()
     {
         $datas = $this->dao->select('product as name, count(product) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('product')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $products = $this->loadModel('product')->getPairs();
@@ -1114,7 +1137,7 @@ class storyModel extends model
     public function getDataOfStorysPerModule()
     {
         $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('module')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $modules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in(array_keys($datas))->fetchPairs();
@@ -1131,7 +1154,7 @@ class storyModel extends model
     public function getDataOfStorysPerSource()
     {
         $datas = $this->dao->select('source as name, count(source) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('source')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $this->lang->story->sourceList[''] = $this->lang->report->undefined;
@@ -1148,7 +1171,7 @@ class storyModel extends model
     public function getDataOfStorysPerPlan()
     {
         $datas = $this->dao->select('plan as name, count(plan) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('plan')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $plans = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($datas))->fetchPairs();
@@ -1165,7 +1188,7 @@ class storyModel extends model
     public function getDataOfStorysPerStatus()
     {
         $datas = $this->dao->select('status as name, count(status) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('status')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $status => $data) if(isset($this->lang->story->statusList[$status])) $data->name = $this->lang->story->statusList[$status];
@@ -1181,7 +1204,7 @@ class storyModel extends model
     public function getDataOfStorysPerStage()
     {
         $datas = $this->dao->select('stage as name, count(stage) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('stage')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $stage => $data) $data->name = $this->lang->story->stageList[$stage] != '' ? $this->lang->story->stageList[$stage] : $this->lang->report->undefined;
@@ -1197,7 +1220,7 @@ class storyModel extends model
     public function getDataOfStorysPerPri()
     {
         $datas = $this->dao->select('pri as name, count(pri) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('pri')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $pri => $data)  $data->name = $this->lang->story->priList[$pri] != '' ? $this->lang->story->priList[$pri] : $this->lang->report->undefined;
@@ -1213,7 +1236,7 @@ class storyModel extends model
     public function getDataOfStorysPerEstimate()
     {
         return $this->dao->select('estimate as name, count(estimate) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('estimate')->orderBy('value')->fetchAll();
     }
 
@@ -1226,7 +1249,7 @@ class storyModel extends model
     public function getDataOfStorysPerOpenedBy()
     {
         $datas = $this->dao->select('openedBy as name, count(openedBy) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('openedBy')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
@@ -1243,7 +1266,7 @@ class storyModel extends model
     public function getDataOfStorysPerAssignedTo()
     {
         $datas = $this->dao->select('assignedTo as name, count(assignedTo) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('assignedTo')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
@@ -1260,7 +1283,7 @@ class storyModel extends model
     public function getDataOfStorysPerClosedReason()
     {
         $datas = $this->dao->select('closedReason as name, count(closedReason) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('closedReason')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $reason => $data) $data->name = $this->lang->story->reasonList[$reason] != '' ? $this->lang->story->reasonList[$reason] : $this->lang->report->undefined;
@@ -1276,7 +1299,7 @@ class storyModel extends model
     public function getDataOfStorysPerChange()
     {
         return $this->dao->select('(version-1) as name, count(*) as value')->from(TABLE_STORY)
-            ->beginIF($this->session->storyReport !=  false)->where($this->session->storyReport)->fi()
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('version')->orderBy('value')->fetchAll();
     }
 }

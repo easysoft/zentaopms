@@ -36,11 +36,11 @@
   echo html::a($browseLink,  $lang->goback);
   if($preAndNext->pre) 
   {
-      echo "<abbr title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'>" . html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '<') . "</abbr>&nbsp;&nbsp;";
+      echo "<abbr id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'>" . html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '<') . "</abbr>&nbsp;&nbsp;";
   }
   if($preAndNext->next) 
   {
-      echo "<abbr title={$preAndNext->next->id}{$lang->colon}{$preAndNext->pre->name}>" . html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '>') . "</abbr>";
+      echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->pre->name}>" . html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '>') . "</abbr>";
   }
   ?>
   </div>

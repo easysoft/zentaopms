@@ -344,9 +344,19 @@ class task extends control
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
         /* Get the previous and next task. */
-        $tmpTaskIDs = $this->dao->select('id')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->fetchPairs('id');
-        $taskIDs    = ',' . implode(',', $tmpTaskIDs) . ',';
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('task', $taskIDs, $taskID);
+        if($this->session->taskReportCondition)
+        {
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskReportCondition)->orderBy($this->session->taskOrderBy)->fetchAll();
+            $tmpTaskIDs = array();
+            foreach($tasks as $tmpTask) $tmpTaskIDs[$tmpTask->id] = $tmpTask->id;
+            $taskIDs    = ',' . implode(',', $tmpTaskIDs) . ',';
+            $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('task', $taskIDs, $taskID);
+        }
+        else
+        {
+            $this->view->preAndNext->pre  = '';
+            $this->view->preAndNext->next = '';
+        }
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->view;
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);

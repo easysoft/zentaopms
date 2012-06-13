@@ -537,6 +537,8 @@ class taskModel extends model
      */
     public function getProjectTasks($projectID, $type = 'all', $orderBy = 'status_asc, id_desc', $pager = null)
     {
+        $this->session->set('taskOrderBy', $orderBy);
+
         $orderBy = str_replace('status', 'statusCustom', $orderBy);
         $type    = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')

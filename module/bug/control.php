@@ -349,7 +349,7 @@ class bug extends control
         $productName = $this->products[$productID];
       
         /* Get the previous and next bug. */
-        $tmpBugIDs = $this->dao->select('id')->from(TABLE_BUG)->where($this->session->storyReport)->fetchPairs('id');
+        $tmpBugIDs = $this->dao->select('id')->from(TABLE_BUG)->where($this->session->bugReport)->fetchPairs('id');
         $bugIDs    = ',' . implode(',', $tmpBugIDs) . ',';
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugIDs, $bugID);
 

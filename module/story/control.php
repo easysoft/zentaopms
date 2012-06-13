@@ -368,7 +368,12 @@ class story extends control
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
         /* Get the previous and next story. */
-        $tmpStoryIDs = $this->dao->select('id')->from(TABLE_STORY)->where($this->session->storyReport)->fetchPairs('id');
+        $stories = $this->dao->select('*')->from(TABLE_STORY)
+            ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
+            ->beginIF($this->session->storyOrderBy !=  false)->orderBy($this->session->storyOrderBy)->fi()
+            ->fetchAll();
+        $tmpStoryIDs = array();
+        foreach($stories as $tmpStory) $tmpStoryIDs[$tmpStory->id] = $tmpStory->id;
         $storyIDs    = ',' . implode(',', $tmpStoryIDs) . ',';
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('story', $storyIDs, $storyID);
 
@@ -534,7 +539,7 @@ class story extends control
             {
                 /* Set menu. */
                 $this->product->setMenu($this->product->getPairs('nodeleted'), $productID);
-                $allStories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyReport)->orderBy($orderBy)->fetchAll('id');
+                $allStories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
             }
             else
             {
@@ -775,7 +780,7 @@ class story extends control
             }
 
             /* Get stories. */
-            $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyReport)->orderBy($orderBy)->fetchAll('id');
+            $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id', false);
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
