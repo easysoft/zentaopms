@@ -458,14 +458,28 @@ class commonModel extends model
         $tmp          = substr($objectIDs, 0, $currentStart - 1);
         $preStart     = strrpos($tmp, ',', 0) +  1;
         $preEnd       = $currentStart - 2;
-        $preID        = substr($objectIDs, $preStart, $preEnd - $preStart + 1);
-        $preAndNextObject->pre  = $this->dao->select('*')->from($table)->where('id')->eq($preID)->fetch();
-
+        if($preEnd - $preStart < 0) 
+        {
+            $preAndNextObject->pre = '';
+        }
+        else
+        {
+            $preID = substr($objectIDs, $preStart, $preEnd - $preStart + 1);
+            $preAndNextObject->pre  = $this->dao->select('*')->from($table)->where('id')->eq($preID)->fetch();
+        }
+        
         /* Get the next object. */
         $nextStart    = $currentEnd + 2;            
         $nextEnd      = strpos($objectIDs, ',', $nextStart) - 1;
-        $nextID       = substr($objectIDs, $nextStart, $nextEnd - $nextStart + 1);
-        $preAndNextObject->next = $this->dao->select('*')->from($table)->where('id')->eq($nextID)->fetch();
+        if($nextEnd - $nextStart < 0) 
+        {
+            $preAndNextObject->next = '';
+        }
+        else
+        {
+            $nextID = substr($objectIDs, $nextStart, $nextEnd - $nextStart + 1);
+            $preAndNextObject->next = $this->dao->select('*')->from($table)->where('id')->eq($nextID)->fetch();
+        }
 
         return $preAndNextObject;
     }
