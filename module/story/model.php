@@ -427,7 +427,7 @@ class storyModel extends model
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
             ->where('id')->eq($storyID)->exec();
-        return true;
+        return common::createChanges($oldStory, $story);
     }
 
     /**

@@ -479,10 +479,10 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $this->story->close($storyID);
+            $changes = $this->story->close($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason));
-            $this->action->logHistory($actionID);
+            $this->action->logHistory($actionID, $changes);
             $this->sendMail($storyID, $actionID);
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
