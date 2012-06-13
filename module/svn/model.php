@@ -358,9 +358,14 @@ class svnModel extends model
         if(!$repo) return false;
 
         $this->setClient($repo);
+        putenv('LC_CTYPE=en_US.UTF-8');
 
         $oldRevision = $revision - 1;
-        $cmd = $this->client . " diff --old=$url@$oldRevision --new=$url@$revision";
+
+        $url = str_replace('%2F', '/', urlencode($url));
+        $url = str_replace('%3A', ':', $url);
+
+        $cmd = $this->client . " diff -r $oldRevision:$revision $url";
         $diff = `$cmd`;
         return $diff;
     }
@@ -379,6 +384,11 @@ class svnModel extends model
         if(!$repo) return false;
 
         $this->setClient($repo);
+
+        putenv('LC_CTYPE=en_US.UTF-8');
+
+        $url = str_replace('%2F', '/', urlencode($url));
+        $url = str_replace('%3A', ':', $url);
 
         $cmd  = $this->client . " cat $url@$revision";
         $code = `$cmd`;
