@@ -833,3 +833,17 @@ $(document).bind('keydown', 'Ctrl+g', function(evt)
     evt.preventDefault( );
     return false;
 });
+
+/* left, go to pre object. */
+$(document).bind('keydown', 'left', function(evt)
+{
+    preLink = ($('#pre a').attr("href"));
+    if(typeof(preLink) != 'undefined') location.href = preLink;
+});
+
+/* right, go to next object. */
+$(document).bind('keydown', 'right', function(evt)
+{
+    nextLink = ($('#next a').attr("href"));
+    if(typeof(nextLink) != 'undefined') location.href = nextLink;
+});
