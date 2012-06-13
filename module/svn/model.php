@@ -202,6 +202,15 @@ class svnModel extends model
     {
         if($this->config->svn->client == '') die("You must set the svn client file.\n");
         $this->client = $this->config->svn->client . " --non-interactive";
+        if(stripos($repo->path, 'https') === 0 or stripos($repo->path, 'svn') === 0)
+        {
+            $cmd = $this->config->svn->client . ' --version --quiet';
+            $version = `$cmd`;
+            if(version_compare($version, '1.6.0', '>'))
+            {
+                $this->client .= ' --trust-server-cert'; 
+            }
+        }
         if(isset($repo->username)) $this->client .= " --username $repo->username --password $repo->password --no-auth-cache";
     }
 
