@@ -86,7 +86,7 @@ class my extends control
         /* Assign. */
         $this->view->dates   = $this->loadModel('todo')->buildDateList();
         $this->view->todos   = $this->todo->getList($type, $account, $status, 0, $pager);
-        $this->view->date    = (int)$type == 0 ? $this->todo->today() : $type;
+        $this->view->date    = (int)$type == 0 ? date(DT_DATE1) : $type;
         $this->view->type    = $type;
         $this->view->status  = $status;
         $this->view->account = $this->app->user->account;

@@ -62,7 +62,7 @@ var customed   = <?php echo (int)$customed;?>;
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
        <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <table class='table-1 fixed colored tablesorter datatable'>
+      <table class='table-1 fixed colored tablesorter datatable border-sep'>
         <thead>
         <tr class='colhead'>
           <th class='w-id'>       <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
@@ -76,8 +76,8 @@ var customed   = <?php echo (int)$customed;?>;
           <?php endif;?>
 
           <?php if($browseType == 'needconfirm'):?>
-          <th class='w-p40'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
-          <th class='w-50px'><?php echo $lang->actions;?></th>
+          <th class='w-p85'<?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
+          <th class='w-120px'><?php echo $lang->actions;?></th>
           <?php else:?>
           <th class='w-user'><?php common::printOrderLink('openedBy',         $orderBy, $vars, $lang->openedByAB);?></th>
 

@@ -58,6 +58,6 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='9' class='f-left'><?php $pager->show();?></td></tr></table>
+  <tfoot><tr><td colspan='9' class='f-right'><?php $pager->show();?></td></tr></table>
 </table>
 <?php include '../../common/view/footer.html.php';?>

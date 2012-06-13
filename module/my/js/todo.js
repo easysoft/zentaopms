@@ -1,6 +1,6 @@
 function changeDate(date)
 {
-    link = createLink('my', 'todo', 'date=' + date);
+    link = createLink('my', 'todo', 'type=' + date);
     location.href=link;
 }
 
