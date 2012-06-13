@@ -123,6 +123,9 @@ class product extends control
         if($browseType == 'changedstory')$stories = $this->story->getByStatus($productID, 'changed', $orderBy, $pager);
         if($browseType == 'closedstory') $stories = $this->story->getByStatus($productID, 'closed', $orderBy, $pager);
 
+        /* Process the sql, get the conditon partion, save it to session. */
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+
         /* Build search form. */
         $this->config->product->search['actionURL'] = $this->createLink('product', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']   = $queryID;

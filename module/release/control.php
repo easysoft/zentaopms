@@ -128,11 +128,16 @@ class release extends control
     {
         $this->loadModel('story');
         $this->loadModel('bug');
+
         $release = $this->release->getById((int)$releaseID, true);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+
         $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->fetchAll();
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+
         $this->commonAction($release->product);
 
         $this->view->header->title = $this->lang->release->view;

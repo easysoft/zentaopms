@@ -103,13 +103,8 @@ class bug extends control
         elseif($browseType == 'needconfirm')   $bugs = $this->bug->getByNeedconfirm($productID, $projects, $orderBy, $pager);
         elseif($browseType == 'bysearch')      $bugs = $this->bug->getBySearch($productID, $projects, $queryID, $orderBy, $pager);
 
-        /* Process the sql, get the conditon partion, save it to session. Thus the report page can use the same condition. */
-        if($browseType != 'needconfirm')
-        {
-            $sql = explode('WHERE', $this->dao->get());
-            $sql = explode('ORDER', $sql[1]);
-            $this->session->set('bugReportCondition', $sql[0]);
-        }
+        /* Process the sql, get the conditon partion, save it to session. */
+        if($browseType != 'needconfirm') $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
 
         /* Get custom fields. */
         $customFields = $this->cookie->bugFields != false ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;
@@ -348,11 +343,6 @@ class bug extends control
         $productID   = $bug->product;
         $productName = $this->products[$productID];
       
-        /* Get the previous and next bug. */
-        $tmpBugIDs = $this->dao->select('id')->from(TABLE_BUG)->where($this->session->bugReport)->fetchPairs('id');
-        $bugIDs    = ',' . implode(',', $tmpBugIDs) . ',';
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugIDs, $bugID);
-
         /* Header and positon. */
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->view;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
@@ -366,6 +356,7 @@ class bug extends control
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
         $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID);
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
 
         $this->display();
     }
@@ -850,7 +841,7 @@ class bug extends control
             }
 
             /* Get bugs. */
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->alias('t1')->where($this->session->bugReportCondition)->orderBy($orderBy)->fetchAll('id');
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->orderBy($orderBy)->fetchAll('id');
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');

@@ -626,7 +626,7 @@ class storyModel extends model
      */
     public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $stories = $this->dao->select('t1.*, t2.title as planTitle')
+        return $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
@@ -634,10 +634,6 @@ class storyModel extends model
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
-        
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
-        
-        return $stories;
     }
 
     /**
@@ -753,7 +749,7 @@ class storyModel extends model
      */
     public function getByField($productID, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
     {
-        $stories = $this->dao->select('t1.*, t2.title as planTitle')
+        return $this->dao->select('t1.*, t2.title as planTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productID)
@@ -763,10 +759,6 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
-
-        return $stories;
     }
 
     /**
@@ -831,8 +823,6 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         if(!$tmpStories) return array();
 
