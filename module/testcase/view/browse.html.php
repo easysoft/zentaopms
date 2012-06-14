@@ -87,11 +87,15 @@ var moduleID   = '<?php echo $moduleID;?>';
               <td><?php echo $lang->testcase->statusList[$case->status];?></td>
               <td class='a-right'>
                 <?php
-                common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
-                common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
-                common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
                 common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
                 common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
+
+                common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
+
+                common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
+
+                common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
+
                 if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))) echo $lang->testtask->createBug;
                 ?>
               </td>

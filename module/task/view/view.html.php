@@ -23,24 +23,26 @@
   if(!$task->deleted)
   {
       //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
+      if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
       if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
       if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
       if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
-      if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
       if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
-      if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
-      if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
-      if(common::hasPriv('task', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
-      if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
+      if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
+
+      if(!common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-edit'")) echo "<span class='icon-edit'></span>";
+      if(common::hasPriv('task', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'"). ' ';
+
+      if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-delete'")) echo "<span class='icon-delete'></span>";
   }
-  echo html::a($browseLink,  $lang->goback);
+  echo html::a($browseLink, '&nbsp', '', "class='icon-goback'");
   if($preAndNext->pre) 
   {
-      echo "<abbr id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'>" . html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '<') . "</abbr>&nbsp;&nbsp;";
+      echo "<abbr id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'>" . html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '&nbsp;', '', "class='icon-pre'") . "</abbr>";
   }
   if($preAndNext->next) 
   {
-      echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->name}>" . html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '>') . "</abbr>";
+      echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->name}>" . html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '&nbsp;', '', "class='icon-next'") . "</abbr>";
   }
   ?>
   </div>
@@ -59,17 +61,19 @@
         <?php
         if(!$task->deleted)
         {
+            if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
             if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
             if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
             if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
-            if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
             if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
-            if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
-            if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
-            if(common::hasPriv('task', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
-            if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", $lang->task->buttonDelete, 'hiddenwin')) echo $lang->task->buttonDelete . ' ';
+            if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
+
+            if(!common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-edit'")) echo "<span class='icon-edit'></span>";
+            if(common::hasPriv('task', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'");
+
+            if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", '&nbsp;', 'hiddenwin')) echo "<span class='icon-delete'></span>";
         }
-        echo html::a($browseLink,  $lang->goback);
+        echo html::a($browseLink, '&nbsp;', '', "class='icon-goback'");
         ?>
       </div>
       <div id='comment' class='hidden'>

@@ -96,10 +96,10 @@ var browseType = '<?php echo $browseType;?>';
             <td>
               <?php 
               $vars = "story={$story->id}";
-              if(!common::printLink('testcase', 'create', "productID=$story->product&module=0&from=&param=0&$vars", $lang->story->createCase)) echo $lang->story->createCase . ' ';
               if(!($story->status != 'closed' and common::printLink('story', 'change', $vars, $lang->story->change))) echo $lang->story->change . ' ';
               if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', $vars, $lang->story->review))) echo $lang->story->review . ' ';
               if(!common::printLink('story', 'edit',   $vars, $lang->edit)) echo $lang->edit;
+              if(!common::printLink('testcase', 'create', "productID=$story->product&module=0&from=&param=0&$vars", $lang->story->createCase)) echo $lang->story->createCase . ' ';
               ?>
             </td>
           </tr>

@@ -397,3 +397,12 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-notice { padding-left:16px;  background:url(images/main/ui-gray.png) -18px 96px;}
 .icon-file   { padding-left:16px;  background:url(images/main/ui-gray.png) -32px 144px;}
 .icon-arrow  { padding-left:10px;  background:url(images/main/ui-gray.png) -32px 0px;}
+
+.icon-edit    { padding-left:16px; background:url(images/main/ui-green.png) -64px -112px;} 
+.icon-comment { padding-left:15px; background:url(images/main/ui-green.png) -128px -96px;}
+.icon-copy    { padding-left:15px; background:url(images/main/ui-green.png) -176px -128px;}
+.icon-delete  { padding-left:16px; background:url(images/main/ui-green.png) -80px -128px;}
+.icon-goback  { padding-left:16px; background:url(images/main/ui-green.png) 0px   -64px;}
+.icon-pre     { padding-left:16px; background:url(images/main/ui-green.png) -96px 0;}
+.icon-next    { padding-left:16px; background:url(images/main/ui-green.png) -32px 0;}
+

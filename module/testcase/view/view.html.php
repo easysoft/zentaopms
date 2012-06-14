@@ -21,20 +21,24 @@
     {
         common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
         common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
+
         if($case->lastRunResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
-        if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
-        common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-        common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
-        common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
+
+        common::printLink('testcase', 'edit',   "caseID=$case->id", '&nbsp;', '', "class='icon-edit'");
+        if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'");
+
+        common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '&nbsp;', '', "class='icon-copy'");
+
+        common::printLink('testcase', 'delete', "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-delete'");
     }
-    echo html::a($browseLink, $lang->goback);
+    echo html::a($browseLink, '&nbsp;', '', "class='icon-goback'");
     if($preAndNext->pre) 
     {
-        echo "<abbr id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'>" . html::a($this->inLink('view', "storyID={$preAndNext->pre->id}&version={$preAndNext->pre->version}"), '<') . "</abbr>&nbsp;&nbsp;";
+        echo "<abbr id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'>" . html::a($this->inLink('view', "storyID={$preAndNext->pre->id}&version={$preAndNext->pre->version}"), '&nbsp;', '', "class='icon-pre'") . "</abbr>";
     }
     if($preAndNext->next) 
     {
-        echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}>" . html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '>') . "</abbr>";
+        echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}>" . html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '&nbsp;', '', "class='icon-next'") . "</abbr>";
     }
     ?>
   </div>
@@ -70,11 +74,12 @@
        <?php
         if(!$case->deleted)
         {
-            if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', $lang->comment, '', 'onclick=setComment()'). ' ';
-            common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-            common::printLink('testcase', 'delete', "caseID=$case->id", $lang->delete, 'hiddenwin');
+            common::printLink('testcase', 'edit',   "caseID=$case->id", '&nbsp;', '', "class='icon-edit'");
+            if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'");
+
+            common::printLink('testcase', 'delete', "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-delete'");
         }
-        echo html::a($browseLink, $lang->goback);
+        echo html::a($browseLink, '&nbsp;', '', "class='icon-goback'");
        ?>
       </div>
       <div id='comment' class='hidden'>
