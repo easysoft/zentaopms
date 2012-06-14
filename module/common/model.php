@@ -451,18 +451,27 @@ class commonModel extends model
           default:break;
         }
 
-        /* Get objectIDs. */
-        $queryCondition = $type . 'QueryCondition';
-        $queryCondition = $this->session->$queryCondition;
-        $orderBy = $type . 'OrderBy';
-        $orderBy = $this->session->$orderBy;
-        $objects = $this->dao->select('*')->from($table)
-            ->beginIF($queryCondition != false)->where($queryCondition)->fi()
-            ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
-            ->fetchAll();
-        $tmpObjectIDs = array();
-        foreach($objects as $object) $tmpObjectIDs[$object->id] = $object->id;
-        $objectIDs    = ',' . implode(',', $tmpObjectIDs) . ',';
+        $typeIDs = $type . 'IDs';
+        if($this->session->$typeIDs)
+        {
+            $objectIDs = $this->session->$typeIDs;
+        }
+        else
+        {
+            /* Get objectIDs. */
+            $queryCondition = $type . 'QueryCondition';
+            $queryCondition = $this->session->$queryCondition;
+            $orderBy = $type . 'OrderBy';
+            $orderBy = $this->session->$orderBy;
+            $objects = $this->dao->select('*')->from($table)
+                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
+                ->fetchAll();
+            $tmpObjectIDs = array();
+            foreach($objects as $object) $tmpObjectIDs[$object->id] = $object->id;
+            $objectIDs    = ',' . implode(',', $tmpObjectIDs) . ',';
+            $this->session->set($type . 'IDs', $objectIDs);
+        }
 
         /* Current object. */
         $currentStart = strpos($objectIDs, ',' . $objectID . ',') + 1;

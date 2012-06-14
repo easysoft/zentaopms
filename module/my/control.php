@@ -208,7 +208,12 @@ class my extends control
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
-     
+
+        /* Save bugIDs session for get the pre and next bug. */
+        $bugIDs = '';
+        foreach($bugs as $bug) $bugIDs .= ',' . $bug->id;
+        $this->session->set('bugIDs', $bugIDs . ',');
+
         /* assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
         $this->view->position[]    = $this->lang->my->bug;
