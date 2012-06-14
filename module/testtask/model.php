@@ -176,12 +176,15 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getRuns($taskID, $moduleID, $pager = null)
+    public function getRuns($taskID, $moduleID, $orderBy, $pager = null)
     {
+        $orderBy = strpos($orderBy, 'assignedTo') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+
         return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq((int)$taskID)
             ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
+            ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('', false);
     }
@@ -195,12 +198,15 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getUserRuns($taskID, $user, $pager = null)
+    public function getUserRuns($taskID, $user, $orderBy, $pager = null)
     {
+        $orderBy = strpos($orderBy, 'assignedTo') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+
         return $this->dao->select('t2.*,t1.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq((int)$taskID)
             ->andWhere('t1.assignedTo')->eq($user)
+            ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
     }

@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <script language="Javascript">
 var browseType = '<?php echo $browseType;?>';
@@ -28,7 +27,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
   <div class='f-right'>
     <?php
-    common::printLink('testcase', 'export', "productID=$productID&orderBy=id_asc&taskID=$task->id", $lang->export, '', 'class="export"');
+    common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=$task->id", $lang->export, '', 'class="export"');
     common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);
     echo html::a($this->session->testtaskList, $lang->goback);
     ?>
@@ -44,18 +43,19 @@ var moduleID   = '<?php echo $moduleID;?>';
     </td>
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
+    <?php $vars = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <table class='table-1 tablesorter datatable mb-zero fixed'>
         <thead>
           <tr class='colhead'>
-            <th class='w-id'><nobr><?php echo $lang->idAB;?></nobr></th>
-            <th class='w-pri'><?php echo $lang->priAB;?></th>
-            <th><?php echo $lang->testcase->title;?></th>
-            <th class='w-type'><?php echo $lang->testcase->type;?></th>
-            <th class='w-user'><?php echo $lang->testtask->assignedTo;?></th>
-            <th class='w-user'><?php echo $lang->testtask->lastRunAccount;?></th>
-            <th class='w-100px'><?php echo $lang->testtask->lastRunTime;?></th>
-            <th class='w-80px'><?php echo $lang->testtask->lastRunResult;?></th>
-            <th class='w-status'><?php echo $lang->statusAB;?></th>
+            <th class='w-id'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>
+            <th class='w-pri'>     <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
+            <th>                   <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+            <th class='w-type'>    <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
+            <th class='w-user'>    <?php common::printOrderLink('assignedTo',    $orderBy, $vars, $lang->testtask->assignedTo);?></th>
+            <th class='w-user'>    <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
+            <th class='w-100px'>   <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+            <th class='w-80px'>    <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
+            <th class='w-status'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
             <th class='w-140px {sorter: false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>

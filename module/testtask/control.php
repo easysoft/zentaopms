@@ -198,7 +198,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function cases($taskID, $browseType = 'byModule', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function cases($taskID, $browseType = 'byModule', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save the session. */
         $this->app->loadLang('testcase');
@@ -220,11 +220,11 @@ class testtask extends control
         {
             $modules = '';
             if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
-            $this->view->runs      = $this->testtask->getRuns($taskID, $modules, $pager);
+            $this->view->runs      = $this->testtask->getRuns($taskID, $modules, $orderBy, $pager);
         }
         elseif($browseType == 'assignedtome')
         {
-            $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $pager);
+            $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $orderBy, $pager);
         }
 
         /* Save testcaseIDs session for get the pre and next testcase. */
@@ -241,6 +241,8 @@ class testtask extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
         $this->view->moduleTree  = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
         $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
         $this->view->taskID      = $taskID;
         $this->view->moduleID    = $moduleID;
         $this->view->treeClass   = $browseType == 'bymodule' ? '' : 'hidden';
