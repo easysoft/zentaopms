@@ -34,3 +34,4 @@ $lang->release->bugs                  = 'Linked bugs';
 $lang->release->ajaxGetStoriesAndBugs = 'API: Get storeis and bugs';
 $lang->release->finishStories         = 'The total demand for a complete %s';
 $lang->release->resolvedBugs          = 'The total solution of bug%s';
+$lang->release->exportStoriesAndBugs  = 'Export as HTML';

@@ -20,19 +20,22 @@
         <div class='content'><?php echo $release->desc;?></div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
-  <div class='a-center f-16px strong'>
-   <?php
-    $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
-    if(!$release->deleted)
-     { 
-        common::printLink('release', 'edit',   "releaseID=$release->id", $lang->edit);
-        common::printLink('release', 'delete', "releaseID=$release->id", $lang->delete, 'hiddenwin');
-     } 
-       echo html::a($browseLink, $lang->goback);
-     ?>
-  </div>
-   <table class='table-1 fixed'>
-    <caption class='caption-t1'><?php echo $lang->release->stories;?></caption>
+      <div class='a-center f-16px strong'>
+      <?php
+      $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
+      if(!$release->deleted)
+      { 
+          common::printLink('release', 'edit',   "releaseID=$release->id", $lang->edit);
+          common::printLink('release', 'delete', "releaseID=$release->id", $lang->delete, 'hiddenwin');
+      } 
+      echo html::a($browseLink, $lang->goback);
+      ?>
+      </div>
+      <table class='table-1 fixed'>
+        <caption class='caption-t1'>
+          <?php echo $lang->release->stories;?>
+          <div class='f-right'><?php if(count($stories)) common::printLink('release', 'exportStoriesAndBugs', 'type=story', $lang->release->exportStoriesAndBugs, '', "class='export'");?></div>
+        </caption>
         <tr>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
@@ -54,12 +57,13 @@
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
         </tr>
         <?php endforeach;?>
-        <tr>
-          <td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->finishStories, count($stories));?></td>
-        </tr>
+        <tr><td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->finishStories, count($stories));?></td></tr>
       </table>
       <table class='table-1 fixed'>
-       <caption class='caption-t1'><?php echo $lang->release->bugs;?></caption>
+        <caption class='caption-t1'>
+          <?php echo $lang->release->bugs;?>
+          <div class='f-right'><?php if(count($bugs)) common::printLink('release', 'exportStoriesAndBugs', 'type=bug', $lang->release->exportStoriesAndBugs, '', "class='export'");?></div>
+        </caption>
         <tr>
           <th class='w-id'>       <?php echo $lang->idAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
@@ -81,35 +85,33 @@
           <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
         </tr>
         <?php endforeach;?>
+        <tr><td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->resolvedBugs, count($bugs));?></td></tr>
+      </table>
+    </td>
+    <td class="divider"></td>
+    <td class="side">
+      <fieldset>
+      <legend><?php echo $lang->release->basicInfo?></legend>
+      <table class='table-1 a-left'>
         <tr>
-          <td colspan="7" class='a-left strong'><?php echo sprintf($lang->release->resolvedBugs, count($bugs));?></td>
+          <th width='25%' class='a-right'><?php echo $lang->release->product;?></th>
+          <td><?php echo $release->productName;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->release->name;?></th>
+          <td class='<?php if($release->deleted) echo 'deleted';?>'><?php echo $release->name;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->release->build;?></th>
+          <td><?php echo $release->buildName;?></td>
+        </tr>  
+        <tr>
+          <th class='rowhead'><?php echo $lang->release->date;?></th>
+          <td><?php echo $release->date;?></td>
         </tr>
       </table>
-</td>
-<td class="divider"></td>
-<td class="side">
-  <fieldset>
-    <legend><?php echo $lang->release->basicInfo?></legend>
-    <table class='table-1 a-left'>
-      <tr>
-        <th width='25%' class='a-right'><?php echo $lang->release->product;?></th>
-        <td><?php echo $release->productName;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->name;?></th>
-    <td class='<?php if($release->deleted) echo 'deleted';?>'><?php echo $release->name;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->build;?></th>
-    <td><?php echo $release->buildName;?></td>
-  </tr>  
-  <tr>
-    <th class='rowhead'><?php echo $lang->release->date;?></th>
-    <td><?php echo $release->date;?></td>
+      </fieldset>
+    </td>
   </tr>
- </table>
-</fieldset>
-</td>
-</tr>
 </table> 
 <?php include '../../common/view/footer.html.php';?>

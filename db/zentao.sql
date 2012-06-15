@@ -1550,11 +1550,12 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 5, 'my', 'changePassword'),
 (1, 1, 'story', 'batchClose'),
 (1, 2, 'story', 'batchClose'),
-(1, 3, 'story', 'batchClose'),
-(1, 4, 'story', 'batchClose'),
 (1, 5, 'story', 'batchClose'),
 (1, 1, 'task', 'batchEdit'),
 (1, 2, 'task', 'batchEdit'),
 (1, 3, 'task', 'batchEdit'),
 (1, 4, 'task', 'batchEdit'),
-(1, 5, 'task', 'batchEdit');
+(1, 5, 'task', 'batchEdit'),
+(1, 1, 'release', 'exportStoriesAndBugs'),
+(1, 2, 'release', 'exportStoriesAndBugs'),
+(1, 5, 'release', 'exportStoriesAndBugs');

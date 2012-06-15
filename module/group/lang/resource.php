@@ -85,6 +85,7 @@ $lang->resource->release->edit   = 'edit';
 $lang->resource->release->delete = 'delete';
 $lang->resource->release->view   = 'view';
 $lang->resource->release->ajaxGetStoriesAndBugs = 'ajaxGetStoriesAndBugs';
+$lang->resource->release->exportStoriesAndBugs  = 'exportStoriesAndBugs';
 
 /* Project. */
 $lang->resource->project->index          = 'index';
@@ -374,3 +375,4 @@ $lang->changelog['3.1'][] = 'todo-batchCreate';
 $lang->changelog['3.2'][] = 'my-changePassword';
 $lang->changelog['3.2'][] = 'story-batchClose';
 $lang->changelog['3.2'][] = 'task-batchEdit';
+$lang->changelog['3.2'][] = 'release-exportStoriesAndBugs';

@@ -195,4 +195,54 @@ class release extends control
         $this->view->orderBy   = $orderBy;
         die($this->display());
     }
+
+    /**
+     * Export the stories of release to HTML.
+     * 
+     * @param  string $type story | bug
+     * @access public
+     * @return void
+     */
+    public function exportStoriesAndBugs($type)
+    {
+        if(!empty($_POST))
+        {
+            if($type == 'story')
+            {
+                $this->loadModel('story');
+
+                $stories = $this->dao->select('id, title')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
+                    ->beginIF($this->session->storyOrderBy != false)->orderBy($this->session->storyOrderBy)->fi()
+                    ->fetchAll('id');
+
+                foreach($stories as $story)
+                {
+                    $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
+                }
+
+                $this->post->set('fields', array('id' => $this->lang->story->id, 'title' => $this->lang->story->title));
+                $this->post->set('rows', $stories);
+                $this->fetch('file', 'export2HTML', $_POST);
+            }
+            else if($type == 'bug')
+            {
+                $this->loadModel('bug');
+
+                $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->bugQueryCondition)
+                    ->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()
+                    ->fetchAll('id');
+
+                foreach($bugs as $bug)
+                {
+                    $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+                }
+
+                $this->post->set('fields', array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title));
+                $this->post->set('rows', $bugs);
+                $this->fetch('file', 'export2HTML', $_POST);
+            }
+        }
+
+        $this->display();
+    }
 }
