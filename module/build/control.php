@@ -41,7 +41,7 @@ class build extends control
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
         $stories = $this->story->getProjectStories($projectID, $orderBy);
-        $bugs    = $this->project->getResolvedBugs($projectID); 
+        $bugs    = $this->bug->getProjectBugs($projectID); 
 
         /* Assign. */
         $this->view->header->title = $this->lang->build->create;
@@ -86,7 +86,7 @@ class build extends control
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
         $stories = $this->story->getProjectStories($build->project, $orderBy);
-        $bugs    = $this->project->getResolvedBugs($build->project); 
+        $bugs    = $this->bug->getProjectBugs($build->project); 
 
         /* Assign. */
         $this->view->header->title = $this->lang->build->edit;

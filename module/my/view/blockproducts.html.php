@@ -40,7 +40,7 @@
   <tr>
     <td>
       <div class='contentDiv1'>
-      <table class='table-1 fixer colored'>
+      <table class='table-1 fixed colored'>
         <?php foreach($productStats as $product):?>
         <tr class='a-center' style='height:30px'>
           <td class='a-left'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>

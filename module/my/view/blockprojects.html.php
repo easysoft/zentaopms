@@ -42,7 +42,7 @@
   <tr>
     <td>
       <div class='contentDiv1'>
-      <table class='table-1 fixer colored'>
+      <table class='table-1 fixed colored'>
         <?php foreach($projectStats as $project):?>
         <tr class='a-center'>
           <td class='a-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name);?></td>

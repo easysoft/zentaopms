@@ -93,7 +93,6 @@ class release extends control
         }
         $this->loadModel('story');
         $this->loadModel('bug');
-        $this->loadModel('project');
         $this->loadModel('build');
 
         /* Get release and build. */
@@ -104,7 +103,7 @@ class release extends control
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
         $stories = $this->story->getProjectStories($build->project, $orderBy);
-        $bugs    = $this->project->getResolvedBugs($build->project); 
+        $bugs    = $this->bug->getProjectBugs($build->project); 
 
         $this->view->header->title = $this->lang->release->edit;
         $this->view->position[]    = $this->lang->release->edit;
@@ -188,7 +187,7 @@ class release extends control
         if(!empty($build))
         {
             $stories = $this->loadModel('story')->getProjectStories($build->project, $orderBy);
-            $bugs    = $this->loadModel('project')->getResolvedBugs($build->project);
+            $bugs    = $this->bug->getProjectBugs($build->project);
         }
         $this->view->productID = $productID;
         $this->view->stories   = $stories;
