@@ -12,7 +12,7 @@
 $lang->story->browse      = "Browse";
 $lang->story->create      = "Create";
 $lang->story->createCase  = "Create case";
-$lang->story->batchCreate = "Batch create";
+$lang->story->batchCreate = "Batch";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Changed';
 $lang->story->review      = 'Review';

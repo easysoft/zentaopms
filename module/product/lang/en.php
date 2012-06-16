@@ -60,18 +60,19 @@ $lang->product->acl       = 'Access limitation';
 $lang->product->whitelist = 'Whitelist';
 
 $lang->product->moduleStory  = 'By module';
-$lang->product->searchStory  = 'By search';
+$lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'To me';
 $lang->product->openedByMe   = 'Opened by me';
 $lang->product->reviewedByMe = 'Reviewed by me';
 $lang->product->closedByMe   = 'Closed by me';
-$lang->product->draftStory   = 'Draft story';
-$lang->product->activeStory  = 'Active story';
-$lang->product->changedStory = 'Changed story';
-$lang->product->closedStory  = 'Closed story';
+$lang->product->draftStory   = 'Draft';
+$lang->product->activeStory  = 'Active';
+$lang->product->changedStory = 'Changed';
+$lang->product->closedStory  = 'Closed';
 
-$lang->product->allStory    = 'All story';
+$lang->product->allStory    = 'All';
 $lang->product->allProduct  = 'All products';
+$lang->product->allProductsOfProject = 'All related products';
 
 $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
