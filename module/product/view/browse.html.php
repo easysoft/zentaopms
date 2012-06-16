@@ -18,7 +18,7 @@ var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='featurebar'>
   <div class='f-left'>
-    <span id='bymoduleTab' onclick='browseByModule()'><a href='#'><?php echo $lang->product->moduleStory;?></a></span>
+    <span id='bymoduleTab' onclick='browseByModule()'><?php echo html::a($this->inlink('browse',"productID=$productID"), $lang->product->moduleStory);?></span>
     <span id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></span>
     <span id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></span>
     <span id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></span>
