@@ -82,7 +82,6 @@ var browseType = '<?php echo $browseType;?>';
       </td>
       <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
 
-
       <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
       <td><?php echo substr($task->openedDate, 5, 6);?></th>
       <?php endif;?>
