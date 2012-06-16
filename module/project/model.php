@@ -1022,6 +1022,7 @@ class projectModel extends model
              ->andWhere('t1.id')->in(array_keys($taskIdList))
              ->orderBy($orderBy)
              ->fetchAll();
+        $this->loadModel('task')->processTasks($tasks);
         return $tasks;
     }
 
