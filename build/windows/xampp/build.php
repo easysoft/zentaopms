@@ -76,6 +76,8 @@ $file->copyFile('./xampp/apache/binold/libaprutil-1.dll',  './xampp/apache/bin/l
 $file->copyFile('./xampp/apache/binold/libhttpd.dll',      './xampp/apache/bin/libhttpd.dll');
 $file->copyFile('./xampp/apache/binold/zlib1.dll',         './xampp/apache/bin/zlib1.dll');
 $file->copyFile('./xampp/apache/binold/pv.exe',            './xampp/apache/bin/pv.exe');
+$file->copyFile('./xampp/apache/binold/libeay32.dll',      './xampp/apache/bin/libeay32.dll');
+$file->copyFile('./xampp/apache/binold/ssleay32.dll',      './xampp/apache/bin/ssleay32.dll');
 $file->removeDir('./xampp/apache/binold');
 
 /* Process the apache's config file. */
@@ -251,7 +253,7 @@ $phpConfig = str_replace('extension=php_pdo_sqlite.dll',';extension=php_pdo_sqli
 $phpConfig = str_replace('extension=php_soap.dll',';extension=php_soap.dll', $phpConfig);
 $phpConfig = str_replace('extension=php_sqlite.dll',';extension=php_sqlite.dll', $phpConfig);
 $phpConfig = str_replace('extension=php_sqlite3.dll',';extension=php_sqlite3.dll', $phpConfig);
-$phpConfig = str_replace('extension=php_xmlrpc.dll',';extension=php_xmlrpc.dll', $phpConfig);
+$phpConfig = str_replace('extension=php_xmlrpc.dll','extension=php_openssl.dll', $phpConfig);    // load openssl extension.
 
 /* Remove empty and comment lines. */
 $phpConfig = explode("\n", $phpConfig);
@@ -289,6 +291,7 @@ $file->copyFile('./xampp/php/extold/php_mysql.dll',           './xampp/php/ext/p
 $file->copyFile('./xampp/php/extold/php_mysqli.dll',          './xampp/php/ext/php_mysqli.dll');
 $file->copyFile('./xampp/php/extold/php_pdo_mysql.dll',       './xampp/php/ext/php_pdo_mysql.dll');
 $file->copyFile('./xampp/php/extold/php_sockets.dll',          './xampp/php/ext/php_sockets.dll');
+$file->copyFile('./xampp/php/extold/php_openssl.dll',          './xampp/php/ext/php_openssl.dll');
 $file->removeDir('./xampp/php/extold');
 
 /* Process sqlbuddy. */
