@@ -60,7 +60,9 @@ class release extends control
             die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
         }
 
-        $builds  = $this->loadModel('build')->getProductBuildPairs($productID);
+        $builds        = $this->loadModel('build')->getProductBuildPairs($productID);
+        $releaseBuilds = $this->release->getReleaseBuilds($productID);
+        foreach($releaseBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
         $this->commonAction($productID);
