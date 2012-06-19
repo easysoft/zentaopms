@@ -17,7 +17,7 @@ $clientTheme  = $this->app->getClientTheme();
   if(!isset($header->keywords)) $header->keywords = $lang->zentaoKeywords;
   if(!isset($header->desc))     $header->desc     = $lang->zentaoDESC;
 
-  echo html::title($header->title . '-' . $lang->ZenTaoPMS);
+  echo html::title($header->title . ' / ' . $lang->ZenTaoPMS);
   echo html::meta('keywords',    $header->keywords);
   echo html::meta('description', $header->desc);
 

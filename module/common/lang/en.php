@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->arrow        = '<span class="icon-arrow">&nbsp;</span>';
+$lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
 $lang->colon        = '::';
 $lang->comma        = ',';
 $lang->dot          = '.';
