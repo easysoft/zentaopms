@@ -13,9 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
 <?php if($task->fromBug == 0):?>
-  <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . $lang->colon . $task->name;?></div>
+  <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . ' ' . $task->name;?></div>
 <?php else:?>
-  <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . $lang->colon . $task->name . '('. $lang->task->fromBug . $lang->colon . $task->fromBug . ')';?></div>
+  <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . ' ' . $task->name . '('. $lang->task->fromBug . $lang->colon . $task->fromBug . ')';?></div>
 <?php endif;?>
   <div>
   <?php

@@ -343,9 +343,9 @@ class task extends control
         $project = $this->project->getById($task->project);
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->task->view;
+        $header['title'] = "TASK#$task->id $task->name / $project->name";
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
-        $position[]      = $this->lang->task->view;
+        $position[]      = $task->name;
 
         $this->view->header     = $header;
         $this->view->position   = $position;
