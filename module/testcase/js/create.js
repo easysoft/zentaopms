@@ -14,5 +14,6 @@ function setPreview()
 }
 $(function()
 {
+     $("#story").chosen({no_results_text: noResultsMatch});
      $("#preview").colorbox({width:1000, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
 })

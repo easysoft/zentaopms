@@ -11,6 +11,8 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
+<script>var noResultsMatch = '<?php echo $lang->noResultsMatch;?>'</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div id='titlebar'>
   <div id='main'>
@@ -84,8 +86,7 @@
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->story;?></td>
-            <td class='a-left'><div id='storyIdBox' class='searchleft'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
-            <!--<div id='storyListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchStories' onclick=getList()");?></div>-->
+            <td class='a-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=select-1');?></div>
             </td>       
           </tr>
           <tr>

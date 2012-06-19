@@ -297,6 +297,8 @@ $lang->zentaoDESC     = "禅道项目管理软件(ZenTaoPMS)是一款国产的�
 
 $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
 
+$lang->noResultsMatch = "没有匹配结果";
+
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
 define('DT_DATETIME2',  'y-m-d H:i');

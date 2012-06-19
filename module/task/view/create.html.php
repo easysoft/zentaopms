@@ -16,6 +16,7 @@
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <script> var holders = '<?php echo json_encode($lang->task->placeholder);?>'</script>
+<script> var noResultsMatch = '<?php echo $lang->noResultsMatch;?>'</script>
 <script language='javascript'> var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
 <script language='Javascript'>
 $(function()

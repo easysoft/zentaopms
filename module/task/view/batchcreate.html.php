@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
+<script>
+  var batchCreateNum = '<?php echo $config->task->batchCreate;?>'; 
+  var noResultsMatch = '<?php echo $lang->noResultsMatch;?>';
+</script>
 <form method='post'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->task->project . $lang->colon . $lang->task->batchCreate;?></caption>
@@ -31,7 +36,7 @@
     <?php $pri = 3;?>
     <tr class='a-center'>
       <td><?php echo $i+1;?></td>
-      <td><?php echo html::select("story[$i]", $stories, $story, 'class=select-1');?></td>
+      <td class='a-left' style='overflow:visible'><?php echo html::select("story[$i]", $stories, $story, "class='select-1'");?></td>
       <td><?php echo html::input("name[$i]", '', 'class=text-1'); echo "<span class='star'>*</span>";?></td>
       <td><?php echo html::textarea("desc[$i]", '', "class=text-1 rows='1'");?></td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=select-1'); echo "<span class='star'>*</span>";?></td>

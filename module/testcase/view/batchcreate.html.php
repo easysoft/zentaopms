@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
+<script>
+  var testcaseBatchCreateNum = '<?php echo $config->testcase->batchCreate;?>';
+  var noResultsMatch = '<?php echo $lang->noResultsMatch;?>';
+</script>
 <form method='post' enctype='multipart/form-data'>
   <table align='center' class='table-1 fixed'> 
     <caption><?php echo $lang->testcase->batchCreate;?></caption>
@@ -30,7 +35,7 @@
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class=select-1");?></td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=select-1"); echo "<span class='star'>*</span>";?></td>
-      <td><?php echo html::select("story[$i]", $stories, $story, 'class=select-1');?></td>
+      <td class='a-left'style='overflow:visible'><?php echo html::select("story[$i]", $stories, $story, 'class=select-1');?></td>
       <td><?php echo html::input("title[$i]", '', "class='text-1'"); echo "<span class='star'>*</span>";?></td>
     </tr>  
     <?php endfor;?>

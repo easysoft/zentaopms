@@ -12,8 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<script> var noResultsMatch = '<?php echo $lang->noResultsMatch;?>'</script>
 <script language='Javascript'>var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div id='titlebar'>
@@ -54,9 +56,7 @@
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->story;?></th>
-            <td><div class='searchleft'><?php echo html::select('story', $stories, $task->story, 'class=select-1');?></div>
-            <?php echo html::a($this->createLink('search', 'select', "productID=0&projectID=$project->id&module=story&storyID=$task->story"), $lang->go, "_blank", "class='search' id='searchStories'");?>
-            </td>
+            <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>

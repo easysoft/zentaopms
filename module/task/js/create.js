@@ -40,6 +40,6 @@ function setPreview()
 $(document).ready(function()
 {
     setPreview();
-    $("#story").chosen();
+    $("#story").chosen({no_results_text: noResultsMatch});
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
 });
