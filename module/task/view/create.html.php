@@ -63,6 +63,10 @@ $(function()
       <td><?php echo html::input('estimate', '', "class='text-3'") . $lang->task->hour;?></td>
     </tr>
     <tr>
+      <th class='rowhead'><?php echo $lang->task->estimateStartDate;?></th>
+      <td><?php echo html::input('estimateStartDate', '', "class='text-3 date'");?></td>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->task->deadline;?></th>
       <td><?php echo html::input('deadline', '', "class='text-3 date'");?></td>
     </tr>

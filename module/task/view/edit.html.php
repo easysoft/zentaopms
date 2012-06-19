@@ -84,6 +84,10 @@
         <legend><?php echo $lang->task->legendEffort;?></legend>
         <table class='table-1'> 
           <tr>
+            <th class='rowhead'><?php echo $lang->task->estimateStartDate;?></th>
+            <td><?php echo html::input('estimateStartDate', $task->actualStartDate, "class='text-1 date'");?></td>
+          </tr>  
+          <tr>
             <th class='rowhead'><?php echo $lang->task->deadline;?></th>
             <td><?php echo html::input('deadline', $task->deadline, "class='text-1 date'");?></td>
           </tr>  

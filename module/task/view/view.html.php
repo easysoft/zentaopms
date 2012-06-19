@@ -137,6 +137,10 @@
         <legend><?php echo $lang->task->legendEffort;?></legend>
         <table class='table-1'> 
           <tr>
+            <th class='rowhead'><?php echo $lang->task->estimateStartDate;?></th>
+            <td> <?php echo strtotime($task->actualStartDate) ? substr($task->actualStartDate, 0, 10) : substr($task->estimateStartDate, 0, 10); ?> </td>
+          </tr>  
+          <tr>
             <th class='rowhead'><?php echo $lang->task->deadline;?></th>
             <td>
               <?php

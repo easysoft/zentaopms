@@ -15,6 +15,10 @@
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
+      <th class='rowhead'><?php echo $lang->task->estimateStartDate;?></th>
+      <td><?php echo html::input('actualStartDate', helper::now(), "class='text-3'");?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->task->consumed;?></th>
       <td><?php echo html::input('consumed', $task->consumed, "class='text-3'") . $lang->task->hour;?></td>
     </tr>  
