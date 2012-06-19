@@ -8,6 +8,7 @@
 function loadAll(productID)
 {
     $('#taskIdBox').get(0).innerHTML = '<select id="task"></select>';  // Reset the task.
+    $('#task').chosen({no_results_text: noResultsMatch});
     loadModuleMenu(productID);
     loadProductStories(productID);
     loadProductProjects(productID);
@@ -38,7 +39,7 @@ function loadModuleMenu(productID)
 function loadProductStories(productID)
 {
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
-    $('#storyIdBox').load(link);
+    $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
 
 /**
@@ -100,7 +101,7 @@ function loadProjectRelated(projectID)
 function loadProjectTasks(projectID)
 {
     link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID);
-    $('#taskIdBox').load(link);
+    $('#taskIdBox').load(link, function(){$('#task').chosen();});
 }
 
 /**
@@ -114,7 +115,7 @@ function loadProjectStories(projectID)
 {
     productID = $('#product').get(0).value; 
     link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID);
-    $('#storyIdBox').load(link);
+    $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
 
 /**
@@ -149,6 +150,7 @@ function loadProjectBuilds(projectID)
 
 $(function() {
     $("#story").chosen({no_results_text:noResultsMatch});
+    $("#task").chosen({no_results_text:noResultsMatch});
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
     setAssignedTo();
 })

@@ -39,7 +39,7 @@
     <tr>
       <th class='rowhead'><?php echo $lang->testcase->lblStory;?></th>
       <td>
-        <?php echo html::select('story', $stories, $storyID, 'class="text-1" onchange=setPreview();');?>
+        <div id='storyIdBox'><?php echo html::select('story', $stories, $storyID, 'class="text-1" onchange=setPreview();');?></div>
         <?php if($storyID == 0): ?>
           <a href='' id='preview' class='iframe hidden'><?php echo $lang->preview;?></a>
         <?php else:?>

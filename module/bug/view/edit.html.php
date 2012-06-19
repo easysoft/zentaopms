@@ -15,7 +15,7 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script>var noResultsMatch = <?php echo $lang->noResultsMatch;?></script>
+<script>var noResultsMatch = '<?php echo $lang->noResultsMatch;?>'</script>
 <script language='Javascript'>
 changeProductConfirmed = false;
 changeProjectConfirmed = false;
@@ -136,9 +136,7 @@ userList               = "<?php echo join(',', array_keys($users));?>".split(','
           </tr>
           <tr>
             <td class='rowhead'><?php echo $lang->bug->task;?></td>
-            <td><div id='taskIdBox' class='searchleft'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></div>
-            <!--<div id='taskListIdBox'><?php echo html::a('', $lang->go, "_blank", "class='search' id='searchTasks' onclick=getList('task')");?></div>-->
-            </td>
+            <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, 'class=select-3');?></div></td>
           </tr>
         </table>
       </fieldset>

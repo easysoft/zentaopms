@@ -43,7 +43,7 @@ function loadModuleMenu(productID)
 function loadStory(productID)
 {
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
-    $('#storyIdBox').load(link);
+    $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text: noResultsMatch});});
 }
 
 /**

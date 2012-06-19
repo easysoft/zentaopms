@@ -571,7 +571,7 @@ class taskModel extends model
      */
     public function getProjectTaskPairs($projectID, $status = 'all', $orderBy = 'finishedBy, id_desc')
     {
-        $tasks = array('' => '');
+        $tasks = array('' => '&nbsp;');
         $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS finishedByRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.finishedBy = t2.account')
