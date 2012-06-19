@@ -1012,7 +1012,7 @@ class storyModel extends model
         $moduleNames = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($modules)->fetchPairs();*/
 
         /* Format these stories. */
-        $storyPairs = array('' => '');
+        $storyPairs = array('' => '&nbsp;');
         foreach($stories as $story) $storyPairs[$story->id] = $story->id . ':' . $story->title . "({$this->lang->story->pri}:$story->pri, {$this->lang->story->estimate}: $story->estimate)";
         return $storyPairs;
     }
