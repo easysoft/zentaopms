@@ -65,41 +65,106 @@ jQuery.cookie = function(name, value, options) {
         return cookieValue;
     }
 };
+
 /*
- * (c) Copyrights 2007 - 2008
+ * jQuery Hotkeys Plugin
+ * Copyright 2010, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
  *
- * Original idea by by Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
- *  
- *  jQuery Plugin by Tzury Bar Yochay 
- *  tzury.by@gmail.com
- *  http://evalinux.wordpress.com
- *  http://facebook.com/profile.php?id=513676303
+ * Based upon the plugin by Tzury Bar Yochay:
+ * http://github.com/tzuryby/hotkeys
  *
- *  Project's sites: 
- *  http://code.google.com/p/js-hotkeys/
- *  http://github.com/tzuryby/hotkeys/tree/master
- *
- *  License: same as jQuery license. 
- */
-(function(jQuery){jQuery.fn.__bind__=jQuery.fn.bind;jQuery.fn.__unbind__=jQuery.fn.unbind;jQuery.fn.__find__=jQuery.fn.find;var hotkeys={version:'0.7.9',override:/keypress|keydown|keyup/g,triggersMap:{},specialKeys:{27:'esc',9:'tab',32:'space',13:'return',8:'backspace',145:'scroll',20:'capslock',144:'numlock',19:'pause',45:'insert',36:'home',46:'del',35:'end',33:'pageup',34:'pagedown',37:'left',38:'up',39:'right',40:'down',109:'-',112:'f1',113:'f2',114:'f3',115:'f4',116:'f5',117:'f6',118:'f7',119:'f8',120:'f9',121:'f10',122:'f11',123:'f12',191:'/'},shiftNums:{"`":"~","1":"!","2":"@","3":"#","4":"$","5":"%","6":"^","7":"&","8":"*","9":"(","0":")","-":"_","=":"+",";":":","'":"\"",",":"<",".":">","/":"?","\\":"|"},newTrigger:function(type,combi,callback){var result={};result[type]={};result[type][combi]={cb:callback,disableInInput:false};return result;}};hotkeys.specialKeys=jQuery.extend(hotkeys.specialKeys,{96:'0',97:'1',98:'2',99:'3',100:'4',101:'5',102:'6',103:'7',104:'8',105:'9',106:'*',107:'+',109:'-',110:'.',111:'/'});jQuery.fn.find=function(selector){this.query=selector;return jQuery.fn.__find__.apply(this,arguments);};jQuery.fn.unbind=function(type,combi,fn){if(jQuery.isFunction(combi)){fn=combi;combi=null;}
-if(combi&&typeof combi==='string'){var selectorId=((this.prevObject&&this.prevObject.query)||(this[0].id&&this[0].id)||this[0]).toString();var hkTypes=type.split(' ');for(var x=0;x<hkTypes.length;x++){delete hotkeys.triggersMap[selectorId][hkTypes[x]][combi];}}
-return this.__unbind__(type,fn);};jQuery.fn.bind=function(type,data,fn){var handle=type.match(hotkeys.override);if(jQuery.isFunction(data)||!handle){return this.__bind__(type,data,fn);}
-else{var result=null,pass2jq=jQuery.trim(type.replace(hotkeys.override,''));if(pass2jq){result=this.__bind__(pass2jq,data,fn);}
-if(typeof data==="string"){data={'combi':data};}
-if(data.combi){for(var x=0;x<handle.length;x++){var eventType=handle[x];var combi=data.combi.toLowerCase(),trigger=hotkeys.newTrigger(eventType,combi,fn),selectorId=((this.prevObject&&this.prevObject.query)||(this[0].id&&this[0].id)||this[0]).toString();trigger[eventType][combi].disableInInput=data.disableInInput;if(!hotkeys.triggersMap[selectorId]){hotkeys.triggersMap[selectorId]=trigger;}
-else if(!hotkeys.triggersMap[selectorId][eventType]){hotkeys.triggersMap[selectorId][eventType]=trigger[eventType];}
-var mapPoint=hotkeys.triggersMap[selectorId][eventType][combi];if(!mapPoint){hotkeys.triggersMap[selectorId][eventType][combi]=[trigger[eventType][combi]];}
-else if(mapPoint.constructor!==Array){hotkeys.triggersMap[selectorId][eventType][combi]=[mapPoint];}
-else{hotkeys.triggersMap[selectorId][eventType][combi][mapPoint.length]=trigger[eventType][combi];}
-this.each(function(){var jqElem=jQuery(this);if(jqElem.attr('hkId')&&jqElem.attr('hkId')!==selectorId){selectorId=jqElem.attr('hkId')+";"+selectorId;}
-jqElem.attr('hkId',selectorId);});result=this.__bind__(handle.join(' '),data,hotkeys.handler)}}
-return result;}};hotkeys.findElement=function(elem){if(!jQuery(elem).attr('hkId')){if(jQuery.browser.opera||jQuery.browser.safari){while(!jQuery(elem).attr('hkId')&&elem.parentNode){elem=elem.parentNode;}}}
-return elem;};hotkeys.handler=function(event){var target=hotkeys.findElement(event.currentTarget),jTarget=jQuery(target),ids=jTarget.attr('hkId');if(ids){ids=ids.split(';');var code=event.which,type=event.type,special=hotkeys.specialKeys[code],character=!special&&String.fromCharCode(code).toLowerCase(),shift=event.shiftKey,ctrl=event.ctrlKey,alt=event.altKey||event.originalEvent.altKey,mapPoint=null;for(var x=0;x<ids.length;x++){if(hotkeys.triggersMap[ids[x]][type]){mapPoint=hotkeys.triggersMap[ids[x]][type];break;}}
-if(mapPoint){var trigger;if(!shift&&!ctrl&&!alt){trigger=mapPoint[special]||(character&&mapPoint[character]);}
-else{var modif='';if(alt)modif+='alt+';if(ctrl)modif+='ctrl+';if(shift)modif+='shift+';trigger=mapPoint[modif+special];if(!trigger){if(character){trigger=mapPoint[modif+character]||mapPoint[modif+hotkeys.shiftNums[character]]||(modif==='shift+'&&mapPoint[hotkeys.shiftNums[character]]);}}}
-if(trigger){var result=false;for(var x=0;x<trigger.length;x++){if(trigger[x].disableInInput){var elem=jQuery(event.target);if(jTarget.is("input")||jTarget.is("textarea")||jTarget.is("select")||elem.is("input")||elem.is("textarea")||elem.is("select")){return true;}}
-result=result||trigger[x].cb.apply(this,[event]);}
-return result;}}}};window.hotkeys=hotkeys;return jQuery;})(jQuery);
+ * Original idea by:
+ * Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
+*/
+
+(function(jQuery){
+    
+    jQuery.hotkeys = {
+        version: "0.8",
+
+        specialKeys: {
+            8: "backspace", 9: "tab", 13: "return", 16: "shift", 17: "ctrl", 18: "alt", 19: "pause",
+            20: "capslock", 27: "esc", 32: "space", 33: "pageup", 34: "pagedown", 35: "end", 36: "home",
+            37: "left", 38: "up", 39: "right", 40: "down", 45: "insert", 46: "del", 
+            96: "0", 97: "1", 98: "2", 99: "3", 100: "4", 101: "5", 102: "6", 103: "7",
+            104: "8", 105: "9", 106: "*", 107: "+", 109: "-", 110: ".", 111 : "/", 
+            112: "f1", 113: "f2", 114: "f3", 115: "f4", 116: "f5", 117: "f6", 118: "f7", 119: "f8", 
+            120: "f9", 121: "f10", 122: "f11", 123: "f12", 144: "numlock", 145: "scroll", 191: "/", 224: "meta"
+        },
+    
+        shiftNums: {
+            "`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&", 
+            "8": "*", "9": "(", "0": ")", "-": "_", "=": "+", ";": ": ", "'": "\"", ",": "<", 
+            ".": ">",  "/": "?",  "\\": "|"
+        }
+    };
+
+    function keyHandler( handleObj ) {
+        // Only care when a possible input has been specified
+        if ( typeof handleObj.data !== "string" ) {
+            return;
+        }
+        
+        var origHandler = handleObj.handler,
+            keys = handleObj.data.toLowerCase().split(" ");
+    
+        handleObj.handler = function( event ) {
+            // Don't fire in text-accepting inputs that we didn't directly bind to
+            if ( this !== event.target && (/textarea|select/i.test( event.target.nodeName ) ||
+                 event.target.type === "text") ) {
+                return;
+            }
+            
+            // Keypress represents characters, not special keys
+            var special = event.type !== "keypress" && jQuery.hotkeys.specialKeys[ event.which ],
+                character = String.fromCharCode( event.which ).toLowerCase(),
+                key, modif = "", possible = {};
+
+            // check combinations (alt|ctrl|shift+anything)
+            if ( event.altKey && special !== "alt" ) {
+                modif += "alt+";
+            }
+
+            if ( event.ctrlKey && special !== "ctrl" ) {
+                modif += "ctrl+";
+            }
+            
+            // TODO: Need to make sure this works consistently across platforms
+            if ( event.metaKey && !event.ctrlKey && special !== "meta" ) {
+                modif += "meta+";
+            }
+
+            if ( event.shiftKey && special !== "shift" ) {
+                modif += "shift+";
+            }
+
+            if ( special ) {
+                possible[ modif + special ] = true;
+
+            } else {
+                possible[ modif + character ] = true;
+                possible[ modif + jQuery.hotkeys.shiftNums[ character ] ] = true;
+
+                // "$" can be triggered as "Shift+4" or "Shift+$" or just "$"
+                if ( modif === "shift+" ) {
+                    possible[ jQuery.hotkeys.shiftNums[ character ] ] = true;
+                }
+            }
+
+            for ( var i = 0, l = keys.length; i < l; i++ ) {
+                if ( possible[ keys[i] ] ) {
+                    return origHandler.apply( this, arguments );
+                }
+            }
+        };
+    }
+
+    jQuery.each([ "keydown", "keyup", "keypress" ], function() {
+        jQuery.event.special[ this ] = { add: keyHandler };
+    });
+
+})( jQuery );
 
 /* Copyright (c) 2006 Brandon Aaron (http://brandonaaron.net)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
