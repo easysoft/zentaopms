@@ -903,6 +903,7 @@ class story extends control
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $stories);
+            $this->post->set('kind', 'story');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 

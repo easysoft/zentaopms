@@ -991,6 +991,7 @@ class bug extends control
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $bugs);
+            $this->post->set('kind', 'bug');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 

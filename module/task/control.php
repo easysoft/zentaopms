@@ -813,6 +813,7 @@ class task extends control
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $tasks);
+            $this->post->set('kind', 'task');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 

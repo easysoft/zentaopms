@@ -22,7 +22,7 @@ table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}
   <tr>
   <?php
   foreach($fields as $fieldLabel)
-  {
+  {  
       echo "<th><nobr>$fieldLabel</nobr></th>\n";
   }
   ?>
