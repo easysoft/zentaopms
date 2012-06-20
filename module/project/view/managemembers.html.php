@@ -51,7 +51,7 @@
     </tr>
     <?php endfor;?>
     <tr>
-      <td colspan='3'>
+      <td colspan='4'>
         <input type='submit' name='submit' value='<?php echo $lang->save;?>' class='button-s' />
       </td>
     </tr>

@@ -50,9 +50,7 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot>
-    <tr> 
-<td colspan='6' class='f-right'><?php $pager->show();?></td></tr></tfoot>
+  <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <script>$('#<?php echo $type;?>').addClass('active')</script>
 <?php include '../../common/view/footer.html.php';?>
