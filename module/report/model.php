@@ -228,4 +228,47 @@ EOT;
         foreach($datas as $data) $data->percent = round($data->value / $sum, 2);
         return $datas;
     }
+
+    /**
+     * Get projects. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function getProjects()
+    {
+        $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('status')->eq('done')->fetchAll();
+        foreach($projects as $project)
+        {
+            $total = $this->dao->select('SUM(estimate) AS estimate, SUM(consumed) AS consumed')
+                ->from(TABLE_TASK)
+                ->where('project')->eq($project->id)
+                ->andWhere('status')->ne('cancel')
+                ->andWhere('deleted')->eq(0)
+                ->fetch();
+            $stories = $this->dao->select("count(*) as count")->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetch();
+            $bugs    = $this->dao->select("count(*) as count")->from(TABLE_BUG)->where('project')->eq($project->id)->fetch();
+            $dev     = $this->dao->select('SUM(consumed) as consumed')
+                ->from(TABLE_TASK)
+                ->where('project')->eq($project->id)
+                ->andWhere('type')->eq('devel')
+                ->andWhere('status')->ne('cancel')
+                ->andWhere('deleted')->eq(0)
+                ->fetch();
+            $test   = $this->dao->select('SUM(consumed) as consumed')
+                ->from(TABLE_TASK)
+                ->where('project')->eq($project->id)
+                ->andWhere('type')->eq('test')
+                ->andWhere('status')->ne('cancel')
+                ->andWhere('deleted')->eq(0)
+                ->fetch();
+            $project->estimate     = $total->estimate;
+            $project->consumed     = $total->consumed;
+            $project->stories      = $stories->count;
+            $project->bugs         = $bugs->count;
+            $project->devConsumed  = empty($dev->consumed) ? 0 : $dev->consumed;
+            $project->testConsumed = empty($test->consumed) ? 0 : $dev->consumed;
+        }
+        return $projects;
+    }
 }

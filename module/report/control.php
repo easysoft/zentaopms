@@ -11,4 +11,15 @@
  */
 class report extends control
 {
+    public function index()
+    {
+        $this->locate(inlink('projectdeviation')); 
+    }
+    
+    public function projectDeviation()
+    {
+        $this->view->header->title = $this->lang->report->projectDeviation;
+        $this->view->projects      = $this->report->getProjects();
+        $this->display();
+    }
 }
