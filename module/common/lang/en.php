@@ -227,7 +227,7 @@ $lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp
 $lang->admin->menu->index     = array('link' => 'Index|admin|index');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => 'Extension editor|editor|index', 'subModule' => 'editor');
-$lang->admin->menu->mail      = array('link' => 'ConfigEmail|mail|set', 'subModule' => 'mail');
+$lang->admin->menu->mail      = array('link' => 'EmailSetting|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->clearData = array('link' => 'ClearData|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');

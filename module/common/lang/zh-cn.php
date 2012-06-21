@@ -227,7 +227,7 @@ $lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp
 $lang->admin->menu->index     = array('link' => '首页|admin|index');
 $lang->admin->menu->extension = array('link' => '插件管理|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => '扩展编辑器|editor|index', 'subModule' => 'editor');
-$lang->admin->menu->mail      = array('link' => 'Email配置|mail|set', 'subModule' => 'mail');
+$lang->admin->menu->mail      = array('link' => '发信配置|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->clearData = array('link' => '清除数据|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
