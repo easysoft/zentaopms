@@ -1,6 +1,6 @@
 <?php
 /**
- * The save view file of mail module of ZenTaoPMS.
+ * The test view file of mail module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
@@ -11,17 +11,18 @@
  */
 include '../../common/view/header.html.php';
 ?>
-<table class='table-5' align='center'>
-  <caption><?php echo $lang->mail->save ?></caption>
+<form method='post' target='hiddenwin'>
+<table class='table-4' align='center'>
+  <caption><?php echo $lang->mail->test; ?></caption>
   <tr>
-    <td>
+    <td class='a-center'>
       <?php 
-      echo html::textArea('', $mailConfig, "rows='12' class='area-1'") . '<br /><br />'; 
-      if($saved)  printf($lang->mail->successSaved, $configFile);
-      if($saved)  echo html::linkButton($lang->mail->test, inlink('test'));
-      if(!$saved) printf($lang->mail->saveManual,   $configFile);
+      echo html::select('to', $users, $app->user->account, 'class=text-3');
+      echo html::submitButton($lang->mail->test);
+      echo html::linkButton($lang->mail->edit, $this->inLink('edit'));
       ?>
     </td>
   </tr>
 </table>
+</form>
 <?php include '../../common/view/footer.html.php';?>

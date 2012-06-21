@@ -1,0 +1,4 @@
+$(document).ready()
+{
+    $('#password').focus();
+}

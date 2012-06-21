@@ -11,15 +11,65 @@
  */
 class mail extends control
 {
+    public function index()
+    {
+        if($this->config->mail->turnon) $this->locate(inlink('edit'));
+        $this->locate(inlink('detect'));
+    }
+
     /**
-     * Config email. 
+     * Detect email config auto.
      * 
      * @access public
      * @return void
      */
-    public function set()
+    public function detect()
     {
-        $this->view->mailConfig = $this->app->loadConfig('mail')->mail;
+        if($_POST)
+        {
+            $error = '';
+            if($this->post->fromAddress == false) $error = sprintf($this->lang->error->notempty, $this->lang->mail->fromAddress);
+            if(!validater::checkEmail($this->post->fromAddress)) $error .= '\n' . sprintf($this->lang->error->email, $this->lang->mail->fromAddress);
+
+            if($error) die(js::alert($error));
+
+            $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
+            $mailConfig->fromAddress = $this->post->fromAddress;
+            $this->session->set('mailConfig',  $mailConfig);
+
+            die(js::locate(inlink('edit'), 'parent'));
+        }
+
+        $this->view->header->title = $this->lang->mail->detect;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->detect;
+
+        $this->view->fromAddress = $this->session->mailConfig ? $this->session->mailConfig->fromAddress : '';
+
+        $this->display();
+    }
+
+    /**
+     * Edit the mail config.
+     * 
+     * @access public
+     * @return void
+     */
+    public function edit()
+    {
+        $mailConfig = $this->session->mailConfig ? $this->session->mailConfig : $this->config->mail->smtp;
+
+        if(!isset($mailConfig->debug))    $mailConfig->debug    = 1;
+        if(!isset($mailConfig->username)) $mailConfig->username = '';
+        if(!isset($mailConfig->password)) $mailConfig->password = '';
+        if(!isset($mailConfig->secure))   $mailConfig->secure   = '';
+        if(!isset($mailConfig->fromName)) $mailConfig->fromName = 'zentao';
+
+        $this->view->header->title = $this->lang->mail->edit;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->edit;
+
+        $this->view->mailConfig  = $mailConfig;
         $this->display();
     }
 
@@ -33,81 +83,56 @@ class mail extends control
     {
         if(!empty($_POST))
         {
-            if('gmail' == $this->post->mta)
-            {
-                $config = <<<EOT
-<?php
-\$config->mail->turnon          = {$this->post->turnon};
-\$config->mail->fromAddress     = "{$this->post->fromAddress}"; 
-\$config->mail->mta             = "gmail";
-\$config->mail->fromName        = "{$this->post->fromName}";
-\$config->mail->gmail->debug    = {$this->post->gmailDebug};
-\$config->mail->gmail->username = "{$this->post->gmailUsername}";
-\$config->mail->gmail->password = "{$this->post->gmailPassword}";
-EOT;
-            }
-            elseif('smtp' == $this->post->mta)
-            {
-                $position = strpos($this->post->fromAddress, '@');
-                if($this->post->smtpHost == '')
-                {
-                    $host = 'smtp.' . substr($this->post->fromAddress, $position + 1); 
-                }
-                else
-                {
-                    $host = $this->post->smtpHost;
-                }
-
-                $config = <<<EOT
+            $mailConfig = <<<EOT
 <?php
 \$config->mail->turnon         = {$this->post->turnon};
+\$config->mail->mta            = 'smtp';
 \$config->mail->fromAddress    = "{$this->post->fromAddress}"; 
-\$config->mail->mta            = "{$this->post->mta}";
 \$config->mail->fromName       = "{$this->post->fromName}";
-\$config->mail->smtp->debug    = {$this->post->smtpDebug};
-\$config->mail->smtp->username = "{$this->post->smtpUsername}";
-\$config->mail->smtp->password = "{$this->post->smtpPassword}";
-\$config->mail->smtp->auth     = {$this->post->smtpAuth};
-\$config->mail->smtp->host     = "$host";
-\$config->mail->smtp->secure   = "{$this->post->smtpSecure}";
-\$config->mail->smtp->port     = "{$this->post->smtpPort}";
+\$config->mail->smtp->host     = "{$this->post->host}";
+\$config->mail->smtp->port     = "{$this->post->port}";
+\$config->mail->smtp->auth     = {$this->post->auth};
+\$config->mail->smtp->username = "{$this->post->username}";
+\$config->mail->smtp->password = "{$this->post->password}";
+\$config->mail->smtp->secure   = "{$this->post->secure}";
+\$config->mail->smtp->debug    = {$this->post->debug};
 EOT;
-            }
-            elseif('phpmail' == $this->post->mta or 'sendmail' == $this->post->mta)
-            {
-                $config = <<<EOT
-<?php
-\$config->mail->turnon      = {$this->post->turnon};
-\$config->mail->fromAddress = "{$this->post->fromAddress}"; 
-\$config->mail->mta         = "{$this->post->mta}";
-\$config->mail->fromName    = "{$this->post->fromName}";
-EOT;
-            }
 
             /* Output config to the extconfig file of mail */
             $configPath = $this->app->getModuleExtPath('mail', 'config');
-            if(is_writable($configPath))
-            {
-                if(file_put_contents($configPath . 'zzzemail.php', $config))
-                {
-                    /* Send test mail */
-                    $this->mail->send($this->app->user->account, $this->lang->mail->subject, $this->lang->mail->content,"", true);
-                    if($this->mail->isError()) echo js::error($this->mail->getError());
-                    echo js::confirm($this->lang->mail->confirmSave,$this->createLink('mail', 'set'));
-                }
-                else
-                {
-                    $this->view->config     = $config;
-                    $this->view->configPath = $configPath;
-                    $this->display();
-                }
-            }
-            else
-            {
-                $this->view->config     = $config;
-                $this->view->configPath = $configPath;
-                $this->display();
-            }
+            $configFile = $configPath . 'zzzemail.php';
+            $saved      = false;
+            if(is_file($configFile)  and is_writable($configFile)) $saved = file_put_contents($configFile, $mailConfig);
+            if(!is_file($configFile) and is_writable($configPath)) $saved = file_put_contents($configFile, $mailConfig);
+
+            $this->view->header->title = $this->lang->mail->save;
+            $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+            $this->view->position[] = $this->lang->mail->save;
+
+            $this->view->mailConfig = $mailConfig;
+            $this->view->configPath = $configPath;
+            $this->view->configFile = $configFile;
+            $this->view->saved      = $saved;
+            $this->display();
         }
+    }
+
+    /**
+     * Send test email.
+     * 
+     * @access public
+     * @return void
+     */
+    public function test()
+    {
+        if($_POST)
+        {
+            $this->mail->send($this->post->to, $this->lang->mail->subject, $this->lang->mail->content,"", true);
+            if($this->mail->isError()) die(js::error($this->mail->getError()));
+            die(js::alert($this->lang->mail->successSended));
+        }
+
+        $this->view->users = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->orderBy('account')->fetchPairs();
+        $this->display();
     }
 }

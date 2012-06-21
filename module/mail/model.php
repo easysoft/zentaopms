@@ -26,6 +26,123 @@ class mailModel extends model
     }
 
     /**
+     * Auto detect email config.
+     * 
+     * @param  int    $email 
+     * @access public
+     * @return void
+     */
+    public function autoDetect($email)
+    {
+        list($username, $domain) = explode('@', $email);
+        $domain = strtolower($domain);
+
+        /* 1. try get config from providers. */
+        if(isset($this->config->mail->provider[$domain]))
+        {
+            $config = $this->config->mail->provider[$domain];
+            $config->mta      = 'smtp';
+            $config->username = $username;
+            $config->auth     = 1;
+            if(!isset($config->port))   $config->port   = 25;
+            if(!isset($config->secure)) $config->secure = '';
+            return $config;
+        }
+
+        /* 2. try get config by MX record. */
+        $config = $this->getConfigByMXRR($domain);
+        if($config)
+        {
+            $config->username = $email;
+            return $config;
+        }
+
+        /* 3. try 25 and 465 port. */
+        $smtpHost         = 'smtp.' . $domain;
+        $config->mta      = 'smtp';
+        $config->username = $username;
+        $config->host     = $smtpHost;
+        $config->auth     = 1;
+
+        if($this->connectSMTP($smtpHost, 25))
+        {
+            $config->port   = 25;
+            $config->secure = '';
+            return $config;
+        }
+        elseif($this->connectSMTP($smtpHost, 465))
+        {
+            $config->port   = 465;
+            $config->secure = 'ssl';
+            return $config;
+        }
+   }
+
+    /**
+     * Get config by MXRR.
+     * 
+     * @param  int    $domain 
+     * @access public
+     * @return void
+     */
+    public function getConfigByMXRR($domain)
+    {
+        /* Try to get mx record, under linux, use getmxrr() directly, windows use nslookup. */
+        if(function_exists('getmxrr'))
+        {
+            getmxrr($domain, $smtpHosts);
+        }
+        elseif(strpos(PHP_OS, 'WIN') !== false)
+        {
+            $smtpHosts = array();
+            $result    = `nslookup -q=mx {$domain} 2>nul`;
+            $lines     = explode("\n", $result);
+            foreach($lines as $line)
+            {
+                if(stripos($line, 'exchanger')) $smtpHosts[] = trim(substr($line, strrpos($line, '=') + 1));
+            }
+        }
+
+        /* Cycle the smtpHosts and try to find it's config from the provider config. */
+        foreach($smtpHosts as $smtpHost)
+        {
+            /* Get the domain name from the hosts, for example: imxbiz1.qq.com get qq.com. */
+            $smtpDomain = explode('.', $smtpHost);
+            array_shift($smtpDomain);
+            $smtpDomain = strtolower(implode('.', $smtpDomain));
+
+            /* If there's config in the provider config, return it. */
+            if(isset($this->config->mail->provider[$smtpDomain]))
+            {
+                $config = $this->config->mail->provider[$smtpDomain];
+                $config->mta  = 'smtp';
+                $config->auth = 1;
+                if(!isset($config->port)) $config->port = 25;
+                return $config;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Try to connect SMTP server.
+     * 
+     * @param  int    $host 
+     * @param  int    $port 
+     * @access public
+     * @return void
+     */
+    public function connectSMTP($host, $port)
+    {
+        ini_set('default_socket_timeout', 1);
+        $connection = @fsockopen($host, $port);
+        if(!$connection) return false;
+        fclose($connection); 
+        return true;
+     }
+
+    /**
      * Set MTA.
      * 
      * @access public
