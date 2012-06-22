@@ -84,8 +84,12 @@
         <legend><?php echo $lang->task->legendEffort;?></legend>
         <table class='table-1'> 
           <tr>
-            <th class='rowhead'><?php echo $lang->task->estimateStartDate;?></th>
-            <td><?php echo html::input('estimateStartDate', $task->actualStartDate, "class='text-1 date'");?></td>
+            <th class='rowhead'><?php echo $lang->task->estStarted;?></th>
+            <td><?php echo html::input('estStarted', $task->estStarted, "class='text-1 date'");?></td>
+          </tr>  
+          <tr>
+            <th class='rowhead'><?php echo $lang->task->realStarted;?></th>
+            <td><?php echo html::input('realStarted', $task->realStarted, "class='text-1 date'");?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->deadline;?></th>

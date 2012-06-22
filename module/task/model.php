@@ -32,6 +32,7 @@ class taskModel extends model
                 ->striptags('name')
                 ->add('project', (int)$projectID)
                 ->setDefault('estimate, left, story', 0)
+                ->setDefault('estStarted', '0000-00-00')
                 ->setDefault('deadline', '0000-00-00')
                 ->setDefault('status', 'wait')
                 ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
@@ -50,6 +51,7 @@ class taskModel extends model
                 ->autoCheck()
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
+                ->checkIF($task->deadline != '', 'deadline', 'ge', $task->estStarted)
                 ->exec();
 
             if(!dao::isError())

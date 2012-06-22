@@ -11,20 +11,21 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->estimateStartDate;?></th>
-      <td><?php echo html::input('actualStartDate', helper::now(), "class='text-3'");?></td>
+      <th class='rowhead'><?php echo $lang->task->realStarted;?></th>
+      <td><?php echo html::input('realStarted', helper::today(), "class='text-2 date'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-      <td><?php echo html::input('consumed', $task->consumed, "class='text-3'") . $lang->task->hour;?></td>
+      <td><?php echo html::input('consumed', $task->consumed, "class='text-2'") . $lang->task->hour;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->left;?></th>
-      <td><?php echo html::input('left', $task->left, "class='text-3'") . $lang->task->hour;?></td>
+      <td><?php echo html::input('left', $task->left, "class='text-2'") . $lang->task->hour;?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>

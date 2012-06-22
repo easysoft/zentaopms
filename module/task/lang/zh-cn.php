@@ -45,8 +45,8 @@ $lang->task->leftAB            = '剩';
 $lang->task->consumed          = '已经消耗';
 $lang->task->consumedAB        = '耗';
 $lang->task->hour              = '小时';
-$lang->task->estimateStartDate = '开始日期';
-$lang->task->actualStartDate   = '实际开始';
+$lang->task->estStarted        = '预计开始';
+$lang->task->realStarted       = '实际开始';
 $lang->task->deadline          = '截止日期';
 $lang->task->deadlineAB        = '截止';
 $lang->task->status            = '任务状态';
@@ -181,5 +181,5 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->placeholder->estimate = '对该任务最初的预计';
-$lang->task->placeholder->deadline = '任务的截至日期，如果逾期有警告显示。';
+$lang->task->placeholder->deadline = '任务的截止日期，如果逾期有警告显示。';
 $lang->task->placeholder->mailto   = '当前task所有的操作都会抄送给该列表(不会指派给当前操作人)，抄送给可以是多个人，输入用户名(非真实姓名)进行选择。'; 
