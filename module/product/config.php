@@ -22,9 +22,10 @@ $config->product->search['fields']['fromBug'] = $lang->story->fromBug;
 $config->product->search['fields']['openedBy']     = $lang->story->openedBy;
 $config->product->search['fields']['reviewedBy']   = $lang->story->reviewedBy;
 $config->product->search['fields']['assignedTo']   = $lang->story->assignedTo;
-$config->product->search['fields']['mailto']       = $lang->story->mailto;
 $config->product->search['fields']['closedBy']     = $lang->story->closedBy;
 $config->product->search['fields']['lastEditedBy'] = $lang->story->lastEditedBy;
+
+$config->product->search['fields']['mailto']       = $lang->story->mailto;
 
 $config->product->search['fields']['closedReason'] = $lang->story->closedReason;
 $config->product->search['fields']['version']      = $lang->story->version;
@@ -52,9 +53,10 @@ $config->product->search['params']['fromBug']        = array('operator' => '=', 
 $config->product->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['reviewedBy']     = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->product->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->product->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->product->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+
+$config->product->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 
 $config->product->search['params']['closedReason']   = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->reasonList);
 $config->product->search['params']['version']        = array('operator' => '>=',      'control' => 'input',  'values' => '');
