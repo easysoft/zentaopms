@@ -28,9 +28,10 @@ $config->bug->search['fields']['toTask']         = $lang->bug->toTask;
 $config->bug->search['fields']['toStory']        = $lang->bug->toStory;
 
 $config->bug->search['fields']['openedBy']       = $lang->bug->openedBy;
-$config->bug->search['fields']['mailto']         = $lang->bug->mailto;
 $config->bug->search['fields']['closedBy']       = $lang->bug->closedBy;
 $config->bug->search['fields']['lastEditedBy']   = $lang->bug->lastEditedByAB;
+
+$config->bug->search['fields']['mailto']         = $lang->bug->mailto;
 
 $config->bug->search['fields']['openedBuild']    = $lang->bug->openedBuild;
 $config->bug->search['fields']['resolvedBuild']  = $lang->bug->resolvedBuild;
@@ -67,9 +68,10 @@ $config->bug->search['params']['toTask']        = array('operator' => '=',      
 $config->bug->search['params']['toStory']       = array('operator' => '=',       'control' => 'input',  'values' => '');
 
 $config->bug->search['params']['openedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->bug->search['params']['mailto']        = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['closedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['lastEditedBy']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+
+$config->bug->search['params']['mailto']        = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 
 $config->bug->search['params']['openedBuild']   = array('operator' => 'include', 'control' => 'select', 'values' => 'builds');
 $config->bug->search['params']['resolvedBuild'] = array('operator' => '=',       'control' => 'select', 'values' => 'builds');
