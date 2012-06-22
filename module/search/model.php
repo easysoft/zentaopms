@@ -39,7 +39,7 @@ class searchModel extends model
             $operatorName = "operator$i";
             $valueName    = "value$i";
 
-            /* Skip empty vales. */
+            /* Skip empty values. */
             if($this->post->$valueName == false) continue; 
             if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
 
@@ -62,6 +62,18 @@ class searchModel extends model
             elseif($operator == "notinclude")
             {
                 $where .= ' NOT LIKE ' . $this->dbh->quote("%$value%"); 
+            }
+            elseif($operator == 'belong')
+            {
+                if($this->post->$fieldName == 'module')
+                {
+                    $allModules = $this->loadModel('tree')->getAllChildId($value);
+                    $where .= helper::dbIN($allModules);
+                }
+                else
+                {
+                    $where .= ' = ' . $this->dbh->quote($value) . ' ';
+                }
             }
             else
             {

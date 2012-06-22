@@ -34,6 +34,7 @@ $lang->search->operators['<']          = '<';
 $lang->search->operators['<=']         = '<=';
 $lang->search->operators['include']    = '包含';
 $lang->search->operators['notinclude'] = '不包含';
+$lang->search->operators['belong']     = '从属于';
 
 $lang->search->andor['and']         = '并且';
 $lang->search->andor['or']          = '或者';

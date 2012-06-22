@@ -44,7 +44,7 @@ var browseType = '<?php echo $browseType;?>';
       <th class='w-40px'>  <?php common::printOrderLink('consumed',  $orderBy, $vars, $lang->task->consumedAB);?></th>
       <th class='w-40px'>  <?php common::printOrderLink('left',      $orderBy, $vars, $lang->task->leftAB);?></th>
       <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story);?></th>
-      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <?php  

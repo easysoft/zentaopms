@@ -11,10 +11,14 @@
  */
 ?>
 <?php include '../../common/view/alert.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <style>
 .helplink {display:none}
 .button-s, .button-r, .button-c {padding:3px} 
 .select-1 {width:80%}
+.text-2{margin-bottom:2px}
+.select-2{margin-bottom:2px}
+.date{width:104px}
 </style>
 <script language='Javascript'>
 
@@ -35,12 +39,13 @@ var actionURL     = '<?php echo $actionURL;?>';
 function setField(fieldName, fieldNO)
 {
     $('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
-    $('#valueBox' + fieldNO) .html($('#box' + fieldName).children().clone());
+    $('#valueBox' + fieldNO).html($('#box' + fieldName).children().clone());
     $('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
 
-    if(fieldName.indexOf('Date') >= 0 || fieldName.indexOf('deadline') >= 0)
+    if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
     {
         $("#value" + fieldNO).datePicker({createButton:true, startDate:startDate})
+        $("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
     }
 }
 
@@ -193,16 +198,9 @@ foreach($fieldParams as $fieldName => $param)
           if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
           if($param['control'] == 'input') 
           {
-              $fieldName = $formSession["field$fieldNO"];
-              if(strpos($fieldName, 'Date') !== false or strpos($fieldName, 'deadline') !== false)
-              {
-
-                  echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 date'");
-              }
-              else
-              {
-                  echo html::input("value$fieldNO", $formSession["value$fieldNO"], 'class=text-2');
-              }
+              $fieldName  = $formSession["field$fieldNO"];
+              $extraClass = isset($param['class']) ? $param['class'] : '';
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 $extraClass'");
           }
           echo '</span>';
 
@@ -240,15 +238,9 @@ foreach($fieldParams as $fieldName => $param)
           if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
           if($param['control'] == 'input')
           {
-              $fieldName = $formSession["field$fieldNO"];
-              if(strpos($fieldName, 'Date') !== false or strpos($fieldName, 'deadline') !== false)
-              {
-                  echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 date'");
-              }
-              else
-              {
-                  echo html::input("value$fieldNO",  $formSession["value$fieldNO"], 'class=text-2');
-              }
+              $fieldName  = $formSession["field$fieldNO"];
+              $extraClass = isset($param['class']) ? $param['class'] : '';
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 $extraClass'");
           }
           echo '</span>';
 

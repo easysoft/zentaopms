@@ -34,6 +34,7 @@ $lang->story->id             = '编号';
 $lang->story->product        = '所属产品';
 $lang->story->module         = '所属模块';
 $lang->story->source         = '来源';
+$lang->story->fromBug        = '来源Bug';
 $lang->story->release        = '发布计划';
 $lang->story->bug            = '相关bug';
 $lang->story->title          = '需求名称';

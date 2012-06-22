@@ -34,6 +34,7 @@ $lang->search->operators['<']          = '<';
 $lang->search->operators['<=']         = '<=';
 $lang->search->operators['include']    = 'include';
 $lang->search->operators['notinclude'] = 'not include';
+$lang->search->operators['belong']     = 'belongs to';
 
 $lang->search->andor['and']         = 'And';
 $lang->search->andor['or']          = 'Or';
