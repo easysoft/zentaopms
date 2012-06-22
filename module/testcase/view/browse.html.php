@@ -36,7 +36,7 @@ var moduleID   = '<?php echo $moduleID;?>';
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 <form method='post' action='<?php echo $this->inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy");?>'>
-  <table class='cont-lt1'>
+  <table class='cont-lt1 fixed'>
     <tr valign='top'>
       <td class='side <?php echo $treeClass;?>'>
         <div class='box-title'><?php echo $productName;?></div>
@@ -44,6 +44,7 @@ var moduleID   = '<?php echo $moduleID;?>';
           <?php echo $moduleTree;?>
           <div class='a-right'>
             <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage);?>
+            <?php common::printLink('tree', 'fix',    "root=$productID&type=case", $lang->tree->fix, 'hiddenwin');?>
           </div>
         </div>
       </td>

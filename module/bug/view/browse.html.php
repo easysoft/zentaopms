@@ -54,7 +54,8 @@ var customed   = <?php echo (int)$customed;?>;
       <div class='box-content'>
         <?php echo $moduleTree;?>
         <div class='a-right'>
-          <?php if(common::hasPriv('tree', 'browse')) echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=bug"), $lang->tree->manage);?>
+          <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage);?>
+          <?php common::printLink('tree', 'fix',    "root=$productID&type=bug", $lang->tree->fix, 'hiddenwin');?>
         </div>
       </div>
     </td>

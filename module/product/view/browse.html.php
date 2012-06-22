@@ -46,9 +46,8 @@ var browseType = '<?php echo $browseType;?>';
         <div class='box-content'>
           <?php echo $moduleTree;?>
           <div class='a-right'>
-            <?php if(common::hasPriv('product', 'edit'))   echo html::a($this->createLink('product', 'edit',   "productID=$productID"), $lang->edit);?>
-            <?php if(common::hasPriv('product', 'delete')) echo html::a($this->createLink('product', 'delete', "productID=$productID&confirm=no"),   $lang->delete, 'hiddenwin');?>
-            <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "rootID=$productID&view=story"), $lang->tree->manage);?>
+            <?php common::printLink('tree', 'browse', "rootID=$productID&view=story", $lang->tree->manage);?>
+            <?php common::printLink('tree', 'fix',    "root=$productID&type=story", $lang->tree->fix, 'hiddenwin');?>
           </div>
         </div>
       </td>
