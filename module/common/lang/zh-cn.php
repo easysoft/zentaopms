@@ -265,6 +265,7 @@ $lang->error->length          = array("『%s』长度错误，应当为『%s』"
 $lang->error->reg             = "『%s』不符合格式，应当为:『%s』。";
 $lang->error->unique          = "『%s』已经有『%s』这条记录了。";
 $lang->error->gt              = "『%s』应当大于『%s』。";
+$lang->error->ge              = "『%s』应当不小于『%s』。";
 $lang->error->notempty        = "『%s』不能为空。";
 $lang->error->empty           = "『%s』必须为空。";
 $lang->error->equal           = "『%s』必须为『%s』。";
