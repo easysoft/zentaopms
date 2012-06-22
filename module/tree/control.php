@@ -143,6 +143,20 @@ class tree extends control
     }
 
     /**
+     * Fix path, grades.
+     * 
+     * @param  string    $root 
+     * @param  string    $type 
+     * @access public
+     * @return void
+     */
+    public function fix($root, $type)
+    {
+        $this->tree->fixModulePath($root, $type);
+        die(js::alert($this->lang->tree->successFixed) . js::reload('parent'));
+    }
+
+    /**
      * Update modules' orders.
      * 
      * @access public

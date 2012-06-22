@@ -16,6 +16,7 @@ $lang->tree->addChild          = '添加子模块';
 $lang->tree->delete            = '删除模块';
 $lang->tree->browse            = '模块维护';
 $lang->tree->manage            = '维护模块';
+$lang->tree->fix               = '修正数据';
 $lang->tree->manageProduct     = '维护产品视图模块';
 $lang->tree->manageProject     = '维护项目视图模块';
 $lang->tree->manageBug         = '维护测试视图模块';
@@ -29,6 +30,7 @@ $lang->tree->ajaxGetSonModules = '接口:获得子菜单列表';
 
 $lang->tree->confirmDelete = '您确定删除该模块吗？';
 $lang->tree->successSave   = '成功保存';
+$lang->tree->successFixed  = '成功修正数据！';
 
 $lang->tree->name       = '模块名称';
 $lang->tree->parent     = '上级模块';

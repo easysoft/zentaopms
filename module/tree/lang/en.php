@@ -16,6 +16,7 @@ $lang->tree->addChild          = 'Add child';
 $lang->tree->delete            = 'Delete';
 $lang->tree->browse            = 'Module manage';
 $lang->tree->manage            = 'Modules';
+$lang->tree->fix               = 'Fix';
 $lang->tree->manageProduct     = 'Mange product module';
 $lang->tree->manageProject     = 'Manage project module';
 $lang->tree->manageBug         = 'Manage bug module';
@@ -28,7 +29,8 @@ $lang->tree->ajaxGetOptionMenu = 'API: Get select menu';
 $lang->tree->ajaxGetSonModules = 'API: Get son modules';
 
 $lang->tree->confirmDelete = 'Are you sure to delete this module?';
-$lang->tree->successSave   = 'Success saved';
+$lang->tree->successSave   = 'Successfully saved';
+$lang->tree->successFixed  = 'Successfully fixed.';
 
 $lang->tree->name       = 'Name';
 $lang->tree->parent     = 'Parent';

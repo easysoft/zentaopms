@@ -503,7 +503,7 @@ class treeModel extends model
     }
 
     /**
-     * Fix fieilds of all module, grade, parent, pathes and so on.
+     * Fix the path, grade fields according to the id and parent fields.
      *
      * @param  string    $root 
      * @param  string    $type 
@@ -512,25 +512,44 @@ class treeModel extends model
      */
     public function fixModulePath($root, $type)
     {
-        /* Get all modules order by parent. Thus a parent module can be before a child. */
-        $modules = $this->dao->select('id, parent')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->eq($type)->orderBy('parent')->fetchAll('id');
+        /* Get all modules grouped by parent. */
+        $groupModules = $this->dao->select('id, parent')->from(TABLE_MODULE)->where('root')->eq($root)->andWhere('type')->eq($type)->fetchGroup('parent', 'id');
+        $modules = array();
 
-        foreach($modules as $moduleID => $module)
+        /* Cycle the groupModules until it has no item any more. */
+        while(count($groupModules) > 0)
         {
-            if($module->parent == 0)
+            $oldCounts = count($groupModules);    // Record the counts before processing.
+            foreach($groupModules as $parentModuleID => $childModules)
             {
-                $module->grade = 1;
-                $module->path  = ",$moduleID,";
+                /* If the parentModule doesn't exsit in the modules, skip it. If exists, compute it's child modules. */
+                if(!isset($modules[$parentModuleID]) and $parentModuleID != 0) continue;
+                if($parentModuleID == 0)
+                {
+                    $parentModule->grade = 0;
+                    $parentModule->path  = ',';
+                }
+                else
+                {
+                    $parentModule = $modules[$parentModuleID];
+                }
+
+                /* Compute it's child modules. */
+                foreach($childModules as $childModuleID => $childModule)
+                {
+                    $childModule->grade = $parentModule->grade + 1;
+                    $childModule->path  = $parentModule->path . $childModule->id . ',';
+                    $modules[$childModuleID] = $childModule;    // Save child module to modules, thus the child of child can compute it's grade and path.
+                }
+                unset($groupModules[$parentModuleID]);    // Remove it from the groupModules.
             }
-            else
-            {
-                $parentModule  = $modules[$module->parent];
-                $module->path  = $parentModule->path . "$moduleID,";
-                $module->grade = $parentModule->grade + 1;
-            }
+            if(count($groupModules) == $oldCounts) break;   // If after processing, no module processed, break the cycle.
         }
 
         /* Save modules to database. */
-        foreach($modules as $module) $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->limit(1)->exec();
+        foreach($modules as $module)
+        {
+            $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->limit(1)->exec();
+        }
     }
 }
