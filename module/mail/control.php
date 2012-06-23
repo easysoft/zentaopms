@@ -57,13 +57,20 @@ class mail extends control
      */
     public function edit()
     {
-        $mailConfig = $this->session->mailConfig ? $this->session->mailConfig : $this->config->mail->smtp;
-
-        if(!isset($mailConfig->debug))    $mailConfig->debug    = 1;
-        if(!isset($mailConfig->username)) $mailConfig->username = '';
-        if(!isset($mailConfig->password)) $mailConfig->password = '';
-        if(!isset($mailConfig->secure))   $mailConfig->secure   = '';
-        if(!isset($mailConfig->fromName)) $mailConfig->fromName = 'zentao';
+        if($this->config->mail->turnon)
+        {
+            $mailConfig = $this->config->mail->smtp;
+            $mailConfig->fromAddress = $this->config->mail->fromAddress;
+            $mailConfig->fromName    = $this->config->mail->fromName;
+        }
+        elseif($this->session->mailConfig)
+        {
+            $mailConfig = $this->session->mailConfig;
+                   }
+        else
+        {
+            $this->locate(inlink('detect'));
+        }
 
         $this->view->header->title = $this->lang->mail->edit;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
@@ -105,6 +112,8 @@ EOT;
             if(is_file($configFile)  and is_writable($configFile)) $saved = file_put_contents($configFile, $mailConfig);
             if(!is_file($configFile) and is_writable($configPath)) $saved = file_put_contents($configFile, $mailConfig);
 
+            if($saved) $this->session->set('mailConfig', '');
+
             $this->view->header->title = $this->lang->mail->save;
             $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
             $this->view->position[] = $this->lang->mail->save;
@@ -125,6 +134,11 @@ EOT;
      */
     public function test()
     {
+        if(!$this->config->mail->turnon)
+        {
+            die(js::alert($this->lang->mail->needConfigure) . js::locate('back'));
+        }
+
         if($_POST)
         {
             $this->mail->send($this->post->to, $this->lang->mail->subject, $this->lang->mail->content,"", true);

@@ -17,7 +17,7 @@ include '../../common/view/header.html.php';
   <tr>
     <td class='a-center'>
       <?php 
-      echo html::select('to', $users, $app->user->account, 'class=text-3');
+      echo html::select('to', $users, $app->user->account);
       echo html::submitButton($lang->mail->test);
       echo html::linkButton($lang->mail->edit, $this->inLink('edit'));
       ?>

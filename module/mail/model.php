@@ -28,16 +28,48 @@ class mailModel extends model
     /**
      * Auto detect email config.
      * 
-     * @param  int    $email 
+     * @param  string    $email 
      * @access public
-     * @return void
+     * @return object
      */
     public function autoDetect($email)
     {
+        /* Split the email to username and domain. */
         list($username, $domain) = explode('@', $email);
         $domain = strtolower($domain);
 
-        /* 1. try get config from providers. */
+        /*
+         * 1. try to find config from the providers. 
+         * 2. try to find the mx record to get the domain and then search it in providers.
+         * 3. try smtp.$domain's 25 and 465 port, if can connect, use smtp.$domain.
+         */
+        $config = $this->getConfigFromProvider($domain, $username);
+        if(!$config) $config = $this->getConfigByMXRR($domain, $username);
+        if(!$config) $config = $this->getConfigByDetectingSMTP($domain, $username, 25);
+        if(!$config) $config = $this->getConfigByDetectingSMTP($domain, $username, 465);
+
+        /* Set default values. */
+        $config->mta      = 'smtp';
+        $config->fromName = 'zentao';
+        $config->password = '';
+        $config->debug    = 1;
+        if(!isset($config->host)) $config->host = '';
+        if(!isset($config->auth)) $config->auth = 1;
+        if(!isset($config->port)) $config->port = '25';
+
+        return $config;
+   }
+
+    /**
+     * Try get config from providers.
+     * 
+     * @param  int    $domain 
+     * @param  int    $username 
+     * @access public
+     * @return bool|object
+     */
+    public function getConfigFromProvider($domain, $username)
+    {
         if(isset($this->config->mail->provider[$domain]))
         {
             $config = $this->config->mail->provider[$domain];
@@ -48,44 +80,18 @@ class mailModel extends model
             if(!isset($config->secure)) $config->secure = '';
             return $config;
         }
-
-        /* 2. try get config by MX record. */
-        $config = $this->getConfigByMXRR($domain);
-        if($config)
-        {
-            $config->username = $email;
-            return $config;
-        }
-
-        /* 3. try 25 and 465 port. */
-        $smtpHost         = 'smtp.' . $domain;
-        $config->mta      = 'smtp';
-        $config->username = $username;
-        $config->host     = $smtpHost;
-        $config->auth     = 1;
-
-        if($this->connectSMTP($smtpHost, 25))
-        {
-            $config->port   = 25;
-            $config->secure = '';
-            return $config;
-        }
-        elseif($this->connectSMTP($smtpHost, 465))
-        {
-            $config->port   = 465;
-            $config->secure = 'ssl';
-            return $config;
-        }
-   }
+        return false;
+    }
 
     /**
      * Get config by MXRR.
      * 
-     * @param  int    $domain 
+     * @param  string    $domain 
+     * @param  string    $username 
      * @access public
-     * @return void
+     * @return bool|object
      */
-    public function getConfigByMXRR($domain)
+    public function getConfigByMXRR($domain, $username)
     {
         /* Try to get mx record, under linux, use getmxrr() directly, windows use nslookup. */
         if(function_exists('getmxrr'))
@@ -110,14 +116,9 @@ class mailModel extends model
             $smtpDomain = explode('.', $smtpHost);
             array_shift($smtpDomain);
             $smtpDomain = strtolower(implode('.', $smtpDomain));
-
-            /* If there's config in the provider config, return it. */
-            if(isset($this->config->mail->provider[$smtpDomain]))
+            if($config = $this->getConfigFromProvider($smtpDomain, $username))
             {
-                $config = $this->config->mail->provider[$smtpDomain];
-                $config->mta  = 'smtp';
-                $config->auth = 1;
-                if(!isset($config->port)) $config->port = 25;
+                $config->username = "$username@$domain";
                 return $config;
             }
         }
@@ -126,20 +127,29 @@ class mailModel extends model
     }
 
     /**
-     * Try to connect SMTP server.
+     * Try connect to smtp.$domain's 25 or 465 port and compute the config according to the connection result.
      * 
-     * @param  int    $host 
+     * @param  string $domain
+     * @param  string $username
      * @param  int    $port 
      * @access public
-     * @return void
+     * @return bool|object
      */
-    public function connectSMTP($host, $port)
+    public function getConfigByDetectingSMTP($domain, $username, $port)
     {
+        $host = 'smtp.' . $domain;
         ini_set('default_socket_timeout', 1);
         $connection = @fsockopen($host, $port);
         if(!$connection) return false;
         fclose($connection); 
-        return true;
+
+        $config->username = $username;
+        $config->host     = $host;
+        $config->auth     = 1;
+        $config->port     = $port;
+        $config->secure   = $port == 465 ? 'ssl' : '';
+
+        return $config;
      }
 
     /**

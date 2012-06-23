@@ -15,7 +15,7 @@ include '../../common/view/header.html.php';
 <table align='center' class='table-4'>
   <caption><?php echo $lang->mail->edit;?></caption>
   <tr>
-    <th class='rowhead'><?php echo $lang->mail->turnon; ?></th>
+    <th class='rowhead w-120px'><?php echo $lang->mail->turnon; ?></th>
     <td><?php echo html::radio('turnon', $lang->mail->turnonList, 1);?></td>
   </tr>
   <tr>

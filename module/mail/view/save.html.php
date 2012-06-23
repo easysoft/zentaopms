@@ -18,8 +18,8 @@ include '../../common/view/header.html.php';
       <?php 
       echo html::textArea('', $mailConfig, "rows='12' class='area-1'") . '<br /><br />'; 
       if($saved)  printf($lang->mail->successSaved, $configFile);
-      if($saved)  echo html::linkButton($lang->mail->test, inlink('test'));
       if(!$saved) printf($lang->mail->saveManual,   $configFile);
+      echo html::linkButton($lang->mail->test, inlink('test'));
       ?>
     </td>
   </tr>

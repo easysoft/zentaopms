@@ -39,3 +39,4 @@ $lang->mail->saveManual     = '请将该配置信息保存到：<span class="red
 $lang->mail->subject        = '测试邮件';
 $lang->mail->content        = '邮箱设置成功';
 $lang->mail->successSended  = '成功发送！';
+$lang->mail->needConfigure  = '无法找到邮件配置信息，请先配置邮件发送参数。';
