@@ -369,10 +369,9 @@ function setPlaceholder()
 {
     if(typeof(holders) != "undefined")
     {
-        holders = JSON.parse(holders);
-        for(key in holders)
+        for(var key in holders)
         {
-            $("#"+key).attr('placeholder',holders[key]);
+            $("#"+key).attr('placeholder', holders[key]);
         }
     }
 }

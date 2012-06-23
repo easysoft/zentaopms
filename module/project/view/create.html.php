@@ -31,7 +31,7 @@ $(document).ready(function()
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script>var holders='<?php echo json_encode($lang->project->placeholder);?>'</script>
+<script>var holders=<?php echo json_encode($lang->project->placeholder);?></script>
 <form method='post' target='hiddenwin'>
   <table align='center' class='table-1 a-left'> 
     <caption><?php echo $lang->project->create;?></caption>

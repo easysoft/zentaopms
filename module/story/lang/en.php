@@ -34,6 +34,7 @@ $lang->story->id             = 'ID';
 $lang->story->product        = 'Product';
 $lang->story->module         = 'Module';
 $lang->story->source         = 'Source';
+$lang->story->fromBug        = 'From bug';
 $lang->story->release        = 'Release';
 $lang->story->bug            = 'Related Bug';
 $lang->story->title          = 'Title';
