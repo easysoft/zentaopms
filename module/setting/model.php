@@ -22,26 +22,54 @@ class settingModel extends model
      */
     public function getVersion()
     {
-        $version = $this->getItem('system', 'global', 'version');
+        $version = $this->getItem('system', 'common', 'global', 'version');
         if($version == '3.0.stable') $version = '3.0';   // convert 3.0.stable to 3.0.
         if($version) return $version;
         return '0.3 beta';
     }
 
     /**
+     * Get config of system and one user.
+     *
+     * @param  string $account 
+     * @access public
+     * @return array
+     */
+    public function getSysAndPersonalConfig($account = '')
+    {
+        $owner   = 'system,' . ($account ? $account : $this->app->user->account);
+        $records = $this->dao->select('owner, module, section, `key`, value')
+            ->from(TABLE_CONFIG)
+            ->where('owner')->in($owner)
+            ->fetchAll();
+        if(!$records) return array();
+
+        /* Group records by owner and module. */
+        $config = array();
+        foreach($records as $record)
+        {
+            if($record->section)  $config[$record->owner]->{$record->module}[] = $record;
+            if(!$record->section) $config[$record->owner]->{$record->module}[] = $record;
+        }
+        return $config;
+    }
+
+    /**
      * Get value of an item.
      * 
      * @param  string    $owner 
+     * @param  string    $module 
      * @param  string    $section 
      * @param  string    $key 
      * @access public
      * @return misc
      */
-    public function getItem($owner, $section, $key)
+    public function getItem($owner, $module, $section, $key)
     {
         return $this->dao->select('`value`')->from(TABLE_CONFIG)
             ->where('company')->eq(0)
             ->andWhere('owner')->eq($owner)
+            ->andWhere('module')->eq($module)
             ->andWhere('section')->eq($section)
             ->andWhere('`key`')->eq($key)
             ->fetch('value', $autoCompany = false);
@@ -51,16 +79,18 @@ class settingModel extends model
      * Set value of an item. 
      * 
      * @param  string $owner 
+     * @param  string $module 
      * @param  string $section 
      * @param  string $key 
      * @param  string $value 
      * @access public
      * @return void
      */
-    public function setItem($owner, $section, $key, $value = '')
+    public function setItem($owner, $module, $section, $key, $value = '')
     {
         $item->company = 0;
         $item->owner   = $owner;
+        $item->module  = $module;
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;
@@ -68,6 +98,7 @@ class settingModel extends model
         $config = $this->dao->select('`value`')->from(TABLE_CONFIG)
             ->where('company')->eq(0)
             ->andWhere('owner')->eq($owner)
+            ->andWhere('module')->eq($module)
             ->andWhere('section')->eq($section)
             ->andWhere('`key`')->eq($key)
             ->fetch('', $autoComapny = false);
@@ -106,6 +137,7 @@ class settingModel extends model
     {
         $item->company = 0;
         $item->owner   = 'system';
+        $item->module  = 'common';
         $item->section = 'global';
         $item->key     = 'sn';
         $item->value   =  $this->computeSN();
@@ -113,6 +145,7 @@ class settingModel extends model
         $config = $this->dao->select('id, value')->from(TABLE_CONFIG)
             ->where('company')->eq(0)
             ->andWhere('owner')->eq('system')
+            ->andWhere('module')->eq('common')
             ->andWhere('section')->eq('global')
             ->andWhere('`key`')->eq('sn')
             ->fetch('', $autoComapny = false);
@@ -140,6 +173,7 @@ class settingModel extends model
     {
         $item->company = 0;
         $item->owner   = 'system';
+        $item->module  = 'common';
         $item->section = 'global';
         $item->key     = 'version';
         $item->value   =  $version;
@@ -147,6 +181,7 @@ class settingModel extends model
         $configID = $this->dao->select('id')->from(TABLE_CONFIG)
             ->where('company')->eq(0)
             ->andWhere('owner')->eq('system')
+            ->andWhere('module')->eq('common')
             ->andWhere('section')->eq('global')
             ->andWhere('`key`')->eq('version')
             ->fetch('id', $autoComapny = false);

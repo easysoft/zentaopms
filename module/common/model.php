@@ -93,6 +93,31 @@ class commonModel extends model
     }
 
     /**
+     * Load configs from database and save it to config->system and config->personal.
+     * 
+     * @access public
+     * @return void
+     */
+    public function loadConfigFromDB()
+    {
+        $account = $this->app->user->account;
+        $config  = $this->loadModel('setting')->getSysAndPersonalConfig($account);
+
+        $this->config->system   = isset($config['system']) ? $config['system'] : array();
+        $this->config->personal = isset($config[$account]) ? $config[$account] : array();
+
+        /* Overide the items defined in config/config.php and config/my.php. */
+        if(isset($this->config->system->common))
+        {
+            foreach($this->config->system->common as $record)
+            {
+                if($record->section)  $this->config->{$record->section}->{$record->key} = $record->value;
+                if(!$record->section) $this->config->{$record->key} = $record->value;
+            }
+        }
+    }
+
+    /**
      * Juage a method of one module is open or not?
      * 
      * @param  string $module 

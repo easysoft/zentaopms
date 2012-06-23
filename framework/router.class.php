@@ -1366,6 +1366,9 @@ class router
      */
     public function loadConfig($moduleName, $exitIfNone = true)
     {
+        global $config;
+        if(!is_object($config)) $config = new config();
+
         $extConfigFiles = array();
 
         /* Set the main config file and extension config file. */
@@ -1384,7 +1387,7 @@ class router
         if(!is_file($mainConfigFile))
         {
             if($exitIfNone) self::error("config file $mainConfigFile not found", __FILE__, __LINE__, true);
-            if(empty($extConfigFiles)) return false;  //  and no extension file, exit.
+            if(empty($extConfigFiles) and !isset($config->system->$moduleName)) return false;  //  and no extension file or extension in db, exit.
             $configFiles = $extConfigFiles;
         }
         else
@@ -1392,14 +1395,22 @@ class router
             $configFiles = array_merge(array($mainConfigFile), $extConfigFiles);
         }
         
-        global $config;
-        if(!is_object($config)) $config = new config();
         static $loadedConfigs = array();
         foreach($configFiles as $configFile)
         {
             if(in_array($configFile, $loadedConfigs)) continue;
             include $configFile;
             $loadedConfigs[] = $configFile;
+        }
+
+        /* Merge from the db configs. */
+        if(isset($config->system->$moduleName))
+        {
+            foreach($config->system->$moduleName as $item)
+            {
+                if($item->section)  $config->{$moduleName}->{$item->section}->{$item->key} = $item->value;
+                if(!$item->section) $config->{$moduleName}->{$item->key} = $item->value;
+            }
         }
 
         $this->config = $config;

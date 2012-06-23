@@ -24,6 +24,7 @@ class common extends control
         $this->common->sendHeader();
         $this->common->setCompany();
         $this->common->setUser();
+        $this->common->loadConfigFromDB();
         $this->app->loadLang('company');
     }
 
