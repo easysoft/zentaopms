@@ -82,6 +82,7 @@ $lang->menu->product = '产品视图|product|index';
 $lang->menu->project = '项目视图|project|index';
 $lang->menu->qa      = '测试视图|qa|index';
 $lang->menu->doc     = '文档视图|doc|index';
+$lang->menu->report  = '统计视图|report|index';
 $lang->menu->company = '组织视图|company|index';
 $lang->menu->admin   = '后台管理|admin|index';
 
@@ -200,6 +201,12 @@ $lang->doc->menu->edit    = '编辑文档库|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '维护模块|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
 $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>新增文档库|doc|createLib', 'float' => 'right');
+
+/* 统计视图菜单设置。*/
+$lang->report->menu->prj     = array('link' => '项目|report|projectdeviation');
+$lang->report->menu->product = array('link' => '产品|report|productinfo');
+$lang->report->menu->test    = array('link' => '测试|report|bugsummary');
+$lang->report->menu->staff   = array('link' => '员工|report|workload');
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;

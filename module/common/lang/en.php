@@ -82,6 +82,7 @@ $lang->menu->product = 'Product|product|index';
 $lang->menu->project = 'Project|project|index';
 $lang->menu->qa      = 'Test|qa|index';
 $lang->menu->doc     = 'Doc|doc|index';
+$lang->menu->report  = 'Report|report|index';
 $lang->menu->company = 'Company|company|index';
 $lang->menu->admin   = 'Admin|admin|index';
 
@@ -200,6 +201,12 @@ $lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
 $lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
 $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
+
+/* Report menu. */
+$lang->report->menu->project = array('link' => 'Project|report|projectdeviation');
+$lang->report->menu->product = array('link' => 'Product|report|productinfo');
+$lang->report->menu->test    = array('link' => 'Test|report|bugsummary');
+$lang->report->menu->project = array('link' => 'Staff|report|workload');
 
 /* Company menu. */
 $lang->company->menu->name        = '%s' . $lang->arrow;
