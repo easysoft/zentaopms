@@ -15,7 +15,6 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script>var noResultsMatch = '<?php echo $lang->noResultsMatch;?>'</script>
 <script language='Javascript'>
 changeProductConfirmed = false;
 changeProjectConfirmed = false;

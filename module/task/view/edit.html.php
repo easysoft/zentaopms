@@ -15,7 +15,6 @@
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script> var noResultsMatch = '<?php echo $lang->noResultsMatch;?>'</script>
 <script language='Javascript'>var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div id='titlebar'>

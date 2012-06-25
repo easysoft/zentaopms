@@ -12,10 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<script>
-  var testcaseBatchCreateNum = '<?php echo $config->testcase->batchCreate;?>';
-  var noResultsMatch = '<?php echo $lang->noResultsMatch;?>';
-</script>
+<script> var testcaseBatchCreateNum = '<?php echo $config->testcase->batchCreate;?>'; </script>
 <form method='post' enctype='multipart/form-data'>
   <table align='center' class='table-1 fixed'> 
     <caption><?php echo $lang->testcase->batchCreate;?></caption>

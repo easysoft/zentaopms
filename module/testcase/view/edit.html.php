@@ -12,7 +12,6 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<script>var noResultsMatch = '<?php echo $lang->noResultsMatch;?>'</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin'>
 <div id='titlebar'>
   <div id='main'>
