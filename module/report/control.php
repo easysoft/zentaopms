@@ -22,4 +22,28 @@ class report extends control
         $this->view->projects      = $this->report->getProjects();
         $this->display();
     }
+
+    public function productInfo()
+    {
+        $this->app->loadLang('product');
+        $this->app->loadLang('productplan');
+        $this->app->loadLang('story');
+        $this->view->header->title = $this->lang->report->productInfo;
+        $this->view->products      = $this->report->getProducts();
+        $this->display();
+    }
+
+    public function bugSummary()
+    {
+        $this->app->loadLang('bug');
+        $this->view->header->title = $this->lang->report->bugSummary;
+        $this->view->bugs          = $this->report->getBugs();
+        $this->display(); 
+    }
+
+    public function workload()
+    {
+        $this->view->workload = $this->report->getWorkload();
+        $this->display();
+    }
 }

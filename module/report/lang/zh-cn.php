@@ -32,6 +32,8 @@ $lang->report->colors[]   = 'A186BE';
 $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = '项目偏差报表';
+$lang->report->productInfo      = '产品信息统计表';
+$lang->report->bugSummary       = 'Bug汇总表';
 
 $lang->report->id            = '编号';
 $lang->report->project       = '项目';
@@ -44,3 +46,5 @@ $lang->report->bugs          = 'Bug数';
 $lang->report->devConsumed   = '开发花费时间';
 $lang->report->testConsumed  = '测试花费时间';
 $lang->report->devTestRate   = '开发与测试时间比';
+$lang->report->details       = '详情';
+$lang->report->total         = '总计';

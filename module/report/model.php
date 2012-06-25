@@ -271,4 +271,74 @@ EOT;
         }
         return $projects;
     }
+
+    public function getProducts()
+    {
+        $products    = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
+        $plans       = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))->fetchAll('id');
+        $planStories = $this->dao->select('plan, id, status')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('plan')->in(array_keys($plans))->fetchGroup('plan', 'id');
+        foreach($planStories as $planID => $stories)
+        {
+            foreach($stories as $story) $statusList[$story->status][] = $story;
+            foreach(array_keys($statusList) as $status) $plans[$planID]->status[$status] = count($statusList[$status]);
+        }
+        foreach($plans as $plan) $products[$plan->product]->plans[] = $plan;
+        return $products;
+    }
+
+    public function getBugs()
+    {
+        $bugGroups  = $this->dao->select('id, resolution, openedBy')->from(TABLE_BUG)->where('deleted')->eq(0)->fetchGroup('openedBy', 'id');
+        $bugSummary = array();
+        foreach($bugGroups as $user => $bugs)
+        {
+            foreach($bugs as $bug)
+            {
+                $bugSummary[$user][$bug->resolution] = empty($bugSummary[$user][$bug->resolution]) ? 1 : $bugSummary[$user][$bug->resolution] + 1;
+            }
+            $bugSummary[$user]['all'] = count($bugs);
+        }
+        return $bugSummary; 
+    }
+
+    public function getWorkload()
+    {
+        $tasks = $this->dao->select('t1.*, t2.name as projectName')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.status')->notin('cancel, closed')
+            ->fetchGroup('assignedTo');
+        $bugs = $this->dao->select('t1.*, t2.name as productName')
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')
+            ->on('t1.product = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.status')->eq('active')
+            ->fetchGroup('assignedTo');
+        $workload = array();
+        foreach($tasks as $user => $userTasks)
+        {
+            if($user)
+            {
+                foreach($userTasks as $task)
+                {
+                    $workload[$user]['task'][$task->projectName]['count']   = isset($workload[$user]['task'][$task->projectName]['count']) ? $workload[$user]['task'][$task->projectName]['count'] + 1 : 1;
+                    $workload[$user]['task'][$task->projectName]['manhour'] = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->consumed : $task->consumed;
+                }
+            }
+        }
+        foreach($bugs as $user => $userBugs)
+        {
+            if($user)
+            {
+                foreach($userBugs as $bug)
+                {
+                    $workload[$user]['bug'][$bug->productName]['count'] = isset($workload[$user]['bug'][$bug->productName]['count']) ? $workload[$user]['bug'][$bug->productName]['count'] + 1 : 1;
+                }
+            }
+        }
+        return $workload;
+    }
 }
