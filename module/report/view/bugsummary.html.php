@@ -1,4 +1,10 @@
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/ext/view/datepicker.html.php';?>
+<style>
+.choose-date span, .dp-choose-date{ display:block; float:left; margin:0 10px;}
+.dp-applied{float:left;}
+.choose-date span{line-height:20px;}
+</style>
 <table class="cont-lt1">
   <tr valign='top'>
     <td class='side'>
@@ -9,6 +15,7 @@
     </td>
     <td class='divider'></td>
     <td>
+      <div class="choose-date mb-10px f-right"><?php echo '<span>' . $lang->report->time . " : </span>" . html::input('date', $begin, "class='select-7 date' onchange='changeDate(this.value, \"$end\")'");?><span> - </span><?php echo html::input('date', $end, "class='select-7 date' onchange='changeDate(\"$begin\", this.value)'");?></div>
       <table class='table-1 fixed colored tablesorter datatable border-sep'>
         <thead>
         <tr class='colhead'>

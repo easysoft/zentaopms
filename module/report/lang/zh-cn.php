@@ -15,6 +15,7 @@ $lang->report->item       = '条目';
 $lang->report->value      = '值';
 $lang->report->percent    = '百分比';
 $lang->report->undefined  = '未设定';
+$lang->report->time       = '时间';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -33,12 +34,18 @@ $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = '项目偏差报表';
 $lang->report->productInfo      = '产品信息统计表';
+$lang->report->workload         = '员工负载表';
 $lang->report->bugSummary       = 'Bug汇总表';
 
 $lang->report->id            = '编号';
 $lang->report->project       = '项目';
+$lang->report->product       = '产品';
+$lang->report->user          = '姓名';
+$lang->report->bug           = 'Bug';
+$lang->report->task          = '任务';
 $lang->report->estimate      = '预计工时';
 $lang->report->consumed      = '实际消耗';
+$lang->report->remain        = '剩余';
 $lang->report->deviation     = '偏差';
 $lang->report->deviationRate = '偏差率';
 $lang->report->stories       = '需求数';
