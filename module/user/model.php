@@ -99,7 +99,7 @@ class userModel extends model
         $deleteds = explode(',', $deleteds);
         foreach($deleteds as $deleted)
         {
-            if(!isset($users[$deleted])) $users[$deleted] = $deleted . $this->lang->user->deleted;
+            if(!isset($users[$deleted])) $users[$deleted] = $deleted;
         }
         return $users;
     }

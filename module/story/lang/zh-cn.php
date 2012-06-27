@@ -162,7 +162,7 @@ $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
 
 $lang->story->specTemplate          = "建议参考的模板：作为一名<<i class='red'>某种类型的用户</i>>，我希望<<i class='red'>达成某些目的</i>>，这样可以<<i class='red'>开发的价值</i>>。";
-$lang->story->notes                 = '(注：如果“需求标题”为空，则表示不使用此行)';
+$lang->story->notes                 = '(注：如果“需求名称”为空，则表示不使用此行)';
 $lang->story->needNotReview         = '不需要评审';
 $lang->story->afterSubmit           = "添加之后";
 $lang->story->successSaved          = "需求成功添加，";
