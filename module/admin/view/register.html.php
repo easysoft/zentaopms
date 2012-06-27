@@ -47,7 +47,7 @@
 	  <td colspan="2">
         <?php 
         echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn);
-        echo "<span class='red strong'>" . sprintf($lang->admin->register->bind, html::a(inlink('bind'), $lang->admin->register->click)) . "</span>";
+        echo "<span>" . sprintf($lang->admin->register->bind, html::a(inlink('bind'), $lang->admin->register->click)) . "</span>";
         ?>
 	  </td>
     </th>

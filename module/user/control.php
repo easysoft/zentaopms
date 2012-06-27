@@ -422,7 +422,7 @@ class user extends control
             $header['title'] = $this->lang->user->login;
             $this->view->header    = $header;
             $this->view->referer   = $this->referer;
-            $this->view->s         = $this->loadModel('setting')->getItem('system', 'global', 'sn');
+            $this->view->s         = $this->loadModel('setting')->getItem('system', 'common', 'global', 'sn');
             $this->view->keepLogin = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
             $this->display();
         }
