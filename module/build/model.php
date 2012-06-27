@@ -142,6 +142,7 @@ class buildModel extends model
             ->setDefault('bugs', '')
             ->join('stories', ',')
             ->join('bugs', ',')
+            ->remove('allchecker')
             ->get();
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
