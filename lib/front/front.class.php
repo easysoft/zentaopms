@@ -146,7 +146,7 @@ class html
 
         /* The begin. */
         $id = $name;
-        if($pos = strpos($name, '[')) $id = substr($name, 0, $pos);
+        if(strpos($name, '[') !== false) $id = trim(str_replace(']', '', str_replace('[', '', $name)));
         $string = "<select name='$name' id='$id' $attrib>\n";
 
         /* The options. */
