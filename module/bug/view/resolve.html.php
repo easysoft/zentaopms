@@ -27,6 +27,10 @@
       <td><?php echo html::select('resolvedBuild', $builds, '', 'class=select-3');?></td>
     </tr>
     <tr>
+      <td class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
+      <td><?php echo html::input('resolvedDate',$date, "class='select-3'");?></td>
+    </tr>
+    <tr>
       <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
       <td><?php echo html::select('assignedTo', $users, $bug->openedBy, 'class=select-3');?></td>
     </tr>

@@ -243,8 +243,9 @@ class bugModel extends model
      */
     public function resolve($bugID)
     {
-        $now = helper::now();
-        $bug = fixer::input('post')
+        $now    = helper::now();
+        $oldBug = $this->getById($bugID);
+        $bug    = fixer::input('post')
             ->add('resolvedBy',     $this->app->user->account)
             ->add('resolvedDate',   $now)
             ->add('status',         'resolved')
