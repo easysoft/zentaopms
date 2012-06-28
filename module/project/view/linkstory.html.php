@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='querybox'><?php echo $searchForm;?></div>
 <form method='post'>
-  <table align='center' class='table-1 tablesorter a-center'> 
+  <table align='center' class='table-1 tablesorter a-center fixed'> 
     <thead>
     <tr class='colhead'>
       <th class='w-id'><?php echo $lang->idAB;?></th>
