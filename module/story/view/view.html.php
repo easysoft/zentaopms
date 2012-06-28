@@ -35,11 +35,11 @@
   echo html::a($browseLink, ' ', '', "class='icon-goback'");
   if($preAndNext->pre) 
   {
-      echo "<abbr id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'>" . html::a($this->inLink('view', "storyID={$preAndNext->pre->id}&version={$preAndNext->pre->version}"), '&nbsp;', '', "class='icon-pre'") . "</abbr>";
+      echo html::a($this->inLink('view', "storyID={$preAndNext->pre->id}&version={$preAndNext->pre->version}"), '&nbsp;', '', "class='icon-pre' id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'");
   }
   if($preAndNext->next) 
   {
-      echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}>" . html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '&nbsp;', '', "class='icon-next'") . "</abbr>";
+      echo html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '&nbsp;', '', "class='icon-next' id='next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}'");
   }
   ?>
   </div>
