@@ -38,11 +38,11 @@
   echo html::a($browseLink, '&nbsp', '', "class='icon-goback'");
   if($preAndNext->pre) 
   {
-      echo "<abbr id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'>" . html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '&nbsp;', '', "class='icon-pre'") . "</abbr>";
+      echo html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '&nbsp;', '', "class='icon-pre' id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'");
   }
   if($preAndNext->next) 
   {
-      echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->name}>" . html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '&nbsp;', '', "class='icon-next'") . "</abbr>";
+      echo html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '&nbsp;', '', "class='icon-next' id='next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->name}'");
   }
   ?>
   </div>
