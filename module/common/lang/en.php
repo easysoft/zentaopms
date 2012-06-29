@@ -99,7 +99,7 @@ $lang->searchObjects['release']     = 'Release';
 $lang->searchObjects['productplan'] = 'Plan';
 $lang->searchObjects['testtask']    = 'Test Task';
 $lang->searchObjects['doc']         = 'Doc';
-$lang->searchTips                   = 'Id here';
+$lang->searchTips                   = 'Id here(ctrl+g)';
 
 /* File type of export. */
 $lang->exportFileTypeList['csv']  = 'csv';

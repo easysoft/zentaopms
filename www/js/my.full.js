@@ -819,7 +819,7 @@ $(document).ready(function()
 $(document).bind('keydown', 'Ctrl+g', function(evt)
 {
     $('#searchQuery').attr('value', '');
-    $('#searchType').focus();
+    $('#searchQuery').focus();
     evt.stopPropagation( );  
     evt.preventDefault( );
     return false;
