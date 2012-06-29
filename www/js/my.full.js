@@ -9,8 +9,7 @@ function loadFixedCSS()
     cssFile = '';
     if($.browser.msie )
     {
-        version = Math.floor(parseInt($.browser.version));
-        cssFile = version == 6 ? config.themeRoot + '/browser/ie.6.css' : config.themeRoot + 'browser/ie.css';
+        cssFile = $.browser.version == '6.0' ? config.themeRoot + '/browser/ie.6.css' : config.themeRoot + 'browser/ie.css';
     }
     else if($.browser.mozilla) 
     {
@@ -452,10 +451,11 @@ function setOuterBox()
     var winWidth  = window.screen.width;
     var winHeight = $(window).height();
     var headerH   = $('#header').height();
-    var footerH   = $('#footer').height();
+    var navbarH   = $('#modulemenu').parent().parent().height();
+    var footerH   = $('#footer').height() + 15;
     if(document.documentElement.clientHeight >= document.documentElement.scrollHeight)
     {
-        var outerH = winHeight - headerH - footerH - 90;
+        var outerH = winHeight - headerH - footerH - navbarH - 37;
         if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
         $('.outer').height(outerH);
     } 

@@ -359,13 +359,13 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .tabs a.current {background:green; color:white}
 
 /* Footer. */
-#divider   {margin-bottom:40px;}
+#divider   {margin-bottom:49px;}
 #footer    {width:100%; position:fixed; bottom:0; left:0; margin:0; color:#333; background:#e5e5e5 url(images/main/status_x_bg.gif) repeat-x bottom; height:34px; line-height:34px; padding-top:15px;}
 #crumbs    {padding:5px 0 5px 10px;}
 #poweredby {padding-right:10px} 
 
 /* Debug. */
-.debugwin  {display:block; width:200px; height:20px; bottom:27px; border-left:10px solid red}
+.debugwin  {display:block; width:200px; height:20px; bottom:50px; border-left:10px solid red; position:fixed;}
 
 /* Pager. */
 .pager {margin-bottom:0}
