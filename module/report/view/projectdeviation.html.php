@@ -37,9 +37,9 @@
             <td><?php echo $project->devConsumed . ' : ' . $project->testConsumed;?></td>
             <td><?php echo $project->estimate;?></td>
             <td><?php echo $project->consumed;?></td>
-            <td><?php echo $project->consumed - $project->estimate;?></td>
+            <td><?php echo ($project->consumed - $project->estimate) > 0 ? '+' . ($project->consumed - $project->estimate) : ($project->consumed - $project->estimate);?></td>
             <td>
-              <?php echo round(abs($project->consumed - $project->estimate) / $project->consumed * 100, 2) . '%';?>
+              <?php echo (($project->consumed - $project->estimate) > 0 ? '+' : '') . round(abs($project->consumed - $project->estimate) / $project->consumed * 100, 2) . '%';?>
             </td>
           </tr>
         <?php endforeach;?>
