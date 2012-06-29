@@ -17,23 +17,19 @@
       <table class='table-1 fixed colored tablesorter datatable border-sep' id='product'>
         <thead>
         <tr class='colhead'>
-          <th><?php echo $lang->product->name;?></th>
-          <th class="w-80px"><?php echo $lang->product->code;?></th>
-          <th class="w-80px"><?php echo $lang->product->PO;?></th>
-          <th><?php echo $lang->productplan->common;?></th>
+          <th width='150'><?php echo $lang->product->name;?></th>
+          <th class="w-100px"><?php echo $lang->productplan->common;?></th>
           <th><?php echo $lang->productplan->desc;?></th>
           <th class="w-80px"><?php echo $lang->productplan->begin;?></th>
           <th class="w-80px"><?php echo $lang->productplan->end;?></th>
-          <th width="250" colspan='4'><?php echo $lang->report->details;?></th>
+          <th width="300" colspan='4'><?php echo $lang->report->details;?></th>
         </tr>
         </thead>
         <tbody>
         <?php foreach($products as $product):?>
           <tr class="a-center">
             <?php $count = isset($product->plans) ? count($product->plans) : 1;?>
-            <td align='left' rowspan="<?php echo $count;?>"><?php echo $product->name;?></td>
-            <td align='left' rowspan="<?php echo $count;?>"><?php echo $product->code;?></td>
-            <td rowspan="<?php echo $count;?>"><?php echo $product->PO;?></td>
+            <td align='left' rowspan="<?php echo $count;?>"><?php echo '<p>' . $product->name . "</p><p>{$lang->product->PO}: " . $product->PO . '</p>';?></td>
             <?php if(isset($product->plans)):?>
             <?php foreach($product->plans as $id => $plan):?>
             <?php if($id != 0) echo "<tr class='a-center'>"?>
@@ -41,10 +37,10 @@
               <td align='left'><?php echo $plan->desc;?></td>
               <td><?php echo $plan->begin;?></td>
               <td><?php echo $plan->end;?></td>
-              <td><?php echo $lang->story->statusList['draft']   . ' : ' . (isset($plan->status['draft']) ? $plan->status['draft'] : 0);?></td>
-              <td><?php echo $lang->story->statusList['active']  . ' : ' . (isset($plan->status['active']) ? $plan->status['active'] : 0);?></td>
-              <td><?php echo $lang->story->statusList['closed']  . ' : ' . (isset($plan->status['closed']) ? $plan->status['closed'] : 0);?></td>
-              <td><?php echo $lang->story->statusList['changed'] . ' : ' . (isset($plan->status['changed']) ? $plan->status['changed'] : 0);?></td>
+              <td align='left'><?php echo $lang->story->statusList['draft']   . ' : ' . (isset($plan->status['draft']) ? $plan->status['draft'] : 0);?></td>
+              <td align='left'><?php echo $lang->story->statusList['active']  . ' : ' . (isset($plan->status['active']) ? $plan->status['active'] : 0);?></td>
+              <td align='left'><?php echo $lang->story->statusList['closed']  . ' : ' . (isset($plan->status['closed']) ? $plan->status['closed'] : 0);?></td>
+              <td align='left'><?php echo $lang->story->statusList['changed'] . ' : ' . (isset($plan->status['changed']) ? $plan->status['changed'] : 0);?></td>
             <?php if($id != 0) echo "</tr>"?>
             <?php endforeach;?>
             <?php else:?>

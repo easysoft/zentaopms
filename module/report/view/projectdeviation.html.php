@@ -1,4 +1,5 @@
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <table class="cont-lt1">
   <tr valign='top'>
     <td class='side'>
@@ -15,7 +16,7 @@
         <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->report->id;?></th>
-          <th><?php echo $lang->report->project;?></th>
+          <th class="w-200px"><?php echo $lang->report->project;?></th>
           <th><?php echo $lang->report->stories;?></th>
           <th><?php echo $lang->report->bugs;?></th>
           <th><?php echo $lang->report->devConsumed;?></th>
@@ -31,17 +32,18 @@
         <?php foreach($projects as $project):?>
           <tr class="a-center">
             <td><?php echo $project->id;?></td>
-            <td><?php echo $project->name;?></td>
+            <td align="left"><?php echo $project->name;?></td>
             <td><?php echo $project->stories;?></td>
             <td><?php echo $project->bugs;?></td>
             <td><?php echo $project->devConsumed;?></td>
             <td><?php echo $project->testConsumed;?></td>
-            <td><?php echo $project->devConsumed . ' : ' . $project->testConsumed;?></td>
+            <td><?php echo round($project->devConsumed / (($project->testConsumed < 1) ? 1 : $project->testConsumed), 1);?></td>
             <td><?php echo $project->estimate;?></td>
             <td><?php echo $project->consumed;?></td>
-            <td><?php echo ($project->consumed - $project->estimate) > 0 ? '+' . ($project->consumed - $project->estimate) : ($project->consumed - $project->estimate);?></td>
+            <?php $deviation = $project->consumed - $project->estimate;?>
+            <td><?php echo $deviation > 0 ? ('+' . $deviation) : ($deviation);?></td>
             <td>
-              <?php echo (($project->consumed - $project->estimate) > 0 ? '+' : '') . round(abs($project->consumed - $project->estimate) / $project->consumed * 100, 2) . '%';?>
+              <?php echo ($deviation > 0 ? '+' : '-') . round(abs($deviation) / $project->estimate * 100, 2) . '%';?>
             </td>
           </tr>
         <?php endforeach;?>

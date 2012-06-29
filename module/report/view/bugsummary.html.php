@@ -41,14 +41,14 @@
           <tr class="a-center">
             <td><?php echo $user;?></td>
             <td><?php echo $bug['all'];?></td>
-            <td><?php echo $bug[''];?></td>
+            <td><?php echo isset($bug['']) ? $bug[''] : 0;?></td>
             <td><?php echo isset($bug['bydesign']) ? $bug['bydesign'] : 0;?></td>
             <td><?php echo isset($bug['duplicate']) ? $bug['duplicate'] : 0;?></td>
             <td><?php echo isset($bug['external']) ? $bug['external'] : 0;?></td>
             <td><?php echo isset($bug['fixed']) ? $bug['fixed'] : 0;?></td>
             <td><?php echo isset($bug['notrepro']) ? $bug['notrepro'] : 0;?></td>
             <td><?php echo isset($bug['postponed']) ? $bug['postponed'] : 0;?></td>
-            <td><?php echo isset($bug['willnotfix']) ? $bug['wllnotfix'] : 0;?></td>
+            <td><?php echo isset($bug['willnotfix']) ? $bug['willnotfix'] : 0;?></td>
             <td><?php echo isset($bug['tostory']) ? $bug['tostory'] : 0;?></td>
           </tr>
         <?php endforeach;?>
