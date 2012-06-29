@@ -4,7 +4,9 @@
     <td class='side'>
       <div class='box-title'><?php echo $lang->report->list;?></div>
       <div class='box-content'>
-        <?php echo html::a(inlink('projectDeviation'), $lang->report->projectDeviation);?>
+      <ul id="report-list">
+        <li><?php echo html::a(inlink('projectDeviation'), $lang->report->projectDeviation);?></li>
+      </ul>
       </div>
     </td>
     <td class='divider'></td>

@@ -7,7 +7,9 @@
     <td class='side'>
       <div class='box-title'><?php echo $lang->report->list;?></div>
       <div class='box-content'>
-        <?php echo html::a(inlink('productInfo'), $lang->report->productInfo);?>
+      <ul id="report-list">
+        <li><?php echo html::a(inlink('productInfo'), $lang->report->productInfo);?></li>
+      </ul>
       </div>
     </td>
     <td class='divider'></td>

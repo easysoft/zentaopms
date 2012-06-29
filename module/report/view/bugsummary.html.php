@@ -10,7 +10,9 @@
     <td class='side'>
       <div class='box-title'><?php echo $lang->report->list;?></div>
       <div class='box-content'>
-        <?php echo html::a(inlink('bugSummary'), $lang->report->bugSummary);?>
+      <ul id="report-list">
+        <li><?php echo html::a(inlink('bugSummary'), $lang->report->bugSummary);?></li>
+      </ul>
       </div>
     </td>
     <td class='divider'></td>
