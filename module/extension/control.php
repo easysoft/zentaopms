@@ -237,7 +237,7 @@ class extension extends control
         $this->session->set('dirs2Created', array());   // clean the session.
 
         /* Execute the install.sql. */
-        if($this->extension->needExecuteDB($extension, 'install'))
+        if($upgrade == 'no' and $this->extension->needExecuteDB($extension, 'install'))
         {
             $return = $this->extension->executeDB($extension, 'install');
             if($return->result != 'ok')
