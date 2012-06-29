@@ -13,13 +13,8 @@ $clientTheme  = $this->app->getClientTheme();
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   <?php
   $header = isset($header) ? (object)$header : new stdclass();
-  if(!isset($header->title))    $header->title    = $lang->ZenTaoPMS;
-  if(!isset($header->keywords)) $header->keywords = $lang->zentaoKeywords;
-  if(!isset($header->desc))     $header->desc     = $lang->zentaoDESC;
-
+  if(!isset($header->title)) $header->title = $lang->ZenTaoPMS;
   echo html::title($header->title . ' / ' . $lang->ZenTaoPMS);
-  echo html::meta('keywords',    $header->keywords);
-  echo html::meta('description', $header->desc);
 
   js::exportConfigVars();
   js::import($jsRoot . 'jquery/lib.js', $config->version);
