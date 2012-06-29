@@ -240,7 +240,7 @@ EOT;
         $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('status')->eq('done')->fetchAll();
         foreach($projects as $project)
         {
-            $total = $this->dao->select('SUM(estimate) AS estimate, SUM(consumed) AS consumed')
+            $total = $this->dao->select('project, SUM(estimate) AS estimate, SUM(consumed) AS consumed')
                 ->from(TABLE_TASK)
                 ->where('project')->eq($project->id)
                 ->andWhere('status')->ne('cancel')
@@ -262,12 +262,12 @@ EOT;
                 ->andWhere('status')->ne('cancel')
                 ->andWhere('deleted')->eq(0)
                 ->fetch();
-            $project->estimate     = $total->estimate;
-            $project->consumed     = $total->consumed;
+            $project->estimate     = round($total->estimate, 2);
+            $project->consumed     = round($total->consumed, 2);
             $project->stories      = $stories->count;
             $project->bugs         = $bugs->count;
-            $project->devConsumed  = empty($dev->consumed) ? 0 : $dev->consumed;
-            $project->testConsumed = empty($test->consumed) ? 0 : $dev->consumed;
+            $project->devConsumed  = empty($dev->consumed) ? 0 : round($dev->consumed, 2);
+            $project->testConsumed = empty($test->consumed) ? 0 : round($test->consumed, 2);
         }
         return $projects;
     }
