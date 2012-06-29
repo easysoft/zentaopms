@@ -262,9 +262,10 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /* Top bar. */
 #topbar, #topbar a {color:#ACCADF}
-#topbar {margin:8px 5px 8px 5px}
+#topbar {margin:5px 5px 15px 5px}
 #topbar select {border:none; color:#ACCADF; background:#003366}
 #topbar a {text-decoration:none;}
+#company{color:#ffcc00; font-size:14px}
 
 /* The nav bar. */
 #navbar ul {margin:0; padding:0;} 
