@@ -284,8 +284,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #mainmenu #searchbox{float:right; border:none; background:#E5E5E5 url(images/main/search_bg.png) repeat-x bottom; height:100%;}
 #mainmenu .button-s{border:none; padding:2px}
 
-#searchType  { border:none; background:#E5E5E5; margin-bottom:2px;}
-#searchQuery {height:16px; border:1px solid #ccc; color:grey;}
+#searchType  { border:none; background:#E5E5E5; margin-bottom:2px; color:gray; font-size:12px}
+#searchQuery {height:16px; border:1px solid #ccc; background: #E5E5E5; color:gray; font-size:12px}
 #searchbox #objectSwitcher{ border:none; width:16px; height:18px; background:url(images/main/enter.png) center bottom;}
 
 /* Module menu. */
@@ -293,7 +293,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #modulemenu ul {background-color:#E5e5e5; height:28px; line-height:28px; padding:5px 10px;}
 #modulemenu li {padding:0 5px; color:#0033cc;}
 #modulemenu a  { font-weight:normal; font-size:14px; color:#003366}
-#modulemenu .active a {color:#fff; background:#33a52e; padding:4px 4px 2px 4px;}
+#modulemenu .active a {color:#33a52e; font-weight:bold; padding:4px 4px 2px 4px;}
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a { font-weight:bold}
 #modulemenu #mybg{ padding-left:10px; background:url(images/main/ui-gray.png); background-position:-146px 144px;}
