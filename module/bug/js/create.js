@@ -39,7 +39,7 @@ function loadModuleMenu(productID)
 function loadProductStories(productID)
 {
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen();});
+    $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
 }
 
 /**
@@ -101,7 +101,7 @@ function loadProjectRelated(projectID)
 function loadProjectTasks(projectID)
 {
     link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID);
-    $('#taskIdBox').load(link, function(){$('#task').chosen();});
+    $('#taskIdBox').load(link, function(){$('#task').chosen({no_results_text:noResultsMatch});});
 }
 
 /**
@@ -115,7 +115,7 @@ function loadProjectStories(projectID)
 {
     productID = $('#product').get(0).value; 
     link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen();});
+    $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
 }
 
 /**

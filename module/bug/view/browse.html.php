@@ -37,10 +37,10 @@ var customed   = <?php echo (int)$customed;?>;
     ?>
   </div>
   <div class='f-right'>
-    <?php if($browseType != 'needconfirm') common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
+    <?php if($browseType != 'needconfirm') common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy", '&nbsp;', '', "class='export icon-green-big-export' title='{$lang->bug->export}'"); ?>
     <?php common::printLink('bug', 'customFields', '', $lang->bug->customFields, '', "class='iframe'"); ?>
-    <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->bug->report->common); ?>
-    <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", $lang->bug->create); ?>
+    <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '&nbsp;', '', "class='icon-green-big-report' title='{$lang->bug->report->common}'"); ?>
+    <?php common::printLink('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", '&nbsp;', '', "class='icon-green-big-bug-create' title='{$lang->bug->create}'"); ?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
@@ -134,10 +134,10 @@ var customed   = <?php echo (int)$customed;?>;
           <td>
             <?php
             $params = "bugID=$bug->id";
-            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
-            if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, $lang->bug->buttonClose)))   echo $lang->bug->buttonClose . ' ';
-            common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
-            if($this->cookie->windowWidth >= $this->config->wideSize) common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", $lang->bug->buttonCopy);
+            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->resolve}'"))) echo "<span class='icon-gray-small-bug-resolve'></span>";
+            if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->close}'")))   echo "<span class='icon-gray-small-bug-close'></span>";
+            common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->bug->edit}'");
+            common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", '&nbsp;', '', "class='icon-green-small-copy' title='{$lang->copy}'");
             ?>
           </td>
           <?php endif;?>

@@ -182,3 +182,8 @@ $lang->project->placeholder->code = 'Project code';
 $lang->project->placeholder->end  = "If scrum it should no more than 30 days";
 $lang->project->placeholder->days = 'Decide by begin date and end day';
 $lang->project->placeholder->team = 'Team name';
+
+$lang->project->selectGroup->doing     = '(Doing)';
+$lang->project->selectGroup->done      = '(Done)';
+
+$lang->project->projectTasks = 'ProjectTasks';

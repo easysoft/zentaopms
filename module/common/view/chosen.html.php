@@ -3,4 +3,11 @@
 css::import($defaultTheme . 'chosen.css');
 js::import($jsRoot . 'jquery/chosen/chosen.min.js');
 ?>
-<script> noResultsMatch = '<?php echo $lang->noResultsMatch;?>' </script>
+<script> 
+noResultsMatch = '<?php echo $lang->noResultsMatch;?>';
+$(document).ready(function()
+{
+    $("#productID").chosen({no_results_text: noResultsMatch});
+    $("#projectID").chosen({no_results_text: noResultsMatch});
+});
+</script>

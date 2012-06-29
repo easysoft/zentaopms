@@ -102,7 +102,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function task($projectID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($projectID = 0, $status = 'byproject', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {   
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
@@ -132,6 +132,7 @@ class project extends control
         $tasks = array();
         if($browseType != "bysearch")
         {
+            $status = $status == 'byproject' ? 'all' : $status;
             $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager); 
         }
         else
@@ -177,6 +178,8 @@ class project extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->param           = $param;
         $this->view->projectID       = $projectID;
+        $this->view->treeClass       = $browseType == 'byproject' ? '' : 'hidden';
+        $this->view->projectTree     = $this->project->tree();
 
         $this->display();
     }

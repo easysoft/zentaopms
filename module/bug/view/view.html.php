@@ -21,38 +21,35 @@
     $convertParams = "productID=$productID&moduleID=0&from=bug&bugID=$bug->id";
     if(!$bug->deleted)
     {
+        if($bug->status == 'active' and $bug->confirmed == 0)common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm);
         common::printLink('bug', 'assignTo', $params, $lang->bug->buttonAssign);
-        if(!($bug->status == 'active' and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm))) echo $lang->bug->buttonConfirm . ' ';
-        if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
-        if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
-        if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+        if($bug->status == 'active') common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve);
+        if($bug->status == 'resolved')common::printLink('bug', 'close', $params, $lang->bug->buttonClose);
+        if(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory')common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate);
+        echo "<span class='icon-green-big-splitLine'></span>";
 
-        if($bug->status == 'active' and common::hasPriv('story', 'create')) 
-        {
-            common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory) . ' ';
-        }
-        else
-        {
-            echo $lang->bug->toStory . ' ';
-        }
+        if($bug->status == 'active' and common::hasPriv('story', 'create')) common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory) . ' ';
         common::printLink('testcase', 'create', $convertParams, $lang->bug->buttonCreateTestcase);
 
+        echo "<span class='icon-green-big-splitLine'></span>";
 
-        common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-edit'");
-        if(common::hasPriv('bug', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'");
+        common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-big-edit' title={$lang->bug->edit}");
+        if(common::hasPriv('bug', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' title={$lang->comment} onclick='setComment()'");
 
-        common::printLink('bug', 'create', $copyParams, '&nbsp;', '', "class='icon-copy'");
+        common::printLink('bug', 'create', $copyParams, '&nbsp;', '', "class='icon-green-big-copy' title={$lang->copy}");
 
-        common::printLink('bug', 'delete', $params, '&nbsp;', 'hiddenwin', "class='icon-delete'");
+        common::printLink('bug', 'delete', $params, '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title={$lang->delete}");
     }
-    echo html::a($browseLink, '&nbsp;', '', "class='icon-goback'");
+
+    echo "<span class='icon-green-big-splitLine'></span>";
+    echo html::a($browseLink, '&nbsp;', '', "class='icon-green-big-goback' title={$lang->goback}");
     if($preAndNext->pre) 
     {
-        echo "<abbr id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'>" . html::a($this->inLink('view', "storyID={$preAndNext->pre->id}"), '&nbsp', '', "class='icon-pre'") . "</abbr>";
+         echo html::a($this->inLink('view', "storyID={$preAndNext->pre->id}"), '&nbsp', '', "class='icon-green-big-pre' id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'");
     }
     if($preAndNext->next) 
     {
-        echo "<abbr id='next' title={$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}>" . html::a($this->inLink('view', "storyID={$preAndNext->next->id}"), '&nbsp;', '', "class='icon-next'") . "</abbr>";
+         echo html::a($this->inLink('view', "storyID={$preAndNext->next->id}"), '&nbsp;', '', "class='icon-green-big-next' id='next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}'");
     }
     ?>
   </div>
@@ -71,30 +68,24 @@
         <?php
         if(!$bug->deleted)
         {
+            if($bug->status == 'active' and $bug->confirmed == 0)common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm);
             common::printLink('bug', 'assignTo', $params, $lang->bug->buttonAssign);
-            if(!($bug->status == 'active'  and $bug->confirmed == 0 and common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm)))   echo $lang->bug->buttonConfirm . ' ';
-            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve)))   echo $lang->bug->buttonResolve . ' ';
-            if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))       echo $lang->bug->buttonClose . ' ';
-            if(!(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory' and common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate))) echo $lang->bug->buttonActivate . ' ';
+            if($bug->status == 'active') common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve);
+            if($bug->status == 'resolved') common::printLink('bug', 'close', $params, $lang->bug->buttonClose);
+            if(($bug->status == 'closed' or $bug->status == 'resolved') and $bug->resolution != 'tostory') common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate);
+            echo "<span class='icon-green-big-splitLine'></span>";
 
-            if($bug->status == 'active' and common::hasPriv('bug', 'resolve')) 
-            {
-                common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory) . ' ';
-            }
-            else
-            {
-                echo $lang->bug->toStory . ' ';
-            }
-            common::printLink('testcase', 'create', $convertParams, $lang->bug->buttonCreateTestcase);
+            if($bug->status == 'active' and common::hasPriv('bug', 'resolve')) common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory) . ' ';
+           common::printLink('testcase', 'create', $convertParams, $lang->bug->buttonCreateTestcase);
+            echo "<span class='icon-green-big-splitLine'></span>";
 
-
-            common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-edit'");
-            if(common::hasPriv('bug', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='comment' onclick='setComment()'"). ' ';
-
-            common::printLink('bug', 'create', $copyParams, '&nbsp;', '', "class='icon-copy'");
-            common::printLink('bug', 'delete', $params, '&nbsp;', 'hiddenwin', "class='icon-delete'");
+            common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-big-edit' title={$lang->bug->edit}");
+            if(common::hasPriv('bug', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' title={$lang->comment} onclick='setComment()'"). ' ';
+            common::printLink('bug', 'create', $copyParams, '&nbsp;', '', "class='icon-green-big-copy' title={$lang->copy}");
+            common::printLink('bug', 'delete', $params, '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title={$lang->delete}");
+            echo "<span class='icon-green-bigsplitLine'></span>";
         }
-        echo html::a($browseLink, '&nbsp;', '', "class='icon-goback'");
+        echo html::a($browseLink, '&nbsp;', '', "class='icon-green-big-goback' title={$lang->goback}");
         ?>
       </div>
       <div id='comment' class='hidden'>

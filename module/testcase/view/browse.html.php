@@ -29,9 +29,9 @@ var moduleID   = '<?php echo $moduleID;?>';
     ?>
   </div>
   <div class='f-right'>
-    <?php if($browseType != 'needconfirm') common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy", $lang->export, '', 'class="export"'); ?>
-    <?php common::printLink('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID", $lang->testcase->batchCreate); ?>
-    <?php common::printLink('testcase', 'create', "productID=$productID&moduleID=$moduleID", $lang->testcase->create); ?>
+    <?php if($browseType != 'needconfirm') common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy", '&nbsp;', '', "class='export icon-green-big-export' title='{$lang->testcase->export}'"); ?>
+    <?php common::printLink('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID", '&nbsp;', '', "class='icon-green-big-case-batchCreate' title='{$lang->testcase->batchCreate}'"); ?>
+    <?php common::printLink('testcase', 'create', "productID=$productID&moduleID=$moduleID", '&nbsp;', '', "class='icon-green-big-case-create' title='{$lang->testcase->create}'"); ?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
@@ -91,13 +91,13 @@ var moduleID   = '<?php echo $moduleID;?>';
                 common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
                 common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
 
-                common::printLink('testcase', 'edit',    "caseID=$case->id", $lang->testcase->buttonEdit);
+                common::printLink('testcase', 'edit',    "caseID=$case->id", '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->testcase->edit}'");
 
-                common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $lang->copy);
+                common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '&nbsp;', '', "class='icon-green-small-copy' title='{$lang->copy}'");
 
-                common::printLink('testcase', 'delete',  "caseID=$case->id", $lang->delete, 'hiddenwin');
+                common::printLink('testcase', 'delete',  "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-green-small-delete' title='{$lang->delete}'");
 
-                if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))) echo $lang->testtask->createBug;
+                if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '&nbsp;', '', "class='icon-green-small-case-createBug' title='{$lang->testtask->createBug}'"))) echo "<span class='icon-gray-small-case-createBug'>&nbsp;</span>";
                 ?>
               </td>
               <?php endif;?>

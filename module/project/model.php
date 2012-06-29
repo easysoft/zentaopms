@@ -94,13 +94,94 @@ class projectModel extends model
      */
     public function select($projects, $projectID, $currentModule, $currentMethod)
     {
+        $projectMode  = $this->cookie->projectMode ? $this->cookie->projectMode : 'all';
+        $products     = $this->loadModel('product')->getPairs('nocode');
+        $productGroup = $this->getProductGroupList();
+        $selectGroup  = array();
+        foreach($productGroup as $projects)
+        {
+            foreach($projects as $project)
+            {
+                if($projectMode == 'noclosed' and $project->status == 'done') continue;
+
+                $status = $project->status != 'done' ? $this->lang->project->selectGroup->doing : '';
+                if($project->product)
+                {
+                    if(isset($products[$project->product]))
+                    {
+                        $selectGroup[$products[$project->product]][$project->id] = $project->name . $status;
+                    }
+                }
+                else
+                {
+                    $selectGroup[$this->lang->project->noProduct][$project->id] = $project->name . $status;
+                }
+            }
+        }
+
         /* See product's model method:select. */
-        $switchCode = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod');";
-        $onchange   = "onchange=\"$switchCode\""; 
-        $onkeypress = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
-        $onclick    = "onclick=\"eventKeyCode = 13; $switchCode\""; 
-        $selectHtml = html::select('projectID', $projects, $projectID, "tabindex=2 $onchange");
+        $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod');";
+        $onchange    = "onchange=\"$switchCode\""; 
+        $onkeypress  = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
+        $onclick     = "onclick=\"eventKeyCode = 13; $switchCode\""; 
+        $selectHtml  = html::selectGroup('projectID', $selectGroup, $projectID, "tabindex=2 $onchange $onkeypress");
         return $selectHtml;
+    }
+
+    /**
+     * Get project tree menu.
+     * 
+     * @access public
+     * @return void
+     */
+    public function tree()
+    {
+        $products     = $this->loadModel('product')->getPairs('nocode');
+        $productGroup = $this->getProductGroupList();
+        $projectTree  = "<ul id='tree'>";
+        foreach($productGroup as $productID => $projects)
+        {
+            if(!isset($products[$productID]) and $productID != '') continue;
+            $productName  = isset($products[$productID]) ? $products[$productID] : $this->lang->project->noProduct;
+            $projectTree .= "<li>$productName<ul>";
+           
+            foreach($projects as $project)
+            {
+                if($project->status != 'done')
+                {
+                    $projectTree .= "<li>" . html::a(inlink('task', "projectID=$project->id"), $project->name, '', "id='project$project->id'") . "</li>";
+                }
+            }
+
+
+            $hasDone = false;
+            foreach($projects as $project) 
+            {
+                if($project->status == 'done') 
+                {
+                    $hasDone = true;
+                    break;
+                }
+            }
+            if($hasDone)
+            {
+                $projectTree .= "<li>{$this->lang->project->selectGroup->done}<ul>";
+                foreach($projects as $project)
+                {
+                    if($project->status == 'done')
+                    {
+                        $projectTree .= "<li>" . html::a(inlink('task', "projectID=$project->id"), $project->name, '', "id='project$project->id'") . "</li>";
+                    }
+                }
+                $projectTree .= "</ul></li>";
+            }
+
+            $projectTree .= "</ul></li>";
+        }
+
+        $projectTree .= "</ul>";
+
+        return $projectTree;
     }
 
     /**
@@ -331,10 +412,10 @@ class projectModel extends model
      */
     public function getProductGroupList()
     {
-        $list = $this->dao->select('t1.id, t1.name, t2.product')->from(TABLE_PROJECT)->alias('t1')
+        $list = $this->dao->select('t1.id, t1.name,t1.status, t2.product')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.deleted')->eq(0)
-            ->orderBy('t1.id')
+            ->orderBy('t1.order')
             ->fetchGroup('product');
 
         foreach($list as $id => $product)

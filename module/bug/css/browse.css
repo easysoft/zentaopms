@@ -11,3 +11,5 @@
 .confirm1 {color:green; font-size:9px}
 tfoot .f-left {color:#141414;}
 table.border-sep {border-collapse:separate;}
+
+#featurebar .f-right a {padding:2px 8px}
