@@ -59,9 +59,32 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '')
     {
+        $productMode = $this->cookie->productMode ? $this->cookie->productMode : 'all';
+        $productGroup = array();
+        $products = $this->dao->select('id, status, name')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->fetchAll();
+        foreach($products as $product)
+        {
+            if($productMode == 'noclosed' and $product->status == 'closed') continue;
+            if($product->status != 'closed')
+            {
+                $productGroup[$this->lang->product->statusList['normal']][$product->id] = $product->name;
+            }
+            elseif($product->status == 'closed')
+            {
+                $productGroup[$this->lang->product->statusList['closed']][$product->id] = $product->name;
+            }
+        }
+
+        /**
+         * 1. if user selected by mouse, reload it. 
+         * 2. if the user select by keyboard, save the event.keyCode, thus the switchProduct() can judge whether reload or not.
+         * 3. if user press enter key in the select, reload it.
+         * 4. if user click the go button, reload it.
+         * */
         $switchCode  = "switchProduct($('#productID').val(), '$currentModule', '$currentMethod', '$extra');";
         $onchange    = "onchange=\"$switchCode\""; 
-        $selectHtml  = html::select('productID', $products, $productID, "tabindex=2 $onchange");
+        $selectHtml  = html::selectGroup('productID', $productGroup, $productID, "tabindex=2 $onchange");
+
         return $selectHtml;
     }
 
