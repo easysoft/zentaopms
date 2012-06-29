@@ -59,8 +59,24 @@ class report extends control
         $this->display(); 
     }
 
-    public function workload()
+    public function workload($begin = 0, $end = 0)
     {
+        if($begin == 0) 
+        {
+            $begin = date('Y-m-d', strtotime('last month'));
+        }
+        else
+        {
+            $begin = date('Y-m-d', strtotime($begin));
+        }
+        if($end == 0)
+        {
+            $end = date('Y-m-d', strtotime('now'));
+        }
+        else
+        {
+            $end = date('Y-m-d', strtotime($end));
+        }
         $this->view->header->title = $this->lang->report->workload;
         $this->view->workload      = $this->report->getWorkload();
         $this->display();
