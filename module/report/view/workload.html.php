@@ -1,4 +1,4 @@
-<?php include '../../common/view/header.html.php';?>
+<?php include '../../../common/view/header.html.php';?>
 <table class="cont-lt1">
   <tr valign='top'>
     <td class='side'>
@@ -29,25 +29,75 @@
             <td><?php echo $lang->report->total;?></td>
           </tr>
         <?php foreach($workload as $user => $load):?>
+        <?php
+        $i = 1;
+        $max = count($load['task']) > count($load['bug']) ? 'task' : 'bug';
+        ?>
+        <?php foreach($load[$max] as $key => $val):?>
           <tr class="a-center">
-            <td rowspan="<?php echo count($load['task']);?>"><?php echo $user;?></td>
-            <td colspan="4">
-              <table>
-              <?php foreach($load['task'] as $project => $task)?>
-              <tr>
-              <td><?php echo $task['count']?></td>
-              <td><?php echo $task['manhour']?></td>
-              <td rowspan="<?php echo count($load['task']);?>"></td>
-              </tr>
-              </table>
+          <?php if($i == 1):?>
+          <td rowspan="<?php echo count($load[$max]);?>"><?php echo $user;?></td>
+          <?php endif;?>
+            <?php if($max == 'task'):?>
+            <td><?php echo $key?></td>
+            <td><?php echo $val['count']?></td>
+            <td><?php echo $val['manhour']?></td>
+            <?php if($i == 1):?>
+            <td rowspan='<?php echo count($load[$max]);?>'>
+            <?php
+            $total = 0;
+            foreach($load['task'] as $count) $total += $count['count'];
+            echo $total;
+            ?>
             </td>
-            <td colspan="3">
+            <?php endif;?>
+            <td><?php echo $product = key($load['bug'])?></td>
+            <td><?php echo empty($product) ? '' : $load['bug'][$product]['count']?></td>
+            <?php if($i == 1):?>
+            <td rowspan='<?php echo count($load[$max]);?>'>
+            <?php
+            $total = 0;
+            foreach($load['bug'] as $count) $total += $count['count'];
+            echo $total;
+            reset($load['bug']);
+            ?>
             </td>
+            <?php endif;?>
+            <?php unset($load['bug'][$product]);?>
+            <?php else:?>
+            <td><?php echo $project = key($load['task'])?></td>
+            <td><?php echo empty($project) ? '' : $load['task'][$project]['count']?></td>
+            <td><?php echo empty($project) ? '' : $load['task'][$project]['manhour']?></td>
+            <?php if($i == 1):?>
+            <td rowspan='<?php echo count($load[$max]);?>'>
+            <?php
+            $total = 0;
+            foreach($load['task'] as $count) $total += $count['count'];
+            echo $total;
+            reset($load['task']);
+            ?>
+            </td>
+            <?php endif;?>
+            <td><?php echo $key?></td>
+            <td><?php echo $val['count']?></td>
+            <?php if($i == 1):?>
+            <td rowspan='<?php echo count($load[$max]);?>'>
+            <?php
+            $total = 0;
+            foreach($load['bug'] as $count) $total += $count['count'];
+            echo $total;
+            ?>
+            </td>
+            <?php endif;?>
+            <?php unset($load['task'][$project]);?>
+            <?php endif;?>
           </tr>
+          <?php $i ++;?>
+          <?php endforeach;?>
         <?php endforeach;?>
         </tbody>
       </table> 
     </td>
   </tr>
 </table>
-<?php include '../../common/view/footer.html.php';?>
+<?php include '../../../common/view/footer.html.php';?>
