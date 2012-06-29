@@ -110,6 +110,7 @@ $lang->project->ajaxGetProducts = '接口：获得项目产品列表';
 /* 分组浏览。*/
 $lang->project->allTasks             = '所有任务';
 $lang->project->assignedToMe         = '指派给我';
+$lang->project->moduleTask           = '按模块浏览';
 $lang->project->finishedByMe         = '由我完成';
 $lang->project->statusWait           = '未开始';
 $lang->project->statusDoing          = '进行中';

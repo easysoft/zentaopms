@@ -25,6 +25,7 @@ $lang->tree->manageCustomDoc   = 'Manage doc library type';
 $lang->tree->updateOrder       = 'Update order';
 $lang->tree->manageChild       = 'Manage child';
 $lang->tree->syncFromProduct   = 'Copy from product module';
+$lang->tree->syncFromProject   = 'Copy from project module';
 $lang->tree->ajaxGetOptionMenu = 'API: Get select menu';
 $lang->tree->ajaxGetSonModules = 'API: Get son modules';
 

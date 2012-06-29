@@ -32,6 +32,7 @@ $lang->task->confirmStoryChange = "Confirm story change";
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
 $lang->task->project           = 'Project';
+$lang->task->module            = 'Module';
 $lang->task->story             = 'Story';
 $lang->task->storyVersion      = 'Version';
 $lang->task->name              = 'Name';
@@ -138,6 +139,7 @@ $lang->task->report->select = 'Select';
 $lang->task->report->create = 'Create';
 
 $lang->task->report->charts['tasksPerProject']      = 'Project tasks';
+$lang->task->report->charts['tasksPerModule']       = 'Module tasks';
 $lang->task->report->charts['tasksPerAssignedTo']   = 'Assigned To';
 $lang->task->report->charts['tasksPerType']         = 'Type';
 $lang->task->report->charts['tasksPerPri']          = 'Priority';
@@ -164,6 +166,7 @@ $lang->task->report->options->graph->pieRadius        = 100;
 $lang->task->report->options->graph->showColumnShadow = 0;
 
 $lang->task->report->tasksPerProject->graph->xAxisName      = 'Project';
+$lang->task->report->tasksPerModule->graph->xAxisName       = 'Module';
 $lang->task->report->tasksPerAssignedTo->graph->xAxisName   = 'User';
 $lang->task->report->tasksPerType->graph->xAxisName         = 'Type';
 $lang->task->report->tasksPerPri->graph->xAxisName          = 'Pri';

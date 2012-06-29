@@ -32,6 +32,7 @@ $lang->task->confirmStoryChange = "确认需求变动";
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
 $lang->task->project           = '所属项目';
+$lang->task->module            = '所属模块';
 $lang->task->story             = '相关需求';
 $lang->task->storyVersion      = '需求版本';
 $lang->task->name              = '任务名称';
@@ -138,6 +139,7 @@ $lang->task->report->select = '请选择报表类型';
 $lang->task->report->create = '生成报表';
 
 $lang->task->report->charts['tasksPerProject']      = '项目任务数统计';
+$lang->task->report->charts['tasksPerModule']       = '模块任务数统计';
 $lang->task->report->charts['tasksPerAssignedTo']   = '指派给统计';
 $lang->task->report->charts['tasksPerType']         = '任务类型统计';
 $lang->task->report->charts['tasksPerPri']          = '优先级统计';
@@ -164,6 +166,7 @@ $lang->task->report->options->graph->pieRadius        = 100; // 饼图直径。
 $lang->task->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
 
 $lang->task->report->tasksPerProject->graph->xAxisName      = '项目';
+$lang->task->report->tasksPerModule->graph->xAxisName       = '模块';
 $lang->task->report->tasksPerAssignedTo->graph->xAxisName   = '用户';
 $lang->task->report->tasksPerType->graph->xAxisName         = '类型';
 $lang->task->report->tasksPerPri->graph->xAxisName          = '优先级';

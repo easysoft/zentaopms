@@ -526,6 +526,37 @@ class taskModel extends model
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
         return $this->processTask($task);
     }
+
+    /**
+     * Get tasks list of a project.
+     * 
+     * @param  int           $projectID 
+     * @param  array|string  $moduleIds 
+     * @param  string        $status 
+     * @param  string        $orderBy 
+     * @param  object        $pager 
+     * @access public
+     * @return array
+     */
+    public function getTasksByModule($projectID = 0, $moduleIds = 0, $orderBy = 'id_desc', $pager = null)
+    {
+        $orderBy = str_replace('status', 'statusCustom', $orderBy);
+        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->where('t1.project')->eq((int)$projectID)
+            ->beginIF(!empty($moduleIds))->andWhere('t1.module')->in($moduleIds)->fi() 
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
+
+        if($tasks) return $this->processTasks($tasks);
+        return array();
+    }
     
     /**
      * Get tasks of a project.
@@ -806,6 +837,26 @@ class taskModel extends model
         if(!$datas) return array();
         $projects = $this->loadModel('project')->getPairs('all');
         foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+        return $datas;
+    }
+
+    /**
+     * Get report data of tasks per module 
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDataOftasksPerModule()
+    {
+        $datas = $this->dao->select('module as name, count(*) as value')
+            ->from(TABLE_TASK)->alias('t1')
+            ->where($this->session->taskQueryCondition)
+            ->groupBy('module')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+        if(!$datas) return array();
+        $modules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in(array_keys($datas))->fetchPairs();
+        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
         return $datas;
     }
 

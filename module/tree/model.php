@@ -273,6 +273,19 @@ class treeModel extends model
     }
 
     /**
+     * Create link of a task.
+     * 
+     * @param  object   $module 
+     * @access public
+     * @return string
+     */
+    public function createTaskLink($module)
+    {
+        $linkHtml = html::a(helper::createLink('project', 'task', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return $linkHtml;
+    }
+
+    /**
      * Create link of a doc.
      * 
      * @param  object   $module 

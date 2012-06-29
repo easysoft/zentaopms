@@ -50,7 +50,17 @@
             </td>
             <td id='moduleBox'> 
               <?php
-              if($viewType != 'story' and strpos($viewType, 'doc') === false)
+              if($viewType == 'task')
+              {
+                  if($allProject)
+                  {
+                      echo html::select('allProject', $allProject, '', 'onchange=syncProject(this)');
+                      echo html::select('productModule', $projectModules, '');
+                      echo html::commonButton($lang->tree->syncFromProject, 'id=copyModule onclick=syncModule('.$currentProject.')');
+                  }
+                  echo '<br />';
+              }
+              elseif($viewType != 'story' and strpos($viewType, 'doc') === false)
               {
                   echo html::select('productModule', $productModules, '', 'class=select-3');
                   echo html::commonButton($lang->tree->syncFromProduct, 'onclick=syncModule('.$rootID.')');

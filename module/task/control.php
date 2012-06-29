@@ -22,6 +22,7 @@ class task extends control
         parent::__construct();
         $this->loadModel('project');
         $this->loadModel('story');
+        $this->loadModel('tree');
     }
 
     /**
@@ -32,7 +33,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $storyID = 0)
+    public function create($projectID = 0, $storyID = 0, $moduleID = 0)
     {
         $project   = $this->project->getById($projectID); 
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
@@ -73,6 +74,7 @@ class task extends control
 
         $stories = $this->story->getProjectStoryPairs($projectID);
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $moduleOptionMenu = $this->tree->getOptionMenu($projectID, $viewType = 'task');
         $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[]      = html::a($taskLink, $project->name);
         $position[]      = $this->lang->task->create;
@@ -82,6 +84,8 @@ class task extends control
         $this->view->stories  = $stories;
         $this->view->storyID  = $storyID;
         $this->view->members  = $members;
+        $this->view->moduleID = $moduleID;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
     }
 

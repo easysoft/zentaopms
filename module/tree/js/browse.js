@@ -35,6 +35,23 @@ function syncProduct(obj)
     $('#copyModule').attr('onclick', null);
     $('#copyModule').bind('click', function(){syncModule(obj.value)});
 }
+
+function syncProject(obj)
+{
+    link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + obj.value + "&viewType=task&rootModuleID=0&returnType=json");
+    $.getJSON(link, function(modules)
+    {
+        $('.helplink').addClass('hidden');
+        $('#projectModule').empty();
+        $.each(modules, function(key, value)
+        {  
+            $('#projectModule').append('<option value=' + key + '>' + value + '</option')
+        }); 
+    })
+    $('#copyModule').attr('onclick', null);
+    $('#copyModule').bind('click', function(){syncModule(obj.value)});
+}
+
 $(document).ready(function()
 {
     $("a.iframe").colorbox({width:480, height:240, iframe:true, transition:'none'});

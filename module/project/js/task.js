@@ -1,3 +1,11 @@
+/* Browse by module. */
+function browseByModule()
+{
+    $('#querybox').addClass('hidden');
+    $('#featurebar .active').removeClass('active');
+    $('#bymoduleTab').addClass('active');
+}
+
 $(function()
 {
     $('#' + browseType + 'Tab').addClass('active');
@@ -6,8 +14,6 @@ $(function()
 /* Browse by project. */
 function browseByProject()
 {
-    $('#treebox').removeClass('hidden');
-    $('.divider').removeClass('hidden');
     $('#querybox').addClass('hidden');
     $('#byProjectTab').addClass('active');
     $('#featurebar .active').removeClass('active');

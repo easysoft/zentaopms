@@ -25,6 +25,7 @@ $lang->tree->manageCustomDoc   = '维护文档库分类';
 $lang->tree->updateOrder       = '更新排序';
 $lang->tree->manageChild       = '维护子模块';
 $lang->tree->syncFromProduct   = '复制产品视图模块';
+$lang->tree->syncFromProject   = '复制项目视图模块';
 $lang->tree->ajaxGetOptionMenu = '接口:获取下拉列表';
 $lang->tree->ajaxGetSonModules = '接口:获得子菜单列表';
 

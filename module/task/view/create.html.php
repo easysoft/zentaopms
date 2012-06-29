@@ -31,6 +31,10 @@ $(function()
       <td><?php echo $project->name;?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->task->module;?></th>
+      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID);?></span></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
       <td><?php echo html::select('assignedTo[]', $members, '', 'class=select-3');?></td>
     </tr>

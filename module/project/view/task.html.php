@@ -21,11 +21,28 @@ var browseType = '<?php echo $browseType;?>';
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td class='side <?php echo $treeClass;?>' id='treebox'>
+    <?php if($browseType =='byproject'):?>
+    <td class='side'>
       <div class='box-title'><?php echo $lang->project->projectTasks;?></div>
       <div class='box-content'><?php echo $projectTree;?></div>
     </td>
-    <td class='divider <?php echo $treeClass;?>'></td>
+    <td class='divider'></td>
+    <?php endif?>
+    <?php if($browseType =='bymodule'):?>
+    <td class='side'>
+      <div class='box-title'><?php echo $project->name;?></div>
+      <div class='box-content'>
+        <?php echo $moduleTree;?>
+        <div class='a-right'>
+          <?php if(common::hasPriv('project', 'edit'))   echo html::a($this->createLink('project', 'edit',   "projectID=$projectID"), $lang->edit);?>
+          <?php if(common::hasPriv('project', 'delete')) echo html::a($this->createLink('project', 'delete', "projectID=$projectID&confirm=no"),   $lang->delete, 'hiddenwin');?>
+          <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "rootID=$projectID&view=task"), $lang->tree->manage);?>
+          <?php common::printLink('tree', 'fix',    "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
+        </div>
+      </div>
+    </td>
+    <td class='divider'></td>
+    <?php endif;?>
     <td>
       <form method='post' action='<?php echo $this->createLink('task', 'batchEdit', "projectID=$project->id&from=projectTask&orderBy=$orderBy");?>'>
         <table class='table-1 fixed colored tablesorter datatable'>
@@ -147,5 +164,4 @@ var browseType = '<?php echo $browseType;?>';
 $('#project<?php echo $projectID;?>').addClass('active')
 $('#<?php echo $browseType;?>Tab').addClass('active')
 </script>
-
 <?php include '../../common/view/footer.html.php';?>

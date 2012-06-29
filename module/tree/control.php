@@ -31,6 +31,12 @@ class tree extends control
             $this->view->root = $product;
             $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         }
+        elseif($viewType == 'task')
+        {
+            $project = $this->loadModel('project')->getById($rootID);
+            $this->view->root = $project;
+            $this->view->projectModules = $this->tree->getOptionMenu($rootID, 'task');
+        }
         /* The viewType is doc. */
         elseif(strpos($viewType, 'doc') !== false)
         {
@@ -67,6 +73,24 @@ class tree extends control
             $header['title'] = $this->lang->tree->manageProduct . $this->lang->colon . $product->name;
             $position[]      = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
             $position[]      = $this->lang->tree->manageProduct;
+        }
+        elseif($viewType == 'task')
+        {
+            $this->lang->set('menugroup.tree', 'project');
+            $this->project->setMenu($this->project->getPairs(), $rootID, 'task');
+            $this->lang->tree->menu = $this->lang->project->menu;
+
+            $projects = $this->project->getPairs();
+            unset($projects[$rootID]);
+            $currentProject = key($projects);
+
+            $this->view->allProject     = $projects;
+            $this->view->currentProject = $currentProject;
+            $this->view->projectModules = $this->tree->getOptionMenu($currentProject, 'task');
+
+            $header['title'] = $this->lang->tree->manageProject . $this->lang->colon . $project->name;
+            $position[]      = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
+            $position[]      = $this->lang->tree->manageProject;
         }
         elseif($viewType == 'bug')
         {
