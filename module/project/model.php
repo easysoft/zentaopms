@@ -77,7 +77,7 @@ class projectModel extends model
         $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName);
         foreach($this->lang->project->menu as $key => $menu)
         {
-            $replace = $key == 'list' ? $selectHtml . $this->lang->arrow : $projectID;
+            $replace = $key == 'list' ? $selectHtml : $projectID;
             common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
     }
