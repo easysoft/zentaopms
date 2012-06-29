@@ -59,18 +59,9 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '')
     {
-        /**
-         * 1. if user selected by mouse, reload it. 
-         * 2. if the user select by keyboard, save the event.keyCode, thus the switchProduct() can judge whether reload or not.
-         * 3. if user press enter key in the select, reload it.
-         * 4. if user click the go button, reload it.
-         * */
         $switchCode  = "switchProduct($('#productID').val(), '$currentModule', '$currentMethod', '$extra');";
         $onchange    = "onchange=\"$switchCode\""; 
-        $onkeypress  = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
-        $onclick     = "onclick=\"eventKeyCode = 13; $switchCode\""; 
-        $selectHtml  = html::select('productID', $products, $productID, "tabindex=2 $onchange $onkeypress");
-        $selectHtml .= html::commonButton($this->lang->go, "id='productSwitcher' tabindex=3 $onclick");
+        $selectHtml  = html::select('productID', $products, $productID, "tabindex=2 $onchange");
         return $selectHtml;
     }
 

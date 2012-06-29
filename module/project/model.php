@@ -95,12 +95,11 @@ class projectModel extends model
     public function select($projects, $projectID, $currentModule, $currentMethod)
     {
         /* See product's model method:select. */
-        $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod');";
-        $onchange    = "onchange=\"$switchCode\""; 
-        $onkeypress  = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
-        $onclick     = "onclick=\"eventKeyCode = 13; $switchCode\""; 
-        $selectHtml  = html::select('projectID', $projects, $projectID, "tabindex=2 $onchange $onkeypress");
-        $selectHtml .= html::commonButton($this->lang->go, "id='projectSwitcher' tabindex=3 $onclick");
+        $switchCode = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod');";
+        $onchange   = "onchange=\"$switchCode\""; 
+        $onkeypress = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
+        $onclick    = "onclick=\"eventKeyCode = 13; $switchCode\""; 
+        $selectHtml = html::select('projectID', $projects, $projectID, "tabindex=2 $onchange");
         return $selectHtml;
     }
 
