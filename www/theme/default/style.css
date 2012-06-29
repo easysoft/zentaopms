@@ -261,9 +261,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #header{padding:2px 15px 0 15px; background:#003366; border-bottom:1px solid #e4e4e4;}
 
 /* Top bar. */
-#topbar, #topbar a {color:#fff}
-#topbar {margin-bottom:8px}
-#topbar select {border:none; color:white; background:#003366}
+#topbar, #topbar a {color:#ACCADF}
+#topbar {margin:8px 5px 8px 5px}
+#topbar select {border:none; color:#ACCADF; background:#003366}
 #topbar a {text-decoration:none;}
 
 /* The nav bar. */
@@ -275,7 +275,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Main menu. */
 #mainmenu ul { height:30px; line-height:30px}
 #mainmenu li {padding:0 10px; border-right:3px solid #002242; color:white; font-size:14px; background:#1A4F85}
-#mainmenu a  {color:white; font-weight:normal;}
+#mainmenu a  {color:#E5E5E5; font-weight:normal;}
 #mainmenu .active   {background-color:#e5e5e5;}
 #mainmenu .active a {color:#33a52e; font-weight:bold;}
 #mainmenu #mainbg{ padding-left:12px; background:url(images/main/index_bg.png) left bottom;}
@@ -292,7 +292,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #modulemenu    {margin-bottom:0px; font-size:14px; border:2px solid #e5e5e5;}
 #modulemenu ul {background-color:#E5e5e5; height:28px; line-height:28px; padding:5px 10px;}
 #modulemenu li {padding:0 5px; color:#0033cc;}
-#modulemenu a  { font-weight:normal; font-size:14px; color:#0033cc}
+#modulemenu a  { font-weight:normal; font-size:14px; color:#003366}
 #modulemenu .active a {color:#fff; background:#33a52e; padding:4px 4px 2px 4px;}
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a { font-weight:bold}
@@ -301,8 +301,6 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Product, project and objects switcher. */
 #productID {background:#e5e5e5; border:1px solid #e5e5e5}
 #projectID {background:#e5e5e5; border:1px solid #e5e5e5}
-#productSwitcher{padding:0; width:35px}
-#projectSwitcher{padding:0; width:35px}
 
 /* Feature bar. */
 #featurebar                {background-color:#EDF3FE; height:28px; line-height:28px; cursor:pointer; padding:6px 8px; margin: -15px -15px 10px -15px;}
