@@ -15,7 +15,9 @@
     </td>
     <td class='divider'></td>
     <td>
-      <div class="choose-date mb-10px f-right"><?php echo '<span>' . $lang->report->time . " : </span>" . html::input('date', $begin, "class='select-7 date' onchange='changeDate(this.value, \"$end\")'");?><span> - </span><?php echo html::input('date', $end, "class='select-7 date' onchange='changeDate(\"$begin\", this.value)'");?></div>
+    <div class="choose-date mb-10px f-left">
+        <?php echo html::input('date', $begin, "class='select-7 date' onchange='changeDate(this.value, \"$end\")'") . "<span> {$lang->report->to} </span>" . html::input('date', $end, "class='select-7 date' onchange='changeDate(\"$begin\", this.value)'");?>
+    </div>
       <table class='table-1 fixed colored tablesorter datatable border-sep'>
         <thead>
         <tr class='colhead'>
