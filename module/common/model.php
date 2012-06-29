@@ -190,20 +190,25 @@ class commonModel extends model
     {
         global $lang, $app;
 
-        printf($lang->todayIs, date(DT_DATE3));
+        printf($lang->todayIs, date(DT_DATE4));
         if(isset($app->user)) echo $app->user->realname . ' ';
         if(isset($app->user) and $app->user->account != 'guest')
         {
-            echo html::a(helper::createLink('my', 'index'), $lang->myControl);
             echo html::a(helper::createLink('user', 'logout'), $lang->logout);
         }
         else
         {
             echo html::a(helper::createLink('user', 'login'), $lang->login);
         }
+
+        echo '&nbsp;|&nbsp; ';
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about'");
         echo $lang->agileTraining;
         echo $lang->donate;
+
+        echo '&nbsp;|&nbsp;';
+        echo html::select('', $app->config->langs, $app->cookie->lang,  'onchange="selectLang(this.value)"');
+        echo html::select('', $app->lang->themes,  $app->cookie->theme, 'onchange="selectTheme(this.value)"');
     }
 
     /**

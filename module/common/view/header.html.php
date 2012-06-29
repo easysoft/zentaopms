@@ -9,12 +9,9 @@ include 'chosen.html.php';
     <tr>
       <td class='w-p50'>
         <?php
-        echo $app->company->name . $lang->colon;
+        echo "<span id='company'>{$app->company->name}</span>" . $lang->arrow;
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
-        echo html::a('#', $lang->switchHelp, '', "onclick='toggleHelpLink();'");
-        echo html::select('', $app->config->langs, $this->cookie->lang,  'onchange="selectLang(this.value)"');
-        echo html::select('', $app->lang->themes,  $this->cookie->theme, 'onchange="selectTheme(this.value)"');
         ?>
       </td>
       <td class='a-right'><?php commonModel::printTopBar();?></td>

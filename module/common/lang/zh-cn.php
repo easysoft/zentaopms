@@ -297,11 +297,7 @@ $lang->pager->locate    = "GO!";
 $lang->zentaoSite     = "官方网站";
 $lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a> ";
 $lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
-$lang->donate         = "<a href='http://www.zentao.net/goto.php?item=donate' target='_blank'>捐助禅道</a> ";
-$lang->zentaoKeywords = "开源项目管理软件,项目管理,项目管理软件,pmp,pms,php框架，国产php框架，scrum工具,scrum管理工具,scrum管理软件,敏捷项目管理,禅道";
-$lang->zentaoDESC     = "禅道项目管理软件(ZenTaoPMS)是一款国产的，基于LGPL协议，开源免费的项目管理软件(工具、系统)，同时也是一款scrum管理工具。
-    它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。禅道项目管理软件使用PHP + MySQL开发，
-基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。禅道在手，项目无忧！"; 
+$lang->donate         = "<a href='http://www.zentao.net/goto.php?item=donate' target='_blank'>捐赠</a> ";
 
 $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
 
