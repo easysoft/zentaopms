@@ -10,10 +10,12 @@
  * @link        http://www.zentao.net
  */
 $lang->report->common     = 'Report';
+$lang->report->list       = 'Report list';
 $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';
 $lang->report->percent    = 'Percent';
 $lang->report->undefined  = 'Undefined';
+$lang->report->time       = 'Time';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -29,3 +31,29 @@ $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
 $lang->report->singleColor[] = 'F6BD0F';
+
+$lang->report->projectDeviation = 'Project deviation';
+$lang->report->productInfo      = 'Product information';
+$lang->report->workload         = 'Workload';
+$lang->report->bugSummary       = 'Bug summary';
+
+$lang->report->id            = 'ID';
+$lang->report->project       = 'Project';
+$lang->report->product       = 'Product';
+$lang->report->user          = 'Username';
+$lang->report->bug           = 'Bug';
+$lang->report->task          = 'Tasks';
+$lang->report->estimate      = 'Estimate';
+$lang->report->consumed      = 'Consumed';
+$lang->report->remain        = 'Remain';
+$lang->report->manhour       = 'Manhour';
+$lang->report->deviation     = 'Deviation';
+$lang->report->deviationRate = 'Deviation rate';
+$lang->report->stories       = 'Stories';
+$lang->report->bugs          = 'Bugs';
+$lang->report->devConsumed   = 'Develop';
+$lang->report->testConsumed  = 'Test';
+$lang->report->devTestRate   = 'Dev/Test';
+$lang->report->details       = 'Details';
+$lang->report->total         = 'Total';
+$lang->report->to            = 'to';
