@@ -101,7 +101,7 @@ var customed   = <?php echo (int)$customed;?>;
         <?php foreach($bugs as $bug):?>
         <?php $bugLink = inlink('view', "bugID=$bug->id");?>
         <tr class='a-center'>
-          <td class='<?php echo $bug->status;?>'><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
+          <td class='<?php echo $bug->status;?>' style="font-weight:bold"><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
           <td>
             <span class='<?php echo 'severity' . $bug->severity;?>'>&nbsp;</span>
             <?php echo $lang->bug->severityList[$bug->severity]?>
@@ -149,21 +149,7 @@ var customed   = <?php echo (int)$customed;?>;
         <tfoot>
           <tr>
             <?php $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 12 : 9;?>
-            <td colspan='<?php echo $columns;?>'>
-              <div class='f-left'>
-                <?php 
-                foreach($lang->bug->statusList as $status => $label)
-                {
-                    if($status != 'active')
-                    {
-                        echo "<span class='$status'> $label </span> ";
-                        continue;
-                    }
-                }
-                ?>
-              </div>
-              <div class='f-right'><?php $pager->show();?></div>
-            </td>
+            <td colspan='<?php echo $columns;?>'><?php $pager->show();?></td>
           </tr>
         </tfoot>
       </table>
