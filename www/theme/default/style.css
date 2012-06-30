@@ -10,7 +10,7 @@
 */
 /*-----------------------BASE SETTING----------------------------*/
 body     {margin:0; text-align:left; color:#141414;}
-fieldset {border:1px solid #b3c8dc; padding:8px 10px 8px 10px; margin-bottom:8px; color:#333;}
+fieldset {border:1px solid #efefef; padding:8px 10px 8px 15px; margin-bottom:8px; color:#333;}
 legend   {font-weight:bold;}
 del{background:#fcc;}
 ins{background:#cfc; text-decoration:none}
@@ -131,9 +131,9 @@ caption     {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px
 .table-5 {width:600px;margin-bottom:10px}
 .table-6 {width:800px;margin-bottom:10px}
 
-.table-1 tr, .table-2 tr, .table-3 tr, .table-4 tr, .table-5 tr {padding:3px 3px 3px 3px}
-.table-1 td, .table-2 td, .table-3 td, .table-4 td, .table-5 td {padding:3px 3px 3px 3px}
-.table-1 th, .table-2 th, .table-3 th, .table-4 th, .table-5 th {padding:3px 3px 3px 3px}
+.table-1 tr, .table-2 tr, .table-3 tr, .table-4 tr, .table-5 tr {padding:4px 3px}
+.table-1 td, .table-2 td, .table-3 td, .table-4 td, .table-5 td {padding:4px 3px}
+.table-1 th, .table-2 th, .table-3 th, .table-4 th, .table-5 th {padding:4px 3px}
 
 .colhead td  {text-align:center; background-color:#efefef;}
 .colhead th  {text-align:center; background-color:#efefef; font-size:12px; font-weight:bold; border-bottom:1px solid #e4e4e4; height:24px;}
@@ -154,7 +154,7 @@ caption     {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px
 .hoover  {background:#d0dee3;}
 .clicked {background:#fce6a2;}
 
-fieldset .rowhead {border:none}
+fieldset .rowhead {border:none; font-weight:normal}
 fieldset table    {border:none}
 fieldset .table-1 {margin:0;}
 fieldset .bd-1px, fieldset .bd-1px td, fieldset .bd-1px th {border:1px solid #b3c8dc; padding:2px}
@@ -293,7 +293,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #mainmenu #searchbox{float:right; border:none; background:#E5E5E5 url(images/main/search_bg.png) repeat-x bottom; height:100%;}
 #mainmenu .button-s{border:none; padding:2px}
 
-#searchType  { border:none; background:#E5E5E5; margin-bottom:2px; color:gray; font-size:12px}
+#searchType  {border:1px solid #ccc; background:#E5E5E5; margin-bottom:2px; color:gray; font-size:12px}
 #searchQuery {height:16px; border:1px solid #ccc; background: #E5E5E5; color:gray; font-size:12px}
 #searchbox #objectSwitcher{ border:none; width:16px; height:18px; background:url(images/main/enter.png) center bottom;}
 
@@ -328,7 +328,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #tree a       {color:#003366}
 
 /* Title bar. */
-#titlebar {font-size:14px; font-weight:bold; background-color:#efefef; padding:0px 5px; margin:10px 0; height:30px; line-height:30px;}
+#titlebar {font-size:14px; font-weight:bold; background-color:#EDF3FE; padding:5px; margin:5px 0; height:30px; line-height:30px;}
 #titlebar #main {float:left;  width:65%; clear:none; text-align:left}
 #titlebar div   {float:right; width:35%; clear:none; text-align:right}
 #titlebar #main input {font-size:14px; margin-top:5px}
@@ -340,6 +340,11 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #form-content .button-r{ background:url(images/main/button_95x36.png) 96px top; border:none; height:36px; width:95px;}
 #form-content hr{ color:#ddd; margin:15px 0;}
 .form-item { background-color:#e5e5e5; padding:8px; margin-bottom:15px; margin-top:5px;}
+
+#createform{margin-top:20px; padding:0 20px}
+#createform caption{font-size:14px; padding:5px 5px 5px 10px}
+#createform .rowhead{font-size:11.5px; font-weight:1.2; border:none}
+#createform tr, #createform td, #createform th{border:none; background:#fcfcfc}
 
 /* Product, project switcher. */
 #switcher {color:white; font-style:bold; background:red; cursor:pointer;}

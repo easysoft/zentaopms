@@ -5,7 +5,7 @@
     <?php echo $lang->file->common . ($i + 1) . " "?>
   </span>
   <input type='file' name='files[]' id="file<?php echo $i;?>"  tabindex='-1' />
-  <label id='label<?php echo $i;?>' tabindex='-1' class='strong'><?php echo $lang->file->label;?></label>
+  <label id='label<?php echo $i;?>' tabindex='-1'><?php echo $lang->file->label;?></label>
   <input type='text' name='labels[]' class='text-3' tabindex='-1' /><br />
   <?php endfor;?>
 </div>

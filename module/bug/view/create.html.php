@@ -19,7 +19,7 @@
 <script language='Javascript'>
 userList = "<?php echo join(',', array_keys($users));?>".split(',');
 </script>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='createform'>
   <table class='table-1'> 
     <caption><?php echo $lang->bug->create;?></caption>
     <tr>

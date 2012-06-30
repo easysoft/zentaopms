@@ -13,7 +13,7 @@
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <script>var holders=<?php echo json_encode($lang->story->placeholder);?></script>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='createform'>
   <table align='center' class='table-1'> 
     <caption><?php echo $lang->story->create;?></caption>
     <tr>
