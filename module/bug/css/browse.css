@@ -1,12 +1,6 @@
-.closed   {background:#efefef; text-decoration:line-through;}
-.closed a {text-decoration:none;}
-.resolved {background:#8EC21F;}
-.active1  {background:#E70014;}
-.active2  {background:#EA5407;}
-.active3  {background:#F39801;}
-.active4  {background:#FFF100;}
-.resolved a, .active1 a, .active2 a, .active3 a{color:white; text-decoration:none}
-.active4 a {color:blue; text-decoration:none}
+.closed, .closed a{color:gray; text-decoration:line-through;font-weight:bold }
+
+.resolved, .resolved a{color:#8EC21F; text-decoration:none; font-weight:bold}
 .confirm0 {color:gray;  font-size:9px}
 .confirm1 {color:green; font-size:9px}
 tfoot .f-left {color:#141414;}

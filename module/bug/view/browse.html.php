@@ -101,9 +101,11 @@ var customed   = <?php echo (int)$customed;?>;
         <?php foreach($bugs as $bug):?>
         <?php $bugLink = inlink('view', "bugID=$bug->id");?>
         <tr class='a-center'>
-          <?php $class = $bug->status == 'active' ? 'active' . $bug->severity : $bug->status;?>
-          <td class='<?php echo $class;?>'> <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?> </td>
-          <td><?php echo $lang->bug->severityList[$bug->severity]?></td>
+          <td class='<?php echo $bug->status;?>'><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
+          <td>
+            <span class='<?php echo 'severity' . $bug->severity;?>'>&nbsp;</span>
+            <?php echo $lang->bug->severityList[$bug->severity]?>
+          </td>
           <td><?php echo $lang->bug->priList[$bug->pri]?></td>
 
           <?php $class = 'confirm' . $bug->confirmed;?>
@@ -156,11 +158,6 @@ var customed   = <?php echo (int)$customed;?>;
                     {
                         echo "<span class='$status'> $label </span> ";
                         continue;
-                    }
-                    rsort($this->lang->bug->severityList);
-                    foreach($this->lang->bug->severityList as $severity) 
-                    {
-                        echo "<span class='$status$severity'> {$lang->bug->severity}:$severity </span> ";
                     }
                 }
                 ?>
