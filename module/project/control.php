@@ -102,7 +102,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function task($projectID = 0, $status = 'byproject', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($projectID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {   
         $this->loadModel('tree');
         /* Set browseType, productID, moduleID and queryID. */
@@ -138,7 +138,7 @@ class project extends control
         }
         elseif($browseType != "bysearch")
         {
-            $status = $status == 'byproject' ? 'all' : $status;
+            $status = $status == 'byProject' ? 'all' : $status;
             $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager); 
         }
         else

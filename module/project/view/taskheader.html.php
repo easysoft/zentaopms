@@ -1,7 +1,7 @@
 <div id='featurebar'>
   <div class='f-left'>
   <?php
-    echo "<span id='byprojectTab' onclick='browseByProject()'>"; common::printLink('project', 'task',"project=$project->id", $lang->project->projectTasks); echo '</span>';
+    echo "<span id='byprojectTab' onclick='browseByProject()'>"; common::printLink('project', 'task',"project=$project->id&type=byProject", $lang->project->projectTasks); echo '</span>';
     echo "<span id='bymoduleTab'  onclick='browseByModule()'>";  common::printLink('project', 'task',"project=$project->id&type=byModule", $lang->project->moduleTask); echo '</span>';
     echo "<span id='allTab'>"         ; common::printLink('project', 'task', "project=$project->id&type=all",          $lang->project->allTasks);     echo  '</span>' ;
     echo "<span id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$project->id&type=assignedtome", $lang->project->assignedToMe); echo  '</span>' ;
