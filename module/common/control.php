@@ -195,14 +195,15 @@ class common extends control
      * @param  string $label    the label of the link
      * @param  string $target   the target of the link
      * @param  string $misc     others
+     * @param  boolean $newline 
      * @static
      * @access public
      * @return bool
      */
-    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '')
+    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true)
     {
         if(!common::hasPriv($module, $method)) return false;
-        echo html::a(helper::createLink($module, $method, $vars), $label, $target, $misc);
+        echo html::a(helper::createLink($module, $method, $vars), $label, $target, $misc, $newline);
         return true;
     }
 
