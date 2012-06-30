@@ -101,6 +101,11 @@ $lang->searchObjects['testtask']    = 'T:测试任务';
 $lang->searchObjects['doc']         = 'D:文档';
 $lang->searchTips                   = '编号(ctrl+g)';
 
+/* 导入支持的编码格式。*/
+$lang->importEncodeList['gbk']   = 'GBK';
+$lang->importEncodeList['big5']  = 'BIG5';
+$lang->importEncodeList['utf-8'] = 'UTF-8';
+
 /* 导出文件的类型列表。*/
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';

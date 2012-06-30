@@ -101,6 +101,11 @@ $lang->searchObjects['testtask']    = 'Test Task';
 $lang->searchObjects['doc']         = 'Doc';
 $lang->searchTips                   = 'Id here(ctrl+g)';
 
+/* Encode list of impot. */
+$lang->importEncodeList['gbk']   = 'GBK';
+$lang->importEncodeList['big5']  = 'BIG5';
+$lang->importEncodeList['utf-8'] = 'UTF-8';
+
 /* File type of export. */
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
