@@ -86,6 +86,16 @@ $lang->menu->report  = '统计视图|report|index';
 $lang->menu->company = '组织视图|company|index';
 $lang->menu->admin   = '后台管理|admin|index';
 
+/* 主菜单顺序。*/
+$lang->menuOrder[5]  = 'my';
+$lang->menuOrder[10] = 'product';
+$lang->menuOrder[15] = 'project';
+$lang->menuOrder[20] = 'qa';
+$lang->menuOrder[25] = 'doc';
+$lang->menuOrder[30] = 'report';
+$lang->menuOrder[35] = 'company';
+$lang->menuOrder[40] = 'admin';
+
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'B:Bug';
 $lang->searchObjects['story']       = 'S:需求';
@@ -126,6 +136,9 @@ $lang->themes['classblue'] = '经典蓝';
 $lang->index->menu->product = '浏览产品|product|browse';
 $lang->index->menu->project = '浏览项目|project|browse';
 
+$lang->index->menuOrder[5]  = 'product';
+$lang->index->menuOrder[10] = 'project';
+
 /* 我的地盘菜单设置。*/
 $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index          = '首页|my|index';
@@ -139,6 +152,19 @@ $lang->my->menu->dynamic        = '我的动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '修改密码|my|changePassword|';
 $lang->todo->menu               = $lang->my->menu;
+
+$lang->my->menuOrder[5]  = 'account';
+$lang->my->menuOrder[10] = 'index';
+$lang->my->menuOrder[15] = 'todo';
+$lang->my->menuOrder[20] = 'task';
+$lang->my->menuOrder[25] = 'bug';
+$lang->my->menuOrder[30] = 'testtask';
+$lang->my->menuOrder[35] = 'story';
+$lang->my->menuOrder[40] = 'myProject';
+$lang->my->menuOrder[45] = 'dynamic';
+$lang->my->menuOrder[50] = 'profile';
+$lang->my->menuOrder[55] = 'changePassword';
+$lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* 产品视图设置。*/
 $lang->product->menu->list    = '%s';
@@ -160,6 +186,25 @@ $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
 
+$lang->product->menuOrder[5]  = 'story';
+$lang->product->menuOrder[10] = 'dynamic';
+$lang->product->menuOrder[15] = 'plan';
+$lang->product->menuOrder[20] = 'release';
+$lang->product->menuOrder[25] = 'roadmap';
+$lang->product->menuOrder[30] = 'doc';
+$lang->product->menuOrder[35] = 'view';
+$lang->product->menuOrder[40] = 'edit';
+$lang->product->menuOrder[45] = 'delete';
+$lang->product->menuOrder[50] = 'module';
+$lang->product->menuOrder[55] = 'project';
+$lang->product->menuOrder[60] = 'order';
+$lang->product->menuOrder[65] = 'create';
+$lang->product->menuOrder[70] = 'all';
+
+$lang->story->menuOrder       = $lang->product->menuOrder;
+$lang->productplan->menuOrder = $lang->product->menuOrder;
+$lang->release->menuOrder     = $lang->product->menuOrder;
+
 /* 项目视图菜单设置。*/
 $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
@@ -180,8 +225,29 @@ $lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>新增项目|project|create', 'float' => 'right');
 $lang->project->menu->copy      = array('link' => '<span class="icon-copy">&nbsp;</span>复制项目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;</span>所有项目|project|index|locate=false', 'float' => 'right');
-$lang->task->menu            = $lang->project->menu;
-$lang->build->menu           = $lang->project->menu;
+$lang->task->menuOrder          = $lang->project->menuOrder;
+$lang->build->menuOrder         = $lang->project->menuOrder;
+
+$lang->project->menuOrder[5]  = 'task';
+$lang->project->menuOrder[10] = 'story';
+$lang->project->menuOrder[15] = 'bug';
+$lang->project->menuOrder[20] = 'dynamic';
+$lang->project->menuOrder[25] = 'build';
+$lang->project->menuOrder[30] = 'testtask';
+$lang->project->menuOrder[35] = 'burn';
+$lang->project->menuOrder[40] = 'team';
+$lang->project->menuOrder[45] = 'doc';
+$lang->project->menuOrder[50] = 'product';
+$lang->project->menuOrder[55] = 'linkstory';
+$lang->project->menuOrder[60] = 'view';
+$lang->project->menuOrder[65] = 'edit';
+$lang->project->menuOrder[70] = 'delete';
+$lang->project->menuOrder[75] = 'order';
+$lang->project->menuOrder[80] = 'create';
+$lang->project->menuOrder[85] = 'copy';
+$lang->project->menuOrder[90] = 'all';
+$lang->task->menuOrder        = $lang->project->menuOrder;
+$lang->build->menuOrder       = $lang->project->menuOrder;
 
 /* QA视图菜单设置。*/
 $lang->bug->menu->product  = '%s';
@@ -189,15 +255,20 @@ $lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=
 $lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
 
+$lang->bug->menuOrder[0]  = 'product';
+$lang->bug->menuOrder[5]  = 'bug';
+$lang->bug->menuOrder[10] = 'testcase';
+$lang->bug->menuOrder[15] = 'testtask';
+
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
+$lang->testcase->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
-$lang->testtask->menu->product  = '%s';
-$lang->testtask->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
-$lang->testtask->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s');
-$lang->testtask->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
+$lang->testcase->menuOrder[0]  = 'product';
+$lang->testcase->menuOrder[5]  = 'bug';
+$lang->testcase->menuOrder[10] = 'testcase';
+$lang->testcase->menuOrder[15] = 'testtask';
 
 /* 文档视图菜单设置。*/
 $lang->doc->menu->list    = '%s';
@@ -207,11 +278,22 @@ $lang->doc->menu->module  = '维护模块|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
 $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>新增文档库|doc|createLib', 'float' => 'right');
 
+$lang->doc->menuOrder[5]  = 'browse';
+$lang->doc->menuOrder[10] = 'edit';
+$lang->doc->menuOrder[15] = 'module';
+$lang->doc->menuOrder[20] = 'delete';
+$lang->doc->menuOrder[25] = 'create';
+
 /* 统计视图菜单设置。*/
 $lang->report->menu->prj     = array('link' => '项目|report|projectdeviation');
 $lang->report->menu->product = array('link' => '产品|report|productinfo');
 $lang->report->menu->test    = array('link' => '测试|report|bugsummary');
 $lang->report->menu->staff   = array('link' => '员工|report|workload');
+
+$lang->report->menuOrder[5]  = 'prj';
+$lang->report->menuOrder[10] = 'product';
+$lang->report->menuOrder[15] = 'test';
+$lang->report->menuOrder[20] = 'staff';
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;
@@ -225,6 +307,17 @@ $lang->company->menu->addUser     = array('link' => '<span class="icon-add1">&nb
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
+$lang->company->menuOrder[0]  = 'name';
+$lang->company->menuOrder[5]  = 'browseUser';
+$lang->company->menuOrder[10] = 'dept';
+$lang->company->menuOrder[15] = 'browseGroup';
+$lang->company->menuOrder[20] = 'edit';
+$lang->company->menuOrder[25] = 'dynamic';
+$lang->company->menuOrder[30] = 'addGroup';
+$lang->company->menuOrder[35] = 'addUser';
+$lang->dept->menuOrder        = $lang->company->menuOrder;
+$lang->group->menuOrder       = $lang->company->menuOrder;
+
 /* 用户信息菜单设置。*/
 $lang->user->menu->account     = '%s' . $lang->arrow;
 $lang->user->menu->todo        = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
@@ -234,6 +327,15 @@ $lang->user->menu->dynamic     = '用户动态|user|dynamic|type=today&account=%
 $lang->user->menu->projectList = '项目列表|user|project|account=%s';
 $lang->user->menu->profile     = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp;</span>用户管理|company|browse|', 'float' => 'right');
+
+$lang->user->menuOrder[0] = 'account';
+$lang->user->menuOrder[5] = 'todo';
+$lang->user->menuOrder[10] = 'task';
+$lang->user->menuOrder[15] = 'bug';
+$lang->user->menuOrder[20] = 'dynamic';
+$lang->user->menuOrder[25] = 'projectList';
+$lang->user->menuOrder[30] = 'profile';
+$lang->user->menuOrder[35] = 'browse';
 
 /* 后台管理菜单设置。*/
 $lang->admin->menu->index     = array('link' => '首页|admin|index');
@@ -249,6 +351,14 @@ $lang->action->menu         = $lang->admin->menu;
 $lang->extension->menu      = $lang->admin->menu;
 $lang->editor->menu         = $lang->admin->menu;
 $lang->mail->menu           = $lang->admin->menu;
+
+$lang->admin->menuOrder[5] = 'index';
+$lang->admin->menuOrder[10] = 'extension';
+$lang->admin->menuOrder[15] = 'editor';
+$lang->admin->menuOrder[20] = 'mail';
+$lang->admin->menuOrder[25] = 'clearData';
+$lang->admin->menuOrder[30] = 'convert';
+$lang->admin->menuOrder[35] = 'trashes';
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release     = 'product';
