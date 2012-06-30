@@ -77,13 +77,15 @@ class html
      * @param  string $title     the link title.
      * @param  string $target    the target window
      * @param  string $misc      other params.
+     * @param  boolean $newline 
      * @return string
      */
-    static public function a($href = '', $title = '', $target = "_self", $misc = '')
+    static public function a($href = '', $title = '', $target = "_self", $misc = '', $newline = true)
     {
         if(empty($title)) $title = $href;
-        if($target == '_self') return "<a href='$href' $misc>$title</a>\n";
-        return "<a href='$href' target='$target' $misc>$title</a>\n";
+        $newline = $newline ? "\n" : '';
+        if($target == '_self') return "<a href='$href' $misc>$title</a>$newline";
+        return "<a href='$href' target='$target' $misc>$title</a>$newline";
     }
 
     /**
