@@ -325,6 +325,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Tree menu. */
 #tree li      {list-style-type:none;}
 #tree .active {color:blue; font-weight:bold}
+#tree a       {color:#003366}
 
 /* Title bar. */
 #titlebar {font-size:14px; font-weight:bold; background-color:#efefef; padding:0px 5px; margin:10px 0; height:30px; line-height:30px;}
