@@ -1,0 +1,7 @@
+.choose-date span, .dp-choose-date{ display:block; float:left; margin:0 10px;}
+.dp-applied{float:left;}
+.choose-date span{line-height:20px;}
+#product td, tr, th{ border:1px solid #E4E4E4;}
+.date{width:80px;}
+ul#report-list{margin:0px;}
+ul li{list-style:none;}

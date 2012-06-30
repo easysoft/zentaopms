@@ -1,10 +1,5 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/ext/view/datepicker.html.php';?>
-<style>
-.choose-date span, .dp-choose-date{ display:block; float:left; margin:0 10px;}
-.dp-applied{float:left;}
-.choose-date span{line-height:20px;}
-</style>
 <table class="cont-lt1">
   <tr valign='top'>
     <td class='side'>

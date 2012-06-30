@@ -1,7 +1,4 @@
 <?php include '../../common/view/header.html.php';?>
-<style>
-#product td, tr, th{ border:1px solid #E4E4E4;}
-</style>
 <table class="cont-lt1">
   <tr valign='top'>
     <td class='side'>
