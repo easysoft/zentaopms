@@ -70,7 +70,7 @@ var browseType = '<?php echo $browseType;?>';
             <th class='w-40px'>  <?php common::printOrderLink('consumed',  $orderBy, $vars, $lang->task->consumedAB);?></th>
             <th class='w-40px'>  <?php common::printOrderLink('left',      $orderBy, $vars, $lang->task->leftAB);?></th>
             <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story);?></th>
-            <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
           </thead>
           <?php  
@@ -130,12 +130,41 @@ var browseType = '<?php echo $browseType;?>';
               echo $story;
               ?>
             </td>
-            <td>
+            <td class='a-right'>
               <?php
-              if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
-              if(!(($task->status == 'done'  or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
-              if(!common::printLink('task', 'edit',  "taskID=$task->id", $lang->task->buttonEdit)) echo $lang->task->buttonEdit . ' ';
-              if($browseType == 'needconfirm') common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
+              if(common::hasPriv('task', 'finish'))
+              {
+                  if($task->status == 'wait'  or $task->status == 'doing')
+                  {
+                      echo html::a($this->inLink('task', 'finish'), '&nbsp;', "taskID=$task->id", "class='icon-green-small-task-finish' title='{$lang->task->buttonDone}'", false);
+                  }
+                  else
+                  {
+                      echo "<span class='icon-gray-small-task-finish' title='{$lang->task->buttonDone}'>&nbsp;</span>";
+                  }
+              }
+
+              if(common::hasPriv('task', 'close'))
+              {
+                  if($task->status == 'done'  or $task->status == 'cancel')
+                  {
+                      echo html::a($this->inLink('task', 'close', "taskID=$task->id"), '&nbsp;', '', "class='icon-green-small-task-close' title='{$lang->task->buttonClose}'", false);
+                  }
+                  else
+                  {
+                      echo "<span class='icon-gray-small-task-close' title='{$lang->task->buttonClose}'>&nbsp;</span>";
+                  }
+              }
+
+              if(!common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->task->buttonEdit}'"))
+              {
+                  echo "<span class='icon-gray-small-edit' title='{$lang->task->buttonEdit}'>&nbsp;</span>";
+              }
+
+              if($browseType == 'needconfirm') 
+              {
+                  common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
+              }
               ?>
             </td>
           </tr>

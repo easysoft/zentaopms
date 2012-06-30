@@ -21,15 +21,27 @@
     {
         common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
         common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
-        echo "<span class='icon-green-big-splitLine'></span>";
+        if(common::hasPriv('testtask', 'runCase') or common::hasPriv('testtask', 'results'))
+        {
+            echo "<span class='icon-green-big-splitLine'></span>";
+        }
 
-        if($case->lastRunResult == 'fail') common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
-
+        if($case->lastRunResult == 'fail')
+        {
+            if(common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))
+            {
+                echo "<span class='icon-green-big-splitLine'></span>";
+            }
+        }
+        
         common::printLink('testcase', 'edit',   "caseID=$case->id", '&nbsp;', '', "class='icon-green-big-edit' title={$lang->testcase->edit}");
         if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' title={$lang->comment} onclick='setComment()'");
         common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '&nbsp;', '', "class='icon-green-big-copy' title={$lang->copy}");
         common::printLink('testcase', 'delete', "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title={$lang->delete}");
-        echo "<span class='icon-green-big-splitLine'></span>";
+        if(common::hasPriv('testcase', 'edit') or common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'delete'))
+        {
+            echo "<span class='icon-green-big-splitLine'></span>";
+        }
     }
     echo html::a($browseLink, '&nbsp;', '', "class='icon-green-big-goback' title={$lang->goback}");
     if($preAndNext->pre) 
@@ -74,13 +86,32 @@
        <?php
         if(!$case->deleted)
         {
+            common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
+            common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
+            if(common::hasPriv('testtask', 'runCase') or common::hasPriv('testtask', 'results'))
+            {
+                echo "<span class='icon-green-big-splitLine'></span>";
+            }
+
+            if($case->lastRunResult == 'fail')
+            {
+                if(common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))
+                {
+                    echo "<span class='icon-green-big-splitLine'></span>";
+                }
+            }
+
             common::printLink('testcase', 'edit',   "caseID=$case->id", '&nbsp;', '', "class='icon-green-big-edit' title={$lang->testcase->edit}");
             if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' title={$lang->comment} onclick='setComment()'");
+            common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '&nbsp;', '', "class='icon-green-big-copy' title={$lang->copy}");
             common::printLink('testcase', 'delete', "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title={$lang->delete}");
-            echo "<span class='icon-green-big-splitLine'></span>";
+            if(common::hasPriv('testcase', 'edit') or common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'delete'))
+            {
+                echo "<span class='icon-green-big-splitLine'></span>";
+            }
         }
         echo html::a($browseLink, '&nbsp;', '', "class='icon-green-big-goback'");
-       ?>
+        ?>
       </div>
       <div id='comment' class='hidden'>
         <fieldset>
@@ -106,27 +137,27 @@
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->testcase->module;?></td>
             <td>
-            <?php 
-            foreach($modulePath as $key => $module)
-            {
-                if(!common::printLink('testcase', 'browse', "productID=$case->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                if(isset($modulePath[$key + 1])) echo $lang->arrow;
-            }
-            ?>
+<?php 
+        foreach($modulePath as $key => $module)
+        {
+            if(!common::printLink('testcase', 'browse', "productID=$case->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+            if(isset($modulePath[$key + 1])) echo $lang->arrow;
+        }
+?>
             </td>
           </tr>
           <tr class='nofixed'>
             <td class='rowhead'><?php echo $lang->testcase->story;?></td>
             <td>
-              <?php
-              if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
-              if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
-              {
-                  echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                  echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
-                  echo ")";
-              }
-              ?>
+<?php
+        if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
+        if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
+        {
+            echo "(<span class='warning'>{$lang->story->changed}</span> ";
+            echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+            echo ")";
+        }
+?>
             </td>
           </tr>
           <tr>
@@ -136,17 +167,17 @@
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->testcase->stage;?></td>
             <td>
-              <?php 
-              if($case->stage)
-              {
-                  $stags = explode(',', $case->stage);
-                  foreach($stags as $stage)
-                  {
-                      isset($lang->testcase->stageList[$stage]) ? print($lang->testcase->stageList[$stage]) : print($stage);
-                      echo "<br />";
-                  }
-              }
-              ?>
+<?php 
+        if($case->stage)
+        {
+            $stags = explode(',', $case->stage);
+            foreach($stags as $stage)
+            {
+                isset($lang->testcase->stageList[$stage]) ? print($lang->testcase->stageList[$stage]) : print($stage);
+                echo "<br />";
+            }
+        }
+?>
             </td>
           </tr>
           <tr>
@@ -172,15 +203,15 @@
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
             <td>
-              <?php
-              if(isset($case->linkCaseTitles))
-              {
-                  foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
-                  {
-                      echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank') . '<br />';
-                  }
-              }
-              ?>
+<?php
+        if(isset($case->linkCaseTitles))
+        {
+            foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+            {
+                echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank') . '<br />';
+            }
+        }
+?>
             </td>
           </tr>
         </table>

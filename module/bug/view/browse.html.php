@@ -136,8 +136,31 @@ var customed   = <?php echo (int)$customed;?>;
           <td class='a-right'>
             <?php
             $params = "bugID=$bug->id";
-            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->resolve}'", false))) echo "<span class='icon-gray-small-bug-resolve'>&nbsp;</span>";
-            if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->close}'", false)))   echo "<span class='icon-gray-small-bug-close'>&nbsp;</span>";
+            if(common::hasPriv('bug', 'resolve'))
+            {
+                if($bug->status == 'active')
+                {
+                    echo html::a($this->inLink('resolve', $params), '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->resolve}'", false);
+                }
+                else
+                {
+                    echo "<span class='icon-gray-small-bug-resolve' title='{$lang->bug->resolve}'>&nbsp;</span>";
+
+                }
+            }
+
+            if(common::hasPriv('bug', 'close'))
+            {
+                if($bug->status == 'resolved')
+                {
+                    echo html::a($this->inLink('close', $params), '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->close}'", false);
+                }
+                else
+                {
+                    echo "<span class='icon-gray-small-bug-close' title='{$lang->bug->close}'>&nbsp;</span>";
+                }
+            }
+
             common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->bug->edit}'", false);
             common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", '&nbsp;', '', "class='icon-green-small-copy' title='{$lang->copy}'", false);
             ?>

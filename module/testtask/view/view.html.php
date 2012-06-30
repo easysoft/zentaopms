@@ -54,11 +54,17 @@
   {
       common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
       common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
-      echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+      if(common::hasPriv('testtask', 'cases') or common::hasPriv('testtask', 'linkcase'))
+      {
+          echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+      }
 
       common::printLink('testtask', 'edit',   "taskID=$task->id", '&nbsp;', '', "class='icon-green-big-edit' title='{$lang->edit}'");
       common::printLink('testtask', 'delete', "taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title='{$lang->delete}'", false);
-      echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+      if(common::hasPriv('testtask', 'edit') or common::hasPriv('testtask', 'delete'))
+      {
+          echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+      }
   }
   echo html::a($browseLink, '&nbsp', '', "class='icon-green-big-goback' title='{$lang->goback}'");
   ?>

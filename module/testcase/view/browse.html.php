@@ -98,9 +98,16 @@ var moduleID   = '<?php echo $moduleID;?>';
 
                 common::printLink('testcase', 'delete',  "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-green-small-delete' title='{$lang->delete}'", false);
 
-                if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '&nbsp;', '', "class='icon-green-small-case-createBug' title='{$lang->testtask->createBug}'", false))) 
+                if(common::hasPriv('bug', 'create'))
                 {
-                    echo "<span class='icon-gray-small-case-createBug'>&nbsp;</span>";
+                    if($case->lastRunResult == 'fail')
+                    {
+                        echo html::a($this->inLink('create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID="), '&nbsp;', '', "class='icon-green-small-case-createBug' title='{$lang->testtask->createBug}'", false);
+                    }
+                    else
+                    {
+                        echo "<span class='icon-gray-small-case-createBug' title='{$lang->testtask->createBug}'>&nbsp;</span>";
+                    }
                 }
                 ?>
               </td>
