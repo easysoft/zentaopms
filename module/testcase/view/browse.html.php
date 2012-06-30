@@ -29,6 +29,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     ?>
   </div>
   <div class='f-right'>
+    <?php common::printLink('testcase', 'import', "productID=$productID", '&nbsp;', '', "class='import icon-green-big-import' title='{$lang->testcase->import}'"); ?>
     <?php if($browseType != 'needconfirm') common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy", '&nbsp;', '', "class='export icon-green-big-export' title='{$lang->testcase->export}'"); ?>
     <?php common::printLink('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID", '&nbsp;', '', "class='icon-green-big-case-batchCreate' title='{$lang->testcase->batchCreate}'"); ?>
     <?php common::printLink('testcase', 'create', "productID=$productID&moduleID=$moduleID", '&nbsp;', '', "class='icon-green-big-case-create' title='{$lang->testcase->create}'"); ?>
