@@ -147,4 +147,29 @@ class settingModel extends model
 
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
     }
+
+    /**
+     * Delete value of item 
+     * 
+     * @param  string              $owner 
+     * @param  string              $module 
+     * @param  string              $section 
+     * @param  string              $key 
+     * @param  string|array|object $value 
+     * @param  string|int          $company 
+     * @access public
+     * @return void
+     */
+    public function deleteItem($owner, $module, $section, $key, $value = '', $company = 'current')
+    {
+        $company = $company === 'current' ? $this->app->company->id : $company;
+        $this->dao->delete()->from(TABLE_CONFIG)
+            ->where('owner')->eq($owner)
+            ->andWhere('module')->eq($module)
+            ->andWhere('section')->eq($section)
+            ->andWhere('company')->eq($company)
+            ->beginIF((is_array($value) or is_object($value)))->andWhere("`$key`")->in($value)->fi()
+            ->beginIF((!is_array($value) and !is_object($value)))->andWhere("`$key`")->eq($value)->fi()
+            ->exec($autoCompany = false);
+    }
 }
