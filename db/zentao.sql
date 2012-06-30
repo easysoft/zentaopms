@@ -473,6 +473,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `company` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL default '0',
+  `module` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0', 
   `story` mediumint(8) unsigned NOT NULL default '0',
   `storyVersion` smallint(6) NOT NULL default '1',
   `fromBug` mediumint(8) unsigned NOT NULL default '0',
