@@ -68,7 +68,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
               <th class='w-80px'>  <?php common::printOrderLink('lastRunResult',$orderBy, $vars, $lang->testtask->lastRunResult);?></th>
               <th class='w-status'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
-              <th class='w-220px {sorter:false}'><?php echo $lang->actions;?></th>
+              <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
               <?php endif;?>
             </tr>
             <?php foreach($cases as $case):?>
@@ -92,13 +92,16 @@ var moduleID   = '<?php echo $moduleID;?>';
                 common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
                 common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
 
-                common::printLink('testcase', 'edit',    "caseID=$case->id", '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->testcase->edit}'");
+                common::printLink('testcase', 'edit',    "caseID=$case->id", '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->testcase->edit}'", false);
 
-                common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '&nbsp;', '', "class='icon-green-small-copy' title='{$lang->copy}'");
+                common::printLink('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '&nbsp;', '', "class='icon-green-small-copy' title='{$lang->copy}'", false);
 
-                common::printLink('testcase', 'delete',  "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-green-small-delete' title='{$lang->delete}'");
+                common::printLink('testcase', 'delete',  "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-green-small-delete' title='{$lang->delete}'", false);
 
-                if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '&nbsp;', '', "class='icon-green-small-case-createBug' title='{$lang->testtask->createBug}'"))) echo "<span class='icon-gray-small-case-createBug'>&nbsp;</span>";
+                if(!($case->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '&nbsp;', '', "class='icon-green-small-case-createBug' title='{$lang->testtask->createBug}'", false))) 
+                {
+                    echo "<span class='icon-gray-small-case-createBug'>&nbsp;</span>";
+                }
                 ?>
               </td>
               <?php endif;?>
