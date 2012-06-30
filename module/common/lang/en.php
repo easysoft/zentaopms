@@ -256,11 +256,13 @@ $lang->testtask->menu->product  = '%s';
 $lang->testtask->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testtask->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s');
 $lang->testtask->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
+$lang->testtask->menu           = $lang->testcase->menu;
 
 $lang->testcase->menuOrder[0]  = 'product';
 $lang->testcase->menuOrder[5]  = 'bug';
 $lang->testcase->menuOrder[10] = 'testcase';
 $lang->testcase->menuOrder[15] = 'testtask';
+$lang->testtask->menuOrder     = $lang->testcase->menuOrder;
 
 /* Doc menu. */
 $lang->doc->menu->list    = '%s';

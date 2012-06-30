@@ -256,11 +256,13 @@ $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
+$lang->testtask->menu           = $lang->testcase->menu;
 
 $lang->testcase->menuOrder[0]  = 'product';
 $lang->testcase->menuOrder[5]  = 'bug';
 $lang->testcase->menuOrder[10] = 'testcase';
 $lang->testcase->menuOrder[15] = 'testtask';
+$lang->testtask->menuOrder     = $lang->testcase->menuOrder;
 
 /* 文档视图菜单设置。*/
 $lang->doc->menu->list    = '%s';
@@ -344,7 +346,7 @@ $lang->extension->menu        = $lang->admin->menu;
 $lang->editor->menu           = $lang->admin->menu;
 $lang->mail->menu             = $lang->admin->menu;
 
-$lang->admin->menuOrder[5] = 'index';
+$lang->admin->menuOrder[5]  = 'index';
 $lang->admin->menuOrder[10] = 'extension';
 $lang->admin->menuOrder[15] = 'editor';
 $lang->admin->menuOrder[20] = 'mail';
