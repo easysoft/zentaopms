@@ -27,7 +27,7 @@ class bugModel extends model
         $selectHtml = $this->product->select($products, $productID, 'bug', 'browse');
         foreach($this->lang->bug->menu as $key => $menu)
         {
-            $replace = ($key == 'product') ? $selectHtml . $this->lang->arrow : $productID;
+            $replace = ($key == 'product') ? $selectHtml : $productID;
             common::setMenuVars($this->lang->bug->menu, $key, $replace);
         }
     }

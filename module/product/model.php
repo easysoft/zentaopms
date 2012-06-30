@@ -41,7 +41,7 @@ class productModel extends model
         $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra);
         foreach($this->lang->product->menu as $key => $menu)
         {
-            $replace = $key == 'list' ? $selectHtml . $this->lang->arrow : $productID;
+            $replace = $key == 'list' ? $selectHtml : $productID;
             common::setMenuVars($this->lang->product->menu, $key, $replace);
         }
     }

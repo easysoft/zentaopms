@@ -27,7 +27,7 @@ class testcaseModel extends model
         $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse');
         foreach($this->lang->testcase->menu as $key => $menu)
         {
-            $replace = ($key == 'product') ? $selectHtml . $this->lang->arrow : $productID;
+            $replace = ($key == 'product') ? $selectHtml : $productID;
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
     }
