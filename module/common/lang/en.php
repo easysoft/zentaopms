@@ -86,6 +86,16 @@ $lang->menu->report  = 'Report|report|index';
 $lang->menu->company = 'Company|company|index';
 $lang->menu->admin   = 'Admin|admin|index';
 
+/* Order of main menu. */
+$lang->menuOrder[5]  = 'my';
+$lang->menuOrder[10] = 'product';
+$lang->menuOrder[15] = 'project';
+$lang->menuOrder[20] = 'qa';
+$lang->menuOrder[25] = 'doc';
+$lang->menuOrder[30] = 'report';
+$lang->menuOrder[35] = 'company';
+$lang->menuOrder[40] = 'admin';
+
 /* The objects in the search box. */
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
@@ -126,6 +136,9 @@ $lang->themes['classblue'] = 'Blue';
 $lang->index->menu->product = 'Products|product|browse';
 $lang->index->menu->project = 'Projects|project|browse';
 
+$lang->index->menuOrder[5]  = 'product';
+$lang->index->menuOrder[10] = 'project';
+
 /* Dashboard menu. */
 $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index          = 'Index|my|index';
@@ -139,6 +152,19 @@ $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Change Password|my|changePassword|';
 $lang->todo->menu               = $lang->my->menu;
+
+$lang->my->menuOrder[5]  = 'account';
+$lang->my->menuOrder[10] = 'index';
+$lang->my->menuOrder[15] = 'todo';
+$lang->my->menuOrder[20] = 'task';
+$lang->my->menuOrder[25] = 'bug';
+$lang->my->menuOrder[30] = 'testtask';
+$lang->my->menuOrder[35] = 'story';
+$lang->my->menuOrder[40] = 'myProject';
+$lang->my->menuOrder[45] = 'dynamic';
+$lang->my->menuOrder[50] = 'profile';
+$lang->my->menuOrder[55] = 'changePassword';
+$lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* Product menu. */
 $lang->product->menu->list    = '%s';
@@ -160,6 +186,25 @@ $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
 
+$lang->product->menuOrder[5]  = 'story';
+$lang->product->menuOrder[10] = 'dynamic';
+$lang->product->menuOrder[15] = 'plan';
+$lang->product->menuOrder[20] = 'release';
+$lang->product->menuOrder[25] = 'roadmap';
+$lang->product->menuOrder[30] = 'doc';
+$lang->product->menuOrder[35] = 'view';
+$lang->product->menuOrder[40] = 'edit';
+$lang->product->menuOrder[45] = 'delete';
+$lang->product->menuOrder[50] = 'module';
+$lang->product->menuOrder[55] = 'project';
+$lang->product->menuOrder[60] = 'order';
+$lang->product->menuOrder[65] = 'create';
+$lang->product->menuOrder[70] = 'all';
+
+$lang->story->menuOrder       = $lang->product->menuOrder;
+$lang->productplan->menuOrder = $lang->product->menuOrder;
+$lang->release->menuOrder     = $lang->product->menuOrder;
+
 /* Project menu. */
 $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
@@ -180,8 +225,29 @@ $lang->project->menu->order     = 'Order|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>New|project|create', 'float' => 'right');
 $lang->project->menu->copy      = array('link' => '<span class="icon-copy">&nbsp;</span>Copy|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;</span>Projects|project|index|locate=no', 'float' => 'right');
-$lang->task->menu            = $lang->project->menu;
-$lang->build->menu           = $lang->project->menu;
+$lang->task->menu               = $lang->project->menu;
+$lang->build->menu              = $lang->project->menu;
+
+$lang->project->menuOrder[5]  = 'task';
+$lang->project->menuOrder[10] = 'story';
+$lang->project->menuOrder[15] = 'bug';
+$lang->project->menuOrder[20] = 'dynamic';
+$lang->project->menuOrder[25] = 'build';
+$lang->project->menuOrder[30] = 'testtask';
+$lang->project->menuOrder[35] = 'burn';
+$lang->project->menuOrder[40] = 'team';
+$lang->project->menuOrder[45] = 'doc';
+$lang->project->menuOrder[50] = 'product';
+$lang->project->menuOrder[55] = 'linkstory';
+$lang->project->menuOrder[60] = 'view';
+$lang->project->menuOrder[65] = 'edit';
+$lang->project->menuOrder[70] = 'delete';
+$lang->project->menuOrder[75] = 'order';
+$lang->project->menuOrder[80] = 'create';
+$lang->project->menuOrder[85] = 'copy';
+$lang->project->menuOrder[90] = 'all';
+$lang->task->menuOrder        = $lang->project->menuOrder;
+$lang->build->menuOrder       = $lang->project->menuOrder;
 
 /* QA menu. */
 $lang->bug->menu->product  = '%s';
@@ -199,6 +265,11 @@ $lang->testtask->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s')
 $lang->testtask->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s');
 $lang->testtask->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
+$lang->testcase->menuOrder[0]  = 'product';
+$lang->testcase->menuOrder[5]  = 'bug';
+$lang->testcase->menuOrder[10] = 'testcase';
+$lang->testcase->menuOrder[15] = 'testtask';
+
 /* Doc menu. */
 $lang->doc->menu->list    = '%s';
 $lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s');
@@ -207,11 +278,22 @@ $lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
 $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
 
+$lang->doc->menuOrder[5]  = 'browse';
+$lang->doc->menuOrder[10] = 'edit';
+$lang->doc->menuOrder[15] = 'module';
+$lang->doc->menuOrder[20] = 'delete';
+$lang->doc->menuOrder[25] = 'create';
+
 /* Report menu. */
-$lang->report->menu->project = array('link' => 'Project|report|projectdeviation');
+$lang->report->menu->prj     = array('link' => 'Project|report|projectdeviation');
 $lang->report->menu->product = array('link' => 'Product|report|productinfo');
 $lang->report->menu->test    = array('link' => 'Test|report|bugsummary');
-$lang->report->menu->project = array('link' => 'Staff|report|workload');
+$lang->report->menu->staff   = array('link' => 'Staff|report|workload');
+
+$lang->report->menuOrder[5]  = 'prj';
+$lang->report->menuOrder[10] = 'product';
+$lang->report->menuOrder[15] = 'test';
+$lang->report->menuOrder[20] = 'staff';
 
 /* Company menu. */
 $lang->company->menu->name        = '%s' . $lang->arrow;
@@ -225,6 +307,17 @@ $lang->company->menu->addUser     = array('link' => '<span class="icon-add1">&nb
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
+$lang->company->menuOrder[0]  = 'name';
+$lang->company->menuOrder[5]  = 'browseUser';
+$lang->company->menuOrder[10] = 'dept';
+$lang->company->menuOrder[15] = 'browseGroup';
+$lang->company->menuOrder[20] = 'edit';
+$lang->company->menuOrder[25] = 'dynamic';
+$lang->company->menuOrder[30] = 'addGroup';
+$lang->company->menuOrder[35] = 'addUser';
+$lang->dept->menuOrder        = $lang->company->menuOrder;
+$lang->group->menuOrder       = $lang->company->menuOrder;
+
 /* User menu. */
 $lang->user->menu->account     = '%s' . $lang->arrow;
 $lang->user->menu->todo        = array('link' => 'Todo|user|todo|account=%s', 'subModule' => 'todo');
@@ -235,6 +328,15 @@ $lang->user->menu->projectList = 'Project|user|project|account=%s';
 $lang->user->menu->profile     = array('link' => 'Profile|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp;</span>Manage user|company|browse|', 'float' => 'right');
 
+$lang->user->menuOrder[0]  = 'account';
+$lang->user->menuOrder[5]  = 'todo';
+$lang->user->menuOrder[10] = 'task';
+$lang->user->menuOrder[15] = 'bug';
+$lang->user->menuOrder[20] = 'dynamic';
+$lang->user->menuOrder[25] = 'projectList';
+$lang->user->menuOrder[30] = 'profile';
+$lang->user->menuOrder[35] = 'browse';
+
 /* Admin menu. */
 $lang->admin->menu->index     = array('link' => 'Index|admin|index');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
@@ -243,12 +345,26 @@ $lang->admin->menu->mail      = array('link' => 'EmailSetting|mail|index', 'subM
 $lang->admin->menu->clearData = array('link' => 'ClearData|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
-$lang->convert->menu        = $lang->admin->menu;
-$lang->upgrade->menu        = $lang->admin->menu;
-$lang->action->menu         = $lang->admin->menu;
-$lang->extension->menu      = $lang->admin->menu;
-$lang->editor->menu         = $lang->admin->menu;
-$lang->mail->menu           = $lang->admin->menu;
+$lang->convert->menu          = $lang->admin->menu;
+$lang->upgrade->menu          = $lang->admin->menu;
+$lang->action->menu           = $lang->admin->menu;
+$lang->extension->menu        = $lang->admin->menu;
+$lang->editor->menu           = $lang->admin->menu;
+$lang->mail->menu             = $lang->admin->menu;
+
+$lang->admin->menuOrder[5] = 'index';
+$lang->admin->menuOrder[10] = 'extension';
+$lang->admin->menuOrder[15] = 'editor';
+$lang->admin->menuOrder[20] = 'mail';
+$lang->admin->menuOrder[25] = 'clearData';
+$lang->admin->menuOrder[30] = 'convert';
+$lang->admin->menuOrder[35] = 'trashes';
+$lang->convert->menuOrder   = $lang->admin->menuOrder;
+$lang->upgrade->menuOrder   = $lang->admin->menuOrder;
+$lang->action->menuOrder    = $lang->admin->menuOrder;
+$lang->extension->menuOrder = $lang->admin->menuOrder;
+$lang->editor->menuOrder    = $lang->admin->menuOrder;
+$lang->mail->menuOrder      = $lang->admin->menuOrder;
 
 /* Groups. */
 $lang->menugroup->release     = 'product';

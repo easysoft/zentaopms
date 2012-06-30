@@ -328,8 +328,8 @@ $lang->user->menu->projectList = '项目列表|user|project|account=%s';
 $lang->user->menu->profile     = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp;</span>用户管理|company|browse|', 'float' => 'right');
 
-$lang->user->menuOrder[0] = 'account';
-$lang->user->menuOrder[5] = 'todo';
+$lang->user->menuOrder[0]  = 'account';
+$lang->user->menuOrder[5]  = 'todo';
 $lang->user->menuOrder[10] = 'task';
 $lang->user->menuOrder[15] = 'bug';
 $lang->user->menuOrder[20] = 'dynamic';
@@ -345,12 +345,12 @@ $lang->admin->menu->mail      = array('link' => '发信配置|mail|index', 'subM
 $lang->admin->menu->clearData = array('link' => '清除数据|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => '从其他系统导入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
-$lang->convert->menu        = $lang->admin->menu;
-$lang->upgrade->menu        = $lang->admin->menu;
-$lang->action->menu         = $lang->admin->menu;
-$lang->extension->menu      = $lang->admin->menu;
-$lang->editor->menu         = $lang->admin->menu;
-$lang->mail->menu           = $lang->admin->menu;
+$lang->convert->menu          = $lang->admin->menu;
+$lang->upgrade->menu          = $lang->admin->menu;
+$lang->action->menu           = $lang->admin->menu;
+$lang->extension->menu        = $lang->admin->menu;
+$lang->editor->menu           = $lang->admin->menu;
+$lang->mail->menu             = $lang->admin->menu;
 
 $lang->admin->menuOrder[5] = 'index';
 $lang->admin->menuOrder[10] = 'extension';
@@ -359,6 +359,12 @@ $lang->admin->menuOrder[20] = 'mail';
 $lang->admin->menuOrder[25] = 'clearData';
 $lang->admin->menuOrder[30] = 'convert';
 $lang->admin->menuOrder[35] = 'trashes';
+$lang->convert->menuOrder   = $lang->admin->menuOrder;
+$lang->upgrade->menuOrder   = $lang->admin->menuOrder;
+$lang->action->menuOrder    = $lang->admin->menuOrder;
+$lang->extension->menuOrder = $lang->admin->menuOrder;
+$lang->editor->menuOrder    = $lang->admin->menuOrder;
+$lang->mail->menuOrder      = $lang->admin->menuOrder;
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release     = 'product';
