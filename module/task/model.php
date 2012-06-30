@@ -51,7 +51,7 @@ class taskModel extends model
                 ->autoCheck()
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
-                ->checkIF($task->deadline != '', 'deadline', 'ge', $task->estStarted)
+                ->checkIF($task->deadline != '0000-00-00', 'deadline', 'ge', $task->estStarted)
                 ->exec();
 
             if(!dao::isError())

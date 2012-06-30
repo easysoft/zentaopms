@@ -34,10 +34,10 @@ var browseType = '<?php echo $browseType;?>';
       <div class='box-content'>
         <?php echo $moduleTree;?>
         <div class='a-right'>
-          <?php if(common::hasPriv('project', 'edit'))   echo html::a($this->createLink('project', 'edit',   "projectID=$projectID"), $lang->edit);?>
-          <?php if(common::hasPriv('project', 'delete')) echo html::a($this->createLink('project', 'delete', "projectID=$projectID&confirm=no"),   $lang->delete, 'hiddenwin');?>
-          <?php if(common::hasPriv('tree', 'browse'))    echo html::a($this->createLink('tree',    'browse', "rootID=$projectID&view=task"), $lang->tree->manage);?>
-          <?php common::printLink('tree', 'fix',    "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
+          <?php common::printLink('project', 'edit',   "projectID=$projectID", $lang->edit);?>
+          <?php common::printLink('project', 'delete', "projectID=$projectID&confirm=no",   $lang->delete, 'hiddenwin');?>
+          <?php common::printLink('tree', 'browse',    "rootID=$projectID&view=task", $lang->tree->manage);?>
+          <?php common::printLink('tree', 'fix',       "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
         </div>
       </div>
     </td>
