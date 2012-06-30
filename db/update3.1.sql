@@ -6,3 +6,4 @@ update zt_config set module = 'common';
 update zt_config set company = 1 where `key` = 'sn';
 ALTER TABLE `zt_config` CHANGE `value` `value` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `zt_config` ADD UNIQUE `unique` (`company` , `owner` , `module` , `section` , `key`);
+ALTER TABLE `zt_task` ADD `module` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0' AFTER `project` ;
