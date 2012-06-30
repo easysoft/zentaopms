@@ -795,7 +795,6 @@ $(document).ready(function()
 {
     setNowrapObjTitle();
     setRequiredFields();
-    setHelpLink();
     setPlaceholder();
     setProductSwitcher();
     setProjectSwitcher();
