@@ -131,11 +131,11 @@ var customed   = <?php echo (int)$customed;?>;
           <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
           <?php endif;?>
 
-          <td>
+          <td class='a-right'>
             <?php
             $params = "bugID=$bug->id";
-            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->resolve}'"))) echo "<span class='icon-gray-small-bug-resolve'></span>";
-            if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->close}'")))   echo "<span class='icon-gray-small-bug-close'></span>";
+            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->resolve}'"))) echo "<span class='icon-gray-small-bug-resolve'>&nbsp;</span>";
+            if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->close}'")))   echo "<span class='icon-gray-small-bug-close'>&nbsp;</span>";
             common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->bug->edit}'");
             common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", '&nbsp;', '', "class='icon-green-small-copy' title='{$lang->copy}'");
             ?>
