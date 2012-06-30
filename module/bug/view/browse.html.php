@@ -93,7 +93,7 @@ var customed   = <?php echo (int)$customed;?>;
           <th class='w-date'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
           <?php endif;?>
 
-          <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
+          <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
         </thead>
@@ -134,10 +134,10 @@ var customed   = <?php echo (int)$customed;?>;
           <td class='a-right'>
             <?php
             $params = "bugID=$bug->id";
-            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->resolve}'"))) echo "<span class='icon-gray-small-bug-resolve'>&nbsp;</span>";
-            if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->close}'")))   echo "<span class='icon-gray-small-bug-close'>&nbsp;</span>";
-            common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->bug->edit}'");
-            common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", '&nbsp;', '', "class='icon-green-small-copy' title='{$lang->copy}'");
+            if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->resolve}'", false))) echo "<span class='icon-gray-small-bug-resolve'>&nbsp;</span>";
+            if(!($bug->status == 'resolved' and common::printLink('bug', 'close',   $params, '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->close}'", false)))   echo "<span class='icon-gray-small-bug-close'>&nbsp;</span>";
+            common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->bug->edit}'", false);
+            common::printLink('bug', 'create', "product=$bug->product&extra=bugID=$bug->id", '&nbsp;', '', "class='icon-green-small-copy' title='{$lang->copy}'", false);
             ?>
           </td>
           <?php endif;?>
