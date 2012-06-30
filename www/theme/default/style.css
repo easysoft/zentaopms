@@ -108,14 +108,14 @@ a  {text-decoration:none;}
 .select-1, .select-2, .select-3, .select-4, .select-5, 
 .area-1, .area-2, .area-3, .area-4, .area-5 {border:1px solid #ccc}
 
-.button-s{padding:3px 20px 3px 20px}
-.button-r{padding:3px 20px 3px 20px}
-.button-c{padding:3px 20px 3px 20px}
+.button-s{padding:2px 10px 2px 10px}
+.button-r{padding:2px 10px 2px 10px; color:gray}
+.button-c{padding:2px 10px 2px 10px}
 .button-d{color:blue}
 
 /*-----------------------TABLE SETTING----------------------------*/
 table      {border:1px solid #e4e4e4;}
-td, tr, th {border:none; border-bottom:1px solid #e4e4e4}
+td, tr, th {border:none;}
 tfoot      {border-top:1px solid #e4e4e4}
 tfoot .f-left{ color:gray}
 tfoot .f-left strong{ color:#141414}
@@ -150,7 +150,7 @@ caption     {border:1px solid #e4e4e4; background:#edf3fe; margin:0; padding:6px
 .nofixed th, .nofixed td  {overflow:visible; white-space:normal}
 
 .odd     {background:#fff;}
-.even    {background:#f1f1f1;}
+.even    {background:#f9f9f9;}
 .hoover  {background:#d0dee3;}
 .clicked {background:#fce6a2;}
 
@@ -313,7 +313,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /* Feature bar. */
 #featurebar                {background-color:#EDF3FE; height:28px; line-height:28px; cursor:pointer; padding:6px 8px; margin: -15px -15px 10px -15px;}
-#featurebar a              {text-decoration:none; border-right:1px solid #ddd; padding:4px 10px 4px 4px;}
+#featurebar a              {text-decoration:none; border-right:1px solid #ddd; padding:4px 10px 4px 4px; color:#003366}
 #featurebar a:hover        {color:#ff3600;}
 #featurebar .f-right a     {color:red; font-weight:bold; border-right:none; padding:0px;}
 #featurebar #bysearchTab a {border:none;}
