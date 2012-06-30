@@ -41,7 +41,7 @@
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
     <td><?php echo $lang->testtask->statusList[$task->status];?></td>
-    <td>
+    <td class='a-right'>
       <?php
       common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
       common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
