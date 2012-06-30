@@ -19,7 +19,7 @@ function switchGroup(projectID, groupBy)
 function convertStringToDate(dateString)
 {
     var myDate = dateString.split('-')
-    return new Date(myDate[0], myDate[1], myDate[2]);
+    return new Date(myDate[0], (myDate[1] - 1), myDate[2]);
 }
 
 /**
@@ -34,7 +34,7 @@ function computeDaysDelta(date1, date2)
 {
     date1 = convertStringToDate(date1);
     date2 = convertStringToDate(date2);
-    return (date2 - date1) / (1000 * 60 * 60 * 24) + 1
+    return (date2 - date1) / (1000 * 60 * 60 * 24) + 1;
 }
 
 /**
