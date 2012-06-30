@@ -225,8 +225,8 @@ $lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>新增项目|project|create', 'float' => 'right');
 $lang->project->menu->copy      = array('link' => '<span class="icon-copy">&nbsp;</span>复制项目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;</span>所有项目|project|index|locate=false', 'float' => 'right');
-$lang->task->menuOrder          = $lang->project->menuOrder;
-$lang->build->menuOrder         = $lang->project->menuOrder;
+$lang->task->menu               = $lang->project->menu;
+$lang->build->menu              = $lang->project->menu;
 
 $lang->project->menuOrder[5]  = 'task';
 $lang->project->menuOrder[10] = 'story';
