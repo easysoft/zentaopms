@@ -27,7 +27,7 @@
     <th class='w-80px'><?php echo $lang->testtask->begin;?></th>
     <th class='w-80px'><?php echo $lang->testtask->end;?></th>
     <th class='w-50px'><?php echo $lang->statusAB;?></th>
-    <th class='w-130px {sorter:false}'><?php echo $lang->actions;?></th>
+    <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -45,8 +45,8 @@
       <?php
       common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
       common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
-      common::printLink('testtask', 'edit',     "taskID=$task->id", $lang->edit);
-      common::printLink('testtask', 'delete',   "taskID=$task->id", $lang->delete, 'hiddenwin');
+      common::printLink('testtask', 'edit',     "taskID=$task->id", '&nbsp;', '', "class='icon-green-small-edit' title={$lang->edit}", false);
+      common::printLink('testtask', 'delete',   "taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-green-small-delete' title='{$lang->delete}'", false);
       ?>
     </td>
   </tr>

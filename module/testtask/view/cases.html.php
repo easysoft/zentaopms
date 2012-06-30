@@ -27,9 +27,9 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
   <div class='f-right'>
     <?php
-    common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=$task->id", $lang->export, '', 'class="export"');
+    common::printLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=$task->id", '&nbsp;', '', "class='export icon-green-big-export' title='{$lang->export}'");
     common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);
-    echo html::a($this->session->testtaskList, $lang->goback);
+    echo html::a($this->session->testtaskList, '&nbsp;', '', "class='icon-green-big-goback' title='{$lang->goback}'");
     ?>
   </div>
 </div>
@@ -56,7 +56,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-100px'>   <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
             <th class='w-80px'>    <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
             <th class='w-status'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-140px {sorter: false}'><?php echo $lang->actions;?></th>
+            <th class='w-120px {sorter: false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -72,12 +72,15 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
             <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
             <td class='<?php echo $run->status;?>'><?php echo $lang->testtask->statusList[$run->status];?></td>
-            <td class='a-left'>
+            <td class='a-right'>
               <?php
               common::printLink('testtask', 'runcase',    "id=$run->id", $lang->testtask->runCase, '', 'class="iframe"');
               common::printLink('testtask', 'results',    "id=$run->id", $lang->testtask->results, '', 'class="iframe"');
               common::printLink('testtask', 'unlinkcase', "id=$run->id", $lang->testtask->unlinkCase, 'hiddenwin');
-              if($run->lastRunResult == 'fail') common::printLink('bug', 'create', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $lang->testtask->createBug);
+              if(!($run->lastRunResult == 'fail' and common::printLink('bug', 'create', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", '&nbsp;', '', "class='icon-green-small-case-createBug' title'{$lang->testtask->createBug}'")))
+              {
+                  echo "<span class='icon-gray-small-case-createBug'>&nbsp;</span>";
+              }
               ?>
             </td>
           </tr>

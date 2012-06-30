@@ -54,10 +54,13 @@
   {
       common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
       common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
-      common::printLink('testtask', 'edit',   "taskID=$task->id", $lang->edit);
-      common::printLink('testtask', 'delete', "taskID=$task->id", $lang->delete, 'hiddenwin');
+      echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+
+      common::printLink('testtask', 'edit',   "taskID=$task->id", '&nbsp;', '', "class='icon-green-big-edit' title='{$lang->edit}'");
+      common::printLink('testtask', 'delete', "taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title='{$lang->delete}'", false);
+      echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
   }
-  echo html::a($browseLink, $lang->goback);
+  echo html::a($browseLink, '&nbsp', '', "class='icon-green-big-goback' title='{$lang->goback}'");
   ?>
 </div>
 <?php include '../../common/view/action.html.php';?>
