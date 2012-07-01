@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
- * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
+ * @version     $Id: zh-tw.php 3083 2012-06-22 09:45:14Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';
@@ -34,6 +34,7 @@ $lang->search->operators['<']          = '<';
 $lang->search->operators['<=']         = '<=';
 $lang->search->operators['include']    = '包含';
 $lang->search->operators['notinclude'] = '不包含';
+$lang->search->operators['belong']     = '從屬於';
 
 $lang->search->andor['and']         = '並且';
 $lang->search->andor['or']          = '或者';

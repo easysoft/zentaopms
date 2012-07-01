@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 2786 2012-04-27 01:35:33Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3011 2012-06-07 01:51:05Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -64,27 +64,29 @@ $lang->install->dataRoot     = '上傳檔案目錄';
 $lang->install->mkdir        = '<p>需要創建目錄%s。<br /> linux下面命令為：<br /> mkdir -p %s</p>';
 $lang->install->chmod        = '需要修改目錄 "%s" 的權限。<br />linux下面命令為：<br />chmod o=rwx -R %s';
 
-$lang->install->settingDB   = '設置資料庫';
-$lang->install->webRoot     = 'PMS所在網站目錄';
-$lang->install->requestType = 'URL方式';
-$lang->install->defaultLang = '預設語言';
-$lang->install->dbHost      = '資料庫伺服器';
-$lang->install->dbHostNote  = '如果localhost無法訪問，嘗試使用127.0.0.1';
-$lang->install->dbPort      = '伺服器連接埠';
-$lang->install->dbUser      = '資料庫用戶名';
-$lang->install->dbPassword  = '資料庫密碼';
-$lang->install->dbName      = 'PMS使用的庫';
-$lang->install->dbPrefix    = '建表使用的首碼';
-$lang->install->createDB    = '自動創建資料庫';
-$lang->install->clearDB     = '清空現有數據';
+$lang->install->settingDB      = '設置資料庫';
+$lang->install->webRoot        = 'PMS所在網站目錄';
+$lang->install->requestType    = 'URL方式';
+$lang->install->defaultLang    = '預設語言';
+$lang->install->dbHost         = '資料庫伺服器';
+$lang->install->dbHostNote     = '如果localhost無法訪問，嘗試使用127.0.0.1';
+$lang->install->dbPort         = '伺服器連接埠';
+$lang->install->dbUser         = '資料庫用戶名';
+$lang->install->dbPassword     = '資料庫密碼';
+$lang->install->dbName         = 'PMS使用的庫';
+$lang->install->dbPrefix       = '建表使用的首碼';
+$lang->install->createDB       = '自動創建資料庫';
+$lang->install->clearDB        = '清空現有數據';
+$lang->install->importDemoData = '導入demo數據';
 
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '靜態友好方式';
 
-$lang->install->errorConnectDB     = '資料庫連接失敗 ';
-$lang->install->errorCreateDB      = '資料庫創建失敗';
-$lang->install->errorDBExists      = '資料庫已經存在，繼續安裝請選擇清空數據';
-$lang->install->errorCreateTable   = '創建表失敗';
+$lang->install->errorConnectDB      = '資料庫連接失敗 ';
+$lang->install->errorCreateDB       = '資料庫創建失敗';
+$lang->install->errorDBExists       = '資料庫已經存在，繼續安裝請選擇清空數據';
+$lang->install->errorCreateTable    = '創建表失敗';
+$lang->install->errorImportDemoData = '導入demo數據失敗';
 
 $lang->install->setConfig  = '生成配置檔案';
 $lang->install->key        = '配置項';

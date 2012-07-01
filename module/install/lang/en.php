@@ -82,10 +82,11 @@ $lang->install->importDemoData = 'Import demo data if database exists.';
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
-$lang->install->errorConnectDB     = 'Database connect failed.';
-$lang->install->errorCreateDB      = 'Database create failed.';
-$lang->install->errorDBExists      = 'Database alread exists, to continue install, check the clear db box.';
-$lang->install->errorCreateTable   = 'Table create failed.';
+$lang->install->errorConnectDB      = 'Database connect failed.';
+$lang->install->errorCreateDB       = 'Database create failed.';
+$lang->install->errorDBExists       = 'Database alread exists, to continue install, check the clear db box.';
+$lang->install->errorCreateTable    = 'Table create failed.';
+$lang->install->errorImportDemoData = 'Import demo data.';
 
 $lang->install->setConfig  = 'Create config file';
 $lang->install->key        = 'Item';

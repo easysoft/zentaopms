@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 2894 2012-05-02 14:06:00Z wwccss $
+ * @version     $Id: zh-tw.php 3026 2012-06-11 06:25:34Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->group->common             = '權限分組';
@@ -36,10 +36,14 @@ $lang->group->option   = '選項';
 $lang->group->inside   = '組內用戶';
 $lang->group->outside  = '組外用戶';
 
+$lang->group->placeholder->name = '如果設置公司允許匿名訪問，需要建立一個guest的分組';
+$lang->group->placeholder->desc = '分組描述';
+
 $lang->group->copyOptions['copyPriv'] = '複製權限';
 $lang->group->copyOptions['copyUser'] = '複製用戶';
 
 $lang->group->versions['']          = '顯示各版本新增權限';
+$lang->group->versions['3.2']       = '禪道3.2';
 $lang->group->versions['3.1']       = '禪道3.1';
 $lang->group->versions['3.0.beta2'] = '禪道3.0.beta2';
 $lang->group->versions['3.0.beta1'] = '禪道3.0.beta1';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
+ * @version     $Id: zh-tw.php 3158 2012-06-30 07:49:01Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = '用例編號';
@@ -56,6 +56,7 @@ $lang->testcase->view               = "用例詳情";
 $lang->testcase->edit               = "編輯用例";
 $lang->testcase->delete             = "刪除用例";
 $lang->testcase->browse             = "用例列表";
+$lang->testcase->import             = "導入用例";
 $lang->testcase->export             = "導出數據";
 $lang->testcase->confirmStoryChange = '確認需求變動';
 
@@ -67,7 +68,7 @@ $lang->testcase->selectProduct = '請選擇產品';
 $lang->testcase->byModule      = '按模組';
 $lang->testcase->assignToMe    = '指派給我的用例';
 $lang->testcase->openedByMe    = '由我創建的用例';
-$lang->testcase->allCases      = '所有Case';
+$lang->testcase->allCases      = '所有用例';
 $lang->testcase->needConfirm   = '需求有變動的用例';
 $lang->testcase->moduleCases   = '按模組瀏覽';
 $lang->testcase->bySearch      = '搜索';
@@ -121,6 +122,13 @@ $lang->testcase->stageList['system']     = '系統測試階段';
 $lang->testcase->stageList['smoke']      = '冒煙測試階段';
 $lang->testcase->stageList['bvt']        = '版本驗證階段';
 
+$lang->testcase->stageListAB['unittest']   = '單元';
+$lang->testcase->stageListAB['feature']    = '功能';
+$lang->testcase->stageListAB['intergrate'] = '整合';
+$lang->testcase->stageListAB['system']     = '系統';
+$lang->testcase->stageListAB['smoke']      = '冒煙';
+$lang->testcase->stageListAB['bvt']        = '版本';
+
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['normal']      = '正常';
 $lang->testcase->statusList['blocked']     = '被阻塞';
@@ -133,3 +141,5 @@ $lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonEdit   = '編輯';
 $lang->testcase->buttonToList = '返回';
+
+$lang->testcase->placeholder->keywords = '可以靈活運用這個欄位，方便進行查詢檢索。';

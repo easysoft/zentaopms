@@ -249,9 +249,24 @@ $lang->resource->tree->browse            = 'browse';
 $lang->resource->tree->updateOrder       = 'updateOrder';
 $lang->resource->tree->manageChild       = 'manageChild';
 $lang->resource->tree->edit              = 'edit';
+$lang->resource->tree->fix               = 'fix';
 $lang->resource->tree->delete            = 'delete';
 $lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
 $lang->resource->tree->ajaxGetSonModules = 'ajaxGetSonModules';
+
+/* Mail. */
+$lang->resource->mail->index  = 'index';
+$lang->resource->mail->detect = 'detect';
+$lang->resource->mail->edit   = 'edit';
+$lang->resource->mail->save   = 'save';
+$lang->resource->mail->test   = 'test';
+
+/* Report. */
+$lang->resource->report->index            = 'index';
+$lang->resource->report->projectDeviation = 'projectDeviation';
+$lang->resource->report->productInfo      = 'productInfo';
+$lang->resource->report->bugSummary       = 'bugSummary';
+$lang->resource->report->workload         = 'workload';
 
 /* Search. */
 $lang->resource->search->buildForm    = 'buildForm';
@@ -261,7 +276,10 @@ $lang->resource->search->deleteQuery  = 'deleteQuery';
 $lang->resource->search->select       = 'select';
 
 /* Admin. */
-$lang->resource->admin->index        = 'index';
+$lang->resource->admin->index            = 'index';
+$lang->resource->admin->checkDB          = 'checkDB';
+$lang->resource->admin->clearData        = 'clearData';
+$lang->resource->admin->confirmClearData = 'confirmClearData';
 
 /* Extension. */
 $lang->resource->extension->browse     = 'browse';
@@ -376,3 +394,17 @@ $lang->changelog['3.2'][] = 'my-changePassword';
 $lang->changelog['3.2'][] = 'story-batchClose';
 $lang->changelog['3.2'][] = 'task-batchEdit';
 $lang->changelog['3.2'][] = 'release-exportStoriesAndBugs';
+$lang->changelog['3.2'][] = 'mail-index';
+$lang->changelog['3.2'][] = 'mail-detect';
+$lang->changelog['3.2'][] = 'mail-edit';
+$lang->changelog['3.2'][] = 'mail-save';
+$lang->changelog['3.2'][] = 'mail-test';
+$lang->changelog['3.2'][] = 'report-index';
+$lang->changelog['3.2'][] = 'report-projectDeviation';
+$lang->changelog['3.2'][] = 'report-productInfo';
+$lang->changelog['3.2'][] = 'report-bugSummary';
+$lang->changelog['3.2'][] = 'report-workload';
+$lang->changelog['3.2'][] = 'admin-checkDB';
+$lang->changelog['3.2'][] = 'admin-clearData';
+$lang->changelog['3.2'][] = 'admin-confirmClearData';
+$lang->changelog['3.2'][] = 'tree-fix';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
- * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
+ * @version     $Id: zh-tw.php 3173 2012-07-01 00:05:16Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->company->common   = '組織視圖';
@@ -30,7 +30,7 @@ $lang->company->phone    = '聯繫電話';
 $lang->company->fax      = '傳真';
 $lang->company->address  = '通訊地址';
 $lang->company->zipcode  = '郵政編碼';
-$lang->company->website  = '公司網站';
+$lang->company->website  = '公司官網';
 $lang->company->backyard = '公司內網';
 $lang->company->pms      = 'PMS網站';
 $lang->company->guest    = '匿名登錄';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 2809 2012-04-30 02:48:39Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3096 2012-06-27 07:53:04Z areyou123456 $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -18,6 +18,7 @@ $lang->story->changed     = '需求變更';
 $lang->story->review      = '評審';
 $lang->story->edit        = "編輯需求";
 $lang->story->close       = '關閉';
+$lang->story->batchClose  = '批量關閉';
 $lang->story->activate    = '激活';
 $lang->story->delete      = "刪除需求";
 $lang->story->view        = "需求詳情";
@@ -33,6 +34,7 @@ $lang->story->id             = '編號';
 $lang->story->product        = '所屬產品';
 $lang->story->module         = '所屬模組';
 $lang->story->source         = '來源';
+$lang->story->fromBug        = '來源Bug';
 $lang->story->release        = '發佈計劃';
 $lang->story->bug            = '相關bug';
 $lang->story->title          = '需求名稱';
@@ -160,11 +162,12 @@ $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
 $lang->story->specTemplate          = "建議參考的模板：作為一名<<i class='red'>某種類型的用戶</i>>，我希望<<i class='red'>達成某些目的</i>>，這樣可以<<i class='red'>開發的價值</i>>。";
-$lang->story->notes                 = '(註：如果“需求標題”為空，則表示不使用此行)';
+$lang->story->notes                 = '(註：如果“需求名稱”為空，則表示不使用此行)';
 $lang->story->needNotReview         = '不需要評審';
 $lang->story->afterSubmit           = "添加之後";
 $lang->story->successSaved          = "需求成功添加，";
 $lang->story->confirmDelete         = "您確認刪除該需求嗎?";
+$lang->story->confirmBatchClose     = "您確認關閉這些需求嗎?";
 $lang->story->errorFormat           = '需求數據有誤';
 $lang->story->errorEmptyTitle       = '標題不能為空';
 $lang->story->mustChooseResult      = '必須選擇評審結果';
@@ -186,10 +189,9 @@ $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 從項目 <strong>$extra</strong> 移除。'); 
 
 /* 統計報表。*/
-$lang->story->report->common        = '統計報表';
-$lang->story->report->select        = '請選擇報表類型';
-$lang->story->report->create        = '生成報表';
-$lang->story->report->selectReverse = '反選';
+$lang->story->report->common = '統計報表';
+$lang->story->report->select = '請選擇報表類型';
+$lang->story->report->create = '生成報表';
 
 $lang->story->report->charts['storysPerProduct']        = '產品需求數量';
 $lang->story->report->charts['storysPerModule']         = '模組需求數量';
@@ -229,3 +231,6 @@ $lang->story->report->storysPerAssignedTo->graph->xAxisName   = '當前指派';
 $lang->story->report->storysPerClosedReason->graph->xAxisName = '關閉原因';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = '預計時間';
 $lang->story->report->storysPerChange->graph->xAxisName       = '變更次數';
+
+$lang->story->placeholder->estimate = "對需求所需要花費的時間進行大致估計";
+$lang->story->placeholder->mailto   = '跟這個需求相關的人員，可以通過email的形式抄送給他們。提示：請輸入用戶名進行選擇。';

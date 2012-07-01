@@ -6,14 +6,16 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
+ * @version     $Id: zh-tw.php 3129 2012-06-29 10:36:01Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->common     = '報表';
+$lang->report->common     = '統計視圖';
+$lang->report->list       = '統計報表';
 $lang->report->item       = '條目';
 $lang->report->value      = '值';
 $lang->report->percent    = '百分比';
 $lang->report->undefined  = '未設定';
+$lang->report->time       = '時間';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -29,3 +31,29 @@ $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
 $lang->report->singleColor[] = 'F6BD0F';
+
+$lang->report->projectDeviation = '項目偏差報表';
+$lang->report->productInfo      = '產品信息統計表';
+$lang->report->workload         = '員工負載表';
+$lang->report->bugSummary       = 'Bug彙總表';
+
+$lang->report->id            = '編號';
+$lang->report->project       = '項目';
+$lang->report->product       = '產品';
+$lang->report->user          = '姓名';
+$lang->report->bug           = 'Bug';
+$lang->report->task          = '任務數';
+$lang->report->estimate      = '總預計';
+$lang->report->consumed      = '總消耗';
+$lang->report->remain        = '剩餘工時';
+$lang->report->manhour       = '工時';
+$lang->report->deviation     = '偏差';
+$lang->report->deviationRate = '偏差率';
+$lang->report->stories       = '需求數';
+$lang->report->bugs          = 'Bug數';
+$lang->report->devConsumed   = '開發時間';
+$lang->report->testConsumed  = '測試時間';
+$lang->report->devTestRate   = '開發/測試';
+$lang->report->details       = '詳情';
+$lang->report->total         = '總計';
+$lang->report->to            = '至';

@@ -1,53 +1,42 @@
 <?php
-$lang->mail->setParam = '請設置下面的配置參數';
+$lang->mail->common = '發信配置';
+$lang->mail->index  = '首頁';
+$lang->mail->detect = '檢測';
+$lang->mail->edit   = '編輯配置';
+$lang->mail->save   = '保存配置';
+$lang->mail->test   = '測試發信';
 
-$lang->mail->turnon       = '是否打開發信功能';
-$lang->mail->fromAddress  = '發信人郵箱';
-$lang->mail->fromName     = '發信人名稱';
-$lang->mail->mta          = '請選擇發信方式';
-$lang->mail->debugExample = '0表示關閉調試信息,1和2表示打開調試信息，但2比1調試信息顯示更詳細';
+$lang->mail->turnon      = '是否打開';
+$lang->mail->fromAddress = '發信郵箱';
+$lang->mail->fromName    = '發信人';
+$lang->mail->mta         = '發信方式';
+$lang->mail->host        = 'smtp伺服器';
+$lang->mail->port        = 'smtp連接埠號';
+$lang->mail->auth        = '是否需要驗證';
+$lang->mail->username    = 'smtp帳號';
+$lang->mail->password    = 'smtp密碼';
+$lang->mail->secure      = '是否加密';
+$lang->mail->debug       = '調試級別';
 
-$lang->mail->mtaList['gmail']    = 'Gmail伺服器方式';
-$lang->mail->mtaList['smtp']     = 'SMTP伺服器方式';
-$lang->mail->mtaList['phpmail']  = 'PHP內置mail函數';
-$lang->mail->mtaList['sendmail'] = '本機sendmail';
+$lang->mail->turnonList[1]  = '打開';
+$lang->mail->turnonList[0] = '關閉';
 
-/* Trun on email feature or not */
-$lang->mail->turnonList['true']  = '打開';
-$lang->mail->turnonList['false'] = '關閉';
+$lang->mail->debugList[0] = '關閉';
+$lang->mail->debugList[1] = '一般';
+$lang->mail->debugList[2] = '較高';
 
-$lang->mail->debugList[2] = '2';
-$lang->mail->debugList[0] = '0';
-$lang->mail->debugList[1] = '1';
+$lang->mail->authList[1]  = '需要';
+$lang->mail->authList[0] = '不需要';
 
-$lang->mail->smtp->authList['true']  = '是';
-$lang->mail->smtp->authList['false'] = '否';
+$lang->mail->secureList['']    = '不加密';
+$lang->mail->secureList['ssl'] = 'ssl';
+$lang->mail->secureList['tls'] = 'tls';
 
-$lang->mail->smtp->secureList['']    = '不加密';
-$lang->mail->smtp->secureList['ssl'] = 'ssl';
-$lang->mail->smtp->secureList['tls'] = 'tls';
-
-/* Set SMTP */
-$lang->mail->smtp->fromName    = '發信人姓名';
-$lang->mail->smtp->auth        = '是否需要驗證';
-$lang->mail->smtp->debug       = '請選擇調試等級';
-$lang->mail->smtp->secure      = '請選擇SMTP加密方式';
-$lang->mail->smtp->host        = '請輸入HOST';
-$lang->mail->smtp->hostInfo    = '如不是特殊HOST，可不填寫，系統會自動生成';
-$lang->mail->smtp->username    = '發信郵箱用戶名';
-$lang->mail->smtp->password    = '請輸入密碼';
-$lang->mail->smtp->port        = '請輸入連接埠號';
-$lang->mail->smtp->portInfo    = 'ssl加密方式預設連接埠號為465，tls加密方式預設連接埠號為587，不加密連接埠號一般為空';
-/* Set gmail */
-$lang->mail->gmail->username = '請輸入發信郵箱用戶名';
-$lang->mail->gmail->password = '請輸入發信郵箱密碼';
-$lang->mail->gmail->debug    = '請選擇調試等級';
-
-$lang->mail->confirmSave = '保存成功, 請到您的郵箱中查看測試郵件是否發送成功。';
-$lang->mail->subject     = '測試郵件';
-$lang->mail->content     = '郵箱設置成功';
-
-/* Save config information */
-$lang->mail->configInfo  = '配置信息';
-$lang->mail->saveConfig  = '請將該配置信息保存到： ';
-$lang->mail->createFile  = '如果zzzemail.php檔案不存在，請手動創建該檔案，將以上配置保存即可。';
+$lang->mail->inputFromEmail = '請輸入發信郵箱：';
+$lang->mail->nextStep       = '下一步';
+$lang->mail->successSaved   = '配置信息已經成功保存到：<span class="red">%s</span>';
+$lang->mail->saveManual     = '請將該配置信息保存到：<span class="red">%s</span>';
+$lang->mail->subject        = '測試郵件';
+$lang->mail->content        = '郵箱設置成功';
+$lang->mail->successSended  = '成功發送！';
+$lang->mail->needConfigure  = '無法找到郵件配置信息，請先配置郵件發送參數。';

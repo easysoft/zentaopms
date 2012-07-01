@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
- * @version     $Id: zh-tw.php 2799 2012-04-29 08:14:12Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3010 2012-06-06 08:45:54Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->build->common    = "Build";
@@ -38,3 +38,6 @@ $lang->build->bugs               = '已關聯Bug';
 
 $lang->build->finishStories = '本次共完成需求%s個';
 $lang->build->resolvedBugs  = '本次共解決Bug%s個';
+
+$lang->build->notice  = '(還沒有相應的版本信息哦，馬上到[項目視圖]-[版本]創建一個吧)';
+$lang->build->notice2 = '(如果還沒有相應的版本信息，請到[項目視圖]-[版本]創建)';

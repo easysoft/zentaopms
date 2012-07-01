@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 2889 2012-05-02 13:20:36Z wwccss $
+ * @version     $Id: zh-tw.php 3026 2012-06-11 06:25:34Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -54,7 +54,7 @@ $lang->bug->resolvedDate     = '解決日期';
 $lang->bug->resolvedDateAB   = '解決日期';
 $lang->bug->closedBy         = '由誰關閉';
 $lang->bug->closedDate       = '關閉日期';
-$lang->bug->duplicateBug     = '重複Bug';
+$lang->bug->duplicateBug     = '重複ID';
 $lang->bug->lastEditedBy     = '最後修改者';
 $lang->bug->lastEditedDate   = '最後修改日期';
 $lang->bug->linkBug          = '相關Bug';
@@ -69,6 +69,7 @@ $lang->bug->index              = '首頁';
 $lang->bug->create             = '創建Bug';
 $lang->bug->confirmBug         = '確認';
 $lang->bug->edit               = '編輯Bug';
+$lang->bug->assignTo           = '指派';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug詳情';
 $lang->bug->resolve            = '解決Bug';
@@ -128,11 +129,12 @@ $lang->bug->legendAction       = '操作';
 $lang->bug->legendHistory      = '歷史記錄';
 $lang->bug->legendComment      = '備註';
 $lang->bug->legendLife         = 'BUG的一生';
-$lang->bug->legendMisc         = '其相關他';
+$lang->bug->legendMisc         = '其他相關';
 
 /* 功能按鈕。*/
 $lang->bug->buttonConfirm        = '確認';
 $lang->bug->buttonCopy           = '複製';
+$lang->bug->buttonAssign         = '指派';
 $lang->bug->buttonEdit           = '編輯';
 $lang->bug->buttonActivate       = '激活';
 $lang->bug->buttonResolve        = '解決';
@@ -244,6 +246,7 @@ $lang->bug->report->select        = '請選擇報表類型';
 $lang->bug->report->create        = '生成報表';
 
 $lang->bug->report->charts['bugsPerProject']        = '項目Bug數量';
+$lang->bug->report->charts['bugsPerBuild']          = '版本Bug數量';
 $lang->bug->report->charts['bugsPerModule']         = '模組Bug數量';
 $lang->bug->report->charts['openedBugsPerDay']      = '每天新增Bug數';
 $lang->bug->report->charts['resolvedBugsPerDay']    = '每天解決Bug數';
@@ -274,6 +277,7 @@ $lang->bug->report->options->graph->pieRadius        = 100; // 餅圖直徑。
 $lang->bug->report->options->graph->showColumnShadow = 0;   // 是否顯示柱狀圖陰影。
 
 $lang->bug->report->bugsPerProject->graph->xAxisName     = '項目';
+$lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = '模組';
 
 $lang->bug->report->openedBugsPerDay->swf                = 'column2d';
@@ -308,3 +312,6 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
 $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
+
+$lang->bug->placeholder->mailto   = '當前bug所有的操作都會抄送給該列表(不抄送給當前操作者)，抄送給可以是多個人，輸入用戶名(非真實姓名)進行選擇。';
+$lang->bug->placeholder->keywords = '可以靈活運用這個欄位，方便進行查詢檢索。';

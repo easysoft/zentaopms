@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
- * @version     $Id: zh-tw.php 2642 2012-02-22 12:18:00Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 3012 2012-06-07 07:23:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->admin->common  = '後台管理';
@@ -17,6 +17,18 @@ $lang->admin->group   = '分組管理';
 $lang->admin->welcome = '歡迎使用禪道管理軟件後台管理系統';
 
 $lang->admin->browseCompany = '瀏覽公司';
+
+$lang->admin->clearData        = '清除數據';
+$lang->admin->confirmClearData = '您確認要清楚數據嗎？';
+$lang->admin->clearDataFailed  = '清除數據失敗！';
+$lang->admin->clearDataSucceed = '清除數據成功！';
+$lang->admin->clearDataDesc    = <<<EOT
+<strong><font color='red'>清除數據存在一定的風險，清楚數據之前，我們強烈建議您備份資料庫及相應的數據檔案，並保證清楚數據的時候，沒有其他人進行操作。</font></strong>\n
+清除數據對資料庫的影響如下：
+1、清楚數據不會對company, group, groupPriv表進行操作。
+2、如果安裝的時候有導入demo數據，則會刪除config表key=showDemoUsers的記錄，並刪除user表中的所有demo用戶。
+3、對於其他表則進行全部清除操作。
+EOT;
 
 $lang->admin->info->caption        = '禪道系統信息';
 $lang->admin->info->version        = '當前系統的版本是%s，';

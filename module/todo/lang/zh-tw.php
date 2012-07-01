@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 2839 2012-05-01 00:54:21Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3018 2012-06-08 02:47:49Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->todo->common       = 'TODO';
@@ -71,11 +71,15 @@ $lang->todo->successMarked  = "成功切換狀態！";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
 $lang->todo->lblDisableDate = '暫時不設定時間';
 
-$lang->todo->thisWeekTodos = '本週計劃';
-$lang->todo->lastWeekTodos = '上周工作';
-$lang->todo->futureTodos   = '暫不指定';
-$lang->todo->allDaysTodos  = '所有TODO';
-$lang->todo->allUndone     = '之前未完';
-$lang->todo->todayTodos    = '今日安排';
-
-$lang->todo->action->marked = array('main' => '$date, 由 <strong>$actor</strong> 標記為<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);
+$lang->todo->thisWeekTodos   = '本週計劃';
+$lang->todo->lastWeekTodos   = '上周工作';
+$lang->todo->futureTodos     = '暫不指定';
+$lang->todo->allDaysTodos    = '所有TODO';
+$lang->todo->allUndone       = '之前未完';
+$lang->todo->todayTodos      = '今日安排';
+$lang->todo->yesterdayTodos  = '昨日安排';
+$lang->todo->lastmonthTodos  = '上月TODO';
+$lang->todo->thisseasonTodos = '本季TODO';
+$lang->todo->thisyearTodos   = '本年TODO';
+$lang->todo->thismonthTodos  = '本月TODO';
+$lang->todo->action->marked  = array('main' => '$date, 由 <strong>$actor</strong> 標記為<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);

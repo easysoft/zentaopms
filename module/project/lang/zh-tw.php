@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 2783 2012-04-26 07:55:12Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3126 2012-06-29 08:27:11Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -52,15 +52,23 @@ $lang->project->createTesttask= '提交測試';
 $lang->project->noProduct     = '無產品項目';
 $lang->project->select        = '--請選擇項目--';
 
+$lang->project->endList['2weeks'] = '兩星期';
+$lang->project->endList['1']      = '一個月';
+$lang->project->endList['2']      = '兩個月';
+$lang->project->endList['3']      = '三個月';
+$lang->project->endList['6']      = '半年';
+$lang->project->endList['12']     = '一年';
+
 $lang->team->account    = '用戶';
 $lang->team->role       = '角色';
 $lang->team->join       = '加盟日';
 $lang->team->hours      = '可用工時/天';
 $lang->team->days       = '可用工日';
 $lang->team->totalHours = '總計';
-
+ 
 $lang->project->basicInfo = '基本信息';
 $lang->project->otherInfo = '其他信息';
+
 /* 欄位取值列表。*/
 $lang->project->statusList['']      = '';
 $lang->project->statusList['wait']  = '未開始';
@@ -102,6 +110,7 @@ $lang->project->ajaxGetProducts = '介面：獲得項目產品列表';
 /* 分組瀏覽。*/
 $lang->project->allTasks             = '所有任務';
 $lang->project->assignedToMe         = '指派給我';
+$lang->project->moduleTask           = '按模組瀏覽';
 $lang->project->finishedByMe         = '由我完成';
 $lang->project->statusWait           = '未開始';
 $lang->project->statusDoing          = '進行中';
@@ -168,3 +177,14 @@ $lang->project->charts->burn->graph->formatNumber = 0;
 $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
+
+$lang->project->placeholder->name = '項目名稱';
+$lang->project->placeholder->code = '作為團隊內部對某一個項目的簡短稱呼。';
+$lang->project->placeholder->end  = '對於scrum而言，一般不宜超過30天。';
+$lang->project->placeholder->days = '根據開始日期和結束日期自動計算';
+$lang->project->placeholder->team = '團隊內部可以自己選擇自己喜歡的名稱。';
+
+$lang->project->selectGroup->doing     = '(進行中)';
+$lang->project->selectGroup->done      = '(已結束)';
+
+$lang->project->projectTasks = '按項目瀏覽';

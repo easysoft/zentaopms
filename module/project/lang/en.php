@@ -59,7 +59,6 @@ $lang->project->endList['3']      = 'Three Months';
 $lang->project->endList['6']      = 'Half Of Year';
 $lang->project->endList['12']     = 'One Year';
 
-
 $lang->team->account    = 'Account';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Join date';
@@ -69,6 +68,7 @@ $lang->team->totalHours = 'Total';
 
 $lang->project->basicInfo = 'Basic info';
 $lang->project->otherInfo = 'Other info';
+
 /* Lists. */
 $lang->project->statusList['']      = '';
 $lang->project->statusList['wait']  = 'Pending';

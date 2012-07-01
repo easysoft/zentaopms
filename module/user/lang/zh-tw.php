@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
+ * @version     $Id: zh-tw.php 3026 2012-06-11 06:25:34Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->user->common          = '用戶';
@@ -52,6 +52,7 @@ $lang->user->genderList->f = '女';
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
 $lang->user->keepLogin['on']      = '保持登錄';
+$lang->user->loginWithDemoUser    = '使用demo賬號登錄：';
 
 $lang->user->id        = '用戶編號';
 $lang->user->company   = '所屬公司';
@@ -80,3 +81,11 @@ $lang->user->visits    = '訪問次數';
 $lang->user->ip        = '最後IP';
 $lang->user->last      = '最後登錄';
 $lang->user->status    = '狀態';
+
+$lang->user->placeholder->account   = '英文，數字，下劃線的組合，三位以上';
+$lang->user->placeholder->password1 = '六位以上';
+$lang->user->placeholder->password2 = '確認密碼';
+$lang->user->placeholder->realname  = '真實姓名';
+$lang->user->placeholder->email     = '用來聯繫用的郵箱，用於禪道的發信';
+$lang->user->placeholder->join      = '也就是員工的入職日期';
+$lang->user->placeholder->last      = '最後登錄時間';
