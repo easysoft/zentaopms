@@ -260,6 +260,7 @@ class groupModel extends model
         $resources = $this->lang->resource;
         unset($this->lang->resource);
 
+        /* sort moduleOrder. */
         ksort($this->lang->moduleOrder, SORT_ASC);
         foreach($this->lang->moduleOrder as $moduleName)
         {
@@ -271,7 +272,8 @@ class groupModel extends model
         {
             $this->lang->resource->$key = $resource;
         }
-
+        
+        /* sort methodOrder. */
         foreach($this->lang->resource as $moduleName => $resources)
         {
             $resources = (array)$resources;
