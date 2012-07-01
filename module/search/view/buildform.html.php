@@ -16,7 +16,7 @@
 .helplink {display:none}
 .button-s, .button-r, .button-c {padding:3px} 
 .select-1 {width:80%}
-.text-2{margin-bottom:2px}
+.text-2{margin-bottom:2px; width:123px}
 .select-2{margin-bottom:2px}
 .date{width:104px}
 </style>
