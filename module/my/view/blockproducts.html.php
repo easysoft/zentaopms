@@ -23,16 +23,16 @@
     <td>
       <table class='headTable'>
         <tr class='colhead'>
-          <th class='w-150px'><?php echo $lang->product->name;?></th>
-          <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
-          <th><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
-          <th><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
-          <th><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
-          <th><?php echo $lang->product->plans;?></th>
-          <th><?php echo $lang->product->releases;?></th>
-          <th><?php echo $lang->product->bugs;?></th>
-          <th><?php echo $lang->bug->unResolved;?></th>
-          <th><?php echo $lang->bug->assignToNull;?></th>
+          <th class='w-100px'><?php echo $lang->product->name;?></th>
+          <th class='w-50px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
+          <th class='w-50px'><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
+          <th class='w-50px'><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
+          <th class='w-50px'><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
+          <th class='w-50px'><?php echo $lang->product->plans;?></th>
+          <th class='w-50px'><?php echo $lang->product->releases;?></th>
+          <th class='w-50px'><?php echo $lang->product->bugs;?></th>
+          <th class='w-50px'><?php echo $lang->bug->unResolved;?></th>
+          <th class='w-50px'><?php echo $lang->bug->assignToNull;?></th>
         </tr>
       </table>
     </td>
@@ -43,16 +43,16 @@
       <table class='table-1 fixed colored'>
         <?php foreach($productStats as $product):?>
         <tr class='a-center' style='height:30px'>
-          <td class='a-left w-150px'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
-          <td><?php echo $product->stories['active']?></td>
-          <td><?php echo $product->stories['changed']?></td>
-          <td><?php echo $product->stories['draft']?></td>
-          <td><?php echo $product->stories['closed']?></td>
-          <td><?php echo $product->plans?></td>
-          <td><?php echo $product->releases?></td>
-          <td><?php echo $product->bugs?></td>
-          <td><?php echo $product->unResolved?></td>
-          <td><?php echo $product->assignToNull?></td>
+          <td class='a-left w-100px'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+          <td class='w-50px'><?php echo $product->stories['active']?></td>
+          <td class='w-50px'><?php echo $product->stories['changed']?></td>
+          <td class='w-50px'><?php echo $product->stories['draft']?></td>
+          <td class='w-50px'><?php echo $product->stories['closed']?></td>
+          <td class='w-50px'><?php echo $product->plans?></td>
+          <td class='w-50px'><?php echo $product->releases?></td>
+          <td class='w-50px'><?php echo $product->bugs?></td>
+          <td class='w-50px'><?php echo $product->unResolved?></td>
+          <td class='w-50px'><?php echo $product->assignToNull?></td>
         </tr>
         <?php endforeach;?>
       </table>
