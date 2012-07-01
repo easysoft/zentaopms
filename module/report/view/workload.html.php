@@ -31,7 +31,7 @@
             <td><?php echo $lang->report->bug;?></td>
             <td><?php echo $lang->report->total;?></td>
           </tr>
-        <?php foreach($workload as $user => $load):?>
+        <?php foreach($workload as $account => $load):?>
         <?php
         $i = 1;
         $taskNum = empty($load['task']) ? 0 : count($load['task']);
@@ -41,7 +41,7 @@
         <?php foreach($load[$max] as $key => $val):?>
           <tr class="a-center">
           <?php if($i == 1):?>
-          <td rowspan="<?php echo count($load[$max]);?>"><?php echo $user;?></td>
+          <td rowspan="<?php echo count($load[$max]);?>"><?php echo $users[$account];?></td>
           <?php endif;?>
             <?php if($max == 'task'):?>
             <td><?php echo $key?></td>

@@ -63,6 +63,7 @@ class report extends control
     {
         $this->view->header->title = $this->lang->report->workload;
         $this->view->workload      = $this->report->getWorkload();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display();
     }
 }
