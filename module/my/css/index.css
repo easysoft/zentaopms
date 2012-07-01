@@ -1,8 +1,3 @@
-.tab-box  {margin:0;}
-.tab-box td, .tab-box tr{padding:0; margin:0}
-.tab-title{margin: 0; padding:5px; background:#efefef; border:none; border-bottom:1px solid #ddd; cursor:pointer; font-size:14px}
-
-
 #row1{margin-bottom:20px}
 #row1 .table-1, #row1 caption{border:none}
 #row2 .table-1, #row2 caption{border:none}
@@ -16,4 +11,3 @@
 .headTable {width:100%; margin:0px; padding:0px; border:none}
 .contentDiv1 {height:150px; overflow-y:auto}
 .contentDiv2 {height:195px; overflow-y:auto}
-
