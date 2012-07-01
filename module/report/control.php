@@ -11,11 +11,23 @@
  */
 class report extends control
 {
+    /**
+     * The index of report, goto project deviation.
+     * 
+     * @access public
+     * @return void
+     */
     public function index()
     {
         $this->locate(inlink('projectdeviation')); 
     }
     
+    /**
+     * Project deviation report.
+     * 
+     * @access public
+     * @return void
+     */
     public function projectDeviation()
     {
         $this->view->header->title = $this->lang->report->projectDeviation;
@@ -23,6 +35,12 @@ class report extends control
         $this->display();
     }
 
+    /**
+     * Product information report.
+     * 
+     * @access public
+     * @return void
+     */
     public function productInfo()
     {
         $this->app->loadLang('product');
@@ -33,6 +51,14 @@ class report extends control
         $this->display();
     }
 
+    /**
+     * Bug summary report.
+     * 
+     * @param  int    $begin 
+     * @param  int    $end 
+     * @access public
+     * @return void
+     */
     public function bugSummary($begin = 0, $end = 0)
     {
         $this->app->loadLang('bug');
@@ -59,6 +85,12 @@ class report extends control
         $this->display(); 
     }
 
+    /**
+     * Workload report.
+     * 
+     * @access public
+     * @return void
+     */
     public function workload()
     {
         $this->view->header->title = $this->lang->report->workload;

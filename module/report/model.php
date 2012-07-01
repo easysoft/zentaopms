@@ -272,6 +272,12 @@ EOT;
         return $projects;
     }
 
+    /**
+     * Get products. 
+     * 
+     * @access public
+     * @return array 
+     */
     public function getProducts()
     {
         $products    = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
@@ -292,6 +298,14 @@ EOT;
         return $products;
     }
 
+    /**
+     * Get bugs 
+     * 
+     * @param  int    $begin 
+     * @param  int    $end 
+     * @access public
+     * @return array
+     */
     public function getBugs($begin, $end)
     {
         $bugGroups  = $this->dao->select('id, resolution, openedBy')->from(TABLE_BUG)
@@ -311,6 +325,12 @@ EOT;
         return $bugSummary; 
     }
 
+    /**
+     * Get workload. 
+     * 
+     * @access public
+     * @return array
+     */
     public function getWorkload()
     {
         $tasks = $this->dao->select('t1.*, t2.name as projectName')
