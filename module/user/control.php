@@ -275,7 +275,8 @@ class user extends control
     public function edit($userID)
     {
         $this->lang->set('menugroup.user', 'company');
-        $this->lang->user->menu = $this->lang->company->menu;
+        $this->lang->user->menu      = $this->lang->company->menu;
+        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
         if(!empty($_POST))
         {
             $this->user->update($userID);
