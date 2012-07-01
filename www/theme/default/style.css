@@ -346,6 +346,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #createform .rowhead{font-size:11.5px; font-weight:1.2; border:none}
 #createform tr, #createform td, #createform th{border:none; background:#fcfcfc}
 
+.actionlink{font-size:14px; font-weight:bold}
+
 /* Product, project switcher. */
 #switcher {color:white; font-style:bold; background:red; cursor:pointer;}
 
@@ -412,26 +414,38 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-arrow  { padding-left:10px;  background:url(images/main/ui-gray.png) -32px 0px;}
 
 /* Common icons. */
-.icon-green-big-edit             {padding:2px 8px;  background:url(images/main/zt-green.png) 0px   0px;} 
-.icon-green-small-edit           {padding:2px 8px;  background:url(images/main/zt-green.png) 0px   -21px;} 
+.icon-green-big-common-edit             {padding:2px 8px;  background:url(images/main/zt-green.png) 0px   0px;} 
+.icon-green-small-common-edit           {padding:2px 8px;  background:url(images/main/zt-green.png) 0px   -21px;} 
 
-.icon-green-big-comment          {padding:2px 8px;  background:url(images/main/zt-green.png) -20px 0px;} 
+.icon-green-big-common-comment          {padding:2px 8px;  background:url(images/main/zt-green.png) -20px 0px;} 
 
-.icon-green-big-copy             {padding:2px 8px;  background:url(images/main/zt-green.png) -40px 0px;}
-.icon-green-small-copy           {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -20px;}
+.icon-green-big-common-copy             {padding:2px 8px;  background:url(images/main/zt-green.png) -40px 0px;}
+.icon-green-small-common-copy           {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -20px;}
 
-.icon-green-big-delete           {padding:2px 8px;  background:url(images/main/zt-green.png) -60px 0px;}
-.icon-green-small-delete         {padding:2px 8px;  background:url(images/main/zt-green.png) -60px -22px;}
+.icon-green-big-common-delete           {padding:2px 8px;  background:url(images/main/zt-green.png) -60px 0px;}
+.icon-green-small-common-delete         {padding:2px 8px;  background:url(images/main/zt-green.png) -60px -22px;}
 
-.icon-green-big-goback           {padding:2px 10px;  background:url(images/main/zt-green.png) 2px   -40px;}
-.icon-green-big-pre              {padding:2px 8px;  background:url(images/main/zt-green.png) -21px -40px;}
-.icon-green-big-next             {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -40px;}
+.icon-goback           {padding:2px 10px;  background:url(images/main/zt-green.png) 2px   -40px;}
+.icon-pre              {padding:2px 8px;  background:url(images/main/zt-green.png) -21px -40px;}
+.icon-next             {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -40px;}
 
-#featurebar .f-right .icon-green-big-import {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) 0px   -80px;} 
-#featurebar .f-right .icon-green-big-export {padding:2px 7px 2px 10px;  background:url(images/main/zt-green.png) -20px -80px;} 
-.icon-green-big-report           {padding:2px 10px; background:url(images/main/zt-green.png) -40px -80px;} 
+#featurebar .f-right .icon-green-big-common-import {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) 0px   -80px;} 
+#featurebar .f-right .icon-green-big-common-export {padding:2px 7px 2px 10px;  background:url(images/main/zt-green.png) -20px -80px;} 
+.icon-green-big-common-report           {padding:2px 10px; background:url(images/main/zt-green.png) -40px -80px;} 
 
-.icon-green-big-splitLine        {padding:2px 10px; background:url(images/main/zt-green.png) -60px -40px;} 
+.icon-green-big-common-splitLine        {padding:2px 10px; background:url(images/main/zt-green.png) -60px -40px;} 
+
+/* Story icons. */
+#featurebar .f-right .icon-green-big-story-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) 0px   -200px;} 
+#featurebar .f-right .icon-green-big-story-batchCreate {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) -20px -200px;} 
+
+.icon-green-small-story-change {padding:2px 8px; background:url(images/main/zt-green.png) -40px -220px;}
+.icon-gray-small-story-change  {padding:2px 8px; background:url(images/main/zt-gray.png)  -40px -220px;}
+
+.icon-green-small-story-review {padding:2px 8px; background:url(images/main/zt-green.png) -60px -220px;}
+.icon-gray-small-story-review  {padding:2px 8px; background:url(images/main/zt-gray.png)  -60px -220px;}
+
+.icon-green-small-story-createCase {padding:2px 8px; background:url(images/main/zt-green.png) -120px -221px;}
 
 /* Task icons. */
 #featurebar .f-right .icon-green-big-task-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) 0px   -240px;} 
@@ -446,6 +460,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Bug icons. */
 #featurebar .f-right .icon-green-big-bug-create, caption .f-right .icon-green-big-bug-create  {padding:2px 7px 2px 10px;  background:url(images/main/zt-green.png) 0px   -200px;} 
 
+.icon-green-small-bug-createBug {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -340px;} 
+.icon-gray-small-bug-createBug  {padding:2px 8px;  background:url(images/main/zt-gray.png)  -40px -340px;} 
+
 .icon-green-small-bug-resolve    {padding:2px 8px;  background:url(images/main/zt-green.png) -60px -300px;} 
 .icon-gray-small-bug-resolve     {padding:2px 8px;  background:url(images/main/zt-gray.png)  -60px -300px;} 
 
@@ -458,8 +475,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .severity4 {padding:2px 8px; background:url(images/main/zt-green.png) -60px -380px no-repeat;}
 
 /* Case icons. */
-#featurebar .f-right .icon-green-big-case-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) 0px   -320px;} 
-#featurebar .f-right .icon-green-big-case-batchCreate {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) -20px -320px;} 
+#featurebar .f-right .icon-green-big-testcase-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) 0px   -320px;} 
+#featurebar .f-right .icon-green-big-testcase-batchCreate {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) -20px -320px;} 
 
-.icon-green-small-case-createBug {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -340px;} 
-.icon-gray-small-case-createBug  {padding:2px 8px;  background:url(images/main/zt-gray.png)  -40px -340px;} 
+
