@@ -79,7 +79,8 @@ class company extends control
         }
 
         $this->lang->set('menugroup.company', 'admin');
-        $this->lang->company->menu = $this->lang->admin->menu;
+        $this->lang->company->menu      = $this->lang->admin->menu;
+        $this->lang->company->menuOrder = $this->lang->admin->menuOrder;
 
         $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->company->create;
         $position[]      = html::a($this->createLink('admin', 'browsecompany'), $this->lang->admin->company);
