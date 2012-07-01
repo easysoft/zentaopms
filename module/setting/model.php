@@ -154,22 +154,27 @@ class settingModel extends model
      * @param  string              $owner 
      * @param  string              $module 
      * @param  string              $section 
-     * @param  string              $key 
-     * @param  string|array|object $value 
+     * @param  array               $key 
      * @param  string|int          $company 
      * @access public
      * @return void
      */
-    public function deleteItem($owner, $module, $section, $key, $value = '', $company = 'current')
+    public function deleteItem($owner, $module, $section, $key, $company = 'current')
     {
+        $fieldNames = array_keys($key);
         $company = $company === 'current' ? $this->app->company->id : $company;
-        $this->dao->delete()->from(TABLE_CONFIG)
-            ->where('owner')->eq($owner)
-            ->andWhere('module')->eq($module)
-            ->andWhere('section')->eq($section)
-            ->andWhere('company')->eq($company)
-            ->beginIF((is_array($value) or is_object($value)))->andWhere("`$key`")->in($value)->fi()
-            ->beginIF((!is_array($value) and !is_object($value)))->andWhere("`$key`")->eq($value)->fi()
-            ->exec($autoCompany = false);
+        foreach($fieldNames as $fieldName)
+        {
+            $value = $key[$fieldName];
+            $more  = (is_array($value) or is_object($value)) ? true : false;
+            $this->dao->delete()->from(TABLE_CONFIG)
+                ->where('owner')->eq($owner)
+                ->andWhere('module')->eq($module)
+                ->andWhere('section')->eq($section)
+                ->andWhere('company')->eq($company)
+                ->beginIF($more)->andWhere("`$fieldName`")->in($value)->fi()
+                ->beginIF(!$more)->andWhere("`$fieldName`")->eq($value)->fi()
+                ->exec($autoCompany = false);
+        }
     }
 }
