@@ -268,7 +268,8 @@ class doc extends control
         /* According the from, set menus. */
         if($from == 'product')
         {
-            $this->lang->doc->menu = $this->lang->product->menu;
+            $this->lang->doc->menu      = $this->lang->product->menu;
+            $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $productID);
             $this->lang->set('menugroup.doc', 'product');
         }
