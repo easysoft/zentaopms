@@ -274,7 +274,8 @@ class doc extends control
         }
         elseif($from == 'project')
         {
-            $this->lang->doc->menu = $this->lang->project->menu;
+            $this->lang->doc->menu      = $this->lang->project->menu;
+            $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $projectID);
             $this->lang->set('menugroup.doc', 'project');
         }
