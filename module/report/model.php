@@ -280,7 +280,13 @@ EOT;
         foreach($planStories as $planID => $stories)
         {
             foreach($stories as $story) $statusList[$story->status][] = $story;
-            foreach(array_keys($statusList) as $status) $plans[$planID]->status[$status] = count($statusList[$status]);
+            foreach(array_keys($statusList) as $status) 
+            {
+                if(isset($plans[$planID]))
+                {
+                    $plans[$planID]->status[$status] = count($statusList[$status]);
+                }
+            }
         }
         foreach($plans as $plan) $products[$plan->product]->plans[] = $plan;
         return $products;

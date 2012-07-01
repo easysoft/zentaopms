@@ -34,7 +34,9 @@
         <?php foreach($workload as $user => $load):?>
         <?php
         $i = 1;
-        $max = count($load['task']) > count($load['bug']) ? 'task' : 'bug';
+        $taskNum = empty($load['task']) ? 0 : count($load['task']);
+        $bugNum  = empty($load['bug'])  ? 0 : count($load['bug']);
+        $max     = $taskNum > $bugNum ? 'task' : 'bug';
         ?>
         <?php foreach($load[$max] as $key => $val):?>
           <tr class="a-center">
@@ -54,30 +56,36 @@
             ?>
             </td>
             <?php endif;?>
-            <td><?php echo $product = key($load['bug'])?></td>
+            <td><?php echo $product = empty($load['bug']) ? '' : key($load['bug'])?></td>
             <td><?php echo empty($product) ? '' : $load['bug'][$product]['count']?></td>
             <?php if($i == 1):?>
             <td rowspan='<?php echo count($load[$max]);?>'>
             <?php
             $total = 0;
-            foreach($load['bug'] as $count) $total += $count['count'];
+            if(!empty($load['bug']))
+            {
+                foreach($load['bug'] as $count) $total += $count['count'];
+                reset($load['bug']);
+            }
             echo $total;
-            reset($load['bug']);
             ?>
             </td>
             <?php endif;?>
             <?php unset($load['bug'][$product]);?>
             <?php else:?>
-            <td><?php echo $project = key($load['task'])?></td>
+            <td><?php echo $project = empty($load['task']) ? '' : key($load['task'])?></td>
             <td><?php echo empty($project) ? '' : $load['task'][$project]['count']?></td>
             <td><?php echo empty($project) ? '' : $load['task'][$project]['manhour']?></td>
             <?php if($i == 1):?>
             <td rowspan='<?php echo count($load[$max]);?>'>
             <?php
             $total = 0;
-            foreach($load['task'] as $count) $total += $count['count'];
+            if(!empty($load['task']))
+            {
+                foreach($load['task'] as $count) $total += $count['count'];
+                reset($load['task']);
+            }
             echo $total;
-            reset($load['task']);
             ?>
             </td>
             <?php endif;?>
