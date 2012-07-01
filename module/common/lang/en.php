@@ -168,7 +168,7 @@ $lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* Product menu. */
 $lang->product->menu->list    = '%s';
-$lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s',     'subModule' => 'story');
+$lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s', 'subModule' => 'story');
 $lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
@@ -190,9 +190,9 @@ $lang->product->menuOrder[15] = 'plan';
 $lang->product->menuOrder[20] = 'release';
 $lang->product->menuOrder[25] = 'roadmap';
 $lang->product->menuOrder[30] = 'doc';
-$lang->product->menuOrder[35] = 'view';
-$lang->product->menuOrder[40] = 'module';
-$lang->product->menuOrder[45] = 'project';
+$lang->product->menuOrder[35] = 'project';
+$lang->product->menuOrder[40] = 'view';
+$lang->product->menuOrder[45] = 'module';
 $lang->product->menuOrder[50] = 'order';
 $lang->product->menuOrder[55] = 'create';
 $lang->product->menuOrder[60] = 'all';
@@ -204,7 +204,7 @@ $lang->release->menuOrder     = $lang->product->menuOrder;
 /* Project menu. */
 $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
-$lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s');
+$lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'alias' => 'linkstory', 'subModule' => 'story');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
@@ -213,7 +213,6 @@ $lang->project->menu->burn      = 'Burn|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = 'Product|project|manageproducts|projectID=%s';
-$lang->project->menu->linkstory = array('link' => 'Story|project|linkstory|projectID=%s');
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->order     = 'Order|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>New|project|create', 'float' => 'right');
