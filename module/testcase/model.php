@@ -298,4 +298,21 @@ class testcaseModel extends model
         }
         return $caseSteps;
     }
+
+    /**
+     * Adjust the action is clickable.
+     * 
+     * @param  object $case 
+     * @param  string $action 
+     * @access public
+     * @return void
+     */
+    public function isClickable($case, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'tobug') return $case->lastRunResult == 'fail';
+
+        return true;
+    }
 }

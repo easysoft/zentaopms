@@ -19,38 +19,29 @@
     $browseLink = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
     if(!$case->deleted)
     {
+        ob_start();
+
         common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
         common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
-        if(common::hasPriv('testtask', 'runCase') or common::hasPriv('testtask', 'results'))
-        {
-            echo "<span class='icon-green-big-splitLine'></span>";
-        }
 
-        if($case->lastRunResult == 'fail')
+        if($this->testcase->isClickable($case, 'toBug'))
         {
-            if(common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))
-            {
-                echo "<span class='icon-green-big-splitLine'></span>";
-            }
+            common::printSplitIcon();
+            common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
         }
         
-        common::printLink('testcase', 'edit',   "caseID=$case->id", '&nbsp;', '', "class='icon-green-big-edit' title={$lang->testcase->edit}");
-        if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' title={$lang->comment} onclick='setComment()'");
-        common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '&nbsp;', '', "class='icon-green-big-copy' title={$lang->copy}");
-        common::printLink('testcase', 'delete', "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title={$lang->delete}");
-        if(common::hasPriv('testcase', 'edit') or common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'delete'))
-        {
-            echo "<span class='icon-green-big-splitLine'></span>";
-        }
-    }
-    echo html::a($browseLink, '&nbsp;', '', "class='icon-green-big-goback' title={$lang->goback}");
-    if($preAndNext->pre) 
-    {
-        echo html::a($this->inLink('view', "storyID={$preAndNext->pre->id}&version={$preAndNext->pre->version}"), '&nbsp;', '', "class='icon-green-big-pre' id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'");
-    }
-    if($preAndNext->next) 
-    {
-        echo html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '&nbsp;', '', "class='icon-green-big-next' id='next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}'");
+        if($this->testcase->isClickable($case, 'edit')) common::printSplitIcon();
+        common::printIcon('testcase', 'edit',"caseID=$case->id", '', 'big');
+        common::printCommentIcon('testcase');
+        common::printIcon('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '', 'big', 'copy');
+        common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'big', '', 'hiddenwin');
+        
+        if($this->testcase->isClickable($case, 'goback')) common::printSplitIcon();
+        common::printRPN($browseLink, $preAndNext);
+
+        $actionLinks = ob_get_contents();
+        ob_clean();
+        echo $actionLinks;
     }
     ?>
   </div>
@@ -82,37 +73,7 @@
       </table>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center' style='font-size:16px; font-weight:bold'>
-       <?php
-        if(!$case->deleted)
-        {
-            common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
-            common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
-            if(common::hasPriv('testtask', 'runCase') or common::hasPriv('testtask', 'results'))
-            {
-                echo "<span class='icon-green-big-splitLine'></span>";
-            }
-
-            if($case->lastRunResult == 'fail')
-            {
-                if(common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug))
-                {
-                    echo "<span class='icon-green-big-splitLine'></span>";
-                }
-            }
-
-            common::printLink('testcase', 'edit',   "caseID=$case->id", '&nbsp;', '', "class='icon-green-big-edit' title={$lang->testcase->edit}");
-            if(common::hasPriv('testcase', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' title={$lang->comment} onclick='setComment()'");
-            common::printLink('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '&nbsp;', '', "class='icon-green-big-copy' title={$lang->copy}");
-            common::printLink('testcase', 'delete', "caseID=$case->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title={$lang->delete}");
-            if(common::hasPriv('testcase', 'edit') or common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'delete'))
-            {
-                echo "<span class='icon-green-big-splitLine'></span>";
-            }
-        }
-        echo html::a($browseLink, '&nbsp;', '', "class='icon-green-big-goback'");
-        ?>
-      </div>
+      <div class='a-center actionlink'><?php echo $actionLinks;?></div>
       <div id='comment' class='hidden'>
         <fieldset>
           <legend><?php echo $lang->comment;?></legend>
