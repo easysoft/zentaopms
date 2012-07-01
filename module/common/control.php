@@ -208,6 +208,111 @@ class common extends control
     }
 
     /**
+     * Print icon of split line.
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printSplitIcon()
+    {
+        echo "<span class='icon-green-big-common-splitLine'></span>";
+    }
+
+    /**
+     * Print icon of comment.
+     * 
+     * @param  string $module 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printCommentIcon($module)
+    {
+        global $lang;
+
+        if(!common::hasPriv($module, 'edit')) return false;
+        echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-common-comment' title={$lang->comment} onclick='setComment()'");
+    }
+
+    /**
+     * Print link icon.
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $vars 
+     * @param  object $object 
+     * @param  string $size 
+     * @param  string $icon 
+     * @param  string $target 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printIcon($module, $method, $vars = '', $object = '', $size = 'small', $icon = '', $target = '')
+    {
+        /* Judge the $method of $module clickable or not, default is clickable. */
+        global $app;
+        $clickable = true;
+        if(is_object($object))
+        {
+            if($app->getModuleName() != $module) $app->control->loadModel($module);
+            $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
+            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable')) $clickable = $modelClass::isClickable($object, $method);
+        }
+
+        /* Set module and method, then create link to it. */
+        if(strtolower($module) == 'testcase' and strtolower($method) == 'tobug') ($module = 'bug') and ($method = 'create');
+        if(!common::hasPriv($module, $method)) return false;
+        $link = helper::createLink($module, $method, $vars);
+
+        /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
+        global $lang;
+        $title = $method;
+        if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
+        if(isset($lang->$module->$method) and is_string($lang->$module->$method)) $title = $lang->$module->$method;
+
+        /* Get the icon name. */
+        if(!$icon) $icon = $method;
+        if(strpos(',edit,copy,report,export,delete,', ",$icon,") !== false) $module = 'common';
+        $iconClass = $clickable ? "icon-green-$size-$module-$icon" : "icon-gray-$size-$module-$icon";
+ 
+        /* Create the icon link. */
+        if($clickable)
+        {
+            $newline = $size == 'small' ? false : true;
+            echo html::a($link, '&nbsp;', $target, "class='$iconClass' title='$title'", $newline);
+        }
+        else
+        {
+            echo "<span class='$iconClass' title='$title'>&nbsp;</span>";
+        }
+    }
+
+    /**
+     * Print backLink and preLink and nextLink.
+     * 
+     * @param  string $backLink 
+     * @param  object $preAndNext 
+     * @access public
+     * @return void
+     */
+    public function printRPN($backLink, $preAndNext = '')
+    {
+        global $lang;
+
+        echo html::a($backLink, '&nbsp;', '', "class='icon-goback' title={$lang->goback}");
+        if(isset($preAndNext->pre) and $preAndNext->pre) 
+        {
+            echo html::a($this->inLink('view', "ID={$preAndNext->pre->id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'");
+        }
+        if(isset($preAndNext->next) and $preAndNext->next) 
+        {
+            echo html::a($this->inLink('view', "ID={$preAndNext->next->id}"), '&nbsp;', '', "id='next' class='icon-next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}'");
+        }
+    }
+
+    /**
      * Create changes of one object.
      * 
      * @param mixed $old    the old object

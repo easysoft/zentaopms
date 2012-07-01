@@ -526,7 +526,7 @@ class commonModel extends model
         
         /* Get the next object. */
         $nextStart    = $currentEnd + 2;            
-        $nextEnd      = strpos($objectIDs, ',', $nextStart) - 1;
+        $nextEnd      = strlen($objectIDs) > $nextStart ? strpos($objectIDs, ',', $nextStart) - 1 : 0;
         if($nextEnd - $nextStart < 0) 
         {
             $preAndNextObject->next = '';
