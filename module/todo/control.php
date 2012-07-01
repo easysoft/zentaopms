@@ -141,7 +141,8 @@ class todo extends control
         $this->session->set('bugList',  $this->app->getURI(true));
 
         /* Set menus. */
-        $this->lang->todo->menu = $this->lang->user->menu;
+        $this->lang->todo->menu      = $this->lang->user->menu;
+        $this->lang->todo->menuOrder = $this->lang->user->menuOrder;
         $this->loadModel('user')->setMenu($this->user->getPairs(), $todo->account);
         $this->lang->set('menugroup.todo', $from);
 
