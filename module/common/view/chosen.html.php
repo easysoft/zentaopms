@@ -3,6 +3,9 @@
 css::import($defaultTheme . 'chosen.css');
 js::import($jsRoot . 'jquery/chosen/chosen.min.js');
 ?>
+<style>
+#colorbox, #cboxOverlay, #cboxWrapper{z-index:9999;}
+</style>
 <script> 
 noResultsMatch = '<?php echo $lang->noResultsMatch;?>';
 $(document).ready(function()
