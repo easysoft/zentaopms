@@ -451,7 +451,8 @@ function setOuterBox()
     {
         var outerH = winHeight - headerH - footerH - navbarH - 37;
         if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
-        $('.outer').height(outerH);
+        if ($.browser.msie && ($.browser.version == "6.0")) $('.outer').css('height', outerH);
+        $('.outer').css('min-height', outerH);
     } 
     if($.browser.msie && ($.browser.version == "6.0") && !$.support.style)
     {
