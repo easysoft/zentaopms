@@ -245,7 +245,8 @@ class user extends control
     public function create($deptID = 0)
     {
         $this->lang->set('menugroup.user', 'company');
-        $this->lang->user->menu = $this->lang->company->menu;
+        $this->lang->user->menu      = $this->lang->company->menu;
+        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
         if(!empty($_POST))
         {
