@@ -331,7 +331,7 @@ class commonModel extends model
             }
             foreach($lang->$moduleName->menuOrder as $order)  
             {
-                if($order != 'list')
+                if(($order != 'list') && isset($menus->$order))
                 {
                     $subOrder = $menus->$order;
                     unset($menus->$order);
