@@ -43,7 +43,7 @@
       <table class='table-1 fixed colored'>
         <?php foreach($productStats as $product):?>
         <tr class='a-center' style='height:30px'>
-          <td class='a-left'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+          <td class='a-left w-150px'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
           <td><?php echo $product->stories['active']?></td>
           <td><?php echo $product->stories['changed']?></td>
           <td><?php echo $product->stories['draft']?></td>

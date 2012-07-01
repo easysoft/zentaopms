@@ -45,17 +45,17 @@
       <table class='table-1 fixed colored'>
         <?php foreach($projectStats as $project):?>
         <tr class='a-center'>
-          <td class='a-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name);?></td>
+          <td class='a-left w-150px'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name);?></td>
           <td><?php echo $project->end;?></td>
           <td><?php echo $lang->project->statusList[$project->status];?></td>
           <td><?php echo $project->hours->totalEstimate;?></td>
           <td><?php echo $project->hours->totalConsumed;?></td>
           <td><?php echo $project->hours->totalLeft;?></td>
-          <td class='a-left w-150px'>
+          <td class='a-left w-120px'>
             <?php if($project->hours->progress):?><img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: /><?php endif;?>
             <small><?php echo $project->hours->progress;?>%</small>
           </td>
-          <td class='projectline a-left' values='<?php echo join(',', $project->burns);?>'></td>
+          <td class='projectline a-left w-100px' values='<?php echo join(',', $project->burns);?>'></td>
         </tr>
         <?php endforeach;?>
       </table>
