@@ -9,7 +9,7 @@ include 'chosen.html.php';
     <tr>
       <td class='w-p50'>
         <?php
-        echo "<span id='company'>{$app->company->name}</span>" . $lang->arrow;
+        echo "<span id='company'>{$app->company->name}</span> ";
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
         ?>
