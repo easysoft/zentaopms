@@ -185,10 +185,11 @@ class release extends control
         $stories = array();
         $bugs    = array();
         $this->loadModel('bug');
+        $this->loadModel('story');
         $build = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch(); 
         if(!empty($build))
         {
-            $stories = $this->loadModel('story')->getProjectStories($build->project, $orderBy);
+            $stories = $this->story->getProjectStories($build->project, $orderBy);
             $bugs    = $this->bug->getProjectBugs($build->project);
         }
         $this->view->productID = $productID;

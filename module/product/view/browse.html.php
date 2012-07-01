@@ -118,7 +118,7 @@ var browseType = '<?php echo $browseType;?>';
                       echo "<span class='icon-gray-small-story-review' title='{$lang->story->review}'>&nbsp;</span>";
                   }
               }
-              common::printLink('story', 'edit', '', '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->edit}'", false);
+              common::printLink('story', 'edit', "storyID=$story->id", '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->edit}'", false);
               common::printLink('testcase', 'create', "productID=$story->product&module=0&from=&param=0&$vars", '&nbsp;', '', "class='icon-green-small-story-createCase' title='{$lang->story->createCase}'", false);
               ?>
             </td>
