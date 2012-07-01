@@ -100,6 +100,8 @@ class commonModel extends model
      */
     public function loadConfigFromDB()
     {
+        if(!isset($this->app->user->account)) return;
+
         $account = $this->app->user->account;
         $config  = $this->loadModel('setting')->getSysAndPersonalConfig($account);
 
