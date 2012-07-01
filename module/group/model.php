@@ -280,8 +280,11 @@ class groupModel extends model
                 ksort($this->lang->$moduleName->methodOrder, SORT_ASC);
                 foreach($this->lang->$moduleName->methodOrder as $key)
                 {
-                    $tmpResources->$key = $resources[$key];
-                    unset($resources[$key]);
+                    if(isset($resources[$key]))
+                    {
+                        $tmpResources->$key = $resources[$key];
+                        unset($resources[$key]);
+                    }
                 }
                 if($resources)
                 {
