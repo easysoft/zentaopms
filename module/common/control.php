@@ -195,7 +195,7 @@ class common extends control
      * @param  string $label    the label of the link
      * @param  string $target   the target of the link
      * @param  string $misc     others
-     * @param  boolean $newline 
+     * @param  bool   $newline 
      * @static
      * @access public
      * @return bool
