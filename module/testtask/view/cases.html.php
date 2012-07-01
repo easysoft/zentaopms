@@ -77,17 +77,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               common::printLink('testtask', 'runcase',    "id=$run->id", $lang->testtask->runCase, '', 'class="iframe"');
               common::printLink('testtask', 'results',    "id=$run->id", $lang->testtask->results, '', 'class="iframe"');
               common::printLink('testtask', 'unlinkcase', "id=$run->id", $lang->testtask->unlinkCase, 'hiddenwin');
-              if(common::hasPriv('bug', 'create'))
-              {
-                  if($run->lastRunResult == 'fail')
-                  {
-                      echo html::a($this->createLink('bug', 'create', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id"), '&nbsp;', '', "class='icon-green-small-case-createBug' title='{$lang->testtask->createBug}'", false);
-                  }
-                  else
-                  {
-                      echo "<span class='icon-gray-small-case-createBug' title='{$lang->testtask->createBug}'>&nbsp;</span>";
-                  }
-              }
+              common::printIcon('testcase', 'toBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'small', 'createBug');
               ?>
             </td>
           </tr>
