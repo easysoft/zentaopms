@@ -493,6 +493,7 @@ class commonModel extends model
             $queryCondition = $this->session->$queryCondition;
             $orderBy = $type . 'OrderBy';
             $orderBy = $this->session->$orderBy;
+            $orderBy = str_replace('`left`', 'left', $orderBy); // process the `left` to left.
             $objects = $this->dao->select('*')->from($table)
                 ->beginIF($queryCondition != false)->where($queryCondition)->fi()
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
