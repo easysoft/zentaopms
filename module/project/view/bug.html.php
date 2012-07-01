@@ -20,7 +20,7 @@
       if($build) echo '<span class="red">(Build:' . $build->name . ')</span>';
       ?>
     </div>
-    <div class='f-right'><?php common::printLink('bug', 'create', "productID=$productID&extra=projectID=$project->id", $lang->bug->create);?></div>
+    <div class='f-right'><?php common::printLink('bug', 'create', "productID=$productID&extra=projectID=$project->id", '&nbsp;', '', "class='icon-green-big-bug-create' title='{$lang->bug->create}'");?></div>
   </caption>
   <thead>
   <tr class='colhead'>
@@ -47,12 +47,33 @@
     <td><?php echo $users[$bug->assignedTo];?></td>
     <td><?php echo $users[$bug->resolvedBy];?></td>
     <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
-    <td>
+    <td class='a-right'>
       <?php
       $params = "bugID=$bug->id";
-      if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
-      if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))     echo $lang->bug->buttonClose . ' ';
-      common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+      if(common::hasPriv('bug', 'resolve'))
+      {
+          if($bug->status == 'active')
+          {
+              echo html::a($this->createLink('bug', 'resolve', $params), '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->buttonResolve}'", false);
+          }
+          else
+          {
+              echo "<span class='icon-gray-small-bug-resolve'>&nbsp;</span>";
+          }
+      }
+
+      if(common::hasPriv('bug', 'close'))
+      {
+          if($bug->status == 'resolved')
+          {
+              echo html::a($this->createLink('bug', 'close', $params), '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->buttonClose}'", false);
+          }
+          else
+          {
+              echo "<span class='icon-gray-small-bug-close'>&nbsp;</span>";
+          }
+      }
+      common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->bug->buttonEdit}'", false);
       ?>
     </td>
   </tr>

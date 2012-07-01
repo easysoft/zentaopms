@@ -444,7 +444,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-gray-small-task-close  {padding:2px 8px; background:url(images/main/zt-gray.png)  -100px -260px;} 
 
 /* Bug icons. */
-#featurebar .f-right .icon-green-big-bug-create {padding:2px 7px 2px 10px;  background:url(images/main/zt-green.png) 0px   -200px;} 
+#featurebar .f-right .icon-green-big-bug-create, caption .f-right .icon-green-big-bug-create  {padding:2px 7px 2px 10px;  background:url(images/main/zt-green.png) 0px   -200px;} 
 
 .icon-green-small-bug-resolve    {padding:2px 8px;  background:url(images/main/zt-green.png) -60px -300px;} 
 .icon-gray-small-bug-resolve     {padding:2px 8px;  background:url(images/main/zt-gray.png)  -60px -300px;} 
