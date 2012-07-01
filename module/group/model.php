@@ -144,7 +144,7 @@ class groupModel extends model
         while($priv = $stmt->fetch()) $privs[$priv->module][$priv->method] = $priv->method;
         return $privs;
     }
-    
+
     /**
      * Get user pairs of a group.
      * 
@@ -246,6 +246,55 @@ class groupModel extends model
             $data->account = $account;
             $data->group   = $groupID;
             $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+        }
+    }
+    
+    /**
+     * Sort resource.
+     * 
+     * @access public
+     * @return void
+     */
+    public function sortResource()
+    {
+        $resources = $this->lang->resource;
+        unset($this->lang->resource);
+
+        ksort($this->lang->moduleOrder, SORT_ASC);
+        foreach($this->lang->moduleOrder as $moduleName)
+        {
+            $resource = $resources->$moduleName;
+            unset($resources->$moduleName);
+            $this->lang->resource->$moduleName = $resource;
+        }
+        foreach($resources as $key => $resource)
+        {
+            $this->lang->resource->$key = $resource;
+        }
+
+        foreach($this->lang->resource as $moduleName => $resources)
+        {
+            $resources = (array)$resources;
+            if(isset($this->lang->$moduleName->methodOrder))
+            {
+                ksort($this->lang->$moduleName->methodOrder, SORT_ASC);
+                foreach($this->lang->$moduleName->methodOrder as $key)
+                {
+                    $tmpResources->$key = $resources[$key];
+                    unset($resources[$key]);
+                }
+                if($resources)
+                {
+                    $resources = array_keys($resources);
+                    $labels    = array_values($resources);
+                    foreach($resources as $key => $resource)
+                    {
+                        $tmpResources->$resource = $labels[$key];
+                    }
+                }
+                $this->lang->resource->$moduleName = $tmpResources;
+                unset($tmpResources);
+            }
         }
     }
 }

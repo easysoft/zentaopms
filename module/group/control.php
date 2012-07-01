@@ -139,6 +139,7 @@ class group extends control
 
         if($type == 'byGroup')
         {
+            $this->group->sortResource();
             $group      = $this->group->getById($groupID);
             $groupPrivs = $this->group->getPrivs($groupID);
 
@@ -148,10 +149,10 @@ class group extends control
             $this->view->group      = $group;
             $this->view->changelogs = $this->lang->changelog;
             $this->view->groupPrivs = $groupPrivs;
-
         }
         elseif($type == 'byModule')
         {
+            $this->group->sortResource();
             $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
             $this->view->position[]    = $this->lang->group->managePriv;
 
