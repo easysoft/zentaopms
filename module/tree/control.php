@@ -60,7 +60,8 @@ class tree extends control
         {
             $this->lang->set('menugroup.tree', 'product');
             $this->product->setMenu($this->product->getPairs(), $rootID, 'story');
-            $this->lang->tree->menu = $this->lang->product->menu;
+            $this->lang->tree->menu      = $this->lang->product->menu;
+            $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
 
             $products = $this->product->getPairs();
             unset($products[$rootID]);
@@ -78,7 +79,8 @@ class tree extends control
         {
             $this->lang->set('menugroup.tree', 'project');
             $this->project->setMenu($this->project->getPairs(), $rootID, 'task');
-            $this->lang->tree->menu = $this->lang->project->menu;
+            $this->lang->tree->menu      = $this->lang->project->menu;
+            $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
 
             $projects = $this->project->getPairs();
             unset($projects[$rootID]);
@@ -95,7 +97,8 @@ class tree extends control
         elseif($viewType == 'bug')
         {
             $this->loadModel('bug')->setMenu($this->product->getPairs(), $rootID);
-            $this->lang->tree->menu = $this->lang->bug->menu;
+            $this->lang->tree->menu      = $this->lang->bug->menu;
+            $this->lang->tree->menuOrder = $this->lang->bug->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
 
             $header['title'] = $this->lang->tree->manageBug . $this->lang->colon . $product->name;
@@ -105,7 +108,8 @@ class tree extends control
         elseif($viewType == 'case')
         {
             $this->loadModel('testcase')->setMenu($this->product->getPairs(), $rootID);
-            $this->lang->tree->menu = $this->lang->testcase->menu;
+            $this->lang->tree->menu      = $this->lang->testcase->menu;
+            $this->lang->tree->menuOrder = $this->lang->testcase->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
 
             $header['title'] = $this->lang->tree->manageCase . $this->lang->colon . $product->name;
@@ -115,7 +119,8 @@ class tree extends control
         elseif(strpos($viewType, 'doc') !== false)
         {
             $this->doc->setMenu($this->doc->getLibs(), $rootID, 'doc');
-            $this->lang->tree->menu = $this->lang->doc->menu;
+            $this->lang->tree->menu      = $this->lang->doc->menu;
+            $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
             $this->lang->set('menugroup.tree', 'doc');
 
             $header['title'] = $this->lang->tree->manageCustomDoc . $this->lang->colon . $lib->name;
