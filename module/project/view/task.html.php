@@ -95,9 +95,8 @@ var browseType = '<?php echo $browseType;?>';
             <td><?php echo $lang->task->priList[$task->pri];?></td>
             <td class='a-left nobr'>
               <?php 
-              if($task->fromBug != 0) echo "<span class='bug'>[BUG] </span>";
-              else echo "<span class='task'>[TASK] </span>";
               if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
+              if($task->fromBug) echo html::a($this->createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
               ?>
             </td>
             <td class=<?php echo $task->status;?> >
