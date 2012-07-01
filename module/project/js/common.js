@@ -68,19 +68,19 @@ function computeEndDate()
     endDate = begin + 14 * 24 * 60 * 60 * 1000;
     endDate = new Date(endDate);
     year    = endDate.getFullYear();
-    month   = endDate.getMonth();
+    month   = endDate.getMonth() + 1;
     day     = endDate.getDate() - 1;
   }
   else if(workDays == '12') 
   {
     year  = beginDate.getFullYear() + 1;
-    month = beginDate.getMonth();
+    month = beginDate.getMonth() + 1;
     day   = beginDate.getDate() - 1;
   }
   else
   {
     year  = beginDate.getFullYear();
-    month = beginDate.getMonth() + Number(workDays);
+    month = beginDate.getMonth() + Number(workDays) + 1;
     if(month > 12)
     {
       year  = year + 1;
