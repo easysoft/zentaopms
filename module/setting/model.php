@@ -90,14 +90,14 @@ class settingModel extends model
     public function setSN()
     {
         $sn = $this->getItem('system', 'common', 'global', 'sn', 0);
-        if(!$sn) return false;
-        if($sn->value == '281602d8ff5ee7533eeafd26eda4e776' or 
-           $sn->value == '9bed3108092c94a0db2b934a46268b4a' or
-           $sn->value == '8522dd4d76762a49d02261ddbe4ad432' or
-           $sn->value == '13593e340ee2bdffed640d0c4eed8bec')
+        if($sn == '' or
+           $sn == '281602d8ff5ee7533eeafd26eda4e776' or 
+           $sn == '9bed3108092c94a0db2b934a46268b4a' or
+           $sn == '8522dd4d76762a49d02261ddbe4ad432' or
+           $sn == '13593e340ee2bdffed640d0c4eed8bec')
         {
-            $sn->value = $this->computeSN();
-            $this->dao->replace(TABLE_CONFIG)->data($sn)->exec($autoCompany = false);
+            $sn = $this->computeSN();
+            $this->setItem('system', 'common', 'global', 'sn', $sn, 0);
         }
     }
 
