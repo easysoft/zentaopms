@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->report->common     = 'Report';
+$lang->report->index      = 'Report index';
 $lang->report->list       = 'Report list';
 $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';

@@ -11,6 +11,7 @@
  */
 $lang->admin->common  = '后台管理';
 $lang->admin->index   = '后台管理首页';
+$lang->admin->checkDB = '修正数据';
 $lang->admin->company = '公司管理';
 $lang->admin->user    = '用户管理';
 $lang->admin->group   = '分组管理';

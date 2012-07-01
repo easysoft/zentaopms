@@ -11,6 +11,7 @@
  */
 $lang->admin->common  = 'Admin';
 $lang->admin->index   = 'Index';
+$lang->admin->checkDB = 'Repair data';
 $lang->admin->company = 'Company';
 $lang->admin->user    = 'User';
 $lang->admin->group   = 'Group';
