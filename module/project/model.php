@@ -981,7 +981,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getBurnData($projectID = 0, $itemCounts = 30)
+    public function getBurnData($projectID = 0, $itemCounts = 30, $extra = 'noempty')
     {
         /* Get project and burn counts. */
         $project    = $this->getById($projectID);
@@ -1012,7 +1012,7 @@ class projectModel extends model
             for($i = 0; $i < $counts - $burnCounts; $i ++)
             {
                 if(helper::diffDate($current, $project->end) > 0) break;
-                if(!isset($sets[$current]))
+                if(!isset($sets[$current]) and $extra != 'noempty')
                 {
                     $sets[$current]->name = $current;
                     $sets[$current]->value = '';
@@ -1025,6 +1025,14 @@ class projectModel extends model
         return $sets;
     }
 
+    /**
+     * Get burn data for flot 
+     * 
+     * @param  int    $projectID 
+     * @param  int    $itemCounts 
+     * @access public
+     * @return void
+     */
     public function getBurnDataFlot($projectID = 0, $itemCounts = 30)
     {
         /* Get project and burn counts. */
