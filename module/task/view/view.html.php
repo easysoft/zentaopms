@@ -23,26 +23,89 @@
   if(!$task->deleted)
   {
       //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
-      if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
-      if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
-      if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
-      if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
-      if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
-      if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
+      common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign);
+      if(common::hasPriv('task', 'start'))
+      {
+          if($task->status == 'wait')
+          {
+              echo html::a($this->inLink('start', "taskID=$task->id"), $lang->task->buttonStart);
+          }
+          else
+          {
+              echo $lang->task->buttonStart . ' ';
+          }
+      }
 
-      if(!common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-edit'")) echo "<span class='icon-edit'></span>";
-      if(common::hasPriv('task', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'"). ' ';
+      if(common::hasPriv('task', 'finish'))
+      {
+          if($task->status == 'wait'   or $task->status == 'doing')
+          {
+              echo html::a($this->inLink('finish', "taskID=$task->id"), $lang->task->buttonDone);
+          }
+          else
+          {
+              echo $lang->task->buttonDone . ' ';
+          }
+      }
 
-      if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-delete'")) echo "<span class='icon-delete'></span>";
+      if(common::hasPriv('task', 'close'))
+      {
+          if($task->status == 'done'   or $task->status == 'cancel')
+          {
+              echo html::a($this->inLink('close', "taskID=$task->id"), $lang->task->buttonClose);
+          }
+          else
+          { 
+              echo $lang->task->buttonClose . ' ';
+          }
+      }
+
+      if(common::hasPriv('task', 'activate'))
+      {
+          if($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel')
+          {
+              echo html::a($this->inLink('activate', "taskID=$task->id"), $lang->task->buttonActivate);
+          }
+          else
+          { 
+              echo $lang->task->buttonActivate . ' ';
+          }
+      }
+
+      if(common::hasPriv('task', 'cancel'))
+      {
+          if($task->status == 'wait' or $task->status == 'doing')
+          {
+              echo html::a($this->inLink('cancel', "taskID=$task->id"), $lang->task->buttonCancel);
+          }
+          else
+          { 
+              echo $lang->task->buttonCancel . ' ';
+          }
+      }
+      if(common::hasPriv('task', 'assignTo') or common::hasPriv('task', 'start') 
+          or common::hasPriv('task', 'finish') or common::hasPriv('task', 'close')
+          or common::hasPriv('task', 'activate') or common::hasPriv('task', 'cancel'))
+      {
+          echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+      }
+
+      common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-green-big-edit' title='{$lang->task->edit}'");
+      if(common::hasPriv('task', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' onclick='setComment()' title='{$lang->comment}'");
+      common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title='{$lang->delete}'");
+      if(common::hasPriv('task', 'edit') or common::hasPriv('task', 'delete'))
+      {
+          echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+      }
   }
-  echo html::a($browseLink, '&nbsp', '', "class='icon-goback'");
+  echo html::a($browseLink, '&nbsp', '', "class='icon-green-big-goback' title='{$lang->goback}'");
   if($preAndNext->pre) 
   {
-      echo html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '&nbsp;', '', "class='icon-pre' id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'");
+      echo html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '&nbsp;', '', "class='icon-green-big-pre' id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'");
   }
   if($preAndNext->next) 
   {
-      echo html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '&nbsp;', '', "class='icon-next' id='next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->name}'");
+      echo html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '&nbsp;', '', "class='icon-green-big-next' id='next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->name}'");
   }
   ?>
   </div>
@@ -61,20 +124,83 @@
         <?php
         if(!$task->deleted)
         {
-            if(!common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign)) echo $lang->task->assign . ' ';
-            if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
-            if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
-            if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
-            if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
-            if(!(($task->status == 'wait'  or $task->status == 'doing')  and common::printLink('task', 'cancel', "taskID=$task->id", $lang->task->buttonCancel))) echo $lang->task->buttonCancel . ' ';
+            common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign);
+            if(common::hasPriv('task', 'start'))
+            {
+                if($task->status == 'wait')
+                {
+                    echo html::a($this->inLink('start', "taskID=$task->id"), $lang->task->buttonStart);
+                }
+                else
+                {
+                    echo $lang->task->buttonStart . ' ';
+                }
+            }
 
-            if(!common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-edit'")) echo "<span class='icon-edit'></span>";
-            if(common::hasPriv('task', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'");
+            if(common::hasPriv('task', 'finish'))
+            {
+                if($task->status == 'wait'   or $task->status == 'doing')
+                {
+                    echo html::a($this->inLink('finish', "taskID=$task->id"), $lang->task->buttonDone);
+                }
+                else
+                {
+                    echo $lang->task->buttonDone . ' ';
+                }
+            }
 
-            if(!common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", '&nbsp;', 'hiddenwin')) echo "<span class='icon-delete'></span>";
+            if(common::hasPriv('task', 'close'))
+            {
+                if($task->status == 'done'   or $task->status == 'cancel')
+                {
+                    echo html::a($this->inLink('close', "taskID=$task->id"), $lang->task->buttonClose);
+                }
+                else
+                { 
+                    echo $lang->task->buttonClose . ' ';
+                }
+            }
+
+            if(common::hasPriv('task', 'activate'))
+            {
+                if($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel')
+                {
+                    echo html::a($this->inLink('activate', "taskID=$task->id"), $lang->task->buttonActivate);
+                }
+                else
+                { 
+                    echo $lang->task->buttonActivate . ' ';
+                }
+            }
+
+            if(common::hasPriv('task', 'cancel'))
+            {
+                if($task->status == 'wait' or $task->status == 'doing')
+                {
+                    echo html::a($this->inLink('cancel', "taskID=$task->id"), $lang->task->buttonCancel);
+                }
+                else
+                { 
+                    echo $lang->task->buttonCancel . ' ';
+                }
+            }
+            if(common::hasPriv('task', 'assignTo') or common::hasPriv('task', 'start') 
+                or common::hasPriv('task', 'finish') or common::hasPriv('task', 'close')
+                or common::hasPriv('task', 'activate') or common::hasPriv('task', 'cancel'))
+            {
+                echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+            }
+
+            common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-green-big-edit' title='{$lang->task->edit}'");
+            if(common::hasPriv('task', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' onclick='setComment()' title='{$lang->comment}'");
+            common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title='{$lang->delete}'");
+            if(common::hasPriv('task', 'edit') or common::hasPriv('task', 'delete'))
+            {
+                echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
+            }
         }
-        echo html::a($browseLink, '&nbsp;', '', "class='icon-goback'");
-        ?>
+        echo html::a($browseLink, '&nbsp', '', "class='icon-green-big-goback' title='{$lang->goback}'");
+       ?>
       </div>
       <div id='comment' class='hidden'>
         <fieldset>
@@ -100,15 +226,15 @@
           <tr class='nofixed'>
             <th class='rowhead'><?php echo $lang->task->story;?></th>
             <td>
-              <?php 
-              if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle)) echo $task->storyTitle;
-              if($task->needConfirm)
-              {
-                  echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                  echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$task->id"), $lang->confirm, 'hiddenwin');
-                  echo ")";
-              }
-              ?>
+            <?php 
+            if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle)) echo $task->storyTitle;
+            if($task->needConfirm)
+            {
+                echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$task->id"), $lang->confirm, 'hiddenwin');
+                echo ")";
+            }
+            ?>
             </td>
           </tr>  
           <tr>
@@ -147,10 +273,10 @@
           <tr>
             <th class='rowhead'><?php echo $lang->task->deadline;?></th>
             <td>
-              <?php
-              echo $task->deadline;
-              if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);
-              ?>
+            <?php
+            echo $task->deadline;
+            if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);
+            ?>
             </td>
           </tr>  
           <tr>
