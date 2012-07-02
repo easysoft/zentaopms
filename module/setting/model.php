@@ -69,7 +69,8 @@ class settingModel extends model
      */
     public function updateVersion($version)
     {
-        $this->setItem('system', 'common', 'global', 'version', $version, 0);
+        if($version >= 3.2) $this->setItemGE32('system', 'common', 'global', 'version', $version, 0);
+        else                $this->setItemLT32('system', 'global', 'version', $version, 0);
     }
 
     /**
@@ -103,7 +104,7 @@ class settingModel extends model
            $sn == '13593e340ee2bdffed640d0c4eed8bec')
         {
             $sn = $this->computeSN();
-            $this->setItem('system', 'common', 'global', 'sn', $sn, 0);
+            $this->setItemGE32('system', 'common', 'global', 'sn', $sn, 0);
         }
     }
 
@@ -142,11 +143,34 @@ class settingModel extends model
      * @access public
      * @return void
      */
-    public function setItem($owner, $module, $section, $key, $value = '', $company = 'current')
+    public function setItemGE32($owner, $module, $section, $key, $value = '', $company = 'current')
     {
         $item->company = $company === 'current' ? $this->app->company->id : $company;
         $item->owner   = $owner;
         $item->module  = $module;
+        $item->section = $section;
+        $item->key     = $key;
+        $item->value   = $value;
+
+        $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
+    }
+
+    /**
+     * Set value of an item. 
+     * 
+     * @param  string      $owner 
+     * @param  string      $module 
+     * @param  string      $section 
+     * @param  string      $key 
+     * @param  string      $value 
+     * @param  string|int  $company 
+     * @access public
+     * @return void
+     */
+    public function setItemLT32($owner, $section, $key, $value = '', $company = 'current')
+    {
+        $item->company = $company === 'current' ? $this->app->company->id : $company;
+        $item->owner   = $owner;
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;

@@ -375,7 +375,6 @@ class upgradeModel extends model
         }
 
         $this->deletePatch();
-        $this->setting->setSN();
     }
 
     /**
@@ -629,6 +628,14 @@ class upgradeModel extends model
         elseif($fromVersion == '3_0_beta1')
         {
             $confirmContent .= file_get_contents($this->getUpgradeFile('3.0.beta1'));
+            $confirmContent .= file_get_contents($this->getUpgradeFile('3.1'));
+        }
+        elseif($fromVersion == '3_0_beta2')
+        {
+            $confirmContent .= file_get_contents($this->getUpgradeFile('3.1'));
+        }
+        elseif($fromVersion == '3_0')
+        {
             $confirmContent .= file_get_contents($this->getUpgradeFile('3.1'));
         }
         elseif($fromVersion == '3_1')
@@ -916,6 +923,7 @@ class upgradeModel extends model
      */
     public function upgradeFrom3_1To3_2()
     {
+        $this->execSQL($this->getUpgradeFile('3.1'));
         if(!$this->isError()) $this->setting->updateVersion('3.2');
     }
 
