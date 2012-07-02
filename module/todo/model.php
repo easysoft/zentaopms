@@ -173,7 +173,7 @@ class todoModel extends model
             $begin = $this->today();
             $end   = $begin;
         }
-        if($date == 'yesterday') 
+        elseif($date == 'yesterday') 
         {
             $begin = $this->yesterday();
             $end   = $begin;
