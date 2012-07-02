@@ -68,7 +68,7 @@ class admin extends control
 			die($response);
 		}
 		$this->view->register = $this->admin->getRegisterInfo();
-		$this->view->sn       = $this->loadModel('setting')->getItem('system', 'common', 'global', 'sn');
+		$this->view->sn       = $this->loadModel('setting')->getItem('system', 'common', 'global', 'sn', 0);
 		$this->display();
 	}
 
@@ -91,7 +91,7 @@ class admin extends control
 			}
 			die($response);
 		}
-		$this->view->sn = $this->loadModel('setting')->getItem('system', 'common', 'global', 'sn');
+		$this->view->sn = $this->loadModel('setting')->getItem('system', 'common', 'global', 'sn', 0);
 		$this->display();
 	}
 
