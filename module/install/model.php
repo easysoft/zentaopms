@@ -371,11 +371,12 @@ class installModel extends model
         }
 
         $config->company = '1';
+        $config->module  = 'common';
         $config->owner   = 'system';
         $config->section = 'global';
         $config->key     = 'showDemoUsers';
         $config->value   = '1';
-        $this->dao->insert(TABLE_CONFIG)->data($config)->exec();
+        $this->dao->replace(TABLE_CONFIG)->data($config, false)->exec(false);
         return true;
     }
 

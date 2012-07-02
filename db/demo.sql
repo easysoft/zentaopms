@@ -128,9 +128,6 @@ INSERT INTO `zt_caseStep` (`id`, `company`, `case`, `version`, `desc`, `expect`)
 INSERT INTO `zt_caseStep` (`id`, `company`, `case`, `version`, `desc`, `expect`) VALUES(3, 1, 3, 1, '进入新闻中心', '正常显示');
 INSERT INTO `zt_caseStep` (`id`, `company`, `case`, `version`, `desc`, `expect`) VALUES(4, 1, 4, 1, '进入成果展示', '正常显示');
 
-INSERT INTO `zt_config` (`id`, `company`, `owner`, `section`, `key`, `value`) VALUES(1, 0, 'system', 'global', 'version', '3.1');
-INSERT INTO `zt_config` (`id`, `company`, `owner`, `section`, `key`, `value`) VALUES(2, 0, 'system', 'global', 'sn', 'abb901c7a4a7940cf6dafca0e84a7045');
-
 INSERT INTO `zt_dept` (`id`, `company`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(1, 1, '经理', 0, ',1,', 1, 0, '', '', '');
 INSERT INTO `zt_dept` (`id`, `company`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(2, 1, '开发', 0, ',2,', 1, 0, '', '', '');
 INSERT INTO `zt_dept` (`id`, `company`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(3, 1, '测试', 0, ',3,', 1, 0, '', '', '');
@@ -139,10 +136,6 @@ INSERT INTO `zt_dept` (`id`, `company`, `name`, `parent`, `path`, `grade`, `orde
 INSERT INTO `zt_dept` (`id`, `company`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(6, 1, '项目', 1, ',1,6,', 2, 0, '', '', '');
 INSERT INTO `zt_dept` (`id`, `company`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(7, 1, '编程', 2, ',2,7,', 2, 0, '', '', '');
 INSERT INTO `zt_dept` (`id`, `company`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES(8, 1, '美工', 2, ',2,8,', 2, 0, '', '', '');
-
-
-
-
 
 
 INSERT INTO `zt_history` (`id`, `company`, `action`, `field`, `old`, `new`, `diff`) VALUES(1, 1, 14, 'version', '1', '2', '');
