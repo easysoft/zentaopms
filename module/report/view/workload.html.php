@@ -1,5 +1,4 @@
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/ext/view/datepicker.html.php';?>
 <table class="cont-lt1">
   <tr valign='top'>
     <td class='side'>
