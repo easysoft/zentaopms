@@ -19,9 +19,10 @@
       $browseLink = $this->session->projectList ? $this->session->projectList : inlink('task', "projectID=$project->id");
       if(!$project->deleted)
       {
-          common::printLink('project', 'edit',   "projectID=$project->id", '&nbsp;', '', "class='icon-green-big-edit' title='{$lang->project->edit}'");
-          common::printLink('project', 'delete', "projectID=$project->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title='{$lang->project->delete}'");
+          common::printLink('project', 'edit',   "projectID=$project->id", $lang->project->edit);
+          common::printLink('project', 'delete', "projectID=$project->id", $lang->project->delete, 'hiddenwin');
       }
+      echo html::a($browseLink, $lang->goback);
       ?>
     </div>
    </caption>
@@ -37,14 +38,10 @@
       $browseLink = $this->session->projectList ? $this->session->projectList : inlink('task', "projectID=$project->id");
       if(!$project->deleted)
       {
-          common::printLink('project', 'edit',   "projectID=$project->id", '&nbsp;', '', "class='icon-green-big-edit' title='{$lang->project->edit}'");
-          common::printLink('project', 'delete', "projectID=$project->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title='{$lang->project->delete}'");
-          if(common::hasPriv('project', 'edit') or common::hasPriv('project', 'delete'))
-          {
-              echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
-          }
+          common::printLink('project', 'edit',   "projectID=$project->id", $lang->project->edit);
+          common::printLink('project', 'delete', "projectID=$project->id", $lang->project->delete, 'hiddenwin');
       }
-      echo html::a($browseLink, '&nbsp;', '', "class='icon-green-big-goback' title='{$lang->goback}'");
+      echo html::a($browseLink, $lang->goback);
       ?>
       </div>
     </td>
