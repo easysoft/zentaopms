@@ -48,7 +48,13 @@ class settingModel extends model
      */
     public function getVersion()
     {
-        $version = $this->getItem('system', 'common', 'global', 'version', 0);
+        $version = $this->dao->select('value')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('section')->eq('global')
+            ->andWhere('`key`')->eq('version')
+            ->andWhere('company')->eq(0)
+            ->fetch('value', false);
+
         if($version == '3.0.stable') $version = '3.0';   // convert 3.0.stable to 3.0.
         if($version) return $version;
         return '0.3 beta';
