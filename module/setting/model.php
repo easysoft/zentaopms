@@ -23,7 +23,7 @@ class settingModel extends model
     public function getSysAndPersonalConfig($account = '')
     {
         $owner   = 'system,' . ($account ? $account : $this->app->user->account);
-        $records = $this->dao->select('owner, module, section, `key`, value')
+        $records = $this->dao->select('*')
             ->from(TABLE_CONFIG)
             ->where('owner')->in($owner)
             ->fetchAll();
@@ -33,6 +33,8 @@ class settingModel extends model
         $config = array();
         foreach($records as $record)
         {
+            if(!isset($record->module)) return array();    // If no module field, return directly. Since 3.2 version, there's the module field.
+
             if($record->section)  $config[$record->owner]->{$record->module}[] = $record;
             if(!$record->section) $config[$record->owner]->{$record->module}[] = $record;
         }
