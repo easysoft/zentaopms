@@ -653,7 +653,7 @@ class storyModel extends model
             ->where('1=1')
             ->beginIF($productID)->andWhere('t1.product')->in($productID)->fi()
             ->beginIF($moduleIds)->andWhere('t1.module')->in($moduleIds)->fi()
-            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($order)
             ->fetchAll();
