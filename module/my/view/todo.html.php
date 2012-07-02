@@ -28,7 +28,7 @@
       echo '<span id="future">'   . html::a(inlink('todo', "date=future"),    $lang->todo->futureTodos)   . '</span>';
       echo '<span id="all">'      . html::a(inlink('todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
       echo '<span id="before">'   . html::a(inlink('todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
-      echo "<span id='$date'>"    . html::input('date', $date,"class='select-2 date' onchange=changeDate(this.value)") . '</span>';
+      echo "<span id='$date'>"    . html::input('date', $date,"class='w-date date' onchange=changeDate(this.value)") . '</span>';
       ?>
       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
@@ -36,7 +36,7 @@
       <?php 
       common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="export w-date"');
       common::printLink('todo', 'batchCreate', "", $lang->todo->batchCreate);
-      echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
+      echo html::a($this->createLink('todo', 'create', "date=" . str_replace('-', '', $date)), $lang->todo->create);
       ?>
     </div>
   </div>

@@ -42,7 +42,7 @@ class todo extends control
             $todoID = $this->todo->create($date, $account);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('todo', $todoID, 'opened');
-            die(js::locate($this->createLink('my', 'todo', "date=$_POST[date]"), 'parent'));
+            die(js::locate($this->createLink('my', 'todo', "date=" . str_replace('-', '', $this->post->date)), 'parent'));
         }
 
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;

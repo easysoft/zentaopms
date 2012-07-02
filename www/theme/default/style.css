@@ -322,6 +322,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #featurebar .active a       {color:#009900; font-weight:bold;}
 #featurebar .active select  {border:3px solid #009900;}
 
+#featurebar .dp-choose-date {padding:0px;}
+
 /* Tree menu. */
 #tree li      {list-style-type:none;}
 #tree .active {color:blue; font-weight:bold}
