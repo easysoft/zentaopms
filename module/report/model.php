@@ -310,8 +310,8 @@ EOT;
     {
         $bugGroups  = $this->dao->select('id, resolution, openedBy')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
-            ->andWhere('openedDate')->gt($begin)
-            ->andWhere('openedDate')->lt($end)
+            ->andWhere('openedDate')->ge($begin)
+            ->andWhere('openedDate')->le($end)
             ->fetchGroup('openedBy', 'id');
         $bugSummary = array();
         foreach($bugGroups as $user => $bugs)
