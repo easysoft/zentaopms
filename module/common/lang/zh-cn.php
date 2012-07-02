@@ -86,16 +86,6 @@ $lang->menu->report  = '统计视图|report|index';
 $lang->menu->company = '组织视图|company|index';
 $lang->menu->admin   = '后台管理|admin|index';
 
-/* 主菜单顺序。*/
-$lang->menuOrder[5]  = 'my';
-$lang->menuOrder[10] = 'product';
-$lang->menuOrder[15] = 'project';
-$lang->menuOrder[20] = 'qa';
-$lang->menuOrder[25] = 'doc';
-$lang->menuOrder[30] = 'report';
-$lang->menuOrder[35] = 'company';
-$lang->menuOrder[40] = 'admin';
-
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'B:Bug';
 $lang->searchObjects['story']       = 'S:需求';
@@ -136,9 +126,6 @@ $lang->themes['classblue'] = '经典蓝';
 $lang->index->menu->product = '浏览产品|product|browse';
 $lang->index->menu->project = '浏览项目|project|browse';
 
-$lang->index->menuOrder[5]  = 'product';
-$lang->index->menuOrder[10] = 'project';
-
 /* 我的地盘菜单设置。*/
 $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index          = '首页|my|index';
@@ -152,19 +139,6 @@ $lang->my->menu->dynamic        = '我的动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '修改密码|my|changePassword|';
 $lang->todo->menu               = $lang->my->menu;
-
-$lang->my->menuOrder[5]  = 'account';
-$lang->my->menuOrder[10] = 'index';
-$lang->my->menuOrder[15] = 'todo';
-$lang->my->menuOrder[20] = 'task';
-$lang->my->menuOrder[25] = 'bug';
-$lang->my->menuOrder[30] = 'testtask';
-$lang->my->menuOrder[35] = 'story';
-$lang->my->menuOrder[40] = 'myProject';
-$lang->my->menuOrder[45] = 'dynamic';
-$lang->my->menuOrder[50] = 'profile';
-$lang->my->menuOrder[55] = 'changePassword';
-$lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* 产品视图设置。*/
 $lang->product->menu->list    = '%s';
@@ -183,23 +157,6 @@ $lang->product->menu->all     = array('link' => '<span class="icon-all">&nbsp;</
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
-
-$lang->product->menuOrder[5]  = 'story';
-$lang->product->menuOrder[10] = 'dynamic';
-$lang->product->menuOrder[15] = 'plan';
-$lang->product->menuOrder[20] = 'release';
-$lang->product->menuOrder[25] = 'roadmap';
-$lang->product->menuOrder[30] = 'doc';
-$lang->product->menuOrder[35] = 'project';
-$lang->product->menuOrder[40] = 'view';
-$lang->product->menuOrder[45] = 'module';
-$lang->product->menuOrder[50] = 'order';
-$lang->product->menuOrder[55] = 'create';
-$lang->product->menuOrder[60] = 'all';
-
-$lang->story->menuOrder       = $lang->product->menuOrder;
-$lang->productplan->menuOrder = $lang->product->menuOrder;
-$lang->release->menuOrder     = $lang->product->menuOrder;
 
 /* 项目视图菜单设置。*/
 $lang->project->menu->list      = '%s';
@@ -221,47 +178,17 @@ $lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;
 $lang->task->menu               = $lang->project->menu;
 $lang->build->menu              = $lang->project->menu;
 
-$lang->project->menuOrder[5]  = 'task';
-$lang->project->menuOrder[10] = 'story';
-$lang->project->menuOrder[15] = 'bug';
-$lang->project->menuOrder[20] = 'build';
-$lang->project->menuOrder[25] = 'testtask';
-$lang->project->menuOrder[30] = 'burn';
-$lang->project->menuOrder[35] = 'team';
-$lang->project->menuOrder[40] = 'dynamic';
-$lang->project->menuOrder[45] = 'doc';
-$lang->project->menuOrder[50] = 'product';
-$lang->project->menuOrder[55] = 'linkstory';
-$lang->project->menuOrder[60] = 'view';
-$lang->project->menuOrder[65] = 'order';
-$lang->project->menuOrder[70] = 'create';
-$lang->project->menuOrder[75] = 'copy';
-$lang->project->menuOrder[80] = 'all';
-$lang->task->menuOrder        = $lang->project->menuOrder;
-$lang->build->menuOrder       = $lang->project->menuOrder;
-
 /* QA视图菜单设置。*/
 $lang->bug->menu->product  = '%s';
 $lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
 
-$lang->bug->menuOrder[0]  = 'product';
-$lang->bug->menuOrder[5]  = 'bug';
-$lang->bug->menuOrder[10] = 'testcase';
-$lang->bug->menuOrder[15] = 'testtask';
-
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 $lang->testtask->menu           = $lang->testcase->menu;
-
-$lang->testcase->menuOrder[0]  = 'product';
-$lang->testcase->menuOrder[5]  = 'bug';
-$lang->testcase->menuOrder[10] = 'testcase';
-$lang->testcase->menuOrder[15] = 'testtask';
-$lang->testtask->menuOrder     = $lang->testcase->menuOrder;
 
 /* 文档视图菜单设置。*/
 $lang->doc->menu->list    = '%s';
@@ -271,22 +198,11 @@ $lang->doc->menu->module  = '维护模块|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
 $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>新增文档库|doc|createLib', 'float' => 'right');
 
-$lang->doc->menuOrder[5]  = 'browse';
-$lang->doc->menuOrder[10] = 'edit';
-$lang->doc->menuOrder[15] = 'module';
-$lang->doc->menuOrder[20] = 'delete';
-$lang->doc->menuOrder[25] = 'create';
-
 /* 统计视图菜单设置。*/
 $lang->report->menu->prj     = array('link' => '项目|report|projectdeviation');
 $lang->report->menu->product = array('link' => '产品|report|productinfo');
 $lang->report->menu->test    = array('link' => '测试|report|bugsummary');
 $lang->report->menu->staff   = array('link' => '员工|report|workload');
-
-$lang->report->menuOrder[5]  = 'prj';
-$lang->report->menuOrder[10] = 'product';
-$lang->report->menuOrder[15] = 'test';
-$lang->report->menuOrder[20] = 'staff';
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;
@@ -300,17 +216,6 @@ $lang->company->menu->addUser     = array('link' => '<span class="icon-add1">&nb
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 
-$lang->company->menuOrder[0]  = 'name';
-$lang->company->menuOrder[5]  = 'browseUser';
-$lang->company->menuOrder[10] = 'dept';
-$lang->company->menuOrder[15] = 'browseGroup';
-$lang->company->menuOrder[20] = 'edit';
-$lang->company->menuOrder[25] = 'dynamic';
-$lang->company->menuOrder[30] = 'addGroup';
-$lang->company->menuOrder[35] = 'addUser';
-$lang->dept->menuOrder        = $lang->company->menuOrder;
-$lang->group->menuOrder       = $lang->company->menuOrder;
-
 /* 用户信息菜单设置。*/
 $lang->user->menu->account     = '%s' . $lang->arrow;
 $lang->user->menu->todo        = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
@@ -320,15 +225,6 @@ $lang->user->menu->dynamic     = '用户动态|user|dynamic|type=today&account=%
 $lang->user->menu->projectList = '项目列表|user|project|account=%s';
 $lang->user->menu->profile     = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
 $lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp;</span>用户管理|company|browse|', 'float' => 'right');
-
-$lang->user->menuOrder[0]  = 'account';
-$lang->user->menuOrder[5]  = 'todo';
-$lang->user->menuOrder[10] = 'task';
-$lang->user->menuOrder[15] = 'bug';
-$lang->user->menuOrder[20] = 'dynamic';
-$lang->user->menuOrder[25] = 'projectList';
-$lang->user->menuOrder[30] = 'profile';
-$lang->user->menuOrder[35] = 'browse';
 
 /* 后台管理菜单设置。*/
 $lang->admin->menu->index     = array('link' => '首页|admin|index');
@@ -344,20 +240,6 @@ $lang->action->menu           = $lang->admin->menu;
 $lang->extension->menu        = $lang->admin->menu;
 $lang->editor->menu           = $lang->admin->menu;
 $lang->mail->menu             = $lang->admin->menu;
-
-$lang->admin->menuOrder[5]  = 'index';
-$lang->admin->menuOrder[10] = 'extension';
-$lang->admin->menuOrder[15] = 'editor';
-$lang->admin->menuOrder[20] = 'mail';
-$lang->admin->menuOrder[25] = 'clearData';
-$lang->admin->menuOrder[30] = 'convert';
-$lang->admin->menuOrder[35] = 'trashes';
-$lang->convert->menuOrder   = $lang->admin->menuOrder;
-$lang->upgrade->menuOrder   = $lang->admin->menuOrder;
-$lang->action->menuOrder    = $lang->admin->menuOrder;
-$lang->extension->menuOrder = $lang->admin->menuOrder;
-$lang->editor->menuOrder    = $lang->admin->menuOrder;
-$lang->mail->menuOrder      = $lang->admin->menuOrder;
 
 /*菜单设置：分组设置。*/
 $lang->menugroup->release     = 'product';
@@ -379,290 +261,6 @@ $lang->menugroup->action      = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
-
-/* 模块顺序。*/
-$lang->moduleOrder[0]   = 'index';
-$lang->moduleOrder[5]   = 'my';
-$lang->moduleOrder[10]  = 'todo';
-$lang->moduleOrder[15]  = 'product';
-$lang->moduleOrder[20]  = 'story';
-$lang->moduleOrder[25]  = 'productplan';
-$lang->moduleOrder[30]  = 'release';
-$lang->moduleOrder[35]  = 'project';
-$lang->moduleOrder[40]  = 'task';
-$lang->moduleOrder[45]  = 'build';
-$lang->moduleOrder[50]  = 'qa';
-$lang->moduleOrder[55]  = 'bug';
-$lang->moduleOrder[60]  = 'testcase';
-$lang->moduleOrder[65]  = 'testtask';
-$lang->moduleOrder[70]  = 'doc';
-$lang->moduleOrder[75]  = 'svn';
-$lang->moduleOrder[80]  = 'company';
-$lang->moduleOrder[85]  = 'dept';
-$lang->moduleOrder[90]  = 'group';
-$lang->moduleOrder[95]  = 'user';
-$lang->moduleOrder[100] = 'tree';
-$lang->moduleOrder[105] = 'search';
-$lang->moduleOrder[110] = 'admin';
-$lang->moduleOrder[115] = 'api';
-$lang->moduleOrder[120] = 'file';
-$lang->moduleOrder[125] = 'misc';
-$lang->moduleOrder[130] = 'action';
-
-/* 方法顺序。*/
-$lang->index->methodOrder[0] = 'index';
-
-$lang->my->methodOrder[0]  = 'index';
-$lang->my->methodOrder[5]  = 'todo';
-$lang->my->methodOrder[10] = 'task';
-$lang->my->methodOrder[15] = 'bug';
-$lang->my->methodOrder[20] = 'testTask';
-$lang->my->methodOrder[25] = 'testCase';
-$lang->my->methodOrder[30] = 'story';
-$lang->my->methodOrder[35] = 'project';
-$lang->my->methodOrder[40] = 'profile';
-$lang->my->methodOrder[45] = 'dynamic';
-$lang->my->methodOrder[50] = 'editProfile';
-$lang->my->methodOrder[55] = 'changePassword';
-
-$lang->todo->methodOrder[5]  = 'create';
-$lang->todo->methodOrder[10] = 'batchCreate';
-$lang->todo->methodOrder[15] = 'edit';
-$lang->todo->methodOrder[20] = 'view';
-$lang->todo->methodOrder[25] = 'delete';
-$lang->todo->methodOrder[30] = 'export';
-$lang->todo->methodOrder[35] = 'mark';
-$lang->todo->methodOrder[40] = 'import2Today';
-
-$lang->product->methodOrder[0]  = 'index';
-$lang->product->methodOrder[5]  = 'browse';
-$lang->product->methodOrder[10] = 'create';
-$lang->product->methodOrder[15] = 'view';
-$lang->product->methodOrder[20] = 'edit';
-$lang->product->methodOrder[25] = 'order';
-$lang->product->methodOrder[30] = 'delete';
-$lang->product->methodOrder[35] = 'roadmap';
-$lang->product->methodOrder[40] = 'doc';
-$lang->product->methodOrder[45] = 'dynamic';
-$lang->product->methodOrder[50] = 'project';
-$lang->product->methodOrder[55] = 'ajaxGetProjects';
-$lang->product->methodOrder[60] = 'ajaxGetPlans';
-
-$lang->story->methodOrder[] = 'create';
-$lang->story->methodOrder[] = 'batchCreate';
-$lang->story->methodOrder[] = 'edit';
-$lang->story->methodOrder[] = 'export';
-$lang->story->methodOrder[] = 'delete';
-$lang->story->methodOrder[] = 'view';
-$lang->story->methodOrder[] = 'change';
-$lang->story->methodOrder[] = 'review';
-$lang->story->methodOrder[] = 'close';
-$lang->story->methodOrder[] = 'batchClose';
-$lang->story->methodOrder[] = 'activate';
-$lang->story->methodOrder[] = 'tasks';
-$lang->story->methodOrder[] = 'report';
-$lang->story->methodOrder[] = 'ajaxGetProjectStories';
-$lang->story->methodOrder[] = 'ajaxGetProductStories';
-
-$lang->productplan->methodOrder[] = 'browse';
-$lang->productplan->methodOrder[] = 'create';
-$lang->productplan->methodOrder[] = 'edit';
-$lang->productplan->methodOrder[] = 'delete';
-$lang->productplan->methodOrder[] = 'view';
-$lang->productplan->methodOrder[] = 'linkStory';
-$lang->productplan->methodOrder[] = 'unlinkStory';
-
-$lang->release->methodOrder[] = 'browse';
-$lang->release->methodOrder[] = 'create';
-$lang->release->methodOrder[] = 'edit';
-$lang->release->methodOrder[] = 'delete';
-$lang->release->methodOrder[] = 'view';
-$lang->release->methodOrder[] = 'ajaxGetStoriesAndBugs';
-$lang->release->methodOrder[] = 'exportStoriesAndBugs';
-
-$lang->project->methodOrder[] = 'index';
-$lang->project->methodOrder[] = 'view';
-$lang->project->methodOrder[] = 'browse';
-$lang->project->methodOrder[] = 'create';
-$lang->project->methodOrder[] = 'edit';
-$lang->project->methodOrder[] = 'order';
-$lang->project->methodOrder[] = 'delete';
-$lang->project->methodOrder[] = 'task';
-$lang->project->methodOrder[] = 'grouptask';
-$lang->project->methodOrder[] = 'importtask';
-$lang->project->methodOrder[] = 'importBug';
-$lang->project->methodOrder[] = 'story';
-$lang->project->methodOrder[] = 'build';
-$lang->project->methodOrder[] = 'testtask';
-$lang->project->methodOrder[] = 'bug';
-$lang->project->methodOrder[] = 'burn';
-$lang->project->methodOrder[] = 'computeBurn';
-$lang->project->methodOrder[] = 'burnData';
-$lang->project->methodOrder[] = 'team';
-$lang->project->methodOrder[] = 'doc';
-$lang->project->methodOrder[] = 'dynamic';
-$lang->project->methodOrder[] = 'manageProducts';
-$lang->project->methodOrder[] = 'manageMembers';
-$lang->project->methodOrder[] = 'unlinkMember';
-$lang->project->methodOrder[] = 'linkStory';
-$lang->project->methodOrder[] = 'unlinkStory';
-$lang->project->methodOrder[] = 'ajaxGetProducts';
-
-$lang->task->methodOrder[] = 'create';
-$lang->task->methodOrder[] = 'batchCreate';
-$lang->task->methodOrder[] = 'batchEdit';
-$lang->task->methodOrder[] = 'edit';
-$lang->task->methodOrder[] = 'assignTo';
-$lang->task->methodOrder[] = 'start';
-$lang->task->methodOrder[] = 'finish';
-$lang->task->methodOrder[] = 'cancel';
-$lang->task->methodOrder[] = 'close';
-$lang->task->methodOrder[] = 'batchClose';
-$lang->task->methodOrder[] = 'activate';
-$lang->task->methodOrder[] = 'delete';
-$lang->task->methodOrder[] = 'view';
-$lang->task->methodOrder[] = 'export';
-$lang->task->methodOrder[] = 'confirmStoryChange';
-$lang->task->methodOrder[] = 'ajaxGetUserTasks';
-$lang->task->methodOrder[] = 'ajaxGetProjectTasks';
-$lang->task->methodOrder[] = 'report';
-
-$lang->build->methodOrder[] = 'create';
-$lang->build->methodOrder[] = 'edit';
-$lang->build->methodOrder[] = 'delete';
-$lang->build->methodOrder[] = 'view';
-$lang->build->methodOrder[] = 'ajaxGetProductBuilds';
-$lang->build->methodOrder[] = 'ajaxGetProjectBuilds';
-
-$lang->qa->methodOrder[] = 'index';
-
-$lang->bug->methodOrder[] = 'index';
-$lang->bug->methodOrder[] = 'browse';
-$lang->bug->methodOrder[] = 'create';
-$lang->bug->methodOrder[] = 'confirmBug';
-$lang->bug->methodOrder[] = 'view';
-$lang->bug->methodOrder[] = 'edit';
-$lang->bug->methodOrder[] = 'assignTo';
-$lang->bug->methodOrder[] = 'resolve';
-$lang->bug->methodOrder[] = 'activate';
-$lang->bug->methodOrder[] = 'close';
-$lang->bug->methodOrder[] = 'report';
-$lang->bug->methodOrder[] = 'export';
-$lang->bug->methodOrder[] = 'confirmStoryChange';
-$lang->bug->methodOrder[] = 'delete';
-$lang->bug->methodOrder[] = 'saveTemplate';
-$lang->bug->methodOrder[] = 'deleteTemplate';
-$lang->bug->methodOrder[] = 'customFields';
-$lang->bug->methodOrder[] = 'ajaxGetUserBugs';
-$lang->bug->methodOrder[] = 'ajaxGetModuleOwner';
-
-$lang->testcase->methodOrder[] = 'index';
-$lang->testcase->methodOrder[] = 'browse';
-$lang->testcase->methodOrder[] = 'create';
-$lang->testcase->methodOrder[] = 'batchCreate';
-$lang->testcase->methodOrder[] = 'view';
-$lang->testcase->methodOrder[] = 'edit';
-$lang->testcase->methodOrder[] = 'delete';
-$lang->testcase->methodOrder[] = 'export';
-$lang->testcase->methodOrder[] = 'confirmStoryChange';
-
-$lang->testtask->methodOrder[] = 'index';
-$lang->testtask->methodOrder[] = 'create';
-$lang->testtask->methodOrder[] = 'browse';
-$lang->testtask->methodOrder[] = 'view';
-$lang->testtask->methodOrder[] = 'cases';
-$lang->testtask->methodOrder[] = 'edit';
-$lang->testtask->methodOrder[] = 'delete';
-$lang->testtask->methodOrder[] = 'batchAssign';
-$lang->testtask->methodOrder[] = 'linkcase';
-$lang->testtask->methodOrder[] = 'unlinkcase';
-$lang->testtask->methodOrder[] = 'runcase';
-$lang->testtask->methodOrder[] = 'results';
-
-$lang->doc->methodOrder[] = 'index';
-$lang->doc->methodOrder[] = 'browse';
-$lang->doc->methodOrder[] = 'createLib';
-$lang->doc->methodOrder[] = 'editLib';
-$lang->doc->methodOrder[] = 'deleteLib';
-$lang->doc->methodOrder[] = 'create';
-$lang->doc->methodOrder[] = 'view';
-$lang->doc->methodOrder[] = 'edit';
-$lang->doc->methodOrder[] = 'delete';
-
-$lang->svn->methodOrder[] = 'diff';
-$lang->svn->methodOrder[] = 'cat';
-$lang->svn->methodOrder[] = 'apiSync';
-
-$lang->moduleOrder[80]  = 'company';
-$lang->moduleOrder[85]  = 'dept';
-$lang->moduleOrder[90]  = 'group';
-$lang->moduleOrder[95]  = 'user';
-$lang->moduleOrder[100] = 'tree';
-$lang->moduleOrder[105] = 'search';
-$lang->moduleOrder[110] = 'extension';
-$lang->moduleOrder[115] = 'api';
-$lang->moduleOrder[120] = 'file';
-$lang->moduleOrder[125] = 'misc';
-$lang->moduleOrder[130] = 'action';
-
-$lang->company->methodOrder[] = 'index';
-$lang->company->methodOrder[] = 'browse';
-$lang->company->methodOrder[] = 'edit';
-$lang->company->methodOrder[] = 'dynamic';
-$lang->company->methodOrder[] = 'dffort';
-
-$lang->dept->methodOrder[] = 'browse';
-$lang->dept->methodOrder[] = 'updateOrder';
-$lang->dept->methodOrder[] = 'manageChild';
-$lang->dept->methodOrder[] = 'delete';
-
-$lang->group->methodOrder[] = 'browse';
-$lang->group->methodOrder[] = 'create';
-$lang->group->methodOrder[] = 'edit';
-$lang->group->methodOrder[] = 'copy';
-$lang->group->methodOrder[] = 'delete';
-$lang->group->methodOrder[] = 'managePriv';
-$lang->group->methodOrder[] = 'manageMember';
-
-$lang->user->methodOrder[] = 'create';
-$lang->user->methodOrder[] = 'view';
-$lang->user->methodOrder[] = 'edit';
-$lang->user->methodOrder[] = 'delete';
-$lang->user->methodOrder[] = 'todo';
-$lang->user->methodOrder[] = 'task';
-$lang->user->methodOrder[] = 'bug';
-$lang->user->methodOrder[] = 'project';
-$lang->user->methodOrder[] = 'dynamic';
-$lang->user->methodOrder[] = 'profile';
-$lang->user->methodOrder[] = 'ajaxGetUser';
-
-$lang->tree->methodOrder[] = 'browse';
-$lang->tree->methodOrder[] = 'updateOrder';
-$lang->tree->methodOrder[] = 'manageChild';
-$lang->tree->methodOrder[] = 'edit';
-$lang->tree->methodOrder[] = 'delete';
-$lang->tree->methodOrder[] = 'ajaxGetOptionMenu';
-$lang->tree->methodOrder[] = 'ajaxGetSonModules';
-
-$lang->search->methodOrder[] = 'buildForm';
-$lang->search->methodOrder[] = 'buildQuery';
-$lang->search->methodOrder[] = 'saveQuery';
-$lang->search->methodOrder[] = 'deleteQuery';
-$lang->search->methodOrder[] = 'select';
-
-$lang->admin->methodOrder[] = 'index';
-
-$lang->api->methodOrder[] = 'getModel';
-
-$lang->file->methodOrder[] = 'download';
-$lang->file->methodOrder[] = 'edit';
-$lang->file->methodOrder[] = 'delete';
-$lang->file->methodOrder[] = 'ajaxUpload';
-
-$lang->misc->methodOrder[] = 'ping';
-
-$lang->action->methodOrder[] = 'trash';
-$lang->action->methodOrder[] = 'undelete';
 
 /* 错误提示信息。*/
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";
@@ -712,3 +310,5 @@ define('DT_DATE3',     'Y年m月d日');
 define('DT_DATE4',     'n月j日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
+
+include (dirname(__FILE__) . '/menuOrder.php');
