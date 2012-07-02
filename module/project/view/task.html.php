@@ -132,8 +132,8 @@ var browseType = '<?php echo $browseType;?>';
             <td class='a-right'>
               <?php
               if($browseType == 'needconfirm') common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
-              if($this->task->isClickable($task, 'finish')) common::printIcon('task', 'finish', "taskID=$task->id", $task);
-              if($this->task->isClickable($task, 'close'))  common::printIcon('task', 'close',  "taskID=$task->id", $task);
+              common::printIcon('task', 'finish', "taskID=$task->id", $task);
+              common::printIcon('task', 'close',  "taskID=$task->id", $task);
               if($this->task->isClickable($task, 'edit'))   common::printIcon('task', 'edit',   "taskID=$task->id");
               ?>
             </td>
