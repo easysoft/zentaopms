@@ -5,10 +5,12 @@
     <td class='side'>
       <div class='box-title'><?php echo $lang->report->list;?></div>
       <div class='box-content'>
-      <ul id="report-list">
-        <li><?php echo html::a(inlink('projectDeviation'), $lang->report->projectDeviation);?></li>
-      </ul>
+        <ul id="report-list">
+          <li><?php echo html::a(inlink('projectDeviation'), $lang->report->projectDeviation);?></li>
+        </ul>
       </div>
+      <div class='proversion'><?php echo $lang->report->proVersion;?></div>
+
     </td>
     <td class='divider'></td>
     <td>

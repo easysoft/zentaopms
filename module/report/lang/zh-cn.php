@@ -58,3 +58,5 @@ $lang->report->devTestRate   = '开发/测试';
 $lang->report->details       = '详情';
 $lang->report->total         = '总计';
 $lang->report->to            = '至';
+
+$lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，尽在专业版！</a>';

@@ -58,3 +58,5 @@ $lang->report->devTestRate   = 'Dev/Test';
 $lang->report->details       = 'Details';
 $lang->report->total         = 'Total';
 $lang->report->to            = 'to';
+
+$lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try pro version for more!</a>';
