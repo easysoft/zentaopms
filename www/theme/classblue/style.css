@@ -1,7 +1,7 @@
 /* Designed by silver, www.yanhonglu.com. */
 #header{background:url(./images/bg.header.gif) repeat; border:none}
 
-#topbar   {color:black}
+#topbar   {color:black; margin: 1px 5px;}
 #topbar a {color:black; text-decoration:none}
 #topbar select {color:black; background:#efefef url(./images/bg.header.gif) repeat-x}
 #topbar .w-p50 {padding-left:8px}
