@@ -18,28 +18,28 @@
   $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
   if(!$story->deleted)
   {
-      if(!($story->status != 'closed' and common::printLink('story', 'change', "storyID=$story->id", $lang->story->change))) echo $lang->story->change . ' ';
-      if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
-      if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
-      if(!($story->status == 'closed' and $story->closedReason == 'postponed' and common::printLink('story', 'activate', "storyID=$story->id", $lang->story->activate))) echo $lang->story->activate . ' ';
+      ob_start();
 
-      if(!common::printLink('testcase', 'create', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", $lang->story->createCase)) echo $lang->story->createCase . ' ';
+      if($this->story->isClickable($story, 'change')) common::printLink('story', 'change', "storyID=$story->id", $lang->story->change);
+      if($this->story->isClickable($story, 'review')) common::printLink('story', 'review', "storyID=$story->id", $lang->story->review);
+      if($this->story->isClickable($story, 'close'))  common::printLink('story', 'close',  "storyID=$story->id", $lang->story->close);
+      if($this->story->isClickable($story, 'activate'))  common::printLink('story', 'activate',  "storyID=$story->id", $lang->story->activate);
 
-      if(!common::printLink('story', 'edit', "storyID=$story->id", '&nbsp;', '', "class='icon-edit'")) echo "<span class='icon-edit'></span>";
-      if(common::hasPriv('story', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'");
+      if($this->story->isClickable($story, 'toCase'))  common::printSplitIcon();
+      common::printLink('testcase', 'create', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", $lang->story->createCase);
 
-      common::printLink('story', 'create', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '&nbsp;', '', "class='icon-copy'");
+      if($this->story->isClickable($story, 'edit'))  common::printSplitIcon();
+      common::printIcon('story', 'edit', "storyID=$story->id", '', 'big');
+      common::printCommentIcon('story');
+      common::printIcon('story', 'create', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'big', 'copy');
+      common::printIcon('story', 'delete', "storyID=$story->id", '', 'big', '', 'hiddenwin');
 
-      common::printLink('story', 'delete', "storyID=$story->id", '&nbsp;', 'hiddenwin', "class='icon-delete'");
-  }
-  echo html::a($browseLink, ' ', '', "class='icon-goback'");
-  if($preAndNext->pre) 
-  {
-      echo html::a($this->inLink('view', "storyID={$preAndNext->pre->id}&version={$preAndNext->pre->version}"), '&nbsp;', '', "class='icon-pre' id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'");
-  }
-  if($preAndNext->next) 
-  {
-      echo html::a($this->inLink('view', "storyID={$preAndNext->next->id}&version={$preAndNext->next->version}"), '&nbsp;', '', "class='icon-next' id='next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}'");
+      if($this->story->isClickable('story', 'goback')) common::printSplitIcon();
+      common::printRPN($browseLink, $preAndNext);
+
+      $actionLinks = ob_get_contents();
+      ob_clean();
+      echo $actionLinks;
   }
   ?>
   </div>
@@ -58,26 +58,7 @@
       </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center' style='font-size:16px; font-weight:bold'>
-      <?php
-      if(!$story->deleted)
-      {
-          if(!($story->status != 'closed' and common::printLink('story', 'change', "storyID=$story->id", $lang->story->change))) echo $lang->story->change . ' ';
-          if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
-
-          if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
-          if(!($story->status == 'closed' and $story->closedReason == 'postponed' and common::printLink('story', 'activate', "storyID=$story->id", $lang->story->activate))) echo $lang->story->activate . ' ';
-
-          if(!common::printLink('testcase', 'create', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", $lang->story->createCase)) echo $lang->story->createCase . ' ';
-
-          if(!common::printLink('story', 'edit', "storyID=$story->id", '&nbsp;', '', "class='icon-edit'")) echo "<span class='icon-edit'></span>";
-          if(common::hasPriv('story', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-comment' onclick='setComment()'");
-
-          common::printLink('story', 'delete', "storyID=$story->id", '&nbsp;', 'hiddenwin', "class='icon-delete'");
-      }
-      echo html::a($browseLink, '&nbsp;', '', "class='icon-goback'");
-     ?>
-      </div>
+      <div class='a-center actionlink'><?php echo $actionLinks;?></div>
       <div id='comment' class='hidden'>
         <fieldset>
           <legend><?php echo $lang->comment;?></legend>

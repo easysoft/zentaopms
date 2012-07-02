@@ -31,10 +31,10 @@ var browseType = '<?php echo $browseType;?>';
     <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
-    <?php common::printLink('story', 'export', "productID=$productID&orderBy=$orderBy", '&nbsp;', '', "class='export icon-green-big-export' title='{$lang->export}'", false); ?>
-    <?php common::printLink('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '&nbsp;', '', "class='icon-green-big-report' title='{$lang->story->report->common}'", false); ?>
-    <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&moduleID=$moduleID"), '&nbsp;', '', "class='icon-green-big-story-batchCreate' title='{$lang->story->batchCreate}'"); ?>
-    <?php if(common::hasPriv('story', 'create')) echo html::a($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID"), '&nbsp;', '', "class='icon-green-big-story-create' title='{$lang->story->create}'"); ?>
+    <?php common::printIcon('story', 'export', "productID=$productID&orderBy=$orderBy", '', 'big');?>
+    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'big');?>
+    <?php common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID", '', 'big');?>
+    <?php common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID", '', 'big'); ?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
@@ -95,31 +95,10 @@ var browseType = '<?php echo $browseType;?>';
             <td class='a-right'>
               <?php 
               $vars = "story={$story->id}";
-              if(common::hasPriv('story', 'change'))
-              {
-                  if($story->status != 'closed')
-                  {
-                      echo html::a($this->inLink('story', 'change', $vars), '&nbsp;', '', "class='icon-green-small-story-change' title='{$lang->story->change}'", false);
-                  }
-                  else
-                  {
-                      echo "<span class='icon-gray-small-story-change' title='{$lang->story->change}'>&nbsp;</span>";
-                  }
-              }
-
-              if(common::hasPriv('story', 'review'))
-              {
-                  if($story->status == 'draft' or $story->status == 'changed')
-                  {
-                      echo html::a($this->inLink('review', $vars), '&nbsp;', '', "class='icon-green-small-story-review' title='{$lang->story->review}'", false);
-                  }
-                  else
-                  {
-                      echo "<span class='icon-gray-small-story-review' title='{$lang->story->review}'>&nbsp;</span>";
-                  }
-              }
-              common::printLink('story', 'edit', "storyID=$story->id", '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->edit}'", false);
-              common::printLink('testcase', 'create', "productID=$story->product&module=0&from=&param=0&$vars", '&nbsp;', '', "class='icon-green-small-story-createCase' title='{$lang->story->createCase}'", false);
+              common::printIcon('story', 'change', $vars, $story);
+              common::printIcon('story', 'review', $vars, $story);
+              common::printIcon('story', 'edit', "storyID=$story->id", $story);
+              common::printIcon('story', 'createCase', "productID=$story->product&module=0&from=&param=0&$vars", $story, 'small', 'createCase');
               ?>
             </td>
           </tr>

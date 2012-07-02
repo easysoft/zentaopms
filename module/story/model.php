@@ -1265,4 +1265,24 @@ class storyModel extends model
             ->beginIF($this->session->storyQueryCondition !=  false)->where($this->session->storyQueryCondition)->fi()
             ->groupBy('version')->orderBy('value')->fetchAll();
     }
+
+    /**
+     * Adjust the action clickable.
+     * 
+     * @param  object $story 
+     * @param  string $action 
+     * @access public
+     * @return void
+     */
+    public function isClickable($story, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'change')   return $story->status != 'closed';
+        if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
+        if($action == 'close')    return $story->status != 'closed';
+        if($action == 'activate') return $story->status == 'closed' and $story->closedReason == 'postponed';
+
+        return true;
+    }
 }
