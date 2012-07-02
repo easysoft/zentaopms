@@ -341,7 +341,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #form-content hr{ color:#ddd; margin:15px 0;}
 .form-item { background-color:#e5e5e5; padding:8px; margin-bottom:15px; margin-top:5px;}
 
-#createform{margin-top:20px; padding:0 20px}
+#createform{margin-top:20px; padding:0 30px}
 #createform caption{font-size:14px; padding:5px 5px 5px 10px}
 #createform .rowhead{font-size:11.5px; font-weight:1.2; border:none}
 #createform tr, #createform td, #createform th{border:none; background:#fcfcfc}
@@ -360,10 +360,12 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .history  .changes   {border:none; margin:0; padding:0}
 .content {font-size:14px; padding:10px}
 .content p {margin:0}
-.roadmap {width:200px; margin:10px auto 10px auto; padding:10px; border:1px solid gray;}
-.roadmap a{color:white;}
-.release {background:darkgreen; color:white}
-.plan    {background:#9F9F5F;}
+.roadmap {width:180px; margin:10px auto 10px auto; padding:15px 10px; font-weight:bold}
+.roadmap a{color:#ccc;}
+.roadmap p{margin:2px}
+.release {background:darkgreen; color:#ccc}
+.plan    {background:#ffcc00;}
+.plan a{color:black}
 .search  {display:block; float:left; clear:none; width:16px; height:16px; padding:0; margin:0 0 0 2px; text-indent:-2000px; overflow:hidden; background: url(images/main/search.gif) no-repeat;} 
 .searchleft{display:block; float:left; clear:none;} 
 .helplink {font-size:9px}
