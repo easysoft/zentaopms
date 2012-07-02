@@ -18,8 +18,10 @@ function switchGroup(projectID, groupBy)
  */
 function convertStringToDate(dateString)
 {
-    var myDate = dateString.split('-')
-    return new Date(myDate[0], (myDate[1] - 1), myDate[2]);
+    dateString = dateString.split('-');
+    dateString = dateString[1] + '/' + dateString[2] + '/' + dateString[0];
+    
+    return Date.parse(dateString);
 }
 
 /**
@@ -57,44 +59,22 @@ function computeWorkDays()
     }
 }
 
-function computeEndDate()
+/**
+ * Compute the end date for project.
+ * 
+ * @param  int    $delta 
+ * @access public
+ * @return void
+ */
+function computeEndDate(delta)
 {
-  beginDate = $('#begin').val();
-  workDays  = $('input:checked').val();
-  beginDate = convertStringToDate(beginDate);
-  if(workDays == '2weeks')
-  {
-    begin   = beginDate.valueOf();
-    endDate = begin + 14 * 24 * 60 * 60 * 1000;
-    endDate = new Date(endDate);
-    year    = endDate.getFullYear();
-    month   = endDate.getMonth() + 1;
-    day     = endDate.getDate() - 1;
-  }
-  else if(workDays == '12') 
-  {
-    year  = beginDate.getFullYear() + 1;
-    month = beginDate.getMonth() + 1;
-    day   = beginDate.getDate() - 1;
-  }
-  else
-  {
-    year  = beginDate.getFullYear();
-    month = beginDate.getMonth() + Number(workDays) + 1;
-    if(month > 12)
-    {
-      year  = year + 1;
-      month = month - 12; 
-    }
-    day   = beginDate.getDate() - 1;
-  }
-  endDate = year + '-' + month + '-' + day;
-  if( month < 10) month = '0' + month;
-  if( day < 10)   day   = '0' + day;
-  end = year + '-' + month + '-' + day;
-  $('#end').val(end);
-  endDate =  convertStringToDate(endDate);
-  $('#days').val((endDate - beginDate) / (1000 * 60 * 60 * 24) + 1);
+    beginDate = $('#begin').val();
+    if(!beginDate) return;
+
+    endDate = convertStringToDate(beginDate).addDays(parseInt(delta));
+    endDate = endDate.toString('yyyy-M-dd');
+    $('#end').val(endDate);
+    computeWorkDays();
 }
 
 /* Auto compute the work days. */
@@ -105,4 +85,3 @@ $(function()
         computeWorkDays();
     })
 });
-
