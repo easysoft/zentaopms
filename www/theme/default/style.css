@@ -471,8 +471,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .severity4 {padding:2px 8px; background:url(images/main/zt-green.png) -60px  -381px;}
 .severity5 {padding:2px 8px; background:url(images/main/zt-green.png) -80px  -381px;}
 .severity6 {padding:2px 8px; background:url(images/main/zt-green.png) -100px -381px;}
-.icon-green-small-bug-createBug  {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -340px;} 
-.icon-gray-small-bug-createBug   {padding:2px 8px;  background:url(images/main/zt-gray.png)  -40px -340px;} 
+.icon-green-small-bug-createBug  {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -342px;} 
+.icon-gray-small-bug-createBug   {padding:2px 8px;  background:url(images/main/zt-gray.png)  -40px -342px;} 
 .icon-green-small-bug-resolve    {padding:2px 8px;  background:url(images/main/zt-green.png) -60px -301px;} 
 .icon-gray-small-bug-resolve     {padding:2px 8px;  background:url(images/main/zt-gray.png)  -60px -301px;} 
 .icon-green-small-bug-close      {padding:2px 8px;  background:url(images/main/zt-green.png) -80px -301px;} 
