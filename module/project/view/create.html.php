@@ -33,7 +33,7 @@ $(document).ready(function()
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <script>var holders=<?php echo json_encode($lang->project->placeholder);?></script>
-<form method='post' target='hiddenwin' id='createform'>
+<form method='post' target='hiddenwin' id='dataform'>
   <table align='center' class='table-1 a-left'> 
     <caption><?php echo $lang->project->create;?></caption>
     <tr>

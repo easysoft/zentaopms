@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <script>var holders=<?php echo json_encode($lang->group->placeholder);?></script>
-<form method='post' target='hiddenwin' id='createform'>
+<form method='post' target='hiddenwin' id='dataform'>
   <table align='center' class='table-4 a-left'> 
     <caption><?php echo $lang->group->create;?></caption>
     <tr>

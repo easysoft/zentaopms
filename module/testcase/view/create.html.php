@@ -13,7 +13,7 @@
 <?php include './header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <script>var holders = <?php echo json_encode($lang->testcase->placeholder);?></script>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='createform'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->testcase->create;?></caption>
     <tr>
