@@ -52,12 +52,12 @@ $lang->project->createTesttask= '提交测试';
 $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
 
-$lang->project->endList['2weeks'] = '两星期';
-$lang->project->endList['1']      = '一个月';
-$lang->project->endList['2']      = '两个月';
-$lang->project->endList['3']      = '三个月';
-$lang->project->endList['6']      = '半年';
-$lang->project->endList['12']     = '一年';
+$lang->project->endList[14]   = '两星期';
+$lang->project->endList[31]   = '一个月';
+$lang->project->endList[62]   = '两个月';
+$lang->project->endList[93]   = '三个月';
+$lang->project->endList[186]  = '半年';
+$lang->project->endList[365]  = '一年';
 
 $lang->team->account    = '用户';
 $lang->team->role       = '角色';
@@ -178,8 +178,7 @@ $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
-$lang->project->placeholder->name = '项目名称';
-$lang->project->placeholder->code = '作为团队内部对某一个项目的简短称呼。';
+$lang->project->placeholder->code = '团队内部对项目简短的称呼。';
 $lang->project->placeholder->end  = '对于scrum而言，一般不宜超过30天。';
 $lang->project->placeholder->days = '根据开始日期和结束日期自动计算';
 $lang->project->placeholder->team = '团队内部可以自己选择自己喜欢的名称。';

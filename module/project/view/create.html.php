@@ -31,6 +31,7 @@ $(document).ready(function()
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::import($jsRoot . 'misc/date.js');?>
 <script>var holders=<?php echo json_encode($lang->project->placeholder);?></script>
 <form method='post' target='hiddenwin' id='createform'>
   <table align='center' class='table-1 a-left'> 
@@ -49,8 +50,10 @@ $(document).ready(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->end;?></th>
-      <td><?php echo html::input('end', '', "class='text-3 date' onchange='computeWorkDays()'");?>
-      <span><?php echo html::radio('workDays',(array)$lang->project->endList , '', "onclick='computeEndDate()'");?></span></td>
+      <td>
+         <?php echo html::input('end', '', "class='text-3 date' onchange='computeWorkDays()'");?>
+         <span><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></span>
+      </td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->days;?></th>
