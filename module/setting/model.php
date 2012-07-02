@@ -152,8 +152,7 @@ class settingModel extends model
         $item->key     = $key;
         $item->value   = $value;
 
-        $this->dao->delete()->from(TABLE_CONFIG)->where('value')->eq('3.0.stable')->exec($autoCompany = false);
-        $this->dao->delete()->from(TABLE_CONFIG)->where('value')->eq('3.0')->exec($autoCompany = false);
+        $this->dao->delete()->from(TABLE_CONFIG)->where('key')->eq('version')->exec($autoCompany = false);
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
     }
 
@@ -177,8 +176,7 @@ class settingModel extends model
         $item->key     = $key;
         $item->value   = $value;
 
-        $this->dao->delete()->from(TABLE_CONFIG)->where('value')->eq('3.0.stable')->exec($autoCompany = false);
-        $this->dao->delete()->from(TABLE_CONFIG)->where('value')->eq('3.0')->exec($autoCompany = false);
+        $this->dao->delete()->from(TABLE_CONFIG)->where('key')->eq('version')->exec($autoCompany = false);
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
     }
 
