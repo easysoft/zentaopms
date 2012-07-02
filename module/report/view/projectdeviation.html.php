@@ -43,7 +43,16 @@
             <?php $deviation = $project->consumed - $project->estimate;?>
             <td><?php echo $deviation > 0 ? ('+' . $deviation) : ($deviation);?></td>
             <td>
-              <?php echo $deviation > 0 ? ('+' . round($deviation / $project->estimate * 100, 2)) : round($deviation / $project->estimate * 100, 2) . '%';?>
+              <?php 
+                if($project->estimate)
+                {
+                    echo $deviation > 0 ? ('+' . round($deviation / $project->estimate * 100, 2)) : round($deviation / $project->estimate * 100, 2) . '%';
+                }
+                else
+                {
+                    echo '0%';
+                }
+              ?>
             </td>
           </tr>
         <?php endforeach;?>
