@@ -274,7 +274,7 @@ class common extends control
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
         $title = $method;
         if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
-        if(isset($lang->$module->$method) and is_string($lang->$module->$method)) $title = $lang->$module->$method;
+        if((isset($lang->$module->$method) or $app->loadLang($module)) and isset($lang->$module->$method) and is_string($lang->$module->$method)) $title = $lang->$module->$method;
 
         /* Get the icon name. */
         if(!$icon) $icon = $method;
