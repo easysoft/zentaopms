@@ -237,6 +237,8 @@ EOT;
      */
     public function getProjects()
     {
+        $projects = array();
+
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
         foreach($tasks as $task)
         {
@@ -245,6 +247,7 @@ EOT;
             if($task->type == 'devel') $projects[$task->project]->devConsumed  = isset($projects[$task->project]->devConsumed) ? $projects[$task->project]->devConsumed + $task->consumed : 1;
             if($task->type == 'test')  $projects[$task->project]->testConsumed = isset($projects[$task->project]->testConsumed) ? $projects[$task->project]->testConsumed + $task->consumed : 1;
         }
+
         $bugs = $this->dao->select('project')->from(TABLE_BUG)->where('deleted')->eq(0)->fetchAll();
         foreach($bugs as $bug)
         {
@@ -253,11 +256,13 @@ EOT;
                 $projects[$bug->project]->bugs = isset($projects[$bug->project]->bugs) ? $projects[$bug->project]->bugs + 1 : 1;
             }
         }
+
         $stories = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->fetchAll();
         foreach($stories as $story)
         {
             $projects[$story->project]->stories = isset($projects[$story->project]->stories) ? $projects[$story->project]->stories + 1 : 1;
         }
+
         $projectPairs = $this->loadModel('project')->getPairs();
         foreach($projects as $id => $project)
         {
