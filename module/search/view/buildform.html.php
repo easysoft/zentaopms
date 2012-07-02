@@ -157,8 +157,8 @@ function deleteQuery()
 foreach($fieldParams as $fieldName => $param)
 {
     echo "<span id='box$fieldName'>";
-    if($param['control'] == 'select') echo html::select($fieldName, $param['values'], '', 'class=select-2');
-    if($param['control'] == 'input')  echo html::input($fieldName, '', "class='text-2'");
+    if($param['control'] == 'select') echo html::select($fieldName, $param['values'], '', 'class=select-2 searchSelect');
+    if($param['control'] == 'input')  echo html::input($fieldName, '', "class='text-2 searchInput'");
     echo '</span>';
 }
 ?>
@@ -166,7 +166,7 @@ foreach($fieldParams as $fieldName => $param)
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform'>
 <table class='table-1'>
   <tr valign='middle'>
-    <th width='10' style='padding-left:5px'><span id='search'>&nbsp;</span></th>
+    <th width='10'><span id='search'>&nbsp;</span></th>
     <td class='a-right'>
       <nobr>
       <?php
@@ -195,12 +195,12 @@ foreach($fieldParams as $fieldName => $param)
 
           /* Print value. */
           echo "<span id='valueBox$fieldNO'>";
-          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
+          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='select-2 searchSelect'");
           if($param['control'] == 'input') 
           {
               $fieldName  = $formSession["field$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 $extraClass'");
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 $extraClass searchInput'");
           }
           echo '</span>';
 
@@ -235,12 +235,13 @@ foreach($fieldParams as $fieldName => $param)
 
           /* Print value. */
           echo "<span id='valueBox$fieldNO'>";
-          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], 'class=select-2');
+          if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='select-2 searchSelect'");
+
           if($param['control'] == 'input')
           {
               $fieldName  = $formSession["field$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 $extraClass'");
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='text-2 $extraClass searchInput'");
           }
           echo '</span>';
 
@@ -269,8 +270,8 @@ foreach($fieldParams as $fieldName => $param)
       ?>
     </td>
     <th width='10' class='a-center' style='cursor:pointer; padding:0'>
-      <span id='searchmore' onclick='showmore()' style='width:100%; height:100%; padding-right:10px'>&nbsp;</span>
-      <span id='searchlite' onclick='showlite()' style='width:100%; height:100%' class='hidden'>&nbsp;</span>
+      <span id='searchmore' onclick='showmore()'>&nbsp;</span>
+      <span id='searchlite' onclick='showlite()' class='hidden'>&nbsp;</span>
       <?php echo html::hidden('formType', 'lite');?>
     </th>
   </tr>

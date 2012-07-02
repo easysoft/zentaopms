@@ -387,6 +387,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Pager. */
 .pager {margin-bottom:0}
 
+/* Search. */
+#searchform .searchSelect, #searchform .searchInput, #searchform #queryID{background:#f9f9f9;}
+
 /*-----------------------OTHERS SETTINGS --------------------*/
 .box-title  {border:1px solid #e4e4e4; background-color:#edf3fe; margin:0; padding:6px; border-bottom:none; text-align:left; font-weight:bold; color:#333;}
 .box-content{border:1px solid #e4e4e4; padding:5px}
@@ -425,9 +428,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-goback {padding:2px 10px; background:url(images/main/zt-green.png) 2px    -40px;}
 .icon-pre    {padding:2px 8px;  background:url(images/main/zt-green.png) -22px  -40px;}
 .icon-next   {padding:2px 8px;  background:url(images/main/zt-green.png) -42px  -40px;}
-#search      {padding:2px 8px;  background:url(images/main/zt-green.png) -102px -80px;}
-#searchmore  {padding:2px 8px;  background:url(images/main/zt-green.png) -62px  -100px no-repeat;}
-#searchlite  {padding:2px 8px;  background:url(images/main/zt-green.png) -82px  -100px no-repeat;}
+#search      {padding:2px 8px;  background:url(images/main/zt-green.png) -102px -80px; margin-left:10px;}
+#searchmore  {padding:2px 8px;  background:url(images/main/zt-green.png) -62px  -100px no-repeat; margin-right:10px;}
+#searchlite  {padding:2px 8px;  background:url(images/main/zt-green.png) -82px  -100px no-repeat; margin-right:10px}
 .icon-green-big-common-edit      {padding:2px 8px;  background:url(images/main/zt-green.png) -1px   0px;} 
 .icon-green-small-common-edit    {padding:2px 8px;  background:url(images/main/zt-green.png) 0px   -21px;} 
 .icon-green-big-common-comment   {padding:2px 8px;  background:url(images/main/zt-green.png) -22px 0px;} 
