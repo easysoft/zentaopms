@@ -294,6 +294,7 @@ $lang->zentaoSite     = "Official Site";
 $lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum community</a> ";
 $lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>Training</a> ";
 $lang->donate         = "<a href='http://www.zentao.net/goto.php?item=donate' target='_blank'>Donate</a> ";
+$lang->proVersion     = "<a href='http://www.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red f-14px'>Try pro version!</a> ";
 
 $lang->suhosinInfo = "Warming:data is too large! Please enlarge the setting of <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> in php.ini. Otherwise partial data can't be saved.";
 

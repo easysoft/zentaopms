@@ -294,6 +294,7 @@ $lang->zentaoSite     = "官方网站";
 $lang->chinaScrum     = "<a href='http://www.zentao.net/goto.php?item=chinascrum' target='_blank'>Scrum社区</a> ";
 $lang->agileTraining  = "<a href='http://www.zentao.net/goto.php?item=agiletrain' target='_blank'>培训</a> ";
 $lang->donate         = "<a href='http://www.zentao.net/goto.php?item=donate' target='_blank'>捐赠</a> ";
+$lang->proVersion     = "<a href='http://www.zentao.net/goto.php?item=proversion&from=footer' target='_blank' class='red'>购买专业版(特惠)！</a> ";
 
 $lang->suhosinInfo = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
 
