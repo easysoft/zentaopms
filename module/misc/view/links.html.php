@@ -1,7 +1,5 @@
 <table class='table-1'>
-  <tr class='colhead'>
-    <?php foreach($lang->misc->zentao->labels as $label) echo "<th class='w-p25'>$label</th>";?>
-  </tr>
+  <tr class='colhead'><?php foreach($lang->misc->zentao->labels as $label) echo "<th class='w-p25'>$label</th>";?></tr>
   <?php
   unset($lang->misc->zentao->version);
   unset($lang->misc->zentao->labels);
