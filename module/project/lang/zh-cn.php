@@ -179,9 +179,6 @@ $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder->code = '团队内部对项目简短的称呼。';
-$lang->project->placeholder->end  = '对于scrum而言，一般不宜超过30天。';
-$lang->project->placeholder->days = '根据开始日期和结束日期自动计算';
-$lang->project->placeholder->team = '团队内部可以自己选择自己喜欢的名称。';
 
 $lang->project->selectGroup->doing     = '(进行中)';
 $lang->project->selectGroup->done      = '(已结束)';
