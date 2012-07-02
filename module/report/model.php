@@ -237,37 +237,37 @@ EOT;
      */
     public function getProjects()
     {
-        $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('status')->eq('done')->fetchAll();
-        foreach($projects as $project)
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
+        foreach($tasks as $task)
         {
-            $total = $this->dao->select('project, SUM(estimate) AS estimate, SUM(consumed) AS consumed')
-                ->from(TABLE_TASK)
-                ->where('project')->eq($project->id)
-                ->andWhere('status')->ne('cancel')
-                ->andWhere('deleted')->eq(0)
-                ->fetch();
-            $stories = $this->dao->select("count(*) as count")->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetch();
-            $bugs    = $this->dao->select("count(*) as count")->from(TABLE_BUG)->where('project')->eq($project->id)->fetch();
-            $dev     = $this->dao->select('SUM(consumed) as consumed')
-                ->from(TABLE_TASK)
-                ->where('project')->eq($project->id)
-                ->andWhere('type')->eq('devel')
-                ->andWhere('status')->ne('cancel')
-                ->andWhere('deleted')->eq(0)
-                ->fetch();
-            $test   = $this->dao->select('SUM(consumed) as consumed')
-                ->from(TABLE_TASK)
-                ->where('project')->eq($project->id)
-                ->andWhere('type')->eq('test')
-                ->andWhere('status')->ne('cancel')
-                ->andWhere('deleted')->eq(0)
-                ->fetch();
-            $project->estimate     = round($total->estimate, 2);
-            $project->consumed     = round($total->consumed, 2);
-            $project->stories      = $stories->count;
-            $project->bugs         = $bugs->count;
-            $project->devConsumed  = empty($dev->consumed) ? 0 : round($dev->consumed, 2);
-            $project->testConsumed = empty($test->consumed) ? 0 : round($test->consumed, 2);
+            $projects[$task->project]->estimate = isset($projects[$task->project]->estimate) ? $projects[$task->project]->estimate + $task->estimate : 1;
+            $projects[$task->project]->consumed = isset($projects[$task->project]->consumed) ? $projects[$task->project]->consumed + $task->consumed : 1;
+            if($task->type == 'devel') $projects[$task->project]->devConsumed  = isset($projects[$task->project]->devConsumed) ? $projects[$task->project]->devConsumed + $task->consumed : 1;
+            if($task->type == 'test')  $projects[$task->project]->testConsumed = isset($projects[$task->project]->testConsumed) ? $projects[$task->project]->testConsumed + $task->consumed : 1;
+        }
+        $bugs = $this->dao->select('project')->from(TABLE_BUG)->where('deleted')->eq(0)->fetchAll();
+        foreach($bugs as $bug)
+        {
+            if($bug->project)
+            {
+                $projects[$bug->project]->bugs = isset($projects[$bug->project]->bugs) ? $projects[$bug->project]->bugs + 1 : 1;
+            }
+        }
+        $stories = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->fetchAll();
+        foreach($stories as $story)
+        {
+            $projects[$story->project]->stories = isset($projects[$story->project]->stories) ? $projects[$story->project]->stories + 1 : 1;
+        }
+        $projectPairs = $this->loadModel('project')->getPairs();
+        foreach($projects as $id => $project)
+        {
+            if(!isset($project->stories)) $projects[$id]->stories = 0;
+            if(!isset($project->bugs)) $projects[$id]->bugs = 0;
+            if(!isset($project->devConsumed)) $projects[$id]->devConsumed = 0;
+            if(!isset($project->testConsumed)) $projects[$id]->testConsumed = 0;
+            if(!isset($project->consumed)) $projects[$id]->consumed = 0;
+            if(!isset($project->estimate)) $projects[$id]->estimate = 0;
+            $projects[$id]->name = $projectPairs[$id];
         }
         return $projects;
     }

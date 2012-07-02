@@ -29,9 +29,9 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach($projects as $project):?>
+        <?php foreach($projects as $id  =>$project):?>
           <tr class="a-center">
-            <td><?php echo $project->id;?></td>
+            <td><?php echo $id;?></td>
             <td align="left"><?php echo $project->name;?></td>
             <td><?php echo $project->stories;?></td>
             <td><?php echo $project->bugs;?></td>
@@ -43,7 +43,7 @@
             <?php $deviation = $project->consumed - $project->estimate;?>
             <td><?php echo $deviation > 0 ? ('+' . $deviation) : ($deviation);?></td>
             <td>
-              <?php echo ($deviation > 0 ? '+' : '-') . round(abs($deviation) / $project->estimate * 100, 2) . '%';?>
+              <?php echo $deviation > 0 ? ('+' . round($deviation / $project->estimate * 100, 2)) : round($deviation / $project->estimate * 100, 2) . '%';?>
             </td>
           </tr>
         <?php endforeach;?>
