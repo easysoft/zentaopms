@@ -232,5 +232,5 @@ $lang->story->report->storysPerClosedReason->graph->xAxisName = '关闭原因';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = '预计时间';
 $lang->story->report->storysPerChange->graph->xAxisName       = '变更次数';
 
-$lang->story->placeholder->estimate = "对需求所需要花费的时间进行大致估计";
-$lang->story->placeholder->mailto   = '跟这个需求相关的人员，可以通过email的形式抄送给他们。提示：请输入用户名进行选择。';
+$lang->story->placeholder->estimate = "完成该需求的工作量";
+$lang->story->placeholder->mailto   = '输入用户名自动完成';

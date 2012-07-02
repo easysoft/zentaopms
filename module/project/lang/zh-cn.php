@@ -178,7 +178,7 @@ $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
-$lang->project->placeholder->code = '团队内部对项目简短的称呼。';
+$lang->project->placeholder->code = '团队内部的简称';
 
 $lang->project->selectGroup->doing     = '(进行中)';
 $lang->project->selectGroup->done      = '(已结束)';

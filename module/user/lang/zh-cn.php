@@ -82,10 +82,6 @@ $lang->user->ip        = '最后IP';
 $lang->user->last      = '最后登录';
 $lang->user->status    = '状态';
 
-$lang->user->placeholder->account   = '英文，数字，下划线的组合，三位以上';
+$lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
 $lang->user->placeholder->password1 = '六位以上';
-$lang->user->placeholder->password2 = '确认密码';
-$lang->user->placeholder->realname  = '真实姓名';
-$lang->user->placeholder->email     = '用来联系用的邮箱，用于禅道的发信';
-$lang->user->placeholder->join      = '也就是员工的入职日期';
-$lang->user->placeholder->last      = '最后登录时间';
+$lang->user->placeholder->join      = '入职日期';

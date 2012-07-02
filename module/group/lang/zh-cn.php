@@ -36,9 +36,6 @@ $lang->group->option   = '选项';
 $lang->group->inside   = '组内用户';
 $lang->group->outside  = '组外用户';
 
-$lang->group->placeholder->name = '如果设置公司允许匿名访问，需要建立一个guest的分组';
-$lang->group->placeholder->desc = '分组描述';
-
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 

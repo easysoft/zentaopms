@@ -84,5 +84,4 @@ $lang->product->aclList['custom']  = '自定义白名单(团队成员和白名�
 
 $lang->product->storySummary = "本页共 <strong>%s</strong> 个需求，预计 <strong>%s</strong> 个工时。";
 
-$lang->product->placeholder->name = '产品名称';
-$lang->product->placeholder->code = '作为团队内部对某一个产品的简短称呼。';
+$lang->product->placeholder->code = '团队内部的简称';

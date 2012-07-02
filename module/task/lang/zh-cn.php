@@ -184,5 +184,4 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->placeholder->estimate = '对该任务最初的预计';
-$lang->task->placeholder->deadline = '任务的截止日期，如果逾期有警告显示。';
-$lang->task->placeholder->mailto   = '当前task所有的操作都会抄送给该列表(不会指派给当前操作人)，抄送给可以是多个人，输入用户名(非真实姓名)进行选择。'; 
+$lang->task->placeholder->mailto   = '输入用户名进行选择'; 

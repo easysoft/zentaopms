@@ -141,5 +141,3 @@ $lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonEdit   = '编辑';
 $lang->testcase->buttonToList = '返回';
-
-$lang->testcase->placeholder->keywords = '可以灵活运用这个字段，方便进行查询检索。';

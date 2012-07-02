@@ -313,5 +313,4 @@ $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</stron
 $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong>需求</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 
-$lang->bug->placeholder->mailto   = '当前bug所有的操作都会抄送给该列表(不抄送给当前操作者)，抄送给可以是多个人，输入用户名(非真实姓名)进行选择。';
-$lang->bug->placeholder->keywords = '可以灵活运用这个字段，方便进行查询检索。';
+$lang->bug->placeholder->mailto = '输入用户名自动选择';
