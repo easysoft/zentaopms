@@ -201,6 +201,7 @@ class userModel extends model
             {
                 $admins = str_replace(',' . $oldUser->account . ',', ',' . $this->post->account . ',', $this->app->company->admins);
                 $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec(false);
+                if(!dao::isError()) $this->app->user->account = $this->post->account;
             }
         }
     }
