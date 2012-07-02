@@ -11,11 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin'>
+<form method='post' target='hiddenwin' action='<?php echo $this->inLink('clearData', 'confirm=no')?>'>
   <table align='center' class='table-5'>
     <caption><?php echo $lang->admin->clearData;?></caption>
     <tr><td><?php echo nl2br($lang->admin->clearDataDesc);?></td></tr>
-    <tr><td class='a-center'><?php echo html::submitButton($lang->admin->clearData) . html::hidden('confirm', 'no');?></td></tr>
+    <tr><td class='a-center'><?php echo html::submitButton($lang->admin->clearData);?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

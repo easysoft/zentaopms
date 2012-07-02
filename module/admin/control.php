@@ -113,35 +113,21 @@ class admin extends control
     }
 
     /**
-     * clear data.
-     * 
-     * @access public
-     * @return void
-     */
-    public function clearData()
-    {
-        if(!empty($_POST))
-        {
-            $this->confirmClearData();
-        }
-
-        $this->display();
-    }
-
-    /**
      * Confirm clear data.
      * 
-     * @param  string $confirm no|yes
+     * @param  string $confirm ''|no|yes
      * @access public
      * @return void
      */
-    public function confirmClearData($confirm = 'no')
+    public function clearData($confirm = '')
     {
+        if($confirm == '') $this->display();
+
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->admin->confirmClearData, inlink('confirmClearData', "confirm=yes")));
+            die(js::confirm($this->lang->admin->confirmClearData, inlink('clearData', "confirm=yes")));
         }
-        else
+        elseif($confirm == 'yes')
         {
             $result = $this->admin->clearData();
             if($result)
