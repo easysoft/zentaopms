@@ -251,14 +251,18 @@ class common extends control
      */
     public static function printIcon($module, $method, $vars = '', $object = '', $size = 'small', $icon = '', $target = '')
     {
+        global $app, $lang;
+
         /* Judge the $method of $module clickable or not, default is clickable. */
-        global $app;
         $clickable = true;
         if(is_object($object))
         {
             if($app->getModuleName() != $module) $app->control->loadModel($module);
             $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
-            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable')) $clickable = $modelClass::isClickable($object, $method);
+            if(class_exists($modelClass) and is_callable(array($modelClass, 'isClickable')))
+            {
+                $clickable = call_user_func_array(array($modelClass, 'isClickable'), array('object' => $object, 'method' => $method));
+            }
         }
 
         /* Set module and method, then create link to it. */
@@ -267,7 +271,6 @@ class common extends control
         $link = helper::createLink($module, $method, $vars);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
-        global $lang;
         $title = $method;
         if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
         if(isset($lang->$module->$method) and is_string($lang->$module->$method)) $title = $lang->$module->$method;
