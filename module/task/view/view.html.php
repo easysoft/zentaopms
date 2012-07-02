@@ -22,90 +22,26 @@
   $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");
   if(!$task->deleted)
   {
+      ob_start();
       //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
       common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign);
-      if(common::hasPriv('task', 'start'))
-      {
-          if($task->status == 'wait')
-          {
-              echo html::a($this->inLink('start', "taskID=$task->id"), $lang->task->buttonStart);
-          }
-          else
-          {
-              echo $lang->task->buttonStart . ' ';
-          }
-      }
+      if($this->task->isClickable($task, 'start'))    common::printLink('task', 'start',    "taskID=$task->id", $lang->task->buttonStart);
+      if($this->task->isClickable($task, 'finish'))   common::printLink('task', 'finish',   "taskID=$task->id", $lang->task->buttonDone);
+      if($this->task->isClickable($task, 'close'))    common::printLink('task', 'close',    "taskID=$task->id", $lang->task->buttonClose);
+      if($this->task->isClickable($task, 'activate')) common::printLink('task', 'activate', "taskID=$task->id", $lang->task->buttonActivate);
+      if($this->task->isClickable($task, 'cancel'))   common::printLink('task', 'cancel',   "taskID=$task->id", $lang->task->buttonCancel);
 
-      if(common::hasPriv('task', 'finish'))
-      {
-          if($task->status == 'wait'   or $task->status == 'doing')
-          {
-              echo html::a($this->inLink('finish', "taskID=$task->id"), $lang->task->buttonDone);
-          }
-          else
-          {
-              echo $lang->task->buttonDone . ' ';
-          }
-      }
+      if($this->task->isClickable($task, 'edit')) common::printSplitIcon();
+      common::printIcon('task', 'edit',  "taskID=$task->id", '', 'big');
+      common::printCommentIcon('task');
+      common::printIcon('task', 'delete',"projectID=$task->project&taskID=$task->id", '', 'big', '', 'hiddenwin');
 
-      if(common::hasPriv('task', 'close'))
-      {
-          if($task->status == 'done'   or $task->status == 'cancel')
-          {
-              echo html::a($this->inLink('close', "taskID=$task->id"), $lang->task->buttonClose);
-          }
-          else
-          { 
-              echo $lang->task->buttonClose . ' ';
-          }
-      }
+      if($this->task->isClickable($task, 'goback')) common::printSplitIcon();
+      common::printRPN($browseLink, $preAndNext);
 
-      if(common::hasPriv('task', 'activate'))
-      {
-          if($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel')
-          {
-              echo html::a($this->inLink('activate', "taskID=$task->id"), $lang->task->buttonActivate);
-          }
-          else
-          { 
-              echo $lang->task->buttonActivate . ' ';
-          }
-      }
-
-      if(common::hasPriv('task', 'cancel'))
-      {
-          if($task->status == 'wait' or $task->status == 'doing')
-          {
-              echo html::a($this->inLink('cancel', "taskID=$task->id"), $lang->task->buttonCancel);
-          }
-          else
-          { 
-              echo $lang->task->buttonCancel . ' ';
-          }
-      }
-      if(common::hasPriv('task', 'assignTo') or common::hasPriv('task', 'start') 
-          or common::hasPriv('task', 'finish') or common::hasPriv('task', 'close')
-          or common::hasPriv('task', 'activate') or common::hasPriv('task', 'cancel'))
-      {
-          echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
-      }
-
-      common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-green-big-edit' title='{$lang->task->edit}'");
-      if(common::hasPriv('task', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' onclick='setComment()' title='{$lang->comment}'");
-      common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title='{$lang->delete}'");
-      if(common::hasPriv('task', 'edit') or common::hasPriv('task', 'delete'))
-      {
-          echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
-      }
-  }
-  echo html::a($browseLink, '&nbsp', '', "class='icon-green-big-goback' title='{$lang->goback}'");
-  if($preAndNext->pre) 
-  {
-      echo html::a($this->inLink('view', "taskID={$preAndNext->pre->id}"), '&nbsp;', '', "class='icon-green-big-pre' id='pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->name}'");
-  }
-  if($preAndNext->next) 
-  {
-      echo html::a($this->inLink('view', "taskID={$preAndNext->next->id}"), '&nbsp;', '', "class='icon-green-big-next' id='next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->name}'");
+      $actionLinks = ob_get_contents();
+      ob_clean();
+      echo $actionLinks;
   }
   ?>
   </div>
@@ -120,88 +56,7 @@
       </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center f-16px strong'>
-        <?php
-        if(!$task->deleted)
-        {
-            common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign);
-            if(common::hasPriv('task', 'start'))
-            {
-                if($task->status == 'wait')
-                {
-                    echo html::a($this->inLink('start', "taskID=$task->id"), $lang->task->buttonStart);
-                }
-                else
-                {
-                    echo $lang->task->buttonStart . ' ';
-                }
-            }
-
-            if(common::hasPriv('task', 'finish'))
-            {
-                if($task->status == 'wait'   or $task->status == 'doing')
-                {
-                    echo html::a($this->inLink('finish', "taskID=$task->id"), $lang->task->buttonDone);
-                }
-                else
-                {
-                    echo $lang->task->buttonDone . ' ';
-                }
-            }
-
-            if(common::hasPriv('task', 'close'))
-            {
-                if($task->status == 'done'   or $task->status == 'cancel')
-                {
-                    echo html::a($this->inLink('close', "taskID=$task->id"), $lang->task->buttonClose);
-                }
-                else
-                { 
-                    echo $lang->task->buttonClose . ' ';
-                }
-            }
-
-            if(common::hasPriv('task', 'activate'))
-            {
-                if($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel')
-                {
-                    echo html::a($this->inLink('activate', "taskID=$task->id"), $lang->task->buttonActivate);
-                }
-                else
-                { 
-                    echo $lang->task->buttonActivate . ' ';
-                }
-            }
-
-            if(common::hasPriv('task', 'cancel'))
-            {
-                if($task->status == 'wait' or $task->status == 'doing')
-                {
-                    echo html::a($this->inLink('cancel', "taskID=$task->id"), $lang->task->buttonCancel);
-                }
-                else
-                { 
-                    echo $lang->task->buttonCancel . ' ';
-                }
-            }
-            if(common::hasPriv('task', 'assignTo') or common::hasPriv('task', 'start') 
-                or common::hasPriv('task', 'finish') or common::hasPriv('task', 'close')
-                or common::hasPriv('task', 'activate') or common::hasPriv('task', 'cancel'))
-            {
-                echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
-            }
-
-            common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-green-big-edit' title='{$lang->task->edit}'");
-            if(common::hasPriv('task', 'edit')) echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-comment' onclick='setComment()' title='{$lang->comment}'");
-            common::printLink('task', 'delete',"projectID=$task->project&taskID=$task->id", '&nbsp;', 'hiddenwin', "class='icon-green-big-delete' title='{$lang->delete}'");
-            if(common::hasPriv('task', 'edit') or common::hasPriv('task', 'delete'))
-            {
-                echo "<span class='icon-green-big-splitLine'>&nbsp;</span>";
-            }
-        }
-        echo html::a($browseLink, '&nbsp', '', "class='icon-green-big-goback' title='{$lang->goback}'");
-       ?>
-      </div>
+      <div class='a-center actionlink'> <?php if(!$task->deleted) echo $actionLinks;?></div>
       <div id='comment' class='hidden'>
         <fieldset>
           <legend><?php echo $lang->comment;?></legend>

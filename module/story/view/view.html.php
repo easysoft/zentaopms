@@ -58,7 +58,7 @@
       </fieldset>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center actionlink'><?php echo $actionLinks;?></div>
+      <div class='a-center actionlink'><?php if(!$story->deleted) echo $actionLinks;?></div>
       <div id='comment' class='hidden'>
         <fieldset>
           <legend><?php echo $lang->comment;?></legend>

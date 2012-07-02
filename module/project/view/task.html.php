@@ -131,39 +131,10 @@ var browseType = '<?php echo $browseType;?>';
             </td>
             <td class='a-right'>
               <?php
-              if(common::hasPriv('task', 'finish'))
-              {
-                  if($task->status == 'wait'  or $task->status == 'doing')
-                  {
-                      echo html::a($this->inLink('task', 'finish'), '&nbsp;', "taskID=$task->id", "class='icon-green-small-task-finish' title='{$lang->task->buttonDone}'", false);
-                  }
-                  else
-                  {
-                      echo "<span class='icon-gray-small-task-finish' title='{$lang->task->buttonDone}'>&nbsp;</span>";
-                  }
-              }
-
-              if(common::hasPriv('task', 'close'))
-              {
-                  if($task->status == 'done'  or $task->status == 'cancel')
-                  {
-                      echo html::a($this->inLink('task', 'close', "taskID=$task->id"), '&nbsp;', '', "class='icon-green-small-task-close' title='{$lang->task->buttonClose}'", false);
-                  }
-                  else
-                  {
-                      echo "<span class='icon-gray-small-task-close' title='{$lang->task->buttonClose}'>&nbsp;</span>";
-                  }
-              }
-
-              if(!common::printLink('task', 'edit',  "taskID=$task->id", '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->task->buttonEdit}'"))
-              {
-                  echo "<span class='icon-gray-small-edit' title='{$lang->task->buttonEdit}'>&nbsp;</span>";
-              }
-
-              if($browseType == 'needconfirm') 
-              {
-                  common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
-              }
+              if($browseType == 'needconfirm') common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
+              if($this->task->isClickable($task, 'finish')) common::printIcon('task', 'finish', "taskID=$task->id", $task);
+              if($this->task->isClickable($task, 'close'))  common::printIcon('task', 'close',  "taskID=$task->id", $task);
+              if($this->task->isClickable($task, 'edit'))   common::printIcon('task', 'edit',   "taskID=$task->id");
               ?>
             </td>
           </tr>

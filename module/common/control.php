@@ -308,11 +308,13 @@ class common extends control
         echo html::a($backLink, '&nbsp;', '', "class='icon-goback' title={$lang->goback}");
         if(isset($preAndNext->pre) and $preAndNext->pre) 
         {
-            echo html::a($this->inLink('view', "ID={$preAndNext->pre->id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$preAndNext->pre->id}{$lang->colon}{$preAndNext->pre->title}'");
+            $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
+            echo html::a($this->inLink('view', "ID={$preAndNext->pre->id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$preAndNext->pre->id}{$lang->colon}{$title}'");
         }
         if(isset($preAndNext->next) and $preAndNext->next) 
         {
-            echo html::a($this->inLink('view', "ID={$preAndNext->next->id}"), '&nbsp;', '', "id='next' class='icon-next' title='{$preAndNext->next->id}{$lang->colon}{$preAndNext->next->title}'");
+            $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
+            echo html::a($this->inLink('view', "ID={$preAndNext->next->id}"), '&nbsp;', '', "id='next' class='icon-next' title='{$preAndNext->next->id}{$lang->colon}{$title}'");
         }
     }
 
