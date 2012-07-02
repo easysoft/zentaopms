@@ -5,6 +5,7 @@
 ul#report-list{margin:0px;}
 ul li{list-style:none;}
 #product td, tr, th{ border:1px solid #E4E4E4;}
+#workload td, tr, th{ border:1px solid #E4E4E4;}
 #product p{margin:2px 0;}
 
 .proversion {text-align:center; margin-top:10px}

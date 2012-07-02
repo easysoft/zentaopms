@@ -11,7 +11,7 @@
     </td>
     <td class='divider'></td>
     <td>
-      <table class='table-1 fixed colored tablesorter datatable border-sep'>
+      <table class='table-1 fixed colored tablesorter datatable border-sep' id="workload">
         <thead>
         <tr class='colhead'>
           <th><?php echo $lang->report->user;?></th>
