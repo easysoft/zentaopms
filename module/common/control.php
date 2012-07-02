@@ -266,7 +266,8 @@ class common extends control
         }
 
         /* Set module and method, then create link to it. */
-        if(strtolower($module) == 'testcase' and strtolower($method) == 'tobug') ($module = 'bug') and ($method = 'create');
+        if(strtolower($module) == 'testcase' and strtolower($method) == 'tobug')      ($module = 'bug') and ($method = 'create');
+        if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(!common::hasPriv($module, $method)) return false;
         $link = helper::createLink($module, $method, $vars);
 
