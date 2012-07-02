@@ -166,7 +166,7 @@ foreach($fieldParams as $fieldName => $param)
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform'>
 <table class='table-1'>
   <tr valign='middle'>
-    <th width='10' class='bg-gray'><?php echo $lang->search->common;?></th>
+    <th width='10' style='padding-left:5px'><span id='search'>&nbsp;</span></th>
     <td class='a-right'>
       <nobr>
       <?php
@@ -268,9 +268,9 @@ foreach($fieldParams as $fieldName => $param)
       if(common::hasPriv('search', 'deleteQuery')) echo html::commonButton(' x ', 'onclick=deleteQuery();');
       ?>
     </td>
-    <th width='10' class='bg-gray' style='cursor:pointer; padding:0'>
-      <span id='searchmore' onclick='showmore()' style='width:100%; height:100%'><?php echo $lang->search->more;?></span>
-      <span id='searchlite' onclick='showlite()' style='width:100%; height:100%' class='hidden'><?php echo $lang->search->lite;?></span>
+    <th width='10' class='a-center' style='cursor:pointer; padding:0'>
+      <span id='searchmore' onclick='showmore()' style='width:100%; height:100%; padding-right:10px'>&nbsp;</span>
+      <span id='searchlite' onclick='showlite()' style='width:100%; height:100%' class='hidden'>&nbsp;</span>
       <?php echo html::hidden('formType', 'lite');?>
     </th>
   </tr>
