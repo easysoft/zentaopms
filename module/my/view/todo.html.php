@@ -34,7 +34,7 @@
     </div>
     <div class='f-right'>
       <?php 
-      common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="w-date"');
+      common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="export w-date"');
       common::printLink('todo', 'batchCreate', "", $lang->todo->batchCreate);
       echo html::a($this->createLink('todo', 'create', "date=$date"), $lang->todo->create);
       ?>
