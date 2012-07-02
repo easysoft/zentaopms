@@ -52,7 +52,7 @@
                   <table class='headTable'>
                     <caption><?php echo $lang->build->linkStories;?></caption>
                     <tr>
-                      <th class='w-id a-left'><?php echo html::selectAll('story', 'checkbox', 'true') . $lang->idAB;?></th>
+                      <th class='w-id a-left'><?php echo html::selectAll('story', 'checkbox') . $lang->idAB;?></th>
                       <th><?php echo $lang->story->title;?></th>
                       <th class='w-hour'><?php echo $lang->statusAB;?></th>
                       <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
@@ -87,7 +87,7 @@
                   <table class='headTable'>
                     <caption><?php echo $lang->build->linkBugs;?></caption>
                     <tr>
-                      <th class='w-id a-left'><?php echo html::selectAll('bug', 'checkbox', 'true') . $lang->idAB;?></th>
+                      <th class='w-id a-left'><?php echo html::selectAll('bug', 'checkbox') . $lang->idAB;?></th>
                       <th><?php echo $lang->bug->title;?></th>
                       <th class='w-100px'><?php echo $lang->bug->status;?></th>
                     </tr>
