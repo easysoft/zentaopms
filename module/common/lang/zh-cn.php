@@ -137,7 +137,7 @@ $lang->my->menu->story          = '我的需求|my|story|';
 $lang->my->menu->myProject      = '我的项目|my|project|';
 $lang->my->menu->dynamic        = '我的动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '修改密码|my|changePassword|';
+$lang->my->menu->changePassword = '修改密码|my|changepassword|';
 $lang->todo->menu               = $lang->my->menu;
 
 /* 产品视图设置。*/

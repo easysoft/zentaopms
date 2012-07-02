@@ -137,7 +137,7 @@ $lang->my->menu->story          = 'Story|my|story|';
 $lang->my->menu->myProject      = 'Project|my|project|';
 $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = 'Change Password|my|changePassword|';
+$lang->my->menu->changePassword = 'Change Password|my|changepassword|';
 $lang->todo->menu               = $lang->my->menu;
 
 /* Product menu. */
