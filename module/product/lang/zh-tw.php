@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: zh-tw.php 3026 2012-06-11 06:25:34Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->product->common = '產品視圖';
@@ -84,5 +84,4 @@ $lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名�
 
 $lang->product->storySummary = "本頁共 <strong>%s</strong> 個需求，預計 <strong>%s</strong> 個工時。";
 
-$lang->product->placeholder->name = '產品名稱';
-$lang->product->placeholder->code = '作為團隊內部對某一個產品的簡短稱呼。';
+$lang->product->placeholder->code = '團隊內部的簡稱';

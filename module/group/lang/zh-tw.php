@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 3026 2012-06-11 06:25:34Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->group->common             = '權限分組';
@@ -35,9 +35,6 @@ $lang->group->priv     = '權限';
 $lang->group->option   = '選項';
 $lang->group->inside   = '組內用戶';
 $lang->group->outside  = '組外用戶';
-
-$lang->group->placeholder->name = '如果設置公司允許匿名訪問，需要建立一個guest的分組';
-$lang->group->placeholder->desc = '分組描述';
 
 $lang->group->copyOptions['copyPriv'] = '複製權限';
 $lang->group->copyOptions['copyUser'] = '複製用戶';

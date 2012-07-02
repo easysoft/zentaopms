@@ -6,10 +6,11 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id: zh-tw.php 3129 2012-06-29 10:36:01Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 3210 2012-07-01 08:48:16Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->report->common     = '統計視圖';
+$lang->report->index      = '統計首頁';
 $lang->report->list       = '統計報表';
 $lang->report->item       = '條目';
 $lang->report->value      = '值';

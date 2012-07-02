@@ -6,11 +6,12 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
- * @version     $Id: zh-tw.php 3012 2012-06-07 07:23:15Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3236 2012-07-02 01:29:43Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->admin->common  = '後台管理';
 $lang->admin->index   = '後台管理首頁';
+$lang->admin->checkDB = '修正數據';
 $lang->admin->company = '公司管理';
 $lang->admin->user    = '用戶管理';
 $lang->admin->group   = '分組管理';
@@ -19,7 +20,7 @@ $lang->admin->welcome = '歡迎使用禪道管理軟件後台管理系統';
 $lang->admin->browseCompany = '瀏覽公司';
 
 $lang->admin->clearData        = '清除數據';
-$lang->admin->confirmClearData = '您確認要清楚數據嗎？';
+$lang->admin->confirmClearData = '您確認要清除數據嗎？';
 $lang->admin->clearDataFailed  = '清除數據失敗！';
 $lang->admin->clearDataSucceed = '清除數據成功！';
 $lang->admin->clearDataDesc    = <<<EOT

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 3126 2012-06-29 08:27:11Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
@@ -184,5 +184,4 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->placeholder->estimate = '對該任務最初的預計';
-$lang->task->placeholder->deadline = '任務的截止日期，如果逾期有警告顯示。';
-$lang->task->placeholder->mailto   = '當前task所有的操作都會抄送給該列表(不會指派給當前操作人)，抄送給可以是多個人，輸入用戶名(非真實姓名)進行選擇。'; 
+$lang->task->placeholder->mailto   = '輸入用戶名進行選擇'; 

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 3158 2012-06-30 07:49:01Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = '用例編號';
@@ -141,5 +141,3 @@ $lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonEdit   = '編輯';
 $lang->testcase->buttonToList = '返回';
-
-$lang->testcase->placeholder->keywords = '可以靈活運用這個欄位，方便進行查詢檢索。';

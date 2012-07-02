@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 3126 2012-06-29 08:27:11Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -52,12 +52,12 @@ $lang->project->createTesttask= '提交測試';
 $lang->project->noProduct     = '無產品項目';
 $lang->project->select        = '--請選擇項目--';
 
-$lang->project->endList['2weeks'] = '兩星期';
-$lang->project->endList['1']      = '一個月';
-$lang->project->endList['2']      = '兩個月';
-$lang->project->endList['3']      = '三個月';
-$lang->project->endList['6']      = '半年';
-$lang->project->endList['12']     = '一年';
+$lang->project->endList[14]   = '兩星期';
+$lang->project->endList[31]   = '一個月';
+$lang->project->endList[62]   = '兩個月';
+$lang->project->endList[93]   = '三個月';
+$lang->project->endList[186]  = '半年';
+$lang->project->endList[365]  = '一年';
 
 $lang->team->account    = '用戶';
 $lang->team->role       = '角色';
@@ -178,11 +178,7 @@ $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
-$lang->project->placeholder->name = '項目名稱';
-$lang->project->placeholder->code = '作為團隊內部對某一個項目的簡短稱呼。';
-$lang->project->placeholder->end  = '對於scrum而言，一般不宜超過30天。';
-$lang->project->placeholder->days = '根據開始日期和結束日期自動計算';
-$lang->project->placeholder->team = '團隊內部可以自己選擇自己喜歡的名稱。';
+$lang->project->placeholder->code = '團隊內部的簡稱';
 
 $lang->project->selectGroup->doing     = '(進行中)';
 $lang->project->selectGroup->done      = '(已結束)';

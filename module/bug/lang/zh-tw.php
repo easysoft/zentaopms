@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 3026 2012-06-11 06:25:34Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -313,5 +313,4 @@ $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</stron
 $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
 
-$lang->bug->placeholder->mailto   = '當前bug所有的操作都會抄送給該列表(不抄送給當前操作者)，抄送給可以是多個人，輸入用戶名(非真實姓名)進行選擇。';
-$lang->bug->placeholder->keywords = '可以靈活運用這個欄位，方便進行查詢檢索。';
+$lang->bug->placeholder->mailto = '輸入用戶名自動選擇';

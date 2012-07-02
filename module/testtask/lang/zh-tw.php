@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 3026 2012-06-11 06:25:34Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -64,6 +64,3 @@ $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';
 $lang->testtask->lblRunCase    = '執行用例';
 $lang->testtask->lblResults    = '執行結果';
-
-$lang->testtask->placeholder->begin = '開始日期';
-$lang->testtask->placeholder->end   = '結束日期';

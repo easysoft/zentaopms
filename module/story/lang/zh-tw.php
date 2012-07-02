@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 3096 2012-06-27 07:53:04Z areyou123456 $
+ * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -232,5 +232,5 @@ $lang->story->report->storysPerClosedReason->graph->xAxisName = '關閉原因';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = '預計時間';
 $lang->story->report->storysPerChange->graph->xAxisName       = '變更次數';
 
-$lang->story->placeholder->estimate = "對需求所需要花費的時間進行大致估計";
-$lang->story->placeholder->mailto   = '跟這個需求相關的人員，可以通過email的形式抄送給他們。提示：請輸入用戶名進行選擇。';
+$lang->story->placeholder->estimate = "完成該需求的工作量";
+$lang->story->placeholder->mailto   = '輸入用戶名自動完成';
