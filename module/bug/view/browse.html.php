@@ -38,7 +38,7 @@ var customed   = <?php echo (int)$customed;?>;
   </div>
   <div class='f-right'>
     <?php if($browseType != 'needconfirm') common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy", '', 'big');?>
-    <?php common::printLink('bug', 'customFields', '', $lang->bug->customFields, '', "class='iframe'"); ?>
+    <?php common::printIcon('bug', 'customFields', '', '', 'big'); ?>
     <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'big');?>
     <?php common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", '', 'big'); ?>
   </div>
@@ -102,11 +102,8 @@ var customed   = <?php echo (int)$customed;?>;
         <?php $bugLink = inlink('view', "bugID=$bug->id");?>
         <tr class='a-center'>
           <td class='<?php echo $bug->status;?>' style="font-weight:bold"><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
-          <td>
-            <span class='<?php echo 'severity' . $bug->severity;?>'>&nbsp;</span>
-            <?php echo $lang->bug->severityList[$bug->severity]?>
-          </td>
-          <td><?php echo $lang->bug->priList[$bug->pri]?></td>
+          <td><span class='<?php echo 'severity' . $bug->severity;?>'>&nbsp;</span></td>
+          <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri];?>'>&nbsp;</span></td>
 
           <?php $class = 'confirm' . $bug->confirmed;?>
           <td class='a-left nobr'><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
