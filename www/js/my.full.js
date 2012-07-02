@@ -578,7 +578,7 @@ function setProjectListLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.icon-green-big-export').size()) $(".icon-green-big-export").colorbox({width:500, height:200, iframe:true, transition:'elastic', speed:350, scrolling:true});
+   if($('.icon-green-big-common-export').size()) $(".icon-green-big-common-export").colorbox({width:500, height:200, iframe:true, transition:'elastic', speed:350, scrolling:true});
 }
 
 /**

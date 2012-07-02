@@ -21,12 +21,12 @@
   </div>
   <div class='f-right'>
     <?php 
-    if($browseType != 'needconfirm') common::printLink('task', 'export', "projectID=$projectID&orderBy=$orderBy", '&nbsp;', '', "class='export icon-green-big-export' title='{$lang->export}'");
+    if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy", '', 'big');
     common::printLink('project', 'importTask', "project=$project->id", $lang->project->importTask);
     common::printLink('project', 'importBug', "projectID=$project->id", $lang->project->importBug);
-    common::printLink('task', 'report', "project=$project->id&browseType=$browseType", '&nbsp;', '', "class='icon-green-big-report' title='{$lang->task->report->common}'");
-    common::printLink('task', 'batchCreate', "projectID=$project->id", '&nbsp;', '', "class='icon-green-big-task-batchCreate' title='{$lang->task->batchCreate}'");
-    common::printLink('task', 'create', "project=$project->id", '&nbsp;', '', "class='icon-green-big-task-create' title='{$lang->task->create}'");
+    common::printIcon('task', 'report', "project=$project->id&browseType=$browseType", '', 'big');
+    common::printIcon('task', 'batchCreate', "projectID=$project->id", '', 'big');
+    common::printIcon('task', 'create', "project=$project->id", '', 'big');
     ?>
   </div>
 </div>
