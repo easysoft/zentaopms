@@ -290,11 +290,9 @@ class groupModel extends model
                 }
                 if($resources)
                 {
-                    $resources = array_keys($resources);
-                    $labels    = array_values($resources);
                     foreach($resources as $key => $resource)
                     {
-                        $tmpResources->$resource = $labels[$key];
+                        $tmpResources->$key = $resource;
                     }
                 }
                 $this->lang->resource->$moduleName = $tmpResources;
