@@ -343,7 +343,7 @@ EOT;
             ->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->notin('cancel, closed')
+            ->andWhere('t1.status')->notin('cancel, closed, done')
             ->fetchGroup('assignedTo');
         $bugs = $this->dao->select('t1.*, t2.name as productName')
             ->from(TABLE_BUG)->alias('t1')
