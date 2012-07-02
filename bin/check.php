@@ -36,6 +36,8 @@ $whiteList[] = 'svn-run';
 $whiteList[] = 'admin-ignore';
 $whiteList[] = 'admin-register';
 $whiteList[] = 'admin-bind';
+$whiteList[] = 'admin-checkdb';
+$whiteList[] = 'admin-cleardata';
 $whiteList[] = 'bug-sendmail';
 $whiteList[] = 'project-commonaction';
 $whiteList[] = 'project-sendmail';
@@ -43,6 +45,10 @@ $whiteList[] = 'story-commonaction';
 $whiteList[] = 'story-sendmail';
 $whiteList[] = 'task-sendmail';
 $whiteList[] = 'user-setreferer';
+$whiteList[] = 'mail-index';
+$whiteList[] = 'mail-detect';
+$whiteList[] = 'mail-edit';
+$whiteList[] = 'mail-test';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
@@ -108,7 +114,9 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                 if(trim($mainKey) != trim($key))
                 {
                     $key = trim($key);
-                    echo "$moduleName $langKey $mainKey $key " . ($lineNO + 1) . "\n";
+                    $lineNO = $lineNO + 1;
+                    echo "module $moduleName need checking, command is:";
+                    echo " vim -O +$lineNO ../module/$moduleName/lang/zh-cn.php +$lineNO ../module/$moduleName/lang/en.php \n";
                     break;
                 }
             }
