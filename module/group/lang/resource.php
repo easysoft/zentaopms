@@ -14,30 +14,39 @@
 $lang->moduleOrder[0]   = 'index';
 $lang->moduleOrder[5]   = 'my';
 $lang->moduleOrder[10]  = 'todo';
+
 $lang->moduleOrder[15]  = 'product';
 $lang->moduleOrder[20]  = 'story';
 $lang->moduleOrder[25]  = 'productplan';
 $lang->moduleOrder[30]  = 'release';
+
 $lang->moduleOrder[35]  = 'project';
 $lang->moduleOrder[40]  = 'task';
 $lang->moduleOrder[45]  = 'build';
+
 $lang->moduleOrder[50]  = 'qa';
 $lang->moduleOrder[55]  = 'bug';
 $lang->moduleOrder[60]  = 'testcase';
 $lang->moduleOrder[65]  = 'testtask';
+
 $lang->moduleOrder[70]  = 'doc';
-$lang->moduleOrder[75]  = 'svn';
+$lang->moduleOrder[75]  = 'report';
+
 $lang->moduleOrder[80]  = 'company';
 $lang->moduleOrder[85]  = 'dept';
 $lang->moduleOrder[90]  = 'group';
 $lang->moduleOrder[95]  = 'user';
-$lang->moduleOrder[100] = 'tree';
-$lang->moduleOrder[105] = 'search';
-$lang->moduleOrder[110] = 'admin';
-$lang->moduleOrder[115] = 'api';
-$lang->moduleOrder[120] = 'file';
-$lang->moduleOrder[125] = 'misc';
-$lang->moduleOrder[130] = 'action';
+
+$lang->moduleOrder[100] = 'admin';
+$lang->moduleOrder[105] = 'extension';
+$lang->moduleOrder[110] = 'action';
+
+$lang->moduleOrder[115]  = 'svn';
+$lang->moduleOrder[120] = 'search';
+$lang->moduleOrder[125] = 'tree';
+$lang->moduleOrder[130] = 'api';
+$lang->moduleOrder[135] = 'file';
+$lang->moduleOrder[140] = 'misc';
 
 /* Index module. */
 $lang->resource->index->index = 'index';
@@ -505,13 +514,6 @@ $lang->tree->methodOrder[25] = 'delete';
 $lang->tree->methodOrder[30] = 'ajaxGetOptionMenu';
 $lang->tree->methodOrder[35] = 'ajaxGetSonModules';
 
-/* Mail. */
-$lang->resource->mail->index  = 'index';
-$lang->resource->mail->detect = 'detect';
-$lang->resource->mail->edit   = 'edit';
-$lang->resource->mail->save   = 'save';
-$lang->resource->mail->test   = 'test';
-
 /* Report. */
 $lang->resource->report->index            = 'index';
 $lang->resource->report->projectDeviation = 'projectDeviation';
@@ -534,12 +536,8 @@ $lang->search->methodOrder[25] = 'select';
 
 /* Admin. */
 $lang->resource->admin->index            = 'index';
-$lang->resource->admin->checkDB          = 'checkDB';
-$lang->resource->admin->clearData        = 'clearData';
 
 $lang->admin->methodOrder[0]  = 'index';
-$lang->admin->methodOrder[5]  = 'checkDB';
-$lang->admin->methodOrder[10] = 'clearData';
 
 /* Extension. */
 $lang->resource->extension->browse     = 'browse';
@@ -669,17 +667,10 @@ $lang->changelog['3.2'][] = 'my-changePassword';
 $lang->changelog['3.2'][] = 'story-batchClose';
 $lang->changelog['3.2'][] = 'task-batchEdit';
 $lang->changelog['3.2'][] = 'release-exportStoriesAndBugs';
-$lang->changelog['3.2'][] = 'mail-index';
-$lang->changelog['3.2'][] = 'mail-detect';
-$lang->changelog['3.2'][] = 'mail-edit';
-$lang->changelog['3.2'][] = 'mail-save';
-$lang->changelog['3.2'][] = 'mail-test';
 $lang->changelog['3.2'][] = 'report-index';
 $lang->changelog['3.2'][] = 'report-projectDeviation';
 $lang->changelog['3.2'][] = 'report-productInfo';
 $lang->changelog['3.2'][] = 'report-bugSummary';
 $lang->changelog['3.2'][] = 'report-workload';
 $lang->changelog['3.2'][] = 'admin-checkDB';
-$lang->changelog['3.2'][] = 'admin-clearData';
-$lang->changelog['3.2'][] = 'admin-confirmClearData';
 $lang->changelog['3.2'][] = 'tree-fix';
