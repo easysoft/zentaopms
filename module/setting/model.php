@@ -69,8 +69,19 @@ class settingModel extends model
      */
     public function updateVersion($version)
     {
-        if($version >= 3.2) $this->setItemGE32('system', 'common', 'global', 'version', $version, 0);
-        else                $this->setItemLT32('system', 'global', 'version', $version, 0);
+        if($version >= 3.2) return $this->setItem('system', 'common', 'global', 'version', $version, 0);
+
+        $this->dao->delete()->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('section')->eq('global')
+            ->andWhere('`key`')->eq('version')
+            ->andWhere('company')->eq(0)
+            ->exec();
+        $data->owner   = 'system';
+        $data->section = 'global';
+        $data->key     = 'version';
+        $data->company = 0;
+        return $this->dao->insert(TABLE_CONFIG)->data($data, false)->exec();
     }
 
     /**
@@ -104,7 +115,7 @@ class settingModel extends model
            $sn == '13593e340ee2bdffed640d0c4eed8bec')
         {
             $sn = $this->computeSN();
-            $this->setItemGE32('system', 'common', 'global', 'sn', $sn, 0);
+            $this->setItem('system', 'common', 'global', 'sn', $sn, 0);
         }
     }
 
@@ -143,7 +154,7 @@ class settingModel extends model
      * @access public
      * @return void
      */
-    public function setItemGE32($owner, $module, $section, $key, $value = '', $company = 'current')
+    public function setItem($owner, $module, $section, $key, $value = '', $company = 'current')
     {
         $item->company = $company === 'current' ? $this->app->company->id : $company;
         $item->owner   = $owner;
@@ -152,31 +163,6 @@ class settingModel extends model
         $item->key     = $key;
         $item->value   = $value;
 
-        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('version')->exec($autoCompany = false);
-        $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
-    }
-
-    /**
-     * Set value of an item. 
-     * 
-     * @param  string      $owner 
-     * @param  string      $module 
-     * @param  string      $section 
-     * @param  string      $key 
-     * @param  string      $value 
-     * @param  string|int  $company 
-     * @access public
-     * @return void
-     */
-    public function setItemLT32($owner, $section, $key, $value = '', $company = 'current')
-    {
-        $item->company = $company === 'current' ? $this->app->company->id : $company;
-        $item->owner   = $owner;
-        $item->section = $section;
-        $item->key     = $key;
-        $item->value   = $value;
-
-        $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('version')->exec($autoCompany = false);
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
     }
 

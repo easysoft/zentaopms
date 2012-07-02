@@ -44,7 +44,7 @@ class admin extends control
 	 */
 	public function ignore()
 	{
-		$this->loadModel('setting')->setItemGE32('system', 'common', 'global', 'community', 'na');
+		$this->loadModel('setting')->setItem('system', 'common', 'global', 'community', 'na');
 		die(js::locate(inlink('index'), 'parent'));
 	}
 
@@ -61,7 +61,7 @@ class admin extends control
 			$response = $this->admin->registerByAPI();
 			if($response == 'success') 
 			{
-				$this->loadModel('setting')->setItemGE32('system', 'common', 'global', 'community', $this->post->account);
+				$this->loadModel('setting')->setItem('system', 'common', 'global', 'community', $this->post->account);
 				echo js::alert($this->lang->admin->register->success);
 				die(js::locate(inlink('index'), 'parent'));
 			}
@@ -85,7 +85,7 @@ class admin extends control
 			$response = $this->admin->bindByAPI();	
 			if($response == 'success') 
 			{
-				$this->loadModel('setting')->setItemGE32('system', 'common', 'global', 'community', $this->post->account);
+				$this->loadModel('setting')->setItem('system', 'common', 'global', 'community', $this->post->account);
 				echo js::alert($this->lang->admin->bind->success);
 				die(js::locate(inlink('index'), 'parent'));
 			}
