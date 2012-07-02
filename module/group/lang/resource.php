@@ -279,7 +279,6 @@ $lang->resource->search->select       = 'select';
 $lang->resource->admin->index            = 'index';
 $lang->resource->admin->checkDB          = 'checkDB';
 $lang->resource->admin->clearData        = 'clearData';
-$lang->resource->admin->confirmClearData = 'confirmClearData';
 
 /* Extension. */
 $lang->resource->extension->browse     = 'browse';
