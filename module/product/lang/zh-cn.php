@@ -83,5 +83,3 @@ $lang->product->aclList['private'] = '私有项目(只有项目团队成员才�
 $lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
 
 $lang->product->storySummary = "本页共 <strong>%s</strong> 个需求，预计 <strong>%s</strong> 个工时。";
-
-$lang->product->placeholder->code = '团队内部的简称';

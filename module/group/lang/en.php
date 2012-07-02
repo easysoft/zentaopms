@@ -36,9 +36,6 @@ $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group users';
 $lang->group->outside  = 'Other users';
 
-$lang->group->placeholder->name = 'You can create \"guest\" group if allows guest login';
-$lang->group->placeholder->desc = 'Group description';
-
 $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
 

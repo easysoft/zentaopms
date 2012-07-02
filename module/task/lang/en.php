@@ -184,5 +184,4 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName   = 'Date';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
 $lang->task->placeholder->estimate = 'The estimated time for this task';
-$lang->task->placeholder->deadline = 'The deadline of this task';
 $lang->task->placeholder->mailto   = 'Mail to'; 

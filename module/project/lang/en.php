@@ -52,12 +52,12 @@ $lang->project->createTesttask= 'Create testtask';
 $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
 
-$lang->project->endList['2weeks'] = 'Two Weeks';
-$lang->project->endList['1']      = 'One Month';
-$lang->project->endList['2']      = 'Two Months';
-$lang->project->endList['3']      = 'Three Months';
-$lang->project->endList['6']      = 'Half Of Year';
-$lang->project->endList['12']     = 'One Year';
+$lang->project->endList[14]  = 'Two Weeks';
+$lang->project->endList[31]  = 'One Month';
+$lang->project->endList[62]  = 'Two Months';
+$lang->project->endList[93]  = 'Three Months';
+$lang->project->endList[186] = 'Half Of Year';
+$lang->project->endList[365] = 'One Year';
 
 $lang->team->account    = 'Account';
 $lang->team->role       = 'Role';
@@ -178,11 +178,7 @@ $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
-$lang->project->placeholder->name = 'Project name';
 $lang->project->placeholder->code = 'Project code';
-$lang->project->placeholder->end  = "If scrum it should no more than 30 days";
-$lang->project->placeholder->days = 'Decide by begin date and end day';
-$lang->project->placeholder->team = 'Team name';
 
 $lang->project->selectGroup->doing     = '(Doing)';
 $lang->project->selectGroup->done      = '(Done)';
