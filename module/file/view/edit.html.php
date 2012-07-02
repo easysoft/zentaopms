@@ -27,7 +27,7 @@ function closeWindow()
 }
 </script>
 
-<form method='post' target='hiddenwin' onsubmit='setFileName();'>
+<form method='post' target='hiddenwin' onsubmit='setFileName();' id='dataform'>
   <table class='table-1'>
     <caption><?php echo $lang->file->inputFileName;?></caption>
     <tr>

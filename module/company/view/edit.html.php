@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin'>
+<form method='post' target='hiddenwin' id='dataform'>
   <table align='center' class='table-5'> 
     <caption><?php echo $lang->company->edit;?></caption>
     <tr>

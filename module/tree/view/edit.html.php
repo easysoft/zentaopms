@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' class='mt-10px'>
+<form method='post' class='mt-10px' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->tree->edit;?></caption>
     <tr>

@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div id='main'>
   CASE #<?php echo $case->id . $lang->colon;?>

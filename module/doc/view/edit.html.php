@@ -19,7 +19,7 @@ $(document).ready(function()
     setType(type);
 });
 </script>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->doc->edit;?></caption>
     <tr>

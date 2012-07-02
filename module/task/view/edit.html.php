@@ -16,7 +16,7 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <script language='Javascript'>var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
-<form method='post' enctype='multipart/form-data' target='hiddenwin'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div id='main'>TASK #<?php echo $task->id . $lang->colon . html::input('name', $task->name, 'class="text-1"');?></div>
   <div><?php echo html::submitButton();?></div>

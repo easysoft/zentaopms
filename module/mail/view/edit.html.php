@@ -11,7 +11,7 @@
  */
 include '../../common/view/header.html.php';
 ?>
-<form method='post' action='<?php echo inlink('save');?>'>
+<form method='post' action='<?php echo inlink('save');?>' id='dataform'>
 <table align='center' class='table-4'>
   <caption><?php echo $lang->mail->edit;?></caption>
   <tr>

@@ -27,7 +27,7 @@ oldResolvedBuild       = '<?php echo $bug->resolvedBuild;?>';
 emptySelect            = "<select name='task' id='task'><option value=''></option></select>";
 userList               = "<?php echo join(',', array_keys($users));?>".split(',');
 </script>
-<form method='post' target='hiddenwin' enctype='multipart/form-data'>
+<form method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform'>
 <div id='titlebar'>
   <div id='main'>
   BUG #<?php echo $bug->id . $lang->colon;?>
