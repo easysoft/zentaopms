@@ -21,7 +21,7 @@
 <table class='mainTable'>
   <tr>
     <td>
-      <table class='headTable'>
+      <table class='headTable fixed'>
         <tr class='colhead'>
           <th class='w-100px'><?php echo $lang->product->name;?></th>
           <th class='w-60px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
