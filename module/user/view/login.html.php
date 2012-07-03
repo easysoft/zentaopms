@@ -41,11 +41,12 @@ include '../../common/view/colorbox.html.php';
   <div id='demoUsers'>  
   <?php
       echo "<span>" . $lang->user->loginWithDemoUser . "</span>";
-      if(isset($demoUsers['productManager'])) echo html::a($this->inLink('login', "account=productManager&password=123456"), $demoUsers['productManager'], 'hiddenwin');
-      if(isset($demoUsers['projectManager'])) echo html::a($this->inLink('login', "account=projectManager&password=123456"), $demoUsers['projectManager'], 'hiddenwin');
-      if(isset($demoUsers['testManager']))    echo html::a($this->inLink('login', "account=testManager&password=123456"),    $demoUsers['testManager'],    'hiddenwin');
-      if(isset($demoUsers['dev1']))           echo html::a($this->inLink('login', "account=dev1&password=123456"),           $demoUsers['dev1'],           'hiddenwin');
-      if(isset($demoUsers['tester1']))        echo html::a($this->inLink('login', "account=tester1&password=123456"),        $demoUsers['tester1'],        'hiddenwin');
+      $sign = $config->requestType == 'GET' ? '&' : '?';
+      if(isset($demoUsers['productManager'])) echo html::a(inlink('login') . $sign . "account=productManager&password=123456", $demoUsers['productManager'], 'hiddenwin');
+      if(isset($demoUsers['projectManager'])) echo html::a(inlink('login') . $sign . "account=projectManager&password=123456", $demoUsers['projectManager'], 'hiddenwin');
+      if(isset($demoUsers['testManager']))    echo html::a(inlink('login') . $sign . "account=testManager&password=123456",    $demoUsers['testManager'],    'hiddenwin');
+      if(isset($demoUsers['dev1']))           echo html::a(inlink('login') . $sign . "account=dev1&password=123456",           $demoUsers['dev1'],           'hiddenwin');
+      if(isset($demoUsers['tester1']))        echo html::a(inlink('login') . $sign . "account=tester1&password=123456",        $demoUsers['tester1'],        'hiddenwin');
   ?>  
   </div>  
   <?php endif;?>  
