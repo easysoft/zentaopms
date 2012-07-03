@@ -521,6 +521,12 @@ $lang->resource->report->productInfo      = 'productInfo';
 $lang->resource->report->bugSummary       = 'bugSummary';
 $lang->resource->report->workload         = 'workload';
 
+$lang->report->methodOrder[0]  = 'index';
+$lang->report->methodOrder[5]  = 'projectDeviation';
+$lang->report->methodOrder[10] = 'productInfo';
+$lang->report->methodOrder[15] = 'bugSummary';
+$lang->report->methodOrder[20] = 'workload';
+
 /* Search. */
 $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
