@@ -555,7 +555,6 @@ class bug extends control
         $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
         $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->bug->resolve;
-        $this->view->date            = strftime("%Y-%m-%d %X", strtotime('now'));
 
         $this->view->bug     = $bug;
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);

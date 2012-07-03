@@ -28,7 +28,7 @@
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->resolvedDate;?></td>
-      <td><?php echo html::input('resolvedDate',$date, "class='select-3'");?></td>
+      <td><?php echo html::input('resolvedDate', helper::now(), "class='select-3'");?></td>
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->bug->assignedTo;?></td>
