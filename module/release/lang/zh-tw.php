@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
- * @version     $Id: zh-tw.php 3198 2012-07-01 02:54:03Z areyou123456 $
+ * @version     $Id: zh-tw.php 3301 2012-07-03 01:25:29Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->release->common    = '發佈';
@@ -34,4 +34,4 @@ $lang->release->bugs                  = '已關聯Bugs';
 $lang->release->ajaxGetStoriesAndBugs = '介面：獲得需求和Bug';
 $lang->release->finishStories         = '本次共完成需求%s個';
 $lang->release->resolvedBugs          = '本次共解決Bug%s個';
-$lang->release->exportStoriesAndBugs  = '導出HTML';
+$lang->release->export                = '導出HTML';

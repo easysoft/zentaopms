@@ -39,4 +39,4 @@ $lang->build->bugs               = '已关联Bug';
 $lang->build->finishStories = '本次共完成需求%s个';
 $lang->build->resolvedBugs  = '本次共解决Bug%s个';
 
-$lang->build->notice = '版本请到[项目视图]-[版本]创建';
+$lang->build->notice = '版本请到[项目视图]-[版本]创建。';

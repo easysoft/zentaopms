@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id: zh-tw.php 3277 2012-07-02 12:14:08Z wwccss $
+ * @version     $Id: zh-tw.php 3299 2012-07-03 01:00:09Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->report->common     = '統計視圖';
@@ -58,5 +58,7 @@ $lang->report->devTestRate   = '開發/測試';
 $lang->report->details       = '詳情';
 $lang->report->total         = '總計';
 $lang->report->to            = '至';
+$lang->report->taskTotal     = "共%s個任務，需%s工時";
+$lang->report->bugTotal      = "共%s個Bug";
 
 $lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，盡在專業版！</a>';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 3276 2012-07-02 12:12:06Z wwccss $
+ * @version     $Id: zh-tw.php 3283 2012-07-02 14:19:23Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
@@ -137,7 +137,7 @@ $lang->my->menu->story          = '我的需求|my|story|';
 $lang->my->menu->myProject      = '我的項目|my|project|';
 $lang->my->menu->dynamic        = '我的動態|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '我的檔案|my|profile|', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '修改密碼|my|changePassword|';
+$lang->my->menu->changePassword = '修改密碼|my|changepassword|';
 $lang->todo->menu               = $lang->my->menu;
 
 /* 產品視圖設置。*/
