@@ -34,4 +34,4 @@ $lang->release->bugs                  = '已关联Bugs';
 $lang->release->ajaxGetStoriesAndBugs = '接口：获得需求和Bug';
 $lang->release->finishStories         = '本次共完成需求%s个';
 $lang->release->resolvedBugs          = '本次共解决Bug%s个';
-$lang->release->exportStoriesAndBugs  = '导出HTML';
+$lang->release->export                = '导出HTML';

@@ -184,8 +184,8 @@ $lang->resource->release->create = 'create';
 $lang->resource->release->edit   = 'edit';
 $lang->resource->release->delete = 'delete';
 $lang->resource->release->view   = 'view';
+$lang->resource->release->export = 'export';
 $lang->resource->release->ajaxGetStoriesAndBugs = 'ajaxGetStoriesAndBugs';
-$lang->resource->release->exportStoriesAndBugs  = 'exportStoriesAndBugs';
 
 $lang->release->methodOrder[5]  = 'browse';
 $lang->release->methodOrder[10] = 'create';

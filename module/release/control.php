@@ -206,7 +206,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function exportStoriesAndBugs($type)
+    public function export($type)
     {
         if(!empty($_POST))
         {

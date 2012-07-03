@@ -34,7 +34,7 @@
       <table class='table-1 fixed'>
         <caption class='caption-t1'>
           <?php echo $lang->release->stories;?>
-          <div class='f-right'><?php if(count($stories)) common::printLink('release', 'exportStoriesAndBugs', 'type=story', $lang->release->exportStoriesAndBugs, '', "class='export'");?></div>
+          <div class='f-right'><?php if(count($stories)) common::printLink('release', 'export', 'type=story', $lang->release->export, '', "class='export'");?></div>
         </caption>
         <tr>
           <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -62,7 +62,7 @@
       <table class='table-1 fixed'>
         <caption class='caption-t1'>
           <?php echo $lang->release->bugs;?>
-          <div class='f-right'><?php if(count($bugs)) common::printLink('release', 'exportStoriesAndBugs', 'type=bug', $lang->release->exportStoriesAndBugs, '', "class='export'");?></div>
+          <div class='f-right'><?php if(count($bugs)) common::printLink('release', 'export', 'type=bug', $lang->release->export, '', "class='export'");?></div>
         </caption>
         <tr>
           <th class='w-id'>       <?php echo $lang->idAB;?></th>
