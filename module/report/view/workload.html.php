@@ -49,9 +49,9 @@
             <?php if($i == 1):?>
             <td rowspan='<?php echo count($load[$max]);?>'>
             <?php
-            $total = 0;
-            foreach($load['task'] as $count) $total += $count['count'];
-            echo $total;
+                $taskCount = isset($load['total']['task']['count']) ? $load['total']['task']['count'] : 0;
+                $taskHour  = isset($load['total']['task']['manhour']) ? $load['total']['task']['manhour'] : 0;
+                printf($lang->report->taskTotal, $taskCount, $taskHour);
             ?>
             </td>
             <?php endif;?>
@@ -60,13 +60,8 @@
             <?php if($i == 1):?>
             <td rowspan='<?php echo count($load[$max]);?>'>
             <?php
-            $total = 0;
-            if(!empty($load['bug']))
-            {
-                foreach($load['bug'] as $count) $total += $count['count'];
-                reset($load['bug']);
-            }
-            echo $total;
+                $bugCount = isset($load['total']['bug']['count']) ? $load['total']['bug']['count'] : 0;
+                printf($lang->report->bugTotal, $bugCount);
             ?>
             </td>
             <?php endif;?>
@@ -78,13 +73,9 @@
             <?php if($i == 1):?>
             <td rowspan='<?php echo count($load[$max]);?>'>
             <?php
-            $total = 0;
-            if(!empty($load['task']))
-            {
-                foreach($load['task'] as $count) $total += $count['count'];
-                reset($load['task']);
-            }
-            echo $total;
+                $taskCount = isset($load['total']['task']['count']) ? $load['total']['task']['count'] : 0;
+                $taskHour  = isset($load['total']['task']['manhour']) ? $load['total']['task']['manhour'] : 0;
+                printf($lang->report->taskTotal, $taskCount, $taskHour);
             ?>
             </td>
             <?php endif;?>
@@ -93,9 +84,8 @@
             <?php if($i == 1):?>
             <td rowspan='<?php echo count($load[$max]);?>'>
             <?php
-            $total = 0;
-            foreach($load['bug'] as $count) $total += $count['count'];
-            echo $total;
+                $bugCount = isset($load['total']['bug']['count']) ? $load['total']['bug']['count'] : 0;
+                printf($lang->report->bugTotal, $bugCount);
             ?>
             </td>
             <?php endif;?>
