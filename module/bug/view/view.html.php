@@ -225,15 +225,15 @@
           <tr>
             <td class='rowhead'><?php echo $lang->bug->linkBug;?></td>
             <td>
-<?php
-        if(isset($bug->linkBugTitles))
-        {
-            foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
-            {
-                echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID"), "#$linkBugID $linkBugTitle", '_blank') . '<br />';
-            }
-        }
-?>
+              <?php
+              if(isset($bug->linkBugTitles))
+              {
+                  foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                  {
+                      echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID"), "#$linkBugID $linkBugTitle", '_blank') . '<br />';
+                  }
+              }
+              ?>
             </td>
           </tr>
           <tr>
