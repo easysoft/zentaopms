@@ -37,7 +37,7 @@ userList = "<?php echo join(',', array_keys($users));?>".split(',');
       <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
       <td>
         <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, 'size=3 multiple=multiple class=select-3');?></span>
-        <?php echo $lang->build->notice2;?>
+        <?php if(count($builds) == 1) echo $lang->build->notice;?>
       </td>
     </tr>
     <tr>

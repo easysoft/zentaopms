@@ -193,7 +193,7 @@ $lang->release->methodOrder[15] = 'edit';
 $lang->release->methodOrder[20] = 'delete';
 $lang->release->methodOrder[25] = 'view';
 $lang->release->methodOrder[30] = 'ajaxGetStoriesAndBugs';
-$lang->release->methodOrder[35] = 'exportStoriesAndBugs';
+$lang->release->methodOrder[35] = 'export';
 
 /* Project. */
 $lang->resource->project->index          = 'index';
@@ -521,6 +521,12 @@ $lang->resource->report->productInfo      = 'productInfo';
 $lang->resource->report->bugSummary       = 'bugSummary';
 $lang->resource->report->workload         = 'workload';
 
+$lang->report->methodOrder[0]  = 'index';
+$lang->report->methodOrder[5]  = 'projectDeviation';
+$lang->report->methodOrder[10] = 'productInfo';
+$lang->report->methodOrder[15] = 'bugSummary';
+$lang->report->methodOrder[20] = 'workload';
+
 /* Search. */
 $lang->resource->search->buildForm    = 'buildForm';
 $lang->resource->search->buildQuery   = 'buildQuery';
@@ -666,11 +672,10 @@ $lang->changelog['3.1'][] = 'todo-batchCreate';
 $lang->changelog['3.2'][] = 'my-changePassword';
 $lang->changelog['3.2'][] = 'story-batchClose';
 $lang->changelog['3.2'][] = 'task-batchEdit';
-$lang->changelog['3.2'][] = 'release-exportStoriesAndBugs';
+$lang->changelog['3.2'][] = 'release-export';
 $lang->changelog['3.2'][] = 'report-index';
 $lang->changelog['3.2'][] = 'report-projectDeviation';
 $lang->changelog['3.2'][] = 'report-productInfo';
 $lang->changelog['3.2'][] = 'report-bugSummary';
 $lang->changelog['3.2'][] = 'report-workload';
-$lang->changelog['3.2'][] = 'admin-checkDB';
 $lang->changelog['3.2'][] = 'tree-fix';
