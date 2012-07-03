@@ -62,7 +62,7 @@ var customed   = <?php echo (int)$customed;?>;
     <td class='divider <?php echo $treeClass;?>'></td>
     <td>
        <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <table class='table-1 fixed colored tablesorter datatable border-sep'>
+      <table class='table-1 fixed colored tablesorter datatable'>
         <thead>
         <tr class='colhead'>
           <th class='w-id'>       <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
