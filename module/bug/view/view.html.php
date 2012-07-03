@@ -86,13 +86,13 @@
           <tr>
             <th class='rowhead'><?php echo $lang->bug->module;?></th>
             <td> 
-<?php
-        foreach($modulePath as $key => $module)
-        {
-            if(!common::printLink('bug', 'browse', "productID=$bug->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-            if(isset($modulePath[$key + 1])) echo $lang->arrow;
-        }
-?>
+              <?php
+              foreach($modulePath as $key => $module)
+              {
+                  if(!common::printLink('bug', 'browse', "productID=$bug->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                  if(isset($modulePath[$key + 1])) echo $lang->arrow;
+              }
+              ?>
             </td>
           </tr>
           <tr>
@@ -147,17 +147,17 @@
           <tr>
             <th class='rowhead'><?php echo $lang->bug->openedBuild;?></th>
             <td>
-<?php
-        if($bug->openedBuild)
-        {
-            $openedBuilds = explode(',', $bug->openedBuild);
-            foreach($openedBuilds as $openedBuild) isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
-        }
-        else
-        {
-            echo $bug->openedBuild;
-        }
-?>
+              <?php
+              if($bug->openedBuild)
+              {
+                  $openedBuilds = explode(',', $bug->openedBuild);
+                  foreach($openedBuilds as $openedBuild) isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
+              }
+              else
+              {
+                  echo $bug->openedBuild;
+              }
+              ?>
             </td>
           </tr>
           <tr>
@@ -171,10 +171,10 @@
           <tr>
             <th class='rowhead'><?php echo $lang->bug->resolution;?></th>
             <td>
-<?php
-        echo $lang->bug->resolutionList[$bug->resolution];
-        if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug"), $bug->duplicateBugTitle);
-?>
+              <?php
+              echo $lang->bug->resolutionList[$bug->resolution];
+              if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug"), $bug->duplicateBugTitle);
+              ?>
             </td>
           </tr>
           <tr>
