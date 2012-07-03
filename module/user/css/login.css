@@ -19,3 +19,7 @@ table, tr, td, th, input{ border:none;}
 #updater {width:500px; height:30px; border:none; overflow:hidden;}
 
 .hidden{display:none}   /* Add it to avoid the white flash when load css later for the updater. */
+
+#demoUsers {margin:25px 0px -15px 0px;}
+#demoUsers span{color:white}
+#demoUsers a{color:yellow}

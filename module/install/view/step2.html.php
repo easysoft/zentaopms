@@ -56,7 +56,6 @@
       <?php 
       echo html::input('dbPrefix', 'zt_', 'class=text-3');
       echo html::checkBox('clearDB', $lang->install->clearDB);
-      echo html::checkBox('importDemoData', $lang->install->importDemoData);
       ?>
       </td>
     </tr>

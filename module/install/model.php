@@ -227,16 +227,6 @@ class installModel extends model
             return $return;
         }
 
-        if($this->post->importDemoData)
-        {
-            if(!$this->importDemoData())
-            {
-                $return->result = 'fail';
-                $return->error  = $this->lang->install->errorImportDemoData;
-                return $return;
-            }
-        }
-
         return $return;
     }
 
@@ -351,36 +341,6 @@ class installModel extends model
     }
 
     /**
-     * Import demo data. 
-     * 
-     * @access public
-     * @return void
-     */
-    public function importDemoData()
-    {
-        $demoDataFile = $this->app->getAppRoot() . 'db' . $this->app->getPathFix() . 'demo.sql';
-        $insertTables = explode(";\n", file_get_contents($demoDataFile));
-        foreach($insertTables as $table)
-        { 
-            $table = trim($table);
-            if(empty($table)) continue;
-  
-            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
-            $table = str_replace('zt_', $this->config->db->prefix, $table);
-            if(!$this->dbh->query($table)) return false;
-        }
-
-        $config->company = '1';
-        $config->module  = 'common';
-        $config->owner   = 'system';
-        $config->section = 'global';
-        $config->key     = 'showDemoUsers';
-        $config->value   = '1';
-        $this->dao->replace(TABLE_CONFIG)->data($config, false)->exec(false);
-        return true;
-    }
-
-    /**
      * Create a comapny, set admin.
      * 
      * @access public
@@ -411,4 +371,35 @@ class installModel extends model
             $this->dao->update(TABLE_GROUPPRIV)->set('company')->eq($companyID)->exec($autoCompany = false);
         }
     }
+
+    /**
+     * Import demo data. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function importDemoData()
+    {
+        $demoDataFile = $this->app->getAppRoot() . 'db' . $this->app->getPathFix() . 'demo.sql';
+        $insertTables = explode(";\n", file_get_contents($demoDataFile));
+        foreach($insertTables as $table)
+        { 
+            $table = trim($table);
+            if(empty($table)) continue;
+  
+            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+            $table = str_replace('zt_', $this->config->db->prefix, $table);
+            if(!$this->dbh->query($table)) return false;
+        }
+
+        $config->company = '1';
+        $config->module  = 'common';
+        $config->owner   = 'system';
+        $config->section = 'global';
+        $config->key     = 'showDemoUsers';
+        $config->value   = '1';
+        $this->dao->replace(TABLE_CONFIG)->data($config, false)->exec(false);
+        return true;
+    }
+
 }

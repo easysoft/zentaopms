@@ -41,7 +41,7 @@
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->install->password;?></th>
-    <td><?php echo html::input('password');?></td>
+    <td><?php echo html::input('password') .  html::checkBox('importDemoData', $lang->install->importDemoData);?></td>
   </tr>
   <tr class='a-center'>
     <td colspan='2'><?php echo html::submitButton();?></td>
