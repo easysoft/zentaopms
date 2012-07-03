@@ -25,7 +25,15 @@ $(function()
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table align='center' class='table-1 a-left'> 
-    <caption><?php echo $lang->task->create;?></caption>
+    <caption>
+      <?php echo $lang->task->create;?>
+      <div class='f-right'>
+      <?php 
+      common::printLink('project', 'importTask', "project=$project->id", $lang->project->importTask);
+      common::printLink('project', 'importBug', "projectID=$project->id", $lang->project->importBug);
+      ?>
+      </div>
+    </caption>
     <tr>
       <th class='rowhead'><?php echo $lang->task->project;?></th>
       <td><?php echo $project->name;?></td>

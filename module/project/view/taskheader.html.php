@@ -21,8 +21,6 @@
   </div>
   <div class='f-right'>
     <?php 
-    common::printLink('project', 'importTask', "project=$project->id", $lang->project->importTask, '', "style='padding:0px'");
-    common::printLink('project', 'importBug', "projectID=$project->id", $lang->project->importBug, '', "style='padding:0px'");
     if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy", '', 'big');
     common::printIcon('task', 'report', "project=$project->id&browseType=$browseType", '', 'big');
     common::printIcon('task', 'batchCreate', "projectID=$project->id", '', 'big');
