@@ -11,7 +11,7 @@ all: 7z
 	sudo mv .package lampp
 	sudo mv lampp/Makefile .
 	sudo chmod a+rx lampp/start*
-	sudo chmod a+rx lampp/stop88
+	sudo chmod a+rx lampp/start88
 	sudo 7z a -sfx ZenTaoPMS.${VERSION}.linux.7z lampp
 clean:
 	sudo mv lampp lampp.bak
