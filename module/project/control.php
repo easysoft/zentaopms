@@ -108,7 +108,7 @@ class project extends control
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-        $moduleID  = ($status == 'byModule') ? (int)$param : 0;
+        $moduleID   = ($status == 'byModule') ? (int)$param : 0;
         $project    = $this->commonAction($projectID);
         $projectID  = $project->id;
      
