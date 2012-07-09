@@ -1,14 +1,8 @@
+.block {border:1px solid #efefef; height:225px;}
+.linkbox1{height:180px; overflow-y:auto}
+.linkbox2{height:225px; overflow-y:auto}
+
 #row1{margin-bottom:20px}
 #row2{margin-bottom:10px}
 #row1 .table-1, #row1 caption{border:none}
 #row2 .table-1, #row2 caption{border:none}
-
-.block {border:1px solid #efefef;}
-
-.linkbox1 {height:180px;}
-.linkbox2 {height:225px;}
-
-.mainTable {width:100%; margin:0px; padding:0px; border:none}
-.headTable {width:100%; margin:0px; padding:0px; border:none}
-.contentDiv1 {height:150px; overflow-y:auto}
-.contentDiv2 {height:195px; overflow-y:auto}
