@@ -40,7 +40,7 @@ $(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->module;?></th>
-      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID);?></span></td>
+      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='select-3'");?></span></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>

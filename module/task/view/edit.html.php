@@ -54,6 +54,10 @@
             <td><?php echo $project->name;?></td>
           </tr>  
           <tr>
+            <th class='rowhead w-p20'><?php echo $lang->task->module;?></th>
+            <td><?php echo html::select('module', $modules, $task->module, 'class="select-1"');?></td>
+          </tr>  
+          <tr>
             <th class='rowhead'><?php echo $lang->task->story;?></th>
             <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?></td>
           </tr>  

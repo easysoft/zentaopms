@@ -211,6 +211,7 @@ class task extends control
         $this->view->position[]    = $this->lang->task->edit;
         $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
         $this->view->members       = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->assignedTo);        
+        $this->view->modules       = $this->tree->getOptionMenu($this->view->task->project, $viewType = 'task');
         $this->display();
     }
 
@@ -350,13 +351,14 @@ class task extends control
         $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
         $position[]      = $task->name;
 
-        $this->view->header     = $header;
-        $this->view->position   = $position;
-        $this->view->project    = $project;
-        $this->view->task       = $task;
-        $this->view->actions    = $this->loadModel('action')->getList('task', $taskID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
+        $this->view->header      = $header;
+        $this->view->position    = $position;
+        $this->view->project     = $project;
+        $this->view->task        = $task;
+        $this->view->actions     = $this->loadModel('action')->getList('task', $taskID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
+        $this->view->modulePath  = $this->tree->getParents($task->module);
         $this->display();
     }
 

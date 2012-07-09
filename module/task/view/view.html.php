@@ -78,6 +78,18 @@
             <th class='rowhead w-p20'><?php echo $lang->task->project;?></th>
             <td><?php if(!common::printLink('project', 'task', "projectID=$task->project", $project->name)) echo $project->name;?></td>
           </tr>  
+          <tr>
+            <th class='rowhead w-p20'><?php echo $lang->task->module;?></th>
+            <td>
+              <?php
+              foreach($modulePath as $key => $module)
+              {
+                  if(!common::printLink('project', 'task', "projectID=$task->project&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                  if(isset($modulePath[$key + 1])) echo $lang->arrow;
+              }
+              ?>
+            </td>
+          </tr>  
           <tr class='nofixed'>
             <th class='rowhead'><?php echo $lang->task->story;?></th>
             <td>
