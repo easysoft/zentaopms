@@ -275,7 +275,10 @@ class common extends control
         $title = $method;
         if($method == 'create' and $icon == 'copy') $method = 'copy';
         if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
-        if((isset($lang->$module->$method) or $app->loadLang($module)) and isset($lang->$module->$method) and is_string($lang->$module->$method)) $title = $lang->$module->$method;
+        if((isset($lang->$module->$method) or $app->loadLang($module)) and isset($lang->$module->$method)) 
+        {
+            $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
+        }
 
         /* Get the icon name. */
         if(!$icon) $icon = $method;
