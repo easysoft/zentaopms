@@ -3,6 +3,7 @@
 if(count($argv) != 2) die("please set the yaml file.\n");
 $filename = $argv[1];
 if(!is_file($filename)) die("the yaml file doesn't exit\n");
+include '../lib/spyc/spyc.class.php';
 $extension = Spyc::YAMLLoadString(file_get_contents($filename));
 
 /* Basic info checking. */
