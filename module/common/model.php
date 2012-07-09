@@ -487,6 +487,7 @@ class commonModel extends model
         if($this->session->$typeIDs)
         {
             $objectIDs = $this->session->$typeIDs;
+            $this->session->set($typeIDs, '');
         }
         else
         {
