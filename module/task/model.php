@@ -427,6 +427,7 @@ class taskModel extends model
             ->setDefault('closedDate, lastEditedDate', $now) 
             ->setIF($oldTask->status == 'done',   'closedReason', 'done') 
             ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel') 
+            ->remove('_recPerPage')
             ->remove('comment')->get();
         $this->setStatus($task);
 
