@@ -3,12 +3,7 @@
 <table class="cont-lt1">
   <tr valign='top'>
     <td class='side'>
-      <div class='box-title'><?php echo $lang->report->list;?></div>
-      <div class='box-content'>
-      <ul id="report-list">
-        <li><?php echo html::a(inlink('bugSummary'), $lang->report->bugSummary);?></li>
-      </ul>
-      </div>
+      <?php include 'blockreportlist.html.php';?>
     </td>
     <td class='divider'></td>
     <td>

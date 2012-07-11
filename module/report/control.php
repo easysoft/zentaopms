@@ -32,6 +32,7 @@ class report extends control
     {
         $this->view->header->title = $this->lang->report->projectDeviation;
         $this->view->projects      = $this->report->getProjects();
+        $this->view->submenu       = 'project';
         $this->display();
     }
 
@@ -48,6 +49,7 @@ class report extends control
         $this->app->loadLang('story');
         $this->view->header->title = $this->lang->report->productInfo;
         $this->view->products      = $this->report->getProducts();
+        $this->view->submenu       = 'product';
         $this->display();
     }
 
@@ -82,6 +84,7 @@ class report extends control
         $this->view->begin         = $begin;
         $this->view->end           = $end;
         $this->view->bugs          = $this->report->getBugs($begin, $end);
+        $this->view->submenu       = 'test';
         $this->display(); 
     }
 
@@ -96,6 +99,7 @@ class report extends control
         $this->view->header->title = $this->lang->report->workload;
         $this->view->workload      = $this->report->getWorkload();
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->submenu       = 'staff';
         $this->display();
     }
 }

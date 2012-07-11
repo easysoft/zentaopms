@@ -35,8 +35,13 @@ $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = 'Project deviation';
 $lang->report->productInfo      = 'Product information';
-$lang->report->workload         = 'Workload';
 $lang->report->bugSummary       = 'Bug summary';
+$lang->report->workload         = 'Workload';
+
+$lang->reportList->project->lists[10] = 'Project deviation|report|projectdeviation';
+$lang->reportList->product->lists[10] = 'Product information|report|productinfo';
+$lang->reportList->test->lists[10]    = 'Bug summary|report|bugsummary';
+$lang->reportList->staff->lists[10]   = 'Workload|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->project       = 'Project';
