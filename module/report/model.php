@@ -360,9 +360,9 @@ EOT;
                 foreach($userTasks as $task)
                 {
                     $workload[$user]['task'][$task->projectName]['count']   = isset($workload[$user]['task'][$task->projectName]['count']) ? $workload[$user]['task'][$task->projectName]['count'] + 1 : 1;
-                    $workload[$user]['task'][$task->projectName]['manhour'] = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->consumed : $task->consumed;
+                    $workload[$user]['task'][$task->projectName]['manhour'] = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
                     $workload[$user]['total']['task']['count']   = isset($workload[$user]['total']['task']['count']) ? $workload[$user]['total']['task']['count'] + 1 : 1;
-                    $workload[$user]['total']['task']['manhour'] = isset($workload[$user]['total']['task']['manhour']) ? $workload[$user]['total']['task']['manhour'] + $task->consumed : $task->consumed;
+                    $workload[$user]['total']['task']['manhour'] = isset($workload[$user]['total']['task']['manhour']) ? $workload[$user]['total']['task']['manhour'] + $task->left : $task->left;
                 }
             }
         }
