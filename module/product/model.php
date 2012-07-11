@@ -61,7 +61,7 @@ class productModel extends model
     {
         $productMode = $this->cookie->productMode ? $this->cookie->productMode : 'all';
         $productGroup = array();
-        $products = $this->dao->select('id, status, name')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->fetchAll();
+        $products = $this->dao->select('id, status, name')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->orderBy('`order`')->fetchAll();
         foreach($products as $product)
         {
             if($productMode == 'noclosed' and $product->status == 'closed') continue;
