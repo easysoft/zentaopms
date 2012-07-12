@@ -1,8 +1,12 @@
 <?php
 if(empty($argv[1])) die('Must request a param');
 $filePath   = $argv[1];
-$phpVersion = empty($argv[2]) ? 5 : $argv[2];
-$dirName = basename($filePath);
+$users      = empty($argv[2]) ? 0 : $argv[2];
+$company    = empty($argv[3]) ? '' : $argv[3];
+$type       = empty($argv[4]) ? '' : $argv[4];
+$ip         = empty($argv[5]) ? '' : $argv[5];
+$mac        = empty($argv[6]) ? '' : $argv[6];
+$dirName    = basename($filePath);
 echo "Removing file\n";
 `rm -rf /tmp/$dirName`;
 echo "Copying file\n";
@@ -21,12 +25,12 @@ $notice = <<<EOD
   <title>Error</title>
 </head>
 <body>
-您版本的用户数是{\$properties['user']}，已经超过该版本的人数限制，请联系我们<br>
+您版本的用户数是{\$properties['user']['value']}，已经超过该版本的人数限制，请联系我们<br>
 email：<a href='mailto:zentao@cnezsoft.com'>zentao@cnezsoft.com</a><br>
 电话：4006 889923<br>
 网址：<a href='http://www.zentao.net/goto.php?item=buypro'>www.zentao.net</a><br>
 <br><br>
-The number of users is {\$properties['user']} for the edition and has exceeded the limit, please contact us.<br>
+The number of users is {\$properties['user']['value']} for the edition and has exceeded the limit, please contact us.<br>
 email:<a href='mailto:zentao@cnezsoft.com'>zentao@cnezsoft.com</a><br>
 tel:4006 889923<br>
 Web:<a href='http://www.zentao.net/goto.php?item=buypro'>www.zentao.net</a><br>
@@ -34,15 +38,15 @@ Web:<a href='http://www.zentao.net/goto.php?item=buypro'>www.zentao.net</a><br>
 </html>
 EOD;
 $limitUser =<<<EOD
-if(function_exists('ioncube_file_properties')) \$properties = ioncube_file_properties();
+if(function_exists('ioncube_license_properties')) \$properties = ioncube_license_properties();
 \$user = \$this->dao->select("COUNT('*') as count")->from(TABLE_USER)->where('deleted')->eq(0)->fetch();
-if(!empty(\$properties) and \$properties['user'] < \$user->count) die("$notice");
+if(!empty(\$properties['user']) and \$properties['user']['value'] < \$user->count) die("$notice");
 EOD;
 $limitFunc =<<<EOD
 public function __construct()
 {
     parent::__construct();
-    $limitUser;
+    $limitUser
 }
 EOD;
 foreach($modules as $module)
@@ -146,32 +150,22 @@ if($defaultValue)
     file_put_contents($defaultDir . basename($filePath) . '.php', $valueFile);
 }
 $file = "/tmp/$dirName";
-/* construct ext module class .*/
-echo "Constructing ext module class\n";
-foreach(glob("$file/module/*/ext/model/*.php") as $fileName)
-{
-    $className  = str_replace('.php', '', basename($fileName));
-    $moduleName = str_replace(array("$file/module/", "/ext/model"), '', dirname($fileName));
-    $className  = $moduleName . $className;
-    $modelName  = $moduleName . "Model";
-    $fileContent = file_get_contents($fileName);
-    $fileLines   = explode("\n", $fileContent);
-    foreach($fileLines as $num =>$line)
-    {
-        if(strpos(trim($line), '<?php') === 0)
-        {
-            $fileLines[$num] = "$line \nclass $className extends $modelName \n {";
-            break;
-        }
-    }
-    $fileLines[] = '}';
-    $fileContent = join("\n", $fileLines);
-    file_put_contents($fileName, $fileContent);
-}
+
 /* encrypt file*/
 echo "Encrypting extension\n";
 if(!is_dir('/tmp/encrypt'))mkdir("/tmp/encrypt");
-exec("/home/z/ioncubeEncoder/ioncube_encoder$phpVersion --expire-in 180d --property user=3 --copy config.php --copy phpexcel/ --copy tmp/ --copy hook --copy framework/ --copy config/ --copy view/ --copy lang/ $file --update-target --into /tmp/encrypt/", $outError);
+
+$withLicense = '';
+$order->account = $company;
+$order->users   = $users;
+$order->ip      = $ip;
+$order->mac     = $mac;
+$order->type    = $type;
+$passphrase     = empty($order->account) ? 'try' : $order->account;
+createLicense($order, $dirName, '/tmp/encrypt/');
+$withLicense = "--with-license config/license/" . basename($file) . $order->account . ".txt --passphrase $passphrase";
+
+exec("/usr/local/ioncube/ioncube_encoder5 --copy config.php --copy phpexcel/ --copy tmp/ --copy hook/ --copy framework/ --copy config/ --copy view/ --copy lang/ $withLicense $file --update-target --into /tmp/encrypt/", $outError);
 foreach($outError as $error)
 {
     $errorFile    = substr($error, 0 , strpos($error, ':'));
@@ -180,5 +174,25 @@ foreach($outError as $error)
     `cp $errorFile /tmp/encrypt/$relativeFile`;
 }
 echo "Ziping extension\n";
-`cd /tmp/encrypt/; zip -rm -9 $dirName$phpVersion.zip $dirName`;
+if(file_exists("/tmp/encrypt/$dirName$company.zip")) `rm /tmp/encrypt/$dirName$company.zip`;
+`cd /tmp/encrypt/; zip -rm -9 $dirName$company.zip $dirName`;
 echo "Finished\n";
+
+function createLicense($order, $saveName, $encryptPath)
+{
+    echo "Creating license.\n";
+    $property = $order->users == 0 ? '' : "--property user=$order->users";
+    $expire   = empty($order->account) ? '--expire-in 180d' : '';
+    if(!is_dir($encryptPath . $saveName))mkdir($encryptPath . $saveName);
+    if(!is_dir($encryptPath . $saveName . "/config"))mkdir($encryptPath . $saveName . '/config');
+    if(!is_dir($encryptPath . $saveName . "/config/license"))mkdir($encryptPath . $saveName . "/config/license");
+    $server = empty($order->ip) ? '' : $order->ip;
+    $server = !empty($order->mac) ? empty($server) ? "'{{$order->mac}}'" : "'$server{{$order->mac}}'" : $server;
+    $server = empty($server) ? '' : '--allowed-server ' . $server;
+    $expire  = $order->type == 'year' ? "--expire-in 365d" : $expire;
+    $expire  = $order->type == 'try' ? "--expire-in 30d" : $expire;
+    $expire  = is_numeric($order->type) ? "--expire-in {$order->type}d" : $expire;
+    $passphrase = empty($order->account) ? 'try' : $order->account;
+    $license = $encryptPath . $saveName . '/config/license/' . $saveName . $order->account . '.txt';
+    echo `/usr/local/ioncube/make_license $property $expire --passphrase $passphrase -o $license`;
+}
