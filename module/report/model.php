@@ -239,7 +239,14 @@ EOT;
     {
         $projects = array();
 
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
+        $tasks = $this->dao->select('t1.*')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t1.status')->ne('cancel')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll();
         foreach($tasks as $task)
         {
             $projects[$task->project]->estimate = isset($projects[$task->project]->estimate) ? $projects[$task->project]->estimate + $task->estimate : 1;
@@ -248,7 +255,13 @@ EOT;
             if($task->type == 'test')  $projects[$task->project]->testConsumed = isset($projects[$task->project]->testConsumed) ? $projects[$task->project]->testConsumed + $task->consumed : 1;
         }
 
-        $bugs = $this->dao->select('project')->from(TABLE_BUG)->where('deleted')->eq(0)->fetchAll();
+        $bugs = $this->dao->select('t1.project')
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll();
         foreach($bugs as $bug)
         {
             if($bug->project)
@@ -257,7 +270,12 @@ EOT;
             }
         }
 
-        $stories = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->fetchAll();
+        $stories = $this->dao->select('t1.project')
+            ->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')
+            ->on('t1.project = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->fetchAll();
         foreach($stories as $story)
         {
             $projects[$story->project]->stories = isset($projects[$story->project]->stories) ? $projects[$story->project]->stories + 1 : 1;
