@@ -24,7 +24,7 @@
             <td align='left' rowspan="<?php echo $count;?>"><?php echo '<p>' . $product->name . "</p><p>{$lang->product->PO}: " . $product->PO . '</p>';?></td>
             <?php if(isset($product->plans)):?>
             <?php foreach($product->plans as $id => $plan):?>
-            <?php if($id != 0) echo "<tr class='a-center'>"?>
+            <?php if($id != 1) echo "<tr class='a-center'>"?>
               <td align='left'><?php echo $plan->title;?></td>
               <td align='left'><?php echo $plan->desc;?></td>
               <td><?php echo $plan->begin;?></td>
@@ -33,7 +33,7 @@
               <td align='left'><?php echo $lang->story->statusList['active']  . ' : ' . (isset($plan->status['active']) ? $plan->status['active'] : 0);?></td>
               <td align='left'><?php echo $lang->story->statusList['closed']  . ' : ' . (isset($plan->status['closed']) ? $plan->status['closed'] : 0);?></td>
               <td align='left'><?php echo $lang->story->statusList['changed'] . ' : ' . (isset($plan->status['changed']) ? $plan->status['changed'] : 0);?></td>
-            <?php if($id != 0) echo "</tr>"?>
+            <?php if($id != 1) echo "</tr>"?>
             <?php endforeach;?>
             <?php else:?>
               <td></td>

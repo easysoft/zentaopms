@@ -249,10 +249,11 @@ EOT;
             ->fetchAll();
         foreach($tasks as $task)
         {
-            $projects[$task->project]->estimate = isset($projects[$task->project]->estimate) ? $projects[$task->project]->estimate + $task->estimate : 1;
-            $projects[$task->project]->consumed = isset($projects[$task->project]->consumed) ? $projects[$task->project]->consumed + $task->consumed : 1;
-            if($task->type == 'devel') $projects[$task->project]->devConsumed  = isset($projects[$task->project]->devConsumed) ? $projects[$task->project]->devConsumed + $task->consumed : 1;
-            if($task->type == 'test')  $projects[$task->project]->testConsumed = isset($projects[$task->project]->testConsumed) ? $projects[$task->project]->testConsumed + $task->consumed : 1;
+            $projects[$task->project]->estimate = isset($projects[$task->project]->estimate) ? $projects[$task->project]->estimate + $task->estimate : $task->estimate;
+            $projects[$task->project]->consumed = isset($projects[$task->project]->consumed) ? $projects[$task->project]->consumed + $task->consumed : $task->consumed;
+            $projects[$task->project]->tasks    = isset($projects[$task->project]->tasks)    ? $projects[$task->project]->tasks + 1 : 1;
+            if($task->type == 'devel') $projects[$task->project]->devConsumed  = isset($projects[$task->project]->devConsumed) ? $projects[$task->project]->devConsumed + $task->consumed : $task->consumed;
+            if($task->type == 'test')  $projects[$task->project]->testConsumed = isset($projects[$task->project]->testConsumed) ? $projects[$task->project]->testConsumed + $task->consumed : $task->consumed;
         }
 
         $bugs = $this->dao->select('t1.project')
@@ -274,7 +275,10 @@ EOT;
             ->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
+            ->leftJoin(TABLE_STORY)->alias('t3')
+            ->on('t1.story = t3.id')
             ->where('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
             ->fetchAll();
         foreach($stories as $story)
         {
@@ -306,18 +310,21 @@ EOT;
         $products    = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
         $plans       = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))->fetchAll('id');
         $planStories = $this->dao->select('plan, id, status')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('plan')->in(array_keys($plans))->fetchGroup('plan', 'id');
+        foreach($plans as $plan)
+        {
+            $products[$plan->product]->plans[$plan->id]->title = $plan->title;
+            $products[$plan->product]->plans[$plan->id]->desc  = $plan->desc;
+            $products[$plan->product]->plans[$plan->id]->begin = $plan->begin;
+            $products[$plan->product]->plans[$plan->id]->end   = $plan->end;
+        }
         foreach($planStories as $planID => $stories)
         {
-            foreach($stories as $story) $statusList[$story->status][] = $story;
-            foreach(array_keys($statusList) as $status) 
+            foreach($stories as $story)
             {
-                if(isset($plans[$planID]))
-                {
-                    $plans[$planID]->status[$status] = count($statusList[$status]);
-                }
+                $plan = $plans[$story->plan];
+                $products[$plan->product]->plans[$story->plan]->status[$story->status] = isset($products[$plan->product]->plans[$story->plan]->status[$story->status]) ? $products[$plan->product]->plans[$story->plan]->status[$story->status] + 1 : 1;
             }
         }
-        foreach($plans as $plan) $products[$plan->product]->plans[] = $plan;
         return $products;
     }
 

@@ -13,6 +13,7 @@
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->report->id;?></th>
           <th class="w-200px"><?php echo $lang->report->project;?></th>
+          <th><?php echo $lang->report->task;?></th>
           <th><?php echo $lang->report->stories;?></th>
           <th><?php echo $lang->report->bugs;?></th>
           <th><?php echo $lang->report->devConsumed;?></th>
@@ -29,6 +30,7 @@
           <tr class="a-center">
             <td><?php echo $id;?></td>
             <td align="left"><?php echo $project->name;?></td>
+            <td><?php echo $project->tasks;?></td>
             <td><?php echo $project->stories;?></td>
             <td><?php echo $project->bugs;?></td>
             <td><?php echo $project->devConsumed;?></td>
@@ -42,7 +44,7 @@
               <?php 
                 if($project->estimate)
                 {
-                    echo $deviation > 0 ? ('+' . round($deviation / $project->estimate * 100, 2)) : round($deviation / $project->estimate * 100, 2) . '%';
+                    echo $deviation > 0 ? ('+' . round($deviation / $project->estimate * 100, 2)) . '%' : round($deviation / $project->estimate * 100, 2) . '%';
                 }
                 else
                 {
