@@ -4,15 +4,15 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
  */
 
 /**
- * The valida clas, checking datas by rules.
- * 
+ * The valida class, checking datas by rules.
+ *
  * @package framework
  */
 class validater
@@ -230,34 +230,6 @@ class validater
     }
 
     /**
-     * Must greater than a value.
-     * 
-     * @param  mixed  $var 
-     * @param  mixed $value 
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function checkGT($var, $value)
-    {
-        return $var > $value;
-    }
-
-    /**
-     * Must greater than or equal a value.
-     * 
-     * @param  mixed  $var 
-     * @param  mixed $value 
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function checkGE($var, $value)
-    {
-        return $var >= $value;
-    }
-
-    /**
      * Call a function to check it.
      * 
      * @param  mixed  $var 
@@ -426,16 +398,45 @@ class fixer
     }
 
     /**
+     * Must greater than a value.
+     * 
+     * @param  mixed  $var 
+     * @param  mixed $value 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkGT($var, $value)
+    {
+        return $var > $value;
+    }
+    
+    /**
+     * Must greater than or equal a value.
+     * 
+     * @param  mixed  $var 
+     * @param  mixed $value 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkGE($var, $value)
+    {
+        return $var >= $value;
+    }
+    
+    /**
      * Strip tags 
      * 
      * @param  string $fieldName 
+     * @param  string $allowableTags 
      * @access public
      * @return object fixer object
      */
-    public function stripTags($fieldName)
+    public function stripTags($fieldName, $allowableTags = FILTER_SANITIZE_STRING)
     {
         $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName) $this->data->$fieldName = filter_var($this->data->$fieldName, FILTER_SANITIZE_STRING);
+        foreach($fields as $fieldName) $this->data->$fieldName = strip_tags($this->data->$fieldName, $allowableTags);
         return $this;
     }
 
