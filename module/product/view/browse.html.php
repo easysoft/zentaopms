@@ -31,10 +31,10 @@ var browseType = '<?php echo $browseType;?>';
     <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
-    <?php common::printIcon('story', 'export', "productID=$productID&orderBy=$orderBy", '', 'big');?>
-    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'big');?>
-    <?php common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID", '', 'big');?>
-    <?php common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID", '', 'big'); ?>
+    <?php common::printIcon('story', 'export', "productID=$productID&orderBy=$orderBy");?>
+    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");?>
+    <?php common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");?>
+    <?php common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); ?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
@@ -95,10 +95,10 @@ var browseType = '<?php echo $browseType;?>';
             <td class='a-right'>
               <?php 
               $vars = "story={$story->id}";
-              common::printIcon('story', 'change', $vars, $story);
-              common::printIcon('story', 'review', $vars, $story);
-              common::printIcon('story', 'edit', "storyID=$story->id", $story);
-              common::printIcon('story', 'createCase', "productID=$story->product&module=0&from=&param=0&$vars", $story, 'small', 'createCase');
+              common::printIcon('story', 'change', $vars, $story, 'list');
+              common::printIcon('story', 'review', $vars, $story, 'list');
+              common::printIcon('story', 'edit', "storyID=$story->id", $story, 'list');
+              common::printIcon('story', 'createCase', "productID=$story->product&module=0&from=&param=0&$vars", $story, 'list', 'createCase');
               ?>
             </td>
           </tr>

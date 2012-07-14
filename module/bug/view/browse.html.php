@@ -37,10 +37,10 @@ var customed   = <?php echo (int)$customed;?>;
     ?>
   </div>
   <div class='f-right'>
-    <?php if($browseType != 'needconfirm') common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy", '', 'big');?>
-    <?php common::printIcon('bug', 'customFields', '', '', 'big'); ?>
-    <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'big');?>
-    <?php common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID", '', 'big'); ?>
+    <?php if($browseType != 'needconfirm') common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy");?>
+    <?php common::printIcon('bug', 'customFields'); ?>
+    <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");?>
+    <?php common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID"); ?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
@@ -133,10 +133,10 @@ var customed   = <?php echo (int)$customed;?>;
           <td class='a-right'>
             <?php
             $params = "bugID=$bug->id";
-            common::printIcon('bug', 'resolve', $params, $bug);
-            common::printIcon('bug', 'close',   $params, $bug);
-            common::printIcon('bug', 'edit',    $params, $bug);
-            common::printIcon('bug', 'create',  "product=$bug->product&extra=bugID=$bug->id", $bug, 'small', 'copy');
+            common::printIcon('bug', 'resolve', $params, $bug, 'list');
+            common::printIcon('bug', 'close',   $params, $bug, 'list');
+            common::printIcon('bug', 'edit',    $params, $bug, 'list');
+            common::printIcon('bug', 'create',  "product=$bug->product&extra=bugID=$bug->id", $bug, 'list', 'copy');
             ?>
           </td>
           <?php endif;?>

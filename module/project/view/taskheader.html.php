@@ -21,10 +21,10 @@
   </div>
   <div class='f-right'>
     <?php 
-    if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy", '', 'big');
-    common::printIcon('task', 'report', "project=$project->id&browseType=$browseType", '', 'big');
-    common::printIcon('task', 'batchCreate', "projectID=$project->id", '', 'big');
-    common::printIcon('task', 'create', "project=$project->id", '', 'big');
+    if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy");
+    common::printIcon('task', 'report', "project=$project->id&browseType=$browseType");
+    common::printIcon('task', 'batchCreate', "projectID=$project->id");
+    common::printIcon('task', 'create', "project=$project->id");
     ?>
   </div>
 </div>

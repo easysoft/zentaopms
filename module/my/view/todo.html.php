@@ -34,9 +34,9 @@
     </div>
     <div class='f-right'>
       <?php 
-      common::printLink('todo', 'export', "account=$account&orderBy=id_desc", $lang->export, '', 'class="export w-date"');
-      common::printLink('todo', 'batchCreate', "", $lang->todo->batchCreate);
-      echo html::a($this->createLink('todo', 'create', "date=" . str_replace('-', '', $date)), $lang->todo->create);
+      common::printIcon('todo', 'export', "account=$account&orderBy=id_desc");
+      common::printIcon('todo', 'batchCreate');
+      common::printIcon('todo', 'create', "date=" . str_replace('-', '', $date));
       ?>
     </div>
   </div>
@@ -51,7 +51,7 @@
       <th class='w-hour'><?php echo $lang->todo->beginAB;?></th>
       <th class='w-hour'><?php echo $lang->todo->endAB;?></th>
       <th class='w-status'><?php echo $lang->todo->status;?></th>
-      <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -70,12 +70,11 @@
       <td><?php echo $todo->begin;?></td>
       <td><?php echo $todo->end;?></td>
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
-      <td>
+      <td class='f-right'>
         <?php 
         echo html::a($this->createLink('todo', 'mark',   "id=$todo->id&status=$todo->status"), $lang->todo->{'mark'.ucfirst($todo->status)}, 'hiddenwin');
-        echo html::a($this->createLink('todo', 'view',   "id=$todo->id&from=my"), $lang->todo->viewAB);
-        echo html::a($this->createLink('todo', 'edit',   "id=$todo->id"), $lang->edit);
-        echo html::a($this->createLink('todo', 'delete', "id=$todo->id"), $lang->delete, 'hiddenwin');
+        common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list');
+        common::printIcon('todo', 'delete', "id=$todo->id", '', 'list', '', 'hiddenwin');
         ?>
       </td>
     </tr>

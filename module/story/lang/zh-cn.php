@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
-$lang->story->create      = "新增需求";
+$lang->story->create      = "新增";
 $lang->story->createCase  = "建用例";
 $lang->story->batchCreate = "批量添加";
 $lang->story->change      = "变更";
@@ -26,7 +26,7 @@ $lang->story->tasks       = "相关任务";
 $lang->story->taskCount   = '任务数';
 $lang->story->bugs        = "Bug";
 $lang->story->linkStory   = '关联需求';
-$lang->story->export      = "导出数据";
+$lang->story->export      = "导出";
 $lang->story->reportChart = "统计报表";
 
 $lang->story->common         = '需求';
@@ -189,7 +189,7 @@ $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。'); 
 
 /* 统计报表。*/
-$lang->story->report->common = '统计报表';
+$lang->story->report->common = '报表';
 $lang->story->report->select = '请选择报表类型';
 $lang->story->report->create = '生成报表';
 

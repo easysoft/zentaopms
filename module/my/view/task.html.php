@@ -42,7 +42,7 @@
       <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
       <th class='w-status'><?php echo $lang->statusAB;?></th>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
-      <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>   
     <tbody>
@@ -61,12 +61,12 @@
       <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class='<?php echo $task->status;?>'><?php echo $lang->task->statusList[$task->status];?></td>
       <td><?php echo $users[$task->openedBy];?></td>
-      <td>
+      <td class='a-right'>
         <?php 
-        if(!(($task->status == 'wait') and common::printLink('task', 'start',  "taskID=$task->id", $lang->task->buttonStart))) echo $lang->task->buttonStart . ' ';
-        if(!(($task->status == 'wait'   or $task->status == 'doing')  and common::printLink('task', 'finish', "taskID=$task->id", $lang->task->buttonDone))) echo $lang->task->buttonDone . ' ';
-        if(!(($task->status == 'done'   or $task->status == 'cancel') and common::printLink('task', 'close', "taskID=$task->id", $lang->task->buttonClose))) echo $lang->task->buttonClose . ' ';
-        if(!(($task->status == 'closed' or $task->status == 'done' or $task->status == 'cancel') and common::printLink('task', 'activate',   "taskID=$task->id", $lang->task->buttonActivate)))   echo $lang->task->buttonActivate . ' ';
+        common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list');
+        common::printIcon('task', 'finish',   "taskID=$task->id", $task, 'list');
+        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list');
+        common::printIcon('task', 'activate', "taskID=$task->id", $task, 'list');
         ?>
       </td>
     </tr>

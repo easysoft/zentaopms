@@ -22,19 +22,19 @@
     ?>
   </div>
 </div>
-<table class='table-1 tablesorter'>
+<table class='table-1 tablesorter fixed'>
   <thead>
     <tr class='colhead'>
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
-      <th><?php echo $lang->story->product;?></th>
+      <th class='w-200px'><?php echo $lang->story->product;?></th>
       <th><?php echo $lang->story->title;?></th>
-      <th><?php echo $lang->story->plan;?></th>
+      <th class='w-150px'><?php echo $lang->story->plan;?></th>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
       <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
       <th class='w-status'><?php echo $lang->statusAB;?></th>
-      <th class='w-stage'><?php echo $lang->story->stageAB;?></th>
-      <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
+      <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>
@@ -50,11 +50,11 @@
       <td><?php echo $story->estimate;?></td>
       <td class='<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
       <td><?php echo $lang->story->stageList[$story->stage];?></td>
-      <td>
+      <td class='a-right'>
         <?php
-        if(!($story->status != 'closed' and common::printLink('story', 'change', "storyID=$story->id", $lang->story->change))) echo $lang->story->change . ' ';
-        if(!(($story->status == 'draft' or $story->status == 'changed') and common::printLink('story', 'review', "storyID=$story->id", $lang->story->review))) echo $lang->story->review . ' ';
-        if(!($story->status != 'closed' and common::printLink('story', 'close', "storyID=$story->id", $lang->story->close))) echo $lang->story->close . ' ';
+        common::printIcon('story', 'change', "storyID=$story->id", $story, 'list');
+        common::printIcon('story', 'review', "storyID=$story->id", $story, 'list');
+        common::printIcon('story', 'close', "storyID=$story->id", $story, 'list');
         ?>
       </td>
     </tr>

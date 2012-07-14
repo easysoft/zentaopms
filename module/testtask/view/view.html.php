@@ -54,9 +54,9 @@
   {
       common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
       common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
-      common::printIcon('testtask', 'edit',   "taskID=$task->id", '', 'big');
-      common::printIcon('testtask', 'delete', "taskID=$task->id", '', 'big', '', 'hiddenwin');
-      echo common::printRPN($browseLink);
+      common::printLink('testtask', 'edit',   "taskID=$task->id",$lang->edit);
+      common::printLink('testtask', 'delete', "taskID=$task->id", $lang->delete, 'hiddenwin');
+      echo html::a($browseLink, $lang->goback);
   }
   ?>
 </div>

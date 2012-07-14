@@ -66,17 +66,17 @@ $lang->bug->lastEditedDateAB = '修改日期';
 
 /* 方法列表。*/
 $lang->bug->index              = '首页';
-$lang->bug->create             = '创建Bug';
+$lang->bug->create             = '创建';
 $lang->bug->confirmBug         = '确认';
 $lang->bug->edit               = '编辑Bug';
 $lang->bug->assignTo           = '指派';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug详情';
-$lang->bug->resolve            = '解决Bug';
-$lang->bug->close              = '关闭Bug';
+$lang->bug->resolve            = '解决';
+$lang->bug->close              = '关闭';
 $lang->bug->activate           = '激活Bug';
 $lang->bug->reportChart        = '报表统计';
-$lang->bug->export             = '导出数据';
+$lang->bug->export             = '导出';
 $lang->bug->delete             = '删除Bug';
 $lang->bug->saveTemplate       = '保存模板';
 $lang->bug->deleteTemplate     = '删除模板';
@@ -241,7 +241,7 @@ $lang->bug->resolutionList['willnotfix'] = "不予解决";
 $lang->bug->resolutionList['tostory']    = '转为需求';
 
 /* 统计报表。*/
-$lang->bug->report->common        = '统计报表';
+$lang->bug->report->common        = '报表';
 $lang->bug->report->select        = '请选择报表类型';
 $lang->bug->report->create        = '生成报表';
 

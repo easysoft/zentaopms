@@ -33,7 +33,7 @@
       <th class='w-type'>  <?php echo $lang->typeAB;?></th>
       <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
       <th class='w-status'><?php echo $lang->statusAB;?></th>
-      <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-40px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>
@@ -45,11 +45,7 @@
       <td><?php echo $lang->testcase->typeList[$case->type];?></td>
       <td><?php echo $users[$case->openedBy];?></td>
       <td><?php echo $lang->testcase->statusList[$case->status];?></td>
-      <td>
-        <?php
-        common::printLink('testcase', 'edit',   "caseID=$case->id", $lang->testcase->buttonEdit);
-        ?>
-      </td>
+      <td><?php common::printIcon('testcase', 'edit', "caseID=$case->id", '', 'list');?></td>
     </tr>
     <?php endforeach;?>
   </tbody> 

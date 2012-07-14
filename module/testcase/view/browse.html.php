@@ -30,9 +30,9 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
   <div class='f-right'>
     <?php //common::printLink('testcase', 'import', "productID=$productID", '&nbsp;', '', "class='import icon-green-big-import' title='{$lang->testcase->import}'"); ?>
-    <?php if($browseType != 'needconfirm') common::printIcon('testcase', 'export', "productID=$productID&orderBy=$orderBy", '', 'big'); ?>
-    <?php common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID", '', 'big');?>
-    <?php common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID", '', 'big'); ?>
+    <?php if($browseType != 'needconfirm') common::printIcon('testcase', 'export', "productID=$productID&orderBy=$orderBy"); ?>
+    <?php common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");?>
+    <?php common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID"); ?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
@@ -91,10 +91,10 @@ var moduleID   = '<?php echo $moduleID;?>';
                 <?php
                 common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
                 common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
-                common::printIcon('testcase', 'edit',    "caseID=$case->id", $case);
-                common::printIcon('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $case, 'small', 'copy');
-                common::printIcon('testcase', 'delete',  "caseID=$case->id", '', 'small', '', 'hiddenwin');
-                common::printIcon('testcase', 'toBug',   "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $case, 'small', 'createBug');
+                common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
+                common::printIcon('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
+                common::printIcon('testcase', 'delete',  "caseID=$case->id", '', 'list', '', 'hiddenwin');
+                common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'createBug');
                 ?>
               </td>
               <?php endif;?>

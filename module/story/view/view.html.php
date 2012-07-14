@@ -20,21 +20,19 @@
   {
       ob_start();
 
-      if($this->story->isClickable($story, 'change')) common::printLink('story', 'change', "storyID=$story->id", $lang->story->change);
-      if($this->story->isClickable($story, 'review')) common::printLink('story', 'review', "storyID=$story->id", $lang->story->review);
-      if($this->story->isClickable($story, 'close'))  common::printLink('story', 'close',  "storyID=$story->id", $lang->story->close);
-      if($this->story->isClickable($story, 'activate'))  common::printLink('story', 'activate',  "storyID=$story->id", $lang->story->activate);
+      if($this->story->isClickable($story, 'change')) common::printIcon('story', 'change', "storyID=$story->id");
+      if($this->story->isClickable($story, 'review')) common::printIcon('story', 'review', "storyID=$story->id");
+      if($this->story->isClickable($story, 'close'))  common::printIcon('story', 'close',  "storyID=$story->id");
+      if(!$this->story->isClickable($story, 'activate'))  common::printIcon('story', 'activate',  "storyID=$story->id");
+      common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'button', 'createCase');
 
-      if($this->story->isClickable($story, 'toCase'))  common::printSplitIcon();
-      common::printLink('testcase', 'create', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", $lang->story->createCase);
-
-      if($this->story->isClickable($story, 'edit'))  common::printSplitIcon();
-      common::printIcon('story', 'edit', "storyID=$story->id", '', 'big');
+      common::printDivider();
+      common::printIcon('story', 'edit', "storyID=$story->id");
       common::printCommentIcon('story');
-      common::printIcon('story', 'create', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'big', 'copy');
-      common::printIcon('story', 'delete', "storyID=$story->id", '', 'big', '', 'hiddenwin');
+      common::printIcon('story', 'create', "productID=$story->product&moduleID=$story->module&storyID=$story->id", '', 'button', 'copy');
+      common::printIcon('story', 'delete', "storyID=$story->id", '', 'button', '', 'hiddenwin');
 
-      if($this->story->isClickable('story', 'goback')) common::printSplitIcon();
+      common::printDivider();
       common::printRPN($browseLink, $preAndNext);
 
       $actionLinks = ob_get_contents();

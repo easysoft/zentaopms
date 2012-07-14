@@ -33,7 +33,7 @@
     <th class='w-user'>    <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
     <th class='w-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
     <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-    <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+    <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -50,30 +50,9 @@
     <td class='a-right'>
       <?php
       $params = "bugID=$bug->id";
-      if(common::hasPriv('bug', 'resolve'))
-      {
-          if($bug->status == 'active')
-          {
-              echo html::a($this->createLink('bug', 'resolve', $params), '&nbsp;', '', "class='icon-green-small-bug-resolve' title='{$lang->bug->buttonResolve}'", false);
-          }
-          else
-          {
-              echo "<span class='icon-gray-small-bug-resolve'>&nbsp;</span>";
-          }
-      }
-
-      if(common::hasPriv('bug', 'close'))
-      {
-          if($bug->status == 'resolved')
-          {
-              echo html::a($this->createLink('bug', 'close', $params), '&nbsp;', '', "class='icon-green-small-bug-close' title='{$lang->bug->buttonClose}'", false);
-          }
-          else
-          {
-              echo "<span class='icon-gray-small-bug-close'>&nbsp;</span>";
-          }
-      }
-      common::printLink('bug', 'edit', $params, '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->bug->buttonEdit}'", false);
+      common::printIcon('bug', 'resolve', $params, $bug, 'list');
+      common::printIcon('bug', 'close', $params, $bug, 'list');
+      common::printIcon('bug', 'edit', $params, $bug, 'list');
       ?>
     </td>
   </tr>

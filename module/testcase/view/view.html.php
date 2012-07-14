@@ -21,22 +21,18 @@
     {
         ob_start();
 
-        common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
-        common::printLink('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", $lang->testtask->results, '', 'class="results"');
+        common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion");
+        common::printIcon('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version");
 
-        if($this->testcase->isClickable($case, 'toBug'))
-        {
-            common::printSplitIcon();
-            common::printLink('bug', 'create', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", $lang->testtask->createBug);
-        }
-        
-        if($this->testcase->isClickable($case, 'edit')) common::printSplitIcon();
-        common::printIcon('testcase', 'edit',"caseID=$case->id", '', 'big');
+        common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '', 'button', 'createBug');
+
+        common::printDivider();
+        common::printIcon('testcase', 'edit',"caseID=$case->id");
         common::printCommentIcon('testcase');
-        common::printIcon('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '', 'big', 'copy');
-        common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'big', '', 'hiddenwin');
+        common::printIcon('testcase', 'create', "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
+        common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'button', '', 'hiddenwin');
         
-        if($this->testcase->isClickable($case, 'goback')) common::printSplitIcon();
+        common::printDivider();
         common::printRPN($browseLink, $preAndNext);
 
         $actionLinks = ob_get_contents();

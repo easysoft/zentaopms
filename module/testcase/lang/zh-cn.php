@@ -49,7 +49,7 @@ $lang->testcase->stepExpect = '预期';
 
 $lang->testcase->common             = '用例管理';
 $lang->testcase->index              = "用例管理首页";
-$lang->testcase->create             = "创建用例";
+$lang->testcase->create             = "建用例";
 $lang->testcase->batchCreate        = "批量添加";
 $lang->testcase->delete             = "删除用例";
 $lang->testcase->view               = "用例详情";
@@ -57,7 +57,7 @@ $lang->testcase->edit               = "编辑用例";
 $lang->testcase->delete             = "删除用例";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->import             = "导入用例";
-$lang->testcase->export             = "导出数据";
+$lang->testcase->export             = "导出";
 $lang->testcase->confirmStoryChange = '确认需求变动';
 
 $lang->testcase->deleteStep   = '删除';

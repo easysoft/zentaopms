@@ -10,7 +10,7 @@ function browseByModule(active)
 
 $(document).ready(function()
 {
-    $("a.icon-green-big-bug-customFields").colorbox({width:600, height:340, iframe:true, transition:'none'});
+    $("a.customFields").colorbox({width:600, height:340, iframe:true, transition:'none'});
     $('#' + browseType + 'Tab').addClass('active'); 
     $('#module' + moduleID).addClass('active'); 
 

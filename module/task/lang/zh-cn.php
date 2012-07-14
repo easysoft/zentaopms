@@ -10,21 +10,21 @@
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任务一览";
-$lang->task->create             = "新增任务";
+$lang->task->create             = "新增";
 $lang->task->batchCreate        = "批量添加";
 $lang->task->batchEdit          = "批量编辑";
 $lang->task->import             = "导入之前未完任务";
-$lang->task->edit               = "编辑任务";
-$lang->task->delete             = "删除任务";
+$lang->task->edit               = "编辑";
+$lang->task->delete             = "删除";
 $lang->task->view               = "查看任务";
 $lang->task->logEfforts         = "记录工时";
-$lang->task->start              = "开始任务";
-$lang->task->finish             = "完成任务";
-$lang->task->close              = "关闭任务";
+$lang->task->start              = "开始";
+$lang->task->finish             = "完成";
+$lang->task->close              = "关闭";
 $lang->task->batchClose         = "批量关闭";
-$lang->task->cancel             = "取消任务";
-$lang->task->activate           = "激活任务";
-$lang->task->export             = "导出数据";
+$lang->task->cancel             = "取消";
+$lang->task->activate           = "激活";
+$lang->task->export             = "导出";
 $lang->task->reportChart        = "报表统计";
 $lang->task->fromBug            = '来源Bug';
 $lang->task->confirmStoryChange = "确认需求变动";
@@ -135,7 +135,7 @@ $lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天
 $lang->task->remindBug           = "该任务为Bug转化得到，是否更新Bug:%s ?";
 
 /* 统计报表。*/
-$lang->task->report->common = '统计报表';
+$lang->task->report->common = '报表';
 $lang->task->report->select = '请选择报表类型';
 $lang->task->report->create = '生成报表';
 

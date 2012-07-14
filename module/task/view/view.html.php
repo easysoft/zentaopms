@@ -24,19 +24,19 @@
   {
       ob_start();
       //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
-      common::printLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $lang->task->assign);
-      if($this->task->isClickable($task, 'start'))    common::printLink('task', 'start',    "taskID=$task->id", $lang->task->buttonStart);
-      if($this->task->isClickable($task, 'finish'))   common::printLink('task', 'finish',   "taskID=$task->id", $lang->task->buttonDone);
-      if($this->task->isClickable($task, 'close'))    common::printLink('task', 'close',    "taskID=$task->id", $lang->task->buttonClose);
-      if($this->task->isClickable($task, 'activate')) common::printLink('task', 'activate', "taskID=$task->id", $lang->task->buttonActivate);
-      if($this->task->isClickable($task, 'cancel'))   common::printLink('task', 'cancel',   "taskID=$task->id", $lang->task->buttonCancel);
+      common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id");
+      if($this->task->isClickable($task, 'start'))    common::printIcon('task', 'start',    "taskID=$task->id");
+      if($this->task->isClickable($task, 'finish'))   common::printIcon('task', 'finish',   "taskID=$task->id");
+      if($this->task->isClickable($task, 'close'))    common::printIcon('task', 'close',    "taskID=$task->id");
+      if($this->task->isClickable($task, 'activate')) common::printIcon('task', 'activate', "taskID=$task->id");
+      if($this->task->isClickable($task, 'cancel'))   common::printIcon('task', 'cancel',   "taskID=$task->id");
 
-      if($this->task->isClickable($task, 'edit')) common::printSplitIcon();
-      common::printIcon('task', 'edit',  "taskID=$task->id", '', 'big');
+      common::printDivider();
+      common::printIcon('task', 'edit',  "taskID=$task->id");
       common::printCommentIcon('task');
-      common::printIcon('task', 'delete',"projectID=$task->project&taskID=$task->id", '', 'big', '', 'hiddenwin');
+      common::printIcon('task', 'delete',"projectID=$task->project&taskID=$task->id", '', 'button', '', 'hiddenwin');
 
-      if($this->task->isClickable($task, 'goback')) common::printSplitIcon();
+      common::printDivider();
       common::printRPN($browseLink, $preAndNext);
 
       $actionLinks = ob_get_contents();

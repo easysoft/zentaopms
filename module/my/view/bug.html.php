@@ -34,7 +34,7 @@
     <th class='w-user'><?php echo $lang->openedByAB;?></th>
     <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
     <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
-    <th class='w-130px {sorter:false}'><?php echo $lang->actions;?></th>
+    <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -48,12 +48,12 @@
     <td><?php echo $users[$bug->openedBy];?></td>
     <td><?php echo $users[$bug->resolvedBy];?></td>
     <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
-    <td>
+    <td class='a-right'>
       <?php
       $params = "bugID=$bug->id";
-      if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
-      if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))     echo $lang->bug->buttonClose . ' ';
-      common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+      common::printIcon('bug', 'resolve', $params, $bug, 'list');
+      common::printIcon('bug', 'close', $params, $bug, 'list');
+      common::printIcon('bug', 'edit', $params, '', 'list');
       ?>
     </td>
   </tr>

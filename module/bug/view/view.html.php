@@ -22,26 +22,22 @@
     if(!$bug->deleted)
     {
         ob_start();
-        if($this->bug->isClickable($bug, 'confirmBug')) common::printLink('bug', 'confirmBug', $params, $lang->bug->buttonConfirm);
-        common::printLink('bug', 'assignTo', $params, $lang->bug->buttonAssign);
-        if($this->bug->isClickable($bug, 'resolve'))  common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve);
-        if($this->bug->isClickable($bug, 'close'))    common::printLink('bug', 'close', $params, $lang->bug->buttonClose);
-        if($this->bug->isClickable($bug, 'activate')) common::printLink('bug', 'activate', $params, $lang->bug->buttonActivate);
+        if($this->bug->isClickable($bug, 'confirmBug')) common::printIcon('bug', 'confirmBug', $params);
+        common::printIcon('bug', 'assignTo', $params);
+        if($this->bug->isClickable($bug, 'resolve'))  common::printIcon('bug', 'resolve', $params);
+        if($this->bug->isClickable($bug, 'close'))    common::printIcon('bug', 'close', $params);
+        if($this->bug->isClickable($bug, 'activate')) common::printIcon('bug', 'activate', $params);
 
-        if($this->bug->isClickable($bug, 'toStory'))
-        {
-            common::printSplitIcon();
-            common::printLink('story', 'create', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $lang->bug->toStory);
-        }
-        common::printLink('testcase', 'create', $convertParams, $lang->bug->buttonCreateTestcase);
+        if($this->bug->isClickable($bug, 'toStory')) common::printIcon('bug', 'toStory', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", '', 'button', 'toStory');
+        common::printIcon('bug', 'createCase', $convertParams, '', 'button', 'createCase');
 
-        if($this->bug->isClickable($bug, 'edit')) common::printSplitIcon();
-        common::printIcon('bug', 'edit', $params, '', 'big');
+        common::printDivider();
+        common::printIcon('bug', 'edit', $params);
         common::printCommentIcon('bug');
-        common::printIcon('bug', 'create', $copyParams, '', 'big', 'copy');
-        common::printIcon('bug', 'delete', $params, '', 'big', '', 'hiddenwin');
+        common::printIcon('bug', 'create', $copyParams, '', 'button', 'copy');
+        common::printIcon('bug', 'delete', $params, '', 'button', '', 'hiddenwin');
 
-        if($this->bug->isClickable($bug, 'goback')) common::printSplitIcon();
+        common::printDivider();
         common::printRPN($browseLink, $preAndNext);
 
         $actionLinks = ob_get_contents();

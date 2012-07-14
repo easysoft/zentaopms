@@ -214,9 +214,9 @@ class common extends control
      * @access public
      * @return void
      */
-    public static function printSplitIcon()
+    public static function printDivider()
     {
-        echo "<span class='icon-green-big-common-splitLine'></span>";
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;";
     }
 
     /**
@@ -232,7 +232,9 @@ class common extends control
         global $lang;
 
         if(!common::hasPriv($module, 'edit')) return false;
-        echo html::a('#comment', '&nbsp;', '', "class='icon-green-big-common-comment' title={$lang->comment} onclick='setComment()'");
+        echo "<span class='link-button'>";
+        echo html::a('#comment', '&nbsp;', '', "class='icon-black-common-comment' title='$lang->comment' onclick='setComment()'");
+        echo "</span>";
     }
 
     /**
@@ -242,14 +244,14 @@ class common extends control
      * @param  string $method 
      * @param  string $vars 
      * @param  object $object 
-     * @param  string $size 
+     * @param  string $type button|list 
      * @param  string $icon 
      * @param  string $target 
      * @static
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $size = 'small', $icon = '', $target = '')
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '')
     {
         global $app, $lang;
 
@@ -266,8 +268,10 @@ class common extends control
         }
 
         /* Set module and method, then create link to it. */
-        if(strtolower($module) == 'testcase' and strtolower($method) == 'tobug')      ($module = 'bug') and ($method = 'create');
+        if(strtolower($module) == 'testcase' and strtolower($method) == 'createbug')      ($module = 'bug') and ($method = 'create');
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
+        if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
+        if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(!common::hasPriv($module, $method)) return false;
         $link = helper::createLink($module, $method, $vars);
 
@@ -279,21 +283,40 @@ class common extends control
         {
             $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
         }
+        if($icon == 'toStory')   $title = $lang->bug->toStory;
+        if($icon == 'createBug') $title = $lang->testtask->createBug;
 
-        /* Get the icon name. */
+        /* set the class. */
         if(!$icon) $icon = $method;
         if(strpos(',edit,copy,report,export,delete,', ",$icon,") !== false) $module = 'common';
-        $iconClass = $clickable ? "icon-green-$size-$module-$icon" : "icon-gray-$size-$module-$icon";
+        $color      = $type == 'button' ? 'black' : ($clickable ? 'green' : 'gray');
+        $extraClass = strpos(',export,customFields,runCase,results,', ",$method,") !== false ? $method : '';
+        $class      = $extraClass ? "icon-$color-$module-$icon $extraClass" : "icon-$color-$module-$icon";
  
         /* Create the icon link. */
         if($clickable)
         {
-            $newline = $size == 'small' ? false : true;
-            echo html::a($link, '&nbsp;', $target, "class='$iconClass' title='$title'", $newline);
+            if($type == 'button')
+            {
+                echo "<span class='link-button'>";
+                echo html::a($link, '&nbsp;', $target, "class='$class' title='$title'", true);
+                if($method != 'edit' and $method != 'delete' and $method != 'copy')
+                {
+                    echo html::a($link, $title . '&nbsp;&nbsp;&nbsp;', $target, "class='$extraClass'", true);
+                }
+                echo "</span>";
+            }
+            else
+            {
+                echo html::a($link, '&nbsp;', $target, "class='$class' title='$title'", false);
+            }
         }
         else
         {
-            echo "<span class='$iconClass' title='$title'>&nbsp;</span>";
+            if($type == 'list')
+            {
+                echo "<span class='$class' title='$title'>&nbsp;</span>";
+            }
         }
     }
 
@@ -309,16 +332,25 @@ class common extends control
     {
         global $lang;
 
+        echo "<span class='link-button'>";
         echo html::a($backLink, '&nbsp;', '', "class='icon-goback' title={$lang->goback}");
+        echo "</span>";
+
         if(isset($preAndNext->pre) and $preAndNext->pre) 
         {
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
-            echo html::a($this->inLink('view', "ID={$preAndNext->pre->id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$preAndNext->pre->id}{$lang->colon}{$title}'");
+            $title = '#' . $preAndNext->pre->id . ' ' . $title;
+            echo "<span class='link-button'>";
+            echo html::a($this->inLink('view', "ID={$preAndNext->pre->id}"), '&nbsp', '', "id='pre' class='icon-pre' title='{$title}'");
+            echo "</span>";
         }
         if(isset($preAndNext->next) and $preAndNext->next) 
         {
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
-            echo html::a($this->inLink('view', "ID={$preAndNext->next->id}"), '&nbsp;', '', "id='next' class='icon-next' title='{$preAndNext->next->id}{$lang->colon}{$title}'");
+            $title = '#' . $preAndNext->next->id . ' ' . $title;
+            echo "<span class='link-button'>";
+            echo html::a($this->inLink('view', "ID={$preAndNext->next->id}"), '&nbsp;', '', "id='next' class='icon-next' title='$title'");
+            echo "</span>";
         }
     }
 
