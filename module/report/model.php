@@ -338,7 +338,12 @@ EOT;
      */
     public function getBugs($begin, $end)
     {
-        $bugs = $this->dao->select('id, resolution, openedBy')->from(TABLE_BUG)->where('deleted')->eq(0)->fetchAll();
+        $end = date('Ymd', strtotime("$end +1 day"));
+        $bugs = $this->dao->select('id, resolution, openedBy')->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andWhere('openedDate')->ge($begin)
+            ->andWhere('openedDate')->le($end)
+            ->fetchAll();
         $bugSummary = array();
         foreach($bugs as $bug)
         {
