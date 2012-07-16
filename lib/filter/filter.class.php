@@ -230,6 +230,34 @@ class validater
     }
 
     /**
+     * Must greater than a value.
+     * 
+     * @param  mixed  $var 
+     * @param  mixed $value 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkGT($var, $value)
+    {
+        return $var > $value;
+    }
+    
+    /**
+     * Must greater than or equal a value.
+     * 
+     * @param  mixed  $var 
+     * @param  mixed $value 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkGE($var, $value)
+    {
+        return $var >= $value;
+    }
+
+    /**
      * Call a function to check it.
      * 
      * @param  mixed  $var 
@@ -397,33 +425,6 @@ class fixer
         return $this;
     }
 
-    /**
-     * Must greater than a value.
-     * 
-     * @param  mixed  $var 
-     * @param  mixed $value 
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function checkGT($var, $value)
-    {
-        return $var > $value;
-    }
-    
-    /**
-     * Must greater than or equal a value.
-     * 
-     * @param  mixed  $var 
-     * @param  mixed $value 
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function checkGE($var, $value)
-    {
-        return $var >= $value;
-    }
     
     /**
      * Strip tags 
