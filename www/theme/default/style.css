@@ -312,8 +312,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 
 /* Feature bar. */
-#featurebar                { height:28px; line-height:28px; cursor:pointer; padding:20px 8px 10px 8px; margin: -15px -15px 10px -15px;}
-#featurebar a              {text-decoration:none; border-right:1px solid #ddd; padding:4px 10px 4px 4px; color:#003366}
+#featurebar                {height:28px; line-height:28px; cursor:pointer; padding:20px 8px 10px 8px; margin: -15px -15px 10px -15px;}
+#featurebar a              {text-decoration:none; border-right:1px solid #ddd; padding:4px 4px 4px 4px; color:#003366; font-size:12px}
 #featurebar a:hover        {color:#ff3600;}
 #featurebar .f-right a     {border-right:none; padding:0px}
 #featurebar #bysearchTab a {border:none;}
@@ -530,7 +530,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #featurebar .f-right .icon-black-testcase-create      {padding:2px 8px; background:url(images/main/zt-green.png) 0px   -340px;} 
 #featurebar .f-right .icon-black-testcase-batchCreate {padding:2px 8px; background:url(images/main/zt-black.png) -20px -340px;} 
 
-.link-button {padding:5px 0px 5px 12px; margin-left:-1px; background:url(images/main/link-button.png) 0px 0px repeat-x; border-right:1px solid RGB(234, 234, 234); border-left:1px solid RGB(234, 234, 234)} 
+.link-button {padding:5px 0px 5px 0px; margin-left:-1px; background:url(images/main/link-button.png) 0px 0px repeat-x; border-right:1px solid RGB(234, 234, 234); border-left:1px solid RGB(234, 234, 234)} 
 .link-button:hover {background:RGB(200, 200, 200)} 
 .link-button a{color:black; font-weight:normal; font-size:12px;} 
 .link-button a:hover {color:RGB(234, 0, 0);}

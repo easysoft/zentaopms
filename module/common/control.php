@@ -302,7 +302,7 @@ class common extends control
                 echo html::a($link, '&nbsp;', $target, "class='$class' title='$title'", true);
                 if($method != 'edit' and $method != 'delete' and $method != 'copy')
                 {
-                    echo html::a($link, $title . '&nbsp;&nbsp;&nbsp;', $target, "class='$extraClass'", true);
+                    echo html::a($link, $title, $target, "class='$extraClass'", true);
                 }
                 echo "</span>";
             }

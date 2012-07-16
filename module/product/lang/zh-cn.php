@@ -59,7 +59,7 @@ $lang->product->RM        = '发布负责人';
 $lang->product->acl       = '访问控制';
 $lang->product->whitelist = '分组白名单';
 
-$lang->product->moduleStory  = '按模块浏览';
+$lang->product->moduleStory  = '按模块';
 $lang->product->searchStory  = '搜索';
 $lang->product->assignedToMe = '指派给我';
 $lang->product->openedByMe   = '由我创建';

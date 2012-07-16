@@ -108,9 +108,9 @@ $lang->project->importBug       = '导入Bug';
 $lang->project->ajaxGetProducts = '接口：获得项目产品列表';
 
 /* 分组浏览。*/
-$lang->project->allTasks             = '所有任务';
+$lang->project->allTasks             = '所有';
 $lang->project->assignedToMe         = '指派给我';
-$lang->project->moduleTask           = '按模块浏览';
+$lang->project->moduleTask           = '按模块';
 $lang->project->finishedByMe         = '由我完成';
 $lang->project->statusWait           = '未开始';
 $lang->project->statusDoing          = '进行中';
@@ -183,4 +183,4 @@ $lang->project->placeholder->code = '团队内部的简称';
 $lang->project->selectGroup->doing     = '(进行中)';
 $lang->project->selectGroup->done      = '(已结束)';
 
-$lang->project->projectTasks = '按项目浏览';
+$lang->project->projectTasks = '按项目';
