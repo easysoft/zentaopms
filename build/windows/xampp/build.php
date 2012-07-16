@@ -240,10 +240,12 @@ $file->batchRemoveFile('./xampp/php/*.php');
 $file->rename('./xampp/php/php5apache2_2.dll', './xampp/php/php5apache2_2.bak');
 $file->rename('./xampp/php/php5ts.dll', './xampp/php/php5ts.bak');
 $file->rename('./xampp/php/ssleay32.dll', './xampp/php/ssleay32.dll.bak');
+$file->rename('./xampp/php/libeay32.dll', './xampp/php/libeay32.dll.bak');
 $file->batchRemoveFile('./xampp/php/*.dll');
 $file->rename('./xampp/php/php5apache2_2.bak', './xampp/php/php5apache2_2.dll');
 $file->rename('./xampp/php/php5ts.bak', './xampp/php/php5ts.dll');
 $file->rename('./xampp/php/ssleay32.dll.bak', './xampp/php/ssleay32.dll');
+$file->rename('./xampp/php/libeay32.dll.bak', './xampp/php/libeay32.dll');
 
 /* Process php ini file. */
 $phpConfig = file_get_contents('./xampp/php/php.ini');
