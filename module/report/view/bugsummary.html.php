@@ -29,7 +29,7 @@
         <tbody>
         <?php foreach($bugs as $user => $bug):?>
           <tr class="a-center">
-            <td><?php echo $user;?></td>
+            <td><?php echo $users[$user];?></td>
             <td><?php echo $bug['all'];?></td>
             <td><?php echo isset($bug['']) ? $bug[''] : 0;?></td>
             <td><?php echo isset($bug['bydesign']) ? $bug['bydesign'] : 0;?></td>

@@ -21,7 +21,7 @@
         <?php foreach($products as $product):?>
           <tr class="a-center">
             <?php $count = isset($product->plans) ? count($product->plans) : 1;?>
-            <td align='left' rowspan="<?php echo $count;?>"><?php echo '<p>' . $product->name . "</p><p>{$lang->product->PO}: " . $product->PO . '</p>';?></td>
+            <td align='left' rowspan="<?php echo $count;?>"><?php echo '<p>' . $product->name . "</p><p>{$lang->product->PO}: " . $users[$product->PO] . '</p>';?></td>
             <?php if(isset($product->plans)):?>
             <?php foreach($product->plans as $id => $plan):?>
             <?php if($id != 1) echo "<tr class='a-center'>"?>
