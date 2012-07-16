@@ -433,10 +433,10 @@ class fixer
      * @access public
      * @return object fixer object
      */
-    public function stripTags($fieldName, $allowableTags = FILTER_SANITIZE_STRING)
+    public function stripTags($fieldName)
     {
         $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName) $this->data->$fieldName = strip_tags($this->data->$fieldName, $allowableTags);
+        foreach($fields as $fieldName) $this->data->$fieldName = filter_var($this->data->$fieldName, FILTER_SANITIZE_STRING);
         return $this;
     }
 
