@@ -338,19 +338,11 @@ EOT;
      */
     public function getBugs($begin, $end)
     {
-        $bugGroups  = $this->dao->select('id, resolution, openedBy')->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andWhere('openedDate')->ge($begin)
-            ->andWhere('openedDate')->le($end)
-            ->fetchGroup('openedBy', 'id');
-        $bugSummary = array();
-        foreach($bugGroups as $user => $bugs)
+        $bugs = $this->dao->select('id, resolution, openedBy')->from(TABLE_BUG)->where('deleted')->eq(0)->fetchAll();
+        foreach($bugs as $bug)
         {
-            foreach($bugs as $bug)
-            {
-                $bugSummary[$user][$bug->resolution] = empty($bugSummary[$user][$bug->resolution]) ? 1 : $bugSummary[$user][$bug->resolution] + 1;
-            }
-            $bugSummary[$user]['all'] = count($bugs);
+            $bugSummary[$bug->openedBy][$bug->resolution] = empty($bugSummary[$bug->openedBy][$bug->resolution]) ? 1 : $bugSummary[$bug->openedBy][$bug->resolution] + 1;
+            $bugSummary[$bug->openedBy]['all'] = empty($bugSummary[$bug->openedBy]['all']) ? 1 : $bugSummary[$bug->openedBy]['all'] + 1;
         }
         return $bugSummary; 
     }
