@@ -394,6 +394,7 @@ EOT;
                 }
             }
         }
+        unset($workload['closed']);
         return $workload;
     }
 }
