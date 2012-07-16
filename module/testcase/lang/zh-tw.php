@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 3343 2012-07-16 01:15:26Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = '用例編號';
@@ -49,7 +49,7 @@ $lang->testcase->stepExpect = '預期';
 
 $lang->testcase->common             = '用例管理';
 $lang->testcase->index              = "用例管理首頁";
-$lang->testcase->create             = "創建用例";
+$lang->testcase->create             = "建用例";
 $lang->testcase->batchCreate        = "批量添加";
 $lang->testcase->delete             = "刪除用例";
 $lang->testcase->view               = "用例詳情";
@@ -57,7 +57,7 @@ $lang->testcase->edit               = "編輯用例";
 $lang->testcase->delete             = "刪除用例";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->import             = "導入用例";
-$lang->testcase->export             = "導出數據";
+$lang->testcase->export             = "導出";
 $lang->testcase->confirmStoryChange = '確認需求變動';
 
 $lang->testcase->deleteStep   = '刪除';
@@ -68,9 +68,9 @@ $lang->testcase->selectProduct = '請選擇產品';
 $lang->testcase->byModule      = '按模組';
 $lang->testcase->assignToMe    = '指派給我的用例';
 $lang->testcase->openedByMe    = '由我創建的用例';
-$lang->testcase->allCases      = '所有用例';
-$lang->testcase->needConfirm   = '需求有變動的用例';
-$lang->testcase->moduleCases   = '按模組瀏覽';
+$lang->testcase->allCases      = '所有';
+$lang->testcase->needConfirm   = '需求變動';
+$lang->testcase->moduleCases   = '按模組';
 $lang->testcase->bySearch      = '搜索';
 $lang->testcase->doneByMe      = '我完成的用例';
 

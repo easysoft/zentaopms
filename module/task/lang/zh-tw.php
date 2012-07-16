@@ -6,25 +6,25 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 3341 2012-07-14 07:26:53Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
-$lang->task->create             = "新增任務";
+$lang->task->create             = "新增";
 $lang->task->batchCreate        = "批量添加";
 $lang->task->batchEdit          = "批量編輯";
 $lang->task->import             = "導入之前未完任務";
-$lang->task->edit               = "編輯任務";
-$lang->task->delete             = "刪除任務";
+$lang->task->edit               = "編輯";
+$lang->task->delete             = "刪除";
 $lang->task->view               = "查看任務";
 $lang->task->logEfforts         = "記錄工時";
-$lang->task->start              = "開始任務";
-$lang->task->finish             = "完成任務";
-$lang->task->close              = "關閉任務";
+$lang->task->start              = "開始";
+$lang->task->finish             = "完成";
+$lang->task->close              = "關閉";
 $lang->task->batchClose         = "批量關閉";
-$lang->task->cancel             = "取消任務";
-$lang->task->activate           = "激活任務";
-$lang->task->export             = "導出數據";
+$lang->task->cancel             = "取消";
+$lang->task->activate           = "激活";
+$lang->task->export             = "導出";
 $lang->task->reportChart        = "報表統計";
 $lang->task->fromBug            = '來源Bug';
 $lang->task->confirmStoryChange = "確認需求變動";
@@ -54,6 +54,7 @@ $lang->task->status            = '任務狀態';
 $lang->task->statusCustom      = '狀態排序';
 $lang->task->desc              = '任務描述';
 $lang->task->assign            = '指派';
+$lang->task->assignTo          = $lang->task->assign;
 $lang->task->assignedTo        = '指派給';
 $lang->task->assignedToAB      = '指派給';
 $lang->task->assignedDate      = '指派日期';
@@ -134,7 +135,7 @@ $lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天
 $lang->task->remindBug           = "該任務為Bug轉化得到，是否更新Bug:%s ?";
 
 /* 統計報表。*/
-$lang->task->report->common = '統計報表';
+$lang->task->report->common = '報表';
 $lang->task->report->select = '請選擇報表類型';
 $lang->task->report->create = '生成報表';
 

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 3343 2012-07-16 01:15:26Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -66,17 +66,17 @@ $lang->bug->lastEditedDateAB = '修改日期';
 
 /* 方法列表。*/
 $lang->bug->index              = '首頁';
-$lang->bug->create             = '創建Bug';
+$lang->bug->create             = '創建';
 $lang->bug->confirmBug         = '確認';
 $lang->bug->edit               = '編輯Bug';
 $lang->bug->assignTo           = '指派';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug詳情';
-$lang->bug->resolve            = '解決Bug';
-$lang->bug->close              = '關閉Bug';
+$lang->bug->resolve            = '解決';
+$lang->bug->close              = '關閉';
 $lang->bug->activate           = '激活Bug';
 $lang->bug->reportChart        = '報表統計';
-$lang->bug->export             = '導出數據';
+$lang->bug->export             = '導出';
 $lang->bug->delete             = '刪除Bug';
 $lang->bug->saveTemplate       = '保存模板';
 $lang->bug->deleteTemplate     = '刪除模板';
@@ -98,8 +98,8 @@ $lang->bug->unResolved     = '未解決';
 $lang->bug->unclosed       = '未關閉';
 $lang->bug->longLifeBugs   = '久未處理';
 $lang->bug->postponedBugs  = '被延期';
-$lang->bug->allBugs        = '所有Bug';
-$lang->bug->moduleBugs     = '按模組瀏覽';
+$lang->bug->allBugs        = '所有';
+$lang->bug->moduleBugs     = '按模組';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求變動';
 $lang->bug->allProduct     = '所有產品';
@@ -241,7 +241,7 @@ $lang->bug->resolutionList['willnotfix'] = "不予解決";
 $lang->bug->resolutionList['tostory']    = '轉為需求';
 
 /* 統計報表。*/
-$lang->bug->report->common        = '統計報表';
+$lang->bug->report->common        = '報表';
 $lang->bug->report->select        = '請選擇報表類型';
 $lang->bug->report->create        = '生成報表';
 

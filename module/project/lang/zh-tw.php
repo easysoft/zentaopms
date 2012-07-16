@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 3343 2012-07-16 01:15:26Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -108,9 +108,9 @@ $lang->project->importBug       = '導入Bug';
 $lang->project->ajaxGetProducts = '介面：獲得項目產品列表';
 
 /* 分組瀏覽。*/
-$lang->project->allTasks             = '所有任務';
+$lang->project->allTasks             = '所有';
 $lang->project->assignedToMe         = '指派給我';
-$lang->project->moduleTask           = '按模組瀏覽';
+$lang->project->moduleTask           = '按模組';
 $lang->project->finishedByMe         = '由我完成';
 $lang->project->statusWait           = '未開始';
 $lang->project->statusDoing          = '進行中';
@@ -183,4 +183,4 @@ $lang->project->placeholder->code = '團隊內部的簡稱';
 $lang->project->selectGroup->doing     = '(進行中)';
 $lang->project->selectGroup->done      = '(已結束)';
 
-$lang->project->projectTasks = '按項目瀏覽';
+$lang->project->projectTasks = '按項目';

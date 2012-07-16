@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id: zh-tw.php 3299 2012-07-03 01:00:09Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 3336 2012-07-11 08:36:27Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->report->common     = '統計視圖';
@@ -35,8 +35,13 @@ $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = '項目偏差報表';
 $lang->report->productInfo      = '產品信息統計表';
-$lang->report->workload         = '員工負載表';
 $lang->report->bugSummary       = 'Bug彙總表';
+$lang->report->workload         = '員工負載表';
+
+$lang->reportList->project->lists[10] = '項目偏差報表|report|projectdeviation';
+$lang->reportList->product->lists[10] = '產品信息統計表|report|productinfo';
+$lang->reportList->test->lists[10]    = 'Bug彙總表|report|bugsummary';
+$lang->reportList->staff->lists[10]   = '員工負載表|report|workload';
 
 $lang->report->id            = '編號';
 $lang->report->project       = '項目';

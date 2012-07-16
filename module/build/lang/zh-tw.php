@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
- * @version     $Id: zh-tw.php 3307 2012-07-03 02:45:15Z wwccss $
+ * @version     $Id: zh-tw.php 3309 2012-07-03 02:53:55Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->build->common    = "Build";

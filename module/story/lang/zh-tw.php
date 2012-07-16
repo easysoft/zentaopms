@@ -6,11 +6,11 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 3341 2012-07-14 07:26:53Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
-$lang->story->create      = "新增需求";
+$lang->story->create      = "新增";
 $lang->story->createCase  = "建用例";
 $lang->story->batchCreate = "批量添加";
 $lang->story->change      = "變更";
@@ -26,7 +26,7 @@ $lang->story->tasks       = "相關任務";
 $lang->story->taskCount   = '任務數';
 $lang->story->bugs        = "Bug";
 $lang->story->linkStory   = '關聯需求';
-$lang->story->export      = "導出數據";
+$lang->story->export      = "導出";
 $lang->story->reportChart = "統計報表";
 
 $lang->story->common         = '需求';
@@ -189,7 +189,7 @@ $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 從項目 <strong>$extra</strong> 移除。'); 
 
 /* 統計報表。*/
-$lang->story->report->common = '統計報表';
+$lang->story->report->common = '報表';
 $lang->story->report->select = '請選擇報表類型';
 $lang->story->report->create = '生成報表';
 
