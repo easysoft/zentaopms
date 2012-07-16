@@ -23,7 +23,7 @@
       if($this->story->isClickable($story, 'change')) common::printIcon('story', 'change', "storyID=$story->id");
       if($this->story->isClickable($story, 'review')) common::printIcon('story', 'review', "storyID=$story->id");
       if($this->story->isClickable($story, 'close'))  common::printIcon('story', 'close',  "storyID=$story->id");
-      if(!$this->story->isClickable($story, 'activate'))  common::printIcon('story', 'activate',  "storyID=$story->id");
+      if($this->story->isClickable($story, 'activate'))  common::printIcon('story', 'activate',  "storyID=$story->id");
       common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'button', 'createCase');
 
       common::printDivider();
