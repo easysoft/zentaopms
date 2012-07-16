@@ -339,6 +339,7 @@ EOT;
     public function getBugs($begin, $end)
     {
         $bugs = $this->dao->select('id, resolution, openedBy')->from(TABLE_BUG)->where('deleted')->eq(0)->fetchAll();
+        $bugSummary = array();
         foreach($bugs as $bug)
         {
             $bugSummary[$bug->openedBy][$bug->resolution] = empty($bugSummary[$bug->openedBy][$bug->resolution]) ? 1 : $bugSummary[$bug->openedBy][$bug->resolution] + 1;
