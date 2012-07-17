@@ -311,7 +311,7 @@ class testcaseModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'tobug') return $case->lastRunResult == 'fail';
+        if($action == 'createbug') return $case->lastRunResult == 'fail';
 
         return true;
     }

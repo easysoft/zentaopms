@@ -27,9 +27,10 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
   <div class='f-right'>
     <?php
-    common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCase);
-    common::printIcon('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=$task->id", '', 'big');
-    common::printRPN($this->session->testtaskLisk, '');
+    common::printIcon('testtask', 'linkCase', "taskID=$task->id");
+    common::printIcon('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=$task->id");
+    common::printDivider();
+    common::printRPN($this->session->testtaskList, '');
     ?>
   </div>
 </div>
@@ -77,7 +78,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               common::printLink('testtask', 'runcase',    "id=$run->id", $lang->testtask->runCase, '', 'class="iframe"');
               common::printLink('testtask', 'results',    "id=$run->id", $lang->testtask->results, '', 'class="iframe"');
               common::printLink('testtask', 'unlinkcase', "id=$run->id", $lang->testtask->unlinkCase, 'hiddenwin');
-              common::printIcon('testcase', 'toBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'small', 'createBug');
+              common::printIcon('testcase', 'createBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'list', 'createBug');
               ?>
             </td>
           </tr>

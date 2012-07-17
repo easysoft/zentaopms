@@ -268,7 +268,7 @@ class common extends control
         }
 
         /* Set module and method, then create link to it. */
-        if(strtolower($module) == 'testcase' and strtolower($method) == 'createbug')      ($module = 'bug') and ($method = 'create');
+        if(strtolower($module) == 'testcase' and strtolower($method) == 'createbug')  ($module = 'bug') and ($method = 'create');
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');

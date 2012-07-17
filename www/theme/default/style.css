@@ -421,6 +421,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-arrow  { padding-left:10px;  background:url(images/main/ui-gray.png) -32px 0px;}
 
 /* Common icons. */
+#featurebar .f-right .icon-goback     {padding:0px 10px}
 .pri1        {padding:2px 8px; background:url(images/main/zt-green.png) 0px    -141px;}
 .pri2        {padding:2px 8px; background:url(images/main/zt-green.png) -20px  -141px;}
 .pri3        {padding:2px 8px; background:url(images/main/zt-green.png) -40px  -141px;}
