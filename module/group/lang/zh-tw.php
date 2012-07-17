@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 3347 2012-07-16 01:58:48Z shiyangyangwork@yahoo.cn $
  * @link        http://www.zentao.net
  */
 $lang->group->common             = '權限分組';
