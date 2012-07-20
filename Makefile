@@ -1,7 +1,8 @@
 VERSION=$(shell head -n 1 VERSION)
 
 all: tgz
-sae: tgz build4sae
+sae: tgz build4sina build4sae
+syun: tgz build4sina build4yunshangdian
 edu: tgz build4edu
 linux: tgz build4linux
 
@@ -12,6 +13,7 @@ clean:
 	rm -fr api*
 	rm -fr build/linux/lampp
 	rm -fr sae
+	rm -fr syun
 tgz:
 	# make the directories.
 	mkdir -p zentaopms/lib
@@ -58,11 +60,12 @@ phpdoc:
 	phpdoc -d bin,framework,config,lib,module,www -t api.chm -o chm:default:default -ti ZenTaoPMSAPI²Î¿¼ÊÖ²á -s on -pp on -i *test*
 doxygen:
 	doxygen misc/doc/doxygen/doxygen.conf
-build4sae:	
+build4sina:	
+	# unzip the zentaopms packae.
 	unzip ZenTaoPMS.$(VERSION).zip
 	rm -fr ZenTaoPMS.$(VERSION).zip
+	# move the files under www to zentaopms/
 	mv zentaopms/www/* zentaopms
-	rm -fr zentaopms/data zentaopms/www zentaopms/tmp
 	# replace the directory of index.php, install.php, upgrade.php.
 	sed -e 's/..\/framework/framework/g' zentaopms/index.php |sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/index.php.new
 	sed -e 's/..\/framework/framework/g' zentaopms/install.php |sed -e "s/dirname(//" |sed -e 's/)))/))/' >zentaopms/install.php.new
@@ -70,11 +73,16 @@ build4sae:
 	sed -e 's/..\/framework/framework/g' zentaopms/upgrade.php.new | sed -e "s/dirname(//" |sed -e 's/)))/))/' > zentaopms/upgrade.php.new
 	mv zentaopms/index.php.new zentaopms/index.php
 	mv zentaopms/upgrade.php.new zentaopms/upgrade.php
+build4sae:	
+	# remove the data and tmp directory for sae.
+	rm -fr zentaopms/data zentaopms/www zentaopms/tmp
+	# process the install.php.
 	cat zentaopms/install.php.new |grep -v 'setDebug' > zentaopms/install.php
 	rm -fr zentaopms/install.php.new
 	# replace the error_log to sae_debug
 	sed -e 's/error_log/sae_debug/g' zentaopms/framework/router.class.php | sed -e "s/saveSQL/saveSQL4SAE/" >zentaopms/framework/router.class.php.new
 	mv zentaopms/framework/router.class.php.new zentaopms/framework/router.class.php
+	# append the savesql.php.
 	cat build/sae/savesql.php >> zentaopms/framework/helper.class.php
 	# change the logic of merge model file in helper.class.php.
 	sed -e 's/\$$app->getTmpRoot/"saemc:\/\/" . \$$app\-\>getTmpRoot/g' zentaopms/framework/helper.class.php >zentaopms/framework/helper.class.new
@@ -90,6 +98,26 @@ build4sae:
 	cd zentaopms && zip -r -9 ../ZenTaoPMS.$(VERSION).sae.zip * && cd -
 	rm -fr sae
 	rm -fr zentaopms
+build4yunshangdian:	
+	# rename the install.php.
+	mv zentaopms/install.php.new zentaopms/install.php
+	# process the data and tmp directory.
+	touch data/index.html
+	touch tmp/index.html
+	# move the .htaccess to zentaopms/
+	mv zentaopms/www/.htaccess zentaopms/
+	rm -fr zentaopms/www
+	# copy the my.php
+	cp build/sae/my.php zentaopms/config/my.php
+	# copy the wizard.xml.
+	grep -v 'Storage' build/sae/sae_app_wizard.xml | grep -v 'Memcache' >  zentaopms/sae_app_wizard.xml
+	# get the extension files.
+	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/syun
+	cp -fr syun/* zentaopms/module/
+	# create the package.
+	cd zentaopms && zip -r -9 ../ZenTaoPMS.$(VERSION).syun.zip * && cd -
+	#rm -fr syun
+	#rm -fr zentaopms
 build4linux:	
 	unzip ZenTaoPMS.$(VERSION).zip
 	rm -fr ZenTaoPMS.$(VERSION).zip
