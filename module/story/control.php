@@ -271,6 +271,7 @@ class story extends control
         $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $this->view->story->title;
         $this->view->position[]    = $this->lang->story->edit;
         $this->view->users         = $this->user->appendDeleted($this->user->getPairs('nodeleted'), $this->view->story->assignedTo);
+        $this->view->story         = $this->story->getById($storyID, 0, true);
         $this->display();
     }
 
