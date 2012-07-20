@@ -1102,7 +1102,8 @@ class router
         $this->control = $module;
 
         /* include default value for module*/
-        foreach(glob($this->getTmpRoot() . "defaultvalue/*.php") as $file) include $file;
+        $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
+        if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
 
         /* Get the default setings of the method to be called useing the reflecting. */
         $defaultParams = array();
