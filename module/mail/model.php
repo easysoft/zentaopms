@@ -138,7 +138,7 @@ class mailModel extends model
     public function getConfigByDetectingSMTP($domain, $username, $port)
     {
         $host = 'smtp.' . $domain;
-        ini_set('default_socket_timeout', 1);
+        ini_set('default_socket_timeout', 3);
         $connection = @fsockopen($host, $port);
         if(!$connection) return false;
         fclose($connection); 
