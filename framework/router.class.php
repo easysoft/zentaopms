@@ -1486,6 +1486,7 @@ class router
     public function connectDB()
     {
         global $config, $dbh, $slaveDBH;
+        if(!isset($config->installed) or !$config->installed) return;
 
         if(isset($config->db->host))      $this->dbh      = $dbh      = $this->connectByPDO($config->db);
         if(isset($config->slaveDB->host)) $this->slaveDBH = $slaveDBH = $this->connectByPDO($config->slaveDB);
