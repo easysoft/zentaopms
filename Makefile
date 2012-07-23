@@ -101,14 +101,16 @@ build4sae:
 build4yunshangdian:	
 	# rename the install.php.
 	mv zentaopms/install.php.new zentaopms/install.php
-	# process the data and tmp directory.
-	touch data/index.html
-	touch tmp/index.html
 	# move the .htaccess to zentaopms/
-	mv zentaopms/www/.htaccess zentaopms/
+	mv zentaopms/www/.htaccess zentaopms/htaccess
+	# remove tmp, www, data, init them in my.php
 	rm -fr zentaopms/www
+	rm -fr zentaopms/tmp
+	rm -fr zentaopms/data
 	# copy the my.php
 	cp build/sae/my.php zentaopms/config/my.php
+	sed -e 's/PATH_INFO/GET/g' build/sae/my.php > zentaopms/config/my.php
+	mkdir zentaopms/config/ext
 	# copy the wizard.xml.
 	grep -v 'Storage' build/sae/sae_app_wizard.xml | grep -v 'Memcache' >  zentaopms/sae_app_wizard.xml
 	# get the extension files.
