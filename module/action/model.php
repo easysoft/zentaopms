@@ -297,13 +297,14 @@ class actionModel extends model
     public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all')
     {
         /* Computer the begin and end date of a period. */
-        $period = $this->computeBeginAndEnd($period);
-        extract($period);
+        $beginAndEnd = $this->computeBeginAndEnd($period);
+        extract($beginAndEnd);
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('date')->gt($begin)
-            ->andWhere('date')->lt($end)
+            ->where(1)
+            ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
+            ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
