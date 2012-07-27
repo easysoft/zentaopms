@@ -14,7 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <form method='post'>
   <table class='table-1 fixed'> 
-    <caption> <?php echo $lang->todo->batchCreate . $lang->colon . html::input('date', $date, "class='select-2 date'");?> </caption>
+    <caption> <?php echo $lang->todo->batchCreate . $lang->colon . html::input('date', $date, "class='select-2 date' onchange='updateAction(this.value)'");?> </caption>
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
       <th class='w-100px'><?php echo $lang->todo->type;?></th>

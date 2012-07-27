@@ -66,8 +66,7 @@ class todo extends control
      */
     public function batchCreate($date = 'today', $account = '')
     {
-        if($date == 'today') $this->view->date = helper::today();
-
+        if($date == 'today') $date = date(DT_DATE1, time());
         if(!empty($_POST))
         {
             $this->todo->batchCreate();
@@ -82,6 +81,7 @@ class todo extends control
 
         $this->view->header   = $header;
         $this->view->position = $position;
+        $this->view->date     = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
         $this->view->times    = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time     = $this->todo->now();
 
