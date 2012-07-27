@@ -87,7 +87,7 @@ build4sae:
 	# change the logic of merge model file in helper.class.php.
 	sed -e 's/\$$app->getTmpRoot/"saemc:\/\/" . \$$app\-\>getTmpRoot/g' zentaopms/framework/helper.class.php >zentaopms/framework/helper.class.new
 	mv zentaopms/framework/helper.class.new zentaopms/framework/helper.class.php
-	cp build/sae/my.php zentaopms/config/my.php
+	cp build/sae/mysae.php zentaopms/config/my.php
 	cp build/sae/sae_app_wizard.xml zentaopms/
 	# get the extension files.
 	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/sae
@@ -108,9 +108,8 @@ build4yunshangdian:
 	rm -fr zentaopms/tmp
 	rm -fr zentaopms/data
 	# copy the my.php
-	cp build/sae/my.php zentaopms/config/my.php
-	sed -e 's/PATH_INFO/GET/g' build/sae/my.php > zentaopms/config/my.php
 	mkdir zentaopms/config/ext
+	cp build/sae/mysyun.php zentaopms/config/ext/syun.php
 	# copy the wizard.xml.
 	grep -v 'Storage' build/sae/sae_app_wizard.xml | grep -v 'Memcache' >  zentaopms/sae_app_wizard.xml
 	# get the extension files.
