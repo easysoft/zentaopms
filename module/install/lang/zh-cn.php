@@ -84,7 +84,7 @@ $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
 
 $lang->install->errorConnectDB      = '数据库连接失败 ';
 $lang->install->errorCreateDB       = '数据库创建失败';
-$lang->install->errorDBExists       = '数据库已经存在，继续安装请选择清空数据';
+$lang->install->errorTableExists    = '数据表已经存在，您之前应该有安装过禅道，继续安装请返回前页并选择清空数据';
 $lang->install->errorCreateTable    = '创建表失败';
 $lang->install->errorImportDemoData = '导入demo数据失败';
 

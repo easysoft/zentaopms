@@ -212,10 +212,10 @@ class installModel extends model
                 return $return;
             }
         }
-        elseif($this->post->clearDB == false)
+        elseif($this->tableExits() and $this->post->clearDB == false)
         {
             $return->result = 'fail';
-            $return->error  = $this->lang->install->errorDBExists;
+            $return->error  = $this->lang->install->errorTableExists;
             return $return;
         }
 
@@ -279,6 +279,19 @@ class installModel extends model
     public function dbExists()
     {
         $sql = "SHOW DATABASES like '{$this->config->db->name}'";
+        return $this->dbh->query($sql)->fetch();
+    }
+
+    /**
+     * Check table exits or not.
+     * 
+     * @access public
+     * @return void
+     */
+    public function tableExits()
+    {
+        $configTable = str_replace('`', "'", TABLE_CONFIG);
+        $sql = "SHOW TABLES FROM {$this->config->db->name} like $configTable";
         return $this->dbh->query($sql)->fetch();
     }
 

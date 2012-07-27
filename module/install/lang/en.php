@@ -84,7 +84,7 @@ $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->errorConnectDB      = 'Database connect failed.';
 $lang->install->errorCreateDB       = 'Database create failed.';
-$lang->install->errorDBExists       = 'Database alread exists, to continue install, check the clear db box.';
+$lang->install->errorTableExists    = 'The same tables alread exists, to continue install, go back and check the clear db box.';
 $lang->install->errorCreateTable    = 'Table create failed.';
 $lang->install->errorImportDemoData = 'Import demo data.';
 
