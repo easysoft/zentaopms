@@ -68,4 +68,3 @@
     </td>
   </tr>
 </table>
-<?php include '../../common/view/footer.lite.html.php';?>
