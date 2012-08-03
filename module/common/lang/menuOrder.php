@@ -85,8 +85,8 @@ $lang->doc->menuOrder[20] = 'delete';
 $lang->doc->menuOrder[25] = 'create';
 
 /* report menu order. */
-$lang->report->menuOrder[5]  = 'prj';
-$lang->report->menuOrder[10] = 'product';
+$lang->report->menuOrder[5]  = 'product';
+$lang->report->menuOrder[10] = 'prj';
 $lang->report->menuOrder[15] = 'test';
 $lang->report->menuOrder[20] = 'staff';
 

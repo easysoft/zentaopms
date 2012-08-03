@@ -199,10 +199,10 @@ $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=
 $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
 
 /* Report menu. */
-$lang->report->menu->prj     = array('link' => 'Project|report|projectdeviation');
 $lang->report->menu->product = array('link' => 'Product|report|productinfo');
+$lang->report->menu->prj     = array('link' => 'Project|report|projectdeviation');
 $lang->report->menu->test    = array('link' => 'Test|report|bugsummary');
-$lang->report->menu->staff   = array('link' => 'Staff|report|workload');
+$lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 /* Company menu. */
 $lang->company->menu->name        = '%s' . $lang->arrow;
