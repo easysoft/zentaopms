@@ -8,5 +8,15 @@ ul li{list-style:none;}
 #workload td, tr, th{ border:1px solid #E4E4E4;}
 #product p{margin:2px 0;}
 
-.proversion {text-align:center; margin-top:10px}
-.proversion a{color:red}
+.proversion {text-align:center; margin-top:10px;}
+.proversion a{color:red;}
+td .deviation{padding-left:20px; text-align:left;}
+.up{color:red; padding-right:2px;}
+.down{color:green; padding-right:2px;}
+.zero{color:#66CD00;}
+.u50{color:#ED1C24;}
+.u30{color:#F37021;}
+.u10{color:#FAA61A;}
+.u0{color:#FFCB05;}
+.d0{color:#76B043;}
+.d20{color:#33A52E;}

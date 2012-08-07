@@ -285,7 +285,12 @@ EOT;
             $projects[$story->project]->stories = isset($projects[$story->project]->stories) ? $projects[$story->project]->stories + 1 : 1;
         }
 
-        $projectPairs = $this->loadModel('project')->getPairs();
+        $projectList = $this->dao->select('id, name')->from(TABLE_PROJECT)->fetchAll();
+        $projectPairs = array();
+        foreach($projectList as $project)
+        {
+            $projectPairs[$project->id] = $project->name;
+        }
         foreach($projects as $id => $project)
         {
             if(!isset($project->stories)) $projects[$id]->stories = 0;
@@ -368,13 +373,6 @@ EOT;
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->notin('cancel, closed, done')
             ->fetchGroup('assignedTo');
-        $bugs = $this->dao->select('t1.*, t2.name as productName')
-            ->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->eq('active')
-            ->fetchGroup('assignedTo');
         $workload = array();
         foreach($tasks as $user => $userTasks)
         {
@@ -384,23 +382,43 @@ EOT;
                 {
                     $workload[$user]['task'][$task->projectName]['count']   = isset($workload[$user]['task'][$task->projectName]['count']) ? $workload[$user]['task'][$task->projectName]['count'] + 1 : 1;
                     $workload[$user]['task'][$task->projectName]['manhour'] = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
-                    $workload[$user]['total']['task']['count']   = isset($workload[$user]['total']['task']['count']) ? $workload[$user]['total']['task']['count'] + 1 : 1;
-                    $workload[$user]['total']['task']['manhour'] = isset($workload[$user]['total']['task']['manhour']) ? $workload[$user]['total']['task']['manhour'] + $task->left : $task->left;
+                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count']) ? $workload[$user]['total']['count'] + 1 : 1;
+                    $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
             }
         }
+        unset($workload['closed']);
+        return $workload;
+    }
+
+    /**
+     * Get bug assign. 
+     * 
+     * @access public
+     * @return array 
+     */
+    public function getBugAssign()
+    {
+        $bugs = $this->dao->select('t1.*, t2.name as productName')
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')
+            ->on('t1.product = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.status')->eq('active')
+            ->fetchGroup('assignedTo');
+        $assign = array();
         foreach($bugs as $user => $userBugs)
         {
             if($user)
             {
                 foreach($userBugs as $bug)
                 {
-                    $workload[$user]['bug'][$bug->productName]['count'] = isset($workload[$user]['bug'][$bug->productName]['count']) ? $workload[$user]['bug'][$bug->productName]['count'] + 1 : 1;
-                    $workload[$user]['total']['bug']['count']   = isset($workload[$user]['total']['bug']['count']) ? $workload[$user]['total']['bug']['count'] + 1 : 1;
+                    $assign[$user]['bug'][$bug->productName]['count'] = isset($assign[$user]['bug'][$bug->productName]['count']) ? $assign[$user]['bug'][$bug->productName]['count'] + 1 : 1;
+                    $assign[$user]['total']['count']   = isset($assign[$user]['total']['count']) ? $assign[$user]['total']['count'] + 1 : 1;
                 }
             }
         }
-        unset($workload['closed']);
-        return $workload;
+        unset($assign['closed']);
+        return $assign;
     }
 }

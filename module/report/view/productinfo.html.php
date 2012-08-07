@@ -3,6 +3,7 @@
   <tr valign='top'>
     <td class='side'>
       <?php include 'blockreportlist.html.php';?>
+      <div class='proversion'><?php echo $lang->report->proVersion;?></div>
     </td>
     <td class='divider'></td>
     <td>

@@ -19,7 +19,7 @@ class report extends control
      */
     public function index()
     {
-        $this->locate(inlink('projectdeviation')); 
+        $this->locate(inlink('productinfo')); 
     }
     
     /**
@@ -91,6 +91,20 @@ class report extends control
         $this->display(); 
     }
 
+    /**
+     * Bug assign report.
+     * 
+     * @access public
+     * @return void
+     */
+    public function bugAssign()
+    {
+        $this->view->header->title = $this->lang->report->bugAssign;
+        $this->view->submenu       = 'test';
+        $this->view->assigns       = $this->report->getBugAssign();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->display(); 
+    }
     /**
      * Workload report.
      * 

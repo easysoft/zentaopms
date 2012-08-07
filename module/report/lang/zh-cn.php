@@ -36,11 +36,13 @@ $lang->report->singleColor[] = 'F6BD0F';
 $lang->report->projectDeviation = '项目偏差报表';
 $lang->report->productInfo      = '产品信息统计表';
 $lang->report->bugSummary       = 'Bug汇总表';
+$lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '员工负载表';
 
 $lang->reportList->project->lists[10] = '项目偏差报表|report|projectdeviation';
 $lang->reportList->product->lists[10] = '产品信息统计表|report|productinfo';
 $lang->reportList->test->lists[10]    = 'Bug汇总表|report|bugsummary';
+$lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
 $lang->reportList->staff->lists[10]   = '员工负载表|report|workload';
 
 $lang->report->id            = '编号';

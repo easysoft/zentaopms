@@ -4,7 +4,6 @@
   <tr valign='top'>
     <td class='side'>
       <?php include 'blockreportlist.html.php';?>
-      <div class='proversion'><?php echo $lang->report->proVersion;?></div>
     </td>
     <td class='divider'></td>
     <td>
@@ -45,16 +44,59 @@
             <td><?php echo $project->estimate;?></td>
             <td><?php echo $project->consumed;?></td>
             <?php $deviation = $project->consumed - $project->estimate;?>
-            <td><?php echo $deviation > 0 ? ('+' . $deviation) : ($deviation);?></td>
-            <td>
-              <?php 
-                if($project->estimate)
+            <td class="deviation">
+            <?php 
+                if($deviation > 0)
                 {
-                    echo $deviation > 0 ? ('+' . round($deviation / $project->estimate * 100, 2)) . '%' : round($deviation / $project->estimate * 100, 2) . '%';
+                    echo '<span class="up">&uarr;</span>' . $deviation;
+                }
+                else if($deviation < 0)
+                {
+                    echo '<span class="down">&darr;</span>' . abs($deviation);
                 }
                 else
                 {
-                    echo '0%';
+                    echo '<span class="zero">0</span>'; 
+                }
+            ?>
+            </td>
+            <td class="deviation">
+              <?php 
+                if($project->estimate)
+                {
+                    $num = round($deviation / $project->estimate * 100, 2);
+                    if($num >= 50)
+                    {
+                        echo '<span class="u50">' . $num . '%</span>';
+                    }
+                    else if($num >= 30)
+                    {
+                        echo '<span class="u30">' . $num . '%</span>';
+                    }
+                    else if($num >= 10)
+                    {
+                        echo '<span class="u10">' . $num . '%</span>';
+                    }
+                    else if($num > 0)
+                    {
+                        echo '<span class="u0">' . abs($num) . '%</span>';
+                    }
+                    else if($num <= -20)
+                    {
+                        echo '<span class="d20">' . abs($num) . '%</span>';
+                    }
+                    else if($num < 0)
+                    {
+                        echo '<span class="d0">' . abs($num) . '%</span>';
+                    }
+                    else
+                    {
+                        echo '<span class="zero">' . abs($num) . '%</span>';
+                    }
+                }
+                else
+                {
+                    echo '<span class="zero">0%</span>';
                 }
               ?>
             </td>

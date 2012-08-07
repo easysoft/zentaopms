@@ -10,32 +10,29 @@
         <thead>
         <tr class='colhead'>
           <th><?php echo $lang->report->user;?></th>
-          <th><?php echo $lang->report->project;?></th>
-          <th><?php echo $lang->report->task;?></th>
-          <th><?php echo $lang->report->remain;?></th>
+          <th><?php echo $lang->report->product;?></th>
+          <th><?php echo $lang->report->bug;?></th>
           <th><?php echo $lang->report->total;?></th>
         </tr>
         </thead>
         <tbody>
-        <?php foreach($workload as $account => $load):?>
+          <?php foreach($assigns as $account => $assign):?>
           <tr class="a-center">
-            <td rowspan="<?php echo count($load['task']);?>"><?php echo $users[$account];?></td>
+            <td rowspan="<?php echo count($assign['bug']);?>"><?php echo $users[$account];?></td>
             <?php $id = 1;?>
-            <?php foreach($load['task'] as $project => $info):?>
+            <?php foreach($assign['bug'] as $product => $count):?>
             <?php if($id != 1) echo '<tr class="a-center">';?>
-            <td><?php echo $project;?></td>
-            <td><?php echo $info['count'];?></td>
-            <td><?php echo $info['manhour'];?></td>
+            <td><?php echo $product;?></td>
+            <td><?php echo $count['count'];?></td>
             <?php if($id == 1):?>
-            <td rowspan="<?php echo count($load['task']);?>">
-                <?php printf($lang->report->taskTotal, $load['total']['count'], $load['total']['manhour']);?>
+            <td rowspan="<?php echo count($assign['bug']);?>">
+                <?php printf($lang->report->bugTotal, $assign['total']['count']);?>
             </td>
             <?php endif;?>
             <?php if($id != 1) echo '</tr>'; $id ++;?>
             <?php endforeach;?>
           </tr>
-          </tr>
-        <?php endforeach;?>
+          <?php endforeach;?>
         </tbody>
       </table> 
     </td>

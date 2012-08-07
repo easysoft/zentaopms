@@ -41,6 +41,7 @@ $lang->report->workload         = 'Workload';
 $lang->reportList->project->lists[10] = 'Project deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = 'Product information|report|productinfo';
 $lang->reportList->test->lists[10]    = 'Bug summary|report|bugsummary';
+$lang->reportList->test->lists[13]    = 'Bug assign|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Workload|report|workload';
 
 $lang->report->id            = 'ID';
