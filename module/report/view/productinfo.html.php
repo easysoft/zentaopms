@@ -18,6 +18,7 @@
           <th width="w-50px"><?php echo $lang->story->statusList['draft'];?></th>
           <th width="w-50px"><?php echo $lang->story->statusList['active'];?></th>
           <th width="w-50px"><?php echo $lang->story->statusList['changed'];?></th>
+          <th width="w-50px"><?php echo $lang->story->statusList['closed'];?></th>
         </tr>
         </thead>
         <tbody>
@@ -36,10 +37,12 @@
               <td><?php echo (isset($plan->status['draft']) ? $plan->status['draft'] : 0);?></td>
               <td><?php echo (isset($plan->status['active']) ? $plan->status['active'] : 0);?></td>
               <td><?php echo (isset($plan->status['changed']) ? $plan->status['changed'] : 0);?></td>
+              <td><?php echo (isset($plan->status['closed']) ? $plan->status['closed'] : 0);?></td>
             <?php if($id != 1) echo "</tr>"?>
             <?php $id ++;?>
             <?php endforeach;?>
             <?php else:?>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

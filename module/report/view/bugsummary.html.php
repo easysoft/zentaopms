@@ -10,7 +10,7 @@
     <div class="choose-date mb-10px f-left">
         <?php echo html::input('date', $begin, "class='select-7 date' onchange='changeDate(this.value, \"$end\")'") . "<span> {$lang->report->to} </span>" . html::input('date', $end, "class='select-7 date' onchange='changeDate(\"$begin\", this.value)'");?>
     </div>
-      <table class='table-1 fixed colored tablesorter datatable border-sep'>
+      <table class='table-1 fixed colored tablesorter datatable border-sep' id="bug">
         <thead>
         <tr class='colhead'>
           <th><?php echo $lang->bug->openedBy;?></th>

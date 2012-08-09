@@ -105,6 +105,7 @@ class report extends control
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display(); 
     }
+
     /**
      * Workload report.
      * 

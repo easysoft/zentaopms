@@ -36,6 +36,7 @@ $lang->report->singleColor[] = 'F6BD0F';
 $lang->report->projectDeviation = 'Project deviation';
 $lang->report->productInfo      = 'Product information';
 $lang->report->bugSummary       = 'Bug summary';
+$lang->report->bugAssign        = 'Bug assign';
 $lang->report->workload         = 'Workload';
 
 $lang->reportList->project->lists[10] = 'Project deviation|report|projectdeviation';
@@ -64,7 +65,8 @@ $lang->report->devTestRate   = 'Dev/Test';
 $lang->report->details       = 'Details';
 $lang->report->total         = 'Total';
 $lang->report->to            = 'to';
-$lang->report->taskTotal     = "%s Tasks, %s Manhours";
+$lang->report->taskTotal     = "Task Total";
+$lang->report->manhourTotal  = "Manhour Total";
 $lang->report->bugTotal      = "%s Bugs";
 
 $lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try pro version for more!</a>';

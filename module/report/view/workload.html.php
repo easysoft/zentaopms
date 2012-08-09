@@ -13,7 +13,8 @@
           <th><?php echo $lang->report->project;?></th>
           <th><?php echo $lang->report->task;?></th>
           <th><?php echo $lang->report->remain;?></th>
-          <th><?php echo $lang->report->total;?></th>
+          <th><?php echo $lang->report->taskTotal;?></th>
+          <th><?php echo $lang->report->manhourTotal;?></th>
         </tr>
         </thead>
         <tbody>
@@ -28,7 +29,10 @@
             <td><?php echo $info['manhour'];?></td>
             <?php if($id == 1):?>
             <td rowspan="<?php echo count($load['task']);?>">
-                <?php printf($lang->report->taskTotal, $load['total']['count'], $load['total']['manhour']);?>
+                <?php echo $load['total']['count'];?>
+            </td>
+            <td rowspan="<?php echo count($load['task']);?>">
+                <?php echo $load['total']['manhour'];?>
             </td>
             <?php endif;?>
             <?php if($id != 1) echo '</tr>'; $id ++;?>

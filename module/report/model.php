@@ -372,6 +372,7 @@ EOT;
             ->on('t1.project = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->notin('cancel, closed, done')
+            ->andWhere('t2.deleted')->eq(0)
             ->fetchGroup('assignedTo');
         $workload = array();
         foreach($tasks as $user => $userTasks)
@@ -405,6 +406,7 @@ EOT;
             ->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->eq('active')
+            ->andWhere('t2.deleted')->eq(0)
             ->fetchGroup('assignedTo');
         $assign = array();
         foreach($bugs as $user => $userBugs)
