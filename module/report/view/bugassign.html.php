@@ -26,7 +26,7 @@
             <td><?php echo $count['count'];?></td>
             <?php if($id == 1):?>
             <td rowspan="<?php echo count($assign['bug']);?>">
-                <?php printf($lang->report->bugTotal, $assign['total']['count']);?>
+                <?php echo $assign['total']['count'];?>
             </td>
             <?php endif;?>
             <?php if($id != 1) echo '</tr>'; $id ++;?>

@@ -10,11 +10,11 @@
       <table class='table-1 fixed colored tablesorter datatable border-sep' id='product'>
         <thead>
         <tr class='colhead'>
-          <th width='150'><?php echo $lang->product->name;?></th>
-          <th width='150'><?php echo $lang->product->PO;?></th>
-          <th width="200"><?php echo $lang->productplan->common;?></th>
-          <th class="w-100px"><?php echo $lang->productplan->begin;?></th>
-          <th class="w-100px"><?php echo $lang->productplan->end;?></th>
+          <th width='200'><?php echo $lang->product->name;?></th>
+          <th width='120'><?php echo $lang->product->PO;?></th>
+          <th width="300"><?php echo $lang->productplan->common;?></th>
+          <th width="150"><?php echo $lang->productplan->begin;?></th>
+          <th width="150"><?php echo $lang->productplan->end;?></th>
           <th width="w-50px"><?php echo $lang->story->statusList['draft'];?></th>
           <th width="w-50px"><?php echo $lang->story->statusList['active'];?></th>
           <th width="w-50px"><?php echo $lang->story->statusList['changed'];?></th>
@@ -26,7 +26,7 @@
           <tr class="a-center">
             <?php $count = isset($product->plans) ? count($product->plans) : 1;?>
             <td align='left' rowspan="<?php echo $count;?>"><?php echo '<p>' . $product->name . "</p>";?></td>
-            <td align='left' rowspan="<?php echo $count;?>"><?php echo "<p>" . $users[$product->PO] . '</p>';?></td>
+            <td align='left' rowspan="<?php echo $count;?>" class="a-center"><?php echo "<p>" . $users[$product->PO] . '</p>';?></td>
             <?php if(isset($product->plans)):?>
             <?php $id = 1;?>
             <?php foreach($product->plans as $plan):?>
