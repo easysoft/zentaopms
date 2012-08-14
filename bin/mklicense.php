@@ -6,6 +6,7 @@ $type       = empty($argv[4]) ? '' : $argv[4];
 $ip         = empty($argv[5]) ? '' : $argv[5];
 $mac        = empty($argv[6]) ? '' : $argv[6];
 $dirName    = basename($filePath);
+define('PASSWORD', md5(md5('Zentao Pro editor') . 'cnezsoft'));
 
 $order->account = $company;
 $order->users   = $users;
@@ -14,24 +15,30 @@ $order->mac     = $mac;
 $order->type    = $type;
 createLicense($order, $dirName, '/tmp/encrypt/');
 echo "Ziping extension\n";
-if(file_exists("license$dirName$company.zip")) `rm license$dirName$company.zip`;
+if(file_exists("/tmp/encrypt/license$dirName$company.zip")) `rm /tmp/encrypt/license$dirName$company.zip`;
 `cd /tmp/encrypt/; zip -rm -9 license$dirName$company.zip $dirName`;
-echo "Finished\n";
+echo "license$dirName$company.zip Finished\n";
 
 function createLicense($order, $saveName, $encryptPath)
 {
     echo "Creating license.\n";
-    $property = $order->users == 0 ? '' : "--property user=$order->users";
-    $expire   = empty($order->account) ? '--expire-in 180d' : '';
     if(!is_dir($encryptPath . $saveName))mkdir($encryptPath . $saveName);
     if(!is_dir($encryptPath . $saveName . "/config"))mkdir($encryptPath . $saveName . '/config');
     if(!is_dir($encryptPath . $saveName . "/config/license"))mkdir($encryptPath . $saveName . "/config/license");
-    $server = empty($order->ip) ? '' : $order->ip;
+
+    $property  = empty($order->account) ? "company='try'" : "company='$order->account'";
+    $property .= $order->users == 0 ? '' : ",user=$order->users";
+    $property = "--property \"$property\"";
+
+    $server = empty($order->ip) ? '' : '127.0.0.1,' . $order->ip;
     $server = !empty($order->mac) ? empty($server) ? "'{{$order->mac}}'" : "'$server{{$order->mac}}'" : $server;
     $server = empty($server) ? '' : '--allowed-server ' . $server;
-    $expire  = $order->type == 'year' ? "--expire-in 365d" : $expire;
-    $expire  = $order->type == 'try' ? "--expire-in 30d" : $expire;
-    $passphrase = empty($order->account) ? 'try' : $order->account;
-    $license = $encryptPath . $saveName . '/config/license/' . $saveName . $order->account . '.txt';
-    echo `/usr/local/ioncube/make_license $property $expire --passphrase $passphrase -o $license`;
+
+    $expire  = empty($order->account) ? '--expire-in 186d' : '';
+    $expire  = $order->type == 'year' ? "--expire-in 372d" : $expire;
+    $expire  = $order->type == 'try' ? "--expire-in 31d" : $expire;
+
+    $passphrase = PASSWORD;
+    $license = $encryptPath . $saveName . '/config/license/' . $saveName . '.txt';
+    echo `/usr/local/ioncube/make_license $property $server $expire --passphrase $passphrase -o $license`;
 }

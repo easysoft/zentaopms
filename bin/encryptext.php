@@ -2,11 +2,12 @@
 if(empty($argv[1])) die('Must request a param');
 $filePath   = $argv[1];
 $users      = empty($argv[2]) ? 0 : $argv[2];
-$company    = empty($argv[3]) ? '' : $argv[3];
-$type       = empty($argv[4]) ? '' : $argv[4];
+$company    = empty($argv[3]) ? '' : $argv[3]; // 如果没有，try (type = 180d)
+$type       = empty($argv[4]) ? '' : $argv[4]; // try ->30d   year ->365d  or 60 -> 60d
 $ip         = empty($argv[5]) ? '' : $argv[5];
 $mac        = empty($argv[6]) ? '' : $argv[6];
 $dirName    = basename($filePath);
+define('PASSWORD', md5(md5('Zentao Pro editor') . 'cnezsoft'));
 echo "Removing file\n";
 `rm -rf /tmp/$dirName`;
 echo "Copying file\n";
@@ -161,9 +162,9 @@ $order->users   = $users;
 $order->ip      = $ip;
 $order->mac     = $mac;
 $order->type    = $type;
-$passphrase     = empty($order->account) ? 'try' : $order->account;
+$passphrase     = PASSWORD;
 createLicense($order, $dirName, '/tmp/encrypt/');
-$withLicense = "--with-license config/license/" . basename($file) . $order->account . ".txt --passphrase $passphrase";
+$withLicense = "--with-license config/license/" . basename($file) . ".txt --passphrase $passphrase";
 
 exec("/usr/local/ioncube/ioncube_encoder5 --copy config.php --copy phpexcel/ --copy tmp/ --copy hook/ --copy framework/ --copy config/ --copy view/ --copy lang/ $withLicense $file --update-target --into /tmp/encrypt/", $outError);
 foreach($outError as $error)
@@ -176,23 +177,30 @@ foreach($outError as $error)
 echo "Ziping extension\n";
 if(file_exists("/tmp/encrypt/$dirName$company.zip")) `rm /tmp/encrypt/$dirName$company.zip`;
 `cd /tmp/encrypt/; zip -rm -9 $dirName$company.zip $dirName`;
-echo "Finished\n";
+echo "$dirName$company.zip Finished\n";
 
 function createLicense($order, $saveName, $encryptPath)
 {
     echo "Creating license.\n";
-    $property = $order->users == 0 ? '' : "--property user=$order->users";
-    $expire   = empty($order->account) ? '--expire-in 180d' : '';
     if(!is_dir($encryptPath . $saveName))mkdir($encryptPath . $saveName);
     if(!is_dir($encryptPath . $saveName . "/config"))mkdir($encryptPath . $saveName . '/config');
     if(!is_dir($encryptPath . $saveName . "/config/license"))mkdir($encryptPath . $saveName . "/config/license");
-    $server = empty($order->ip) ? '' : $order->ip;
+
+    $property  = empty($order->account) ? "company='try'" : "company='$order->account'";
+    $property .= $order->users == 0 ? '' : ",user=$order->users";
+    $property = "--property \"$property\"";
+
+    $server = empty($order->ip) ? '' : '127.0.0.1,' . $order->ip;
     $server = !empty($order->mac) ? empty($server) ? "'{{$order->mac}}'" : "'$server{{$order->mac}}'" : $server;
     $server = empty($server) ? '' : '--allowed-server ' . $server;
-    $expire  = $order->type == 'year' ? "--expire-in 365d" : $expire;
-    $expire  = $order->type == 'try' ? "--expire-in 30d" : $expire;
+
+    $expire   = empty($order->account) ? '--expire-in 186d' : '';
+    $expire  = $order->type == 'year' ? "--expire-in 372d" : $expire;
+    $expire  = $order->type == 'try' ? "--expire-in 31d" : $expire;
     $expire  = is_numeric($order->type) ? "--expire-in {$order->type}d" : $expire;
-    $passphrase = empty($order->account) ? 'try' : $order->account;
-    $license = $encryptPath . $saveName . '/config/license/' . $saveName . $order->account . '.txt';
-    echo `/usr/local/ioncube/make_license $property $expire --passphrase $passphrase -o $license`;
+    $expire  = $order->type == 'life' ? "" : $expire;
+
+    $passphrase = PASSWORD;
+    $license = $encryptPath . $saveName . '/config/license/' . $saveName . '.txt';
+    echo `/usr/local/ioncube/make_license $property $server $expire --passphrase $passphrase -o $license`;
 }
