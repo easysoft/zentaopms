@@ -152,16 +152,18 @@ if($defaultValue)
 }
 $file = "/tmp/$dirName";
 $noLoader = "
-'<html>
+\\\$link = is_file(\\\$_SERVER['DOCUMENT_ROOT'] . '/loader-wizard.php') ? '/loader-wizard.php' : 'http://www.ioncube.com/lw/';
+echo \\\"<html>
   <head>
-    <meta http-equiv=\'content-type\' content=\'text/html; charset=utf-8\' />
+    <meta http-equiv='content-type' content='text/html; charset=utf-8' />
     <title>error</title>
   </head>
   <body>
-    <h1 style=\'color:red;text-align:center\'>未安装 ioncube loader</h1>
-    <p>网站错误：文件'.__file__.'需要安装ioncube php loader 解析，该网站需要安装'.basename(\\\$__ln).'。如果你是网站所有者，请使用<a href=\'http://www.ioncube.com/lw/\'>ioncube loader安装向导</a>。</p>
+    <h1 style='color:red;text-align:center'>未安装 ioncube loader</h1>
+    <p>网站错误：文件\\\".__file__.'需要安装ioncube php loader来解析，该网站需要安装'.basename(\\\$__ln).\\\"。如果你是网站所有者，请使用<a href='\\\$link'>ioncube loader安装向导</a>。</p>
   </body>
-</html>'
+</html>\\\";
+exit;
 ";
 
 /* encrypt file*/
@@ -181,7 +183,7 @@ $callbackFile = dirname(__FILE__) . "/callback.php";
 echo `cp $callbackFile /tmp/encrypt/$dirName/config/license/`;
 $callback = "--callback-file config/license/callback.php";
 
-exec("/usr/local/ioncube/ioncube_encoder5 --copy config.php --copy phpexcel/ --copy tmp/ --copy hook/ --copy framework/ --copy config/ --copy view/ --copy lang/ $withLicense $callback --message-if-no-loader \"$noLoader\" $file --update-target --into /tmp/encrypt/", $outError);
+exec("/usr/local/ioncube/ioncube_encoder5 --copy config.php --copy phpexcel/ --copy tmp/ --copy hook/ --copy framework/ --copy config/ --copy view/ --copy lang/ $withLicense $callback --action-if-no-loader \"$noLoader\" $file --update-target --into /tmp/encrypt/", $outError);
 foreach($outError as $error)
 {
     $errorFile    = substr($error, 0 , strpos($error, ':'));
