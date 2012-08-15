@@ -112,7 +112,8 @@ class todo extends control
         /* Judge a private todo or not, If private, die. */
         $todo = $this->todo->getById($todoID);
         if($todo->private and $this->app->user->account != $todo->account) die('private');
-
+       
+        $todo->date      = strftime("%Y-%m-%d", strtotime($todo->date));
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
         $position[]      = $this->lang->todo->edit;
 

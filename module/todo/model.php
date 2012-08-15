@@ -33,11 +33,11 @@ class todoModel extends model
             ->setIF($this->post->type != 'custom', 'name', '')
             ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
             ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
+            ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
             ->remove('bug, task')
             ->get();
-
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
@@ -56,13 +56,19 @@ class todoModel extends model
     public function batchCreate()
     {
         $todos = fixer::input('post')->cleanInt('date')->get();
-
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
             if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]))
             {
                 $todo->account = $this->app->user->account;
-                $todo->date    = $this->post->date;
+                if($this->post->date == false)
+                {
+                    $todo->date    = '2030-01-01';
+                }
+                else
+                {
+                    $todo->date    = $this->post->date;
+                }
                 $todo->type    = $todos->types[$i];
                 $todo->pri     = $todos->pris[$i];
                 $todo->name    = isset($todos->names[$i]) ? $todos->names[$i] : '';
@@ -109,6 +115,7 @@ class todoModel extends model
             ->cleanInt('date, pri, begin, end, private')
             ->specialChars('type,name')
             ->setIF($this->post->type  != 'custom', 'name', '')
+            ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
             ->setDefault('private', 0)
@@ -511,3 +518,6 @@ class todoModel extends model
         return array('begin' => $begin, 'end' => $end);
     }
 }
+
+
+
