@@ -36,8 +36,9 @@ class release extends control
     public function browse($productID)
     {
         $this->commonAction($productID);
+        $products                  = $this->product->getPairs();
         $this->session->set('releaseList', $this->app->getURI(true));
-        $this->view->header->title = $this->lang->release->browse;
+        $this->view->header->title = $products[$productID] . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[]    = $this->lang->release->browse;
         $this->view->releases      = $this->release->getList($productID);
         $this->display();
@@ -138,10 +139,11 @@ class release extends control
 
         $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        
 
         $this->commonAction($release->product);
-
-        $this->view->header->title = $this->lang->release->view;
+        $products                  = $this->product->getPairs();
+        $this->view->header->title = "RELEASE #$release->id $release->name/" . $products[$release->product];
         $this->view->position[]    = $this->lang->release->view;
         $this->view->release       = $release;
         $this->view->stories       = $stories;

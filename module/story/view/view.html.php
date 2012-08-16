@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
-  <div id='main' <?php if($story->deleted) echo "class='deleted'";?>>STORY #<?php echo $story->id . $lang->colon . $story->title;?></div>
+  <div id='main' <?php if($story->deleted) echo "class='deleted'";?>>STORY #<?php echo $story->id . ' ' . $story->title;?></div>
   <div>
   <?php
   $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");

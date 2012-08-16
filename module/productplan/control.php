@@ -111,7 +111,8 @@ class productplan extends control
     {
         $this->session->set('productPlanList', $this->app->getURI(true));
         $this->commonAction($product);
-        $this->view->header->title = $this->lang->productplan->browse;
+        $products               = $this->product->getPairs();
+        $this->view->header->title = $products[$product] . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->plans      = $this->productplan->getList($product);
         $this->display();
@@ -130,13 +131,12 @@ class productplan extends control
 
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
-
         $this->commonAction($plan->product);
-
-        $this->view->header->title = $this->lang->productplan->view;
+        $products               = $this->product->getPairs();
+        $this->view->header->title = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[] = $this->lang->productplan->view;
         $this->view->planStories= $this->loadModel('story')->getPlanStories($planID);
-        $this->view->products   = $this->product->getPairs();
+        $this->view->products   = $products;
         $this->view->plan       = $plan;
         $this->view->actions    = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');

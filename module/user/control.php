@@ -198,7 +198,6 @@ class user extends control
      */
     public function profile($account)
     {
-        $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->profile;
         $position[]      = $this->lang->user->profile;
 
         /* Set menu. */
@@ -206,7 +205,8 @@ class user extends control
 
         $user = $this->user->getById($account);
         $deptPath = $this->dept->getParents($user->dept);
-
+       
+        $header['title'] = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->user     = $user;

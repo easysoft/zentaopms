@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <table class='table-1 a-left'> 
-  <caption><?php echo $lang->todo->view;?></caption>
+  <caption>TODO  #<?php echo $todo->id . ' ' . $todo->name;?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->todo->account;?></th>
     <td><?php echo $todo->account;?></td>

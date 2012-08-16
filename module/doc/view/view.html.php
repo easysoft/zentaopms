@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <table class='table-1'>
-  <caption><?php echo $doc->title . $lang->colon . $lang->doc->view;?></caption>
+  <caption>DOC #<?php echo $doc->id . ' ' . $doc->title?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->doc->title;?></th>
     <td <?php if($doc->deleted) echo "class='deleted'";?>><?php echo $doc->title;?></td>

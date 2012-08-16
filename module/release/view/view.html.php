@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <table class='cont-rt5'> 
-  <caption><?php echo $lang->release->view;?></caption>
+  <caption>RELEASE #<?php echo $release->id . ' ' . $release->name;?></caption>
   <tr valign='top'>
     <td>
       <fieldset>

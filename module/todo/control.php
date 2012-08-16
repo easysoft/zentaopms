@@ -147,7 +147,7 @@ class todo extends control
         $this->loadModel('user')->setMenu($this->user->getPairs(), $todo->account);
         $this->lang->set('menugroup.todo', $from);
 
-        $this->view->header->title = $this->lang->todo->view;
+        $this->view->header->title = "TODO #$todo->id $todo->name";
         $this->view->position[]    = $this->lang->todo->view;
         $this->view->todo          = $todo;
         $this->view->times         = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);

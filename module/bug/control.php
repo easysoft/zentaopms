@@ -344,7 +344,7 @@ class bug extends control
         $productName = $this->products[$productID];
       
         /* Header and positon. */
-        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->view;
+        $this->view->header->title = "BUG #$bug->id $bug->title/" . $this->products[$productID];
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
         $this->view->position[]    = $this->lang->bug->view;
 

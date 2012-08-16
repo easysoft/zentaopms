@@ -123,9 +123,9 @@ class build extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
 
         $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
-
+        $projects                  = $this->project->getPairs();
         /* Assign. */
-        $this->view->header->title = $this->lang->build->view;
+        $this->view->header->title = "BUILD #$build->id $build->name/" . $projects[$build->project];
         $this->view->position[]    = $this->lang->build->view;
         $this->view->products      = $this->project->getProducts($build->project);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');

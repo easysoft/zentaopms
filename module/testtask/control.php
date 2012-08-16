@@ -174,7 +174,7 @@ class testtask extends control
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID);
 
-        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->view;
+        $this->view->header['title'] = "TASK #$task->id $task->name/" . $this->products[$productID];
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->view;
 

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <div id='titlebar' <?php if($case->deleted) echo "class='deleted'";?>>
-  <div id='main'>CASE #<?php echo $case->id . $lang->colon . $case->title;?></div>
+  <div id='main'>CASE #<?php echo $case->id . ' ' . $case->title;?></div>
   <div>
     <?php
     $browseLink = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");

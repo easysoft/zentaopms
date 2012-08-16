@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <table class='cont-rt5'> 
   <caption>
-    <?php echo $lang->product->view;?>
+    <?php echo $product->name . $this->lang->colon . $lang->product->view;?>
     <div class='f-right f-16px strong'>
       <?php
       $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");

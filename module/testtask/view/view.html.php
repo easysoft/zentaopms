@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <table class='table-1'> 
-  <caption><?php echo $lang->testtask->view;?></caption>
+  <caption>TASK #<?php echo $task->id . ' ' . $task->name;?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->testtask->name;?></th>
     <td class='<?php if($task->deleted) echo 'deleted';?>'><?php echo $task->name;?>

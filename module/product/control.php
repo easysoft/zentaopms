@@ -102,7 +102,7 @@ class product extends control
         setcookie('productStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         /* Set header and position. */
-        $this->view->header->title = $this->lang->product->index . $this->lang->colon . $this->products[$productID];
+        $this->view->header->title = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
         $this->view->position[]    = $this->products[$productID];
 
         /* Load pager. */
@@ -223,7 +223,7 @@ class product extends control
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->view->header->title = $this->lang->product->view . $this->lang->colon . $product->name;
+        $this->view->header->title = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[]    = $this->lang->product->view;
         $this->view->product       = $product;
@@ -269,7 +269,7 @@ class product extends control
         $this->session->set('docList', $this->app->getURI(true));
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $this->view->header->title = $this->lang->product->doc;
+        $this->view->header->title = $product->name . $this->lang->colon . $this->lang->product->doc;
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[]    = $this->lang->product->doc;
         $this->view->product       = $product;
@@ -293,7 +293,7 @@ class product extends control
         $this->session->set('productPlanList', $this->app->getURI(true));
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $this->view->header->title = $this->lang->product->roadmap;
+        $this->view->header->title = $product->name . $this->lang->colon . $this->lang->product->roadmap;
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[]    = $this->lang->product->roadmap;
         $this->view->product       = $product;
@@ -341,7 +341,7 @@ class product extends control
         $period  = $type == 'account' ? 'all'  : $type;
 
         /* The header and position. */
-        $this->view->header->title = $this->lang->product->dynamic;
+        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
         $this->view->position[]    = $this->lang->product->dynamic;
 
         /* Assign. */

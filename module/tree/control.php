@@ -71,7 +71,7 @@ class tree extends control
             $this->view->currentProduct = $currentProduct;
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
 
-            $header['title'] = $this->lang->tree->manageProduct . $this->lang->colon . $product->name;
+            $header['title'] = $product->name . $this->lang->colon . $this->lang->tree->manageProduct;
             $position[]      = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
             $position[]      = $this->lang->tree->manageProduct;
         }
@@ -90,7 +90,7 @@ class tree extends control
             $this->view->currentProject = $currentProject;
             $this->view->projectModules = $this->tree->getOptionMenu($currentProject, 'task');
 
-            $header['title'] = $this->lang->tree->manageProject . $this->lang->colon . $project->name;
+            $header['title'] = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
             $position[]      = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
             $position[]      = $this->lang->tree->manageProject;
         }
@@ -101,7 +101,7 @@ class tree extends control
             $this->lang->tree->menuOrder = $this->lang->bug->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
 
-            $header['title'] = $this->lang->tree->manageBug . $this->lang->colon . $product->name;
+            $header['title'] = $product->name . $this->lang->colon . $this->lang->tree->manageBug;
             $position[]      = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
             $position[]      = $this->lang->tree->manageBug;
         }
@@ -112,7 +112,7 @@ class tree extends control
             $this->lang->tree->menuOrder = $this->lang->testcase->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
 
-            $header['title'] = $this->lang->tree->manageCase . $this->lang->colon . $product->name;
+            $header['title'] = $product->name . $this->lang->colon . $this->lang->tree->manageCase;
             $position[]      = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
             $position[]      = $this->lang->tree->manageCase;
         }
@@ -123,7 +123,7 @@ class tree extends control
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
             $this->lang->set('menugroup.tree', 'doc');
 
-            $header['title'] = $this->lang->tree->manageCustomDoc . $this->lang->colon . $lib->name;
+            $header['title'] = $lib->name . $this->lang->colon . $this->lang->tree->manageCustomDoc;
             $position[]      = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
             $position[]      = $this->lang->tree->manageCustomDoc;
         }

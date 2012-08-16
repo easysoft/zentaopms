@@ -387,7 +387,7 @@ class doc extends control
         /* Set menu. */
         $this->doc->setMenu($this->libs, $doc->lib);
 
-        $this->view->header->title = $this->libs[$doc->lib] . $this->lang->colon . $this->lang->doc->view;
+        $this->view->header->title = "DOC #$doc->id $doc->title/" . $this->libs[$doc->lib];
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
         $this->view->position[]    = $this->lang->doc->view;
 

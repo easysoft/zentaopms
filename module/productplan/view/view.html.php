@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <table class='cont-rt5'>
-  <caption><?php echo $plan->title . $lang->colon . $lang->productplan->view;?></caption>
+  <caption>PLAN #<?php echo $plan->id . ' ' . $plan->title;?></caption>
   <tr valign='top'>
     <td>
       <fieldset>

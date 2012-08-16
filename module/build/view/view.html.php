@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <table class='cont-rt5'> 
-  <caption><?php echo $lang->build->view;?></caption>
+  <caption>BUILD #<?php echo $build->id . ' ' . $build->name;?></caption>
   <tr valign='top'>
     <td>
       <fieldset>
