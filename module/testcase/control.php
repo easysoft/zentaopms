@@ -543,9 +543,9 @@ class testcase extends control
                     $i = 1;
                     foreach($relatedSteps[$case->id] as $step)
                     {
+                        if($step->version != $case->version) continue;
                         $case->steps .= $i . ":" . $step->desc . '<br />' . $caseLang->stepExpect . ':' . $step->expect . '<br />';
                         $i ++;
-                        if($step->version != $case->version) break;
                     }
                 }
 
