@@ -82,7 +82,7 @@ class releaseModel extends model
             ->join('bugs', ',')
             ->remove('allchecker')
             ->get();
-        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
+        $this->dao->insert(TABLE_RELEASE)->data($release)->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
         $releaseID = $this->dao->lastInsertID();
         $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
         if(!dao::isError()) return $releaseID;
@@ -106,7 +106,6 @@ class releaseModel extends model
             ->join('bugs', ',')
             ->get();
         $this->dao->update(TABLE_RELEASE)->data($release)
-            ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name','unique', "id != $releaseID")
             ->where('id')->eq((int)$releaseID)

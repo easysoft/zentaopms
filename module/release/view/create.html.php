@@ -25,7 +25,6 @@
       <td>
       <?php  
           echo html::select('build', $builds, '', "class='select-3' onchange=loadStoriesAndBugs(this.value,$productID)");
-          unset($builds['']);
           if(empty($builds)) echo $lang->build->notice;
       ?>
       </td>

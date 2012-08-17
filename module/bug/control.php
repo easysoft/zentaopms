@@ -292,7 +292,6 @@ class bug extends control
             $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
             $stories = $this->story->getProductStoryPairs($productID);
         }
-
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->create;

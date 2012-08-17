@@ -102,11 +102,18 @@ class release extends control
         $release = $this->release->getById((int)$releaseID);
         $this->commonAction($release->product);
         $build = $this->build->getById($release->build);
-
+        if($release->build !=0)
+        {
         /* Get stories and bugs. */
         $orderBy = 'status_asc, stage_asc, id_desc';
         $stories = $this->story->getProjectStories($build->project, $orderBy);
         $bugs    = $this->bug->getProjectBugs($build->project); 
+        }
+        else
+        {
+            $stories = array();
+            $bugs    = array();
+        }
 
         $this->view->header->title = $this->lang->release->edit;
         $this->view->position[]    = $this->lang->release->edit;
