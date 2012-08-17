@@ -143,7 +143,8 @@
 /* Product and project seleteGroup. */
 .chzn-container-single .chzn-single div b {background: url('./images/chosen/chosen-sprite.png') no-repeat 0 -2px;}
 
-#navbar ul .chzn-results li {margin:0; padding:0px 0px 0px 5px; float:none; text-align:left; list-style-type:none;}
+#navbar ul .chzn-results li {margin:0; padding:0px 0px 0px 5px; float:none; text-align:left; list-style-type:none; font-size:14px}
+#navbar ul .chzn-results li:first-child {line-height:5px}
 #navbar ul .chzn-results .active-result {padding:0px 0px 0px 25px;}
 #modulemenu .chzn-results {height:auto; padding:0px}
 #modulemenu .chzn-results li {color:black}

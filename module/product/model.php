@@ -67,7 +67,7 @@ class productModel extends model
             if($productMode == 'noclosed' and $product->status == 'closed') continue;
             if($product->status != 'closed')
             {
-                $productGroup[$this->lang->product->statusList['normal']][$product->id] = $product->name;
+                $productGroup['&nbsp;'][$product->id] = $product->name;
             }
             elseif($product->status == 'closed')
             {
