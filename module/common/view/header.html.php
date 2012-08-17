@@ -3,6 +3,7 @@ if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::
 include 'header.lite.html.php';
 include 'colorbox.html.php';
 include 'chosen.html.php';
+include 'validation.html.php';
 ?>
 <div id='header'>
   <table class='cont' id='topbar'>
