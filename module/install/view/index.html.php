@@ -25,7 +25,10 @@
       ?>
     </h3>
 	<?php else:?>
-      <h3 class='a-center'><?php echo html::a($this->createLink('install', 'step1'), $lang->install->start);?></h3>
+      <h3 class='a-center'>
+        <?php echo html::select('', $app->config->langs, $app->cookie->lang,  'onchange="selectLang(this.value)"');?>
+        <?php echo html::a($this->createLink('install', 'step1'), $lang->install->start);?>
+      </h3>
     <?php endif;?>
     </td>
   </tr>
