@@ -13,6 +13,7 @@
 $lang->project->common        = 'Project';
 $lang->project->id            = 'ID';
 $lang->project->company       = 'Company';
+$lang->project->fromproject   = 'FromProject';
 $lang->project->iscat         = 'Is category';
 $lang->project->type          = 'Type';
 $lang->project->parent        = 'Parent';

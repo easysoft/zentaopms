@@ -16,7 +16,7 @@
   <table class='table-1 fixed tablesorter'>
     <thead>
     <tr class='colhead'>
-      <th class='w-150px'><?php echo $lang->task->project;?></th>
+      <td class='w-150px'><?php $projects = array(0 => $lang->project->fromproject)+$projects;?><?php echo html::select('fromproject', $projects, $fromProject, "class='select-2' onchange='reload($projectID, this.value)'");?></td>
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th class='w-p30'><?php echo $lang->task->name;?></th>

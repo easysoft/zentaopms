@@ -612,6 +612,7 @@ class projectModel extends model
     public function getRelatedProjects($projectID)
     {
         $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchAll('product');
+        // $products   = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->fetchAll('product');
         if(!$products) return array();
         $products = array_keys($products);
         return $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
@@ -631,18 +632,12 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getTasks2Imported($projectID)
+    public function getTasks2Imported($fromProject)
     {
         $this->loadModel('task');
-        $releatedProjects = $this->getRelatedProjects($projectID);
-        if(!$releatedProjects) return array();
-        $tasks = array();
-        foreach($releatedProjects as $releatedProjectID => $releatedProjectName)
-        {
-            $projectTasks = $this->task->getProjectTasks($releatedProjectID, 'wait,doing,cancel');
-            if(!$projectTasks) continue;
-            $tasks = array_merge($tasks, $projectTasks); 
-        }
+        $tasks        = array();
+        $projectTasks = $this->task->getProjectTasks($fromProject, 'wait,doing,cancel');
+        $tasks        = array_merge($tasks, $projectTasks); 
         return $tasks;
     }
 

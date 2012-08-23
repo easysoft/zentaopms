@@ -218,7 +218,6 @@ class project extends control
         /* Get tasks and group them. */
         $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $groupBy ? $groupBy : 'story');
         $groupBy     = strtolower(str_replace('`', '', $groupBy));
-       
         $taskLang    = $this->lang->task;
         $groupByList = array();
         $groupTasks  = array();
@@ -287,25 +286,29 @@ class project extends control
      * @access public
      * @return void
      */
-    public function importTask($projectID)
-    {
+    public function importTask($toProject, $fromProject = 0)
+    {   
         if(!empty($_POST))
         {
-            $this->project->importTask($projectID);
-            die(js::locate(inlink('task', "projectID=$projectID"), 'parent'));
+            $this->project->importTask($toProject,$fromProject);
+            die(js::locate(inlink('task', "projectID=$toProject"), 'parent'));
         }
 
-        $project = $this->commonAction($projectID);
+        $project   = $this->commonAction($toProject);
+        $projects  = $this->project->getPairs('all');
+        unset($projects[$toProject]);
 
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true));
         $this->app->session->set('storyList', $this->app->getURI(true));
 
         $this->view->header->title  = $project->name . $this->lang->colon . $this->lang->project->importTask;
-        $this->view->position[]     = html::a(inlink('browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]     = html::a(inlink('browse', "projectID=$toProject"), $project->name);
         $this->view->position[]     = $this->lang->project->importTask;
-        $this->view->tasks2Imported = $this->project->getTasks2Imported($projectID);
-        $this->view->projects       = $this->project->getPairs('all');
+        $this->view->tasks2Imported = $this->project->getTasks2Imported($fromProject);
+        $this->view->projects       = $projects;
+        $this->view->projectID      = $project->id;
+        $this->view->fromProject    = $fromProject;
         $this->display();
     }
 
