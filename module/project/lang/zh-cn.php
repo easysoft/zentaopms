@@ -13,6 +13,7 @@
 $lang->project->common        = '项目视图';
 $lang->project->id            = '项目编号';
 $lang->project->company       = '所属公司';
+$lang->project->fromproject   = '所属项目';
 $lang->project->iscat         = '作为目录';
 $lang->project->type          = '项目类型';
 $lang->project->parent        = '上级项目';
