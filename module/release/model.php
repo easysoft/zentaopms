@@ -75,14 +75,28 @@ class releaseModel extends model
      */
     public function create($productID)
     {
-        $release = fixer::input('post')
-            ->stripTags('name')
-            ->add('product', (int)$productID)
-            ->join('stories', ',')
-            ->join('bugs', ',')
-            ->remove('allchecker')
-            ->get();
-        $this->dao->insert(TABLE_RELEASE)->data($release)->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
+       if($this->post->build == false)
+        {
+            $build = fixer::input('post')
+                ->stripTags('name')
+                ->add('product', (int)$productID)
+                ->add('builder', $this->app->user->account)
+                ->remove('build')
+                ->get();
+            $this->dao->insert(TABLE_BUILD)->data($build)->autoCheck()->check('name','unique')->exec();
+            $buildID = $this->dao->lastInsertID();
+        }
+
+            $release = fixer::input('post')
+                ->stripTags('name')
+                ->add('product', (int)$productID)
+                ->join('stories', ',')
+                ->join('bugs', ',')
+                ->remove('allchecker')
+                ->setIF($this->post->build ==false, 'build', $buildID)
+                ->get();
+
+        $this->dao->insert(TABLE_RELEASE)->data($release)->autoCheck()->batchCheck($this->config->release->create->requiredFields, 'notempty')->check('name','unique')->exec();
         $releaseID = $this->dao->lastInsertID();
         $this->dao->update(TABLE_STORY)->set('stage')->eq('released')->where('id')->in($release->stories)->exec();
         if(!dao::isError()) return $releaseID;
@@ -106,6 +120,7 @@ class releaseModel extends model
             ->join('bugs', ',')
             ->get();
         $this->dao->update(TABLE_RELEASE)->data($release)
+            ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name','unique', "id != $releaseID")
             ->where('id')->eq((int)$releaseID)

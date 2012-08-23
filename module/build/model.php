@@ -101,12 +101,11 @@ class buildModel extends model
             ->where('product')->eq((int)$productID)
             ->andWhere('deleted')->eq(0)
             ->orderBy('date desc, id desc')->fetchPairs();
-        $release = $this->dao->select('name')->from(TABLE_RELEASE)
-            ->where('build')->eq(0)
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
+       // $release = $this->dao->select('name')->from(TABLE_RELEASE)
+         //    ->where('build')->eq(0)
+           //  ->andWhere('deleted')->eq(0)
+             //->fetchPairs();
         if(!$builds) return $sysBuilds;
-        foreach($release as $buildID => $releaseName) $builds[$buildID] = $releaseName;
         return $sysBuilds + $builds;
     }
 
