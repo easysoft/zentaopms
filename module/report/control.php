@@ -32,7 +32,6 @@ class report extends control
     {
         $this->view->header->title = $this->lang->report->projectDeviation;
         $this->view->projects      = $this->report->getProjects();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->submenu       = 'project';
         $this->display();
     }
