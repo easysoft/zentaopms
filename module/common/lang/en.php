@@ -201,7 +201,7 @@ $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</spa
 /* Report menu. */
 $lang->report->menu->product = array('link' => 'Product|report|productinfo');
 $lang->report->menu->prj     = array('link' => 'Project|report|projectdeviation');
-$lang->report->menu->test    = array('link' => 'Test|report|bugsummary');
+$lang->report->menu->test    = array('link' => 'Test|report|bugsummary', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 /* Company menu. */

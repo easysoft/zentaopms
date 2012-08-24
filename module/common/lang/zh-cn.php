@@ -201,7 +201,7 @@ $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</spa
 /* 统计视图菜单设置。*/
 $lang->report->menu->product = array('link' => '产品|report|productinfo');
 $lang->report->menu->prj     = array('link' => '项目|report|projectdeviation');
-$lang->report->menu->test    = array('link' => '测试|report|bugsummary');
+$lang->report->menu->test    = array('link' => '测试|report|bugsummary', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => '组织|report|workload');
 
 /* 组织结构视图菜单设置。*/
