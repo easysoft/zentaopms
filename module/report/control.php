@@ -86,7 +86,7 @@ class report extends control
         $this->view->begin         = $begin;
         $this->view->end           = $end;
         $this->view->bugs          = $this->report->getBugs($begin, $end);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         $this->view->submenu       = 'test';
         $this->display(); 
     }
@@ -102,7 +102,7 @@ class report extends control
         $this->view->header->title = $this->lang->report->bugAssign;
         $this->view->submenu       = 'test';
         $this->view->assigns       = $this->report->getBugAssign();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         $this->display(); 
     }
 

@@ -1,4 +1,5 @@
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <table class="cont-lt1">
   <tr valign='top'>
@@ -28,6 +29,7 @@
         </thead>
         <tbody>
         <?php foreach($bugs as $user => $bug):?>
+          <?php if(!array_key_exists($user, $users)) continue;?>
           <tr class="a-center">
             <td><?php echo $users[$user];?></td>
             <td><?php echo $bug['all'];?></td>
