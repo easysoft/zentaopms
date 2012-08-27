@@ -18,38 +18,7 @@ $defaultValue = "";
 $moduleDir    = $filePath . '/module/';
 $modules      = glob($moduleDir . '*');
 echo "Seting default value for control\n";
-$notice = <<<EOD
-<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dli'>
-<html xmlns='http://www.w3.org/1999/xhtml'>
-<head>
-  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-  <title>Error</title>
-</head>
-<body>
-您版本的用户数是{\$properties['user']['value']}，已经超过该版本的人数限制，请联系我们<br>
-email：<a href='mailto:zentao@cnezsoft.com'>zentao@cnezsoft.com</a><br>
-电话：4006 889923<br>
-网址：<a href='http://www.zentao.net/goto.php?item=buypro'>www.zentao.net</a><br>
-<br><br>
-The number of users is {\$properties['user']['value']} for the edition and has exceeded the limit, please contact us.<br>
-email:<a href='mailto:zentao@cnezsoft.com'>zentao@cnezsoft.com</a><br>
-tel:4006 889923<br>
-Web:<a href='http://www.zentao.net/goto.php?item=buypro'>www.zentao.net</a><br>
-</body>
-</html>
-EOD;
-$limitUser =<<<EOD
-if(function_exists('ioncube_license_properties')) \$properties = ioncube_license_properties();
-\$user = \$this->dao->select("COUNT('*') as count")->from(TABLE_USER)->where('deleted')->eq(0)->fetch();
-if(!empty(\$properties['user']) and \$properties['user']['value'] < \$user->count) die("$notice");
-EOD;
-$limitFunc =<<<EOD
-public function __construct()
-{
-    parent::__construct();
-    $limitUser
-}
-EOD;
+include 'notice.php';
 foreach($modules as $module)
 {
     $controlPath = $module . '/control.php';
@@ -151,20 +120,6 @@ if($defaultValue)
     file_put_contents($defaultDir . basename($filePath) . '.php', $valueFile);
 }
 $file = "/tmp/$dirName";
-$noLoader = "
-\\\$link = is_file(\\\$_SERVER['DOCUMENT_ROOT'] . '/loader-wizard.php') ? '/loader-wizard.php' : 'http://www.ioncube.com/lw/';
-echo \\\"<html>
-  <head>
-    <meta http-equiv='content-type' content='text/html; charset=utf-8' />
-    <title>error</title>
-  </head>
-  <body>
-    <h1 style='color:red;text-align:center'>未安装 ioncube loader</h1>
-    <p>网站错误：文件\\\".__file__.'需要安装ioncube php loader来解析，该网站需要安装'.basename(\\\$__ln).\\\"。如果你是网站所有者，请使用<a href='\\\$link'>ioncube loader安装向导</a>。</p>
-  </body>
-</html>\\\";
-exit;
-";
 
 /* encrypt file*/
 echo "Encrypting extension\n";
@@ -177,13 +132,11 @@ $order->ip      = $ip;
 $order->mac     = $mac;
 $order->type    = $type;
 $passphrase     = PASSWORD;
-createLicense($order, $dirName, '/tmp/encrypt/');
+createLicense($order, $dirName, '/tmp/');
 $withLicense = "--with-license config/license/" . basename($file) . ".txt --passphrase $passphrase";
-$callbackFile = dirname(__FILE__) . "/callback.php";
-echo `cp $callbackFile /tmp/encrypt/$dirName/config/license/`;
 $callback = "--callback-file config/license/callback.php";
 
-exec("/usr/local/ioncube/ioncube_encoder5 --copy config.php --copy phpexcel/ --copy tmp/ --copy hook/ --copy framework/ --copy config/ --copy view/ --copy lang/ $withLicense $callback --action-if-no-loader \"$noLoader\" $file --update-target --into /tmp/encrypt/", $outError);
+exec("~/ioncube/ioncube_encoder5 --copy config.php --copy phpexcel/ --copy tmp/ --copy hook/ --copy framework/ --copy config/ --copy view/ --copy lang/ $withLicense $callback --action-if-no-loader \"$noLoader\" $file --update-target --into /tmp/encrypt/", $outError);
 foreach($outError as $error)
 {
     $errorFile    = substr($error, 0 , strpos($error, ':'));
@@ -211,13 +164,20 @@ function createLicense($order, $saveName, $encryptPath)
     $server = !empty($order->mac) ? empty($server) ? "'{{$order->mac}}'" : "'$server{{$order->mac}}'" : $server;
     $server = empty($server) ? '' : '--allowed-server ' . $server;
 
-    $expire   = empty($order->account) ? '--expire-in 186d' : '';
-    $expire  = $order->type == 'year' ? "--expire-in 372d" : $expire;
-    $expire  = $order->type == 'try' ? "--expire-in 31d" : $expire;
-    $expire  = is_numeric($order->type) ? "--expire-in {$order->type}d" : $expire;
-    $expire  = $order->type == 'life' ? "" : $expire;
+    $expireDays = empty($order->account) ? '186' : '';
+    $expireDays = $order->type == 'year' ? "372" : $expireDays;
+    $expireDays = $order->type == 'try' ? "31" : $expireDays;
+    $expireDays = is_numeric($order->type) ? "{$order->type}" : $expireDays;
+    $expireDays = $order->type == 'life' ? "" : $expireDays;
+
+    $expire       = empty($expireDays) ? '' : "--expire-in {$expireDays}d";
+    $expiredate   = empty($expireDays) ? 'All Life' : date('Y-m-d', strtotime("+$expireDays day"));
+    $callbackFile = dirname(__FILE__) . "/callback.php";
+    $callbackCon  = file_get_contents($callbackFile);
+    $callbackCon  = str_replace('%expiredate%', $expiredate, $callbackCon);
+    file_put_contents($encryptPath . "$saveName/config/license/callback.php", $callbackCon);
 
     $passphrase = PASSWORD;
     $license = $encryptPath . $saveName . '/config/license/' . $saveName . '.txt';
-    echo `/usr/local/ioncube/make_license $property $server $expire --passphrase $passphrase -o $license`;
+    echo `~/ioncube/make_license $property $server $expire --passphrase $passphrase -o $license`;
 }
