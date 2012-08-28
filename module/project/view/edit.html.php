@@ -62,7 +62,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
-      <td><?php echo html::checkbox("products", $allProducts, $linkedProducts);?></td>
+      <td id='productsBox'><?php echo html::checkbox("products", $allProducts, $linkedProducts);?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->goal;?></th>
@@ -78,7 +78,7 @@
     </tr>  
     <tr id='whitelistBox' <?php if($project->acl != 'custom') echo "class='hidden'";?>>
       <th class='rowhead'><?php echo $lang->project->whitelist;?></th>
-      <td><?php echo html::checkbox('whitelist', $groups, $project->whitelist);?></td>
+      <td id='whitelistBox'><?php echo html::checkbox('whitelist', $groups, $project->whitelist);?></td>
     </tr>  
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>

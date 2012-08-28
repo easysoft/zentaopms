@@ -65,7 +65,7 @@ $(document).ready(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
-      <td><?php echo html::checkbox("products", $allProducts, $products);?></td>
+      <td id='productsBox'><?php echo html::checkbox("products", $allProducts, $products);?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->goal;?></th>

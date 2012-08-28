@@ -12,10 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <form method='post'>
-  <table align='center' class='table-4'> 
+  <table align='center' class='table-6'> 
     <caption><?php echo $lang->project->manageProducts;?></caption>
     <tr>
-      <td><?php echo html::checkbox("products", $allProducts, $linkedProducts);?><?php echo html::hidden("post", 'post');?></td>
+      <td id='productsBox'><?php echo html::checkbox("products", $allProducts, $linkedProducts);?><?php echo html::hidden("post", 'post');?></td>
     </tr>
     <tr><td class='a-center'><?php echo html::submitButton();?></td></tr>
   </table>
