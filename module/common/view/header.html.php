@@ -5,6 +5,7 @@ include 'colorbox.html.php';
 include 'chosen.html.php';
 include 'validation.html.php';
 ?>
+<?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <div id='header'>
   <table class='cont' id='topbar'>
     <tr>
@@ -26,4 +27,5 @@ include 'validation.html.php';
    <tr><td id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></td></tr>
 </table>
 <div id='wrap'>
+<?php endif;?>
   <div class='outer'>

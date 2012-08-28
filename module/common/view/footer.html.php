@@ -2,6 +2,7 @@
   <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
   <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php $config->debug ? print("debugwin") : print('hidden')?>'></iframe>
   <div id='divider'></div>
+<?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 </div>
 <div id='footer'>
   <table class='cont' >
@@ -14,11 +15,14 @@
     </tr>
   </table>
 </div>
+<?php endif;?>
 <script laguage='Javascript'>
 $().ready(function(){
     setDebugWin('white');
     setOuterBox();
 })
+<?php $onlybody = (!empty($_GET['onlybody']) and $_GET['onlybody'] == 'yes') ? 'yes' : ''?>
+var onlybody = '<?php echo $onlybody?>';
 <?php if(isset($pageJS)) echo $pageJS;?>
 </script>
 <?php 

@@ -4,7 +4,7 @@ js::import($jsRoot . 'jquery/validation/min.js');
 ?>
 <style>label.error {color:red}</style>
 <script> 
-requiredFields = "<?php echo $this->config->{$this->app->getModuleName()}->{$this->app->getMethodName()}->requiredFields;?>";
+requiredFields = "<?php echo isset($this->config->{$this->app->getModuleName()}->{$this->app->getMethodName()}->requiredFields) ? $this->config->{$this->app->getModuleName()}->{$this->app->getMethodName()}->requiredFields : '';?>";
 $(document).ready(function()
 {
     for(i in requiredFields)

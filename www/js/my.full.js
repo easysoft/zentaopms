@@ -76,6 +76,13 @@ function createLink(moduleName, methodName, vars, viewType)
         link = config.router + '?' + config.moduleVar + '=' + moduleName + '&' + config.methodVar + '=' + methodName + '&' + config.viewVar + '=' + viewType;
         if(vars) for(i = 0; i < vars.length; i ++) link += '&' + vars[i][0] + '=' + vars[i][1];
     }
+
+    //if page has onlybody param then add this param in all link. the param hide header and footer.
+    if(onlybody == 'yes')
+    {
+        var onlybody = config.requestType == 'PATH_INFO' ? "?onlybody=yes" : '&onlybody=yes';
+        link = link + onlybody;
+    }
     return link;
 }
 

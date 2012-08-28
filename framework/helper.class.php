@@ -106,6 +106,13 @@ class helper
             if($viewType != 'html') $link .= "&{$config->viewVar}=" . $viewType;
             foreach($vars as $key => $value) $link .= "&$key=$value";
         }
+
+        //if page has onlybody param then add this param in all link. the param hide header and footer.
+        if(isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
+        {
+            $onlybody = $config->requestType == 'PATH_INFO' ? "?onlybody=yes" : "&onlybody=yes";
+            $link .= $onlybody;
+        }
         return $link;
     }
 
