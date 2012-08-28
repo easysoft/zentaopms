@@ -105,6 +105,7 @@ class project extends control
     public function task($projectID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {   
         $this->loadModel('tree');
+
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -174,21 +175,21 @@ class project extends control
         $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->project->search);
 
         /* Assign. */
-        $this->view->tasks           = $tasks;
-        $this->view->tabID           = 'task';
-        $this->view->pager           = $pager;
-        $this->view->recTotal        = $pager->recTotal;
-        $this->view->recPerPage      = $pager->recPerPage;
-        $this->view->orderBy         = $orderBy;
-        $this->view->browseType      = $browseType;
-        $this->view->status          = $status;
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
-        $this->view->param           = $param;
-        $this->view->projectID       = $projectID;
-        $this->view->project         = $project;
-        $this->view->moduleID        = $moduleID;
-        $this->view->moduleTree      = $this->tree->getTreeMenu($projectID, $viewType = 'task', $startModuleID = 0, array('treeModel', 'createTaskLink'));
-        $this->view->projectTree     = $this->project->tree();
+        $this->view->tasks       = $tasks;
+        $this->view->tabID       = 'task';
+        $this->view->pager       = $pager;
+        $this->view->recTotal    = $pager->recTotal;
+        $this->view->recPerPage  = $pager->recPerPage;
+        $this->view->orderBy     = $orderBy;
+        $this->view->browseType  = $browseType;
+        $this->view->status      = $status;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->param       = $param;
+        $this->view->projectID   = $projectID;
+        $this->view->project     = $project;
+        $this->view->moduleID    = $moduleID;
+        $this->view->moduleTree  = $this->tree->getTreeMenu($projectID, $viewType = 'task', $startModuleID = 0, array('treeModel', 'createTaskLink'));
+        $this->view->projectTree = $this->project->tree();
 
         $this->display();
     }
