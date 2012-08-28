@@ -360,6 +360,7 @@ class user extends control
             {
                 /* Authorize him and save to session. */
                 $user->rights = $this->user->authorize($account);
+                $user->groups = $this->user->getGroups($account);
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
                 $this->loadModel('action')->create('user', $user->id, 'login');
