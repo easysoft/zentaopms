@@ -32,20 +32,22 @@ class projectModel extends model
         /* If project is open, return true. */
         if($project->acl == 'open') return true;
 
-        /* Get team members. */
-        $teamMembers = $this->getTeamMemberPairs($project->id);
+        /* Get all teams of all projects and group by projects, save it as static. */
+        static $teams;
+        if(empty($teams)) $teams = $this->dao->select('project, account')->from(TABLE_TEAM)->fetchGroup('project', 'account');
+        $currentTeam = isset($teams[$project->id]) ? $teams[$project->id] : array();
 
         /* If project is private, only members can access. */
         if($project->acl == 'private')
         {
-            return isset($teamMembers[$this->app->user->account]);
+            return isset($currentTeam[$this->app->user->account]);
         }
 
         /* Project's acl is custom, check the groups. */
         if($project->acl == 'custom')
         {
-            if(isset($teamMembers[$this->app->user->account])) return true;
-            $userGroups    = $this->loadModel('user')->getGroups($this->app->user->account);
+            if(isset($currentTeam[$this->app->user->account])) return true;
+            $userGroups    = $this->app->user->groups;
             $projectGroups = explode(',', $project->whitelist);
             foreach($userGroups as $groupID)
             {
@@ -372,6 +374,7 @@ class projectModel extends model
      * 
      * @param  string $status  all|undone|wait|running
      * @param  int    $limit 
+     * @param  int    $productID 
      * @access public
      * @return array
      */
@@ -418,11 +421,13 @@ class projectModel extends model
             ->orderBy('t1.order')
             ->fetchGroup('product');
 
+        $projects = $this->getList();
+
         foreach($list as $id => $product)
         {
             foreach($product as $ID => $project)
             {
-                if(!$this->checkPriv($this->getById($project->id))) 
+                if(!$this->checkPriv($projects[$project->id])) 
                 {
                     unset($list[$id][$ID]);
                 }
@@ -439,25 +444,26 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStats($status = 'undone', $productID = 0)
+    public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30)
     {
         $this->loadModel('report');
 
-        $projects = $this->getList($status, 0, $productID);
-        $stats    = array();
+        $projects    = $this->getList($status, 0, $productID);
+        $projectKeys = array_keys($projects);
+        $stats       = array();
 
         /* Get total estimate, consumed and left hours of project. */
         $emptyHour = (object)array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
         $hours = $this->dao->select('project, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed')
             ->from(TABLE_TASK)
-            ->where('project')->in(array_keys($projects))
+            ->where('project')->in($projectKeys)
             ->andWhere('deleted')->eq(0)
             ->groupBy('project')
             ->fetchAll('project');
 
         $lefts = $this->dao->select('project, SUM(`left`) AS totalLeft')
             ->from(TABLE_TASK)
-            ->where('project')->in(array_keys($projects))
+            ->where('project')->in($projectKeys)
             ->andWhere('closedReason')->ne('cancel')
             ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
@@ -478,10 +484,39 @@ class projectModel extends model
         /* Get tasks stats group by status. */
         $tasks = $this->dao->select('project, status, count(status) AS count')
             ->from(TABLE_TASK)
-            ->where('project')->in(array_keys($projects))
+            ->where('project')->in($projectKeys)
             ->andWhere('deleted')->eq(0)
             ->groupBy('project, status')
             ->fetchGroup('project', 'status');
+
+        /* Get burndown charts datas. */
+        $burns = $this->dao->select('project, date AS name, `left` AS value')
+            ->from(TABLE_BURN)
+            ->where('project')->in($projectKeys)
+            ->orderBy('date desc')
+            ->fetchGroup('project', 'name');
+
+        foreach($burns as $projectID => $projectBurns)
+        {
+            /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
+            if(count($projectBurns) > $itemCounts)
+            {
+                $projectBurns = array_slice($projectBurns, 0, $itemCounts);
+            }
+            else
+            {
+                $projectBurns = $this->processBurnData($projectBurns, $itemCounts, $projects[$projectID]->begin, $projects[$projectID]->end);
+            }
+
+            /* Short names.  */
+            foreach($projectBurns as $projectBurn)
+            {
+                $projectBurn->name = substr($projectBurn->name, 5);
+                unset($projectBurn->project);
+            }
+
+            $burns[$projectID] = $projectBurns;
+        }
 
         /* Process projects. */
         foreach($projects as $key => $project)
@@ -493,15 +528,16 @@ class projectModel extends model
 
                 /* Process the burns. */
                 $project->burns = array();
-                $burnData       = $this->getBurnData($project->id);
+                $burnData = isset($burns[$project->id]) ? $burns[$project->id] : array();
                 foreach($burnData as $data) $project->burns[] = $data->value;
-                $stats[] = $project;
 
                 /* Process the hours. */
                 $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : $emptyHour;
 
                 /* Process the tasks. */
                 $project->tasks = isset($tasks[$project->id]) ? $tasks[$project->id] : array();
+
+                $stats[] = $project;
             }
             else
             {
@@ -524,7 +560,8 @@ class projectModel extends model
     {
         $project = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
         if(!$project) return false;
-        $total   = $this->dao->select('
+
+        $total = $this->dao->select('
             SUM(estimate) AS totalEstimate, 
             SUM(consumed) AS totalConsumed, 
             SUM(`left`) AS totalLeft')
@@ -943,8 +980,8 @@ class projectModel extends model
      */
     public function computeBurn()
     {
-        $today    = helper::today();
-        $burns    = array();
+        $today = helper::today();
+        $burns = array();
 
         $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where("end >= '$today'")
@@ -973,10 +1010,11 @@ class projectModel extends model
      * 
      * @param  int    $projectID 
      * @param  int    $itemCounts 
+     * @param  string $mode        noempty: skip the dates without burn down data.
      * @access public
      * @return array
      */
-    public function getBurnData($projectID = 0, $itemCounts = 30, $extra = 'noempty')
+    public function getBurnData($projectID = 0, $itemCounts = 30, $mode = 'noempty')
     {
         /* Get project and burn counts. */
         $project    = $this->getById($projectID);
@@ -992,30 +1030,10 @@ class projectModel extends model
         else
         {
             /* The burnCounts < itemCounts, after getting from the db, padding left dates. */
-            $sets    = $sql->orderBy('date ASC')->fetchAll('name');
-            $current = helper::today();
-            if($project->end != '0000-00-00')
-            {
-                $period = helper::diffDate($project->end, $project->begin) + 1;
-                $counts = $period > $itemCounts ? $itemCounts : $period;
-            }
-            else
-            {
-                $counts = $itemCounts;
-            }
-
-            for($i = 0; $i < $counts - $burnCounts; $i ++)
-            {
-                if(helper::diffDate($current, $project->end) > 0) break;
-                if(!isset($sets[$current]) and $extra != 'noempty')
-                {
-                    $sets[$current]->name = $current;
-                    $sets[$current]->value = '';
-                }
-                $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
-                $current = $nextDay;
-            }
+            $sets = $sql->orderBy('date ASC')->fetchAll('name');
+            $this->processBurnData($sets, $itemCounts, $project->begin, $project->end, $mode);
         }
+
         foreach($sets as $set) $set->name = substr($set->name, 5);
         return $sets;
     }
@@ -1044,30 +1062,10 @@ class projectModel extends model
         else
         {
             /* The burnCounts < itemCounts, after getting from the db, padding left dates. */
-            $sets    = $sql->orderBy('date ASC')->fetchAll('name');
-            $current = helper::today();
-            if($project->end != '0000-00-00')
-            {
-                $period = helper::diffDate($project->end, $project->begin) + 1;
-                $counts = $period > $itemCounts ? $itemCounts : $period;
-            }
-            else
-            {
-                $counts = $itemCounts;
-            }
-
-            for($i = 0; $i < $counts - $burnCounts; $i ++)
-            {
-                if(helper::diffDate($current, $project->end) > 0) break;
-                if(!isset($sets[$current]))
-                {
-                    $sets[$current]->name = $current;
-                    $sets[$current]->value = '';
-                }
-                $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
-                $current = $nextDay;
-            }
+            $sets = $sql->orderBy('date ASC')->fetchAll('name');
+            $sets = $this->processBurnData($sets, $itemCounts, $project->begin, $project->end);
         }
+
         $count = 0;
         foreach($sets as $set) 
         {
@@ -1075,6 +1073,46 @@ class projectModel extends model
             $count ++;
         }
         $sets['count'] = $count;
+        return $sets;
+    }
+
+    /**
+     * Process burndown datas when the sets is smaller than the itemCounts.
+     * 
+     * @param  array   $sets 
+     * @param  int     $itemCounts 
+     * @param  date    $begin 
+     * @param  date    $end 
+     * @param  string  $mode 
+     * @access public
+     * @return array
+     */
+    public function processBurnData($sets, $itemCounts, $begin, $end, $mode = 'noempty')
+    {
+        $burnCounts = count($sets);
+        $current    = helper::today();
+
+        if($end != '0000-00-00')
+        {
+            $period = helper::diffDate($end, $begin) + 1;
+            $counts = $period > $itemCounts ? $itemCounts : $period;
+        }
+        else
+        {
+            $counts = $itemCounts;
+        }
+
+        for($i = 0; $i < $counts - $burnCounts; $i ++)
+        {
+            if(helper::diffDate($current, $end) > 0) break;
+            if(!isset($sets[$current]) and $mode != 'noempty')
+            {
+                $sets[$current]->name = $current;
+                $sets[$current]->value = '';
+            }
+            $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
+            $current = $nextDay;
+        }
         return $sets;
     }
 
