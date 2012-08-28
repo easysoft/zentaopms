@@ -20,8 +20,17 @@ Date.abbrDayNames   = ['星期天', '星期一', '星期二', '星期三', '星�
 Date.monthNames     = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
  
 $(function() {
+    var time = $('.date').val();
+    if(!isNaN(time)){
+        var Y = time.substring(0, 4);
+        var m = time.substring(4, 6);
+        var d = time.substring(6, 8);
+        time = Y + '-' + m + '-' + d;
+        $('.date').val(time);
+    }
+
     startDate = new Date(1970, 1, 1);
     $(".date").datePicker({createButton:true, startDate:startDate})
-    .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+        .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
 });
 </script>

@@ -12,4 +12,6 @@ function updateAction(date)
   link = createLink('todo', 'batchCreate', 'date=' + date);
   location.href=link;
 }
-
+$(function(){
+    $('.date').dpSetStartDate(new Date());
+})

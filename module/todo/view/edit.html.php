@@ -66,4 +66,9 @@
   </table>
 </form>
 <?php include './footer.html.php';?>
-<script language='Javascript'>switchDateFeature(document.getElementById('dateSwitcher'));</script>
+<script language='Javascript'>
+switchDateFeature(document.getElementById('dateSwitcher'));
+$(function(){
+    $('.date').dpSetStartDate(new Date());
+});
+</script>

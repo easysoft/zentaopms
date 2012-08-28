@@ -63,4 +63,9 @@
   </table>
 </form>
 <?php include './footer.html.php';?>
-<script language='Javascript'>selectNext();</script>
+<script language='Javascript'>
+selectNext();
+$(function(){
+    $('.date').dpSetStartDate(new Date());
+});
+</script>
