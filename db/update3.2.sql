@@ -3,7 +3,7 @@ ALTER TABLE `zt_task` ADD INDEX ( `project` );
 ALTER TABLE `zt_task` ADD INDEX ( `status` );
 
 # product table.
-ALTER TABLE `zt_product` ADD INDEX ( `order` )
+ALTER TABLE `zt_product` ADD INDEX ( `order` );
 
 # projectProduct table.
 ALTER TABLE `zt_projectProduct` DROP PRIMARY KEY;
@@ -26,8 +26,8 @@ ALTER TABLE `zt_user` ADD INDEX ( `dept` );
 ALTER TABLE `zt_action` ADD INDEX ( `date` );
 
 # zt_history
-ALTER TABLE `zt_history` ADD INDEX ( `action` ) 
+ALTER TABLE `zt_history` ADD INDEX ( `action` ); 
 
 # zt_file
-ALTER TABLE `zt_file` ADD INDEX ( `objectType` ) ;
-ALTER TABLE `zt_file` ADD INDEX ( `objectID` ) 
+ALTER TABLE `zt_file` ADD INDEX ( `objectType` );
+ALTER TABLE `zt_file` ADD INDEX ( `objectID` );
