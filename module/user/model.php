@@ -33,6 +33,19 @@ class userModel extends model
     }
 
     /**
+     * Set users list.
+     * 
+     * @param  array    $users 
+     * @param  string   $account 
+     * @access public
+     * @return html 
+     */
+    public function setUserList($users, $account)
+    {
+        return html::select('account', $users, $account, "onchange=\"switchAccount(this.value, '{$this->app->getMethodName()}')\"");
+    }
+
+    /**
      * Get users list of current company.
      * 
      * @access public

@@ -215,16 +215,7 @@ $lang->company->menu->addGroup    = array('link' => '<span class="icon-add1">&nb
 $lang->company->menu->addUser     = array('link' => '<span class="icon-add1">&nbsp;</span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
-
-/* User menu. */
-$lang->user->menu->account     = '%s' . $lang->arrow;
-$lang->user->menu->todo        = array('link' => 'Todo|user|todo|account=%s', 'subModule' => 'todo');
-$lang->user->menu->task        = 'Task|user|task|account=%s';
-$lang->user->menu->bug         = 'Bug|user|bug|account=%s';
-$lang->user->menu->dynamic     = 'Dynamic|user|dynamic|type=today&account=%s';
-$lang->user->menu->projectList = 'Project|user|project|account=%s';
-$lang->user->menu->profile     = array('link' => 'Profile|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp;</span>Manage user|company|browse|', 'float' => 'right');
+$lang->user->menu            = $lang->company->menu;
 
 /* Admin menu. */
 $lang->admin->menu->index     = array('link' => 'Index|admin|index');

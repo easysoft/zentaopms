@@ -24,6 +24,7 @@ class user extends control
         parent::__construct();
         $this->loadModel('company')->setMenu();
         $this->loadModel('dept');
+        $this->loadModel('todo');
     }
 
     /**
@@ -35,7 +36,7 @@ class user extends control
      */
     public function view($account)
     {
-        $this->locate($this->createLink('user', 'profile', "account=$account"));
+        $this->locate($this->createLink('user', 'todo', "account=$account"));
     }
 
     /**
@@ -65,10 +66,11 @@ class user extends control
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
         $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Get user, totos. */
         $user  = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-        $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager);
+        $todos = $this->todo->getList($type, $account, $status, 0, $pager);
         $date  = (int)$type == 0 ? $this->todo->today() : $type;
 
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
@@ -77,7 +79,6 @@ class user extends control
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->tabID    = 'todo';
-        $this->view->dates    = $this->todo->buildDateList(); 
         $this->view->date     = $date;
         $this->view->todos    = $todos;
         $this->view->user     = $user;
@@ -110,6 +111,7 @@ class user extends control
         /* Set the menu. */
         $this->lang->set('menugroup.user', 'company');
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Assign. */
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
@@ -118,6 +120,7 @@ class user extends control
         $this->view->position = $position;
         $this->view->tabID    = 'task';
         $this->view->tasks    = $this->loadModel('task')->getUserTasks($account, 'assignedto', 0, $pager);
+        $this->view->account  = $account;
         $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
         $this->view->pager    = $pager;
 
@@ -146,6 +149,7 @@ class user extends control
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
@@ -157,6 +161,7 @@ class user extends control
         $this->view->position = $position;
         $this->view->tabID    = 'bug';
         $this->view->bugs     = $this->user->getBugs($account, $pager);
+        $this->view->account  = $account;
         $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
         $this->view->users    = $this->user->getPairs('noletter');
         $this->view->pager    = $pager;
@@ -177,6 +182,7 @@ class user extends control
         $this->loadModel('project');
         $this->lang->set('menugroup.user', 'company');
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
         $position[]      = $this->lang->user->project;
@@ -184,6 +190,7 @@ class user extends control
         $this->view->position = $position;
         $this->view->tabID    = 'project';
         $this->view->projects = $this->user->getProjects($account);
+        $this->view->account  = $account;
         $this->view->user     = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
 
         $this->display();
@@ -202,6 +209,7 @@ class user extends control
 
         /* Set menu. */
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         $user = $this->user->getById($account);
         $deptPath = $this->dept->getParents($user->dept);
@@ -209,6 +217,7 @@ class user extends control
         $header['title'] = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->header   = $header;
         $this->view->position = $position;
+        $this->view->account  = $account;
         $this->view->user     = $user;
 
         $this->view->deptPath = $deptPath;
@@ -488,6 +497,7 @@ class user extends control
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -515,6 +525,7 @@ class user extends control
         $this->view->period  = $period;
         $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
         $this->view->account = $account;
+        $this->view->user    = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
         $this->view->actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager);
         $this->display();
     }

@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include './featurebar.html.php';?>
 <div class="yui-d0 yui-t3">                 
   <div class="yui-b">
     <table class='table-1'>

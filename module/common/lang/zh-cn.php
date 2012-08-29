@@ -215,16 +215,7 @@ $lang->company->menu->addGroup    = array('link' => '<span class="icon-add1">&nb
 $lang->company->menu->addUser     = array('link' => '<span class="icon-add1">&nbsp;</span>添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
-
-/* 用户信息菜单设置。*/
-$lang->user->menu->account     = '%s' . $lang->arrow;
-$lang->user->menu->todo        = array('link' => 'TODO列表|user|todo|account=%s', 'subModule' => 'todo');
-$lang->user->menu->task        = '任务列表|user|task|account=%s';
-$lang->user->menu->bug         = 'Bug列表|user|bug|account=%s';
-$lang->user->menu->dynamic     = '用户动态|user|dynamic|type=today&account=%s';
-$lang->user->menu->projectList = '项目列表|user|project|account=%s';
-$lang->user->menu->profile     = array('link' => '用户信息|user|profile|account=%s', 'alias' => 'edit');
-$lang->user->menu->browse      = array('link' => '<span class="icon-title">&nbsp;</span>用户管理|company|browse|', 'float' => 'right');
+$lang->user->menu            = $lang->company->menu;
 
 /* 后台管理菜单设置。*/
 $lang->admin->menu->index     = array('link' => '首页|admin|index');
@@ -241,7 +232,6 @@ $lang->extension->menu        = $lang->admin->menu;
 $lang->editor->menu           = $lang->admin->menu;
 $lang->mail->menu             = $lang->admin->menu;
 
-/*菜单设置：分组设置。*/
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
 $lang->menugroup->productplan = 'product';

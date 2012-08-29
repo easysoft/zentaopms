@@ -101,16 +101,7 @@ $lang->company->menuOrder[30] = 'addGroup';
 $lang->company->menuOrder[35] = 'addUser';
 $lang->dept->menuOrder        = $lang->company->menuOrder;
 $lang->group->menuOrder       = $lang->company->menuOrder;
-
-/* user menu order. */
-$lang->user->menuOrder[0]  = 'account';
-$lang->user->menuOrder[5]  = 'todo';
-$lang->user->menuOrder[10] = 'task';
-$lang->user->menuOrder[15] = 'bug';
-$lang->user->menuOrder[20] = 'dynamic';
-$lang->user->menuOrder[25] = 'projectList';
-$lang->user->menuOrder[30] = 'profile';
-$lang->user->menuOrder[35] = 'browse';
+$lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';

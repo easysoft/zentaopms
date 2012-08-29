@@ -1,5 +1,4 @@
 function changeDate(date)
 {
-    link = createLink('user', 'todo', 'account=' + account + '&date=' + date);
-    location.href=link;
+    location.href = createLink('user', 'todo', 'account=' + account + '&type=' + date.replace(/\-/g, ''));
 }

@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include './featurebar.html.php';?>
 <table align='center' class='table-4'>
   <caption><?php echo $lang->user->profile;?></caption>
   <tr>
