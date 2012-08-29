@@ -49,7 +49,7 @@ function loadList(type, id)
 
 function selectNext()
 {
-    $("#end ").get(0).selectedIndex = $("#begin ").get(0).selectedIndex + 2;
+    $("#end ").get(0).selectedIndex = $("#begin ").get(0).selectedIndex + 3;
 }
 
 function setBeginsAndEnds(i)
@@ -58,7 +58,7 @@ function setBeginsAndEnds(i)
     {
         for(j = 0; j < batchCreateNum; j++)
         {
-            endIndex = $("#begins" + j).get(0).selectedIndex + 2;
+            endIndex = $("#begins" + j).get(0).selectedIndex + 3;
             $("#ends" + j).get(0).selectedIndex = endIndex;
         }
     }
@@ -68,7 +68,7 @@ function setBeginsAndEnds(i)
         for(j = i; j < batchCreateNum; j++)
         {
             $("#begins" + j).val(begin);
-            $("#ends" + j).get(0).selectedIndex = $("#begins" + i).get(0).selectedIndex + 2;
+            $("#ends" + j).get(0).selectedIndex = $("#begins" + i).get(0).selectedIndex + 3;
         }
     }
 }
