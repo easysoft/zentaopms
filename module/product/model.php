@@ -148,7 +148,7 @@ class productModel extends model
         if($product->acl == 'custom')
         {
             if(isset($teamMembers[$this->app->user->account])) return true;
-            $userGroups    = $this->loadModel('user')->getGroups($this->app->user->account);
+            $userGroups    = $this->app->user->groups;
             $productGroups = explode(',', $product->whitelist);
             foreach($userGroups as $groupID)
             {
@@ -374,9 +374,17 @@ class productModel extends model
         $members[$product->RM] = $product->RM;
         $members[$product->createdBy] = $product->createdBy;
 
-        $projects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product->id)->fetchPairs();
-        if(!$projects) return $members;
-        $projectTeams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs();
+        /* Set projects and teams as static thus we can only query sql one times. */
+        static $projects, $teams;
+        if(empty($projects)) $projects = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->fetchGroup('product', 'project');
+        if(empty($teams))    $teams    = $this->dao->select('project, account')->from(TABLE_TEAM)->fetchGroup('project', 'account');
+
+        if(!isset($projects[$product->id])) return $members;
+        $productProjects = $projects[$product->id];
+
+        $projectTeams = array();
+        foreach($teams as $projectID => $projectTeam) $projectTeams = $projectTeams + array_keys($projectTeam);
+
         return array_merge($members, $projectTeams);
     }
 
