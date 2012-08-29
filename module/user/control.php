@@ -64,7 +64,7 @@ class user extends control
 
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
 
         /* Get user, totos. */
         $user  = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
