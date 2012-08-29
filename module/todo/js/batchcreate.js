@@ -12,6 +12,7 @@ function updateAction(date)
   link = createLink('todo', 'batchCreate', 'date=' + date);
   location.href=link;
 }
+
 $(function(){
     var endDate = new Date('2222', '1', '1');
     $("#date").datePicker({

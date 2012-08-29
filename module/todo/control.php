@@ -73,7 +73,8 @@ class todo extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             /* Locate the browser. */
-            die(js::locate($this->createLink('my', 'todo', "date={$this->post->date}"), 'parent'));
+            $date = str_replace('-', '', $this->post->date);
+            die(js::locate($this->createLink('my', 'todo', "date=$date"), 'parent'));
         }
 
         $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;

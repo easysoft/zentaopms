@@ -35,8 +35,8 @@
         <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div>
         <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div>
       </td>
-      <td><?php echo html::textarea("descs[$i]", '', "rows='2' class=text-1");?></td>
-      <td><?php echo html::select('begins[]', $times, '') . html::select('ends[]', $times, '');?><td>
+      <td><?php echo html::textarea("descs[$i]", '', "rows='1' class=text-1");?></td>
+      <td><?php echo html::select("begins[$i]", $times, $time, "onchange=setBeginsAndEnds($i)") . html::select("ends[$i]", $times, '');?><td>
     </tr>  
     <?php endfor;?>
     <tr>
@@ -48,4 +48,7 @@
   </table>
 </form>
 <?php include './footer.html.php';?>
-<script language='Javascript'>selectNext();</script>
+<script language='Javascript'>
+var batchCreateNum = '<?php echo $config->todo->batchCreate;?>';
+setBeginsAndEnds();
+</script>

@@ -49,8 +49,28 @@ function loadList(type, id)
 
 function selectNext()
 {
-    endIndex = $("#begin ").get(0).selectedIndex + 2;
-    $("#end ").get(0).selectedIndex = endIndex;
+    $("#end ").get(0).selectedIndex = $("#begin ").get(0).selectedIndex + 2;
+}
+
+function setBeginsAndEnds(i)
+{
+    if(typeof i == 'undefined')
+    {
+        for(j = 0; j < batchCreateNum; j++)
+        {
+            endIndex = $("#begins" + j).get(0).selectedIndex + 2;
+            $("#ends" + j).get(0).selectedIndex = endIndex;
+        }
+    }
+    else
+    {
+        begin = $("#begins" + i).val();
+        for(j = i; j < batchCreateNum; j++)
+        {
+            $("#begins" + j).val(begin);
+            $("#ends" + j).get(0).selectedIndex = $("#begins" + i).get(0).selectedIndex + 2;
+        }
+    }
 }
 
 function switchDateFeature(switcher)
