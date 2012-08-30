@@ -3,7 +3,7 @@ if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::
 include 'header.lite.html.php';
 include 'colorbox.html.php';
 include 'chosen.html.php';
-include 'validation.html.php';
+//include 'validation.html.php';
 ?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <div id='header'>

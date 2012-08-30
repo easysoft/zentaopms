@@ -7,6 +7,7 @@ js::import($jsRoot . 'jquery/validation/min.js');
 requiredFields = "<?php echo isset($this->config->{$this->app->getModuleName()}->{$this->app->getMethodName()}->requiredFields) ? $this->config->{$this->app->getModuleName()}->{$this->app->getMethodName()}->requiredFields : '';?>";
 $(document).ready(function()
 {
+    if(typeOf requiredFields == 'unDefined') return;
     for(i in requiredFields)
     {
         $('form #' + requiredFields[i]).addClass('required');
