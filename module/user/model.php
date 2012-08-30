@@ -318,7 +318,7 @@ class userModel extends model
         if(!$user) return false;
 
         $user->rights = $this->authorize($account);
-        $user->groups = $this->user->getGroups($account);
+        $user->groups = $this->getGroups($account);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
@@ -338,7 +338,7 @@ class userModel extends model
         if(!$user) return false;
 
         $user->rights = $this->authorize($account);
-        $user->groups = $this->user->getGroups($account);
+        $user->groups = $this->getGroups($account);
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
