@@ -446,48 +446,42 @@ class projectModel extends model
      */
     public function getProjectStats($status = 'undone', $productID = 0, $itemCounts = 30)
     {
-        $this->loadModel('report');
-
+        /* Init vars. */
         $projects    = $this->getList($status, 0, $productID);
         $projectKeys = array_keys($projects);
         $stats       = array();
+        $hours       = array();
+        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
-        /* Get total estimate, consumed and left hours of project. */
-        $emptyHour = (object)array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-        $hours = $this->dao->select('project, SUM(estimate) AS totalEstimate, SUM(consumed) AS totalConsumed')
+        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
             ->where('project')->in($projectKeys)
             ->andWhere('deleted')->eq(0)
-            ->groupBy('project')
-            ->fetchAll('project');
+            ->fetchGroup('project', 'id');
 
-        $lefts = $this->dao->select('project, SUM(`left`) AS totalLeft')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('closedReason')->ne('cancel')
-            ->andWhere('status')->ne('cancel')
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('project')
-            ->fetchAll('project');
-        foreach($lefts as $projectID => $projectLefts) $hours[$projectID]->totalLeft = $projectLefts->totalLeft;
+        /* Compute totalEstimate, totalConsumed, totalLeft. */
+        foreach($tasks as $projectID => $projectTasks)
+        {
+            $hour = (object)$emptyHour;
+            foreach($projectTasks as $task)
+            {
+                $hour->totalEstimate += $task->estimate;
+                $hour->totalConsumed += $task->consumed;
+                $hour->totalLeft     += ($task->status != 'cancel' and $task->closedReason != 'cancel') ? $task->left : 0;
+            }
+            $hours[$projectID] = $hour;
+        }
 
-        /* Round them. */
+        /* Compute totalReal and progress. */
         foreach($hours as $hour)
         {
-            $hour->totalEstimate = round($hour->totalEstimate, 1);
+            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
             $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = isset($hour->totalLeft) ? round($hour->totalLeft, 1) : $emptyHour->totalLeft;
+            $hour->totalLeft     = round($hour->totalLeft, 1);
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 3) * 100 : 0;
         }
-
-        /* Get tasks stats group by status. */
-        $tasks = $this->dao->select('project, status, count(status) AS count')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('deleted')->eq(0)
-            ->groupBy('project, status')
-            ->fetchGroup('project', 'status');
 
         /* Get burndown charts datas. */
         $burns = $this->dao->select('project, date AS name, `left` AS value')
@@ -499,16 +493,12 @@ class projectModel extends model
         foreach($burns as $projectID => $projectBurns)
         {
             /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
-            if(count($projectBurns) > $itemCounts)
-            {
-                $projectBurns = array_slice($projectBurns, 0, $itemCounts);
-            }
-            else
-            {
-                $projectBurns = $this->processBurnData($projectBurns, $itemCounts, $projects[$projectID]->begin, $projects[$projectID]->end);
-            }
+            $begin = $projects[$projectID]->begin;
+            $end   = $projects[$projectID]->end;
+            if(count($projectBurns) >= $itemCounts) $projectBurns = array_slice($projectBurns, 0, $itemCounts);
+            if(count($projectBurns) < $itemCounts)  $projectBurns = $this->processBurnData($projectBurns, $itemCounts, $begin, $end);
 
-            /* Short names.  */
+            /* Shorter names.  */
             foreach($projectBurns as $projectBurn)
             {
                 $projectBurn->name = substr($projectBurn->name, 5);
@@ -521,28 +511,24 @@ class projectModel extends model
         /* Process projects. */
         foreach($projects as $key => $project)
         {
-            if($this->checkPriv($project))
-            {
-                // Process the end time.
-                $project->end = date(DT_DATE4, strtotime($project->end));
-
-                /* Process the burns. */
-                $project->burns = array();
-                $burnData = isset($burns[$project->id]) ? $burns[$project->id] : array();
-                foreach($burnData as $data) $project->burns[] = $data->value;
-
-                /* Process the hours. */
-                $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : $emptyHour;
-
-                /* Process the tasks. */
-                $project->tasks = isset($tasks[$project->id]) ? $tasks[$project->id] : array();
-
-                $stats[] = $project;
-            }
-            else
+            if(!$this->checkPriv($project))
             {
                 unset($projects[$key]);
+                continue;
             }
+
+            // Process the end time.
+            $project->end = date(DT_DATE4, strtotime($project->end));
+
+            /* Process the burns. */
+            $project->burns = array();
+            $burnData = isset($burns[$project->id]) ? $burns[$project->id] : array();
+            foreach($burnData as $data) $project->burns[] = $data->value;
+
+            /* Process the hours. */
+            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
+
+            $stats[] = $project;
         }
 
         return $stats;
