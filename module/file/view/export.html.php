@@ -52,8 +52,8 @@ function switchEncode(fileType)
       <td class='a-center'>
         <?php echo $lang->setFileName;?>
         <?php echo html::input('fileName', '', 'size=15');?>
-        <?php echo html::select('fileType', $lang->exportFileTypeList,'csv', 'onchange=switchEncode(this.value)');?>
-        <?php echo html::select('encode', $lang->exportEncodeList, 'gbk');?> 
+        <?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value)');?>
+        <?php echo key($lang->exportFileTypeList) == 'csv' ? html::select('encode', $lang->exportEncodeList, 'gbk') : '';?> 
         <?php echo html::submitButton();?>
       </td>
     </tr>
