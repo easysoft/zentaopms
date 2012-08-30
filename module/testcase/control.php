@@ -534,25 +534,30 @@ class testcase extends control
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
             $relatedSteps   = $this->dao->select('`case`, version, `desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case');
+            $relatedModules = array('0' => '/') + $relatedModules;
 
             foreach($cases as $case)
             {
-                $case->steps = '';
+                $case->stepDesc   = '';
+                $case->stepExpect = '';
                 if(isset($relatedSteps[$case->id]))
                 {
                     $i = 1;
                     foreach($relatedSteps[$case->id] as $step)
                     {
                         if($step->version != $case->version) continue;
-                        $case->steps .= $i . ":" . $step->desc . '<br />' . $caseLang->stepExpect . ':' . $step->expect . '<br />';
+                        $case->stepDesc   .= $i . "." . $step->desc . "\n";
+                        $case->stepExpect .= $i . "." . $step->expect . "\n";
                         $i ++;
                     }
                 }
 
                 if($this->post->fileType == 'csv')
                 {
-                    $case->steps = str_replace('<br />', "\n", $case->steps);
-                    $case->steps = str_replace('"', '""', $case->steps);
+                    $case->stepDesc   = str_replace('<br />', "\n", $case->stepDesc);
+                    $case->stepDesc   = str_replace('"', '""', $case->stepDesc);
+                    $case->stepExpect = str_replace('<br />', "\n", $case->stepExpect);
+                    $case->stepExpect = str_replace('"', '""', $case->stepExpect);
                 }
 
                 /* fill some field with useful value. */

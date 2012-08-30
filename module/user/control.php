@@ -472,7 +472,7 @@ class user extends control
      */
     public function logout($referer = 0)
     {
-        $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
+        if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
         session_destroy();
         setcookie('za', false);
         setcookie('zp', false);
