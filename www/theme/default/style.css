@@ -315,7 +315,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #featurebar                {height:28px; line-height:28px; cursor:pointer; padding:20px 8px 10px 8px; margin: -15px -15px 10px -15px;}
 #featurebar a              {text-decoration:none; border-right:1px solid #ddd; padding:4px 4px 4px 4px; color:#003366; font-size:12px}
 #featurebar a:hover        {color:#ff3600;}
-#featurebar .f-right a     {border-right:none; padding:0px}
+#featurebar .f-right a     {border-right:none; padding:5px 5px 5px 0px;}
 #featurebar #bysearchTab a {border:none;}
 #featurebar select         {font-size:12px; height:22px; margin-top:3px;}
 
@@ -335,6 +335,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #titlebar div   {float:right; width:55%; clear:none; text-align:right}
 #titlebar #main input {font-size:14px; margin-top:5px}
 #titlebar .text-1 {width:80%}
+#titlebar span{padding:5px 3px}
 
 /* Form settings */
 #form-content { margin:5px 25px; border:none;}
@@ -349,6 +350,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #dataform tr, #createform td, #createform th{border:none; background:#fcfcfc}
 
 .actionlink{font-size:14px; font-weight:bold; padding-top:8px}
+.actionlink span{padding:5px 3px}
 
 /* Product, project switcher. */
 #switcher {color:white; font-style:bold; background:red; cursor:pointer;}
@@ -492,6 +494,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 .icon-black-task-cancel   {padding:2px 8px; background:url(images/main/zt-black.png) -141px -262px;} 
 
+.icon-black-task-close    {padding:2px 8px; background:url(images/main/zt-black.png) -100px -261px;} 
 .icon-green-task-close    {padding:2px 8px; background:url(images/main/zt-green.png) -100px -261px;} 
 .icon-gray-task-close     {padding:2px 8px; background:url(images/main/zt-gray.png)  -100px -261px;} 
 
@@ -536,3 +539,5 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .link-button a{color:black; font-weight:normal; font-size:12px;} 
 .link-button a:hover {color:RGB(234, 0, 0);}
 
+/* Effort icons. */
+.icon-black-effort-createForObject {padding:2px 8px;  background:url(images/main/zt-black.png) -80px -2px;} 
