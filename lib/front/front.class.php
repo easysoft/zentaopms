@@ -460,7 +460,7 @@ EOT;
     {
         global $config;
         //if page has onlybody param then add this param in all link. the param hide header and footer.
-        if(strpos($href, 'onlybody=') === false and isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
+        if(strpos($link, 'onlybody=') === false and isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
         {
             $onlybody = $config->requestType == 'PATH_INFO' ? "?onlybody=yes" : "&onlybody=yes";
             $link .= $onlybody;
