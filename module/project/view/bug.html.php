@@ -20,7 +20,7 @@
       if($build) echo '<span class="red">(Build:' . $build->name . ')</span>';
       ?>
     </div>
-    <div class='f-right'><?php common::printLink('bug', 'create', "productID=$productID&extra=projectID=$project->id", '&nbsp;', '', "class='icon-green-big-bug-create' title='{$lang->bug->create}'");?></div>
+    <div class='f-right'><?php common::printIcon('bug', 'create', "productID=$productID&extra=projectID=$project->id");?></div>
   </caption>
   <thead>
   <tr class='colhead'>

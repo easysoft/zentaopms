@@ -234,6 +234,7 @@ class common extends control
         if(!common::hasPriv($module, 'edit')) return false;
         echo "<span class='link-button'>";
         echo html::a('#comment', '&nbsp;', '', "class='icon-black-common-comment' title='$lang->comment' onclick='setComment()'");
+        echo html::a('#comment', $lang->comment);
         echo "</span>";
     }
 
@@ -300,10 +301,7 @@ class common extends control
             {
                 echo "<span class='link-button'>";
                 echo html::a($link, '&nbsp;', $target, "class='$class' title='$title'", true);
-                if($method != 'edit' and $method != 'delete' and $method != 'copy')
-                {
-                    echo html::a($link, $title, $target, "class='$extraClass'", true);
-                }
+                echo html::a($link, $title, $target, "class='$extraClass'", true);
                 echo "</span>";
             }
             else
