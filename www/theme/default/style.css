@@ -436,8 +436,8 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #searchicon  {padding:2px 8px; background:url(images/main/zt-green.png) -102px -80px; margin-left:10px;}
 #searchmore  {padding:2px 8px; background:url(images/main/zt-green.png) -62px  -100px no-repeat; margin-right:10px;}
 #searchlite  {padding:2px 8px; background:url(images/main/zt-green.png) -82px  -100px no-repeat; margin-right:10px}
-.icon-addFile     {border:none; padding:2px 8px; background:url(images/main/zt-green.png) -120px  0px no-repeat;}
-.icon-delFile     {border:none; padding:2px 8px; background:url(images/main/zt-green.png) -140px  0px no-repeat;}
+.icon-addFile     {border:none; padding:2px 5px; background:url(images/main/zt-green.png) -120px  -20px no-repeat;}
+.icon-delFile     {border:none; padding:2px 5px; background:url(images/main/zt-green.png) -100px  -20px no-repeat;}
 .icon-addFile:hover, .icon-delFile:hover {cursor:pointer}
 
 .icon-black-common-edit    {padding:2px 8px;  background:url(images/main/zt-black.png)  0px  -22px no-repeat;} 
