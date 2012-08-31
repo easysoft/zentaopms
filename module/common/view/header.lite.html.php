@@ -17,13 +17,22 @@ $clientTheme  = $this->app->getClientTheme();
   echo html::title($header->title . ' / ' . $lang->ZenTaoPMS);
 
   js::exportConfigVars();
-  js::import($jsRoot . 'jquery/lib.js', $config->version);
-  js::import($jsRoot . 'my.min.js',     $config->version);
+  if($config->debug)
+  {
+      js::import($jsRoot . 'jquery/lib.js', $config->version);
+      js::import($jsRoot . 'my.min.js',     $config->version);
 
-  css::import($defaultTheme . 'yui.css',   $config->version);
-  css::import($defaultTheme . 'style.css', $config->version);
-  css::import($langTheme, $config->version);
-  if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css', $config->version);
+      css::import($defaultTheme . 'yui.css',   $config->version);
+      css::import($defaultTheme . 'style.css', $config->version);
+      css::import($langTheme, $config->version);
+      if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css', $config->version);
+  }
+  else
+  {
+      js::import($jsRoot . 'all.js', $config->version);
+      css::import($defaultTheme . $this->cookie->lang . '.' . $this->cookie->theme . '.css', $config->version);
+  }
+
   if(isset($pageCss)) css::internal($pageCss);
 
   echo html::icon($webRoot . 'favicon.ico');

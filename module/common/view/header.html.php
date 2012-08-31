@@ -23,9 +23,7 @@ include 'chosen.html.php';
     <tr><td id='mainmenu'><?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?></td></tr>
   </table>
 </div>
-<table class='cont' id='navbar'>
-   <tr><td id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></td></tr>
-</table>
+<table class='cont' id='navbar'><tr><td id='modulemenu'><?php commonModel::printModuleMenu($this->moduleName);?></td></tr></table>
 <div id='wrap'>
 <?php endif;?>
   <div class='outer'>

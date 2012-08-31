@@ -3,5 +3,8 @@
 $webRoot      = $this->app->getWebRoot();
 $jsRoot       = $webRoot . "js/";
 $defaultTheme = $webRoot . 'theme/default/';
-css::import($defaultTheme . 'alert.css');
-js::import($jsRoot . 'jquery/alert/min.js');
+if($config->debug)
+{
+    css::import($defaultTheme . 'alert.css');
+    js::import($jsRoot . 'jquery/alert/min.js');
+}
