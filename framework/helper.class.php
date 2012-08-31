@@ -195,8 +195,15 @@ class helper
         /* Create the merged model file and import it. */
         $replaceMark = '//**//';    // This mark is for replacing code using.
         $modelLines .= "$replaceMark\n}";
-        file_put_contents($mergedModelFile, $modelLines);
-        include $mergedModelFile;
+        if(is_writeable($mergedModelFile))
+        {
+            file_put_contents($mergedModelFile, $modelLines);
+            include $mergedModelFile;
+        }
+        else
+        {
+            die("ERROR: $mergedModelFile not writable, please make sur the " . dirname($mergedModelFile) . ' directory exists and writable');
+        }
 
         /* Get hook codes need to merge. */
         $hookCodes = array();
