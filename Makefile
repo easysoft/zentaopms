@@ -27,14 +27,13 @@ tgz:
 	cp -fr config/config.php zentaopms/config/
 	cp -fr module zentaopms/
 	cp -fr www/*.ico www/fusioncharts www/*.php www/js www/*.txt www/theme www/.htaccess www/.ztaccess zentaopms/www
-	cp bin/ztc* bin/computeburn.php bin/getbugs.php bin/initext.php bin/todo.php bin/backup.php bin/checkdb.php zentaopms/bin
+	cp bin/ztc* bin/computeburn.php bin/getbugs.php bin/initext.php bin/todo.php bin/backup.php bin/checkdb.php bin/minifyfront.php zentaopms/bin
 	cp -fr db zentaopms/
 	cp -fr doc/* zentaopms/
 	cp -fr tmp zentaopms/
 	cp VERSION zentaopms/
-	# create my.min.js
-	rm zentaopms/www/js/my.min.js
-	java -jar ~/bin/yuicompressor/build/yuicompressor-2.4.6.jar www/js/my.full.js > zentaopms/www/js/my.min.js
+	# combine js and css files.
+	cd zentaopms/bin/ && php ./minifyfront.php
 	# create the restart file for svn.
 	touch zentaopms/module/svn/restart
 	# touch the front.class.php to make it's mtime to new.
