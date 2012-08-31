@@ -393,9 +393,10 @@ class common extends control
      */
     public function getSysURL()
     {
-        $httpType = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on' ? 'https' : 'http';
+        $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
+        $httpPort = $_SERVER['SERVER_PORT'] == 80 ? '' : $_SERVER['SERVER_PORT'];
         $httpHost = $_SERVER['HTTP_HOST'];
-        return "$httpType://$httpHost";
+        return "$httpType://$httpHost:$httpPort";
     }
 
     /**

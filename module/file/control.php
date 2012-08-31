@@ -156,32 +156,34 @@ class file extends control
      */
     public function export2HTML() 
     {  
-        $this->view->fields   = $this->post->fields;
-        $this->view->rows     = $this->post->rows;
+        $this->view->fields = $this->post->fields;
+        $this->view->rows   = $this->post->rows;
+        $this->host         = common::getSysURL();
+
         switch($this->post->kind)
         {
         case 'task':
             foreach($this->view->rows as $row)
             {
-                $row->name = html::a('http://' . $_SERVER['HTTP_HOST'] . $this->createLink('task', 'view', "taskID=$row->id"), $row->name); 
+                $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name); 
             }
             break;
         case 'story':
             foreach($this->view->rows as $row)
             {
-                $row->title= html::a('http://' . $_SERVER['HTTP_HOST'] . $this->createLink('story', 'view', "storyID=$row->id"), $row->title);  
+                $row->title= html::a($this->host . $this->createLink('story', 'view', "storyID=$row->id"), $row->title);  
             }
             break;
         case 'bug':
             foreach($this->view->rows as $row)
             {
-                $row->title= html::a('http://' . $_SERVER['HTTP_HOST'] . $this->createLink('bug', 'view', "bugID=$row->id"), $row->title);  
+                $row->title= html::a($this->host . $this->createLink('bug', 'view', "bugID=$row->id"), $row->title);  
             }
             break;
         case 'testcase':
             foreach($this->view->rows as $row)
             {
-                $row->title= html::a('http://' . $_SERVER['HTTP_HOST'] . $this->createLink('testcase', 'view', "caseID=$row->id"), $row->title);    
+                $row->title= html::a($this->host . $this->createLink('testcase', 'view', "caseID=$row->id"), $row->title);    
             }
             break;
         }

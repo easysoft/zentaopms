@@ -546,17 +546,16 @@ class testcase extends control
                     foreach($relatedSteps[$case->id] as $step)
                     {
                         if($step->version != $case->version) continue;
-                        $case->stepDesc   .= $i . "." . $step->desc . "\n";
-                        $case->stepExpect .= $i . "." . $step->expect . "\n";
+                        $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
+                        $case->stepDesc   .= $i . ". " . $step->desc . $sign;
+                        $case->stepExpect .= $i . ". " . $step->expect . $sign;
                         $i ++;
                     }
                 }
 
                 if($this->post->fileType == 'csv')
                 {
-                    $case->stepDesc   = str_replace('<br />', "\n", $case->stepDesc);
                     $case->stepDesc   = str_replace('"', '""', $case->stepDesc);
-                    $case->stepExpect = str_replace('<br />', "\n", $case->stepExpect);
                     $case->stepExpect = str_replace('"', '""', $case->stepExpect);
                 }
 
