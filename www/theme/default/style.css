@@ -100,9 +100,8 @@ a  {text-decoration:none;}
 .area-4{width: 360px}
 .area-5{width: 480px}
 
-.text-1, .text-2, .text-3, .text-4, .text-5 {padding:2px 0}
-.select-1, .select-2, .select-3, .select-4, .select-5 {padding:1px 0}
-
+.text-1, .text-2, .text-3, .text-4, .text-5 {padding:3px 0}
+.select-1, .select-2, .select-3, .select-4, .select-5 {padding:3px}
 
 .text-1, .text-2, .text-3, .text-4, .text-5, 
 .select-1, .select-2, .select-3, .select-4, .select-5, 
