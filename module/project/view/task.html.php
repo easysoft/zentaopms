@@ -163,5 +163,7 @@ var browseType = '<?php echo $browseType;?>';
 <script language='javascript'>
 $('#project<?php echo $projectID;?>').addClass('active')
 $('#<?php echo $browseType;?>Tab').addClass('active')
+var statusActive = <?php echo isset($lang->project->statusSelects[$browseType]);?>;
+if(statusActive) $('#statusTab').addClass('active')
 </script>
 <?php include '../../common/view/footer.html.php';?>

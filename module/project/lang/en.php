@@ -111,14 +111,15 @@ $lang->project->ajaxGetProducts = "API: get project's products";
 /* Browse. */
 $lang->project->allTasks             = 'All';
 $lang->project->assignedToMe         = 'To me';
-$lang->project->moduleTask           = 'Module';
-$lang->project->finishedByMe         = 'My done';
-$lang->project->statusWait           = 'Pending';
-$lang->project->statusDoing          = 'Progressing';
-$lang->project->statusUndone         = 'Not final';
-$lang->project->statusDone           = 'Done';
-$lang->project->statusClosed         = 'Closed';
 $lang->project->delayed              = 'Delayed';
+
+$lang->project->statusSelects['']             = 'More';
+$lang->project->statusSelects['finishedbyme'] = 'Mydone'; 
+$lang->project->statusSelects['wait']         = 'Pending';
+$lang->project->statusSelects['doing']        = 'Progressing';
+$lang->project->statusSelects['done']         = 'Done'; 
+$lang->project->statusSelects['closed']       = 'Closed';
+$lang->project->statusSelects['needconfirm']  = 'Story changed';
 $lang->project->groups['']           = 'Group View';
 $lang->project->groups['story']      = 'Group by story';
 $lang->project->groups['status']     = 'Group by status';
@@ -132,7 +133,8 @@ $lang->project->groups['consumed']   = 'Group by consumed';
 $lang->project->groups['left']       = 'Group by left';
 $lang->project->groups['type']       = 'Group by type';
 $lang->project->groups['deadline']   = 'Group by deadline';
-$lang->project->listTaskNeedConfrim  = 'Story changed';
+
+$lang->project->moduleTask           = 'Module';
 $lang->project->byQuery              = 'Search';
 
 /* Browse tabs. */

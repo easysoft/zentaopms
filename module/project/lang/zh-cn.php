@@ -111,14 +111,15 @@ $lang->project->ajaxGetProducts = '接口：获得项目产品列表';
 /* 分组浏览。*/
 $lang->project->allTasks             = '所有';
 $lang->project->assignedToMe         = '指派给我';
-$lang->project->moduleTask           = '按模块';
-$lang->project->finishedByMe         = '由我完成';
-$lang->project->statusWait           = '未开始';
-$lang->project->statusDoing          = '进行中';
-$lang->project->statusUndone         = '未完成';
-$lang->project->statusDone           = '已完成';
-$lang->project->statusClosed         = '已关闭';
 $lang->project->delayed              = '已延期';
+
+$lang->project->statusSelects['']             = '更多';
+$lang->project->statusSelects['finishedbyme'] = '我完成';
+$lang->project->statusSelects['wait']         = '未开始';
+$lang->project->statusSelects['doing']        = '进行中';
+$lang->project->statusSelects['done']         = '已完成';
+$lang->project->statusSelects['closed']       = '已关闭';
+$lang->project->statusSelects['needconfirm']  = '需求变动';
 $lang->project->groups['']           = '分组查看';
 $lang->project->groups['story']      = '需求分组';
 $lang->project->groups['status']     = '状态分组';
@@ -132,7 +133,8 @@ $lang->project->groups['consumed']   = '已消耗分组';
 $lang->project->groups['left']       = '剩余分组';
 $lang->project->groups['type']       = '类型分组';
 $lang->project->groups['deadline']   = '截止分组';
-$lang->project->listTaskNeedConfrim  = '需求变动';
+
+$lang->project->moduleTask           = '按模块';
 $lang->project->byQuery              = '搜索';
 
 /* 查询条件列表。*/

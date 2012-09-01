@@ -3,6 +3,11 @@ function setWhite(acl)
     acl == 'custom' ? $('#whitelistBox').removeClass('hidden') : $('#whitelistBox').addClass('hidden');
 }
 
+function switchStatus(projectID, status)
+{
+  if(status) location.href = createLink('project', 'task', 'project=' + projectID + '&type=' + status);
+}
+
 function switchGroup(projectID, groupBy)
 {
     link = createLink('project', 'groupTask', 'project=' + projectID + '&groupBy=' + groupBy);
