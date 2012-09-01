@@ -12,12 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include "../../common/view/datepicker.html.php"; ?>
 <?php include './featurebar.html.php';?>
 <script language='Javascript'>var account='<?php echo $account;?>'</script>
 <table class='cont-lt1'>
   <tr valign='top'>
     <td class='side'>
-      <div class='box-title'><?php echo html::input('date', $date, "class='w-date date' onchange=changeDate(this.value)"); ?></div>
+      <div class='box-title'><?php echo $lang->user->todo; ?></div>
       <div class='box-content'>
         <?php 
         echo html::a(inLink('todo', "account=$account&type=today"),    $lang->todo->todayTodos)    . '<br />';
@@ -26,6 +27,7 @@
         echo html::a(inLink('todo', "account=$account&type=future"),   $lang->todo->futureTodos)   . '<br />';
         echo html::a(inLink('todo', "account=$account&type=all"),      $lang->todo->allDaysTodos)  . '<br />';
         echo html::a(inLink('todo', "account=$account&type=before"),   $lang->todo->allUndone)     . '<br />';
+        echo html::input('date', $date, "class='w-date date' onchange=changeDate(this.value)"); 
         ?>
       </div>
     </td>

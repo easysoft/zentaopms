@@ -1,4 +1,3 @@
-<?php include "../../common/view/datepicker.html.php"; ?>
 <div id='featurebar'>
   <div class='f-left'>
   <?php
