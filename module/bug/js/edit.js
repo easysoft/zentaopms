@@ -14,7 +14,7 @@ function loadAll(productID)
     }
     if(changeProductConfirmed || firstChoice)
     {
-        $('#taskIdBox').get(0).innerHTML = emptySelect;
+        $('#taskIdBox').innerHTML = emptySelect;
         $('#task').chosen({no_results_text: noResultsMatch});
         loadModuleMenu(productID); 
         loadProductStories(productID);
@@ -94,9 +94,9 @@ function loadProjectRelated(projectID)
     }
     else
     {
-        $('#taskIdBox').get(0).innerHTML = emptySelect;
-        loadProductStories($('#product').get(0).value);
-        loadProductBuilds($('#product').get(0).value);
+        $('#taskIdBox').innerHTML = emptySelect;
+        loadProductStories($('#product').val());
+        loadProductBuilds($('#product').val());
     }
 }
 
@@ -122,8 +122,7 @@ function loadProjectTasks(projectID)
  */
 function loadProjectStories(projectID)
 {
-    productID = $('#product').get(0).value; 
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + productID + '&storyID=' + oldStoryID);
+    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
 
@@ -171,10 +170,10 @@ function setDuplicate(resolution)
  */
 function getList(module)
 {
-    productID = $('#product').get(0).value;
-    projectID = $('#project').get(0).value;
-    storyID   = $('#story').get(0).value;
-    taskID    = $('#task').get(0).value;
+    productID = $('#product').val();
+    projectID = $('#project').val();
+    storyID   = $('#story').val();
+    taskID    = $('#task').val();
     if(module == 'story')
     {
         link = createLink('search', 'select', 'productID=' + productID + '&projectID=' + projectID + '&module=story&moduleID=' + storyID);
