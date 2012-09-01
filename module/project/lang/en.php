@@ -111,7 +111,6 @@ $lang->project->ajaxGetProducts = "API: get project's products";
 /* Browse. */
 $lang->project->allTasks             = 'All';
 $lang->project->assignedToMe         = 'To me';
-$lang->project->delayed              = 'Delayed';
 
 $lang->project->statusSelects['']             = 'More';
 $lang->project->statusSelects['finishedbyme'] = 'Mydone'; 
@@ -120,6 +119,7 @@ $lang->project->statusSelects['doing']        = 'Progressing';
 $lang->project->statusSelects['done']         = 'Done'; 
 $lang->project->statusSelects['closed']       = 'Closed';
 $lang->project->statusSelects['needconfirm']  = 'Story changed';
+$lang->project->statusSelects['delayed']      = 'Delayed';
 $lang->project->groups['']           = 'Group View';
 $lang->project->groups['story']      = 'Group by story';
 $lang->project->groups['status']     = 'Group by status';

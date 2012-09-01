@@ -656,10 +656,11 @@ class project extends control
         $charts   = $this->report->createJSChartFlot($project->name, $dataJSON, $count, 700, 350);
 
         /* Assign. */
-        $this->view->header   = $header;
-        $this->view->position = $position;
-        $this->view->tabID    = 'burn';
-        $this->view->charts   = $charts;
+        $this->view->header    = $header;
+        $this->view->position  = $position;
+        $this->view->tabID     = 'burn';
+        $this->view->charts    = $charts;
+        $this->view->projectID = $projectID;
 
         $this->display();
     }

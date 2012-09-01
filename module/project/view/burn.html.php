@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include './taskheader.html.php';?>
+<script>$('#burnTab').addClass('active');</script>
 <div class='a-center'>
   <?php
   echo $charts; 

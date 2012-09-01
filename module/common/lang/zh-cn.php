@@ -160,13 +160,12 @@ $lang->release->menu          = $lang->product->menu;
 
 /* 项目视图菜单设置。*/
 $lang->project->menu->list      = '%s';
-$lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
+$lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask,burn');
 $lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'alias' => 'linkstory', 'subModule' => 'story');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '动态|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->testtask  = '测试申请|project|testtask|projectID=%s';
-$lang->project->menu->burn      = '燃尽图|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';

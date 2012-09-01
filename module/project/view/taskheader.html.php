@@ -2,8 +2,8 @@
   <div class='f-left'>
   <?php
     echo "<span id='allTab'>"         ; common::printLink('project', 'task', "project=$projectID&type=all",          $lang->project->allTasks);     echo  '</span>' ;
+    echo "<span id='burnTab'>"        ; common::printLink('project', 'burn', "project=$projectID",                   $lang->project->burn);         echo  '</span>' ;
     echo "<span id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$projectID&type=assignedtome", $lang->project->assignedToMe); echo  '</span>' ;
-    echo "<span id='delayedTab'>"     ; common::printLink('project', 'task', "project=$projectID&type=delayed",      $lang->project->delayed);      echo  '</span>' ;
 
     echo "<span id='statusTab'>";
     echo html::select('status', $lang->project->statusSelects, isset($status) ? $status : '', "onchange='switchStatus({$projectID}, this.value)'");
@@ -20,6 +20,8 @@
   </div>
   <div class='f-right'>
     <?php 
+    if(!isset($browseType)) $browseType = '';
+    if(!isset($orderBy))    $orderBy = '';
     if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy");
     common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
     common::printIcon('task', 'batchCreate', "projectID=$projectID");
@@ -27,3 +29,4 @@
     ?>
   </div>
 </div>
+<?php foreach(glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php") as $fileName) include_once $fileName; ?>
