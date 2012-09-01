@@ -539,7 +539,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 .link-button {padding:7px 0px 7px 0px; margin-left:-1px; background:url(images/main/link-button.png) 0px 0px repeat-x; border-right:1px solid RGB(234, 234, 234); border-left:1px solid RGB(234, 234, 234)} 
 .link-button:hover {background:RGB(200, 200, 200)} 
-.link-button a{color:black; font-weight:normal; font-size:12px;} 
+.link-button a{color:black; font-weight:normal; font-size:14px;} 
 .link-button a:hover {color:RGB(234, 0, 0);}
 
 /* Effort icons. */
