@@ -36,15 +36,15 @@
         <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div>
       </td>
       <td><?php echo html::textarea("descs[$i]", '', "rows='1' class=text-1");?></td>
-      <td><?php echo html::select("begins[$i]", $times, $time, "onchange=setBeginsAndEnds($i)") . html::select("ends[$i]", $times, '');?><td>
+      <td>
+        <?php 
+        echo html::select("begins[$i]", $times, $time, "onchange=setBeginsAndEnds($i,'begin')");
+        echo html::select("ends[$i]",   $times, '', "onchange=setBeginsAndEnds($i,'end')");
+        ?>
+      <td>
     </tr>  
     <?php endfor;?>
-    <tr>
-      <td colspan='6'>
-        <div class='half-left red'><?php echo $lang->todo->notes;?></div>
-        <div class='half-right'><?php echo html::submitButton() . html::resetButton();?></div>
-      </td>
-    </tr>
+    <tr><td colspan='6' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>
 </form>
 <?php include './footer.html.php';?>

@@ -52,23 +52,26 @@ function selectNext()
     $("#end ").get(0).selectedIndex = $("#begin ").get(0).selectedIndex + 3;
 }
 
-function setBeginsAndEnds(i)
+function setBeginsAndEnds(i, beginOrEnd)
 {
     if(typeof i == 'undefined')
     {
         for(j = 0; j < batchCreateNum; j++)
         {
-            endIndex = $("#begins" + j).get(0).selectedIndex + 3;
-            $("#ends" + j).get(0).selectedIndex = endIndex;
+            if(j != 0) $("#begins" + j).get(0).selectedIndex = $("#ends" + (j - 1)).get(0).selectedIndex;
+            $("#ends" + j).get(0).selectedIndex = $("#begins" + j).get(0).selectedIndex + 3;
         }
     }
     else
     {
-        begin = $("#begins" + i).val();
-        for(j = i; j < batchCreateNum; j++)
+        if(beginOrEnd == 'begin')
         {
-            $("#begins" + j).val(begin);
-            $("#ends" + j).get(0).selectedIndex = $("#begins" + i).get(0).selectedIndex + 3;
+            $("#ends" + i).get(0).selectedIndex = $("#begins" + i).get(0).selectedIndex + 3;
+        }
+        for(j = i+1; j < batchCreateNum; j++)
+        {
+            $("#begins" + j).get(0).selectedIndex = $("#ends" + (j - 1)).get(0).selectedIndex;
+            $("#ends" + j).get(0).selectedIndex = $("#begins" + j).get(0).selectedIndex + 3;
         }
     }
 }
