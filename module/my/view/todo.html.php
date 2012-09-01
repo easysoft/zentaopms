@@ -17,18 +17,18 @@
   <div id='featurebar'>
     <div class='f-left'>
       <?php 
-      echo '<span id="today">'    . html::a(inlink('todo', "date=today"),     $lang->todo->todayTodos)    . '</span>';
-      echo '<span id="yesterday">'. html::a(inlink('todo', "date=yesterday"), $lang->todo->yesterdayTodos). '</span>';
-      echo '<span id="thisweek">' . html::a(inlink('todo', "date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
-      echo '<span id="lastweek">' . html::a(inlink('todo', "date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
-      echo '<span id="thismonth">'. html::a(inlink('todo', "date=thismonth"), $lang->todo->thismonthTodos). '</span>';
-      echo '<span id="lastmonth">' . html::a(inlink('todo', "date=lastmonth"), $lang->todo->lastmonthTodos). '</span>';
-      echo '<span id="thisseason">'. html::a(inlink('todo', "date=thisseason"),$lang->todo->thisseasonTodos).'</span>';
-      echo '<span id="thisyear">'  . html::a(inlink('todo', "date=thisyear"),  $lang->todo->thisyearTodos) . '</span>';
-      echo '<span id="future">'   . html::a(inlink('todo', "date=future"),    $lang->todo->futureTodos)   . '</span>';
-      echo '<span id="all">'      . html::a(inlink('todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
-      echo '<span id="before">'   . html::a(inlink('todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
-      echo "<span id='$date'>"    . html::input('date', $date,"class='w-date date' onchange=changeDate(this.value)") . '</span>';
+      echo '<span id="today">'      . html::a(inlink('todo', "date=today"),     $lang->todo->todayTodos)    . '</span>';
+      echo '<span id="yesterday">'  . html::a(inlink('todo', "date=yesterday"), $lang->todo->yesterdayTodos). '</span>';
+      echo '<span id="thisweek">'   . html::a(inlink('todo', "date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
+      echo '<span id="lastweek">'   . html::a(inlink('todo', "date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
+      echo '<span id="thismonth">'  . html::a(inlink('todo', "date=thismonth"), $lang->todo->thismonthTodos). '</span>';
+      echo '<span id="lastmonth">'  . html::a(inlink('todo', "date=lastmonth"), $lang->todo->lastmonthTodos). '</span>';
+      echo '<span id="thisseason">' . html::a(inlink('todo', "date=thisseason"),$lang->todo->thisseasonTodos).'</span>';
+      echo '<span id="thisyear">'   . html::a(inlink('todo', "date=thisyear"),  $lang->todo->thisyearTodos) . '</span>';
+      echo '<span id="future">'     . html::a(inlink('todo', "date=future"),    $lang->todo->futureTodos)   . '</span>';
+      echo '<span id="all">'        . html::a(inlink('todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
+      echo '<span id="before">'     . html::a(inlink('todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
+      echo "<span id='bydate'>"     . html::input('date', $date, "class='w-date date' onchange=changeDate(this.value)") . '</span>';
       ?>
       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
