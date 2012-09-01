@@ -108,10 +108,10 @@ a  {text-decoration:none;}
 .select-1, .select-2, .select-3, .select-4, .select-5, 
 .area-1, .area-2, .area-3, .area-4, .area-5 {border:1px solid #ccc}
 
-.button-s{padding:2px 10px 2px 10px}
-.button-r{padding:2px 10px 2px 10px; color:gray}
-.button-c{padding:2px 10px 2px 10px}
-.button-d{color:blue}
+.button-s{padding:2px 10px 2px 10px; font-size:14px; cursor:pointer}
+.button-r{padding:2px 10px 2px 10px; font-size:14px; cursor:pointer; color:gray}
+.button-c{padding:2px 10px 2px 10px; font-size:14px; cursor:pointer}
+.button-d{color:blue; font-size:14px; cursor:pointer}
 
 /*-----------------------TABLE SETTING----------------------------*/
 table      {border:1px solid #e4e4e4;}
