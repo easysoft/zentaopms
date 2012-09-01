@@ -293,6 +293,11 @@ EOT;
         }
         foreach($projects as $id => $project)
         {
+            if(!isset($projectPairs[$id]))
+            { 
+                unset($projects[$id]);
+                continue;
+            }
             if(!isset($project->stories)) $projects[$id]->stories = 0;
             if(!isset($project->bugs)) $projects[$id]->bugs = 0;
             if(!isset($project->devConsumed)) $projects[$id]->devConsumed = 0;
