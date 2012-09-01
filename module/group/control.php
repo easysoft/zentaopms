@@ -187,7 +187,7 @@ class group extends control
         }
         $group      = $this->group->getById($groupID);
         $groupUsers = $this->group->getUserPairs($groupID);
-        $allUsers   = $this->user->getPairs('noclosed|noempty|noletter');
+        $allUsers   = $this->user->getPairs('nodeleted|noclosed|noempty|noletter');
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
         $header['title'] = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
