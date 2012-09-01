@@ -19,11 +19,11 @@
   </caption>
   <thead>
   <tr class='colhead'>
-   <th><?php echo $lang->group->id;?></th>
-   <th><?php echo $lang->group->name;?></th>
+   <th class='w-id'><?php echo $lang->group->id;?></th>
+   <th class='w-100px'><?php echo $lang->group->name;?></th>
    <th><?php echo $lang->group->desc;?></th>
-   <th class='w-p60'><?php echo $lang->group->users;?></th>
-   <th class='{sorter:false}'><?php echo $lang->actions;?></th>
+   <th><?php echo $lang->group->users;?></th>
+   <th class='w-200px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
