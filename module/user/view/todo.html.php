@@ -27,7 +27,7 @@
         echo html::a(inLink('todo', "account=$account&type=future"),   $lang->todo->futureTodos)   . '<br />';
         echo html::a(inLink('todo', "account=$account&type=all"),      $lang->todo->allDaysTodos)  . '<br />';
         echo html::a(inLink('todo', "account=$account&type=before"),   $lang->todo->allUndone)     . '<br />';
-        echo html::input('date', $date, "class='w-date date' onchange=changeDate(this.value)"); 
+        echo html::input('date', $date, "class='w-date todo-date' onchange=changeDate(this.value)"); 
         ?>
       </div>
     </td>
