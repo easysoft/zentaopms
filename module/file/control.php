@@ -162,25 +162,25 @@ class file extends control
 
         switch($this->post->kind)
         {
-        case 'task':
+            case 'task':
             foreach($this->view->rows as $row)
             {
                 $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name); 
             }
             break;
-        case 'story':
+            case 'story':
             foreach($this->view->rows as $row)
             {
                 $row->title= html::a($this->host . $this->createLink('story', 'view', "storyID=$row->id"), $row->title);  
             }
             break;
-        case 'bug':
+            case 'bug':
             foreach($this->view->rows as $row)
             {
                 $row->title= html::a($this->host . $this->createLink('bug', 'view', "bugID=$row->id"), $row->title);  
             }
             break;
-        case 'testcase':
+            case 'testcase':
             foreach($this->view->rows as $row)
             {
                 $row->title= html::a($this->host . $this->createLink('testcase', 'view', "caseID=$row->id"), $row->title);    
