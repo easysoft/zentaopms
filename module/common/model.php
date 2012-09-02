@@ -374,7 +374,7 @@ class commonModel extends model
                 {
                     /* Is the currentModule active? */
                     if($currentModule == $subModule and $float != 'right') $active = 'active';
-                    if($module == $currentModule and ($method == $currentMethod or in_array($currentMethod, explode(',', $alias))) and $float != 'right') $active = 'active';
+                    if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and $float != 'right') $active = 'active';
                     echo "<li class='$float $active'>" . html::a(helper::createLink($module, $method, $vars), $label, $target, "id=submenu$subMenuKey") . "</li>\n";
                 }
             }
