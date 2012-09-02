@@ -46,12 +46,12 @@ var customed   = <?php echo (int)$customed;?>;
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 
 <?php 
-    if($customed)
-    {
-        include 'browse.custom.html.php'; 
-        include '../../common/view/footer.lite.html.php';
-        exit;
-    }
+if($customed)
+{
+    include 'browse.custom.html.php'; 
+    include '../../common/view/footer.lite.html.php';
+    exit;
+}
 ?>
 
 <table class='cont-lt1'>
