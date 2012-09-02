@@ -75,9 +75,9 @@ class task extends control
         $stories = $this->story->getProjectStoryPairs($projectID);
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($projectID, $viewType = 'task');
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
-        $position[]      = html::a($taskLink, $project->name);
-        $position[]      = $this->lang->task->create;
+        $header['title']  = $project->name . $this->lang->colon . $this->lang->task->create;
+        $position[]       = html::a($taskLink, $project->name);
+        $position[]       = $this->lang->task->create;
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->project  = $project;
@@ -260,6 +260,7 @@ class task extends control
 
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->projectID   = $project->id;
+            $this->view->modules     = $this->tree->getOptionMenu($projectID, $viewType = 'task');
             $this->view->editedTasks = $editedTasks;
             $this->view->users       = $this->loadModel('user')->getPairs('noletter');
             $this->view->members     = $this->project->getTeamMemberPairs($projectID, 'nodeleted');

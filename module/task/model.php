@@ -230,6 +230,7 @@ class taskModel extends model
                 $oldTask = $this->getById($taskID);
 
                 $task->name           = htmlspecialchars($this->post->names[$taskID]);
+                $task->module         = $this->post->modules[$taskID];
                 $task->assignedTo     = $this->post->assignedTos[$taskID];
                 $task->type           = $this->post->types[$taskID];
                 $task->status         = $this->post->statuses[$taskID];
@@ -248,36 +249,39 @@ class taskModel extends model
                 $task->lastEditedDate = $now;
                 if(isset($this->post->assignedTos[$taskID])) 
                 {
-                    $task->assignedDate   = $this->post->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
+                    $task->assignedDate = $this->post->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
                 }
 
                 switch($task->status)
                 {
-                  case 'done':
-                  {
-                    $task->left = 0;
-                    if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
-                    if(!$task->finishedDate) $task->finishedDate = $now;
-                  }break;
-                  case 'cancel':
-                  {
-                    $task->assignedTo   = $oldTask->openedBy;
-                    $task->assignedDate = $now;
+                    case 'done':
+                    {
+                        $task->left = 0;
+                        if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
+                        if(!$task->finishedDate) $task->finishedDate = $now;
+                    }
+                    break;
+                    case 'cancel':
+                    {
+                        $task->assignedTo   = $oldTask->openedBy;
+                        $task->assignedDate = $now;
 
-                    if(!$task->canceledBy)   $task->canceledBy   = $this->app->user->account;
-                    if(!$task->canceledDate) $task->canceledDate = $now;
-                  }break;
-                  case 'closed':
-                  {
-                    if(!$task->closedBy)   $task->closedBy   = $this->app->user->account;
-                    if(!$task->closedDate) $task->closedDate = $now;
-                  }break;
-                  case 'wait':
-                  {
-                    if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
-                    if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
-                  }
-                  default:break;
+                        if(!$task->canceledBy)   $task->canceledBy   = $this->app->user->account;
+                        if(!$task->canceledDate) $task->canceledDate = $now;
+                    }
+                    break;
+                    case 'closed':
+                    {
+                        if(!$task->closedBy)   $task->closedBy   = $this->app->user->account;
+                        if(!$task->closedDate) $task->closedDate = $now;
+                    }
+                    break;
+                    case 'wait':
+                    {
+                        if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
+                        if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
+                    }
+                    default:break;
                 }
                 if($task->assignedTo) $task->assignedDate = $now;
 
