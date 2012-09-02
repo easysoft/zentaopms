@@ -13,15 +13,15 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <form method='post'>
-  <table class='table-1 fixed'> 
+  <table class='table-1' > 
     <caption> <?php echo $lang->todo->batchCreate . $lang->colon . html::input('date', $date, "class='select-2 date' onchange='updateAction(this.value)'");?>
     <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'><?php echo $lang->todo->futureTodos;?></caption>
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
       <th class='w-100px'><?php echo $lang->todo->type;?></th>
       <th class='w-70px'><?php echo $lang->todo->pri;?></th>
-      <th class='w-p40'><?php echo $lang->todo->name;?></th>
-      <th class='w-p30'><?php echo $lang->todo->desc;?></th>
+      <th class='red'><?php echo $lang->todo->name;?></th>
+      <th><?php echo $lang->todo->desc;?></th>
       <th class='w-150px'><?php echo $lang->todo->beginAndEnd;?></th>
     </tr>
 
@@ -32,8 +32,8 @@
       <td><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange=loadList(this.value,$i+1) class='select-1'");?></td>
       <td><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=select-1');?></td>
       <td>
-        <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div>
-        <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="f-left text-1"'); echo "<span class='star'>*</span>";?></div>
+        <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="f-left text-1"');?></div>
+        <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="f-left text-1"');?></div>
       </td>
       <td><?php echo html::textarea("descs[$i]", '', "rows='1' class=text-1");?></td>
       <td>
