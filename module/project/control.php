@@ -776,6 +776,7 @@ class project extends control
             $projectID = $copyProjectID == '' ? $this->project->create() : $this->project->create($copyProjectID);
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
+
             $this->loadModel('action')->create('project', $projectID, 'opened');
             die(js::locate($this->createLink('project', 'create', "projectID=$projectID"), 'parent'));
         }
@@ -793,6 +794,7 @@ class project extends control
         $this->view->products      = $products ;
         $this->view->whitelist     = $whitelist;
         $this->view->acl           = $acl      ;
+        $this->view->copyProjectID = $copyProjectID;
         $this->display();
     }
 

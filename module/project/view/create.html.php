@@ -35,7 +35,16 @@ $(document).ready(function()
 <script>var holders=<?php echo json_encode($lang->project->placeholder);?></script>
 <form method='post' target='hiddenwin' id='dataform'>
   <table align='center' class='table-1 a-left'> 
-    <caption><?php echo $lang->project->create;?></caption>
+    <caption>
+      <div class='f-left'><?php echo $lang->project->create;?></div>
+      <div class='f-right'><?php echo html::checkbox('', $lang->project->copy . '?', '', 'onclick=switchCopyProject(this);');?></div>
+    </caption>
+    <?php if($projects):?>
+    <tr id='copyProjectBox' <?php if($copyProjectID == 0) echo "class='hidden'";?>>
+      <th class='rowhead'><?php echo $lang->project->copy;?></th>
+      <td><?php echo html::select('', $projects, $copyProjectID, "class='select-3' onchange=setCopyProject(this.value)");?></td>
+    </tr>  
+    <?php endif;?>
     <tr>
       <th class='rowhead'><?php echo $lang->project->name;?></th>
       <td><?php echo html::input('name', $name, "class='text-3'");?></td>

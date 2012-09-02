@@ -173,7 +173,6 @@ $lang->project->menu->product   = array('link' => 'Product|project|manageproduct
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->order     = 'Order|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>New|project|create', 'float' => 'right');
-$lang->project->menu->copy      = array('link' => '<span class="icon-copy">&nbsp;</span>Copy|project|create|projectID=&copyProjectID=%s', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;</span>Projects|project|index|locate=no', 'float' => 'right');
 $lang->task->menu               = $lang->project->menu;
 $lang->build->menu              = $lang->project->menu;

@@ -98,6 +98,7 @@ $lang->project->manageProducts  = 'Link product';
 $lang->project->linkStory       = 'Link story';
 $lang->project->view            = "Info";
 $lang->project->create          = "Add";
+$lang->project->copy            = "Copy a project";
 $lang->project->delete          = "Delete";
 $lang->project->browse          = "Browse";
 $lang->project->edit            = "Edit";

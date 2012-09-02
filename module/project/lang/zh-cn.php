@@ -98,6 +98,7 @@ $lang->project->manageProducts  = '关联产品';
 $lang->project->linkStory       = '关联需求';
 $lang->project->view            = "基本信息";
 $lang->project->create          = "添加项目";
+$lang->project->copy            = "复制项目";
 $lang->project->delete          = "删除项目";
 $lang->project->browse          = "浏览项目";
 $lang->project->edit            = "编辑项目";
