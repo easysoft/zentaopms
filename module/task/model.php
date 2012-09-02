@@ -94,8 +94,8 @@ class taskModel extends model
         {
             if($tasks->type[$i] != '' and $tasks->name[$i] != '' and $tasks->pri[$i] != 0 and $tasks->estimate[$i] != '')
             {
-                $data[$i]->story        = $tasks->story[$i] != 'same' ? $tasks->story[$i] : ($i == 0 ? 0 : $data[$i-1]->story);
-                $data[$i]->type         = $tasks->type[$i] == 'same' ? ($i == 0 ? '' : $data[$i-1]->type) : $tasks->type[$i];
+                $data[$i]->story        = $tasks->story[$i] != 'ditto' ? $tasks->story[$i] : ($i == 0 ? 0 : $data[$i-1]->story);
+                $data[$i]->type         = $tasks->type[$i] == 'ditto' ? ($i == 0 ? '' : $data[$i-1]->type) : $tasks->type[$i];
                 $data[$i]->name         = $tasks->name[$i];
                 $data[$i]->desc         = $tasks->desc[$i];
                 $data[$i]->assignedTo   = $tasks->assignedTo[$i];

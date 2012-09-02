@@ -75,8 +75,7 @@ $lang->task->lastEditedBy      = '最后修改';
 $lang->task->lastEditedDate    = '最后修改日期';
 $lang->task->lastEdited        = '最后编辑';
 
-$lang->task->same  = '同上';
-$lang->task->notes = '(注：“任务类型”、“任务名称”、“优先级”和“预计工时”必需填写，否则此行无效)';
+$lang->task->ditto = '同上';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未开始';
