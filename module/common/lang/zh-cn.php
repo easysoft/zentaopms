@@ -148,7 +148,7 @@ $lang->product->menu->plan    = array('link' => '计划|productplan|browse|produ
 $lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文档|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view    = '概况|product|view|productID=%s';
+$lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '项目列表|product|project|status=all&productID=%s';
 $lang->product->menu->order   = '排序|product|order|productID=%s';
@@ -161,7 +161,7 @@ $lang->release->menu          = $lang->product->menu;
 /* 项目视图菜单设置。*/
 $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask,burn');
-$lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'alias' => 'linkstory', 'subModule' => 'story');
+$lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '动态|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
@@ -169,7 +169,7 @@ $lang->project->menu->testtask  = '测试申请|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
-$lang->project->menu->view      = '概况|project|view|projectID=%s';
+$lang->project->menu->view      = array('link' => '概况|project|view|projectID=%s', 'alias' => 'edit');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>新增项目|project|create', 'float' => 'right');
 $lang->project->menu->copy      = array('link' => '<span class="icon-copy">&nbsp;</span>复制项目|project|create|projectID=&copyProjectID=%s', 'float' => 'right');

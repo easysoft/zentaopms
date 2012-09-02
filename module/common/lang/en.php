@@ -148,7 +148,7 @@ $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|product
 $lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => 'Doc|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view    = 'Info|product|view|productID=%s';
+$lang->product->menu->view    = array('link' => 'Info|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = 'Projects|product|project|status=all&productID=%s';
 $lang->product->menu->order   = 'Order|product|order|productID=%s';
@@ -161,7 +161,7 @@ $lang->release->menu          = $lang->product->menu;
 /* Project menu. */
 $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask');
-$lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'alias' => 'linkstory', 'subModule' => 'story');
+$lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
@@ -169,7 +169,7 @@ $lang->project->menu->testtask  = 'Testtask|project|testtask|projectID=%s';
 $lang->project->menu->burn      = 'Burn|project|burn|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s', 'subModule' => 'doc');
-$lang->project->menu->product   = 'Product|project|manageproducts|projectID=%s';
+$lang->project->menu->product   = array('link' => 'Product|project|manageproducts|projectID=%s', 'alias' => 'edit');
 $lang->project->menu->view      = 'Info|project|view|projectID=%s';
 $lang->project->menu->order     = 'Order|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>New|project|create', 'float' => 'right');
