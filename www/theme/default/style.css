@@ -424,102 +424,102 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /* Common icons. */
 #featurebar .f-right .icon-goback     {padding:0px 10px}
-.pri1        {padding:2px 8px; background:url(images/main/zt-green.png) 0px    -141px;}
-.pri2        {padding:2px 8px; background:url(images/main/zt-green.png) -20px  -141px;}
-.pri3        {padding:2px 8px; background:url(images/main/zt-green.png) -40px  -141px;}
-.pri4        {padding:2px 8px; background:url(images/main/zt-green.png) -60px  -141px;}
-.pri5        {padding:2px 8px; background:url(images/main/zt-green.png) -80px  -141px;}
-.pri6        {padding:2px 8px; background:url(images/main/zt-green.png) -100px -141px;}
-.icon-goback {padding:2px 8px; background:url(images/main/zt-green.png) 0px   -42px;}
-.icon-pre    {padding:2px 8px; background:url(images/main/zt-green.png) -20px  -42px;}
-.icon-next   {padding:2px 8px; background:url(images/main/zt-green.png) -40px  -42px;}
-#searchicon  {padding:2px 8px; background:url(images/main/zt-green.png) -102px -80px; margin-left:10px;}
-#searchmore  {padding:2px 8px; background:url(images/main/zt-green.png) -62px  -100px no-repeat; margin-right:10px;}
-#searchlite  {padding:2px 8px; background:url(images/main/zt-green.png) -82px  -100px no-repeat; margin-right:10px}
-.icon-addFile     {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-green.png) -120px  -20px no-repeat;}
-.icon-delFile     {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-green.png) -100px  -20px no-repeat;}
+.pri1        {padding:2px 8px; background:url(images/main/zt-icons.png) 0px    -141px;}
+.pri2        {padding:2px 8px; background:url(images/main/zt-icons.png) -20px  -141px;}
+.pri3        {padding:2px 8px; background:url(images/main/zt-icons.png) -40px  -141px;}
+.pri4        {padding:2px 8px; background:url(images/main/zt-icons.png) -60px  -141px;}
+.pri5        {padding:2px 8px; background:url(images/main/zt-icons.png) -80px  -141px;}
+.pri6        {padding:2px 8px; background:url(images/main/zt-icons.png) -100px -141px;}
+.icon-goback {padding:2px 8px; background:url(images/main/zt-icons.png) 0px    -42px;}
+.icon-pre    {padding:2px 8px; background:url(images/main/zt-icons.png) -20px  -42px;}
+.icon-next   {padding:2px 8px; background:url(images/main/zt-icons.png) -40px  -42px;}
+#searchicon  {padding:2px 8px; background:url(images/main/zt-icons.png) -102px -80px; margin-left:10px;}
+#searchmore  {padding:2px 8px; background:url(images/main/zt-icons.png) -62px  -100px no-repeat; margin-right:10px;}
+#searchlite  {padding:2px 8px; background:url(images/main/zt-icons.png) -82px  -100px no-repeat; margin-right:10px}
+.icon-addFile     {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -120px  0px no-repeat;}
+.icon-delFile     {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -100px  0px no-repeat;}
 .icon-addFile:hover, .icon-delFile:hover {cursor:pointer}
 
-.icon-green-common-edit    {padding:2px 8px;  background:url(images/main/zt-green.png)  0px  0px no-repeat;} 
-.icon-green-common-comment {padding:2px 8px;  background:url(images/main/zt-green.png) -20px 0px no-repeat;} 
-.icon-green-common-copy    {padding:2px 8px;  background:url(images/main/zt-green.png) -40px 0px no-repeat;}
-.icon-green-common-delete  {padding:2px 8px;  background:url(images/main/zt-green.png) -60px 0px no-repeat;}
-.icon-gray-common-delete   {padding:2px 8px;  background:url(images/main/zt-gray.png)  -60px -22px no-repeat;}
+.icon-green-common-edit    {padding:2px 8px;  background:url(images/main/zt-icons.png)  0px  0px no-repeat;} 
+.icon-green-common-comment {padding:2px 8px;  background:url(images/main/zt-icons.png) -20px 0px no-repeat;} 
+.icon-green-common-copy    {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px 0px no-repeat;}
+.icon-green-common-delete  {padding:2px 8px;  background:url(images/main/zt-icons.png) -60px 0px no-repeat;}
+.icon-gray-common-delete   {padding:2px 8px;  background:url(images/main/zt-icons.png) -60px -22px no-repeat;}
 
-#featurebar .f-right .icon-green-common-report  {padding:2px 10px; background:url(images/main/zt-green.png) -40px -82px no-repeat;} 
-#featurebar .f-right .icon-green-common-export {padding:2px 8px; background:url(images/main/zt-green.png) -21px -82px;} 
+#featurebar .f-right .icon-green-common-report  {padding:2px 10px; background:url(images/main/zt-icons.png) -40px -82px no-repeat;} 
+#featurebar .f-right .icon-green-common-export  {padding:2px 8px; background:url(images/main/zt-icons.png) -21px -82px;} 
 
 /* Story icons. */
-.icon-green-story-toStory    {padding:2px 8px; background:url(images/main/zt-green.png) 0px  -202px;}
+.icon-green-story-toStory    {padding:2px 8px; background:url(images/main/zt-icons.png) 0px   -202px;}
 
-.icon-green-story-change     {padding:2px 8px; background:url(images/main/zt-green.png) -40px  -200px;}
-.icon-gray-story-change      {padding:2px 8px; background:url(images/main/zt-gray.png)  -40px  -200px;}
+.icon-green-story-change     {padding:2px 8px; background:url(images/main/zt-icons.png) -40px -200px;}
+.icon-gray-story-change      {padding:2px 8px; background:url(images/main/zt-icons.png) -40px -220px;}
 
-.icon-green-story-review     {padding:2px 8px; background:url(images/main/zt-green.png) -60px  -201px;}
-.icon-gray-story-review      {padding:2px 8px; background:url(images/main/zt-gray.png)  -60px  -201px;}
+.icon-green-story-review     {padding:2px 8px; background:url(images/main/zt-icons.png) -60px  -201px;}
+.icon-gray-story-review      {padding:2px 8px; background:url(images/main/zt-icons.png)  -60px -221px;}
 
-.icon-green-story-close      {padding:2px 8px; background:url(images/main/zt-green.png) -80px  -201px;}
-.icon-gray-story-close       {padding:2px 8px; background:url(images/main/zt-gray.png) -80px   -201px;}
+.icon-green-story-close      {padding:2px 8px; background:url(images/main/zt-icons.png) -80px  -201px;}
+.icon-gray-story-close       {padding:2px 8px; background:url(images/main/zt-icons.png) -80px  -221px;}
 
-.icon-green-story-activate   {padding:2px 8px; background:url(images/main/zt-green.png) -100px  -201px;}
+.icon-green-story-activate   {padding:2px 8px; background:url(images/main/zt-icons.png) -100px  -201px;}
 
-.icon-green-story-createCase {padding:2px 8px; background:url(images/main/zt-green.png) -120px -201px;}
-.icon-green-story-createCase {padding:2px 8px; background:url(images/main/zt-green.png) -120px -201px;}
+.icon-green-story-createCase {padding:2px 8px; background:url(images/main/zt-icons.png) -120px -201px;}
+.icon-gray-story-createCase {padding:2px 8px; background:url(images/main/zt-icons.png)  -120px -221px;}
 
-#featurebar .f-right .icon-green-story-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) 0px   -202px;} 
-#featurebar .f-right .icon-green-story-batchCreate {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) -20px -202px;} 
+#featurebar .f-right .icon-green-story-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-icons.png) 0px   -202px;} 
+#featurebar .f-right .icon-green-story-batchCreate {padding:2px 7px 2px 10px; background:url(images/main/zt-icons.png) -20px -202px;} 
 
 /* Task icons. */
-.icon-green-task-assignTo {padding:2px 8px; background:url(images/main/zt-green.png) -40px  -242px;} 
-.icon-gray-task-assignTo  {padding:2px 8px; background:url(images/main/zt-gray.png)  -40px  -242px;} 
+.icon-green-task-assignTo {padding:2px 8px; background:url(images/main/zt-icons.png) -40px  -242px;} 
+.icon-gray-task-assignTo  {padding:2px 8px; background:url(images/main/zt-icons.png) -40px -262px;} 
 
-.icon-green-task-start    {padding:2px 8px; background:url(images/main/zt-green.png) -61px  -242px;} 
-.icon-gray-task-start     {padding:2px 8px; background:url(images/main/zt-gray.png)  -61px  -242px;} 
+.icon-green-task-start    {padding:2px 8px; background:url(images/main/zt-icons.png) -61px  -242px;} 
+.icon-gray-task-start     {padding:2px 8px; background:url(images/main/zt-icons.png) -61px  -262px;} 
 
-.icon-green-task-finish   {padding:2px 8px; background:url(images/main/zt-green.png) -80px  -242px;} 
-.icon-gray-task-finish    {padding:2px 8px; background:url(images/main/zt-gray.png)  -80px  -242px;} 
+.icon-green-task-finish   {padding:2px 8px; background:url(images/main/zt-icons.png) -80px  -242px;} 
+.icon-gray-task-finish    {padding:2px 8px; background:url(images/main/zt-icons.png) -80px  -262px;} 
 
-.icon-green-task-activate {padding:2px 8px; background:url(images/main/zt-green.png) -120px  -241px;} 
-.icon-gray-task-activate  {padding:2px 8px; background:url(images/main/zt-gray.png)  -120px  -242px;} 
+.icon-green-task-activate {padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -241px;} 
+.icon-gray-task-activate  {padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -262px;} 
 
-.icon-green-task-cancel   {padding:2px 8px; background:url(images/main/zt-green.png) -141px -242px;} 
+.icon-green-task-cancel   {padding:2px 8px; background:url(images/main/zt-icons.png) -141px -242px;} 
 
-.icon-green-task-close    {padding:2px 8px; background:url(images/main/zt-green.png) -100px -241px;} 
-.icon-gray-task-close     {padding:2px 8px; background:url(images/main/zt-gray.png)  -100px -241px;} 
+.icon-green-task-close    {padding:2px 8px; background:url(images/main/zt-icons.png) -100px -241px;} 
+.icon-gray-task-close     {padding:2px 8px; background:url(images/main/zt-icons.png) -100px -261px;} 
 
-#featurebar .f-right .icon-green-task-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) 0px   -242px;} 
-#featurebar .f-right .icon-green-task-batchCreate {padding:2px 7px 2px 10px; background:url(images/main/zt-green.png) -20px -242px;} 
+#featurebar .f-right .icon-green-task-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-icons.png) 0px   -242px;} 
+#featurebar .f-right .icon-green-task-batchCreate {padding:2px 7px 2px 10px; background:url(images/main/zt-icons.png) -20px -242px;} 
 
 /* Bug icons. */
-.severity1 {padding:2px 8px; background:url(images/main/zt-green.png) 0px    -381px;}
-.severity2 {padding:2px 8px; background:url(images/main/zt-green.png) -20px  -381px;}
-.severity3 {padding:2px 8px; background:url(images/main/zt-green.png) -40px  -381px;}
-.severity4 {padding:2px 8px; background:url(images/main/zt-green.png) -60px  -381px;}
-.severity5 {padding:2px 8px; background:url(images/main/zt-green.png) -80px  -381px;}
-.severity6 {padding:2px 8px; background:url(images/main/zt-green.png) -100px -381px;}
+.severity1 {padding:2px 8px; background:url(images/main/zt-icons.png) 0px    -381px;}
+.severity2 {padding:2px 8px; background:url(images/main/zt-icons.png) -20px  -381px;}
+.severity3 {padding:2px 8px; background:url(images/main/zt-icons.png) -40px  -381px;}
+.severity4 {padding:2px 8px; background:url(images/main/zt-icons.png) -60px  -381px;}
+.severity5 {padding:2px 8px; background:url(images/main/zt-icons.png) -80px  -381px;}
+.severity6 {padding:2px 8px; background:url(images/main/zt-icons.png) -100px -381px;}
 
-.icon-green-bug-confirmBug {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -282px;} 
+.icon-green-bug-confirmBug {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;} 
 
-.icon-green-bug-assignTo   {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -242px;} 
+.icon-green-bug-assignTo   {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -242px;} 
 
-.icon-green-bug-createBug  {padding:2px 8px;  background:url(images/main/zt-green.png) -40px -322px;} 
-.icon-gray-bug-createBug   {padding:2px 8px;  background:url(images/main/zt-gray.png)  -40px -322px;} 
+.icon-green-bug-createBug  {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -322px;} 
+.icon-gray-bug-createBug   {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -342px;} 
 
-.icon-green-bug-resolve    {padding:2px 8px;  background:url(images/main/zt-green.png) -60px -281px;} 
-.icon-gray-bug-resolve     {padding:2px 8px;  background:url(images/main/zt-gray.png)  -60px -281px;} 
+.icon-green-bug-resolve    {padding:2px 8px;  background:url(images/main/zt-icons.png) -60px -281px;} 
+.icon-gray-bug-resolve     {padding:2px 8px;  background:url(images/main/zt-icons.png) -60px -301px;} 
 
-.icon-green-bug-close      {padding:2px 8px;  background:url(images/main/zt-green.png) -80px -281px;} 
-.icon-gray-bug-close       {padding:2px 8px;  background:url(images/main/zt-gray.png)  -80px -281px;} 
+.icon-green-bug-close      {padding:2px 8px;  background:url(images/main/zt-icons.png) -80px -281px;} 
+.icon-gray-bug-close       {padding:2px 8px;  background:url(images/main/zt-icons.png) -80px -301px;} 
 
-#featurebar .f-right .icon-green-bug-create, caption .f-right .icon-green-bug-create  {padding:2px 8px;  background:url(images/main/zt-green.png) 0px -202px;} 
-#featurebar .f-right .icon-green-bug-customFields {padding:2px 8px;  background:url(images/main/zt-green.png) -161px -282px;} 
+#featurebar .f-right .icon-green-bug-create, caption .f-right .icon-green-bug-create  {padding:2px 8px;  background:url(images/main/zt-icons.png) 0px -202px;} 
+#featurebar .f-right .icon-green-bug-customFields {padding:2px 8px;  background:url(images/main/zt-icons.png) -161px -282px;} 
 
 /* Case icons. */
-.icon-green-testcase-createCase {padding:1px 7px 1px 10px; background:url(images/main/zt-green.png) -120px   -202px;} 
-.icon-green-testcase-createCase {padding:1px 7px 1px 10px; background:url(images/main/zt-green.png) -120px   -202px;} 
+.icon-green-testcase-createCase {padding:1px 7px 1px 10px; background:url(images/main/zt-icons.png) -120px -202px;} 
+.icon-gray-testcase-createCase  {padding:1px 7px 1px 10px; background:url(images/main/zt-icons.png) -120px -222px;} 
 
-#featurebar .f-right .icon-green-testcase-create      {padding:2px 8px; background:url(images/main/zt-green.png) 0px   -320px;} 
-#featurebar .f-right .icon-green-testcase-batchCreate {padding:2px 8px; background:url(images/main/zt-green.png) -20px -320px;} 
+#featurebar .f-right .icon-green-testcase-create      {padding:2px 8px; background:url(images/main/zt-icons.png) 0px   -320px;} 
+#featurebar .f-right .icon-green-testcase-batchCreate {padding:2px 8px; background:url(images/main/zt-icons.png) -20px -320px;} 
 
 .link-button {padding:7px 0px 7px 0px; margin-left:-1px; } 
 .link-button:hover {background:RGB(200, 200, 200)} 
@@ -527,4 +527,4 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .link-button a:hover {color:RGB(234, 0, 0);}
 
 /* Effort icons. */
-.icon-green-effort-createForObject {padding:2px 8px;  background:url(images/main/zt-green.png) -80px -2px;} 
+.icon-green-effort-createForObject {padding:2px 8px;  background:url(images/main/zt-icons.png) -80px -2px;} 
