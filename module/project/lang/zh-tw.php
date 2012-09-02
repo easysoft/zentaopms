@@ -6,13 +6,14 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 3343 2012-07-16 01:15:26Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3481 2012-09-02 05:53:18Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
 $lang->project->common        = '項目視圖';
 $lang->project->id            = '項目編號';
 $lang->project->company       = '所屬公司';
+$lang->project->fromproject   = '所屬項目';
 $lang->project->iscat         = '作為目錄';
 $lang->project->type          = '項目類型';
 $lang->project->parent        = '上級項目';
@@ -97,6 +98,7 @@ $lang->project->manageProducts  = '關聯產品';
 $lang->project->linkStory       = '關聯需求';
 $lang->project->view            = "基本信息";
 $lang->project->create          = "添加項目";
+$lang->project->copy            = "複製項目";
 $lang->project->delete          = "刪除項目";
 $lang->project->browse          = "瀏覽項目";
 $lang->project->edit            = "編輯項目";
@@ -110,14 +112,15 @@ $lang->project->ajaxGetProducts = '介面：獲得項目產品列表';
 /* 分組瀏覽。*/
 $lang->project->allTasks             = '所有';
 $lang->project->assignedToMe         = '指派給我';
-$lang->project->moduleTask           = '按模組';
-$lang->project->finishedByMe         = '由我完成';
-$lang->project->statusWait           = '未開始';
-$lang->project->statusDoing          = '進行中';
-$lang->project->statusUndone         = '未完成';
-$lang->project->statusDone           = '已完成';
-$lang->project->statusClosed         = '已關閉';
-$lang->project->delayed              = '已延期';
+
+$lang->project->statusSelects['']             = '更多';
+$lang->project->statusSelects['finishedbyme'] = '我完成';
+$lang->project->statusSelects['wait']         = '未開始';
+$lang->project->statusSelects['doing']        = '進行中';
+$lang->project->statusSelects['done']         = '已完成';
+$lang->project->statusSelects['closed']       = '已關閉';
+$lang->project->statusSelects['delayed']      = '已延期';
+$lang->project->statusSelects['needconfirm']  = '需求變動';
 $lang->project->groups['']           = '分組查看';
 $lang->project->groups['story']      = '需求分組';
 $lang->project->groups['status']     = '狀態分組';
@@ -131,7 +134,8 @@ $lang->project->groups['consumed']   = '已消耗分組';
 $lang->project->groups['left']       = '剩餘分組';
 $lang->project->groups['type']       = '類型分組';
 $lang->project->groups['deadline']   = '截止分組';
-$lang->project->listTaskNeedConfrim  = '需求變動';
+
+$lang->project->moduleTask           = '按模組';
 $lang->project->byQuery              = '搜索';
 
 /* 查詢條件列表。*/

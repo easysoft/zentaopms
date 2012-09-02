@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 3343 2012-07-16 01:15:26Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3431 2012-08-30 07:45:20Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -68,7 +68,7 @@ $lang->bug->lastEditedDateAB = '修改日期';
 $lang->bug->index              = '首頁';
 $lang->bug->create             = '創建';
 $lang->bug->confirmBug         = '確認';
-$lang->bug->edit               = '編輯Bug';
+$lang->bug->edit               = '編輯';
 $lang->bug->assignTo           = '指派';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug詳情';
@@ -77,7 +77,7 @@ $lang->bug->close              = '關閉';
 $lang->bug->activate           = '激活Bug';
 $lang->bug->reportChart        = '報表統計';
 $lang->bug->export             = '導出';
-$lang->bug->delete             = '刪除Bug';
+$lang->bug->delete             = '刪除';
 $lang->bug->saveTemplate       = '保存模板';
 $lang->bug->deleteTemplate     = '刪除模板';
 $lang->bug->customFields       = '自定義欄位';

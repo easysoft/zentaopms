@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 3341 2012-07-14 07:26:53Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3476 2012-09-02 02:53:29Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
@@ -75,8 +75,7 @@ $lang->task->lastEditedBy      = '最後修改';
 $lang->task->lastEditedDate    = '最後修改日期';
 $lang->task->lastEdited        = '最後編輯';
 
-$lang->task->same  = '同上';
-$lang->task->notes = '(註：“任務類型”、“任務名稱”、“優先順序”和“預計工時”必需填寫，否則此行無效)';
+$lang->task->ditto = '同上';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = '未開始';

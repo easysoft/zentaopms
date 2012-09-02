@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 3011 2012-06-07 01:51:05Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3374 2012-07-27 01:23:08Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -84,7 +84,7 @@ $lang->install->requestTypes['PATH_INFO'] = '靜態友好方式';
 
 $lang->install->errorConnectDB      = '資料庫連接失敗 ';
 $lang->install->errorCreateDB       = '資料庫創建失敗';
-$lang->install->errorDBExists       = '資料庫已經存在，繼續安裝請選擇清空數據';
+$lang->install->errorTableExists    = '數據表已經存在，您之前應該有安裝過禪道，繼續安裝請返回前頁並選擇清空數據';
 $lang->install->errorCreateTable    = '創建表失敗';
 $lang->install->errorImportDemoData = '導入demo數據失敗';
 

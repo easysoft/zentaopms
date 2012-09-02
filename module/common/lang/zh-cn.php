@@ -230,6 +230,7 @@ $lang->extension->menu        = $lang->admin->menu;
 $lang->editor->menu           = $lang->admin->menu;
 $lang->mail->menu             = $lang->admin->menu;
 
+/* 菜单分组。*/
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
 $lang->menugroup->productplan = 'product';
