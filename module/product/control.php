@@ -223,7 +223,7 @@ class product extends control
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->view->header->title = $product->name . $this->lang->colon . $this->lang->product->view;
+        $this->view->header->title = $product->name . ' - ' . $this->lang->product->view;
         $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[]    = $this->lang->product->view;
         $this->view->product       = $product;
