@@ -63,3 +63,4 @@ $lang->upgrade->fromVersions['3_0_beta2'] = '3.0 BETA2';
 $lang->upgrade->fromVersions['3_0']       = '3.0 STABLE';
 $lang->upgrade->fromVersions['3_1']       = '3.1';
 $lang->upgrade->fromVersions['3_2']       = '3.2';
+$lang->upgrade->fromVersions['3_2_1']     = '3.2.1';

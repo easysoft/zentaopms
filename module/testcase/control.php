@@ -434,42 +434,6 @@ class testcase extends control
         die(js::reload('parent'));
     }
 
-    public function import($productID)
-    {
-        $this->testcase->setMenu($this->products, $productID);
-        if($_FILES)
-        {
-            $savePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . date('Ym/', time());
-            if(!file_exists($savePath)) @mkdir($savePath, 0777, true);
-
-            move_uploaded_file($_FILES['file']['tmp_name'], $savePath . $_FILES['file']['name']);
-
-            $file = $savePath . $_FILES['file']['name'];
-            $row = 1;
-            $handle = fopen($file, "r");
-            $result = array();
-            while($data = fgetcsv($handle)) 
-            {
-                $result[$row++] = $data;
-                /*
-                $num = count($data);
-                echo "<p> $num fields in line $row: <br>\n";
-                $row++;
-                for ($c=0; $c < $num; $c++) {
-                    echo $data[$c] . "<br>\n";
-                }
-                 */
-            }
-            fclose($handle);
-
-            $this->view->fileType = $this->post->fileType;
-            $this->view->result = $result;
-            $this->display();
-        }
-        $this->view->result = array();
-        $this->display();
-    }
-
     /**
      * export 
      * 
