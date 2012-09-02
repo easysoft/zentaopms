@@ -459,12 +459,14 @@ EOT;
     public static function linkButton($label = '', $link = '', $misc = '')
     {
         global $config;
-        //if page has onlybody param then add this param in all link. the param hide header and footer.
+
+        /* if page has onlybody param then add this param in all link. the param hide header and footer. */
         if(strpos($link, 'onlybody=') === false and isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
         {
             $onlybody = $config->requestType == 'PATH_INFO' ? "?onlybody=yes" : "&onlybody=yes";
             $link .= $onlybody;
         }
+
         return " <input type='button' value='$label' class='button-c' $misc onclick='location.href=\"$link\"' /> ";
     }
 
