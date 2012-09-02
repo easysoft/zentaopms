@@ -14,7 +14,7 @@ $clientTheme  = $this->app->getClientTheme();
   <?php
   $header = isset($header) ? (object)$header : new stdclass();
   if(!isset($header->title)) $header->title = $lang->ZenTaoPMS;
-  echo html::title($header->title . ' / ' . $lang->ZenTaoPMS);
+  echo html::title($header->title . ' - ' . $lang->ZenTaoPMS);
 
   js::exportConfigVars();
   if($config->debug)
