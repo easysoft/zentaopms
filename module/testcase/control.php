@@ -317,7 +317,7 @@ class testcase extends control
         $productID = $case->product;
         $this->testcase->setMenu($this->products, $productID);
 
-        $this->view->header['title'] = "CASE #$case->id $case->title/" . $this->products[$productID];
+        $this->view->header['title'] = "CASE #$case->id $case->title - " . $this->products[$productID];
         $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testcase->view;
 
