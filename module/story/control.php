@@ -368,7 +368,7 @@ class story extends control
         /* Set the menu. */
         $this->product->setMenu($this->product->getPairs(), $product->id);
 
-        $header['title'] = "STORY #$story->id $story->title/$product->name";
+        $header['title'] = "STORY #$story->id $story->title - $product->name";
         $position[]      = html::a($this->createLink('product', 'browse', "product=$product->id"), $product->name);
         $position[]      = $this->lang->story->view;
 
