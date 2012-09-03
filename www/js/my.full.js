@@ -526,7 +526,7 @@ function setImageSize(image, maxWidth)
     {
         if($(this).width() > maxWidth) $(this).attr('width', maxWidth);
     });
-     $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>')
+    $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>')
 }
 
 /**

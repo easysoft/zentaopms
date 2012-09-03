@@ -238,14 +238,16 @@ $file->batchRemoveFile('./xampp/php/phpunit');
 $file->batchRemoveFile('./xampp/php/*.php');
 
 $file->rename('./xampp/php/php5apache2_2.dll', './xampp/php/php5apache2_2.bak');
-$file->rename('./xampp/php/php5ts.dll', './xampp/php/php5ts.bak');
+$file->rename('./xampp/php/php5ts.dll',   './xampp/php/php5ts.bak');
 $file->rename('./xampp/php/ssleay32.dll', './xampp/php/ssleay32.dll.bak');
 $file->rename('./xampp/php/libeay32.dll', './xampp/php/libeay32.dll.bak');
+$file->rename('./xampp/php/libsasl.dll',  './xampp/php/libsasl.dll.bak');
 $file->batchRemoveFile('./xampp/php/*.dll');
 $file->rename('./xampp/php/php5apache2_2.bak', './xampp/php/php5apache2_2.dll');
 $file->rename('./xampp/php/php5ts.bak', './xampp/php/php5ts.dll');
 $file->rename('./xampp/php/ssleay32.dll.bak', './xampp/php/ssleay32.dll');
 $file->rename('./xampp/php/libeay32.dll.bak', './xampp/php/libeay32.dll');
+$file->rename('./xampp/php/libsasl.dll.bak',  './xampp/apache/bin/libsasl.dll');
 
 /* Process php ini file. */
 $phpConfig = file_get_contents('./xampp/php/php.ini');
@@ -256,7 +258,7 @@ $phpConfig = str_replace('extension=php_pdo_odbc.dll',';extension=php_pdo_odbc.d
 $phpConfig = str_replace('extension=php_pdo_sqlite.dll',';extension=php_pdo_sqlite.dll', $phpConfig);
 $phpConfig = str_replace('extension=php_soap.dll',';extension=php_soap.dll', $phpConfig);
 $phpConfig = str_replace('extension=php_sqlite.dll',';extension=php_sqlite.dll', $phpConfig);
-$phpConfig = str_replace('extension=php_sqlite3.dll',';extension=php_sqlite3.dll', $phpConfig);
+$phpConfig = str_replace('extension=php_sqlite3.dll','extension=php_ldap.dll',   $phpConfig);    // load ldap extension.
 $phpConfig = str_replace('extension=php_xmlrpc.dll','extension=php_openssl.dll', $phpConfig);    // load openssl extension.
 
 /* Remove empty and comment lines. */
@@ -287,15 +289,16 @@ file_put_contents('./xampp/php/php.ini', str_replace('', '', $phpConfig));
 /* Process php's ext directory. */
 $file->rename('./xampp/php/ext', './xampp/php/extold');
 $file->mkdir('./xampp/php/ext');
-$file->copyFile('./xampp/php/extold/php_bz2.dll',             './xampp/php/ext/php_bz2.dll');
-$file->copyFile('./xampp/php/extold/php_gd2.dll',             './xampp/php/ext/php_gd2.dll');
-$file->copyFile('./xampp/php/extold/php_imap.dll',            './xampp/php/ext/php_imap.dll');
-$file->copyFile('./xampp/php/extold/php_mbstring.dll',        './xampp/php/ext/php_mbstring.dll');
-$file->copyFile('./xampp/php/extold/php_mysql.dll',           './xampp/php/ext/php_mysql.dll');
-$file->copyFile('./xampp/php/extold/php_mysqli.dll',          './xampp/php/ext/php_mysqli.dll');
-$file->copyFile('./xampp/php/extold/php_pdo_mysql.dll',       './xampp/php/ext/php_pdo_mysql.dll');
-$file->copyFile('./xampp/php/extold/php_sockets.dll',          './xampp/php/ext/php_sockets.dll');
-$file->copyFile('./xampp/php/extold/php_openssl.dll',          './xampp/php/ext/php_openssl.dll');
+$file->copyFile('./xampp/php/extold/php_bz2.dll',       './xampp/php/ext/php_bz2.dll');
+$file->copyFile('./xampp/php/extold/php_gd2.dll',       './xampp/php/ext/php_gd2.dll');
+$file->copyFile('./xampp/php/extold/php_imap.dll',      './xampp/php/ext/php_imap.dll');
+$file->copyFile('./xampp/php/extold/php_mbstring.dll',  './xampp/php/ext/php_mbstring.dll');
+$file->copyFile('./xampp/php/extold/php_mysql.dll',     './xampp/php/ext/php_mysql.dll');
+$file->copyFile('./xampp/php/extold/php_mysqli.dll',    './xampp/php/ext/php_mysqli.dll');
+$file->copyFile('./xampp/php/extold/php_pdo_mysql.dll', './xampp/php/ext/php_pdo_mysql.dll');
+$file->copyFile('./xampp/php/extold/php_sockets.dll',   './xampp/php/ext/php_sockets.dll');
+$file->copyFile('./xampp/php/extold/php_openssl.dll',   './xampp/php/ext/php_openssl.dll');
+$file->copyFile('./xampp/php/extold/php_ldap.dll',      './xampp/php/ext/php_ldap.dll');
 $file->removeDir('./xampp/php/extold');
 
 /* Process sqlbuddy. */
@@ -325,7 +328,7 @@ $file->copyFile($buildDir . '/ioncube_loader_win_5.3.dll', './xampp/php/ext/ionc
 $file->copyFile($buildDir . '/apache_installservice.bat',   './xampp/apache_installservice.bat');
 $file->copyFile($buildDir . '/apache_uninstallservice.bat', './xampp/apache_uninstallservice.bat');
 $file->copyFile($buildDir . '/mysql_installservice.bat',    './xampp/mysql_installservice.bat');
-$file->copyFile($buildDir . '/mysql_uninstallserivice.bat', './xampp/mysql_uninstallservice.bat');
+$file->copyFile($buildDir . '/mysql_uninstallservice.bat',  './xampp/mysql_uninstallservice.bat');
 
 /* Copy the src of control panel and readme files. */
 $file->mkdir('./xampp/source');

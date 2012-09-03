@@ -1,7 +1,6 @@
 <div style='<?php if(count($story->projects)==0) echo "display:none";?>'>
   <table class='table-1 mt-10px'>
     <caption><?php echo $lang->story->affectedProjects;?></caption>
-
     <?php foreach($story->projects as $projectID => $project):?>
     <tr>
       <td class='a-center'><?php echo "<strong>$project->name</strong><br />"; ?> </td>
@@ -18,7 +17,7 @@
           </tr>
         </table>
         <?php if(isset($story->tasks[$projectID])):?>
-        <div class='<?php if(count($story->tasks[$projectID]) > 5)  echo "linkbox";?>'>
+        <div class='<?php if(count($story->tasks[$projectID]) > $config->story->affectedFixedNum)  echo "linkbox";?>'>
           <table class='table-1'>
           <?php foreach($story->tasks[$projectID] as $task):?> 
             <tr class='a-center'>
@@ -38,22 +37,23 @@
     <?php endforeach;?>
   </table>
 </div>
+
 <div style='<?php if(count($story->bugs)==0) echo "display:none";?>'>
-  <table class='table-1'>
+  <table class='table-1 headerTable'>
     <caption><?php echo $lang->story->affectedBugs;?></caption>
-      <tr>
-        <th class='w-p10'><?php echo $lang->bug->id;?></th>
-        <th class='w-p40'><?php echo $lang->bug->title;?></th>
-        <th class='w-p10'><?php echo $lang->bug->status;?></th>
-        <th class='w-p10'><?php echo $lang->bug->openedBy;?></th>
-        <th><?php echo $lang->bug->resolvedBy;?></th>
-        <th><?php echo $lang->bug->resolution;?></th>
-        <th><?php echo $lang->bug->lastEditedBy;?></th>
-      </tr>
+    <tr>
+      <th class='w-p10'><?php echo $lang->bug->id;?></th>
+      <th class='w-p40'><?php echo $lang->bug->title;?></th>
+      <th class='w-p10'><?php echo $lang->bug->status;?></th>
+      <th class='w-p10'><?php echo $lang->bug->openedBy;?></th>
+      <th><?php echo $lang->bug->resolvedBy;?></th>
+      <th><?php echo $lang->bug->resolution;?></th>
+      <th><?php echo $lang->bug->lastEditedBy;?></th>
+    </tr>
   </table>
-  <div class= '<?php if(count($story->bugs) > 7) echo "linkbox";?>'>
-    <table class='table-1'>
-    <?php foreach($story->bugs as $bug):?>
+  <div class= '<?php if(count($story->bugs) > $config->story->affectedFixedNum) echo "linkbox";?>'>
+    <table class='table-1 contentTable'>
+      <?php foreach($story->bugs as $bug):?>
       <tr class='a-center'>
         <td class='w-p10'><?php echo $bug->id;?></td>
         <td class='w-p40'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?></td>
@@ -67,8 +67,9 @@
     </table>
   </div>
 </div>
+
 <div style='<?php if(count($story->cases)==0) echo "display:none";?>'>
-  <table class='table-1'>
+  <table class='table-1 headerTable'>
     <caption><?php echo $lang->story->affectedCases;?></caption>
       <tr>
         <th class='w-p10'><?php echo $lang->testcase->id;?></th>
@@ -78,8 +79,8 @@
         <th><?php echo $lang->testcase->lastEditedBy;?></th>
       </tr>
   </table>
-  <div class='<?php if(count($story->cases) > 7)  echo "linkbox";?>'>
-    <table class='table-1'>
+  <div class='<?php if(count($story->cases) > $config->story->affectedFixedNum)  echo "linkbox";?>'>
+    <table class='table-1 contentTable'>
     <?php foreach($story->cases as $case):?>
       <tr class='a-center'>
         <td class='w-p10'><?php echo $case->id;?></td>

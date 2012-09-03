@@ -21,8 +21,8 @@
       <th><?php echo $lang->task->story;?></th>
       <th class='red'><?php echo $lang->task->name;?></th>
       <th class='w-60px red'><?php echo $lang->typeAB;?></th>
-      <th class='w-80px red'><?php echo $lang->task->assignedTo;?></th>
-      <th class='w-50px red'><?php echo $lang->task->estimateAB;?></th>
+      <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
+      <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
       <th class='w-200px'><?php echo $lang->task->desc;?></th>
       <th class='w-50px'><?php echo $lang->task->pri;?></th>
     </tr>

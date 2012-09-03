@@ -90,9 +90,10 @@ class taskModel extends model
     {
         $now   = helper::now();
         $tasks = fixer::input('post')->get();
+        $mails = array();
         for($i = 0; $i < $this->config->task->batchCreate; $i++)
         {
-            if($tasks->type[$i] != '' and $tasks->name[$i] != '' and $tasks->pri[$i] != 0 and $tasks->estimate[$i] != '')
+            if($tasks->type[$i] != '' and $tasks->name[$i] != '' and $tasks->pri[$i] != 0)
             {
                 $data[$i]->story        = $tasks->story[$i] != 'ditto' ? $tasks->story[$i] : ($i == 0 ? 0 : $data[$i-1]->story);
                 $data[$i]->type         = $tasks->type[$i] == 'ditto' ? ($i == 0 ? '' : $data[$i-1]->type) : $tasks->type[$i];
