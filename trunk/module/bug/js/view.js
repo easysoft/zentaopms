@@ -1,0 +1,4 @@
+function setComment()
+{
+  $('#comment').toggle();
+}

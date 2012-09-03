@@ -1,0 +1,8 @@
+#!/bin/bash
+if test "`id -u`" -ne 0
+then
+  echo "You need to start XAMPP as root!"
+  exit
+fi
+
+./lampp stop

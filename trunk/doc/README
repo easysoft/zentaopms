@@ -1,0 +1,29 @@
+zentaopms is a scrum management system which is licensed under LGPLV3. 
+
+The key feature of zentaopms:
+
+1. product management(product backlog)
+
+   story management
+   plan management
+   release management
+
+2. project management(sprint backlog)
+   
+   task management
+   team management
+   build management
+   burn down chart
+
+3. QA management
+
+   bug tracking
+   test case management
+   test task management
+
+4. document management
+5. user management
+6. todo feature 
+
+the english version site of zentaopms is http://en.zentao.net
+the english demo site of zentaopms is http://endemo.zentao.net. 

@@ -1,0 +1,7 @@
+#header {background:#990000}
+#mainmenu ul{background:#cc0000}
+#mainmenu ul li{background:#cc0000}
+#mainmenu a {color:#fff}
+#mainmenu a:hover {color:yellow;}
+#mainmenu .active a{color:#990000}
+#topbar select{background:#990000}

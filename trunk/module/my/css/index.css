@@ -1,0 +1,8 @@
+.block {border:1px solid #efefef; height:225px;}
+.linkbox1{height:180px; overflow-y:auto}
+.linkbox2{height:225px; overflow-y:auto}
+
+#row1{margin-bottom:20px}
+#row2{margin-bottom:10px}
+#row1 .table-1, #row1 caption{border:none}
+#row2 .table-1, #row2 caption{border:none}

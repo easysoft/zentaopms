@@ -1,0 +1,17 @@
+name: zentao
+version: 1
+cron:
+  - description: cron
+    url: project-computeburn-admin.html
+    schedule: every day of month 00:00
+    timezone: Beijing
+handle:
+  - rewrite: if(!is_dir() && !is_file()) goto "index.php/%{REQUEST_URI}"
+  - compress: if(out_header["Content-Type"] ~ "text") compress
+  - compress: if(out_header["Content-Type"] ~ "javascript") compress
+  - expire: if(path ~ "\.js$") time 360000
+  - expire: if(path ~ "\.css$") time 360000
+  - expire: if(path ~ "\.gif$") time 360000
+  - expire: if(path ~ "\.png$") time 360000
+  - expire: if(path ~ "\.ico$") time 360000
+  - expire: if(path ~ "\.jpg$") time 360000

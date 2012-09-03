@@ -1,0 +1,2 @@
+zip xampp.zip *.exe
+move xampp.zip c:\ftproot

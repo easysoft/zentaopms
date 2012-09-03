@@ -1,0 +1,25 @@
+html {background-color:#06294e;}
+body {background-image:url(theme/default/images/main/loginbg.png); background-position:center top; background-repeat:no-repeat;}
+form {padding-top:200px; text-align:center}
+
+table, tr, td, th, input{ border:none;}
+.table-4 {text-align:left}
+.table-4 tr, .table-4 th, .table-4 td{padding:2px}
+.rowhead {width:300px; font-weight:normal; font-size:14px; color:#fff; border:none}
+
+.text-2  {width:150px; height:22px; background-color:#a4c5e0; border:1px solid #035793; font-size:16px; font-weight:bold}
+.select-2{width:150px}
+
+#welcome     {background:none; border:none; color:#FFF; padding-top:8px; font-size:14px; font-weight:normal}
+#poweredby   {color:#fff; margin-top:30px; height:50px; text-align:center; line-height:1}
+#poweredby a {color:#fff}
+#keeplogin   {color:white; font-size:14px}
+.button-s, .button-c {padding:3px 5px 3px 5px;height:30px; width:80px; font-size:14px; font-weight:bold; border:none}
+.debugwin, .helplink{display:none}
+#updater {width:500px; height:30px; border:none; overflow:hidden;}
+
+.hidden{display:none}   /* Add it to avoid the white flash when load css later for the updater. */
+
+#demoUsers {margin:25px 0px -15px 0px;}
+#demoUsers span{color:white}
+#demoUsers a{color:yellow}

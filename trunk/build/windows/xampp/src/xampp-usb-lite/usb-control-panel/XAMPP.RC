@@ -1,0 +1,237 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+#include "xampp.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (中国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+MYICON                  ICON    DISCARDABLE     "xampp.ico"
+TRAYICON                ICON    DISCARDABLE     "tray.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+SERVICE DIALOG DISCARDABLE  32768, 51, 164, 166
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CLASS "XamppClass"
+FONT 8, "Verdana"
+BEGIN
+    CONTROL         "将zentaoamp安装为服务",IDC_CHECKBOX9,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFTTEXT | BS_CENTER | BS_FLAT,4,6,
+                    154,12
+    CONTROL         "",-1,"Static",SS_BLACKFRAME,48,112,112,12
+    EDITTEXT        IDC_EDIT83,49,113,110,10,ES_AUTOHSCROLL | WS_DISABLED | 
+                    NOT WS_BORDER
+    CTEXT           "密码",IDC_PASSWORD,6,127,40,10,WS_DISABLED
+    CONTROL         "",-1,"Static",SS_BLACKFRAME,48,126,112,12
+    EDITTEXT        IDC_EDIT84,49,127,110,10,ES_PASSWORD | ES_AUTOHSCROLL | 
+                    WS_DISABLED | NOT WS_BORDER
+    CONTROL         "",-1,"Static",SS_BLACKFRAME,4,58,156,12
+    EDITTEXT        IDC_EDIT30,5,59,154,10,ES_AUTOHSCROLL | WS_DISABLED | 
+                    NOT WS_BORDER | NOT WS_TABSTOP
+    PUSHBUTTON      "帮助",IDHELP,4,148,32,14,BS_FLAT
+    PUSHBUTTON      "取消",IDCANCEL,84,148,32,14,BS_FLAT
+    DEFPUSHBUTTON   "确定",IDOK,122,148,38,14,BS_FLAT
+    CONTROL         "允许桌面交互",IDC_CHECKBOX30,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | BS_FLAT | WS_DISABLED | WS_TABSTOP,26,92,
+                    73,10
+    PUSHBUTTON      "本地服务",IDC_PUSHBUTTON41,44,148,32,14,BS_FLAT
+    CONTROL         "系统账户",IDC_RADIOBUTTON7,"Button",BS_AUTORADIOBUTTON | 
+                    WS_DISABLED,6,78,68,10
+    CONTROL         "账户名",IDC_RADIOBUTTON8,"Button",BS_AUTORADIOBUTTON | 
+                    WS_DISABLED,6,113,37,10
+    CONTROL         "Apache",IDC_CHECKBOX4,"Button",BS_AUTOCHECKBOX | 
+                    BS_FLAT | WS_DISABLED | WS_TABSTOP,4,40,36,12
+    CONTROL         "MySql",IDC_CHECKBOX5,"Button",BS_AUTOCHECKBOX | BS_FLAT | 
+                    WS_DISABLED | WS_TABSTOP,44,40,31,12
+    LTEXT           "选择运行模块:",-1,4,24,74,12
+END
+
+SHELP DIALOG DISCARDABLE  0, 0, 194, 184
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Zentaoamp Control Service Help"
+CLASS "XamppClass"
+FONT 8, "Verdana"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,72,164,50,14,BS_FLAT
+    GROUPBOX        "Windows NT/2000/XP",IDC_GROUPBOX38,8,6,178,78
+    GROUPBOX        "Windows 95/98/SE/ME",IDC_GROUPBOX39,8,90,178,66
+    LTEXT           "Because the XAMPP Service starts before a user has logged on, only the details of the Account under which the service runs will be available.\n\nEnabling Desktop Interaction allows an icon to be placed in the System Tray after a user logs on.",
+                    -1,14,18,168,64
+    LTEXT           "An entry is added to the Registry so that XAMPP starts at boot time.\n\nThe service waits until the Desktop is up and then adds an icon to the System Tray.",
+                    -1,14,104,168,46
+END
+
+XAMPP DIALOG DISCARDABLE  0, 0, 247, 201
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | 
+    WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "zentao集成运行环境"
+CLASS "XamppClass"
+FONT 8, "Verdana"
+BEGIN
+    CONTROL         110,-1,"Static",SS_BITMAP,8,6,73,25
+    PUSHBUTTON      "退出",IDCANCEL,195,95,46,12,BS_FLAT
+    PUSHBUTTON      "官方支持",IDC_HELPX,195,81,46,12,BS_FLAT
+    PUSHBUTTON      "显示文件",IDC_EXPLORE,195,67,46,12,BS_FLAT
+    PUSHBUTTON      "刷新",IDC_XREFRESH,195,53,46,12,BS_FLAT
+    GROUPBOX        "Modules",IDC_GROUPBOX1,1,36,180,72
+    EDITTEXT        IDC_EDIT0,55,59,38,12,ES_CENTER | NOT WS_BORDER
+    EDITTEXT        IDC_EDIT1,55,77,38,12,ES_CENTER | NOT WS_BORDER
+    PUSHBUTTON      "",IDC_ACTION0,95,58,36,12,BS_FLAT
+    PUSHBUTTON      "",IDC_ACTION1,95,76,36,12,BS_FLAT
+    LISTBOX         IDC_LISTBOX1,0,113,247,88,LBS_NOINTEGRALHEIGHT | 
+                    LBS_DISABLENOSCROLL | WS_VSCROLL | WS_HSCROLL
+    EDITTEXT        IDC_EDIT9,197,0,50,12,ES_READONLY | NOT WS_VISIBLE | NOT 
+                    WS_BORDER | NOT WS_TABSTOP
+    PUSHBUTTON      "运行状态",IDC_DEBUG,195,39,46,12,BS_FLAT
+    PUSHBUTTON      "管理界面",IDC_XAMPP,195,12,46,12,BS_FLAT
+    RTEXT           "Apache",-1,6,59,42,10
+    RTEXT           "MySql",-1,6,77,42,10
+    PUSHBUTTON      "安装为服务",IDC_SERVICE,143,12,46,12,BS_FLAT | 
+                    WS_DISABLED
+    PUSHBUTTON      "本地服务",IDC_PUSHBUTTON1,88,12,46,12,BS_FLAT
+    PUSHBUTTON      "",IDC_ACTION2,137,58,36,12,BS_FLAT
+    PUSHBUTTON      "",IDC_ACTION3,137,77,36,12,BS_FLAT
+END
+
+HELP DIALOG DISCARDABLE  0, 0, 200, 130
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Zentaoamp Control Help"
+CLASS "XamppClass"
+FONT 8, "Verdana"
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,144,110,50,14,BS_FLAT
+    ICON            "MyIcon",-1,6,6,20,20
+    PUSHBUTTON      "&Read Me...",IDC_README,76,110,44,14,BS_FLAT
+    PUSHBUTTON      "官方支持",IDC_SUPPORT,6,110,44,14,BS_FLAT
+    LISTBOX         IDC_LISTBOX2,6,32,188,72,LBS_USETABSTOPS | 
+                    LBS_NOINTEGRALHEIGHT | LBS_DISABLENOSCROLL | WS_VSCROLL | 
+                    WS_HSCROLL
+    EDITTEXT        IDC_EDIT10,32,12,162,12,ES_READONLY | NOT WS_BORDER
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VERSIONINFO_1 VERSIONINFO
+ FILEVERSION 1,4,0,0
+ PRODUCTVERSION 1,4,0,0
+ FILEFLAGSMASK 0x0L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x0L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "Comments", "XAMPP Control Panel\0"
+            VALUE "Installer", "none\0"
+            VALUE "Uninstaller", "none\0"
+            VALUE "Version", "2.5\0"
+            VALUE "Build", "9. March, 2011\0"
+            VALUE "CompanyName", "NAT Software, Germany.\0"
+            VALUE "FileDescription", "XAMPP Control Panel (USB) for win32\0"
+            VALUE "FileVersion", "2.5\0"
+            VALUE "InternalName", "Xampp\0"
+            VALUE "LegalCopyright", "Copyright ?NAT Software 2007\0"
+            VALUE "OriginalFilename", "xampp.exe\0"
+            VALUE "WEB Site", "www.nat32.com/xampp\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+#endif    // !_MAC
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""xampp.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP  DISCARDABLE     "logo.bmp"
+#endif    // Chinese (中国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+/**
+ * The cli router file of zentaopms.
+ *
+ * @copyright   Copyright 2009-2012 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     bin
+ * @version     $Id$
+ * @link        http://www.ZenTaoPMS.com
+ */
+//error_reporting(0);
+define('IN_SHELL', true);
+
+/* Judge the args. */
+if($argc != 2) die('Usage: ' . basename(__FILE__) . " <request>\n");
+
+/* Parse the request into params. */
+$request = parse_url(trim($argv[1]));
+$_SERVER['HTTP_HOST'] = $request['host'];
+
+/* Load the framework. */
+chdir(dirname(__FILE__));
+include '../framework/router.class.php';
+include '../framework/control.class.php';
+include '../framework/model.class.php';
+include '../framework/helper.class.php';
+include '../config/config.php';
+
+if($config->requestType == 'PATH_INFO')
+{
+    $_SERVER['PATH_INFO'] = str_replace($config->webRoot, '', $request['path']);
+}
+else
+{
+    parse_str($request['query'], $_GET);
+    $_SERVER['SCRIPT_NAME'] = $_SERVER['HTTP_HOST'] . 'index.php';
+    $_SERVER['REQUEST_URI'] = isset($request['query']) ? $request['query'] : '';
+}
+
+/* Instance the app and run it. */
+$app    = router::createApp('pms', dirname(dirname(__FILE__)));
+$common = $app->loadCommon();
+$app->parseRequest();
+$app->loadModule();
