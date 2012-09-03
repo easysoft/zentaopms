@@ -1,4 +1,0 @@
-$(document).ready()
-{
-    $('#password').focus();
-}

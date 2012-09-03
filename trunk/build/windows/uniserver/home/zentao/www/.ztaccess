@@ -1,7 +1,0 @@
-Options +FollowSymLinks +SymLinksIfOwnerMatch
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteCond %{REQUEST_FILENAME} !-d 
-  RewriteCond %{REQUEST_FILENAME} !-f 
-  RewriteRule (.*)$ /zentao/index.php/$1 [L]
-</IfModule>
