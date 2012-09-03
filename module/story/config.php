@@ -1,5 +1,6 @@
 <?php
-$config->story->batchCreate = 10;
+$config->story->batchCreate      = 10;
+$config->story->affectedFixedNum = 7;
 $config->story->create->requiredFields = 'title';
 $config->story->edit->requiredFields   = 'title';
 $config->story->change->requiredFields = 'title';
