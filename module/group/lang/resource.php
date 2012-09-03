@@ -682,4 +682,4 @@ $lang->changelog['3.2'][] = 'report-bugSummary';
 $lang->changelog['3.2'][] = 'report-workload';
 $lang->changelog['3.2'][] = 'tree-fix';
 
-$lang->changelog['3.3.stable'][] = 'report-bugAssign';
+$lang->changelog['3.3'][] = 'report-bugAssign';
