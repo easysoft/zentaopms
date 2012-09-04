@@ -505,6 +505,7 @@ class projectModel extends model
                 unset($projectBurn->project);
             }
 
+            ksort($projectBurns);
             $burns[$projectID] = $projectBurns;
         }
 
