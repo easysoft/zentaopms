@@ -137,6 +137,7 @@ class productModel extends model
 
         /* Get team members. */
         $teamMembers = $this->getTeamMemberPairs($product);
+        $teamMembers = array_flip($teamMembers);
 
         /* Private. */
         if($product->acl == 'private')
