@@ -197,14 +197,15 @@ class extensionModel extends model
     public function getInfoFromPackage($extension)
     {
         /* Init the data. */
-        $data->name    = $extension;
-        $data->code    = $extension;
-        $data->version = 'unknown';
-        $data->author  = 'unknown';
-        $data->desc    = $extension;
-        $data->site    = 'unknown';
-        $data->license = 'unknown';
+        $data->name          = $extension;
+        $data->code          = $extension;
+        $data->version       = 'unknown';
+        $data->author        = 'unknown';
+        $data->desc          = $extension;
+        $data->site          = 'unknown';
+        $data->license       = 'unknown';
         $data->zentaoVersion = '';
+        $data->type          = '';
 
         $info = $this->parseExtensionCFG($extension);
         foreach($info as $key => $value) if(isset($data->$key)) $data->$key = $value;
@@ -710,7 +711,8 @@ class extensionModel extends model
         $extension = $this->getInfoFromPackage($extension);
         $extension->status = 'available';
         $extension->code   = $code;
-        $extension->type   = $type;
+        $extension->type   = empty($type) ? $extension->type : $type;
+
         $this->dao->replace(TABLE_EXTENSION)->data($extension)->exec();
     }
 
