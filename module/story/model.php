@@ -817,6 +817,11 @@ class storyModel extends model
      */
     public function getBySQL($productID, $sql, $orderBy, $pager = null)
     {
+        /* Get plans. */
+        $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
+            ->beginIF($productID != 'all' and $productID != '')->where('product')->eq((int)$productID)->fi()
+            ->fetchPairs();
+
         $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
@@ -825,11 +830,6 @@ class storyModel extends model
             ->fetchAll('id');
 
         if(!$tmpStories) return array();
-
-        /* Get plans. */
-        $plans = array();
-        foreach($tmpStories as $story) $plans[$story->plan] = $story->plan;
-        $plans   = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($plans))->fetchPairs();
 
         /* Process plans. */
         $stories = array();
