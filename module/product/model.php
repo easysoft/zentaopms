@@ -137,7 +137,6 @@ class productModel extends model
 
         /* Get team members. */
         $teamMembers = $this->getTeamMemberPairs($product);
-        $teamMembers = array_flip($teamMembers);
 
         /* Private. */
         if($product->acl == 'private')
@@ -386,7 +385,7 @@ class productModel extends model
         $projectTeams = array();
         foreach($teams as $projectID => $projectTeam) $projectTeams = array_merge($projectTeams, array_keys($projectTeam));
 
-        return array_merge($members, $projectTeams);
+        return array_flip(array_merge($members, $projectTeams));
     }
 
     /**
