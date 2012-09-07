@@ -384,7 +384,7 @@ class productModel extends model
         $productProjects = $projects[$product->id];
 
         $projectTeams = array();
-        foreach($teams as $projectID => $projectTeam) $projectTeams = $projectTeams + array_keys($projectTeam);
+        foreach($teams as $projectID => $projectTeam) $projectTeams = array_merge($projectTeams, array_keys($projectTeam));
 
         return array_merge($members, $projectTeams);
     }
