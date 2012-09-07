@@ -109,10 +109,8 @@ class projectModel extends model
                 $status = $project->status != 'done' ? $this->lang->project->selectGroup->doing : '';
                 if($project->product)
                 {
-                    if(isset($products[$project->product]))
-                    {
-                        $selectGroup[$products[$project->product]][$project->id] = $project->name . $status;
-                    }
+                    $product = isset($products[$project->product]) ? $products[$project->product] : '';
+                    $selectGroup[$product][$project->id] = $project->name . $status;
                 }
                 else
                 {
