@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <form method='post' target='hiddenwin'>
 <table align='center' class='table-5'>
-  <caption><?php echo $lang->project->statusUndone?></caption>
+  <caption><?php echo $lang->project->unDoneProjects?></caption>
   <tr>
     <th class='w-80px'><?php echo $lang->project->id?></th>
     <th><?php echo $lang->project->name?></th>
@@ -34,7 +34,7 @@
 </form>
 <form method='post' target='hiddenwin'>
 <table align='center' class='table-5'>
-  <caption><?php echo $lang->project->statusDone?></caption>
+  <caption><?php echo $lang->project->doneProjects?></caption>
   <tr>
     <th class='w-80px'><?php echo $lang->project->id?></th>
     <th><?php echo $lang->project->name?></th>
