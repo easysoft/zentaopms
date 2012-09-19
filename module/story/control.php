@@ -361,7 +361,7 @@ class story extends control
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
-        $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchAll();
+        $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $modulePath   = $this->tree->getParents($story->module);
         $users        = $this->user->getPairs('noletter');
 
