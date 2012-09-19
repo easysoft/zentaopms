@@ -16,7 +16,8 @@
   <div id='main'>CASE #<?php echo $case->id . ' ' . $case->title;?></div>
   <div>
     <?php
-    $browseLink = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
+    $browseLink  = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
+    $actionLinks = '';
     if(!$case->deleted)
     {
         ob_start();

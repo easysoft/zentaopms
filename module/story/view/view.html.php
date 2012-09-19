@@ -15,7 +15,8 @@
   <div id='main' <?php if($story->deleted) echo "class='deleted'";?>>STORY #<?php echo $story->id . ' ' . $story->title;?></div>
   <div>
   <?php
-  $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
+  $browseLink  = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
+  $actionLinks = '';
   if(!$story->deleted)
   {
       ob_start();

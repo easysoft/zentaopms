@@ -19,7 +19,8 @@
 <?php endif;?>
   <div>
   <?php
-  $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");
+  $browseLink  = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");
+  $actionLinks = '';
   if(!$task->deleted)
   {
       ob_start();
