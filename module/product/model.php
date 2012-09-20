@@ -376,14 +376,26 @@ class productModel extends model
 
         /* Set projects and teams as static thus we can only query sql one times. */
         static $projects, $teams;
-        if(empty($projects)) $projects = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)->fetchGroup('product', 'project');
-        if(empty($teams))    $teams    = $this->dao->select('project, account')->from(TABLE_TEAM)->fetchGroup('project', 'account');
+        if(empty($projects))
+        {
+            $projects = $this->dao->select('t1.project, t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t2.deleted')->eq(0)
+                ->fetchGroup('product', 'project');
+        }
+        if(empty($teams))
+        {
+            $teams = $this->dao->select('t1.project, t1.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t2.deleted')->eq(0)
+                ->fetchGroup('project', 'account');
+        }
 
         if(!isset($projects[$product->id])) return $members;
         $productProjects = $projects[$product->id];
 
         $projectTeams = array();
-        foreach($teams as $projectID => $projectTeam) $projectTeams = array_merge($projectTeams, array_keys($projectTeam));
+        foreach(array_keys($productProjects) as $projectID) $projectTeams = array_merge($projectTeams, array_keys($teams[$projectID]));
 
         return array_flip(array_merge($members, $projectTeams));
     }
