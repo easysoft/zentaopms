@@ -455,4 +455,54 @@ class userModel extends model
             ->page($pager)
             ->fetchAll();
     }
+
+    /**
+     * Plus the fail times.
+     * 
+     * @param  int    $account 
+     * @access public
+     * @return void
+     */
+    public function failPlus($account)
+    {
+        $user  = $this->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+        $fails = $user->fails;
+        $fails ++; 
+        if($fails < $this->config->user->failTimes) 
+        {
+            $locked = '0000-00-00';
+        }
+        else
+        {
+            $locked = date('Y-m-d', strtotime('today'));
+            $fails  = 0;
+        }
+        $this->dao->update(TABLE_USER)->set('fails')->eq($fails)->set('locked')->eq($locked)->where('account')->eq($account)->exec(false);
+    }
+
+    /**
+     * Check whether the user is locked. 
+     * 
+     * @param  int    $account 
+     * @access public
+     * @return void
+     */
+    public function checkLocked($account)
+    {
+        $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch(); 
+        if((strtotime($user->locked) - strtotime(date('Y-m-d'))) < 0) return false;
+        return true;
+    }
+
+    /**
+     * Unlock the locked user. 
+     * 
+     * @param  int    $account 
+     * @access public
+     * @return void
+     */
+    public function cleanLocked($account)
+    {
+        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00')->where('account')->eq($account)->exec(false);
+    }
 }

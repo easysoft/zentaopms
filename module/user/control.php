@@ -325,6 +325,27 @@ class user extends control
     }
 
     /**
+     * Unlock a user.
+     * 
+     * @param  int    $account 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function unlock($account, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->user->confirmUnlock, $this->createLink('user', 'unlock', "account=$account&confirm=yes")));
+        }
+        else
+        {
+            $this->user->cleanLocked($account);
+            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+        }
+    }
+
+    /**
      * User login, identify him and authorize him.
      * 
      * @access public
@@ -363,10 +384,13 @@ class user extends control
             if($this->post->password) $password = $this->post->password;
             if($this->get->password)  $password = $this->get->password;
 
+            if($this->user->checkLocked($account)) die(js::error($this->lang->user->loginLocked));
+            
             $user = $this->user->identify($account, $password);
 
             if($user)
             {
+                $this->user->cleanLocked($account);
                 /* Authorize him and save to session. */
                 $user->rights = $this->user->authorize($account);
                 $user->groups = $this->user->getGroups($account);
@@ -418,6 +442,7 @@ class user extends control
             }
             else
             {
+                $this->user->failPlus($account);
                 if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'failed')));
                 die(js::error($this->lang->user->loginFailed));
             }

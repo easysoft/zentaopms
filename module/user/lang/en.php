@@ -25,6 +25,7 @@ $lang->user->editPassword    = "Change password";
 $lang->user->deny            = "Denied";
 $lang->user->confirmDelete   = "Are you sure to delete this user?";
 $lang->user->confirmActivate = "Are you sure to activate this user?";
+$lang->user->confirmUnlock   = "Are you sure to unlock this user?";
 $lang->user->relogin         = "Relogin";
 $lang->user->asGuest         = "Guest";
 $lang->user->goback          = "Back";
@@ -45,6 +46,7 @@ $lang->user->editProfile = 'Edit profile';
 
 $lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
 $lang->user->loginFailed = "Login failed, please check your account and password.";
+$lang->user->loginLocked = "You try the password too many times, please contact the administrator.";
 
 $lang->user->genderList->m = 'Male';
 $lang->user->genderList->f = 'Female';

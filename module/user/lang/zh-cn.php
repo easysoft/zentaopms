@@ -25,6 +25,7 @@ $lang->user->editPassword    = "修改密码";
 $lang->user->deny            = "访问受限";
 $lang->user->confirmDelete   = "您确认删除该用户吗？";
 $lang->user->confirmActivate = "您确认激活该用户吗？";
+$lang->user->confirmUnlock   = "您确认解锁该用户吗？";
 $lang->user->relogin         = "重新登录";
 $lang->user->asGuest         = "游客访问";
 $lang->user->goback          = "返回前一页";
@@ -45,6 +46,7 @@ $lang->user->editProfile = '修改信息';
 
 $lang->user->errorDeny   = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
 $lang->user->loginFailed = "登录失败，请检查您的用户名或密码是否填写正确。";
+$lang->user->loginLocked = "密码尝试次数太多，请联系管理员解锁";
 
 $lang->user->genderList->m = '男';
 $lang->user->genderList->f = '女';
