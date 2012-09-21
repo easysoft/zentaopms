@@ -65,6 +65,7 @@ include '../../common/view/tablesorter.html.php';
             <?php 
             common::printLink('user', 'edit',   "userID=$user->id&from=company", $lang->edit);
             common::printLink('user', 'delete', "userID=$user->id", $lang->delete, "hiddenwin");
+            if((strtotime($user->locked) - strtotime(date('Y-m-d'))) >= 0) common::printLink('user', 'unlock', "userID=$user->account", $lang->company->unlock, "hiddenwin");
             ?>
           </td>
         </tr>

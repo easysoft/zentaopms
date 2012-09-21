@@ -34,6 +34,7 @@ $lang->company->website  = '公司官网';
 $lang->company->backyard = '公司内网';
 $lang->company->pms      = 'PMS网站';
 $lang->company->guest    = '匿名登录';
+$lang->company->unlock   = '解锁';
 
 $lang->company->guestList[0] = '不允许';
 $lang->company->guestList[1] = '允许';
