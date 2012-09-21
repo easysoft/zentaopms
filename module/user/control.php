@@ -384,7 +384,7 @@ class user extends control
             if($this->post->password) $password = $this->post->password;
             if($this->get->password)  $password = $this->get->password;
 
-            if($this->user->checkLocked($account)) die(js::error($this->lang->user->loginLocked));
+            if($this->user->checkLocked($account)) die(js::error(sprintf($this->lang->user->loginLocked, $this->config->user->lockHours)));
             
             $user = $this->user->identify($account, $password);
 
@@ -442,8 +442,17 @@ class user extends control
             }
             else
             {
-                $this->user->failPlus($account);
                 if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'failed')));
+                $fails       = $this->user->failPlus($account);
+                $remainTimes = $this->config->user->failTimes - $fails;
+                if($remainTimes <= 0)
+                {
+                    die(js::error(sprintf($this->lang->user->loginLocked, $this->config->user->lockHours)));
+                }
+                else if($remainTimes <= 3)
+                {
+                    die(js::error(sprintf($this->lang->user->lockWarning, $remainTimes)));
+                }
                 die(js::error($this->lang->user->loginFailed));
             }
         }

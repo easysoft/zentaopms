@@ -470,14 +470,16 @@ class userModel extends model
         $fails ++; 
         if($fails < $this->config->user->failTimes) 
         {
-            $locked = '0000-00-00';
+            $locked    = '0000-00-00 00:00:00';
+            $failTimes = $fails;
         }
         else
         {
-            $locked = date('Y-m-d', strtotime('today'));
-            $fails  = 0;
+            $locked    = date('Y-m-d H:i:s', mktime() + $this->config->user->lockHours * 60 * 60);
+            $failTimes = 0;
         }
-        $this->dao->update(TABLE_USER)->set('fails')->eq($fails)->set('locked')->eq($locked)->where('account')->eq($account)->exec(false);
+        $this->dao->update(TABLE_USER)->set('fails')->eq($failTimes)->set('locked')->eq($locked)->where('account')->eq($account)->exec(false);
+        return $fails;
     }
 
     /**
@@ -490,7 +492,7 @@ class userModel extends model
     public function checkLocked($account)
     {
         $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch(); 
-        if((strtotime($user->locked) - strtotime(date('Y-m-d'))) < 0) return false;
+        if((strtotime($user->locked) - strtotime(date('Y-m-d H:i:s'))) < 0) return false;
         return true;
     }
 
@@ -503,6 +505,6 @@ class userModel extends model
      */
     public function cleanLocked($account)
     {
-        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00')->where('account')->eq($account)->exec(false);
+        $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00 00:00:00')->where('account')->eq($account)->exec(false);
     }
 }

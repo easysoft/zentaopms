@@ -46,7 +46,8 @@ $lang->user->editProfile = '修改信息';
 
 $lang->user->errorDeny   = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
 $lang->user->loginFailed = "登录失败，请检查您的用户名或密码是否填写正确。";
-$lang->user->loginLocked = "密码尝试次数太多，请联系管理员解锁";
+$lang->user->lockWarning = "您还有%s次尝试机会。";
+$lang->user->loginLocked = "密码尝试次数太多，请联系管理员解锁，或%s小时后重试。";
 
 $lang->user->genderList->m = '男';
 $lang->user->genderList->f = '女';
