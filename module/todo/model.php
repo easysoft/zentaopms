@@ -505,9 +505,24 @@ class todoModel extends model
 
     public function getThisSeason()
     {
-        $getMonthDays = date("t", mktime(0,0,0,date('n')-(date('n')-1)%3,1,date("Y")));
-        $begin = date('Y-m-d H:i:s', mktime(0,0,0,date('n')-(date('n')-1)%3,1,date("Y")));
-        $end   = date('Y-m-d H:i:s', mktime(23,59,59,date('n')+(date('n')-1)%3,$getMonthDays,date('Y')));
+        $year  = date("Y-");
+        $month = date("n");
+        if($month % 3)
+        {
+            $seasonBegin = $month - ($month % 3) + 1;
+            $seasonEnd   = $seasonBegin + 3;
+        }
+        else
+        {
+            $seasonEnd   = $month + 1;
+            $seasonBegin = $seasonEnd - 3;
+        }
+
+        if(strlen($seasonBegin) == 1) $seasonBegin = "0$seasonBegin";
+        if(strlen($seasonEnd) == 1)   $seasonEnd   = "0$seasonEnd";
+        $begin = $year . $seasonBegin;
+        $end   = $year . $seasonEnd;
+
         return array('begin' => $begin, 'end' => $end);
     }
 
