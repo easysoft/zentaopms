@@ -732,25 +732,9 @@ class taskModel extends model
      */
     public function processTasks($tasks)
     {
-        $today = helper::today();
         foreach($tasks as $task)
         {
-            /* Delayed or not. */
-            if($task->status !== 'done' and $task->status !== 'cancel')
-            {   
-                if($task->deadline != '0000-00-00')
-                {
-                    $delay = helper::diffDate($today, $task->deadline);
-                    if($delay > 0) $task->delay = $delay;
-                }
-            }    
-	    
-            /* Story changed or not. */
-            $task->needConfirm = false;
-            if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
-            {
-                $task->needConfirm = true;
-            }
+            $task = $this->processTask($task);
         }
         return $tasks;
     }
