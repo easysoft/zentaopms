@@ -47,7 +47,7 @@ $lang->user->editProfile = 'Edit profile';
 $lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
 $lang->user->loginFailed = "Login failed, please check your account and password.";
 $lang->user->lockWarning = "You only have %s times to try.";
-$lang->user->loginLocked = "You try the password too many times, please contact the administrator or try again after %s hours.";
+$lang->user->loginLocked = "You try the password too many times, please contact the administrator or try again after %s minutes.";
 
 $lang->user->genderList->m = 'Male';
 $lang->user->genderList->f = 'Female';

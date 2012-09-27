@@ -384,7 +384,7 @@ class user extends control
             if($this->post->password) $password = $this->post->password;
             if($this->get->password)  $password = $this->get->password;
 
-            if($this->user->checkLocked($account)) die(js::error(sprintf($this->lang->user->loginLocked, $this->config->user->lockHours)));
+            if($this->user->checkLocked($account)) die(js::error(sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes)));
             
             $user = $this->user->identify($account, $password);
 
@@ -447,7 +447,7 @@ class user extends control
                 $remainTimes = $this->config->user->failTimes - $fails;
                 if($remainTimes <= 0)
                 {
-                    die(js::error(sprintf($this->lang->user->loginLocked, $this->config->user->lockHours)));
+                    die(js::error(sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes)));
                 }
                 else if($remainTimes <= 3)
                 {
