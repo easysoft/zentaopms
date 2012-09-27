@@ -15,6 +15,7 @@ $lang->user->view            = "用户详情";
 $lang->user->create          = "添加用户";
 $lang->user->read            = "查看用户";
 $lang->user->edit            = "编辑用户";
+$lang->user->unlock          = "解锁用户";
 $lang->user->update          = "编辑用户";
 $lang->user->delete          = "删除用户";
 $lang->user->browse          = "浏览用户";

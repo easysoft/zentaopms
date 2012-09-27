@@ -15,6 +15,7 @@ $lang->user->view            = "Info";
 $lang->user->create          = "Add";
 $lang->user->read            = "Info";
 $lang->user->edit            = "Edit";
+$lang->user->unlock          = "Unlock";
 $lang->user->update          = "Upgrade";
 $lang->user->delete          = "Delete";
 $lang->user->browse          = "Browse";
