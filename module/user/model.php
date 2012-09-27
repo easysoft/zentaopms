@@ -475,7 +475,7 @@ class userModel extends model
         }
         else
         {
-            $locked    = date('Y-m-d H:i:s', mktime() + $this->config->user->lockMinutes * 60);
+            $locked    = date('Y-m-d H:i:s', mktime());
             $failTimes = 0;
         }
         $this->dao->update(TABLE_USER)->set('fails')->eq($failTimes)->set('locked')->eq($locked)->where('account')->eq($account)->exec(false);
@@ -492,7 +492,7 @@ class userModel extends model
     public function checkLocked($account)
     {
         $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch(); 
-        if((strtotime($user->locked) - strtotime(date('Y-m-d H:i:s'))) < 0) return false;
+        if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) > $this->config->user->lockMinutes * 60) return false;
         return true;
     }
 
