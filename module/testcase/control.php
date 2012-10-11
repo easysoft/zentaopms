@@ -502,7 +502,8 @@ class testcase extends control
 
             foreach($cases as $case)
             {
-                $case->steps = '';
+                $case->stepDesc   = '';
+                $case->stepExpect = '';
                 if(isset($relatedSteps[$case->id]))
                 {
                     $i = 1;
@@ -510,8 +511,8 @@ class testcase extends control
                     {
                         if($step->version != $case->version) continue;
                         $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
-                        $case->steps .= $i . ". " . $step->desc . $sign;
-                        $case->steps .= $caseLang->stepExpect  . ". " . $step->expect . $sign;
+                        $case->stepDesc   .= $i . ". " . $step->desc . $sign;
+                        $case->stepExpect .= $i . ". " . $step->expect . $sign;
                         $i ++;
                     }
                 }
