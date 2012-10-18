@@ -285,11 +285,12 @@ EOT;
             $projects[$story->project]->stories = isset($projects[$story->project]->stories) ? $projects[$story->project]->stories + 1 : 1;
         }
 
-        $projectList = $this->dao->select('id, name')->from(TABLE_PROJECT)->fetchAll();
+        $projectList = $this->dao->select('id, name, status')->from(TABLE_PROJECT)->fetchAll();
         $projectPairs = array();
         foreach($projectList as $project)
         {
             $projectPairs[$project->id] = $project->name;
+            if($project->status != 'done') unset($projects[$project->id]);
         }
         foreach($projects as $id => $project)
         {
