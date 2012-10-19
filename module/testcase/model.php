@@ -259,7 +259,7 @@ class testcaseModel extends model
      */
     public function joinStep($steps)
     {
-        $retrun = '';
+        $return = '';
         foreach($steps as $step) $return .= $step->desc . ' EXPECT:' . $step->expect . "\n";
         return $return;
     }
