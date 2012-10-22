@@ -91,7 +91,7 @@ class my extends control
         $this->view->status  = $status;
         $this->view->account = $this->app->user->account;
         $this->view->pager   = $pager;
-        $this->view->importFuture = ($type == 'before' or $type == 'future' or $type == TODOMODEL::DAY_IN_FUTURE);
+        $this->view->importFuture = ($type != 'today');
 
         $this->display();
     }
