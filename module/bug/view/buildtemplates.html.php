@@ -1,6 +1,6 @@
 <script language='Javascript'>
 setTemplateTitle = '<?php echo $lang->bug->setTemplateTitle;?>';
-KE.lang.savetemplate = '<?php echo $lang->bug->saveTemplate;?>';
+KindEditor.lang({'savetemplate' : '<?php echo $lang->bug->saveTemplate;?>'});
 </script>
 <?php 
 foreach($templates as $key => $template)

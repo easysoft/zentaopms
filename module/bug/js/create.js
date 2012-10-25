@@ -155,26 +155,31 @@ $(function() {
 })
 
 /* Save template. */
-KE.plugin.savetemplate = {
-    click: function(id) {
-        content = KE.html('steps');
-        jPrompt(setTemplateTitle, '','', function(r)
-        {
-            if(!r || !content) return;
-            saveTemplateLink = createLink('bug', 'saveTemplate');
-            $.post(saveTemplateLink, {title:r, content:content}, function(data)
+KindEditor.plugin('savetemplate', function(K) {
+    var self = this, name = 'savetemplate';
+    self.plugin.savetemplate = {
+        click: function(id) {
+            content = self.html();
+            jPrompt(setTemplateTitle, '','', function(r)
             {
-                $('#tplBox').html(data);
+                if(!r || !content) return;
+                saveTemplateLink = createLink('bug', 'saveTemplate');
+                $.post(saveTemplateLink, {title:r, content:content}, function(data)
+                {
+                    $('#tplBox').html(data);
+                });
             });
-        });
-    }
-}
+        }
+    };
+    self.clickToolbar(name, self.plugin.savetemplate.click);
+});
+
 /* Set template. */
 function setTemplate(templateID)
 {
     $('#tplTitleBox' + templateID).attr('style', 'text-decoration:underline; color:#8B008B');
     steps = $('#template' + templateID).html();
-    KE.html('steps', steps);
+    editor.html(steps);
 }
 
 /* Delete template. */
