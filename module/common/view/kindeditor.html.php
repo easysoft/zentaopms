@@ -45,7 +45,7 @@ $(document).ready(function()
         if(editor.tools == 'fullTools') editorTool = fullTools;
 
         KindEditor.ready(function(K){
-            K.create('#'+editor.id,{
+            editor = K.create('#'+editor.id,{
                 items:editorTool,
                 filterMode:true, 
                 htmlTags :{
