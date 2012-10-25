@@ -18,7 +18,7 @@
     <td>
       <fieldset>
         <legend><?php echo $lang->productplan->desc;?></legend>
-        <div class='content'><?php echo $product->desc;?></div>
+        <div class='content'><?php echo $plan->desc;?></div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center f-16px strong'>
