@@ -69,8 +69,8 @@ var browseType = '<?php echo $browseType;?>';
             <td>
               <?php 
               $vars = "doc={$doc->id}";
-              if(!common::printLink('doc', 'edit',   $vars, $lang->edit)) echo $lang->edit;
-              if(!common::printLink('doc', 'delete', $vars, $lang->delete, 'hiddenwin')) echo $lang->delete;
+              common::printIcon('doc', 'edit',   $vars, '', 'list');
+              common::printIcon('doc', 'delete', $vars, '', 'list', '', 'hiddenwin');
               ?>
             </td>
           </tr>
