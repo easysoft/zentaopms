@@ -152,8 +152,8 @@ $lang->product->menu->view    = array('link' => '概况|product|view|productID=%
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '项目列表|product|project|status=all&productID=%s';
 $lang->product->menu->order   = '排序|product|order|productID=%s';
-$lang->product->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>新增产品|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-all">&nbsp;</span>所有产品|product|index|locate=false', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<span class="icon-addProduct">&nbsp;</span>新增产品|product|create', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有产品|product|index|locate=false', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
@@ -171,8 +171,8 @@ $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=
 $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '概况|project|view|projectID=%s', 'alias' => 'edit');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
-$lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>新增项目|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;</span>所有项目|project|index|locate=false', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<span class="icon-addProject">&nbsp;</span>新增项目|project|create', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有项目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu               = $lang->project->menu;
 $lang->build->menu              = $lang->project->menu;
 
