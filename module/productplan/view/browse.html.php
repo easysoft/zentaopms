@@ -37,9 +37,9 @@
     <td class='a-left nobr content'><?php echo $plan->desc;?></td>
     <td>
       <?php
-      common::printLink('productplan', 'edit', "planID=$plan->id", $lang->edit);
       common::printLink('productplan', 'linkstory', "planID=$plan->id", $lang->productplan->linkStory);
-      common::printLink('productplan', 'delete', "planID=$plan->id", $lang->delete, 'hiddenwin');
+      common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
+      common::printIcon('productplan', 'delete', "planID=$plan->id", '', 'list', '', 'hiddenwin');
       ?>
     </td>
   </tr>
