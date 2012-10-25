@@ -45,8 +45,8 @@ KindEditor.plugin('code', function(K) {
 					click : function(e) {
 						var type = K('.ke-code-type', dialog.div).val(),
 							code = textarea.val(),
-							cls = type === '' ? '' :  ' lang-' + type,
-							html = '<pre class="prettyprint' + cls + '">\n' + K.escape(code) + '</pre> ';
+							cls = type === '' ? '' : type,
+							html = '<pre class="prettyprint brush:' + cls + '">\n' + K.escape(code) + '</pre><p></p>';
 						self.insertHtml(html).hideDialog().focus();
 					}
 				}
