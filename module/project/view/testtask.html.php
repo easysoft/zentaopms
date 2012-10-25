@@ -43,8 +43,8 @@
       <?php
       common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
       common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
-      common::printLink('testtask', 'edit',     "taskID=$task->id", $lang->edit);
-      common::printLink('testtask', 'delete',   "taskID=$task->id", $lang->delete, 'hiddenwin');
+      common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'list', '', 'hiddenwin');
       ?>
     </td>
   </tr>
