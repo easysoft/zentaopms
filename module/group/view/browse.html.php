@@ -33,12 +33,12 @@
     <td><?php echo $group->name;?></td>
     <td class='a-left'><?php echo $group->desc;?></td>
     <td class='a-left'><?php foreach($groupUsers[$group->id] as $user) echo "<span class='user'>$user</span>";?></td>
-    <td>
+    <td class='a-right'>
       <?php common::printLink('group', 'managepriv',   "type=byGroup&param=$group->id", $lang->group->managePrivByGroup);?>
       <?php common::printLink('group', 'managemember', "groupID=$group->id", $lang->group->manageMember);?>
-      <?php common::printLink('group', 'edit',         "groupID=$group->id", $lang->edit);?>
-      <?php common::printLink('group', 'copy',         "groupID=$group->id", $lang->copy);?>
-      <?php common::printLink('group', 'delete',       "groupID=$group->id", $lang->delete, "hiddenwin");?>
+      <?php common::printIcon('group', 'edit',         "groupID=$group->id", '', 'list');?>
+      <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list');?>
+      <?php common::printIcon('group', 'delete',       "groupID=$group->id", '', 'list', '', "hiddenwin");?>
     </td>
   </tr>
   <?php endforeach;?>
