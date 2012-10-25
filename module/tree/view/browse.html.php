@@ -103,4 +103,7 @@
     </td>
   </tr>
 </table>
-<?php include '../../common/view/footer.html.php';?>
+<?php 
+if(strpos($viewType, 'doc') !== false) include '../../doc/view/footer.html.php';
+if($viewType != 'doc') include '../../common/view/footer.html.php';
+?>
