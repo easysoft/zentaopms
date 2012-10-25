@@ -61,7 +61,7 @@ include '../../common/view/tablesorter.html.php';
           <td><?php echo $user->join;?></td>
           <td><?php echo date('Y-m-d', $user->last);?></td>
           <td><?php echo $user->visits;?></td>
-          <td class="a-left">
+          <td>
             <?php 
             common::printLink('user', 'edit',   "userID=$user->id&from=company", $lang->edit);
             common::printLink('user', 'delete', "userID=$user->id", $lang->delete, "hiddenwin");
