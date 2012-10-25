@@ -35,8 +35,8 @@
     <td class='a-center'><?php echo $release->date;?></td>
     <td class='a-center'>
       <?php
-      common::printLink('release', 'edit',   "release=$release->id", $lang->edit);
-      common::printLink('release', 'delete', "release=$release->id", $lang->delete, 'hiddenwin');
+      common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
+      common::printIcon('release', 'delete', "release=$release->id", '', 'list', '', 'hiddenwin');
       ?>
     </td>
   </tr>
