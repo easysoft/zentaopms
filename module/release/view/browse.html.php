@@ -33,7 +33,7 @@
     <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
     <td><?php echo $release->buildName;?></td>
     <td class='a-center'><?php echo $release->date;?></td>
-    <td class='a-center'>
+    <td class='a-right'>
       <?php
       common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
       common::printIcon('release', 'delete', "release=$release->id", '', 'list', '', 'hiddenwin');
