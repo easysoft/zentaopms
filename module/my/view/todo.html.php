@@ -30,7 +30,7 @@
       echo '<span id="before">'     . html::a(inlink('todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
       echo "<span id='bydate'>"     . html::input('date', $date, "class='w-date date' onchange=changeDate(this.value)") . '</span>';
       ?>
-      <?php if($date == date('Y-m-j')) $type = 'today';?>
+      <?php if($date == date('Y-m-j') and $type != 'all') $type = 'today';?>
       <script>$('#<?php echo $type;?>').addClass('active')</script>
     </div>
     <div class='f-right'>
@@ -81,7 +81,7 @@
     </tr>
     <?php endforeach;?>
     </tbody>
-    <?php if(count($todos)):?>
+    <?php if(count($todos) and ((common::hasPriv('todo', 'import2Today') and $importFuture) or $type == 'all')):?>
     <tfoot>
       <tr>
         <td colspan='9'>
