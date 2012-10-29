@@ -271,8 +271,10 @@ function switchProject(projectID, module, method)
         module = 'project';
         method = 'build';
     }
-    link = createLink(module, method, 'projectID=' + projectID);
-    location.href=link;
+
+    if(module == 'project' && method == 'create') die;
+
+    location.href = createLink(module, method, 'projectID=' + projectID);
 }
 
 /**
