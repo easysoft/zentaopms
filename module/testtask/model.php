@@ -262,7 +262,7 @@ class testtaskModel extends model
         {
             foreach($this->post->steps as $stepID =>$stepResult)
             {
-                $step['result'] = $stepResult;
+                $step['result'] = $this->post->passall ? 'pass' : $stepResult;
                 $step['real']   = $this->post->reals[$stepID];
                 $stepResults[$stepID] = $step;
             }
