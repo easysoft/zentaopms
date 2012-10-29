@@ -95,13 +95,20 @@
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->testcase->module;?></td>
             <td>
-<?php 
-        foreach($modulePath as $key => $module)
-        {
-            if(!common::printLink('testcase', 'browse', "productID=$case->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-            if(isset($modulePath[$key + 1])) echo $lang->arrow;
-        }
-?>
+            <?php 
+            if(empty($modulePath))
+            {
+                echo "/";
+            }
+            else
+            {
+               foreach($modulePath as $key => $module)
+               {
+                   if(!common::printLink('testcase', 'browse', "productID=$case->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                   if(isset($modulePath[$key + 1])) echo $lang->arrow;
+               }
+            }
+            ?>
             </td>
           </tr>
           <tr class='nofixed'>

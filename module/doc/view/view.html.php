@@ -23,7 +23,7 @@
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->doc->module;?></th>
-    <td><?php echo $doc->moduleName;?></td>
+    <td><?php echo $doc->moduleName ? $doc->moduleName : '/';?></td>
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->doc->type;?></th>

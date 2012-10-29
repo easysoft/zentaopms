@@ -83,10 +83,17 @@
             <th class='rowhead'><?php echo $lang->bug->module;?></th>
             <td> 
               <?php
-              foreach($modulePath as $key => $module)
+              if(empty($modulePath))
               {
-                  if(!common::printLink('bug', 'browse', "productID=$bug->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                  if(isset($modulePath[$key + 1])) echo $lang->arrow;
+                  echo "/";
+              }
+              else
+              {
+                 foreach($modulePath as $key => $module)
+                 {
+                     if(!common::printLink('bug', 'browse', "productID=$bug->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                     if(isset($modulePath[$key + 1])) echo $lang->arrow;
+                 }
               }
               ?>
             </td>
