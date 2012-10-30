@@ -261,18 +261,19 @@ class tree extends control
     /**
      * AJAX: get a module's son modules.
      * 
-     * @param  int $moduleID 
-     * @param  int $rootID 
+     * @param  int    $moduleID 
+     * @param  int    $rootID 
+     * @param  string $type
      * @access public
      * @return string json_encoded modules.
      */
-    public function ajaxGetSonModules($moduleID, $rootID = 0)
+    public function ajaxGetSonModules($moduleID, $rootID = 0, $type = 'story')
     {
         if($moduleID) die(json_encode($this->dao->findByParent($moduleID)->from(TABLE_MODULE)->fetchPairs('id', 'name')));
         $modules = $this->dao->select('id, name')->from(TABLE_MODULE)
             ->where('root')->eq($rootID)
             ->andWhere('parent')->eq('0')
-            ->andWhere('type')->eq('story')
+            ->andWhere('type')->eq($type)
             ->fetchPairs();
         foreach($modules as $key => $name) $modules[$key] = str_replace(" ","&nbsp;","$name");
         die(json_encode($modules));

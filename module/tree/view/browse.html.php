@@ -55,8 +55,8 @@
                   if($allProject)
                   {
                       echo html::select('allProject', $allProject, '', 'onchange=syncProject(this)');
-                      echo html::select('productModule', $projectModules, '');
-                      echo html::commonButton($lang->tree->syncFromProject, 'id=copyModule onclick=syncModule('.$currentProject.')');
+                      echo html::select('projectModule', $projectModules, '');
+                      echo html::commonButton($lang->tree->syncFromProject, 'id=copyModule onclick=syncModule('.$currentProject.',"task")');
                   }
                   echo '<br />';
               }

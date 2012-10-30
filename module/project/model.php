@@ -62,10 +62,11 @@ class projectModel extends model
      * 
      * @param  array  $projects 
      * @param  int    $projectID 
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function setMenu($projects, $projectID)
+    public function setMenu($projects, $projectID, $extra = '')
     {
         /* Check the privilege. */
         if($projects and !isset($projects[$projectID]) and !$this->checkPriv($this->getById($projectID)))
@@ -76,7 +77,7 @@ class projectModel extends model
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
-        $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName);
+        $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName, $extra);
         foreach($this->lang->project->menu as $key => $menu)
         {
             $replace = $key == 'list' ? $selectHtml : $projectID;
@@ -91,10 +92,11 @@ class projectModel extends model
      * @param  int       $projectID 
      * @param  string    $currentModule 
      * @param  string    $currentMethod 
+     * @param  string    $extra
      * @access public
      * @return string
      */
-    public function select($projects, $projectID, $currentModule, $currentMethod)
+    public function select($projects, $projectID, $currentModule, $currentMethod, $extra = '')
     {
         $projectMode  = $this->cookie->projectMode ? $this->cookie->projectMode : 'all';
         $products     = $this->loadModel('product')->getPairs('nocode');
@@ -120,7 +122,7 @@ class projectModel extends model
         }
 
         /* See product's model method:select. */
-        $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod');";
+        $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod', '$extra');";
         $onchange    = "onchange=\"$switchCode\""; 
         $onkeypress  = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
         $onclick     = "onclick=\"eventKeyCode = 13; $switchCode\""; 

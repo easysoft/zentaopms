@@ -1,6 +1,8 @@
-function syncModule(rootID)
+function syncModule(rootID, type = 'story')
 {
-    link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + $('#productModule').val() + '&rootID=' + rootID);
+    if(type == 'story') moduleID = $('#productModule').val();
+    if(type == 'task')  moduleID = $('#projectModule').val();
+    link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + moduleID + '&rootID=' + rootID + '&type=' + type);
     $.getJSON(link, function(modules)
     {
         $('.helplink').addClass('hidden');
@@ -49,7 +51,7 @@ function syncProject(obj)
         }); 
     })
     $('#copyModule').attr('onclick', null);
-    $('#copyModule').bind('click', function(){syncModule(obj.value)});
+    $('#copyModule').bind('click', function(){syncModule(obj.value,'task')});
 }
 
 $(document).ready(function()
