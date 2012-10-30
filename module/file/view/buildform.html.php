@@ -7,8 +7,8 @@
     <input type='file' name='files[]' class='fileControl'  tabindex='-1' />
     <label tabindex='-1' class='fileLabel'>{$lang->file->label}</label>
     <input type='text' name='labels[]' class='text-3' tabindex='-1' /> 
-    <input type='button' onclick='addFile(this)'  class='icon-addFile'></input>
-    <input type='button' onclick='delFile(this)'  class='icon-delFile'></input>
+    <input type='button' onclick='addFile(this)'  class='icon-addFile' value='&nbsp;'></input>
+    <input type='button' onclick='delFile(this)'  class='icon-delFile' value='&nbsp;'></input>
   </div>
 EOT;
   for($i = 1; $i <= $fileCount; $i ++) echo str_replace('$i', $i, $fileRow);
