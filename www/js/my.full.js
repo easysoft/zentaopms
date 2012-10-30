@@ -251,7 +251,7 @@ function setProjectSwitcher()
  * @access public
  * @return void
  */
-function switchProject(projectID, module, method)
+function switchProject(projectID, module, method, extra)
 {
     /* The projec id is a string, use it as the project model. */
     if(isNaN(projectID))
@@ -274,7 +274,9 @@ function switchProject(projectID, module, method)
 
     if(module == 'project' && method == 'create') die;
 
-    location.href = createLink(module, method, 'projectID=' + projectID);
+    link = createLink(module, method, 'projectID=' + projectID);
+    if(module == 'tree') link = createLink(module, method, 'projectID=' + projectID + '&type=' + extra);
+    location.href = link;
 }
 
 /**
