@@ -32,9 +32,9 @@ function downloadFile(fileID)
   <?php
   foreach($files as $file)
   {
-      if(common::hasPriv('file' , 'download')) echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'");
-      if(common::hasPriv('file', 'edit'))      echo html::a($this->createLink('file', 'edit', "fileID=$file->id"), $lang->edit, '', "class='edit'");
-      if(common::hasPriv('file', 'delete'))    echo html::commonButton(' x ', "onclick='deleteFile($file->id)'");
+      if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'");
+      if(common::hasPriv('file', 'edit'))     echo html::a($this->createLink('file', 'edit', "fileID=$file->id"), $lang->edit, '', "class='edit'");
+      if(common::hasPriv('file', 'delete'))   echo html::commonButton(' x ', "onclick='deleteFile($file->id)'");
   }
   ?>
   </div>

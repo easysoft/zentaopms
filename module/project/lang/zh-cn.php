@@ -52,6 +52,7 @@ $lang->project->viewBug       = '查看bug';
 $lang->project->createTesttask= '提交测试';
 $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
+$lang->project->createStory   = "新增需求";
 
 $lang->project->endList[14]   = '两星期';
 $lang->project->endList[31]   = '一个月';

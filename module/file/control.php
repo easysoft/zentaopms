@@ -254,7 +254,7 @@ class file extends control
      * Print files. 
      * 
      * @param  array  $files 
-     * @param  string    $fieldset 
+     * @param  string $fieldset 
      * @access public
      * @return void
      */

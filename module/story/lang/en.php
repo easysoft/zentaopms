@@ -28,7 +28,6 @@ $lang->story->bugs        = "Bug";
 $lang->story->linkStory   = 'Related story';
 $lang->story->export      = "Export";
 $lang->story->reportChart = "Report";
-$lang->story->createStory = "Create story";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';

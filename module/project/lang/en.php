@@ -52,6 +52,7 @@ $lang->project->viewBug       = 'View bug';
 $lang->project->createTesttask= 'Create testtask';
 $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
+$lang->project->createStory   = "Create story";
 
 $lang->project->endList[14]  = 'Two Weeks';
 $lang->project->endList[31]  = 'One Month';
