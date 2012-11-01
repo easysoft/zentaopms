@@ -33,7 +33,7 @@
       <?php 
       if($type == 'bydate') 
       {
-          if($date == date('Y-m-j'))
+          if($date == date('Y-m-d'))
           {
               $type = 'today'; 
           }
