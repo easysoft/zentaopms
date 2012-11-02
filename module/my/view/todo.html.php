@@ -37,7 +37,7 @@
           {
               $type = 'today'; 
           }
-          else if($date == date('Y-m-j', strtotime('-1 day')))
+          else if($date == date('Y-m-d', strtotime('-1 day')))
           {
               $type = 'yesterday'; 
           }
