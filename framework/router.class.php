@@ -1114,13 +1114,13 @@ class router
             $name = $param->getName();
             
             $default = '_NOT_SET';
-            if($param->isDefaultValueAvailable())
-            {
-                $default = $param->getDefaultValue();
-            }
-            elseif(isset($paramDefaultValue[$className][$methodName][$name]))
+            if(isset($paramDefaultValue[$className][$methodName][$name]))
             {
                 $default = $paramDefaultValue[$className][$methodName][$name];
+            }
+            elseif($param->isDefaultValueAvailable())
+            {
+                $default = $param->getDefaultValue();
             }
 
             $defaultParams[$name] = $default;
