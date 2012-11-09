@@ -24,13 +24,12 @@ function setDownloading()
 
 function closeWindow()
 {
-    if($.cookie('downloading') == 1 || i >= 30)
+    if($.cookie('downloading') == 1)
     {
         parent.$.fn.colorbox.close();
         $.cookie('downloading', null);
         clearInterval(time);
     }
-    i ++;
 }
 function switchEncode(fileType)
 {
