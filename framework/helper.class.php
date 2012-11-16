@@ -199,7 +199,7 @@ class helper
         {
             die("ERROR: $mergedModelFile not writable, please make sur the " . dirname($mergedModelFile) . ' directory exists and writable');
         }
-        include $mergedModelFile;
+        if(!class_exists($extTmpModelClass))include $mergedModelFile;
 
         /* Get hook codes need to merge. */
         $hookCodes = array();
