@@ -97,9 +97,9 @@ class taskModel extends model
             {
                 $data[$i]->story        = $tasks->story[$i] != 'ditto' ? $tasks->story[$i] : ($i == 0 ? 0 : $data[$i-1]->story);
                 $data[$i]->type         = $tasks->type[$i] == 'ditto' ? ($i == 0 ? '' : $data[$i-1]->type) : $tasks->type[$i];
+                $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? ($i == 0 ? '' : $data[$i-1]->assignedTo) : $tasks->assignedTo[$i];
                 $data[$i]->name         = $tasks->name[$i];
                 $data[$i]->desc         = $tasks->desc[$i];
-                $data[$i]->assignedTo   = $tasks->assignedTo[$i];
                 $data[$i]->pri          = $tasks->pri[$i];
                 $data[$i]->estimate     = $tasks->estimate[$i];
                 $data[$i]->left         = $tasks->estimate[$i];

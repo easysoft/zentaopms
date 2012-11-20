@@ -28,7 +28,10 @@
     </tr>
     <?php for($i = 0; $i < $config->task->batchCreate; $i++):?>
     <?php $story = $i == 0 ? '' : 'ditto';?>
-    <?php $lang->task->typeList['ditto'] = $lang->task->ditto; $type = $i == 0 ? '' : 'ditto';?>
+    <?php
+    $lang->task->typeList['ditto'] = $lang->task->ditto; $type = $i == 0 ? '' : 'ditto';
+    $members['ditto'] = $lang->task->ditto; $member = $i == 0 ? '' : 'ditto';
+    ?>
 
     <?php $pri = 3;?>
     <tr class='a-center'>
@@ -36,7 +39,7 @@
       <td class='a-left' style='overflow:visible'><?php echo html::select("story[$i]", $stories, $story, "class='select-1'");?></td>
       <td><?php echo html::input("name[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=select-1');?></td>
-      <td><?php echo html::select("assignedTo[$i]", $members, '', 'class=select-1');?></td>
+      <td><?php echo html::select("assignedTo[$i]", $members, $member, 'class=select-1');?></td>
       <td><?php echo html::input("estimate[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::textarea("desc[$i]", '', "class=text-1 rows='1'");?></td>
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=select-1');?></td>
