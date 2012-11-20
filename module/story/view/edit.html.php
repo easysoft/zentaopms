@@ -25,6 +25,10 @@
         <div class='content'><?php echo $story->spec;?></div>
       </fieldset>
       <fieldset>
+        <legend><?php echo $lang->story->verify;?></legend>
+        <div><?php echo htmlspecialchars($story->verify);?></div>
+      </fieldset>
+      <fieldset>
         <legend><?php echo $lang->story->comment;?></legend>
         <?php echo html::textarea('comment', '', "rows='5' class='area-1'");?>
       </fieldset>
