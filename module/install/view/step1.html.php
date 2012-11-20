@@ -13,10 +13,10 @@
 <table align='center' class='table-6 a-center'>
   <caption><?php echo $lang->install->checking;?></caption>
   <tr>
-    <th class='w-p20'><?php echo $lang->install->checkItem;?></th>
-    <th class='w-p25'><?php echo $lang->install->current?></th>
-    <th class='w-p15'><?php echo $lang->install->result?></th>
-    <th><?php echo $lang->install->action?></th>
+    <th class='w-p20 a-center'><?php echo $lang->install->checkItem;?></th>
+    <th class='w-p25 a-center'><?php echo $lang->install->current?></th>
+    <th class='w-p15 a-center'><?php echo $lang->install->result?></th>
+    <th class="a-center"><?php echo $lang->install->action?></th>
   </tr>
   <tr>
     <th><?php echo $lang->install->phpVersion;?></th>
@@ -71,6 +71,29 @@
       <?php 
       if(!$dataRootInfo['exists'])   printf($lang->install->mkdir, $dataRootInfo['path'], $dataRootInfo['path']);
       if(!$dataRootInfo['writable']) printf($lang->install->chmod, $dataRootInfo['path'], $dataRootInfo['path']);
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <th><?php echo $lang->install->session;?></th>
+    <td>
+      <?php
+      $sessionInfo['exists']   ? print($lang->install->exists)   : print($lang->install->notExists);
+      $sessionInfo['writable'] ? print($lang->install->writable) : print($lang->install->notWritable);
+      ?>
+    </td>
+    <td class='<?php echo $sessionResult;?>'><?php echo $lang->install->$sessionResult;?></td>
+    <td class='a-left f-12px'>
+      <?php 
+      if($sessionInfo['path'])
+      {
+          if(!$sessionInfo['exists'])   printf($lang->install->mkdir, $sessionInfo['path'], $sessionInfo['path']);
+          if(!$sessionInfo['writable']) printf($lang->install->chmod, $sessionInfo['path'], $sessionInfo['path']);
+      }
+      else
+      {
+          echo $lang->install->sessionFail; 
+      }
       ?>
     </td>
   </tr>

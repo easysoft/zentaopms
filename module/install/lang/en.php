@@ -61,6 +61,8 @@ $lang->install->json         = 'JSON extension';
 $lang->install->jsonFail     = 'Edit the php.ini file to load JSON extension';
 $lang->install->tmpRoot      = 'Temp directory';
 $lang->install->dataRoot     = 'Upload directory.';
+$lang->install->session      = 'Session save path';
+$lang->install->sessionFail  = 'Edit the php.ini file to set session.save_path';
 $lang->install->mkdir        = '<p>Should creat the directory %s。<br /> Under linux, can try<br /> mkdir -p %s</p>';
 $lang->install->chmod        = 'Should change the permission of "%s".<br />Under linux, can try<br />chmod o=rwx -R %s';
 

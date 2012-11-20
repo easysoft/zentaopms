@@ -61,6 +61,8 @@ $lang->install->json         = 'JSON扩展';
 $lang->install->jsonFail     = '修改PHP配置文件，加载JSON扩展。';
 $lang->install->tmpRoot      = '临时文件目录';
 $lang->install->dataRoot     = '上传文件目录';
+$lang->install->session      = 'Session存储目录';
+$lang->install->sessionFail  = '修改PHP配置文件，设置session.save_path';
 $lang->install->mkdir        = '<p>需要创建目录%s。<br /> linux下面命令为：<br /> mkdir -p %s</p>';
 $lang->install->chmod        = '需要修改目录 "%s" 的权限。<br />linux下面命令为：<br />chmod o=rwx -R %s';
 

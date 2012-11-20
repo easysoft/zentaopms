@@ -126,6 +126,32 @@ class installModel extends model
     }
 
     /**
+     * Get session save path. 
+     * 
+     * @access public
+     * @return array 
+     */
+    public function getSessionSavePath()
+    {
+        $result['path']     = session_save_path();
+        $result['exists']   = is_dir($result['path']);
+        $result['writable'] = is_writable($result['path']);
+        return $result;
+    }
+
+    /**
+     * Check session save path. 
+     * 
+     * @access public
+     * @return string
+     */
+    public function checkSessionSavePath()
+    {
+        $sessionSavePath = session_save_path();
+        return $result   = (is_dir($sessionSavePath) and is_writable($sessionSavePath)) ? 'ok' : 'fail'; 
+    }
+
+    /**
      * Get data root 
      * 
      * @access public
