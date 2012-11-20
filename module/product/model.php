@@ -74,6 +74,7 @@ class productModel extends model
                 $productGroup[$this->lang->product->statusList['closed']][$product->id] = $product->name;
             }
         }
+        ksort($productGroup);
 
         /**
          * 1. if user selected by mouse, reload it. 
