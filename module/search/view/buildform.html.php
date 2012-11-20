@@ -266,7 +266,7 @@ foreach($fieldParams as $fieldName => $param)
     <td width='250' class='a-center'>
       <?php
       echo html::select('queryID', $queries, $queryID, 'class=select-1 onchange=executeQuery(this.value)');
-      if(common::hasPriv('search', 'deleteQuery')) echo html::commonButton(' x ', 'onclick=deleteQuery();');
+      if(common::hasPriv('search', 'deleteQuery')) echo html::a('javascript:deleteQuery()', '&nbsp;', '', 'class="icon-delete"');
       ?>
     </td>
     <th width='10' class='a-center' style='cursor:pointer; padding:0'>
