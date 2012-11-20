@@ -12,6 +12,7 @@
   </div>
 EOT;
   for($i = 1; $i <= $fileCount; $i ++) echo str_replace('$i', $i, $fileRow);
+  printf($lang->file->maxUploadSize, ini_get('upload_max_filesize'));
 ?>
 </div>
 <script language='javascript'>
