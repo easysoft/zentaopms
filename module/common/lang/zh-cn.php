@@ -148,7 +148,7 @@ $lang->product->menu->plan    = array('link' => '计划|productplan|browse|produ
 $lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文档|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+$lang->product->menu->view    = array('link' => '维护|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '项目列表|product|project|status=all&productID=%s';
 $lang->product->menu->order   = '排序|product|order|productID=%s';
@@ -169,7 +169,7 @@ $lang->project->menu->testtask  = '测试申请|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
-$lang->project->menu->view      = array('link' => '概况|project|view|projectID=%s', 'alias' => 'edit');
+$lang->project->menu->view      = array('link' => '维护|project|view|projectID=%s', 'alias' => 'edit');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-addProject">&nbsp;</span>新增项目|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有项目|project|index|locate=false', 'float' => 'right');
