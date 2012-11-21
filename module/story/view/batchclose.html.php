@@ -11,8 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchClose', "from=storyBatchClose")?>">
-  <table class='table-1 fixed'> 
+  <table class='table-1 fixed colored'> 
     <caption><?php echo $lang->story->common . $lang->colon . $lang->story->batchClose;?></caption>
     <tr>
       <th class='w-30px'> <?php echo $lang->idAB;?></th> 
@@ -32,7 +33,7 @@
         <div class='f-left'>
         <?php
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
-        echo html::select("closedReasons[$story->id]", $lang->story->reasonList, $story->closedReason, "class=w-70px onchange=setDuplicateAndChild(this.value,$story->id)");
+        echo html::select("closedReasons[$story->id]", $lang->story->reasonList, 'done', "class=w-70px onchange=setDuplicateAndChild(this.value,$story->id)");
         ?>
         </div>
         <div class='f-left' id='<?php echo 'duplicateStoryBox' . $story->id;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
@@ -44,10 +45,14 @@
         </div>
       </td>
       <?php else:?>  
-      <td class='f-left'><?php echo html::select("closedReasons[$story->id]", $lang->story->reasonList, $story->closedReason, 'class="w-60px" disabled="disabled"');?></td>
+      <td>
+        <div class='f-left'>
+          <?php echo html::select("closedReasons[$story->id]", $lang->story->reasonList, $story->closedReason, 'class="w-60px" disabled="disabled"');?>
+        </div>
+      </td>
       <?php endif;?>
 
-      <td><?php echo html::textarea("comments[$story->id]", '', "rows='2' class='area-1'");?></td>
+      <td><?php echo html::textarea("comments[$story->id]", '', "rows='1' class='area-1'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
