@@ -113,6 +113,55 @@ class admin extends control
     }
 
     /**
+     * Rename table for from windows to linux.
+     * 
+     * @access public
+     * @return void
+     */
+    public function renameTable()
+    {
+        $renameTables = array(
+            'zt_casestep'        => 'zt_caseStep'       ,
+            'zt_doclib'          => 'zt_docLib'         ,
+            'zt_grouppriv'       => 'zt_groupPriv'      ,
+            'zt_productplan'     => 'zt_productPlan'    ,
+            'zt_projectproduct'  => 'zt_projectProduct' ,
+            'zt_projectstory'    => 'zt_projectStory'   ,
+            'zt_relationoftasks' => 'zt_relationOfTasks',
+            'zt_storyspec'       => 'zt_storySpec'      ,
+            'zt_taskestimate'    => 'zt_taskEstimate'   ,
+            'zt_testresult'      => 'zt_testResult'     ,
+            'zt_testrun'         => 'zt_testRun'        ,
+            'zt_testtask'        => 'zt_testTask'       ,
+            'zt_usergroup'       => 'zt_userGroup'      ,
+            'zt_userquery'       => 'zt_userQuery'      ,
+            'zt_usertpl'         => 'zt_userTPL'        
+        );
+
+        $existTables = $this->dbh->query('SHOW TABLES')->fetchAll();
+        foreach($existTables as $key => $table) $existTables[$key] = current((array)$table);
+        $existTables = array_flip($existTables);
+
+        foreach($renameTables as $oldTable => $newTable)
+        {
+            if(isset($existTables[$newTable]))
+            {
+                echo "Has existed table '$newTable'\n";
+            }
+            elseif(!isset($existTables[$oldTable]))
+            {
+                echo "No found table '$oldTable'\n";
+            }
+            else
+            {
+                $this->dbh->query("RENAME TABLE `$oldTable` TO `$newTable`");
+                echo "RENAME TABLE `$oldTable` TO `$newTable`\n";
+            }
+        }
+        echo "Finish!\n";
+    }
+
+    /**
      * Confirm clear data.
      * 
      * @param  string $confirm ''|no|yes
