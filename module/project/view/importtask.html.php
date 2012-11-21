@@ -16,7 +16,12 @@
   <table class='table-1 fixed tablesorter'>
     <thead>
     <tr class='colhead'>
-      <td class='w-150px'><?php $projects = array(0 => $lang->project->fromproject)+$projects;?><?php echo html::select('fromproject', $projects, $fromProject, "class='select-2' onchange='reload($projectID, this.value)'");?></td>
+      <th class='w-150px {sorter:false}'>
+      <?php
+      $projects = array(0 => $lang->project->fromproject) + $projects;
+      echo html::select('fromproject', $projects, $fromProject, "class='select-2' onchange='reload($projectID, this.value)'");
+      ?>
+      </th>
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th class='w-p30'><?php echo $lang->task->name;?></th>
@@ -44,8 +49,14 @@
         <?php 
         if($task->storyID)
         {
-            if(common::hasPriv('story', 'view')) echo html::a($this->createLink('story', 'view', "storyid=$task->storyID"), $task->storyTitle);
-            else echo $task->storyTitle;
+            if(common::hasPriv('story', 'view'))
+            {
+                echo html::a($this->createLink('story', 'view', "storyid=$task->storyID"), $task->storyTitle);
+            }
+            else
+            {
+                echo $task->storyTitle;
+            }
         }
         ?>
       </td>

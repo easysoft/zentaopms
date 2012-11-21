@@ -298,7 +298,8 @@ class project extends control
         }
 
         $project   = $this->commonAction($toProject);
-        $projects  = $this->project->getPairs('all');
+        $projects  = $this->project->getPairs('nocode');
+        $fromProject = ($fromProject == 0 and !empty($projects)) ? key($projects) : $fromProject;
         unset($projects[$toProject]);
 
         /* Save session. */
