@@ -10,9 +10,9 @@ $config->task->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->task->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 
 $config->task->exportFields = '
-    id, project, story,
+    id, project, module, story,
     name, desc,
-    type, pri,  deadline, status,estimate, consumed, left,
+    type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
     mailto,
     openedBy, openedDate, assignedTo, assignedDate, 
     finishedBy, finishedDate, canceledBy, canceledDate,
