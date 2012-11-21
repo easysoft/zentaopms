@@ -35,7 +35,7 @@
         <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th class='w-status {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
         <th class='w-50px'>                  <?php echo $lang->story->taskCount;?></th>
-        <th class='w-100px {sorter:false}'>  <?php echo $lang->actions;?></th>
+        <th class='w-150px {sorter:false}'>  <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -67,6 +67,7 @@
           <?php 
           $param = "projectID={$project->id}&story={$story->id}";
           common::printLink('task', 'create', $param, $lang->project->wbs);
+          common::printLink('task', 'batchCreate', $param, $lang->task->batchCreate);
           common::printLink('project', 'unlinkStory', $param, $lang->unlink, 'hiddenwin');
           ?>
         </td>
