@@ -200,10 +200,13 @@ class common extends control
      * @access public
      * @return bool
      */
-    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true)
+    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false)
     {
         if(!common::hasPriv($module, $method)) return false;
-        echo html::a(helper::createLink($module, $method, $vars), $label, $target, $misc, $newline);
+        global $config;
+        $concat = $config->requestType == 'GET' ? '&' : '?';
+        $onlyBody = $onlyBody ? $concat . "onlybody=yes" : '';
+        echo html::a(helper::createLink($module, $method, $vars) . $onlyBody, $label, $target, $misc, $newline);
         return true;
     }
 
