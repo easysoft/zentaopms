@@ -66,7 +66,7 @@ class project extends control
      * @access public
      * @return object current object
      */
-    public function commonAction($projectID = 0)
+    public function commonAction($projectID = 0, $extra = '')
     {
         $this->loadModel('product');
 
@@ -78,7 +78,7 @@ class project extends control
         $teamMembers   = $this->project->getTeamMembers($project->id);
 
         /* Set menu. */
-        $this->project->setMenu($this->projects, $project->id);
+        $this->project->setMenu($this->projects, $project->id, $extra);
 
         /* Assign. */
         $this->view->projects      = $this->projects;
@@ -110,7 +110,7 @@ class project extends control
         $browseType = strtolower($status);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
         $moduleID   = ($status == 'byModule') ? (int)$param : 0;
-        $project    = $this->commonAction($projectID);
+        $project    = $this->commonAction($projectID, $status);
         $projectID  = $project->id;
      
         /* Save to session. */

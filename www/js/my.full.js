@@ -275,7 +275,7 @@ function switchProject(projectID, module, method, extra)
     if(module == 'project' && method == 'create') die;
 
     link = createLink(module, method, 'projectID=' + projectID);
-    if(module == 'tree') link = createLink(module, method, 'projectID=' + projectID + '&type=' + extra);
+    if(extra != '') link = createLink(module, method, 'projectID=' + projectID + '&type=' + extra);
     location.href = link;
 }
 
