@@ -1,15 +1,17 @@
 #!/usr/bin/env php
 <?php
 /* 包含http客户端类，snoopy。在禅道lib/snoopy里面可以找到。*/
-include dirname(dirname(__FILE__)) . '/lib/snoopy/snoopy.class.php';
+$pmsRoot = dirname(dirname(__FILE__));
+include $pmsRoot . '/config/my.php';
+include $pmsRoot . '/lib/snoopy/snoopy.class.php';
 
 /* 用来登录的地址，用户名和密码。*/
-$zentaoRoot  = "http://pms.easysoft.com/";
-$account     = "";              // 需要设置用户名和密码。
-$password    = "";
-$requestType = "PATH_INFO";     // 禅道系统访问方式，请根据实际的配置进行修改。
+$zentaoRoot  = "http://" . $config->default->domain ."/";
+$requestType = $config->requestType;     // 禅道系统访问方式，请根据实际的配置进行修改。
+$account     = "admin";              // 需要设置用户名和密码。
+$password    = "123456";
 
-if($account == '' and $password == '') die("Must set account and password.\n");
+if($account == '' and $password == '') die("Must set account and password in " . __FILE__ . ".\n");
 
 /* 设置API地址。*/
 if($requestType == 'GET')
