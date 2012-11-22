@@ -63,4 +63,17 @@ class action extends control
         $this->action->undelete($actionID);
         die(js::locate(inlink('trash'), 'parent'));
     }
+
+    /**
+     * Hide object. 
+     * 
+     * @param  int    $actionID 
+     * @access public
+     * @return void
+     */
+    public function hide($actionID)
+    {
+        $this->action->hide($actionID);
+        die(js::reload('parent'));
+    }
 }

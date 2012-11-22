@@ -15,6 +15,7 @@ class actionModel extends model
 {
     const CAN_UNDELETED = 1;    // The deleted object can be undeleted or not.
     const BE_UNDELETED  = 0;    // The deleted object has been undeleted or not.
+    const BE_HIDDEN     = 2;
 
     /**
      * Create a action.
@@ -552,5 +553,20 @@ class actionModel extends model
                 printf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
             }
         }
+    }
+
+    /**
+     * Hide object. 
+     * 
+     * @param  int    $actionID 
+     * @access public
+     * @return void
+     */
+    public function hide($actionID)
+    {
+        $action = $this->getById($actionID);
+        if($action->action != 'deleted') return;
+        $this->dao->update(TABLE_ACTION)->set('extra')->eq(self::BE_HIDDEN)->where('id')->eq($actionID)->exec();
+        $this->create($action->objectType, $action->objectID, 'hidden');
     }
 }

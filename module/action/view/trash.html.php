@@ -33,7 +33,12 @@
     <td class='a-left'><?php echo html::a($this->createLink($module, 'view', "id=$action->objectID"), $action->objectName);?></td>
     <td><?php echo $users[$action->actor];?></td>
     <td><?php echo $action->date;?></td>
-    <td><?php common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');?>
+    <td>
+    <?php
+    common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');
+    common::printLink('action', 'hide',     "actionid=$action->id", $lang->action->hide,   'hiddenwin');
+    ?>
+    </td>
   </tr>
   <?php endforeach;?>
   </tbody>
