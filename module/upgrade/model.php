@@ -1393,7 +1393,10 @@ class upgradeModel extends model
      */
     public function updateTaskAssignedTo()
     {
-        $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed')->where('status')->eq('closed')->andWhere('deleted')->eq(0)->exec();
+        $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed')
+            ->where('status')->eq('closed')
+            ->andWhere('assignedTo')->eq('')
+            ->exec();
         return true;
     }
 
