@@ -258,12 +258,14 @@ class task extends control
             $this->view->position[] = $this->lang->task->common;
             $this->view->position[] = $this->lang->task->batchEdit;
 
+            $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+            $members = $members + array('closed' => 'Closed');
+
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->projectID   = $project->id;
             $this->view->modules     = $this->tree->getOptionMenu($projectID, $viewType = 'task');
             $this->view->editedTasks = $editedTasks;
-            $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-            $this->view->members     = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+            $this->view->members     = $members;
 
             $this->display();
         }

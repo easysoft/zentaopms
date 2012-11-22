@@ -232,9 +232,9 @@ class taskModel extends model
 
                 $task->name           = htmlspecialchars($this->post->names[$taskID]);
                 $task->module         = $this->post->modules[$taskID];
-                $task->assignedTo     = $this->post->assignedTos[$taskID];
                 $task->type           = $this->post->types[$taskID];
                 $task->status         = $this->post->statuses[$taskID];
+                $task->assignedTo     = $task->status == 'closed' ? 'closed' : $this->post->assignedTos[$taskID];
                 $task->pri            = $this->post->pris[$taskID];
                 $task->estimate       = $this->post->estimates[$taskID];
                 $task->consumed       = $this->post->consumeds[$taskID];

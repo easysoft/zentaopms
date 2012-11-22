@@ -1386,6 +1386,18 @@ class upgradeModel extends model
     }
 
     /**
+     * Update task assignedTo.
+     * 
+     * @access public
+     * @return void
+     */
+    public function updateTaskAssignedTo()
+    {
+        $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed')->where('status')->eq('closed')->andWhere('deleted')->eq(0)->exec();
+        return true;
+    }
+
+    /**
      * Delete the patch record.
      * 
      * @access public
