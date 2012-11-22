@@ -7,34 +7,40 @@ $config->langs['en'] = 'EN';
 $lang->cn->title     = '欢迎使用禅道集成运行环境！';
 $lang->cn->poweredBy = "由<a href='http://www.apachefriends.org/' target='_blank'>xampp</a>精简而来";
 
-$lang->cn->links['zentao']['link']   = '/zentao/';
-$lang->cn->links['zentao']['text']   = '访问禅道';
-$lang->cn->links['zentao']['target']   = '_self';
-$lang->cn->links['official']['link'] = 'http://www.zentao.net/';
-$lang->cn->links['official']['text'] = '禅道官网';
-$lang->cn->links['official']['target'] = '_blank';
-$lang->cn->links['sqlbudyy']['link'] = '/sqlbuddy/';
-$lang->cn->links['sqlbudyy']['text'] = '数据库管理';
-$lang->cn->links['sqlbudyy']['target'] = '_blank';
-$lang->cn->links['phpinfo']['link']  = '?mode=phpinfo';
-$lang->cn->links['phpinfo']['text']  = 'PHP信息';
-$lang->cn->links['phpinfo']['target']  = '_blank';
+$lang->cn->links['zentao']['link']       = '/zentao/';
+$lang->cn->links['zentao']['text']       = '访问禅道';
+$lang->cn->links['zentao']['target']     = '_self';
+
+$lang->cn->links['official']['link']     = 'http://www.zentao.net/';
+$lang->cn->links['official']['text']     = '禅道官网';
+$lang->cn->links['official']['target']   = '_blank';
+
+$lang->cn->links['phpmyadmin']['link']   = '/phpmyadmin/';
+$lang->cn->links['phpmyadmin']['text']   = '数据库管理';
+$lang->cn->links['phpmyadmin']['target'] = '_blank';
+
+$lang->cn->links['phpinfo']['link']      = '?mode=phpinfo';
+$lang->cn->links['phpinfo']['text']      = 'PHP信息';
+$lang->cn->links['phpinfo']['target']    = '_blank';
 
 $lang->en->title     = 'Welcome to use zentao!';
 $lang->en->poweredBy = "reduced from <a href='http://www.apachefriends.org/' target='_blank'>xampp</a>";
 
-$lang->en->links['zentao']['link']     = '/zentao/';
-$lang->en->links['zentao']['text']     = 'ZenTao';
-$lang->en->links['zentao']['target']   = '_self';
-$lang->en->links['official']['link']   = 'http://www.zentao.net/';
-$lang->en->links['official']['text']   = 'Community';
-$lang->en->links['official']['target'] = '_blank';
-$lang->en->links['sqlbudyy']['link']   = '/sqlbuddy/';
-$lang->en->links['sqlbudyy']['text']   = 'MySQL';
-$lang->en->links['sqlbudyy']['target'] = '_blank';
-$lang->en->links['phpinfo']['link']    = '?mode=phpinfo';
-$lang->en->links['phpinfo']['text']    = 'PHP';
-$lang->en->links['phpinfo']['target']  = '_blank';
+$lang->en->links['zentao']['link']       = '/zentao/';
+$lang->en->links['zentao']['text']       = 'ZenTao';
+$lang->en->links['zentao']['target']     = '_self';
+
+$lang->en->links['official']['link']     = 'http://www.zentao.net/';
+$lang->en->links['official']['text']     = 'Community';
+$lang->en->links['official']['target']   = '_blank';
+
+$lang->en->links['phpmyadmin']['link']   = '/phpmyadmin/';
+$lang->en->links['phpmyadmin']['text']   = 'MySQL';
+$lang->en->links['phpmyadmin']['target'] = '_blank';
+
+$lang->en->links['phpinfo']['link']      = '?mode=phpinfo';
+$lang->en->links['phpinfo']['text']      = 'PHP';
+$lang->en->links['phpinfo']['target']    = '_blank';
 
 if(is_file('./my.php')) include './my.php';
 
