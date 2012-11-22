@@ -27,6 +27,7 @@ if(!isset($error))
 \$config->webRoot         = '$webRoot';
 \$config->default->domain = '$domain';
 \$config->default->lang   = '$defaultLang';
+\$config->mysqldump       = '';
 EOT;
 }
 ?>
