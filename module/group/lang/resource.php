@@ -582,9 +582,11 @@ $lang->misc->methodOrder[5] = 'ping';
 
 $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undelete';
+$lang->resource->action->hide     = 'hide';
 
 $lang->action->methodOrder[5]  = 'trash';
 $lang->action->methodOrder[10] = 'undelete';
+$lang->action->methodOrder[15] = 'hide';
 
 /* Every version of new privilege. */
 $lang->changelog['1.0.1'][] = 'project-computeBurn';
