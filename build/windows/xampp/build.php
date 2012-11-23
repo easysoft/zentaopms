@@ -70,6 +70,7 @@ $file->removeDir('./xampp/apache/icons');
 $file->removeDir('./xampp/apache/include');
 $file->removeDir('./xampp/apache/lib');
 $file->batchRemoveFile('./xampp/apache/logs/*.log');
+$file->batchRemoveFile('./xampp/apache/*.pl');
 $file->removeDir('./xampp/apache/manual');
 
 $file->rename('./xampp/apache/bin', './xampp/apache/binold');
@@ -317,6 +318,14 @@ $file->rename('./xampp/admin/phpmyadmin/locale.old/en_GB', './xampp/admin/phpmya
 $file->rename('./xampp/admin/phpmyadmin/locale.old/zh_CN', './xampp/admin/phpmyadmin/locale/zh_CN');
 $file->rename('./xampp/admin/phpmyadmin/locale.old/zh_TW', './xampp/admin/phpmyadmin/locale/zh_TW');
 $file->removeDir('./xampp/admin/phpmyadmin/locale.old');
+
+/* Process the svn. */
+$file->copyDir($buildDir . '/svn/silksvn/', '/xampp/silksvn');
+$file->mkdir('/xampp/zentao/module/svn/ext/config/');
+$file->mkdir('/xampp/zentao/bin/');
+$file->copyFile($buildDir . '/svn/svn.php', '/xampp/zentao/module/svn/ext/config/svn.php');
+$file->copyFile($buildDir . '/svn/syncsvn.bat', '/xampp/zentao/bin/syncsvn.bat');
+$file->copyFile($buildDir . '/ztcli.bat', '/xampp/zentao/bin/');
 
 /* Copy index.php. */
 $file->copyFile($buildDir . '/index.php', './xampp/htdocs/index.php');
