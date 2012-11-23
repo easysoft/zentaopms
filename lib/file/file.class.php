@@ -127,7 +127,7 @@ class file
      */
     public function mkdir($dir)
     {
-        return mkdir($dir);
+        return mkdir($dir, 0755, true);
     }
 
     /**
