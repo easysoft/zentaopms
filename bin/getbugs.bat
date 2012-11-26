@@ -1,0 +1,2 @@
+php getbugs.php
+pause

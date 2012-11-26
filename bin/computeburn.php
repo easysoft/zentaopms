@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
-include dirname(dirname(__FILE__)) . '/lib/api/api.class.php';
+error_reporting(E_ERROR);
+$pmsRoot = dirname(dirname(__FILE__));
+include $pmsRoot . '/config/my.php';
+include $pmsRoot . '/lib/api/api.class.php';
 
-$config->zentao->root     = "";    // 禅道访问的完整路径，包括后面的斜线。比如http://pms.zentao.net/
+$domain = $config->default->domain;
+unset($config);
+
+$config->zentao->root     = "'http://' . $domain . '/'";    // 禅道访问的完整路径，包括后面的斜线。比如http://pms.zentao.net/
 $config->zentao->account  = "";    // 可以访问禅道的帐号，需要有超级model调用接口的访问权限。
 $config->zentao->password = "";    // 密码。
+
+if($config->zentao->account == '' and $config->zentao->password == '') die("Must set account and password in " . __FILE__ . ".\n");
 
 class computeburn
 {
@@ -21,7 +29,7 @@ class computeburn
     public function run()
     {
         $result = $this->zentao->fetchModel('project', 'computeburn');
-        if(empty($result)) return;
+        if(empty($result)) die("Nothing to computburn.");
         foreach($result as $burns)
         {
             echo $burns->project  . "\t";

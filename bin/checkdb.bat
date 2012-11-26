@@ -1,0 +1,2 @@
+php checkdb.php
+pause

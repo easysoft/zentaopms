@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ERROR);
 include dirname(dirname(__FILE__)) . "/config/my.php";
 
 if($config->requestType == 'PATH_INFO')

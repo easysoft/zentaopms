@@ -1,15 +1,16 @@
 #!/usr/bin/env php
 <?php
+error_reporting(E_ERROR);
 /* 包含http客户端类，snoopy。在禅道lib/snoopy里面可以找到。*/
 $pmsRoot = dirname(dirname(__FILE__));
 include $pmsRoot . '/config/my.php';
 include $pmsRoot . '/lib/snoopy/snoopy.class.php';
 
 /* 用来登录的地址，用户名和密码。*/
-$zentaoRoot  = "http://" . $config->default->domain ."/";
+$zentaoRoot  = "http://" . $config->default->domain . "/";
 $requestType = $config->requestType;     // 禅道系统访问方式，请根据实际的配置进行修改。
-$account     = "admin";              // 需要设置用户名和密码。
-$password    = "123456";
+$account     = "";              // 需要设置用户名和密码。
+$password    = "";
 
 if($account == '' and $password == '') die("Must set account and password in " . __FILE__ . ".\n");
 

@@ -1,0 +1,2 @@
+php backup.php
+pause

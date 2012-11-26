@@ -10,7 +10,7 @@
  * @version     $Id$
  * @link        http://www.ZenTaoPMS.com
  */
-//error_reporting(0);
+error_reporting(E_ERROR);
 define('IN_SHELL', true);
 
 /* Judge the args. */
