@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->convert->common  = 'Import';
+$lang->convert->index   = 'Index';
 $lang->convert->next    = 'Next';
 $lang->convert->pre     = 'Back';
 $lang->convert->reload  = 'Reload';
@@ -20,6 +21,14 @@ $lang->convert->desc    = <<<EOT
 <p>Welcome to use this convert wizard which will help you to import other system data to ZenTaoPMS.</p>
 <strong>Importing is dangerous. Be sure to backup your database and other data files and sure nobody is using pms when importing.</strong>
 EOT;
+
+$lang->convert->setConfig      = 'Source config';
+$lang->convert->setBugfree     = 'Bugfree config';
+$lang->convert->setRedmine     = 'Redmine config';
+$lang->convert->checkBugFree   = 'Check Bugfree';
+$lang->convert->checkRedmine   = 'Check Redmine';
+$lang->convert->convertRedmine = 'Convert Redmine';
+$lang->convert->convertBugFree = 'Convert BugFree';
 
 $lang->convert->selectSource     = 'Select source system and version';
 $lang->convert->source           = 'Source system';

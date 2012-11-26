@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->convert->common  = '从其他系统导入';
+$lang->convert->index   = '首页';
 $lang->convert->next    = '下一步';
 $lang->convert->pre     = '返回';
 $lang->convert->reload  = '刷新';
@@ -20,6 +21,14 @@ $lang->convert->desc    = <<<EOT
 <p>欢迎使用系统转换向导，本程序会帮助您将其他系统的数据转换到禅道项目管理系统中。</p>
 <strong>转换存在一定的风险，转换之前，我们强烈建议您备份数据库及相应的数据文件，并保证转换的时候，没有其他人进行操作。</strong>
 EOT;
+
+$lang->convert->setConfig      = '来源系统配置';
+$lang->convert->setBugfree     = 'Bugfree配置';
+$lang->convert->setRedmine     = 'Redmine配置';
+$lang->convert->checkBugFree   = '检查Bugfree';
+$lang->convert->checkRedmine   = '检查Redmine';
+$lang->convert->convertRedmine = '转换Redmine';
+$lang->convert->convertBugFree = '转换BugFree';
 
 $lang->convert->selectSource     = '选择来源系统及版本';
 $lang->convert->source           = '来源系统';
