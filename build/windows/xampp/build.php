@@ -325,7 +325,7 @@ $file->mkdir('/xampp/zentao/module/svn/ext/config/');
 $file->mkdir('/xampp/zentao/bin/');
 $file->copyFile($buildDir . '/svn/svn.php', '/xampp/zentao/module/svn/ext/config/svn.php');
 $file->copyFile($buildDir . '/svn/syncsvn.bat', '/xampp/zentao/bin/syncsvn.bat');
-$file->copyFile($buildDir . '/ztcli.bat', '/xampp/zentao/bin/');
+$file->copyDir($buildDir . '/bin/', '/xampp/zentao/bin/');
 
 /* Copy index.php. */
 $file->copyFile($buildDir . '/index.php', './xampp/htdocs/index.php');
