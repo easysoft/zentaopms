@@ -751,29 +751,19 @@ class taskModel extends model
         $today = helper::today();
        
         /* Delayed or not?. */
-        if($task->status !== 'done' and $task->status !== 'cancel')
+        if($task->status !== 'done' and $task->status !== 'cancel' and $task->status != 'closed')
         {
             if($task->deadline != '0000-00-00')
             {
-                if($task->status == 'closed' && $task->closedReason == 'done')
-                {
-                    if($task->finishedDate == '') $delay = helper::diffDate(substr($task->closedDate, 0, 10), $task->deadline);
-                    if($task->finishedDate != '') $delay = helper::diffDate(substr($task->finishedDate, 0, 10), $task->deadline);
-                }
-                else
-                {
-                    $delay = helper::diffDate($today, $task->deadline);
-                }
-            	if($delay > 0) $task->delay = $delay;            
+                $delay = helper::diffDate($today, $task->deadline);
+                if($delay > 0) $task->delay = $delay;            
 	        } 
 	    }
 	    
         /* Story changed or not. */
         $task->needConfirm = false;
-        if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion)
-        {
-            $task->needConfirm = true;
-        }
+        if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
+
         return $task;
     }
 
