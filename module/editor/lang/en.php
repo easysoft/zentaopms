@@ -1,4 +1,6 @@
 <?php
+$lang->editor->common    = 'Extension editor';
+$lang->editor->index     = 'Index';
 $lang->editor->newMethod = 'New method';
 $lang->editor->extend    = 'Extend';
 $lang->editor->newLang   = 'New language';
@@ -8,6 +10,8 @@ $lang->editor->newExtend = 'New extend';
 $lang->editor->newPage   = 'New page';
 $lang->editor->override  = 'override';
 $lang->editor->edit      = 'Edit extend';
+$lang->editor->save      = 'Save page';
+$lang->editor->delete    = 'Delete page';
 
 $lang->editor->moduleList   = 'Module list';
 $lang->editor->filePath     = "Extend:";

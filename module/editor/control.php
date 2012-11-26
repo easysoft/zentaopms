@@ -24,7 +24,7 @@ class editor extends control
     }
 
     /**
-     * Show this module of files.
+     * Show files and methods of the module.
      * 
      * @param  string $moduleDir 
      * @access public
