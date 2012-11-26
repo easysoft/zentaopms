@@ -74,7 +74,6 @@ class productModel extends model
                 $productGroup[$this->lang->product->statusList['closed']][$product->id] = $product->name;
             }
         }
-        ksort($productGroup);
 
         /**
          * 1. if user selected by mouse, reload it. 
@@ -137,26 +136,8 @@ class productModel extends model
         if($product->acl == 'open') return true;
 
         /* Get team members. */
-        $teamMembers = $this->getTeamMemberPairs($product);
-
-        /* Private. */
-        if($product->acl == 'private')
-        {
-            return isset($teamMembers[$this->app->user->account]);
-        }
-
-        /* Custom, check groups. */
-        if($product->acl == 'custom')
-        {
-            if(isset($teamMembers[$this->app->user->account])) return true;
-            $userGroups    = $this->app->user->groups;
-            $productGroups = explode(',', $product->whitelist);
-            foreach($userGroups as $groupID)
-            {
-                if(in_array($groupID, $productGroups)) return true;
-            }
-            return false;
-        }
+        $privProducts = $this->getPrivProducts();
+        return isset($privProducts[$product->id]) ? true : false;;
     }
 
     /**
@@ -540,5 +521,35 @@ class productModel extends model
         }
 
         return $stats;
+    }
+
+    public function getPrivProducts()
+    {
+        $account = ',' . $this->app->user->account . ',';
+        static $products;
+        if($products === null)
+        {
+            $groupSql = '';
+            foreach($this->app->user->groups as $group) $groupSql .= "INSTR(CONCAT(',', t1.whitelist, ','), ',$group,') > 0 OR ";
+            $groupSql = !empty($groupSql) ? '(' . substr($groupSql, 0, strlen($groupSql) - 4) . ')' : '1 != 1';
+            $products = $this->dao->select('distinct t1.id')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
+                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.project')
+                ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
+                ->beginIF(strpos($this->app->company->admins, $account) !== false)->where('t1.deleted')->eq(0)->fi()
+                ->beginIF(strpos($this->app->company->admins, $account) === false)
+                ->where('t1.acl')->eq('open')
+                ->orWhere("(t1.acl = 'custom' AND $groupSql)")
+                ->orWhere('t1.PO')->eq($this->app->user->account)
+                ->orWhere('t1.QM')->eq($this->app->user->account)
+                ->orWhere('t1.RM')->eq($this->app->user->account)
+                ->orWhere('t1.createdBy')->eq($this->app->user->account)
+                ->orWhere('t3.account')->eq($this->app->user->account)
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t4.deleted')->eq(0)
+                ->fi()
+                ->fetchAll('id');
+        }
+        return $products;
     }
 }

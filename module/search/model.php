@@ -136,10 +136,23 @@ class searchModel extends model
      */
     public function setDefaultParams($fields, $params)
     {
-        $users    = $this->loadModel('user')->getPairs();
-        $products = array('' => '') + $this->loadModel('product')->getPairs();
-        $projects = array('' => '') + $this->loadModel('project')->getPairs();
-        $fields   = array_keys($fields);
+        $hasProduct = false;
+        $hasProject = false;
+        $hasUser    = false;
+
+        $fields     = array_keys($fields);
+        foreach($fields as $fieldName)
+        {
+            if(empty($params[$fieldName])) continue;
+            if($params[$fieldName]['values'] == 'products') $hasProduct = true;
+            if($params[$fieldName]['values'] == 'users')    $hasUser    = true;
+            if($params[$fieldName]['values'] == 'projects') $hasProject = true;
+        }
+
+        if($hasUser)    $users    = $this->loadModel('user')->getPairs();
+        if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs();
+        if($hasProject) $projects = array('' => '') + $this->loadModel('project')->getPairs();
+
         foreach($fields as $fieldName)
         {
             if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
