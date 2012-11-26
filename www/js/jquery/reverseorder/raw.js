@@ -4,7 +4,7 @@
  * (c) Arc90, Inc.
  * 
  * http://www.arc90.com
- * http://lab.arc90.com
+ * http://lab.arc90.com/2008/05/22/jquery-reverse-order-plugin/#licensing
  * 
  * Licensed under:
  * Creative Commons Attribution-Share Alike 3.0 http://creativecommons.org/licenses/by-sa/3.0/us/
