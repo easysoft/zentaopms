@@ -39,14 +39,18 @@ $lang->moduleOrder[95]  = 'user';
 
 $lang->moduleOrder[100] = 'admin';
 $lang->moduleOrder[105] = 'extension';
-$lang->moduleOrder[110] = 'action';
+$lang->moduleOrder[105] = 'extension';
+$lang->moduleOrder[110] = 'editor';
+$lang->moduleOrder[115] = 'convert';
+$lang->moduleOrder[120] = 'action';
 
-$lang->moduleOrder[115]  = 'svn';
-$lang->moduleOrder[120] = 'search';
-$lang->moduleOrder[125] = 'tree';
-$lang->moduleOrder[130] = 'api';
-$lang->moduleOrder[135] = 'file';
-$lang->moduleOrder[140] = 'misc';
+$lang->moduleOrder[125] = 'mail';
+$lang->moduleOrder[130] = 'svn';
+$lang->moduleOrder[135] = 'search';
+$lang->moduleOrder[140] = 'tree';
+$lang->moduleOrder[145] = 'api';
+$lang->moduleOrder[150] = 'file';
+$lang->moduleOrder[155] = 'misc';
 
 /* Index module. */
 $lang->resource->index->index = 'index';
@@ -422,6 +426,19 @@ $lang->doc->methodOrder[30] = 'view';
 $lang->doc->methodOrder[35] = 'edit';
 $lang->doc->methodOrder[40] = 'delete';
 
+/* mail. */
+$lang->resource->mail->index  = 'index';
+$lang->resource->mail->detect = 'detect';
+$lang->resource->mail->edit   = 'edit';
+$lang->resource->mail->save   = 'save';
+$lang->resource->mail->test   = 'test';
+
+$lang->mail->methodOrder[5]  = 'index';
+$lang->mail->methodOrder[10] = 'detect';
+$lang->mail->methodOrder[15] = 'edit';
+$lang->mail->methodOrder[20] = 'save';
+$lang->mail->methodOrder[25] = 'test';
+
 /* Subversion. */
 $lang->resource->svn->diff    = 'diff';
 $lang->resource->svn->cat     = 'cat';
@@ -434,14 +451,17 @@ $lang->svn->methodOrder[15] = 'apiSync';
 /* Company. */
 $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
+$lang->resource->company->create = 'create';
 $lang->resource->company->edit   = 'edit';
+$lang->resource->company->delete = 'delete';
 $lang->resource->company->dynamic= 'dynamic';
 
 $lang->company->methodOrder[0]  = 'index';
 $lang->company->methodOrder[5]  = 'browse';
-$lang->company->methodOrder[10] = 'edit';
-$lang->company->methodOrder[15] = 'dynamic';
-$lang->company->methodOrder[20] = 'dffort';
+$lang->company->methodOrder[10] = 'create';
+$lang->company->methodOrder[15] = 'edit';
+$lang->company->methodOrder[20] = 'delete';
+$lang->company->methodOrder[25] = 'dynamic';
 
 /* Department. */
 $lang->resource->dept->browse      = 'browse';
@@ -545,9 +565,13 @@ $lang->search->methodOrder[20] = 'deleteQuery';
 $lang->search->methodOrder[25] = 'select';
 
 /* Admin. */
-$lang->resource->admin->index            = 'index';
+$lang->resource->admin->index     = 'index';
+$lang->resource->admin->checkDB   = 'checkDB';
+$lang->resource->admin->clearData = 'clearData';
 
 $lang->admin->methodOrder[0]  = 'index';
+$lang->admin->methodOrder[5]  = 'checkDB';
+$lang->admin->methodOrder[10] = 'clearData';
 
 /* Extension. */
 $lang->resource->extension->browse     = 'browse';
@@ -560,6 +584,57 @@ $lang->resource->extension->deactivate = 'deactivate';
 $lang->resource->extension->upload     = 'upload';
 $lang->resource->extension->erase      = 'erase';
 $lang->resource->extension->upgrade    = 'upgrade';
+
+$lang->extension->methodOrder[5]  = 'browse';
+$lang->extension->methodOrder[10] = 'obtain';
+$lang->extension->methodOrder[15] = 'structure';
+$lang->extension->methodOrder[20] = 'install';
+$lang->extension->methodOrder[25] = 'uninstall';
+$lang->extension->methodOrder[30] = 'activate';
+$lang->extension->methodOrder[35] = 'deactivate';
+$lang->extension->methodOrder[40] = 'upload';
+$lang->extension->methodOrder[45] = 'erase';
+$lang->extension->methodOrder[50] = 'upgrade';
+
+/* Editor . */
+$lang->resource->editor->index   = 'index';
+$lang->resource->editor->extend  = 'extend';
+$lang->resource->editor->edit    = 'edit';
+$lang->resource->editor->newPage = 'newPage';
+$lang->resource->editor->save    = 'save';
+$lang->resource->editor->delete  = 'delete';
+
+$lang->editor->methodOrder[5]  = 'index';
+$lang->editor->methodOrder[10] = 'extend';
+$lang->editor->methodOrder[15] = 'edit';
+$lang->editor->methodOrder[20] = 'newPage';
+$lang->editor->methodOrder[25] = 'save';
+$lang->editor->methodOrder[30] = 'delete';
+
+/* Convert. */
+$lang->resource->convert->index          = 'index';
+$lang->resource->convert->selectSource   = 'selectSource';  
+$lang->resource->convert->setConfig      = 'setConfig';
+$lang->resource->convert->setBugfree     = 'setBugfree';
+$lang->resource->convert->setRedmine     = 'setRedmine';
+$lang->resource->convert->checkConfig    = 'checkConfig';
+$lang->resource->convert->checkBugFree   = 'checkBugFree';
+$lang->resource->convert->checkRedmine   = 'checkRedmine';
+$lang->resource->convert->execute        = 'execute';
+$lang->resource->convert->convertBugFree = 'convertBugFree';
+$lang->resource->convert->convertRedmine = 'convertRedmine';
+
+$lang->convert->methodOrder[5]  = 'index';
+$lang->convert->methodOrder[10] = 'selectSource';
+$lang->convert->methodOrder[15] = 'setConfig';
+$lang->convert->methodOrder[20] = 'setBugfree';
+$lang->convert->methodOrder[25] = 'setRedmine';
+$lang->convert->methodOrder[30] = 'checkConfig';
+$lang->convert->methodOrder[35] = 'checkBugFree';
+$lang->convert->methodOrder[40] = 'checkRedmine';
+$lang->convert->methodOrder[45] = 'execute';
+$lang->convert->methodOrder[50] = 'convertBugFree';
+$lang->convert->methodOrder[55] = 'convertRedmine';
 
 /* Others. */
 $lang->resource->api->getModel    = 'getModel';
