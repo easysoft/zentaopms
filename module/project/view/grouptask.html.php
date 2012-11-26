@@ -91,7 +91,7 @@
     <tr id='<?php echo $task->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
       <td class='<?php echo $groupClass;?>'></td>
       <td class='a-left'>&nbsp;<?php echo $task->id . $lang->colon; if(common::hasPriv('task', 'view')) echo html::a($this->createLink('task', 'view', "task=$task->id"), $task->name); else echo $task->name;?></td>
-      <td><?php echo $task->pri;?></td>
+      <td><span class='<?php echo 'pri' . $task->pri?>'><?php echo $task->pri;?></span></td>
       <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $users[$task->finishedBy];?></td>
       <td><?php echo $task->estimate;?></td>

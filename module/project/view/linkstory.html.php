@@ -37,7 +37,7 @@
         <input type='hidden'   name='products[]' value='<?php echo $story->product;?>' />
         <?php echo html::a($storyLink, $story->id);?>
       </td>
-      <td><?php echo $lang->story->priList[$story->pri];?></td>
+      <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
       <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product"), $products[$story->product], '_blank');?></td>
       <td class='a-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
       <td><?php echo $story->planTitle;?></td>

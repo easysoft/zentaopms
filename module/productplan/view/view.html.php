@@ -57,7 +57,7 @@
            ?>
           <tr>
             <td><?php echo html::a($viewLink, $story->id);?></td>
-            <td><?php echo $story->pri;?></td>
+            <td><span class='<?php echo 'pri' . $story->pri?>'><?php echo $story->pri;?></span></td>
             <td class='a-left nobr'><?php echo html::a($viewLink , $story->title);?></td>
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $users[$story->assignedTo];?></td>

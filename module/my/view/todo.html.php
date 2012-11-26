@@ -78,7 +78,7 @@
       </td>
       <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFuture : $todo->date;?></td>
       <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
-      <td><?php echo $todo->pri;?></td>
+      <td><span class='<?php echo 'pri' . $todo->pri;?>'><?php echo $todo->pri?></span></td>
       <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my"), $todo->name);?></td>
       <td><?php echo $todo->begin;?></td>
       <td><?php echo $todo->end;?></td>

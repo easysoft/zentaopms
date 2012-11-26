@@ -92,7 +92,7 @@ var browseType = '<?php echo $browseType;?>';
               <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
               <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
             </td>
-            <td><?php echo $lang->task->priList[$task->pri];?></td>
+            <td><span class='<?php echo 'pri'. $lang->task->priList[$task->pri]?>'><?php echo $lang->task->priList[$task->pri];?></span></td>
             <td class='a-left nobr'>
               <?php 
               if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;

@@ -52,7 +52,7 @@
         <?php if($canBatchClose):?><input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?>
       </td>
-      <td><?php echo $lang->task->priList[$task->pri];?></td>
+      <td><span class='<?php echo 'pri' . $lang->task->priList[$task->pri];?>'><?php echo isset($lang->task->priList[$task->pri]) ? $lang->task->priList[$task->pri] : $task->pri;?></span></td>
       <td class='nobr'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></th>
       <td class='a-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
       <td><?php echo $task->estimate;?></td>

@@ -14,14 +14,16 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <form method='post' target='hiddenwin'>
   <table class='table-1 fixed tablesorter'>
+    <caption>
+    <?php
+    $projects = array(0 => $lang->project->fromproject) + $projects;
+    echo $lang->project->selectProject . ':';
+    echo html::select('fromproject', $projects, $fromProject, "class='select-2' onchange='reload($projectID, this.value)'");
+    ?>
+    </caption>
     <thead>
     <tr class='colhead'>
-      <th class='w-150px {sorter:false}'>
-      <?php
-      $projects = array(0 => $lang->project->fromproject) + $projects;
-      echo html::select('fromproject', $projects, $fromProject, "class='select-2' onchange='reload($projectID, this.value)'");
-      ?>
-      </th>
+      <th class='w-150px {sorter:false}'><?php echo $lang->project->name ?></th>
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th class='w-p30'><?php echo $lang->task->name;?></th>
@@ -39,7 +41,7 @@
     <tr class='a-center'>
       <td><?php echo $projects[$task->project];?></td>
       <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
-      <td><?php echo $task->pri;?></td>
+      <td><span class='<?php echo 'pri' . $task->pri?>'><?php echo $task->pri;?></span></td>
       <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $task->left;?></td>

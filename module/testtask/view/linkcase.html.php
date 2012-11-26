@@ -40,7 +40,7 @@
       <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
     </td>
     <td class='a-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class=select-1');?> </td>
-    <td><?php echo $case->pri?></td>
+    <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span></td>
     <td class='a-left'>
       <?php
       echo $case->title . ' ( ';

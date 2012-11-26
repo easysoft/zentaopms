@@ -109,8 +109,8 @@ if($customed)
         <?php $bugLink = inlink('view', "bugID=$bug->id");?>
         <tr class='a-center'>
           <td class='<?php echo $bug->status;?>' style="font-weight:bold"><?php echo html::a($bugLink, sprintf('%03d', $bug->id));?></td>
-          <td><span class='<?php echo 'severity' . $bug->severity;?>'>&nbsp;</span></td>
-          <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri];?>'>&nbsp;</span></td>
+          <td><span class='<?php echo 'severity' . $bug->severity;?>'><?php echo $bug->severity;?></span></td>
+          <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri];?>'><?php echo $lang->bug->priList[$bug->pri];?></span></td>
 
           <?php $class = 'confirm' . $bug->confirmed;?>
           <td class='a-left nobr'><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>

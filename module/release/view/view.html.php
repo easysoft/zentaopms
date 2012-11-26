@@ -49,7 +49,7 @@
         <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
         <tr class='a-center'>
           <td><?php echo sprintf('%03d', $story->id);?></td>
-          <td><?php echo $lang->story->priList[$story->pri];?></td>
+          <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
           <td class='a-left nobr'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
           <td><?php echo $users[$story->openedBy];?></td>
           <td><?php echo $story->estimate;?></td>

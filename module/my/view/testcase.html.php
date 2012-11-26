@@ -40,7 +40,7 @@
     <?php foreach($cases as $case):?>
     <tr class='a-center'>
       <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?></td>
-      <td><?php echo $case->pri?></td>
+      <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span</td>
       <td class='a-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), $case->title);?></td>
       <td><?php echo $lang->testcase->typeList[$case->type];?></td>
       <td><?php echo $users[$case->openedBy];?></td>

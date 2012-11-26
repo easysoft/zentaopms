@@ -36,7 +36,7 @@
     ?>
     <tr>
       <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
-      <td><?php echo $story->pri;?></td>
+      <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
       <td><?php echo $story->planTitle;?></td>
       <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
       <td><?php echo $users[$story->openedBy];?></td>
@@ -74,7 +74,7 @@
   <?php foreach($planStories as $story):?>
   <tr>
     <td><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?></td>
-    <td><?php echo $story->pri;?></td>
+    <td><span class='<?php echo 'pri' . $story->pri;?>'><?php echo $story->pri?></span></td>
     <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
     <td><?php echo $users[$story->openedBy];?></td>
     <td><?php echo $users[$story->assignedTo];?></td>
