@@ -9,6 +9,7 @@ rm -fr logs/*
 rm -fr htdocs/*
 rm -fr cgi-bin
 rm -fr libexec
+rm -fr phpmyadmin
 rm -fr php
 rm -fr tmp/*
 chmod -R 777 tmp
