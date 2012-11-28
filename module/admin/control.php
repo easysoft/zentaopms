@@ -118,7 +118,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function renameTable()
+    public function win2Unit()
     {
         $renameTables = array(
             'zt_casestep'        => 'zt_caseStep'       ,

@@ -3,9 +3,9 @@ include dirname(dirname(__FILE__)) . "/config/my.php";
 
 if($config->requestType == 'PATH_INFO')
 {
-    system('php ztcli "http://localhost/admin-renameTable"');
+    system('php ztcli "http://localhost/admin-win2Unit"');
 }
 elseif($config->requestType == 'GET')
 {
-    system('php ztcli "http://localhost/?m=admin&f=renameTable"');
+    system('php ztcli "http://localhost/?m=admin&f=win2Unit"');
 }
