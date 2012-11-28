@@ -7,9 +7,9 @@ rm -fr  error
 rm -fr icons
 rm -fr logs/*
 rm -fr htdocs/*
-rm -fr phpmyadmin
 rm -fr cgi-bin
 rm -fr libexec
+rm -fr php
 rm -fr tmp/*
 chmod -R 777 tmp
 
@@ -36,51 +36,7 @@ rm -fr etc/extra/httpd-multilang-errordoc.conf
 rm -fr etc/lampp/startssl
 
 # process httpd conf
-grep -v '#' etc/httpd.conf | \
-grep -v '^$' | \
-grep -v 'mod_actions.so' | \
-grep -v 'authn_dbm' | \
-grep -v 'authn_anon' | \
-grep -v 'authn_dbd' | \
-grep -v 'authn_default' | \
-grep -v 'authz_groupfile' | \
-grep -v 'authz_dbm' | \
-grep -v 'authz_owner' | \
-grep -v 'authnz_ldap' | \
-grep -v 'authz_default' | \
-grep -v 'auth_digest_module' | \
-grep -v 'cache.so' | \
-grep -v 'mod_bucketeer' | \
-grep -v 'mod_dumpio' | \
-grep -v 'mod_echo' | \
-grep -v 'mod_case*' | \
-grep -v 'mod_ext_filter*' | \
-grep -v 'mod_include' | \
-grep -v 'mod_filter' | \
-grep -v 'mod_charset_lite' | \
-grep -v 'mod_ldap' | \
-grep -v 'mod_log_config' | \
-grep -v 'mod_logio' | \
-grep -v 'mod_cern_meta' | \
-grep -v 'mod_headers' | \
-grep -v 'mod_ident' | \
-grep -v 'mod_usertrack' | \
-grep -v 'mod_unique_id' | \
-grep -v 'mod_proxy*' | \
-grep -v 'mod_dav*' | \
-grep -v 'mod_status' | \
-grep -v 'mod_asis' | \
-grep -v 'mod_info' | \
-grep -v 'mod_suexec' | \
-grep -v 'mod_cgi*' | \
-grep -v 'mod_negotiation' | \
-grep -v 'mod_imagemap' | \
-grep -v 'mod_speling' | \
-grep -v 'mod_userdir' | \
-grep -v 'mod_apreq2' | \
-grep -v 'mod_ssl' | \
-grep -v 'multilang-errordoc' > etc/httpd.conf.lite
-mv etc/httpd.conf.lite etc/httpd.conf
+cp ../httpd.conf etc/httpd.conf
 
 # process my.cnf
 grep -v '^innodb' etc/my.cnf| \
@@ -90,7 +46,7 @@ grep -v '^$' > etc/my.cnf.new
 mv etc/my.cnf.new etc/my.cnf
 
 # process php.ini
-echo 'zend_extension = /opt/lampp/lib/php/extensions/no-debug-non-zts-20090626/ioncube_loader_lin_5.3.so' > etc/php.ini.new
+echo 'zend_extension = /opt/lampp/lib/php/extensions/no-debug-non-zts-20100525/ioncube_loader_lin_5.4.so' > etc/php.ini.new
 grep -v '^;' etc/php.ini |\
 grep -v '^$' |\
 grep -v 'sqlite.so' |\
@@ -191,7 +147,6 @@ rm -fr var/proftpd*
 rm -fr var/mysql/cdcol
 rm -fr var/mysql/*.err
 rm -fr var/mysql/ib*
-rm -fr var/mysql/phpmyadmin
 rm -fr var/mysql/test
 chmod -R 777 var/mysql
 
@@ -219,7 +174,6 @@ rm -fr modules/mod_disk_cache.so
 rm -fr modules/mod_dumpio.so
 rm -fr modules/mod_ext_filter.so
 rm -fr modules/mod_file_cache.so
-rm -fr modules/mod_filter.so
 rm -fr modules/mod_headers.so
 rm -fr modules/mod_ident.so
 rm -fr modules/mod_imagemap.so
@@ -254,15 +208,21 @@ cp ../start88 .
 cp ../stop .
 cp ../../windows/xampp/index.php htdocs/
 
-# copy sqlbuddy.
-mkdir admin
-unzip $1/sqlbuddy.zip
-mv sqlbuddy admin/
-
 # make the auth file
 mkdir auth
 touch auth/users
-echo 'use htpasswd users username password to add a new user.' > auth/readme
+echo 'use "../bin/htpasswd -b users username password" to add a new user.' > auth/readme
+
+# process the phpmyadmin
+7z x $1/phpmyadmin.7z
+mkdir admin
+mv phpMyAdmin-3.5.4-all-languages admin/phpmyadmin
+mv admin/phpmyadmin/locale admin/phpmyadmin/locale.bak
+mkdir admin/phpmyadmin/locale
+mv admin/phpmyadmin/locale.bak/en_GB admin/phpmyadmin/locale
+mv admin/phpmyadmin/locale.bak/zh_* admin/phpmyadmin/locale
+rm -fr admin/phpmyadmin/locale.bak
+cp ../phpmyadmin.php admin/phpmyadmin/config.inc.php
 
 # copy the ioncube loader.
-cp ../ioncube_loader_lin_5.3.so lib/php/extensions/no-debug-non-zts-20090626/
+cp ../ioncube_loader_lin_5.4.so lib/php/extensions/no-debug-non-zts-20100525/
