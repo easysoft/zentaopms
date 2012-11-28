@@ -29,12 +29,14 @@ tgz:
 	cp -fr module zentaopms/
 	cp -fr www/*.ico www/fusioncharts www/*.php www/js www/*.txt www/theme www/.htaccess www/.ztaccess zentaopms/www
 	cp bin/ztc* bin/computeburn.php bin/getbugs.php bin/initext.php bin/todo.php bin/backup.php bin/checkdb.php bin/minifyfront.php bin/win2unit.php zentaopms/bin
+	cp bin/*.bat zentaopms/bin/
 	cp -fr db zentaopms/
-	cp -fr doc/* zentaopms/
+	cp -fr doc zentaopms/
 	cp -fr tmp zentaopms/
 	cp VERSION zentaopms/
 	# combine js and css files.
 	cd zentaopms/bin/ && php ./minifyfront.php
+	rm -fr zentaopms/bin/minifyfront.php
 	# create the restart file for svn.
 	touch zentaopms/module/svn/restart
 	# touch the front.class.php to make it's mtime to new.
@@ -51,7 +53,7 @@ tgz:
 	find zentaopms/ -name ext |xargs chmod -R 777
 	# zip it.
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	rm -fr zentaopms
+	#rm -fr zentaopms
 
 patchphpdoc:
 	sudo cp misc/doc/phpdoc/*.tpl /usr/share/php/data/PhpDocumentor/phpDocumentor/Converters/HTML/frames/templates/phphtmllib/templates/
