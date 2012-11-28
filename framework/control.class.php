@@ -422,7 +422,6 @@ class control
         unset($this->view->app);
         unset($this->view->config);
         unset($this->view->lang);
-        unset($this->view->pager);
         unset($this->view->header);
         unset($this->view->position);
         unset($this->view->moduleTree);
