@@ -14,6 +14,7 @@ clean:
 	rm -fr build/linux/lampp
 	rm -fr sae
 	rm -fr syun
+	rm -fr lampp
 tgz:
 	# make the directories.
 	mkdir -p zentaopms/lib
