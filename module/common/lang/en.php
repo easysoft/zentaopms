@@ -77,14 +77,15 @@ $lang->typeAB       = 'Type';
 $lang->common->common = 'Common module';
 
 /* The main menu. */
-$lang->menu->my      = '<span id="mainbg">&nbsp;</span>Dashboard|my|index';
-$lang->menu->product = 'Product|product|index';
-$lang->menu->project = 'Project|project|index';
-$lang->menu->qa      = 'Test|qa|index';
-$lang->menu->doc     = 'Doc|doc|index';
-$lang->menu->report  = 'Report|report|index';
-$lang->menu->company = 'Company|company|index';
-$lang->menu->admin   = 'Admin|admin|index';
+$lang->menu->my       = '<span id="mainbg">&nbsp;</span>Dashboard|my|index';
+$lang->menu->product  = 'Product|product|index';
+$lang->menu->project  = 'Project|project|index';
+$lang->menu->qa       = 'Test|qa|index';
+$lang->menu->doc      = 'Doc|doc|index';
+$lang->menu->report   = 'Report|report|index';
+$lang->menu->resource = 'Resource|resource|index';
+$lang->menu->company  = 'Company|company|index';
+$lang->menu->admin    = 'Admin|admin|index';
 
 /* The objects in the search box. */
 $lang->searchObjects['bug']         = 'Bug';
@@ -201,6 +202,10 @@ $lang->report->menu->product = array('link' => 'Product|report|productinfo');
 $lang->report->menu->prj     = array('link' => 'Project|report|projectdeviation');
 $lang->report->menu->test    = array('link' => 'Test|report|bugsummary', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
+
+/* Resource menu. */
+$lang->resource->menu->addedApp = array('link' => 'Added App|resource|index');
+$lang->resource->menu->obtain   = array('link' => 'Obtain App|resource|obtain');
 
 /* Company menu. */
 $lang->company->menu->name        = '%s' . $lang->arrow;

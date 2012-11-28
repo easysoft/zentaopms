@@ -6,8 +6,9 @@ $lang->menuOrder[15] = 'project';
 $lang->menuOrder[20] = 'qa';
 $lang->menuOrder[25] = 'doc';
 $lang->menuOrder[30] = 'report';
-$lang->menuOrder[35] = 'company';
-$lang->menuOrder[40] = 'admin';
+$lang->menuOrder[35] = 'resource';
+$lang->menuOrder[40] = 'company';
+$lang->menuOrder[45] = 'admin';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';

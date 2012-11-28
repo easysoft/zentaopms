@@ -77,14 +77,15 @@ $lang->typeAB       = '类型';
 $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
-$lang->menu->my      = '<span id="mainbg">&nbsp;</span>我的地盘|my|index';
-$lang->menu->product = '产品视图|product|index';
-$lang->menu->project = '项目视图|project|index';
-$lang->menu->qa      = '测试视图|qa|index';
-$lang->menu->doc     = '文档视图|doc|index';
-$lang->menu->report  = '统计视图|report|index';
-$lang->menu->company = '组织视图|company|index';
-$lang->menu->admin   = '后台管理|admin|index';
+$lang->menu->my       = '<span id="mainbg">&nbsp;</span>我的地盘|my|index';
+$lang->menu->product  = '产品视图|product|index';
+$lang->menu->project  = '项目视图|project|index';
+$lang->menu->qa       = '测试视图|qa|index';
+$lang->menu->doc      = '文档视图|doc|index';
+$lang->menu->report   = '统计视图|report|index';
+$lang->menu->resource = '资源视图|resource|index';
+$lang->menu->company  = '组织视图|company|index';
+$lang->menu->admin    = '后台管理|admin|index';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'B:Bug';
@@ -201,6 +202,10 @@ $lang->report->menu->product = array('link' => '产品|report|productinfo');
 $lang->report->menu->prj     = array('link' => '项目|report|projectdeviation');
 $lang->report->menu->test    = array('link' => '测试|report|bugsummary', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => '组织|report|workload');
+
+/* 资源视图菜单设置。*/
+$lang->resource->menu->addedApp = array('link' => '已有应用|resource|index');
+$lang->resource->menu->obtain   = array('link' => '获得应用|resource|obtain');
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;

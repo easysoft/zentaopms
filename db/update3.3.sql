@@ -5,4 +5,20 @@ ALTER TABLE  `zt_user` CHANGE  `locked`  `locked` DATETIME NOT NULL DEFAULT  '00
 ALTER TABLE `zt_case` CHANGE `pri` `pri` TINYINT( 3 ) UNSIGNED NOT NULL 
 
 ALTER TABLE  `zt_action` ADD  `read` ENUM(  '0',  '1' ) NOT NULL DEFAULT  '0';
-UPDATE `zt_action` SET  `read` =  '1'
+UPDATE `zt_action` SET  `read` =  '1';
+
+CREATE TABLE IF NOT EXISTS `zt_webApp` (
+  `id` mediumint(9) NOT NULL auto_increment,
+  `appid` mediumint(9) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `account` char(30) NOT NULL,
+  `module` mediumint(9) NOT NULL,
+  `url` varchar(100) NOT NULL,
+  `icon` mediumint(9) NOT NULL,
+  `target` varchar(50) NOT NULL,
+  `size` varchar(20) NOT NULL,
+  `author` varchar(30) NOT NULL,
+  `desc` text NOT NULL,
+  `addedDate` datetime NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
