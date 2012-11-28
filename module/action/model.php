@@ -49,6 +49,61 @@ class actionModel extends model
     }
 
     /**
+     * Update read field of action when view a task/bug.
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function read($objectType, $objectID)
+    {
+        $this->dao->update(TABLE_ACTION)
+            ->set('`read`')->eq(1)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->eq($objectID)
+            ->andWhere('`read`')->eq(0)
+            ->exec();
+    }
+
+    /**
+     * Get unread actions.
+     * 
+     * @param  int    $objectType 
+     * @access public
+     * @return void
+     */
+    public function getUnreadActions()
+    {
+        $objectList['task'] = TABLE_TASK;
+        $objectList['bug']  = TABLE_BUG;
+        $actions = array();
+
+        foreach($objectList as $object => $table)
+        {
+            $idList = $this->dao->select('id')->from($table)->where('assignedTo')->eq($this->app->user->account)->fetchPairs('id', '', false);
+
+            $tmpActions = $this->dao->select('*')->from(TABLE_ACTION)
+                ->where('objectType')->eq($object)
+                ->andWhere('objectID')->in($idList)
+                ->andWhere('`read`')->eq(0)
+                ->fetchAll();
+            if(empty($tmpActions)) continue;
+
+           $tmpActions = $this->transformActions($tmpActions);
+            foreach($tmpActions as $action)
+            {
+                $actions[$action->objectType][] = array(
+                    'objectType' => $action->objectType,
+                    'objectID'   => $action->objectID,
+                    'action'     => $action->actor . $action->actionLabel . $action->objectType . " #$action->objectID" . $action->objectName
+                );
+            }
+        }
+        return json_encode($actions);
+    }
+
+    /**
      * Get product and project of an object.
      * 
      * @param  string $objectType 

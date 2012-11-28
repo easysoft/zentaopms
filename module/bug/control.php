@@ -335,6 +335,9 @@ class bug extends control
         $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
+        /* Update action. */
+        if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
+
         /* Set menu. */
         $this->bug->setMenu($this->products, $bug->product);
 
