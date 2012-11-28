@@ -347,8 +347,7 @@ class task extends control
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
 
         /* Update action. */
-       // if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
-        $this->loadModel('action')->getUnreadActions();
+        if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
 
         /* Set menu. */
         $project = $this->project->getById($task->project);
