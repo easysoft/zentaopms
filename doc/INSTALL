@@ -2,44 +2,35 @@
 
 zentao needs apache, php(>5.2) and mysql.
 
-2. how to install on windows
+2. install the allinone package on windows
 
-  2.1  use uniserver package on windows.
+We have build an allinone package for windows systems. This package comes from the xampp project which is a great AMP tool.
 
-    uniserver is a very good AMP package. please see http://www.uniformserver.com/
+2.1 download our .exe package.
+2.2 double click the .exe and extract it into c:\xampp or d:\xampp, keep it under the root directory.
+2.3 start zentao
 
-    We have bind zentao to uniserver, so you can only download our .exe package, unpack it, then you can use zentao now.
-
-    2.1.1  download our .exe package. 
-    2.1.2  unpack it.
-
-      after download the package, save it to a path(no space), for example c:\
-      then double click the exe file, it will be extracted to c:\zentao
-
-    2.1.3 start zentao
-
-      cd c:\zentao, there'is a start.exe. double click it, it will stay on the tray menu at the bottom of the window.
-
-      click on the blue one icon, then the menu will show, you can choose the "start apache and mysql", waiting for a moment.
+      cd c:\xampp, there'is control panel tools. double click it, it will stay on the tray menu at the bottom of the window.
+      click the zentao icon, then the menu will show, you can choose the "start zentao", waiting for a moment.
       Then you can visit zentao through http://localhost/zentao/
 
-  2.1.4 the admin account and password.
+3. install the allinone package on linux
 
-    the default admin account is 'admin' and password is '123456'. the root password of mysql is 'root';
+We also build an allinone package for linux systems from the xampp tool.
 
-  2.2  install from the sourcecode on windows, linux or freebsd.
+3.1 download our .7z package, and save it to /opt/
+3.2 cd /opt/ and chmod a+rx *.7z and then execute the 7z file, which will self extrct.
+3.3 after extract, the directory should be /opt/lampp
+3.4 cd /opt/lampp, and execute sudo ./start or sudo ./start88 to start apache in 88 port and mysql in 3308 port.
+3.5 then you can visit zentao through http://localhost/zentao/
 
-    2.2.1 install one AMP package. 
-      you can install other AMP package. Make sure the version of apache, php and mysql meets the needs of zetnao.
+4. install the source code. 
 
-    2.2.2 download our zip package.
-
-    2.2.3 unpack it.
-
-      after download our zip package, save it to the apache's htdocs path and unpack it to zentaopms. make sure the zentaopms path can be
-      visited through browse.
-
-   2.2.4  start the installation
-
+4.1 install one AMP package.  you can install other AMP package. Make sure the version of apache, php and mysql meets the needs of zetnao.
+4.2 download our zip package.
+4.3 unpack it.
+    after download our zip package, save it to the apache's htdocs path and unpack it to zentaopms. make sure the zentaopms path can be
+    visited through browse.
+4.4 start the installation
     open your browser and visit the zentaopms path, for example http://192.168.1.1/zentaopms/, then the install wizard will launch, you can install it
     step by step.
