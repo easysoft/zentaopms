@@ -5,6 +5,10 @@ then
   exit
 fi
 
+sed -e 's/80/88/g' lampp | sed -e 's/3306/3308/g' > lampp.88
+mv lampp.88 lampp
+chmod a+rx lampp
+
 sed -e 's/80/88/g' etc/httpd.conf > etc/httpd.conf.88
 mv etc/httpd.conf.88 etc/httpd.conf
 
