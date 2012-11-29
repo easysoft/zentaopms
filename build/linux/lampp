@@ -1,0 +1,600 @@
+#!/bin/bash
+#
+# For RedHat (thanks to Sudhaker Raj):
+# chkconfig: 345 95 05
+# description: Starts and stops the XAMPP \
+#              used to control Apache, MySQL, ProFTPD.
+# For SuSE:
+### BEGIN INIT INFO
+# Provides:                     apache2 httpd2 xampp
+# Required-Start:               $local_fs $remote_fs $network
+# Required-Stop:                $local_fs $remote_fs $network
+# Default-Start:                3 5
+# Default-Stop:                 0 1 2 6
+# Short-Description:            XAMPP
+# Description:                  Starts and stops XAMPP
+### END INIT INFO
+###############################################################################
+# Copyright 2002-2005 by Kai 'Oswald' Seidler, oswald@apachefriends.org, GPL-licensed
+
+function testport() {
+	if netstat -an | egrep ":$1 .*LISTEN" > /dev/null
+	then
+		return 0
+	else
+		return 1
+	fi
+}
+
+function testrun() {
+	if test -f $1
+	then
+		pid=`cat $1`
+		if ps ax 2>/dev/null | egrep "^ *$pid.*$2" > /dev/null
+		then
+			return 0
+		else
+			rm $1
+			return 1
+		fi
+	else
+		return 1
+	fi
+}
+
+function osguess() {
+	if test -f /etc/redhat-release
+	then
+		if egrep "9 " /etc/redhat-release > /dev/null
+		then
+                        if egrep "Fedora" /etc/redhat-release > /dev/null
+                        then
+                                echo "unknown"
+                                return 0
+                        fi
+			echo "rh9"
+			return 0
+		fi
+	else
+		echo "unknown"
+		return 0
+	fi
+}
+
+de="false"
+case $LANG in
+        de*) de="true";;
+esac
+
+
+# we need root to run 
+if test "`id -u`" -ne 0
+then
+	$de && echo "XAMPP muss als root aufgerufen werden!"
+	$de || echo "You need to start XAMPP as root!"
+	exit
+fi
+
+# XAMPP is currently 32 bit only
+case `uname -m` in
+	*_64)
+	if /opt/lampp/bin/php -v > /dev/null 2>&1
+	then
+		:
+	else
+		$de && echo "XAMPP gibt es zur Zeit nur als 32-Bit Applikation. Bitte verwende eine 32-Bit Kompatibilitaetsbibliothek fuer Dein System."
+		$de || echo "XAMPP is currently only availably as 32 bit application. Please use a 32 bit compatibility library for your system."
+		$de || echo "For centos, rhel or fedora systems, please try 'sudo yum install glibc.i686 libgcc.i686 libstdc++.i686'."
+		$de || echo "For ubuntu, debian systems, please try 'sudo apt-get install 'sudo apt-get install ia32-libs'."
+		exit
+	fi
+	;;
+esac
+
+# do we have that new red hat linux 9 with posix native threads?
+if test "`osguess`" = "rh9"
+then
+	# for now disable PNTL. if PNTL gets more popular we will support it. - oswald [8apr3]
+	export LD_ASSUME_KERNEL=2.2.5
+	#echo "XAMPP: DISABLE PNTL..."
+fi
+
+# Thanks to drosenbe! - oswald [3sep10]
+if test -z $LD_LIBRARY_PATH
+then
+	export LD_LIBRARY_PATH=/opt/lampp/lib
+else
+	export LD_LIBRARY_PATH=/opt/lampp/lib:$LD_LIBRARY_PATH
+fi
+
+# Do we use Oracle? If yes, add Oracle's lib directory to LD_LIBRARY_PATH - oswald [6jul5]
+if test -f /opt/lampp/etc/lampp/oraclelib
+then
+	export LD_LIBRARY_PATH=`cat /opt/lampp/etc/lampp/oraclelib`:$LD_LIBRARY_PATH
+fi
+
+iswebmin="false";
+if test -d /opt/lampp/webmin
+then
+	iswebmin="true";
+fi
+
+version=`cat /opt/lampp/lib/VERSION`
+bon="[1m"
+boff="[m"
+lc="/opt/lampp/etc/lampp"
+
+# Hack to let XAMPP run with SELinux (for Fedora)
+/opt/lampp/share/lampp/selinux
+
+case $1 in
+	"start")
+		$de && echo "Starte XAMPP fuer Linux $version..."
+		$de || echo "Starting XAMPP for Linux $version..."
+
+		/opt/lampp/share/lampp/nogroupcheck
+
+		$0 startapache %
+		$0 startmysql %
+		$0 startftp %
+		$iswebmin && $0 startwebmin %
+
+		/opt/lampp/share/lampp/alladdons start
+
+		$de && echo "XAMPP fuer Linux gestartet."
+		$de || echo "XAMPP for Linux started."
+		;;
+
+	"reload")
+		$0 reloadapache
+		$0 reloadmysql
+		$0 reloadftp
+
+		/opt/lampp/share/lampp/alladdons reload
+		;;
+
+	"stopssl")
+		if test -f $lc/startssl
+		then
+			if test -f /opt/lampp/logs/httpd.pid
+			then
+				$0 stopapache
+				rm $lc/startssl
+				$0 startapache
+			else
+				$de && echo "XAMPP: XAMPP-Apache laeuft gar nicht."
+				$de || echo "XAMPP: XAMPP-Apache is not running."
+				rm $lc/startssl
+			fi
+		else
+			$de && echo "XAMPP: SSL laeuft nicht!"
+			$de || echo "XAMPP: SSL isn't running!"
+		fi
+		;;
+
+	"startssl") 
+		if testrun /opt/lampp/logs/httpd.pid httpd
+		then
+			if test -f $lc/startssl
+			then
+				$de && echo "XAMPP: SSL laeuft bereits!"
+				$de || echo "XAMPP: SSL is already running!"
+			else
+				$0 stopapache
+				touch $lc/startssl
+				$0 startapache
+			fi
+		else
+			touch $lc/startssl
+			$0 startapache
+		fi
+		;;
+
+	"startapache")
+		if testrun /opt/lampp/logs/httpd.pid httpd
+		then
+			$de && echo "XAMPP: XAMPP-Apache laeuft bereits."
+			$de || echo "XAMPP: XAMPP-Apache is already running."
+		else
+			if testport 80
+			then
+				$de && echo "XAMPP: Ein anderer Webserver laeuft bereits."
+				$de || echo "XAMPP: Another web server daemon is already running."
+			else
+				case `$0 phpstatus` in
+					5*) xampp_apachedefine="$xampp_apachedefine -DPHP5"
+					    $de && phpextra="(und PHP5)"
+					    $de || phpextra="(and PHP5)"
+					    ;;
+					4*) xampp_apachedefine="$xampp_apachedefine -DPHP4"
+					    $de && phpextra="(und PHP4)"
+					    $de || phpextra="(and PHP4)"
+					    ;;
+				esac
+				if test -f $lc/startssl
+				then
+					if testport 443
+					then
+						$de && echo "XAMPP: Ein anderer Webserver mit SSL laeuft bereits."
+						$de || echo "XAMPP: Another web server daemon with SSL is already running."
+					else
+						$de && echo "XAMPP: Starte Apache mit SSL $phpextra..."
+						$de || echo "XAMPP: Starting Apache with SSL $phpextra..."
+						/opt/lampp/bin/apachectl -k start -DSSL $xampp_apachedefine -E /opt/lampp/logs/error_log
+					fi
+				else
+					$de && echo "XAMPP: Starte Apache..."
+					$de || echo "XAMPP: Starting Apache..."
+					/opt/lampp/bin/apachectl -k start $xampp_apachedefine -E /opt/lampp/logs/error_log
+				fi
+				error=$?
+				if test $error -gt 0
+				then
+					$de && echo "XAMPP: ${bon}Fehler $error beim Starten vom Apache!${boff}"
+					$de || echo "XAMPP: ${bon}Error $error! Couldn't start Apache!${boff}"
+					/opt/lampp/share/lampp/diagnose apache
+				fi
+			fi
+		fi
+		;;
+
+
+	"startmysql")
+		if testrun /opt/lampp/var/mysql/`/bin/hostname`.pid mysqld
+		then
+			$de && echo "XAMPP: XAMPP-MySQL laeuft bereits."
+			$de || echo "XAMPP: XAMPP-MySQL is already running."
+		else
+			if testport 3306
+			then
+				$de && echo "XAMPP: Ein anderer MySQL daemon laeuft bereits."
+				$de || echo "XAMPP: Another MySQL daemon is already running."
+			else
+				$de && echo "XAMPP: Starte MySQL..."
+				$de || echo "XAMPP: Starting MySQL..."
+				/opt/lampp/bin/mysql.server start > /dev/null
+				if test $? -ne 0
+				then
+					$de && echo "XAMPP: MySQL konnte nicht gestartet werden!"
+					$de || echo "XAMPP: Couldn't start MySQL!"
+					
+				fi
+			fi
+		fi
+		;;
+		
+	"startwebmin")
+		if $iswebmin 
+		then
+			if test "$2" != "%"
+			then
+				touch $lc/startwebmin
+			fi
+			if test -f $lc/startwebmin
+			then
+				if testrun /opt/lampp/var/webmin/miniserv.pid miniserv
+				then
+					$de && echo "XAMPP: Webmin laeuft bereits."
+					$de || echo "XAMPP: Webmin is already running."
+				else
+					$de && echo "XAMPP: Starte Webmin..."
+					$de || echo "XAMPP: Starting Webmin..."
+					/opt/lampp/etc/webmin/start quiet
+				fi
+			fi
+		else
+			$de && echo "XAMPP: Webmin ist nicht installiert."
+			$de || echo "XAMPP: Webmin isn't installed."
+		fi
+		;;
+
+	"stopwebmin")
+		if $iswebmin 
+		then
+			if test -f $lc/startwebmin
+			then
+				if testrun /opt/lampp/var/webmin/miniserv.pid miniserv
+				then
+					$de && echo "XAMPP: Stoppe Webmin..."
+					$de || echo "XAMPP: Stopping Webmin..."
+					/opt/lampp/etc/webmin/stop quiet
+				else
+					$de && echo "XAMPP: XAMPP-Webmin laeuft gar nicht."
+					$de || echo "XAMPP: XAMPP-Webmin is not running."
+				fi
+				if test "$2" != "%"
+				then
+					rm $lc/startwebmin 2> /dev/null
+				fi
+			fi
+		else
+			$de && echo "XAMPP: Webmin ist nicht installiert."
+			$de || echo "XAMPP: Webmin isn't installed."
+		fi
+		;;
+
+	"startftp")
+		if test "$2" != "%"
+		then
+			touch $lc/startftp
+		fi
+		if test -f $lc/startftp
+		then
+			if testrun /opt/lampp/var/proftpd.pid proftpd
+			then
+				$de && echo "XAMPP: XAMPP-ProFTPD laeuft bereits."
+				$de || echo "XAMPP: XAMPP-ProFTPD is already running."
+			else
+				if testport 21
+				then
+					$de && echo "XAMPP: Ein anderer FTP daemon laeuft bereits."
+					$de || echo "XAMPP: Another FTP daemon is already running."
+				else
+					$de && echo "XAMPP: Starte ProFTPD..."
+					$de || echo "XAMPP: Starting ProFTPD..."
+					/opt/lampp/sbin/proftpd > /opt/lampp/var/proftpd/start.err 2>&1
+					error=$?
+					if test $error -gt 0
+					then
+						echo "XAMPP: `cat /opt/lampp/var/proftpd/start.err`"
+						$de && echo "XAMPP: ${bon}Fehler $error beim Starten von ProFTPD!${boff}"
+						$de || echo "XAMPP: ${bon}Error $error! Couln't start ProFTPD!${boff}"
+					fi
+				fi
+			fi
+		fi
+		;;
+
+	"stop")
+		$de && echo "Stoppe XAMPP fuer Linux $version..."
+		$de || echo "Stopping XAMPP for Linux $version..."
+
+		$0 stopapache %
+		$0 stopmysql %
+		$0 stopftp %
+		$iswebmin && $0 stopwebmin %
+
+		/opt/lampp/share/lampp/alladdons stop
+
+		$de && echo "XAMPP beendet."
+		$de || echo "XAMPP stopped."
+		;;
+
+	"stopapache")
+		if test -f /opt/lampp/logs/httpd.pid
+		then
+			if test -f $lc/startssl
+			then
+				$de && echo "XAMPP: Stoppe Apache mit SSL..."
+				$de || echo "XAMPP: Stopping Apache with SSL..."
+			else
+				$de && echo "XAMPP: Stoppe Apache..."
+				$de || echo "XAMPP: Stopping Apache..."
+			fi
+
+			
+			# Thanks to Emilio Paolini <ep@im-netz.de> for the next 12 lines - Oswald, 30sep04
+
+			case `$0 phpstatus` in
+				5*) xampp_apachedefine="$xampp_apachedefine -D PHP5"
+				    $de && phpextra="(und PHP5)"
+				    $de || phpextra="(and PHP5)"
+				    ;;
+				4*) xampp_apachedefine="$xampp_apachedefine -D PHP4"
+				    $de && phpextra="(und PHP4)"
+				    $de || phpextra="(and PHP4)"
+				    ;;
+			esac
+
+			/opt/lampp/bin/apachectl $xampp_apachedefine -k stop > /dev/null
+
+			sleep 2
+			#test -f /opt/lampp/logs/httpd.pid && rm /opt/lampp/logs/httpd.pid
+		else
+			$de && echo "XAMPP: XAMPP-Apache laeuft gar nicht."
+			$de || echo "XAMPP: XAMPP-Apache is not running."
+		fi
+		;;
+
+	"reloadapache")
+		if test -f /opt/lampp/logs/httpd.pid
+		then
+			kill -USR1 `cat /opt/lampp/logs/httpd.pid`
+			$de && echo "XAMPP: Aktualisiere Apache..."
+			$de || echo "XAMPP: Reload Apache..."
+		else
+			$de && echo "XAMPP: Apache laeuft nicht..."
+			$de || echo "XAMPP: Apache isn't running..."
+		fi
+		;;
+
+
+	"stopmysql")
+		if test -f /opt/lampp/var/mysql/`/bin/hostname`.pid
+		then
+			/opt/lampp/bin/mysql.server stop > /dev/null 2>&1 &
+			$de && echo "XAMPP: Stoppe MySQL..."
+			$de || echo "XAMPP: Stopping MySQL..."
+			sleep 2
+			test -f /opt/lampp/var/mysql/`/bin/hostname`.pid && rm /opt/lampp/var/mysql/`/bin/hostname`.pid
+		else
+			$de && echo "XAMPP: XAMPP-MySQL laeuft gar nicht."
+			$de || echo "XAMPP: XAMPP-MySQL is not running."
+		fi
+		;;
+
+	"reloadmysql")
+		if test -f /opt/lampp/var/mysql/`/bin/hostname`.pid
+		then
+			h="`/bin/hostname`"
+			kill -HUP `cat /opt/lampp/var/mysql/$h.pid`
+			$de && echo "XAMPP: Aktualisiere MySQL..."
+			$de || echo "XAMPP: Reload MySQL..."
+		else
+			$de && echo "XAMPP: MySQL laeuft nicht..."
+			$de || echo "XAMPP: MySQL isn't running..."
+		fi
+		;;
+
+
+	"stopftp")
+		if test -f /opt/lampp/var/proftpd.pid
+		then
+			kill `cat /opt/lampp/var/proftpd.pid`
+			$de && echo "XAMPP: Stoppe ProFTPD..."
+			$de || echo "XAMPP: Stopping ProFTPD..."
+		else
+			if test -f $lc/startftp
+			then
+				$de && echo "XAMPP: XAMPP-ProFTPD laeuft gar nicht."
+				$de || echo "XAMPP: XAMPP-ProFTPD is not running."
+			fi
+		fi
+		if test "$2" != "%"
+		then
+			rm $lc/startftp 2> /dev/null
+		fi
+		;;
+
+	"reloadftp")
+		if test -f /opt/lampp/var/proftpd.pid
+		then
+			kill -HUP `cat /opt/lampp/var/proftpd.pid`
+			$de && echo "XAMPP: Aktualisiere ProFTPD..."
+			$de || echo "XAMPP: Reload ProFTPD..."
+		else
+			$de && echo "XAMPP: ProFTPD laeuft gar nicht..."
+			$de || echo "XAMPP: ProFTPD isn't running..."
+		fi
+		;;
+
+	"wizard")
+		/opt/lampp/bin/php /opt/lampp/share/lampp/wizard.php
+		;;
+
+	"restartapache")
+		$0 stopapache
+		sleep 4
+		$0 startapache
+		;;
+
+	"restart")
+		$0 stop
+		sleep 4
+		$0 start
+		;;
+
+	"security")
+		/opt/lampp/share/lampp/checkall
+		;;
+
+	"oci8")
+		/opt/lampp/share/lampp/oci8install
+		;;
+
+	"backup")
+		/opt/lampp/share/lampp/backup $2
+		;;
+
+	"php4")
+		/opt/lampp/share/lampp/activatephp 4
+		;;
+
+	"php5")
+		/opt/lampp/share/lampp/activatephp 5.4.7
+		;;
+
+	"phpstatus")
+		/opt/lampp/share/lampp/phpstatus
+		;;
+
+	"panel")
+		exec /opt/lampp/share/xampp-control-panel/xampp-control-panel
+		;;
+
+	"status")
+		. /opt/lampp/share/lampp/status
+		;;
+
+	"statusraw")
+		. /opt/lampp/share/lampp/statusraw
+		;;
+
+	start*|stop*|reload*|status*|restart*)
+		/opt/lampp/share/lampp/addons $*
+		;;
+
+        "version")
+                $de && echo "Version: XAMPP fuer Linux $version"
+                $de || echo "Version: XAMPP for Linux $version"
+                ;;
+
+	*)	if $de 
+		then
+			echo "Aufruf: $0 <Aktion>"
+			echo ""
+			echo "	start        Starte XAMPP (Apache, MySQL und evtl. weitere)"
+			echo "	startapache  Starte nur den Apache"
+			echo "	startssl     Starte nur die SSL-Unterstuetzung des Apache"
+			echo "	startmysql   Starte nur den MySQL"
+			echo "	startftp     Starte nur den ProFTPD"
+			$iswebmin && echo "	startwebmin  Starte nur Webmin"
+			echo ""
+			echo "	stop         Stoppe XAMPP (Apache, MySQL und evtl. weitere)"
+			echo "	stopapache   Stoppe nur den Apache"
+			echo "	stopssl      Stoppe nur die SSL-Unterstuetzung des Apache"
+			echo "	stopmysql    Stoppe nur den MySQL"
+			echo "	stopftp      Stoppe nur den ProFTPD"
+			$iswebmin && echo "	stopwebmin   Stoppe nur Webmin"
+			echo ""
+			echo "	reload       Aktualisiere XAMPP (Apache, MySQL und evtl. weitere)"
+			echo "	reloadapache Aktualisiere nur den Apache"
+			echo "	reloadmysql  Aktualisiere nur den MySQL"
+			echo "	reloadftp    Aktualisiere nur den ProFTPD"
+			echo ""
+			echo "	restart      Stoppe und starte XAMPP"
+			echo "	security     Überpruefe XAMPPs Sicherheit"
+			echo ""
+			echo "	php5         Aktiviere PHP5"
+			##echo "	php4         Aktiviere PHP4"
+			echo "	phpstatus    Welches PHP ist aktiv?"
+			echo ""
+			echo "	backup       Backup der XAMPP-Konfig, Logs und Daten erstellen"
+			echo "	panel        Startet das grafische XAMPP control panel"
+			echo ""
+		else
+			echo "Usage: $0 <action>"
+			echo ""
+			echo "	start        Start XAMPP (Apache, MySQL and eventually others)"
+			echo "	startapache  Start only Apache"
+			echo "	startssl     Start only SSL support"
+			echo "	startmysql   Start only MySQL"
+			echo "	startftp     Start only ProFTPD"
+			$iswebmin && echo "	startwebmin  Start only Webmin"
+			echo ""
+			echo "	stop         Stop XAMPP (Apache, MySQL and eventually others)"
+			echo "	stopapache   Stop only Apache"
+			echo "	stopssl      Stop only SSL support"
+			echo "	stopmysql    Stop only MySQL"
+			echo "	stopftp      Stop only ProFTPD"
+			$iswebmin && echo "	stopwebmin   Stop only Webmin"
+			echo ""
+			echo "	reload       Reload XAMPP (Apache, MySQL and eventually others)"
+			echo "	reloadapache Reload only Apache"
+			echo "	reloadmysql  Reload only MySQL"
+			echo "	reloadftp    Reload only ProFTPD"
+			echo ""
+			echo "	restart      Stop and start XAMPP"
+			echo "	security     Check XAMPP's security"
+			echo ""
+			echo "	php5         Activate PHP5"
+			##echo "	php4         Activate PHP4"
+			echo "	phpstatus    Which version of PHP is active?"
+			echo ""
+			echo "	backup       Make backup file of your XAMPP config, log and data files"
+			echo "	panel        Starts graphical XAMPP control panel"
+			echo ""
+		fi
+
+		;;
+esac

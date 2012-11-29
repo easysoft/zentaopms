@@ -207,6 +207,7 @@ cp ../Makefile .
 cp ../start .
 cp ../start88 .
 cp ../stop .
+cp ../lampp .
 cp ../../windows/xampp/index.php htdocs/
 
 # make the auth file
