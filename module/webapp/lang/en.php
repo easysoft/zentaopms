@@ -46,6 +46,7 @@ $lang->webapp->selectModule = 'Select Category:';
 $lang->webapp->allModule    = 'All';
 $lang->webapp->noModule     = 'Uncategorized';
 
+$lang->webapp->targetList['']       = '';
 $lang->webapp->targetList['popup']  = 'Popup';
 $lang->webapp->targetList['ifame']  = 'Iframe';
 $lang->webapp->targetList['blank']  = 'New Window';
