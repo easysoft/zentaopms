@@ -32,7 +32,7 @@ $common = $app->loadCommon();
 
 /* Reset the config params to make sure the install program will be lauched. */
 $config->set('requestType', 'GET');
-$config->set('debug', true);
+$config->set('debug', false);
 $config->set('default.module', 'upgrade');
 $app->setDebug();
 
