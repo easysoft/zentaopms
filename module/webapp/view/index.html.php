@@ -36,12 +36,14 @@
         $popup   = '';
         $target  = '_self';
         if($webapp->target == 'blank') $target   = '_blank';
-        if($webapp->target == 'inline')$method   = "toggleShowapp($webapp->id);";
+        if($webapp->target == 'iframe')$method   = "toggleShowapp($webapp->id);";
         if($webapp->target == 'popup')
         {
-            list($width, $height) = explode('x', $webapp->size);
-            $method  = "popup($width, $height);";
-            $popup = 'popup';
+            $width  = 0;
+            $height = 0;
+            if($webapp->size) list($width, $height) = explode('x', $webapp->size);
+            $method = "popup($width, $height);";
+            $popup  = 'popup';
         }
         $useAppCode    = html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
         $editAppCode    = html::a(inlink('edit', "webappID=$webapp->id"), $lang->edit, '',  "class='button-c webapp'");

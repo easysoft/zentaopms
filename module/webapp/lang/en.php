@@ -34,7 +34,7 @@ $lang->webapp->updatedTime = 'Update Time';
 $lang->webapp->downloads   = 'Downloads';
 $lang->webapp->grade       = 'Grade';
 $lang->webapp->addType     = 'Add Type';
-$lang->webapp->packup      = 'Pack Up';
+$lang->webapp->packup      = 'Fold';
 
 $lang->webapp->byDownloads   = 'Most Downloads';
 $lang->webapp->byAddedTime   = 'New Add';
@@ -46,8 +46,8 @@ $lang->webapp->selectModule = 'Select Category:';
 $lang->webapp->allModule    = 'All';
 $lang->webapp->noModule     = 'Uncategorized';
 
-$lang->webapp->targetList['popup']  = 'Poput';
-$lang->webapp->targetList['inline'] = 'Inline';
+$lang->webapp->targetList['popup']  = 'Popup';
+$lang->webapp->targetList['ifame']  = 'Iframe';
 $lang->webapp->targetList['blank']  = 'New Window';
 
 $lang->webapp->sizeList['900x600'] = "900 x 600";
@@ -57,6 +57,7 @@ $lang->webapp->sizeList['600x500'] = "600 x 500";
 $lang->webapp->addTypeList['system'] = 'System App';
 $lang->webapp->addTypeList['custom'] = 'Custom App';
 
+$lang->webapp->errorOccurs         = 'Error:';
 $lang->webapp->errorGetModules     = "Get extensions' categories data from the www.zentao.net failed. ";
 $lang->webapp->errorGetExtensions  = 'Get extensions from www.zentao.net failed. You can visit <a href="http://www.zentao.net/extension/" target="_blank">www.zentao.net</a> to find your extensions, download it manually and then upload to zentaopms to install it.';
 $lang->webapp->successInstall      = 'Success Install App.';

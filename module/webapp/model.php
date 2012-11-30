@@ -206,19 +206,20 @@ class webappModel extends model
     {
         $data = $this->getAppInfoByAPI($webappID);
         $webapp = $data->webapp;
-        $webapp->icon      = $this->config->webapp->url . $webapp->icon->webPath;
-        $webapp->addedDate = helper::now();
-        $webapp->addedBy   = $this->app->user->account;
-        $webapp->module    = $this->post->module;
-        $webapp->appid     = $webapp->id;
-        unset($webapp->account);
-        unset($webapp->status);
-        unset($webapp->url);
-        unset($webapp->id);
-        unset($webapp->grade);
-        unset($webapp->updatedDate);
-        unset($webapp->downloads);
-        $this->dao->insert(TABLE_WEBAPP)->data($webapp, false)->autocheck()->exec(false);
+
+        $installWebapp->appid     = $webapp->id;
+        $installWebapp->module    = $this->post->module;
+        $installWebapp->name      = $webapp->name;
+        $installWebapp->author    = $webapp->author;
+        $installWebapp->url       = $webapp->url;
+        $installWebapp->icon      = $this->config->webapp->url . $webapp->icon;
+        $installWebapp->target    = $webapp->target;
+        $installWebapp->size      = $webapp->size;
+        $installWebapp->desc      = $webapp->desc;
+        $installWebapp->addedBy   = $this->app->user->account;
+        $installWebapp->addedDate = helper::now();
+
+        $this->dao->insert(TABLE_WEBAPP)->data($installWebapp, false)->autocheck()->exec(false);
         return $this->dao->lastInsertID(); 
     }
 

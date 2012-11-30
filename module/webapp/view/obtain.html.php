@@ -40,7 +40,7 @@
       <?php foreach($webapps as $webapp):?>
         <table class='table-1 exttable'>
           <caption>
-            <div class='f-left'><?php echo "<img src='{$config->webapp->url}{$webapp->icon->webPath}' /> " . $webapp->name;?></div>
+            <div class='f-left'><?php echo "<img src='{$config->webapp->url}{$webapp->icon}' /> " . $webapp->name;?></div>
           </caption> 
           <tr valign='middle'>
             <td>

@@ -1,10 +1,10 @@
 if($('a.iframe').size()) $("a.iframe").colorbox({width:450, height:220, iframe:true, transition:'elastic', speed:350, scrolling:true});
 if($('a.webapp').size()) $("a.webapp").colorbox({width:600, height:400, iframe:true, transition:'elastic', speed:350, scrolling:true});
-if($('a.popup').size()) $("a.popup").colorbox({width:200, height:100, iframe:true, transition:'elastic', speed:350, scrolling:true});
+if($('a.popup').size()) $("a.popup").colorbox({width:900, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
 
 function popup(width, height)
 {
-    $("a.popup").colorbox({width:width, height:height});
+    if(width == 0 || height == 0) $("a.popup").colorbox({width:width, height:height});
 }
 
 var show = false;

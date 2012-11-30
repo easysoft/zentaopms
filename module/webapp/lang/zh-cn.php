@@ -49,9 +49,10 @@ $lang->webapp->allModule    = '所有';
 $lang->webapp->noModule     = '未分类';
 
 $lang->webapp->targetList['popup']  = '弹窗';
-$lang->webapp->targetList['inline'] = '内嵌';
+$lang->webapp->targetList['iframe'] = '内嵌';
 $lang->webapp->targetList['blank']  = '新窗口';
 
+$lang->webapp->sizeList['']        = "";
 $lang->webapp->sizeList['900x600'] = "900 x 600";
 $lang->webapp->sizeList['700x600'] = "700 x 600";
 $lang->webapp->sizeList['600x500'] = "600 x 500";
@@ -59,7 +60,8 @@ $lang->webapp->sizeList['600x500'] = "600 x 500";
 $lang->webapp->addTypeList['system'] = '系统应用';
 $lang->webapp->addTypeList['custom'] = '自定义应用';
 
+$lang->webapp->errorOccurs        = '错误：';
 $lang->webapp->errorGetModules    = '从www.zentao.net获得插件分类失败。可能是因为网络方面的原因，请检查后重新刷新页面。';
 $lang->webapp->errorGetExtensions = '从www.zentao.net获得插件失败。可能是因为网络方面的原因，您可以到<a href="http://www.zentao.net/extension/" target="_blank">www.zentao.net</a>手工下载插件，然后上传安装。';
-$lang->webapp->successInstall      = '成功安装应用！';
-$lang->webapp->confirmDelete       = '是否删除该应用？';
+$lang->webapp->successInstall     = '成功安装应用！';
+$lang->webapp->confirmDelete      = '是否删除该应用？';
