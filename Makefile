@@ -53,7 +53,7 @@ tgz:
 	find zentaopms/ -name ext |xargs chmod -R 777
 	# zip it.
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	#rm -fr zentaopms
+	rm -fr zentaopms
 
 patchphpdoc:
 	sudo cp misc/doc/phpdoc/*.tpl /usr/share/php/data/PhpDocumentor/phpDocumentor/Converters/HTML/frames/templates/phphtmllib/templates/
