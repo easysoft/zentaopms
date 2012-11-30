@@ -21,6 +21,7 @@ $lang->tree->manageProduct     = '维护产品视图模块';
 $lang->tree->manageProject     = '维护项目视图模块';
 $lang->tree->manageBug         = '维护测试视图模块';
 $lang->tree->manageCase        = '维护用例视图模块';
+$lang->tree->manageWebapp      = '维护WEB应用分类';
 $lang->tree->manageCustomDoc   = '维护文档库分类';
 $lang->tree->updateOrder       = '更新排序';
 $lang->tree->manageChild       = '维护子模块';

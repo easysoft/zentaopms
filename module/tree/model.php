@@ -358,6 +358,20 @@ class treeModel extends model
     }
 
     /**
+     * Create Webapp Link 
+     * 
+     * @param  int    $module 
+     * @param  int    $extra 
+     * @access public
+     * @return void
+     */
+    public function createWebappLink($module, $extra)
+    {
+        $linkHtml = html::a(helper::createLink('webapp', 'index', "module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return $linkHtml;
+    }
+
+    /**
      * Get sons of a module.
      * 
      * @param  int    $rootID 

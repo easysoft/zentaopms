@@ -83,7 +83,7 @@ $lang->menu->project  = '项目视图|project|index';
 $lang->menu->qa       = '测试视图|qa|index';
 $lang->menu->doc      = '文档视图|doc|index';
 $lang->menu->report   = '统计视图|report|index';
-$lang->menu->resource = '资源视图|resource|index';
+$lang->menu->webapp   = '应用中心|webapp|index';
 $lang->menu->company  = '组织视图|company|index';
 $lang->menu->admin    = '后台管理|admin|index';
 
@@ -204,8 +204,7 @@ $lang->report->menu->test    = array('link' => '测试|report|bugsummary', 'alia
 $lang->report->menu->staff   = array('link' => '组织|report|workload');
 
 /* 资源视图菜单设置。*/
-$lang->resource->menu->addedApp = array('link' => '已有应用|resource|index');
-$lang->resource->menu->obtain   = array('link' => '获得应用|resource|obtain');
+$lang->webapp->menu->obtain  = array('link' => '应用商店|webapp|obtain', 'float' => 'right');
 
 /* 组织结构视图菜单设置。*/
 $lang->company->menu->name        = '%s' . $lang->arrow;

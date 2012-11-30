@@ -60,7 +60,7 @@
                   }
                   echo '<br />';
               }
-              elseif($viewType != 'story' and strpos($viewType, 'doc') === false)
+              elseif($viewType != 'story' and strpos($viewType, 'doc') === false and $viewType != 'webapp')
               {
                   echo html::select('productModule', $productModules, '', 'class=select-3');
                   echo html::commonButton($lang->tree->syncFromProduct, 'onclick=syncModule('.$rootID.')');

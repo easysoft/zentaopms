@@ -83,7 +83,7 @@ $lang->menu->project  = 'Project|project|index';
 $lang->menu->qa       = 'Test|qa|index';
 $lang->menu->doc      = 'Doc|doc|index';
 $lang->menu->report   = 'Report|report|index';
-$lang->menu->resource = 'Resource|resource|index';
+$lang->menu->webapp   = 'Web App|webapp|index';
 $lang->menu->company  = 'Company|company|index';
 $lang->menu->admin    = 'Admin|admin|index';
 
@@ -204,8 +204,8 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugsummary', 'alias'
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 /* Resource menu. */
-$lang->resource->menu->addedApp = array('link' => 'Added App|resource|index');
-$lang->resource->menu->obtain   = array('link' => 'Obtain App|resource|obtain');
+$lang->webapp->menu->addedApp = array('link' => 'Added App|webapp|index');
+$lang->webapp->menu->obtain   = array('link' => 'Obtain App|webapp|obtain');
 
 /* Company menu. */
 $lang->company->menu->name        = '%s' . $lang->arrow;

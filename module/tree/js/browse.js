@@ -1,4 +1,4 @@
-function syncModule(rootID, type = 'story')
+function syncModule(rootID, type)
 {
     if(type == 'story') moduleID = $('#productModule').val();
     if(type == 'task')  moduleID = $('#projectModule').val();
@@ -22,7 +22,7 @@ function syncModule(rootID, type = 'story')
     })
 }
 
-function syncProductOrProject(obj, type = 'product')
+function syncProductOrProject(obj, type)
 {
     if(type == 'product') viewType = 'story';
     if(type == 'project') viewType = 'task';

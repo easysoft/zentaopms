@@ -636,6 +636,20 @@ $lang->convert->methodOrder[45] = 'execute';
 $lang->convert->methodOrder[50] = 'convertBugFree';
 $lang->convert->methodOrder[55] = 'convertRedmine';
 
+$lang->resource->webapp->index     = 'index';
+$lang->resource->webapp->obtain    = 'obtain';
+$lang->resource->webapp->create    = 'create';
+$lang->resource->webapp->edit      = 'edit';
+$lang->resource->webapp->install   = 'install';
+$lang->resource->webapp->uninstall = 'uninstall';
+
+$lang->webapp->methodOrder[5] = 'index';
+$lang->webapp->methodOrder[10] = 'obtain';
+$lang->webapp->methodOrder[15] = 'create';
+$lang->webapp->methodOrder[20] = 'edit';
+$lang->webapp->methodOrder[25] = 'install';
+$lang->webapp->methodOrder[30] = 'uninstall';
+
 /* Others. */
 $lang->resource->api->getModel    = 'getModel';
 

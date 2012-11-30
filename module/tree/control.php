@@ -127,6 +127,19 @@ class tree extends control
             $position[]      = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
             $position[]      = $this->lang->tree->manageCustomDoc;
         }
+        elseif(strpos($viewType, 'webapp') !== false)
+        {
+            $this->loadModel('webapp')->setMenu();
+            $this->lang->tree->menu      = $this->lang->webapp->menu;
+            $this->lang->set('menugroup.tree', 'webapp');
+
+            $header['title'] = $this->lang->tree->manageWebapp;
+            $position[]      = $this->lang->tree->manageWebapp;
+
+            $root->name = $this->lang->tree->manageWebapp;
+            $root->id   = 0;
+            $this->view->root = $root;
+        }
 
         $parentModules = $this->tree->getParents($currentModuleID);
         $this->view->header          = $header;
