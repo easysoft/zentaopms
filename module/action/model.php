@@ -67,14 +67,15 @@ class actionModel extends model
     }
 
     /**
-     * Get unread actions.
+     * Get the unread actions.
      * 
-     * @param  int    $objectType 
+     * @param  int    $actionID 
      * @access public
      * @return void
      */
-    public function getUnreadActions()
+    public function getUnreadActions($actionID = 0)
     {
+        if(!is_numeric($actionID)) $actionID = 0;
         $objectList['task'] = TABLE_TASK;
         $objectList['bug']  = TABLE_BUG;
         $actions = array();
@@ -87,16 +88,19 @@ class actionModel extends model
                 ->where('objectType')->eq($object)
                 ->andWhere('objectID')->in($idList)
                 ->andWhere('`read`')->eq(0)
-                ->fetchAll();
+                ->andWhere('id')->gt($actionID)
+                ->fetchAll('id');
+
             if(empty($tmpActions)) continue;
 
-           $tmpActions = $this->transformActions($tmpActions);
+            $tmpActions = $this->transformActions($tmpActions);
             foreach($tmpActions as $action)
             {
                 $actions[$action->objectType][] = array(
+                    'actionID'   => $action->id,
                     'objectType' => $action->objectType,
                     'objectID'   => $action->objectID,
-                    'action'     => $action->actor . $action->actionLabel . $action->objectType . " #$action->objectID" . $action->objectName
+                    'action'     => $action->actor . ' ' . $action->actionLabel . ' ' . $action->objectType . " #$action->objectID" . $action->objectName
                 );
             }
         }
