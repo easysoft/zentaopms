@@ -13,7 +13,7 @@ KindEditor.plugin('image', function(K) {
 		formatUploadUrl = K.undef(self.formatUploadUrl, true),
 		allowFileManager = K.undef(self.allowFileManager, false),
 		uploadJson = K.undef(self.uploadJson, self.basePath + 'php/upload_json.php'),
-		imageTabIndex = K.undef(self.imageTabIndex, 0),
+		imageTabIndex = K.undef(self.imageTabIndex, 1),   // set the localImage tab as default, changed by zentao team.
 		imgPath = self.pluginsPath + 'image/images/',
 		extraParams = K.undef(self.extraFileUploadParams, {}),
 		filePostName = K.undef(self.filePostName, 'imgFile'),
@@ -39,23 +39,8 @@ KindEditor.plugin('image', function(K) {
 			'<div style="padding:20px;">',
 			//tabs
 			'<div class="tabs"></div>',
-			//local upload - start
-			'<div class="tab1" style="display:none;">',
-			'<iframe name="' + target + '" style="display:none;"></iframe>',
-			'<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + K.addParam(uploadJson, 'dir=image') + '">',
-			//file
-			'<div class="ke-dialog-row">',
-			hiddenElements.join(''),
-			'<label style="width:60px;">' + lang.localUrl + '</label>',
-			'<input type="text" name="localUrl" class="ke-input-text" tabindex="-1" style="width:200px;" readonly="true" /> &nbsp;',
-			'<input type="button" class="ke-upload-button" value="' + lang.upload + '" />',
-			'</div>',
-			'</form>',
-			'</div>',
-			//local upload - end
-
 			//remote image - start
-			'<div class="tab2" style="display:none;">',
+			'<div class="tab1" style="display:none;">',
 			//url
 			'<div class="ke-dialog-row">',
 			'<label for="remoteUrl" style="width:60px;">' + lang.remoteUrl + '</label>',
@@ -85,6 +70,20 @@ KindEditor.plugin('image', function(K) {
 			'</div>',
 			'</div>',
 			//remote image - end
+			//local upload - start
+			'<div class="tab2" style="display:none;">',
+			'<iframe name="' + target + '" style="display:none;"></iframe>',
+			'<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + K.addParam(uploadJson, 'dir=image') + '">',
+			//file
+			'<div class="ke-dialog-row">',
+			hiddenElements.join(''),
+			'<label style="width:60px;">' + lang.localUrl + '</label>',
+			'<input type="text" name="localUrl" class="ke-input-text" tabindex="-1" style="width:200px;" readonly="true" /> &nbsp;',
+			'<input type="button" class="ke-upload-button" value="' + lang.upload + '" />',
+			'</div>',
+			'</form>',
+			'</div>',
+			//local upload - end
 			'</div>'
 		].join('');
 		var dialogWidth = showLocal || allowFileManager ? 450 : 400,
@@ -168,18 +167,18 @@ KindEditor.plugin('image', function(K) {
 				afterSelect : function(i) {}
 			});
 			tabs.add({
-				title : lang.localImage,
+				title : lang.remoteImage,
 				panel : K('.tab1', div)
 			});
 			tabs.add({
-				title : lang.remoteImage,
+				title : lang.localImage,
 				panel : K('.tab2', div)
 			});
 			tabs.select(tabIndex);
 		} else if (showRemote) {
-			K('.tab2', div).show();
-		} else if (showLocal) {
 			K('.tab1', div).show();
+		} else if (showLocal) {
+			K('.tab2', div).show();
 		}
 
 		var uploadbutton = K.uploadbutton({
