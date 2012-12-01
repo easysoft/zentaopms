@@ -2734,8 +2734,8 @@ _extend(KCmd, {
 				range.collapse(false);
 			}
 			rng = range.get(true);
-			sel.removeAllRanges();
-			sel.addRange(rng);
+			//sel.removeAllRanges();
+			//sel.addRange(rng);
 		}
 		win.focus();
 		return self;
