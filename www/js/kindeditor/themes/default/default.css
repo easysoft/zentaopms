@@ -890,6 +890,8 @@
 	padding:0;
 }
 .ke-tabs-li {
+
+	list-style-type:none;
 	position: relative;
 	border: 1px solid #A0A0A0;
 	background-color: #F0F0EE;
