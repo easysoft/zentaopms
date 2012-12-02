@@ -425,6 +425,7 @@ class project extends control
             $this->config->bug->search['params']['product']['values'] = array(''=>'');
         }
         $this->config->bug->search['params']['project']['values'] = array(''=>'') + $projects + array('all'=>$this->lang->project->aboveAllProject);
+        $this->config->bug->search['module'] = 'importBug';
         unset($this->config->bug->search['fields']['resolvedBy']); 
         unset($this->config->bug->search['fields']['closedBy']);    
         unset($this->config->bug->search['fields']['status']);      
