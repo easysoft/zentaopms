@@ -6,7 +6,7 @@ $lang->menuOrder[15] = 'project';
 $lang->menuOrder[20] = 'qa';
 $lang->menuOrder[25] = 'doc';
 $lang->menuOrder[30] = 'report';
-$lang->menuOrder[35] = 'webapp';
+//$lang->menuOrder[35] = 'webapp';
 $lang->menuOrder[40] = 'company';
 $lang->menuOrder[45] = 'admin';
 
