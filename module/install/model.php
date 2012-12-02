@@ -133,10 +133,14 @@ class installModel extends model
      */
     public function getSessionSavePath()
     {
-        $result['path']     = session_save_path();
-        $result['exists']   = is_dir($result['path']);
-        $result['writable'] = is_writable($result['path']);
-        return $result;
+        if(preg_match('/WIN/i', PHP_OS))
+        {
+            $result['path']     = session_save_path();
+            $result['exists']   = is_dir($result['path']);
+            $result['writable'] = is_writable($result['path']);
+            return $result;
+        }
+        return array('path' => '/tmp', 'exists' => true, 'writable' => true);
     }
 
     /**
@@ -147,8 +151,12 @@ class installModel extends model
      */
     public function checkSessionSavePath()
     {
-        $sessionSavePath = session_save_path();
-        return $result   = (is_dir($sessionSavePath) and is_writable($sessionSavePath)) ? 'ok' : 'fail'; 
+        if(preg_match('/WIN/i', PHP_OS))
+        {
+            $sessionSavePath = session_save_path();
+            return $result   = (is_dir($sessionSavePath) and is_writable($sessionSavePath)) ? 'ok' : 'fail'; 
+        }
+        return 'ok';
     }
 
     /**

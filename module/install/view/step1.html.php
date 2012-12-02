@@ -74,6 +74,7 @@
       ?>
     </td>
   </tr>
+  <?php if(preg_match('/WIN/i', PHP_OS)):?>
   <tr>
     <th><?php echo $lang->install->session;?></th>
     <td>
@@ -97,10 +98,11 @@
       ?>
     </td>
   </tr>
+  <?php endif;?>
   <tr>
     <td colspan='4'>
     <?php
-    if($phpResult == 'ok' and $pdoResult == 'ok' and $pdoMySQLResult == 'ok' and $tmpRootResult == 'ok' and $dataRootResult == 'ok')
+    if($phpResult == 'ok' and $pdoResult == 'ok' and $pdoMySQLResult == 'ok' and $tmpRootResult == 'ok' and $dataRootResult == 'ok' and $sessionResult == 'ok')
     {
         echo html::a($this->createLink('install', 'step2'), $lang->install->next);
     }
