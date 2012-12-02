@@ -75,6 +75,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('3.3'));
             $this->updateTaskAssignedTo();
             $this->loadModel('setting')->setItem('system', 'common', '', 'flow', 'full');
+            $this->dao->update(TABLE_ACTION)->set('read')->eq(1)->exec();
 
         default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
