@@ -16,14 +16,14 @@
   <caption><?php echo $lang->index->selectFlow?></caption>
   <tr>
     <td>
-<?php
-foreach($lang->index->flowList as $type => $name)
-{
-    $checked = $type == 'all' ? "checked='checked'" : '';
-    echo "<p><input type='radio' name='flow' value='$type' $checked> $name</p>";
-}
-?>
-</td>
+    <?php
+    foreach($lang->index->flowList as $type => $name)
+    {
+        $checked = $type == 'full' ? "checked='checked'" : '';
+        echo "<p><input type='radio' name='flow' value='$type' $checked> $name</p>";
+    }
+    ?>
+    </td>
   </tr>
   <tr>
     <td><?php echo html::submitButton()?></td>
