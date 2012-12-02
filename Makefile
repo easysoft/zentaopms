@@ -51,6 +51,16 @@ tgz:
 	chmod 777 zentaopms/module
 	chmod a+rx zentaopms/bin/*
 	find zentaopms/ -name ext |xargs chmod -R 777
+	# add zentaotest zentaotask zentaostory extension.
+	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/zentaotest
+	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/zentaotask
+	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/zentaostory
+	zip -rm -9 zentaotest.zip zentaotest
+	zip -rm -9 zentaotask.zip zentaotask
+	zip -rm -9 zentaostory.zip zentaostory
+	mv zentaotest.zip zentaopms/tmp/extension
+	mv zentaostory.zip zentaopms/tmp/extension
+	mv zentaotask.zip zentaopms/tmp/extension
 	# zip it.
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
