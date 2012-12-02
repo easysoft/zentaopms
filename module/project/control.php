@@ -299,7 +299,6 @@ class project extends control
 
         $project   = $this->commonAction($toProject);
         $projects  = $this->project->getPairs('nocode');
-        $fromProject = ($fromProject == 0 and !empty($projects)) ? key($projects) : $fromProject;
         unset($projects[$toProject]);
 
         /* Save session. */
@@ -312,7 +311,7 @@ class project extends control
         $this->view->tasks2Imported = $this->project->getTasks2Imported($fromProject);
         $this->view->projects       = $projects;
         $this->view->projectID      = $project->id;
-        $this->view->fromProject    = $fromProject;
+        $this->view->fromProject    = ($fromProject == 0 and !empty($projects)) ? key($projects) : $fromProject;
         $this->display();
     }
 
