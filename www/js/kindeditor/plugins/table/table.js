@@ -241,7 +241,8 @@ KindEditor.plugin('table', function(K) {
 						if (bgColor !== '') {
 							style += 'background-color:' + bgColor + ';';
 						}
-						var html = '<table';
+            tableID = String(parseInt(100 * Math.random())) + String(new Date().getTime()).substr(10);
+						var html = '<table class="ke-table' + tableID + '"';
 						if (style !== '') {
 							html += ' style="' + style + '"';
 						}
