@@ -493,6 +493,7 @@ $lang->group->methodOrder[35] = 'manageMember';
 
 /* User. */
 $lang->resource->user->create      = 'create';
+$lang->resource->user->batchCreate = 'batchCreate';
 $lang->resource->user->view        = 'view';
 $lang->resource->user->edit        = 'edit';
 $lang->resource->user->unlock      = 'unlock';
