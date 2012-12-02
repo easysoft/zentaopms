@@ -13,6 +13,7 @@ $lang->user->common          = '用户';
 $lang->user->index           = "用户视图首页";
 $lang->user->view            = "用户详情";
 $lang->user->create          = "添加用户";
+$lang->user->batchCreate     = "批量添加用户";
 $lang->user->read            = "查看用户";
 $lang->user->edit            = "编辑用户";
 $lang->user->unlock          = "解锁用户";
@@ -89,3 +90,9 @@ $lang->user->status    = '状态';
 $lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
 $lang->user->placeholder->password1 = '六位以上';
 $lang->user->placeholder->join      = '入职日期';
+
+$lang->user->error->account       = "ID %s，用户名必须三位以上";
+$lang->user->error->accountDupl   = "ID %s，该用户名已经存在";
+$lang->user->error->realname      = "ID %s，必须填写真实姓名";
+$lang->user->error->password      = "ID %s，密码必须六位以上";
+$lang->user->error->mail          = "ID %s，请填写正确的邮箱地址";

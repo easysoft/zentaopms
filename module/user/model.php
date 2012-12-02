@@ -177,6 +177,50 @@ class userModel extends model
     }
 
     /**
+     * Batch create users. 
+     * 
+     * @param  int    $users 
+     * @access public
+     * @return void
+     */
+    public function batchCreate()
+    {
+        $users = fixer::input('post')->get(); 
+        $data  = array();
+        for($i = 0; $i < $this->config->user->batchCreate; $i++)
+        {
+            if($users->account[$i] != '')  
+            {
+                $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
+                if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));
+                if(!validater::checkReg($users->account[$i], '|(.){3,}|')) die(js::error(sprintf($this->lang->user->error->account, $i+1)));
+                if($users->realname[$i] == '') die(js::error(sprintf($this->lang->user->error->realname, $i+1)));
+                if(!validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i+1)));
+                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i+1)));
+
+                $data[$i]->dept     = $users->dept[$i];
+                $data[$i]->account  = $users->account[$i];
+                $data[$i]->realname = $users->realname[$i];
+                $data[$i]->email    = $users->email[$i];
+                $data[$i]->gender   = $users->gender[$i];
+                $data[$i]->password = md5($users->password[$i]); 
+            }
+        }
+        foreach($data as $user)
+        {
+            $this->dao->insert(TABLE_USER)->data($user)
+                ->autoCheck()
+                ->batchCheck($this->config->user->create->requiredFields, 'notempty')
+                ->exec();
+            if(dao::isError()) 
+            {
+                echo js::error(dao::getError());
+                die(js::reload('parent'));
+            }
+        }
+    }
+
+    /**
      * Update a user.
      * 
      * @param  int    $userID 

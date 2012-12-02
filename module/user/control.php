@@ -274,6 +274,36 @@ class user extends control
         $this->display();
     }
 
+
+    /**
+     * Batch create users.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return void
+     */
+    public function batchCreate($deptID = 0)
+    {
+        $this->lang->set('menugroup.user', 'company');
+        $this->lang->user->menu      = $this->lang->company->menu;
+        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
+
+        if(!empty($_POST))
+        {
+            $this->user->batchCreate();
+            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+        }
+
+        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
+        $position[]      = $this->lang->user->batchCreate;
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->depts    = $this->dept->getOptionMenu();
+        $this->view->deptID   = $deptID;
+
+        $this->display();
+    }
+
     /**
      * Edit a user.
      * 

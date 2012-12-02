@@ -13,6 +13,7 @@ $lang->user->common          = 'User';
 $lang->user->index           = "Index";
 $lang->user->view            = "Info";
 $lang->user->create          = "Add";
+$lang->user->batchCreate     = "Batch add user";
 $lang->user->read            = "Info";
 $lang->user->edit            = "Edit";
 $lang->user->unlock          = "Unlock";
@@ -89,3 +90,9 @@ $lang->user->status    = 'Status';
 $lang->user->placeholder->account   = 'Letters/underline/numbers, three above';
 $lang->user->placeholder->password1 = 'Six above';
 $lang->user->placeholder->join      = 'The date the employee join the company';
+
+$lang->user->error->account       = "ID %s，account must be three letters at least";
+$lang->user->error->accountDupl   = "ID %s，this account has been exist";
+$lang->user->error->realname      = "ID %s，please input realname";
+$lang->user->error->password      = "ID %s，password must be six letters at least";
+$lang->user->error->mail          = "ID %s，please input correct email address";
