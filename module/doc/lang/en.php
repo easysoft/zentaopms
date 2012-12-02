@@ -29,8 +29,7 @@ $lang->doc->addedBy        = 'Added by';
 $lang->doc->addedDate      = 'Added date';
 $lang->doc->editedBy       = 'Edited by';
 $lang->doc->editedDate     = 'Edited date';
-$lang->doc->manage         = 'Doc type';
-$lang->doc->manageType     = 'Manage type';
+$lang->doc->basicInfo      = 'Basic Info';
 
 $lang->doc->moduleDoc      = 'By module';
 $lang->doc->searchDoc      = 'By search';
@@ -46,10 +45,12 @@ $lang->doc->edit           = 'Edit doc';
 $lang->doc->delete         = 'Delete doc';
 $lang->doc->browse         = 'Browse doc';
 $lang->doc->view           = 'View doc';
+$lang->doc->manageType     = 'Manage type';
+
+$lang->doc->libName        = 'Library name';
 $lang->doc->createLib      = 'Create library';
 $lang->doc->editLib        = 'Edit library';
 $lang->doc->deleteLib      = 'Delete library';
-$lang->doc->libName        = 'Library name';
 
 /* Browse tabs. */
 $lang->doc->allProduct     = 'All products';

@@ -29,8 +29,7 @@ $lang->doc->addedBy        = '由谁添加';
 $lang->doc->addedDate      = '添加时间';
 $lang->doc->editedBy       = '由谁编辑';
 $lang->doc->editedDate     = '编辑时间';
-$lang->doc->manage         = '文档分类';
-$lang->doc->manageType     = '维护分类';
+$lang->doc->basicInfo      = '基本信息';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -46,10 +45,12 @@ $lang->doc->edit           = '编辑文档';
 $lang->doc->delete         = '删除文档';
 $lang->doc->browse         = '文档列表';
 $lang->doc->view           = '文档详情';
+$lang->doc->manageType     = '维护分类';
+
+$lang->doc->libName        = '文档库名称';
 $lang->doc->createLib      = '创建文档库';
 $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
-$lang->doc->libName        = '文档库名称';
 
 /* 查询条件列表 */
 $lang->doc->allProduct     = '所有产品';

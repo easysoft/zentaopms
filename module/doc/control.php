@@ -391,10 +391,11 @@ class doc extends control
         $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
         $this->view->position[]    = $this->lang->doc->view;
 
-        $this->view->doc     = $doc;
-        $this->view->lib     = $lib;
-        $this->view->actions = $this->loadModel('action')->getList('doc', $docID);
-        $this->view->users   = $this->user->getPairs('noclosed,nodeleted');
+        $this->view->doc        = $doc;
+        $this->view->lib        = $lib;
+        $this->view->actions    = $this->loadModel('action')->getList('doc', $docID);
+        $this->view->users      = $this->user->getPairs('noclosed,nodeleted,noletter');
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
 
         $this->display();
     }
