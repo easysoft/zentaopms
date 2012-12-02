@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
- * @version     $Id: zh-tw.php 3126 2012-06-29 08:27:11Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 3668 2012-11-30 06:06:33Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->tree->common            = '模組維護';
@@ -21,6 +21,7 @@ $lang->tree->manageProduct     = '維護產品視圖模組';
 $lang->tree->manageProject     = '維護項目視圖模組';
 $lang->tree->manageBug         = '維護測試視圖模組';
 $lang->tree->manageCase        = '維護用例視圖模組';
+$lang->tree->manageWebapp      = '維護WEB應用分類';
 $lang->tree->manageCustomDoc   = '維護文檔庫分類';
 $lang->tree->updateOrder       = '更新排序';
 $lang->tree->manageChild       = '維護子模組';

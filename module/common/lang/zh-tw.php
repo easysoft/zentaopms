@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 3485 2012-09-02 06:38:01Z wwccss $
+ * @version     $Id: zh-tw.php 3700 2012-12-02 10:41:38Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
@@ -77,14 +77,15 @@ $lang->typeAB       = '類型';
 $lang->common->common = '公有模組';
 
 /* 主導航菜單。*/
-$lang->menu->my      = '<span id="mainbg">&nbsp;</span>我的地盤|my|index';
-$lang->menu->product = '產品視圖|product|index';
-$lang->menu->project = '項目視圖|project|index';
-$lang->menu->qa      = '測試視圖|qa|index';
-$lang->menu->doc     = '文檔視圖|doc|index';
-$lang->menu->report  = '統計視圖|report|index';
-$lang->menu->company = '組織視圖|company|index';
-$lang->menu->admin   = '後台管理|admin|index';
+$lang->menu->my       = '<span id="mainbg">&nbsp;</span>我的地盤|my|index';
+$lang->menu->product  = '產品視圖|product|index';
+$lang->menu->project  = '項目視圖|project|index';
+$lang->menu->qa       = '測試視圖|qa|index';
+$lang->menu->doc      = '文檔視圖|doc|index';
+$lang->menu->report   = '統計視圖|report|index';
+//$lang->menu->webapp   = '應用中心|webapp|index';
+$lang->menu->company  = '組織視圖|company|index';
+$lang->menu->admin    = '後台管理|admin|index';
 
 /* 查詢條中可以選擇的對象列表。*/
 $lang->searchObjects['bug']         = 'B:Bug';
@@ -132,7 +133,7 @@ $lang->my->menu->index          = '首頁|my|index';
 $lang->my->menu->todo           = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = '我的任務|my|task|';
 $lang->my->menu->bug            = '我的Bug|my|bug|';
-$lang->my->menu->testtask       = '我的測試|my|testtask|';
+$lang->my->menu->testtask       = array('link' => '我的測試|my|testtask|', 'alias' => 'testcase');
 $lang->my->menu->story          = '我的需求|my|story|';
 $lang->my->menu->myProject      = '我的項目|my|project|';
 $lang->my->menu->dynamic        = '我的動態|my|dynamic|';
@@ -148,19 +149,19 @@ $lang->product->menu->plan    = array('link' => '計劃|productplan|browse|produ
 $lang->product->menu->release = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路線圖|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文檔|product|doc|productID=%s', 'subModule' => 'doc');
-$lang->product->menu->view    = array('link' => '概況|product|view|productID=%s', 'alias' => 'edit');
+$lang->product->menu->view    = array('link' => '維護|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模組|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '項目列表|product|project|status=all&productID=%s';
 $lang->product->menu->order   = '排序|product|order|productID=%s';
-$lang->product->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>新增產品|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-all">&nbsp;</span>所有產品|product|index|locate=false', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<span class="icon-addProduct">&nbsp;</span>新增產品|product|create', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有產品|product|index|locate=false', 'float' => 'right');
 $lang->story->menu            = $lang->product->menu;
 $lang->productplan->menu      = $lang->product->menu;
 $lang->release->menu          = $lang->product->menu;
 
 /* 項目視圖菜單設置。*/
 $lang->project->menu->list      = '%s';
-$lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask,burn');
+$lang->project->menu->task      = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask,burn,importbug');
 $lang->project->menu->story     = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '動態|project|dynamic|projectID=%s';
@@ -169,10 +170,10 @@ $lang->project->menu->testtask  = '測試申請|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文檔|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = '產品|project|manageproducts|projectID=%s';
-$lang->project->menu->view      = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit');
+$lang->project->menu->view      = array('link' => '維護|project|view|projectID=%s', 'alias' => 'edit');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
-$lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>新增項目|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;</span>所有項目|project|index|locate=false', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<span class="icon-addProject">&nbsp;</span>新增項目|project|create', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有項目|project|index|locate=false', 'float' => 'right');
 $lang->task->menu               = $lang->project->menu;
 $lang->build->menu              = $lang->project->menu;
 
@@ -190,7 +191,7 @@ $lang->testtask->menu           = $lang->testcase->menu;
 
 /* 文檔視圖菜單設置。*/
 $lang->doc->menu->list    = '%s';
-$lang->doc->menu->browse  = array('link' => '文檔列表|doc|browse|libID=%s');
+$lang->doc->menu->browse  = array('link' => '文檔列表|doc|browse|libID=%s', 'alias' => 'view,create,edit');
 $lang->doc->menu->edit    = '編輯文檔庫|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '維護模組|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '刪除文檔庫|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
@@ -202,15 +203,19 @@ $lang->report->menu->prj     = array('link' => '項目|report|projectdeviation')
 $lang->report->menu->test    = array('link' => '測試|report|bugsummary', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => '組織|report|workload');
 
+/* 資源視圖菜單設置。*/
+//$lang->webapp->menu->obtain  = array('link' => '應用商店|webapp|obtain', 'float' => 'right');
+
 /* 組織結構視圖菜單設置。*/
-$lang->company->menu->name        = '%s' . $lang->arrow;
-$lang->company->menu->browseUser  = array('link' => '用戶列表|company|browse', 'subModule' => 'user');
-$lang->company->menu->dept        = array('link' => '部門維護|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup = array('link' => '權限分組|group|browse', 'subModule' => 'group');
-$lang->company->menu->edit        = array('link' => '公司管理|company|edit');
-$lang->company->menu->dynamic     = '組織動態|company|dynamic|';
-$lang->company->menu->addGroup    = array('link' => '<span class="icon-add1">&nbsp;</span>添加分組|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => '<span class="icon-add1">&nbsp;</span>添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->name         = '%s' . $lang->arrow;
+$lang->company->menu->browseUser   = array('link' => '用戶列表|company|browse', 'subModule' => 'user');
+$lang->company->menu->dept         = array('link' => '部門維護|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup  = array('link' => '權限分組|group|browse', 'subModule' => 'group');
+$lang->company->menu->edit         = array('link' => '公司管理|company|edit');
+$lang->company->menu->dynamic      = '組織動態|company|dynamic|';
+$lang->company->menu->addGroup     = array('link' => '<span class="icon-add1">&nbsp;</span>添加分組|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add1">&nbsp;</span>批量添加|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser      = array('link' => '<span class="icon-add1">&nbsp;</span>添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 $lang->user->menu            = $lang->company->menu;
@@ -255,7 +260,7 @@ $lang->menugroup->mail        = 'admin';
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
 $lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且不小於『%s』。");
 $lang->error->reg             = "『%s』不符合格式，應當為:『%s』。";
-$lang->error->unique          = "『%s』已經有『%s』這條記錄了。";
+$lang->error->unique          = "『%s』已經有『%s』這條記錄了。如果您確定該記錄已刪除，請到後台管理-資源回收筒還原。。";
 $lang->error->gt              = "『%s』應當大於『%s』。";
 $lang->error->ge              = "『%s』應當不小於『%s』。";
 $lang->error->notempty        = "『%s』不能為空。";

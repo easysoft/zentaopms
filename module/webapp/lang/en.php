@@ -13,11 +13,13 @@ $lang->webapp->common = 'Web App';
 $lang->webapp->index  = 'Added App';
 $lang->webapp->obtain = 'Obtain App';
 
-$lang->webapp->install   = 'Install App';
-$lang->webapp->useapp    = 'Use App';
-$lang->webapp->installed = 'Installed';
-$lang->webapp->edit      = 'Edit App';
-$lang->webapp->customAdd = 'Custom Add';
+$lang->webapp->install    = 'Install App';
+$lang->webapp->uninstall  = 'Uninstall App';
+$lang->webapp->useapp     = 'Use App';
+$lang->webapp->installed  = 'Installed';
+$lang->webapp->edit       = 'Edit App';
+$lang->webapp->create     = 'Create App';
+$lang->webapp->manageTree = 'Manage Tree';
 
 $lang->webapp->id          = 'ID';
 $lang->webapp->name        = 'Name';
@@ -48,9 +50,10 @@ $lang->webapp->noModule     = 'Uncategorized';
 
 $lang->webapp->targetList['']       = '';
 $lang->webapp->targetList['popup']  = 'Popup';
-$lang->webapp->targetList['ifame']  = 'Iframe';
+$lang->webapp->targetList['iframe']  = 'Iframe';
 $lang->webapp->targetList['blank']  = 'New Window';
 
+$lang->webapp->sizeList['']        = "";
 $lang->webapp->sizeList['900x600'] = "900 x 600";
 $lang->webapp->sizeList['700x600'] = "700 x 600";
 $lang->webapp->sizeList['600x500'] = "600 x 500";

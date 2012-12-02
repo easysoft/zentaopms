@@ -6,15 +6,17 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 3697 2012-12-02 09:14:31Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->user->common          = '用戶';
 $lang->user->index           = "用戶視圖首頁";
 $lang->user->view            = "用戶詳情";
 $lang->user->create          = "添加用戶";
+$lang->user->batchCreate     = "批量添加用戶";
 $lang->user->read            = "查看用戶";
 $lang->user->edit            = "編輯用戶";
+$lang->user->unlock          = "解鎖用戶";
 $lang->user->update          = "編輯用戶";
 $lang->user->delete          = "刪除用戶";
 $lang->user->browse          = "瀏覽用戶";
@@ -25,6 +27,7 @@ $lang->user->editPassword    = "修改密碼";
 $lang->user->deny            = "訪問受限";
 $lang->user->confirmDelete   = "您確認刪除該用戶嗎？";
 $lang->user->confirmActivate = "您確認激活該用戶嗎？";
+$lang->user->confirmUnlock   = "您確認解鎖該用戶嗎？";
 $lang->user->relogin         = "重新登錄";
 $lang->user->asGuest         = "遊客訪問";
 $lang->user->goback          = "返回前一頁";
@@ -45,6 +48,8 @@ $lang->user->editProfile = '修改信息';
 
 $lang->user->errorDeny   = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
 $lang->user->loginFailed = "登錄失敗，請檢查您的用戶名或密碼是否填寫正確。";
+$lang->user->lockWarning = "您還有%s次嘗試機會。";
+$lang->user->loginLocked = "密碼嘗試次數太多，請聯繫管理員解鎖，或%s分鐘後重試。";
 
 $lang->user->genderList->m = '男';
 $lang->user->genderList->f = '女';
@@ -85,3 +90,9 @@ $lang->user->status    = '狀態';
 $lang->user->placeholder->account   = '英文、數字和下劃線的組合，三位以上';
 $lang->user->placeholder->password1 = '六位以上';
 $lang->user->placeholder->join      = '入職日期';
+
+$lang->user->error->account       = "ID %s，用戶名必須三位以上";
+$lang->user->error->accountDupl   = "ID %s，該用戶名已經存在";
+$lang->user->error->realname      = "ID %s，必須填寫真實姓名";
+$lang->user->error->password      = "ID %s，密碼必須六位以上";
+$lang->user->error->mail          = "ID %s，請填寫正確的郵箱地址";

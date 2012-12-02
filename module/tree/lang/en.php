@@ -21,6 +21,7 @@ $lang->tree->manageProduct     = 'Mange product module';
 $lang->tree->manageProject     = 'Manage project module';
 $lang->tree->manageBug         = 'Manage bug module';
 $lang->tree->manageCase        = 'Manage case module';
+$lang->tree->manageWebapp      = 'Manage web app type';
 $lang->tree->manageCustomDoc   = 'Manage doc library type';
 $lang->tree->updateOrder       = 'Update order';
 $lang->tree->manageChild       = 'Manage child';

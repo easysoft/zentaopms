@@ -6,10 +6,11 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
- * @version     $Id: zh-tw.php 2605 2012-02-21 07:22:58Z wwccss $
+ * @version     $Id: zh-tw.php 3642 2012-11-26 09:09:38Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->convert->common  = '從其他系統導入';
+$lang->convert->index   = '首頁';
 $lang->convert->next    = '下一步';
 $lang->convert->pre     = '返回';
 $lang->convert->reload  = '刷新';
@@ -20,6 +21,14 @@ $lang->convert->desc    = <<<EOT
 <p>歡迎使用系統轉換嚮導，本程序會幫助您將其他系統的數據轉換到禪道項目管理系統中。</p>
 <strong>轉換存在一定的風險，轉換之前，我們強烈建議您備份資料庫及相應的數據檔案，並保證轉換的時候，沒有其他人進行操作。</strong>
 EOT;
+
+$lang->convert->setConfig      = '來源系統配置';
+$lang->convert->setBugfree     = 'Bugfree配置';
+$lang->convert->setRedmine     = 'Redmine配置';
+$lang->convert->checkBugFree   = '檢查Bugfree';
+$lang->convert->checkRedmine   = '檢查Redmine';
+$lang->convert->convertRedmine = '轉換Redmine';
+$lang->convert->convertBugFree = '轉換BugFree';
 
 $lang->convert->selectSource     = '選擇來源系統及版本';
 $lang->convert->source           = '來源系統';

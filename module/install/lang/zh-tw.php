@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 3374 2012-07-27 01:23:08Z wwccss $
+ * @version     $Id: zh-tw.php 3613 2012-11-20 08:49:28Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->install->common  = '安裝';
@@ -61,6 +61,8 @@ $lang->install->json         = 'JSON擴展';
 $lang->install->jsonFail     = '修改PHP配置檔案，加載JSON擴展。';
 $lang->install->tmpRoot      = '臨時檔案目錄';
 $lang->install->dataRoot     = '上傳檔案目錄';
+$lang->install->session      = 'Session存儲目錄';
+$lang->install->sessionFail  = '修改PHP配置檔案，設置session.save_path';
 $lang->install->mkdir        = '<p>需要創建目錄%s。<br /> linux下面命令為：<br /> mkdir -p %s</p>';
 $lang->install->chmod        = '需要修改目錄 "%s" 的權限。<br />linux下面命令為：<br />chmod o=rwx -R %s';
 

@@ -6,12 +6,13 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 2835 2012-04-30 11:37:04Z wwccss $
+ * @version     $Id: zh-tw.php 3626 2012-11-22 01:41:37Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
 $lang->action->trash    = '資源回收筒';
 $lang->action->undelete = '還原';
+$lang->action->hide     = '隱藏';
 
 $lang->action->product    = '產品';
 $lang->action->project    = '項目';
@@ -63,6 +64,7 @@ $lang->action->desc->deletedfile  = '$date, 由 <strong>$actor</strong> 刪除�
 $lang->action->desc->editfile     = '$date, 由 <strong>$actor</strong> 編輯了附件：<strong><i>$extra</i></strong>。' . "\n";
 $lang->action->desc->erased       = '$date, 由 <strong>$actor</strong> 刪除。' . "\n";
 $lang->action->desc->undeleted    = '$date, 由 <strong>$actor</strong> 還原。' . "\n";
+$lang->action->desc->hidden       = '$date, 由 <strong>$actor</strong> 隱藏。' . "\n";
 $lang->action->desc->commented    = '$date, 由 <strong>$actor</strong> 添加備註。' . "\n";
 $lang->action->desc->activated    = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->moved        = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"。' . "\n";
@@ -89,6 +91,7 @@ $lang->action->label->deletedfile         = '刪除附件';
 $lang->action->label->editfile            = '編輯附件';
 $lang->action->label->erased              = '刪除了';
 $lang->action->label->undeleted           = '還原了';
+$lang->action->label->hidden              = '隱藏了';
 $lang->action->label->commented           = '評論了';
 $lang->action->label->activated           = '激活了';
 $lang->action->label->resolved            = '解決了';
@@ -158,6 +161,7 @@ $lang->action->search->label['deletedfile']         = $lang->action->label->dele
 $lang->action->search->label['editfile']            = $lang->action->label->editfile;           
 $lang->action->search->label['erased']              = $lang->action->label->erased;             
 $lang->action->search->label['undeleted']           = $lang->action->label->undeleted;          
+$lang->action->search->label['hidden']              = $lang->action->label->hidden;          
 $lang->action->search->label['commented']           = $lang->action->label->commented;          
 $lang->action->search->label['activated']           = $lang->action->label->activated;          
 $lang->action->search->label['resolved']            = $lang->action->label->resolved;           

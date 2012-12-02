@@ -48,6 +48,7 @@ $lang->webapp->selectModule = '选择分类：';
 $lang->webapp->allModule    = '所有';
 $lang->webapp->noModule     = '未分类';
 
+$lang->webapp->targetList['']       = '';
 $lang->webapp->targetList['popup']  = '弹窗';
 $lang->webapp->targetList['iframe'] = '内嵌';
 $lang->webapp->targetList['blank']  = '新窗口';

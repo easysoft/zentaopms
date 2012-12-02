@@ -1,4 +1,6 @@
 <?php
+$lang->editor->common    = '擴展編輯器';
+$lang->editor->index     = '首頁';
 $lang->editor->newMethod = '新增方法';
 $lang->editor->extend    = '擴展';
 $lang->editor->newLang   = '新增語言';
@@ -8,6 +10,8 @@ $lang->editor->newExtend = '新增擴展';
 $lang->editor->newPage   = '新增頁面';
 $lang->editor->override  = '覆蓋';
 $lang->editor->edit      = '編輯擴展';
+$lang->editor->save      = '保存頁面';
+$lang->editor->delete    = '刪除頁面';
 
 $lang->editor->moduleList   = '模組列表';
 $lang->editor->filePath     = "擴展：";
