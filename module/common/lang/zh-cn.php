@@ -191,7 +191,7 @@ $lang->testtask->menu           = $lang->testcase->menu;
 
 /* 文档视图菜单设置。*/
 $lang->doc->menu->list    = '%s';
-$lang->doc->menu->browse  = array('link' => '文档列表|doc|browse|libID=%s');
+$lang->doc->menu->browse  = array('link' => '文档列表|doc|browse|libID=%s', 'alias' => 'view,create,edit');
 $lang->doc->menu->edit    = '编辑文档库|doc|editLib|libID=%s';
 $lang->doc->menu->module  = '维护模块|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');

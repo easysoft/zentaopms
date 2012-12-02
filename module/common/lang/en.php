@@ -191,7 +191,7 @@ $lang->testtask->menu           = $lang->testcase->menu;
 
 /* Doc menu. */
 $lang->doc->menu->list    = '%s';
-$lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s');
+$lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s', 'alias' => 'view,create,edit');
 $lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
 $lang->doc->menu->module  = 'Modules|tree|browse|libID=%s&viewType=doc';
 $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
