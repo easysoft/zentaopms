@@ -22,7 +22,7 @@ class settingModel extends model
      */
     public function getSysAndPersonalConfig($account = '')
     {
-        $owner   = 'system,' . ($account ? $account : $this->app->user->account);
+        $owner   = 'system,' . ($account ? $account : '');
         $records = $this->dao->select('*')
             ->from(TABLE_CONFIG)
             ->where('owner')->in($owner)
