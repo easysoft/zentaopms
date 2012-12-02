@@ -477,11 +477,12 @@ class commonModel extends model
         $table = '';
         switch($type)
         {
-          case 'story'    : $table = TABLE_STORY; break;
-          case 'task'     : $table = TABLE_TASK;  break;
-          case 'bug'      : $table = TABLE_BUG;   break;
-          case 'testcase' : $table = TABLE_CASE;  break;
-          default:break;
+            case 'story'    : $table = TABLE_STORY; break;
+            case 'task'     : $table = TABLE_TASK;  break;
+            case 'bug'      : $table = TABLE_BUG;   break;
+            case 'testcase' : $table = TABLE_CASE;  break;
+            case 'doc'      : $table = TABLE_DOC;   break;
+            default:break;
         }
 
         $typeIDs = $type . 'IDs';
@@ -513,9 +514,9 @@ class commonModel extends model
         $currentEnd   = $currentStart + strlen($objectID) - 1;
 
         /* Get the previous object. */
-        $tmp          = substr($objectIDs, 0, $currentStart - 1);
-        $preStart     = strrpos($tmp, ',', 0) +  1;
-        $preEnd       = $currentStart - 2;
+        $tmp      = substr($objectIDs, 0, $currentStart - 1);
+        $preStart = strrpos($tmp, ',', 0) +  1;
+        $preEnd   = $currentStart - 2;
         if($preEnd - $preStart < 0) 
         {
             $preAndNextObject->pre = '';
@@ -527,8 +528,8 @@ class commonModel extends model
         }
         
         /* Get the next object. */
-        $nextStart    = $currentEnd + 2;            
-        $nextEnd      = strlen($objectIDs) > $nextStart ? strpos($objectIDs, ',', $nextStart) - 1 : 0;
+        $nextStart = $currentEnd + 2;            
+        $nextEnd   = strlen($objectIDs) > $nextStart ? strpos($objectIDs, ',', $nextStart) - 1 : 0;
         if($nextEnd - $nextStart < 0) 
         {
             $preAndNextObject->next = '';
