@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php echo css::internal($keTableCSS);?>
 <div id='titlebar'>
   <div id='main' <?php if($doc->deleted) echo "class='deleted'";?>>DOC #<?php echo $doc->id . ' ' . $doc->title;?></div>
   <div>

@@ -396,6 +396,7 @@ class doc extends control
         $this->view->actions    = $this->loadModel('action')->getList('doc', $docID);
         $this->view->users      = $this->user->getPairs('noclosed,nodeleted,noletter');
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->keTableCSS = $this->doc->extractKETableCSS($doc->content);
 
         $this->display();
     }

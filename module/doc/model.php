@@ -279,4 +279,41 @@ class docModel extends model
     {
         return $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->andWhere('type')->eq('projectdoc')->fetchPairs('id', 'name');
     }
+
+    /**
+     * Extract css styles for tables created in kindeditor.
+     *
+     * Like this: <table class="ke-table1" style="width:100%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
+     * 
+     * @param  string    $content 
+     * @access public
+     * @return void
+     */
+    public function extractKETableCSS($content)
+    {
+        $css = '';
+        $rule = '/<table class="ke(.*)" .*/';
+        if(preg_match_all($rule, $content, $results))
+        {
+            foreach($results[0] as $tableLine)
+            {
+                $attributes = explode(' ', str_replace('"', '', $tableLine));
+                foreach($attributes as $attribute)
+                {
+                    if(strpos($attribute, '=') === false) continue;
+                    list($attributeName, $attributeValue) = explode('=', $attribute);
+                    $$attributeName = $attributeValue;
+                }
+
+                if(!isset($class)) continue;
+                $className   = $class;
+                $borderSize  = isset($border)      ? $border . 'px' : '1px';
+                $borderColor = isset($bordercolor) ? $bordercolor : 'gray';
+                $borderStyle = "{border:$borderSize $borderColor solid}\n";
+                $css .= ".$className$borderStyle";
+                $css .= ".$className td$borderStyle";
+            }
+        }
+        return $css;
+    }
 }
