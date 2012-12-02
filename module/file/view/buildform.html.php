@@ -11,8 +11,8 @@
     <input type='button' onclick='delFile(this)'  class='icon-delete' value='&nbsp;'></input>
   </div>
 EOT;
-  for($i = 1; $i <= $fileCount; $i ++) echo str_replace('$i', $i, $fileRow);
   printf($lang->file->maxUploadSize, ini_get('upload_max_filesize'));
+  for($i = 1; $i <= $fileCount; $i ++) echo str_replace('$i', $i, $fileRow);
 ?>
 </div>
 <script language='javascript'>
