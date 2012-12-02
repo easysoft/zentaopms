@@ -32,12 +32,12 @@ class index extends control
      */
     public function index()
     {
-        if(isset($this->app->config->index->softType) or strpos($this->config->version, 'pro') !== false or strpos($this->app->company->admins, ",{$this->app->user->account},") === false) $this->locate($this->createLink('my', 'index'));
+        if(isset($this->app->config->flow) or strpos($this->config->version, 'pro') !== false or strpos($this->app->company->admins, ",{$this->app->user->account},") === false) $this->locate($this->createLink('my', 'index'));
 
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system', 'index', '', 'softType', $this->post->softType);
-            if($this->post->softType != 'all') die(js::locate($this->createLink('extension', 'install', "extension={$this->post->softType}"), 'parent'));
+            $this->loadModel('setting')->setItem('system', 'common', '', 'flow', $this->post->flow);
+            if($this->post->flow != 'full') die(js::locate($this->createLink('extension', 'install', "extension={$this->config->index->flow2Ext[$this->post->flow]}"), 'parent'));
             die(js::locate($this->createLink('my', 'index'), 'parent'));
         }
         $this->display();
