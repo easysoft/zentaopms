@@ -207,14 +207,15 @@ $lang->report->menu->staff   = array('link' => '组织|report|workload');
 //$lang->webapp->menu->obtain  = array('link' => '应用商店|webapp|obtain', 'float' => 'right');
 
 /* 组织结构视图菜单设置。*/
-$lang->company->menu->name        = '%s' . $lang->arrow;
-$lang->company->menu->browseUser  = array('link' => '用户列表|company|browse', 'subModule' => 'user');
-$lang->company->menu->dept        = array('link' => '部门维护|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup = array('link' => '权限分组|group|browse', 'subModule' => 'group');
-$lang->company->menu->edit        = array('link' => '公司管理|company|edit');
-$lang->company->menu->dynamic     = '组织动态|company|dynamic|';
-$lang->company->menu->addGroup    = array('link' => '<span class="icon-add1">&nbsp;</span>添加分组|group|create', 'float' => 'right');
-$lang->company->menu->addUser     = array('link' => '<span class="icon-add1">&nbsp;</span>添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->name         = '%s' . $lang->arrow;
+$lang->company->menu->browseUser   = array('link' => '用户列表|company|browse', 'subModule' => 'user');
+$lang->company->menu->dept         = array('link' => '部门维护|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup  = array('link' => '权限分组|group|browse', 'subModule' => 'group');
+$lang->company->menu->edit         = array('link' => '公司管理|company|edit');
+$lang->company->menu->dynamic      = '组织动态|company|dynamic|';
+$lang->company->menu->addGroup     = array('link' => '<span class="icon-add1">&nbsp;</span>添加分组|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add1">&nbsp;</span>批量添加|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser      = array('link' => '<span class="icon-add1">&nbsp;</span>添加用户|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
 $lang->dept->menu            = $lang->company->menu;
 $lang->group->menu           = $lang->company->menu;
 $lang->user->menu            = $lang->company->menu;
