@@ -23,7 +23,7 @@
       <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList);?></td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>
   </table>
   <?php include '../../common/view/action.html.php';?>
