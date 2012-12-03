@@ -37,7 +37,7 @@ var moduleID   = '<?php echo $moduleID;?>';
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
 <form method='post' action='<?php echo $this->inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy");?>'>
-  <table class='cont-lt1 fixed'>
+  <table class='cont-lt1'>
     <tr valign='top'>
       <td class='side <?php echo $treeClass;?>'>
         <div class='box-title'><?php echo $productName;?></div>
@@ -52,7 +52,7 @@ var moduleID   = '<?php echo $moduleID;?>';
       <td class='divider <?php echo $treeClass;?>'></td>
       <td>
         <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-        <table class='table-1 colored tablesorter datatable'>
+        <table class='table-1 colored tablesorter datatable fixed'>
           <thead>
             <tr class='colhead'>
               <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
