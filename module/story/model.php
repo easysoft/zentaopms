@@ -218,6 +218,7 @@ class storyModel extends model
                 }
 
                 $storyID = $this->dao->lastInsertID();
+                $this->setStage($storyID);
 
                 $specData[$i]->story   = $storyID;
                 $specData[$i]->version = 1;
