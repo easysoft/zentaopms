@@ -63,13 +63,13 @@
               <tr style='border-bottom:none'>
                 <td style='border-bottom:none; padding:0px'>
                   <div class='contentDiv'>
-                    <table class='f-left table-1 fixed'>
+                    <table class='f-left table-1 fixed' id='story'>
                       <?php foreach($stories as $key => $story):?>
                       <?php
                       $storyLink = $this->createLink('story', 'view', "storyID=$story->id");
                       ?>
                       <tr class='a-center'>
-                        <td class='w-id a-left' id='story'>
+                        <td class='w-id a-left'>
                           <input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?>
                         </td>
                         <td class='a-left nobr'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
@@ -101,11 +101,11 @@
               <tr style='border-bottom:none'>
                 <td style='border-bottom:none; padding:0px'>
                   <div class='contentDiv'>
-                    <table class='f-left table-1 fixed'>
+                    <table class='f-left table-1 fixed' id='bug'>
                       <?php foreach($bugs as $bug):?>
                       <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id");?>
                       <tr class='a-center'>
-                        <td class='w-id a-left' id='bug'>
+                        <td class='w-id a-left'>
                           <input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if($bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?>> <?php echo sprintf('%03d', $bug->id);?>
                         </td>
                         <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
