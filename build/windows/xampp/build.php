@@ -86,6 +86,8 @@ $file->copyFile('./xampp/apache/binold/zlib1.dll',         './xampp/apache/bin/z
 $file->copyFile('./xampp/apache/binold/pv.exe',            './xampp/apache/bin/pv.exe');
 $file->copyFile('./xampp/apache/binold/libeay32.dll',      './xampp/apache/bin/libeay32.dll');
 $file->copyFile('./xampp/apache/binold/ssleay32.dll',      './xampp/apache/bin/ssleay32.dll');
+$file->copyFile('./xampp/apache/binold/pcre.dll',          './xampp/apache/bin/pcre.dll');
+$file->copyFile('./xampp/apache/binold/msvcr100.dll',      './xampp/apache/bin/msvcr100.dll');
 $file->removeDir('./xampp/apache/binold');
 
 /* Process the apache's config file. */
