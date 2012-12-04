@@ -163,7 +163,11 @@ class project extends control
             }
             /* Limit current project when no project. */
             if(strpos($this->session->taskQuery, "`project` =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND `project` = $projectID");
-            $taskQuery = str_replace("`project` = 'all'", '1', $this->session->taskQuery); // Search all project.
+
+            $projectIDs   = array_keys($this->project->getPairs());
+            $projectQuery = "`project` in (" . implode($projectIDs, ',') . ")";  
+            $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
+
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOrderBy', $orderBy);
             $tasks = $this->project->getSearchTasks($taskQuery, $pager, $orderBy);
