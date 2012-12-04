@@ -822,13 +822,17 @@ class storyModel extends model
      */
     public function getBySQL($productID, $sql, $orderBy, $pager = null)
     {
+        $productIDs = array_keys($this->product->getPrivProducts());
+
         /* Get plans. */
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->beginIF($productID != 'all' and $productID != '')->where('product')->eq((int)$productID)->fi()
+            ->beginIF($productID == 'all')->where('product')->in($productIDs)->fi()
             ->fetchPairs();
 
         $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
+            ->beginIF($productID == 'all')->andWhere('product')->in($productIDs)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
