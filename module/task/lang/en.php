@@ -133,6 +133,8 @@ $lang->task->successSaved        = "Successfully saved";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> Postponed %s days </strong>";
 $lang->task->remindBug           = "This task from Bug, update the Bug:%s or not?";
 
+$lang->task->error->consumed = '"Consumed" must be number';
+
 /* Report. */
 $lang->task->report->common = 'Report';
 $lang->task->report->select = 'Select';

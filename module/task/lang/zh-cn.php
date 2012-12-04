@@ -133,6 +133,8 @@ $lang->task->successSaved        = "成功添加，";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天 </strong>";
 $lang->task->remindBug           = "该任务为Bug转化得到，是否更新Bug:%s ?";
 
+$lang->task->error->consumed = '"已经消耗"必须为数字';
+
 /* 统计报表。*/
 $lang->task->report->common = '报表';
 $lang->task->report->select = '请选择报表类型';

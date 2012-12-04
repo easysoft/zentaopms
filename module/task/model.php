@@ -402,6 +402,9 @@ class taskModel extends model
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now) 
             ->remove('comment')->get();
+
+        if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumed));;
+
         $this->setStatus($task);
 
         $this->dao->update(TABLE_TASK)->data($task)
