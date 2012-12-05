@@ -153,7 +153,7 @@ class webapp extends control
     {
         if($confirm == 'no') die(js::confirm($this->lang->webapp->confirmDelete, inlink('uninstall', "webappID=$webappID&confirm=yes")));
 
-        $this->dao->delete()->from(TABLE_WEBAPP)->where('id')->eq($webappID)->exec(false);
+        $this->dao->delete()->from(TABLE_WEBAPP)->where('id')->eq($webappID)->exec();
         die(js::reload('parent'));
     }
 
@@ -166,6 +166,6 @@ class webapp extends control
      */
     public function ajaxAddView($webappID)
     {
-        $this->dao->update(TABLE_WEBAPP)->set('views=views+1')->where('id')->eq($webappID)->exec(false);
+        $this->dao->update(TABLE_WEBAPP)->set('views=views+1')->where('id')->eq($webappID)->exec();
     }
 }

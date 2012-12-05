@@ -9,6 +9,7 @@ UPDATE `zt_action` SET  `read` =  '1';
 
 CREATE TABLE IF NOT EXISTS `zt_webapp` (
   `id` mediumint(9) NOT NULL auto_increment,
+  `company` mediumint(8) unsigned NOT NULL default '0',
   `appid` mediumint(9) NOT NULL,
   `module` mediumint(9) NOT NULL,
   `name` varchar(100) NOT NULL,

@@ -163,7 +163,7 @@ class webappModel extends model
     {
         $webapps = $this->dao->select('*')->from(TABLE_WEBAPP)
             ->beginIF($module != 0)->where('module')->eq($module)->fi()
-            ->fetchAll($key, false);
+            ->fetchAll($key);
         $localIcons = array();
         foreach($webapps as $webapp)
         {
@@ -192,7 +192,7 @@ class webappModel extends model
      */
     public function getLocalAppByID($webappID)
     {
-        return $this->dao->select('*')->from(TABLE_WEBAPP)->where('id')->eq($webappID)->fetch('', false);
+        return $this->dao->select('*')->from(TABLE_WEBAPP)->where('id')->eq($webappID)->fetch();
     }
 
     /**
@@ -219,7 +219,7 @@ class webappModel extends model
         $installWebapp->addedBy   = $this->app->user->account;
         $installWebapp->addedDate = helper::now();
 
-        $this->dao->insert(TABLE_WEBAPP)->data($installWebapp, false)->autocheck()->exec(false);
+        $this->dao->insert(TABLE_WEBAPP)->data($installWebapp)->autocheck()->exec();
         return $this->dao->lastInsertID(); 
     }
 
@@ -233,7 +233,7 @@ class webappModel extends model
     public function update($webappID)
     {
         $data = fixer::input('post')->get();
-        $this->dao->update(TABLE_WEBAPP)->data($data, false)->where('id')->eq($webappID)->exec(false);
+        $this->dao->update(TABLE_WEBAPP)->data($data)->where('id')->eq($webappID)->exec();
     }
 
     /**
@@ -250,17 +250,17 @@ class webappModel extends model
             ->add('addedDate', helper::now())
             ->add('author', $this->app->user->account)
             ->remove('files')->get();
-        $this->dao->insert(TABLE_WEBAPP)->data($data, false)
+        $this->dao->insert(TABLE_WEBAPP)->data($data)
             ->autocheck()
             ->batchCheck($this->config->webapp->create->requiredFields, 'notempty')
-            ->exec(false);
+            ->exec();
         if(!dao::isError())
         {
             $webappID = $this->dao->lastInsertID();
             if($_FILES)
             {
                 $fileTitle = $this->loadModel('file')->saveUpload('webapp', $webappID);
-                $this->dao->update(TABLE_WEBAPP)->set('icon')->eq(key($fileTitle))->where('id')->eq($webappID)->exec(false);
+                $this->dao->update(TABLE_WEBAPP)->set('icon')->eq(key($fileTitle))->where('id')->eq($webappID)->exec();
             }
             return $webappID;
         }
