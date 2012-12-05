@@ -22,9 +22,10 @@
       <legend><?php echo $lang->story->legendSpec;?></legend>
       <div class='content'>
       <?php 
-      if(strpos($story->spec, '<img src="data/upload'))
+      if(strpos($story->spec, 'src="data/upload'))
       {
         $story->spec = str_replace('<img src="', '<img src="http://' . $this->server->http_host . $this->config->webRoot, $story->spec);
+        $story->spec = str_replace('<img alt="" src="', '<img src="http://' . $this->server->http_host . $this->config->webRoot, $story->spec);
       }
       echo $story->spec;
       ?>
