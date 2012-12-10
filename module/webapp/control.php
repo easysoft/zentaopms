@@ -25,7 +25,6 @@ class webapp extends control
 
         $this->webapp->setMenu($module);
 
-
         $this->view->webapps    = $webapps;
         $this->view->moduleTree = $this->loadModel('tree')->getTreeMenu(0, 'webapp', 0, array('treeModel', 'createWebappLink'));
         $this->view->module     = $module;
@@ -46,11 +45,12 @@ class webapp extends control
     public function obtain($type = 'byUpdatedTime', $param = '', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->webapp->setMenu();
+
         /* Init vars. */
-        $type       = strtolower($type);
-        $moduleID   = $type == 'bymodule' ? (int)$param : 0;
-        $webapps = array();
-        $pager      = null;
+        $type     = strtolower($type);
+        $moduleID = $type == 'bymodule' ? (int)$param : 0;
+        $webapps  = array();
+        $pager    = null;
 
         /* Set the key. */
         if($type == 'bysearch') $param = helper::safe64Encode($this->post->key);
@@ -60,7 +60,7 @@ class webapp extends control
         if($results)
         {
             $this->app->loadClass('pager', $static = true);
-            $pager      = new pager($results->dbPager->recTotal, $results->dbPager->recPerPage, $results->dbPager->pageID);
+            $pager   = new pager($results->dbPager->recTotal, $results->dbPager->recPerPage, $results->dbPager->pageID);
             $webapps = $results->webapps;
         }
 
