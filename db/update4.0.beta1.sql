@@ -13,5 +13,9 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 2, 'story', 'batchEdit'),
 (1, 3, 'story', 'batchEdit'),
 (1, 4, 'story', 'batchEdit'),
-(1, 5, 'story', 'batchEdit');
-
+(1, 5, 'story', 'batchEdit'),
+(1, 1, 'todo', 'batchEdit'),
+(1, 2, 'todo', 'batchEdit'),
+(1, 3, 'todo', 'batchEdit'),
+(1, 4, 'todo', 'batchEdit'),
+(1, 5, 'todo', 'batchEdit');

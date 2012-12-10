@@ -128,6 +128,65 @@ class todoModel extends model
     }
 
     /**
+     * Batch update todos.
+     * 
+     * @access public
+     * @return array
+     */
+    public function batchUpdate()
+    {
+        $todos      = array();
+        $allChanges = array();
+        $todoIDList = $this->post->todoIDList ? $this->post->todoIDList : array();
+
+        /* Adjust whether the post data is complete, if not, remove the last element of $todoIDList. */
+        if($this->session->showSuhosinInfo) array_pop($taskIDList);
+
+        if(!empty($todoIDList))
+        {
+            /* Initialize todos from the post data. */
+            foreach($todoIDList as $todoID)
+            {
+                $todo->date  = $this->post->dates[$todoID];
+                $todo->type  = $this->post->types[$todoID];
+                $todo->pri   = $this->post->pris[$todoID];
+                $todo->name  = $todo->type == 'custom' ? htmlspecialchars($this->post->names[$todoID]) : '';
+                $todo->begin = $this->post->begins[$todoID];
+                $todo->end   = $this->post->ends[$todoID];
+                if($todo->type == 'task') $todo->idvalue = isset($this->post->tasks[$todoID]) ? $this->post->tasks[$todoID] : 0;
+                if($todo->type == 'bug')  $todo->idvalue = isset($this->post->bugs[$todoID]) ? $this->post->bugs[$todoID] : 0;
+
+                $todos[$todoID] = $todo;
+                unset($todo);
+            }
+
+            foreach($todos as $todoID => $todo)
+            {
+                $oldTodo = $this->getById($todoID);
+                if($oldTodo->type != 'custom') $oldTodo->name = '';
+                $this->dao->update(TABLE_TODO)->data($todo)
+                    ->autoCheck()
+                    ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')               
+                    ->checkIF($todo->type == 'bug', 'idvalue', 'notempty')
+                    ->checkIF($todo->type == 'task', 'idvalue', 'notempty')
+                    ->where('id')->eq($todoID)
+                    ->exec();
+
+                if(!dao::isError()) 
+                {
+                    $allChanges[$todoID] = common::createChanges($oldTodo, $todo);
+                }
+                else
+                {
+                    die(js::error('todo#' . $todoID . dao::getError(true)));
+                }
+            }
+        }
+
+        return $allChanges;
+    }
+
+    /**
      * Change the status of a todo.
      * 
      * @param  string $todoID 

@@ -14,6 +14,7 @@ $lang->todo->index        = "todo一览";
 $lang->todo->create       = "新增";
 $lang->todo->batchCreate  = "批量添加";
 $lang->todo->edit         = "更新TODO";
+$lang->todo->batchEdit    = "批量编辑";
 $lang->todo->view         = "TODO详情";
 $lang->todo->viewAB       = "详情";
 $lang->todo->markDone     = "未完成";

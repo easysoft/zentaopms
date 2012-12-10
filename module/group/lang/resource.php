@@ -88,6 +88,7 @@ $lang->my->methodOrder[55] = 'changePassword';
 $lang->resource->todo->create       = 'create';
 $lang->resource->todo->batchCreate  = 'batchCreate';
 $lang->resource->todo->edit         = 'edit';
+$lang->resource->todo->batchEdit    = 'batchEdit';
 $lang->resource->todo->view         = 'view';
 $lang->resource->todo->delete       = 'delete';
 $lang->resource->todo->export       = 'export';

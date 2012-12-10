@@ -126,6 +126,89 @@ class todo extends control
     }
 
     /**
+     * Batch edit todo.
+     * 
+     * @param  string $from example:myTodo, todoBatchEdit.
+     * @param  string $type 
+     * @param  string $account 
+     * @param  string $status 
+     * @access public
+     * @return void
+     */
+    public function batchEdit($from = '', $type = 'today', $account = '', $status = 'all')
+    {
+        /* Get form data for my-todo. */
+        if($from == 'myTodo')
+        {
+            /* Initialize vars. */
+            $editedTodos = array();
+            $todoIDList  = array();
+            $columns     = 7;
+            $showSuhosinInfo = false;
+
+            if($account == '') $account = $this->app->user->account;
+            $bugs       = $this->bug->getUserBugPairs($account);
+            $tasks      = $this->task->getUserTaskPairs($account, $status);
+            $allTodos   = $this->todo->getList($type, $account, $status);
+            if($this->post->todoIDList)  $todoIDList = $this->post->todoIDList;
+
+            /* Initialize todos whose need to edited. */
+            foreach($allTodos as $todo) 
+            {
+                if(in_array($todo->id, $todoIDList))
+                {
+                    $editedTodos[$todo->id] = $todo;
+                }
+            }
+            foreach($editedTodos as $todo) 
+            {
+                if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
+                if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
+                $todo->date  = str_replace('-', '', $todo->date);
+                $todo->begin = str_replace(':', '', $todo->begin);
+                $todo->end   = str_replace(':', '', $todo->end);
+            }
+
+            /* Judge whether the edited todos is too large. */
+            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedTodos), $columns);
+
+            /* Set the sessions. */
+            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+
+            /* Assign. */
+            $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->batchEdit;
+            $position[]      = $this->lang->todo->common;
+            $position[]      = $this->lang->todo->batchEdit;
+
+            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+            $this->view->bugs        = $bugs;
+            $this->view->tasks       = $tasks;
+            $this->view->editedTodos = $editedTodos;
+            $this->view->times       = $this->todo->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+            $this->view->time        = $this->todo->now();
+            $this->view->header      = $header;
+            $this->view->position    = $position;
+
+            $this->display();
+        }
+        /* Get form data from todo-batchEdit. */
+        elseif($from == 'todoBatchEdit')
+        {
+            $allChanges = $this->todo->batchUpdate();
+            foreach($allChanges as $todoID => $changes)
+            {
+                if(!empty($changes))
+                {
+                    $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+
+            die(js::locate($this->session->todoList, 'parent'));
+        }
+    }
+
+    /**
      * View a todo. 
      * 
      * @param  int    $todoID 
