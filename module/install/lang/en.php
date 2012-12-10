@@ -9,6 +9,8 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+$lang->install = new stdclass();
+
 $lang->install->common  = 'Install';
 $lang->install->next    = 'Next';
 $lang->install->pre     = 'Back';
