@@ -51,6 +51,7 @@ $lang->user->loginFailed = "Login failed, please check your account and password
 $lang->user->lockWarning = "You only have %s times to try.";
 $lang->user->loginLocked = "You try the password too many times, please contact the administrator or try again after %s minutes.";
 
+$lang->user->genderList = new stdclass();
 $lang->user->genderList->m = 'Male';
 $lang->user->genderList->f = 'Female';
 
@@ -87,10 +88,12 @@ $lang->user->ip        = 'Last IP';
 $lang->user->last      = 'Last login';
 $lang->user->status    = 'Status';
 
+$lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = 'Letters/underline/numbers, three above';
 $lang->user->placeholder->password1 = 'Six above';
 $lang->user->placeholder->join      = 'The date the employee join the company';
 
+$lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，account must be three letters at least";
 $lang->user->error->accountDupl   = "ID %s，this account has been exist";
 $lang->user->error->realname      = "ID %s，please input realname";

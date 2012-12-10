@@ -51,6 +51,7 @@ $lang->user->loginFailed = "登录失败，请检查您的用户名或密码是�
 $lang->user->lockWarning = "您还有%s次尝试机会。";
 $lang->user->loginLocked = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 
+$lang->user->genderList = new stdclass();
 $lang->user->genderList->m = '男';
 $lang->user->genderList->f = '女';
 
@@ -87,10 +88,12 @@ $lang->user->ip        = '最后IP';
 $lang->user->last      = '最后登录';
 $lang->user->status    = '状态';
 
+$lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
 $lang->user->placeholder->password1 = '六位以上';
 $lang->user->placeholder->join      = '入职日期';
 
+$lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，用户名必须三位以上";
 $lang->user->error->accountDupl   = "ID %s，该用户名已经存在";
 $lang->user->error->realname      = "ID %s，必须填写真实姓名";
