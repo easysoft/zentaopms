@@ -31,14 +31,17 @@ $lang->admin->clearDataDesc    = <<<EOT
 3、对于其他表则进行全部清除操作。
 EOT;
 
-$lang->admin->info->caption        = '禅道系统信息';
-$lang->admin->info->version        = '当前系统的版本是%s，';
-$lang->admin->info->links          = '您可以访问以下链接：';
-$lang->admin->info->account        = "您的禅道社区账户为%s。";
+$lang->admin->info = new stdclass();
+$lang->admin->info->caption = '禅道系统信息';
+$lang->admin->info->version = '当前系统的版本是%s，';
+$lang->admin->info->links   = '您可以访问以下链接：';
+$lang->admin->info->account = "您的禅道社区账户为%s。";
 
+$lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "友情提示：您还未在禅道社区(www.zentao.net)登记，%s进行登记，以及时获得禅道最新信息。";
 $lang->admin->notice->ignore   = "不再提示";
 
+$lang->admin->register = new stdclass();
 $lang->admin->register->caption    = '禅道社区登记';
 $lang->admin->register->click      = '点击此处';
 $lang->admin->register->lblAccount = '请设置您的用户名，英文字母和数字的组合，三位以上。';
@@ -47,6 +50,7 @@ $lang->admin->register->submit     = '登记';
 $lang->admin->register->bind       = "如果您已经拥有社区账号，%s关联账户";
 $lang->admin->register->success    = "登记账户成功";
 
+$lang->admin->bind = new stdclass();
 $lang->admin->bind->caption  = '关联社区账号';
 $lang->admin->bind->action   = '关联';
 $lang->admin->bind->success  = "关联账户成功";
