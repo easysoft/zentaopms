@@ -1290,7 +1290,7 @@ class storyModel extends model
         if($action == 'change')   return $story->status != 'closed';
         if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
         if($action == 'close')    return $story->status != 'closed';
-        if($action == 'activate') return $story->status == 'closed' and $story->closedReason == 'postponed';
+        if($action == 'activate') return $story->status == 'closed';
 
         return true;
     }
