@@ -11,7 +11,7 @@ include $moduleRoot . '/group/lang/resource.php';
 
 $whiteList[] = 'api-getsessionid';
 $whiteList[] = 'bug-buildtemplates';
-$whiteList[] = 'bug-exportdata';
+$whiteList[] = 'bug-sendmail';
 $whiteList[] = 'company-create';
 $whiteList[] = 'company-delete';
 $whiteList[] = 'file-buildform';
@@ -25,30 +25,23 @@ $whiteList[] = 'index-testext';
 $whiteList[] = 'productplan-commonaction';
 $whiteList[] = 'project-managechilds';
 $whiteList[] = 'project-tips';
+$whiteList[] = 'project-commonaction';
+$whiteList[] = 'project-sendmail';
 $whiteList[] = 'release-commonaction';
 $whiteList[] = 'task-commonaction';
+$whiteList[] = 'task-sendmail';
 $whiteList[] = 'user-login';
 $whiteList[] = 'user-deny';
 $whiteList[] = 'user-logout';
-$whiteList[] = 'mail-set';
-$whiteList[] = 'mail-save';
+$whiteList[] = 'user-setreferer';
 $whiteList[] = 'svn-run';
 $whiteList[] = 'admin-ignore';
 $whiteList[] = 'admin-register';
+$whiteList[] = 'admin-win2unix';
 $whiteList[] = 'admin-bind';
-$whiteList[] = 'admin-checkdb';
-$whiteList[] = 'admin-cleardata';
-$whiteList[] = 'bug-sendmail';
-$whiteList[] = 'project-commonaction';
-$whiteList[] = 'project-sendmail';
 $whiteList[] = 'story-commonaction';
 $whiteList[] = 'story-sendmail';
-$whiteList[] = 'task-sendmail';
-$whiteList[] = 'user-setreferer';
-$whiteList[] = 'mail-index';
-$whiteList[] = 'mail-detect';
-$whiteList[] = 'mail-edit';
-$whiteList[] = 'mail-test';
+$whiteList[] = 'webapp-ajaxaddview';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
@@ -123,4 +116,25 @@ foreach(glob($moduleRoot . '*') as $modulePath)
         }
     }
 }
-?>
+
+echo '-------------php5.4 synatax checking-----------------' . "\n";
+class app
+{
+    function loadLang()
+    {
+    }
+}
+$app = new app;
+
+error_reporting(E_ALL ^ E_NOTICE);
+foreach(glob($moduleRoot . '*') as $modulePath)
+{
+    $moduleName = basename($modulePath);
+    $cnLangFile = $modulePath . '/lang/zh-cn.php';
+    $enLangFile = $modulePath . '/lang/en.php';
+    $configFile = $modulePath . '/config.php';
+
+    if(file_exists($cnLangFile)) include $cnLangFile;
+    if(file_exists($enLangFile)) include $enLangFile;
+    if(file_exists($configFile)) include $configFile;
+}
