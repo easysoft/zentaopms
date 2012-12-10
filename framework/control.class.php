@@ -163,6 +163,7 @@ class control
         $this->config     = $config;
         $this->lang       = $lang;
         $this->dbh        = $dbh;
+        $this->view       = new stdclass();
         $this->pathFix    = $this->app->getPathFix();
         $this->viewType   = $this->app->getViewType();
 
