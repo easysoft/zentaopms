@@ -159,13 +159,15 @@ class control
     {
         /* Global the globals, and refer them to the class member. */
         global $app, $config, $lang, $dbh;
-        $this->app        = $app;
-        $this->config     = $config;
-        $this->lang       = $lang;
-        $this->dbh        = $dbh;
-        $this->view       = new stdclass();
-        $this->pathFix    = $this->app->getPathFix();
-        $this->viewType   = $this->app->getViewType();
+        $this->app      = $app;
+        $this->config   = $config;
+        $this->lang     = $lang;
+        $this->dbh      = $dbh;
+        $this->pathFix  = $this->app->getPathFix();
+        $this->viewType = $this->app->getViewType();
+
+        $this->view = new stdclass();
+        $this->view->header = new stdclass();
 
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
