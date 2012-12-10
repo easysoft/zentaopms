@@ -54,6 +54,7 @@ $lang->testcase->batchCreate        = "Batch create";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->view               = "Info";
 $lang->testcase->edit               = "Edit";
+$lang->testcase->batchEdit          = "Batch edit";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->browse             = "Browse";
 $lang->testcase->import             = "Import";

@@ -365,6 +365,7 @@ $lang->resource->testcase->create             = 'create';
 $lang->resource->testcase->batchCreate        = 'batchCreate';
 $lang->resource->testcase->view               = 'view';
 $lang->resource->testcase->edit               = 'edit';
+$lang->resource->testcase->batchEdit          = 'batchEdit';
 $lang->resource->testcase->delete             = 'delete';
 $lang->resource->testcase->export             = 'export';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
