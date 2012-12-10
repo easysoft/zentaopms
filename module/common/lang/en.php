@@ -74,9 +74,11 @@ $lang->openedByAB   = 'Open';
 $lang->assignedToAB = 'To';
 $lang->typeAB       = 'Type';
 
+$lang->common = new stdclass();
 $lang->common->common = 'Common module';
 
 /* The main menu. */
+$lang->menu = new stdclass();
 $lang->menu->my       = '<span id="mainbg">&nbsp;</span>Dashboard|my|index';
 $lang->menu->product  = 'Product|product|index';
 $lang->menu->project  = 'Project|project|index';
@@ -124,10 +126,16 @@ $lang->themes['red']       = 'Red';
 $lang->themes['classblue'] = 'Blue';
 
 /* Index mododule menu. */
+$lang->index = new stdclass();
+$lang->index->menu = new stdclass();
+
 $lang->index->menu->product = 'Products|product|browse';
 $lang->index->menu->project = 'Projects|project|browse';
 
 /* Dashboard menu. */
+$lang->my = new stdclass();
+$lang->my->menu = new stdclass();
+
 $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index          = 'Index|my|index';
 $lang->my->menu->todo           = array('link' => 'Todo|my|todo|', 'subModule' => 'todo');
@@ -139,9 +147,14 @@ $lang->my->menu->myProject      = 'Project|my|project|';
 $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile|', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Change Password|my|changepassword|';
-$lang->todo->menu               = $lang->my->menu;
+
+$lang->todo = new stdclass();
+$lang->todo->menu = $lang->my->menu;
 
 /* Product menu. */
+$lang->product = new stdclass();
+$lang->product->menu = new stdclass();
+
 $lang->product->menu->list    = '%s';
 $lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
@@ -155,11 +168,19 @@ $lang->product->menu->project = 'Projects|product|project|status=all&productID=%
 $lang->product->menu->order   = 'Order|product|order|productID=%s';
 $lang->product->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>New|product|create', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '<span class="icon-all">&nbsp;</span>All|product|index|locate=false', 'float' => 'right');
-$lang->story->menu            = $lang->product->menu;
-$lang->productplan->menu      = $lang->product->menu;
-$lang->release->menu          = $lang->product->menu;
+
+$lang->story       = new stdclass();
+$lang->productplan = new stdclass();
+$lang->release     = new stdclass();
+
+$lang->story->menu       = $lang->product->menu;
+$lang->productplan->menu = $lang->product->menu;
+$lang->release->menu     = $lang->product->menu;
 
 /* Project menu. */
+$lang->project = new stdclass();
+$lang->project->menu = new stdclass();
+
 $lang->project->menu->list      = '%s';
 $lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask,importbug,burn');
 $lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
@@ -174,22 +195,36 @@ $lang->project->menu->view      = 'Manage|project|view|projectID=%s';
 $lang->project->menu->order     = 'Order|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add1">&nbsp;</span>New|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-all">&nbsp;</span>Projects|project|index|locate=no', 'float' => 'right');
-$lang->task->menu               = $lang->project->menu;
-$lang->build->menu              = $lang->project->menu;
+
+$lang->task  = new stdclass();
+$lang->build = new stdclass();
+$lang->task->menu  = $lang->project->menu;
+$lang->build->menu = $lang->project->menu;
 
 /* QA menu. */
+$lang->bug = new stdclass();
+$lang->bug->menu = new stdclass();
+
 $lang->bug->menu->product  = '%s';
 $lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s');
 
+$lang->testcase = new stdclass();
+$lang->testcase->menu = new stdclass();
+
 $lang->testcase->menu->product  = '%s';
 $lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
-$lang->testtask->menu           = $lang->testcase->menu;
+
+$lang->testtask = new stdclass();
+$lang->testtask->menu = $lang->testcase->menu;
 
 /* Doc menu. */
+$lang->doc = new stdclass();
+$lang->doc->menu = new stdclass();
+
 $lang->doc->menu->list    = '%s';
 $lang->doc->menu->browse  = array('link' => 'Doc|doc|browse|libID=%s', 'alias' => 'view,create,edit');
 $lang->doc->menu->edit    = 'Edit Library|doc|editLib|libID=%s';
@@ -198,15 +233,22 @@ $lang->doc->menu->delete  = array('link' => 'Delete Library|doc|deleteLib|libID=
 $lang->doc->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>New Library|doc|createLib', 'float' => 'right');
 
 /* Report menu. */
+$lang->report = new stdclass();
+$lang->report->menu = new stdclass();
+
 $lang->report->menu->product = array('link' => 'Product|report|productinfo');
 $lang->report->menu->prj     = array('link' => 'Project|report|projectdeviation');
 $lang->report->menu->test    = array('link' => 'Test|report|bugsummary', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 /* Resource menu. */
+$lang->webapp = new stdclass();
+$lang->webapp->menu = new stdclass();
 //$lang->webapp->menu->obtain   = array('link' => 'App Store|webapp|obtain');
 
 /* Company menu. */
+$lang->company = new stdclass();
+$lang->company->menu = new stdclass();
 $lang->company->menu->name         = '%s' . $lang->arrow;
 $lang->company->menu->browseUser   = array('link' => 'Users|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept         = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
@@ -216,11 +258,18 @@ $lang->company->menu->dynamic      = 'Dynamic|company|dynamic|';
 $lang->company->menu->addGroup     = array('link' => '<span class="icon-add1">&nbsp;</span>Add Group|group|create', 'float' => 'right');
 $lang->company->menu->batchAddUser = array('link' => '<span class="icon-add1">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
 $lang->company->menu->addUser      = array('link' => '<span class="icon-add1">&nbsp;</span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
-$lang->dept->menu            = $lang->company->menu;
-$lang->group->menu           = $lang->company->menu;
-$lang->user->menu            = $lang->company->menu;
+
+$lang->dept  = new stdclass();
+$lang->group = new stdclass();
+$lang->user  = new stdclass();
+
+$lang->dept->menu  = $lang->company->menu;
+$lang->group->menu = $lang->company->menu;
+$lang->user->menu  = $lang->company->menu;
 
 /* Admin menu. */
+$lang->admin = new stdclass();
+$lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Index|admin|index');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => 'Extension editor|editor|index', 'subModule' => 'editor');
@@ -228,14 +277,23 @@ $lang->admin->menu->mail      = array('link' => 'EmailSetting|mail|index', 'subM
 $lang->admin->menu->clearData = array('link' => 'ClearData|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
-$lang->convert->menu          = $lang->admin->menu;
-$lang->upgrade->menu          = $lang->admin->menu;
-$lang->action->menu           = $lang->admin->menu;
-$lang->extension->menu        = $lang->admin->menu;
-$lang->editor->menu           = $lang->admin->menu;
-$lang->mail->menu             = $lang->admin->menu;
+
+$lang->convert   = new stdclass();
+$lang->upgrade   = new stdclass();
+$lang->action    = new stdclass();
+$lang->extension = new stdclass();
+$lang->editor    = new stdclass();
+$lang->mail      = new stdclass();
+
+$lang->convert->menu   = $lang->admin->menu;
+$lang->upgrade->menu   = $lang->admin->menu;
+$lang->action->menu    = $lang->admin->menu;
+$lang->extension->menu = $lang->admin->menu;
+$lang->editor->menu    = $lang->admin->menu;
+$lang->mail->menu      = $lang->admin->menu;
 
 /* Groups. */
+$lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
 $lang->menugroup->productplan = 'product';
@@ -257,6 +315,7 @@ $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
 
 /* Error info. */
+$lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s does not exist.";
 $lang->error->length          = array("『%s』length should be『%s』", "『%s』length should between『%s』and 『%s』.");
 $lang->error->reg             = "『%s』should like『%s』";
@@ -276,6 +335,7 @@ $lang->error->passwordrule    = "Password should more than six letters.";
 $lang->error->accessDenied    = 'No purview';
 
 /* Pager. */
+$lang->pager = new stdclass();
 $lang->pager->noRecord  = "No records yet.";
 $lang->pager->digest    = "<strong>%s</strong> records, <strong>%s</strong> per page, <strong>%s/%s</strong> ";
 $lang->pager->first     = "First";
