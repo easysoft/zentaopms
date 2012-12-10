@@ -179,7 +179,7 @@ $lang->build->menu              = $lang->project->menu;
 
 /* QA menu. */
 $lang->bug->menu->product  = '%s';
-$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report', 'subModule' => 'tree');
+$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s');
 
