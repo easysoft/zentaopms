@@ -19,7 +19,6 @@ var browseType = '<?php echo $browseType;?>';
 <div id='featurebar'>
   <div class='f-left'>
     <span id='bymoduleTab' onclick='browseByModule()'><?php echo html::a($this->inlink('browse',"productID=$productID"), $lang->product->moduleStory);?></span>
-    <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
     <span id='assignedtomeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=assignedtome"), $lang->product->assignedToMe);?></span>
     <span id='openedbymeTab'>   <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=openedByMe"),   $lang->product->openedByMe);?></span>
     <span id='reviewedbymeTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=reviewedByMe"), $lang->product->reviewedByMe);?></span>
@@ -28,6 +27,7 @@ var browseType = '<?php echo $browseType;?>';
     <span id='activestoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=activeStory"),  $lang->product->activeStory);?></span>
     <span id='changedstoryTab'> <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=changedStory"), $lang->product->changedStory);?></span>
     <span id='closedstoryTab'>  <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=closedStory"),  $lang->product->closedStory);?></span>
+    <span id='allstoryTab'>     <?php echo html::a($this->inlink('browse', "productID=$productID&browseType=allStory"),     $lang->product->allStory);?></span>
     <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
@@ -111,8 +111,13 @@ var browseType = '<?php echo $browseType;?>';
               <?php
               if(count($stories))
               {
-                  echo html::selectAll() . html::selectReverse();
-
+                 echo html::selectAll() . html::selectReverse();
+                 
+                  if(common::hasPriv('story', 'batchEdit'))
+                  {
+                      $actionLink = $this->createLink('story', 'batchEdit', "from=productBrowse&productID=$productID&projectID=0&orderBy=$orderBy");
+                      echo html::commonButton($lang->story->batchEdit, "onclick=\"changeAction('productStoryForm', 'batchEdit', '$actionLink')\"");
+                  }
                   if(common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory')
                   {
                       $actionLink = $this->createLink('story', 'batchClose', "from=productBrowse&productID=$productID&projectID=0&orderBy=$orderBy");

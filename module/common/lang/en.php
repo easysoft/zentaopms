@@ -143,7 +143,7 @@ $lang->todo->menu               = $lang->my->menu;
 
 /* Product menu. */
 $lang->product->menu->list    = '%s';
-$lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s', 'subModule' => 'story');
+$lang->product->menu->story   = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');

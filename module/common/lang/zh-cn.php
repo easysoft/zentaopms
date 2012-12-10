@@ -143,7 +143,7 @@ $lang->todo->menu               = $lang->my->menu;
 
 /* 产品视图设置。*/
 $lang->product->menu->list    = '%s';
-$lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s',     'subModule' => 'story');
+$lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');

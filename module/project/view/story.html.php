@@ -35,7 +35,7 @@
         <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th class='w-status {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
         <th class='w-50px'>                  <?php echo $lang->story->taskCount;?></th>
-        <th class='w-150px {sorter:false}'>  <?php echo $lang->actions;?></th>
+        <th class='w-100px {sorter:false}'>  <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -83,6 +83,11 @@
           {
               echo html::selectAll() . html::selectReverse();
 
+              if(common::hasPriv('story', 'batchEdit'))
+              {
+                  $actionLink = $this->createLink('story', 'batchEdit', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
+                  echo html::commonButton($lang->story->batchEdit, "onclick=\"changeAction('projectStoryForm', 'batchEdit', '$actionLink')\"");
+              }
               if(common::hasPriv('story', 'batchClose'))
               {
                   $actionLink = $this->createLink('story', 'batchClose', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");

@@ -136,6 +136,7 @@ $lang->product->methodOrder[60] = 'ajaxGetPlans';
 $lang->resource->story->create      = 'create';
 $lang->resource->story->batchCreate = 'batchCreate';
 $lang->resource->story->edit        = 'edit';
+$lang->resource->story->batchEdit   = 'batchEdit';
 $lang->resource->story->export      = 'export';
 $lang->resource->story->delete      = 'delete';
 $lang->resource->story->view        = 'view';
