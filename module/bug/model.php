@@ -194,6 +194,86 @@ class bugModel extends model
     }
 
     /**
+     * Batch update bugs.
+     * 
+     * @access public
+     * @return array
+     */
+    public function batchUpdate()
+    {
+        $bugs       = array();
+        $allChanges = array();
+        $now        = helper::now();
+        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : array();
+
+        /* Adjust whether the post data is complete, if not, remove the last element of $bugIDList. */
+        if($this->session->showSuhosinInfo) array_pop($bugIDList);
+
+        if(!empty($bugIDList))
+        {
+            /* Initialize bugs from the post data.*/
+            foreach($bugIDList as $bugID)
+            {
+                $oldBug = $this->getByID($bugID);
+
+                $bug->lastEditedBy   = $this->app->user->account;
+                $bug->lastEditedDate = $now;
+                $bug->type           = $this->post->types[$bugID];
+                $bug->severity       = $this->post->severities[$bugID];
+                $bug->pri            = $this->post->pris[$bugID];
+                $bug->status         = $this->post->statuses[$bugID];
+                $bug->title          = htmlspecialchars($this->post->titles[$bugID]);
+                $bug->assignedTo     = $this->post->assignedTos[$bugID];
+                $bug->resolvedBy     = $this->post->resolvedBys[$bugID];
+                $bug->resolution     = $this->post->resolutions[$bugID];
+                $bug->duplicateBug   = $this->post->duplicateBugs[$bugID] ? $this->post->duplicateBugs[$bugID] : $oldBug->duplicateBug;
+
+                if($bug->assignedTo  != $oldBug->assignedTo)           $bug->assignedDate = $now;
+                if($bug->resolvedBy  != '' or $bug->resolution  != '') $bug->resolvedDate = $now;
+                if($bug->resolution  != '' and $bug->resolvedBy == '') $bug->resolvedBy   = $this->app->user->account;
+                if($bug->resolution  != '') 
+                { 
+                    $bug->status    = 'resolved';
+                    $bug->confirmed = 1; 
+                }
+                if($bug->resolution  != '' and $bug->assignedTo == '') 
+                {
+                    $bug->assignedTo   = $oldBug->openedBy;
+                    $bug->assignedDate = $now;
+                }
+
+                $bugs[$bugID] = $bug;
+                unset($bug);
+            }
+
+            /* Update bugs. */
+            foreach($bugs as $bugID => $bug)
+            {
+                $oldBug = $this->getByID($bugID);
+
+                $this->dao->update(TABLE_BUG)->data($bug)
+                    ->autoCheck()
+                    ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
+                    ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
+                    ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
+                    ->where('id')->eq((int)$bugID)
+                    ->exec();
+
+                if(!dao::isError())
+                {
+                    $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+                }
+                else
+                {
+                    die(js::error('bug#' . $bugID . dao::getError(true)));
+                }
+            }
+        }
+
+        return $allChanges;
+    }
+
+    /**
      * Assign a bug to a user again.
      * 
      * @param  int    $bugID 

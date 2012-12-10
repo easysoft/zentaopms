@@ -69,6 +69,7 @@ $lang->bug->index              = '首页';
 $lang->bug->create             = '创建';
 $lang->bug->confirmBug         = '确认';
 $lang->bug->edit               = '编辑';
+$lang->bug->batchEdit          =  '批量编辑';
 $lang->bug->assignTo           = '指派';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug详情';
