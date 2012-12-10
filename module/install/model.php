@@ -221,6 +221,7 @@ class installModel extends model
      */
     public function checkConfig()
     {
+        $return = new stdclass();
         $return->result = 'ok';
 
         /* Connect to database. */
