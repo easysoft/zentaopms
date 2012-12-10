@@ -13,6 +13,27 @@
 <?php
 class searchModel extends model
 {
+
+    /**
+     * Get search form URL. 
+     * 
+     * @param  array    $searchConfig 
+     * @access public
+     * @return void
+     */
+    public function getFormUrl($searchConfig)
+    {
+        $module       = $searchConfig['module'];
+        $searchFields = $searchConfig['fields'];
+        $fieldParams  = $searchConfig['params'];
+        $actionURL    = $searchConfig['actionURL'];
+        $queryID      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
+        $searchFields = helper::safe64Encode(json_encode($searchFields));
+        $fieldParams  = helper::safe64Encode(json_encode($fieldParams));
+        $actionURL    = helper::safe64Encode($actionURL);
+        return helper::createLink('search', 'buildForm', "module=$module&searchFields=$searchFields&fieldParams=$fieldParams&actionURL=$actionURL&queryID=$queryID");
+    }
+
     /**
      * Build the query to execute.
      * 

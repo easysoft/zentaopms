@@ -632,6 +632,7 @@ function togglesearch()
                 $('#' + browseType + 'Tab').removeClass('active');
             }
             $('#bysearchTab').addClass('active');
+            ajaxGetSearchForm();
             $('#querybox').removeClass('hidden');
         },
         function()
@@ -650,6 +651,22 @@ function togglesearch()
             $('#querybox').addClass('hidden');
         } 
     );
+}
+
+/**
+ * Ajax get search form 
+ * 
+ * @access public
+ * @return void
+ */
+function ajaxGetSearchForm()
+{
+    if($('#querybox').html() == '')
+    {
+        $.get(formUrl, function(data){
+            $('#querybox').html(data);
+        });
+    }
 }
 
 /**

@@ -13,3 +13,7 @@ function changeProduct(product)
     link = createLink('company', 'dynamic', 'type=product&param=' + product);
     location.href = link;
 }
+
+$(function(){
+    if(browseType == 'bysearch') ajaxGetSearchForm();    
+})

@@ -24,6 +24,9 @@ class search extends control
      */
     public function buildForm($module, $searchFields, $fieldParams, $actionURL, $queryID = 0)
     {
+        $searchFields = is_array($searchFields) ? $searchFields : json_decode(helper::safe64Decode($searchFields), true);
+        $fieldParams  = is_array($fieldParams) ? $fieldParams : json_decode(helper::safe64Decode($fieldParams), true);
+        $actionURL    = (strpos($actionURL, 'index.php?') !== false or strrpos($actionURL, '.html') !== false) ? $actionURL : helper::safe64Decode($actionURL);
         $this->search->initSession($module, $searchFields, $fieldParams);
 
         $this->view->module       = $module;

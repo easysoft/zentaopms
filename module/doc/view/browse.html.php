@@ -16,6 +16,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
+var formUrl    = '<?php echo $formUrl;?>';
 </script>
 <div id='featurebar'>
   <div class='f-left'>
@@ -26,7 +27,7 @@ var browseType = '<?php echo $browseType;?>';
     <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>
   </div>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 
 <table class='cont-lt3'>
   <tr valign='top'>

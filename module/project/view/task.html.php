@@ -16,9 +16,10 @@
 <?php include '../../common/view/treeview.html.php';?>
 <?php include './taskheader.html.php';?>
 <script language='Javascript'>
-var browseType = '<?php echo $browseType;?>';
+var browseType  = '<?php echo $browseType;?>';
+var formUrl     = '<?php echo $formUrl?>';
 </script>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 <table class='cont-lt1'>
   <tr valign='top'>
     <?php if($browseType =='byproject'):?>

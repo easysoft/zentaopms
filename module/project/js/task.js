@@ -9,6 +9,7 @@ function browseByModule()
 $(function()
 {
     $('#' + browseType + 'Tab').addClass('active');
+    if(browseType == 'bysearch') ajaxGetSearchForm();
 });
 
 /* Browse by project. */

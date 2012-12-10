@@ -14,6 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
+var formUrl    = '<?php echo $formUrl;?>';
 </script>
 <div id='featurebar'>
   <?php 
@@ -31,7 +32,7 @@ var browseType = '<?php echo $browseType;?>';
   echo "<span id='bysearchTab'>" . html::a('#', '<span class="icon-search"></span>' . $lang->action->dynamic->search) . "</span>";
   ?>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 <table class='table-1 colored tablesorter'>
   <thead>
   <tr class='colhead'>

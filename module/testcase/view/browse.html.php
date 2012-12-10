@@ -17,6 +17,7 @@
 <script language="Javascript">
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
+var formUrl    = '<?php echo $formUrl;?>';
 </script>
 
 <div id='featurebar'>
@@ -35,7 +36,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     <?php common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID"); ?>
   </div>
 </div>
-<div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+<div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
 <form method='post' action='<?php echo $this->inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy");?>'>
   <table class='cont-lt1'>
     <tr valign='top'>

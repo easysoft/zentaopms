@@ -15,6 +15,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
+var formUrl    = '<?php echo $formUrl;?>';
 </script>
 <div id='featurebar'>
   <div class='f-left'>
@@ -37,7 +38,7 @@ var browseType = '<?php echo $browseType;?>';
     <?php common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); ?>
   </div>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 <form method='post' id='productStoryForm'>
   <table class='cont-lt1'>
     <tr valign='top'>

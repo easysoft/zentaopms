@@ -223,10 +223,10 @@ class company extends control
         $this->config->company->dynamic->search['params']['project']['values'] = $projects;
         $this->config->company->dynamic->search['params']['product']['values'] = $products; 
         $this->config->company->dynamic->search['params']['actor']['values']   = $users; 
-        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->company->dynamic->search);
 
         /* Assign. */
         $this->view->browseType = $browseType;
+        $this->view->formUrl    = $this->loadModel('search')->getFormUrl($this->config->company->dynamic->search);
         $this->view->account    = $account;
         $this->view->product    = $product;
         $this->view->project    = $project;

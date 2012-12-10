@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php echo $searchForm;?>
+<div id='querybox'></div>
 <form method='post'>
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
@@ -67,4 +67,8 @@
   </tfoot>
 </table>
 </form>
+<script type='text/javascript'>
+var formUrl = '<?php echo $formUrl?>';
+ajaxGetSearchForm();
+</script>
 <?php include '../../common/view/footer.html.php';?>

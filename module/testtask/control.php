@@ -344,7 +344,6 @@ class testtask extends control
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID");
-        $this->view->searchForm = $this->fetch('search', 'buildForm', $this->config->testcase->search);
 
         /* Save session. */
         $this->testtask->setMenu($this->products, $productID);
@@ -392,10 +391,11 @@ class testtask extends control
                 ->page($pager)
                 ->fetchAll();
         }
-        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->cases  = $cases;
-        $this->view->taskID = $taskID;
-        $this->view->pager  = $pager;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->cases   = $cases;
+        $this->view->taskID  = $taskID;
+        $this->view->pager   = $pager;
+        $this->view->formUrl = $this->loadModel('search')->getFormUrl($this->config->testcase->search);
 
         $this->display();
     }

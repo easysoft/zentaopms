@@ -15,6 +15,7 @@
 <?php include '../../common/view/colorize.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
+var formUrl    = '<?php echo $formUrl;?>';
 var moduleID   = '<?php echo $moduleID;?>';
 var customed   = <?php echo (int)$customed;?>;
 </script>
@@ -43,7 +44,7 @@ var customed   = <?php echo (int)$customed;?>;
     <?php common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID"); ?>
   </div>
 </div>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'><?php echo $searchForm;?></div>
+<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 
 <?php 
     if($customed)
