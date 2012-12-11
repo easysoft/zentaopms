@@ -18,7 +18,7 @@
     <?php
     $projects = array(0 => $lang->project->fromproject) + $projects;
     echo $lang->project->selectProject . ':';
-    echo html::select('fromproject', $projects, $fromProject, "class='select-2' onchange='reload($projectID, this.value)'");
+    echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)'");
     ?>
     </caption>
     <thead>

@@ -624,7 +624,7 @@ class projectModel extends model
         $now   = date('Y-m-d');
         foreach($projects as $id => $project)
         {
-            if($this->checkPriv($project) and ($project->status == 'done' or $project->end <= $now)) $pairs[$id] = $project->name;
+            if($this->checkPriv($project) and ($project->status == 'done' or $project->end < $now)) $pairs[$id] = $project->name;
         }
         return $pairs;
     }
