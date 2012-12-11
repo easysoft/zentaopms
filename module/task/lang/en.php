@@ -133,9 +133,11 @@ $lang->task->successSaved        = "Successfully saved";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> Postponed %s days </strong>";
 $lang->task->remindBug           = "This task from Bug, update the Bug:%s or not?";
 
+$lang->task->error = new stdclass();
 $lang->task->error->consumed = '"Consumed" must be number';
 
 /* Report. */
+$lang->task->report = new stdclass();
 $lang->task->report->common = 'Report';
 $lang->task->report->select = 'Select';
 $lang->task->report->create = 'Create';
@@ -154,6 +156,8 @@ $lang->task->report->charts['tasksPerFinishedBy']   = 'Finished By';
 $lang->task->report->charts['tasksPerClosedReason'] = 'Closed reason';
 $lang->task->report->charts['finishedTasksPerDay']  = 'Finished tasks per day';
 
+$lang->task->report->options = new stdclass();
+$lang->task->report->options->graph = new stdclass();
 $lang->task->report->options->swf                     = 'pie2d';
 $lang->task->report->options->width                   = 'auto';
 $lang->task->report->options->height                  = 300;
@@ -166,6 +170,34 @@ $lang->task->report->options->graph->rotateNames      = 0;
 $lang->task->report->options->graph->yAxisName        = 'COUNT';
 $lang->task->report->options->graph->pieRadius        = 100;
 $lang->task->report->options->graph->showColumnShadow = 0;
+
+$lang->task->report->tasksPerProject      = new stdclass();
+$lang->task->report->tasksPerModule       = new stdclass();
+$lang->task->report->tasksPerAssignedTo   = new stdclass();
+$lang->task->report->tasksPerType         = new stdclass();
+$lang->task->report->tasksPerPri          = new stdclass();
+$lang->task->report->tasksPerStatus       = new stdclass();
+$lang->task->report->tasksPerDeadline     = new stdclass();
+$lang->task->report->tasksPerEstimate     = new stdclass();
+$lang->task->report->tasksPerLeft         = new stdclass();
+$lang->task->report->tasksPerConsumed     = new stdclass();
+$lang->task->report->tasksPerFinishedBy   = new stdclass();
+$lang->task->report->tasksPerClosedReason = new stdclass();
+$lang->task->report->finishedTasksPerDay  = new stdclass();
+
+$lang->task->report->tasksPerProject->graph      = new stdclass();
+$lang->task->report->tasksPerModule->graph       = new stdclass();
+$lang->task->report->tasksPerAssignedTo->graph   = new stdclass();
+$lang->task->report->tasksPerType->graph         = new stdclass();
+$lang->task->report->tasksPerPri->graph          = new stdclass();
+$lang->task->report->tasksPerStatus->graph       = new stdclass();
+$lang->task->report->tasksPerDeadline->graph     = new stdclass();
+$lang->task->report->tasksPerEstimate->graph     = new stdclass();
+$lang->task->report->tasksPerLeft->graph         = new stdclass();
+$lang->task->report->tasksPerConsumed->graph     = new stdclass();
+$lang->task->report->tasksPerFinishedBy->graph   = new stdclass();
+$lang->task->report->tasksPerClosedReason->graph = new stdclass();
+$lang->task->report->finishedTasksPerDay->graph  = new stdclass();
 
 $lang->task->report->tasksPerProject->graph->xAxisName      = 'Project';
 $lang->task->report->tasksPerModule->graph->xAxisName       = 'Module';

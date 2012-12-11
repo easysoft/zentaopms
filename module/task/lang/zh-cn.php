@@ -133,9 +133,11 @@ $lang->task->successSaved        = "成功添加，";
 $lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天 </strong>";
 $lang->task->remindBug           = "该任务为Bug转化得到，是否更新Bug:%s ?";
 
+$lang->task->error = new stdclass();
 $lang->task->error->consumed = '"已经消耗"必须为数字';
 
 /* 统计报表。*/
+$lang->task->report = new stdclass();
 $lang->task->report->common = '报表';
 $lang->task->report->select = '请选择报表类型';
 $lang->task->report->create = '生成报表';
@@ -154,6 +156,8 @@ $lang->task->report->charts['tasksPerFinishedBy']   = '由谁完成统计';
 $lang->task->report->charts['tasksPerClosedReason'] = '关闭原因统计';
 $lang->task->report->charts['finishedTasksPerDay']  = '每天完成统计';
 
+$lang->task->report->options = new stdclass();
+$lang->task->report->options->graph = new stdclass();
 $lang->task->report->options->swf                     = 'pie2d';
 $lang->task->report->options->width                   = 'auto';
 $lang->task->report->options->height                  = 300;
@@ -166,6 +170,34 @@ $lang->task->report->options->graph->rotateNames      = 0;
 $lang->task->report->options->graph->yAxisName        = 'COUNT';
 $lang->task->report->options->graph->pieRadius        = 100; // 饼图直径。
 $lang->task->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
+
+$lang->task->report->tasksPerProject      = new stdclass();
+$lang->task->report->tasksPerModule       = new stdclass();
+$lang->task->report->tasksPerAssignedTo   = new stdclass();
+$lang->task->report->tasksPerType         = new stdclass();
+$lang->task->report->tasksPerPri          = new stdclass();
+$lang->task->report->tasksPerStatus       = new stdclass();
+$lang->task->report->tasksPerDeadline     = new stdclass();
+$lang->task->report->tasksPerEstimate     = new stdclass();
+$lang->task->report->tasksPerLeft         = new stdclass();
+$lang->task->report->tasksPerConsumed     = new stdclass();
+$lang->task->report->tasksPerFinishedBy   = new stdclass();
+$lang->task->report->tasksPerClosedReason = new stdclass();
+$lang->task->report->finishedTasksPerDay  = new stdclass();
+
+$lang->task->report->tasksPerProject->graph      = new stdclass();
+$lang->task->report->tasksPerModule->graph       = new stdclass();
+$lang->task->report->tasksPerAssignedTo->graph   = new stdclass();
+$lang->task->report->tasksPerType->graph         = new stdclass();
+$lang->task->report->tasksPerPri->graph          = new stdclass();
+$lang->task->report->tasksPerStatus->graph       = new stdclass();
+$lang->task->report->tasksPerDeadline->graph     = new stdclass();
+$lang->task->report->tasksPerEstimate->graph     = new stdclass();
+$lang->task->report->tasksPerLeft->graph         = new stdclass();
+$lang->task->report->tasksPerConsumed->graph     = new stdclass();
+$lang->task->report->tasksPerFinishedBy->graph   = new stdclass();
+$lang->task->report->tasksPerClosedReason->graph = new stdclass();
+$lang->task->report->finishedTasksPerDay->graph  = new stdclass();
 
 $lang->task->report->tasksPerProject->graph->xAxisName      = '项目';
 $lang->task->report->tasksPerModule->graph->xAxisName       = '模块';
@@ -185,5 +217,6 @@ $lang->task->report->finishedTasksPerDay->height             = 400;
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
+$lang->task->placeholder = new stdclass();
 $lang->task->placeholder->estimate = '对该任务最初的预计';
 $lang->task->placeholder->mailto   = '输入用户名进行选择'; 
