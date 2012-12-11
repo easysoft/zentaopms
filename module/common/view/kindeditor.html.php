@@ -46,7 +46,7 @@ $(document).ready(function()
             editor = K.create('#'+editor.id,{
                 items:editorTool,
                 filterMode:true, 
-                cssPath:['<?php echo $jsRoot?>jquery/kindeditor/plugins/code/prettify.css'],
+                cssPath:['<?php echo $jsRoot?>kindeditor/plugins/code/prettify.css'],
                 urlType:'relative', 
                 uploadJson: createLink('file', 'ajaxUpload'),
                 allowFileManager:true,

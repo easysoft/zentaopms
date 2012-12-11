@@ -3505,7 +3505,7 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 		'body {margin:0;padding:5px;}',
 		'body, td {font:12px/1.5 "sans serif",tahoma,verdana,helvetica;}',
 		'body, p, div {word-wrap: break-word;}',
-		'p {margin:5px 0;}',
+		'p {margin:0px;}',
 		'table {border-collapse:collapse;}',
 		'img {border:0;}',
 		'noscript {display:none;}',
