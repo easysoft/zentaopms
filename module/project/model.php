@@ -607,6 +607,29 @@ class projectModel extends model
     }
 
     /**
+     * Get projects to import 
+     * 
+     * @access public
+     * @return void
+     */
+    public function getProjectsToImport()
+    {
+        $projects = $this->dao->select('distinct t1.*')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.id=t2.project')
+            ->where('t2.status')->notIN('done,closed')
+            ->orderBy('id desc')
+            ->fetchAll('id');
+
+        $pairs = array();
+        $now   = date('Y-m-d');
+        foreach($projects as $id => $project)
+        {
+            if($this->checkPriv($project) and ($project->status == 'done' or $project->end <= $now)) $pairs[$id] = $project->name;
+        }
+        return $pairs;
+    }
+
+    /**
      * Update products of a project.
      * 
      * @param  int    $projectID 

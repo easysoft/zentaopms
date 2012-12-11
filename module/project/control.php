@@ -302,8 +302,10 @@ class project extends control
         }
 
         $project   = $this->commonAction($toProject);
-        $projects  = $this->project->getPairs('nocode');
+        $projects  = $this->project->getProjectsToImport();
         unset($projects[$toProject]);
+
+        $fromProject = ($fromProject == 0 and !empty($projects)) ? key($projects) : $fromProject;
 
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true));
@@ -315,7 +317,7 @@ class project extends control
         $this->view->tasks2Imported = $this->project->getTasks2Imported($fromProject);
         $this->view->projects       = $projects;
         $this->view->projectID      = $project->id;
-        $this->view->fromProject    = ($fromProject == 0 and !empty($projects)) ? key($projects) : $fromProject;
+        $this->view->fromProject    = $fromProject;
         $this->display();
     }
 
