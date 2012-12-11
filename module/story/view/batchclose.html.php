@@ -47,7 +47,7 @@
       <?php else:?>  
       <td>
         <div class='f-left'>
-          <?php echo html::select("closedReasons[$story->id]", $lang->story->reasonList, $story->closedReason, 'class="w-60px" disabled="disabled"');?>
+          <?php echo html::select("closedReasons[$story->id]", $lang->story->reasonList, $story->closedReason, 'class="w-70px" disabled="disabled"');?>
         </div>
       </td>
       <?php endif;?>
