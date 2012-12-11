@@ -416,7 +416,7 @@ EOT;
             global $lang;
             $label = $lang->save;
         }
-        return " <input type='submit' id='submit' value='$label' class='button-s' $misc /> ";
+        return " <input type='submit' id='submit' value='$label' $misc class='button-s' /> ";
     }
 
     /**
