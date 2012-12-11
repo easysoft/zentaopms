@@ -11,7 +11,7 @@
  */
 class tree extends control
 {
-    const NEW_CHILD_COUNT = 5;
+    const NEW_CHILD_COUNT = 10;
 
     /**
      * Module browse.
