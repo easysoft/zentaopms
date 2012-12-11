@@ -97,7 +97,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function batchCreate($projectID = 0, $storyID = 0)
+    public function batchCreate($projectID = 0, $storyID = 0, $iframe = 0)
     {
         $project   = $this->project->getById($projectID); 
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
@@ -118,6 +118,7 @@ class task extends control
             }            
 
             /* Locate the browser. */
+            if($iframe) die(js::reload('parent.parent'));
             die(js::locate($taskLink, 'parent'));
         }
 
@@ -254,9 +255,9 @@ class task extends control
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
     
             /* Assign. */
-            $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
-            $this->view->position[] = $this->lang->task->common;
-            $this->view->position[] = $this->lang->task->batchEdit;
+            $this->view->header->title = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->position[]    = $this->lang->task->common;
+            $this->view->position[]    = $this->lang->task->batchEdit;
 
             $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
             $members = $members + array('closed' => 'Closed');

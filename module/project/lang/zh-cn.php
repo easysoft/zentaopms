@@ -154,6 +154,7 @@ $lang->project->taskSummary     = "本页共 <strong>%s</strong> 个任务，未
 $lang->project->memberHours     = "%s共有 <strong>%s</strong> 个可用工时，";
 $lang->project->groupSummary    = "本组共 <strong>%s</strong> 个任务，未开始<strong>%s</strong>，进行中<strong>%s</strong>，总预计<strong>%s</strong>工时，已消耗<strong>%s</strong>工时，剩余<strong>%s</strong>工时。";
 $lang->project->wbs             = "分解任务";
+$lang->project->batchWBS        = "批量分解";
 $lang->project->largeBurnChart  = '点击查看大图';
 $lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>如何更新?</i></a>";
 $lang->project->whyNoStories    = "看起来没有需求可以关联。请检查下项目关联的产品中有没有需求，而且要确保它们已经审核通过。";

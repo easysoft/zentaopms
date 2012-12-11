@@ -218,7 +218,7 @@ class project extends control
         $this->app->session->set('storyList', $this->app->getURI(true));
 
         /* Header and session. */
-        $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->project->task;
+        $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->task;
         $this->view->position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[]      = $this->lang->project->task;
 

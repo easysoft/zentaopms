@@ -146,7 +146,7 @@ class testtask extends control
         $productID  = $this->product->saveState($productID, $this->products);
         $this->testtask->setMenu($this->products, $productID);
 
-        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
+        $this->view->header->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->create;
 
@@ -178,7 +178,7 @@ class testtask extends control
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID);
 
-        $this->view->header['title'] = "TASK #$task->id $task->name/" . $this->products[$productID];
+        $this->view->header->title   = "TASK #$task->id $task->name/" . $this->products[$productID];
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->view;
 
@@ -236,7 +236,7 @@ class testtask extends control
         foreach($this->view->runs as $run) $testcaseIDs .= ',' . $run->case;
         $this->session->set('testcaseIDs', $testcaseIDs . ',');
 
-        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
+        $this->view->header->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->cases;
         $this->view->productID   = $productID;
@@ -286,7 +286,7 @@ class testtask extends control
         /* Set menu. */
         $this->testtask->setMenu($this->products, $productID);
 
-        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
+        $this->view->header->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->edit;
 
@@ -355,7 +355,7 @@ class testtask extends control
         /* Save session. */
         $this->testtask->setMenu($this->products, $productID);
 
-        $this->view->header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->linkCase;
+        $this->view->header->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->linkCase;
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->linkCase;
 

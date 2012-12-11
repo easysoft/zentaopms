@@ -317,7 +317,7 @@ class testcase extends control
         $productID = $case->product;
         $this->testcase->setMenu($this->products, $productID);
 
-        $this->view->header['title'] = "CASE #$case->id $case->title - " . $this->products[$productID];
+        $this->view->header->title   = "CASE #$case->id $case->title - " . $this->products[$productID];
         $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testcase->view;
 
@@ -435,7 +435,7 @@ class testcase extends control
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
 
             /* Assign. */
-            $this->view->header['title'] = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+            $this->view->header->title   = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
             $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
             $this->view->position[]      = $this->lang->testcase->common;
             $this->view->position[]      = $this->lang->testcase->batchEdit;

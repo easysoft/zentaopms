@@ -325,12 +325,12 @@ class story extends control
             if(!$projectID)
             {
                 $product = $this->product->getByID($productID);
-                $this->view->header['title'] = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
+                $this->view->header->title = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
             }
             else
             {
                 $project = $this->project->getByID($projectID);
-                $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
+                $this->view->header->title = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
             }
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->position[]       = $this->lang->story->common;
@@ -646,12 +646,12 @@ class story extends control
             if(!$projectID)
             {
                 $product = $this->product->getByID($productID);
-                $this->view->header['title'] = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+                $this->view->header->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
             }
             else
             {
                 $project = $this->project->getByID($projectID);
-                $this->view->header['title'] = $project->name . $this->lang->colon . $this->lang->story->batchClose;
+                $this->view->header->title = $project->name . $this->lang->colon . $this->lang->story->batchClose;
             }
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->position[]       = $this->lang->story->common;

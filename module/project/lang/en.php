@@ -154,6 +154,7 @@ $lang->project->taskSummary     = "Total tasks shown: <strong>%s</strong>. Pendi
 $lang->project->memberHours     = "%s has <strong>%s</strong> workhours, ";
 $lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
 $lang->project->wbs             = "WBS";
+$lang->project->batchWBS        = "Batch WBS";
 $lang->project->largeBurnChart  = 'View large';
 $lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>How?</i></a>";
 $lang->project->whyNoStories    = "There no active stories to added to this project. Please check the linked product.";
