@@ -279,12 +279,13 @@ class deptModel extends model
      * @access public
      * @return array
      */
-    public function getUsers($deptID)
+    public function getUsers($deptID, $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
             ->beginIF($deptID)->andWhere('dept')->in($deptID)->fi()
             ->orderBy('id')
+            ->page($pager)
             ->fetchAll();
     }
     

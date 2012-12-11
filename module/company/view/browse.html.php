@@ -71,6 +71,7 @@ include '../../common/view/tablesorter.html.php';
         </tr>
         <?php endforeach;?>
         </tbody>
+        <tr><td colspan='10'><?php $pager->show()?></td></tr>
       </table>
     </td>
   </tr>

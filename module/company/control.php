@@ -43,22 +43,27 @@ class company extends control
      * @access public
      * @return void
      */
-    public function browse($deptID = 0)
+    public function browse($deptID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->lang->set('menugroup.company', 'company');
         $childDeptIds = $this->dept->getAllChildID($deptID);
 
         $this->company->setMenu($deptID);
 
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         $header['title'] = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $position[]      = $this->lang->dept->common;
 
         $this->view->header      = $header;
         $this->view->position    = $position;
-        $this->view->users       = $this->dept->getUsers($childDeptIds);
+        $this->view->users       = $this->dept->getUsers($childDeptIds, $pager);
         $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
         $this->view->parentDepts = $this->dept->getParents($deptID);
         $this->view->deptID      = $deptID;
+        $this->view->pager   = $pager;
 
         $this->display();
     }
