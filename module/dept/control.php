@@ -11,7 +11,7 @@
  */
 class dept extends control
 {
-    const NEW_CHILD_COUNT = 5;
+    const NEW_CHILD_COUNT = 10;
 
     /**
      * Construct function, set menu. 
