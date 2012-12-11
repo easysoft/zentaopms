@@ -16,17 +16,20 @@ $lang->my->dynamic        = '我的动态';
 $lang->my->editProfile    = '更新信息';
 $lang->my->changePassword = '修改密码';
 
+$lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派给我';
 $lang->my->taskMenu->openedByMe   = '由我创建';
 $lang->my->taskMenu->finishedByMe = '由我完成';
 $lang->my->taskMenu->closedByMe   = '由我关闭';
 $lang->my->taskMenu->canceledByMe = '由我取消';
 
+$lang->my->storyMenu = new stdclass();
 $lang->my->storyMenu->assignedToMe = '指派给我';
 $lang->my->storyMenu->openedByMe   = '由我创建';
 $lang->my->storyMenu->reviewedByMe = '由我评审';
 $lang->my->storyMenu->closedByMe   = '由我关闭';
 
+$lang->my->home = new stdclass();
 $lang->my->home->latest        =  '最新动态';
 $lang->my->home->action        =  "%s, %s <i>%s</i> %s <a href='%s'>%s</a>。";
 $lang->my->home->projects      =  '项目';
