@@ -151,6 +151,24 @@ class userModel extends model
     }
 
     /**
+     * Get users by sql.
+     * 
+     * @param  int    $query 
+     * @param  int    $pager 
+     * @access public
+     * @return void
+     */
+    public function getByQuery($query, $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_USER)
+            ->where($query)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('id')
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
      * Create a user.
      * 
      * @access public

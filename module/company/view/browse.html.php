@@ -16,6 +16,9 @@ include '../../common/view/treeview.html.php';
 include '../../common/view/tablesorter.html.php';
 ?>
 <table class='cont-lt1'>
+  <tr>
+    <td colspan='3'><div id='querybox'><?php echo $searchForm?></div></td>
+  </tr>
   <tr valign='top'>
     <td class='side'>
       <div class='box-title'><?php echo $lang->dept->common;?></div>

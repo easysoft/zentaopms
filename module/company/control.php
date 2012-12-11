@@ -21,7 +21,6 @@ class company extends control
     {
         parent::__construct();
         $this->loadModel('dept');
-        $this->app->loadLang('user');
         $this->company->setMenu();
     }
 
@@ -43,27 +42,58 @@ class company extends control
      * @access public
      * @return void
      */
-    public function browse($deptID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($param = 0, $type = 'bydept', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('search');
         $this->lang->set('menugroup.company', 'company');
-        $childDeptIds = $this->dept->getAllChildID($deptID);
 
+        $deptID = $type == 'bydept' ? (int)$param : 0;
         $this->company->setMenu($deptID);
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Build the search form. */
+        $queryID = $type == 'bydept' ? 0 : (int)$param;
+        $this->config->company->browse->search['actionURL'] = $this->createLink('company', 'browse', "param=myQueryID&type=bysearch");
+        $this->config->company->browse->search['queryID']   = $queryID;
+        $this->config->company->browse->search['params']['dept']['values'] = array('' => '') + $this->dept->getOptionMenu();
+
         $header['title'] = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $position[]      = $this->lang->dept->common;
 
+        if($type == 'bydept')
+        {
+            $childDeptIds = $this->dept->getAllChildID($deptID);
+            $users        = $this->dept->getUsers($childDeptIds, $pager);
+        }
+        else
+        {
+            if($queryID)
+            {
+                $query = $this->search->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('userQuery', $query->sql);
+                    $this->session->set('userForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('userQuery', ' 1 = 1');
+                }
+            }
+            $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager);
+        }
+
         $this->view->header      = $header;
         $this->view->position    = $position;
-        $this->view->users       = $this->dept->getUsers($childDeptIds, $pager);
+        $this->view->users       = $users;
+        $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
         $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
         $this->view->parentDepts = $this->dept->getParents($deptID);
         $this->view->deptID      = $deptID;
-        $this->view->pager   = $pager;
+        $this->view->pager       = $pager;
 
         $this->display();
     }

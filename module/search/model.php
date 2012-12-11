@@ -91,6 +91,11 @@ class searchModel extends model
                     $allModules = $this->loadModel('tree')->getAllChildId($value);
                     $where .= helper::dbIN($allModules);
                 }
+                elseif($this->post->$fieldName == 'dept')
+                {
+                    $allDepts = $this->loadModel('dept')->getAllChildId($value);
+                    $where .= helper::dbIN($allDepts);
+                }
                 else
                 {
                     $where .= ' = ' . $this->dbh->quote($value) . ' ';
