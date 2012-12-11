@@ -1,9 +1,13 @@
 <?php
+$config->company = new stdclass();
+$config->company->create = new stdclass();
+$config->company->edit   = new stdclass();
 $config->company->create->requiredFields = 'name,pms';
 $config->company->edit->requiredFields   = 'name,pms';
 
 global $lang, $app;
 $app->loadLang('action');
+$config->company->dynamic = new stdclass();
 $config->company->dynamic->search['module']               = 'action';
 $config->company->dynamic->search['fields']['product']    = $lang->action->product;
 $config->company->dynamic->search['fields']['actor']      = $lang->action->actor;
