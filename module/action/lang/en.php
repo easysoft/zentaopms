@@ -25,6 +25,7 @@ $lang->action->actionID   = 'ActionID';
 $lang->action->date       = 'Date';
 $lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic";
 
+$lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = 'Today';
 $lang->action->dynamic->yesterday  = 'Yesterday';
 $lang->action->dynamic->twoDaysAgo = 'Two days ago';
@@ -51,6 +52,7 @@ $lang->action->objectTypes['doclib']      = 'DocLib';
 $lang->action->objectTypes['todo']        = 'TODO';
 
 /* The desc of actions. */
+$lang->action->desc = new stdclass();
 $lang->action->desc->common       = '$date, <strong>$action</strong> by <strong>$actor</strong>.';
 $lang->action->desc->extra        = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>.';
 $lang->action->desc->opened       = '$date, opened by <strong>$actor</strong>.';
@@ -80,6 +82,7 @@ $lang->action->desc->diff2        = 'changed <strong><i>%s</i></strong>, the dif
 $lang->action->desc->diff3        = "changed file's name %s to %s.";
 
 /* The action labels. */
+$lang->action->label = new stdclass();
 $lang->action->label->created             = 'created';
 $lang->action->label->opened              = 'opened';
 $lang->action->label->changed             = 'changed';

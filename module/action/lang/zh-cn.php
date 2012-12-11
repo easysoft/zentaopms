@@ -25,6 +25,7 @@ $lang->action->actionID   = '记录ID';
 $lang->action->date       = '日期';
 $lang->action->trashTips  = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
 
+$lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';
 $lang->action->dynamic->yesterday  = '昨天';
 $lang->action->dynamic->twoDaysAgo = '前天';
@@ -51,6 +52,7 @@ $lang->action->objectTypes['doclib']      = '文档库';
 $lang->action->objectTypes['todo']        = 'TODO';
 
 /* 用来描述操作历史记录。*/
+$lang->action->desc = new stdclass();
 $lang->action->desc->common       = '$date, <strong>$action</strong> by <strong>$actor</strong>。' . "\n";
 $lang->action->desc->extra        = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>。' . "\n";
 $lang->action->desc->opened       = '$date, 由 <strong>$actor</strong> 创建。' . "\n";
@@ -80,6 +82,7 @@ $lang->action->desc->diff2        = '修改了 <strong><i>%s</i></strong>，区�
 $lang->action->desc->diff3        = '将文件名 %s 改为 %s 。' . "\n";
 
 /* 用来显示动态信息。*/
+$lang->action->label = new stdclass();
 $lang->action->label->created             = '创建了';
 $lang->action->label->opened              = '创建了';
 $lang->action->label->changed             = '变更了';
