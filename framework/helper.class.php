@@ -530,5 +530,5 @@ function isLocalIP()
  */
 function getWebRoot()
 {
-    return rtrim(str_replace('\\', '/', pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME)), '/') . '/';
+    return substr($_SERVER['SCRIPT_NAME'], 0, (strrpos($_SERVER['SCRIPT_NAME'], '/') + 1));
 }
