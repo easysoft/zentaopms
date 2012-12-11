@@ -521,3 +521,14 @@ function isLocalIP()
     if($serverIP == '127.0.0.1') return true;
     return !filter_var($serverIP, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE);
 }
+
+/**
+ * Get web root. 
+ * 
+ * @access public
+ * @return string 
+ */
+function getWebRoot()
+{
+    return rtrim(str_replace('\\', '/', pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME)), '/') . '/';
+}
