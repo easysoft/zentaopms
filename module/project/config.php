@@ -1,4 +1,5 @@
 <?php
+$config->project = new stdclass();
 $config->project->defaultWorkhours = 7;
 $config->project->orderBy          = 'isDone, `order`, status';
 

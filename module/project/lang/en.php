@@ -61,6 +61,7 @@ $lang->project->endList[93]  = 'Three Months';
 $lang->project->endList[186] = 'Half Of Year';
 $lang->project->endList[365] = 'One Year';
 
+$lang->team = new stdclass();
 $lang->team->account    = 'Account';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Join date';
@@ -175,6 +176,9 @@ $lang->project->createTask            = 'Create task';
 $lang->project->goback                = 'Go back（Automatically after 5 seconds）';
 
 /* Report. */
+$lang->project->charts = new stdclass();
+$lang->project->charts->burn = new stdclass();
+$lang->project->charts->burn->graph = new stdclass();
 $lang->project->charts->burn->graph->caption      = "Burndown chart";
 $lang->project->charts->burn->graph->xAxisName    = "Date";
 $lang->project->charts->burn->graph->yAxisName    = "HOUR";
@@ -184,9 +188,11 @@ $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
+$lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code = 'Project code';
 
-$lang->project->selectGroup->doing     = '(Doing)';
-$lang->project->selectGroup->done      = '(Done)';
+$lang->project->selectGroup = new stdclass();
+$lang->project->selectGroup->doing = '(Doing)';
+$lang->project->selectGroup->done  = '(Done)';
 
 $lang->project->projectTasks = 'ProjectTasks';

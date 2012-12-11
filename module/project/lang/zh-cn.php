@@ -61,6 +61,7 @@ $lang->project->endList[93]   = '三个月';
 $lang->project->endList[186]  = '半年';
 $lang->project->endList[365]  = '一年';
 
+$lang->team = new stdclass();
 $lang->team->account    = '用户';
 $lang->team->role       = '角色';
 $lang->team->join       = '加盟日';
@@ -175,6 +176,9 @@ $lang->project->createTask            = '添加任务';
 $lang->project->goback                = '返回项目首页（5秒后将自动跳转）';
 
 /* 统计。*/
+$lang->project->charts = new stdclass();
+$lang->project->charts->burn = new stdclass();
+$lang->project->charts->burn->graph = new stdclass();
 $lang->project->charts->burn->graph->caption      = "燃尽图";
 $lang->project->charts->burn->graph->xAxisName    = "日期";
 $lang->project->charts->burn->graph->yAxisName    = "HOUR";
@@ -184,9 +188,11 @@ $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
+$lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code = '团队内部的简称';
 
-$lang->project->selectGroup->doing     = '(进行中)';
-$lang->project->selectGroup->done      = '(已结束)';
+$lang->project->selectGroup = new stdclass();
+$lang->project->selectGroup->doing = '(进行中)';
+$lang->project->selectGroup->done  = '(已结束)';
 
 $lang->project->projectTasks = '按项目';
