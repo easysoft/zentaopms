@@ -26,7 +26,7 @@ class search extends control
     {
         $searchFields = is_array($searchFields) ? $searchFields : json_decode(helper::safe64Decode($searchFields), true);
         $fieldParams  = is_array($fieldParams) ? $fieldParams : json_decode(helper::safe64Decode($fieldParams), true);
-        $actionURL    = (strpos($actionURL, 'index.php?') !== false or strrpos($actionURL, '.html') !== false) ? $actionURL : helper::safe64Decode($actionURL);
+        $actionURL    = (strpos($actionURL, '/') !== false) ? $actionURL : helper::safe64Decode($actionURL);
         $this->search->initSession($module, $searchFields, $fieldParams);
 
         $this->view->module       = $module;
