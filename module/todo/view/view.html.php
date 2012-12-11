@@ -24,7 +24,7 @@
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->todo->type;?></th>
-    <td><?php echo $lang->todo->typeList->{$todo->type};?></td>
+    <td><?php echo $lang->todo->typeList[$todo->type];?></td>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->todo->pri;?></th>

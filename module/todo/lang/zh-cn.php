@@ -61,9 +61,9 @@ $lang->todo->priList[1] = '最高';
 $lang->todo->priList[2] = '较高';
 $lang->todo->priList[4] = '最低';
 
-$lang->todo->typeList->custom = '自定义';
-$lang->todo->typeList->bug    = 'Bug';
-$lang->todo->typeList->task   = '项目任务';
+$lang->todo->typeList['custom'] = '自定义';
+$lang->todo->typeList['bug']    = 'Bug';
+$lang->todo->typeList['task']   = '项目任务';
 
 $lang->todo->confirmDelete  = "您确定要删除这个todo吗？";
 $lang->todo->successMarked  = "成功切换状态！";
@@ -81,4 +81,6 @@ $lang->todo->lastmonthTodos  = '上月';
 $lang->todo->thisseasonTodos = '本季';
 $lang->todo->thisyearTodos   = '本年';
 $lang->todo->thismonthTodos  = '本月';
+
+$lang->todo->action = new stdclass();
 $lang->todo->action->marked  = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);

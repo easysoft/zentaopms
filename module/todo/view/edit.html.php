@@ -23,7 +23,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->type;?></th>
-      <td><input type='hidden' name='type' value='<?php echo $todo->type;?>' /><?php echo $lang->todo->typeList->{$todo->type};?></td>
+      <td><input type='hidden' name='type' value='<?php echo $todo->type;?>' /><?php echo $lang->todo->typeList[$todo->type];?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->pri;?></th>

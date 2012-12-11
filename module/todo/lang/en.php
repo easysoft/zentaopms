@@ -61,9 +61,9 @@ $lang->todo->priList[1] = '1';
 $lang->todo->priList[2] = '2';
 $lang->todo->priList[4] = '4';
 
-$lang->todo->typeList->custom = 'Custom';
-$lang->todo->typeList->bug    = 'Bug';
-$lang->todo->typeList->task   = 'Task';
+$lang->todo->typeList['custom'] = 'Custom';
+$lang->todo->typeList['bug']    = 'Bug';
+$lang->todo->typeList['task']   = 'Task';
 
 $lang->todo->confirmDelete  = "Are you sure to delete this todo?";
 $lang->todo->successMarked  = "Successfully changed status";;
@@ -81,4 +81,6 @@ $lang->todo->lastmonthTodos  = 'Last Month';
 $lang->todo->thisseasonTodos = 'This Season';
 $lang->todo->thisyearTodos   = 'This Year';
 $lang->todo->thismonthTodos  = 'This Month';
+
+$lang->todo->action = new stdclass();
 $lang->todo->action->marked  = array('main' => '$date, Change status to <stong>$extra</strong> by <strong>$actor</strong>。', 'extra' => $lang->todo->statusList);
