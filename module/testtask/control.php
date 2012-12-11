@@ -87,7 +87,11 @@ class testtask extends control
         {
             $taskID = $this->testtask->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->loadModel('action')->create('testtask', $taskID, 'opened');
+            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'opened');
+            if($this->post->owner)
+            {
+                $this->sendmail($taskID, $actionID, 'opened');
+            }
             die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -268,6 +272,9 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited');
                 $this->action->logHistory($actionID, $changes);
+
+                /* send mail.*/
+                $this->sendmail($taskID, $actionID, 'edited');
             }
             die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
         }
@@ -487,5 +494,38 @@ class testtask extends control
             ->andWhere('`case`')->in($this->post->caseIDList)
             ->exec();
         die(js::locate($this->session->caseList));
+    }
+
+    /**
+     * Send mail. 
+     * 
+     * @param  int    $testtaskID 
+     * @param  int    $actionID 
+     * @param  string $action 
+     * @access public
+     * @return void
+     */
+    public function sendmail($testtaskID, $actionID, $actionType)
+    {
+        $testtask = $this->testtask->getByID($testtaskID);
+        $action   = $this->action->getById($actionID);
+        $users    = $this->loadModel('user')->getPairs('noletter');
+
+        $this->view->testtask = $testtask;
+        $this->view->action   = $action;
+        $this->view->users    = $users;
+
+        $mailContent = $this->parse($this->moduleName, 'sendmail');
+
+        if($actionType == 'opened')
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtaskID, $this->post->name);
+        }
+        else
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtaskID, $this->post->name);
+        }
+        $this->loadModel('mail')->send($this->post->owner, $mailTitle, $mailContent); 
+        if($this->mail->isError()) echo js::error($this->mail->getError());
     }
 }
