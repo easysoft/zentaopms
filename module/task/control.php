@@ -629,6 +629,7 @@ class task extends control
         /* Set toList and ccList. */
         $task        = $this->task->getById($taskID);
         $projectName = $this->project->getById($task->project)->name;
+        $users       = $this->loadModel('user')->getPairs('noletter');
         $toList      = $task->assignedTo;
         $ccList      = trim($task->mailto, ',');
 
@@ -660,6 +661,7 @@ class task extends control
         /* Create the email content. */
         $this->view->task   = $task;
         $this->view->action = $action;
+        $this->view->users  = $users;
         $this->clear();
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
