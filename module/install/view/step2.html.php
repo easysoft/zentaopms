@@ -19,10 +19,6 @@
       <th class='a-left'><?php echo $lang->install->value?></th>
     </tr>
     <tr>
-      <th><?php echo $lang->install->webRoot;?></th>
-      <td><?php echo html::input('webRoot', $webRoot, 'class=text-3');?></td>
-    </tr>
-    <tr>
       <th><?php echo $lang->install->requestType;?></th>
       <td><?php echo html::select('requestType', $lang->install->requestTypes, 'GET', 'class=select-3');?></td>
     </tr>

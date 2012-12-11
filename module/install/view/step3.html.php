@@ -24,7 +24,7 @@ if(!isset($error))
 \$config->db->user        = '$dbUser';
 \$config->db->password    = '$dbPassword';
 \$config->db->prefix      = '$dbPrefix';
-\$config->webRoot         = '$webRoot';
+\$config->webRoot         = getWebRoot();
 \$config->default->domain = '$domain';
 \$config->default->lang   = '$defaultLang';
 \$config->mysqldump       = '';

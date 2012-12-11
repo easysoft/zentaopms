@@ -203,17 +203,6 @@ class installModel extends model
     }
 
     /**
-     * Get web root.
-     * 
-     * @access public
-     * @return string
-     */
-    public function getWebRoot()
-    {
-        return rtrim(str_replace('\\', '/', pathinfo($_SERVER['PHP_SELF'], PATHINFO_DIRNAME)), '/') . '/';
-    }
-
-    /**
      * Check config ok or not.
      * 
      * @access public
