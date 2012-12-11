@@ -429,9 +429,14 @@ class treeModel extends model
      */
     public function updateOrder($orders)
     {
+        asort($orders);
+        $i = 0;
         foreach($orders as $moduleID => $order)
         {
-            $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq((int)$moduleID)->limit(1)->exec();
+            $i++;
+            $newOrder = $i * 10;
+            if($newOrder == $order) continue;
+            $this->dao->update(TABLE_MODULE)->set('`order`')->eq($newOrder)->where('id')->eq((int)$moduleID)->limit(1)->exec();
         }
     }
 
