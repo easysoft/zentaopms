@@ -264,8 +264,6 @@ class tree extends control
      */
     public function ajaxGetOptionMenu($rootID, $viewType = 'story', $rootModuleID = 0, $returnType = 'html')
     {
-
-        $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID);
         if($returnType == 'html') die( html::select("module", $optionMenu, '', 'onchange=setAssignedTo()'));
         if($returnType == 'json') die(json_encode($optionMenu));
