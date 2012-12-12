@@ -249,6 +249,8 @@ EOT;
             ->fetchAll();
         foreach($tasks as $task)
         {
+            if(!isset($projects[$task->project])) $projects[$task->project] = new stdclass();
+
             $projects[$task->project]->estimate = isset($projects[$task->project]->estimate) ? $projects[$task->project]->estimate + $task->estimate : $task->estimate;
             $projects[$task->project]->consumed = isset($projects[$task->project]->consumed) ? $projects[$task->project]->consumed + $task->consumed : $task->consumed;
             $projects[$task->project]->tasks    = isset($projects[$task->project]->tasks)    ? $projects[$task->project]->tasks + 1 : 1;
@@ -318,17 +320,12 @@ EOT;
      */
     public function getProducts()
     {
-        $products    = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
-        $plans       = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))->fetchAll('id');
+        $products = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
+        $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))->fetchAll('id');
         if(!$plans) return array();
+        foreach($plans as $plan) $products[$plan->product]->plans[$plan->id] = $plan;
+
         $planStories = $this->dao->select('plan, id, status')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('plan')->in(array_keys($plans))->fetchGroup('plan', 'id');
-        foreach($plans as $plan)
-        {
-            $products[$plan->product]->plans[$plan->id]->title = $plan->title;
-            $products[$plan->product]->plans[$plan->id]->desc  = $plan->desc;
-            $products[$plan->product]->plans[$plan->id]->begin = $plan->begin;
-            $products[$plan->product]->plans[$plan->id]->end   = $plan->end;
-        }
         foreach($planStories as $planID => $stories)
         {
             foreach($stories as $story)
