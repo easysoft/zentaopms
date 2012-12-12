@@ -19,3 +19,5 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 3, 'todo', 'batchEdit'),
 (1, 4, 'todo', 'batchEdit'),
 (1, 5, 'todo', 'batchEdit');
+
+ALTER TABLE  `zt_testtask` ADD  `pri` TINYINT( 3 ) UNSIGNED NOT NULL DEFAULT  '0' AFTER  `owner`;
