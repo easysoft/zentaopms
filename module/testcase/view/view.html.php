@@ -183,6 +183,27 @@
       </fieldset>
 
       <fieldset>
+        <legend><?php echo $lang->testcase->legendLinkBugs;?></legend>
+        <table class='table-1 a-left'>
+          <tr>
+            <td class='rowhead w-p20'><?php echo $lang->testcase->fromBug;?></td>
+            <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug"), $case->fromBugName);?></td>
+          </tr>
+          <tr>
+            <td valign="top" class='rowhead w-p20'><?php echo $lang->testcase->toBug;?></td>
+            <td>
+            <?php 
+            foreach($case->toBugs as $bugID => $bug) 
+            {
+                echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug) . '</p>';
+            }
+            ?>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+
+      <fieldset>
         <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>
         <table class='table-1 a-left'>
           <tr>

@@ -41,6 +41,8 @@ $lang->testcase->stage            = 'Stage';
 $lang->testcase->lastEditedByAB   = 'Last edited by';
 $lang->testcase->lastEditedDateAB = 'Last edited date';
 $lang->testcase->allProduct       = 'All product';
+$lang->testcase->fromBug          = 'From bug';
+$lang->testcase->toBug            = 'To bug';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID     = 'ID';

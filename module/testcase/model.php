@@ -160,6 +160,19 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
+
+        /* Get fromBugName and toBugs. */
+        $case->fromBugName = '';
+        $case->toBugs      = array();
+
+        if($case->fromBug)
+        {
+            $bug = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch(); 
+            $case->fromBugName = $bug->title;
+        }
+        $toBugs = $this->dao->select('id, title')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
+        foreach($toBugs as $toBug) $case->toBugs[$toBug->id] = $toBug->title;
+
         if($case->linkCase) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->fetchPairs();
         if($version == 0) $version = $case->version;
         $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll();
