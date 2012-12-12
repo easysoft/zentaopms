@@ -18,29 +18,29 @@ if($config->mail->mta == 'smtp')
     $config->mail->smtp->password = '';         // The smtp user's password.
 }
 
-$config->mail->provider['163.com']->host      = 'smtp.163.com';
-$config->mail->provider['yeah.net']->host     = 'smtp.yeah.net';
-$config->mail->provider['netease.com']->host  = 'smtp.netease.com';
-$config->mail->provider['126.com']->host      = 'smtp.126.com';
-$config->mail->provider['qiye.163.com']->host = 'smtp.qiye.163.com';
+$config->mail->provider['163.com']['host']      = 'smtp.163.com';
+$config->mail->provider['yeah.net']['host']     = 'smtp.yeah.net';
+$config->mail->provider['netease.com']['host']  = 'smtp.netease.com';
+$config->mail->provider['126.com']['host']      = 'smtp.126.com';
+$config->mail->provider['qiye.163.com']['host'] = 'smtp.qiye.163.com';
 
-$config->mail->provider['sina.com']->host     = 'smtp.sina.com';
-$config->mail->provider['sina.cn']->host      = 'smtp.sina.cn';
-$config->mail->provider['vip.sina.com']->host = 'smtp.vip.sina.com';
-$config->mail->provider['sina.net']->host     = 'smtp.sina.net';
+$config->mail->provider['sina.com']['host']     = 'smtp.sina.com';
+$config->mail->provider['sina.cn']['host']      = 'smtp.sina.cn';
+$config->mail->provider['vip.sina.com']['host'] = 'smtp.vip.sina.com';
+$config->mail->provider['sina.net']['host']     = 'smtp.sina.net';
 
-$config->mail->provider['sohu.com']->host     = 'smtp.sohu.com';
-$config->mail->provider['vip.sohu.com']->host = 'smtp.vip.sohu.com';
+$config->mail->provider['sohu.com']['host']     = 'smtp.sohu.com';
+$config->mail->provider['vip.sohu.com']['host'] = 'smtp.vip.sohu.com';
 
-$config->mail->provider['21cn.com']->host     = 'smtp.21cn.com';
+$config->mail->provider['21cn.com']['host']     = 'smtp.21cn.com';
 
-$config->mail->provider['qq.com']->host       = 'smtp.qq.com';
+$config->mail->provider['qq.com']['host']       = 'smtp.qq.com';
 
-$config->mail->provider['gmail.com']->host    = 'smtp.gmail.com';
-$config->mail->provider['gmail.com']->secure  = 'ssl';
-$config->mail->provider['gmail.com']->port    = '465';
-$config->mail->provider['google.com']         = $config->mail->provider['gmail.com'];
-$config->mail->provider['googlemail.com']     = $config->mail->provider['gmail.com'];
+$config->mail->provider['gmail.com']['host']    = 'smtp.gmail.com';
+$config->mail->provider['gmail.com']['secure']  = 'ssl';
+$config->mail->provider['gmail.com']['port']    = '465';
+$config->mail->provider['google.com']           = $config->mail->provider['gmail.com'];
+$config->mail->provider['googlemail.com']       = $config->mail->provider['gmail.com'];
 
-$config->mail->provider['263.net']->host       = 'smtp.263.net';
-$config->mail->provider['263xmail.com']->host = 'smtp.263xmail.com';
+$config->mail->provider['263.net']['host']      = 'smtp.263.net';
+$config->mail->provider['263xmail.com']['host'] = 'smtp.263xmail.com';

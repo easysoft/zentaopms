@@ -72,7 +72,7 @@ class mailModel extends model
     {
         if(isset($this->config->mail->provider[$domain]))
         {
-            $config = $this->config->mail->provider[$domain];
+            $config = (object)$this->config->mail->provider[$domain];
             $config->mta      = 'smtp';
             $config->username = $username;
             $config->auth     = 1;
