@@ -22,6 +22,7 @@
 /* System settings. */
 $config->timezone = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
 $config->sleep    = 0;               // The seconds to sleep.
+$config->svn      = new stdclass();
 
 /* Subversion settings. */
 $config->svn->client = '';
@@ -39,6 +40,7 @@ $config->svn->repos[$i]['password'] = '';
 */
 
 /* ZenTaoPMS settings. */
+$config->zentao = new stdclass();
 $config->zentao->path = '';
 $config->zentao->user = '';
 $config->zentao->password = '';
