@@ -118,6 +118,10 @@ class bugModel extends model
         if($bug->toStory > 0)  $bug->toStoryTitle      = $this->dao->findById($bug->toStory)->from(TABLE_STORY)->fields('title')->fetch('title');
         if($bug->toTask > 0)   $bug->toTaskTitle       = $this->dao->findById($bug->toTask)->from(TABLE_TASK)->fields('name')->fetch('name');
 
+        $bug->toCases = array();
+        $toCases      = $this->dao->select('id, title')->from(TABLE_CASE)->where('`fromBug`')->eq($bugID)->fetchAll();
+        foreach($toCases as $toCase) $bug->toCases[$toCase->id] = $toCase->title;
+
         $bug->files = $this->loadModel('file')->getByObject('bug', $bugID);
 
         return $bug;

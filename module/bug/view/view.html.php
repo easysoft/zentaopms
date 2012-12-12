@@ -140,6 +140,28 @@
           </tr>
         </table>
       </fieldset>
+
+      <fieldset>
+        <legend><?php echo $lang->bug->case;?></legend>
+        <table class='table-1 a-left'>
+          <tr>
+            <td class='rowhead w-p20'><?php echo $lang->bug->fromCase;?></td>
+            <td><?php if($bug->case) echo html::a($this->createLink('case', 'view', "caseID=$bug->case"), $bug->caseTitle);?></td>
+          </tr>
+          <tr>
+            <td valign="top" class='rowhead w-p20'><?php echo $lang->bug->toCase;?></td>
+            <td>
+            <?php 
+            foreach($bug->toCases as $caseID => $case) 
+            {
+                echo '<p style="margin-bottom:0;">' . html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case) . '</p>';
+            }
+            ?>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+
       <fieldset>
         <legend><?php echo $lang->bug->legendLife;?></legend>
         <table class='table-1 a-left fixed'>

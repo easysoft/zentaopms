@@ -63,6 +63,8 @@ $lang->bug->files            = 'Files';
 $lang->bug->keywords         = 'Keywords';
 $lang->bug->lastEditedByAB   = 'Edited';
 $lang->bug->lastEditedDateAB = 'Edited Date';
+$lang->bug->fromCase         = 'From case';
+$lang->bug->toCase           = 'To case';
 
 /* Actions. */
 $lang->bug->index              = 'Index';
