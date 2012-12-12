@@ -200,9 +200,16 @@ class editorModel extends model
         $tree = $isRoot ? "<ul id='extendTree'>\n" : "<ul>\n";
         if($isRoot)
         {
-            $langFile = dirname(key($files)) . $this->pathFix . 'lang' . $this->pathFix . $this->cookie->lang. '.php';
-            if(file_exists($langFile)) include_once $langFile;
             $module = basename(dirname(key($files)));
+
+            $langFile = dirname(key($files)) . $this->pathFix . 'lang' . $this->pathFix . $this->cookie->lang. '.php';
+            if(file_exists($langFile))
+            {
+                if(!isset($lang)) $lang = new stdclass();
+                if(!isset($lang->$module)) $lang->$module = new stdclass();
+                include_once $langFile;
+            }
+
             if(isset($lang->$module))
             {
                 $this->module = $lang->$module;
