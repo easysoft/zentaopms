@@ -187,7 +187,7 @@
         <table class='table-1 a-left'>
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->testcase->fromBug;?></td>
-            <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug"), $case->fromBugTitle);?></td>
+            <td><?php if($case->fromBug) echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug"), $case->fromBugTitle);?></td>
           </tr>
           <tr>
             <td valign="top" class='rowhead w-p20'><?php echo $lang->testcase->toBug;?></td>
