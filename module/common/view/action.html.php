@@ -14,6 +14,15 @@ function switchChange(historyID,type)
         $('#changeBox' + historyID).hide();
     }
 }
+
+function toggleStripTags(obj)
+{
+    var boxObj  = $(obj).parent();
+    var oldDiff = $(boxObj).find('blockquote').html();
+    var newDiff = $(boxObj).find('#hideDiff').html();
+    $(boxObj).find('blockquote').html(newDiff);
+    $(boxObj).find('#hideDiff').html(oldDiff);
+}
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <script src='<?php echo $jsRoot;?>jquery/reverseorder/raw.js' type='text/javascript'></script>

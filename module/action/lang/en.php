@@ -78,7 +78,7 @@ $lang->action->desc->canceled     = '$date, canceled by <strong>$actor</strong>.
 $lang->action->desc->svncommited  = '$date, <strong>$actor</strong> commited to svn，revision is <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->finished     = '$date, finished by <strong>$actor</strong>.';
 $lang->action->desc->diff1        = 'changed <strong><i>%s</i></strong>, old is "%s", new is "%s".<br />';
-$lang->action->desc->diff2        = 'changed <strong><i>%s</i></strong>, the diff is：<blockquote>%s</blockquote>' . "\n";
+$lang->action->desc->diff2        = 'changed <strong><i>%s</i></strong>, the diff is:' . "\n" . "<blockquote>%s</blockquote>" . "\n<button onclick='toggleStripTags(this)'>Change DIFF</button><div id='hideDiff' class='hidden'>%s</div>";
 $lang->action->desc->diff3        = "changed file's name %s to %s.";
 
 /* The action labels. */

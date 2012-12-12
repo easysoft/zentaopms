@@ -78,7 +78,7 @@ $lang->action->desc->canceled     = '$date, 由 <strong>$actor</strong> 取消�
 $lang->action->desc->svncommited  = '$date, 由 <strong>$actor</strong> 提交代码，版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->finished     = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
 $lang->action->desc->diff1        = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
-$lang->action->desc->diff2        = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . '<blockquote>%s</blockquote>' . "\n";
+$lang->action->desc->diff2        = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote>%s</blockquote>" . "\n<button onclick='toggleStripTags(this)'>切换DIFF</button><div id='hideDiff' class='hidden'>%s</div>";
 $lang->action->desc->diff3        = '将文件名 %s 改为 %s 。' . "\n";
 
 /* 用来显示动态信息。*/

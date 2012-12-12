@@ -603,11 +603,12 @@ class actionModel extends model
             $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
             if($history->diff != '')
             {
-                $history->diff = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
-                $history->diff = $history->field != 'subversion' ? htmlspecialchars($history->diff) : $history->diff;   // Keep the diff link.
-                $history->diff = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
-                $history->diff = nl2br($history->diff);
-                printf($this->lang->action->desc->diff2, $history->fieldLabel, $history->diff);
+                $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
+                $history->diff      = $history->field != 'subversion' ? htmlspecialchars($history->diff) : $history->diff;   // Keep the diff link.
+                $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
+                $history->diff      = nl2br($history->diff);
+                $history->noTagDiff = preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff);
+                printf($this->lang->action->desc->diff2, $history->fieldLabel, $history->noTagDiff, $history->diff);
             }
             else
             {
