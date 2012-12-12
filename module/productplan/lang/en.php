@@ -32,7 +32,3 @@ $lang->productplan->title   = 'Title';
 $lang->productplan->desc    = 'Desc';
 $lang->productplan->begin   = 'Begin';
 $lang->productplan->end     = 'End';
-
-$lang->productplan->placeholder->title = "shorter better.";
-$lang->productplan->placeholder->begin = "begin date of this plan";
-$lang->productplan->placeholder->end   = "end date of this plan";

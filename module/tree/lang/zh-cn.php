@@ -9,6 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+$lang->tree = new stdclass();
 $lang->tree->common            = '模块维护';
 $lang->tree->add               = '添加';
 $lang->tree->edit              = '编辑';

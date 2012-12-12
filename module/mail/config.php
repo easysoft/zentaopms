@@ -1,16 +1,18 @@
 <?php
-$config->mail->turnon      = 0;    // trun on email feature or not.
+$config->mail = new stdclass();
+$config->mail->turnon      = 0;        // trun on email feature or not.
 $config->mail->fromAddress = '';       // The from address.
-$config->mail->fromName    = 'zentao';  // The from name.
+$config->mail->fromName    = 'zentao'; // The from name.
 $config->mail->mta         = 'smtp';   // smtp|phpmail.
 
 /* SMTP settings. */
 if($config->mail->mta == 'smtp')
 {
+    $config->mail->smtp = new stdclass();
     $config->mail->smtp->debug    = 0;          // Debug level, 0,1,2.
     $config->mail->smtp->auth     = true;       // Need auth or not.
-    $config->mail->smtp->host     = 'localhost';         // The smtp server host address.
-    $config->mail->smtp->port     = '25';         // The smtp server host port.
+    $config->mail->smtp->host     = 'localhost';// The smtp server host address.
+    $config->mail->smtp->port     = '25';       // The smtp server host port.
     $config->mail->smtp->secure   = '';         // The type to encode datas, 'ssl' or 'tls' allowed
     $config->mail->smtp->username = '';         // The smtp user, may be a full email adress.
     $config->mail->smtp->password = '';         // The smtp user's password.

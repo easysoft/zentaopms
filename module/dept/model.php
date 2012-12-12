@@ -35,7 +35,12 @@ class deptModel extends model
     public function buildMenuQuery($rootDeptID)
     {
         $rootDept = $this->getByID($rootDeptID);
-        if(!$rootDept) $rootDept->path = '';
+        if(!$rootDept)
+        {
+            $rootDept = new stdclass();
+            $rootDept->path = '';
+        }
+
         return $this->dao->select('*')->from(TABLE_DEPT)
             ->beginIF($rootDeptID > 0)->where('path')->like($rootDept->path . '%')->fi()
             ->orderBy('grade desc, `order`')

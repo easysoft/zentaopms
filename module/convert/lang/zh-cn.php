@@ -71,6 +71,7 @@ $lang->convert->item       = '转换项';
 $lang->convert->count      = '转换数量';
 $lang->convert->info       = '转换信息';
 
+$lang->convert->bugfree = new stdclass();
 $lang->convert->bugfree->users    = '用户';
 $lang->convert->bugfree->projects = '项目';
 $lang->convert->bugfree->modules  = '模块';
@@ -80,6 +81,7 @@ $lang->convert->bugfree->results  = '测试结果';
 $lang->convert->bugfree->actions  = '历史记录';
 $lang->convert->bugfree->files    = '附件';
 
+$lang->convert->redmine = new stdclass();
 $lang->convert->redmine->users        = '用户';
 $lang->convert->redmine->groups       = '用户分组';
 $lang->convert->redmine->products     = '产品';
@@ -105,6 +107,9 @@ $lang->convert->errorCopyFailed    = '文件 %s 拷贝失败';
 
 $lang->convert->setParam = '请设置转换参数';
 
+$lang->convert->statusType = new stdclass();
+$lang->convert->priType    = new stdclass();
+
 $lang->convert->aimType           = '问题类型转换';
 $lang->convert->statusType->bug   = '状态类型转换(Bug状态)';
 $lang->convert->statusType->story = '状态类型转换(Story状态)';
@@ -113,6 +118,7 @@ $lang->convert->priType->bug      = '优先级类型转换(Bug状态)';
 $lang->convert->priType->story    = '优先级类型转换(Story状态)';
 $lang->convert->priType->task     = '优先级类型转换(Task状态)';
 
+$lang->convert->issue = new stdclass();
 $lang->convert->issue->redmine = 'Redmine';
 $lang->convert->issue->zentao  = '禅道';
 $lang->convert->issue->goto    = '转换为';

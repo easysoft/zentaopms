@@ -9,9 +9,11 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->misc->common  = '杂项';
-$lang->misc->ping    = '防超时';
+$lang->misc = new stdclass();
+$lang->misc->common = '杂项';
+$lang->misc->ping   = '防超时';
 
+$lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
 $lang->misc->zentao->labels['about']   = '关于禅道';
 $lang->misc->zentao->labels['support'] = '技术支持';

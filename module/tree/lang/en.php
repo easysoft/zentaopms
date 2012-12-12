@@ -9,6 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+$lang->tree = new stdclass();
 $lang->tree->common            = 'Module manage';
 $lang->tree->add               = 'Add';
 $lang->tree->edit              = 'Edit';

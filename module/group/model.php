@@ -258,7 +258,7 @@ class groupModel extends model
     public function sortResource()
     {
         $resources = $this->lang->resource;
-        unset($this->lang->resource);
+        $this->lang->resource = new stdclass();
 
         /* sort moduleOrder. */
         ksort($this->lang->moduleOrder, SORT_ASC);
@@ -276,7 +276,9 @@ class groupModel extends model
         /* sort methodOrder. */
         foreach($this->lang->resource as $moduleName => $resources)
         {
-            $resources = (array)$resources;
+            $resources    = (array)$resources;
+            $tmpResources = new stdclass();
+
             if(isset($this->lang->$moduleName->methodOrder))
             {
                 ksort($this->lang->$moduleName->methodOrder, SORT_ASC);

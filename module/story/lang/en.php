@@ -176,12 +176,14 @@ $lang->story->mustChoosePreVersion  = 'Must select an version to revert';
 $lang->story->ajaxGetProjectStories = 'API:Project stories';
 $lang->story->ajaxGetProductStories = 'API:Product stories';
 
+$lang->story->form = new stdclass();
 $lang->story->form->titleNote = 'A word to briefly express story content';
 $lang->story->form->area      = 'The story of their respective range';
 $lang->story->form->desc      = 'Description and standards, what stories? How to acceptance?';
 $lang->story->form->resource  = 'Allocation of resources, who completed? How long does it take?';
 $lang->story->form->file      = 'Attachments, if the demand for related documents, please click here to upload.';
 
+$lang->story->action = new stdclass();
 $lang->story->action->reviewed            = array('main' => '$date, reviewed by <strong>$actor</strong>, result is <strong>$extra</strong>.', 'extra' => $lang->story->reviewResultList);
 $lang->story->action->closed              = array('main' => '$date, closed by <strong>$actor</strong>, reason is <strong>$extra</strong>.', 'extra' => $lang->story->reasonList);
 $lang->story->action->linked2plan         = array('main' => '$date, linked to plan <strong>$extra</strong> by <strong>$actor</strong>.'); 
@@ -190,6 +192,7 @@ $lang->story->action->linked2project      = array('main' => '$date, linked to pr
 $lang->story->action->unlinkedfromproject = array('main' => '$date, removed from project <strontg>$extra</strong> by <strong>$actor</strong>.');
 
 /* Report*/
+$lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
 $lang->story->report->select = 'Select';
 $lang->story->report->create = 'Create';
@@ -207,6 +210,8 @@ $lang->story->report->charts['storysPerAssignedTo']     = 'Assigned to user';
 $lang->story->report->charts['storysPerClosedReason']   = 'Storys for reason';
 $lang->story->report->charts['storysPerChange']         = 'Story version';
 
+$lang->story->report->options = new stdclass();
+$lang->story->report->options->graph = new stdclass();
 $lang->story->report->options->swf                     = 'pie2d';
 $lang->story->report->options->width                   = 'auto';
 $lang->story->report->options->height                  = 300;
@@ -219,6 +224,32 @@ $lang->story->report->options->graph->rotateNames      = 0;
 $lang->story->report->options->graph->yAxisName        = 'COUNT';
 $lang->story->report->options->graph->pieRadius        = 100;
 $lang->story->report->options->graph->showColumnShadow = 0; 
+
+$lang->story->report->storysPerProduct      = new stdclass();     
+$lang->story->report->storysPerModule       = new stdclass();
+$lang->story->report->storysPerSource       = new stdclass();
+$lang->story->report->storysPerPlan         = new stdclass();
+$lang->story->report->storysPerStatus       = new stdclass();
+$lang->story->report->storysPerStage        = new stdclass();
+$lang->story->report->storysPerPri          = new stdclass();
+$lang->story->report->storysPerOpenedBy     = new stdclass();
+$lang->story->report->storysPerAssignedTo   = new stdclass();
+$lang->story->report->storysPerClosedReason = new stdclass();
+$lang->story->report->storysPerEstimate     = new stdclass();
+$lang->story->report->storysPerChange       = new stdclass();
+
+$lang->story->report->storysPerProduct->graph      = new stdclass();     
+$lang->story->report->storysPerModule->graph       = new stdclass();
+$lang->story->report->storysPerSource->graph       = new stdclass();
+$lang->story->report->storysPerPlan->graph         = new stdclass();
+$lang->story->report->storysPerStatus->graph       = new stdclass();
+$lang->story->report->storysPerStage->graph        = new stdclass();
+$lang->story->report->storysPerPri->graph          = new stdclass();
+$lang->story->report->storysPerOpenedBy->graph     = new stdclass();
+$lang->story->report->storysPerAssignedTo->graph   = new stdclass();
+$lang->story->report->storysPerClosedReason->graph = new stdclass();
+$lang->story->report->storysPerEstimate->graph     = new stdclass();
+$lang->story->report->storysPerChange->graph       = new stdclass();
 
 $lang->story->report->storysPerProduct->graph->xAxisName      = 'Product';
 $lang->story->report->storysPerModule->graph->xAxisName       = 'Module';
@@ -233,5 +264,6 @@ $lang->story->report->storysPerClosedReason->graph->xAxisName = 'Closed reason';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = 'Estimate';
 $lang->story->report->storysPerChange->graph->xAxisName       = 'Change';
 
+$lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = 'Estimate the story point.';
 $lang->story->placeholder->mailto   = 'Mail to';

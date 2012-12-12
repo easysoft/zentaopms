@@ -1,4 +1,5 @@
 <?php
+$config->product = new stdclass();
 $config->product->orderBy = 'isClosed, `order`';
 
 global $lang, $app;
@@ -67,8 +68,11 @@ $config->product->search['params']['assignedDate']   = array('operator' => '>=',
 $config->product->search['params']['closedDate']     = array('operator' => '>=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->product->search['params']['lastEditedDate'] = array('operator' => '>=', 'control' => 'input', 'values' => '', 'class' => 'date');
 
+$config->product->create = new stdclass();
+$config->product->edit   = new stdclass();
 $config->product->create->requiredFields = 'name,code';
 $config->product->edit->requiredFields   = 'name,code';
 
+$config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');

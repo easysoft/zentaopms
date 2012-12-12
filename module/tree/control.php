@@ -43,7 +43,7 @@ class tree extends control
             $this->loadModel('doc');
             if($rootID == 'product' or $rootID == 'project')
             {
-                $viewType  = $rootID . 'doc';
+                $lib = new stdclass();
                 $lib->id   = $rootID;
                 $lib->name = $this->lang->doc->systemLibs[$rootID];
                 $this->view->root = $lib;

@@ -9,6 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+$lang->file = new stdclass();
 $lang->file->common        = '附件';
 $lang->file->download      = '下载附件';
 $lang->file->edit          = '编辑附件名称';

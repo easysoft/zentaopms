@@ -1405,12 +1405,19 @@ class router
         }
 
         /* Merge from the db configs. */
-        if(isset($config->system->$moduleName))
+        if($moduleName != 'common' and isset($config->system->$moduleName))
         {
             foreach($config->system->$moduleName as $item)
             {
-                if($item->section)  $config->{$moduleName}->{$item->section}->{$item->key} = $item->value;
-                if(!$item->section) $config->{$moduleName}->{$item->key} = $item->value;
+                if($item->section)
+                {
+                    if(!isset($config->{$moduleName}->{$item->section})) $config->{$moduleName}->{$item->section} = new stdclass();
+                    $config->{$moduleName}->{$item->section}->{$item->key} = $item->value;
+                }
+                else
+                {
+                    if(!$item->section) $config->{$moduleName}->{$item->key} = $item->value;
+                }
             }
         }
 

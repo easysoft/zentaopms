@@ -244,9 +244,10 @@ $lang->bug->resolutionList['willnotfix'] = "Won't fix";
 $lang->bug->resolutionList['tostory']    = 'To story';
 
 /* Report. */
-$lang->bug->report->common        = 'Report';
-$lang->bug->report->select        = 'Select';
-$lang->bug->report->create        = 'Create';
+$lang->bug->report = new stdclass();
+$lang->bug->report->common = 'Report';
+$lang->bug->report->select = 'Select';
+$lang->bug->report->create = 'Create';
 
 $lang->bug->report->charts['bugsPerProject']        = 'Project bugs';
 $lang->bug->report->charts['bugsPerBuild']          = 'Build bugs';
@@ -266,6 +267,8 @@ $lang->bug->report->charts['bugsPerAssignedTo']     = 'AssignedTo';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug处理时间统计';
 //$lang->bug->report->charts['bugHistories']       = 'Bug处理步骤统计';
 
+$lang->bug->report->options = new stdclass();
+$lang->bug->report->options->graph = new stdclass();
 $lang->bug->report->options->swf                     = 'pie2d';
 $lang->bug->report->options->width                   = 'auto';
 $lang->bug->report->options->height                  = 300;
@@ -278,6 +281,42 @@ $lang->bug->report->options->graph->rotateNames      = 0;
 $lang->bug->report->options->graph->yAxisName        = 'COUNT';
 $lang->bug->report->options->graph->pieRadius        = 100;
 $lang->bug->report->options->graph->showColumnShadow = 0;
+
+$lang->bug->report->bugsPerProject        = new stdclass();
+$lang->bug->report->bugsPerBuild          = new stdclass();
+$lang->bug->report->bugsPerModule         = new stdclass();
+$lang->bug->report->openedBugsPerDay      = new stdclass();
+$lang->bug->report->resolvedBugsPerDay    = new stdclass();
+$lang->bug->report->closedBugsPerDay      = new stdclass();
+$lang->bug->report->openedBugsPerUser     = new stdclass();
+$lang->bug->report->resolvedBugsPerUser   = new stdclass();
+$lang->bug->report->closedBugsPerUser     = new stdclass();
+$lang->bug->report->bugsPerSeverity       = new stdclass();
+$lang->bug->report->bugsPerResolution     = new stdclass();
+$lang->bug->report->bugsPerStatus         = new stdclass();
+$lang->bug->report->bugsPerActivatedCount = new stdclass();
+$lang->bug->report->bugsPerType           = new stdclass();
+$lang->bug->report->bugsPerAssignedTo     = new stdclass();
+$lang->bug->report->bugLiveDays           = new stdclass();
+$lang->bug->report->bugHistories          = new stdclass();
+
+$lang->bug->report->bugsPerProject->graph        = new stdclass();
+$lang->bug->report->bugsPerBuild->graph          = new stdclass();
+$lang->bug->report->bugsPerModule->graph         = new stdclass();
+$lang->bug->report->openedBugsPerDay->graph      = new stdclass();
+$lang->bug->report->resolvedBugsPerDay->graph    = new stdclass();
+$lang->bug->report->closedBugsPerDay->graph      = new stdclass();
+$lang->bug->report->openedBugsPerUser->graph     = new stdclass();
+$lang->bug->report->resolvedBugsPerUser->graph   = new stdclass();
+$lang->bug->report->closedBugsPerUser->graph     = new stdclass();
+$lang->bug->report->bugsPerSeverity->graph       = new stdclass();
+$lang->bug->report->bugsPerResolution->graph     = new stdclass();
+$lang->bug->report->bugsPerStatus->graph         = new stdclass();
+$lang->bug->report->bugsPerActivatedCount->graph = new stdclass();
+$lang->bug->report->bugsPerType->graph           = new stdclass();
+$lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
+$lang->bug->report->bugLiveDays->graph           = new stdclass();
+$lang->bug->report->bugHistories->graph          = new stdclass();
 
 $lang->bug->report->bugsPerProject->graph->xAxisName     = 'Project';
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = 'Build';
@@ -312,9 +351,11 @@ $lang->bug->report->bugLiveDays->graph->xAxisName           = 'Live days';
 $lang->bug->report->bugHistories->graph->xAxisName          = 'Histories';
 
 /* 操作记录。*/
+$lang->bug->action = new stdclass();
 $lang->bug->action->resolved = array('main' => '$date, Resolved by <strong>$actor</strong>, resolution is <strong>$extra</strong>.', 'extra' => $lang->bug->resolutionList);
 $lang->bug->action->tostory  = array('main' => '$date, To story by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
 $lang->bug->action->totask   = array('main' => '$date, To task by <strong>$actor</strong>, ID is <strong>$extra</strong>.');
 
+$lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->mailto   = 'you can input the user account to select users to mail to.';
 $lang->bug->placeholder->keywords = 'keywords';

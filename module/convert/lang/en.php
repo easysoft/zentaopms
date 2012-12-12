@@ -71,6 +71,7 @@ $lang->convert->item       = 'Imported items';
 $lang->convert->count      = 'Count';
 $lang->convert->info       = 'Info';
 
+$lang->convert->bugfree = new stdclass();
 $lang->convert->bugfree->users    = 'User';
 $lang->convert->bugfree->projects = 'Project';
 $lang->convert->bugfree->modules  = 'Module';
@@ -80,6 +81,7 @@ $lang->convert->bugfree->results  = 'Result';
 $lang->convert->bugfree->actions  = 'History';
 $lang->convert->bugfree->files    = 'File';
 
+$lang->convert->redmine = new stdclass();
 $lang->convert->redmine->users        = 'Users';
 $lang->convert->redmine->groups       = 'Groups';
 $lang->convert->redmine->products     = 'Products';
@@ -105,6 +107,9 @@ $lang->convert->errorCopyFailed    = 'file %s copy failed.';
 
 $lang->convert->setParam = 'Please set params';
 
+$lang->convert->statusType = new stdclass();
+$lang->convert->priType    = new stdclass();
+
 $lang->convert->aimType           = 'Issue types goto';
 $lang->convert->statusType->bug   = 'Status types goto(status of Bug)';
 $lang->convert->statusType->story = 'Status types goto(status of story)';
@@ -113,6 +118,7 @@ $lang->convert->priType->bug      = 'Priority types goto(priority of Bug)';
 $lang->convert->priType->story    = 'Priority types goto(priority of story)';
 $lang->convert->priType->task     = 'Priority types goto(priority of task)';
 
+$lang->convert->issue = new stdclass();
 $lang->convert->issue->redmine = 'Redmine';
 $lang->convert->issue->zentao  = 'ZenTao';
 $lang->convert->issue->goto    = 'Goto';

@@ -35,6 +35,8 @@ $config->testcase->search['params']['lastEditedDate'] = array('operator' => '>='
 $config->testcase->defaultSteps = 3;
 $config->testcase->batchCreate  = 10;
 
+$config->testcase->create = new stdclass();
+$config->testcase->edit   = new stdclass();
 $config->testcase->create->requiredFields = 'title,type';
 $config->testcase->edit->requiredFields   = 'title,type';
 

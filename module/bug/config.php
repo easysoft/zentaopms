@@ -82,10 +82,14 @@ $config->bug->search['params']['resolvedDate']  = array('operator' => '>=',     
 $config->bug->search['params']['closedDate']    = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->bug->search['params']['lastEditedDate']= array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
+$config->bug->create  = new stdclass();
+$config->bug->edit    = new stdclass();
+$config->bug->resolve = new stdclass();
 $config->bug->create->requiredFields  = 'title,openedBuild';
 $config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
 $config->bug->resolve->requiredFields = 'resolution';
 
+$config->bug->list = new stdclass();
 $config->bug->list->allFields = 'id, module, project, story, task, 
     title, keywords, severity, pri, type, os, browser, hardware,
     found, steps, status, activatedCount, confirmed, mailto,
@@ -111,5 +115,6 @@ $config->bug->list->exportFields = 'id, product, module, project, story, task,
     lastEditedBy,
     lastEditedDate, files';
 
+$config->bug->editor = new stdclass();
 $config->bug->editor->create = array('id' => 'steps', 'tools' => 'bugTools');
 $config->bug->editor->edit   = array('id' => 'steps', 'tools' => 'bugTools');

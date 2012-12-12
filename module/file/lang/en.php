@@ -9,6 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+$lang->file = new stdclass();
 $lang->file->common        = 'File';
 $lang->file->download      = 'Download';
 $lang->file->edit          = 'Edit file name';

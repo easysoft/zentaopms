@@ -176,12 +176,14 @@ $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->ajaxGetProjectStories = '接口:获取项目需求列表';
 $lang->story->ajaxGetProductStories = '接口:获取产品需求列表';
 
+$lang->story->form = new stdclass();
 $lang->story->form->titleNote = '一句话简要表达需求内容';
 $lang->story->form->area      = '该需求所属范围';
 $lang->story->form->desc      = '描述及标准，什么需求？如何验收？';
 $lang->story->form->resource  = '资源分配，有谁完成？需要多少时间？';
 $lang->story->form->file      = '附件，如果该需求有相关文件，请点此上传。';
 
+$lang->story->action = new stdclass();
 $lang->story->action->reviewed            = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => $lang->story->reviewResultList);
 $lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong>。', 'extra' => $lang->story->reasonList);
 $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。'); 
@@ -190,6 +192,7 @@ $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。'); 
 
 /* 统计报表。*/
+$lang->story->report = new stdclass();
 $lang->story->report->common = '报表';
 $lang->story->report->select = '请选择报表类型';
 $lang->story->report->create = '生成报表';
@@ -207,6 +210,8 @@ $lang->story->report->charts['storysPerAssignedTo']     = '当前指派来进行
 $lang->story->report->charts['storysPerClosedReason']   = '关闭原因来进行统计';
 $lang->story->report->charts['storysPerChange']         = '变更次数来进行统计';
 
+$lang->story->report->options = new stdclass();
+$lang->story->report->options->graph = new stdclass();
 $lang->story->report->options->swf                     = 'pie2d';
 $lang->story->report->options->width                   = 'auto';
 $lang->story->report->options->height                  = 300;
@@ -219,6 +224,32 @@ $lang->story->report->options->graph->rotateNames      = 0;
 $lang->story->report->options->graph->yAxisName        = 'COUNT';
 $lang->story->report->options->graph->pieRadius        = 100; // 饼图直径。
 $lang->story->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
+
+$lang->story->report->storysPerProduct      = new stdclass();     
+$lang->story->report->storysPerModule       = new stdclass();
+$lang->story->report->storysPerSource       = new stdclass();
+$lang->story->report->storysPerPlan         = new stdclass();
+$lang->story->report->storysPerStatus       = new stdclass();
+$lang->story->report->storysPerStage        = new stdclass();
+$lang->story->report->storysPerPri          = new stdclass();
+$lang->story->report->storysPerOpenedBy     = new stdclass();
+$lang->story->report->storysPerAssignedTo   = new stdclass();
+$lang->story->report->storysPerClosedReason = new stdclass();
+$lang->story->report->storysPerEstimate     = new stdclass();
+$lang->story->report->storysPerChange       = new stdclass();
+
+$lang->story->report->storysPerProduct->graph      = new stdclass();     
+$lang->story->report->storysPerModule->graph       = new stdclass();
+$lang->story->report->storysPerSource->graph       = new stdclass();
+$lang->story->report->storysPerPlan->graph         = new stdclass();
+$lang->story->report->storysPerStatus->graph       = new stdclass();
+$lang->story->report->storysPerStage->graph        = new stdclass();
+$lang->story->report->storysPerPri->graph          = new stdclass();
+$lang->story->report->storysPerOpenedBy->graph     = new stdclass();
+$lang->story->report->storysPerAssignedTo->graph   = new stdclass();
+$lang->story->report->storysPerClosedReason->graph = new stdclass();
+$lang->story->report->storysPerEstimate->graph     = new stdclass();
+$lang->story->report->storysPerChange->graph       = new stdclass();
 
 $lang->story->report->storysPerProduct->graph->xAxisName      = '产品';
 $lang->story->report->storysPerModule->graph->xAxisName       = '模块';
@@ -233,5 +264,6 @@ $lang->story->report->storysPerClosedReason->graph->xAxisName = '关闭原因';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = '预计时间';
 $lang->story->report->storysPerChange->graph->xAxisName       = '变更次数';
 
+$lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = "完成该需求的工作量";
 $lang->story->placeholder->mailto   = '输入用户名自动完成';

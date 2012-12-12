@@ -79,6 +79,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
 
 /* checking actions of every module. */
 echo '-------------lang checking-----------------' . "\n";
+include '../module/common/lang/zh-cn.php';
 include '../config/config.php';
 foreach(glob($moduleRoot . '*') as $modulePath)
 {
@@ -118,15 +119,11 @@ foreach(glob($moduleRoot . '*') as $modulePath)
 }
 
 echo '-------------php5.4 synatax checking-----------------' . "\n";
-class app
-{
-    function loadLang()
-    {
-    }
-}
+class app {function loadLang() {}}
 $app = new app;
+$lang = new stdclass();
 
-error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_WARNING | E_STRICT );
 foreach(glob($moduleRoot . '*') as $modulePath)
 {
     $moduleName = basename($modulePath);
@@ -134,6 +131,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
     $enLangFile = $modulePath . '/lang/en.php';
     $configFile = $modulePath . '/config.php';
 
+    if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
     if(file_exists($cnLangFile)) include $cnLangFile;
     if(file_exists($enLangFile)) include $enLangFile;
     if(file_exists($configFile)) include $configFile;

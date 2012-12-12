@@ -9,9 +9,11 @@
  * @version     $Id: English.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->misc->common  = 'Misc';
-$lang->misc->ping    = 'Keep session';
+$lang->misc = new stdclass();
+$lang->misc->common = 'Misc';
+$lang->misc->ping   = 'Keep session';
 
+$lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
 $lang->misc->zentao->labels['about']   = 'About';
 $lang->misc->zentao->labels['support'] = 'Support';

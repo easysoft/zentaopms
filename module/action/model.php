@@ -30,6 +30,8 @@ class actionModel extends model
      */
     public function create($objectType, $objectID, $actionType, $comment = '', $extra = '')
     {
+        $action = new stdclass();
+
         $objectType = str_replace('`', '', $objectType);
         $action->objectType = strtolower($objectType);
         $action->objectID   = $objectID;

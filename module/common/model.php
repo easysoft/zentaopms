@@ -242,7 +242,8 @@ class commonModel extends model
         if(isset($lang->menuOrder))
         {
             $menus = $lang->menu;
-            unset($lang->menu);
+            $lang->menu = new stdclass();
+
             ksort($lang->menuOrder, SORT_ASC);
             foreach($lang->menuOrder as $order)  
             {
@@ -255,7 +256,6 @@ class commonModel extends model
                 $lang->menu->$key = $menu; 
             }
         }
-
 
         /* Print all main menus. */
         foreach($lang->menu as $menuKey => $menu)
@@ -329,8 +329,9 @@ class commonModel extends model
         /* Sort the subMenu according to menuOrder. */
         if(isset($lang->$moduleName->menuOrder))
         {
-            $menus    = $submenus;
-            unset($submenus);
+            $menus = $submenus;
+            $submenus = new stdclass();
+
             ksort($lang->$moduleName->menuOrder, SORT_ASC);
             if(isset($menus->list)) 
             {
@@ -481,7 +482,8 @@ class commonModel extends model
      */
     public function getPreAndNextObject($type, $objectID)
     {
-        $table = '';
+        $preAndNextObject = new stdClass();
+
         switch($type)
         {
             case 'story'    : $table = TABLE_STORY; break;
@@ -489,7 +491,7 @@ class commonModel extends model
             case 'bug'      : $table = TABLE_BUG;   break;
             case 'testcase' : $table = TABLE_CASE;  break;
             case 'doc'      : $table = TABLE_DOC;   break;
-            default:break;
+            default         : return $preAndNextObject;
         }
 
         $typeIDs = $type . 'IDs';

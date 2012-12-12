@@ -65,8 +65,12 @@ $lang->testtask->lblUnlinkCase = 'Remove case';
 $lang->testtask->lblRunCase    = 'Run';
 $lang->testtask->lblResults    = 'Result';
 
+$lang->testtask->placeholder = new stdclass();
 $lang->testtask->placeholder->begin = 'begin date';
 $lang->testtask->placeholder->end   = 'end date';
 
+$lang->testtask->mail = new stdclass();
+$lang->testtask->mail->create = new stdclass();
+$lang->testtask->mail->edit   = new stdclass();
 $lang->testtask->mail->create->title = "%s created testtask #%s:%s";
 $lang->testtask->mail->edit->title   = "%s finished testtask #%s:%s";

@@ -244,9 +244,10 @@ $lang->bug->resolutionList['willnotfix'] = "不予解决";
 $lang->bug->resolutionList['tostory']    = '转为需求';
 
 /* 统计报表。*/
-$lang->bug->report->common        = '报表';
-$lang->bug->report->select        = '请选择报表类型';
-$lang->bug->report->create        = '生成报表';
+$lang->bug->report = new stdclass();
+$lang->bug->report->common = '报表';
+$lang->bug->report->select = '请选择报表类型';
+$lang->bug->report->create = '生成报表';
 
 $lang->bug->report->charts['bugsPerProject']        = '项目Bug数量';
 $lang->bug->report->charts['bugsPerBuild']          = '版本Bug数量';
@@ -266,6 +267,8 @@ $lang->bug->report->charts['bugsPerAssignedTo']     = '指派给统计';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug处理时间统计';
 //$lang->bug->report->charts['bugHistories']       = 'Bug处理步骤统计';
 
+$lang->bug->report->options = new stdclass();
+$lang->bug->report->options->graph = new stdclass();
 $lang->bug->report->options->swf                     = 'pie2d';
 $lang->bug->report->options->width                   = 'auto';
 $lang->bug->report->options->height                  = 300;
@@ -278,6 +281,42 @@ $lang->bug->report->options->graph->rotateNames      = 0;
 $lang->bug->report->options->graph->yAxisName        = 'COUNT';
 $lang->bug->report->options->graph->pieRadius        = 100; // 饼图直径。
 $lang->bug->report->options->graph->showColumnShadow = 0;   // 是否显示柱状图阴影。
+
+$lang->bug->report->bugsPerProject        = new stdclass();
+$lang->bug->report->bugsPerBuild          = new stdclass();
+$lang->bug->report->bugsPerModule         = new stdclass();
+$lang->bug->report->openedBugsPerDay      = new stdclass();
+$lang->bug->report->resolvedBugsPerDay    = new stdclass();
+$lang->bug->report->closedBugsPerDay      = new stdclass();
+$lang->bug->report->openedBugsPerUser     = new stdclass();
+$lang->bug->report->resolvedBugsPerUser   = new stdclass();
+$lang->bug->report->closedBugsPerUser     = new stdclass();
+$lang->bug->report->bugsPerSeverity       = new stdclass();
+$lang->bug->report->bugsPerResolution     = new stdclass();
+$lang->bug->report->bugsPerStatus         = new stdclass();
+$lang->bug->report->bugsPerActivatedCount = new stdclass();
+$lang->bug->report->bugsPerType           = new stdclass();
+$lang->bug->report->bugsPerAssignedTo     = new stdclass();
+$lang->bug->report->bugLiveDays           = new stdclass();
+$lang->bug->report->bugHistories          = new stdclass();
+
+$lang->bug->report->bugsPerProject->graph        = new stdclass();
+$lang->bug->report->bugsPerBuild->graph          = new stdclass();
+$lang->bug->report->bugsPerModule->graph         = new stdclass();
+$lang->bug->report->openedBugsPerDay->graph      = new stdclass();
+$lang->bug->report->resolvedBugsPerDay->graph    = new stdclass();
+$lang->bug->report->closedBugsPerDay->graph      = new stdclass();
+$lang->bug->report->openedBugsPerUser->graph     = new stdclass();
+$lang->bug->report->resolvedBugsPerUser->graph   = new stdclass();
+$lang->bug->report->closedBugsPerUser->graph     = new stdclass();
+$lang->bug->report->bugsPerSeverity->graph       = new stdclass();
+$lang->bug->report->bugsPerResolution->graph     = new stdclass();
+$lang->bug->report->bugsPerStatus->graph         = new stdclass();
+$lang->bug->report->bugsPerActivatedCount->graph = new stdclass();
+$lang->bug->report->bugsPerType->graph           = new stdclass();
+$lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
+$lang->bug->report->bugLiveDays->graph           = new stdclass();
+$lang->bug->report->bugHistories->graph          = new stdclass();
 
 $lang->bug->report->bugsPerProject->graph->xAxisName     = '项目';
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
@@ -312,8 +351,10 @@ $lang->bug->report->bugLiveDays->graph->xAxisName           = '处理时间';
 $lang->bug->report->bugHistories->graph->xAxisName          = '处理步骤';
 
 /* 操作记录。*/
+$lang->bug->action = new stdclass();
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
 $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong>需求</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 
+$lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->mailto = '输入用户名自动选择';

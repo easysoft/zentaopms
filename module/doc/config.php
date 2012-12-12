@@ -1,10 +1,18 @@
 <?php
 global $lang;
+
+$config->doc = new stdclass();
+$config->doc->createLib = new stdclass();
+$config->doc->editLib   = new stdclass();
+$config->doc->create    = new stdclass();
+$config->doc->edit      = new stdclass();
+
 $config->doc->createLib->requiredFields = 'name';
 $config->doc->editLib->requiredFields   = 'name';
 $config->doc->create->requiredFields = 'title';
 $config->doc->edit->requiredFields   = 'title';
 
+$config->doc->editor = new stdclass();
 $config->doc->editor->create = array('id' => 'content', 'tools' => 'fullTools');
 $config->doc->editor->edit   = array('id' => 'content', 'tools' => 'fullTools');
 

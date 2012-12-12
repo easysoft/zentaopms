@@ -67,4 +67,5 @@ $lang->doc->confirmDelete      = "Are you sure to delete this doc?";
 $lang->doc->confirmDeleteLib   = " Are you sure to delete this doc library?";
 $lang->doc->errorEditSystemDoc = "System doc library needn't edit";
 
+$lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'url';
