@@ -28,7 +28,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   <div class='f-right'>
     <?php
     common::printIcon('testtask', 'linkCase', "taskID=$task->id");
-    common::printIcon('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=$task->id");
+    common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id");
     common::printRPN($this->session->testtaskList, '');
     ?>
   </div>

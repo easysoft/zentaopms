@@ -18,6 +18,7 @@
       <div class='f-left'><?php echo $lang->project->story;?></div>
       <div class='f-right'>
         <?php 
+        common::printLink('story', 'export', "productID=$productID&orderBy=id_desc", $lang->story->export, '', "class='export'");
         if($productID) common::printLink('story', 'create', "productID=$productID&moduleID=0&story=0&project=$project->id", $lang->project->createStory);
         if(common::hasPriv('project', 'linkstory')) echo html::a($this->createLink('project', 'linkstory', "project=$project->id"), $lang->project->linkStory);
         ?>

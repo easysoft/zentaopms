@@ -230,6 +230,7 @@ class testtask extends control
         {
             $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $orderBy, $pager);
         }
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', 'false');
 
         /* Save testcaseIDs session for get the pre and next testcase. */
         $testcaseIDs = '';
@@ -239,6 +240,7 @@ class testtask extends control
         $this->view->header->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[]      = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]      = $this->lang->testtask->cases;
+
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->task        = $task;

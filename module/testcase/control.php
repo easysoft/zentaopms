@@ -528,14 +528,29 @@ class testcase extends control
             }
 
             /* Get cases. */
-            if($taskID)
+            if($this->session->testcaseOnlyCondition == 'true')
             {
-                $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
-                $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->andWhere('id')->in($caseIDList)->orderBy($orderBy)->fetchAll('id');
+                if($taskID)
+                {
+                    $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
+                    $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->andWhere('id')->in($caseIDList)->orderBy($orderBy)->fetchAll('id');
+                }
+                else
+                {
+                    $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->orderBy($orderBy)->fetchAll('id');
+                }
             }
             else
             {
-                $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->orderBy($orderBy)->fetchAll('id');
+                $cases   = array();
+                $orderBy = " ORDER BY " . str_replace(array('|', '^A', '_'), ' ', $orderBy);
+                $stmt    = $this->dbh->query($this->session->testcaseQueryCondition . $orderBy);
+                while($row = $stmt->fetch())
+                {
+                    $caseID = isset($row->case) ? $row->case : $row->id;
+                    $cases[$caseID] = $row;
+                    $row->id        = $caseID;
+                }
             }
 
             /* Get users, products and projects. */

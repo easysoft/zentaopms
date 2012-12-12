@@ -863,7 +863,16 @@ class story extends control
             }
 
             /* Get stories. */
-            $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id', false);
+            $stories = array();
+            if($this->session->storyOnlyCondition == 'true')
+            {
+                $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id', false);
+            }
+            else
+            {
+                $stmt = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
+                while($row = $stmt->fetch()) $stories[$row->id] = $row;
+            }
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');

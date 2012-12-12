@@ -560,13 +560,23 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public function saveQueryCondition($sql, $objectType)
+    public function saveQueryCondition($sql, $objectType, $onlyCondition = 'true')
     {
         /* Set the query condition session. */
-        $queryCondition = explode('WHERE', $sql);
-        $queryCondition = explode('ORDER', $queryCondition[1]);
-        $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+        if($onlyCondition == 'true')
+        {
+            $queryCondition = explode('WHERE', $sql);
+            $queryCondition = explode('ORDER', $queryCondition[1]);
+            $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+        }
+        else
+        {
+            $queryCondition = explode('ORDER', $sql);
+            $queryCondition = $queryCondition[0];
+        }
+
         $this->session->set($objectType . 'QueryCondition', $queryCondition);
+        $this->session->set($objectType . 'OnlyCondition', $onlyCondition);
 
         /* Set the query condition session. */
         $orderBy = explode('ORDER BY', $sql);
