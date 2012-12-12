@@ -31,6 +31,7 @@ $lang->testtask->product        = '所属产品';
 $lang->testtask->project        = '所属项目';
 $lang->testtask->build          = '版本';
 $lang->testtask->owner          = '负责人';
+$lang->testtask->pri            = '优先级';
 $lang->testtask->name           = '任务名称';
 $lang->testtask->begin          = '开始日期';
 $lang->testtask->end            = '结束日期';
@@ -46,6 +47,12 @@ $lang->testtask->statusList['wait']    = '未开始';
 $lang->testtask->statusList['doing']   = '进行中';
 $lang->testtask->statusList['done']    = '已完成';
 $lang->testtask->statusList['blocked'] = '被阻塞';
+
+$lang->testtask->priList[0] = '';
+$lang->testtask->priList[3] = '3';
+$lang->testtask->priList[1] = '1';
+$lang->testtask->priList[2] = '2';
+$lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
 $lang->testtask->linkedCases   = '已关联';

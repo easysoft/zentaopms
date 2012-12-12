@@ -31,6 +31,10 @@
     <td><?php echo $users[$task->owner];?></td>
   </tr>  
   <tr>
+    <th class='rowhead'><?php echo $lang->testtask->pri;?></th>
+    <td><?php echo $task->pri;?></td>
+  </tr>  
+  <tr>
     <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
     <td><?php echo $task->begin;?></td>
   </tr>  

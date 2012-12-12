@@ -31,6 +31,7 @@ $lang->testtask->product        = 'Product';
 $lang->testtask->project        = 'Project';
 $lang->testtask->build          = 'Build';
 $lang->testtask->owner          = 'Owner';
+$lang->testtask->pri            = 'Priority';
 $lang->testtask->name           = 'Name';
 $lang->testtask->begin          = 'Begin';
 $lang->testtask->end            = 'End';
@@ -46,6 +47,12 @@ $lang->testtask->statusList['wait']    = 'Pending';
 $lang->testtask->statusList['doing']   = 'In progress';
 $lang->testtask->statusList['done']    = 'Done';
 $lang->testtask->statusList['blocked'] = 'Blocked';
+
+$lang->testtask->priList[0] = '';
+$lang->testtask->priList[3] = '3';
+$lang->testtask->priList[1] = '1';
+$lang->testtask->priList[2] = '2';
+$lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = 'Unlinked';
 $lang->testtask->linkedCases   = 'Linked';

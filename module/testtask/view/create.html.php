@@ -40,6 +40,10 @@
       <td><?php echo html::select('owner', $users, '', 'class=select-3');?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->testtask->pri;?></th>
+      <td><?php echo html::select('pri', $lang->testtask->priList, 0, 'class=select-3');?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
       <td><?php echo html::input('begin', '', "class='text-3 date'");?>
     </tr>  
