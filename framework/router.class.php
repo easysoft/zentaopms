@@ -1369,6 +1369,7 @@ class router
     {
         global $config;
         if(!is_object($config)) $config = new config();
+        if(!isset($config->$moduleName)) $config->$moduleName = new stdclass();
 
         $extConfigFiles = array();
 
