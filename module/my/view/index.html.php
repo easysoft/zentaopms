@@ -25,8 +25,16 @@
 <table class='cont' id='row2'>
   <tr valign='top'>
     <td width='33%' style='padding-right:20px'><?php include './blocktodoes.html.php';?></td>
+    <?php if($app->user->role == 'qa'):?>
+    <td width='33%' style='padding-right:20px'><?php include './blockbugs.html.php';?></td>
+    <td width='33%'><?php include './blocktasks.html.php';?></td>
+    <?php elseif($app->user->role == 'po'):?>
+    <td width='33%' style='padding-right:20px'><?php include './blockstories.html.php';?></td>
+    <td width='33%'><?php include './blockbugs.html.php';?></td>
+    <?php else:?>
     <td width='33%' style='padding-right:20px'><?php include './blocktasks.html.php';?></td>
     <td width='33%'><?php include './blockbugs.html.php';?></td>
+    <?php endif;?>
   </tr>
 </table>
 <?php include '../../common/view/footer.html.php';?>

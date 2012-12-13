@@ -64,14 +64,14 @@ $lang->user->allUsers        = '全部用户';
 $lang->user->deleted         = '(已删除)';
 $lang->user->select          = '--请选择用户--';
 
-$lang->user->profile     = '用户档案';
-$lang->user->project     = '用户项目';
-$lang->user->task        = '用户任务';
-$lang->user->bug         = '用户Bug';
-$lang->user->todo        = '用户TODO';
-$lang->user->story       = '用户需求';
-$lang->user->team        = '用户团队';
-$lang->user->dynamic     = '用户动态';
+$lang->user->profile     = '档案';
+$lang->user->project     = '项目';
+$lang->user->task        = '任务';
+$lang->user->bug         = '缺陷';
+$lang->user->todo        = '待办';
+$lang->user->story       = '需求';
+$lang->user->team        = '团队';
+$lang->user->dynamic     = '动态';
 $lang->user->ajaxGetUser = '接口:获得用户';
 $lang->user->editProfile = '修改信息';
 

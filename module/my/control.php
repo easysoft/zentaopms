@@ -49,6 +49,7 @@ class my extends control
         $this->view->todos         = $this->loadModel('todo')->getList('all', $account, 'wait, doing', $this->config->my->todoCounts);
         $this->view->tasks         = $this->loadModel('task')->getUserTasks($account, 'assignedTo', $this->config->my->taskCounts);
         $this->view->bugs          = $this->loadModel('bug')->getUserBugPairs($account, false, $this->config->my->bugCounts);
+        $this->view->stories       = $this->loadModel('story')->getUserStoryPairs($account, $this->config->my->storyCounts);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|withguest');
         $this->view->header->title = $this->lang->my->common;
 

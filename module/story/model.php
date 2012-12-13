@@ -1041,6 +1041,25 @@ class storyModel extends model
         
         return $stories;
     }
+
+    /**
+     * Get story pairs of a user.
+     * 
+     * @param  string    $account 
+     * @param  string    $limit 
+     * @access public
+     * @return array
+     */
+    public function getUserStoryPairs($account, $limit = 10)
+    {
+        return $this->dao->select('id, title')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('assignedTo')->eq($account)
+            ->orderBy('id_desc')
+            ->limit($limit)
+            ->fetchAll();
+    }
     
     /**
      * Get doing projects' members of a story.

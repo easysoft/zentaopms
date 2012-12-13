@@ -3,9 +3,9 @@ $lang->my->common = '我的地盘';
 
 /* 方法列表。*/
 $lang->my->index          = '首页';
-$lang->my->todo           = '我的TODO';
+$lang->my->todo           = '我的待办';
 $lang->my->task           = '我的任务';
-$lang->my->bug            = '我的Bug';
+$lang->my->bug            = '我的缺陷';
 $lang->my->testTask       = '我的测试任务';
 $lang->my->testCase       = '我的测试用例';
 $lang->my->story          = '我的需求';

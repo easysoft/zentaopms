@@ -81,14 +81,14 @@ $lang->common->common = '公有模块';
 /* 主导航菜单。*/
 $lang->menu = new stdclass();
 $lang->menu->my       = '<span id="mainbg">&nbsp;</span>我的地盘|my|index';
-$lang->menu->product  = '产品视图|product|index';
-$lang->menu->project  = '项目视图|project|index';
-$lang->menu->qa       = '测试视图|qa|index';
-$lang->menu->doc      = '文档视图|doc|index';
-$lang->menu->report   = '统计视图|report|index';
+$lang->menu->product  = '产品|product|index';
+$lang->menu->project  = '项目|project|index';
+$lang->menu->qa       = '测试|qa|index';
+$lang->menu->doc      = '文档|doc|index';
+$lang->menu->report   = '统计|report|index';
 //$lang->menu->webapp   = '应用中心|webapp|index';
-$lang->menu->company  = '组织视图|company|index';
-$lang->menu->admin    = '后台管理|admin|index';
+$lang->menu->company  = '组织|company|index';
+$lang->menu->admin    = '管理|admin|index';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'B:Bug';
@@ -142,15 +142,15 @@ $lang->my->menu = new stdclass();
 
 $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arrow;
 $lang->my->menu->index          = '首页|my|index';
-$lang->my->menu->todo           = array('link' => '我的TODO|my|todo|', 'subModule' => 'todo');
-$lang->my->menu->task           = '我的任务|my|task|';
-$lang->my->menu->bug            = '我的Bug|my|bug|';
-$lang->my->menu->testtask       = array('link' => '我的测试|my|testtask|', 'alias' => 'testcase');
-$lang->my->menu->story          = '我的需求|my|story|';
-$lang->my->menu->myProject      = '我的项目|my|project|';
-$lang->my->menu->dynamic        = '我的动态|my|dynamic|';
-$lang->my->menu->profile        = array('link' => '我的档案|my|profile|', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '修改密码|my|changepassword|';
+$lang->my->menu->todo           = array('link' => '待办|my|todo|', 'subModule' => 'todo');
+$lang->my->menu->task           = '任务|my|task|';
+$lang->my->menu->bug            = '缺陷|my|bug|';
+$lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'alias' => 'testcase');
+$lang->my->menu->story          = '需求|my|story|';
+$lang->my->menu->myProject      = '项目|my|project|';
+$lang->my->menu->dynamic        = '动态|my|dynamic|';
+$lang->my->menu->profile        = array('link' => '档案|my|profile|', 'alias' => 'editprofile');
+$lang->my->menu->changePassword = '密码|my|changepassword|';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
