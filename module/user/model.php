@@ -458,7 +458,6 @@ class userModel extends model
         setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot);
     }
 
-    /* 
     /**
      * Judge a user is logon or not.
      * 
