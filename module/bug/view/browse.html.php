@@ -15,7 +15,6 @@
 <?php include '../../common/view/colorize.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
-var formUrl    = '<?php echo $formUrl;?>';
 var moduleID   = '<?php echo $moduleID;?>';
 var customed   = <?php echo (int)$customed;?>;
 </script>

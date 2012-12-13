@@ -353,6 +353,7 @@ class testtask extends control
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID");
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         /* Save session. */
         $this->testtask->setMenu($this->products, $productID);
@@ -404,7 +405,6 @@ class testtask extends control
         $this->view->cases   = $cases;
         $this->view->taskID  = $taskID;
         $this->view->pager   = $pager;
-        $this->view->formUrl = $this->loadModel('search')->getFormUrl($this->config->testcase->search);
 
         $this->display();
     }

@@ -59,8 +59,5 @@
     </tfoot>
   </table>
 </form>
-<script type='text/javascript'>
-var formUrl = '<?php echo $formUrl?>';
-$(function(){ajaxGetSearchForm()});
-</script>
+<script type='text/javascript'>$(function(){ajaxGetSearchForm()});</script>
 <?php include '../../common/view/footer.html.php';?>

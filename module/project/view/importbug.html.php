@@ -18,7 +18,6 @@ $(function(){
      $(".preview").colorbox({width:1000, height:700, iframe:true, transition:'elastic', speed:350, scrolling:true});
 })
 var browseType = '<?php echo $browseType;?>';
-var formUrl    = '<?php echo $formUrl;?>';
 </script>
 <div id='querybox'></div>
 <div>

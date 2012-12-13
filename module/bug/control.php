@@ -121,6 +121,7 @@ class bug extends control
         $this->config->bug->search['params']['project']['values']       = $this->product->getProjectPairs($productID);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID);
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID);
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         $users = $this->user->getPairs('noletter');
 
@@ -148,7 +149,6 @@ class bug extends control
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->moduleTree  = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'));
-        $this->view->formUrl     = $this->loadModel('search')->getFormUrl($this->config->bug->search);
         $this->view->browseType  = $browseType;
         $this->view->bugs        = $bugs;
         $this->view->users       = $users;

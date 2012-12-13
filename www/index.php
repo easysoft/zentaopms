@@ -12,6 +12,7 @@
  * @link        http://www.zentao.net
  */
 /* Set the error reporting. */
+ xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
 error_reporting(0);
 /* Start output buffer. */
 ob_start();
@@ -40,3 +41,9 @@ $app->loadModule();
 
 /* Flush the buffer. */
 ob_end_flush();
+$data = xhprof_disable();
+include_once "xhprof_lib/utils/xhprof_lib.php";  
+include_once "xhprof_lib/utils/xhprof_runs.php";  
+$objXhprofRun = new XHProfRuns_Default();
+$run_id = $objXhprofRun->save_run($data, "xhprof");
+echo $run_id;

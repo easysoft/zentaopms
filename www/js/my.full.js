@@ -663,7 +663,7 @@ function ajaxGetSearchForm()
 {
     if($('#querybox').html() == '')
     {
-        $.get(formUrl, function(data){
+        $.get(createLink('search', 'buildForm'), function(data){
             $('#querybox').html(data);
         });
     }

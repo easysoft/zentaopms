@@ -17,7 +17,6 @@
 <?php include './taskheader.html.php';?>
 <script language='Javascript'>
 var browseType  = '<?php echo $browseType;?>';
-var formUrl     = '<?php echo $formUrl?>';
 </script>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 <table class='cont-lt1'>

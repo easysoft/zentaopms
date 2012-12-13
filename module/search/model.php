@@ -15,23 +15,20 @@ class searchModel extends model
 {
 
     /**
-     * Get search form URL. 
+     * Set search params to session. 
      * 
      * @param  array    $searchConfig 
      * @access public
      * @return void
      */
-    public function getFormUrl($searchConfig)
+    public function setSearchParams($searchConfig)
     {
-        $module       = $searchConfig['module'];
-        $searchFields = $searchConfig['fields'];
-        $fieldParams  = $searchConfig['params'];
-        $actionURL    = $searchConfig['actionURL'];
-        $queryID      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
-        $searchFields = helper::safe64Encode(json_encode($searchFields));
-        $fieldParams  = helper::safe64Encode(json_encode($fieldParams));
-        $actionURL    = helper::safe64Encode($actionURL);
-        return helper::createLink('search', 'buildForm', "module=$module&searchFields=$searchFields&fieldParams=$fieldParams&actionURL=$actionURL&queryID=$queryID");
+        $searchParams['module']       = $searchConfig['module'];
+        $searchParams['searchFields'] = json_encode($searchConfig['fields']);
+        $searchParams['fieldParams']  = json_encode($searchConfig['params']);
+        $searchParams['actionURL']    = $searchConfig['actionURL'];
+        $searchParams['queryID']      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
+        $this->session->set('searchParams', $searchParams);
     }
 
     /**

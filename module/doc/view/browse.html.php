@@ -16,7 +16,6 @@
 <?php include '../../common/view/colorize.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
-var formUrl    = '<?php echo $formUrl;?>';
 </script>
 <div id='featurebar'>
   <div class='f-left'>

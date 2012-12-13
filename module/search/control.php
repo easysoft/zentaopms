@@ -22,11 +22,13 @@ class search extends control
      * @access public
      * @return void
      */
-    public function buildForm($module, $searchFields, $fieldParams, $actionURL, $queryID = 0)
+    public function buildForm($module = '', $searchFields = '', $fieldParams = '', $actionURL = '', $queryID = 0)
     {
-        $searchFields = is_array($searchFields) ? $searchFields : json_decode(helper::safe64Decode($searchFields), true);
-        $fieldParams  = is_array($fieldParams) ? $fieldParams : json_decode(helper::safe64Decode($fieldParams), true);
-        $actionURL    = (strpos($actionURL, '/') !== false) ? $actionURL : helper::safe64Decode($actionURL);
+        $queryID      = (empty($module) and empty($queryID)) ? $this->session->searchParams['queryID'] : $queryID;
+        $module       = empty($module) ?       $this->session->searchParams['module'] : $module;
+        $searchFields = empty($searchFields) ? json_decode($this->session->searchParams['searchFields'], true) : $searchFields;
+        $fieldParams  = empty($fieldParams) ?  json_decode($this->session->searchParams['fieldParams'], true)  : $fieldParams;
+        $actionURL    = empty($actionURL) ?    $this->session->searchParams['actionURL'] : $actionURL;
         $this->search->initSession($module, $searchFields, $fieldParams);
 
         $this->view->module       = $module;

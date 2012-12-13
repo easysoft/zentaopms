@@ -127,6 +127,7 @@ class testcase extends control
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = $this->createLink('testcase', 'browse', "productID=$productID&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['queryID']   = $queryID;
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         /* Assign. */
         $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
@@ -141,7 +142,6 @@ class testcase extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
-        $this->view->formUrl       = $this->loadModel('search')->getFormUrl($this->config->testcase->search);
         $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
 
         $this->display();

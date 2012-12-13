@@ -14,7 +14,6 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <script language='Javascript'>
 var browseType = '<?php echo $browseType;?>';
-var formUrl    = '<?php echo $formUrl;?>';
 </script>
 <div id='featurebar'>
   <?php 

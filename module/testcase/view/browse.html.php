@@ -17,7 +17,6 @@
 <script language="Javascript">
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
-var formUrl    = '<?php echo $formUrl;?>';
 </script>
 
 <div id='featurebar'>

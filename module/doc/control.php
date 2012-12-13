@@ -126,6 +126,7 @@ class doc extends control
         $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->project->getPairs() + array('all'=>$this->lang->doc->allProject);
         $this->config->doc->search['params']['lib']['values']     = array(''=>'') + $this->libs;
         $this->config->doc->search['params']['type']['values']    = array(''=>'') + $this->config->doc->search['params']['type']['values'];
+        $this->loadModel('search')->setSearchParams($this->config->doc->search);
 
         /* Get the modules. */
         if($libID == 'product' or $libID == 'project')
@@ -139,7 +140,6 @@ class doc extends control
         $this->config->doc->search['params']['module']['values']        = array(''=>'') + $moduleOptionMenu;
 
         $this->view->libID         = $libID;
-        $this->view->formUrl       = $this->loadModel('search')->getFormUrl($this->config->doc->search);
         $this->view->libName       = $this->libs[$libID];
         $this->view->moduleID      = $moduleID;
         $this->view->moduleTree    = $moduleTree;

@@ -132,6 +132,7 @@ class product extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productID);
         $this->config->product->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->product->allProduct);
         $this->config->product->search['params']['module']['values']  = $this->tree->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $this->view->productID     = $productID;
         $this->view->productName   = $this->products[$productID];
@@ -144,7 +145,6 @@ class product extends control
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
-        $this->view->formUrl       = $this->loadModel('search')->getFormUrl($this->config->product->search);
         $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
         $this->display();
     }

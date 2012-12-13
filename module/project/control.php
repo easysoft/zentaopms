@@ -178,6 +178,7 @@ class project extends control
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['params']['project']['values'] = array(''=>'', $projectID => $this->projects[$projectID], 'all' => $this->lang->project->allProject);
         $this->config->project->search['params']['module']['values']  = $this->tree->getOptionMenu($projectID, $viewType = 'task', $startModuleID = 0);
+        $this->loadModel('search')->setSearchParams($this->config->project->search);
 
         /* Assign. */
         $this->view->tasks       = $tasks;
@@ -193,7 +194,6 @@ class project extends control
         $this->view->projectID   = $projectID;
         $this->view->project     = $project;
         $this->view->moduleID    = $moduleID;
-        $this->view->formUrl     = $this->loadModel('search')->getFormUrl($this->config->project->search);
         $this->view->moduleTree  = $this->tree->getTreeMenu($projectID, $viewType = 'task', $startModuleID = 0, array('treeModel', 'createTaskLink'));
         $this->view->projectTree = $this->project->tree();
 
@@ -452,10 +452,10 @@ class project extends control
         unset($this->config->bug->search['params']['resolvedBuild']);
         unset($this->config->bug->search['params']['resolvedDate']);
         unset($this->config->bug->search['params']['closedDate']);   
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Assign. */
         $this->view->header     = $header;
-        $this->view->formUrl    = $this->loadModel('search')->getFormUrl($this->config->bug->search);
         $this->view->pager      = $pager;
         $this->view->bugs       = $bugs;
         $this->view->recTotal   = $pager->recTotal;
@@ -1171,6 +1171,7 @@ class project extends control
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->linkStory;
         $position[]      = html::a($browseLink, $project->name);
@@ -1193,7 +1194,6 @@ class project extends control
         $this->view->allStories = $allStories;
         $this->view->prjStories = $prjStories;
         $this->view->browseType = $browseType;
-        $this->view->formUrl    = $this->loadModel('search')->getFormUrl($this->config->product->search);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
