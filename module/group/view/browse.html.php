@@ -22,7 +22,6 @@
    <th class='w-id'><?php echo $lang->group->id;?></th>
    <th class='w-100px'><?php echo $lang->group->name;?></th>
    <th><?php echo $lang->group->desc;?></th>
-   <th><?php echo $lang->group->users;?></th>
    <th class='w-200px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
@@ -32,7 +31,6 @@
     <td class='strong'><?php echo $group->id;?></td>
     <td><?php echo $group->name;?></td>
     <td class='a-left'><?php echo $group->desc;?></td>
-    <td class='a-left'><?php foreach($groupUsers[$group->id] as $user) echo "<span class='user'>$user</span>";?></td>
     <td class='a-right'>
       <?php common::printLink('group', 'managepriv',   "type=byGroup&param=$group->id", $lang->group->managePrivByGroup);?>
       <?php common::printLink('group', 'managemember', "groupID=$group->id", $lang->group->manageMember);?>

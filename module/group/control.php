@@ -38,14 +38,11 @@ class group extends control
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
         $position[]      = $this->lang->group->browse;
 
-        $groups     = $this->group->getList($companyID);
-        $groupUsers = array();
-        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+        $groups = $this->group->getList($companyID);
 
-        $this->view->header     = $header;
-        $this->view->position   = $position;
-        $this->view->groups     = $groups;
-        $this->view->groupUsers = $groupUsers;
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->groups   = $groups;
 
         $this->display();
     }
