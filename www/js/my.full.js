@@ -796,6 +796,29 @@ function selectItem(SelectID)
     }
 }
 
+/**
+ * Save checked item to cookie when click a object.
+ * 
+ * @param  string $obj 
+ * @access public
+ * @return void
+ */
+function getCheckedItem(obj)
+{
+  $(obj).click(function(){
+      var checkeds = '';
+      $(':checkbox').each(function(){
+          if($(this).attr('checked'))
+          {
+              var checkedVal = parseInt($(this).val());
+              if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
+          }
+      })
+      if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
+      $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
+  })
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -819,6 +842,7 @@ $(document).ready(function()
     togglesearch();
     saveWindowSize();
     loadFixedCSS();
+    getCheckedItem('.export');
     $(window).resize(function(){saveWindowSize()});       // When window resized, call it again.
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
 });

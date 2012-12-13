@@ -917,7 +917,9 @@ class bug extends control
             }
 
             /* Get bugs. */
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->orderBy($orderBy)->fetchAll('id');
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)
+                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->orderBy($orderBy)->fetchAll('id');
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');

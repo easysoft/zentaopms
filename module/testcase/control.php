@@ -533,11 +533,15 @@ class testcase extends control
                 if($taskID)
                 {
                     $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
-                    $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->andWhere('id')->in($caseIDList)->orderBy($orderBy)->fetchAll('id');
+                    $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->andWhere('id')->in($caseIDList)
+                        ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                        ->orderBy($orderBy)->fetchAll('id');
                 }
                 else
                 {
-                    $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->orderBy($orderBy)->fetchAll('id');
+                    $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
+                        ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                        ->orderBy($orderBy)->fetchAll('id');
                 }
             }
             else
@@ -548,6 +552,7 @@ class testcase extends control
                 while($row = $stmt->fetch())
                 {
                     $caseID = isset($row->case) ? $row->case : $row->id;
+                    if($this->post->exportType == 'selected' and strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
                     $cases[$caseID] = $row;
                     $row->id        = $caseID;
                 }

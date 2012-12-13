@@ -866,11 +866,13 @@ class story extends control
             $stories = array();
             if($this->session->storyOnlyCondition == 'true')
             {
-                $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id', false);
+                $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
+                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                    ->orderBy($orderBy)->fetchAll('id', false);
             }
             else
             {
-                $stmt = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $stmt = $this->dbh->query($this->session->storyQueryCondition . ($this->post->exportType == 'selected' ? " AND id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
                 while($row = $stmt->fetch()) $stories[$row->id] = $row;
             }
 

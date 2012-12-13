@@ -770,7 +770,9 @@ class task extends control
             }
 
             /* Get tasks. */
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)->orderBy($orderBy)->fetchAll('id');
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
+                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
+                ->orderBy($orderBy)->fetchAll('id');
 
             /* Get users and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');

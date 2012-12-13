@@ -331,7 +331,9 @@ class todo extends control
             unset($fields['private']);
 
             /* Get bugs. */
-            $todos = $this->dao->select('*')->from(TABLE_TODO)->where($this->session->todoReportCondition)->orderBy($orderBy)->fetchAll('id');
+            $todos = $this->dao->select('*')->from(TABLE_TODO)->where($this->session->todoReportCondition)
+                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->orderBy($orderBy)->fetchAll('id');
 
             /* Get users, bugs, tasks and times. */
             $users    = $this->loadModel('user')->getPairs('noletter');
@@ -347,7 +349,7 @@ class todo extends control
                 if(isset($times[$todo->end]))                   $todo->end     = $times[$todo->end];
                 if($todo->type == 'bug')                        $todo->name    = isset($bugs[$todo->idvalue])  ? $bugs[$todo->idvalue]  : '';
                 if($todo->type == 'task')                       $todo->name    = isset($tasks[$todo->idvalue]) ? $tasks[$todo->idvalue] : '';
-                if(isset($todoLang->typeList->{$todo->type}))   $todo->type    = $todoLang->typeList->{$todo->type};
+                if(isset($todoLang->typeList[$todo->type]))     $todo->type    = $todoLang->typeList[$todo->type];
                 if(isset($todoLang->priList[$todo->pri]))       $todo->pri     = $todoLang->priList[$todo->pri];
                 if(isset($todoLang->statusList[$todo->status])) $todo->status  = $todoLang->statusList[$todo->status];
                 if($todo->private == 1)                         $todo->desc    = $this->lang->todo->thisIsPrivate;
