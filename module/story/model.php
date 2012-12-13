@@ -900,7 +900,7 @@ class storyModel extends model
      */
     public function getBySQL($productID, $sql, $orderBy, $pager = null)
     {
-        $productIDs = array_keys($this->product->getPrivProducts());
+        $productIDs = array_keys($this->loadModel('product')->getPrivProducts());
 
         /* Get plans. */
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
