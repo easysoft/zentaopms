@@ -1296,6 +1296,19 @@ class project extends control
     }
     
     /**
+     * AJAX: get team members of the project. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMembers($projectID)
+    {
+        $users = $this->project->getTeamMemberPairs($projectID);
+        die(html::select('assignedTo', $users, ''));
+    }
+
+    /**
      * When create a project, help the user. 
      * 
      * @param  int    $projectID 
