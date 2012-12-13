@@ -111,19 +111,17 @@ $lang->todo->methodOrder[40] = 'import2Today';
 
 /* Product. */
 $lang->resource->product = new stdclass();
-$lang->resource->product->index  = 'index';
-$lang->resource->product->browse = 'browse';
-$lang->resource->product->create = 'create';
-$lang->resource->product->view   = 'view';
-$lang->resource->product->edit   = 'edit';
-$lang->resource->product->order  = 'order';
-$lang->resource->product->delete = 'delete';
-$lang->resource->product->roadmap= 'roadmap';
-$lang->resource->product->doc    = 'doc';
-$lang->resource->product->dynamic= 'dynamic';
-$lang->resource->product->project= 'project';
-$lang->resource->product->ajaxGetProjects = 'ajaxGetProjects';
-$lang->resource->product->ajaxGetPlans    = 'ajaxGetPlans';
+$lang->resource->product->index   = 'index';
+$lang->resource->product->browse  = 'browse';
+$lang->resource->product->create  = 'create';
+$lang->resource->product->view    = 'view';
+$lang->resource->product->edit    = 'edit';
+$lang->resource->product->order   = 'order';
+$lang->resource->product->delete  = 'delete';
+$lang->resource->product->roadmap = 'roadmap';
+$lang->resource->product->doc     = 'doc';
+$lang->resource->product->dynamic = 'dynamic';
+$lang->resource->product->project = 'project';
 
 $lang->product->methodOrder[0]  = 'index';
 $lang->product->methodOrder[5]  = 'browse';
@@ -136,8 +134,6 @@ $lang->product->methodOrder[35] = 'roadmap';
 $lang->product->methodOrder[40] = 'doc';
 $lang->product->methodOrder[45] = 'dynamic';
 $lang->product->methodOrder[50] = 'project';
-$lang->product->methodOrder[55] = 'ajaxGetProjects';
-$lang->product->methodOrder[60] = 'ajaxGetPlans';
 
 /* Story. */
 $lang->resource->story = new stdclass();
@@ -155,8 +151,6 @@ $lang->resource->story->batchClose  = 'batchClose';
 $lang->resource->story->activate    = 'lblActivate';
 $lang->resource->story->tasks       = 'tasks';
 $lang->resource->story->report      = 'reportChart';
-$lang->resource->story->ajaxGetProjectStories = 'ajaxGetProjectStories';
-$lang->resource->story->ajaxGetProductStories = 'ajaxGetProductStories';
 
 $lang->story->methodOrder[5]  = 'create';
 $lang->story->methodOrder[10] = 'batchCreate';
@@ -171,8 +165,6 @@ $lang->story->methodOrder[50] = 'batchClose';
 $lang->story->methodOrder[55] = 'activate';
 $lang->story->methodOrder[60] = 'tasks';
 $lang->story->methodOrder[65] = 'report';
-$lang->story->methodOrder[70] = 'ajaxGetProjectStories';
-$lang->story->methodOrder[75] = 'ajaxGetProductStories';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -200,14 +192,12 @@ $lang->resource->release->edit   = 'edit';
 $lang->resource->release->delete = 'delete';
 $lang->resource->release->view   = 'view';
 $lang->resource->release->export = 'export';
-$lang->resource->release->ajaxGetStoriesAndBugs = 'ajaxGetStoriesAndBugs';
 
 $lang->release->methodOrder[5]  = 'browse';
 $lang->release->methodOrder[10] = 'create';
 $lang->release->methodOrder[15] = 'edit';
 $lang->release->methodOrder[20] = 'delete';
 $lang->release->methodOrder[25] = 'view';
-$lang->release->methodOrder[30] = 'ajaxGetStoriesAndBugs';
 $lang->release->methodOrder[35] = 'export';
 
 /* Project. */
@@ -239,7 +229,6 @@ $lang->resource->project->manageMembers  = 'manageMembers';
 $lang->resource->project->unlinkMember   = 'unlinkMember';
 $lang->resource->project->linkStory      = 'linkStory';
 $lang->resource->project->unlinkStory    = 'unlinkStory';
-$lang->resource->project->ajaxGetProducts= 'ajaxGetProducts';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -267,28 +256,25 @@ $lang->project->methodOrder[110] = 'manageMembers';
 $lang->project->methodOrder[115] = 'unlinkMember';
 $lang->project->methodOrder[120] = 'linkStory';
 $lang->project->methodOrder[125] = 'unlinkStory';
-$lang->project->methodOrder[130] = 'ajaxGetProducts';
 
 /* Task. */
 $lang->resource->task = new stdclass();
-$lang->resource->task->create              = 'create';
-$lang->resource->task->batchCreate         = 'batchCreate';
-$lang->resource->task->batchEdit           = 'batchEdit';
-$lang->resource->task->edit                = 'edit';
-$lang->resource->task->assignTo            = 'assign';
-$lang->resource->task->start               = 'start';
-$lang->resource->task->finish              = 'finish';
-$lang->resource->task->cancel              = 'cancel';
-$lang->resource->task->close               = 'close';
-$lang->resource->task->batchClose          = 'batchClose';
-$lang->resource->task->activate            = 'activate';
-$lang->resource->task->delete              = 'delete';
-$lang->resource->task->view                = 'view';
-$lang->resource->task->export              = 'export';
-$lang->resource->task->confirmStoryChange  = 'confirmStoryChange';
-$lang->resource->task->ajaxGetUserTasks    = 'ajaxGetUserTasks';
-$lang->resource->task->ajaxGetProjectTasks = 'ajaxGetProjectTasks';
-$lang->resource->task->report              = 'reportChart';
+$lang->resource->task->create             = 'create';
+$lang->resource->task->batchCreate        = 'batchCreate';
+$lang->resource->task->batchEdit          = 'batchEdit';
+$lang->resource->task->edit               = 'edit';
+$lang->resource->task->assignTo           = 'assign';
+$lang->resource->task->start              = 'start';
+$lang->resource->task->finish             = 'finish';
+$lang->resource->task->cancel             = 'cancel';
+$lang->resource->task->close              = 'close';
+$lang->resource->task->batchClose         = 'batchClose';
+$lang->resource->task->activate           = 'activate';
+$lang->resource->task->delete             = 'delete';
+$lang->resource->task->view               = 'view';
+$lang->resource->task->export             = 'export';
+$lang->resource->task->confirmStoryChange = 'confirmStoryChange';
+$lang->resource->task->report             = 'reportChart';
 
 $lang->task->methodOrder[5]  = 'create';
 $lang->task->methodOrder[10] = 'batchCreate';
@@ -305,25 +291,19 @@ $lang->task->methodOrder[60] = 'delete';
 $lang->task->methodOrder[65] = 'view';
 $lang->task->methodOrder[70] = 'export';
 $lang->task->methodOrder[75] = 'confirmStoryChange';
-$lang->task->methodOrder[80] = 'ajaxGetUserTasks';
-$lang->task->methodOrder[85] = 'ajaxGetProjectTasks';
 $lang->task->methodOrder[90] = 'report';
 
 /* Build. */
 $lang->resource->build = new stdclass();
-$lang->resource->build->create               = 'create';
-$lang->resource->build->edit                 = 'edit';
-$lang->resource->build->delete               = 'delete';
-$lang->resource->build->view                 = 'view';
-$lang->resource->build->ajaxGetProductBuilds = 'ajaxGetProductBuilds';
-$lang->resource->build->ajaxGetProjectBuilds = 'ajaxGetProjectBuilds';
+$lang->resource->build->create = 'create';
+$lang->resource->build->edit   = 'edit';
+$lang->resource->build->delete = 'delete';
+$lang->resource->build->view   = 'view';
 
 $lang->build->methodOrder[5]  = 'create';
 $lang->build->methodOrder[10] = 'edit';
 $lang->build->methodOrder[15] = 'delete';
 $lang->build->methodOrder[20] = 'view';
-$lang->build->methodOrder[25] = 'ajaxGetProductBuilds';
-$lang->build->methodOrder[30] = 'ajaxGetProjectBuilds';
 
 /* QA. */
 $lang->resource->qa = new stdclass();
@@ -333,26 +313,24 @@ $lang->qa->methodOrder[0] = 'index';
 
 /* Bug. */
 $lang->resource->bug = new stdclass();
-$lang->resource->bug->index               = 'index';
-$lang->resource->bug->browse              = 'browse';
-$lang->resource->bug->create              = 'create';
-$lang->resource->bug->confirmBug          = 'confirmBug';
-$lang->resource->bug->view                = 'view';
-$lang->resource->bug->edit                = 'edit';
-$lang->resource->bug->batchEdit           = 'batchEdit';
-$lang->resource->bug->assignTo            = 'assignTo';
-$lang->resource->bug->resolve             = 'resolve';
-$lang->resource->bug->activate            = 'activate';
-$lang->resource->bug->close               = 'close';
-$lang->resource->bug->report              = 'reportChart';
-$lang->resource->bug->export              = 'export';
-$lang->resource->bug->confirmStoryChange  = 'confirmStoryChange';
-$lang->resource->bug->delete              = 'delete';
-$lang->resource->bug->saveTemplate        = 'saveTemplate';
-$lang->resource->bug->deleteTemplate      = 'deleteTemplate';
-$lang->resource->bug->customFields        = 'customFields';
-$lang->resource->bug->ajaxGetUserBugs     = 'ajaxGetUserBugs';
-$lang->resource->bug->ajaxGetModuleOwner  = 'ajaxGetModuleOwner';
+$lang->resource->bug->index              = 'index';
+$lang->resource->bug->browse             = 'browse';
+$lang->resource->bug->create             = 'create';
+$lang->resource->bug->confirmBug         = 'confirmBug';
+$lang->resource->bug->view               = 'view';
+$lang->resource->bug->edit               = 'edit';
+$lang->resource->bug->batchEdit          = 'batchEdit';
+$lang->resource->bug->assignTo           = 'assignTo';
+$lang->resource->bug->resolve            = 'resolve';
+$lang->resource->bug->activate           = 'activate';
+$lang->resource->bug->close              = 'close';
+$lang->resource->bug->report             = 'reportChart';
+$lang->resource->bug->export             = 'export';
+$lang->resource->bug->confirmStoryChange = 'confirmStoryChange';
+$lang->resource->bug->delete             = 'delete';
+$lang->resource->bug->saveTemplate       = 'saveTemplate';
+$lang->resource->bug->deleteTemplate     = 'deleteTemplate';
+$lang->resource->bug->customFields       = 'customFields';
 
 $lang->bug->methodOrder[0]  = 'index';
 $lang->bug->methodOrder[5]  = 'browse';
@@ -371,8 +349,6 @@ $lang->bug->methodOrder[65] = 'delete';
 $lang->bug->methodOrder[70] = 'saveTemplate';
 $lang->bug->methodOrder[75] = 'deleteTemplate';
 $lang->bug->methodOrder[80] = 'customFields';
-$lang->bug->methodOrder[85] = 'ajaxGetUserBugs';
-$lang->bug->methodOrder[90] = 'ajaxGetModuleOwner';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
@@ -531,7 +507,6 @@ $lang->resource->user->bug         = 'bug';
 $lang->resource->user->project     = 'project';
 $lang->resource->user->dynamic     = 'dynamic';
 $lang->resource->user->profile     = 'profile';
-$lang->resource->user->ajaxGetUser = 'ajaxGetUser';
 
 $lang->user->methodOrder[5]  = 'create';
 $lang->user->methodOrder[10] = 'view';
@@ -544,26 +519,21 @@ $lang->user->methodOrder[40] = 'bug';
 $lang->user->methodOrder[45] = 'project';
 $lang->user->methodOrder[50] = 'dynamic';
 $lang->user->methodOrder[55] = 'profile';
-$lang->user->methodOrder[60] = 'ajaxGetUser';
 
 /* Tree. */
 $lang->resource->tree = new stdclass();
-$lang->resource->tree->browse            = 'browse';
-$lang->resource->tree->updateOrder       = 'updateOrder';
-$lang->resource->tree->manageChild       = 'manageChild';
-$lang->resource->tree->edit              = 'edit';
-$lang->resource->tree->fix               = 'fix';
-$lang->resource->tree->delete            = 'delete';
-$lang->resource->tree->ajaxGetOptionMenu = 'ajaxGetOptionMenu';
-$lang->resource->tree->ajaxGetSonModules = 'ajaxGetSonModules';
+$lang->resource->tree->browse      = 'browse';
+$lang->resource->tree->updateOrder = 'updateOrder';
+$lang->resource->tree->manageChild = 'manageChild';
+$lang->resource->tree->edit        = 'edit';
+$lang->resource->tree->fix         = 'fix';
+$lang->resource->tree->delete      = 'delete';
 
 $lang->tree->methodOrder[5]  = 'browse';
 $lang->tree->methodOrder[10] = 'updateOrder';
 $lang->tree->methodOrder[15] = 'manageChild';
 $lang->tree->methodOrder[20] = 'edit';
 $lang->tree->methodOrder[25] = 'delete';
-$lang->tree->methodOrder[30] = 'ajaxGetOptionMenu';
-$lang->tree->methodOrder[35] = 'ajaxGetSonModules';
 
 /* Report. */
 $lang->resource->report = new stdclass();
@@ -696,12 +666,10 @@ $lang->resource->file = new stdclass();
 $lang->resource->file->download   = 'download';
 $lang->resource->file->edit       = 'edit';
 $lang->resource->file->delete     = 'delete';
-$lang->resource->file->ajaxUpload = 'ajaxUpload';
 
 $lang->file->methodOrder[5]  = 'download';
 $lang->file->methodOrder[10] = 'edit';
 $lang->file->methodOrder[15] = 'delete';
-$lang->file->methodOrder[20] = 'ajaxUpload';
 
 $lang->resource->misc = new stdclass();
 $lang->resource->misc->ping = 'ping';
@@ -725,11 +693,9 @@ $lang->changelog['1.1'][]   = 'search-deleteQuery';
 
 $lang->changelog['1.2'][]   = 'product-doc';
 $lang->changelog['1.2'][]   = 'project-doc';
-$lang->changelog['1.2'][]   = 'project-ajaxGetProducts';
 $lang->changelog['1.2'][]   = 'bug-saveTemplate';
 $lang->changelog['1.2'][]   = 'bug-deleteTemplate';
 $lang->changelog['1.2'][]   = 'bug-customFields';
-$lang->changelog['1.2'][]   = 'bug-ajaxGetModuleOwner';
 $lang->changelog['1.2'][]   = 'doc-index';
 $lang->changelog['1.2'][]   = 'doc-browse';
 $lang->changelog['1.2'][]   = 'doc-createLib';
@@ -744,9 +710,7 @@ $lang->changelog['1.2'][]   = 'doc-deleteFile';
 $lang->changelog['1.3'][]   = 'task-start';
 $lang->changelog['1.3'][]   = 'task-complete';
 $lang->changelog['1.3'][]   = 'task-cancel';
-$lang->changelog['1.3'][]   = 'tree-ajaxGetSonModules';
 $lang->changelog['1.3'][]   = 'file-delete';
-$lang->changelog['1.3'][]   = 'file-ajaxUpload';
 
 $lang->changelog['1.4'][]   = 'my-testTask';
 $lang->changelog['1.4'][]   = 'my-testCase';
@@ -790,13 +754,10 @@ $lang->changelog['2.3'][]   = 'svn-diff';
 $lang->changelog['2.3'][]   = 'svn-cat';
 $lang->changelog['2.3'][]   = 'svn-apiSync';
 
-$lang->changelog['2.4'][]   = 'user-ajaxGetUser';
 $lang->changelog['2.4'][]   = 'task-assign';
 $lang->changelog['2.4'][]   = 'project-testtask';
 $lang->changelog['2.4'][]   = 'todo-export';
 $lang->changelog['2.4'][]   = 'product-project';
-
-$lang->changelog['3.0.beta1'][] = 'release-ajaxGetStoriesAndBugs';
 
 $lang->changelog['3.0.beta2'][] = 'extension-structure';
 $lang->changelog['3.0.beta2'][] = 'product-order';
