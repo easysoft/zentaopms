@@ -15,7 +15,12 @@
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script language='Javascript'>var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
+<script language='Javascript'>
+changeProjectConfirmed = false;
+confirmChangeProject   = '<?php echo $lang->task->confirmChangeProject;?>';
+oldStoryID             = '<?php echo $task->story;?>';
+userList               = "<?php echo join(',', array_keys($users));?>".split(',');
+</script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div id='main'>TASK #<?php echo $task->id . $lang->colon . html::input('name', $task->name, 'class="text-1"');?></div>
@@ -51,19 +56,19 @@
         <table class='table-1'> 
           <tr>
             <th class='rowhead w-p20'><?php echo $lang->task->project;?></th>
-            <td><?php echo $project->name;?></td>
+            <td><?php echo html::select('project', $projects, $task->project, 'class="select-1" onchange="loadAll(this.value)"');?></td>
           </tr>  
           <tr>
             <th class='rowhead w-p20'><?php echo $lang->task->module;?></th>
-            <td><?php echo html::select('module', $modules, $task->module, 'class="select-1"');?></td>
+            <td><span id="moduleIdBox"><?php echo html::select('module', $modules, $task->module);?></span></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->story;?></th>
-            <td><?php echo html::select('story', $stories, $task->story, 'class=select-1');?></td>
+            <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, 'class=select-1');?></span></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-            <td><?php echo html::select('assignedTo', $members, $task->assignedTo, 'class=select-1');?> 
+            <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, 'class=select-1');?></span></td> 
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->type;?></th>

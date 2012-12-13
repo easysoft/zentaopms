@@ -124,14 +124,15 @@ $lang->task->legendLife   = '任务的一生';
 $lang->task->legendDesc   = '任务描述';
 $lang->task->legendAction = '操作';
 
-$lang->task->ajaxGetUserTasks    = "接口:我的任务";
-$lang->task->ajaxGetProjectTasks = "接口:项目任务";
-$lang->task->confirmDelete       = "您确定要删除这个任务吗？";
-$lang->task->copyStoryTitle      = "同需求";
-$lang->task->afterSubmit         = "添加之后";
-$lang->task->successSaved        = "成功添加，";
-$lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天 </strong>";
-$lang->task->remindBug           = "该任务为Bug转化得到，是否更新Bug:%s ?";
+$lang->task->ajaxGetUserTasks     = "接口:我的任务";
+$lang->task->ajaxGetProjectTasks  = "接口:项目任务";
+$lang->task->confirmDelete        = "您确定要删除这个任务吗？";
+$lang->task->copyStoryTitle       = "同需求";
+$lang->task->afterSubmit          = "添加之后";
+$lang->task->successSaved         = "成功添加，";
+$lang->task->delayWarning         = " <strong class='delayed f-14px'> 延期%s天 </strong>";
+$lang->task->remindBug            = "该任务为Bug转化得到，是否更新Bug:%s ?";
+$lang->task->confirmChangeProject = '修改项目会导致相应的所属模块、相关需求和指派人发生变化，确定吗？';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumed = '"已经消耗"必须为数字';

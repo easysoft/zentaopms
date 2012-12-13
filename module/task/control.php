@@ -210,6 +210,7 @@ class task extends control
 
         $this->view->header->title = $this->lang->task->edit;
         $this->view->position[]    = $this->lang->task->edit;
+        $this->view->projects      = $this->project->getPairs('noclosed,nocode');
         $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
         $this->view->members       = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->assignedTo);        
         $this->view->modules       = $this->tree->getOptionMenu($this->view->task->project, $viewType = 'task');
