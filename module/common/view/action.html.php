@@ -7,22 +7,42 @@ function switchChange(historyID,type)
     {
         $('#switchButton' + historyID).val(fold);
         $('#changeBox' + historyID).show();
+        $('#changeBox' + historyID).prev().show();
     }
     else
     {
         $('#switchButton' + historyID).val(unfold);
         $('#changeBox' + historyID).hide();
+        $('#changeBox' + historyID).prev().hide();
     }
 }
 
 function toggleStripTags(obj)
 {
-    var boxObj  = $(obj).parent();
-    var oldDiff = $(boxObj).find('blockquote').html();
-    var newDiff = $(boxObj).find('#hideDiff').html();
-    $(boxObj).find('blockquote').html(newDiff);
-    $(boxObj).find('#hideDiff').html(oldDiff);
+    var boxObj  = $(obj).next();
+    var oldDiff = '';
+    var newDiff = '';
+    $(boxObj).find('blockquote').each(function(){
+        oldDiff = $(this).html();
+        newDiff = $(this).next().html();
+        $(this).html(newDiff);
+        $(this).next().html(oldDiff);
+    })
 }
+
+$(function(){
+    var diffButton = "<button onclick='toggleStripTags(this)' class='hidden'><?php echo $lang->action->toggleDiff?></button>";
+    var newBoxID = ''
+    var oldBoxID = ''
+    $('blockquote').each(function(){
+        newBoxID = $(this).parent().attr('id');
+        if(newBoxID != oldBoxID) 
+        {
+            oldBoxID = newBoxID;
+            if($(this).html() != $(this).next().html()) $(this).parent().before(diffButton);
+        }
+    })
+})
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <script src='<?php echo $jsRoot;?>jquery/reverseorder/raw.js' type='text/javascript'></script>
