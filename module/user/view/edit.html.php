@@ -28,6 +28,10 @@
       <td><?php echo html::input('realname', $user->realname, "class='text-3'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->user->role;?></th>
+      <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='select-3'");?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->user->commiter;?></th>
       <td><?php echo html::input('commiter', $user->commiter, "class='text-3'");?></td>
     </tr>  

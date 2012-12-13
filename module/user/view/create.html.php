@@ -29,12 +29,24 @@
       <td><?php echo html::input('realname', '', "class='text-3'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->user->commiter;?></th>
-      <td><?php echo html::input('commiter', '', "class='text-3'");?></td>
+      <th class='rowhead'><?php echo $lang->user->password;?></th>
+      <td><?php echo html::password('password1', '', "class='text-3' autocomplete='off'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->user->password2;?></th>
+      <td><?php echo html::password('password2', '', "class='text-3' autocomplete='off'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->user->role;?></th>
+      <td><?php echo html::select('role', $lang->user->roleList, '', "class='select-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->email;?></th>
       <td><?php echo html::input('email', '', "class='text-3'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->user->commiter;?></th>
+      <td><?php echo html::input('commiter', '', "class='text-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->join;?></th>
@@ -44,14 +56,7 @@
       <th class='rowhead'><?php echo $lang->user->gender;?></th>
       <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>
     </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->user->password;?></th>
-      <td><?php echo html::password('password1', '', "class='text-3' autocomplete='off'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->user->password2;?></th>
-      <td><?php echo html::password('password2', '', "class='text-3' autocomplete='off'");?></td>
-    </tr>  
+
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>
 </form>

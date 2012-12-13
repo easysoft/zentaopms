@@ -9,7 +9,36 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->user->common          = 'User';
+$lang->user->common    = 'User';
+$lang->user->id        = 'ID';
+$lang->user->company   = 'Company';
+$lang->user->dept      = 'Department';
+$lang->user->account   = 'Account';
+$lang->user->password  = 'Password';
+$lang->user->password2 = 'Repeat password';
+$lang->user->role      = 'Role';
+$lang->user->realname  = 'Fullname';
+$lang->user->nickname  = 'Nickname';
+$lang->user->commiter  = 'Commit account';
+$lang->user->avatar    = 'Avatar';
+$lang->user->birthyear = 'Birth year';
+$lang->user->gender    = 'Gender';
+$lang->user->email     = 'Email';
+$lang->user->msn       = 'MSN';
+$lang->user->qq        = 'QQ';
+$lang->user->yahoo     = 'Yahoo!';
+$lang->user->gtalk     = 'GTalk';
+$lang->user->wangwang  = 'Wangwang';
+$lang->user->mobile    = 'Mobile';
+$lang->user->phone     = 'Phone';
+$lang->user->address   = 'Address';
+$lang->user->zipcode   = 'Zipcode';
+$lang->user->join      = 'Join date';
+$lang->user->visits    = 'Visits';
+$lang->user->ip        = 'Last IP';
+$lang->user->last      = 'Last login';
+$lang->user->status    = 'Status';
+
 $lang->user->index           = "Index";
 $lang->user->view            = "Info";
 $lang->user->create          = "Add";
@@ -51,47 +80,26 @@ $lang->user->loginFailed = "Login failed, please check your account and password
 $lang->user->lockWarning = "You only have %s times to try.";
 $lang->user->loginLocked = "You try the password too many times, please contact the administrator or try again after %s minutes.";
 
-$lang->user->genderList = new stdclass();
-$lang->user->genderList->m = 'Male';
-$lang->user->genderList->f = 'Female';
+$lang->user->roleList['']    = '';
+$lang->user->roleList['dev'] = 'Dev';
+$lang->user->roleList['qa']  = 'QA';
+$lang->user->roleList['pm']  = 'PM';
+$lang->user->roleList['po']  = 'PO';
+
+$lang->user->genderList['m'] = 'Male';
+$lang->user->genderList['f'] = 'Female';
 
 $lang->user->statusList['active'] = 'Activate';
 $lang->user->statusList['delete'] = 'Deleted';
+
 $lang->user->keepLogin['on']      = 'Keep login';
 $lang->user->loginWithDemoUser    = 'Login with demo user:';
-
-$lang->user->id        = 'ID';
-$lang->user->company   = 'Company';
-$lang->user->dept      = 'Department';
-$lang->user->account   = 'Account';
-$lang->user->password  = 'Password';
-$lang->user->password2 = 'Repeat password';
-$lang->user->realname  = 'Fullname';
-$lang->user->nickname  = 'Nickname';
-$lang->user->commiter  = 'Commit account';
-$lang->user->avatar    = 'Avatar';
-$lang->user->birthyear = 'Birth year';
-$lang->user->gender    = 'Gender';
-$lang->user->email     = 'Email';
-$lang->user->msn       = 'MSN';
-$lang->user->qq        = 'QQ';
-$lang->user->yahoo     = 'Yahoo!';
-$lang->user->gtalk     = 'GTalk';
-$lang->user->wangwang  = 'Wangwang';
-$lang->user->mobile    = 'Mobile';
-$lang->user->phone     = 'Phone';
-$lang->user->address   = 'Address';
-$lang->user->zipcode   = 'Zipcode';
-$lang->user->join      = 'Join date';
-$lang->user->visits    = 'Visits';
-$lang->user->ip        = 'Last IP';
-$lang->user->last      = 'Last login';
-$lang->user->status    = 'Status';
 
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = 'Letters/underline/numbers, three above';
 $lang->user->placeholder->password1 = 'Six above';
-$lang->user->placeholder->join      = 'The date the employee join the company';
+$lang->user->placeholder->join      = 'The date the employee joined the company';
+$lang->user->placeholder->commiter  = 'The account in version control systems';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，account must be three letters at least";

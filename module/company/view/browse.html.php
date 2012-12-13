@@ -41,14 +41,14 @@ include '../../common/view/tablesorter.html.php';
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->user->realname;?></th>
           <th><?php echo $lang->user->account;?></th>
-          <?php // echo $lang->user->nickname;?>
+          <th><?php echo $lang->user->role;?></th>
           <th><?php echo $lang->user->email;?></th>
           <th><?php echo $lang->user->gender;?></th>
           <th><?php echo $lang->user->phone;?></th>
           <th><?php echo $lang->user->join;?></th>
           <th><?php echo $lang->user->last;?></th>
           <th><?php echo $lang->user->visits;?></th>
-          <th><?php echo $lang->actions;?></th>
+          <th class='w-80px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
@@ -57,14 +57,14 @@ include '../../common/view/tablesorter.html.php';
           <td><?php echo $user->id;?></td>
           <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
-          <?php // echo $user->nickname;?>
+          <td><?php echo $lang->user->roleList[$user->role];?></td>
           <td><?php echo html::mailto($user->email);?></td>
-          <td><?php if(isset($lang->user->genderList->{$user->gender})) echo $lang->user->genderList->{$user->gender};?></td>
+          <td><?php if(isset($lang->user->genderList[$user->gender])) echo $lang->user->genderList[$user->gender];?></td>
           <td><?php echo $user->phone;?></td>
           <td><?php echo $user->join;?></td>
           <td><?php echo date('Y-m-d', $user->last);?></td>
           <td><?php echo $user->visits;?></td>
-          <td class='a-right'>
+          <td class='a-left'>
             <?php 
             common::printIcon('user', 'edit',   "userID=$user->id&from=company", '', 'list');
             common::printIcon('user', 'delete', "userID=$user->id", '', 'list', '', "hiddenwin");
