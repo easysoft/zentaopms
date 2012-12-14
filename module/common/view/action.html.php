@@ -7,13 +7,13 @@ function switchChange(historyID,type)
     {
         $('#switchButton' + historyID).val(fold);
         $('#changeBox' + historyID).show();
-        $('#changeBox' + historyID).prev().show();
+        $('#changeBox' + historyID).prev('.changeDiff').show();
     }
     else
     {
         $('#switchButton' + historyID).val(unfold);
         $('#changeBox' + historyID).hide();
-        $('#changeBox' + historyID).prev().hide();
+        $('#changeBox' + historyID).prev('.changeDiff').hide();
     }
 }
 
@@ -30,8 +30,17 @@ function toggleStripTags(obj)
     })
 }
 
+function toggleShow()
+{
+    $('.changes').each(function(){
+        var box = $(this).parent();
+        var switchButtonID = ($(box).find('span').find("input[type='button']").attr('id'));
+        switchChange(switchButtonID.replace('switchButton', ''), $('#' + switchButtonID).val());
+    })
+}
+
 $(function(){
-    var diffButton = "<button onclick='toggleStripTags(this)' class='hidden'><?php echo $lang->action->toggleDiff?></button>";
+    var diffButton = "<input type='button' onclick='toggleStripTags(this)' class='hidden changeDiff' value='<?php echo $lang->action->toggleDiff?>' >";
     var newBoxID = ''
     var oldBoxID = ''
     $('blockquote').each(function(){
@@ -52,14 +61,14 @@ $(function(){
 <div id='actionbox'>
 <fieldset>
   <legend>
-    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . $lang->reverse;?></span>
-    <span onclick='$(".changes").toggle();' class='hand'><?php echo $lang->switchDisplay;?></span>
+    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . "[<span title='$lang->reverse' class='log-reverse'>&nbsp;</span>]";?></span>
+    <span onclick='toggleShow();' class='hand'><?php echo "[<span title='$lang->switchDisplay' class='switchDisplay'>&nbsp;</span>]";?></span>
   </legend>
 <?php else:?>
 <table class='table-1' id='actionbox'>
   <caption>
-    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . $lang->reverse;?></span>
-    <span onclick='$(".changes").toggle();' class='hand'><?php echo $lang->switchDisplay;?></span>
+    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . "[<span title='$lang->reverse' class='log-reverse'>&nbsp;</span>]";?></span>
+    <span onclick='toggleShow();' class='hand'><?php echo "[<span title='$lang->switchDisplay' class='switchDisplay'>&nbsp;</span>]";?></span>
   </caption>
   <tr><td>
 <?php endif;?>
