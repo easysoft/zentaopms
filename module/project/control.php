@@ -167,6 +167,7 @@ class project extends control
             $projectIDs   = array_keys($this->project->getPairs());
             $projectQuery = "`project` in (" . implode($projectIDs, ',') . ")";  
             $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
+            $taskQuery    = $this->loadModel('search')->replaceDynamic($taskQuery);
 
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOrderBy', $orderBy);
