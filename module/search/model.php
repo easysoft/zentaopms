@@ -72,6 +72,7 @@ class searchModel extends model
             /* Set operator. */
             $value    = $this->post->$valueName;
             $operator = $this->post->$operatorName;
+            if($value == '@me') $value = $this->app->user->account;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
             if($operator == "include")
             {
@@ -172,7 +173,11 @@ class searchModel extends model
             if($params[$fieldName]['values'] == 'projects') $hasProject = true;
         }
 
-        if($hasUser)    $users    = $this->loadModel('user')->getPairs();
+        if($hasUser)    
+        {
+            $users        = $this->loadModel('user')->getPairs();
+            $users['@me'] = $this->lang->search->me;
+        }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs();
         if($hasProject) $projects = array('' => '') + $this->loadModel('project')->getPairs();
 

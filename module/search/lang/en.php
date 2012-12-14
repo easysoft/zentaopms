@@ -26,6 +26,7 @@ $lang->search->setQueryTitle = 'Please input the title（execute searching befor
 $lang->search->storyTitle    = 'Story title';
 $lang->search->taskTitle     = 'Task title';
 $lang->search->select        = 'Stories/Tasks filter';
+$lang->search->me            = 'Me';
 
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';
