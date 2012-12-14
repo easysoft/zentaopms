@@ -77,12 +77,18 @@ $chartID.render("$divID");
 EOT;
     }
 
-    public function createJSChartFlot($projectName, $dataJSON, $count, $width = 'auto', $height = 500)
+    public function createJSChartFlot($projectName, $flotJSON, $count, $width = 'auto', $height = 500)
     {
         $this->app->loadLang('project');
-        $jsRoot = $this->app->getWebRoot() . 'js/';
-        $width  = $width . 'px';
-        $height = $height . 'px';
+        $this->app->loadConfig('project');
+        $jsRoot  = $this->app->getWebRoot() . 'js/';
+        $width   = $width . 'px';
+        $height  = $height . 'px';
+        $maxDays = $this->config->project->maxBurnDay;
+
+        $dataJSON    = $flotJSON['data'];
+        $limitJSON   = $flotJSON['limit'];
+        $reflineJSON = $flotJSON['refline'];
 return <<<EOT
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/excanvas.min.js"></script><![endif]-->
 <script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.flot.min.js"></script>
@@ -91,7 +97,9 @@ return <<<EOT
 <script type="text/javascript">
 $(function () 
 {
-    var data = [{data: $dataJSON}];
+    var data    = $dataJSON;
+    var limit   = $limitJSON;
+    var refline = $reflineJSON;
     function showTooltip(x, y, contents) 
     {
         $('<div id="tooltip">' + contents + '</div>').css
@@ -106,7 +114,8 @@ $(function ()
             opacity: 0.80
         }).appendTo("body").fadeIn(200);
     } 
-    if($count < 20)
+
+    if($count < $maxDays)
     {
         var options = {
             series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
@@ -121,18 +130,37 @@ $(function ()
             series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
             legend: {noColumns: 1},
             grid: { hoverable: true, clickable: true },
-            xaxis: {mode: "time", timeformat: "%m-%d", ticks:20, minTickSize:[1, "day"]},
+            xaxis: {mode: "time", timeformat: "%m-%d", ticks:$maxDays, minTickSize:[1, "day"]},
             yaxis: {mode: null, min: 0, minTickSize: [1, "day"]}};
     }
-    var placeholder = $("#placeholder");
 
-    placeholder.bind("plotselected", function (event, ranges) 
+    var placeholder = $("#placeholder");
+    $("#placeholder").bind("plotselected", function (event, ranges) 
     {
         plot = $.plot(placeholder, data, $.extend(true, {}, options, {xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to } }));
     });
-    var plot = $.plot(placeholder, data, options);
+    var plot = $.plot(placeholder, [
+            {
+                data:data,
+                lines:  {show: true},
+                points: {show: true}
+            },
+            {
+                data:refline,
+                color: "rgb(200, 200, 200)",
+                hoverable: false,
+                lines:  {show: true, lineWidth:0.1, lineType:'dashed'},
+                points: {show: false}
+            },
+            {
+                data:limit,
+                lines:  {show: false},
+                points: {show: false}
+            }
+        ], options);
     var previousPoint = null;
-    $("#placeholder").bind("plothover", function (event, pos, item) 
+
+    placeholder.bind("plothover", function(event, pos, item) 
     {
         $("#x").text(pos.x.toFixed(2));
         $("#y").text(pos.y.toFixed(2));
@@ -192,7 +220,7 @@ EOT;
         $data = '[';
         foreach($sets as $set)
         {
-            $data .= " [$set->name, $set->value],";
+            $data .= "[$set->name, $set->value],";
         }
         $data = rtrim($data, ',');
         $data .= ']';

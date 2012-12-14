@@ -1060,30 +1060,37 @@ class projectModel extends model
     {
         /* Get project and burn counts. */
         $project    = $this->getById($projectID);
-        $burnCounts = $this->dao->select('count(*) AS counts')->from(TABLE_BURN)->where('project')->eq($projectID)->fetch('counts');
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sql = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
-        if($burnCounts > $itemCounts)
-        {
-            $sets = $sql->orderBy('date DESC')->limit($itemCounts)->fetchAll('name');
-            $sets = array_reverse($sets);
-        }
-        else
-        {
-            /* The burnCounts < itemCounts, after getting from the db, padding left dates. */
-            $sets = $sql->orderBy('date ASC')->fetchAll('name');
-            $sets = $this->processBurnData($sets, $itemCounts, $project->begin, $project->end);
-        }
+        $sets = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date DESC')->fetchAll('name');
 
-        $count = 0;
-        foreach($sets as $set) 
+        $count    = 0;
+        $burnData = array();
+        foreach($sets as $date => $set) 
         {
-            $set->name = (string)strtotime("$set->name UTC") . '000';
-            $count ++;
+            if($count > $itemCounts)  break;
+            if($date > $project->end) continue;
+
+            $set->name       = $this->getMicTime($set->name);
+            $burnData[$date] = $set;
+            $count++;
         }
-        $sets['count'] = $count;
-        return $sets;
+        $burnData = array_reverse($burnData);
+
+        return $burnData;
+    }
+
+    /**
+     * Get microsecond from date. 
+     * 
+     * @param  string|int    $date 
+     * @access public
+     * @return void
+     */
+    public function getMicTime($date)
+    {
+        if(is_numeric($date)) return (string)$date . '000';
+        return (string)strtotime("$date UTC") . '000';
     }
 
     /**

@@ -647,7 +647,9 @@ class project extends control
     public function burn($projectID = 0)
     {
         $this->loadModel('report');
-        $project = $this->commonAction($projectID);
+        $project     = $this->commonAction($projectID);
+        $projectInfo = $this->project->getByID($projectID);
+        $maxDays     = $this->config->project->maxBurnDay;
 
         /* Header and position. */
         $header['title'] = $project->name . $this->lang->colon . $this->lang->project->burn;
@@ -659,11 +661,32 @@ class project extends control
         //$charts  = $this->report->createJSChart('line', $dataXML, 700, 350);
 
         /* Create charts by flot. */
-        $sets   = $this->project->getBurnDataFlot($project->id);
-        $count  = $sets['count'];
-        unset($sets['count']);
+        $sets     = $this->project->getBurnDataFlot($project->id);
+        $count    = count($sets);
         $dataJSON = $this->report->createSingleJSON($sets);
-        $charts   = $this->report->createJSChartFlot($project->name, $dataJSON, $count, 700, 350);
+
+        $limitJSON     = '[]';
+        $reflineJSON   = '[]';
+        $beginMicTime  = $this->project->getMicTime($projectInfo->begin);
+        $endMicTime    = $this->project->getMicTime($projectInfo->end);
+        $maxDayMicTime = $this->project->getMicTime(strtotime($projectInfo->begin) + $maxDays * 24 * 3600);
+        $minDayMicTime = $this->project->getMicTime(time() - $maxDays * 24 * 3600);
+        if($projectInfo->days <= $maxDays)
+        {
+            $limitJSON   = "[[$beginMicTime, 0], [$endMicTime, 0]]";
+            $firstBurn   = reset($sets);
+            $reflineJSON = "[[$beginMicTime, $firstBurn->value], [$endMicTime, 0]]";
+        }
+        elseif($count <= $maxDays)
+        {
+            $limitJSON = "[[$beginMicTime, 0], [$maxDayMicTime, 0]]";
+        }
+
+        $flotJSON['data']    = $dataJSON;
+        $flotJSON['limit']   = $limitJSON;
+        $flotJSON['refline'] = $reflineJSON;
+
+        $charts = $this->report->createJSChartFlot($project->name, $flotJSON, $count, 900, 400);
 
         /* Assign. */
         $this->view->header    = $header;
