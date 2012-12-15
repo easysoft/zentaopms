@@ -22,6 +22,7 @@ function changeAction(formName, actionName, actionLink)
     $('#' + formName).attr('action', actionLink).submit();
 }
 
-$(function(){
+$(function()
+{
     if(browseType == 'bysearch') ajaxGetSearchForm();
 })
