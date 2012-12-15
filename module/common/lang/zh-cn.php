@@ -198,7 +198,7 @@ $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '维护|project|view|projectID=%s', 'alias' => 'edit');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-addProject">&nbsp;</span>新增项目|project|create', 'float' => 'right');
-$lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有项目|project|index|locate=false', 'float' => 'right');
+$lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有项目|project|index|locate=no&status=undone&projectID=%s', 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

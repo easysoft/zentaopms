@@ -9,12 +9,11 @@
  * @version     $Id$
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <h3>
-  <?php echo html::a(inlink("index", "locate=no&status=undone"), $lang->project->unDoneProjects);?>
-  <?php echo html::a(inlink("index", "locate=no&status=done"), $lang->project->doneProjects);?>
+  <?php echo html::a(inlink("index", "locate=no&status=undone&projectID=$project->id"), $lang->project->unDoneProjects);?>
+  <?php echo html::a(inlink("index", "locate=no&status=done&projectID=$project->id"), $lang->project->doneProjects);?>
 </h3>
 <table class='table-1 fixed colored'>
   <tr class='colhead'>
@@ -45,4 +44,4 @@
  </tr>
  <?php endforeach;?>
 </table>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

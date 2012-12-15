@@ -31,15 +31,18 @@ class project extends control
     /**
      * The index page.
      * 
-     * @param  string $locate  yes|no locate to the browse page or not.
-     * @param  string $status  the projects status, if locate is no, then get projects by the $status.
+     * @param  string $locate     yes|no locate to the browse page or not.
+     * @param  string $status     the projects status, if locate is no, then get projects by the $status.
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function index($locate = 'yes', $status = 'undone')
+    public function index($locate = 'yes', $status = 'undone', $projectID = 0)
     {
         if(empty($this->projects)) $this->locate($this->createLink('project', 'create'));
-        if($locate == 'yes') $this->locate($this->createLink('project', 'browse'));
+        if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
+
+        $this->commonAction($projectID);
 
         $this->app->loadLang('my');
         $this->view->projectStats  = $this->project->getProjectStats($status);
