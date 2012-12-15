@@ -89,7 +89,8 @@
             </td>
           </tr>
           <tr>
-            <td class='a-center' colspan='3'>
+            <td></td>
+            <td colspan='2'>
               <?php 
               echo html::submitButton() . html::resetButton();
               echo html::hidden('parentModuleID', $currentModuleID);
