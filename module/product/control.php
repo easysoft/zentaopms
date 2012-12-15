@@ -37,14 +37,18 @@ class product extends control
 
     /**
      * Index page, to browse.
-     * 
+     *
+     * @param  string $locate     locate to browse page or not. If not, display all products.
+     * @param  int    $productID 
      * @access public
      * @return void
      */
-    public function index($locate = 'yes')
+    public function index($locate = 'yes', $productID = 0)
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
         
+        $this->product->setMenu($this->products, $productID);
+
         $this->app->loadLang('my');
         $this->view->productStats = $this->product->getStats();
         $this->display();
@@ -60,6 +64,8 @@ class product extends control
      */
     public function project($status = 'all', $productID = 0)
     {
+        $this->product->setMenu($this->products, $productID);
+
         $this->app->loadLang('my');
         $this->view->projectStats  = $this->loadModel('project')->getProjectStats($status, $productID);
 

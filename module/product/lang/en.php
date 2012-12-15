@@ -59,12 +59,12 @@ $lang->product->RM        = 'Release manager';
 $lang->product->acl       = 'Access limitation';
 $lang->product->whitelist = 'Whitelist';
 
-$lang->product->moduleStory  = 'By module';
+$lang->product->moduleStory  = 'Module';
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'To me';
-$lang->product->openedByMe   = 'Opened by me';
-$lang->product->reviewedByMe = 'Reviewed by me';
-$lang->product->closedByMe   = 'Closed by me';
+$lang->product->openedByMe   = 'My opened';
+$lang->product->reviewedByMe = 'My reviewed';
+$lang->product->closedByMe   = 'My closed';
 $lang->product->draftStory   = 'Draft';
 $lang->product->activeStory  = 'Active';
 $lang->product->changedStory = 'Changed';

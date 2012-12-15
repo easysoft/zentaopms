@@ -9,9 +9,8 @@
  * @version     $Id: index.html.php 2343 2011-11-21 05:24:56Z wwccss $
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 fixed colored'>
   <tr class='colhead'>
     <th class='w-150px'><?php echo $lang->project->name;?></th>
@@ -41,4 +40,4 @@
  </tr>
  <?php endforeach;?>
 </table>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

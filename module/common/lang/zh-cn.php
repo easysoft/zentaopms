@@ -168,10 +168,10 @@ $lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
 $lang->product->menu->doc     = array('link' => '文档|product|doc|productID=%s', 'subModule' => 'doc');
 $lang->product->menu->view    = array('link' => '维护|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
-$lang->product->menu->project = '项目列表|product|project|status=all&productID=%s';
+$lang->product->menu->project = '项目|product|project|status=all&productID=%s';
 $lang->product->menu->order   = '排序|product|order|productID=%s';
 $lang->product->menu->create  = array('link' => '<span class="icon-addProduct">&nbsp;</span>新增产品|product|create', 'float' => 'right');
-$lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有产品|product|index|locate=false', 'float' => 'right');
+$lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();

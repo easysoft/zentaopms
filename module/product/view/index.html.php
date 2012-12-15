@@ -9,9 +9,8 @@
  * @version     $Id$
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
 <div class='block' id='productbox'>
 <?php if(empty($productStats)):?>
 <table class='table-1 a-center' height='100%'>
@@ -57,4 +56,4 @@
 </div>
 <?php endif;?>
 </div>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include '../../common/view/footer.html.php';?>
