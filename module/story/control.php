@@ -80,7 +80,7 @@ class story extends control
                 break;
             }
         }
-        $users    = $this->user->getPairs('nodeleted');
+        $users = $this->user->getPairs('nodeleted|pofirst');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
 
         /* Set menu. */

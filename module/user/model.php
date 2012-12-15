@@ -59,26 +59,43 @@ class userModel extends model
     /**
      * Get the account=>relaname pairs.
      * 
-     * @param  string $params   noletter|noempty|noclosed|nodeleted|withguest, can be sets of theme
+     * @param  string $params   noletter|noempty|noclosed|nodeleted|withguest|pofirst|devfirst|qafirst|pmfirst, can be sets of theme
      * @access public
      * @return array
      */
     public function getPairs($params = '')
     {
-        $users = $this->dao->select('account, realname')->from(TABLE_USER)
-            ->beginIF(strpos($params, 'nodeleted') !== false)
-            ->where('deleted')->eq(0)
-            ->fi()
-            ->orderBy('account')->fetchPairs();
-        foreach($users as $account => $realName)
+        /* Set the query fields and orderBy condition.
+         *
+         * If there's xxfirst in the params, use INSTR function to get the position of role fields in a order string,
+         * thus to make sure users of this role at first.
+         */
+        $fields = 'account, realname';
+        if(strpos($params, 'pofirst') !== false) $fields .= ", INSTR(',po,',  role) AS roleOrder";
+        if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',dev,', role) AS roleOrder";
+        if(strpos($params, 'qafirst') !== false) $fields .= ", INSTR(',qa,',  role) AS roleOrder";
+        if(strpos($params, 'pmfirst') !== false) $fields .= ", INSTR(',pm,',  role) AS roleOrder";
+        $orderBy = strpos($params, 'first') !== false ? 'roleOrder DESC, account' : 'account';
+
+        /* Get raw records. */
+        $users = $this->dao->select($fields)->from(TABLE_USER)
+            ->beginIF(strpos($params, 'nodeleted') !== false)->where('deleted')->eq(0)->fi()
+            ->orderBy($orderBy)
+            ->fetchAll('account');
+
+        /* Cycle the user records to append the first letter of his account. */
+        foreach($users as $account => $user)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
             if(strpos($params, 'noletter') !== false) $firstLetter =  '';
-            $users[$account] =  $firstLetter . ($realName ? $realName : $account);
+            $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $account);
         }
+
+        /* Append empty, closed, and guest users. */
         if(strpos($params, 'noempty')   === false) $users = array('' => '') + $users;
         if(strpos($params, 'noclosed')  === false) $users = $users + array('closed' => 'Closed');
         if(strpos($params, 'withguest') !== false) $users = $users + array('guest' => 'Guest');
+
         return $users;
     }
 
