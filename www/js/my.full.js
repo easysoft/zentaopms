@@ -544,28 +544,6 @@ function setSubversionLink()
     if($('.svnlink').size()) $('.svnlink').colorbox({width:960, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
 }
 
-/**
- * Set the link of the project list menu.
- * 
- * @access public
- * @return void
- */
-function setProductListLink()
-{
-   if($('#submenuproject').size()) $("#submenuproject").colorbox({width:1000, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
-}
-
-/**
- * Set the link of the project list menu.
- * 
- * @access public
- * @return void
- */
-function setProjectListLink()
-{
-   if($('#submenuall').size()) $("#submenuall").colorbox({width:1000, height:600, iframe:true, transition:'elastic', speed:350, scrolling:true});
-}
-
 /* Set the colorbox of export. */
 function setExport()
 {
@@ -615,7 +593,7 @@ function autoCheck()
  * @access public
  * @return void
  */
-function togglesearch()
+function toggleSearch()
 {
     $("#bysearchTab").toggle
     (
@@ -835,11 +813,9 @@ $(document).ready(function()
     saveProject();
     setForm();
     setSubversionLink();
-    setProductListLink();
-    setProjectListLink();
     setExport();
     autoCheck();
-    togglesearch();
+    toggleSearch();
     saveWindowSize();
     loadFixedCSS();
     getCheckedItem('.export');
