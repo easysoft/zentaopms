@@ -80,7 +80,7 @@ class story extends control
                 break;
             }
         }
-        $users = $this->user->getPairs('nodeleted|pofirst');
+        $users = $this->user->getPairs('nodeleted|pdfirst');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
 
         /* Set menu. */
@@ -225,7 +225,7 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
-        $users    = $this->user->getPairs('nodeleted|pofirst');
+        $users    = $this->user->getPairs('nodeleted|pdfirst');
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story');
 
         /* Set menu. */
