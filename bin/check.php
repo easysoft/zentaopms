@@ -64,6 +64,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                 {
                     $methodName = $method->name;
                     if(in_array($moduleName . '-' . strtolower($method->name), $whiteList)) continue;
+                    if(strpos($methodName, 'ajax') !== false) continue;
 
                     $exits = false;
                     foreach($lang->resource->$moduleName as $key => $label)
