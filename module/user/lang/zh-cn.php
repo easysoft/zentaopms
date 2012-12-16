@@ -80,11 +80,16 @@ $lang->user->loginFailed = "登录失败，请检查您的用户名或密码是�
 $lang->user->lockWarning = "您还有%s次尝试机会。";
 $lang->user->loginLocked = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 
-$lang->user->roleList['']    = '';
-$lang->user->roleList['dev'] = '研发';
-$lang->user->roleList['qa']  = '测试';
-$lang->user->roleList['pm']  = '项目经理';
-$lang->user->roleList['po']  = '产品经理';
+$lang->user->roleList['']       = '';
+$lang->user->roleList['dev']    = '研发';
+$lang->user->roleList['qa']     = '测试';
+$lang->user->roleList['pm']     = '项目经理';
+$lang->user->roleList['po']     = '产品经理';
+$lang->user->roleList['td']     = '研发主管';
+$lang->user->roleList['pd']     = '产品主管';
+$lang->user->roleList['qd']     = '测试主管';
+$lang->user->roleList['top']    = '高层管理';
+$lang->user->roleList['others'] = '其他';
 
 $lang->user->genderList['m'] = '男';
 $lang->user->genderList['f'] = '女';
@@ -107,3 +112,11 @@ $lang->user->error->accountDupl   = "ID %s，该用户名已经存在";
 $lang->user->error->realname      = "ID %s，必须填写真实姓名";
 $lang->user->error->password      = "ID %s，密码必须六位以上";
 $lang->user->error->mail          = "ID %s，请填写正确的邮箱地址";
+
+$lang->user->contacts = new stdclass();
+$lang->user->contacts->common  = '联系人';
+$lang->user->contacts->id      = '编号';
+$lang->user->contacts->company = '所属公司';
+$lang->user->contacts->account = '所有人';
+$lang->user->contacts->group   = '列表名称';
+$lang->user->contacts->contacts= '联系人列表';

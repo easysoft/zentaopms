@@ -80,11 +80,16 @@ $lang->user->loginFailed = "Login failed, please check your account and password
 $lang->user->lockWarning = "You only have %s times to try.";
 $lang->user->loginLocked = "You try the password too many times, please contact the administrator or try again after %s minutes.";
 
-$lang->user->roleList['']    = '';
-$lang->user->roleList['dev'] = 'Dev';
-$lang->user->roleList['qa']  = 'QA';
-$lang->user->roleList['pm']  = 'PM';
-$lang->user->roleList['po']  = 'PO';
+$lang->user->roleList['']       = '';
+$lang->user->roleList['dev']    = 'Developer';
+$lang->user->roleList['qa']     = 'Tester';
+$lang->user->roleList['pm']     = 'Project manager';
+$lang->user->roleList['po']     = 'Product owner';
+$lang->user->roleList['td']     = 'Technical directory';
+$lang->user->roleList['pd']     = 'Product director';
+$lang->user->roleList['qd']     = 'Quality Director';
+$lang->user->roleList['top']    = 'Top manager';
+$lang->user->roleList['others'] = 'Others';
 
 $lang->user->genderList['m'] = 'Male';
 $lang->user->genderList['f'] = 'Female';

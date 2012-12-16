@@ -71,10 +71,10 @@ class userModel extends model
          * thus to make sure users of this role at first.
          */
         $fields = 'account, realname';
-        if(strpos($params, 'pofirst') !== false) $fields .= ", INSTR(',po,',  role) AS roleOrder";
-        if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',dev,', role) AS roleOrder";
-        if(strpos($params, 'qafirst') !== false) $fields .= ", INSTR(',qa,',  role) AS roleOrder";
-        if(strpos($params, 'pmfirst') !== false) $fields .= ", INSTR(',pm,',  role) AS roleOrder";
+        if(strpos($params, 'pofirst') !== false) $fields .= ", INSTR(',pd,po,',     role) AS roleOrder";
+        if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',td,pm,dev,', role) AS roleOrder";
+        if(strpos($params, 'qafirst') !== false) $fields .= ", INSTR(',qd,qa,',     role) AS roleOrder";
+        if(strpos($params, 'pmfirst') !== false) $fields .= ", INSTR(',td,pm,',     role) AS roleOrder";
         $orderBy = strpos($params, 'first') !== false ? 'roleOrder DESC, account' : 'account';
 
         /* Get raw records. */
