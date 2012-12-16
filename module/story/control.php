@@ -225,7 +225,7 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $product  = $this->product->getById($story->product);
         $products = $this->product->getPairs();
-        $users    = $this->user->getPairs('nodeleted');
+        $users    = $this->user->getPairs('nodeleted|pofirst');
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story');
 
         /* Set menu. */
@@ -270,7 +270,7 @@ class story extends control
         /* Assign. */
         $this->view->header->title = $this->view->product->name . $this->lang->colon . $this->lang->story->edit . $this->lang->colon . $this->view->story->title;
         $this->view->position[]    = $this->lang->story->edit;
-        $this->view->users         = $this->user->appendDeleted($this->user->getPairs('nodeleted'), $this->view->story->assignedTo);
+        $this->view->users         = $this->user->appendDeleted($this->user->getPairs('nodeleted|pofirst'), $this->view->story->assignedTo);
         $this->view->story         = $this->story->getById($storyID, 0, true);
         $this->display();
     }
