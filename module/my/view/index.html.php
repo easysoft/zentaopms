@@ -25,10 +25,10 @@
 <table class='cont' id='row2'>
   <tr valign='top'>
     <td width='33%' style='padding-right:20px'><?php include './blocktodoes.html.php';?></td>
-    <?php if($app->user->role == 'qa'):?>
+    <?php if(strpos('qa|qd', $app->user->role) !== false):?>
     <td width='33%' style='padding-right:20px'><?php include './blockbugs.html.php';?></td>
     <td width='33%'><?php include './blocktasks.html.php';?></td>
-    <?php elseif($app->user->role == 'po'):?>
+    <?php elseif(strpos('po|pd', $app->user->role) !== false):?>
     <td width='33%' style='padding-right:20px'><?php include './blockstories.html.php';?></td>
     <td width='33%'><?php include './blockbugs.html.php';?></td>
     <?php else:?>
