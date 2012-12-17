@@ -100,6 +100,7 @@ class doc extends control
             }
             $docQuery = str_replace("`product` = 'all'", '1', $this->session->docQuery); // Search all producti.
             $docQuery = str_replace("`project` = 'all'", '1', $docQuery);                // Search all project.
+            $docQuery = $this->loadModel('search')->replaceDynamic($docQuery);
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
