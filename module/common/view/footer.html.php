@@ -11,6 +11,7 @@
       <td class='a-right' id='poweredby'>
         <span>Powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span>
         <?php echo $lang->proVersion;?>
+        <?php echo html::a($this->createLink('misc', 'downNotify'), $lang->downNotify);?>
       </td>
     </tr>
   </table>

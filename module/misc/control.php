@@ -83,4 +83,36 @@ class misc extends control
         echo $this->misc->hello();
         echo $this->misc->hello2();
     }
+
+    /**
+     * Down notify.
+     * 
+     * @access public
+     * @return void
+     */
+    public function downNotify()
+    {
+        $notifyDir   = $this->app->getBasePath() . 'www/data/notify/';
+        $packageFile = $notifyDir . 'notify.zip';
+        $tmpDir      = $notifyDir . 'notify';
+        $loginFile   = $tmpDir . '/notify/logininfo';
+
+        $this->app->loadClass('pclzip', true);
+        $sourceZip = new pclzip($packageFile);
+        $files = $sourceZip->extract(PCLZIP_OPT_PATH, $notifyDir);
+        if($files == 0) die("Error : ".$archive->errorInfo(true));
+
+        $currentUser = $this->app->user;
+        $loginInfo   = json_encode(array('account' => $currentUser->account, 'password' => $currentUser->password, 'zentaoRoot' => 'http://' . $this->config->default->domain));
+        file_put_contents($loginFile, $loginInfo);
+
+        unlink($packageFile);
+        $newZip = new pclzip($packageFile);
+        if($newZip->create($tmpDir, PCLZIP_OPT_REMOVE_PATH, $notifyDir))
+        {
+            $this->zfile = $this->app->loadClass('zfile');
+            $this->zfile->removeDir($tmpDir);
+        }
+        $this->fetch('file', 'sendDownHeader', array('fileName' => 'notify.zip', 'zip', file_get_contents($packageFile)));
+    }
 }
