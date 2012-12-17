@@ -71,7 +71,7 @@ class bug extends control
 
         /* Set menu and save session. */
         $this->bug->setMenu($this->products, $productID);
-        $this->session->set('bugList',    $this->app->getURI(true));
+        $this->session->set('bugList', $this->app->getURI(true));
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
@@ -836,7 +836,7 @@ class bug extends control
     {
         $owner = '';
         if($moduleID) $owner = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch('owner');
-        if(!$owner)   $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QM');
+        if(!$owner)   $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
         die($owner);
     }
 
