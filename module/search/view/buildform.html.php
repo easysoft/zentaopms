@@ -270,7 +270,7 @@ foreach($fieldParams as $fieldName => $param)
       echo html::hidden('module',     $module);
       echo html::hidden('actionURL',  $actionURL);
       echo html::hidden('groupItems', $groupItems);
-      echo html::submitButton($lang->search->common, "class='searchButton' title='{$lang->search->common}'");
+      echo html::submitButton($lang->search->common, "class='button-search' title='{$lang->search->common}'");
       echo html::commonButton($lang->search->reset, 'onclick=resetForm();');
       echo html::commonButton($lang->save, 'onclick=saveQuery()');
       ?>

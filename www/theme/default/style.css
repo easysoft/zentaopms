@@ -371,7 +371,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .plan    {background:#ffcc00;}
 .plan a{color:green}
 .search  {display:block; float:left; clear:none; width:16px; height:16px; padding:0; margin:0 0 0 2px; text-indent:-2000px; overflow:hidden; background: url(images/main/search.gif) no-repeat;} 
-.searchButton{width:28px; height:21px; padding:0; margin:0px; text-indent:-2000px; background: url(images/main/searchButton.jpg) no-repeat;} 
+.button-search{width:40px; height:27px; padding:0; margin:0px; text-indent:-2000px; background: url(images/main/searchButton.jpg) no-repeat;} 
 .searchleft{display:block; float:left; clear:none;} 
 .helplink {font-size:9px}
 #bysearchTab a{color:red}
@@ -411,6 +411,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .linkbox a {display:block}
 .owner     {background:#e4e4e4; font-size:smaller}
 .notice    { background-color:#ffffcc; border:1px solid #ffcc00; padding:15px 25px;}
+.button-create{}
 
 /*-----------------------ICONS --------------------*/
 .icon-search { padding-left:16px; background:url(images/main/ui-green.png) -160px 128px; border:0px;}
