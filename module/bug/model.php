@@ -1105,6 +1105,7 @@ class bugModel extends model
         }
 
         $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
+        $bugQuery = $this->loadModel('search')->replaceDynamic($bugQuery);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
