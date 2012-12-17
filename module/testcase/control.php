@@ -113,6 +113,7 @@ class testcase extends control
             }
 
             $caseQuery = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // If product is all, change it to 1=1.
+            $caseQuery = $this->loadModel('search')->replaceDynamic($caseQuery);
             $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->andWhere('product')->eq($productID)
                 ->andWhere('deleted')->eq(0)
