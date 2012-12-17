@@ -72,8 +72,8 @@ class searchModel extends model
             /* Set operator. */
             $value    = $this->post->$valueName;
             $operator = $this->post->$operatorName;
-            if($value == '@me') $value = $this->app->user->account;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
+
             if($operator == "include")
             {
                 $where .= ' LIKE ' . $this->dbh->quote("%$value%");
@@ -176,7 +176,7 @@ class searchModel extends model
         if($hasUser)    
         {
             $users        = $this->loadModel('user')->getPairs();
-            $users['@me'] = $this->lang->search->me;
+            $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs();
         if($hasProject) $projects = array('' => '') + $this->loadModel('project')->getPairs();
@@ -204,6 +204,7 @@ class searchModel extends model
         $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
         if(!$query) return false;
         $query->form = unserialize($query->form);
+        $query->sql  = $this->replaceDynamic($query->sql);
         return $query;
     }
 
@@ -319,4 +320,15 @@ class searchModel extends model
         return $resultPairs;
     }
 
+    /**
+     * Replace dynamic account and date. 
+     * 
+     * @param  string $query 
+     * @access public
+     * @return string 
+     */
+    public function replaceDynamic($query)
+    {
+        return str_replace('$@me', $this->app->user->account, $query); 
+    }
 }
