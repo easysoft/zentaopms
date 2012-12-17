@@ -127,7 +127,7 @@ $(function ()
     else
     {
         var options = {
-            series: {lines:{show: true,  lineWidth: 2}, points: {show: true},hoverable: true},
+            series: {lines:{show: true,  lineWidth: 5}, points: {show: true},hoverable: true},
             legend: {noColumns: 1},
             grid: { hoverable: true, clickable: true },
             xaxis: {mode: "time", timeformat: "%m-%d", ticks:$maxDays, minTickSize:[1, "day"]},
@@ -142,14 +142,15 @@ $(function ()
     var plot = $.plot(placeholder, [
             {
                 data:data,
+                color: "rgb(10, 12, 235)",
                 lines:  {show: true},
                 points: {show: true}
             },
             {
                 data:refline,
-                color: "rgb(200, 200, 200)",
+                color: "rgb(235, 12, 10)",
                 hoverable: false,
-                lines:  {show: true, lineWidth:0.1, lineType:'dashed'},
+                lines:  {show: true, lineWidth:0.5, lineType:'dashed', style:'dashed'},
                 points: {show: false}
             },
             {
