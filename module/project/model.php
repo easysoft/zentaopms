@@ -934,16 +934,41 @@ class projectModel extends model
         return array('' => '') + $users;
     }
 
+    /**
+     * Get teams which can be imported.
+     * 
+     * @param  string $account 
+     * @param  int    $currentProject 
+     * @access public
+     * @return array
+     */
     public function getTeams2Import($account, $currentProject)
     {
-        return $this->dao->select('t1.project, t2.name as projectName, t2.team as teamName')
+        return $this->dao->select('t1.project, t2.name as projectName')
             ->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t1.project')->ne($currentProject)
             ->groupBy('t1.project')
             ->orderBy('t1.project DESC')
-            ->fetchAll('project');
+            ->fetchPairs();
+    }
+
+    /**
+     * Get members of a project who can be imported.
+     * 
+     * @param  int    $project 
+     * @param  array  $currentMembers 
+     * @access public
+     * @return array
+     */
+    public function getMembers2Import($project, $currentMembers)
+    {
+        return $this->dao->select('account, role, hours')
+            ->from(TABLE_TEAM)
+            ->where('project')->eq($project)
+            ->andWhere('account')->notIN($currentMembers)
+            ->fetchAll('account');
     }
 
     /**

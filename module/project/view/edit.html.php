@@ -46,19 +46,19 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->project->PO;?></th>
-      <td><?php echo html::select('PO', $users, $project->PO, 'class=text-3');?></td>
+      <td><?php echo html::select('PO', $poUsers, $project->PO, 'class=text-3');?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->PM;?></th>
-      <td><?php echo html::select('PM', $users, $project->PM, 'class=text-3');?></td>
+      <td><?php echo html::select('PM', $pmUsers, $project->PM, 'class=text-3');?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->QD;?></th>
-      <td><?php echo html::select('QD', $users, $project->QD, 'class=text-3');?></td>
+      <td><?php echo html::select('QD', $qdUsers, $project->QD, 'class=text-3');?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->RD;?></th>
-      <td><?php echo html::select('RD', $users, $project->RD, 'class=text-3');?></td>
+      <td><?php echo html::select('RD', $rdUsers, $project->RD, 'class=text-3');?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>

@@ -880,7 +880,10 @@ class project extends control
         $this->view->position       = $position;
         $this->view->projects       = $projects;
         $this->view->project        = $project;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,nodeleted');
+        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed,nodeleted,pofirst');
+        $this->view->pmUsers        = $this->user->getPairs('noclosed,nodeleted,pmfirst');
+        $this->view->qdUsers        = $this->user->getPairs('noclosed,nodeleted,qdfirst');
+        $this->view->rdUsers        = $this->user->getPairs('noclosed,nodeleted,devfirst');
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $this->loadModel('product')->getPairs();
         $this->view->linkedProducts = $linkedProducts;
@@ -1097,10 +1100,11 @@ class project extends control
      * Manage members of the project.
      * 
      * @param  int    $projectID 
+     * @param  int    $team2Import    the team to import.
      * @access public
      * @return void
      */
-    public function manageMembers($projectID = 0)
+    public function manageMembers($projectID = 0, $team2Import = 0)
     {
         if(!empty($_POST))
         {
@@ -1110,17 +1114,18 @@ class project extends control
         }
         $this->loadModel('user');
 
-        $project = $this->project->getById($projectID);
-        $users   = $this->user->getPairs('noclosed, nodeleted');
-        $users   = array('' => '') + $users;
-        $members = $this->project->getTeamMembers($projectID);
-        $teams   = $this->project->getTeams2Import($this->app->user->account, $projectID);
-        a($teams);
+        $project        = $this->project->getById($projectID);
+        $users          = $this->user->getPairs('noclosed, nodeleted, devfirst');
+        $users          = array('' => '') + $users;
+        $currentMembers = $this->project->getTeamMembers($projectID);
+        $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
+        $teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
+        $teams2Import   = array($this->lang->project->copyTeam) + $teams2Import;
 
         /* The deleted members. */
-        foreach($members as $account => $member)
+        foreach($currentMembers as $account => $member)
         {
-            if(!@$users[$member->account]) $member->account .= $this->lang->user->deleted;
+            if(!isset($users[$member->account])) $member->account .= $this->lang->user->deleted;
         }
 
         /* Set menu. */
@@ -1132,9 +1137,12 @@ class project extends control
         $this->view->header   = $header;
         $this->view->position = $position;
 
-        $this->view->project  = $project;
-        $this->view->users    = $users;
-        $this->view->members  = $members;
+        $this->view->project        = $project;
+        $this->view->users          = $users;
+        $this->view->currentMembers = $currentMembers;
+        $this->view->members2Import = $members2Import;
+        $this->view->teams2Import   = $teams2Import;
+        $this->view->team2Import    = $team2Import;
         $this->display();
     }
 

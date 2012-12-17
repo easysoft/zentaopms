@@ -161,6 +161,7 @@ $lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>如何更新
 $lang->project->whyNoStories    = "看起来没有需求可以关联。请检查下项目关联的产品中有没有需求，而且要确保它们已经审核通过。";
 $lang->project->doneProjects    = '已结束';
 $lang->project->unDoneProjects  = '未结束';
+$lang->project->copyTeam        = '复制团队';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您确定删除项目[%s]吗？';

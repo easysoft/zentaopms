@@ -11,16 +11,27 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<script>
+projectID = <?php echo $project->id;?>;
+function importTeam()
+{
+    location.href = createLink('project', 'manageMembers', 'project=' + projectID + '&teamImport=' + $('#teams2Import').val());
+}
+</script>
+
 <form method='post'>
   <table align='center' class='table-4 a-center'> 
-    <caption><?php echo $lang->project->manageMembers;?></caption>
+    <caption>
+      <div class='f-left'><?php echo $lang->project->manageMembers;?></div>
+      <div class='f-right'><?php echo html::select('teams2Import', $teams2Import, $team2Import, 'onchange=importTeam()');?></div>
+    </caption>
     <tr>
       <th><?php echo $lang->team->account;?></th>
       <th><?php echo $lang->team->role;?></th>
       <th><?php echo $lang->team->days;?></th>
       <th><?php echo $lang->team->hours;?></th>
     </tr>
-    <?php foreach($members as $key => $member):?>
+    <?php foreach($currentMembers as $key => $member):?>
     <?php $realname = substr($users[$member->account], 2);?>
     <?php unset($users[$member->account]);?>
     <tr>
@@ -34,6 +45,21 @@
       </td>
     </tr>
     <?php endforeach;?>
+
+    <?php if(!$currentMembers) $key = 0;?>
+    <?php foreach($members2Import as $member2Import):?>
+    <?php $key ++;?>
+    <tr>
+      <td><?php echo html::select('accounts[]', $users, $member2Import->account, 'class=select-2');?></td>
+      <td><input type='text' name='roles[]' id='role<?php echo $key;?>' class='text-2' value='<?php echo $member2Import->role;?>' /></td>
+      <td><input type='text'   name='days[]'  id='days<?php echo  $key;?>' class='text-2' value='<?php echo $project->days?>'/></td>
+      <td>
+        <input type='text'   name='hours[]' id='hours<?php echo $key;?>' class='text-2' value='<?php echo $member2Import->hours;?>' />
+        <input type='hidden' name='modes[]' value='create' />
+      </td>
+    </tr>
+    <?php endforeach;?>
+
     <?php
     $count = count($users) - 1;
     if($count > PROJECTMODEL::LINK_MEMBERS_ONE_TIME) $count = PROJECTMODEL::LINK_MEMBERS_ONE_TIME;

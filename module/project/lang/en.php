@@ -161,6 +161,7 @@ $lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>How?</i></a>
 $lang->project->whyNoStories    = "There no active stories to added to this project. Please check the linked product.";
 $lang->project->doneProjects    = 'Done';
 $lang->project->unDoneProjects  = 'Undone';
+$lang->project->copyTeam        = 'Copy a team';
 
 /* Confirm. */
 $lang->project->confirmDelete         = 'Are you sure to delete project [%s]?';
