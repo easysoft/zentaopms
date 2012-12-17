@@ -43,7 +43,7 @@ class extensionModel extends model
         parent::__construct();
         $this->setAgent();
         $this->setApiRoot();
-        $this->classFile = $this->app->loadClass('file');
+        $this->classFile = $this->app->loadClass('zfile');
     }
 
     /**

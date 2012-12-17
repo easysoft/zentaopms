@@ -4,7 +4,7 @@ chdir($buildDir);
 
 /* include the file class. */
 include '../../../lib/file/file.class.php';
-$file = new file();
+$file = new zfile();
 
 /* set xampp package and 7-zip command. */
 if(count($argv) != 3) die("please specify the package directory and 7z command.\n");

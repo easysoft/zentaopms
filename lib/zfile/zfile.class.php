@@ -1,5 +1,5 @@
 <?php
-class file
+class zfile
 {
     /**
      * Copy a directory from an directory to another directory.
