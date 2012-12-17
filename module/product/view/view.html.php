@@ -11,20 +11,29 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<div id='titlebar'>
+  <div id='main' <?php if($product->deleted) echo "class='deleted'";?>>PRODUCT #<?php echo $product->id . ' ' . $product->name;?></div>
+  <div>
+    <?php
+    $params = "product=$product->id";
+    $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
+    if(!$product->deleted)
+    {
+        ob_start();
+        common::printDivider();
+        common::printIcon('product', 'edit', $params);
+        common::printIcon('product', 'delete', $params, '', 'button', '', 'hiddenwin');
+        common::printRPN($browseLink);
+
+        $actionLinks = ob_get_contents();
+        ob_end_clean();
+        echo $actionLinks;
+    }
+    ?>
+  </div>
+</div>
+
 <table class='cont-rt5'> 
-  <caption>
-    <?php echo $product->name . $this->lang->colon . $lang->product->view;?>
-    <div class='f-right f-16px strong'>
-      <?php
-      $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
-      if(!$product->deleted)
-      {
-          common::printLink('product', 'edit',   "productID=$product->id", $lang->edit);
-          common::printLink('product', 'delete', "productID=$product->id", $lang->delete, 'hiddenwin');
-      }
-      ?>
-    </div>
-  </caption>
   <tr valign='top'>
     <td>
       <fieldset>
@@ -32,17 +41,7 @@
         <div class='content'><?php echo $product->desc;?></div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center f-16px strong'>
-      <?php
-      $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
-      if(!$product->deleted)
-      {
-          common::printLink('product', 'edit',   "productID=$product->id", $lang->edit);
-          common::printLink('product', 'delete', "productID=$product->id", $lang->delete, 'hiddenwin');
-      }
-      echo html::a($browseLink, $lang->goback);
-      ?>
-      </div>
+      <div class='a-center actionlink'><?php if(!$product->deleted) echo $actionLinks;?></div>
     </td>
     <td class="divider"></td>
     <td class="side">
@@ -62,12 +61,8 @@
             <td><?php echo $users[$product->PO];?></td>
           </tr>  
           <tr>
-            <th class='rowhead'><?php echo $lang->product->QM;?></th>
-            <td><?php echo $users[$product->QM];?></td>
-          </tr>  
-          <tr>
-            <th class='rowhead'><?php echo $lang->product->RM;?></th>
-            <td><?php echo $users[$product->RM];?></td>
+            <th class='rowhead'><?php echo $lang->product->QD;?></th>
+            <td><?php echo $users[$product->QD];?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->product->status;?></th>
@@ -88,7 +83,7 @@
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->story->openedBy?></th>
-            <td><?php echo $product->createdBy;?></td>
+            <td><?php echo $users[$product->createdBy];?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->story->openedDate?></th>

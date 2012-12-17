@@ -25,15 +25,11 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->PO;?></th>
-      <td><?php echo html::select('PO', $users, $product->PO, "class='select-3'");?></td>
+      <td><?php echo html::select('PO', $poUsers, $product->PO, "class='select-3'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->product->QM;?></th>
-      <td><?php echo html::select('QM', $users, $product->QM, "class='select-3'");?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->product->RM;?></th>
-      <td><?php echo html::select('RM', $users, $product->RM, "class='select-3'");?></td>
+      <th class='rowhead'><?php echo $lang->product->QD;?></th>
+      <td><?php echo html::select('QD', $qdUsers, $product->QD, "class='select-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->status;?></th>

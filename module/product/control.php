@@ -47,6 +47,7 @@ class product extends control
     {
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
         
+        $this->session->set('productList', $this->app->getURI(true));
         $this->product->setMenu($this->products, $productID);
 
         $this->app->loadLang('my');
@@ -176,7 +177,8 @@ class product extends control
         $this->view->header->title = $this->lang->product->create;
         $this->view->position[]    = $this->view->header->title;
         $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->users         = $this->loadModel('user')->getPairs();
+        $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
+        $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
         $this->display();
     }
 
@@ -209,7 +211,8 @@ class product extends control
         $this->view->position[]    = $this->lang->product->edit;
         $this->view->product       = $product;
         $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->users         = $this->loadModel('user')->getPairs();
+        $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
+        $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
 
         $this->display();
     }
