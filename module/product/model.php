@@ -352,8 +352,8 @@ class productModel extends model
     public function getTeamMemberPairs($product)
     {
         $members[$product->PO] = $product->PO;
-        $members[$product->QM] = $product->QM;
-        $members[$product->RM] = $product->RM;
+        $members[$product->QD] = $product->QD;
+        $members[$product->RD] = $product->RD;
         $members[$product->createdBy] = $product->createdBy;
 
         /* Set projects and teams as static thus we can only query sql one times. */
@@ -541,8 +541,8 @@ class productModel extends model
                 ->where('t1.acl')->eq('open')
                 ->orWhere("(t1.acl = 'custom' AND $groupSql)")
                 ->orWhere('t1.PO')->eq($this->app->user->account)
-                ->orWhere('t1.QM')->eq($this->app->user->account)
-                ->orWhere('t1.RM')->eq($this->app->user->account)
+                ->orWhere('t1.QD')->eq($this->app->user->account)
+                ->orWhere('t1.RD')->eq($this->app->user->account)
                 ->orWhere('t1.createdBy')->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->andWhere('t1.deleted')->eq(0)

@@ -29,8 +29,12 @@
       <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='select-3'");?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->product->QM;?></th>
+      <th class='rowhead'><?php echo $lang->product->QD;?></th>
       <td><?php echo html::select('QD', $qdUsers, '', "class='select-3'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->product->RD;?></th>
+      <td><?php echo html::select('RD', $rdUsers, '', "class='select-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->product->desc;?></th>

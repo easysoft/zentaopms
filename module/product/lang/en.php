@@ -54,8 +54,8 @@ $lang->product->order     = 'Order';
 $lang->product->status    = 'Status';
 $lang->product->desc      = 'Desc';
 $lang->product->PO        = 'Product owner';
-$lang->product->QD        = 'Test manager';
-$lang->product->RM        = 'Release manager';
+$lang->product->QD        = 'Quality director';
+$lang->product->RD        = 'Release director';
 $lang->product->acl       = 'Access limitation';
 $lang->product->whitelist = 'Whitelist';
 

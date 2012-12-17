@@ -65,6 +65,11 @@
             <td><?php echo $users[$product->QD];?></td>
           </tr>  
           <tr>
+            <th class='rowhead'><?php echo $lang->product->RD;?></th>
+            <td><?php echo $users[$product->RD];?></td>
+          </tr>  
+          <tr>
+          <tr>
             <th class='rowhead'><?php echo $lang->product->status;?></th>
             <td><?php echo $lang->product->statusList[$product->status];?></td>
           </tr>  

@@ -32,6 +32,10 @@
       <td><?php echo html::select('QD', $qdUsers, $product->QD, "class='select-3'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->product->RD;?></th>
+      <td><?php echo html::select('RD', $rdUsers, $product->RD, "class='select-3'");?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->product->status;?></th>
       <td><?php echo html::select('status', $lang->product->statusList, $product->status, "class='select-3'");?></td>
     </tr>  

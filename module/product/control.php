@@ -179,6 +179,7 @@ class product extends control
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
         $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
+        $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst');
         $this->display();
     }
 
@@ -213,6 +214,7 @@ class product extends control
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
         $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
+        $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst');
 
         $this->display();
     }
