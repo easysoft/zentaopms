@@ -46,6 +46,19 @@ function setField(fieldName, fieldNO)
     {
         $("#value" + fieldNO).datePicker({createButton:true, startDate:startDate})
         $("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
+        var groupItems = <?php echo $config->search->groupItems?>;
+        var maxNO      = 2 * groupItems;
+        var nextNO     = fieldNO > groupItems ? fieldNO - groupItems + 1 : fieldNO + groupItems;
+        var nextValue  = $('#value' + nextNO).val();
+        if(nextNO <= maxNO && fieldNO < maxNO && (nextValue == '' || nextValue == 0))
+        {
+            $('#field' + nextNO).val($('#field' + fieldNO).val());
+            $('#operator' + nextNO).val('<=');
+            $('#valueBox' + nextNO).html($('#box' + fieldName).children().clone());
+            $('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
+            $("#value" + nextNO).datePicker({createButton:true, startDate:startDate});
+            $("#value" + nextNO).addClass('date');
+        }
     }
 }
 
