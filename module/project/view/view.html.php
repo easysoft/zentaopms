@@ -81,12 +81,12 @@
             <td><?php echo $users[$project->PO];?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->QM;?></th>
-            <td><?php echo $users[$project->QM];?></td>
+            <th class='rowhead'><?php echo $lang->project->QD;?></th>
+            <td><?php echo $users[$project->QD];?></td>
           </tr>
           <tr>
-            <th class='rowhead'><?php echo $lang->project->RM;?></th>
-            <td><?php echo $users[$project->RM];?></td>
+            <th class='rowhead'><?php echo $lang->project->RD;?></th>
+            <td><?php echo $users[$project->RD];?></td>
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->project->products;?></th>

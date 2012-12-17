@@ -311,14 +311,14 @@ class projectModel extends model
             ->exec();
         foreach($project as $fieldName => $value)
         {
-            if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QM' or $fieldName == 'RM' )
+            if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
             {
                 if(!empty($value) and !isset($team[$value]))
                 {
                     $member->project = (int)$projectID;
                     $member->account = $value;
                     $member->join    = helper::today();
-                    $member->role    = $fieldName;
+                    $member->role    = $this->lang->project->$fieldName;
                     $member->days    = $project->days;
                     $member->hours   = $this->config->project->defaultWorkhours;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
@@ -578,15 +578,15 @@ class projectModel extends model
      */
     public function getDefaultManagers($projectID)
     {
-        $managers = $this->dao->select('PO,QM,RM')->from(TABLE_PRODUCT)->alias('t1')
+        $managers = $this->dao->select('PO,QD,RD')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
             ->where('t2.project')->eq($projectID)
             ->fetch();
         if($managers) return $managers;
 
         $managers->PO = '';
-        $managers->QM = '';
-        $managers->RM = '';
+        $managers->QD = '';
+        $managers->RD = '';
         return $managers;
     }
 
@@ -932,6 +932,18 @@ class projectModel extends model
             $users[$account] =  $firstLetter . ($realName ? $realName : $account);
         }
         return array('' => '') + $users;
+    }
+
+    public function getTeams2Import($account, $currentProject)
+    {
+        return $this->dao->select('t1.project, t2.name as projectName, t2.team as teamName')
+            ->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.account')->eq($account)
+            ->andWhere('t1.project')->ne($currentProject)
+            ->groupBy('t1.project')
+            ->orderBy('t1.project DESC')
+            ->fetchAll('project');
     }
 
     /**

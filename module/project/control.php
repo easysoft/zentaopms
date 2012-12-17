@@ -43,6 +43,7 @@ class project extends control
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
         $this->commonAction($projectID);
+        $this->session->set('projectList', $this->app->getURI(true));
 
         $this->app->loadLang('my');
         $this->view->projectStats  = $this->project->getProjectStats($status);
@@ -1113,6 +1114,8 @@ class project extends control
         $users   = $this->user->getPairs('noclosed, nodeleted');
         $users   = array('' => '') + $users;
         $members = $this->project->getTeamMembers($projectID);
+        $teams   = $this->project->getTeams2Import($this->app->user->account, $projectID);
+        a($teams);
 
         /* The deleted members. */
         foreach($members as $account => $member)

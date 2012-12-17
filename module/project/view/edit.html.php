@@ -53,12 +53,12 @@
       <td><?php echo html::select('PM', $users, $project->PM, 'class=text-3');?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->project->QM;?></th>
-      <td><?php echo html::select('QM', $users, $project->QM, 'class=text-3');?></td>
+      <th class='rowhead'><?php echo $lang->project->QD;?></th>
+      <td><?php echo html::select('QD', $users, $project->QD, 'class=text-3');?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->project->RM;?></th>
-      <td><?php echo html::select('RM', $users, $project->RM, 'class=text-3');?></td>
+      <th class='rowhead'><?php echo $lang->project->RD;?></th>
+      <td><?php echo html::select('RD', $users, $project->RD, 'class=text-3');?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
