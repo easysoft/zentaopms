@@ -171,7 +171,7 @@ class tree extends control
         $module = $this->tree->getById($moduleID);
         if($module->owner == null)
         {
-           $module->owner = $this->loadModel('product')->getById($module->root)->QM;
+           $module->owner = $this->loadModel('product')->getById($module->root)->QD;
         }
         $this->view->module     = $module;
         $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->root, $this->view->module->type);
