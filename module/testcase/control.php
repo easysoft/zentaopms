@@ -221,6 +221,7 @@ class testcase extends control
         if(count($steps) < $this->config->testcase->defaultSteps)
         {
             $paddingCount = $this->config->testcase->defaultSteps - count($steps);
+            $step = new stdclass();
             $step->desc   = '';
             $step->expect = '';
             for($i = 1; $i <= $paddingCount; $i ++) $steps[] = $step;
