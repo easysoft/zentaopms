@@ -158,7 +158,7 @@ class testtask extends control
         $this->view->projects  = $projects;
         $this->view->productID = $productID;
         $this->view->builds    = $builds; 
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
 
         $this->display();
     }
