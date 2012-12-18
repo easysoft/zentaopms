@@ -61,6 +61,8 @@ tgz:
 	mv zentaotest.zip zentaopms/tmp/extension
 	mv zentaostory.zip zentaopms/tmp/extension
 	mv zentaotask.zip zentaopms/tmp/extension
+	cd ~/zentao/notify && git pull && git archive --format=zip -9 --prefix=notify/ HEAD > ./notify.zip
+	mv ~/zentao/notify/notify.zip zentaopms/tmp/extension
 	# zip it.
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms

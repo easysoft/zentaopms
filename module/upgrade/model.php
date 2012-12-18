@@ -75,6 +75,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('3.3'));
             $this->updateTaskAssignedTo();
             $this->loadModel('setting')->setItem('system', 'common', '', 'flow', 'full');
+        case '4_0_beta1': $this->execSQL($this->getUpgradeFile('4.0.beta1'));
 
         default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -116,10 +117,11 @@ class upgradeModel extends model
         case '3_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('3.0.beta1'));
         case '3_0_beta2':
         case '3_0':
-        case '3_1':   $confirmContent .= file_get_contents($this->getUpgradeFile('3.1'));
-        case '3_2':   $confirmContent .= file_get_contents($this->getUpgradeFile('3.2'));
-        case '3_2_1': $confirmContent .= file_get_contents($this->getUpgradeFile('3.2.1'));
-        case '3_3':   $confirmContent .= file_get_contents($this->getUpgradeFile('3.3'));
+        case '3_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('3.1'));
+        case '3_2':       $confirmContent .= file_get_contents($this->getUpgradeFile('3.2'));
+        case '3_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('3.2.1'));
+        case '3_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('3.3'));
+        case '4.0.beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
