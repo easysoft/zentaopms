@@ -484,8 +484,8 @@ class todoModel extends model
     public function getThisWeek()
     {
         $baseTime = $this->getMiddleOfThisWeek();
-        $begin = date(DT_DATE1, strtotime('last monday', $baseTime));
-        $end   = date(DT_DATE1, strtotime('next sunday', $baseTime));
+        $begin = date(DT_DATE1, strtotime('last monday', $baseTime)) . ' 00:00:00';
+        $end   = date(DT_DATE1, strtotime('next sunday', $baseTime)) . ' 23:59:59';
         return array('begin' => $begin, 'end' => $end);
     }
 
@@ -498,8 +498,8 @@ class todoModel extends model
     public function getLastWeek()
     {
         $baseTime = $this->getMiddleOfLastWeek();
-        $begin = date(DT_DATE1, strtotime('last monday', $baseTime));
-        $end   = date(DT_DATE1, strtotime('next sunday', $baseTime));
+        $begin = date(DT_DATE1, strtotime('last monday', $baseTime)) . ' 00:00:00';
+        $end   = date(DT_DATE1, strtotime('next sunday', $baseTime)) . ' 23:59:59';
         return array('begin' => $begin, 'end' => $end);
     }
 
@@ -544,8 +544,8 @@ class todoModel extends model
      */
     public function getThisMonth()
     {
-        $begin = date('Y-m');
-        $end   = date('Y-m', strtotime('next month'));
+        $begin = date('Y-m') . '-01 00:00:00';
+        $end   = date('Y-m', strtotime('next month')) . '-00 23:59:59';
         return array('begin' => $begin, 'end' => $end);
     }
 
@@ -557,8 +557,8 @@ class todoModel extends model
      */
     public function getLastMonth()
     {
-        $begin = date('Y-m', strtotime('last month'));
-        $end   = date('Y-m', strtotime('this month'));
+        $begin = date('Y-m', strtotime('last month')) . '-01 00:00:00';
+        $end   = date('Y-m', strtotime('this month')) . '-00 23:59:59';
         return array('begin' => $begin, 'end' => $end);
     }
 
