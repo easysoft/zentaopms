@@ -3,7 +3,7 @@
 if($config->debug)
 {
     css::import($defaultTheme . 'datepicker.css');
-    js::import($jsRoot . 'jquery/datepicker/min.js'); 
+    js::import($jsRoot . 'jquery/datepicker/source.js'); 
     js::import($jsRoot . 'jquery/datepicker/date.js');
 }
 ?>
@@ -11,11 +11,18 @@ if($config->debug)
 Date.firstDayOfWeek = 1;
 Date.format = 'yyyy-mm-dd';
 $.dpText = {
+    TEXT_OR             :   '或 ',
     TEXT_PREV_YEAR      :   '去年',
-    TEXT_PREV_MONTH     :   '上个月',
+    TEXT_PREV_MONTH     :   '上月',
+    TEXT_PREV_WEEK      :   '上周',
+    TEXT_YESTERDAY      :   '昨天',
+    TEXT_THIS_MONTH     :   '本月',
+    TEXT_THIS_WEEK      :   '本周',
+    TEXT_TODAY          :   '今天',
     TEXT_NEXT_YEAR      :   '明年',
-    TEXT_NEXT_MONTH     :   '下个月',
+    TEXT_NEXT_MONTH     :   '下月',
     TEXT_CLOSE          :   '关闭',
+    TEXT_DATE           :   '选择时间段',
     TEXT_CHOOSE_DATE    :   '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
 }
 Date.dayNames       = ['日', '一', '二', '三', '四', '五', '六'];
