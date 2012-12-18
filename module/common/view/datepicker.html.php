@@ -3,7 +3,7 @@
 if($config->debug)
 {
     css::import($defaultTheme . 'datepicker.css');
-    js::import($jsRoot . 'jquery/datepicker/source.js'); 
+    js::import($jsRoot . 'jquery/datepicker/min.js'); 
     js::import($jsRoot . 'jquery/datepicker/date.js');
 }
 ?>
