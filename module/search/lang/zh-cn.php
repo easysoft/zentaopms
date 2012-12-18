@@ -35,6 +35,7 @@ $lang->search->operators['>=']         = '>=';
 $lang->search->operators['<']          = '<';
 $lang->search->operators['<=']         = '<=';
 $lang->search->operators['include']    = '包含';
+$lang->search->operators['between']    = '介于';
 $lang->search->operators['notinclude'] = '不包含';
 $lang->search->operators['belong']     = '从属于';
 

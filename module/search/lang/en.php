@@ -35,6 +35,7 @@ $lang->search->operators['>=']         = '>=';
 $lang->search->operators['<']          = '<';
 $lang->search->operators['<=']         = '<=';
 $lang->search->operators['include']    = 'include';
+$lang->search->operators['between']    = 'between';
 $lang->search->operators['notinclude'] = 'not include';
 $lang->search->operators['belong']     = 'belongs to';
 

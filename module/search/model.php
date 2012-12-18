@@ -321,7 +321,7 @@ class searchModel extends model
     }
 
     /**
-     * Replace dynamic account and date. 
+      Replace dynamic account and date. 
      * 
      * @param  string $query 
      * @access public
@@ -329,6 +329,23 @@ class searchModel extends model
      */
     public function replaceDynamic($query)
     {
-        return str_replace('$@me', $this->app->user->account, $query); 
+        $this->loadModel('todo');
+        $lastWeek  = $this->todo->getLastWeek();
+        $thisWeek  = $this->todo->getThisWeek();
+        $lastMonth = $this->todo->getLastMonth();
+        $thisMonth = $this->todo->getThisMonth();
+        $yesterday = $this->todo->yesterday();
+        $today     = $this->todo->today();
+        if(strpos($query, '$') !== false)
+        {
+            $query = str_replace('$@me', $this->app->user->account, $query);
+            $query = str_replace("'\$lastMonth'", "'" . $lastMonth['begin'] . "' and '" . $lastMonth['end'] . "'", $query);
+            $query = str_replace("'\$thisMonth'", "'" . $thisMonth['begin'] . "' and '" . $thisMonth['end'] . "'", $query);
+            $query = str_replace("'\$lastWeek'",  "'" . $lastWeek['begin']  . "' and '" . $lastWeek['end']  . "'", $query);
+            $query = str_replace("'\$thisWeek'",  "'" . $thisWeek['begin']  . "' and '" . $thisWeek['end']  . "'", $query);
+            $query = str_replace("'\$yesterday'", "'" . $yesterday          . "' and '" . $yesterday        . "'", $query);
+            $query = str_replace("'\$today'",     "'" . $today              . "' and '" . $today            . "'", $query);
+        }
+        return $query;
     }
 }
