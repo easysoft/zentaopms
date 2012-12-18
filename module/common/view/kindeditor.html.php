@@ -42,8 +42,10 @@ $(document).ready(function()
         if(editor.tools == 'bugTools')  editorTool = bugTools;
         if(editor.tools == 'fullTools') editorTool = fullTools;
 
-        KindEditor.ready(function(K){
-            editor = K.create('#'+editor.id,{
+        KindEditor.ready(function(K)
+        {
+            editor = K.create('#' + editorID,
+            {
                 items:editorTool,
                 filterMode:true, 
                 cssPath:['<?php echo $jsRoot?>kindeditor/plugins/code/prettify.css'],
