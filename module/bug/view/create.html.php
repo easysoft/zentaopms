@@ -42,7 +42,7 @@ userList = "<?php echo join(',', array_keys($users));?>".split(',');
     </tr>
     <tr>
       <th class='rowhead'><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-      <td> <?php echo html::select('assignedTo', $users, $assignedTo, 'class=select-3');?></td>
+      <td><span id='assignedToBox'><?php echo html::select('assignedTo', $users, $assignedTo, 'class=select-3');?></span></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->title;?></th>

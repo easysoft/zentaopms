@@ -82,6 +82,7 @@ function loadProjectRelated(projectID)
         loadProjectTasks(projectID);
         loadProjectStories(projectID);
         loadProjectBuilds(projectID);
+        loadAssignedTo(projectID);
     }
     else
     {
@@ -118,18 +119,16 @@ function loadProjectStories(projectID)
 }
 
 /**
- * Set the assignedTo field.
+ * Load assginedTo list, make use the members of this project at first.
  * 
+ * @param  int     $projectID 
  * @access public
  * @return void
  */
-function setAssignedTo()
+function loadAssignedTo(projectID)
 {
-    link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + $('#module').val() + '&productID=' + $('#product').val());
-    $.get(link, function(owner)
-    {
-        $('#assignedTo').val(owner);
-    });
+    link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
+    $('#assignedToBox').load(link)       
 }
 
 /**
@@ -147,18 +146,29 @@ function loadProjectBuilds(projectID)
     $('#buildBox').load(link);
 }
 
-$(function() {
-    $("#story").chosen({no_results_text:noResultsMatch});
-    $("#task").chosen({no_results_text:noResultsMatch});
-    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
-    setAssignedTo();
-})
+/**
+ * Set the assignedTo field.
+ * 
+ * @access public
+ * @return void
+ */
+function setAssignedTo()
+{
+    link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + $('#module').val() + '&productID=' + $('#product').val());
+    $.get(link, function(owner)
+    {
+        $('#assignedTo').val(owner);
+    });
+}
 
 /* Save template. */
-KindEditor.plugin('savetemplate', function(K) {
+KindEditor.plugin('savetemplate', function(K) 
+{
     var self = this, name = 'savetemplate';
-    self.plugin.savetemplate = {
-        click: function(id) {
+    self.plugin.savetemplate = 
+    {
+        click: function(id) 
+        {
             content = self.html();
             jPrompt(setTemplateTitle, '','', function(r)
             {
@@ -189,3 +199,11 @@ function deleteTemplate(templateID)
     hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
     $('#tplBox' + templateID).addClass('hidden');
 }
+
+$(function() 
+{
+    $("#story").chosen({no_results_text:noResultsMatch});
+    $("#task").chosen({no_results_text:noResultsMatch});
+    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    setAssignedTo();
+})

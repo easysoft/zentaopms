@@ -213,7 +213,7 @@ class bug extends control
      */
     public function create($productID, $extras = '')
     {
-        $this->view->users = $this->user->getPairs('nodeleted');
+        $this->view->users = $this->user->getPairs('nodeleted,devfirst');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
         if(!empty($_POST))
@@ -838,6 +838,23 @@ class bug extends control
         if($moduleID) $owner = $this->dao->findByID($moduleID)->from(TABLE_MODULE)->fetch('owner');
         if(!$owner)   $owner = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('QD');
         die($owner);
+    }
+
+    /**
+     * AJAX: get assignedTo list, make sure the members of the project at the first.
+     * 
+     * @param  int    $projectID 
+     * @param  string $selectedUser 
+     * @access public
+     * @return string
+     */
+    public function ajaxLoadAssignedTo($projectID, $selectedUser = '')
+    {
+        $allUsers       = $this->loadModel('user')->getPairs('nodeleted, devfirst');
+        $projectMembers = $this->loadModel('project')->getTeamMemberPairs($projectID);
+        $assignedToList = array_merge($projectMembers, $allUsers);
+        
+        die(html::select('assignedTo', $assignedToList, $selectedUser, 'class="select-3"'));
     }
 
     /**
