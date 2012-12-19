@@ -33,8 +33,8 @@
       <td><?php echo html::input("titles[$story->id]",         $story->title, 'class=text-1'); echo "<span class='star'>*</span>";?></td>
       <td><?php echo html::input("estimates[$story->id]",      $story->estimate, 'class=text-1'); echo "<span class='star'>*</span>";?></td>
       <td><?php echo html::select("pris[$story->id]",          (array)$lang->story->priList, $story->pri, 'class=select-1');?></td>
-      <td><?php echo html::select("modules[$story->id]",       $moduleOptionMenu, $story->module, 'class=select-1');?></td>
-      <td><?php echo html::select("plans[$story->id]",         $plans, $story->plan, 'class=select-1');?></td>
+      <td><?php echo html::select("modules[$story->id]",       $moduleOptionMenus[$story->product], $story->module, 'class=select-1');?></td>
+      <td><?php echo html::select("plans[$story->id]",         $productPlans[$story->product], $story->plan, 'class=select-1');?></td>
       <td><?php echo html::select("sources[$story->id]",       $lang->story->sourceList, $story->source, 'class=select-1');?></td>
       <td><?php echo $lang->story->statusList[$story->status];?></td>
 

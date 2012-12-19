@@ -313,7 +313,21 @@ class story extends control
             if(!$allStories) $allStories = array();
 
             /* Initialize the stories whose need to edited. */
-            foreach($allStories as $story) if(in_array($story->id, $storyIDList)) $editedStories[$story->id] = $story;
+            $moduleOptionMenus = array();
+            $productPlans      = array();
+            $this->loadModel('productplan');
+            foreach($allStories as $story) 
+            {
+                if(in_array($story->id, $storyIDList)) 
+                {
+                    $editedStories[$story->id] = $story;
+                    if(!isset($moduleOptionMenus[$story->product]))
+                    {
+                        $moduleOptionMenus[$story->product] = $this->tree->getOptionMenu($story->product, $viewType = 'story');
+                        $productPlans[$story->product]      = $this->productplan->getPairs($story->product);
+                    }
+                }
+            }
 
             /* Judge whether the editedStories is too large. */
             $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedStories), $columns);
@@ -333,13 +347,13 @@ class story extends control
                 $this->view->header->title = $project->name . $this->lang->colon . $this->lang->story->batchEdit;
             }
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
-            $this->view->position[]       = $this->lang->story->common;
-            $this->view->position[]       = $this->lang->story->batchEdit;
-            $this->view->users            = $this->loadModel('user')->getPairs('nodeleted');
-            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story');
-            $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
-            $this->view->productID        = $productID;
-            $this->view->editedStories    = $editedStories;
+            $this->view->position[]        = $this->lang->story->common;
+            $this->view->position[]        = $this->lang->story->batchEdit;
+            $this->view->users             = $this->loadModel('user')->getPairs('nodeleted');
+            $this->view->moduleOptionMenus = $moduleOptionMenus;
+            $this->view->productPlans      = $productPlans;
+            $this->view->productID         = $productID;
+            $this->view->editedStories     = $editedStories;
 
             $this->display();
         }
