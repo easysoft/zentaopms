@@ -269,7 +269,7 @@ class testcase extends control
         {
             $caseID = $this->testcase->batchCreate($productID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('testcase', 'browse', "productID=$_POST[product]&browseType=byModule&param=$_POST[module]"), 'parent'));
+            die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&browseType=byModule&param=$moduleID"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 

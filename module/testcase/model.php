@@ -95,7 +95,14 @@ class testcaseModel extends model
                 $data[$i]->openedDate = $now;
                 $data[$i]->status     = 'normal';
                 $data[$i]->version    = 1;
-                if($data[$i]->story != 0) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($this->post->story);
+                if(!$data[$i]->story) 
+                {
+                    $data[$i]->story = 0;
+                }
+                else
+                {
+                    $data[$i]->storyVersion = $this->loadModel('story')->getVersion($this->post->story);
+                }
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()
