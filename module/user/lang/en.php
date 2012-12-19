@@ -38,6 +38,7 @@ $lang->user->visits    = 'Visits';
 $lang->user->ip        = 'Last IP';
 $lang->user->last      = 'Last login';
 $lang->user->status    = 'Status';
+$lang->user->ditto     = 'Ditto';
 
 $lang->user->index           = "Index";
 $lang->user->view            = "Info";

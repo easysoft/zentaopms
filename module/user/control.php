@@ -334,6 +334,36 @@ class user extends control
     }
 
     /**
+     * Batch edit user.
+     * 
+     * @param  int    $deptID 
+     * @access public
+     * @return void
+     */
+    public function batchEdit($deptID = 0)
+    {
+        if(isset($_POST['userIDList']))
+        {
+            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->userIDList)->orderBy('id')->fetchAll('id');
+        }
+        elseif($_POST)
+        {
+            $this->user->batchEdit();
+            die(js::locate($this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
+        }
+        $this->lang->set('menugroup.user', 'company');
+        $this->lang->user->menu      = $this->lang->company->menu;
+        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
+
+        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
+        $position[]      = $this->lang->user->edit;
+        $this->view->header   = $header;
+        $this->view->position = $position;
+        $this->view->depts    = $this->dept->getOptionMenu();
+        $this->display();
+    }
+
+    /**
      * Delete a user.
      * 
      * @param  int    $userID 

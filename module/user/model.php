@@ -232,15 +232,21 @@ class userModel extends model
                 if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));
                 if(!validater::checkReg($users->account[$i], '|(.){3,}|')) die(js::error(sprintf($this->lang->user->error->account, $i+1)));
                 if($users->realname[$i] == '') die(js::error(sprintf($this->lang->user->error->realname, $i+1)));
-                if(!validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i+1)));
+                if($users->email[$i] and !validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i+1)));
+                $users->password[$i] =  (isset($prev['password']) and $users->ditto[$i] == 'on') ? $prev['password'] : $users->password[$i];
                 if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i+1)));
 
-                $data[$i]->dept     = $users->dept[$i];
+                $data[$i]->dept     = (isset($prev['dept']) and $users->dept[$i] == 'ditto') ? $prev['dept'] : $users->dept[$i];
                 $data[$i]->account  = $users->account[$i];
                 $data[$i]->realname = $users->realname[$i];
+                $data[$i]->role     = (isset($prev['role']) and $users->role[$i] == 'ditto') ? $prev['role'] : $users->role[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5($users->password[$i]); 
+
+                $prev['dept'] = $data[$i]->dept;
+                $prev['role'] = $data[$i]->role;
+                $prev['password'] = $users->password[$i];
             }
         }
         foreach($data as $user)
@@ -296,6 +302,49 @@ class userModel extends model
                 $admins = str_replace(',' . $oldUser->account . ',', ',' . $this->post->account . ',', $this->app->company->admins);
                 $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec(false);
                 if(!dao::isError()) $this->app->user->account = $this->post->account;
+            }
+        }
+    }
+
+    /**
+     * Batch edit user.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchEdit()
+    {
+        $oldUsers     = $this->dao->select('id, account')->from(TABLE_USER)->where('id')->in(array_keys($this->post->account))->fetchPairs('id', 'account');
+        $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($this->post->account)->fetchGroup('account', 'id');
+        foreach($this->post->account as $id => $account)
+        {
+            $users[$id]['account']  = $account;
+            $users[$id]['dept']     = $this->post->dept[$id];
+            $users[$id]['realname'] = $this->post->realname[$id];
+            $users[$id]['role']     = $this->post->role[$id];
+            $users[$id]['commiter'] = $this->post->commiter[$id];
+            $users[$id]['email']    = $this->post->email[$id];
+            $users[$id]['join']     = $this->post->join[$id];
+
+            if(isset($accountGroup[$account]) and count($accountGroup[$account]) >1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(!validater::checkReg($users[$id]['account'], '|(.){3,}|')) die(js::error(sprintf($this->lang->user->error->account, $id)));
+            if($users[$id]['realname'] == '') die(js::error(sprintf($this->lang->user->error->realname, $id)));
+            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) die(js::error(sprintf($this->lang->user->error->mail, $id)));
+        }
+
+        foreach($users as $id => $user)
+        {
+            $this->dao->update(TABLE_USER)->data($user)->where('id')->eq((int)$id)->exec();
+            if($user['account'] != $oldUsers[$id])
+            {
+                $oldAccount = $oldUsers[$id];
+                $this->dao->update(TABLE_USERGROUP)->set('account')->eq($user['account'])->where('account')->eq($oldAccount)->exec();
+                if(strpos($this->app->company->admins, ',' . $oldAccount . ',') !== false)
+                {
+                    $admins = str_replace(',' . $oldAccount . ',', ',' . $user['account'] . ',', $this->app->company->admins);
+                    $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec(false);
+                }
+                if(!dao::isError() and $this->app->user->account == $oldAccount) $this->app->user->account = $users['account'];
             }
         }
     }

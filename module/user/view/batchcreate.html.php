@@ -21,23 +21,31 @@
       <th class='w-150px'><?php echo $lang->user->dept;?></th>
       <th class='w-150px'><?php echo $lang->user->account;?></th>
       <th class='w-150px'><?php echo $lang->user->realname;?></th>
+      <th class='w-150px'><?php echo $lang->user->role;?></th>
       <th><?php echo $lang->user->email;?></th>
       <th class='w-80px'><?php echo $lang->user->gender;?></th>
       <th><?php echo $lang->user->password;?></th>
     </tr>
+    <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
+    <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
     <?php for($i = 0; $i < $config->user->batchCreate; $i++):?>
-    <?php $pri = 3;?>
     <tr class='a-center'>
       <td><?php echo $i+1;?></td>
-      <td><?php echo html::select("dept[$i]", $depts, $deptID, "class='select-2'");?>
+      <td><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='select-2'");?>
       <td><?php echo html::input("account[$i]", '', "class='text-2' autocomplete='off'");?></td>
       <td><?php echo html::input("realname[$i]", '', "class='text-2'");?></td>
+      <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='select-2'");?></td>
       <td><?php echo html::input("email[$i]", '', "class='text-3'");?></td>
       <td><?php echo html::radio("gender[$i]", (array)$lang->user->genderList, 'm');?></td>
-      <td><?php echo html::input("password[$i]", '', "class='text-3' autocomplete='off'");?></td>
+      <td>
+<?php
+echo html::input("password[$i]", '', "class='text-3' autocomplete='off'");
+echo "<input type='checkbox' name='ditto[$i]' " . ($i> 0 ? "checked" : '') . " />"
+?>
+</td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='7' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
+    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

@@ -38,6 +38,7 @@ $lang->user->visits    = '访问次数';
 $lang->user->ip        = '最后IP';
 $lang->user->last      = '最后登录';
 $lang->user->status    = '状态';
+$lang->user->ditto     = '同上';
 
 $lang->user->index           = "用户视图首页";
 $lang->user->view            = "用户详情";
@@ -45,6 +46,7 @@ $lang->user->create          = "添加用户";
 $lang->user->batchCreate     = "批量添加用户";
 $lang->user->read            = "查看用户";
 $lang->user->edit            = "编辑用户";
+$lang->user->batchEdit       = "批量编辑";
 $lang->user->unlock          = "解锁用户";
 $lang->user->update          = "编辑用户";
 $lang->user->delete          = "删除用户";

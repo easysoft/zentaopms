@@ -52,9 +52,10 @@ include '../../common/view/tablesorter.html.php';
         </tr>
         </thead>
         <tbody>
+        <form action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post'>
         <?php foreach($users as $user):?>
         <tr class='a-center'>
-          <td><?php echo html::checkbox('userIDList[]', $user->id) . $user->id;?></td>
+          <td><?php echo "<input type='checkbox' name='userIDList[]' value='$user->id'> "; printf('%03d', $user->id);?></td>
           <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
           <td><?php echo $lang->user->roleList[$user->role];?></td>
@@ -75,16 +76,16 @@ include '../../common/view/tablesorter.html.php';
         <?php endforeach;?>
         </tbody>
         <tfoot>
-<tr>
-<td colspan='11'>
-<?php
-            echo html::selectAll();
-            echo html::selectReverse();
-            $pager->show();
-?>
-</td>
-</tr>
-</tfoot>
+        <tr>
+          <td colspan='11'>
+          <?php
+          echo html::selectAll() . html::selectReverse();
+          echo html::submitButton($lang->user->batchEdit);
+          $pager->show();
+          ?>
+          </td>
+        </tr>
+        </tfoot>
       </table>
     </td>
   </tr>
