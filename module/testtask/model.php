@@ -303,6 +303,73 @@ class testtaskModel extends model
     }
 
     /**
+     * Batch run case
+     * 
+     * @param  string $runCaseType 
+     * @access public
+     * @return void
+     */
+    public function batchRun($runCaseType = 'testcase')
+    {
+        $this->post->a();
+        $runs   = array();
+        $caseIdList = array_keys($this->post->results);
+        if($runCaseType == 'testtask') $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs('case', 'id');
+
+        $stepGroups = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.case')->in($caseIdList)
+            ->andWhere('t1.version=t2.version')
+            ->fetchGroup('case', 'id');
+
+        $now = helper::now();
+        foreach($this->post->results as $caseID => $result)
+        {
+            $runID       = isset($runs[$caseID]) ? $runs[$caseID] : 0;
+            $dbSteps     = $stepGroups[$caseID];
+            $postSteps   = $this->post->steps[$caseID];
+            $postReals   = $this->post->reals[$caseID];
+
+            $caseResult  = $result ? $result : 'pass';
+            $stepResults = array();
+            foreach($dbSteps as $stepID => $step)
+            {
+                $step           = array();
+                $step['result'] = $caseResult == 'pass' ? $caseResult : $postSteps[$stepID];
+                $step['real']   = $caseResult == 'pass' ? '' : $postReals[$stepID];
+                $stepResults[$stepID] = $step;
+            }
+
+            $result              = new stdClass();
+            $result->run         = $runID;
+            $result->case        = $caseID;
+            $result->version     = $this->post->version[$caseID];
+            $result->caseResult  = $caseResult;
+            $result->stepResults = serialize($stepResults);
+            $result->lastRunner  = $this->app->user->account;
+            $result->date        = $now;
+            $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
+            $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($caseID)->exec();
+
+            if($runID)
+            {
+                /* Update testRun's status. */
+                if(!dao::isError())
+                {
+                    $runStatus = $caseResult == 'blocked' ? 'blocked' : 'done';
+                    $this->dao->update(TABLE_TESTRUN)
+                        ->set('lastRunResult')->eq($caseResult)
+                        ->set('status')->eq($runStatus)
+                        ->set('lastRunner')->eq($this->app->user->account)
+                        ->set('lastRunDate')->eq($now)
+                        ->where('id')->eq($runID)
+                        ->exec();
+                }
+            }
+        }
+    }
+
+    /**
      * Get results by runID or caseID
      * 
      * @param  int   $runID 

@@ -20,6 +20,11 @@ function browseBySearch(active)
     $('#bymoduleTab').removeClass('active');
 }
 
+function changeAction(url)
+{
+  $('#batchForm').attr('action', url);
+}
+
 $(document).ready(function()
 {
     $("a.runcase").colorbox({width:900, height:600, iframe:true, transition:'none'});

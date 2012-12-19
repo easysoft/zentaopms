@@ -20,6 +20,7 @@ $lang->testtask->linkCaseAB     = "关联";
 $lang->testtask->unlinkCase     = "移除";
 $lang->testtask->batchAssign    = "批量指派";
 $lang->testtask->runCase        = "执行";
+$lang->testtask->batchRun       = "批量执行";
 $lang->testtask->results        = "结果";
 $lang->testtask->createBug      = "提Bug";
 $lang->testtask->assign         = '指派';

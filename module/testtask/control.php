@@ -449,6 +449,53 @@ class testtask extends control
     }
 
     /**
+     * Batch run case.
+     * 
+     * @param  int    $productID 
+     * @param  string $orderBy 
+     * @param  string $from 
+     * @access public
+     * @return void
+     */
+    public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase')
+    {
+        if(isset($_POST['caseIDList']))
+        {
+            if($from == 'testcase') $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($this->post->caseIDList)->orderBy($orderBy)->fetchAll('id');
+            if($from == 'testtask')
+            {
+                $this->view->cases = $this->dao->select('t1.*,t2.lastRunResult')->from(TABLE_CASE)->alias('t1')
+                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                    ->where('t1.id')->in($this->post->caseIDList)
+                    ->orderBy($orderBy)
+                    ->fetchAll('id');
+            }
+        }
+        else
+        {
+            $this->testtask->batchRun($from);
+            $method = $from == 'testcase' ? 'browse' : 'cases';
+            die(js::locate($this->createLink($from, $method, "productID=$productID"), 'parent'));
+        }
+        $this->app->loadLang('testcase');
+        $this->testtask->setMenu($this->products, $productID);
+
+        $resultList = $this->lang->testcase->resultList;
+        unset($resultList['n/a']);
+
+        $steps = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('t2.id')->in($this->post->caseIDList)
+            ->andWhere('t1.version=t2.version')
+            ->fetchGroup('case', 'id');
+
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
+        $this->view->resultList       = $resultList; 
+        $this->view->steps            = $steps;
+        $this->display();
+    }
+
+    /**
      * View test results of a test run.
      * 
      * @param  int    $runID 

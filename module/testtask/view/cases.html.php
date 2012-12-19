@@ -95,7 +95,8 @@ var moduleID   = '<?php echo $moduleID;?>';
               <?php endif;?>
               <?php if(common::hasPriv('testtask', 'batchAssign')):?>
               <?php echo html::select('assignedTo', $users);?>
-              <input class='button-s' value="<?php echo $lang->testtask->batchAssign; ?>" type="button" onclick="casesform.action='<?php echo $this->inLink('batchAssign', "taskID=$task->id");?>';casesform.submit();">
+              <input class='button-s' value="<?php echo $lang->testtask->batchAssign; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchAssign', "taskID=$task->id");?>';casesform.submit();">
+              <input class='button-s' value="<?php echo $lang->testtask->batchRun; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");?>';casesform.submit();">
               <?php endif;?>
               </div>
               <?php echo $pager->show();?>

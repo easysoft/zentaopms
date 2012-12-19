@@ -18,7 +18,6 @@
 var browseType = '<?php echo $browseType;?>';
 var moduleID   = '<?php echo $moduleID;?>';
 </script>
-
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -36,7 +35,6 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
-<form method='post' action='<?php echo $this->inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy");?>'>
   <table class='cont-lt1'>
     <tr valign='top'>
       <td class='side <?php echo $treeClass;?>'>
@@ -52,6 +50,7 @@ var moduleID   = '<?php echo $moduleID;?>';
       <td class='divider <?php echo $treeClass;?>'></td>
       <td>
         <?php $vars = "productID=$productID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+        <form id='batchForm' method='post' action='<?php echo inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy");?>'>
         <table class='table-1 colored tablesorter datatable fixed'>
           <thead>
             <tr class='colhead'>
@@ -108,8 +107,10 @@ var moduleID   = '<?php echo $moduleID;?>';
            <tr>
              <td colspan='10'>
                <div class='f-left'>
-               <?php 
-               if(common::hasPriv('testcase', 'batchEdit')) echo html::selectAll() . html::selectReverse(). html::submitButton($lang->testcase->batchEdit);
+               <?php
+               echo html::selectAll() . html::selectReverse(); 
+               if(common::hasPriv('testcase', 'batchEdit'))echo html::submitButton($lang->testcase->batchEdit, "onclick='changeAction(\"" . inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy") . "\")'");
+               if(common::hasPriv('testtask', 'batchRun')) echo html::submitButton($lang->testtask->batchRun,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
                ?>
                </div>
                <?php $pager->show();?>

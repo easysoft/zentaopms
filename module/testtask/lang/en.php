@@ -20,6 +20,7 @@ $lang->testtask->linkCaseAB     = "Link";
 $lang->testtask->unlinkCase     = "Del";
 $lang->testtask->batchAssign    = "Batch Assign";
 $lang->testtask->runCase        = "Run";
+$lang->testtask->batchRun       = "Batch Run";
 $lang->testtask->results        = "Result";
 $lang->testtask->createBug      = "Bug(+)";
 $lang->testtask->assign         = 'Assign';
