@@ -530,7 +530,7 @@ class testcase extends control
             }
 
             /* Get cases. */
-            if($this->session->testcaseOnlyCondition == 'true')
+            if($this->session->testcaseOnlyCondition)
             {
                 if($taskID)
                 {

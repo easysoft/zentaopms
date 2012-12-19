@@ -50,6 +50,7 @@
         echo html::hidden('case',    $run->case->id);
         echo html::hidden('version', $run->case->version);
         if($run->case->steps)  echo html::hidden('passall', 0);
+        if($nextCase)  echo html::linkButton($lang->testtask->next, inlink('runCase', "runID={$nextCase['runID']}&caseID={$nextCase['caseID']}&version={$nextCase['version']}"));
         if(!$run->case->steps) echo html::hidden('result', '');
         ?>
       </td>

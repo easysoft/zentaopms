@@ -25,6 +25,7 @@ $lang->testtask->results        = "Result";
 $lang->testtask->createBug      = "Bug(+)";
 $lang->testtask->assign         = 'Assign';
 $lang->testtask->cases          = 'Cases';
+$lang->testtask->next           = 'Next';
 
 $lang->testtask->common         = 'Test task';
 $lang->testtask->id             = 'ID';

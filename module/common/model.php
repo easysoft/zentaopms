@@ -506,17 +506,27 @@ class commonModel extends model
         else
         {
             /* Get objectIDs. */
-            $queryCondition = $type . 'QueryCondition';
+            $queryCondition    = $type . 'QueryCondition';
+            $typeOnlyCondition = $type . 'OnlyCondition';
             $queryCondition = $this->session->$queryCondition;
             $orderBy = $type . 'OrderBy';
             $orderBy = $this->session->$orderBy;
             $orderBy = str_replace('`left`', 'left', $orderBy); // process the `left` to left.
-            $objects = $this->dao->select('*')->from($table)
-                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
-                ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
-                ->fetchAll();
+
+            if($this->session->$typeOnlyCondition)
+            {
+                $objects = $this->dao->select('*')->from($table)
+                    ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                    ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
+                    ->fetchAll();
+            }
+            else
+            {
+                $objects = $this->dbh->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
+            }
+
             $tmpObjectIDs = array();
-            foreach($objects as $object) $tmpObjectIDs[$object->id] = $object->id;
+            foreach($objects as $object) $tmpObjectIDs[$object->id] = (!$this->session->$typeOnlyCondition and $type == 'testcase') ? $object->case : $object->id;
             $objectIDs    = ',' . implode(',', $tmpObjectIDs) . ',';
             $this->session->set($type . 'IDs', $objectIDs);
         }
@@ -563,10 +573,10 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public function saveQueryCondition($sql, $objectType, $onlyCondition = 'true')
+    public function saveQueryCondition($sql, $objectType, $onlyCondition = true)
     {
         /* Set the query condition session. */
-        if($onlyCondition == 'true')
+        if($onlyCondition)
         {
             $queryCondition = explode('WHERE', $sql);
             $queryCondition = explode('ORDER', $queryCondition[1]);

@@ -230,7 +230,7 @@ class testtask extends control
         {
             $this->view->runs = $this->testtask->getUserRuns($taskID, $this->session->user->account, $orderBy, $pager);
         }
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', 'false');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         /* Save testcaseIDs session for get the pre and next testcase. */
         $testcaseIDs = '';
@@ -443,7 +443,19 @@ class testtask extends control
         if(!$caseID) $run = $this->testtask->getRunById($runID);
         if($caseID)  $run->case = $this->loadModel('testcase')->getById($caseID, $version);
 
-        $this->view->run = $run;
+        $nextCase   = '';
+        $caseID     = $caseID ? $caseID : $run->case->id;
+        $preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        if($runID and $preAndNext->next) $preAndNext->next = $this->dao->select('*')->from(TABLE_TESTRUN)->where('`case`')->eq($preAndNext->next->id)->fetch();
+        if($preAndNext->next)
+        {
+            $nextCase['runID']   = $runID ? $preAndNext->next->id : 0;
+            $nextCase['caseID']  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
+            $nextCase['version'] = $preAndNext->next->version;
+        }
+        
+        $this->view->run      = $run;
+        $this->view->nextCase = $nextCase;
 
         die($this->display());
     }

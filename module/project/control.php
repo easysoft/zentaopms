@@ -503,7 +503,7 @@ class project extends control
 
         /* The pager. */
         $stories    = $this->story->getProjectStories($projectID, $orderBy);
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', 'false');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
 

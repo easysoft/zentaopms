@@ -878,7 +878,7 @@ class story extends control
 
             /* Get stories. */
             $stories = array();
-            if($this->session->storyOnlyCondition == 'true')
+            if($this->session->storyOnlyCondition)
             {
                 $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
