@@ -44,7 +44,7 @@ function setField(fieldName, fieldNO)
 
     if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
     {
-        $("#value" + fieldNO).datePicker({createButton:true, startDate:startDate})
+        $("#value" + fieldNO).datePicker({createButton:true, startDate:startDate, displayDynamic:true})
         $("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
         var groupItems = <?php echo $config->search->groupItems?>;
         var maxNO      = 2 * groupItems;
