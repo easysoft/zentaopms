@@ -423,7 +423,7 @@ class actionModel extends model
         /* If the sql not include 'project', add check purview for project. */
         if(strpos($actionQuery, $allProject) === false)
         {
-            $actionQuery = $actionQuery . 'AND `project`' . helper::dbIN(array_keys($projects));
+            $actionQuery = $actionQuery . ' AND `project`' . helper::dbIN(array_keys($projects));
         }
         else
         {

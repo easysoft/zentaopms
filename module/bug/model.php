@@ -1100,7 +1100,7 @@ class bugModel extends model
         /* check the purview of projects.*/
         if(strpos($this->session->bugQuery, '`project`') === false) 
         {
-            $var = $this->session->bugQuery . 'AND `project`' . helper::dbIN(array_keys($projects));
+            $var = $this->session->bugQuery . ' AND `project`' . helper::dbIN(array_keys($projects));
             $this->session->set('bugQuery', "$var");
         }
 
