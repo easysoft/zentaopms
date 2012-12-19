@@ -177,12 +177,12 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function getByQuery($query, $pager = null)
+    public function getByQuery($query, $pager = null, $orderBy = 'id')
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where($query)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id')
+            ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
     }
@@ -316,6 +316,7 @@ class userModel extends model
     {
         $oldUsers     = $this->dao->select('id, account')->from(TABLE_USER)->where('id')->in(array_keys($this->post->account))->fetchPairs('id', 'account');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($this->post->account)->fetchGroup('account', 'id');
+
         foreach($this->post->account as $id => $account)
         {
             $users[$id]['account']  = $account;
@@ -326,7 +327,7 @@ class userModel extends model
             $users[$id]['email']    = $this->post->email[$id];
             $users[$id]['join']     = $this->post->join[$id];
 
-            if(isset($accountGroup[$account]) and count($accountGroup[$account]) >1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
             if(!validater::checkReg($users[$id]['account'], '|(.){3,}|')) die(js::error(sprintf($this->lang->user->error->account, $id)));
             if($users[$id]['realname'] == '') die(js::error(sprintf($this->lang->user->error->realname, $id)));
             if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) die(js::error(sprintf($this->lang->user->error->mail, $id)));

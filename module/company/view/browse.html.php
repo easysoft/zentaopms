@@ -13,7 +13,6 @@
 <?php 
 include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
-include '../../common/view/tablesorter.html.php';
 ?>
 <table class='cont-lt1'>
   <tr>
@@ -38,16 +37,17 @@ include '../../common/view/tablesorter.html.php';
       <table class='table-1 tablesorter'>
         <thead>
         <tr class='colhead'>
-          <th class='w-id'><?php echo $lang->idAB;?></th>
-          <th><?php echo $lang->user->realname;?></th>
-          <th><?php echo $lang->user->account;?></th>
-          <th><?php echo $lang->user->role;?></th>
-          <th><?php echo $lang->user->email;?></th>
-          <th><?php echo $lang->user->gender;?></th>
-          <th><?php echo $lang->user->phone;?></th>
-          <th><?php echo $lang->user->join;?></th>
-          <th><?php echo $lang->user->last;?></th>
-          <th><?php echo $lang->user->visits;?></th>
+          <?php $vars = "param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+          <th class='w-id'><?php common::printorderlink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th><?php common::printorderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
+          <th><?php common::printOrderLink('account',  $orderBy, $vars, $lang->user->account);?></th>
+          <th><?php common::printOrderLink('role',     $orderBy, $vars, $lang->user->role);?></th>
+          <th><?php common::printOrderLink('email',    $orderBy, $vars, $lang->user->email);?></th>
+          <th><?php common::printOrderLink('gander',   $orderBy, $vars, $lang->user->gender);?></th>
+          <th><?php common::printOrderLink('phone',    $orderBy, $vars, $lang->user->phone);?></th>
+          <th><?php common::printOrderLink('join',     $orderBy, $vars, $lang->user->join);?></th>
+          <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
+          <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
           <th class='w-80px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>

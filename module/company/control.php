@@ -42,7 +42,7 @@ class company extends control
      * @access public
      * @return void
      */
-    public function browse($param = 0, $type = 'bydept', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($param = 0, $type = 'bydept', $orderBy = 'id', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('search');
         $this->lang->set('menugroup.company', 'company');
@@ -66,7 +66,7 @@ class company extends control
         if($type == 'bydept')
         {
             $childDeptIds = $this->dept->getAllChildID($deptID);
-            $users        = $this->dept->getUsers($childDeptIds, $pager);
+            $users        = $this->dept->getUsers($childDeptIds, $pager, $orderBy);
         }
         else
         {
@@ -83,7 +83,7 @@ class company extends control
                     $this->session->set('userQuery', ' 1 = 1');
                 }
             }
-            $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager);
+            $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $orderBy);
         }
 
         $this->view->header      = $header;
@@ -92,8 +92,11 @@ class company extends control
         $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
         $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
         $this->view->parentDepts = $this->dept->getParents($deptID);
+        $this->view->orderBy     = $orderBy;
         $this->view->deptID      = $deptID;
         $this->view->pager       = $pager;
+        $this->view->param       = $param;
+        $this->view->type        = $type;
 
         $this->display();
     }
