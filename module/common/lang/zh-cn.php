@@ -387,7 +387,7 @@ $lang->datepicker->dpText->TEXT_NEXT_YEAR   = '明年';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = '下月';
 $lang->datepicker->dpText->TEXT_CLOSE       = '关闭';
 $lang->datepicker->dpText->TEXT_DATE        = '选择时间段';
-$lang->datepicker->dpText->TEXT_CHOOSE_DATE = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+$lang->datepicker->dpText->TEXT_CHOOSE_DATE = '选择日期';
 
 $lang->datepicker->dayNames     = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');

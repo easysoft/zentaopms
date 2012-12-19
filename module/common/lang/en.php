@@ -387,7 +387,7 @@ $lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Next year';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Next month';
 $lang->datepicker->dpText->TEXT_CLOSE       = 'Close';
 $lang->datepicker->dpText->TEXT_DATE        = 'Please select date range';
-$lang->datepicker->dpText->TEXT_CHOOSE_DATE = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+$lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choose date';
 
 $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 $lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
