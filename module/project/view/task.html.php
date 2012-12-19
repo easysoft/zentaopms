@@ -111,7 +111,7 @@ var browseType  = '<?php echo $browseType;?>';
             <td><?php echo substr($task->openedDate, 5, 6);?></th>
             <?php endif;?>
 
-            <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
+            <td <?php echo $class;?>><?php echo $task->assignedTo == 'closed' ? 'Closed' : $task->assignedToRealName;?></td>
             <td><?php echo $users[$task->finishedBy];?></td>
 
             <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
