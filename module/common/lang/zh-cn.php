@@ -371,4 +371,26 @@ define('DT_DATE4',     'n月j日');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
 
+/* datepicker 时间*/
+$lang->datepicker = new stdclass();
+
+$lang->datepicker->dpText = new stdclass();
+$lang->datepicker->dpText->TEXT_OR          = '或 ';
+$lang->datepicker->dpText->TEXT_PREV_YEAR   = '去年';
+$lang->datepicker->dpText->TEXT_PREV_MONTH  = '上月';
+$lang->datepicker->dpText->TEXT_PREV_WEEK   = '上周';
+$lang->datepicker->dpText->TEXT_YESTERDAY   = '昨天';
+$lang->datepicker->dpText->TEXT_THIS_MONTH  = '本月';
+$lang->datepicker->dpText->TEXT_THIS_WEEK   = '本周';
+$lang->datepicker->dpText->TEXT_TODAY       = '今天';
+$lang->datepicker->dpText->TEXT_NEXT_YEAR   = '明年';
+$lang->datepicker->dpText->TEXT_NEXT_MONTH  = '下月';
+$lang->datepicker->dpText->TEXT_CLOSE       = '关闭';
+$lang->datepicker->dpText->TEXT_DATE        = '选择时间段';
+$lang->datepicker->dpText->TEXT_CHOOSE_DATE = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+$lang->datepicker->dayNames     = array('日', '一', '二', '三', '四', '五', '六');
+$lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');
+$lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
+
 include (dirname(__FILE__) . '/menuOrder.php');

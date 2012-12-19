@@ -371,4 +371,26 @@ define('DT_DATE4',     'M j');
 define('DT_TIME1',     'H:i:s');
 define('DT_TIME2',     'H:i');
 
+/* datepicker 时间*/
+$lang->datepicker = new stdclass();
+
+$lang->datepicker->dpText = new stdclass();
+$lang->datepicker->dpText->TEXT_OR          = 'Or ';
+$lang->datepicker->dpText->TEXT_PREV_YEAR   = 'Last year';
+$lang->datepicker->dpText->TEXT_PREV_MONTH  = 'Last month';
+$lang->datepicker->dpText->TEXT_PREV_WEEK   = 'Last week';
+$lang->datepicker->dpText->TEXT_YESTERDAY   = 'Yesterday';
+$lang->datepicker->dpText->TEXT_THIS_MONTH  = 'This month';
+$lang->datepicker->dpText->TEXT_THIS_WEEK   = 'This week';
+$lang->datepicker->dpText->TEXT_TODAY       = 'Today';
+$lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Next year';
+$lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Next month';
+$lang->datepicker->dpText->TEXT_CLOSE       = 'Close';
+$lang->datepicker->dpText->TEXT_DATE        = 'Please select date range';
+$lang->datepicker->dpText->TEXT_CHOOSE_DATE = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+$lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+$lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+$lang->datepicker->monthNames   = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+
 include (dirname(__FILE__) . '/menuOrder.php');
