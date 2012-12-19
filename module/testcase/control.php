@@ -422,7 +422,7 @@ class testcase extends control
             $showSuhosinInfo = false;
 
             /* Get all cases. */
-            $allCases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')->where($this->session->testcaseQueryCondition)->orderBy($orderBy)->fetchAll('id');
+            $allCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->orderBy($orderBy)->fetchAll('id');
 
             /* Set product menu. */
             $this->testcase->setMenu($this->products, $productID);
