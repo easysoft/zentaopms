@@ -199,7 +199,7 @@ class release extends control
         if(!empty($build))
         {
             $stories = $this->story->getProjectStories($build->project, $orderBy);
-            $bugs    = $this->bug->getProjectBugs($build->project);
+            $bugs    = $this->bug->getReleaseBugs($buildID, $productID);
         }
         $this->view->productID = $productID;
         $this->view->stories   = $stories;

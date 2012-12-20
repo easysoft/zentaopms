@@ -500,6 +500,30 @@ class bugModel extends model
     }
 
     /**
+     * Get bugs according to buildID and productID.
+     * 
+     * @param  int    $buildID 
+     * @param  int    $productID 
+     * @access public
+     * @return object
+     */
+    public function getReleaseBugs($buildID, $productID)
+    {
+        $project = $this->dao->select('t1.begin')
+            ->from(TABLE_PROJECT)->alias('t1') 
+            ->leftJoin(TABLE_BUILD)->alias('t2')
+            ->on('t1.id = t2.project')
+            ->where('t2.id')->eq($buildID)
+            ->fetch();
+        $bugs = $this->dao->select('*')->from(TABLE_BUG) 
+            ->where('resolvedDate')->ge($project->begin)
+            ->andWhere('product')->eq($productID)
+            ->orderBy('openedDate ASC')
+            ->fetchAll();
+        return $bugs;
+    }
+
+    /**
      * Get bug info from a result.
      * 
      * @param  int    $resultID 
