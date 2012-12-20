@@ -1083,6 +1083,7 @@ class bugModel extends model
     {
         return $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where("t2.status = 'active'")
+            ->andWhere('t1.product')->eq($productID)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.version > t1.storyVersion')
             ->andWhere('t1.project')->in(array_keys($projects))
