@@ -443,7 +443,7 @@ EOT;
      */
     public static function commonButton($label = '', $misc = '')
     {
-        return " <input type='button' value='$label' class='button-c' $misc /> ";
+        return " <input type='button' value='$label' $misc class='button-c' /> ";
     }
 
     /**
@@ -467,7 +467,7 @@ EOT;
             $link .= $onlybody;
         }
 
-        return " <input type='button' value='$label' class='button-c' $misc onclick='location.href=\"$link\"' /> ";
+        return " <input type='button' value='$label' $misc onclick='location.href=\"$link\"' class='button-c' /> ";
     }
 
     /**

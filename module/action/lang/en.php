@@ -24,7 +24,8 @@ $lang->action->action     = 'Action';
 $lang->action->actionID   = 'ActionID';
 $lang->action->date       = 'Date';
 $lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic";
-$lang->action->toggleDiff = 'Toggle Diff';
+$lang->action->textDiff   = 'Text mode';
+$lang->action->original   = 'Original content';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = 'Today';

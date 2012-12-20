@@ -1,17 +1,18 @@
 <script language='Javascript'>
 var fold   = '<?php echo $lang->fold;?>';
 var unfold = '<?php echo $lang->unfold;?>';
-function switchChange(historyID,type)
+function switchChange(historyID)
 {
-    if(type == unfold)
+    changeClass = $('#switchButton' + historyID).attr('class');
+    if(changeClass.indexOf('change-show') > 0)
     {
-        $('#switchButton' + historyID).val(fold);
+        $('#switchButton' + historyID).attr('class', changeClass.replace('change-show', 'change-hide'));
         $('#changeBox' + historyID).show();
         $('#changeBox' + historyID).prev('.changeDiff').show();
     }
     else
     {
-        $('#switchButton' + historyID).val(unfold);
+        $('#switchButton' + historyID).attr('class', changeClass.replace('change-hide', 'change-show'));
         $('#changeBox' + historyID).hide();
         $('#changeBox' + historyID).prev('.changeDiff').hide();
     }
@@ -19,6 +20,17 @@ function switchChange(historyID,type)
 
 function toggleStripTags(obj)
 {
+    var diffClass = $(obj).attr('class');
+    if(diffClass.indexOf('diff-all') > 0)
+    {
+        $(obj).attr('class', diffClass.replace('diff-all', 'diff-short'));
+        $(obj).attr('title', '<?php echo $lang->action->textDiff?>');
+    }
+    else
+    {
+        $(obj).attr('class', diffClass.replace('diff-short', 'diff-all'));
+        $(obj).attr('title', '<?php echo $lang->action->original?>');
+    }
     var boxObj  = $(obj).next();
     var oldDiff = '';
     var newDiff = '';
@@ -30,17 +42,40 @@ function toggleStripTags(obj)
     })
 }
 
-function toggleShow()
+function toggleShow(obj)
 {
+    var orderClass = $(obj).find('span').attr('class');
+    if(orderClass == 'change-show')
+    {
+        $(obj).find('span').attr('class', 'change-hide');
+    }
+    else
+    {
+        $(obj).find('span').attr('class', 'change-show');
+    }
     $('.changes').each(function(){
         var box = $(this).parent();
         var switchButtonID = ($(box).find('span').find("input[type='button']").attr('id'));
-        switchChange(switchButtonID.replace('switchButton', ''), $('#' + switchButtonID).val());
+        switchChange(switchButtonID.replace('switchButton', ''));
     })
 }
 
+function toggleOrder(obj)
+{
+    var orderClass = $(obj).find('span').attr('class');
+    if(orderClass == 'log-asc')
+    {
+        $(obj).find('span').attr('class', 'log-desc');
+    }
+    else
+    {
+        $(obj).find('span').attr('class', 'log-asc');
+    }
+    $("#historyItem li").reverseOrder();
+}
+
 $(function(){
-    var diffButton = "<input type='button' onclick='toggleStripTags(this)' class='hidden changeDiff' value='<?php echo $lang->action->toggleDiff?>' >";
+    var diffButton = "<input type='button' onclick='toggleStripTags(this)' class='hidden changeDiff diff-all' title='<?php echo $lang->action->original?>' >";
     var newBoxID = ''
     var oldBoxID = ''
     $('blockquote').each(function(){
@@ -61,14 +96,16 @@ $(function(){
 <div id='actionbox'>
 <fieldset>
   <legend>
-    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . "[<span title='$lang->reverse' class='log-reverse'>&nbsp;</span>]";?></span>
-    <span onclick='toggleShow();' class='hand'><?php echo "[<span title='$lang->switchDisplay' class='switchDisplay'>&nbsp;</span>]";?></span>
+  <?php echo $lang->history?>
+    <span onclick='toggleOrder(this)' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'>&nbsp;</span>";?></span>
+    <span onclick='toggleShow(this);' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show'>&nbsp;</span>";?></span>
   </legend>
 <?php else:?>
 <table class='table-1' id='actionbox'>
   <caption>
-    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo $lang->history . "[<span title='$lang->reverse' class='log-reverse'>&nbsp;</span>]";?></span>
-    <span onclick='toggleShow();' class='hand'><?php echo "[<span title='$lang->switchDisplay' class='switchDisplay'>&nbsp;</span>]";?></span>
+    <?php echo $lang->history?>
+    <span onclick='$("#historyItem li").reverseOrder();' class='hand'> <?php echo "<span title='$lang->reverse' class='log-asc'>&nbsp;</span>";?></span>
+    <span onclick='toggleShow();' class='hand'><?php echo "<span title='$lang->switchDisplay' class='change-show'>&nbsp;</span>";?></span>
   </caption>
   <tr><td>
 <?php endif;?>
@@ -84,7 +121,7 @@ $(function(){
       ?>
       <span>
         <?php $this->action->printAction($action);?>
-        <?php if(!empty($action->history)) echo html::commonButton($lang->unfold, "id=switchButton$i onclick=switchChange($i,this.value)");?>
+        <?php if(!empty($action->history)) echo html::commonButton('', "id=switchButton$i class='hand change-show' onclick=switchChange($i)");?>
       </span>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
       <?php if(!empty($action->comment)) echo "<div class='history'>";?>

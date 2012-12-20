@@ -23,3 +23,19 @@ function switchAccount(account, method)
     location.href=link;
 }
 
+var mailsuffix = '';
+var account    = new Array();
+function setDefaultEmail(num)
+{
+    var mailValue = $('.email_' + num).val();
+    if(mailValue.indexOf('@') <= 0) return;
+    if(mailValue.indexOf('@') > 0) mailValue = mailValue.substr(mailValue.indexOf('@'));
+    mailsuffix = mailValue;
+}
+
+function changeEmail(num)
+{
+    var mailValue = $('.email_' + num).val();
+    if(mailsuffix != '' && (mailValue == '' || mailValue == account[num] + mailsuffix)) $('.email_' + num).val($('.account_' + num).val() + mailsuffix);
+    account[num] = $('.account_' + num).val();
+}

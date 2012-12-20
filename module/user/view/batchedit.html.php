@@ -26,13 +26,15 @@
       <th><?php echo $lang->user->email;?></th>
       <th class='w-150px'><?php echo $lang->user->join;?></th>
     </tr>
+    <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
+    <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
     <?php foreach($users as $user):?>
     <tr class='a-center'>
       <td><?php echo $user->id;?></td>
-      <td><?php echo html::select("dept[$user->id]", $depts, $user->dept, "class='select-2'");?>
+      <td><?php echo html::select("dept[$user->id]", $depts, empty($user->dept) ? 'ditto' : $user->dept, "class='select-2'");?>
       <td><?php echo html::input("account[$user->id]", $user->account, "class='text-2' autocomplete='off'");?></td>
       <td><?php echo html::input("realname[$user->id]", $user->realname, "class='text-2'");?></td>
-      <td><?php echo html::select("role[$user->id]", $lang->user->roleList, $user->role, "class='select-2'");?>
+      <td><?php echo html::select("role[$user->id]", $lang->user->roleList, empty($user->role) ? 'ditto' : $user->role, "class='select-2'");?>
       <td><?php echo html::input("commiter[$user->id]", $user->commiter, "class='text-3'");?></td>
       <td><?php echo html::input("email[$user->id]", $user->email, "class='text-3'");?></td>
       <td><?php echo html::input("join[$user->id]", $user->join, "class='text-2 date'");?></td>

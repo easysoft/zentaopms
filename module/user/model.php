@@ -222,39 +222,42 @@ class userModel extends model
      */
     public function batchCreate()
     {
-        $users = fixer::input('post')->get(); 
-        $data  = array();
+        $users    = fixer::input('post')->get(); 
+        $data     = array();
+        $accounts = array();
         for($i = 0; $i < $this->config->user->batchCreate; $i++)
         {
             if($users->account[$i] != '')  
             {
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
                 if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));
+                if(in_array($users->account[$i], $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));
                 if(!validater::checkReg($users->account[$i], '|(.){3,}|')) die(js::error(sprintf($this->lang->user->error->account, $i+1)));
                 if($users->realname[$i] == '') die(js::error(sprintf($this->lang->user->error->realname, $i+1)));
                 if($users->email[$i] and !validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i+1)));
-                $users->password[$i] =  (isset($prev['password']) and $users->ditto[$i] == 'on') ? $prev['password'] : $users->password[$i];
+                $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and empty($users->password[$i])) ? $prev['password'] : $users->password[$i];
+                a($users->password[$i]);
                 if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i+1)));
+                if(empty($users->role[$i])) die(js::error(sprintf($this->lang->user->error->role, $id)));
 
-                $data[$i]->dept     = (isset($prev['dept']) and $users->dept[$i] == 'ditto') ? $prev['dept'] : $users->dept[$i];
+                $data[$i]->dept     = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
                 $data[$i]->account  = $users->account[$i];
                 $data[$i]->realname = $users->realname[$i];
-                $data[$i]->role     = (isset($prev['role']) and $users->role[$i] == 'ditto') ? $prev['role'] : $users->role[$i];
+                $data[$i]->role     = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5($users->password[$i]); 
 
-                $prev['dept'] = $data[$i]->dept;
-                $prev['role'] = $data[$i]->role;
+                $accounts[$i]     = $data[$i]->account;
+                $prev['dept']     = $data[$i]->dept;
+                $prev['role']     = $data[$i]->role;
                 $prev['password'] = $users->password[$i];
             }
         }
+
         foreach($data as $user)
         {
-            $this->dao->insert(TABLE_USER)->data($user)
-                ->autoCheck()
-                ->batchCheck($this->config->user->create->requiredFields, 'notempty')
-                ->exec();
+            $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
             if(dao::isError()) 
             {
                 echo js::error(dao::getError());
@@ -317,20 +320,27 @@ class userModel extends model
         $oldUsers     = $this->dao->select('id, account')->from(TABLE_USER)->where('id')->in(array_keys($this->post->account))->fetchPairs('id', 'account');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($this->post->account)->fetchGroup('account', 'id');
 
+        $accounts = array();
         foreach($this->post->account as $id => $account)
         {
             $users[$id]['account']  = $account;
-            $users[$id]['dept']     = $this->post->dept[$id];
             $users[$id]['realname'] = $this->post->realname[$id];
-            $users[$id]['role']     = $this->post->role[$id];
             $users[$id]['commiter'] = $this->post->commiter[$id];
             $users[$id]['email']    = $this->post->email[$id];
             $users[$id]['join']     = $this->post->join[$id];
+            $users[$id]['dept']     = $this->post->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $this->post->dept[$id];
+            $users[$id]['role']     = $this->post->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $this->post->role[$id];
 
             if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(in_array($account, $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
             if(!validater::checkReg($users[$id]['account'], '|(.){3,}|')) die(js::error(sprintf($this->lang->user->error->account, $id)));
             if($users[$id]['realname'] == '') die(js::error(sprintf($this->lang->user->error->realname, $id)));
             if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) die(js::error(sprintf($this->lang->user->error->mail, $id)));
+            if(empty($users[$id]['role'])) die(js::error(sprintf($this->lang->user->error->role, $id)));
+
+            $accounts[$id] = $account;
+            $prev['dept']  = $users[$id]['dept'];
+            $prev['role']  = $users[$id]['role'];
         }
 
         foreach($users as $id => $user)

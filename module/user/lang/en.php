@@ -113,3 +113,4 @@ $lang->user->error->accountDupl   = "ID %s，this account has been exist";
 $lang->user->error->realname      = "ID %s，please input realname";
 $lang->user->error->password      = "ID %s，password must be six letters at least";
 $lang->user->error->mail          = "ID %s，please input correct email address";
+$lang->user->error->role          = "ID %s，please input role";

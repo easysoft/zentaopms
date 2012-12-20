@@ -114,6 +114,7 @@ $lang->user->error->accountDupl   = "ID %s，该用户名已经存在";
 $lang->user->error->realname      = "ID %s，必须填写真实姓名";
 $lang->user->error->password      = "ID %s，密码必须六位以上";
 $lang->user->error->mail          = "ID %s，请填写正确的邮箱地址";
+$lang->user->error->role          = "ID %s，角色不能为空";
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common  = '联系人';

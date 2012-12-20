@@ -24,7 +24,8 @@ $lang->action->action     = '动作';
 $lang->action->actionID   = '记录ID';
 $lang->action->date       = '日期';
 $lang->action->trashTips  = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
-$lang->action->toggleDiff = '切换DIFF';
+$lang->action->textDiff   = '文本格式';
+$lang->action->original   = '原始格式';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';
