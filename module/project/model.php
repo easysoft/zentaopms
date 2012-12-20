@@ -69,7 +69,8 @@ class projectModel extends model
     public function setMenu($projects, $projectID, $extra = '')
     {
         /* Check the privilege. */
-        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($this->getById($projectID)))
+        $project = $this->getById($projectID);
+        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($project))
         {
             echo(js::alert($this->lang->project->accessDenied));
             die(js::locate('back'));
@@ -77,6 +78,13 @@ class projectModel extends model
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
+
+        if($this->cookie->projectMode == 'noclosed' and $project->status == 'done') 
+        {
+            setcookie('projectMode', 'all');
+            $this->cookie->projectMode = 'all';
+        }
+
         $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName, $extra);
         foreach($this->lang->project->menu as $key => $menu)
         {
