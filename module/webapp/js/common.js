@@ -7,23 +7,28 @@ function popup(width, height)
     if(width == 0 || height == 0) $("a.popup").colorbox({width:width, height:height});
 }
 
-var show = false;
-var url  = '';
-function toggleShowapp(webappID)
+var show = new Array();
+var url  = new Array();
+function toggleShowapp(webappID, webappName)
 {
-    height = document.body.clientHeight - 60;
-    if(!show)
+    if(show[webappID] == undefined)
     {
-        if(url == '') url = $('#useapp' + webappID).attr('href');
+        height = document.documentElement.clientHeight - 110;
+        if(url[webappID] == undefined) url[webappID] = $('#useapp' + webappID).attr('href');
         $('#useapp' + webappID).attr('href', '#iframe' + webappID);
-        var html = "<tr id='iframe" + webappID + "'><td colspan='2'><p align='right'><button class='button-c' onclick='toggleShowapp(" + webappID + ")'>" + packup + "</button></p><iframe src='" + url + "' height='" + height + "' width='100%'></iframe></td></tr>";
-        $('#webapp' + webappID).append(html);
-        show = true;
+        var html = "<tr id='iframe" + webappID + "'><td><p>" + webappName + "<span class='f-right'><button class='button-c' onclick='toggleShowapp(" + webappID + ", \" " + webappName + "\")'>" + packup + "</button></sapn></p><iframe src='" + url[webappID] + "' height='" + height + "' width='100%'></iframe></td></tr>";
+        $('#webapps').parent().parent().after(html);
+        show[webappID] = true;
+    }
+    else if(show[webappID])
+    {
+        $('#iframe' + webappID).hide();
+        show[webappID] = false;
     }
     else
     {
-        $('#iframe' + webappID).remove();
-        show = false;
+        $('#iframe' + webappID).show();
+        show[webappID] = true;
     }
 }
 

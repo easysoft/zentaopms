@@ -192,7 +192,9 @@ class webappModel extends model
      */
     public function getLocalAppByID($webappID)
     {
-        return $this->dao->select('*')->from(TABLE_WEBAPP)->where('id')->eq($webappID)->fetch();
+        $webapp =  $this->dao->select('*')->from(TABLE_WEBAPP)->where('id')->eq($webappID)->fetch();
+        if($webapp and is_numeric($webapp->icon)) $webapp->icon = $this->loadModel('file')->getByID($webapp->icon);
+        return $webapp;
     }
 
     /**
@@ -212,7 +214,7 @@ class webappModel extends model
         $installWebapp->name      = $webapp->name;
         $installWebapp->author    = $webapp->author;
         $installWebapp->url       = $webapp->url;
-        $installWebapp->icon      = $this->config->webapp->url . $webapp->icon;
+        $installWebapp->icon      = $webapp->icon ? $this->config->webapp->url . $webapp->icon : '';
         $installWebapp->target    = $webapp->target;
         $installWebapp->size      = $webapp->size;
         $installWebapp->desc      = $webapp->desc;
@@ -232,8 +234,27 @@ class webappModel extends model
      */
     public function update($webappID)
     {
-        $data = fixer::input('post')->get();
-        $this->dao->update(TABLE_WEBAPP)->data($data)->where('id')->eq($webappID)->exec();
+        $webapp = $this->getLocalAppByID($webappID);
+        $data = fixer::input('post')->remove('files')->get();
+
+        $this->dao->update(TABLE_WEBAPP)->data($data)->where('id')->eq($webappID)->check('url', 'unique', "id != $webappID", false)->exec();
+
+        if(!dao::isError())
+        {
+            if($_FILES)
+            {
+                $this->loadModel('file');
+                if(empty($webapp->icon))
+                {
+                    $icon = $this->file->saveUpload('webapp', $webappID);
+                    $this->dao->update(TABLE_WEBAPP)->set('icon')->eq(key($icon))->where('id')->eq($webappID)->exec();
+                }
+                else
+                {
+                    $this->file->replaceFile($webapp->icon->id, 'files');
+                }
+            }
+        }
     }
 
     /**

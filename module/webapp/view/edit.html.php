@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form method='post' target='hiddenwin'>
+<form method='post' target='hiddenwin' enctype='multipart/form-data'>
 <table class='table-1'>
   <caption><?php echo $lang->webapp->edit?></caption>
   <tr>
@@ -40,6 +40,17 @@
     <th><?php echo $lang->webapp->desc?></th>
     <td><?php echo html::textarea('desc', $webapp->desc, "class='area-1' rows='5'")?></td>
   </tr>
+  <?php if($webapp->addType == 'custom'):?>
+  <tr>
+    <th><?php echo $lang->webapp->icon?></th>
+    <td>
+    <?php
+    if($webapp->icon) echo "<p><img src='{$webapp->icon->webPath}' /></p>";
+    echo html::file('files', '', "class='text-3'");
+    ?>
+    </td>
+  </tr>
+  <?php endif;?>
   <tr><td colspan='2' align='center'><?php echo html::submitButton()?></td></tr>
 </table>
 </form>

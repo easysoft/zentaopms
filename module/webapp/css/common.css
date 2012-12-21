@@ -8,4 +8,8 @@
 .exttable {border-color:#CCC9C9; border-top:none;}
 .exttable td{border-color:#CCC9C9}
 
+#webapps li {float:left; width:25%; list-style:none}
+#webapps li table {border:0px; width:95%; background:#f0f0f0}
+#webapps li table .webapp-name{font-size:14px}
+
 small{font-weight:normal}

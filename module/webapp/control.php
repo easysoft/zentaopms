@@ -87,7 +87,7 @@ class webapp extends control
         {
             $this->webapp->update($webappID);
             if(dao::isError())die(js::error(dao::getError()));
-            die(js::reload('parent.parent'));
+            die(js::reload('parent'));
         }
 
         $this->view->modules = $this->webapp->getModules();

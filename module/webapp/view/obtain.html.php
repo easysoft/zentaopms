@@ -37,30 +37,21 @@
     <td class='divider'></td>
     <td> 
       <?php if($webapps):?>
-      <?php foreach($webapps as $webapp):?>
-        <table class='table-1 exttable'>
-          <caption>
-            <div class='f-left'><?php echo "<img src='{$config->webapp->url}{$webapp->icon}' /> " . $webapp->name;?></div>
-          </caption> 
-          <tr valign='middle'>
-            <td>
-              <div class='mb-10px'><?php echo $webapp->desc;?></div>
-              <div>
-                <?php
-                echo "<strong>{$lang->webapp->author}</strong>：     {$webapp->author} ";
-                echo "<strong>{$lang->webapp->target}</strong>：     {$lang->webapp->targetList[$webapp->target]} ";
-                if(!empty($webapp->size)) echo "<strong>{$lang->webapp->size}</strong>： {$webapp->size} ";
-                echo "<strong>{$lang->webapp->downloads}</strong>：  {$webapp->downloads} ";
-                echo "<strong>{$lang->webapp->grade}</strong>： ",   html::printStars($webapp->stars);
-                ?>
-              </div>
-            </td>
-            <td class='w-200px a-right'>
-            <?php echo isset($installeds[$webapp->id]) ? html::commonButton($lang->webapp->installed, "disabled='disabled' style='color:gray'") : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='button-c iframe'")?>
-          </td></tr>
+      <ul id='webapps'>
+        <?php foreach($webapps as $webapp):?>
+        <li>
+          <table class='fixed exttable'>
+            <tr>
+              <td rowspan='4' width='73' height='73'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : $config->webapp->url . $webapp->icon?>' width='72' height='72' /></td>
+              <td class='webapp-name'><h4><?php echo $webapp->name?></h4></td>
+            </tr>
+            <tr><td><span title='<?php echo $webapp->desc?>'><?php echo empty($webapp->desc) ? '&nbsp;' : $webapp->desc?></span></td></tr>
+            <tr><td><?php echo isset($installeds[$webapp->id]) ? html::commonButton($lang->webapp->installed, "disabled='disabled' style='color:gray'") : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='button-c iframe'")?></td></tr>
           </table>
+        </li>
         <?php endforeach;?>
-        <?php if($pager) $pager->show();?>
+      </ul>
+      <p class='c-left'><?php if($pager) $pager->show();?></p>
       <?php else:?>
         <div class='box-title'><?php echo $lang->webapp->errorOccurs;?></div>
         <div class='box-content'><?php echo $lang->webapp->errorGetExtensions;?></div>

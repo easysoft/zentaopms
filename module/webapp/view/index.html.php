@@ -15,44 +15,44 @@
 <table class='table-1'>
   <tr>
     <td>
+      <ul id='webapps'>
     <?php foreach($webapps as $webapp):?>
-    <table class='table-1 exttable' id='webapp<?php echo $webapp->id?>'>
-      <caption><img src='<?php echo $webapp->icon?>'> <?php echo "$webapp->name";?></caption> 
-      <tr valign='middle'>
-        <td>
-          <div class='mb-10px'><?php echo $webapp->desc;?></div>
-          <div>
-            <?php
-            echo "{$lang->webapp->author} :     <i>{$webapp->author}</i> ";
-            echo "{$lang->webapp->addType}:     <i>{$lang->webapp->addTypeList[$webapp->addType]}</i> ";
-            ?>
-          </div>
-        </td>
-        <td class='w-220px a-right'>
-        <?php
-        $uninstallCode = html::a(inlink('uninstall',  "webapp=$webapp->id"), $lang->webapp->uninstall, 'hiddenwin',  "class='button-c'");
-        $url     = $webapp->addType == 'custom' ? $webapp->url : $config->webapp->url . "/webapp-showapp-{$webapp->appid}.html";
-        $method  = '';
-        $popup   = '';
-        $target  = '_self';
-        if($webapp->target == 'blank') $target   = '_blank';
-        if($webapp->target == 'iframe')$method   = "toggleShowapp($webapp->id);";
-        if($webapp->target == 'popup')
-        {
-            $width  = 0;
-            $height = 0;
-            if($webapp->size) list($width, $height) = explode('x', $webapp->size);
-            $method = "popup($width, $height);";
-            $popup  = 'popup';
-        }
-        $useAppCode    = html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
-        $editAppCode    = html::a(inlink('edit', "webappID=$webapp->id"), $lang->edit, '',  "class='button-c webapp'");
-        echo $useAppCode . $editAppCode . $uninstallCode;
-        ?>
-        </td>
-      </tr>
-    </table>
+        <li>
+          <table class='fixed exttable' id='webapp<?php echo $webapp->id?>'>
+            <tr>
+              <td rowspan='4' width='73' height='73'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : ($webapp->addType == 'custom' ? '' : $config->webapp->url) . $webapp->icon?>' width='72' height='72' /></td>
+              <td class='webapp-name'><h4><?php echo $webapp->name?></h4></td>
+            </tr>
+            <tr><td><span title='<?php echo $webapp->desc?>'><?php echo empty($webapp->desc) ? '&nbsp;' : $webapp->desc?></span></td></tr>
+            <tr><td><?php echo $lang->webapp->addTypeList[$webapp->addType];?></td></tr>
+            <tr>
+              <td>
+              <?php
+              $uninstallCode = html::a(inlink('uninstall',  "webapp=$webapp->id"), $lang->webapp->uninstall, 'hiddenwin',  "class='button-c'");
+              $url     = $webapp->addType == 'custom' ? $webapp->url : $config->webapp->url . "/webapp-showapp-{$webapp->appid}.html";
+              $method  = '';
+              $popup   = '';
+              $target  = '_self';
+              if($webapp->target == 'blank') $target   = '_blank';
+              if($webapp->target == 'iframe')$method   = "toggleShowapp($webapp->id, \"$webapp->name\");";
+              if($webapp->target == 'popup')
+              {
+                  $width  = 0;
+                  $height = 0;
+                  if($webapp->size) list($width, $height) = explode('x', $webapp->size);
+                  $method = "popup($width, $height);";
+                  $popup  = 'popup';
+              }
+              $useAppCode    = html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
+              $editAppCode    = html::a(inlink('edit', "webappID=$webapp->id"), $lang->edit, '',  "class='button-c webapp'");
+              echo $useAppCode . $editAppCode . $uninstallCode;
+              ?>
+              </td>
+            </tr>
+          </table>
+        </li>
     <?php endforeach;?>
+      </ul>
     </td>
   </tr>
 </table>
