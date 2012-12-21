@@ -85,19 +85,19 @@ class buildModel extends model
     /**
      * Get builds of a product in pairs. 
      * 
-     * @param  int    $productID 
+     * @param  mix    $products     int|array
      * @param  string $params       noempty|notrunk, can be a set of them
      * @access public
      * @return string
      */
-    public function getProductBuildPairs($productID, $params = '')
+    public function getProductBuildPairs($products, $params = '')
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
         $builds = $this->dao->select('id,name')->from(TABLE_BUILD)
-            ->where('product')->eq((int)$productID)
+            ->where('product')->eq($products)
             ->andWhere('deleted')->eq(0)
             ->orderBy('date desc, id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;

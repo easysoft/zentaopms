@@ -126,8 +126,9 @@ class bug extends control
         $users = $this->user->getPairs('noletter');
 
         /* Process the openedBuild and resolvedBuild fields. */
-        $builds = $this->loadModel('build')->getProductBuildPairs($productID);
-        foreach($bugs as $key => $bug)
+        foreach($bugs as $bug) $productIdList[] = $bug->product;
+        $builds = $this->loadModel('build')->getProductBuildPairs($productIdList);
+        foreach($bugs as $key => $bug) 
         {
             $openBuildIdList = explode(',', $bug->openedBuild);
             $openedBuild = '';
