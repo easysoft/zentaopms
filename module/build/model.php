@@ -97,7 +97,7 @@ class buildModel extends model
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
 
         $builds = $this->dao->select('id,name')->from(TABLE_BUILD)
-            ->where('product')->eq($products)
+            ->where('product')->in($products)
             ->andWhere('deleted')->eq(0)
             ->orderBy('date desc, id desc')->fetchPairs();
         if(!$builds) return $sysBuilds;
