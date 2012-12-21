@@ -163,7 +163,7 @@ function switchProduct(productID, module, method, extra)
     }
 
     /* Module is product, roadmap, bug, testcase or testtask. switch directly. */
-    if(module == 'product' || module == 'roadmap' || module == 'bug' || module == 'testcase' || module == 'testtask')
+    if(module == 'product' || module == 'roadmap' || module == 'bug' || module == 'testcase' || module == 'testtask' || module == 'story')
     {
         link = createLink(module, method, "productID=" + productID);
     }
