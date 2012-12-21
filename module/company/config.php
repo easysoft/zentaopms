@@ -36,7 +36,6 @@ $config->company->browse->search['fields']['role']     = $lang->user->role;
 $config->company->browse->search['fields']['phone']    = $lang->user->phone;
 $config->company->browse->search['fields']['join']     = $lang->user->join;
 $config->company->browse->search['fields']['id']       = $lang->user->id;
-$config->company->browse->search['fields']['role']     = $lang->user->role;
 $config->company->browse->search['fields']['commiter'] = $lang->user->commiter;
 $config->company->browse->search['fields']['birthday'] = $lang->user->birthyear;
 $config->company->browse->search['fields']['gender']   = $lang->user->gender;
@@ -56,7 +55,6 @@ $config->company->browse->search['params']['role']     = array('operator' => '='
 $config->company->browse->search['params']['phone']    = array('operator' => 'include',  'control' => 'input',  'values' => '');
 $config->company->browse->search['params']['join']     = array('operator' => '>=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->company->browse->search['params']['id']       = array('operator' => '=',        'control' => 'input',  'values' => '');
-$config->company->browse->search['params']['role']     = array('operator' => '=',        'control' => 'select', 'values' => $lang->user->roleList);
 $config->company->browse->search['params']['commiter'] = array('operator' => 'include',  'control' => 'select', 'values' => '');
 $config->company->browse->search['params']['birthday'] = array('operator' => '>=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->company->browse->search['params']['gender']   = array('operator' => '=',        'control' => 'select', 'values' => $lang->user->genderList);
