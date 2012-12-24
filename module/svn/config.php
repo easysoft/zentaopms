@@ -15,6 +15,7 @@
  * $config->svn->repos['pms']['password'] = 'pass';
  *
  */
+$config->svn = new stdClass();
 $config->svn->encodings = 'utf-8, gbk';  
 $config->svn->client    = '';
 

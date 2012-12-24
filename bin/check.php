@@ -30,6 +30,7 @@ $whiteList[] = 'project-sendmail';
 $whiteList[] = 'release-commonaction';
 $whiteList[] = 'task-commonaction';
 $whiteList[] = 'task-sendmail';
+$whiteList[] = 'testtask-sendmail';
 $whiteList[] = 'user-login';
 $whiteList[] = 'user-deny';
 $whiteList[] = 'user-logout';

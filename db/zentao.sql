@@ -640,6 +640,15 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   UNIQUE KEY `account` (`account`),
   KEY `company` (`company`,`dept`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_userContact`;
+CREATE TABLE IF NOT EXISTS `zt_userContact` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `company` mediumint(8) unsigned NOT NULL,
+  `account` char(30) NOT NULL,
+  `listName` varchar(60) NOT NULL,
+  `userList` text NOT NULL,
+  PRIMARY KEY (`id`)
+  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userGroup`;
 CREATE TABLE IF NOT EXISTS `zt_userGroup` (
   `company` mediumint(8) unsigned NOT NULL,
