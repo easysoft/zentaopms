@@ -108,6 +108,29 @@ $lang->install->account  = '管理员帐号';
 $lang->install->password = '管理员密码';
 $lang->install->errorEmptyPassword = '密码不能为空';
 
+$lang->install->groupList['ADMIN']['name']  = '管理员';
+$lang->install->groupList['ADMIN']['desc']  = '系统管理员';
+$lang->install->groupList['DEV']['name']    = '研发';
+$lang->install->groupList['DEV']['desc']    = '研发人员';
+$lang->install->groupList['QA']['name']     = '测试';
+$lang->install->groupList['QA']['desc']     = '测试人员';
+$lang->install->groupList['PM']['name']     = '项目经理';
+$lang->install->groupList['PM']['desc']     = '项目经理';
+$lang->install->groupList['PO']['name']     = '产品经理';
+$lang->install->groupList['PO']['desc']     = '产品经理';
+$lang->install->groupList['TD']['name']     = '研发主管';
+$lang->install->groupList['TD']['desc']     = '研发主管';
+$lang->install->groupList['PD']['name']     = '产品主管';
+$lang->install->groupList['PD']['desc']     = '产品主管';
+$lang->install->groupList['QD']['name']     = '测试主管';
+$lang->install->groupList['QD']['desc']     = '测试主管';
+$lang->install->groupList['TOP']['name']    = '高层管理';
+$lang->install->groupList['TOP']['desc']    = '高层管理';
+$lang->install->groupList['OTHERS']['name'] = '其他';
+$lang->install->groupList['OTHERS']['desc'] = '其他';
+$lang->install->groupList['guest']['name']  = '游客';
+$lang->install->groupList['guest']['desc']  = '游客';
+
 $lang->install->success = "安装成功";
 
 $lang->install->joinZentao = <<<EOT

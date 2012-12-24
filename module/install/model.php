@@ -406,6 +406,14 @@ class installModel extends model
             /* Update the group and groupPriv table. */
             $this->dao->update(TABLE_GROUP)->set('company')->eq($companyID)->exec($autoCompany = false);
             $this->dao->update(TABLE_GROUPPRIV)->set('company')->eq($companyID)->exec($autoCompany = false);
+
+            /* Update group name and desc on dafault lang.*/
+            include('lang/' . $this->config->default->lang . '.php');
+            $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
+            foreach($groups as $group)
+            {
+                if(isset($lang->install->groupList[$group->name]))$this->dao->update(TABLE_GROUP)->data($lang->install->groupList[$group->name])->where('id')->eq($group->id)->exec();
+            }
         }
     }
 

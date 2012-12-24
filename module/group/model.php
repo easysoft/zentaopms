@@ -104,7 +104,7 @@ class groupModel extends model
      */
     public function getList($companyID)
     {
-        return $this->dao->findByCompany($companyID)->from(TABLE_GROUP)->fetchAll();
+        return $this->dao->findByCompany($companyID)->from(TABLE_GROUP)->orderBy('id')->fetchAll();
     }
 
     /**

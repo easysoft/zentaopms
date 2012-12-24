@@ -108,6 +108,29 @@ $lang->install->account  = 'Administrator';
 $lang->install->password = 'Admin password';
 $lang->install->errorEmptyPassword = "Can't be empty";
 
+$lang->install->groupList['ADMIN']['name']  = 'Administrator';
+$lang->install->groupList['ADMIN']['desc']  = 'for administrator';
+$lang->install->groupList['DEV']['name']    = 'Developer';
+$lang->install->groupList['DEV']['desc']    = 'for developers';
+$lang->install->groupList['QA']['name']     = 'tester';
+$lang->install->groupList['QA']['desc']     = 'for testers';
+$lang->install->groupList['PM']['name']     = 'Project manager';
+$lang->install->groupList['PM']['desc']     = 'for project managers';
+$lang->install->groupList['PO']['name']     = 'Product manager';
+$lang->install->groupList['PO']['desc']     = 'for product managers';
+$lang->install->groupList['TD']['name']     = 'Technical director';
+$lang->install->groupList['TD']['desc']     = 'for technical director';
+$lang->install->groupList['PD']['name']     = 'Product director';
+$lang->install->groupList['PD']['desc']     = 'for product director';
+$lang->install->groupList['QD']['name']     = 'Quality director';
+$lang->install->groupList['QD']['desc']     = 'for quality director';
+$lang->install->groupList['TOP']['name']    = 'Top manager';
+$lang->install->groupList['TOP']['desc']    = 'for top manager';
+$lang->install->groupList['OTHERS']['name'] = 'Others';
+$lang->install->groupList['OTHERS']['desc'] = 'for others';
+$lang->install->groupList['guest']['name']  = 'Guest';
+$lang->install->groupList['guest']['desc']  = 'for guest';
+
 $lang->install->success = "Success installed";
 
 $lang->install->joinZentao = <<<EOT
