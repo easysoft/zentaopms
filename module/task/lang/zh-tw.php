@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 3476 2012-09-02 02:53:29Z wwccss $
+ * @version     $Id: zh-tw.php 3872 2012-12-24 00:50:43Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
@@ -105,7 +105,7 @@ $lang->task->reasonList['done']   = '已完成';
 $lang->task->reasonList['cancel'] = '已取消';
 
 $lang->task->afterChoices['continueAdding'] = '繼續為該需求添加任務';
-$lang->task->afterChoices['toTastList']     = '返回任務列表';
+$lang->task->afterChoices['toTaskList']     = '返回任務列表';
 $lang->task->afterChoices['toStoryList']    = '返回需求列表';
 
 $lang->task->buttonEdit       = '編輯';
@@ -124,16 +124,21 @@ $lang->task->legendLife   = '任務的一生';
 $lang->task->legendDesc   = '任務描述';
 $lang->task->legendAction = '操作';
 
-$lang->task->ajaxGetUserTasks    = "介面:我的任務";
-$lang->task->ajaxGetProjectTasks = "介面:項目任務";
-$lang->task->confirmDelete       = "您確定要刪除這個任務嗎？";
-$lang->task->copyStoryTitle      = "同需求";
-$lang->task->afterSubmit         = "添加之後";
-$lang->task->successSaved        = "成功添加，";
-$lang->task->delayWarning        = " <strong class='delayed f-14px'> 延期%s天 </strong>";
-$lang->task->remindBug           = "該任務為Bug轉化得到，是否更新Bug:%s ?";
+$lang->task->ajaxGetUserTasks     = "介面:我的任務";
+$lang->task->ajaxGetProjectTasks  = "介面:項目任務";
+$lang->task->confirmDelete        = "您確定要刪除這個任務嗎？";
+$lang->task->copyStoryTitle       = "同需求";
+$lang->task->afterSubmit          = "添加之後";
+$lang->task->successSaved         = "成功添加，";
+$lang->task->delayWarning         = " <strong class='delayed f-14px'> 延期%s天 </strong>";
+$lang->task->remindBug            = "該任務為Bug轉化得到，是否更新Bug:%s ?";
+$lang->task->confirmChangeProject = '修改項目會導致相應的所屬模組、相關需求和指派人發生變化，確定嗎？';
+
+$lang->task->error = new stdclass();
+$lang->task->error->consumed = '"已經消耗"必須為數字';
 
 /* 統計報表。*/
+$lang->task->report = new stdclass();
 $lang->task->report->common = '報表';
 $lang->task->report->select = '請選擇報表類型';
 $lang->task->report->create = '生成報表';
@@ -152,6 +157,8 @@ $lang->task->report->charts['tasksPerFinishedBy']   = '由誰完成統計';
 $lang->task->report->charts['tasksPerClosedReason'] = '關閉原因統計';
 $lang->task->report->charts['finishedTasksPerDay']  = '每天完成統計';
 
+$lang->task->report->options = new stdclass();
+$lang->task->report->options->graph = new stdclass();
 $lang->task->report->options->swf                     = 'pie2d';
 $lang->task->report->options->width                   = 'auto';
 $lang->task->report->options->height                  = 300;
@@ -164,6 +171,34 @@ $lang->task->report->options->graph->rotateNames      = 0;
 $lang->task->report->options->graph->yAxisName        = 'COUNT';
 $lang->task->report->options->graph->pieRadius        = 100; // 餅圖直徑。
 $lang->task->report->options->graph->showColumnShadow = 0;   // 是否顯示柱狀圖陰影。
+
+$lang->task->report->tasksPerProject      = new stdclass();
+$lang->task->report->tasksPerModule       = new stdclass();
+$lang->task->report->tasksPerAssignedTo   = new stdclass();
+$lang->task->report->tasksPerType         = new stdclass();
+$lang->task->report->tasksPerPri          = new stdclass();
+$lang->task->report->tasksPerStatus       = new stdclass();
+$lang->task->report->tasksPerDeadline     = new stdclass();
+$lang->task->report->tasksPerEstimate     = new stdclass();
+$lang->task->report->tasksPerLeft         = new stdclass();
+$lang->task->report->tasksPerConsumed     = new stdclass();
+$lang->task->report->tasksPerFinishedBy   = new stdclass();
+$lang->task->report->tasksPerClosedReason = new stdclass();
+$lang->task->report->finishedTasksPerDay  = new stdclass();
+
+$lang->task->report->tasksPerProject->graph      = new stdclass();
+$lang->task->report->tasksPerModule->graph       = new stdclass();
+$lang->task->report->tasksPerAssignedTo->graph   = new stdclass();
+$lang->task->report->tasksPerType->graph         = new stdclass();
+$lang->task->report->tasksPerPri->graph          = new stdclass();
+$lang->task->report->tasksPerStatus->graph       = new stdclass();
+$lang->task->report->tasksPerDeadline->graph     = new stdclass();
+$lang->task->report->tasksPerEstimate->graph     = new stdclass();
+$lang->task->report->tasksPerLeft->graph         = new stdclass();
+$lang->task->report->tasksPerConsumed->graph     = new stdclass();
+$lang->task->report->tasksPerFinishedBy->graph   = new stdclass();
+$lang->task->report->tasksPerClosedReason->graph = new stdclass();
+$lang->task->report->finishedTasksPerDay->graph  = new stdclass();
 
 $lang->task->report->tasksPerProject->graph->xAxisName      = '項目';
 $lang->task->report->tasksPerModule->graph->xAxisName       = '模組';
@@ -183,5 +218,6 @@ $lang->task->report->finishedTasksPerDay->height             = 400;
 $lang->task->report->finishedTasksPerDay->graph->xAxisName   = '日期';
 $lang->task->report->finishedTasksPerDay->graph->rotateNames = '1';
 
+$lang->task->placeholder = new stdclass();
 $lang->task->placeholder->estimate = '對該任務最初的預計';
 $lang->task->placeholder->mailto   = '輸入用戶名進行選擇'; 

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 3598 2012-11-01 09:15:30Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 3835 2012-12-17 10:26:50Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -36,8 +36,8 @@ $lang->project->canceledBy    = '由誰取消';
 $lang->project->canceledDate  = '取消日期';
 $lang->project->PO            = '產品負責人';
 $lang->project->PM            = '項目負責人';
-$lang->project->QM            = '測試負責人';
-$lang->project->RM            = '發佈負責人';
+$lang->project->QD            = '測試負責人';
+$lang->project->RD            = '發佈負責人';
 $lang->project->acl           = '訪問控制';
 $lang->project->teamname      = '團隊名稱';
 $lang->project->order         = '項目排序';
@@ -61,6 +61,7 @@ $lang->project->endList[93]   = '三個月';
 $lang->project->endList[186]  = '半年';
 $lang->project->endList[365]  = '一年';
 
+$lang->team = new stdclass();
 $lang->team->account    = '用戶';
 $lang->team->role       = '角色';
 $lang->team->join       = '加盟日';
@@ -154,11 +155,13 @@ $lang->project->taskSummary     = "本頁共 <strong>%s</strong> 個任務，未
 $lang->project->memberHours     = "%s共有 <strong>%s</strong> 個可用工時，";
 $lang->project->groupSummary    = "本組共 <strong>%s</strong> 個任務，未開始<strong>%s</strong>，進行中<strong>%s</strong>，總預計<strong>%s</strong>工時，已消耗<strong>%s</strong>工時，剩餘<strong>%s</strong>工時。";
 $lang->project->wbs             = "分解任務";
+$lang->project->batchWBS        = "批量分解";
 $lang->project->largeBurnChart  = '點擊查看大圖';
 $lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>如何更新?</i></a>";
 $lang->project->whyNoStories    = "看起來沒有需求可以關聯。請檢查下項目關聯的產品中有沒有需求，而且要確保它們已經審核通過。";
 $lang->project->doneProjects    = '已結束';
 $lang->project->unDoneProjects  = '未結束';
+$lang->project->copyTeam        = '複製團隊';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = '您確定刪除項目[%s]嗎？';
@@ -174,6 +177,9 @@ $lang->project->createTask            = '添加任務';
 $lang->project->goback                = '返回項目首頁（5秒後將自動跳轉）';
 
 /* 統計。*/
+$lang->project->charts = new stdclass();
+$lang->project->charts->burn = new stdclass();
+$lang->project->charts->burn->graph = new stdclass();
 $lang->project->charts->burn->graph->caption      = "燃盡圖";
 $lang->project->charts->burn->graph->xAxisName    = "日期";
 $lang->project->charts->burn->graph->yAxisName    = "HOUR";
@@ -183,9 +189,11 @@ $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
+$lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code = '團隊內部的簡稱';
 
-$lang->project->selectGroup->doing     = '(進行中)';
-$lang->project->selectGroup->done      = '(已結束)';
+$lang->project->selectGroup = new stdclass();
+$lang->project->selectGroup->doing = '(進行中)';
+$lang->project->selectGroup->done  = '(已結束)';
 
 $lang->project->projectTasks = '按項目';

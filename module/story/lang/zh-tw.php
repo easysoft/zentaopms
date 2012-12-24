@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 3598 2012-11-01 09:15:30Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 3772 2012-12-12 02:18:16Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -17,6 +17,7 @@ $lang->story->change      = "變更";
 $lang->story->changed     = '需求變更';
 $lang->story->review      = '評審';
 $lang->story->edit        = "編輯";
+$lang->story->batchEdit   = "批量編輯";
 $lang->story->close       = '關閉';
 $lang->story->batchClose  = '批量關閉';
 $lang->story->activate    = '激活';
@@ -175,12 +176,14 @@ $lang->story->mustChoosePreVersion  = '必須選擇回溯的版本';
 $lang->story->ajaxGetProjectStories = '介面:獲取項目需求列表';
 $lang->story->ajaxGetProductStories = '介面:獲取產品需求列表';
 
+$lang->story->form = new stdclass();
 $lang->story->form->titleNote = '一句話簡要表達需求內容';
 $lang->story->form->area      = '該需求所屬範圍';
 $lang->story->form->desc      = '描述及標準，什麼需求？如何驗收？';
 $lang->story->form->resource  = '資源分配，有誰完成？需要多少時間？';
 $lang->story->form->file      = '附件，如果該需求有相關檔案，請點此上傳。';
 
+$lang->story->action = new stdclass();
 $lang->story->action->reviewed            = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>。', 'extra' => $lang->story->reviewResultList);
 $lang->story->action->closed              = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong>。', 'extra' => $lang->story->reasonList);
 $lang->story->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。'); 
@@ -189,6 +192,7 @@ $lang->story->action->linked2project      = array('main' => '$date, 由 <strong>
 $lang->story->action->unlinkedfromproject = array('main' => '$date, 由 <strong>$actor</strong> 從項目 <strong>$extra</strong> 移除。'); 
 
 /* 統計報表。*/
+$lang->story->report = new stdclass();
 $lang->story->report->common = '報表';
 $lang->story->report->select = '請選擇報表類型';
 $lang->story->report->create = '生成報表';
@@ -206,6 +210,8 @@ $lang->story->report->charts['storysPerAssignedTo']     = '當前指派來進行
 $lang->story->report->charts['storysPerClosedReason']   = '關閉原因來進行統計';
 $lang->story->report->charts['storysPerChange']         = '變更次數來進行統計';
 
+$lang->story->report->options = new stdclass();
+$lang->story->report->options->graph = new stdclass();
 $lang->story->report->options->swf                     = 'pie2d';
 $lang->story->report->options->width                   = 'auto';
 $lang->story->report->options->height                  = 300;
@@ -218,6 +224,32 @@ $lang->story->report->options->graph->rotateNames      = 0;
 $lang->story->report->options->graph->yAxisName        = 'COUNT';
 $lang->story->report->options->graph->pieRadius        = 100; // 餅圖直徑。
 $lang->story->report->options->graph->showColumnShadow = 0;   // 是否顯示柱狀圖陰影。
+
+$lang->story->report->storysPerProduct      = new stdclass();     
+$lang->story->report->storysPerModule       = new stdclass();
+$lang->story->report->storysPerSource       = new stdclass();
+$lang->story->report->storysPerPlan         = new stdclass();
+$lang->story->report->storysPerStatus       = new stdclass();
+$lang->story->report->storysPerStage        = new stdclass();
+$lang->story->report->storysPerPri          = new stdclass();
+$lang->story->report->storysPerOpenedBy     = new stdclass();
+$lang->story->report->storysPerAssignedTo   = new stdclass();
+$lang->story->report->storysPerClosedReason = new stdclass();
+$lang->story->report->storysPerEstimate     = new stdclass();
+$lang->story->report->storysPerChange       = new stdclass();
+
+$lang->story->report->storysPerProduct->graph      = new stdclass();     
+$lang->story->report->storysPerModule->graph       = new stdclass();
+$lang->story->report->storysPerSource->graph       = new stdclass();
+$lang->story->report->storysPerPlan->graph         = new stdclass();
+$lang->story->report->storysPerStatus->graph       = new stdclass();
+$lang->story->report->storysPerStage->graph        = new stdclass();
+$lang->story->report->storysPerPri->graph          = new stdclass();
+$lang->story->report->storysPerOpenedBy->graph     = new stdclass();
+$lang->story->report->storysPerAssignedTo->graph   = new stdclass();
+$lang->story->report->storysPerClosedReason->graph = new stdclass();
+$lang->story->report->storysPerEstimate->graph     = new stdclass();
+$lang->story->report->storysPerChange->graph       = new stdclass();
 
 $lang->story->report->storysPerProduct->graph->xAxisName      = '產品';
 $lang->story->report->storysPerModule->graph->xAxisName       = '模組';
@@ -232,5 +264,6 @@ $lang->story->report->storysPerClosedReason->graph->xAxisName = '關閉原因';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = '預計時間';
 $lang->story->report->storysPerChange->graph->xAxisName       = '變更次數';
 
+$lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = "完成該需求的工作量";
 $lang->story->placeholder->mailto   = '輸入用戶名自動完成';

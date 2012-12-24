@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 3860 2012-12-19 10:08:20Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -20,10 +20,12 @@ $lang->testtask->linkCaseAB     = "關聯";
 $lang->testtask->unlinkCase     = "移除";
 $lang->testtask->batchAssign    = "批量指派";
 $lang->testtask->runCase        = "執行";
+$lang->testtask->batchRun       = "批量執行";
 $lang->testtask->results        = "結果";
 $lang->testtask->createBug      = "提Bug";
 $lang->testtask->assign         = '指派';
 $lang->testtask->cases          = '用例';
+$lang->testtask->next           = '下一個';
 
 $lang->testtask->common         = '測試任務';
 $lang->testtask->id             = '任務編號';
@@ -31,6 +33,7 @@ $lang->testtask->product        = '所屬產品';
 $lang->testtask->project        = '所屬項目';
 $lang->testtask->build          = '版本';
 $lang->testtask->owner          = '負責人';
+$lang->testtask->pri            = '優先順序';
 $lang->testtask->name           = '任務名稱';
 $lang->testtask->begin          = '開始日期';
 $lang->testtask->end            = '結束日期';
@@ -46,6 +49,12 @@ $lang->testtask->statusList['wait']    = '未開始';
 $lang->testtask->statusList['doing']   = '進行中';
 $lang->testtask->statusList['done']    = '已完成';
 $lang->testtask->statusList['blocked'] = '被阻塞';
+
+$lang->testtask->priList[0] = '';
+$lang->testtask->priList[3] = '3';
+$lang->testtask->priList[1] = '1';
+$lang->testtask->priList[2] = '2';
+$lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未關聯';
 $lang->testtask->linkedCases   = '已關聯';
@@ -64,3 +73,13 @@ $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';
 $lang->testtask->lblRunCase    = '執行用例';
 $lang->testtask->lblResults    = '執行結果';
+
+$lang->testtask->placeholder = new stdclass();
+$lang->testtask->placeholder->begin = '開始日期';
+$lang->testtask->placeholder->end   = '結束日期';
+
+$lang->testtask->mail = new stdclass();
+$lang->testtask->mail->create = new stdclass();
+$lang->testtask->mail->edit   = new stdclass();
+$lang->testtask->mail->create->title = "%s創建了測試任務 #%s:%s";
+$lang->testtask->mail->edit->title   = "%s編輯了測試任務 #%s:%s";

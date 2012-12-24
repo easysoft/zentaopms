@@ -6,9 +6,10 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
- * @version     $Id: zh-tw.php 3668 2012-11-30 06:06:33Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 3772 2012-12-12 02:18:16Z wwccss $
  * @link        http://www.zentao.net
  */
+$lang->tree = new stdclass();
 $lang->tree->common            = '模組維護';
 $lang->tree->add               = '添加';
 $lang->tree->edit              = '編輯';

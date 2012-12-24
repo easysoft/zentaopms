@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
- * @version     $Id: zh-tw.php 3642 2012-11-26 09:09:38Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 3772 2012-12-12 02:18:16Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->convert->common  = '從其他系統導入';
@@ -71,6 +71,7 @@ $lang->convert->item       = '轉換項';
 $lang->convert->count      = '轉換數量';
 $lang->convert->info       = '轉換信息';
 
+$lang->convert->bugfree = new stdclass();
 $lang->convert->bugfree->users    = '用戶';
 $lang->convert->bugfree->projects = '項目';
 $lang->convert->bugfree->modules  = '模組';
@@ -80,6 +81,7 @@ $lang->convert->bugfree->results  = '測試結果';
 $lang->convert->bugfree->actions  = '歷史記錄';
 $lang->convert->bugfree->files    = '附件';
 
+$lang->convert->redmine = new stdclass();
 $lang->convert->redmine->users        = '用戶';
 $lang->convert->redmine->groups       = '用戶分組';
 $lang->convert->redmine->products     = '產品';
@@ -105,6 +107,9 @@ $lang->convert->errorCopyFailed    = '檔案 %s 拷貝失敗';
 
 $lang->convert->setParam = '請設置轉換參數';
 
+$lang->convert->statusType = new stdclass();
+$lang->convert->priType    = new stdclass();
+
 $lang->convert->aimType           = '問題類型轉換';
 $lang->convert->statusType->bug   = '狀態類型轉換(Bug狀態)';
 $lang->convert->statusType->story = '狀態類型轉換(Story狀態)';
@@ -113,6 +118,7 @@ $lang->convert->priType->bug      = '優先順序類型轉換(Bug狀態)';
 $lang->convert->priType->story    = '優先順序類型轉換(Story狀態)';
 $lang->convert->priType->task     = '優先順序類型轉換(Task狀態)';
 
+$lang->convert->issue = new stdclass();
 $lang->convert->issue->redmine = 'Redmine';
 $lang->convert->issue->zentao  = '禪道';
 $lang->convert->issue->goto    = '轉換為';

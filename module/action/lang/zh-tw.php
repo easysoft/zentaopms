@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 3626 2012-11-22 01:41:37Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 3864 2012-12-20 08:00:07Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系統日誌';
@@ -24,7 +24,10 @@ $lang->action->action     = '動作';
 $lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
 $lang->action->trashTips  = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
+$lang->action->textDiff   = '文本格式';
+$lang->action->original   = '原始格式';
 
+$lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';
 $lang->action->dynamic->yesterday  = '昨天';
 $lang->action->dynamic->twoDaysAgo = '前天';
@@ -51,6 +54,7 @@ $lang->action->objectTypes['doclib']      = '文檔庫';
 $lang->action->objectTypes['todo']        = 'TODO';
 
 /* 用來描述操作歷史記錄。*/
+$lang->action->desc = new stdclass();
 $lang->action->desc->common       = '$date, <strong>$action</strong> by <strong>$actor</strong>。' . "\n";
 $lang->action->desc->extra        = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>。' . "\n";
 $lang->action->desc->opened       = '$date, 由 <strong>$actor</strong> 創建。' . "\n";
@@ -76,10 +80,11 @@ $lang->action->desc->canceled     = '$date, 由 <strong>$actor</strong> 取消�
 $lang->action->desc->svncommited  = '$date, 由 <strong>$actor</strong> 提交代碼，版本為<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->finished     = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
 $lang->action->desc->diff1        = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />' . "\n";
-$lang->action->desc->diff2        = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . '<blockquote>%s</blockquote>' . "\n";
+$lang->action->desc->diff2        = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3        = '將檔案名 %s 改為 %s 。' . "\n";
 
 /* 用來顯示動態信息。*/
+$lang->action->label = new stdclass();
 $lang->action->label->created             = '創建了';
 $lang->action->label->opened              = '創建了';
 $lang->action->label->changed             = '變更了';

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 3431 2012-08-30 07:45:20Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3772 2012-12-12 02:18:16Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -63,12 +63,15 @@ $lang->bug->files            = '附件';
 $lang->bug->keywords         = '關鍵詞';
 $lang->bug->lastEditedByAB   = '修改者';
 $lang->bug->lastEditedDateAB = '修改日期';
+$lang->bug->fromCase         = '來源用例';
+$lang->bug->toCase           = '生成用例';
 
 /* 方法列表。*/
 $lang->bug->index              = '首頁';
 $lang->bug->create             = '創建';
 $lang->bug->confirmBug         = '確認';
 $lang->bug->edit               = '編輯';
+$lang->bug->batchEdit          =  '批量編輯';
 $lang->bug->assignTo           = '指派';
 $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug詳情';
@@ -241,9 +244,10 @@ $lang->bug->resolutionList['willnotfix'] = "不予解決";
 $lang->bug->resolutionList['tostory']    = '轉為需求';
 
 /* 統計報表。*/
-$lang->bug->report->common        = '報表';
-$lang->bug->report->select        = '請選擇報表類型';
-$lang->bug->report->create        = '生成報表';
+$lang->bug->report = new stdclass();
+$lang->bug->report->common = '報表';
+$lang->bug->report->select = '請選擇報表類型';
+$lang->bug->report->create = '生成報表';
 
 $lang->bug->report->charts['bugsPerProject']        = '項目Bug數量';
 $lang->bug->report->charts['bugsPerBuild']          = '版本Bug數量';
@@ -263,6 +267,8 @@ $lang->bug->report->charts['bugsPerAssignedTo']     = '指派給統計';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug處理時間統計';
 //$lang->bug->report->charts['bugHistories']       = 'Bug處理步驟統計';
 
+$lang->bug->report->options = new stdclass();
+$lang->bug->report->options->graph = new stdclass();
 $lang->bug->report->options->swf                     = 'pie2d';
 $lang->bug->report->options->width                   = 'auto';
 $lang->bug->report->options->height                  = 300;
@@ -275,6 +281,42 @@ $lang->bug->report->options->graph->rotateNames      = 0;
 $lang->bug->report->options->graph->yAxisName        = 'COUNT';
 $lang->bug->report->options->graph->pieRadius        = 100; // 餅圖直徑。
 $lang->bug->report->options->graph->showColumnShadow = 0;   // 是否顯示柱狀圖陰影。
+
+$lang->bug->report->bugsPerProject        = new stdclass();
+$lang->bug->report->bugsPerBuild          = new stdclass();
+$lang->bug->report->bugsPerModule         = new stdclass();
+$lang->bug->report->openedBugsPerDay      = new stdclass();
+$lang->bug->report->resolvedBugsPerDay    = new stdclass();
+$lang->bug->report->closedBugsPerDay      = new stdclass();
+$lang->bug->report->openedBugsPerUser     = new stdclass();
+$lang->bug->report->resolvedBugsPerUser   = new stdclass();
+$lang->bug->report->closedBugsPerUser     = new stdclass();
+$lang->bug->report->bugsPerSeverity       = new stdclass();
+$lang->bug->report->bugsPerResolution     = new stdclass();
+$lang->bug->report->bugsPerStatus         = new stdclass();
+$lang->bug->report->bugsPerActivatedCount = new stdclass();
+$lang->bug->report->bugsPerType           = new stdclass();
+$lang->bug->report->bugsPerAssignedTo     = new stdclass();
+$lang->bug->report->bugLiveDays           = new stdclass();
+$lang->bug->report->bugHistories          = new stdclass();
+
+$lang->bug->report->bugsPerProject->graph        = new stdclass();
+$lang->bug->report->bugsPerBuild->graph          = new stdclass();
+$lang->bug->report->bugsPerModule->graph         = new stdclass();
+$lang->bug->report->openedBugsPerDay->graph      = new stdclass();
+$lang->bug->report->resolvedBugsPerDay->graph    = new stdclass();
+$lang->bug->report->closedBugsPerDay->graph      = new stdclass();
+$lang->bug->report->openedBugsPerUser->graph     = new stdclass();
+$lang->bug->report->resolvedBugsPerUser->graph   = new stdclass();
+$lang->bug->report->closedBugsPerUser->graph     = new stdclass();
+$lang->bug->report->bugsPerSeverity->graph       = new stdclass();
+$lang->bug->report->bugsPerResolution->graph     = new stdclass();
+$lang->bug->report->bugsPerStatus->graph         = new stdclass();
+$lang->bug->report->bugsPerActivatedCount->graph = new stdclass();
+$lang->bug->report->bugsPerType->graph           = new stdclass();
+$lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
+$lang->bug->report->bugLiveDays->graph           = new stdclass();
+$lang->bug->report->bugHistories->graph          = new stdclass();
 
 $lang->bug->report->bugsPerProject->graph->xAxisName     = '項目';
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
@@ -309,8 +351,10 @@ $lang->bug->report->bugLiveDays->graph->xAxisName           = '處理時間';
 $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 
 /* 操作記錄。*/
+$lang->bug->action = new stdclass();
 $lang->bug->action->resolved = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong>。', 'extra' => $lang->bug->resolutionList);
 $lang->bug->action->tostory  = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->totask   = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
 
+$lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->mailto = '輸入用戶名自動選擇';

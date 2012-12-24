@@ -6,9 +6,11 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
- * @version     $Id: zh-tw.php 3613 2012-11-20 08:49:28Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 3879 2012-12-24 06:24:54Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
+$lang->install = new stdclass();
+
 $lang->install->common  = '安裝';
 $lang->install->next    = '下一步';
 $lang->install->pre     = '返回';
@@ -105,6 +107,29 @@ $lang->install->pmsNote  = '即通過什麼地址可以訪問到禪道項目管�
 $lang->install->account  = '管理員帳號';
 $lang->install->password = '管理員密碼';
 $lang->install->errorEmptyPassword = '密碼不能為空';
+
+$lang->install->groupList['ADMIN']['name']  = '管理員';
+$lang->install->groupList['ADMIN']['desc']  = '系統管理員';
+$lang->install->groupList['DEV']['name']    = '研發';
+$lang->install->groupList['DEV']['desc']    = '研發人員';
+$lang->install->groupList['QA']['name']     = '測試';
+$lang->install->groupList['QA']['desc']     = '測試人員';
+$lang->install->groupList['PM']['name']     = '項目經理';
+$lang->install->groupList['PM']['desc']     = '項目經理';
+$lang->install->groupList['PO']['name']     = '產品經理';
+$lang->install->groupList['PO']['desc']     = '產品經理';
+$lang->install->groupList['TD']['name']     = '研發主管';
+$lang->install->groupList['TD']['desc']     = '研發主管';
+$lang->install->groupList['PD']['name']     = '產品主管';
+$lang->install->groupList['PD']['desc']     = '產品主管';
+$lang->install->groupList['QD']['name']     = '測試主管';
+$lang->install->groupList['QD']['desc']     = '測試主管';
+$lang->install->groupList['TOP']['name']    = '高層管理';
+$lang->install->groupList['TOP']['desc']    = '高層管理';
+$lang->install->groupList['OTHERS']['name'] = '其他';
+$lang->install->groupList['OTHERS']['desc'] = '其他';
+$lang->install->groupList['guest']['name']  = '遊客';
+$lang->install->groupList['guest']['desc']  = '遊客';
 
 $lang->install->success = "安裝成功";
 

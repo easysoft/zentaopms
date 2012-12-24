@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
- * @version     $Id: zh-tw.php 3236 2012-07-02 01:29:43Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 3742 2012-12-10 08:41:09Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->admin->common  = '後台管理';
@@ -26,19 +26,22 @@ $lang->admin->clearDataSucceed = '清除數據成功！';
 $lang->admin->clearDataDesc    = <<<EOT
 <strong><font color='red'>清除數據存在一定的風險，清楚數據之前，我們強烈建議您備份資料庫及相應的數據檔案，並保證清楚數據的時候，沒有其他人進行操作。</font></strong>\n
 清除數據對資料庫的影響如下：
-1、清楚數據不會對company, group, groupPriv表進行操作。
+1、清除數據不會對company, group, groupPriv表進行操作。
 2、如果安裝的時候有導入demo數據，則會刪除config表key=showDemoUsers的記錄，並刪除user表中的所有demo用戶。
 3、對於其他表則進行全部清除操作。
 EOT;
 
-$lang->admin->info->caption        = '禪道系統信息';
-$lang->admin->info->version        = '當前系統的版本是%s，';
-$lang->admin->info->links          = '您可以訪問以下連結：';
-$lang->admin->info->account        = "您的禪道社區賬戶為%s。";
+$lang->admin->info = new stdclass();
+$lang->admin->info->caption = '禪道系統信息';
+$lang->admin->info->version = '當前系統的版本是%s，';
+$lang->admin->info->links   = '您可以訪問以下連結：';
+$lang->admin->info->account = "您的禪道社區賬戶為%s。";
 
+$lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "友情提示：您還未在禪道社區(www.zentao.net)登記，%s進行登記，以及時獲得禪道最新信息。";
 $lang->admin->notice->ignore   = "不再提示";
 
+$lang->admin->register = new stdclass();
 $lang->admin->register->caption    = '禪道社區登記';
 $lang->admin->register->click      = '點擊此處';
 $lang->admin->register->lblAccount = '請設置您的用戶名，英文字母和數字的組合，三位以上。';
@@ -47,6 +50,7 @@ $lang->admin->register->submit     = '登記';
 $lang->admin->register->bind       = "如果您已經擁有社區賬號，%s關聯賬戶";
 $lang->admin->register->success    = "登記賬戶成功";
 
+$lang->admin->bind = new stdclass();
 $lang->admin->bind->caption  = '關聯社區賬號';
 $lang->admin->bind->action   = '關聯';
 $lang->admin->bind->success  = "關聯賬戶成功";

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 3431 2012-08-30 07:45:20Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3768 2012-12-12 00:44:35Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = '用例編號';
@@ -41,6 +41,8 @@ $lang->testcase->stage            = '適用階段';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
 $lang->testcase->allProduct       = '所有產品';
+$lang->testcase->fromBug          = '來源Bug';
+$lang->testcase->toBug            = '生成Bug';
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 
 $lang->testcase->stepID     = '編號';
@@ -54,6 +56,7 @@ $lang->testcase->batchCreate        = "批量添加";
 $lang->testcase->delete             = "刪除用例";
 $lang->testcase->view               = "用例詳情";
 $lang->testcase->edit               = "編輯";
+$lang->testcase->batchEdit          =  "批量編輯 ";
 $lang->testcase->delete             = "刪除";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->import             = "導入用例";

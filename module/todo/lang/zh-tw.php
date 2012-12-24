@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 3457 2012-09-01 07:46:30Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3753 2012-12-11 05:51:16Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->todo->common       = 'TODO';
@@ -14,6 +14,7 @@ $lang->todo->index        = "todo一覽";
 $lang->todo->create       = "新增";
 $lang->todo->batchCreate  = "批量添加";
 $lang->todo->edit         = "更新TODO";
+$lang->todo->batchEdit    = "批量編輯";
 $lang->todo->view         = "TODO詳情";
 $lang->todo->viewAB       = "詳情";
 $lang->todo->markDone     = "未完成";
@@ -60,9 +61,9 @@ $lang->todo->priList[1] = '最高';
 $lang->todo->priList[2] = '較高';
 $lang->todo->priList[4] = '最低';
 
-$lang->todo->typeList->custom = '自定義';
-$lang->todo->typeList->bug    = 'Bug';
-$lang->todo->typeList->task   = '項目任務';
+$lang->todo->typeList['custom'] = '自定義';
+$lang->todo->typeList['bug']    = 'Bug';
+$lang->todo->typeList['task']   = '項目任務';
 
 $lang->todo->confirmDelete  = "您確定要刪除這個todo嗎？";
 $lang->todo->successMarked  = "成功切換狀態！";
@@ -80,4 +81,6 @@ $lang->todo->lastmonthTodos  = '上月';
 $lang->todo->thisseasonTodos = '本季';
 $lang->todo->thisyearTodos   = '本年';
 $lang->todo->thismonthTodos  = '本月';
+
+$lang->todo->action = new stdclass();
 $lang->todo->action->marked  = array('main' => '$date, 由 <strong>$actor</strong> 標記為<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);

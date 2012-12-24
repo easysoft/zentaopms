@@ -6,12 +6,14 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
- * @version     $Id: zh-tw.php 3275 2012-07-02 12:09:36Z wwccss $
+ * @version     $Id: zh-tw.php 3772 2012-12-12 02:18:16Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->misc->common  = '雜項';
-$lang->misc->ping    = '防超時';
+$lang->misc = new stdclass();
+$lang->misc->common = '雜項';
+$lang->misc->ping   = '防超時';
 
+$lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
 $lang->misc->zentao->labels['about']   = '關於禪道';
 $lang->misc->zentao->labels['support'] = '技術支持';

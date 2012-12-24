@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: zh-tw.php 3343 2012-07-16 01:15:26Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 3823 2012-12-17 07:06:29Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->product->common = '產品視圖';
@@ -54,8 +54,8 @@ $lang->product->order     = '排序';
 $lang->product->status    = '狀態';
 $lang->product->desc      = '產品描述';
 $lang->product->PO        = '產品負責人';
-$lang->product->QM        = '測試負責人';
-$lang->product->RM        = '發佈負責人';
+$lang->product->QD        = '測試負責人';
+$lang->product->RD        = '發佈負責人';
 $lang->product->acl       = '訪問控制';
 $lang->product->whitelist = '分組白名單';
 
