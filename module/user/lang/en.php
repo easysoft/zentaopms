@@ -46,6 +46,7 @@ $lang->user->create          = "Add";
 $lang->user->batchCreate     = "Batch add user";
 $lang->user->read            = "Info";
 $lang->user->edit            = "Edit";
+$lang->user->batchEdit       = "Batch Edit";
 $lang->user->unlock          = "Unlock";
 $lang->user->update          = "Upgrade";
 $lang->user->delete          = "Delete";
@@ -114,3 +115,18 @@ $lang->user->error->realname      = "ID %s，please input realname";
 $lang->user->error->password      = "ID %s，password must be six letters at least";
 $lang->user->error->mail          = "ID %s，please input correct email address";
 $lang->user->error->role          = "ID %s，please input role";
+
+$lang->user->contacts = new stdclass();
+$lang->user->contacts->common   = 'Contacts';
+$lang->user->contacts->listName = 'List name';
+$lang->user->contacts->userList = 'User list';
+
+$lang->user->contacts->manage       = 'Manage List';
+$lang->user->contacts->contactsList = 'List';
+$lang->user->contacts->selectedUsers= 'Users';
+$lang->user->contacts->selectList   = 'List';
+$lang->user->contacts->appendToList = 'Append to a list';
+$lang->user->contacts->createList   = 'Createa a list';
+$lang->user->contacts->noListYet    = 'No contacts list yet.';
+$lang->user->contacts->confirmDelete= 'Are you sure to delete this list?';
+$lang->user->contacts->or           = ' or ';

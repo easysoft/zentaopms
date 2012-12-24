@@ -14,10 +14,9 @@
 include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
 ?>
+<script>deptID = <?php echo $deptID;?></script>
 <table class='cont-lt1'>
-  <tr>
-    <td colspan='3'><div id='querybox'><?php echo $searchForm?></div></td>
-  </tr>
+  <tr><td colspan='3'><div id='querybox'><?php echo $searchForm?></div></td></tr>
   <tr valign='top'>
     <td class='side'>
       <div class='box-title'><?php echo $lang->dept->common;?></div>
@@ -52,10 +51,10 @@ include '../../common/view/treeview.html.php';
         </tr>
         </thead>
         <tbody>
-        <form action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post'>
+        <form action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post' id='userListForm'>
         <?php foreach($users as $user):?>
         <tr class='a-center'>
-          <td><?php echo "<input type='checkbox' name='userIDList[]' value='$user->id'> "; printf('%03d', $user->id);?></td>
+          <td><?php echo "<input type='checkbox' name='users[]' value='$user->account'> "; printf('%03d', $user->id);?></td>
           <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
           <td><?php echo $lang->user->roleList[$user->role];?></td>
@@ -80,7 +79,8 @@ include '../../common/view/treeview.html.php';
           <td colspan='11'>
           <?php
           echo html::selectAll() . html::selectReverse();
-          echo html::submitButton($lang->user->batchEdit);
+          echo html::submitButton($lang->user->batchEdit, 'onclick=batchEdit()');
+          echo html::submitButton($lang->user->contacts->manage, 'onclick=manageContacts()');
           $pager->show();
           ?>
           </td>
@@ -90,5 +90,5 @@ include '../../common/view/treeview.html.php';
     </td>
   </tr>
 </table>
-<script lanugage='Javascript'>$('#dept<?php echo $deptID;?>').addClass('active');</script>
+<script lanugage='javascript'>$('#dept<?php echo $deptID;?>').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

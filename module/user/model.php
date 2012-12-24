@@ -236,7 +236,6 @@ class userModel extends model
                 if($users->realname[$i] == '') die(js::error(sprintf($this->lang->user->error->realname, $i+1)));
                 if($users->email[$i] and !validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i+1)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and empty($users->password[$i])) ? $prev['password'] : $users->password[$i];
-                a($users->password[$i]);
                 if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i+1)));
                 if(empty($users->role[$i])) die(js::error(sprintf($this->lang->user->error->role, $id)));
 
@@ -648,5 +647,110 @@ class userModel extends model
     public function cleanLocked($account)
     {
         $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00 00:00:00')->where('account')->eq($account)->exec(false);
+    }
+
+    /**
+     * Get contact list of a user.
+     * 
+     * @param  string    $account 
+     * @access public
+     * @return object
+     */
+    public function getContactLists($account)
+    {
+        return $this->dao->select('id, listName')->from(TABLE_USERCONTACT)->where('account')->eq($account)->fetchPairs();
+    }
+
+    /**
+     * Get a contact list by id.
+     * 
+     * @param  int    $listID 
+     * @access public
+     * @return object
+     */
+    public function getContactListByID($listID)
+    {
+        return $this->dao->select('*')->from(TABLE_USERCONTACT)->where('id')->eq($listID)->fetch();
+    }
+
+    /**
+     * Get user account and realname pairs from a contact list.
+     * 
+     * @param  string    $accountList 
+     * @access public
+     * @return array
+     */
+    public function getContactUserPairs($accountList)
+    {
+        return $this->dao->select('account, realname')->from(TABLE_USER)->where('account')->in($accountList)->fetchPairs();
+    }
+
+    /**
+     * Create a contact list.
+     * 
+     * @param  string    $listName 
+     * @param  string    $userList 
+     * @access public
+     * @return int
+     */
+    public function createContactList($listName, $userList)
+    {
+        $data = new stdclass();
+        $data->listName = $listName;
+        $data->userList = join(',', $userList);
+        $data->account  = $this->app->user->account;
+
+        $this->dao->insert(TABLE_USERCONTACT)->data($data)->exec();
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Append some users to a contact list.
+     * 
+     * @param  int    $listID 
+     * @param  string $userList 
+     * @access public
+     * @return void
+     */
+    public function append2ContactList($listID, $userList)
+    {
+        $list = $this->getContactListByID($listID);
+        if($list->userList) $userList = array_merge($userList, explode(',', $list->userList));
+
+        $userList = array_unique($userList);
+        sort($userList);
+        $userList = join(',', $userList);
+
+        $this->dao->update(TABLE_USERCONTACT)->set('userList')->eq($userList)->where('id')->eq($listID)->exec();
+    }
+
+    /**
+     * Update a contact list.
+     * 
+     * @param  int    $listID 
+     * @param  string $listName 
+     * @param  string $userList 
+     * @access public
+     * @return void
+     */
+    public function updateContactList($listID, $listName, $userList)
+    {
+        $data = new stdclass();
+        $data->listName = $listName;
+        $data->userList = join(',', $userList);
+
+        $this->dao->update(TABLE_USERCONTACT)->data($data)->where('id')->eq($listID)->exec();
+    }
+
+    /**
+     * Delete a contact list.
+     * 
+     * @param  int    $listID 
+     * @access public
+     * @return void
+     */
+    public function deleteContactList($listID)
+    {
+        return $this->dao->delete()->from(TABLE_USERCONTACT)->where('id')->eq($listID)->exec();
     }
 }

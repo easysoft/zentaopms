@@ -117,9 +117,16 @@ $lang->user->error->mail          = "ID %s，请填写正确的邮箱地址";
 $lang->user->error->role          = "ID %s，角色不能为空";
 
 $lang->user->contacts = new stdclass();
-$lang->user->contacts->common  = '联系人';
-$lang->user->contacts->id      = '编号';
-$lang->user->contacts->company = '所属公司';
-$lang->user->contacts->account = '所有人';
-$lang->user->contacts->group   = '列表名称';
-$lang->user->contacts->contacts= '联系人列表';
+$lang->user->contacts->common   = '联系人';
+$lang->user->contacts->listName = '列表名称';
+$lang->user->contacts->userList = '联系人列表';
+
+$lang->user->contacts->manage       = '维护列表';
+$lang->user->contacts->contactsList = '已有列表';
+$lang->user->contacts->selectedUsers= '选择用户';
+$lang->user->contacts->selectList   = '选择列表';
+$lang->user->contacts->appendToList = '追加至已有列表：';
+$lang->user->contacts->createList   = '创建新列表：';
+$lang->user->contacts->noListYet    = '还没有创建任何列表。';
+$lang->user->contacts->confirmDelete= '您确定要删除这个列表吗？';
+$lang->user->contacts->or           = ' 或者 ';

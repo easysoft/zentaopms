@@ -342,9 +342,9 @@ class user extends control
      */
     public function batchEdit($deptID = 0)
     {
-        if(isset($_POST['userIDList']))
+        if(isset($_POST['users']))
         {
-            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->userIDList)->orderBy('id')->fetchAll('id');
+            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('account')->in($this->post->users)->orderBy('id')->fetchAll('id');
         }
         elseif($_POST)
         {
@@ -625,6 +625,86 @@ class user extends control
     }
 
     /**
+     * Manage contacts.
+     * 
+     * @param  int    $listID 
+     * @access public
+     * @return void
+     */
+    public function manageContacts($listID = 0)
+    {
+        $lists = $this->user->getContactLists($this->app->user->account);
+
+        /* If set $mode, need to update database. */
+        if($this->post->mode)
+        {
+            /* The mode is new: append or new a list. */
+            if($this->post->mode == 'new')
+            {
+                if($this->post->list2Append)
+                {
+                    $this->user->append2ContactList($this->post->list2Append, $this->post->users);
+                    die(js::locate(inlink('manageContacts', "listID={$this->post->list2Append}"), 'parent'));
+                }
+                elseif($this->post->newList)
+                {
+                    $listID = $this->user->createContactList($this->post->newList, $this->post->users);
+                    die(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
+                }
+            }
+            elseif($this->post->mode == 'edit')
+            {
+                $this->user->updateContactList($this->post->listID, $this->post->listName, $this->post->users);
+                die(js::locate(inlink('manageContacts', "listID={$this->post->listID}"), 'parent'));
+            }
+        }
+        if($this->post->users) 
+        {
+            $mode  = 'new';
+            $users = $this->user->getContactUserPairs($this->post->users);
+        }
+        else
+        {
+            $mode  = 'edit';
+            $listID= $listID ? $listID : key($lists);
+            if(!$listID) die(js::alert($this->lang->user->contacts->noListYet) . js::locate($this->createLink('company', 'browse'), 'parent'));
+
+            $list  = $this->user->getContactListByID($listID);
+            $users = explode(',', $list->userList);
+            $users = $this->user->getContactUserPairs($users);
+            $this->view->list = $list;
+        }
+
+        $this->view->lists = $this->user->getContactLists($this->app->user->account);
+        $this->view->users = $users;
+        $this->view->mode  = $mode;
+        $this->display();
+    }
+
+    /**
+     * Delete a contact list.
+     * 
+     * @param  int    $listID 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function deleteContacts($listID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            echo js::confirm($this->lang->user->contacts->confirmDelete, inlink('deleteContacts', "listID=$listID&confirm=yes"));
+            exit;
+        }
+        else
+        {
+            $this->user->deleteContactList($listID);
+            echo js::locate(inlink('manageContacts'), 'parent');
+            exit;
+        }
+    }
+
+    /**
      * Get user for ajax
      *
      * @param  string $requestID
@@ -641,5 +721,4 @@ class user extends control
         $html .= '</form>';
         echo $html;
     }
-
 }
