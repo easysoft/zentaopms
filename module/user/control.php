@@ -721,4 +721,22 @@ class user extends control
         $html .= '</form>';
         echo $html;
     }
+
+    /**
+     * AJAX: get users from a contact list.
+     * 
+     * @param  int    $contactListID 
+     * @access public
+     * @return string
+     */
+    public function ajaxGetContactUsers($contactListID)
+    {
+        $list = $this->user->getContactListByID($contactListID);
+        if($list)
+        {
+            $users = str_replace(',', ', ', $list->userList) . ', ';
+            echo $users;
+        }
+        die();
+    }
 }

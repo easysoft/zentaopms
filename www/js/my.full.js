@@ -551,6 +551,23 @@ function setExport()
 }
 
 /**
+ * Set mailto list from a contact list..
+ * 
+ * @param  string $mailto 
+ * @param  int    $contactListID 
+ * @access public
+ * @return void
+ */
+function setMailto(mailto, contactListID)
+{
+    if(!contactListID) return;
+    link = createLink('user', 'ajaxGetContactUsers', 'listID=' + contactListID);
+    $.get(link, function(users)
+    {
+        $('#' + mailto).val(users);
+    });
+}
+/**
  * Auto checked the checkbox of a row. 
  * 
  * @access public

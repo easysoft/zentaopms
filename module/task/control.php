@@ -72,19 +72,23 @@ class task extends control
             }
         }
 
-        $stories = $this->story->getProjectStoryPairs($projectID);
-        $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $stories          = $this->story->getProjectStoryPairs($projectID);
+        $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
         $moduleOptionMenu = $this->tree->getOptionMenu($projectID, $viewType = 'task');
+
         $header['title']  = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[]       = html::a($taskLink, $project->name);
         $position[]       = $this->lang->task->create;
-        $this->view->header   = $header;
-        $this->view->position = $position;
-        $this->view->project  = $project;
-        $this->view->stories  = $stories;
-        $this->view->storyID  = $storyID;
-        $this->view->members  = $members;
-        $this->view->moduleID = $moduleID;
+
+        $this->view->header           = $header;
+        $this->view->position         = $position;
+        $this->view->project          = $project;
+        $this->view->stories          = $stories;
+        $this->view->storyID          = $storyID;
+        $this->view->members          = $members;
+        $this->view->contactLists     = $contactLists;
+        $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
     }

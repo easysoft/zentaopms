@@ -57,7 +57,12 @@
     </tr>  
      <tr>
       <th class='rowhead'><nobr><?php echo $lang->story->mailto;?></nobr></th>
-      <td><?php echo html::input('mailto', $mailto, 'class="text-1"');?></td>
+      <td>
+        <?php 
+        echo html::input('mailto', $mailto, 'class="text-1"'); 
+        if($contactLists) echo html::select('', $contactLists, '', "onchange=\"setMailto('mailto', this.value)\"");
+        ?>
+      </td>
     </tr>
 
     <tr>

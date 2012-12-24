@@ -85,7 +85,12 @@ userList = "<?php echo join(',', array_keys($users));?>".split(',');
     </tr>
     <tr>
       <th class='rowhead'><nobr><?php echo $lang->bug->lblMailto;?></nobr></th>
-      <td> <?php echo html::input('mailto', $mailto, 'class=text-1');?> </td>
+      <td>
+        <?php 
+        echo html::input('mailto', $mailto, 'class=text-1');
+        if($contactLists) echo html::select('', $contactLists, '', "onchange=\"setMailto('mailto', this.value)\"");
+        ?>
+      </td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->keywords;?></th>

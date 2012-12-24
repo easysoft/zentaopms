@@ -137,6 +137,7 @@ class story extends control
         $this->view->position[]       = $this->lang->story->create;
         $this->view->products         = $products;
         $this->view->users            = $users;
+        $this->view->contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, 'unexpired');
