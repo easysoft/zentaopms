@@ -446,7 +446,7 @@ class testcase extends control
             $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
             $this->view->productID        = $productID;
             $this->view->editedCases      = $editedCases;
-            $this->view->users            = $this->user->getPairs('noletter');
+            $this->view->users            = $this->user->getPairs('nodeleted,qafirst');
 
             $this->display();
         }

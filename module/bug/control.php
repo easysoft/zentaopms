@@ -499,7 +499,7 @@ class bug extends control
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->productID   = $productID;
             $this->view->editedBugs  = $editedBugs;
-            $this->view->users       = $this->user->getPairs('nodeleted');
+            $this->view->users       = $this->user->getPairs('nodeleted,devfirst');
 
             $this->display();
         }
