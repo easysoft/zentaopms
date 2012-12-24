@@ -387,6 +387,8 @@ $lang->resource->testtask->linkcase    = 'linkCase';
 $lang->resource->testtask->unlinkcase  = 'lblUnlinkCase';
 $lang->resource->testtask->runcase     = 'lblRunCase';
 $lang->resource->testtask->results     = 'lblResults';
+$lang->resource->testtask->results     = 'lblResults';
+$lang->resource->testtask->batchRun    = 'batchRun';
 
 $lang->testtask->methodOrder[0]  = 'index';
 $lang->testtask->methodOrder[5]  = 'create';
@@ -507,6 +509,7 @@ $lang->resource->user->bug         = 'bug';
 $lang->resource->user->project     = 'project';
 $lang->resource->user->dynamic     = 'dynamic';
 $lang->resource->user->profile     = 'profile';
+$lang->resource->user->batchEdit   = 'batchEdit';
 
 $lang->user->methodOrder[5]  = 'create';
 $lang->user->methodOrder[10] = 'view';
@@ -777,3 +780,10 @@ $lang->changelog['3.2'][] = 'report-workload';
 $lang->changelog['3.2'][] = 'tree-fix';
 
 $lang->changelog['3.3'][] = 'report-bugAssign';
+
+$lang->changelog['4.0.beta2'][] = 'todo-batchEdit';
+$lang->changelog['4.0.beta2'][] = 'story-batchEdit';
+$lang->changelog['4.0.beta2'][] = 'bug-batchEdit';
+$lang->changelog['4.0.beta2'][] = 'testcase-batchEdit';
+$lang->changelog['4.0.beta2'][] = 'testtask-batchRun';
+$lang->changelog['4.0.beta2'][] = 'user-batchEdit';
