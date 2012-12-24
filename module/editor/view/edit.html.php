@@ -30,7 +30,7 @@
   <?php endif?>
   <tr>
     <td>
-    <?php echo html::textarea('fileContent', $fileContent, "class='w-p100'")?>
+    <?php echo html::textarea('fileContent', str_replace('&', '&amp;', $fileContent), "class='w-p100'")?>
     </td>
   </tr>
   <tr>
