@@ -22,6 +22,23 @@
 </style>
 <script language='Javascript'>
 
+$(function() {
+    $('.date').each(function(){
+        time = $(this).val();
+        if(!isNaN(time) && time != ''){
+            var Y = time.substring(0, 4);
+            var m = time.substring(4, 6);
+            var d = time.substring(6, 8);
+            time = Y + '-' + m + '-' + d;
+            $('.date').val(time);
+        }
+    });
+
+    startDate = new Date(1970, 1, 1);
+    $(".date").datePicker({createButton:true, startDate:startDate, displayDynamic:true})
+        .dpSetPosition($.dpConst.POS_TOP, $.dpConst.POS_RIGHT)
+});
+
 var params        = <?php echo json_encode($fieldParams);?>;
 var groupItems    = <?php echo $config->search->groupItems;?>;
 var setQueryTitle = '<?php echo $lang->search->setQueryTitle;?>';
@@ -56,7 +73,7 @@ function setField(fieldName, fieldNO)
             $('#operator' + nextNO).val('<=');
             $('#valueBox' + nextNO).html($('#box' + fieldName).children().clone());
             $('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
-            $("#value" + nextNO).datePicker({createButton:true, startDate:startDate});
+            $("#value" + nextNO).datePicker({createButton:true, startDate:startDate, displayDynamic:true});
             $("#value" + nextNO).addClass('date');
         }
     }
