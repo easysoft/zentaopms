@@ -105,7 +105,7 @@ $lang->task->reasonList['done']   = '已完成';
 $lang->task->reasonList['cancel'] = '已取消';
 
 $lang->task->afterChoices['continueAdding'] = '继续为该需求添加任务';
-$lang->task->afterChoices['toTastList']     = '返回任务列表';
+$lang->task->afterChoices['toTaskList']     = '返回任务列表';
 $lang->task->afterChoices['toStoryList']    = '返回需求列表';
 
 $lang->task->buttonEdit       = '编辑';

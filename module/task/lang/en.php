@@ -105,7 +105,7 @@ $lang->task->reasonList['done']   = 'Done';
 $lang->task->reasonList['cancel'] = 'Canceled';
 
 $lang->task->afterChoices['continueAdding'] = 'Continue to add task for this story. ';
-$lang->task->afterChoices['toTastList']     = 'To task list. ';
+$lang->task->afterChoices['toTaskList']     = 'To task list. ';
 $lang->task->afterChoices['toStoryList']    = 'To story list. ';
 
 $lang->task->buttonEdit       = 'Edit';

@@ -38,10 +38,35 @@ function setPreview()
         $('#preview').removeClass('hidden');
         $('#preview').attr('href', storyLink);
     }
+    setAfter();
 }
+
+/**
+ * Set after locate. 
+ * 
+ * @access public
+ * @return void
+ */
+function setAfter()
+{
+    if($("#story").select().val() == '') 
+    {
+      if($('input[value="continueAdding"]').attr('checked') == true) 
+      {
+        $('input[value="toTaskList"]').attr('checked', true);
+      }
+      $('input[value="continueAdding"]').attr('disabled', 'disabled');
+    }
+    else
+    {
+      $('input[value="continueAdding"]').attr('disabled', false);
+    }
+}
+
 $(document).ready(function()
 {
     setPreview();
     $("#story").chosen({no_results_text: noResultsMatch});
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    setAfter();
 });
