@@ -537,7 +537,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 .log-asc     {padding:2px 6px; background:url(images/main/zt-icons.png) -2px   25px;}
 .log-desc    {padding:2px 6px; background:url(images/main/zt-icons.png) -22px  25px;}
-.change-hide {padding:2px 8px; background:url(images/main/zt-icons.png) -42px  25px; border:0px;}
-.change-show {padding:2px 8px; background:url(images/main/zt-icons.png) -62px  25px; border:0px;}
-.diff-all    {padding:2px 9px; background:url(images/main/zt-icons.png) -78px  25px; border:0px}
-.diff-short  {padding:2px 9px; background:url(images/main/zt-icons.png) -98px 25px; border:0px}
+.change-hide {padding:2px 6px; background:url(images/main/zt-icons.png) -42px  25px; border:0px;}
+.change-show {padding:2px 6px; background:url(images/main/zt-icons.png) -62px  25px; border:0px;}
+.diff-all    {padding:2px 6px; background:url(images/main/zt-icons.png) -81px  25px; border:0px}
+.diff-short  {padding:2px 6px; background:url(images/main/zt-icons.png) -101px 25px; border:0px}
