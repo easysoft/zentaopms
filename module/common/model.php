@@ -498,7 +498,7 @@ class commonModel extends model
         }
 
         $typeIDs = $type . 'IDs';
-        if($this->session->$typeIDs)
+        if($this->session->$typeIDs and strpos($this->session->$typeIDs, ',' . $objectID . ',') !== false)
         {
             $objectIDs = $this->session->$typeIDs;
             $this->session->set($typeIDs, '');
