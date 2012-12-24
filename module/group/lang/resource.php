@@ -497,21 +497,24 @@ $lang->group->methodOrder[35] = 'manageMember';
 
 /* User. */
 $lang->resource->user = new stdclass();
-$lang->resource->user->create      = 'create';
-$lang->resource->user->batchCreate = 'batchCreate';
-$lang->resource->user->view        = 'view';
-$lang->resource->user->edit        = 'edit';
-$lang->resource->user->unlock      = 'unlock';
-$lang->resource->user->delete      = 'delete';
-$lang->resource->user->todo        = 'todo';
-$lang->resource->user->task        = 'task';
-$lang->resource->user->bug         = 'bug';
-$lang->resource->user->project     = 'project';
-$lang->resource->user->dynamic     = 'dynamic';
-$lang->resource->user->profile     = 'profile';
-$lang->resource->user->batchEdit   = 'batchEdit';
+$lang->resource->user->create         = 'create';
+$lang->resource->user->batchCreate    = 'batchCreate';
+$lang->resource->user->view           = 'view';
+$lang->resource->user->edit           = 'edit';
+$lang->resource->user->unlock         = 'unlock';
+$lang->resource->user->delete         = 'delete';
+$lang->resource->user->todo           = 'todo';
+$lang->resource->user->task           = 'task';
+$lang->resource->user->bug            = 'bug';
+$lang->resource->user->project        = 'project';
+$lang->resource->user->dynamic        = 'dynamic';
+$lang->resource->user->profile        = 'profile';
+$lang->resource->user->batchEdit      = 'batchEdit';
+$lang->resource->user->manageContacts = 'manageContacts';
+$lang->resource->user->deleteContacts = 'deleteContacts';
 
 $lang->user->methodOrder[5]  = 'create';
+$lang->user->methodOrder[7]  = 'batchCreate';
 $lang->user->methodOrder[10] = 'view';
 $lang->user->methodOrder[15] = 'edit';
 $lang->user->methodOrder[20] = 'unlock';
@@ -522,6 +525,9 @@ $lang->user->methodOrder[40] = 'bug';
 $lang->user->methodOrder[45] = 'project';
 $lang->user->methodOrder[50] = 'dynamic';
 $lang->user->methodOrder[55] = 'profile';
+$lang->user->methodOrder[60] = 'batchEdit';
+$lang->user->methodOrder[65] = 'manageContacts';
+$lang->user->methodOrder[70] = 'deleteContacts';
 
 /* Tree. */
 $lang->resource->tree = new stdclass();
@@ -787,3 +793,5 @@ $lang->changelog['4.0.beta2'][] = 'bug-batchEdit';
 $lang->changelog['4.0.beta2'][] = 'testcase-batchEdit';
 $lang->changelog['4.0.beta2'][] = 'testtask-batchRun';
 $lang->changelog['4.0.beta2'][] = 'user-batchEdit';
+$lang->changelog['4.0.beta2'][] = 'user-manageContacts';
+$lang->changelog['4.0.beta2'][] = 'user-deleteContacts';
