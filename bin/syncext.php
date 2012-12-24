@@ -43,7 +43,7 @@ function getFiles($dir, $exceptions = array())
 
     foreach($entries as $entry)
     {
-        if($entry == '.' or $entry == '..' or $entry == '.svn') continue;
+        if($entry == '.' or $entry == '..' or $entry == '.svn' or $entry == 'db') continue;
         if(in_array($entry, $exceptions)) continue;
 
         $fullEntry = $dir . $entry;
