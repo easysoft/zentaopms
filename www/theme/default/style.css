@@ -282,7 +282,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 
 /* Main menu. */
 #mainmenu ul { height:30px; line-height:30px}
-#mainmenu li {padding:0 10px; border-right:3px solid #002242; color:white; font-size:14px; background:#1A4F85}
+#mainmenu li {padding:0 15px; border-right:3px solid #002242; color:white; font-size:14px; background:#1A4F85}
 #mainmenu a  {color:#E5E5E5; font-weight:normal;}
 #mainmenu .active   {background-color:#e5e5e5;}
 #mainmenu .active a {color:#33a52e; font-weight:bold;}
