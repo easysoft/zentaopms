@@ -866,6 +866,7 @@ class projectModel extends model
         foreach($this->post->stories as $key => $storyID)
         {
             $productID = $this->post->products[$key];
+            $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
             $data->story   = $storyID;
