@@ -272,7 +272,7 @@ function switchProject(projectID, module, method, extra)
         method = 'build';
     }
 
-    if(module == 'project' && method == 'create') die;
+    if(module == 'project' && method == 'create') return;
 
     link = createLink(module, method, 'projectID=' + projectID);
     if(extra != '') link = createLink(module, method, 'projectID=' + projectID + '&type=' + extra);
