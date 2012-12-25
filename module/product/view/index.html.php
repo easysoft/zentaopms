@@ -11,6 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <div class='block' id='productbox'>
 <?php if(empty($productStats)):?>
 <table class='table-1 a-center' height='100%'>

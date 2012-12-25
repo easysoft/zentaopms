@@ -11,6 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <h3>
   <?php echo html::a(inlink("index", "locate=no&status=undone&projectID=$project->id"), $lang->project->unDoneProjects);?>
   <?php echo html::a(inlink("index", "locate=no&status=done&projectID=$project->id"), $lang->project->doneProjects);?>
