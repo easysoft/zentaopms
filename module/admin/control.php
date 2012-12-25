@@ -133,6 +133,7 @@ class admin extends control
             'zt_testresult'      => 'zt_testResult'     ,
             'zt_testrun'         => 'zt_testRun'        ,
             'zt_testtask'        => 'zt_testTask'       ,
+            'zt_usercontact'     => 'zt_userContact'    ,
             'zt_usergroup'       => 'zt_userGroup'      ,
             'zt_userquery'       => 'zt_userQuery'      ,
             'zt_usertpl'         => 'zt_userTPL'        

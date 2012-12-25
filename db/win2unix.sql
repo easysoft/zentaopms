@@ -10,6 +10,7 @@ RENAME TABLE `zt_taskestimate` TO `zt_taskEstimate`;
 RENAME TABLE `zt_testresult` TO `zt_testResult`;
 RENAME TABLE `zt_testrun` TO `zt_testRun`;
 RENAME TABLE `zt_testtask` TO `zt_testTask`;
+RENAME TABLE `zt_usercontact` TO `zt_userContact`;
 RENAME TABLE `zt_usergroup` TO `zt_userGroup`;
 RENAME TABLE `zt_userquery` TO `zt_userQuery`;
 RENAME TABLE `zt_usertpl` TO `zt_userTPL`;
