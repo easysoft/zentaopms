@@ -26,7 +26,7 @@
       <th class='w-150px'><?php echo $lang->bug->resolutionAB;?></th>
     </tr>
     <?php foreach($editedBugs as $bug):?>
-    <?
+    <?php
     /**
      * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task. 
      * These thress types if upgrade from bugfree2.x.
