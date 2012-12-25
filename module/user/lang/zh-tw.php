@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 3885 2012-12-24 08:55:41Z wwccss $
+ * @version     $Id: zh-tw.php 3889 2012-12-24 10:17:18Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->user->common    = '用戶';
@@ -55,6 +55,8 @@ $lang->user->login           = "用戶登錄";
 $lang->user->userView        = "人員視圖";
 $lang->user->editProfile     = "修改個人信息";
 $lang->user->editPassword    = "修改密碼";
+$lang->user->manageContacts  = '維護聯繫人';
+$lang->user->deleteContacts  = '刪除聯繫人';
 $lang->user->deny            = "訪問受限";
 $lang->user->confirmDelete   = "您確定刪除該用戶嗎？";
 $lang->user->confirmActivate = "您確定激活該用戶嗎？";
