@@ -34,10 +34,10 @@
     <td><?php echo $users[$action->actor];?></td>
     <td><?php echo $action->date;?></td>
     <td>
-    <?php
-    common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');
-    common::printLink('action', 'hide',     "actionid=$action->id", $lang->action->hide,   'hiddenwin');
-    ?>
+      <?php
+      common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');
+      common::printLink('action', 'hide',     "actionid=$action->id", $lang->action->hide,   'hiddenwin');
+      ?>
     </td>
   </tr>
   <?php endforeach;?>
