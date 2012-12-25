@@ -27,7 +27,7 @@ if(!isset($_SESSION['installing']) and isset($config->installed) and $config->in
 
 /* Reset the config params to make sure the install program will be lauched. */
 $config->set('requestType', 'GET');
-$config->set('debug', false);
+$config->set('debug', true);
 $config->set('default.module', 'install');
 $app->setDebug();
 
