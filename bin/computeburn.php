@@ -29,7 +29,7 @@ class computeburn
     public function run()
     {
         $result = $this->zentao->fetchModel('project', 'computeburn');
-        if(empty($result)) die("Nothing to computburn.");
+        if(empty($result)) die("Nothing to compute.");
         foreach($result as $burns)
         {
             echo $burns->project  . "\t";
