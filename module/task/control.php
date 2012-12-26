@@ -62,7 +62,7 @@ class task extends control
                 echo js::alert($this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding']);
                 die(js::locate($this->createLink('task', 'create', "projectID=$projectID&storyID={$this->post->story}"), 'parent'));
             }
-            elseif($this->post->after == 'toTastList')
+            elseif($this->post->after == 'toTaskList')
             {
                 die(js::locate($taskLink, 'parent'));
             }
