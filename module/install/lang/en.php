@@ -128,8 +128,6 @@ $lang->install->groupList['TOP']['name']    = 'Top manager';
 $lang->install->groupList['TOP']['desc']    = 'for top manager';
 $lang->install->groupList['OTHERS']['name'] = 'Others';
 $lang->install->groupList['OTHERS']['desc'] = 'for others';
-$lang->install->groupList['guest']['name']  = 'Guest';
-$lang->install->groupList['guest']['desc']  = 'for guest';
 
 $lang->install->success = "Success installed";
 

@@ -128,8 +128,6 @@ $lang->install->groupList['TOP']['name']    = '高层管理';
 $lang->install->groupList['TOP']['desc']    = '高层管理';
 $lang->install->groupList['OTHERS']['name'] = '其他';
 $lang->install->groupList['OTHERS']['desc'] = '其他';
-$lang->install->groupList['guest']['name']  = '游客';
-$lang->install->groupList['guest']['desc']  = '游客';
 
 $lang->install->success = "安装成功";
 
