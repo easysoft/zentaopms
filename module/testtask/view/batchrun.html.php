@@ -24,25 +24,26 @@ table .table-1 td{border:0px;}
       <th class='w-id'><?php  echo $lang->idAB;?></th> 
       <th class='w-pri'><?php  echo $lang->priAB;?></th>
       <th class='w-100px'><?php echo $lang->testcase->module;?></th> 
-      <th><?php echo $lang->testcase->title;?></th>
-      <th class='w-150px'><?php echo $lang->testcase->result?></th>
+      <th width='300'><?php echo $lang->testcase->title;?></th>
+      <th width='150'><?php echo $lang->testcase->result?></th>
       <th><?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
     </tr>
     <?php foreach($cases as $caseID => $case):?>
     <tr class='a-center'>
       <td><?php echo $case->id . html::hidden("version[$case->id]", $case->version)?></td>
       <td><?php echo $lang->testcase->priList[$case->pri]?></td>
-      <td align='left'><?php echo $moduleOptionMenu[$case->module]?></td>
-      <td align='left'><?php echo $case->title?></td>
-      <td><?php echo html::radio("results[$case->id]", $resultList, 'pass', "onchange='showAction(this.value,\".action$caseID\")'")?></td>
+      <td align='left'><?php echo "<span title='" . $moduleOptionMenu[$case->module] . "'>" . $moduleOptionMenu[$case->module] . "</span>"?></td>
+      <td align='left'><?php echo "<span title='$case->title'>$case->title</span>"?></td>
+      <td><?php echo html::radio("results[$case->id]", $resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'")?></td>
       <td>
-        <table class='table-1'>
+        <table class='table-1 fixed'>
           <?php $i = 1;?>
           <?php foreach($steps[$caseID] as $stepID => $step):?>
           <tr>
-            <td align='left' width='50%'><?php echo "<span title='$step->desc'>" . $i . "、" . $step->desc . '</span>'?></td>
-            <td align='left' width='50%'><?php echo "<span title='$step->expect'>" . $lang->testcase->stepExpect . "：" . $step->expect . '</span>'?></td>
-            <td class='hidden action<?php echo $caseID?>'><?php echo html::select("steps[$caseID][$stepID]", $lang->testcase->resultList, 'pass') . html::input("reals[$caseID][$stepID]", '', "class='text-2'");?></td>
+            <td align='left' width='30%'><?php echo "<span title='$step->desc'>" . $i . "、" . $step->desc . '</span>'?></td>
+            <td align='left' width='30%'><?php echo "<span title='$step->expect'>" . $lang->testcase->stepExpect . "：" . $step->expect . '</span>'?></td>
+            <td width='50' class='hidden action<?php echo $caseID?>'><?php echo html::select("steps[$caseID][$stepID]", $lang->testcase->resultList, 'pass')?></td>
+            <td class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][$stepID]", '', "class='text-1'");?></td>
           </tr>
           <?php $i++?>
           <?php endforeach?>

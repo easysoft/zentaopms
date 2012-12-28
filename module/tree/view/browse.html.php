@@ -56,14 +56,14 @@
                   {
                       echo html::select('allProject', $allProject, '', 'onchange=syncProductOrProject(this,"project")');
                       echo html::select('projectModule', $projectModules, '');
-                      echo html::commonButton($lang->tree->syncFromProject, 'id=copyModule onclick=syncModule('.$currentProject.',"task")');
+                      echo html::commonButton($lang->tree->syncFromProject, "id='copyModule' onclick='syncModule($currentProject, \"task\")'");
                   }
                   echo '<br />';
               }
               elseif($viewType != 'story' and strpos($viewType, 'doc') === false and $viewType != 'webapp')
               {
                   echo html::select('productModule', $productModules, '', 'class=select-3');
-                  echo html::commonButton($lang->tree->syncFromProduct, 'onclick=syncModule('.$rootID.')');
+                  echo html::commonButton($lang->tree->syncFromProduct, 'onclick="syncModule('.$rootID.')"');
                   echo '<br />';
               }
               else if($viewType == 'story')
@@ -72,7 +72,7 @@
                   {
                       echo html::select('allProduct', $allProduct, '', 'onchange=syncProductOrProject(this,"product")');
                       echo html::select('productModule', $productModules, '');
-                      echo html::commonButton($lang->tree->syncFromProduct, 'id=copyModule onclick=syncModule('.$currentProduct.')');
+                      echo html::commonButton($lang->tree->syncFromProduct, "id='copyModule' onclick='syncModule($currentProduct, \"story\")'");
                   }
                   echo '<br />';
               }

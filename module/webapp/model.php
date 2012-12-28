@@ -215,7 +215,7 @@ class webappModel extends model
         $installWebapp->author    = $webapp->author;
         $installWebapp->url       = $webapp->url;
         $installWebapp->icon      = $webapp->icon ? $this->config->webapp->url . $webapp->icon : '';
-        $installWebapp->target    = $webapp->target;
+        $installWebapp->target    = empty($webapp->target) ? 'blank' : $webapp->target;
         $installWebapp->size      = $webapp->size;
         $installWebapp->desc      = $webapp->desc;
         $installWebapp->addedBy   = $this->app->user->account;
