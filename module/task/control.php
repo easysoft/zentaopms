@@ -212,9 +212,12 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        $noclosedProjects = $this->project->getPairs('noclosed,nocode');
+        unset($noclosedProjects[$this->view->project->id]);
+        $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
+
         $this->view->header->title = $this->lang->task->edit;
         $this->view->position[]    = $this->lang->task->edit;
-        $this->view->projects      = $this->project->getPairs('noclosed,nocode');
         $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
         $this->view->members       = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->assignedTo);        
         $this->view->modules       = $this->tree->getOptionMenu($this->view->task->project, $viewType = 'task');
