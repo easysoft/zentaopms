@@ -139,7 +139,11 @@ class commonModel extends model
         if($module == 'user' and strpos('login|logout|deny', $method) !== false) return true;
         if($module == 'api'  and $method == 'getsessionid') return true;
 
-        if($this->loadModel('user')->isLogon() and strpos($method, 'ajax') === 0) return true;
+        if($this->loadModel('user')->isLogon())
+        {
+            if(strpos($method, 'ajax') !== false) return true;
+            if(strpos($method, 'downNotify') !== false) return true;
+        }
 
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
