@@ -141,8 +141,8 @@ class commonModel extends model
 
         if($this->loadModel('user')->isLogon())
         {
-            if(strpos($method, 'ajax') !== false) return true;
-            if(strpos($method, 'downNotify') !== false) return true;
+            if(stripos($method, 'ajax') !== false) return true;
+            if(stripos($method, 'downnotify') !== false) return true;
         }
 
         if($module == 'misc' and $method == 'about') return true;
