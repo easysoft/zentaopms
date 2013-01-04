@@ -115,6 +115,7 @@ $lang->testcase->typeList['performance'] = 'Performance';
 $lang->testcase->typeList['config']      = 'Config';
 $lang->testcase->typeList['install']     = 'Install';
 $lang->testcase->typeList['security']    = 'Security';
+$lang->testcase->typeList['interface']   = 'Interface';
 $lang->testcase->typeList['other']       = 'Other';
 
 $lang->testcase->stageList['']            = '';
