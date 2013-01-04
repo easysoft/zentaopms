@@ -258,8 +258,9 @@ class taskModel extends model
                     case 'done':
                     {
                         $task->left = 0;
-                        if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
+                        if(!$task->finishedBy)   $task->finishedBy   = $this->app->user->account;
                         if(!$task->finishedDate) $task->finishedDate = $now;
+                        if($task->closedReason)  $task->closedDate   = $now;
                     }
                     break;
                     case 'cancel':
@@ -313,6 +314,8 @@ class taskModel extends model
                     ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
                     ->where('id')->eq((int)$taskID)
                     ->exec();
+
+                if($task->status == 'done' and $task->closedReason) $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('id')->eq($taskID)->exec();
 
                 if($oldTask->story != false) $this->loadModel('story')->setStage($oldTask->story);
                 if(!dao::isError()) 
