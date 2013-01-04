@@ -339,7 +339,7 @@ $file->copyFile($buildDir . '/zentao.conf', './xampp/apache/conf/extra/httpd-xam
 $file->copyFile($buildDir . '/ioncube_loader_win_5.4.dll', './xampp/php/ext/ioncube_loader_win_5.4.dll');
 
 /* Copy serive bat file. */
-$file->copyFile($buildDir . '/apache_installservice.bat',   './xampp/apache_installservice.bat');
-$file->copyFile($buildDir . '/apache_uninstallservice.bat', './xampp/apache_uninstallservice.bat');
-$file->copyFile($buildDir . '/mysql_installservice.bat',    './xampp/mysql_installservice.bat');
-$file->copyFile($buildDir . '/mysql_uninstallservice.bat',  './xampp/mysql_uninstallservice.bat');
+//$file->copyFile($buildDir . '/apache_installservice.bat',   './xampp/apache_installservice.bat');
+//$file->copyFile($buildDir . '/apache_uninstallservice.bat', './xampp/apache_uninstallservice.bat');
+//$file->copyFile($buildDir . '/mysql_installservice.bat',    './xampp/mysql_installservice.bat');
+//$file->copyFile($buildDir . '/mysql_uninstallservice.bat',  './xampp/mysql_uninstallservice.bat');
