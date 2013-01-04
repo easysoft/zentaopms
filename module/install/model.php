@@ -400,8 +400,9 @@ class installModel extends model
             $admin->account  = $this->post->account;
             $admin->realname = $this->post->account;
             $admin->password = md5($this->post->password);
+            $admin->gender   = '';
             $admin->company  = $companyID;
-            $this->dao->insert(TABLE_USER)->data($admin)->autoCheck()->check('account', 'notempty')->exec();
+            $this->dao->insert(TABLE_USER)->data($admin)->check('account', 'notempty')->exec();
 
             /* Update the group and groupPriv table. */
             $this->dao->update(TABLE_GROUP)->set('company')->eq($companyID)->exec($autoCompany = false);
