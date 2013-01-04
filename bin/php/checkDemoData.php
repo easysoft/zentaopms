@@ -1,6 +1,6 @@
 <?php
-include("../config/my.php");
-$demoSql = file("../db/demo.sql");
+include("../../config/my.php");
+$demoSql = file("../../db/demo.sql");
 $output  = '';
 foreach($demoSql as $sql)
 {
@@ -10,5 +10,5 @@ foreach($demoSql as $sql)
        strpos($sql, $config->db->prefix . 'group')   === false
        ) $output .= $sql;
 }
-file_put_contents("../db/demo.sql", $output);
+file_put_contents("../../db/demo.sql", $output);
 

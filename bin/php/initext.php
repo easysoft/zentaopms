@@ -9,10 +9,10 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-include '../config/config.php';
+include '../../config/config.php';
 
 $modules    = array();
-$moduleRoot = realpath('../module/') . '/';
+$moduleRoot = realpath('../../module/') . '/';
 
 if(is_dir($moduleRoot))
 {

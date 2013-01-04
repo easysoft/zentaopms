@@ -1,2 +1,0 @@
-php computeburn.php
-pause

@@ -1,5 +1,5 @@
 <?php
-include '../config/config.php';
+include '../../config/config.php';
 connectDB();
 
 $databases[] = 'zentao_03';

@@ -26,7 +26,7 @@ $pmsTagURL = $pmsURL . $pmsTag;
 
 echo $phpTag . "'\t" . $pmsTag . "\n";
 
-chdir('../release/');
+chdir('../../release/');
 echo `svn export $phpTagURL`;
 echo `svn export $pmsTagURL`;
 

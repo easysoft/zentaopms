@@ -3,7 +3,7 @@
 * This file is used to compress css and js files.
 */
 
-$baseDir = dirname(dirname(__FILE__));
+$baseDir = dirname(dirname(dirname(__FILE__)));
 
 //--------------------------------- PROCESS JS FILES ------------------------------ //
 

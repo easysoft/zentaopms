@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 $langType = empty($argv[1]) ? 'zh-cn' : $argv[1];
-$modules = glob('../module/*');
+$modules = glob('../../module/*');
 $maxLength = 0;
 foreach($modules as $modulePath)
 {

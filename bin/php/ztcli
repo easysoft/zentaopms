@@ -21,7 +21,7 @@ $request = parse_url(trim($argv[1]));
 $_SERVER['HTTP_HOST'] = $request['host'];
 
 /* Load the framework. */
-chdir(dirname(__FILE__));
+chdir(dirname(dirname(__FILE__)));
 include '../framework/router.class.php';
 include '../framework/control.class.php';
 include '../framework/model.class.php';
@@ -40,7 +40,7 @@ else
 }
 
 /* Instance the app and run it. */
-$app    = router::createApp('pms', dirname(dirname(__FILE__)));
+$app    = router::createApp('pms', dirname(dirname(dirname(__FILE__))));
 $common = $app->loadCommon();
 $app->parseRequest();
 $app->loadModule();

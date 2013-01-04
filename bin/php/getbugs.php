@@ -2,7 +2,7 @@
 <?php
 error_reporting(E_ERROR);
 /* 包含http客户端类，snoopy。在禅道lib/snoopy里面可以找到。*/
-$pmsRoot = dirname(dirname(__FILE__));
+$pmsRoot = dirname(dirname(dirname(__FILE__)));
 include $pmsRoot . '/config/my.php';
 include $pmsRoot . '/lib/snoopy/snoopy.class.php';
 

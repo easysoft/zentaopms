@@ -3,7 +3,7 @@
 $langType = 'zh-tw';
 $langDesc = 'zh-tw';
 if(empty($langType)) die('lang') . "\n";
-foreach(glob('../module/*') as $moduleName)
+foreach(glob('../../module/*') as $moduleName)
 {
     $moduleLangPath  = realpath($moduleName) . '/lang/';
     $defaultLangFile = $moduleLangPath . 'zh-cn.php';

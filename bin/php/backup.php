@@ -3,7 +3,7 @@
 error_reporting(E_ERROR);
 
 /* Include my.php and pclzip class. */
-$pmsRoot = dirname(dirname(__FILE__));
+$pmsRoot = dirname(dirname(dirname(__FILE__)));
 include $pmsRoot . '/config/my.php';
 include $pmsRoot . '/lib/pclzip/pclzip.class.php';
 
@@ -56,7 +56,7 @@ else
 }
 
 /* Backup the data. */
-chdir(dirname(dirname(__FILE__)) . "/www");
+chdir(dirname(dirname(dirname(__FILE__))) . "/www");
 if(!is_dir('data/upload')) die(" No files needed backup.\n");
 
 $dataFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
