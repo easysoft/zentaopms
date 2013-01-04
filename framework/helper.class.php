@@ -399,17 +399,7 @@ class helper
     {
         $files = array();
         $dir = realpath($dir);
-        if(is_dir($dir))
-        {
-            if($dh = opendir($dir))
-            {
-                while(($file = readdir($dh)) !== false) 
-                {
-                    if(strpos($file, $pattern) !== false) $files[] = $dir . DIRECTORY_SEPARATOR . $file;
-                }
-                closedir($dh);
-            }
-        }
+        if(is_dir($dir)) $files = glob($dir . DIRECTORY_SEPARATOR . '*' . $pattern);
         return $files;
     }
 
