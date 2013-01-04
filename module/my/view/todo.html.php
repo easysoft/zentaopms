@@ -115,7 +115,7 @@
         }
         ?>
         </div>
-        <?php if($type == 'all') $pager->show();?>
+        <?php $pager->show();?>
         </td>
       </tr>
     </tfoot>
