@@ -11,11 +11,16 @@
     <input type='button' onclick='delFile(this)'  class='icon-delete' value='&nbsp;'></input>
   </div>
 EOT;
-  printf($lang->file->maxUploadSize, ini_get('upload_max_filesize'));
   for($i = 1; $i <= $fileCount; $i ++) echo str_replace('$i', $i, $fileRow);
 ?>
 </div>
 <script language='javascript'>
+/**
+ * Show the upload max filesize of config.  
+ */
+maxUploadInfo = "(<?php printf($lang->file->maxUploadSize, ini_get('upload_max_filesize'));?>)";
+$(document).ready(function(){ $('.fileBox').parent().parent().parent().find('th').append(maxUploadInfo); });
+
 /**
  * Set the width of the file form.
  * 
