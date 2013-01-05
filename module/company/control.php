@@ -141,6 +141,11 @@ class company extends control
         {
             $this->company->update();
             if(dao::isError()) die(js::error(dao::getError()));
+
+            /* reset company in session. */
+            $company = $this->loadModel('company')->getByDomain();
+            $this->session->set('company', $company);
+
             die(js::alert($this->lang->company->successSaved));
         }
 
