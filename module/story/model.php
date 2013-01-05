@@ -556,11 +556,12 @@ class storyModel extends model
 
             foreach($stories as $storyID => $story)
             {
+                if(!$story->closedReason) continue;
+
                 $oldStory = $this->getById($storyID);
 
                 $this->dao->update(TABLE_STORY)->data($story)
                     ->autoCheck()
-                    ->batchCheck($this->config->story->close->requiredFields, 'notempty')
                     ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
                     ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
                     ->where('id')->eq($storyID)->exec();
