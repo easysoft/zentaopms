@@ -552,4 +552,18 @@ class productModel extends model
         }
         return $products;
     }
+
+    /**
+     * Get the summary of product's stories.
+     * 
+     * @param  array    $stories 
+     * @access public
+     * @return string.
+     */
+    public function summary($stories)
+    {
+        $totalEstimate = 0.0;
+        foreach($stories as $key => $story) $totalEstimate += $story->estimate; 
+        return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate);
+    }
 }

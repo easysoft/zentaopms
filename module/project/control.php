@@ -187,6 +187,7 @@ class project extends control
 
         /* Assign. */
         $this->view->tasks       = $tasks;
+        $this->view->summary     = $this->project->summary($tasks);
         $this->view->tabID       = 'task';
         $this->view->pager       = $pager;
         $this->view->recTotal    = $pager->recTotal;

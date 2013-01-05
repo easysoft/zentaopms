@@ -71,11 +71,9 @@ var browseType = '<?php echo $browseType;?>';
           </tr>
           </thead>
           <tbody>
-          <?php $totalEstimate = 0.0;?>
           <?php foreach($stories as $key => $story):?>
           <?php
           $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
-          $totalEstimate += $story->estimate; 
           $canView  = common::hasPriv('story', 'view');
           ?>
           <tr class='a-center'>
@@ -124,7 +122,7 @@ var browseType = '<?php echo $browseType;?>';
                       echo html::commonButton($lang->story->batchClose, "onclick=\"changeAction('productStoryForm', 'batchClose', '$actionLink')\"");
                   }
               }
-              printf($lang->product->storySummary, count($stories), $totalEstimate);
+              echo $summary;
               ?>
               </div>
               <?php $pager->show();?>

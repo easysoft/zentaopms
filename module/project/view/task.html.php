@@ -73,20 +73,9 @@ var browseType  = '<?php echo $browseType;?>';
             <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
           </thead>
-          <?php  
-            $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = 0;  
-            $totalEstimate = $totalConsumed = $totalLeft = 0.0;
-          ?>
           <tbody>
           <?php foreach($tasks as $task):?>
-          <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
-          <?php  
-          $totalEstimate  += $task->estimate;
-          $totalConsumed  += $task->consumed;
-          $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
-          $statusVar      = 'status' . ucfirst($task->status);
-          $$statusVar ++;
-          ?>
+          <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
           <tr class='a-center'>
             <td>
               <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
@@ -146,9 +135,9 @@ var browseType  = '<?php echo $browseType;?>';
               <?php $columns = $this->cookie->windowWidth > $this->config->wideSize ? 14 : 12;?>
               <td colspan='<?php echo $columns;?>'>
                 <div class='f-left'>
-                <?php
-                if(common::hasPriv('task', 'batchEdit') and count($tasks))echo html::selectAll() . html::selectReverse() . html::submitButton($lang->task->batchEdit);
-                printf($lang->project->taskSummary, count($tasks), $statusWait, $statusDoing, $totalEstimate, $totalConsumed, $totalLeft);
+                <?php 
+                  if(common::hasPriv('task', 'batchEdit') and count($tasks))echo html::selectAll() . html::selectReverse() . html::submitButton($lang->task->batchEdit); 
+                  echo $summary;
                 ?>
                 </div>
                 <?php $pager->show();?>

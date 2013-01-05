@@ -1235,4 +1235,27 @@ class projectModel extends model
             ->page($pager)
             ->fetchAll();
     }
+
+    /**
+     * Get the summary of project.
+     * 
+     * @param  array    $tasks 
+     * @access public
+     * @return string
+     */
+    public function summary($tasks)
+    {
+        $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = 0;  
+        $totalEstimate = $totalConsumed = $totalLeft = 0.0;
+        foreach($tasks as $task)
+        {
+            $totalEstimate  += $task->estimate;
+            $totalConsumed  += $task->consumed;
+            $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
+            $statusVar       = 'status' . ucfirst($task->status);
+            $$statusVar ++;
+        }
+
+        return sprintf($this->lang->project->taskSummary, count($tasks), $statusWait, $statusDoing, $totalEstimate, $totalConsumed, $totalLeft);
+    }
 }
