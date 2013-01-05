@@ -18,6 +18,7 @@
 <?php js::set('holders', json_encode($lang->bug->placeholder));?>
 <script language='Javascript'>
 userList = "<?php echo join(',', array_keys($users));?>".split(',');
+page     = 'create';
 </script>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table class='table-1'> 
@@ -25,7 +26,7 @@ userList = "<?php echo join(',', array_keys($users));?>".split(',');
     <tr>
       <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
       <td>
-        <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='select-3'");?>
+        <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='select-3'");?>
         <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='setAssignedTo()'");?></span>
       </td>
      </tr>  

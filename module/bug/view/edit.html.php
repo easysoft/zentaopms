@@ -16,6 +16,7 @@
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <script language='Javascript'>
+page                   = 'edit';
 changeProductConfirmed = false;
 changeProjectConfirmed = false;
 confirmChangeProduct   = '<?php echo $lang->bug->confirmChangeProduct;?>';
@@ -24,7 +25,6 @@ oldStoryID             = '<?php echo $bug->story;?>';
 oldTaskID              = '<?php echo $bug->task;?>';
 oldOpenedBuild         = '<?php echo $bug->openedBuild;?>';
 oldResolvedBuild       = '<?php echo $bug->resolvedBuild;?>';
-emptySelect            = "<select name='task' id='task'><option value=''></option></select>";
 userList               = "<?php echo join(',', array_keys($users));?>".split(',');
 </script>
 <form method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform'>

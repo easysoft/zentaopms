@@ -1,124 +1,4 @@
 /**
- * Load all fields. 
- * 
- * @param  int    $productID 
- * @access public
- * @return void
- */
-function loadAll(productID)
-{
-    $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
-    $('#task').chosen({no_results_text: noResultsMatch});
-    loadModuleMenu(productID);
-    loadProductStories(productID);
-    loadProductProjects(productID);
-    loadProductBuilds(productID); 
-    setAssignedTo(); 
-}
-
-/**
- * Load module menu.
- * 
- * @param  int    $productID 
- * @access public
- * @return void
- */
-function loadModuleMenu(productID)
-{
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug');
-    $('#moduleIdBox').load(link);
-}
-
-/**
- * Load product stories 
- * 
- * @param  int    $productID 
- * @access public
- * @return void
- */
-function loadProductStories(productID)
-{
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
-}
-
-/**
- * Load projects of product. 
- * 
- * @param  int    $productID 
- * @access public
- * @return void
- */
-function loadProductProjects(productID)
-{
-    link = createLink('product', 'ajaxGetProjects', 'productID=' + productID);
-    $('#projectIdBox').load(link);
-}
-
-/**
- * Load product builds.
- * 
- * @param  int    $productID 
- * @access public
- * @return void
- */
-function loadProductBuilds(productID)
-{
-    link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild');
-    $('#buildBox').load(link);
-}
-
-/**
- * Load project related bugs and tasks.
- * 
- * @param  int    $projectID 
- * @access public
- * @return void
- */
-function loadProjectRelated(projectID)
-{
-    if(projectID)
-    {
-        loadProjectTasks(projectID);
-        loadProjectStories(projectID);
-        loadProjectBuilds(projectID);
-        loadAssignedTo(projectID);
-    }
-    else
-    {
-        $('#taskIdBox').innerHTML = '';
-        loadProductStories($('#product').val());
-        loadProductBuilds($('#product').val());
-    }
-}
-
-/**
- * Load project tasks.
- * 
- * @param  int    $projectID 
- * @access public
- * @return void
- */
-function loadProjectTasks(projectID)
-{
-    link = createLink('task', 'ajaxGetProjectTasks', 'projectID=' + projectID);
-    $('#taskIdBox').load(link, function(){$('#task').chosen({no_results_text:noResultsMatch});});
-}
-
-/**
- * Load project stories.
- * 
- * @param  int    $projectID 
- * @access public
- * @return void
- */
-function loadProjectStories(projectID)
-{
-    link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=' + $('#product').val());
-    $('#storyIdBox').load(link, function(){$('#story').chosen({no_results_text:noResultsMatch});});
-}
-
-/**
  * Load assginedTo list, make use the members of this project at first.
  * 
  * @param  int     $projectID 
@@ -129,21 +9,6 @@ function loadAssignedTo(projectID)
 {
     link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
     $('#assignedToBox').load(link)       
-}
-
-/**
- * Load project builds.
- * 
- * @param  int $projectID 
- * @access public
- * @return void
- */
-function loadProjectBuilds(projectID)
-{
-    selectedBuilds = $('#openedBuild').val();
-    if(!selectedBuilds) selectedBuilds = 0;
-    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=openedBuild&builds=' + selectedBuilds);
-    $('#buildBox').load(link);
 }
 
 /**
@@ -199,11 +64,3 @@ function deleteTemplate(templateID)
     hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
     $('#tplBox' + templateID).addClass('hidden');
 }
-
-$(function() 
-{
-    $("#story").chosen({no_results_text:noResultsMatch});
-    $("#task").chosen({no_results_text:noResultsMatch});
-    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
-    setAssignedTo();
-})
