@@ -278,7 +278,6 @@ $lang->admin->menu->index     = array('link' => 'Index|admin|index');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->editor    = array('link' => 'Scaffold|editor|index', 'subModule' => 'editor');
 $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
-$lang->admin->menu->clearData = array('link' => 'Reset|admin|cleardata');
 $lang->admin->menu->convert   = array('link' => 'Import|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->trashes   = array('link' => 'Trash|action|trash', 'subModule' => 'action');
 

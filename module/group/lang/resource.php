@@ -578,11 +578,9 @@ $lang->search->methodOrder[25] = 'select';
 $lang->resource->admin = new stdclass();
 $lang->resource->admin->index     = 'index';
 $lang->resource->admin->checkDB   = 'checkDB';
-$lang->resource->admin->clearData = 'clearData';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
-$lang->admin->methodOrder[10] = 'clearData';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();
