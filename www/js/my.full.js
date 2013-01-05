@@ -567,6 +567,19 @@ function setMailto(mailto, contactListID)
         $('#' + mailto).val(users);
     });
 }
+
+/**
+ * Set comment. 
+ * 
+ * @access public
+ * @return void
+ */
+function setComment()
+{
+    $('#comment').toggle();
+    $('#comment textarea').focus();
+}
+
 /**
  * Auto checked the checkbox of a row. 
  * 
