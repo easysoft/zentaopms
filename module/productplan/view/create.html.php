@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::import($jsRoot . 'misc/date.js');?>
 <form method='post' target='hiddenwin' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->productplan->create;?></caption>
@@ -30,7 +31,10 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->productplan->end;?></th>
-      <td><?php echo html::input('end', '', "class='text-3 date'");?></td>
+      <td>
+        <?php echo html::input('end', '', "class='text-3 date'");?>
+        <span><?php echo html::radio('delta', $lang->productplan->endList , '', "onclick='computeEndDate(this.value)'");?></span>
+      </td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->productplan->desc;?></th>
