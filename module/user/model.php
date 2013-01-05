@@ -211,6 +211,17 @@ class userModel extends model
             ->check('account', 'account')
             ->checkIF($this->post->email != false, 'email', 'email')
             ->exec();
+        if($this->post->role)
+        {
+            $group = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->like('%' . $this->post->role . '%')->fetch();
+            if($group)
+            {
+                $data = new stdClass();
+                $data->account = $this->post->account;
+                $data->group   = $group->id;
+                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+            }
+        }
     }
 
     /**
