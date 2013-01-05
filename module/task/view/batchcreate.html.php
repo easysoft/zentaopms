@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<script> var batchCreateNum = '<?php echo $config->task->batchCreate;?>'; </script>
+<?php js::set('batchCreateNum', $config->task->batchCreate);?>
 <form method='post'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->task->project . $lang->colon . $lang->task->batchCreate;?></caption>

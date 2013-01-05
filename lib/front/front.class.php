@@ -770,6 +770,23 @@ EOT;
         $js .= self::end();
         echo $js;
     }
+
+    /**
+     * Set js value.
+     * 
+     * @param  string   $key 
+     * @param  mix      $value 
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function set($key, $value)
+    {
+        $js  = self::start();
+        $js .= "$key=$value";
+        $js .= self::end();
+        echo $js;
+    }
 }
 
 /**

@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<script> var testcaseBatchCreateNum = '<?php echo $config->testcase->batchCreate;?>'; </script>
+<?php js::set('testcaseBatchCreateNum', $config->testcase->batchCreate);?>
 <form method='post' enctype='multipart/form-data'>
   <table align='center' class='table-1 fixed'> 
     <caption><?php echo $lang->testcase->batchCreate;?></caption>

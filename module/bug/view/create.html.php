@@ -15,7 +15,7 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script>var holders = <?php echo json_encode($lang->bug->placeholder);?></script>
+<?php js::set('holders', json_encode($lang->bug->placeholder));?>
 <script language='Javascript'>
 userList = "<?php echo join(',', array_keys($users));?>".split(',');
 </script>

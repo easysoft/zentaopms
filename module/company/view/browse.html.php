@@ -13,8 +13,8 @@
 <?php 
 include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
+js::set('deptID', $deptID);
 ?>
-<script>deptID = <?php echo $deptID;?></script>
 <table class='cont-lt1'>
   <tr><td colspan='3'><div id='querybox'><?php echo $searchForm?></div></td></tr>
   <tr valign='top'>

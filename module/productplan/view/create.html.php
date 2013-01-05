@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script>var holders=<?php echo json_encode($lang->productplan->placeholder);?></script>
 <form method='post' target='hiddenwin' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->productplan->create;?></caption>
