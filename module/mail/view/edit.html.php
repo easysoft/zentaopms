@@ -59,7 +59,7 @@ include '../../common/view/header.html.php';
      <td colspan='2' class='a-center'>
        <?php 
        echo html::submitButton();
-       if($this->config->mail->turnon) echo html::linkButton($lang->mail->test, inlink('test'));
+       if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
        ?>
      </td>
    </tr>
