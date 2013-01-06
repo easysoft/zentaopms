@@ -185,10 +185,10 @@ class groupModel extends model
      * @access public
      * @return bool
      */
-    public function updatePrivByGroup($groupID)
+    public function updatePrivByGroup($groupID, $menu)
     {
         /* Delete old. */
-        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->exec();
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->in($this->getMenuModules($menu))->exec();
 
         /* Insert new. */
         foreach($this->post->actions as $moduleName => $moduleActions)
@@ -301,5 +301,38 @@ class groupModel extends model
                 unset($tmpResources);
             }
         }
+    }
+
+    /**
+     * Check menu have module 
+     * 
+     * @param  string    $menu 
+     * @param  string    $moduleName 
+     * @access public
+     * @return void
+     */
+    public function checkMenuModule($menu, $moduleName)
+    {
+        if(empty($menu)) return true;
+        if($menu == 'other' and (isset($this->lang->menugroup->$moduleName) or isset($this->lang->menu->$moduleName))) return false;
+        if($menu != 'other' and !($moduleName == $menu or (isset($this->lang->menugroup->$moduleName) and $this->lang->menugroup->$moduleName == $menu))) return false;
+        return true;
+    }
+
+    /**
+     * Get modules in menu
+     * 
+     * @param  string    $menu 
+     * @access public
+     * @return void
+     */
+    public function getMenuModules($menu)
+    {
+        $modules = array();
+        foreach($this->lang->resource as $moduleName => $action)
+        {
+            if($this->checkMenuModule($menu, $moduleName)) $modules[] = $moduleName;
+        }
+        return $modules;
     }
 }

@@ -11,6 +11,15 @@
  */
 ?>
 <form method='post' target='hiddenwin'>
+<div id='featurebar'>
+  <?php foreach($lang->menu as $module => $title):?>
+  <span <?php echo $menu == $module ? "class='active'" : ""?>>
+  <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=$module"), substr($title, 0, strpos($title, '|')))?>
+  </span>
+  <?php endforeach;?>
+  <span <?php echo $menu == 'other' ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=other"), $lang->group->other)?></span>
+  <span <?php echo empty($menu) ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu="), $lang->group->all)?></span>
+</div>
   <table class='table-1 a-left'> 
     <caption class='caption-tl'>
       <?php 
@@ -23,6 +32,7 @@
       <th><?php echo $lang->group->method;?></th>
     </tr>  
     <?php foreach($lang->resource as $moduleName => $moduleActions):?>
+    <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
     <tr class='f-14px <?php echo cycle('even, bg-yellow');?>'>
       <th class='a-right'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></td>
       <td id='<?php echo $moduleName;?>' class='pv-10px'>

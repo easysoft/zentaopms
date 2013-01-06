@@ -35,6 +35,8 @@ $lang->group->priv     = '权限';
 $lang->group->option   = '选项';
 $lang->group->inside   = '组内用户';
 $lang->group->outside  = '组外用户';
+$lang->group->other    = '其他模块';
+$lang->group->all      = '所有权限';
 
 $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';

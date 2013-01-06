@@ -120,15 +120,18 @@ class group extends control
      * @access public
      * @return void
      */
-    public function managePriv($type = 'byGroup', $param = 0)
+    public function managePriv($type = 'byGroup', $param = 0, $menu = 'my')
     {
         if($type == 'byGroup') $groupID = $param;
         $this->view->type = $type;
-        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
+        foreach($this->lang->resource as $moduleName => $action)
+        {
+            if($this->group->checkMenuModule($menu, $moduleName)) $this->app->loadLang($moduleName);
+        }
 
         if(!empty($_POST))
         {
-            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID);
+            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu);
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
             print(js::alert($result ? $this->lang->group->successSaved : $this->lang->group->errorNotSaved));
             exit;
@@ -146,6 +149,8 @@ class group extends control
             $this->view->group      = $group;
             $this->view->changelogs = $this->lang->changelog;
             $this->view->groupPrivs = $groupPrivs;
+            $this->view->groupID    = $groupID;
+            $this->view->menu       = $menu;
         }
         elseif($type == 'byModule')
         {
