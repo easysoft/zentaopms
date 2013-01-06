@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -25,15 +24,16 @@
 
 <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
 <table class='table-1 fixed tablesorter'>
+  <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
     <tr class='colhead'>
-      <th class='w-id'> <?php echo $lang->idAB;?></th>
-      <th class='w-pri'><?php echo $lang->priAB;?></th>
-      <th><?php echo $lang->testcase->title;?></th>
-      <th class='w-type'>  <?php echo $lang->typeAB;?></th>
-      <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-      <th class='w-status'><?php echo $lang->statusAB;?></th>
-      <th class='w-40px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-id'>    <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+      <th>                 <?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
+      <th class='w-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
+      <th class='w-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+      <th class='w-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+      <th class='w-40px'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>

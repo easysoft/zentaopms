@@ -315,6 +315,10 @@ class my extends control
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->tabID         = 'test';
         $this->view->type          = $type;
+        $this->view->recTotal      = $recTotal;
+        $this->view->recPerPage    = $recPerPage;
+        $this->view->pageID        = $pageID;
+        $this->view->orderBy       = $orderBy;
         $this->view->pager         = $pager;
         
         $this->display();
