@@ -39,7 +39,7 @@
     <?php foreach($tasks2Imported as $task):?>
     <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
     <tr class='a-center'>
-      <td><?php echo $projects[$task->project];?></td>
+      <td><?php echo substr($projects[$task->project], 2);?></td>
       <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
       <td><span class='<?php echo 'pri' . $task->pri?>'><?php echo $task->pri;?></span></td>
       <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
