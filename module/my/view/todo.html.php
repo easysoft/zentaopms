@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <form method='post' id='todoform'>
   <div id='featurebar'>
     <div class='f-left'>
@@ -53,16 +52,17 @@
     </div>
   </div>
   <table class='table-1 tablesorter'>
+    <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
     <thead>
     <tr class='colhead'>
-      <th class='w-id'><?php echo $lang->idAB;?></th>
-      <th class='w-date'><?php echo $lang->todo->date;?></th>
-      <th class='w-type'><?php echo $lang->todo->type;?></th>
-      <th class='w-pri'><?php echo $lang->priAB;?></th>
-      <th><?php echo $lang->todo->name;?></th>
-      <th class='w-hour'><?php echo $lang->todo->beginAB;?></th>
-      <th class='w-hour'><?php echo $lang->todo->endAB;?></th>
-      <th class='w-status'><?php echo $lang->todo->status;?></th>
+      <th class='w-id'>  <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-date'><?php common::printOrderLink('date',  $orderBy, $vars, $lang->todo->date);?></th>
+      <th class='w-type'><?php common::printOrderLink('type',  $orderBy, $vars, $lang->todo->type);?></th>
+      <th class='w-pri'> <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
+      <th>               <?php common::printOrderLink('name',  $orderBy, $vars, $lang->todo->name);?></th>
+      <th class='w-hour'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->todo->beginAB);?></th>
+      <th class='w-hour'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->todo->endAB);?></th>
+      <th class='w-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
       <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>

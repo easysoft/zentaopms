@@ -68,7 +68,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function todo($type = 'today', $account = '', $status = 'all', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($type = 'today', $account = '', $status = 'all', $orderBy="date, status, begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -85,13 +85,16 @@ class my extends control
         $this->view->position[]    = $this->lang->my->todo;
 
         /* Assign. */
-        $this->view->dates   = $this->loadModel('todo')->buildDateList();
-        $this->view->todos   = $this->todo->getList($type, $account, $status, 0, $pager);
-        $this->view->date    = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
-        $this->view->type    = is_numeric($type) ? 'bydate' : $type;
-        $this->view->status  = $status;
-        $this->view->account = $this->app->user->account;
-        $this->view->pager   = $pager;
+        $this->view->dates        = $this->loadModel('todo')->buildDateList();
+        $this->view->todos        = $this->todo->getList($type, $account, $status, 0, $pager, $orderBy);
+        $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
+        $this->view->type         = is_numeric($type) ? 'bydate' : $type;
+        $this->view->recTotal     = $recTotal;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->status       = $status;
+        $this->view->account      = $this->app->user->account;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
         $this->view->importFuture = ($type != 'today');
 
         $this->display();
