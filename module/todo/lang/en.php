@@ -43,10 +43,6 @@ $lang->todo->desc        = 'Desc';
 $lang->todo->private     = 'Private';
 $lang->todo->idvalue     = 'Task or bug';
 
-$lang->todo->week         = '(l)';  // date function's param.
-$lang->todo->today        = 'Today';
-$lang->todo->weekDateList = '';
-$lang->todo->dayInFuture  = 'Future';
 $lang->todo->confirmBug   = 'This todo linked to bug #%s，chang it also?';
 $lang->todo->confirmTask  = 'This todo linked to task #%s，chang it also?';
 

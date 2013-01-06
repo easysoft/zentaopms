@@ -43,10 +43,6 @@ $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事务';
 $lang->todo->idvalue     = '任务或Bug';
 
-$lang->todo->week         = '星期';
-$lang->todo->today        = '今天';
-$lang->todo->weekDateList = '一,二,三,四,五,六,天';
-$lang->todo->dayInFuture  = '暂不指定';
 $lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';
 $lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
 
