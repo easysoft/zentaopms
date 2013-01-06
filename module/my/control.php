@@ -447,8 +447,12 @@ class my extends control
         $this->view->position[]    = $this->lang->my->dynamic;
 
         /* Assign. */
-        $this->view->type    = $type;
-        $this->view->actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager);
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager);
         $this->display();
     }
 

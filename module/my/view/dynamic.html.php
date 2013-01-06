@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
   <?php 
   echo '<span id="today">'      . html::a(inlink('dynamic', "type=today"),      $lang->action->dynamic->today)      . '</span>';
@@ -26,13 +25,14 @@
 </div>
 
 <table class='table-1 colored tablesorter'>
+  <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='colhead'>
-    <th class='w-150px'><?php echo $lang->action->date;?></th>
-    <th class='w-user'> <?php echo $lang->action->actor;?></th>
-    <th class='w-100px'><?php echo $lang->action->action;?></th>
-    <th class='w-80px'> <?php echo $lang->action->objectType;?></th>
-    <th class='w-id'>   <?php echo $lang->idAB;?></th>
+    <th class='w-150px'><?php common::printOrderLink('date',       $orderBy, $vars, $lang->action->date);?></th>
+    <th class='w-user'> <?php common::printOrderLink('actor',      $orderBy, $vars, $lang->action->actor);?></th>
+    <th class='w-100px'><?php common::printOrderLink('action',     $orderBy, $vars, $lang->action->action);?></th>
+    <th class='w-80px'> <?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
+    <th class='w-id'>   <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
     <th><?php echo $lang->action->objectName;?></th>
   </tr>
   </thead>
