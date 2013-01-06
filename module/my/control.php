@@ -111,7 +111,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function story($type = 'assignedto', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($type = 'assignedto', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true));
@@ -123,9 +123,13 @@ class my extends control
         /* Assign. */
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[]    = $this->lang->my->story;
-        $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, $type, 'id_desc', $pager);
+        $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $pager);
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->type          = $type;
+        $this->view->recTotal      = $recTotal;
+        $this->view->recPerPage    = $recPerPage;
+        $this->view->pageID        = $pageID;
+        $this->view->orderBy       = $orderBy;
         $this->view->pager         = $pager;
 
         $this->display();
