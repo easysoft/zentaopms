@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -24,17 +23,18 @@
 </div>
 <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
 <table class='table-1 fixed tablesorter'>
+  <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='colhead'>
-    <th class='w-id'><?php echo $lang->idAB;?></th>
-    <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
-    <th class='w-pri'><?php echo $lang->priAB;?></th>
-    <th class='w-type'><?php echo $lang->typeAB;?></th>
-    <th><?php echo $lang->bug->title;?></th>
-    <th class='w-user'><?php echo $lang->openedByAB;?></th>
-    <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
-    <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
-    <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
+    <th class='w-id'>        <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+    <th class='w-severity'>  <?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+    <th class='w-pri'>       <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+    <th class='w-type'>      <?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
+    <th>                     <?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+    <th class='w-user'>      <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+    <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+    <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars,  $lang->bug->resolutionAB);?></th>
+    <th class='w-80px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>

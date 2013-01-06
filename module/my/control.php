@@ -197,7 +197,7 @@ class my extends control
                 ->where('t2.deleted')->eq(0)
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)
-                ->orderBy('t1.id_desc')->page($pager)->fetchAll();
+                ->orderBy($orderBy)->page($pager)->fetchAll();
         }
         elseif($type == 'openedbyme')
         {
@@ -230,6 +230,10 @@ class my extends control
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->tabID         = 'bug';
         $this->view->type          = $type;
+        $this->view->recTotal      = $recTotal;
+        $this->view->recPerPage    = $recPerPage;
+        $this->view->pageID        = $pageID;
+        $this->view->orderBy       = $orderBy;
         $this->view->pager         = $pager;
 
         $this->display();
