@@ -249,8 +249,12 @@ class my extends control
      * @access public
      * @return void
      */
-    public function testtask()
+    public function testtask($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
 
@@ -258,8 +262,13 @@ class my extends control
 
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->testTask;
         $this->view->position[]    = $this->lang->my->testTask;
-        $this->view->tasks         = $this->loadModel('testtask')->getByUser($this->app->user->account);
+        $this->view->tasks         = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $orderBy);
         
+        $this->view->recTotal      = $recTotal;
+        $this->view->recPerPage    = $recPerPage;
+        $this->view->pageID        = $pageID;
+        $this->view->orderBy       = $orderBy;
+        $this->view->pager         = $pager;
         $this->display();
 
     }

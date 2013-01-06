@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -23,16 +22,17 @@
   </div>
 </div>
 <table class='table-1 colored tablesorter fixed'>
+  <?php $vars = "orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='colhead'>
-    <th class='w-id'><?php echo $lang->idAB;?></th>
-    <th><?php echo $lang->testtask->name;?></th>
-    <th><?php echo $lang->testtask->project;?></th>
-    <th><?php echo $lang->testtask->build;?></th>
-    <th class='w-80px'><?php echo $lang->testtask->begin;?></th>
-    <th class='w-80px'><?php echo $lang->testtask->end;?></th>
-    <th class='w-50px'><?php echo $lang->statusAB;?></th>
-    <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
+    <th class='w-id'> <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+    <th> <?php common::printOrderLink('name', $orderBy, $vars, $lang->testtask->name);?></th>
+    <th> <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
+    <th> <?php common::printOrderLink('build', $orderBy, $vars, $lang->testtask->build);?></th>
+    <th class='w-80px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
+    <th class='w-80px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
+    <th class='w-50px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+    <th class='w-80px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -55,6 +55,7 @@
   </tr>
   <?php endforeach;?>
   </tbody>
+  <tfoot><tr><td colspan='8'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <script language="Javascript">$("#testtaskTab").addClass('active'); </script>
 <?php include '../../common/view/footer.html.php';?>
