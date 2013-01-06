@@ -1,2 +1,2 @@
-php ../php/computeburn.php
+php ..\php\computeburn.php
 pause

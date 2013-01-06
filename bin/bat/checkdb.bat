@@ -1,2 +1,2 @@
-php ../php/checkdb.php
+php ..\php\checkdb.php
 pause

@@ -1,2 +1,2 @@
-php ../php/todo.php
+php ..\php\todo.php
 pause

@@ -1,2 +1,2 @@
-php ../php/backup.php
+php ..\php\backup.php
 pause

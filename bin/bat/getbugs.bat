@@ -1,2 +1,2 @@
-php ../php/getbugs.php
+php ..\php\getbugs.php
 pause

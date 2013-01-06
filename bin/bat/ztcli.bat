@@ -1,1 +1,1 @@
-php ../php/ztcli %*
+php ..\php\ztcli %*
