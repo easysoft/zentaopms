@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <script language="Javascript">var type='<?php echo $type;?>';</script>
 
 <div id='featurebar'>
@@ -30,19 +29,20 @@
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
 <?php endif;?>
   <table class='table-1 tablesorter fixed' id='tasktable'>
+    <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='colhead'>
-      <th class='w-id'><?php echo $lang->idAB;?></th>
-      <th class='w-pri'><?php echo $lang->priAB;?></th>
-      <th class='w-150px'><?php echo $lang->task->project;?></th>
-      <th><?php echo $lang->task->name;?></th>
-      <th class='w-hour'><?php echo $lang->task->estimateAB;?></th>
-      <th class='w-hour'><?php echo $lang->task->consumedAB;?></th>
-      <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
-      <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
-      <th class='w-status'><?php echo $lang->statusAB;?></th>
-      <th class='w-user'><?php echo $lang->openedByAB;?></th>
-      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-id'>    <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-pri'>   <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
+      <th class='w-150px'> <?php common::printOrderLink('projectName', $orderBy, $vars, $lang->task->project);?></th>
+      <th>                 <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
+      <th class='w-hour'>  <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
+      <th class='w-hour'>  <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
+      <th class='w-hour'>  <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
+      <th class='w-date'>  <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
+      <th class='w-status'><?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
+      <th class='w-user'>  <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+      <th class='w-100px'> <?php echo $lang->actions;?></th>
     </tr>
     </thead>   
     <tbody>

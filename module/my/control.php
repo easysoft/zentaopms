@@ -91,6 +91,7 @@ class my extends control
         $this->view->type         = is_numeric($type) ? 'bydate' : $type;
         $this->view->recTotal     = $recTotal;
         $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
         $this->view->status       = $status;
         $this->view->account      = $this->app->user->account;
         $this->view->orderBy      = $orderBy;
@@ -140,7 +141,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function task($type = 'assignedto', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($type = 'assignedto', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('taskList',  $this->app->getURI(true));
@@ -154,8 +155,12 @@ class my extends control
         $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[]    = $this->lang->my->task;
         $this->view->tabID         = 'task';
-        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager);
+        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $orderBy);
         $this->view->type          = $type;
+        $this->view->recTotal      = $recTotal;
+        $this->view->recPerPage    = $recPerPage;
+        $this->view->pageID        = $pageID;
+        $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager         = $pager;
         $this->display();

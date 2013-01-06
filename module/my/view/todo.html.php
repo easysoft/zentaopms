@@ -52,7 +52,7 @@
     </div>
   </div>
   <table class='table-1 tablesorter'>
-    <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
+    <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='colhead'>
       <th class='w-id'>  <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
