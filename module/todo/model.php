@@ -231,7 +231,7 @@ class todoModel extends model
      * @access public
      * @return void
      */
-    public function getList($date = 'today', $account = '', $status = 'all', $limit = 0, $pager = null)
+    public function getList($date = 'today', $account = '', $status = 'all', $limit = 0, $pager = null, $orderBy="date, status, begin")
     {
         $todos = array();
         if($date == 'today') 
@@ -296,7 +296,7 @@ class todoModel extends model
             ->andWhere("date <= '$end'")
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
-            ->orderBy('date, status, begin')
+            ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
             ->query();
