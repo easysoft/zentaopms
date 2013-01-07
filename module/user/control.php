@@ -25,7 +25,6 @@ class user extends control
         $this->loadModel('company')->setMenu();
         $this->loadModel('dept');
         $this->loadModel('todo');
-        $this->loadModel('date');
     }
 
     /**
@@ -72,7 +71,7 @@ class user extends control
         /* Get user, totos. */
         $user  = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
         $todos = $this->todo->getList($type, $account, $status, 0, $pager);
-        $date  = (int)$type == 0 ? $this->date->today() : $type;
+        $date  = (int)$type == 0 ? helper::today() : $type;
 
         $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
         $position[]      = $this->lang->user->todo;

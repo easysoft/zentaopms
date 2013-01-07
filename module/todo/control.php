@@ -20,7 +20,7 @@ class todo extends control
     public function __construct()
     {
         parent::__construct();
-        $this->loadModel('date');
+        $this->app->loadClass('date');
         $this->loadModel('task');
         $this->loadModel('bug');
         $this->loadModel('my')->setMenu();
@@ -36,7 +36,7 @@ class todo extends control
      */
     public function create($date = 'today', $account = '')
     {
-        if($date == 'today') $date = $this->date->today();
+        if($date == 'today') $date = date::today();
         if($account == '')   $account = $this->app->user->account;
         if(!empty($_POST))
         {
@@ -52,8 +52,8 @@ class todo extends control
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->date     = strftime("%Y-%m-%d", strtotime($date));
-        $this->view->times    = $this->date->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time     = $this->date->now();
+        $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time     = date::now();
         $this->display();
     }
 
@@ -84,8 +84,8 @@ class todo extends control
         $this->view->header   = $header;
         $this->view->position = $position;
         $this->view->date     = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
-        $this->view->times    = $this->date->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->time     = $this->date->now();
+        $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time     = date::now();
 
         $this->display();
     }
@@ -121,7 +121,7 @@ class todo extends control
 
         $this->view->header   = $header;
         $this->view->position = $position;
-        $this->view->times    = $this->date->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->todo     = $todo;
         $this->display();
     }
@@ -185,8 +185,8 @@ class todo extends control
             $this->view->bugs        = $bugs;
             $this->view->tasks       = $tasks;
             $this->view->editedTodos = $editedTodos;
-            $this->view->times       = $this->date->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-            $this->view->time        = $this->date->now();
+            $this->view->times       = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+            $this->view->time        = date::now();
             $this->view->header      = $header;
             $this->view->position    = $position;
 
@@ -235,7 +235,7 @@ class todo extends control
         $this->view->header->title = "TODO #$todo->id $todo->name";
         $this->view->position[]    = $this->lang->todo->view;
         $this->view->todo          = $todo;
-        $this->view->times         = $this->date->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->times         = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->actions       = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from          = $from;
@@ -300,7 +300,7 @@ class todo extends control
     public function import2Today()
     {
         $todoIDList = $this->post->todoIDList;
-        $today      = $this->date->today();
+        $today      = date::today();
         $this->dao->update(TABLE_TODO)->set('date')->eq($today)->where('id')->in($todoIDList)->exec();
         die(js::locate($this->session->todoList));
     }
@@ -340,7 +340,7 @@ class todo extends control
             $users    = $this->loadModel('user')->getPairs('noletter');
             $bugs     = $this->loadModel('bug')->getUserBugPairs($account);
             $tasks    = $this->loadModel('task')->getUserTaskPairs($account);
-            $times    = $this->date->buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+            $times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
 
             foreach($todos as $todo)
             {

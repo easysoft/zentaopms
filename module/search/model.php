@@ -329,13 +329,13 @@ class searchModel extends model
      */
     public function replaceDynamic($query)
     {
-        $this->loadModel('date');
-        $lastWeek  = $this->date->getLastWeek();
-        $thisWeek  = $this->date->getThisWeek();
-        $lastMonth = $this->date->getLastMonth();
-        $thisMonth = $this->date->getThisMonth();
-        $yesterday = $this->date->yesterday();
-        $today     = $this->date->today();
+        $this->app->loadClass('date');
+        $lastWeek  = date::getLastWeek();
+        $thisWeek  = date::getThisWeek();
+        $lastMonth = date::getLastMonth();
+        $thisMonth = date::getThisMonth();
+        $yesterday = date::yesterday();
+        $today     = date::today();
         if(strpos($query, '$') !== false)
         {
             $query = str_replace('$@me', $this->app->user->account, $query);

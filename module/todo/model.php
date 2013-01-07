@@ -231,41 +231,41 @@ class todoModel extends model
      */
     public function getList($date = 'today', $account = '', $status = 'all', $limit = 0, $pager = null, $orderBy="date, status, begin")
     {
-        $this->loadModel('date');
+        $this->app->loadClass('date');
         $todos = array();
         if($date == 'today') 
         {
-            $begin = $this->date->today();
+            $begin = date::today();
             $end   = $begin;
         }
         elseif($date == 'yesterday') 
         {
-            $begin = $this->date->yesterday();
+            $begin = date::yesterday();
             $end   = $begin;
         }
         elseif($date == 'thisweek')
         {
-            extract($this->date->getThisWeek());
+            extract(date::getThisWeek());
         }
         elseif($date == 'lastweek')
         {
-            extract($this->date->getLastWeek());
+            extract(date::getLastWeek());
         }
         elseif($date == 'thismonth')
         {
-            extract($this->date->getThisMonth());
+            extract(date::getThisMonth());
         }
         elseif($date == 'lastmonth')
         {
-            extract($this->date->getLastMonth());
+            extract(date::getLastMonth());
         }
         elseif($date == 'thisseason')
         {
-            extract($this->date->getThisSeason());
+            extract(date::getThisSeason());
         }
         elseif($date == 'thisyear')
         {
-            extract($this->date->getThisYear());
+            extract(date::getThisYear());
         }
         elseif($date == 'future')
         {
@@ -280,7 +280,7 @@ class todoModel extends model
         elseif($date == 'before')
         {
             $begin = '1970-01-01';
-            $end   = $this->date->yesterday();
+            $end   = date::yesterday();
         }
         else
         {
@@ -309,8 +309,8 @@ class todoModel extends model
         {
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-            $todo->begin = $this->date->formatTime($todo->begin);
-            $todo->end   = $this->date->formatTime($todo->end);
+            $todo->begin = date::formatTime($todo->begin);
+            $todo->end   = date::formatTime($todo->end);
 
             /* If is private, change the title to private. */
             if($todo->private and $this->app->user->account != $todo->account) $todo->name = $this->lang->todo->thisIsPrivate;

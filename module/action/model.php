@@ -545,12 +545,12 @@ class actionModel extends model
      */
     public function computeBeginAndEnd($period)
     {
-        $this->loadModel('date');
+        $this->app->loadClass('date');
 
-        $today      = $this->date->today();
-        $tomorrow   = $this->date->tomorrow();
-        $yesterday  = $this->date->yesterday();
-        $twoDaysAgo = $this->date->twoDaysAgo();
+        $today      = date::today();
+        $tomorrow   = date::tomorrow();
+        $yesterday  = date::yesterday();
+        $twoDaysAgo = date::twoDaysAgo();
 
         $period = strtolower($period);
 
@@ -564,12 +564,12 @@ class actionModel extends model
         if($period == 'thisweek' or $period == 'lastweek')
         {
             $func = "get$period";
-            extract($this->date->$func());
+            extract(date::$func());
             return array('begin' => $begin, 'end' => $end . ' 23:59:59');
         }
 
-        if($period == 'thismonth')  return $this->date->getThisMonth();
-        if($period == 'lastmonth')  return $this->date->getLastMonth();
+        if($period == 'thismonth')  return date::getThisMonth();
+        if($period == 'lastmonth')  return date::getLastMonth();
     }
 
     /**
