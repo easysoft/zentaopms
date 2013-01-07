@@ -120,7 +120,7 @@ class group extends control
      * @access public
      * @return void
      */
-    public function managePriv($type = 'byGroup', $param = 0, $menu = 'my')
+    public function managePriv($type = 'byGroup', $param = 0, $menu = 'my', $version = '')
     {
         if($type == 'byGroup') $groupID = $param;
         $this->view->type = $type;
@@ -131,7 +131,7 @@ class group extends control
 
         if(!empty($_POST))
         {
-            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu);
+            if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
             print(js::alert($result ? $this->lang->group->successSaved : $this->lang->group->errorNotSaved));
             exit;
@@ -146,11 +146,20 @@ class group extends control
             $this->view->header->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
             $this->view->position[]    = $group->name . $this->lang->colon . $this->lang->group->managePriv;
 
+            /* Join changelog when be equal or greater than this version.*/
+            $realVersion = str_replace('_', '.', $version);
+            $changelog = array();
+            foreach($this->lang->changelog as $currentVersion => $currentChangeLog)
+            {
+                if(version_compare($currentVersion, $realVersion, '>=')) $changelog[] = join($currentChangeLog, ',');
+            }
+
             $this->view->group      = $group;
-            $this->view->changelogs = $this->lang->changelog;
+            $this->view->changelogs = ',' . join($changelog, ',') . ',';
             $this->view->groupPrivs = $groupPrivs;
             $this->view->groupID    = $groupID;
             $this->view->menu       = $menu;
+            $this->view->version    = $version;
         }
         elseif($type == 'byModule')
         {

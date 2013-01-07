@@ -14,33 +14,45 @@
 <div id='featurebar'>
   <?php foreach($lang->menu as $module => $title):?>
   <span <?php echo $menu == $module ? "class='active'" : ""?>>
-  <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=$module"), substr($title, 0, strpos($title, '|')))?>
+  <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=$module&version=$version"), substr($title, 0, strpos($title, '|')))?>
   </span>
   <?php endforeach;?>
-  <span <?php echo $menu == 'other' ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=other"), $lang->group->other)?></span>
-  <span <?php echo empty($menu) ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu="), $lang->group->all)?></span>
+  <span <?php echo $menu == 'other' ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=other&version=$version"), $lang->group->other)?></span>
+  <span <?php echo empty($menu) ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=&version=$version"), $lang->group->all)?></span>
+  <span><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value)");?></span>
 </div>
   <table class='table-1 a-left'> 
-    <caption class='caption-tl'>
-      <?php 
-      echo $group->name . $lang->colon . $lang->group->managePriv;
-      echo html::select('version', $this->lang->group->versions, '', "onchange=showPriv(this.value)");
-      ?>
-    </caption>
     <tr class='colhead'>
       <th><?php echo $lang->group->module;?></th>
       <th><?php echo $lang->group->method;?></th>
     </tr>  
     <?php foreach($lang->resource as $moduleName => $moduleActions):?>
     <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
+    <?php
+    /* Check method in select version. */
+    if($version)
+    {
+        $hasMethod = false;
+        foreach($moduleActions as $action => $actionLabel)
+        {
+            if(strpos($changelogs, ",$moduleName-$actionLabel,") !== false)
+            {
+                $hasMethod = true;
+                break;
+            }
+        }
+        if(!$hasMethod) continue;
+    }
+    ?>
     <tr class='f-14px <?php echo cycle('even, bg-yellow');?>'>
       <th class='a-right'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></td>
       <td id='<?php echo $moduleName;?>' class='pv-10px'>
         <?php $i = 1;?>
         <?php foreach($moduleActions as $action => $actionLabel):?>
+        <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
         <div class='w-p20 f-left'>
           <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> />
-          <span class='priv' id=<?php echo $moduleName . '-' . $actionLabel;?>><?php echo $lang->$moduleName->$actionLabel;?></span>
+          <span class='priv' id="<?php echo $moduleName . '-' . $actionLabel;?>"><?php echo $lang->$moduleName->$actionLabel;?></span>
         </div>
         <?php if(($i %  4) == 0) echo "<div class='c-both'></div>"; $i ++;?>
         <?php endforeach;?>
@@ -51,15 +63,16 @@
       <th class='rowhead'><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
       <td class='a-center'>
         <?php 
-        echo html::submitButton($lang->save);
+        echo html::submitButton($lang->save, "onclick='setNoChecked()'");
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
         echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.
+        echo html::hidden('noChecked'); // Save the value of no checked.
         ?>
       </td>
     </tr>
   </table>
 </form>
 <script type='text/javascript'>
-var newPriv = <?php echo json_encode($changelogs)?>;
-var version = "<?php echo $this->config->version?>";
+var groupID = <?php echo $groupID?>;
+var menu    = "<?php echo $menu?>";
 </script>

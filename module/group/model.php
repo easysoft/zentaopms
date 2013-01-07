@@ -185,20 +185,55 @@ class groupModel extends model
      * @access public
      * @return bool
      */
-    public function updatePrivByGroup($groupID, $menu)
+    public function updatePrivByGroup($groupID, $menu, $version)
     {
+        /* Set priv when have version. */
+        if($version)
+        {
+            $noCheckeds = trim($this->post->noChecked, ',');
+            if($noCheckeds)
+            {
+                $noCheckeds = explode(',', $noCheckeds);
+                foreach($noCheckeds as $noChecked)
+                {
+                    /* Delete no checked priv*/
+                    list($module, $method) = explode('-', $noChecked);
+                    $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->eq($module)->andWhere('method')->eq($method)->exec();
+                }
+            }
+
+            /* Replace new. */
+            if($this->post->actions)
+            {
+                foreach($this->post->actions as $moduleName => $moduleActions)
+                {
+                    foreach($moduleActions as $actionName)
+                    {
+                        $data->group = $groupID;
+                        $data->module = $moduleName;
+                        $data->method = $actionName;
+                        $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+                    }
+                }
+            }
+            return true;
+        }
+
         /* Delete old. */
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->in($this->getMenuModules($menu))->exec();
 
         /* Insert new. */
-        foreach($this->post->actions as $moduleName => $moduleActions)
+        if($this->post->actions)
         {
-            foreach($moduleActions as $actionName)
+            foreach($this->post->actions as $moduleName => $moduleActions)
             {
-                $data->group = $groupID;
-                $data->module = $moduleName;
-                $data->method = $actionName;
-                $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+                foreach($moduleActions as $actionName)
+                {
+                    $data->group = $groupID;
+                    $data->module = $moduleName;
+                    $data->method = $actionName;
+                    $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+                }
             }
         }
         return true;

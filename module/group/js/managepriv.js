@@ -1,11 +1,6 @@
 function showPriv(value)
 {
-    $('.priv').removeClass('red');
-    privs = newPriv[value];
-    for(var item in privs)
-    {
-        $('#' + privs[item]).addClass('red');
-    }
+  location.href = createLink('group', 'managePriv', "type=byGroup&param="+ groupID + "&menu=" + menu + "&version=" + value);
 }
 
 /* Override the setHelpLink(). */
@@ -25,8 +20,11 @@ function setModuleActions(module)
     $('.' + module + 'Actions').removeClass('hidden');  // Show the action control for current module.
 }
 
-$(function()
+function setNoChecked()
 {
-    showPriv(version);
+    var noCheckValue = '';
+    $(':checkbox').each(function(){
+        if(!$(this).attr('checked') && $(this).next('span').attr('id') != undefined) noCheckValue = noCheckValue + ',' + $(this).next('span').attr('id');
+    })
+    $('#noChecked').val(noCheckValue);
 }
-);
