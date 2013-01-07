@@ -117,14 +117,14 @@ var customed   = <?php echo (int)$customed;?>;
             <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri];?>'><?php echo $lang->bug->priList[$bug->pri];?></span></td>
 
             <?php $class = 'confirm' . $bug->confirmed;?>
-            <td class='a-left nobr'><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
+            <td class='a-left' title="<?php echo $bug->title?>"><?php echo "<span class='$class'>[{$lang->bug->confirmedList[$bug->confirmed]}] </span>" . html::a($bugLink, $bug->title);?></td>
 
             <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
             <td><?php echo $lang->bug->statusList[$bug->status];?></td>
             <?php endif;?>
 
             <?php if($browseType == 'needconfirm'):?>
-            <td class='a-left nobr'><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
+            <td class='a-left' title="<?php echo $bug->storyTitle?>"><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
             <td><?php echo html::a(inlink('confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin')?></td>
             <?php else:?>
             <td><?php echo $users[$bug->openedBy];?></td>
