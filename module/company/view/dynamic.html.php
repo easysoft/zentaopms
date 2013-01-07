@@ -48,7 +48,7 @@ var browseType = '<?php echo $browseType;?>';
   <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
   <tr class='a-center'>
     <td><?php echo $action->date;?></td>
-    <td><?php isset($users[$action->actor]) ? print($users[$action->actor]) : print($action->actor);?></td>
+    <td><?php echo substr(isset($users[$action->actor]) ? $users[$action->actor] : $action->actor, 2);?></td>
     <td><?php echo $action->actionLabel;?></td>
     <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
     <td><?php echo $action->objectID;?></td>
