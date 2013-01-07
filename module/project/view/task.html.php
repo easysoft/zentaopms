@@ -82,7 +82,7 @@ var browseType  = '<?php echo $browseType;?>';
               <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
             </td>
             <td><span class='<?php echo 'pri'. $lang->task->priList[$task->pri]?>'><?php echo $lang->task->priList[$task->pri];?></span></td>
-            <td class='a-left nobr'>
+            <td class='a-left' title="<?php echo $task->name?>">
               <?php 
               if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
               if($task->fromBug) echo html::a($this->createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
@@ -110,7 +110,7 @@ var browseType  = '<?php echo $browseType;?>';
             <td><?php echo $task->estimate;?></td>
             <td><?php echo $task->consumed;?></td>
             <td><?php echo $task->left;?></td>
-            <td class='a-left nobr'>
+            <td class='a-left' title="<?php echo $task->storyTitle?>">
               <?php 
               $story = '';
               if($task->storyID and common::hasPriv('story', 'view'))  $story = html::a($this->createLink('story', 'view', "storyid=$task->storyID"), $task->storyTitle);
