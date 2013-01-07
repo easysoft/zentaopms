@@ -103,27 +103,6 @@ function shortcut()
 }
 
 /**
- * Set the titile of all objects which class is .nobr.
- * 
- * @access public
- * @return void
- */
-function setNowrapObjTitle()
-{
-    $('.nobr').each(function (i) 
-    {
-        if($.browser.mozilla) 
-        {
-            this.title = this.textContent;
-        }
-        else
-        {
-            this.title = this.innerText;
-        }
-    })
-}
-
-/**
  * Set the product switcher 
  * 
  * @access public
@@ -833,7 +812,6 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    setNowrapObjTitle();
     setRequiredFields();
     setPlaceholder();
     setProductSwitcher();
