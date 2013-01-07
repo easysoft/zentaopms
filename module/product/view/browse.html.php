@@ -82,8 +82,8 @@ var browseType = '<?php echo $browseType;?>';
               <?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?>
             </td>
             <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri];?>'><?php echo $lang->story->priList[$story->pri]?></span></td>
-            <td class='a-left nobr'><nobr><?php echo html::a($viewLink, $story->title);?></nobr></td>
-            <td class='nobr'><?php echo $story->planTitle;?></td>
+            <td class='a-left'><nobr><?php echo html::a($viewLink, $story->title, '_self', "title='$story->title'");?></nobr></td>
+            <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
             <td><?php echo $lang->story->sourceList[$story->source];?></td>
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $users[$story->assignedTo];?></td>
