@@ -85,7 +85,6 @@ class my extends control
         $this->view->position[]    = $this->lang->my->todo;
 
         /* Assign. */
-        $this->view->dates        = $this->loadModel('date')->buildDateList();
         $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $orderBy);
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = is_numeric($type) ? 'bydate' : $type;
