@@ -126,7 +126,7 @@ class group extends control
         $this->view->type = $type;
         foreach($this->lang->resource as $moduleName => $action)
         {
-            if($this->group->checkMenuModule($menu, $moduleName)) $this->app->loadLang($moduleName);
+            if($this->group->checkMenuModule($menu, $moduleName) or $type != 'byGroup') $this->app->loadLang($moduleName);
         }
 
         if(!empty($_POST))
