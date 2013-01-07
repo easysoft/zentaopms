@@ -30,15 +30,15 @@ class index extends control
      * @access public
      * @return void
      */
-    public function index()
+    public function index($type='')
     {
-        if(isset($this->app->config->flow) or strpos($this->config->version, 'pro') !== false or strpos($this->app->company->admins, ",{$this->app->user->account},") === false) $this->locate($this->createLink('my', 'index'));
+        if(empty($type))$this->locate($this->createLink('my', 'index'));
 
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system', 'common', '', 'flow', $this->post->flow);
             if($this->post->flow != 'full') die(js::locate($this->createLink('extension', 'install', "extension={$this->config->index->flow2Ext[$this->post->flow]}"), 'parent'));
-            die(js::locate($this->createLink('my', 'index'), 'parent'));
+            die(js::reload( 'parent.parent'));
         }
         $this->display();
     }

@@ -26,7 +26,10 @@
     </td>
   </tr>
   <tr>
-    <td><?php echo html::submitButton()?></td>
+    <td><?php echo "<p>{$lang->index->flowNotice}</p>"?></td>
+  </tr>
+  <tr>
+    <td align='center'><?php echo html::submitButton()?></td>
   </tr>
 </table>
 </form>

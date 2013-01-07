@@ -2,9 +2,11 @@
 $lang->index->common = 'Index';
 $lang->index->index  = 'Index';
 
-$lang->index->selectFlow = '请选择禅道使用方式';
+$lang->index->selectFlow = 'Please select zentao use flow';
 
-$lang->index->flowList['full']      = '全生命周期管理（禅道完全功能）';
-$lang->index->flowList['onlyTest']  = '测试管理（禅道测试管理扩展，去掉了需求、任务管理，只保留bug管理、用例管理和测试任务管理，可以只用作测试跟踪）';
-$lang->index->flowList['onlyTask']  = '任务管理（禅道任务管理扩展，去掉了需求、测试管理，只保留任务管理，可以只用作简单任务跟踪）';
-$lang->index->flowList['onlyStory'] = '需求管理（禅道需求管理扩展，去掉了任务、测试管理，只保留需求管理，可以只用作需求整理）';
+$lang->index->flowList['full']      = 'Total life cycle management(Zentao fully functional)';
+$lang->index->flowList['onlyTest']  = 'Test management(Zentao test management extension. Remove the story, task management, Just keep bug, case and test management, Can only be used for the test track)';
+$lang->index->flowList['onlyTask']  = 'Task management(Zentao task management extension. Remove the story, test management, Just keep task management, Can only be used for the task track)';
+$lang->index->flowList['onlyStory'] = 'Story management(Zentao story management extension, Remove the task, test management, Just keep story management, Can only be used for the trim story)';
+
+$lang->index->flowNotice = "<span class='red'>Note: if the choice is not total life cycle management, then you can go to \"Admin -> Extension\", the corresponding extension unloading, can reuse Zentao fully functional.</span>";

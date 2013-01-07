@@ -13,6 +13,7 @@
 <?php 
 include '../../common/view/header.html.php';
 include '../../common/view/treeview.html.php';
+include '../../common/view/colorize.html.php';
 js::set('deptID', $deptID);
 ?>
 <table class='cont-lt1'>
@@ -33,7 +34,7 @@ js::set('deptID', $deptID);
     </td>
     <td class='divider'></td>
     <td>
-      <table class='table-1 tablesorter'>
+      <table class='table-1 tablesorter colored'>
         <thead>
         <tr class='colhead'>
           <?php $vars = "param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>

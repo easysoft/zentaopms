@@ -21,6 +21,13 @@
 $().ready(function(){
     setDebugWin('white');
     setOuterBox();
+    <?php
+    /* The code for select flow.*/
+    if(!(isset($this->app->config->flow) or strpos($this->config->version, 'pro') !== false or strpos($this->app->company->admins, ",{$this->app->user->account},") === false))
+    {
+        echo "\$.colorbox({href:" . json_encode($this->createLink('index', 'index', 'type=flow')) . ", open:true, width:800, height:400, iframe:true});\n";
+    }
+    ?>
 })
 <?php $onlybody = (!empty($_GET['onlybody']) and $_GET['onlybody'] == 'yes') ? 'yes' : ''?>
 var onlybody = '<?php echo $onlybody?>';
