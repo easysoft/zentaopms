@@ -133,7 +133,7 @@ $lang->action->label->testtask    = '测试任务|testtask|view|caseID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';
-$lang->action->label->user        = '用户';
+$lang->action->label->user        = '用户|user|view|account=%s';
 $lang->action->label->space       = '　';
 
 /* Object type. */

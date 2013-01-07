@@ -510,13 +510,7 @@ class actionModel extends model
             $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
 
             /* If action type is login or logout, needn't link. */
-            if($actionType == 'login' or $actionType == 'logout')
-            {
-                $action->objectLink  = '';
-                $action->objectLabel = '';
-                continue;
-            }
-            elseif($actionType == 'svncommited')
+            if($actionType == 'svncommited')
             {
                 $action->actor = isset($commiters[$action->actor]) ? $commiters[$action->actor] : $action->actor;
             }
