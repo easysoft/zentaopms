@@ -80,7 +80,7 @@ class html
      * @param  boolean $newline 
      * @return string
      */
-    static public function a($href = '', $title = '', $target = "_self", $misc = '', $newline = true, $printTitle = false)
+    static public function a($href = '', $title = '', $target = "_self", $misc = '', $newline = true)
     {
         global $config;
         if(empty($title)) $title = $href;
