@@ -182,7 +182,7 @@
                   {
                       @$projectName = $story->projects[$task->project]->name;
                       echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName);
-                      echo '<span class="nobr">' . html::a($this->createLink('task', 'view', "taskID=$task->id"), "#$task->id $task->name") . '</span><br />';
+                      echo "<span title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id"), "#$task->id $task->name") . '</span><br />';
                   }
               }
               ?>
@@ -199,7 +199,7 @@
               <?php
               foreach($bugs as $bug)
               {
-                  echo '<span class="nobr">' . html::a($this->createLink('bug', 'view', "bugID=$bug->id"), "#$bug->id $bug->title") . '</span><br />';
+                  echo "<span title='#$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id"), "#$bug->id $bug->title") . '</span><br />';
               }
               ?>
             </td>
@@ -215,7 +215,7 @@
               <?php
               foreach($cases as $case)
               {
-                  echo '<span class="nobr">' . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</span><br />';
+                  echo "<span title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</span><br />';
               }
               ?>
             </td>
@@ -251,7 +251,7 @@
         <legend><?php echo $lang->story->legendFromBug;?></legend>
         <div>
           <?php
-          if(!empty($fromBug)) echo '<span class="nobr">' . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</span><br />';
+          if(!empty($fromBug)) echo "<span title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</span><br />';
           ?>
         </div>
       </fieldset>
