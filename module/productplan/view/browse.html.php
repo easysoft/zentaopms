@@ -33,8 +33,8 @@
     <td><?php echo html::a(inlink('view', "id=$plan->id"), $plan->id);?></td>
     <td><?php echo $plan->begin;?></td>
     <td><?php echo $plan->end;?></td>
-    <td class='a-left nobr'><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
-    <td class='a-left nobr content'><?php echo $plan->desc;?></td>
+    <td class='a-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
+    <td class='a-left content' title="<?php echo $plan->desc?>"><?php echo $plan->desc;?></td>
     <td class='a-right'>
       <?php
       common::printLink('productplan', 'linkstory', "planID=$plan->id", $lang->productplan->linkStory);
