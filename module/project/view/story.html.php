@@ -52,7 +52,7 @@
           <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
         </td>
         <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
-        <td class='a-left nobr'><?php echo html::a($storyLink,$story->title);?></td>
+        <td class='a-left' title="<?php echo $story->title?>"><?php echo html::a($storyLink,$story->title);?></td>
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $users[$story->assignedTo];?></td>
         <td><?php echo $story->estimate;?></td>
