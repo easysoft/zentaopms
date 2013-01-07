@@ -78,7 +78,7 @@ var moduleID   = '<?php echo $moduleID;?>';
                 <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
               </td>
               <td><span class='<?php echo 'pri' . $case->pri?>'><?php echo $case->pri?></span></td>
-              <td class='a-left nobr'><?php echo html::a($viewLink, $case->title);?></td>
+              <td class='a-left' title="<?php echo $case->title?>"><?php echo html::a($viewLink, $case->title);?></td>
               <?php if($browseType == 'needconfirm'):?>
               <td class='a-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
               <td><?php echo html::a(inlink('confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');?></td>
