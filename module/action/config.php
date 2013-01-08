@@ -1,19 +1,4 @@
 <?php
-$config->action->objectTables['product']     = TABLE_PRODUCT;
-$config->action->objectTables['story']       = TABLE_STORY;
-$config->action->objectTables['productplan'] = TABLE_PRODUCTPLAN;
-$config->action->objectTables['release']     = TABLE_RELEASE;
-$config->action->objectTables['project']     = TABLE_PROJECT;
-$config->action->objectTables['task']        = TABLE_TASK;
-$config->action->objectTables['build']       = TABLE_BUILD;
-$config->action->objectTables['bug']         = TABLE_BUG;
-$config->action->objectTables['case']        = TABLE_CASE;
-$config->action->objectTables['testtask']    = TABLE_TESTTASK;
-$config->action->objectTables['user']        = TABLE_USER;
-$config->action->objectTables['doc']         = TABLE_DOC;
-$config->action->objectTables['doclib']      = TABLE_DOCLIB;
-$config->action->objectTables['todo']        = TABLE_TODO;
-
 $config->action->objectNameFields['product']     = 'name';
 $config->action->objectNameFields['story']       = 'title';
 $config->action->objectNameFields['productplan'] = 'title';

@@ -491,15 +491,8 @@ class commonModel extends model
     {
         $preAndNextObject = new stdClass();
 
-        switch($type)
-        {
-            case 'story'    : $table = TABLE_STORY; break;
-            case 'task'     : $table = TABLE_TASK;  break;
-            case 'bug'      : $table = TABLE_BUG;   break;
-            case 'testcase' : $table = TABLE_CASE;  break;
-            case 'doc'      : $table = TABLE_DOC;   break;
-            default         : return $preAndNextObject;
-        }
+        if(strpos('story, task, bug, testcase, doc', $type) === false) return $preAndNextObject;
+        $table = $this->config->objectTables[$type];
 
         $typeIDs = $type . 'IDs';
         if($this->session->$typeIDs and strpos($this->session->$typeIDs, ',' . $objectID . ',') !== false)

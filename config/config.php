@@ -121,3 +121,18 @@ define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_WEBAPP',        '`' . $config->db->prefix . 'webapp`');
+
+$config->objectTables['product']     = TABLE_PRODUCT;
+$config->objectTables['story']       = TABLE_STORY;
+$config->objectTables['productplan'] = TABLE_PRODUCTPLAN;
+$config->objectTables['release']     = TABLE_RELEASE;
+$config->objectTables['project']     = TABLE_PROJECT;
+$config->objectTables['task']        = TABLE_TASK;
+$config->objectTables['build']       = TABLE_BUILD;
+$config->objectTables['bug']         = TABLE_BUG;
+$config->objectTables['case']        = TABLE_CASE;
+$config->objectTables['testtask']    = TABLE_TESTTASK;
+$config->objectTables['user']        = TABLE_USER;
+$config->objectTables['doc']         = TABLE_DOC;
+$config->objectTables['doclib']      = TABLE_DOCLIB;
+$config->objectTables['todo']        = TABLE_TODO;

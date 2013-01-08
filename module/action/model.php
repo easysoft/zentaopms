@@ -42,7 +42,7 @@ class actionModel extends model
         $action->extra      = $extra;
 
         /* Get product and project for this object. */
-        $productAndProject  = $this->getProductAndProject($objectType, $objectID);
+        $productAndProject  = $this->getProductAndProject($action->objectType, $objectID);
         $action->product    = $productAndProject['product'];
         $action->project    = $productAndProject['project'];
 
@@ -119,7 +119,6 @@ class actionModel extends model
      */
     public function getProductAndProject($objectType, $objectID)
     {
-        $objectType  = strtolower($objectType);
         $emptyRecord = array('product' => ',0,', 'project' => 0);
 
         /* If objectType is product or project, return the objectID. */
@@ -134,7 +133,7 @@ class actionModel extends model
         /* Only process these object types. */
         if(strpos('story, productplan, release, task, build. bug, case, testtask, doc', $objectType) !== false)
         {
-            if(!isset($this->config->action->objectTables[$objectType])) return $emptyRecord;
+            if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
 
             /* Set fields to fetch. */
             if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
@@ -142,7 +141,7 @@ class actionModel extends model
             if($objectType == 'release') $fields = 'product, build';
             if($objectType == 'task')    $fields = 'project, story';
 
-            $record = $this->dao->select($fields)->from($this->config->action->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+            $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
 
             /* Process story, release and task. */
             if($objectType == 'story')   $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->fetch('project');
@@ -236,7 +235,7 @@ class actionModel extends model
         foreach($typeTrashes as $objectType => $objectIds)
         {
             $objectIds   = array_unique($objectIds);
-            $table       = $this->config->action->objectTables[$objectType];
+            $table       = $this->config->objectTables[$objectType];
             $field       = $this->config->action->objectNameFields[$objectType];
             $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
         }
@@ -471,10 +470,10 @@ class actionModel extends model
         foreach($actions as $object) $objectTypes[$object->objectType][] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIds)
         {
-            if(!isset($this->config->action->objectTables[$objectType])) continue;    // If no defination for this type, omit it.
+            if(!isset($this->config->objectTables[$objectType])) continue;    // If no defination for this type, omit it.
 
             $objectIds   = array_unique($objectIds);
-            $table       = $this->config->action->objectTables[$objectType];
+            $table       = $this->config->objectTables[$objectType];
             $field       = $this->config->action->objectNameFields[$objectType];
             if($table != '`zt_todo`')
             {
