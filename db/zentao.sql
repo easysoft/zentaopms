@@ -703,18 +703,18 @@ CREATE TABLE IF NOT EXISTS `zt_webapp` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `zt_group` (`id`, `company`, `name`, `desc`) VALUES
-(1, 1, 'ADMIN', 'for administrator.'),
-(2, 1, 'DEV', 'for developers.'),
-(3, 1, 'QA', 'for testers.'),
-(4, 1, 'PM', 'for project managers.'),
-(5, 1, 'PO', 'for product owners.'),
-(6, 1, 'TD', 'for technical director.'),
-(7, 1, 'PD', 'for product director.'),
-(8, 1, 'QD', 'for quality director.'),
-(9, 1, 'TOP', 'for top manager.'),
-(10, 1, 'OTHERS', 'for others.'),
-(11, 1, 'guest', 'For guest');
+INSERT INTO `zt_group` (`id`, `company`, `name`, `desc`, `role`) VALUES
+(1, 1, 'ADMIN', 'for administrator', 'admin'),
+(2, 1, 'DEV', 'for developers.', 'dev'),
+(3, 1, 'QA', 'for testers.', 'qa'),
+(4, 1, 'PM', 'for project managers.', 'pm'),
+(5, 1, 'PO', 'for product owners.', 'po'),
+(6, 1, 'TD', 'for technical director.', 'td'),
+(7, 1, 'PD', 'for product director.', 'pd'),
+(8, 1, 'QD', 'for quality director.', 'qd'),
+(9, 1, 'TOP', 'for top manager.', 'top'),
+(10, 1, 'OTHERS', 'for others.', ''),
+(11, 1, 'guest', 'For guest', 'guest');
 
 INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 1, 'project', 'unlinkMember'),
