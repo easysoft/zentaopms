@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <table class='cont-rt5'>
-  <caption>PLAN #<?php echo $plan->id . ' ' . $plan->title;?></caption>
+  <caption <?php if($plan->deleted) echo "class='deleted'";?>>PLAN #<?php echo $plan->id . ' ' . $plan->title;?></caption>
   <tr valign='top'>
     <td>
       <fieldset>
@@ -78,7 +78,7 @@
         <table class='table-1 a-left'>
           <tr>
             <th width='25%' class='a-right'><?php echo $lang->productplan->title;?></th> 
-            <td <?php if($plan->deleted) echo "class='deleted'";?>><?php echo $plan->title;?></th>
+            <td><?php echo $plan->title;?></th>
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->productplan->begin;?></th>

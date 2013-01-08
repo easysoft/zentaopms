@@ -12,27 +12,27 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <table class='cont-rt5'> 
-  <caption>BUILD #<?php echo $build->id . ' ' . $build->name;?></caption>
+  <caption class='<?php if($build->deleted) echo 'deleted';?>'>BUILD #<?php echo $build->id . ' ' . $build->name;?></caption>
   <tr valign='top'>
     <td>
       <fieldset>
         <legend><?php echo $lang->build->desc;?></legend>
         <div class='content'><?php echo $build->desc;?></div>
-     </fieldset>
-     <?php include '../../common/view/action.html.php';?>
- <div class='a-center f-16px strong'>
-   <?php
-   $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");
-   if(!$build->deleted)
-   { 
-       common::printLink('build', 'edit',   "buildID=$build->id", $lang->edit);
-       common::printLink('build', 'delete', "buildID=$build->id", $lang->delete, 'hiddenwin');
-   }
-   echo html::a($browseLink, $lang->goback);
-   ?>
- </div>
-   <table class='table-1 fixed'>
-   <caption class='caption-t1'><?php echo $lang->build->stories;?></caption>
+      </fieldset>
+      <?php include '../../common/view/action.html.php';?>
+      <div class='a-center f-16px strong mb-10px'>
+      <?php
+      $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");
+      if(!$build->deleted)
+      { 
+        common::printLink('build', 'edit',   "buildID=$build->id", $lang->edit);
+        common::printLink('build', 'delete', "buildID=$build->id", $lang->delete, 'hiddenwin');
+      }
+      echo html::a($browseLink, $lang->goback);
+      ?>
+      </div>
+      <table class='table-1 fixed'>
+        <caption class='caption-t1'><?php echo $lang->build->stories;?></caption>
         <tr>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
@@ -54,10 +54,10 @@
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
         </tr>
         <?php endforeach;?>
-       <tr><td colspan=7 class='a-left strong'><?php echo sprintf($lang->build->finishStories, count($stories));?></td></tr>
+        <tr><td colspan=7 class='a-left strong'><?php echo sprintf($lang->build->finishStories, count($stories));?></td></tr>
       </table>
       <table class='table-1 fixed'>
-      <caption class='caption-t1'><?php echo $lang->build->bugs;?></caption>
+        <caption class='caption-t1'><?php echo $lang->build->bugs;?></caption>
         <tr>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
@@ -77,43 +77,43 @@
           <td><?php echo substr($bug->openedDate, 5, 11)?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
           <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+        </tr>
+        <?php endforeach;?>
+        <tr><td colspan=7 class='a-left strong'><?php echo sprintf($lang->build->resolvedBugs, count($bugs));?></td></tr>
+      </table>
+    </td>
+    <td class="divider"></td>
+    <td class="side">
+      <fieldset>
+        <legend><?php echo $lang->build->basicInfo?></legend>
+        <table class='table-1 a-left'>
+          <tr>
+            <th width='25%' class='a-right'><?php echo $lang->build->product;?></th>
+            <td><?php echo $build->productName;?></td>
+          </tr>  
+          <tr>
+            <th class='rowhead'><?php echo $lang->build->name;?></th>
+            <td><?php echo $build->name;?></td>
+          </tr>  
+          <tr>
+            <th class='rowhead'><?php echo $lang->build->builder;?></th>
+            <td><?php echo $users[$build->builder];?></td>
+          </tr>  
+          <tr>
+            <th class='rowhead'><?php echo $lang->build->date;?></th>
+            <td><?php echo $build->date;?></td>
+          </tr>  
+          <tr>
+            <th class='rowhead'><?php echo $lang->build->scmPath;?></th>
+            <td><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
+          </tr>  
+          <tr>
+            <th class='rowhead'><?php echo $lang->build->filePath;?></th>
+            <td><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
           </tr>
-         <?php endforeach;?>
-         <tr><td colspan=7 class='a-left strong'><?php echo sprintf($lang->build->resolvedBugs, count($bugs));?></td></tr>
-         </table>
-        </td>
-        <td class="divider"></td>
-        <td class="side">
-          <fieldset>
-            <legend><?php echo $lang->build->basicInfo?></legend>
-            <table class='table-1 a-left'>
-              <tr>
-                <th width='25%' class='a-right'><?php echo $lang->build->product;?></th>
-                <td><?php echo $build->productName;?></td>
-              </tr>  
-              <tr>
-                <th class='rowhead'><?php echo $lang->build->name;?></th>
-                <td class='<?php if($build->deleted) echo 'deleted';?>'><?php echo $build->name;?></td>
-              </tr>  
-              <tr>
-                <th class='rowhead'><?php echo $lang->build->builder;?></th>
-                <td><?php echo $users[$build->builder];?></td>
-              </tr>  
-              <tr>
-                <th class='rowhead'><?php echo $lang->build->date;?></th>
-                <td><?php echo $build->date;?></td>
-              </tr>  
-              <tr>
-                <th class='rowhead'><?php echo $lang->build->scmPath;?></th>
-                <td><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
-              </tr>  
-              <tr>
-                <th class='rowhead'><?php echo $lang->build->filePath;?></th>
-                <td><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
-              </tr>
-           </table>
-        </fieldset>
-      </td>
-    </tr>
+        </table>
+      </fieldset>
+    </td>
+  </tr>
 </table>   
 <?php include '../../common/view/footer.html.php';?>

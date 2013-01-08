@@ -40,6 +40,10 @@
       ob_clean();
       echo $actionLinks;
   }
+  else
+  {
+      common::printRPN($browseLink);
+  }
   ?>
   </div>
 </div>

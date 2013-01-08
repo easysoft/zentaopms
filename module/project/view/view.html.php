@@ -29,6 +29,10 @@
         ob_end_clean();
         echo $actionLinks;
     }
+    else
+    {
+        common::printRPN($browseLink);
+    }
     ?>
   </div>
 </div>
@@ -50,7 +54,7 @@
         <table class='table-1 a-left'>
           <tr>
             <th width='25%' class='a-right'><?php echo $lang->project->name;?></th>
-            <td <?php if($project->deleted) echo "class='deleted'";?>><?php echo $project->name;?></td>
+            <td><?php echo $project->name;?></td>
           </tr>
           <tr>
             <th class='rowhead'><?php echo $lang->project->code;?></th>

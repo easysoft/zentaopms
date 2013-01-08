@@ -13,10 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <table class='table-1'> 
-  <caption>TASK #<?php echo $task->id . ' ' . $task->name;?></caption>
+  <caption <?php if($task->deleted) echo "class='deleted'";?>>TASK #<?php echo $task->id . ' ' . $task->name;?></caption>
   <tr>
     <th class='rowhead'><?php echo $lang->testtask->name;?></th>
-    <td class='<?php if($task->deleted) echo 'deleted';?>'><?php echo $task->name;?>
+    <td><?php echo $task->name;?>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->testtask->project;?></th>
@@ -60,8 +60,8 @@
       common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
       common::printLink('testtask', 'edit',   "taskID=$task->id",$lang->edit);
       common::printLink('testtask', 'delete', "taskID=$task->id", $lang->delete, 'hiddenwin');
-      echo html::a($browseLink, $lang->goback);
   }
+  echo html::a($browseLink, $lang->goback);
   ?>
 </div>
 <?php include '../../common/view/action.html.php';?>

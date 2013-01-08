@@ -12,8 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
-<div id='titlebar' <?php if($case->deleted) echo "class='deleted'";?>>
-  <div id='main'>CASE #<?php echo $case->id . ' ' . $case->title;?></div>
+<div id='titlebar'>
+  <div id='main' <?php if($case->deleted) echo "class='deleted'";?>>CASE #<?php echo $case->id . ' ' . $case->title;?></div>
   <div>
     <?php
     $browseLink  = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
@@ -39,6 +39,10 @@
         $actionLinks = ob_get_contents();
         ob_clean();
         echo $actionLinks;
+    }
+    else
+    {
+        common::printRPN($browseLink);
     }
     ?>
   </div>

@@ -12,11 +12,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
-<?php if($task->fromBug == 0):?>
-  <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . ' ' . $task->name;?></div>
-<?php else:?>
-  <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'>TASK #<?php echo $task->id . ' ' . $task->name . '('. $lang->task->fromBug . $lang->colon . $task->fromBug . ')';?></div>
-<?php endif;?>
+  <?php 
+  $name = "TASK #$task->id $task->name"; 
+  if($task->fromBug != 0) $name .= "({$lang->task->fromBug}$lang->colon$task->fromBug)";
+  ?>
+  <div id='main' class='<?php if($task->deleted) echo 'deleted';?>'><?php echo $name;?></div>
   <div>
   <?php
   $browseLink  = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");
@@ -43,6 +43,10 @@
       $actionLinks = ob_get_contents();
       ob_clean();
       echo $actionLinks;
+  }
+  else
+  {
+      common::printRPN($browseLink);
   }
   ?>
   </div>

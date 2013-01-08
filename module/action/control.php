@@ -35,6 +35,7 @@ class action extends control
         $this->session->set('bugList',         $uri);
         $this->session->set('caseList',        $uri);
         $this->session->set('testtaskList',    $uri);
+        $this->session->set('docList',         $uri);
 
         /* Header and position. */
         $this->view->header->title = $this->lang->action->trash;

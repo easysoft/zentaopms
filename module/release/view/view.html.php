@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <table class='cont-rt5'> 
-  <caption>RELEASE #<?php echo $release->id . ' ' . $release->name;?></caption>
+  <caption class='<?php if($release->deleted) echo 'deleted';?>'>RELEASE #<?php echo $release->id . ' ' . $release->name;?></caption>
   <tr valign='top'>
     <td>
       <fieldset>
@@ -99,7 +99,7 @@
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->release->name;?></th>
-          <td class='<?php if($release->deleted) echo 'deleted';?>'><?php echo $release->name;?></td>
+          <td><?php echo $release->name;?></td>
         </tr>  
         <tr>
           <th class='rowhead'><?php echo $lang->release->build;?></th>
