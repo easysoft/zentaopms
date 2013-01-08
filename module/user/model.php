@@ -201,7 +201,7 @@ class userModel extends model
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->setIF($this->post->password1 == false, 'password', '')
-            ->remove('password1, password2')
+            ->remove('group, password1, password2')
             ->get();
 
         $this->dao->insert(TABLE_USER)->data($user)
@@ -211,16 +211,12 @@ class userModel extends model
             ->check('account', 'account')
             ->checkIF($this->post->email != false, 'email', 'email')
             ->exec();
-        if($this->post->role)
+        if($this->post->group)
         {
-            $group = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->like('%' . $this->post->role . '%')->fetch();
-            if($group)
-            {
-                $data = new stdClass();
-                $data->account = $this->post->account;
-                $data->group   = $group->id;
-                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
-            }
+            $data = new stdClass();
+            $data->account = $this->post->account;
+            $data->group   = $this->post->group;
+            $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
         }
     }
 
@@ -254,6 +250,7 @@ class userModel extends model
                 $data[$i]->account  = $users->account[$i];
                 $data[$i]->realname = $users->realname[$i];
                 $data[$i]->role     = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
+                $data[$i]->group    = $users->group[$i] == 'ditto' ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5($users->password[$i]); 
@@ -261,12 +258,21 @@ class userModel extends model
                 $accounts[$i]     = $data[$i]->account;
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
+                $prev['group']    = $data[$i]->group;
                 $prev['password'] = $users->password[$i];
             }
         }
 
         foreach($data as $user)
         {
+            if($user->group)
+            {
+                $group = new stdClass();
+                $group->account = $user->account;
+                $group->group   = $user->group;
+            }
+            unset($user->group);
+            $this->dao->insert(TABLE_USERGROUP)->data($group)->exec();
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
             if(dao::isError()) 
             {

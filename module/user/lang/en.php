@@ -17,6 +17,7 @@ $lang->user->account   = 'Account';
 $lang->user->password  = 'Password';
 $lang->user->password2 = 'Repeat password';
 $lang->user->role      = 'Role';
+$lang->user->group     = 'Group';
 $lang->user->realname  = 'Fullname';
 $lang->user->nickname  = 'Nickname';
 $lang->user->commiter  = 'Commit account';

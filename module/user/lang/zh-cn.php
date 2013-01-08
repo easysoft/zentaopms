@@ -17,6 +17,7 @@ $lang->user->account   = '用户名';
 $lang->user->password  = '密码';
 $lang->user->password2 = '请重复密码';
 $lang->user->role      = '角色';
+$lang->user->group     = '分组';
 $lang->user->realname  = '真实姓名';
 $lang->user->nickname  = '昵称';
 $lang->user->commiter  = '源代码帐号';

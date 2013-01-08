@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
+<?php js::set('roleGroup', json_encode($roleGroup));?>
 <form method='post' target='hiddenwin' id='dataform'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->user->batchCreate;?></caption>
@@ -21,19 +22,22 @@
       <th class='w-130px'><?php echo $lang->user->account;?></th>
       <th class='w-130px'><?php echo $lang->user->realname;?></th>
       <th class='w-100px'><?php echo $lang->user->role;?></th>
+      <th class='w-100px'><?php echo $lang->user->group;?></th>
       <th><?php echo $lang->user->email;?></th>
       <th class='w-60px'><?php echo $lang->user->gender;?></th>
       <th><?php echo $lang->user->password;?></th>
     </tr>
     <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
     <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
+    <?php $groupList = $groupList + array('ditto' => $lang->user->ditto)?>
     <?php for($i = 0; $i < $config->user->batchCreate; $i++):?>
     <tr class='a-center'>
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='select-1'");?>
       <td><?php echo html::input("account[$i]", '', "class='text-1 account_$i' autocomplete='off' onchange='changeEmail($i)'");?></td>
       <td><?php echo html::input("realname[$i]", '', "class='text-1'");?></td>
-      <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='select-1'");?></td>
+      <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='select-1' onchange='changeGroup(this.value, $i)'");?></td>
+      <td><?php echo html::select("group[$i]", $groupList, $i > 0 ? 'ditto' : '', "class='select-1'");?></td>
       <td><?php echo html::input("email[$i]", '', "class='text-1 email_$i' onchange='setDefaultEmail($i)'");?></td>
       <td><?php echo html::radio("gender[$i]", (array)$lang->user->genderList, 'm');?></td>
       <td>

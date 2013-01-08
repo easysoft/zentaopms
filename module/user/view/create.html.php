@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('holders', json_encode($lang->user->placeholder));?>
+<?php js::set('roleGroup', json_encode($roleGroup));?>
 <form method='post' target='hiddenwin' id='dataform'>
   <table align='center' class='table-5'> 
     <caption><?php echo $lang->user->create;?></caption>
@@ -38,7 +39,11 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->role;?></th>
-      <td><?php echo html::select('role', $lang->user->roleList, '', "class='select-3'");?></td>
+      <td><?php echo html::select('role', $lang->user->roleList, '', "class='select-3' onchange='changeGroup(this.value)'");?></td>
+    </tr>  
+    <tr>
+      <th class='rowhead'><?php echo $lang->user->group;?></th>
+      <td><?php echo html::select('group', $groupList, '', "class='select-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->email;?></th>

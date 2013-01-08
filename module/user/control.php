@@ -263,13 +263,23 @@ class user extends control
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
+        $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
+        $groupList = array('' => '');
+        $roleGroup = array();
+        foreach($groups as $group)
+        {
+            $groupList[$group->id] = $group->name;
+            if($group->role) $roleGroup[$group->role] = $group->id;
+        }
 
         $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->create;
         $position[]      = $this->lang->user->create;
-        $this->view->header   = $header;
-        $this->view->position = $position;
-        $this->view->depts    = $this->dept->getOptionMenu();
-        $this->view->deptID   = $deptID;
+        $this->view->header    = $header;
+        $this->view->position  = $position;
+        $this->view->depts     = $this->dept->getOptionMenu();
+        $this->view->groupList = $groupList;
+        $this->view->roleGroup = $roleGroup;
+        $this->view->deptID    = $deptID;
 
         $this->display();
     }
@@ -284,6 +294,15 @@ class user extends control
      */
     public function batchCreate($deptID = 0)
     {
+        $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
+        $groupList = array('' => '');
+        $roleGroup = array();
+        foreach($groups as $group)
+        {
+            $groupList[$group->id] = $group->name;
+            if($group->role) $roleGroup[$group->role] = $group->id;
+        }
+
         $this->lang->set('menugroup.user', 'company');
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
@@ -296,10 +315,12 @@ class user extends control
 
         $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
         $position[]      = $this->lang->user->batchCreate;
-        $this->view->header   = $header;
-        $this->view->position = $position;
-        $this->view->depts    = $this->dept->getOptionMenu();
-        $this->view->deptID   = $deptID;
+        $this->view->header    = $header;
+        $this->view->position  = $position;
+        $this->view->depts     = $this->dept->getOptionMenu();
+        $this->view->deptID    = $deptID;
+        $this->view->groupList = $groupList;
+        $this->view->roleGroup = $roleGroup;
 
         $this->display();
     }
