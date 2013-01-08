@@ -3,14 +3,17 @@
 error_reporting(E_ERROR);
 
 /* Include my.php and pclzip class. */
-$pmsRoot = dirname(dirname(dirname(__FILE__)));
-include $pmsRoot . '/config/my.php';
-include $pmsRoot . '/lib/pclzip/pclzip.class.php';
+$pmsRoot  = dirname(dirname(dirname(__FILE__)));
+$myConfig = $pmsRoot . '/config/my.php';
+$zipClass = $pmsRoot . '/lib/pclzip/pclzip.class.php';
+
+include $myConfig;
+include $zipClass;
 
 /* Judge mysqldump cmd setted or not. */
-if(!isset($config->mysqldump))
+if(empty($config->mysqldump))
 {
-    echo "Please set the mysqldump in my.php:\n";
+    echo "Please set the mysqldump path in $myConfig:\n";
     echo "Just like: \n";
     echo '$config->mysqldump = \'/usr/bin/mysqldump\'; for linux' . "\n";
     echo '$config->mysqldump = \'D:\xampp\mysql\bin\mysqldump.exe\'; for windows' . "\n";
@@ -26,20 +29,16 @@ if(!file_exists($destDir))    mkdir($destDir, 0777);
 
 /* Backup database. */
 $dbRawFile = "db." . date('Ymd') . ".sql";
-if($config->db->password)
-{
-    $command = "{$config->mysqldump} -u{$config->db->user} -p{$config->db->password} -P {$config->db->port} {$config->db->name} > {$dbRawFile}";
-}
-else
-{
-    $command = "{$config->mysqldump} -u{$config->db->user} -P {$config->db->port} {$config->db->name} > {$dbRawFile}";
-}
+$password  = $config->db->password ?  "-p{$config->db->password}" : ' ';
+$command   = "{$config->mysqldump} -u{$config->db->user} $password -P {$config->db->port} {$config->db->name} > {$dbRawFile}";
+
 echo "Backuping database,";
 system($command, $return);
-if(!$return)
+if($return == 0)
 {
     $dbZipFile = $destDir . "/"  . str_replace("sql", "zip", $dbRawFile);
-    $archive = new pclzip($dbZipFile);
+    $archive  = new pclzip($dbZipFile);
+
     if($archive->create($dbRawFile))
     {
         unlink($dbRawFile);
@@ -55,12 +54,12 @@ else
     echo "Failed to backup database!\n";
 }
 
-/* Backup the data. */
+/* Backup the attachments. */
 chdir(dirname(dirname(dirname(__FILE__))) . "/www");
 if(!is_dir('data/upload')) die(" No files needed backup.\n");
 
-$dataFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
-$archive  = new pclzip($dataFile);
 echo "Backuping files,";
-if($archive->create("data/upload", PCLZIP_OPT_REMOVE_PATH, "data")) die(" successfully saved to $dataFile\n");
+$attachFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
+$archive    = new pclzip($attachFile);
+if($archive->create("data/upload", PCLZIP_OPT_REMOVE_PATH, "data")) die(" successfully saved to $attachFile\n");
 die("Error : ".$archive->errorInfo(true));
