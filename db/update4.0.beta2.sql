@@ -4,3 +4,4 @@ ALTER TABLE  `zt_taskestimate` CHANGE  `estimater`  `account` CHAR( 30 ) CHARACT
 ALTER TABLE  `zt_taskestimate` ADD  `consumed` TINYINT( 3 ) UNSIGNED NOT NULL AFTER  `estimate`;
 UPDATE `zt_group` SET `role` = 'guest' WHERE `name` = 'guest';
 ALTER TABLE  `zt_taskestimate` CHANGE  `estimate`  `left` TINYINT( 3 ) UNSIGNED NOT NULL DEFAULT  '0';
+ALTER TABLE  `zt_taskestimate` CHANGE  `date`  `date` DATETIME NOT NULL;
