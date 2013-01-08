@@ -11,7 +11,7 @@
  */
 $lang->action->common   = 'Logs';
 $lang->action->trash    = 'Trash';
-$lang->action->undelete = 'Restore';
+$lang->action->undelete = 'Undelete';
 $lang->action->hide     = 'Hide';
 
 $lang->action->product    = 'Product';
@@ -38,20 +38,20 @@ $lang->action->dynamic->lastMonth  = 'Last month';
 $lang->action->dynamic->all        = 'All';
 $lang->action->dynamic->search     = 'Search';
 
-$lang->action->objectTypes['product']     = 'PRODUCT';
-$lang->action->objectTypes['story']       = 'STORY';
-$lang->action->objectTypes['productplan'] = 'PLAN';
-$lang->action->objectTypes['release']     = 'RELEASE';
-$lang->action->objectTypes['project']     = 'PROJECT';
-$lang->action->objectTypes['task']        = 'TASK';
+$lang->action->objectTypes['product']     = 'Product';
+$lang->action->objectTypes['story']       = 'Story';
+$lang->action->objectTypes['productplan'] = 'Plan';
+$lang->action->objectTypes['release']     = 'Release';
+$lang->action->objectTypes['project']     = 'Project';
+$lang->action->objectTypes['task']        = 'Task';
 $lang->action->objectTypes['build']       = 'Build';
 $lang->action->objectTypes['bug']         = 'Bug';
 $lang->action->objectTypes['case']        = 'Case';
 $lang->action->objectTypes['testtask']    = 'Test Task';
 $lang->action->objectTypes['user']        = 'User';
-$lang->action->objectTypes['doc']         = 'DOC';
+$lang->action->objectTypes['doc']         = 'Doc';
 $lang->action->objectTypes['doclib']      = 'DocLib';
-$lang->action->objectTypes['todo']        = 'TODO';
+$lang->action->objectTypes['todo']        = 'Todo';
 
 /* The desc of actions. */
 $lang->action->desc = new stdclass();
