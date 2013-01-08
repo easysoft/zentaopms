@@ -515,7 +515,7 @@ class userModel extends model
         if($account == 'guest')
         {
             $sql = $this->dao->select('module, method')->from(TABLE_GROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
-                ->on('t1.id = t2.group')->where('t1.name')->eq('guest');
+                ->on('t1.id = t2.group')->where('t1.role')->eq('guest');
         }
         else
         {
