@@ -38,6 +38,9 @@ function setPreview()
         $('#preview').removeClass('hidden');
         $('#preview').attr('href', storyLink);
     }
+
+    $("#preview").colorbox({width:960, height:500, iframe:true, transition:'elastic', speed:350, scrolling:true});
+
     setAfter();
 }
 
@@ -51,15 +54,15 @@ function setAfter()
 {
     if($("#story").select().val() == '') 
     {
-      if($('input[value="continueAdding"]').attr('checked') == true) 
-      {
-        $('input[value="toTaskList"]').attr('checked', true);
-      }
-      $('input[value="continueAdding"]').attr('disabled', 'disabled');
+        if($('input[value="continueAdding"]').attr('checked') == true) 
+        {
+            $('input[value="toTaskList"]').attr('checked', true);
+        }
+        $('input[value="continueAdding"]').attr('disabled', 'disabled');
     }
     else
     {
-      $('input[value="continueAdding"]').attr('disabled', false);
+        $('input[value="continueAdding"]').attr('disabled', false);
     }
 }
 
@@ -68,5 +71,4 @@ $(document).ready(function()
     setPreview();
     $("#story").chosen({no_results_text: noResultsMatch});
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
-    setAfter();
 });

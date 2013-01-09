@@ -15,14 +15,8 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('holders',  json_encode($lang->task->placeholder)); ?>
-<script language='javascript'> var userList = "<?php echo join(',', array_keys($users));?>".split(',');</script>
-<script language='Javascript'>
-$(function()
-{
-     $("#preview").colorbox({width:960, height:500, iframe:true, transition:'elastic', speed:350, scrolling:true});
-})
-</script>
+<?php js::set('holders',  $lang->task->placeholder, 'json'); ?>
+<?php js::set('userList', array_keys($users), 'json'); ?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table align='center' class='table-1 a-left'> 
     <caption>
