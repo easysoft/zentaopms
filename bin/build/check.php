@@ -138,3 +138,17 @@ foreach(glob($moduleRoot . '*') as $modulePath)
     if(file_exists($enLangFile)) include $enLangFile;
     if(file_exists($configFile)) include $configFile;
 }
+
+echo '-------------demo data checking. -----------------' . "\n";
+$demoSQL = file("../../db/demo.sql");
+foreach($demoSQL as $line => $sql)
+{
+    if(strpos($sql, 'INSERT') === false) continue;
+
+    if(strpos($sql, $config->db->prefix . 'config')  !== false or
+       strpos($sql, $config->db->prefix . 'company') !== false or
+       strpos($sql, $config->db->prefix . 'group')   !== false) 
+    {
+        die('line ' . ($line + 1) . " has error\n");
+    }
+}
