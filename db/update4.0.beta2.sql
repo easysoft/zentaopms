@@ -5,3 +5,5 @@ ALTER TABLE  `zt_taskEstimate` ADD  `consumed` TINYINT( 3 ) UNSIGNED NOT NULL AF
 UPDATE `zt_group` SET `role` = 'guest' WHERE `name` = 'guest';
 ALTER TABLE  `zt_taskEstimate` CHANGE  `estimate`  `left` TINYINT( 3 ) UNSIGNED NOT NULL DEFAULT  '0';
 ALTER TABLE  `zt_taskEstimate` CHANGE  `date`  `date` DATETIME NOT NULL;
+ALTER TABLE  `zt_taskestimate` CHANGE  `left`  `left` FLOAT UNSIGNED NOT NULL DEFAULT  '0',
+CHANGE  `consumed`  `consumed` FLOAT UNSIGNED NOT NULL;
