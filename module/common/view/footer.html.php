@@ -18,9 +18,8 @@
 </div>
 <?php endif;?>
 <script laguage='Javascript'>
-$().ready(function(){
-    setDebugWin('white');
-    setOuterBox();
+$().ready(function()
+{
     <?php
     /* The code for select flow.*/
     if(!(isset($this->app->config->flow) or strpos($this->config->version, 'pro') !== false or strpos($this->app->company->admins, ",{$this->app->user->account},") === false))
@@ -34,10 +33,10 @@ var onlybody = '<?php echo $onlybody?>';
 <?php if(isset($pageJS)) echo $pageJS;?>
 </script>
 <?php 
-$extPath     = dirname(dirname(dirname(realpath($viewFile)))) . '/common/ext/view/';
-$extHookFile = $extPath . 'footer.*.hook.php';
-$files = glob($extHookFile);
-if($files) foreach($files as $file) include $file;
+$extPath      = dirname(dirname(dirname(realpath($viewFile)))) . '/common/ext/view/';
+$extHookRule  = $extPath . 'footer.*.hook.php';
+$extHookFiles = glob($extHookRule);
+if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 </body>
 </html>
