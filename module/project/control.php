@@ -654,7 +654,7 @@ class project extends control
     {
         $this->loadModel('report');
         $project     = $this->commonAction($projectID);
-        $projectInfo = $this->project->getByID($projectID);
+        $projectInfo = $this->project->getByID($project->id);
         $maxDays     = $this->config->project->maxBurnDay;
 
         /* Header and position. */
@@ -681,7 +681,8 @@ class project extends control
         {
             $limitJSON   = "[[$beginMicTime, 0], [$endMicTime, 0]]";
             $firstBurn   = reset($sets);
-            $reflineJSON = "[[$beginMicTime, $firstBurn->value], [$endMicTime, 0]]";
+            $firstTime   = isset($firstBurn->value) ? $firstBurn->value : 0;
+            $reflineJSON = "[[$beginMicTime, $firstTime], [$endMicTime, 0]]";
         }
         elseif($count <= $maxDays)
         {
