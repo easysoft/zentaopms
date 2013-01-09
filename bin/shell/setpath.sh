@@ -11,6 +11,8 @@ if [ -f $phpPath ]; then
       sed -i "1,2s/^[^ ]*php[^ ]* /$phpPath /g" ./$filename
     fi
   done
+  echo "Change ../ztcli.sh"
+  sed -i "1,2s/^[^ ]*php[^ ]* /$phpPath /g" ../ztcli.sh
   echo "Success"
 else
   echo "Error path for PHP"
