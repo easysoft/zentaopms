@@ -100,7 +100,7 @@ class misc extends control
         $this->app->loadClass('pclzip', true);
         $sourceZip = new pclzip($packageFile);
         $files = $sourceZip->extract(PCLZIP_OPT_PATH, $notifyDir);
-        if($files == 0) die("Error : ".$archive->errorInfo(true));
+        if($files == 0) die("Error : ".$sourceZip->errorInfo(true));
 
         $currentUser = $this->app->user;
         $loginInfo   = json_encode(array('account' => $currentUser->account, 'password' => $currentUser->password, 'zentaoRoot' => 'http://' . $this->config->default->domain));
