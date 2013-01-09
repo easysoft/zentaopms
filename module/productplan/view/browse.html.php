@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<table class='table-1 tablesorter fixed'>
+<table class='table-1 tablesorter fixed' id="productplan">
   <caption class='caption-tr'>
     <div class='f-left'><?php echo $lang->productplan->browse;?></div>
     <div class='f-right'><?php common::printLink('productplan', 'create', "productID=$product->id", $lang->productplan->create);?></div>
