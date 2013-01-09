@@ -18,6 +18,7 @@ $lang->task->edit               = "编辑";
 $lang->task->delete             = "删除";
 $lang->task->view               = "查看任务";
 $lang->task->logEfforts         = "记录工时";
+$lang->task->record             = "工时";
 $lang->task->start              = "开始";
 $lang->task->finish             = "完成";
 $lang->task->close              = "关闭";
@@ -46,6 +47,8 @@ $lang->task->leftAB            = '剩';
 $lang->task->consumed          = '已经消耗';
 $lang->task->consumedAB        = '耗';
 $lang->task->hour              = '小时';
+$lang->task->beforeConsumed    = '之前消耗';
+$lang->task->consumedThisTime  = '本次消耗';
 $lang->task->estStarted        = '预计开始';
 $lang->task->realStarted       = '实际开始';
 $lang->task->deadline          = '截止日期';
@@ -135,7 +138,8 @@ $lang->task->remindBug            = "该任务为Bug转化得到，是否更新B
 $lang->task->confirmChangeProject = '修改项目会导致相应的所属模块、相关需求和指派人发生变化，确定吗？';
 
 $lang->task->error = new stdclass();
-$lang->task->error->consumed = '"已经消耗"必须为数字';
+$lang->task->error->consumed    = '"已经消耗"必须为数字';
+$lang->task->error->newConsumed = '"已经消耗"必须大于之前消耗';
 
 /* 统计报表。*/
 $lang->task->report = new stdclass();

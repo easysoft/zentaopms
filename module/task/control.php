@@ -424,6 +424,32 @@ class task extends control
     }
     
     /**
+     * Record consumed and estimate. 
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function record($taskID, $confirm = 'no')
+    {
+        $this->commonAction($taskID);
+
+        if(!empty($_POST))
+        {
+            $changes  = $this->task->record($taskID);
+            $actionID = $this->action->create('task', $taskID, 'Record', '');
+            $this->action->logHistory($actionID, $changes);
+            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        $header['title'] = $this->lang->task->record;
+
+        $this->view->header         = $header;
+        $this->view->beforeConsumed = $this->task->getBeforeConsumed($taskID);
+        $this->display();
+    }
+
+    /**
      * Finish a task.
      * 
      * @param  int    $taskID 

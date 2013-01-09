@@ -27,6 +27,7 @@
       //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
       common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id");
       if($this->task->isClickable($task, 'start'))    common::printIcon('task', 'start',    "taskID=$task->id");
+      if($this->task->isClickable($task, 'record'))   common::printIcon('task', 'record',   "taskID=$task->id");
       if($this->task->isClickable($task, 'finish'))   common::printIcon('task', 'finish',   "taskID=$task->id");
       if($this->task->isClickable($task, 'close'))    common::printIcon('task', 'close',    "taskID=$task->id");
       if($this->task->isClickable($task, 'activate')) common::printIcon('task', 'activate', "taskID=$task->id");

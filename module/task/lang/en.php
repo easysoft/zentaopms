@@ -18,6 +18,7 @@ $lang->task->edit               = "Update";
 $lang->task->delete             = "Delete";
 $lang->task->view               = "Info";
 $lang->task->logEfforts         = "Efforts";
+$lang->task->record             = "Estimate";
 $lang->task->start              = "Start";
 $lang->task->finish             = "Finish";
 $lang->task->close              = "Close";
@@ -46,6 +47,8 @@ $lang->task->leftAB            = 'Left';
 $lang->task->consumed          = 'Consumed';
 $lang->task->consumedAB        = 'Use';
 $lang->task->hour              = 'Hour';
+$lang->task->beforeConsumed    = 'Before consumed';
+$lang->task->consumedThisTime  = 'This time consumed';
 $lang->task->estStarted        = 'Estimate start';
 $lang->task->realStarted       = 'Real start';
 $lang->task->deadline          = 'Deadline';
@@ -135,7 +138,8 @@ $lang->task->remindBug            = "This task from Bug, update the Bug:%s or no
 $lang->task->confirmChangeProject = 'Change project will change module, story and assignedTo also, are you sure?';
 
 $lang->task->error = new stdclass();
-$lang->task->error->consumed = '"Consumed" must be number';
+$lang->task->error->consumed    = '"Consumed" must be number';
+$lang->task->error->newConsumed = '"Consumed" must be more than consumed before';
 
 /* Report. */
 $lang->task->report = new stdclass();

@@ -184,6 +184,23 @@ class taskModel extends model
             ->get();
         $task->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, $task->status) + 1;
 
+        if($task->consumed < $oldTask->consumed) 
+        {
+            die(js::error($this->lang->task->error->newConsumed));
+        }
+        else if($task->consumed != $oldTask->consumed or $task->left != $oldTask->left)
+        {
+            $estimate = new stdClass();
+            $estimate->consumed = $task->consumed - $oldTask->consumed;
+            $estimate->left     = $task->left;
+            $estimate->task     = $taskID;
+            $estimate->account  = $this->app->user->account;
+            $estimate->date     = helper::now();
+
+            $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
+                ->autoCheck()
+                ->exec();
+        }
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
@@ -383,6 +400,35 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+        if(!dao::isError()) return common::createChanges($oldTask, $task);
+    }
+
+    /**
+     * Record estimate and left of task. 
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function record($taskID)
+    {
+        $oldTask  = $this->getById($taskID);
+        $estimate = fixer::input('post')
+            ->setDefault('account', $this->app->user->account) 
+            ->setDefault('task', $taskID) 
+            ->setDefault('date', helper::now()) 
+            ->get();
+        $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
+            ->autoCheck()
+            ->exec();
+
+        $consumed = $this->getBeforeConsumed($taskID);
+        $this->dao->update(TABLE_TASK)
+            ->set('consumed')->eq($consumed)
+            ->set('`left`')->eq($estimate->left)
+            ->where('id')->eq($taskID)
+            ->exec();
+        $task = $this->getById($taskID);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -730,6 +776,24 @@ class taskModel extends model
     }
 
     /**
+     * Get before consumed. 
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return int 
+     */
+    public function getBeforeConsumed($taskID)
+    {
+        $tasks = $this->dao->select('consumed')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->fetchAll();
+        $beforeConsumed = 0;
+        foreach($tasks as $task)
+        {
+            $beforeConsumed += $task->consumed; 
+        }
+        return $beforeConsumed;
+    }
+
+    /**
      * Batch process tasks.
      * 
      * @param  int    $tasks 
@@ -1072,6 +1136,7 @@ class taskModel extends model
 
         if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'start')    return $task->status != 'doing'  and $task->status != 'closed' and $task->status != 'cancel';
+        if($action == 'record')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'close')    return $task->status == 'done'   or  $task->status == 'cancel';
         if($action == 'activate') return $task->status == 'done'   or  $task->status == 'closed'  or $task->status == 'cancel' ;
