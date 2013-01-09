@@ -85,7 +85,7 @@ class productplanModel extends model
      */
     public function create()
     {
-        $plan = fixer::input('post')->stripTags('title')->get();
+        $plan = fixer::input('post')->stripTags('title')->remove('delta')->get();
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
