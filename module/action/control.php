@@ -62,7 +62,7 @@ class action extends control
     public function undelete($actionID)
     {
         $this->action->undelete($actionID);
-        die(js::locate(inlink('trash'), 'parent'));
+        die(js::reload('parent'));
     }
 
     /**
