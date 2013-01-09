@@ -776,14 +776,28 @@ EOT;
      * 
      * @param  string   $key 
      * @param  mix      $value 
+     * @param  string   $type   string|json|number
      * @static
      * @access public
      * @return void
      */
-    static public function set($key, $value)
+    static public function set($key, $value, $type = 'string')
     {
-        $js  = self::start();
-        $js .= "$key=$value";
+        $js  = self::start(false);
+        if($type == 'json')
+        {
+            $value = json_encode($value);
+            $js .= "$key = $value";
+        }
+        elseif($type == 'number')
+        {
+            $js .= "$key = $value";
+        }
+        else
+        {
+            $value = addslashes($value);
+            $js .= "$key = '$value'";
+        }
         $js .= self::end();
         echo $js;
     }
