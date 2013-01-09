@@ -1,18 +1,13 @@
 <?php
 /**
- * The date class file of ZenTaoPHP framework.
+ * The date library of zentaopms.
  *
- * The author disclaims copyright to this source code.  In place of
- * a legal notice, here is a blessing:
- * 
- *  May you do good and not evil.
- *  May you find forgiveness for yourself and forgive others.
- *  May you share freely, never taking more than you give.
- */
-/**
- * Date class.
- * 
- * @package framework
+ * @copyright   Copyright 2009-2013 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     Date
+ * @version     $Id: date.class.php 2605 2013-01-09 07:22:58Z wwccss $
+ * @link        http://www.zentao.net
  */
 class date 
 {

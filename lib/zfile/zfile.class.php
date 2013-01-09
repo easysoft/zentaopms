@@ -1,4 +1,14 @@
 <?php
+/**
+ * The zfile library of zentaopms.
+ *
+ * @copyright   Copyright 2009-2012 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     Zfile
+ * @version     $Id: zfile.class.php 2605 2013-01-09 07:22:58Z wwccss $
+ * @link        http://www.zentao.net
+ */
 class zfile
 {
     /**
