@@ -1,5 +1,6 @@
 $(function() 
 {
+    if(typeof page == 'undefined') page = '';
     if(page == 'create')
     {
         changeProductConfirmed = true;
@@ -10,9 +11,12 @@ $(function()
         setAssignedTo();
     }
 
-    $("#story").chosen({no_results_text:noResultsMatch});
-    $("#task").chosen({no_results_text:noResultsMatch});
-    $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    if(page == 'create' || page == 'edit')
+    {
+        $("#story").chosen({no_results_text:noResultsMatch});
+        $("#task").chosen({no_results_text:noResultsMatch});
+        $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
+    }
 });
 
 /**
