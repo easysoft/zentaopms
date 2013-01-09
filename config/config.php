@@ -12,6 +12,7 @@
  * @link        http://www.zentao.net
  */
 /* Basic settings. */
+$config = new stdclass();
 $config->version     = '4.0.beta2';       // The version of zentaopms. Don't change it.
 $config->encoding    = 'UTF-8';           // The encoding of zentaopms.
 $config->cookieLife  = time() + 2592000;  // The cookie life time.
@@ -39,6 +40,7 @@ $config->langs['zh-tw'] = '中文繁體';
 $config->langs['en']    = 'English';
 
 /* Default settings. */
+$config->default = new stdclass();
 $config->default->view   = 'html';        // Default view.
 $config->default->lang   = 'en';          // Default language.
 $config->default->theme  = 'default';     // Default theme.
@@ -46,10 +48,12 @@ $config->default->module = 'index';       // Default module.
 $config->default->method = 'index';       // Default method.
 
 /* Upload settings. */
+$config->file = new stdclass();
 $config->file->dangers = 'php,jsp,py,rb,asp,'; // Dangerous files.
 $config->file->maxSize = 1024 * 1024;          // Max size.
 
 /* Master database settings. */
+$config->db = new stdclass();
 $config->db->persistant     = false;     // Pconnect or not.
 $config->db->driver         = 'mysql';   // Must be MySQL. Don't support other database server yet.
 $config->db->encoding       = 'UTF8';    // Encoding of database.
@@ -58,6 +62,7 @@ $config->db->strictMode     = false;     // Turn off the strict mode of MySQL.
 //$config->db->bufferQuery    = true;     // PDO::MYSQL_ATTR_USE_BUFFERED_QUERY
 
 /* Slave database settings. */
+$config->slaveDB = new stdclass();
 $config->slaveDB->persistant = false;      
 $config->slaveDB->driver     = 'mysql';    
 $config->slaveDB->encoding   = 'UTF8';     
