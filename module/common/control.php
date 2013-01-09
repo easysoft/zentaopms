@@ -380,7 +380,7 @@ class common extends control
             if(strtolower($key) == 'editeddate')     continue;
 
             if($magicQuote) $value = stripslashes($value);
-            if($value != $old->$key)
+            if($value != stripslashes($old->$key))
             { 
                 $diff = '';
                 if(substr_count($value, "\n") > 1 or substr_count($old->$key, "\n") > 1 or strpos('name,title,desc,spec,steps,content,digest,verify', strtolower($key)) !== false) $diff = commonModel::diff($old->$key, $value);
