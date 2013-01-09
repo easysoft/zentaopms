@@ -136,6 +136,7 @@ $config->objectTables['task']        = TABLE_TASK;
 $config->objectTables['build']       = TABLE_BUILD;
 $config->objectTables['bug']         = TABLE_BUG;
 $config->objectTables['case']        = TABLE_CASE;
+$config->objectTables['testcase']    = TABLE_CASE;
 $config->objectTables['testtask']    = TABLE_TESTTASK;
 $config->objectTables['user']        = TABLE_USER;
 $config->objectTables['doc']         = TABLE_DOC;
