@@ -812,22 +812,29 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
+    loadFixedCSS();
+    setForm();
+    saveWindowSize();
+    setDebugWin('white');
+    setOuterBox();
+
     setRequiredFields();
     setPlaceholder();
     setProductSwitcher();
     setProjectSwitcher();
-    setAbout();
     saveProduct();
     saveProject();
-    setForm();
-    setSubversionLink();
+
+    setAbout();
     setExport();
+    setSubversionLink();
+
     autoCheck();
-    toggleSearch();
-    saveWindowSize();
-    loadFixedCSS();
     getCheckedItem('.export');
-    $(window).resize(function(){saveWindowSize()});       // When window resized, call it again.
+
+    toggleSearch();
+
+    $(window).resize(function(){saveWindowSize()});   // When window resized, call it again.
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
 });
 
