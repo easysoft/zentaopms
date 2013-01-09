@@ -15,11 +15,9 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/alert.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('holders', json_encode($lang->bug->placeholder));?>
-<script language='Javascript'>
-userList = "<?php echo join(',', array_keys($users));?>".split(',');
-page     = 'create';
-</script>
+<?php js::set('holders', $lang->bug->placeholder, 'json');?>
+<?php js::set('userList', array_keys($users), 'json');?>
+<?php js::set('page', 'create');?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->bug->create;?></caption>
