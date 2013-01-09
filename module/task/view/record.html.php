@@ -11,7 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin'>
+<?php js::set('confirmFinish', $lang->task->confirmFinish);?>
+<form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
@@ -25,6 +26,10 @@
     <tr>
       <th class='rowhead'><?php echo $lang->task->left;?></th>
       <td><?php echo html::input('left', '', "class='text-2'") . $lang->task->hour;?></td>
+    </tr>
+    <tr>
+      <td class='rowhead'><?php echo $lang->comment;?></td>
+      <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
     </tr>
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>

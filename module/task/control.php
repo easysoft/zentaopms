@@ -437,7 +437,7 @@ class task extends control
         if(!empty($_POST))
         {
             $changes  = $this->task->record($taskID);
-            $actionID = $this->action->create('task', $taskID, 'Record', '');
+            $actionID = $this->action->create('task', $taskID, 'Recorded', $this->post->comment, (float)$this->post->consumed);
             $this->action->logHistory($actionID, $changes);
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }

@@ -417,6 +417,8 @@ class taskModel extends model
             ->setDefault('account', $this->app->user->account) 
             ->setDefault('task', $taskID) 
             ->setDefault('date', helper::now()) 
+            ->cleanFloat('consumed, left')
+            ->remove('comment')
             ->get();
         $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
             ->autoCheck()
