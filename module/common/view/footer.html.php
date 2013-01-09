@@ -2,7 +2,8 @@
   <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
   <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php $config->debug ? print("debugwin") : print('hidden')?>'></iframe>
   <div id='divider'></div>
-<?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
+<?php $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : 'no';?>
+<?php if($onlybody != 'yes'):?>
 </div>
 <div id='footer'>
   <table class='cont' >
@@ -17,15 +18,11 @@
   </table>
 </div>
 <?php endif;?>
-<script laguage='Javascript'>
-$().ready(function()
-{
-})
-<?php $onlybody = (!empty($_GET['onlybody']) and $_GET['onlybody'] == 'yes') ? 'yes' : ''?>
-var onlybody = '<?php echo $onlybody?>';
-<?php if(isset($pageJS)) echo $pageJS;?>
-</script>
 <?php 
+js::set('onlybody', $onlybody);           // set the onlybody var.
+if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
+
+/* Load hook files for current page. */
 $extPath      = dirname(dirname(dirname(realpath($viewFile)))) . '/common/ext/view/';
 $extHookRule  = $extPath . 'footer.*.hook.php';
 $extHookFiles = glob($extHookRule);
