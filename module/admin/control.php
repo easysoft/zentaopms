@@ -18,7 +18,7 @@ class admin extends control
      */
     public function index()
     {
-		$community = $this->loadModel('setting')->getItem('system', 'common', 'global', 'community');
+        $community = zset($this->config->global, 'community');
         if(!$community or $community == 'na')
         {
             $this->view->bind    = false;
@@ -44,7 +44,7 @@ class admin extends control
 	 */
 	public function ignore()
 	{
-		$this->loadModel('setting')->setItem('system', 'common', 'global', 'community', 'na');
+		$this->loadModel('setting')->setItem('system.common.global.community', 'na');
 		die(js::locate(inlink('index'), 'parent'));
 	}
 
@@ -61,14 +61,14 @@ class admin extends control
 			$response = $this->admin->registerByAPI();
 			if($response == 'success') 
 			{
-				$this->loadModel('setting')->setItem('system', 'common', 'global', 'community', $this->post->account);
+				$this->loadModel('setting')->setItem('system.common.global.community', $this->post->account);
 				echo js::alert($this->lang->admin->register->success);
 				die(js::locate(inlink('index'), 'parent'));
 			}
 			die($response);
 		}
 		$this->view->register = $this->admin->getRegisterInfo();
-		$this->view->sn       = $this->loadModel('setting')->getItem('system', 'common', 'global', 'sn', 0);
+		$this->view->sn       = $this->config->global->sn;
 		$this->display();
 	}
 
@@ -85,13 +85,13 @@ class admin extends control
 			$response = $this->admin->bindByAPI();	
 			if($response == 'success') 
 			{
-				$this->loadModel('setting')->setItem('system', 'common', 'global', 'community', $this->post->account);
+				$this->loadModel('setting')->setItem('system.common.global.community', $this->post->account);
 				echo js::alert($this->lang->admin->bind->success);
 				die(js::locate(inlink('index'), 'parent'));
 			}
 			die($response);
 		}
-		$this->view->sn = $this->loadModel('setting')->getItem('system', 'common', 'global', 'sn', 0);
+		$this->view->sn = $this->config->global->sn;
 		$this->display();
 	}
 
