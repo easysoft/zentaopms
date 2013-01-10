@@ -14,4 +14,5 @@ $(function()
     {
         $(this).sparkline('html', {height:'25px'});
     })
+    if(typeof(flow) != 'undefined' && flow) $.colorbox({href:createLink('index', 'index', 'type=flow'), open:true, width:800, height:400, iframe:true});
 });

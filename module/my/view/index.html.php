@@ -37,12 +37,5 @@
     <?php endif;?>
   </tr>
 </table>
-<script type='text/javascript'>
-<?php
-if(!(isset($this->app->config->flow) or strpos($this->config->version, 'pro') !== false or strpos($this->app->company->admins, ",{$this->app->user->account},") === false))
-{
-    echo "\$.colorbox({href:" . json_encode($this->createLink('index', 'index', 'type=flow')) . ", open:true, width:800, height:400, iframe:true});\n";
-}
-?>
-</script>
+<?php if(!(isset($config->global->flow) or strpos($this->config->version, 'pro') !== false or strpos($this->app->company->admins, ",{$this->app->user->account},") === false)) js::set('flow', 'true', 'number');?>
 <?php include '../../common/view/footer.html.php';?>
