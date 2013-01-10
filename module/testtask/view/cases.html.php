@@ -86,6 +86,7 @@ var moduleID   = '<?php echo $moduleID;?>';
         <tfoot>
           <tr>
             <td colspan='10'>
+              <?php if($runs):?>
               <div class='f-left'>
               <?php 
               echo html::selectAll() . html::selectReverse();
@@ -99,6 +100,7 @@ var moduleID   = '<?php echo $moduleID;?>';
               <input class='button-s' value="<?php echo $lang->testtask->batchRun; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");?>';casesform.submit();">
               <?php endif;?>
               </div>
+              <?php endif;?>
               <?php echo $pager->show();?>
             </td>
           </tr>

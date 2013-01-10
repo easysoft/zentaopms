@@ -10,14 +10,15 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datepicker.html.php';?>
-<?php include '../../common/view/treeview.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<script language="Javascript">
-var browseType = '<?php echo $browseType;?>';
-var moduleID   = '<?php echo $moduleID;?>';
-</script>
+<?php
+include '../../common/view/header.html.php';
+include '../../common/view/datepicker.html.php';
+include '../../common/view/treeview.html.php';
+include '../../common/view/colorize.html.php';
+js::set('browseType', $browseType);
+js::set('moduleID'  , $moduleID);
+?>
+
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -105,7 +106,9 @@ var moduleID   = '<?php echo $moduleID;?>';
           </thead>
          <tfoot>
            <tr>
-             <td colspan='10'>
+             <?php $mergeColums = $browseType == 'needconfirm' ? 5 : 10;?>
+             <td colspan='<?php echo $mergeColums?>'>
+               <?php if($cases):?>
                <div class='f-left'>
                <?php
                echo html::selectAll() . html::selectReverse(); 
@@ -113,6 +116,7 @@ var moduleID   = '<?php echo $moduleID;?>';
                if(common::hasPriv('testtask', 'batchRun')) echo html::submitButton($lang->testtask->batchRun,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
                ?>
                </div>
+               <?php endif?>
                <?php $pager->show();?>
              </td>
            </tr>

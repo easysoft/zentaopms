@@ -67,7 +67,7 @@ $lang->testtask->fail          = '失败';
 
 $lang->testtask->byModule      = '按模块';
 $lang->testtask->assignedToMe  = '指派给我';
-$lang->testtask->allCases      = '所有Case';
+$lang->testtask->allCases      = '所有用例';
 
 $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';

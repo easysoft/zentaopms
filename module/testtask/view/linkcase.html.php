@@ -60,7 +60,9 @@
   <tfoot> 
   <tr>
     <td colspan='7'>
+      <?php if($cases):?>
       <div class='f-left'><?php echo html::selectAll() . html::selectReverse() . html::submitButton();?></div>
+      <?php endif;?>
       <div class='f-right'><?php $pager->show();?></div>
     </td>
   </tr>
