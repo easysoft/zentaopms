@@ -13,6 +13,144 @@
 <?php
 class settingModel extends model
 {
+    //-------------------------------- methods for get, set and delete setting items. ----------------------------//
+    
+    /**
+     * Get value of an item.
+     * 
+     * @param  string   $paramString    see parseItemParam();
+     * @access public
+     * @return misc
+     */
+    public function getItem($paramString)
+    {
+        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetch('value', $autoCompany = false);
+    }
+
+    /**
+     * Get some items.
+     * 
+     * @param  string   $paramString    see parseItemParam();
+     * @access public
+     * @return array
+     */
+    public function getItems($paramString)
+    {
+        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('id', $autoCompany = false);
+    }
+
+    /**
+     * Set value of an item. 
+     * 
+     * @param  string      $path     system.common.global.sn or system.common.sn 
+     * @param  string      $value 
+     * @param  string|int  $company 
+     * @access public
+     * @return void
+     */
+    public function setItem($path, $value = '', $company = 'current')
+    {
+        $level    = substr_count($keyPath, '.');
+        $section = '';
+
+        if($level == 1) return false;
+        if($level == 2) list($owner, $module, $key) = explode('.', $path);
+        if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
+
+        $item->company = $company === 'current' ? $this->app->company->id : $company;
+        $item->owner   = $owner;
+        $item->module  = $module;
+        $item->section = $section;
+        $item->key     = $key;
+        $item->value   = $value;
+
+        $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
+    }
+
+    /**
+     * Batch set items, the example:
+     * 
+     * $path = 'system.mail';
+     * $items->turnon = true;
+     * $items->smtp->host = 'localhost';
+     *
+     * @param  string         $path   like system.mail 
+     * @param  array|object   $items  the items array or object, can be mixed by one level or two levels.
+     * @access public
+     * @return void
+     */
+    public function setItems($path, $items, $company = 'current')
+    {
+        foreach($items as $key => $item)
+        {
+            if(is_array($item) or is_object($item))
+            {
+                $section = $key;
+                foreach($item as $subKey => $subItem)
+                {
+                    $this->setItem($path . '.' . $section, $subKey, $subItem);
+                }
+            }
+            else
+            {
+                $this->setItem($path, $key, $value);
+            }
+        }
+    }
+
+    /**
+     * Delete items.
+     * 
+     * @param  string   $paramString    see parseItemParam();
+     * @access public
+     * @return void
+     */
+    public function deleteItems($paramString)
+    {
+        $this->createDAO($this->parseItemParam($paramString), 'delete')->exec();
+    }
+
+    /**
+     * Parse the param string for select or delete items.
+     * 
+     * @param  string    $paramString     owner=xxx&company=1,2&key=sn and so on.
+     * @access public
+     * @return array
+     */
+    public function parseItemParam($paramString)
+    {
+        /* Parse the param string into array. */
+        parse_str($paramString, $params); 
+
+        /* Init fields not set in the param string. */
+        $fields = 'company,owner,module,section,key';
+        $fields = explode(',', $fields);
+        foreach($fields as $field) if(!isset($params[$field])) $params[$field] = '';
+
+        /* If not set company, set as current company. */
+        if($params['company'] == '') $params['company'] = $this->app->company->id;
+
+        return $params;
+    }
+
+    /**
+     * Create a DAO object to select or delete one or more records.
+     * 
+     * @param  array  $params     the params parsed by parseItemParam() method.
+     * @param  string $method     select|delete.
+     * @access public
+     * @return object
+     */
+    public function createDAO($params, $method = 'select')
+    {
+        return $this->dao->$method('*')->from(TABLE_CONFIG)->where('1 = 1')
+            ->beginIF($params['company'])->andWhere('company')->in($params['company'])->fi()
+            ->beginIF($params['owner'])->andWhere('owner')->eq($params['owner'])->fi()
+            ->beginIF($params['module'])->andWhere('module')->eq($params['module'])->fi()
+            ->beginIF($params['section'])->andWhere('section')->eq($params['section'])->fi()
+            ->beginIF($params['key'])->andWhere('`key`')->eq($params['key'])->fi();
+    }
+
     /**
      * Get config of system and one user.
      *
@@ -22,11 +160,9 @@ class settingModel extends model
      */
     public function getSysAndPersonalConfig($account = '')
     {
+        $company = $this->app->company->id . ',' . '0';     // Get settings of current company, and also settings for all company.
         $owner   = 'system,' . ($account ? $account : '');
-        $records = $this->dao->select('*')
-            ->from(TABLE_CONFIG)
-            ->where('owner')->in($owner)
-            ->fetchAll();
+        $records = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->in($owner)->andWhere('company')->in($company)->fetchAll('id', false);
         if(!$records) return array();
 
         /* Group records by owner and module. */
@@ -41,25 +177,21 @@ class settingModel extends model
         return $config;
     }
 
+    //-------------------------------- methods for version and sn. ----------------------------//
+   
     /**
      * Get the version of current zentaopms.
      * 
      * Since the version field not saved in db. So if empty, return 0.3 beta.
+     *
      * @access public
      * @return void
      */
     public function getVersion()
     {
-        $version = $this->dao->select('value')->from(TABLE_CONFIG)
-            ->where('owner')->eq('system')
-            ->andWhere('section')->eq('global')
-            ->andWhere('`key`')->eq('version')
-            ->andWhere('company')->eq(0)
-            ->fetch('value', false);
-
-        if($version == '3.0.stable') $version = '3.0';   // convert 3.0.stable to 3.0.
-        if($version) return $version;
-        return '0.3 beta';
+        $version = isset($this->config->global->version) ? $this->config->global->version : '0.3.beta';    // No version, set as 0.3.beta.
+        if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
+        return $version;
     }
 
     /**
@@ -71,19 +203,19 @@ class settingModel extends model
      */
     public function updateVersion($version)
     {
-        if($version >= 3.2) return $this->setItem('system', 'common', 'global', 'version', $version, 0);
+        return $this->setItem('system.common.global.version', $version, 0);
+    }
 
-        $this->dao->delete()->from(TABLE_CONFIG)
-            ->where('owner')->eq('system')
-            ->andWhere('section')->eq('global')
-            ->andWhere('`key`')->eq('version')
-            ->andWhere('company')->eq(0)
-            ->exec();
-        $data->owner   = 'system';
-        $data->section = 'global';
-        $data->key     = 'version';
-        $data->company = 0;
-        return $this->dao->insert(TABLE_CONFIG)->data($data, false)->exec();
+    /**
+     * Set the sn of current zentaopms.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setSN()
+    {
+        $sn = $this->getItem('owner=system&module=common&section=global&key=sn');
+        if($this->snNeededUpdate($sn)) $this->setItem('system.common.global.sn', $this->computeSN());
     }
 
     /**
@@ -102,99 +234,20 @@ class settingModel extends model
     }
 
     /**
-     * Set the sn of current zentaopms.
+     * Judge a sn needed update or not.
      * 
+     * @param  string    $sn 
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setSN()
+    public function snNeededUpdate($sn)
     {
-        $sn = $this->getItem('system', 'common', 'global', 'sn', 0);
-        if($sn == '' or
-           $sn == '281602d8ff5ee7533eeafd26eda4e776' or 
-           $sn == '9bed3108092c94a0db2b934a46268b4a' or
-           $sn == '8522dd4d76762a49d02261ddbe4ad432' or
-           $sn == '13593e340ee2bdffed640d0c4eed8bec')
-        {
-            $sn = $this->computeSN();
-            $this->setItem('system', 'common', 'global', 'sn', $sn, 0);
-        }
-    }
+        if($sn == '') return true;
+        if($sn == '281602d8ff5ee7533eeafd26eda4e776') return true;
+        if($sn == '9bed3108092c94a0db2b934a46268b4a') return true;
+        if($sn == '8522dd4d76762a49d02261ddbe4ad432') return true;
+        if($sn == '13593e340ee2bdffed640d0c4eed8bec') return true;
 
-    /**
-     * Get value of an item.
-     * 
-     * @param  string     $owner 
-     * @param  string     $module 
-     * @param  string     $section 
-     * @param  string     $key 
-     * @param  string|int $company 
-     * @access public
-     * @return misc
-     */
-    public function getItem($owner, $module, $section, $key, $company = 'current')
-    {
-        if($company === 'current') $company = $this->app->company->id;
-        return $this->dao->select('`value`')->from(TABLE_CONFIG)
-            ->where('company')->eq($company)
-            ->andWhere('owner')->eq($owner)
-            ->andWhere('module')->eq($module)
-            ->andWhere('section')->eq($section)
-            ->andWhere('`key`')->eq($key)
-            ->fetch('value', $autoCompany = false);
-    }
-
-    /**
-     * Set value of an item. 
-     * 
-     * @param  string      $owner 
-     * @param  string      $module 
-     * @param  string      $section 
-     * @param  string      $key 
-     * @param  string      $value 
-     * @param  string|int  $company 
-     * @access public
-     * @return void
-     */
-    public function setItem($owner, $module, $section, $key, $value = '', $company = 'current')
-    {
-        $item->company = $company === 'current' ? $this->app->company->id : $company;
-        $item->owner   = $owner;
-        $item->module  = $module;
-        $item->section = $section;
-        $item->key     = $key;
-        $item->value   = $value;
-
-        $this->dao->replace(TABLE_CONFIG)->data($item)->exec($autoCompany = false);
-    }
-
-    /**
-     * Delete value of item 
-     * 
-     * @param  string              $owner 
-     * @param  string              $module 
-     * @param  string              $section 
-     * @param  array               $key 
-     * @param  string|int          $company 
-     * @access public
-     * @return void
-     */
-    public function deleteItem($owner, $module, $section, $key, $company = 'current')
-    {
-        $fieldNames = array_keys($key);
-        $company = $company === 'current' ? $this->app->company->id : $company;
-        foreach($fieldNames as $fieldName)
-        {
-            $value = $key[$fieldName];
-            $more  = (is_array($value) or is_object($value)) ? true : false;
-            $this->dao->delete()->from(TABLE_CONFIG)
-                ->where('owner')->eq($owner)
-                ->andWhere('module')->eq($module)
-                ->andWhere('section')->eq($section)
-                ->andWhere('company')->eq($company)
-                ->beginIF($more)->andWhere("`$fieldName`")->in($value)->fi()
-                ->beginIF(!$more)->andWhere("`$fieldName`")->eq($value)->fi()
-                ->exec($autoCompany = false);
-        }
+        return false;
     }
 }
