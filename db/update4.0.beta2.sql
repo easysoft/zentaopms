@@ -8,6 +8,6 @@ ALTER TABLE  `zt_taskEstimate` CHANGE  `date`  `date` DATETIME NOT NULL;
 ALTER TABLE  `zt_taskEstimate` CHANGE  `left`  `left` FLOAT UNSIGNED NOT NULL DEFAULT  '0', CHANGE  `consumed`  `consumed` FLOAT UNSIGNED NOT NULL;
 
 UPDATE `zt_config` SET `company` = 0 WHERE `key` = 'version';
-DELETE FROM `zt_config` WHERE `company` = 0 AND `key` = 'sn';
+DELETE FROM `zt_config` WHERE `company` = 1 AND `key` = 'sn';
 UPDATE `zt_config` SET `company` = 1 WHERE `key` = 'sn';
 UPDATE `zt_config` SET `section` = 'global' WHERE `key` = 'flow';
