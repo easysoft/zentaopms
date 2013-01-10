@@ -1,7 +1,8 @@
 function syncModule(rootID, type)
 {
-    if(type == 'story') moduleID = $('#productModule').val();
-    if(type == 'task')  moduleID = $('#projectModule').val();
+    moduleID = type == 'task' ? $('#projectModule').val() : $('#productModule').val();
+    type     = type == 'task' ? 'task' : 'story';
+
     link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + moduleID + '&rootID=' + rootID + '&type=' + type);
     $.getJSON(link, function(modules)
     {
