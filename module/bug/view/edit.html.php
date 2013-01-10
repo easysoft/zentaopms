@@ -10,23 +10,24 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
-<?php include '../../common/view/autocomplete.html.php';?>
-<?php include '../../common/view/alert.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
-<script language='Javascript'>
-page                   = 'edit';
-changeProductConfirmed = false;
-changeProjectConfirmed = false;
-confirmChangeProduct   = '<?php echo $lang->bug->confirmChangeProduct;?>';
-oldProjectID           = '<?php echo $bug->project;?>';
-oldStoryID             = '<?php echo $bug->story;?>';
-oldTaskID              = '<?php echo $bug->task;?>';
-oldOpenedBuild         = '<?php echo $bug->openedBuild;?>';
-oldResolvedBuild       = '<?php echo $bug->resolvedBuild;?>';
-userList               = "<?php echo join(',', array_keys($users));?>".split(',');
-</script>
+<?php
+include '../../common/view/header.html.php';
+include '../../common/view/chosen.html.php';
+include '../../common/view/autocomplete.html.php';
+include '../../common/view/alert.html.php';
+include '../../common/view/kindeditor.html.php';
+js::set('page'                   , 'edit');
+js::set('changeProductConfirmed' , 'false', 'number');
+js::set('changeProjectConfirmed' , 'false', 'number');
+js::set('confirmChangeProduct'   , $lang->bug->confirmChangeProduct);
+js::set('oldProjectID'           , $bug->project);
+js::set('oldStoryID'             , $bug->story);
+js::set('oldTaskID'              , $bug->task);
+js::set('oldOpenedBuild'         , $bug->openedBuild);
+js::set('oldResolvedBuild'       , $bug->resolvedBuild);
+js::set('userList'               , array_keys($users), 'json');
+?>
+
 <form method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform'>
 <div id='titlebar'>
   <div id='main'>

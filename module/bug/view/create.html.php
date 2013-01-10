@@ -10,14 +10,17 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
-<?php include '../../common/view/autocomplete.html.php';?>
-<?php include '../../common/view/alert.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('holders', $lang->bug->placeholder, 'json');?>
-<?php js::set('userList', array_keys($users), 'json');?>
-<?php js::set('page', 'create');?>
+<?php
+include '../../common/view/header.html.php';
+include '../../common/view/chosen.html.php';
+include '../../common/view/autocomplete.html.php';
+include '../../common/view/alert.html.php';
+include '../../common/view/kindeditor.html.php';
+js::set('holders', $lang->bug->placeholder, 'json');
+js::set('userList', array_keys($users), 'json');
+js::set('page', 'create');
+?>
+
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->bug->create;?></caption>

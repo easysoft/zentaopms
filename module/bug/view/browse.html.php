@@ -10,14 +10,14 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/treeview.html.php';?>
-<?php include '../../common/view/colorize.html.php';?>
-<script language='Javascript'>
-var browseType = '<?php echo $browseType;?>';
-var moduleID   = '<?php echo $moduleID;?>';
-var customed   = <?php echo (int)$customed;?>;
-</script>
+<?php
+include '../../common/view/header.html.php';
+include '../../common/view/treeview.html.php';
+include '../../common/view/colorize.html.php';
+js::set('browseType', $browseType);
+js::set('moduleID', $moduleID);
+js::set('customed', $customed, 'number');
+?>
 
 <div id='featurebar'>
   <div class='f-left'>
@@ -158,12 +158,14 @@ var customed   = <?php echo (int)$customed;?>;
             <tr>
               <?php $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 12 : 9;?>
               <td colspan='<?php echo $columns;?>'>
+                <?php if(!empty($bugs)):?>
                 <div class='f-left'>
                   <?php 
                   echo html::selectAll() . html::selectReverse(); 
                   if(common::hasPriv('bug', 'batchEdit') and $bugs) echo html::submitButton($lang->bug->batchEdit);
                  ?>
                 </div>
+                <?php endif?>
                 <div class='f-right'><?php $pager->show();?></div>
               </td>
             </tr>
