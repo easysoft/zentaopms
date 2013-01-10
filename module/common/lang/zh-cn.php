@@ -86,9 +86,9 @@ $lang->menu->project  = '项目|project|index';
 $lang->menu->qa       = '测试|qa|index';
 $lang->menu->doc      = '文档|doc|index';
 $lang->menu->report   = '统计|report|index';
-$lang->menu->webapp   = '应用中心|webapp|index';
+$lang->menu->webapp   = '应用|webapp|index';
 $lang->menu->company  = '组织|company|index';
-$lang->menu->admin    = '管理|admin|index';
+$lang->menu->admin    = '后台|admin|index';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'B:Bug';
@@ -144,7 +144,7 @@ $lang->my->menu->account        = '<span id="mybg">&nbsp;</span>%s' . $lang->arr
 $lang->my->menu->index          = '首页|my|index';
 $lang->my->menu->todo           = array('link' => '待办|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = '任务|my|task|';
-$lang->my->menu->bug            = '缺陷|my|bug|';
+$lang->my->menu->bug            = 'Bug|my|bug|';
 $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'alias' => 'testcase');
 $lang->my->menu->story          = '需求|my|story|';
 $lang->my->menu->myProject      = '项目|my|project|';
@@ -170,7 +170,7 @@ $lang->product->menu->view    = array('link' => '维护|product|view|productID=%
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = '项目|product|project|status=all&productID=%s';
 $lang->product->menu->order   = '排序|product|order|productID=%s';
-$lang->product->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>新增产品|product|create', 'float' => 'right');
+$lang->product->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>添加产品|product|create', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '<span class="icon-allProducts">&nbsp;</span>所有产品|product|index|locate=no&productID=%s', 'float' => 'right');
 
 $lang->story       = new stdclass();
@@ -197,7 +197,7 @@ $lang->project->menu->doc       = array('link' => '文档|project|doc|porjectID=
 $lang->project->menu->product   = '产品|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => '维护|project|view|projectID=%s', 'alias' => 'edit');
 $lang->project->menu->order     = '排序|project|order|projectID=%s';
-$lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>新增项目|project|create', 'float' => 'right');
+$lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>添加项目|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>所有项目|project|index|locate=no&status=undone&projectID=%s', 'float' => 'right');
 
 $lang->task  = new stdclass();
@@ -210,16 +210,16 @@ $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product  = '%s';
-$lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
 $lang->testcase->menu->product  = '%s';
-$lang->testcase->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit', 'subModule' => 'tree');
+$lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit', 'subModule' => 'tree');
 $lang->testcase->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
 
 $lang->testtask = new stdclass();
@@ -230,11 +230,11 @@ $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
 $lang->doc->menu->list    = '%s';
-$lang->doc->menu->browse  = array('link' => '文档列表|doc|browse|libID=%s', 'alias' => 'view,create,edit');
-$lang->doc->menu->edit    = '编辑文档库|doc|editLib|libID=%s';
-$lang->doc->menu->module  = '维护模块|tree|browse|libID=%s&viewType=doc';
-$lang->doc->menu->delete  = array('link' => '删除文档库|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
-$lang->doc->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>新增文档库|doc|createLib', 'float' => 'right');
+$lang->doc->menu->browse  = array('link' => '文档|doc|browse|libID=%s', 'alias' => 'view,create,edit');
+$lang->doc->menu->edit    = '编辑|doc|editLib|libID=%s';
+$lang->doc->menu->module  = '分类|tree|browse|libID=%s&viewType=doc';
+$lang->doc->menu->delete  = array('link' => '删除|doc|deleteLib|libID=%s', 'target' => 'hiddenwin');
+$lang->doc->menu->create  = array('link' => '<span class="icon-add">&nbsp;</span>添加文档库|doc|createLib', 'float' => 'right');
 
 /* 统计视图菜单设置。*/
 $lang->report = new stdclass();

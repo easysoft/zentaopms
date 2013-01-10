@@ -68,7 +68,7 @@ $lang->bug->toCase           = '生成用例';
 
 /* 方法列表。*/
 $lang->bug->index              = '首页';
-$lang->bug->create             = '创建';
+$lang->bug->create             = '提Bug';
 $lang->bug->confirmBug         = '确认';
 $lang->bug->edit               = '编辑';
 $lang->bug->batchEdit          =  '批量编辑';
