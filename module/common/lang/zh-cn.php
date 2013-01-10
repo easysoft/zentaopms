@@ -86,7 +86,7 @@ $lang->menu->project  = '项目|project|index';
 $lang->menu->qa       = '测试|qa|index';
 $lang->menu->doc      = '文档|doc|index';
 $lang->menu->report   = '统计|report|index';
-//$lang->menu->webapp   = '应用中心|webapp|index';
+$lang->menu->webapp   = '应用中心|webapp|index';
 $lang->menu->company  = '组织|company|index';
 $lang->menu->admin    = '管理|admin|index';
 
@@ -210,7 +210,7 @@ $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product  = '%s';
-$lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit', 'subModule' => 'tree');
+$lang->bug->menu->bug      = array('link' => '缺陷管理|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => '用例管理|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => '测试任务|testtask|browse|productID=%s');
 
@@ -248,7 +248,7 @@ $lang->report->menu->staff   = array('link' => '组织|report|workload');
 /* 资源视图菜单设置。*/
 $lang->webapp = new stdclass();
 $lang->webapp->menu = new stdclass();
-//$lang->webapp->menu->obtain  = array('link' => '应用商店|webapp|obtain', 'float' => 'right');
+$lang->webapp->menu->obtain  = array('link' => '应用商店|webapp|obtain', 'float' => 'right');
 
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();

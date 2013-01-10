@@ -86,7 +86,7 @@ $lang->menu->project  = 'Project|project|index';
 $lang->menu->qa       = 'Test|qa|index';
 $lang->menu->doc      = 'Doc|doc|index';
 $lang->menu->report   = 'Report|report|index';
-//$lang->menu->webapp   = 'Web App|webapp|index';
+$lang->menu->webapp   = 'Web App|webapp|index';
 $lang->menu->company  = 'Company|company|index';
 $lang->menu->admin    = 'Admin|admin|index';
 
@@ -210,7 +210,7 @@ $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product  = '%s';
-$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit', 'subModule' => 'tree');
+$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase = array('link' => 'Test Case|testcase|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->bug->menu->testtask = array('link' => 'Test Task|testtask|browse|productID=%s');
 
@@ -248,7 +248,7 @@ $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 /* Resource menu. */
 $lang->webapp = new stdclass();
 $lang->webapp->menu = new stdclass();
-//$lang->webapp->menu->obtain   = array('link' => 'App Store|webapp|obtain');
+$lang->webapp->menu->obtain   = array('link' => 'App Store|webapp|obtain');
 
 /* Company menu. */
 $lang->company = new stdclass();
