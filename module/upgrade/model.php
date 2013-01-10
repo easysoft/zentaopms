@@ -32,52 +32,52 @@ class upgradeModel extends model
     {
         switch($fromVersion)
         {
-        case '0_3beta': $this->execSQL($this->getUpgradeFile('0.3'));
-        case '0_4beta': $this->execSQL($this->getUpgradeFile('0.4'));
-        case '0_5beta': $this->execSQL($this->getUpgradeFile('0.5'));
-        case '0_6beta': $this->execSQL($this->getUpgradeFile('0.6'));
-        case '1_0beta':
-            $this->execSQL($this->getUpgradeFile('1.0.beta'));
-            $this->updateCompany();
-        case '1_0rc1': $this->execSQL($this->getUpgradeFile('1.0.rc1'));
-        case '1_0rc2':
-        case '1_0':
-        case '1_0_1': $this->execSQL($this->getUpgradeFile('1.0.1'));
-        case '1_1': $this->execSQL($this->getUpgradeFile('1.1'));
-        case '1_2':
-            $this->execSQL($this->getUpgradeFile('1.2'));
-            $this->updateUBB();
-            $this->updateNL1_2();
-        case '1_3':
-            $this->execSQL($this->getUpgradeFile('1.3'));
-            $this->updateNL1_3();
-            $this->updateTasks();
-        case '1_4': $this->execSQL($this->getUpgradeFile('1.4'));
-        case '1_5': $this->execSQL($this->getUpgradeFile('1.5'));
-        case '2_0': $this->execSQL($this->getUpgradeFile('2.0'));
-        case '2_1': $this->execSQL($this->getUpgradeFile('2.1'));
-        case '2_2':
-            $this->execSQL($this->getUpgradeFile('2.2'));
-            $this->updateCases();
-            $this->updateActivatedCountOfBug();
-        case '2_3': $this->execSQL($this->getUpgradeFile('2.3'));
-        case '2_4': $this->execSQL($this->getUpgradeFile('2.4'));
-        case '3_0_beta1':
-            $this->execSQL($this->getUpgradeFile('3.0.beta1'));
-            $this->updateAction();
-            $this->setOrderData();
-        case '3_0_beta2':
-        case '3_0':
-        case '3_1': $this->execSQL($this->getUpgradeFile('3.1'));
-        case '3_2': $this->execSQL($this->getUpgradeFile('3.2'));
-        case '3_2_1': $this->execSQL($this->getUpgradeFile('3.2.1'));
-        case '3_3':
-            $this->execSQL($this->getUpgradeFile('3.3'));
-            $this->updateTaskAssignedTo();
-            $this->loadModel('setting')->setItem('system', 'common', '', 'flow', 'full');
-        case '4_0_beta1': $this->execSQL($this->getUpgradeFile('4.0.beta1'));
+            case '0_3beta': $this->execSQL($this->getUpgradeFile('0.3'));
+            case '0_4beta': $this->execSQL($this->getUpgradeFile('0.4'));
+            case '0_5beta': $this->execSQL($this->getUpgradeFile('0.5'));
+            case '0_6beta': $this->execSQL($this->getUpgradeFile('0.6'));
+            case '1_0beta':
+                $this->execSQL($this->getUpgradeFile('1.0.beta'));
+                $this->updateCompany();
+            case '1_0rc1': $this->execSQL($this->getUpgradeFile('1.0.rc1'));
+            case '1_0rc2':
+            case '1_0':
+            case '1_0_1': $this->execSQL($this->getUpgradeFile('1.0.1'));
+            case '1_1': $this->execSQL($this->getUpgradeFile('1.1'));
+            case '1_2':
+                $this->execSQL($this->getUpgradeFile('1.2'));
+                $this->updateUBB();
+                $this->updateNL1_2();
+            case '1_3':
+                $this->execSQL($this->getUpgradeFile('1.3'));
+                $this->updateNL1_3();
+                $this->updateTasks();
+            case '1_4': $this->execSQL($this->getUpgradeFile('1.4'));
+            case '1_5': $this->execSQL($this->getUpgradeFile('1.5'));
+            case '2_0': $this->execSQL($this->getUpgradeFile('2.0'));
+            case '2_1': $this->execSQL($this->getUpgradeFile('2.1'));
+            case '2_2':
+                $this->execSQL($this->getUpgradeFile('2.2'));
+                $this->updateCases();
+                $this->updateActivatedCountOfBug();
+            case '2_3': $this->execSQL($this->getUpgradeFile('2.3'));
+            case '2_4': $this->execSQL($this->getUpgradeFile('2.4'));
+            case '3_0_beta1':
+                $this->execSQL($this->getUpgradeFile('3.0.beta1'));
+                $this->updateAction();
+                $this->setOrderData();
+            case '3_0_beta2':
+            case '3_0':
+            case '3_1': $this->execSQL($this->getUpgradeFile('3.1'));
+            case '3_2': $this->execSQL($this->getUpgradeFile('3.2'));
+            case '3_2_1': $this->execSQL($this->getUpgradeFile('3.2.1'));
+            case '3_3':
+                $this->execSQL($this->getUpgradeFile('3.3'));
+                $this->updateTaskAssignedTo();
+                $this->loadModel('setting')->setItem('system', 'common', '', 'flow', 'full');
+            case '4_0_beta1': $this->execSQL($this->getUpgradeFile('4.0.beta1'));
 
-        default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
+            default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
 
         $this->deletePatch();
