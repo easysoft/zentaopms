@@ -77,10 +77,6 @@ if(file_exists($myConfig)) include $myConfig;
 /* Set default table prefix. */
 if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
-/* Include extension config files. */
-$extConfigFiles = glob($configRoot . 'ext/*.php');
-if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
-
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
@@ -142,3 +138,7 @@ $config->objectTables['user']        = TABLE_USER;
 $config->objectTables['doc']         = TABLE_DOC;
 $config->objectTables['doclib']      = TABLE_DOCLIB;
 $config->objectTables['todo']        = TABLE_TODO;
+
+/* Include extension config files. */
+$extConfigFiles = glob($configRoot . 'ext/*.php');
+if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
