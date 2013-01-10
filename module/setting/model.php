@@ -50,10 +50,10 @@ class settingModel extends model
      */
     public function setItem($path, $value = '', $company = 'current')
     {
-        $level    = substr_count($keyPath, '.');
+        $level    = substr_count($path, '.');
         $section = '';
 
-        if($level == 1) return false;
+        if($level <= 1) return false;
         if($level == 2) list($owner, $module, $key) = explode('.', $path);
         if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
 
