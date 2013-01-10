@@ -500,6 +500,27 @@ function a($var)
 }
 
 /**
+ * When the $var has the $key, return it, esle result one default value.
+ * 
+ * @param  array|object    $var 
+ * @param  string|int      $key 
+ * @param  mixed           $valueWhenNone     value when the key not exits.
+ * @param  mixed           $valueWhenExists   value when the key exits.
+ * @access public
+ * @return void
+ */
+function zset($var, $key, $valueWhenNone = '', $valueWhenExists = '')
+{
+    $var = (array)$var;
+    if(isset($var[$key]))
+    {
+        if($valueWhenExists) return $valueWhenExists;
+        return $var[$key];
+    }
+    return $valueWhenNone;
+}
+
+/**
  * Judge the server ip is local or not.
  *
  * @access public
