@@ -539,17 +539,16 @@ class user extends control
         }
         else
         { 
-            $demoUsers = $this->user->getPairs('nodeleted, noletter');
-            array_shift($demoUsers);
-            array_shift($demoUsers);
-            array_pop($demoUsers);
-            $this->view->showDemoUsers = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('showDemoUsers')->fetch();
-            $this->view->demoUsers = $demoUsers;
+            if(!empty($this->config->global->showDemoUsers))
+            {
+                $demoUsers = $this->user->getPairs('nodeleted, noletter, noempty, noclosed');
+                $this->view->demoUsers = $demoUsers;
+            }
 
             $header['title'] = $this->lang->user->login;
             $this->view->header    = $header;
             $this->view->referer   = $this->referer;
-            $this->view->s         = $this->loadModel('setting')->getItem('system', 'common', 'global', 'sn', 0);
+            $this->view->s         = $this->config->global->sn;
             $this->view->keepLogin = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
             $this->display();
         }
