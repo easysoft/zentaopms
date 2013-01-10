@@ -6,3 +6,5 @@
 #row2{margin-bottom:10px}
 #row1 .table-1, #row1 caption{border:none}
 #row2 .table-1, #row2 caption{border:none}
+
+caption .f-left {padding-left:0px}
