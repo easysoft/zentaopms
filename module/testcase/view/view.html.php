@@ -25,7 +25,7 @@
         common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion");
         common::printIcon('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version");
 
-        common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '', 'button', 'createBug');
+        if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '', 'button', 'createBug');
 
         common::printDivider();
         common::printIcon('testcase', 'edit',"caseID=$case->id");
@@ -99,34 +99,34 @@
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->testcase->module;?></td>
             <td>
-            <?php 
-            if(empty($modulePath))
-            {
-                echo "/";
-            }
-            else
-            {
-               foreach($modulePath as $key => $module)
-               {
-                   if(!common::printLink('testcase', 'browse', "productID=$case->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                   if(isset($modulePath[$key + 1])) echo $lang->arrow;
-               }
-            }
-            ?>
+              <?php 
+              if(empty($modulePath))
+              {
+                  echo "/";
+              }
+              else
+              {
+                 foreach($modulePath as $key => $module)
+                 {
+                     if(!common::printLink('testcase', 'browse', "productID=$case->product&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                     if(isset($modulePath[$key + 1])) echo $lang->arrow;
+                 }
+              }
+              ?>
             </td>
           </tr>
           <tr class='nofixed'>
             <td class='rowhead'><?php echo $lang->testcase->story;?></td>
             <td>
-<?php
-        if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
-        if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
-        {
-            echo "(<span class='warning'>{$lang->story->changed}</span> ";
-            echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
-            echo ")";
-        }
-?>
+                <?php
+                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
+                if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
+                {
+                    echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                    echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+                    echo ")";
+                }
+                ?>
             </td>
           </tr>
           <tr>
@@ -136,17 +136,17 @@
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->testcase->stage;?></td>
             <td>
-<?php 
-        if($case->stage)
-        {
-            $stags = explode(',', $case->stage);
-            foreach($stags as $stage)
-            {
-                isset($lang->testcase->stageList[$stage]) ? print($lang->testcase->stageList[$stage]) : print($stage);
-                echo "<br />";
-            }
-        }
-?>
+              <?php 
+              if($case->stage)
+              {
+                  $stags = explode(',', $case->stage);
+                  foreach($stags as $stage)
+                  {
+                      isset($lang->testcase->stageList[$stage]) ? print($lang->testcase->stageList[$stage]) : print($stage);
+                      echo "<br />";
+                  }
+              }
+              ?>
             </td>
           </tr>
           <tr>
@@ -172,15 +172,15 @@
           <tr>
             <td class='rowhead'><?php echo $lang->testcase->linkCase;?></td>
             <td>
-<?php
-        if(isset($case->linkCaseTitles))
-        {
-            foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
-            {
-                echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank') . '<br />';
-            }
-        }
-?>
+              <?php
+              if(isset($case->linkCaseTitles))
+              {
+                  foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+                  {
+                      echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank') . '<br />';
+                  }
+              }
+              ?>
             </td>
           </tr>
         </table>
