@@ -12,7 +12,7 @@
  * @link        http://www.zentao.net
  */
 /* Basic settings. */
-$config = new stdclass();
+$config = new config();
 $config->version     = '4.0.beta2';       // The version of zentaopms. Don't change it.
 $config->encoding    = 'UTF-8';           // The encoding of zentaopms.
 $config->cookieLife  = time() + 2592000;  // The cookie life time.
