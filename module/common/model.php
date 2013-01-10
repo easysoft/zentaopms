@@ -250,11 +250,11 @@ class commonModel extends model
             $lang->menu = new stdclass();
 
             ksort($lang->menuOrder, SORT_ASC);
-            foreach($lang->menuOrder as $order)  
+            foreach($lang->menuOrder as $key)  
             {
-                $menu = $menus->$order; 
-                unset($menus->$order);
-                $lang->menu->$order = $menu;
+                $menu = $menus->$key; 
+                unset($menus->$key);
+                $lang->menu->$key = $menu;
             }
             foreach($menus as $key => $menu)
             {
