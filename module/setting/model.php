@@ -57,6 +57,7 @@ class settingModel extends model
         if($level == 2) list($owner, $module, $key) = explode('.', $path);
         if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
 
+        $item = new stdclass();
         $item->company = $company === 'current' ? $this->app->company->id : $company;
         $item->owner   = $owner;
         $item->module  = $module;
@@ -77,7 +78,7 @@ class settingModel extends model
      * @param  string         $path   like system.mail 
      * @param  array|object   $items  the items array or object, can be mixed by one level or two levels.
      * @access public
-     * @return void
+     * @return bool
      */
     public function setItems($path, $items, $company = 'current')
     {
@@ -88,14 +89,17 @@ class settingModel extends model
                 $section = $key;
                 foreach($item as $subKey => $subItem)
                 {
-                    $this->setItem($path . '.' . $section, $subKey, $subItem);
+                    $this->setItem($path . '.' . $section . '.' . $subKey, $subItem);
                 }
             }
             else
             {
-                $this->setItem($path, $key, $value);
+                $this->setItem($path . '.' . $key, $item);
             }
         }
+
+        if(!dao::isError()) return true;
+        return false;
     }
 
     /**
