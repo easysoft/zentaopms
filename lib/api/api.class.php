@@ -50,7 +50,7 @@ class ztclient
      */
     private function getRemoteConfig()
     {
-        $url = $this->zentao->root  . '/index.php?mode=getconfig';
+        $url = $this->zentao->root  . 'index.php?mode=getconfig';
         $this->agent->fetchText($url);
         $config = json_decode($this->agent->results);
         return $config;
