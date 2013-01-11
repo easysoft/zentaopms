@@ -550,7 +550,7 @@ $lang->resource->report->index            = 'index';
 $lang->resource->report->projectDeviation = 'projectDeviation';
 $lang->resource->report->productInfo      = 'productInfo';
 $lang->resource->report->bugSummary       = 'bugSummary';
-$lang->resource->report->bugAssign        = 'bugAssign';
+$lang->resource->report->bugassign        = 'bugAssign';
 $lang->resource->report->workload         = 'workload';
 
 $lang->report->methodOrder[0]  = 'index';
