@@ -31,7 +31,22 @@ include './config/config.php';
 
 if($config->requestType == 'PATH_INFO')
 {
-    $_SERVER['PATH_INFO'] = str_replace($config->webRoot, '', $request['path']);
+    $path = pathinfo($request['path']);
+    if(strpos($path['basename'], $config->requestFix))
+    {
+        $_SERVER['PATH_INFO'] = $path['basename'];
+    }
+    else 
+    {
+        if(is_dir('./module/' . $path['basename']))
+        {
+            $_SERVER['PATH_INFO'] = $path['basename'];
+        }
+        else
+        {
+            $_SERVER['PATH_INFO'] = '';
+        }
+    }
 }
 else
 {
