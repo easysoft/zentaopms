@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 error_reporting(E_ERROR);
-include 'info.php';
 $pmsRoot = dirname(dirname(dirname(__FILE__)));
 include $pmsRoot . '/config/config.php';
 include $pmsRoot . '/lib/api/api.class.php';
@@ -55,4 +54,7 @@ class computeburn
 
 $computeburn = new computeburn($config);
 $computeburn->run();
-?>
+
+/* avoid init error. */
+function getWebRoot(){}
+class config{}

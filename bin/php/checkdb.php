@@ -1,6 +1,5 @@
 <?php
 error_reporting(E_ERROR);
-include 'info.php';
 include dirname(dirname(dirname(__FILE__))) . "/config/config.php";
 
 if($config->requestType == 'PATH_INFO')
@@ -16,3 +15,7 @@ if(!$requestVar)
 {
     echo "Check DataBase successfully!\n";
 }
+
+/* avoid init error. */
+function getWebRoot(){}
+class config{}

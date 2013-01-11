@@ -1,5 +1,4 @@
 <?php
-include 'info.php';
 include dirname(dirname(dirname(__FILE__))) . "/config/config.php";
 
 if($config->requestType == 'PATH_INFO')
@@ -10,3 +9,7 @@ elseif($config->requestType == 'GET')
 {
     system('php ztcli "http://localhost/?m=admin&f=win2Unix"');
 }
+
+/* avoid init error. */
+function getWebRoot(){}
+class config{}

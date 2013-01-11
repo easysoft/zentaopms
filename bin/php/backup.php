@@ -1,7 +1,6 @@
 <?php
 /* Backup the db. */
 error_reporting(E_ALL ^ E_NOTICE);
-include 'info.php';
 
 /* Include config.php and pclzip class. */
 $pmsRoot  = dirname(dirname(dirname(__FILE__)));
@@ -64,3 +63,7 @@ $attachFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
 $archive    = new pclzip($attachFile);
 if($archive->create("data/upload", PCLZIP_OPT_REMOVE_PATH, "data")) die(" successfully saved to $attachFile\n");
 die("Error : ".$archive->errorInfo(true));
+
+/* avoid init error. */
+function getWebRoot(){}
+class config{}
