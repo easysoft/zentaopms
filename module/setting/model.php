@@ -166,7 +166,11 @@ class settingModel extends model
     {
         $company = $this->app->company->id . ',' . '0';     // Get settings of current company, and also settings for all company.
         $owner   = 'system,' . ($account ? $account : '');
-        $records = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->in($owner)->andWhere('company')->in($company)->fetchAll('id', false);
+        $records = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('owner')->in($owner)
+            ->andWhere('company')->in($company)
+            ->orderBy('id')
+            ->fetchAll('id', false);
         if(!$records) return array();
 
         /* Group records by owner and module. */
