@@ -17,7 +17,7 @@ include '../../common/view/header.html.php';
     <td>
       <?php 
       echo $lang->mail->successSaved;
-      echo html::linkButton($lang->mail->test, inlink('test'));
+      if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
       ?>
     </td>
   </tr>

@@ -370,6 +370,17 @@ class mailModel extends model
     }
 
     /**
+     * Check system if there is a mail at least.
+     * 
+     * @access public
+     * @return bool | object 
+     */
+    public function mailExist()
+    {
+        return $this->dao->select('email')->from(TABLE_USER)->where('email')->ne('')->fetch();
+    }
+
+    /**
      * Is error?
      * 
      * @access public

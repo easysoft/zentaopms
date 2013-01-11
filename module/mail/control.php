@@ -82,7 +82,7 @@ class mail extends control
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->edit;
 
-        $this->view->mailExist   = $this->dao->select('email')->from(TABLE_USER)->where('email')->ne('')->fetch();
+        $this->view->mailExist   = $this->mail->mailExist();
         $this->view->mailConfig  = $mailConfig;
         $this->display();
     }
@@ -121,6 +121,7 @@ class mail extends control
             $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
             $this->view->position[] = $this->lang->mail->save;
 
+            $this->view->mailExist   = $this->mail->mailExist();
             $this->display();
         }
     }
