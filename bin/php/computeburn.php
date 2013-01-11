@@ -9,7 +9,7 @@ include $pmsRoot . '/lib/api/api.class.php';
 $domain = $config->default->domain;
 unset($config);
 
-$config->zentao->root     = "'http://' . $domain . '/'";    // 禅道访问的完整路径，包括后面的斜线。比如http://pms.zentao.net/
+$config->zentao->root     = 'http://' . $domain . '/';    // 禅道访问的完整路径，包括后面的斜线。比如http://pms.zentao.net/
 $config->zentao->account  = "";    // 可以访问禅道的帐号，需要有超级model调用接口的访问权限。
 $config->zentao->password = "";    // 密码。
 
