@@ -3,7 +3,7 @@ $lang->mail->common = 'Email setting';
 $lang->mail->index  = 'Index';
 $lang->mail->detect = 'Detect';
 $lang->mail->edit   = 'Configure';
-$lang->mail->save   = 'Save Configuration';
+$lang->mail->save   = 'Successfully saved';
 $lang->mail->test   = 'Testing';
 
 $lang->mail->turnon      = 'Turnon';
@@ -34,8 +34,7 @@ $lang->mail->secureList['tls'] = 'tls';
 
 $lang->mail->inputFromEmail = 'Please input the from email:';
 $lang->mail->nextStep       = 'Next';
-$lang->mail->successSaved   = 'The configuration successfully saved to: <span class="red">%s</span>';
-$lang->mail->saveManual     = 'Please save the configuration to: <span class="red">%s</span>';
+$lang->mail->successSaved   = 'The configuration has been successfully saved.';
 $lang->mail->subject        = "It's a testing email from zentao.";
 $lang->mail->content        = 'If you can see this, the email notification feature can work now!';
 $lang->mail->successSended  = 'Successfully sended!';

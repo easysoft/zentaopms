@@ -1,23 +1,23 @@
 <?php
+/**
+ * Don't change this mail directly, set mail config in admin panel instead.
+ */
 $config->mail = new stdclass();
-$config->mail->turnon      = 0;        // trun on email feature or not.
-$config->mail->fromAddress = '';       // The from address.
-$config->mail->fromName    = 'zentao'; // The from name.
-$config->mail->mta         = 'smtp';   // smtp|phpmail.
+$config->mail->smtp = new stdclass();
 
-/* SMTP settings. */
-if($config->mail->mta == 'smtp')
-{
-    $config->mail->smtp = new stdclass();
-    $config->mail->smtp->debug    = 0;          // Debug level, 0,1,2.
-    $config->mail->smtp->auth     = true;       // Need auth or not.
-    $config->mail->smtp->host     = 'localhost';// The smtp server host address.
-    $config->mail->smtp->port     = '25';       // The smtp server host port.
-    $config->mail->smtp->secure   = '';         // The type to encode datas, 'ssl' or 'tls' allowed
-    $config->mail->smtp->username = '';         // The smtp user, may be a full email adress.
-    $config->mail->smtp->password = '';         // The smtp user's password.
-}
+$config->mail->turnon      = false;         // trun on email feature or not. true|false
+$config->mail->fromAddress = '';            // The from address.
+$config->mail->fromName    = 'zentao';      // The from name.
+$config->mail->mta         = 'smtp';        // The send mail type.
+$config->mail->smtp->debug    = 0;          // Debug level, 0,1,2.
+$config->mail->smtp->auth     = true;       // Need auth or not. true|false
+$config->mail->smtp->host     = 'localhost';// The smtp server host address.
+$config->mail->smtp->port     = '25';       // The smtp server host port.
+$config->mail->smtp->secure   = '';         // The type to encode datas, 'ssl' or 'tls' allowed
+$config->mail->smtp->username = '';         // The smtp user, may be a full email adress.
+$config->mail->smtp->password = '';         // The smtp user's password.
 
+/* Mail service providers setting. */
 $config->mail->provider['163.com']['host']      = 'smtp.163.com';
 $config->mail->provider['yeah.net']['host']     = 'smtp.yeah.net';
 $config->mail->provider['netease.com']['host']  = 'smtp.netease.com';

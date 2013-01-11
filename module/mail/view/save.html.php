@@ -16,9 +16,7 @@ include '../../common/view/header.html.php';
   <tr>
     <td>
       <?php 
-      echo html::textArea('', $mailConfig, "rows='12' class='area-1'") . '<br /><br />'; 
-      if($saved)  printf($lang->mail->successSaved, $configFile);
-      if(!$saved) printf($lang->mail->saveManual,   $configFile);
+      echo $lang->mail->successSaved;
       echo html::linkButton($lang->mail->test, inlink('test'));
       ?>
     </td>
