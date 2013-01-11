@@ -36,7 +36,7 @@ class index extends control
 
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system', 'common', 'global', 'flow', $this->post->flow);
+            $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
             if($this->post->flow != 'full') die(js::locate($this->createLink('extension', 'install', "extension={$this->config->index->flow2Ext[$this->post->flow]}"), 'parent'));
             die(js::reload( 'parent.parent'));
         }

@@ -74,7 +74,7 @@ class upgradeModel extends model
             case '3_3':
                 $this->execSQL($this->getUpgradeFile('3.3'));
                 $this->updateTaskAssignedTo();
-                $this->loadModel('setting')->setItem('system', 'common', '', 'flow', 'full');
+                $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
             case '4_0_beta1': $this->execSQL($this->getUpgradeFile('4.0.beta1'));
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
