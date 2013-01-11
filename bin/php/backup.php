@@ -3,9 +3,9 @@
 error_reporting(E_ALL ^ E_NOTICE);
 include 'info.php';
 
-/* Include my.php and pclzip class. */
+/* Include config.php and pclzip class. */
 $pmsRoot  = dirname(dirname(dirname(__FILE__)));
-$myConfig = $pmsRoot . '/config/my.php';
+$myConfig = $pmsRoot . '/config/config.php';
 $zipClass = $pmsRoot . '/lib/pclzip/pclzip.class.php';
 
 include $myConfig;

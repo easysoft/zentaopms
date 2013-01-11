@@ -6,6 +6,7 @@ include 'config.php';
 $tasks = array();
 foreach($crontab as $key => $cron)
 {
+    $tasks[$key]       = new stdClass();
     $tasks[$key]->cron = CronExpression::factory($cron['schema']);
     $tasks[$key]->time = $tasks[$key]->cron->getNextRunDate()->format('Y-m-d H:i');
 }
