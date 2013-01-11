@@ -1,0 +1,1 @@
+php ../php/computeburn.php
