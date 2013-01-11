@@ -1,6 +1,7 @@
 <?php
 /* Backup the db. */
 error_reporting(E_ALL ^ E_NOTICE);
+include 'info.php';
 
 /* Include my.php and pclzip class. */
 $pmsRoot  = dirname(dirname(dirname(__FILE__)));

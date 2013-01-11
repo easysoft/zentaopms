@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 error_reporting(E_ERROR);
+include 'info.php';
 $pmsRoot = dirname(dirname(dirname(__FILE__)));
 include $pmsRoot . '/config/my.php';
 include $pmsRoot . '/lib/api/api.class.php';

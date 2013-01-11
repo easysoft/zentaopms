@@ -1,4 +1,5 @@
 <?php
+include 'info.php';
 include dirname(dirname(dirname(__FILE__))) . "/config/my.php";
 
 if($config->requestType == 'PATH_INFO')
