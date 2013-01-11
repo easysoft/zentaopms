@@ -145,10 +145,10 @@ class settingModel extends model
     {
         return $this->dao->$method('*')->from(TABLE_CONFIG)->where('1 = 1')
             ->beginIF($params['company'])->andWhere('company')->in($params['company'])->fi()
-            ->beginIF($params['owner'])->andWhere('owner')->eq($params['owner'])->fi()
-            ->beginIF($params['module'])->andWhere('module')->eq($params['module'])->fi()
-            ->beginIF($params['section'])->andWhere('section')->eq($params['section'])->fi()
-            ->beginIF($params['key'])->andWhere('`key`')->eq($params['key'])->fi();
+            ->beginIF($params['owner'])->andWhere('owner')->in($params['owner'])->fi()
+            ->beginIF($params['module'])->andWhere('module')->in($params['module'])->fi()
+            ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()
+            ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
     }
 
     /**
