@@ -996,14 +996,19 @@ class projectModel extends model
         {
             if(empty($account)) continue;
 
+            $member = new stdclass();
             $member->role  = $roles[$key];
             $member->days  = $days[$key];
             $member->hours = $hours[$key];
-            $mode        = $modes[$key];
 
+            $mode = $modes[$key];
             if($mode == 'update')
             {
-                $this->dao->update(TABLE_TEAM)->data($member)->where('project')->eq((int)$projectID)->andWhere('account')->eq($account)->exec();
+                $this->dao->update(TABLE_TEAM)
+                    ->data($member)
+                    ->where('project')->eq((int)$projectID)
+                    ->andWhere('account')->eq($account)
+                    ->exec();
             }
             else
             {

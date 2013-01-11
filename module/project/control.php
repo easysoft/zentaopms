@@ -1118,7 +1118,7 @@ class project extends control
 
         $project        = $this->project->getById($projectID);
         $users          = $this->user->getPairs('noclosed, nodeleted, devfirst');
-        $users          = array('' => '') + $users;
+        $roles          = $this->user->getUserRoles(array_keys($users));
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
         $teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
@@ -1141,6 +1141,7 @@ class project extends control
 
         $this->view->project        = $project;
         $this->view->users          = $users;
+        $this->view->roles          = $roles;
         $this->view->currentMembers = $currentMembers;
         $this->view->members2Import = $members2Import;
         $this->view->teams2Import   = $teams2Import;

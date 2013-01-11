@@ -11,14 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<script>
-projectID = <?php echo $project->id;?>;
-function importTeam()
-{
-    location.href = createLink('project', 'manageMembers', 'project=' + projectID + '&teamImport=' + $('#teams2Import').val());
-}
-</script>
-
+<?php js::set('projectID', $project->id);?>
+<?php js::set('roles', $roles, 'json');?>
 <form method='post'>
   <table align='center' class='table-4 a-center'> 
     <caption>
@@ -31,33 +25,34 @@ function importTeam()
       <th><?php echo $lang->team->days;?></th>
       <th><?php echo $lang->team->hours;?></th>
     </tr>
-    <?php foreach($currentMembers as $key => $member):?>
+    <?php $i = 1;?>
+    <?php foreach($currentMembers as $member):?>
     <?php $realname = substr($users[$member->account], 2);?>
     <?php unset($users[$member->account]);?>
     <tr>
-      <td><input type='text' name='realnames[]' id='account<?php echo $key;?>' value='<?php echo $realname;?>' readonly class='text-2' /></td>
-      <td class='hidden'><input type='text' name='accounts[]' id='account<?php echo $key;?>' value='<?php echo $member->account;?>' readonly class='text-2' /></td>
-      <td><input type='text' name='roles[]'    id='role<?php echo $key;?>'    value='<?php echo $member->role;?>' class='text-2' /></td>
-      <td><input type='text'   name='days[] '  id='days<?php echo $key;?>'    value='<?php echo $member->days;?>' class='text-2' /></td>
+      <td><input type='text' name='realnames[]' id='account<?php echo $i;?>' value='<?php echo $realname;?>' readonly class='text-2' /></td>
+      <td><input type='text' name='roles[]'     id='role<?php echo $i;?>'    value='<?php echo $member->role;?>' class='text-2' /></td>
+      <td><input type='text' name='days[] '     id='days<?php echo $i;?>'    value='<?php echo $member->days;?>' class='text-2' /></td>
       <td>
-        <input type='text'   name='hours[]' id='hours<?php echo $key;?>' value='<?php echo $member->hours;?>' class='text-2' />
+        <input type='text'   name='hours[]' id='hours<?php echo $i;?>' value='<?php echo $member->hours;?>' class='text-2' />
         <input type='hidden' name='modes[]' value='update' />
+        <input type='hidden' name='accounts[]' value='<?php echo $member->acount;?>' />
       </td>
     </tr>
+    <?php $i ++;?>
     <?php endforeach;?>
 
-    <?php if(!$currentMembers) $key = 0;?>
     <?php foreach($members2Import as $member2Import):?>
-    <?php $key ++;?>
     <tr>
-      <td><?php echo html::select('accounts[]', $users, $member2Import->account, 'class=select-2');?></td>
-      <td><input type='text' name='roles[]' id='role<?php echo $key;?>' class='text-2' value='<?php echo $member2Import->role;?>' /></td>
-      <td><input type='text'   name='days[]'  id='days<?php echo  $key;?>' class='text-2' value='<?php echo $project->days?>'/></td>
+      <td><?php echo html::select('accounts[]', $users, $member2Import->account, "class='select-2' onchange='setRole(this.value, $i)'");?></td>
+      <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='text-2' value='<?php echo $member2Import->role;?>' /></td>
+      <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='text-2' value='<?php echo $project->days?>'/></td>
       <td>
-        <input type='text'   name='hours[]' id='hours<?php echo $key;?>' class='text-2' value='<?php echo $member2Import->hours;?>' />
+        <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='text-2' value='<?php echo $member2Import->hours;?>' />
         <input type='hidden' name='modes[]' value='create' />
       </td>
     </tr>
+    <?php $i ++;?>
     <?php endforeach;?>
 
     <?php
@@ -65,16 +60,17 @@ function importTeam()
     if($count > PROJECTMODEL::LINK_MEMBERS_ONE_TIME) $count = PROJECTMODEL::LINK_MEMBERS_ONE_TIME;
     ?>
 
-    <?php for($i = 0; $i < $count; $i ++):?>
+    <?php for($j = 0; $j < $count; $j ++):?>
     <tr>
-      <td><?php echo html::select('accounts[]', $users, '', 'class=select-2');?></td>
-      <td><input type='text' name='roles[]' id='role<?php echo ($key + $i);?>' class='text-2' /></td>
-      <td><input type='text'   name='days[]'  id='days<?php echo  ($key + $i);?>' class='text-2' value='<?php echo $project->days?>'/></td>
+      <td><?php echo html::select('accounts[]', $users, '', "class='select-2' onchange='setRole(this.value, $i)'");?></td>
+      <td><input type='text' name='roles[]' id='role<?php echo ($i);?>' class='text-2' /></td>
+      <td><input type='text' name='days[]'  id='days<?php echo  ($i);?>' class='text-2' value='<?php echo $project->days?>'/></td>
       <td>
-        <input type='text'   name='hours[]' id='hours<?php echo ($key + $i);?>' class='text-2' value='7' />
+        <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='text-2' value='7' />
         <input type='hidden' name='modes[]' value='create' />
       </td>
     </tr>
+    <?php $i ++;?>
     <?php endfor;?>
     <tr>
       <td colspan='4'>
