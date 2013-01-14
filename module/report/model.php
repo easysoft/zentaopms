@@ -313,6 +313,8 @@ EOT;
             ->fetchAll();
         foreach($stories as $story)
         {
+            if(!isset($projects[$story->project])) $projects[$story->project] = new stdclass();
+
             $projects[$story->project]->stories = isset($projects[$story->project]->stories) ? $projects[$story->project]->stories + 1 : 1;
         }
 
