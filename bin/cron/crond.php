@@ -29,8 +29,12 @@ while(1)
 /* Log cron results. */
 function logCron($content)
 {
-    $file = dirname(dirname(dirname(__FILE__))) . '/tmp/cron.log'; 
-    $fp   = fopen($file, "a");
+    $path = dirname(dirname(dirname(__FILE__))) . '/tmp/cron';
+    $file = $path . '/' . date('Ymd');
+
+    if(!file_exists($path)) mkdir($path, 0777);
+
+    $fp = fopen($file, "a");
     fwrite($fp, $content);
     fclose ($fp);
 }
