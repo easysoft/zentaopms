@@ -50,16 +50,16 @@ function parseCron($path = 'tasks')
         $rows = explode("\n", $content);
         foreach($rows as $row)
         {
-            $mod = "/#.*/";
-            $row = preg_replace($mod, '', $row);
+            $row = preg_replace("/[ \t]+/", ' ', trim($row, " \t"));
+            $row = preg_replace("/#.*/", '', $row);
             if($row)
             {
                 preg_match_all('/(\S+\s+){5}|.*/', $row, $matchs);
                 if($matchs[0])
                 {
                     $cron = array();
-                    $cron['schema']  = trim(preg_replace("/[ \t]+/", ' ', $matchs[0][0]), "\t ");
-                    $cron['command'] = trim($matchs[0][1], "\t ");
+                    $cron['schema']  = trim($matchs[0][0]);
+                    $cron['command'] = trim($matchs[0][1]);
                     $crons[]         = $cron;
                 }
             }
