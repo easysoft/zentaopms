@@ -1,10 +1,8 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/crontab/crontab.class.php';
-include 'config.php';
-
-/* all tasks to run. */
+$crons = parseCron();
 $tasks = array();
-foreach($crontab as $key => $cron)
+foreach($crons as $key => $cron)
 {
     $tasks[$key]       = new stdClass();
     $tasks[$key]->cron = CronExpression::factory($cron['schema']);
@@ -14,12 +12,12 @@ foreach($crontab as $key => $cron)
 /* run as daemon. */
 while(1)
 {
-    foreach($crontab as $key => $cron) 
+    foreach($crons as $key => $cron) 
     {
         if($tasks[$key]->cron->getNextRunDate()->format('Y-m-d H:i') != $tasks[$key]->time)
         {
             $time    = date('Y-m-d H:i:s');
-            $output  = system('php ' . $cron['script'], $retval);
+            $output  = system($cron['command'], $retval);
             $content = $time . ' ' . $key . ' return ' . $retval . ' : ' . $output . "\n";
             logCron($content);
             $tasks[$key]->time = $tasks[$key]->cron->getNextRunDate()->format('Y-m-d H:i');
@@ -28,11 +26,47 @@ while(1)
     sleep(60);
 }
 
-/* log cron results. */
+/* Log cron results. */
 function logCron($content)
 {
     $file = dirname(dirname(dirname(__FILE__))) . '/tmp/cron.log'; 
     $fp   = fopen($file, "a");
     fwrite($fp, $content);
     fclose ($fp);
+}
+
+/* Parse cron file. */
+function parseCron($path = 'config')
+{
+    $crons = array();
+    chdir($path);
+    $files = glob('*');
+    foreach($files as $file)
+    {
+        $handle  = fopen($file, 'r');
+        $content = fread($handle, filesize($file));
+        fclose($handle);
+
+        $rows = explode("\n", $content);
+        if($rows)
+        {
+            foreach($rows as $row)
+            {
+                $mod = "/#.*/";
+                $row = preg_replace($mod, '', $row);
+                if($row)
+                {
+                    preg_match_all('/(\S+\s+){5}|.*/', $row, $matchs);
+                    if($matchs[0])
+                    {
+                        $cron = array();
+                        $cron['schema']  = trim($matchs[0][0], "\t ");
+                        $cron['command'] = trim($matchs[0][1], "\t ");
+                        $crons[]         = $cron;
+                    }
+                }
+            }
+        }
+    }
+    return $crons;
 }
