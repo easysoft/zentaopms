@@ -27,7 +27,7 @@
       echo '<span id="future">'   . html::a(inlink('todo', "date=future"),    $lang->todo->futureTodos)   . '</span>';
       echo '<span id="all">'      . html::a(inlink('todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
       echo '<span id="before">'   . html::a(inlink('todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
-      echo "<span id='$date'>"    . html::input('date', $date,"class='w-date date'") . '</span>';
+      echo "<span id='$date'>"    . html::input('date', $date,"class='w-date date' onchange='changeDate(this.value)'") . '</span>';
 
       if($type == 'bydate') 
       {
