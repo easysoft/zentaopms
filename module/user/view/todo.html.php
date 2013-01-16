@@ -14,6 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include "../../common/view/datepicker.html.php"; ?>
 <?php include './featurebar.html.php';?>
+<?php $onlybody = $config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';?>
 <script language='Javascript'>var account='<?php echo $account;?>'</script>
 <table class='cont-lt1'>
   <tr valign='top'>
@@ -55,7 +56,7 @@
             <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFuture : $todo->date;?></td>
             <td><?php echo $lang->todo->typeList[$todo->type];?></td>
             <td><span class='<?php echo 'pri' . $todo->pri;?>'><?php echo $todo->pri?></span></td>
-            <td class='a-left'><?php if(!common::printLink('todo', 'view', "todo=$todo->id", $todo->name)) echo $todo->name;?></td>
+            <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id") . $onlybody, $todo->name, '', "class='colorbox'");?></td>
             <td><?php echo $todo->begin;?></td>
             <td><?php echo $todo->end;?></td>
             <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
