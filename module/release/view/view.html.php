@@ -20,21 +20,21 @@
         <div class='content'><?php echo $release->desc;?></div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
-      <div class='a-center f-16px strong'>
+      <div class='a-center f-16px pb-10px'>
       <?php
       $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
       if(!$release->deleted)
       { 
-          common::printLink('release', 'edit',   "releaseID=$release->id", $lang->edit);
-          common::printLink('release', 'delete', "releaseID=$release->id", $lang->delete, 'hiddenwin');
+          common::printIcon('release', 'edit',   "releaseID=$release->id");
+          common::printIcon('release', 'delete', "releaseID=$release->id", '', 'button', '', 'hiddenwin');
       } 
-      echo html::a($browseLink, $lang->goback);
+      echo common::printRPN($browseLink, $lang->goback);
       ?>
       </div>
       <table class='table-1 fixed'>
         <caption class='caption-t1'>
           <?php echo $lang->release->stories;?>
-          <div class='f-right'><?php if(count($stories)) common::printLink('release', 'export', 'type=story', $lang->release->export, '', "class='export'");?></div>
+          <div class='f-right'><?php if(count($stories)) common::printIcon('release', 'export', 'type=story', '', 'button', '', '', "export");?></div>
         </caption>
         <tr>
           <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -62,7 +62,7 @@
       <table class='table-1 fixed'>
         <caption class='caption-t1'>
           <?php echo $lang->release->bugs;?>
-          <div class='f-right'><?php if(count($bugs)) common::printLink('release', 'export', 'type=bug', $lang->release->export, '', "class='export'");?></div>
+          <div class='f-right'><?php if(count($bugs)) common::printIcon('release', 'export', 'type=bug', '', 'button', '', '', 'export');?></div>
         </caption>
         <tr>
           <th class='w-id'>       <?php echo $lang->idAB;?></th>

@@ -15,7 +15,7 @@
 <table class='table-1 tablesorter fixed' id="productplan">
   <caption class='caption-tr'>
     <div class='f-left'><?php echo $lang->productplan->browse;?></div>
-    <div class='f-right'><?php common::printLink('productplan', 'create', "productID=$product->id", $lang->productplan->create);?></div>
+    <div class='f-right'><?php common::printIcon('productplan', 'create', "productID=$product->id");?></div>
   </caption>
   <thead>
   <tr class='colhead'>
@@ -24,7 +24,7 @@
     <th class='w-100px'><?php echo $lang->productplan->end;?></th>
     <th><?php echo $lang->productplan->title;?></th>
     <th class='w-p50'><?php echo $lang->productplan->desc;?></th>
-    <th class="w-130px {sorter: false}"><?php echo $lang->actions;?></th>
+    <th class="w-80px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -35,9 +35,9 @@
     <td><?php echo $plan->end;?></td>
     <td class='a-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
     <td class='a-left content' title="<?php echo $plan->desc?>"><?php echo $plan->desc;?></td>
-    <td class='a-right'>
+    <td class='a-center'>
       <?php
-      common::printLink('productplan', 'linkstory', "planID=$plan->id", $lang->productplan->linkStory);
+      common::printIcon('productplan', 'linkStory', "planID=$plan->id", '', 'list');
       common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
       common::printIcon('productplan', 'delete', "planID=$plan->id", '', 'list', '', 'hiddenwin');
       ?>

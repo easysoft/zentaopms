@@ -15,7 +15,7 @@
 <table align='center' class='table-6 tablesorter'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->release->browse;?></div>
-    <div class='f-right'><?php common::printLink('release', 'create', "product=$product->id", $lang->release->create);?></div>
+    <div class='f-right'><?php common::printIcon('release', 'create', "product=$product->id");?></div>
   </caption>
   <thead>
   <tr class='colhead'>
@@ -23,7 +23,7 @@
     <th><?php echo $lang->release->name;?></th>
     <th><?php echo $lang->release->build;?></th>
     <th class='w-100px'><?php echo $lang->release->date;?></th>
-    <th class='w-80px'><?php echo $lang->actions;?></th>
+    <th class='w-60px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -33,7 +33,7 @@
     <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
     <td><?php echo $release->buildName;?></td>
     <td class='a-center'><?php echo $release->date;?></td>
-    <td class='a-right'>
+    <td class='a-center'>
       <?php
       common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
       common::printIcon('release', 'delete', "release=$release->id", '', 'list', '', 'hiddenwin');

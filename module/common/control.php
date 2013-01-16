@@ -254,7 +254,7 @@ class common extends control
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '')
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '')
     {
         global $app, $lang;
 
@@ -293,7 +293,7 @@ class common extends control
         if(!$icon) $icon = $method;
         if(strpos(',edit,copy,report,export,delete,', ",$icon,") !== false) $module = 'common';
         $color      = $type == 'button' ? 'green' : ($clickable ? 'green' : 'gray');
-        $extraClass = strpos(',export,customFields,runCase,results,', ",$method,") !== false ? $method : '';
+        $extraClass = strpos(',export,customFields,runCase,results,', ",$method,") !== false ? $method : $extraClass;
         $class      = $extraClass ? "icon-$color-$module-$icon $extraClass" : "icon-$color-$module-$icon";
  
         /* Create the icon link. */

@@ -26,11 +26,11 @@
        $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
        if(!$plan->deleted)
        {
-          common::printLink('productplan', 'edit',     "planID=$plan->id", $lang->edit);
-          common::printLink('productplan', 'linkstory',"planID=$plan->id", $lang->productplan->linkStory);
-          common::printLink('productplan', 'delete',   "planID=$plan->id", $lang->delete, 'hiddenwin');
+          common::printIcon('productplan', 'linkStory',"planID=$plan->id");
+          common::printIcon('productplan', 'edit',     "planID=$plan->id");
+          common::printIcon('productplan', 'delete',   "planID=$plan->id", '', 'button', '', 'hiddenwin');
        }
-       echo html::a($browseLink, $lang->goback);
+       common::printRPN($browseLink);
       ?>
       </div>
       <table class='table-1 tablesorter a-center'>

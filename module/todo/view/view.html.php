@@ -58,7 +58,7 @@
     </td>
   </tr>  
 </table>
-<div class='a-center f-16px strong'>
+<div class='a-center f-16px strong pb-10px'>
   <?php
   if($this->session->todoList)
   {
@@ -74,10 +74,10 @@
   }
   if($todo->account == $app->user->account)
   {
-      common::printLink('todo', 'edit',   "todoID=$todo->id", $lang->edit);
-      common::printLink('todo', 'delete', "todoID=$todo->id", $lang->delete, 'hiddenwin');
+      common::printIcon('todo', 'edit',   "todoID=$todo->id");
+      common::printIcon('todo', 'delete', "todoID=$todo->id", '', 'button', '', 'hiddenwin');
   }
-  echo html::a($browseLink, $lang->goback);
+  common::printRPN($browseLink);
   ?>
 </div>
 <?php $actionTheme = 'table'; include '../../common/view/action.html.php';?>
