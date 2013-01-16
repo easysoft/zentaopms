@@ -526,7 +526,7 @@ function setSubversionLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.export').size()) $(".export").colorbox({width:500, height:200, iframe:true, transition:'elastic', speed:350, scrolling:true});
+   if($('.export').size()) $(".export").colorbox({width:500, height:240, iframe:true, transition:'elastic', speed:350, scrolling:true});
 }
 
 /**
@@ -811,6 +811,20 @@ $(document).ready(function()
 
     $(window).resize(function(){saveWindowSize()});   // When window resized, call it again.
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
+
+    $('.export').bind('click', function()
+    {
+        var checkeds = '';
+        $(':checkbox').each(function(){
+            if($(this).attr('checked'))
+            {
+                var checkedVal = parseInt($(this).val());
+                if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
+            }
+        })
+        if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
+        $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
+    });
 });
 
 /* CTRL+g, auto focus on the search box. */
@@ -835,17 +849,4 @@ $(document).bind('keydown', 'right', function(evt)
 {
     nextLink = ($('#next').attr("href"));
     if(typeof(nextLink) != 'undefined') location.href = nextLink;
-});
-$('.export').bind('click', function()
-{
-    var checkeds = '';
-    $(':checkbox').each(function(){
-        if($(this).attr('checked'))
-        {
-            var checkedVal = parseInt($(this).val());
-            if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
-        }
-    })
-    if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
-    $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
 });
