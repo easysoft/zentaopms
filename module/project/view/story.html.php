@@ -14,16 +14,19 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <form method='post' id='projectStoryForm'>
   <table class='table-1 fixed colored tablesorter datatable'>
-    <caption class='caption-tl'>
+    <div id='featurebar'>
       <div class='f-left'><?php echo $lang->project->story;?></div>
       <div class='f-right'>
         <?php 
-        common::printLink('story', 'export', "productID=$productID&orderBy=id_desc", $lang->story->export, '', "class='export'");
-        if($productID) common::printLink('story', 'create', "productID=$productID&moduleID=0&story=0&project=$project->id", $lang->project->createStory);
-        if(common::hasPriv('project', 'linkstory')) echo html::a($this->createLink('project', 'linkstory', "project=$project->id"), $lang->project->linkStory);
+        common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc");
+
+        $this->lang->story->create = $this->lang->project->createStory;
+        if($productID) common::printIcon('story', 'create', "productID=$productID&moduleID=0&story=0&project=$project->id");
+
+        common::printIcon('project', 'linkStory', "project=$project->id");
         ?>
       </div>
-    </caption>
+    </div>
     <thead>
       <tr class='colhead'>
       <?php $vars = "projectID={$project->id}&orderBy=%s"; ?>
@@ -64,12 +67,18 @@
           $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
           ?> 
         </td>
-        <td>
+        <td class='a-right'>
           <?php 
           $param = "projectID={$project->id}&story={$story->id}";
-          common::printLink('task', 'create', $param, $lang->project->wbs);
+
+//          $lang->task->batchCreate = $lang->project->batchWBS;
           common::printLink('task', 'batchCreate', $param . "&iframe=1", $lang->project->batchWBS, '', "class='batchWBS'", true, true);
-          common::printLink('project', 'unlinkStory', $param, $lang->unlink, 'hiddenwin');
+
+          $lang->task->create = $lang->project->wbs;
+          common::printIcon('task', 'create', $param, '', 'list');
+
+          $lang->project->unlinkStory = $lang->unlink;
+          common::printIcon('project', 'unlinkStory', $param, '', 'list', '', 'hiddenwin');
           ?>
         </td>
       </tr>

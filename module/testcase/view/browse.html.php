@@ -92,8 +92,8 @@ js::set('moduleID'  , $moduleID);
               <td><?php echo $lang->testcase->statusList[$case->status];?></td>
               <td class='a-right'>
                 <?php
-                common::printLink('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $this->app->loadLang('testtask')->testtask->runCase, '', 'class="runcase"');
-                common::printLink('testtask', 'results', "runID=0&caseID=$case->id", $lang->testtask->results, '', 'class="results"');
+                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list');
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list');
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 common::printIcon('testcase', 'create',  "productID=$case->product&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
                 common::printIcon('testcase', 'delete',  "caseID=$case->id", '', 'list', '', 'hiddenwin');

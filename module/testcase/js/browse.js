@@ -27,7 +27,7 @@ function changeAction(url)
 
 $(document).ready(function()
 {
-    $("a.runcase").colorbox({width:900, height:600, iframe:true, transition:'none'});
+    $("a.icon-green-testtask-runCase").colorbox({width:900, height:600, iframe:true, transition:'none'});
     $('#' + browseType + 'Tab').addClass('active');
     $('#module' + moduleID).addClass('active'); 
     if(browseType == 'bysearch') ajaxGetSearchForm();
@@ -35,5 +35,5 @@ $(document).ready(function()
 
 $(document).ready(function() 
 {
-    $(".results").colorbox({width:900, height:600, iframe:true, transition:'none'});
+    $(".icon-green-testtask-results").colorbox({width:900, height:600, iframe:true, transition:'none'});
 })
