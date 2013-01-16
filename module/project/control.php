@@ -80,6 +80,7 @@ class project extends control
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);
         $teamMembers   = $this->project->getTeamMembers($project->id);
+        $actions       = $this->loadModel('action')->getList('project', $project->id);
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id, $extra);
@@ -90,6 +91,7 @@ class project extends control
         $this->view->childProjects = $childProjects;
         $this->view->products      = $products;
         $this->view->teamMembers   = $teamMembers;
+        $this->view->actions       = $actions;
 
         return $project;
     }
@@ -890,6 +892,156 @@ class project extends control
         $this->view->allProducts    = $this->loadModel('product')->getPairs();
         $this->view->linkedProducts = $linkedProducts;
 
+        $this->display();
+    }
+
+    /**
+     * Start project. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function start($projectID)
+    {
+        $this->commonAction($projectID);
+
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->start($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->start;
+        $this->view->position[]    = $this->lang->project->start;
+        $this->display();
+    }
+
+    /**
+     * Delay project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function delay($projectID)
+    {
+        $this->commonAction($projectID);
+        
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->delay($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('project', $projectID, 'Delayed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->delay;
+        $this->view->position[]    = $this->lang->project->delay;
+        $this->display();
+    }
+
+    /**
+     * Suspend project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function suspend($projectID)
+    {
+        $this->commonAction($projectID);
+        
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->suspend($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
+        $this->view->position[]    = $this->lang->project->suspend;
+        $this->display();
+    }
+
+    /**
+     * Activate project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function activate($projectID)
+    {
+        $this->commonAction($projectID);
+        
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->activate($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->activate;
+        $this->view->position[]    = $this->lang->project->activate;
+        $this->display();
+    }
+
+    /**
+     * Close project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function close($projectID)
+    {
+        $this->commonAction($projectID);
+        
+        if(!empty($_POST))
+        {
+            $this->loadModel('action');
+            $changes = $this->project->close($projectID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('project', $projectID, 'Closed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+        }
+
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
+        $this->view->position[]    = $this->lang->project->suspend;
         $this->display();
     }
 
