@@ -20,6 +20,12 @@
     if(!$project->deleted)
     {
         ob_start();
+        if($this->project->isClickable($project, 'start'))    common::printIcon('project', 'start',    "projectID=$project->id");
+        if($this->project->isClickable($project, 'activate')) common::printIcon('project', 'activate', "projectID=$project->id");
+        if($this->project->isClickable($project, 'delay'))    common::printIcon('project', 'delay',    "projectID=$project->id");
+        if($this->project->isClickable($project, 'suspend'))  common::printIcon('project', 'suspend',  "projectID=$project->id");
+        if($this->project->isClickable($project, 'close'))    common::printIcon('project', 'close',    "projectID=$project->id");
+
         common::printDivider();
         common::printIcon('project', 'edit', $params);
         common::printIcon('project', 'delete', $params, '', 'button', '', 'hiddenwin');

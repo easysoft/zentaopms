@@ -54,6 +54,12 @@ $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
 $lang->project->createStory   = "新增需求";
 
+$lang->project->start    = '开始';
+$lang->project->activate = '激活';
+$lang->project->delay    = '延期';
+$lang->project->suspend  = '挂起';
+$lang->project->close    = '结束';
+
 $lang->project->endList[14]   = '两星期';
 $lang->project->endList[31]   = '一个月';
 $lang->project->endList[62]   = '两个月';
@@ -73,10 +79,11 @@ $lang->project->basicInfo = '基本信息';
 $lang->project->otherInfo = '其他信息';
 
 /* 字段取值列表。*/
-$lang->project->statusList['']      = '';
-$lang->project->statusList['wait']  = '未开始';
-$lang->project->statusList['doing'] = '进行中';
-$lang->project->statusList['done']  = '已完成';
+$lang->project->statusList['']          = '';
+$lang->project->statusList['wait']      = '未开始';
+$lang->project->statusList['doing']     = '进行中';
+$lang->project->statusList['suspended'] = '已挂起';
+$lang->project->statusList['done']      = '已完成';
 
 $lang->project->aclList['open']    = '默认设置(有项目视图权限，即可访问)';
 $lang->project->aclList['private'] = '私有项目(只有项目团队成员才能访问)';

@@ -1263,4 +1263,25 @@ class projectModel extends model
 
         return sprintf($this->lang->project->taskSummary, count($tasks), $statusWait, $statusDoing, $totalEstimate, $totalConsumed, $totalLeft);
     }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object    $project
+     * @param  string    $action 
+     * @access public
+     * @return bool
+     */
+    public function isClickable($project, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'start')    return $project->status == 'wait';
+        if($action == 'close')    return $project->status != 'done';
+        if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
+        if($action == 'delay')    return $project->status == 'wait' or $project->status == 'doing';
+        if($action == 'activate') return $project->status == 'suspended' or $project->status == 'done';
+
+        return true;
+    }
 }

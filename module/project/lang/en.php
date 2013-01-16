@@ -54,6 +54,12 @@ $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
 $lang->project->createStory   = "Create story";
 
+$lang->project->start    = 'Start';
+$lang->project->activate = 'Activate';
+$lang->project->delay    = 'Delay';
+$lang->project->suspend  = 'Suspend';
+$lang->project->close    = 'Close';
+
 $lang->project->endList[14]  = 'Two Weeks';
 $lang->project->endList[31]  = 'One Month';
 $lang->project->endList[62]  = 'Two Months';
@@ -73,10 +79,11 @@ $lang->project->basicInfo = 'Basic info';
 $lang->project->otherInfo = 'Other info';
 
 /* Lists. */
-$lang->project->statusList['']      = '';
-$lang->project->statusList['wait']  = 'Pending';
-$lang->project->statusList['doing'] = 'Progressing';
-$lang->project->statusList['done']  = 'Done';
+$lang->project->statusList['']          = '';
+$lang->project->statusList['wait']      = 'Pending';
+$lang->project->statusList['doing']     = 'Progressing';
+$lang->project->statusList['suspended'] = 'Suspended';
+$lang->project->statusList['done']      = 'Done';
 
 $lang->project->aclList['open']    = 'Default(Having the priviledge of project module can visit this project)';
 $lang->project->aclList['private'] = 'Private(Only team members can visit)';
