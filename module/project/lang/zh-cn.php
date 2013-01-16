@@ -200,7 +200,8 @@ $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code = '团队内部的简称';
 
 $lang->project->selectGroup = new stdclass();
-$lang->project->selectGroup->doing = '(进行中)';
-$lang->project->selectGroup->done  = '(已结束)';
+$lang->project->selectGroup->doing     = '(进行中)';
+$lang->project->selectGroup->suspended = '(已挂起)';
+$lang->project->selectGroup->done      = '(已结束)';
 
 $lang->project->projectTasks = '按项目';

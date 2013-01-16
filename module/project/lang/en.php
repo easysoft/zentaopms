@@ -200,7 +200,8 @@ $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code = 'Project code';
 
 $lang->project->selectGroup = new stdclass();
-$lang->project->selectGroup->doing = '(Doing)';
-$lang->project->selectGroup->done  = '(Done)';
+$lang->project->selectGroup->doing     = '(Doing)';
+$lang->project->selectGroup->suspended = '(Suspended)';
+$lang->project->selectGroup->done      = '(Done)';
 
 $lang->project->projectTasks = 'ProjectTasks';
