@@ -262,6 +262,7 @@ class userModel extends model
                 if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i+1)));
                 if(empty($users->role[$i])) die(js::error(sprintf($this->lang->user->error->role, $id)));
 
+                $data[$i] = new stdclass();
                 $data[$i]->dept     = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
                 $data[$i]->account  = $users->account[$i];
                 $data[$i]->realname = $users->realname[$i];

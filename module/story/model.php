@@ -195,6 +195,7 @@ class storyModel extends model
         {
             if($stories->title[$i] != '')
             {
+                $data[$i] = new stdclass();
                 $data[$i]->module     = $stories->module[$i] != 'same' ? $stories->module[$i] : ($i == 0 ? 0 : $data[$i-1]->module);
                 $data[$i]->plan       = $stories->plan[$i] == 'same' ? ($i != 0 ? $data[$i-1]->plan : 0) : ($stories->plan[$i] != '' ?     $stories->plan[$i] : 0);
                 $data[$i]->title      = $stories->title[$i];

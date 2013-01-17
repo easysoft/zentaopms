@@ -86,6 +86,7 @@ class testcaseModel extends model
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
             {
+                $data[$i] = new stdclass();
                 $data[$i]->product    = $productID;
                 $data[$i]->module     = $cases->module[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->module) : $cases->module[$i];
                 $data[$i]->type       = $cases->type[$i] == 'same' ? ($i == 0 ? '' : $data[$i-1]->type) : $cases->type[$i]; 
