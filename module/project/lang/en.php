@@ -53,6 +53,7 @@ $lang->project->createTesttask= 'Create testtask';
 $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
 $lang->project->createStory   = "Create story";
+$lang->project->all           = 'All';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';

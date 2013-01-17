@@ -13,7 +13,7 @@
 <?php include '../../common/view/sparkline.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <h3>
-  <?php echo html::a(inlink("index", "locate=no&status=all&projectID=$project->id"), $lang->project->allProject);?>
+  <?php echo html::a(inlink("index", "locate=no&status=all&projectID=$project->id"), $lang->project->all);?>
   <?php echo html::a(inlink("index", "locate=no&status=wait&projectID=$project->id"), $lang->project->statusList['wait']);?>
   <?php echo html::a(inlink("index", "locate=no&status=doing&projectID=$project->id"), $lang->project->statusList['doing']);?>
   <?php echo html::a(inlink("index", "locate=no&status=suspended&projectID=$project->id"), $lang->project->statusList['suspended']);?>
