@@ -76,7 +76,7 @@ function toggleOrder(obj)
 }
 
 $(function(){
-    var diffButton = "<input type='button' onclick='toggleStripTags(this)' class='hidden changeDiff diff-all' title='<?php echo $lang->action->original?>' value='&nbsp;' >";
+    var diffButton = "<span onclick='toggleStripTags(this)' class='hidden changeDiff diff-all hand' title='<?php echo $lang->action->original?>'>&nbsp;</span>";
     var newBoxID = ''
     var oldBoxID = ''
     $('blockquote').each(function(){
@@ -122,7 +122,7 @@ $(function(){
       ?>
       <span>
         <?php $this->action->printAction($action);?>
-        <?php if(!empty($action->history)) echo html::commonButton('&nbsp;', "id=switchButton$i class='hand change-show' onclick=switchChange($i)");?>
+        <?php if(!empty($action->history)) echo "<span id='switchButton$i' class='hand change-show' onclick=switchChange($i)>&nbsp;</span>";?>
       </span>
       <?php if(!empty($action->comment) or !empty($action->history)):?>
       <?php if(!empty($action->comment)) echo "<div class='history'>";?>
