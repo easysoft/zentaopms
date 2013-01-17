@@ -1170,7 +1170,7 @@ class projectModel extends model
 
         $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where("end >= '$today'")
-            ->orWhere('end')->eq('0000-00-00')
+            ->andWhere('status')->notin('done,suspended')
             ->fetchPairs();
         if(!$projects) return $burns;
 
