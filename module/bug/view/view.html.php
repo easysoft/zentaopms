@@ -22,13 +22,13 @@
     if(!$bug->deleted)
     {
         ob_start();
-        if($this->bug->isClickable($bug, 'confirmBug')) common::printIcon('bug', 'confirmBug', $params);
-        common::printIcon('bug', 'assignTo', $params);
-        if($this->bug->isClickable($bug, 'resolve'))  common::printIcon('bug', 'resolve', $params);
-        if($this->bug->isClickable($bug, 'close'))    common::printIcon('bug', 'close', $params);
-        if($this->bug->isClickable($bug, 'activate')) common::printIcon('bug', 'activate', $params);
+        common::printIcon('bug', 'confirmBug', $params, $bug);
+        common::printIcon('bug', 'assignTo',   $params);
+        common::printIcon('bug', 'resolve',    $params, $bug);
+        common::printIcon('bug', 'close',      $params, $bug);
+        common::printIcon('bug', 'activate',   $params, $bug);
 
-        if($this->bug->isClickable($bug, 'toStory')) common::printIcon('bug', 'toStory', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", '', 'button', 'toStory');
+        common::printIcon('bug', 'toStory', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', 'toStory');
         common::printIcon('bug', 'createCase', $convertParams, '', 'button', 'createCase');
 
         common::printDivider();

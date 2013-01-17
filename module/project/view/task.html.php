@@ -124,7 +124,7 @@ var browseType  = '<?php echo $browseType;?>';
               common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list');
               common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list');
               common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list');
-              if($this->task->isClickable($task, 'edit'))   common::printIcon('task', 'edit',"taskID=$task->id", '', 'list');
+              common::printIcon('task', 'edit',"taskID=$task->id", '', 'list');
               ?>
             </td>
           </tr>
