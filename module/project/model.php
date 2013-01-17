@@ -114,28 +114,16 @@ class projectModel extends model
         {
             foreach($projects as $project)
             {
-                if($projectMode == 'noclosed' and $project->status == 'done') continue;
+                if($projectMode == 'noclosed' and ($project->status == 'done' or $project->status == 'suspended')) continue;
 
-                if($project->status == 'suspended')
-                {
-                    $status =  $this->lang->project->selectGroup->suspended;
-                }
-                elseif($project->status != 'done')
-                {
-                    $status =  $this->lang->project->selectGroup->doing;
-                }
-                else
-                {
-                    $status = '';
-                }
                 if($project->product)
                 {
                     $product = isset($products[$project->product]) ? $products[$project->product] : '';
-                    $selectGroup[$product][$project->id] = $project->name . $status;
+                    $selectGroup[$product][$project->id] = $project->name;
                 }
                 else
                 {
-                    $selectGroup[$this->lang->project->noProduct][$project->id] = $project->name . $status;
+                    $selectGroup[$this->lang->project->noProduct][$project->id] = $project->name;
                 }
             }
         }
