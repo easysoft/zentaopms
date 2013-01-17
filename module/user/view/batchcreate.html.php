@@ -19,13 +19,13 @@
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
       <th class='w-150px'><?php echo $lang->user->dept;?></th>
-      <th class='w-130px'><?php echo $lang->user->account;?></th>
-      <th class='w-130px'><?php echo $lang->user->realname;?></th>
-      <th class='w-100px'><?php echo $lang->user->role;?></th>
+      <th class='w-130px red'><?php echo $lang->user->account;?></th>
+      <th class='w-130px red'><?php echo $lang->user->realname;?></th>
+      <th class='w-100px red'><?php echo $lang->user->role;?></th>
       <th class='w-100px'><?php echo $lang->user->group;?></th>
       <th><?php echo $lang->user->email;?></th>
       <th class='w-60px'><?php echo $lang->user->gender;?></th>
-      <th><?php echo $lang->user->password;?></th>
+      <th class="red"><?php echo $lang->user->password;?></th>
     </tr>
     <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
     <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
