@@ -429,6 +429,24 @@ class commonModel extends model
         }
     }
 
+    /**
+     * Print the link for notify file.
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printNotifyLink()
+    {
+        if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') !== false)
+        {
+            global $app, $lang;
+            $notifyFile = $app->getBasePath() . 'www/data/notify/notify.zip';
+
+            if(!file_exists($notifyFile)) return false;
+            echo html::a(helper::createLink('misc', 'downNotify'), $lang->downNotify);
+        }
+    }
 
     /**
      * Diff two string. (see phpt)
