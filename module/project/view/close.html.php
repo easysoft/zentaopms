@@ -11,8 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datepicker.html.php';?>
-<?php js::import($jsRoot . 'misc/date.js');?>
 <form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $project->name;?></caption>
