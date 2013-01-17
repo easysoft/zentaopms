@@ -23,13 +23,7 @@ js::set('deptID', $deptID);
       <div class='box-title'><?php echo $lang->dept->common;?></div>
       <div class='box-content'>
         <?php echo $deptTree;?>
-        <div class='a-right'>
-          <?php 
-          common::printLink('user', 'create', "dept=$deptID&from=company", $lang->user->create);echo '<br />';
-          common::printLink('company', 'browse', '', $lang->user->allUsers); echo '<br />';
-          common::printLink('dept', 'browse', '', $lang->dept->manage);
-          ?>
-        </div>
+        <div class='a-right'><?php common::printLink('dept', 'browse', '', $lang->dept->manage);?></div>
       </div>
     </td>
     <td class='divider'></td>
