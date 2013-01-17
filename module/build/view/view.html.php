@@ -25,10 +25,10 @@
       $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");
       if(!$build->deleted)
       { 
-        common::printLink('build', 'edit',   "buildID=$build->id", $lang->edit);
-        common::printLink('build', 'delete', "buildID=$build->id", $lang->delete, 'hiddenwin');
+        common::printIcon('build', 'edit',   "buildID=$build->id");
+        common::printIcon('build', 'delete', "buildID=$build->id", '', 'button', '', 'hiddenwin');
       }
-      echo html::a($browseLink, $lang->goback);
+      echo common::printRPN($browseLink);
       ?>
       </div>
       <table class='table-1 fixed'>

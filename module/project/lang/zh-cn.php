@@ -49,7 +49,6 @@ $lang->project->totalConsumed = '总消耗';
 $lang->project->totalLeft     = '总剩余';
 $lang->project->progess       = '进度';
 $lang->project->viewBug       = '查看bug';
-$lang->project->createTesttask= '提交测试';
 $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
 $lang->project->createStory   = "新增需求";

@@ -56,12 +56,14 @@
   $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");
   if(!$task->deleted)
   {
-      common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
-      common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
-      common::printLink('testtask', 'edit',   "taskID=$task->id",$lang->edit);
-      common::printLink('testtask', 'delete', "taskID=$task->id", $lang->delete, 'hiddenwin');
+      common::printIcon('testtask', 'cases',    "taskID=$task->id");
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id");
+
+      common::printDivider();
+      common::printIcon('testtask', 'edit',     "taskID=$task->id");
+      common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'button', '', 'hiddenwin');
   }
-  echo html::a($browseLink, $lang->goback);
+  common::printRPN($browseLink);
   ?>
 </div>
 <?php include '../../common/view/action.html.php';?>

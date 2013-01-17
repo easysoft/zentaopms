@@ -39,7 +39,7 @@
         <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th class='w-status {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
         <th class='w-50px'>                  <?php echo $lang->story->taskCount;?></th>
-        <th class='w-150px {sorter:false}'>  <?php echo $lang->actions;?></th>
+        <th class='w-80px {sorter:false}'>  <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -67,12 +67,12 @@
           $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
           ?> 
         </td>
-        <td class='a-right'>
+        <td class='a-center'>
           <?php 
           $param = "projectID={$project->id}&story={$story->id}";
 
-//          $lang->task->batchCreate = $lang->project->batchWBS;
-          common::printLink('task', 'batchCreate', $param . "&iframe=1", $lang->project->batchWBS, '', "class='batchWBS'", true, true);
+          $lang->task->batchCreate = $lang->project->batchWBS;
+          common::printIcon('task', 'batchCreate', $param . "&iframe=1", '', 'list', '', '', 'batchWBS', true);
 
           $lang->task->create = $lang->project->wbs;
           common::printIcon('task', 'create', $param, '', 'list');

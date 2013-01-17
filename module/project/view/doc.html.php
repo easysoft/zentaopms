@@ -14,7 +14,10 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 fixed colored tablesorter' align='center'>
-  <caption class='caption-tr'><?php common::printLink('doc', 'create', "libID=project&moduleID=0&productID=0&projectID=$project->id&from=project", $lang->doc->create);?></caption>
+  <caption class='caption-tl'>
+    <div class='f-left'> <?php echo $lang->project->doc;?></div>
+    <div class='f-right'><?php common::printIcon('doc', 'create', "libID=project&moduleID=0&productID=0&projectID=$project->id&from=project");?></div>
+  </caption>
   <thead>
     <tr class='colhead'>
       <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -40,8 +43,8 @@
       <td>
         <?php 
         $vars = "doc={$doc->id}";
-        if(!common::printLink('doc', 'edit',   $vars, $lang->edit)) echo $lang->edit;
-        if(!common::printLink('doc', 'delete', $vars, $lang->delete, 'hiddenwin')) echo $lang->delete;
+        common::printIcon('doc', 'edit',   $vars);
+        common::printIcon('doc', 'delete', $vars, '', 'list', '','hiddenwin');
         ?>
       </td>
     </tr>

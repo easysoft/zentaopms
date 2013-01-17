@@ -15,7 +15,7 @@
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->browse;?></div>
-    <div class='f-right'><?php common::printLink('testtask', 'create', "product=0&project=$projectID", $lang->project->createTesttask);?></div>
+    <div class='f-right'><?php common::printIcon('testtask', 'create', "product=0&project=$projectID");?></div>
   </caption>
   <thead>
   <tr class='colhead'>
@@ -26,7 +26,7 @@
     <th class='w-100px'><?php echo $lang->testtask->begin;?></th>
     <th class='w-100px'><?php echo $lang->testtask->end;?></th>
     <th class='w-80px'><?php echo $lang->statusAB;?></th>
-    <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
+    <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -41,8 +41,8 @@
     <td><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td>
       <?php
-      common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
-      common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'list', '', 'hiddenwin');
       ?>

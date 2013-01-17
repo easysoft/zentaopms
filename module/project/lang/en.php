@@ -49,7 +49,6 @@ $lang->project->totalConsumed = 'Done';
 $lang->project->totalLeft     = 'Left';
 $lang->project->progess       = 'Progess';
 $lang->project->viewBug       = 'View bug';
-$lang->project->createTesttask= 'Create testtask';
 $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
 $lang->project->createStory   = "Create story";

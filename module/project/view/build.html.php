@@ -15,7 +15,7 @@
 <table class='table-1 tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->project->build;?></div>
-    <div class='f-right'><?php common::printLink('build', 'create', "project=$project->id", $lang->build->create);?></div>
+    <div class='f-right'><?php common::printIcon('build', 'create', "project=$project->id");?></div>
   </caption>
   <thead>
   <tr class='colhead'>
@@ -43,8 +43,8 @@
       <?php 
       common::printLink('testtask', 'create', "product=0&project=$project->id&build=$build->id", $lang->testtask->create);
       common::printLink('project', 'bug', "project=$project->id&orderBy=status&build=$build->id", $lang->project->viewBug);
-      common::printLink('build', 'edit',   "buildID=$build->id", '&nbsp;', '', "class='icon-green-small-edit' title='{$lang->edit}'", false);
-      common::printLink('build', 'delete', "buildID=$build->id", '&nbsp;', 'hiddenwin', "class='icon-green-small-delete' title='{$lang->delete}'", false);
+      common::printIcon('build', 'edit',   "buildID=$build->id");
+      common::printIcon('build', 'delete', "buildID=$build->id", '', 'list', '', 'hiddenwin');
       ?>
     </td>
   </tr>

@@ -203,10 +203,7 @@ class common extends control
     public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false)
     {
         if(!common::hasPriv($module, $method)) return false;
-        global $config;
-        $concat = $config->requestType == 'GET' ? '&' : '?';
-        $onlyBody = $onlyBody ? $concat . "onlybody=yes" : '';
-        echo html::a(helper::createLink($module, $method, $vars) . $onlyBody, $label, $target, $misc, $newline);
+        echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
 
@@ -254,7 +251,7 @@ class common extends control
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '')
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false)
     {
         global $app, $lang;
 
@@ -276,7 +273,7 @@ class common extends control
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(!common::hasPriv($module, $method)) return false;
-        $link = helper::createLink($module, $method, $vars);
+        $link = helper::createLink($module, $method, $vars, '', $onlyBody);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
         $title = $method;
