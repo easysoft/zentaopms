@@ -11,3 +11,4 @@ UPDATE `zt_config` SET `company` = 0 WHERE `key` = 'version';
 DELETE FROM `zt_config` WHERE `company` = 1 AND `key` = 'sn';
 UPDATE `zt_config` SET `company` = 1 WHERE `key` = 'sn';
 UPDATE `zt_config` SET `section` = 'global' WHERE `key` = 'flow';
+UPDATE `zt_project` SET `status` = 'doing' WHERE `status` = '';
