@@ -79,7 +79,6 @@ $lang->project->basicInfo = '基本信息';
 $lang->project->otherInfo = '其他信息';
 
 /* 字段取值列表。*/
-$lang->project->statusList['']          = '';
 $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';
 $lang->project->statusList['suspended'] = '已挂起';

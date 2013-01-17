@@ -246,6 +246,7 @@ class projectModel extends model
     {
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
+            ->setDefault('status', 'wait')
             ->stripTags('name, code, team')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')

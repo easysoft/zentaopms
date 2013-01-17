@@ -79,7 +79,6 @@ $lang->project->basicInfo = 'Basic info';
 $lang->project->otherInfo = 'Other info';
 
 /* Lists. */
-$lang->project->statusList['']          = '';
 $lang->project->statusList['wait']      = 'Pending';
 $lang->project->statusList['doing']     = 'Progressing';
 $lang->project->statusList['suspended'] = 'Suspended';
