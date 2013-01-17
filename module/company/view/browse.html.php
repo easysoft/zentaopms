@@ -69,7 +69,7 @@ js::set('deptID', $deptID);
             <?php 
             common::printIcon('user', 'edit',   "userID=$user->id&from=company", '', 'list');
             common::printIcon('user', 'delete', "userID=$user->id", '', 'list', '', "hiddenwin");
-            if((strtotime($user->locked) - strtotime(date('Y-m-d'))) >= 0) 
+            if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60) 
             {
                 common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', '', "hiddenwin");
             }
