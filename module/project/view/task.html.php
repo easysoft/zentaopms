@@ -70,7 +70,7 @@ var browseType  = '<?php echo $browseType;?>';
             <th class='w-40px'>  <?php common::printOrderLink('consumed',  $orderBy, $vars, $lang->task->consumedAB);?></th>
             <th class='w-40px'>  <?php common::printOrderLink('left',      $orderBy, $vars, $lang->task->leftAB);?></th>
             <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story);?></th>
-            <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
           </thead>
           <tbody>
@@ -120,7 +120,12 @@ var browseType  = '<?php echo $browseType;?>';
             </td>
             <td class='a-right'>
               <?php
-              if($browseType == 'needconfirm') common::printLink('task', 'confirmStoryChange', "taskid=$task->id", $lang->confirm, 'hiddenwin');
+              common::printIcon('task', 'record',   "taskID=$task->id", $task, 'list');
+              if($browseType == 'needconfirm')
+              {
+                  $lang->task->confirmStoryChange = $lang->confirm;
+                  common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
+              }
               common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list');
               common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list');
               common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list');

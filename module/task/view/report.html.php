@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
   <div class='f-left'><?php echo $lang->report->common;?></div>
-  <div class='f-right'><?php common::printLink('project', 'task', "projectID=$projectID&browseType=$browseType", $lang->goback); ?></div>
+  <div class='f-right'><?php common::printRPN($this->createLink('project', 'task', "projectID=$projectID&browseType=$browseType")); ?></div>
 </div>
 
 <table class='cont-lt1'>

@@ -176,6 +176,7 @@ class project extends control
             $taskQuery    = $this->loadModel('search')->replaceDynamic($taskQuery);
 
             $this->session->set('taskQueryCondition', $taskQuery);
+            $this->session->set('taskOnlyCondition', true);
             $this->session->set('taskOrderBy', $orderBy);
             $tasks = $this->project->getSearchTasks($taskQuery, $pager, $orderBy);
         }

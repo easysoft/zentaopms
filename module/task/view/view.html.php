@@ -24,7 +24,6 @@
   if(!$task->deleted)
   {
       ob_start();
-      //if(!($task->status != 'closed' and $task->status != 'cancel' and common::printLink('task', 'logEfforts', "taskID=$task->id", $lang->task->buttonLogEfforts))) echo $lang->task->buttonLogEfforts . ' ';
       common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task);
       common::printIcon('task', 'start',    "taskID=$task->id", $task);
       common::printIcon('task', 'record',   "taskID=$task->id", $task);

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
   <div class='f-left'><?php echo $lang->story->report->common;?></div>
-  <div class='f-right'><?php common::printLink('product', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID", $lang->goback); ?></div>
+  <div class='f-right'><?php common::printRPN($this->createLink('product', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID")); ?></div>
 </div>
 
 <table class='cont-lt1'>
