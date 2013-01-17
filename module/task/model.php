@@ -95,6 +95,7 @@ class taskModel extends model
         {
             if($tasks->type[$i] != '' and $tasks->name[$i] != '' and $tasks->pri[$i] != 0)
             {
+                $data[$i] = new stdclass();
                 $data[$i]->story        = $tasks->story[$i] != 'ditto' ? ($tasks->story[$i] ? $tasks->story[$i] : 0) : ($i == 0 ? 0 : $data[$i-1]->story);
                 $data[$i]->type         = $tasks->type[$i] == 'ditto' ? ($i == 0 ? '' : $data[$i-1]->type) : $tasks->type[$i];
                 $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? ($i == 0 ? '' : $data[$i-1]->assignedTo) : $tasks->assignedTo[$i];
