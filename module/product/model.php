@@ -287,6 +287,29 @@ class productModel extends model
     }
     
     /**
+     * Close product.
+     * 
+     * @param  int    $productID.
+     * @access public
+     * @return void
+     */
+    public function close($productID)
+    {
+        $oldProduct = $this->getById($productID);
+        $now        = helper::now();
+        $product= fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_PRODUCT)->data($product)
+            ->autoCheck()
+            ->where('id')->eq((int)$productID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldProduct, $product);
+    }
+
+    /**
      * Get projects of a product in pairs.
      * 
      * @param  int    $productID 
@@ -565,5 +588,22 @@ class productModel extends model
         $totalEstimate = 0.0;
         foreach($stories as $key => $story) $totalEstimate += $story->estimate; 
         return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate);
+    }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object $product 
+     * @param  string $action 
+     * @access public
+     * @return void
+     */
+    public function isClickable($product, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'close') return $product->status != 'closed';
+
+        return true;
     }
 }

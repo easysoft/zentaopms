@@ -221,6 +221,40 @@ class product extends control
     }
 
     /**
+     * Close product.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function close($productID)
+    {
+        $product = $this->product->getById($productID);
+        $actions = $this->loadModel('action')->getList('product', $productID);
+
+        if(!empty($_POST))
+        {
+            $changes = $this->product->close($productID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('product', $productID, 'Closed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('product', 'view', "productID=$productID"), 'parent'));
+        }
+
+        $this->product->setMenu($this->products, $productID);
+
+        $this->view->product       = $product;
+        $this->view->header->title = $this->view->product->name . $this->lang->colon .$this->lang->close;
+        $this->view->position[]    = $this->lang->close;
+        $this->view->actions       = $actions;
+        $this->display();
+    }
+
+    /**
      * View a product.
      * 
      * @param  int    $productID 

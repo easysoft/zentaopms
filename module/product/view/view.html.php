@@ -20,6 +20,8 @@
     if(!$product->deleted)
     {
         ob_start();
+        common::printIcon('product', 'close', "productID=$product->id", $product);
+
         common::printDivider();
         common::printIcon('product', 'edit', $params);
         common::printIcon('product', 'delete', $params, '', 'button', '', 'hiddenwin');
