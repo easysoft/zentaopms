@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <form method='post' id='projectStoryForm'>
   <table class='table-1 fixed colored tablesorter datatable'>
-    <div id='featurebar'>
+    <caption class='caption-tl'>
       <div class='f-left'><?php echo $lang->project->story;?></div>
       <div class='f-right'>
         <?php 
@@ -26,7 +26,7 @@
         common::printIcon('project', 'linkStory', "project=$project->id");
         ?>
       </div>
-    </div>
+    </caption>
     <thead>
       <tr class='colhead'>
       <?php $vars = "projectID={$project->id}&orderBy=%s"; ?>
