@@ -18,7 +18,7 @@ class admin extends control
      */
     public function index()
     {
-        $community = zset($this->config->global, 'community');
+        $community = zget($this->config->global, 'community');
         if(!$community or $community == 'na')
         {
             $this->view->bind    = false;

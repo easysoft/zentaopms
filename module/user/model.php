@@ -163,7 +163,7 @@ class userModel extends model
         $users = $this->dao->select('account, role')->from(TABLE_USER)->where('account')->in($users)->fetchPairs();
         if(!$users) return array();
 
-        foreach($users as $account => $role) $users[$account] = zset($this->lang->user->roleList, $role, $role);
+        foreach($users as $account => $role) $users[$account] = zget($this->lang->user->roleList, $role, $role);
         return $users;
     }
 

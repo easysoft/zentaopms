@@ -509,7 +509,7 @@ function a($var)
  * @access public
  * @return void
  */
-function zset($var, $key, $valueWhenNone = '', $valueWhenExists = '')
+function zget($var, $key, $valueWhenNone = '', $valueWhenExists = '')
 {
     $var = (array)$var;
     if(isset($var[$key]))
