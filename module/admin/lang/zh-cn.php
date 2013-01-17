@@ -24,7 +24,7 @@ $lang->admin->confirmClearData = '您确认要清除数据吗？';
 $lang->admin->clearDataFailed  = '清除数据失败！';
 $lang->admin->clearDataSucceed = '清除数据成功！';
 $lang->admin->clearDataDesc    = <<<EOT
-<strong><font color='red'>清除数据存在一定的风险，清楚数据之前，我们强烈建议您备份数据库及相应的数据文件，并保证清楚数据的时候，没有其他人进行操作。</font></strong>\n
+<strong><font color='red'>清除数据存在一定的风险，清楚数据之前，我们强烈建议您备份数据库及相应的数据文件，并保证清除数据的时候，没有其他人进行操作。</font></strong>\n
 清除数据对数据库的影响如下：
 1、清除数据不会对company, group, groupPriv表进行操作。
 2、如果安装的时候有导入demo数据，则会删除config表key=showDemoUsers的记录，并删除user表中的所有demo用户。
