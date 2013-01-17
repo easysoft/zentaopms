@@ -62,7 +62,7 @@ $lang->selectAll     = 'Select All';
 $lang->selectReverse = 'Select Reverse';
 $lang->notFound      = 'Sorry, the object not found.';
 $lang->showAll       = '++ Show All ++';
-$lang->hideClosed    = '-- Hide Closed--';
+$lang->hideClosed    = '-- Show Progressing --';
 
 $lang->future       = 'Future';
 $lang->year         = 'Year';
