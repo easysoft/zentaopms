@@ -68,4 +68,4 @@
     </tr>
   </table>
 </form>
-<?php include './footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

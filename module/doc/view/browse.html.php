@@ -81,4 +81,4 @@ var browseType = '<?php echo $browseType;?>';
     </td>              
   </tr>    
 </table>  
-<?php include './footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

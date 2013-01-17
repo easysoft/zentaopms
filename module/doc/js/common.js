@@ -27,3 +27,9 @@ function setType(type)
         $('#contentBox').hide();
     }
 }
+
+$(document).ready(function()
+{
+    $("#submenucreate").colorbox({width:500, height:200, iframe:true, transition:'none'});  // The create lib link.
+    $("#submenuedit").colorbox({width:500, height:200, iframe:true, transition:'none'});   // The edit lib link.
+});

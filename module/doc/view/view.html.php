@@ -107,4 +107,4 @@
   </tr>
 </table>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
-<?php include './footer.html.php';?>
+<?php include '../../common/view/footer.html.php';?>
