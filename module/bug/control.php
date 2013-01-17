@@ -104,7 +104,7 @@ class bug extends control
         elseif($browseType == 'bysearch')      $bugs = $this->bug->getBySearch($productID, $projects, $queryID, $orderBy, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
-        if($browseType != 'needconfirm') $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', $browseType == 'needconfirm' ? false : true);
 
         /* Get custom fields. */
         $customFields = $this->cookie->bugFields != false ? $this->cookie->bugFields : $this->config->bug->list->defaultFields;

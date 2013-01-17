@@ -584,7 +584,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerProject()
     {
-        $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('project')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('project')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $projects = $this->loadModel('project')->getPairs();
         foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
@@ -599,7 +599,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerBuild()
     {
-        $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $builds = $this->loadModel('build')->getProductBuildPairs($this->session->product);
 
@@ -640,7 +640,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerModule()
     {
-        $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('module')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('module')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $modules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in(array_keys($datas))->fetchPairs();
         foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
@@ -655,7 +655,7 @@ class bugModel extends model
      */
     public function getDataOfOpenedBugsPerDay()
     {
-        return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('name')->orderBy('openedDate')->fetchAll();
+        return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('openedDate')->fetchAll();
     }
 
     /**
@@ -667,7 +667,7 @@ class bugModel extends model
     public function getDataOfResolvedBugsPerDay()
     {
         return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
-            ->where($this->session->bugQueryCondition)->groupBy('name')
+            ->where($this->reportCondition())->groupBy('name')
             ->having('name != 0000-00-00')
             ->orderBy('resolvedDate')
             ->fetchAll();
@@ -682,7 +682,7 @@ class bugModel extends model
     public function getDataOfClosedBugsPerDay()
     {
         return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(*) AS value')->from(TABLE_BUG)
-            ->where($this->session->bugQueryCondition)->groupBy('name')
+            ->where($this->reportCondition())->groupBy('name')
             ->having('name != 0000-00-00')
             ->orderBy('closedDate')->fetchAll();
     }
@@ -695,7 +695,7 @@ class bugModel extends model
      */
     public function getDataOfOpenedBugsPerUser()
     {
-        $datas = $this->dao->select('openedBy AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('openedBy AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
@@ -711,7 +711,7 @@ class bugModel extends model
     public function getDataOfResolvedBugsPerUser()
     {
         $datas = $this->dao->select('resolvedBy AS name, COUNT(*) AS value')
-            ->from(TABLE_BUG)->where($this->session->bugQueryCondition)
+            ->from(TABLE_BUG)->where($this->reportCondition())
             ->andWhere('resolvedBy')->ne('')
             ->groupBy('name')
             ->orderBy('value DESC')->fetchAll('name');
@@ -731,7 +731,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('closedBy AS name, COUNT(*) AS value')
             ->from(TABLE_BUG)
-            ->where($this->session->bugQueryCondition)
+            ->where($this->reportCondition())
             ->andWhere('closedBy')->ne('')
             ->groupBy('name')
             ->orderBy('value DESC')->fetchAll('name');
@@ -749,7 +749,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerSeverity()
     {
-        $datas = $this->dao->select('severity AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('severity AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $severity => $data) if(isset($this->lang->bug->severityList[$severity])) $data->name = $this->lang->bug->severityList[$severity];
         return $datas;
@@ -765,7 +765,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('resolution AS name, COUNT(*) AS value')
             ->from(TABLE_BUG)
-            ->where($this->session->bugQueryCondition)
+            ->where($this->reportCondition())
             ->andWhere('resolution')->ne('')
             ->groupBy('name')->orderBy('value DESC')
             ->fetchAll('name');
@@ -782,7 +782,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerStatus()
     {
-        $datas = $this->dao->select('status AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('status AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $status => $data) if(isset($this->lang->bug->statusList[$status])) $data->name = $this->lang->bug->statusList[$status];
         return $datas;
@@ -796,7 +796,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerActivatedCount()
     {
-        $datas = $this->dao->select('activatedCount AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('activatedCount AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $data) $data->name = $this->lang->bug->report->bugsPerActivatedCount->graph->xAxisName . ':' . $data->name; 
         return $datas;
@@ -810,7 +810,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerType()
     {
-        $datas = $this->dao->select('type AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('type AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         foreach($datas as $type => $data) if(isset($this->lang->bug->typeList[$type])) $data->name = $this->lang->bug->typeList[$type];
         return $datas;
@@ -825,7 +825,7 @@ class bugModel extends model
     public function getDataOfBugsPerAssignedTo()
     {
         $datas = $this->dao->select('assignedTo AS name, COUNT(*) AS value')
-            ->from(TABLE_BUG)->where($this->session->bugQueryCondition)
+            ->from(TABLE_BUG)->where($this->reportCondition())
             ->groupBy('name')
             ->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
@@ -1088,6 +1088,7 @@ class bugModel extends model
             ->andWhere('t2.version > t1.storyVersion')
             ->andWhere('t1.project')->in(array_keys($projects))
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll();
     }
 
@@ -1197,5 +1198,17 @@ class bugModel extends model
         if($action == 'tostory')    return $object->status == 'active';
 
         return true;
+    }
+
+    /**
+     * Get report condition from session.
+     * 
+     * @access public
+     * @return void
+     */
+    public function reportCondition()
+    {
+        if(!$this->session->bugOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->bugQueryCondition) . ')';
+        return $this->session->bugQueryCondition;
     }
 }
