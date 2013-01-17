@@ -29,7 +29,6 @@ js::set('moduleID'  , $moduleID);
     ?>
   </div>
   <div class='f-right'>
-    <?php //common::printLink('testcase', 'import', "productID=$productID", '&nbsp;', '', "class='import icon-green-big-import' title='{$lang->testcase->import}'"); ?>
     <?php if($browseType != 'needconfirm') common::printIcon('testcase', 'export', "productID=$productID&orderBy=$orderBy"); ?>
     <?php common::printIcon('testcase', 'batchCreate', "productID=$productID&moduleID=$moduleID");?>
     <?php common::printIcon('testcase', 'create', "productID=$productID&moduleID=$moduleID"); ?>
@@ -82,7 +81,7 @@ js::set('moduleID'  , $moduleID);
               <td class='a-left' title="<?php echo $case->title?>"><?php echo html::a($viewLink, $case->title);?></td>
               <?php if($browseType == 'needconfirm'):?>
               <td class='a-left'><?php echo html::a($this->createLink('story', 'view', "storyID=$case->story"), $case->storyTitle, '_blank');?></td>
-              <td><?php echo html::a(inlink('confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');?></td>
+              <td><?php $lang->testcase->confirmStoryChange = $lang->confirm; common::printIcon('testcase', 'confirmStoryChange', "caseID=$case->id", '', 'list', '', 'hiddenwin');?></td>
               <?php else:?>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
               <td><?php echo $users[$case->openedBy];?></td>

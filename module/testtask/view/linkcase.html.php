@@ -17,9 +17,15 @@
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->unlinkedCases;?></div>
-    <div class='f-right'><?php echo html::a($this->session->testtaskList, $lang->goback);?></div>
-    <div class='f-right'><?php echo html::a($this->createLink('testtask', 'linkcase', "taskID=$taskID&param=bybug"), $lang->testtask->linkByBug);?></div>
-    <div class='f-right'><?php echo html::a($this->createLink('testtask', 'linkcase', "taskID=$taskID&param=bystory"), $lang->testtask->linkByStory);?></div>
+    <div class='f-right'>
+      <?php
+      $lang->testtask->linCase = $lang->testtask->linkByStory;
+      common::printIcon('testtask', 'linkCase', "taskID=$taskID&param=bystory");
+      $lang->testtask->linCase = $lang->testtask->linkByBug;
+      common::printIcon('testtask', 'linkCase', "taskID=$taskID&param=bybug");
+      common::printRPN($this->session->testtaskList);
+      ?>
+    </div>
   </caption>
   <thead>
   <tr class='colhead'>

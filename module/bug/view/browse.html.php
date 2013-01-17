@@ -37,10 +37,12 @@ js::set('customed', $customed, 'number');
     ?>
   </div>
   <div class='f-right'>
-    <?php if($browseType != 'needconfirm') common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy");?>
-    <?php common::printIcon('bug', 'customFields'); ?>
-    <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");?>
-    <?php common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID"); ?>
+    <?php
+    if($browseType != 'needconfirm') common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy");
+    common::printIcon('bug', 'customFields');
+    common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");
+    common::printIcon('bug', 'create', "productID=$productID&extra=moduleID=$moduleID");
+    ?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
@@ -84,8 +86,8 @@ js::set('customed', $customed, 'number');
             <?php endif;?>
 
             <?php if($browseType == 'needconfirm'):?>
-            <th class='w-p85'<?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
-            <th class='w-120px'><?php echo $lang->actions;?></th>
+            <th class='w-200px'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
+            <th class='w-50px'><?php echo $lang->actions;?></th>
             <?php else:?>
             <th class='w-user'><?php common::printOrderLink('openedBy',         $orderBy, $vars, $lang->openedByAB);?></th>
 
@@ -110,8 +112,8 @@ js::set('customed', $customed, 'number');
           <?php $bugLink = inlink('view', "bugID=$bug->id");?>
           <tr class='a-center'>
             <td class='<?php echo $bug->status;?>' style="font-weight:bold">
-             <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
-             <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
+              <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
+              <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
             </td>
             <td><span class='<?php echo 'severity' . $bug->severity;?>'><?php echo $bug->severity;?></span></td>
             <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri];?>'><?php echo $lang->bug->priList[$bug->pri];?></span></td>
@@ -125,7 +127,7 @@ js::set('customed', $customed, 'number');
 
             <?php if($browseType == 'needconfirm'):?>
             <td class='a-left' title="<?php echo $bug->storyTitle?>"><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
-            <td><?php echo html::a(inlink('confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin')?></td>
+            <td><?php $lang->bug->confirmStoryChange = $lang->confirm; common::printIcon('bug', 'confirmStoryChange', "bugID=$bug->id", '', 'list', '', 'hiddenwin')?></td>
             <?php else:?>
             <td><?php echo $users[$bug->openedBy];?></td>
 
@@ -156,7 +158,10 @@ js::set('customed', $customed, 'number');
           </tbody>
           <tfoot>
             <tr>
-              <?php $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 12 : 9;?>
+              <?php
+              $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 12 : 9;
+              if($browseType == 'needconfirm') $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 7 : 6; 
+              ?>
               <td colspan='<?php echo $columns;?>'>
                 <?php if(!empty($bugs)):?>
                 <div class='f-left'>

@@ -539,7 +539,7 @@ class commonModel extends model
             }
 
             $tmpObjectIDs = array();
-            foreach($objects as $object) $tmpObjectIDs[$object->id] = (!$this->session->$typeOnlyCondition and $type == 'testcase') ? $object->case : $object->id;
+            foreach($objects as $object) $tmpObjectIDs[$object->id] = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? $object->case : $object->id;
             $objectIDs    = ',' . implode(',', $tmpObjectIDs) . ',';
             $this->session->set($type . 'IDs', $objectIDs);
         }

@@ -72,11 +72,11 @@ var moduleID   = '<?php echo $moduleID;?>';
             <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
             <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
             <td class='<?php echo $run->status;?>'><?php echo $lang->testtask->statusList[$run->status];?></td>
-            <td class='a-right'>
+            <td class='a-center'>
               <?php
-              common::printLink('testtask', 'runcase',    "id=$run->id", $lang->testtask->runCase, '', 'class="iframe"');
-              common::printLink('testtask', 'results',    "id=$run->id", $lang->testtask->results, '', 'class="iframe"');
-              common::printLink('testtask', 'unlinkcase', "id=$run->id", $lang->testtask->unlinkCase, 'hiddenwin');
+              common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'iframe');
+              common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
+              common::printIcon('testtask', 'unlinkCase', "id=$run->id", '', 'list', '', 'hiddenwin');
               common::printIcon('testcase', 'createBug', "product=$productID&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,runID=$run->id", $run, 'list', 'createBug');
               ?>
             </td>

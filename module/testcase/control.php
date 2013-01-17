@@ -89,6 +89,7 @@ class testcase extends control
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.version > t1.storyVersion')
                 ->orderBy($orderBy)
+                ->page($pager)
                 ->fetchAll();
         }
         /* By search. */
@@ -121,7 +122,7 @@ class testcase extends control
         }
 
         /* save session .*/
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType == 'needconfirm' ? false : true);
 
         /* Build the search form. */
         $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);

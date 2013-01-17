@@ -15,7 +15,7 @@
 <table class='table-1 colored tablesorter fixed'>
   <caption class='caption-tl'>
     <div class='f-left'><?php echo $lang->testtask->browse;?></div>
-    <div class='f-right'><?php common::printLink('testtask', 'create', "product=$productID", $lang->testtask->create);?></div>
+    <div class='f-right'><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
   </caption>
   <thead>
   <tr class='colhead'>
@@ -41,10 +41,10 @@
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
     <td><?php echo $lang->testtask->statusList[$task->status];?></td>
-    <td class='a-right'>
+    <td class='a-center'>
       <?php
-      common::printLink('testtask', 'cases',    "taskID=$task->id", $lang->testtask->cases);
-      common::printLink('testtask', 'linkcase', "taskID=$task->id", $lang->testtask->linkCaseAB);
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
       common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'list', '', 'hiddenwin');
       ?>
