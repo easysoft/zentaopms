@@ -2,7 +2,7 @@
 /**
  * The webapp module zh-tw file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2012 青島易軟天創網絡科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2013 青島易軟天創網絡科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     webapp

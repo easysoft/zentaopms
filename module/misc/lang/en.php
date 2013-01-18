@@ -2,7 +2,7 @@
 /**
  * The misc module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
@@ -46,4 +46,4 @@ $lang->misc->zentao->service['install']    = 'Install service';
 $lang->misc->zentao->service['fixissue']   = 'Issue support';
 $lang->misc->zentao->service['servicemore']= 'More...';
 
-$lang->misc->copyright = "Copyright &copy;2009-2012 <a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a>";
+$lang->misc->copyright = "Copyright &copy;2009-2013 <a href='http://www.cnezsoft.com' target='_blank'>Nature EasySoft Network Tecnology Co.ltd, QingDao, China</a>";
