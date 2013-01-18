@@ -21,7 +21,7 @@
             <?php foreach($customFields as $fieldName):?>
             <th><nobr><?php common::printOrderLink($fieldName, $orderBy, $vars, $lang->bug->$fieldName);?></nobr></th>
             <?php endforeach;?>
-            <th class='{sorter:false}'><nobr><?php echo $lang->actions;?></nobr></th>
+            <th class='w-70px {sorter:false}'><nobr><?php echo $lang->actions;?></nobr></th>
           </tr>
           </thead>
           <tbody>
@@ -57,12 +57,12 @@
               ?>
             </nobr></td>
             <?php endforeach;?>
-            <td><nobr>
+            <td class='a-center'><nobr>
               <?php
               $params = "bugID=$bug->id";
-              if(!($bug->status == 'active'   and common::printLink('bug', 'resolve', $params, $lang->bug->buttonResolve))) echo $lang->bug->buttonResolve . ' ';
-              if(!($bug->status == 'resolved' and common::printLink('bug', 'close', $params, $lang->bug->buttonClose)))     echo $lang->bug->buttonClose . ' ';
-              common::printLink('bug', 'edit', $params, $lang->bug->buttonEdit);
+              common::printIcon('bug', 'resolve', $params, '', 'list');
+              common::printIcon('bug', 'close',   $params, '', 'list');
+              common::printIcon('bug', 'edit',    $params, '', 'list');
               ?>
               </nobr>
             </td>
