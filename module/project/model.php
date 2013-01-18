@@ -360,13 +360,13 @@ class projectModel extends model
     }
 
     /**
-     * Delay project.
+     * Put project off.
      * 
      * @param  int    $projectID 
      * @access public
      * @return void
      */
-    public function delay($projectID)
+    public function putoff($projectID)
     {
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
@@ -1392,7 +1392,7 @@ class projectModel extends model
         if($action == 'start')    return $project->status == 'wait';
         if($action == 'close')    return $project->status != 'done';
         if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
-        if($action == 'delay')    return $project->status == 'wait' or $project->status == 'doing';
+        if($action == 'putoff')   return $project->status == 'wait' or $project->status == 'doing';
         if($action == 'activate') return $project->status == 'suspended' or $project->status == 'done';
 
         return true;

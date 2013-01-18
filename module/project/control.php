@@ -933,14 +933,14 @@ class project extends control
      * @access public
      * @return void
      */
-    public function delay($projectID)
+    public function putoff($projectID)
     {
         $this->commonAction($projectID);
         
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->project->delay($projectID);
+            $changes = $this->project->putoff($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -951,8 +951,8 @@ class project extends control
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->delay;
-        $this->view->position[]    = $this->lang->project->delay;
+        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->putoff;
+        $this->view->position[]    = $this->lang->project->putoff;
         $this->display();
     }
 

@@ -22,7 +22,7 @@
         ob_start();
         common::printIcon('project', 'start',    "projectID=$project->id", $project);
         common::printIcon('project', 'activate', "projectID=$project->id", $project);
-        common::printIcon('project', 'delay',    "projectID=$project->id", $project);
+        common::printIcon('project', 'putoff',   "projectID=$project->id", $project);
         common::printIcon('project', 'suspend',  "projectID=$project->id", $project);
         common::printIcon('project', 'close',    "projectID=$project->id", $project);
 

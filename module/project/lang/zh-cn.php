@@ -56,7 +56,7 @@ $lang->project->all           = '所有';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';
-$lang->project->delay    = '延期';
+$lang->project->putoff   = '延期';
 $lang->project->suspend  = '挂起';
 $lang->project->close    = '结束';
 

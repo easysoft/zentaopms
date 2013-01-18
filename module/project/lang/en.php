@@ -56,7 +56,7 @@ $lang->project->all           = 'All';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
-$lang->project->delay    = 'Delay';
+$lang->project->putoff   = 'Putoff';
 $lang->project->suspend  = 'Suspend';
 $lang->project->close    = 'Close';
 
