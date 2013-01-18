@@ -105,6 +105,12 @@
   </tr>
 </table>
 <?php 
-if(strpos($viewType, 'doc') !== false) include '../../doc/view/footer.html.php';
-if($viewType != 'doc') include '../../common/view/footer.html.php';
+if(strpos($viewType, 'doc') !== false) 
+{
+  include '../../doc/view/footer.html.php';
+}
+else
+{
+  include '../../common/view/footer.html.php';
+}
 ?>
