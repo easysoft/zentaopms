@@ -30,7 +30,7 @@
   <tr class='a-center'>
     <td>
     <?php 
-    common::hasPriv('user', 'view') ? print(html::a($this->createLink('user', 'view', "account=$member->account"), $member->realname)) : print($member->realname);
+    if(!common::printLink('user', 'view', "account=$member->account", $member->realname)) print $member->realname;
     $memberHours = $member->days * $member->hours;
     $totalHours  += $memberHours;
     ?>

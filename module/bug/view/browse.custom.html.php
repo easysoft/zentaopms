@@ -5,9 +5,7 @@
       <div class='box-title'><?php echo $productName;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
-        <div class='a-right'>
-          <?php if(common::hasPriv('tree', 'browse')) echo html::a($this->createLink('tree', 'browse', "productID=$productID&view=bug"), $lang->tree->manage);?>
-        </div>
+        <div class='a-right'><?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage);?></div>
       </div>
       </nobr>
     </td>

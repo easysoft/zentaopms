@@ -111,11 +111,11 @@ var browseType  = '<?php echo $browseType;?>';
             <td><?php echo $task->consumed;?></td>
             <td><?php echo $task->left;?></td>
             <td class='a-left' title="<?php echo $task->storyTitle?>">
-              <?php 
-              $story = '';
-              if($task->storyID and common::hasPriv('story', 'view'))  $story = html::a($this->createLink('story', 'view', "storyid=$task->storyID"), $task->storyTitle);
-              if($task->storyID and !common::hasPriv('story', 'view')) $story = $task->storyTitle;
-              echo $story;
+              <?php
+                if($task->storyID)
+                {
+                  if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) print $task->storyTitle;
+                }
               ?>
             </td>
             <td class='a-right'>
