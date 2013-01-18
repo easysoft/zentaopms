@@ -380,7 +380,12 @@ class common extends control
             if($value != stripslashes($old->$key))
             { 
                 $diff = '';
-                if(substr_count($value, "\n") > 1 or substr_count($old->$key, "\n") > 1 or strpos('name,title,desc,spec,steps,content,digest,verify', strtolower($key)) !== false) $diff = commonModel::diff($old->$key, $value);
+                if(substr_count($value, "\n") > 1     or 
+                   substr_count($old->$key, "\n") > 1 or 
+                   strpos('name,title,desc,spec,steps,content,digest,verify,report', strtolower($key)) !== false)
+                {
+                    $diff = commonModel::diff($old->$key, $value);
+                }
                 $changes[] = array('field' => $key, 'old' => $old->$key, 'new' => $value, 'diff' => $diff);
             }
         }
