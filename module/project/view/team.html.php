@@ -21,7 +21,7 @@
     <th><?php echo $lang->team->days;?></th>
     <th><?php echo $lang->team->hours;?></th>
     <th><?php echo $lang->team->totalHours;?></th>
-    <?php if(common::hasPriv('project', 'unlinkmember')) echo "<th>$lang->actions</th>";?>
+    <th><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -40,7 +40,7 @@
     <td><?php echo $member->days;?></td>
     <td><?php echo $member->hours;?></td>
     <td><?php echo $memberHours;?></td>
-    <?php if(common::hasPriv('project', 'unlinkmember')) echo "<td>" . html::a($this->createLink('project', 'unlinkmember', "projectID=$project->id&account=$member->account"), $lang->project->unlinkMember, 'hiddenwin') . '</td>';?>
+    <td><?php common::printIcon('project', 'unlinkMember', "projectID=$project->id&account=$member->account", '', 'list', '', 'hiddenwin');?></td>
   </tr>
   <?php endforeach;?>
   </tbody>     

@@ -67,7 +67,7 @@
     <th><?php echo $lang->story->estimateAB;?></th>
     <th><?php echo $lang->statusAB;?></th>
     <th><?php echo $lang->story->stageAB;?></th>
-    <th class='w-p10 {sorter:false}'><?php echo $lang->actions?></th>
+    <th class='w-50px {sorter:false}'><?php echo $lang->actions?></th>
   </tr>
   </thead>
   <tbody>
@@ -81,7 +81,7 @@
     <td><?php echo $story->estimate;?></td>
     <td><?php echo $lang->story->statusList[$story->status];?></td>
     <td><?php echo $lang->story->stageList[$story->stage];?></td>
-    <td><?php common::printLink('productplan', 'unlinkStory', "story=$story->id", $lang->productplan->unlinkStory, 'hiddenwin');?></td>
+    <td><?php common::printIcon('productplan', 'unlinkStory', "story=$story->id", '', 'list', '', 'hiddenwin');?></td>
   </tr>
   <?php endforeach;?>
   </tbody>
