@@ -27,6 +27,7 @@ $lang->testtask->assign         = 'Assign';
 $lang->testtask->cases          = 'Cases';
 $lang->testtask->next           = 'Next';
 $lang->testtask->start          = "Start";
+$lang->testtask->close          = "Close";
 
 $lang->testtask->common         = 'Test task';
 $lang->testtask->id             = 'ID';
