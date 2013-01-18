@@ -13,9 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <table align='center' class='table-1 tablesorter'>
-  <caption class='caption-tl'>
+  <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->group->browse;?></div>
-    <div class='f-right'><?php echo html::a(inlink('create'), $lang->group->create);?></div>
+    <div class='f-right'><?php common::printIcon('group', 'create');?></div>
   </caption>
   <thead>
   <tr class='colhead'>

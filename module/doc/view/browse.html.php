@@ -23,7 +23,7 @@ var browseType = '<?php echo $browseType;?>';
     <span id='bysearchTab'><a href='#'><span class='icon-search'></span><?php echo $lang->doc->searchDoc;?></a></span>
   </div>
   <div class='f-right'>
-    <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc", $lang->doc->create);?>
+    <?php common::printIcon('doc', 'create', "libID=$libID&moduleID=$moduleID&productID=$productID&projectID=$projectID&from=doc");?>
   </div>
 </div>
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
