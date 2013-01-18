@@ -148,6 +148,49 @@ class testtaskModel extends model
     }
 
     /**
+     * Start testtask.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function start($taskID)
+    {
+        $oldTesttask = $this->getById($taskID);
+        $testtask = fixer::input('post')
+            ->setDefault('status', 'doing')
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+            ->autoCheck()
+            ->where('id')->eq((int)$taskID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+    }
+
+    /**
+     * Close testtask.
+     * 
+     * @access public
+     * @return void
+     */
+    public function close($taskID)
+    {
+        $oldTesttask = $this->getById($taskID);
+        $testtask = fixer::input('post')
+            ->setDefault('status', 'done')
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+            ->autoCheck()
+            ->where('id')->eq((int)$taskID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+    }
+
+    /**
      * Link cases.
      * 
      * @param  int   $taskID 
@@ -420,5 +463,23 @@ class testtaskModel extends model
             }
         }
         return $results;
+    }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object $product 
+     * @param  string $action 
+     * @access public
+     * @return void
+     */
+    public function isClickable($testtask, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'start') return $testtask->status == 'wait';
+        if($action == 'close') return $testtask->status != 'done';
+
+        return true;
     }
 }

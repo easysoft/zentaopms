@@ -26,6 +26,7 @@ $lang->testtask->createBug      = "Bug(+)";
 $lang->testtask->assign         = 'Assign';
 $lang->testtask->cases          = 'Cases';
 $lang->testtask->next           = 'Next';
+$lang->testtask->start          = "Start";
 
 $lang->testtask->common         = 'Test task';
 $lang->testtask->id             = 'ID';
@@ -44,6 +45,7 @@ $lang->testtask->linkVersion    = 'Version';
 $lang->testtask->lastRunAccount = "Run";
 $lang->testtask->lastRunTime    = 'Time';
 $lang->testtask->lastRunResult  = 'Result';
+$lang->testtask->report         = 'Report';
 
 $lang->testtask->statusList['wait']    = 'Pending';
 $lang->testtask->statusList['doing']   = 'In progress';

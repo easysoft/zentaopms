@@ -26,6 +26,7 @@ $lang->testtask->createBug      = "提Bug";
 $lang->testtask->assign         = '指派';
 $lang->testtask->cases          = '用例';
 $lang->testtask->next           = '下一个';
+$lang->testtask->start          = "开始";
 
 $lang->testtask->common         = '测试任务';
 $lang->testtask->id             = '任务编号';
@@ -44,6 +45,7 @@ $lang->testtask->linkVersion    = '版本';
 $lang->testtask->lastRunAccount = '执行人';
 $lang->testtask->lastRunTime    = '执行时间';
 $lang->testtask->lastRunResult  = '结果';
+$lang->testtask->report         = '测试报告';
 
 $lang->testtask->statusList['wait']    = '未开始';
 $lang->testtask->statusList['doing']   = '进行中';

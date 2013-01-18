@@ -301,6 +301,82 @@ class testtask extends control
     }
 
     /**
+     * Start testtask.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function start($taskID)
+    {
+        $actions  = $this->loadModel('action')->getList('testtask', $taskID);
+
+        if(!empty($_POST))
+        {
+            $changes = $this->testtask->start($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('testtask', $taskID, 'Started', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        /* Get task info. */
+        $testtask  = $this->testtask->getById($taskID);
+        $productID = $this->product->saveState($testtask->product, $this->products);
+
+        /* Set menu. */
+        $this->testtask->setMenu($this->products, $productID);
+
+        $this->view->testtask      = $testtask;
+        $this->view->header->title = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
+        $this->view->position[]    = $this->lang->testtask->start;
+        $this->view->actions       = $actions;
+        $this->display();
+    }
+
+    /**
+     * Close testtask.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function close($taskID)
+    {
+        $actions  = $this->loadModel('action')->getList('testtask', $taskID);
+
+        if(!empty($_POST))
+        {
+            $changes = $this->testtask->close($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        /* Get task info. */
+        $testtask  = $this->testtask->getById($taskID);
+        $productID = $this->product->saveState($testtask->product, $this->products);
+
+        /* Set menu. */
+        $this->testtask->setMenu($this->products, $productID);
+
+        $this->view->testtask      = $this->testtask->getById($taskID);
+        $this->view->header->title = $testtask->name . $this->lang->colon . $this->lang->close;
+        $this->view->position[]    = $this->lang->close;
+        $this->view->actions       = $actions;
+        $this->display();
+    }
+
+    /**
      * Delete a test task.
      * 
      * @param  int    $taskID 

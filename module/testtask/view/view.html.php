@@ -56,8 +56,10 @@
   $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");
   if(!$task->deleted)
   {
-      common::printIcon('testtask', 'cases',    "taskID=$task->id");
-      common::printIcon('testtask', 'linkCase', "taskID=$task->id");
+      common::printIcon('testtask', 'start',    "taskID=$task->id", $task);
+      common::printIcon('testtask', 'close',    "taskID=$task->id", $task);
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", $task);
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task);
 
       common::printDivider();
       common::printIcon('testtask', 'edit',     "taskID=$task->id");
