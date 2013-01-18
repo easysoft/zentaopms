@@ -138,7 +138,7 @@ class webapp extends control
                 die(js::reload('parent'));
             }
             echo js::alert($this->lang->webapp->successInstall);
-            die(js::locate(inlink('index'), 'parent.parent'));
+            die(js::locate(inlink('index', "module={$this->post->module}"), 'parent.parent'));
         }
 
         $this->view->modules = $this->webapp->getModules();

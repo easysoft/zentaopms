@@ -20,7 +20,7 @@
         <li>
           <table class='fixed exttable' id='webapp<?php echo $webapp->id?>'>
             <tr>
-              <td rowspan='4' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : ($webapp->addType == 'custom' ? '' : $config->webapp->url) . $webapp->icon?>' width='72' height='72' /></td>
+              <td rowspan='4' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : $webapp->icon?>' width='72' height='72' /></td>
               <td class='webapp-name'><?php echo $webapp->name?></td>
             </tr>
             <tr><td class='webapp-info'><span title='<?php echo $webapp->desc?>'><?php echo empty($webapp->desc) ? '&nbsp;' : $webapp->desc?></span></td></tr>

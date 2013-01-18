@@ -4,14 +4,14 @@
 .success  {color:green; font-size:14px}
 
 .exttable tr {padding:5px 0px}
-.exttable td {padding:0px 5px 0px 10px}
+.exttable td {padding:1px 5px 1px 10px}
 .exttable caption{background:#efefef; border-color:#CCC9C9; margin-left:0}
 .exttable {border-color:#CCC9C9; border-top:none;}
 .exttable td{border-color:#CCC9C9}
 
 #webapps li {float:left; width:25%; list-style:none}
 #webapps li table {border:0px; width:95%; background:#f5f5f5}
-#webapps li table .webapp-name{font-size:14px; color:#039; padding-top:6px;}
+#webapps li table .webapp-name{font-size:14px; color:#039; padding-top:2px;}
 #webapps li table .webapp-icon{padding:5px;}
 #webapps li table .webapp-info{color:#888; padding-top:2px;}
 
