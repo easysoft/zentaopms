@@ -53,6 +53,10 @@
       <td><?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows=10 class='area-1'");?>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->testtask->report;?></th>
+      <td><?php echo html::textarea('report', htmlspecialchars($task->report), "rows=10 class='area-1'");?>
+    </tr>  
+    <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?> </td>
     </tr>
   </table>

@@ -50,6 +50,10 @@
     <th class='rowhead'><?php echo $lang->testtask->desc;?></th>
     <td class='content'><?php echo $task->desc;?></td>
   </tr>  
+  <tr>
+    <th class='rowhead'><?php echo $lang->testtask->report;?></th>
+    <td class='content'><?php echo $task->report;?></td>
+  </tr>  
 </table>
 <div class='a-center f-16px strong'>
   <?php
