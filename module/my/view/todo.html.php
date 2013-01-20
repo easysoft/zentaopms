@@ -64,7 +64,7 @@
       <th class='w-hour'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->todo->beginAB);?></th>
       <th class='w-hour'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->todo->endAB);?></th>
       <th class='w-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
-      <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
