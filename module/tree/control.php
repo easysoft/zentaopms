@@ -72,9 +72,9 @@ class tree extends control
             $this->view->currentProduct = $currentProduct;
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
 
-            $header['title'] = $product->name . $this->lang->colon . $this->lang->tree->manageProduct;
-            $position[]      = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
-            $position[]      = $this->lang->tree->manageProduct;
+            $title      = $product->name . $this->lang->colon . $this->lang->tree->manageProduct;
+            $position[] = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
+            $position[] = $this->lang->tree->manageProduct;
         }
         elseif($viewType == 'task')
         {
@@ -91,9 +91,9 @@ class tree extends control
             $this->view->currentProject = $currentProject;
             $this->view->projectModules = $this->tree->getOptionMenu($currentProject, 'task');
 
-            $header['title'] = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
-            $position[]      = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
-            $position[]      = $this->lang->tree->manageProject;
+            $title      = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
+            $position[] = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
+            $position[] = $this->lang->tree->manageProject;
         }
         elseif($viewType == 'bug')
         {
@@ -102,9 +102,9 @@ class tree extends control
             $this->lang->tree->menuOrder = $this->lang->bug->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
 
-            $header['title'] = $product->name . $this->lang->colon . $this->lang->tree->manageBug;
-            $position[]      = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
-            $position[]      = $this->lang->tree->manageBug;
+            $title      = $product->name . $this->lang->colon . $this->lang->tree->manageBug;
+            $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
+            $position[] = $this->lang->tree->manageBug;
         }
         elseif($viewType == 'case')
         {
@@ -113,9 +113,9 @@ class tree extends control
             $this->lang->tree->menuOrder = $this->lang->testcase->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
 
-            $header['title'] = $product->name . $this->lang->colon . $this->lang->tree->manageCase;
-            $position[]      = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
-            $position[]      = $this->lang->tree->manageCase;
+            $title      = $product->name . $this->lang->colon . $this->lang->tree->manageCase;
+            $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
+            $position[] = $this->lang->tree->manageCase;
         }
         elseif(strpos($viewType, 'doc') !== false)
         {
@@ -124,9 +124,9 @@ class tree extends control
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
             $this->lang->set('menugroup.tree', 'doc');
 
-            $header['title'] = $lib->name . $this->lang->colon . $this->lang->tree->manageCustomDoc;
-            $position[]      = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
-            $position[]      = $this->lang->tree->manageCustomDoc;
+            $title      = $lib->name . $this->lang->colon . $this->lang->tree->manageCustomDoc;
+            $position[] = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
+            $position[] = $this->lang->tree->manageCustomDoc;
         }
         elseif(strpos($viewType, 'webapp') !== false)
         {
@@ -134,8 +134,8 @@ class tree extends control
             $this->lang->tree->menu      = $this->lang->webapp->menu;
             $this->lang->set('menugroup.tree', 'webapp');
 
-            $header['title'] = $this->lang->tree->manageWebapp;
-            $position[]      = $this->lang->tree->manageWebapp;
+            $title      = $this->lang->tree->manageWebapp;
+            $position[] = $this->lang->tree->manageWebapp;
 
             $root->name = $this->lang->tree->manageWebapp;
             $root->id   = 0;
@@ -143,7 +143,7 @@ class tree extends control
         }
 
         $parentModules = $this->tree->getParents($currentModuleID);
-        $this->view->header          = $header;
+        $this->view->title           = $title;
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;

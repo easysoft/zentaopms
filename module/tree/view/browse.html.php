@@ -17,7 +17,7 @@
     <td class='side'>
       <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'updateOrder', "root={$root->id}&viewType=$viewType");?>'>
         <table class='table-1'>
-          <caption><?php echo $header->title;?></caption>
+          <caption><?php echo $title;?></caption>
           <tr>
             <td>
               <div id='main'><?php echo $modules;?></div>
