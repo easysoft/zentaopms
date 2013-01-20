@@ -73,10 +73,10 @@ class user extends control
         $todos = $this->todo->getList($type, $account, $status, 0, $pager);
         $date  = (int)$type == 0 ? helper::today() : $type;
 
-        $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
-        $position[]      = $this->lang->user->todo;
+        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
+        $position[] = $this->lang->user->todo;
 
-        $this->view->header   = $header;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->tabID    = 'todo';
         $this->view->date     = $date;
@@ -114,9 +114,9 @@ class user extends control
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Assign. */
-        $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
-        $position[]      = $this->lang->user->task;
-        $this->view->header   = $header;
+        $title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
+        $position[] = $this->lang->user->task;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->tabID    = 'task';
         $this->view->tasks    = $this->loadModel('task')->getUserTasks($account, 'assignedto', 0, $pager);
@@ -154,10 +154,10 @@ class user extends control
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
  
-        $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
-        $position[]      = $this->lang->user->bug;
+        $title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
+        $position[] = $this->lang->user->bug;
 
-        $this->view->header   = $header;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->tabID    = 'bug';
         $this->view->bugs     = $this->user->getBugs($account, $pager);
@@ -184,9 +184,9 @@ class user extends control
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
-        $header['title'] = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
-        $position[]      = $this->lang->user->project;
-        $this->view->header   = $header;
+        $title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
+        $position[] = $this->lang->user->project;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->tabID    = 'project';
         $this->view->projects = $this->user->getProjects($account);
@@ -214,8 +214,8 @@ class user extends control
         $user = $this->user->getById($account);
         $deptPath = $this->dept->getParents($user->dept);
        
-        $header['title'] = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->header   = $header;
+        $title = "USER #$user->id $user->account/" . $this->lang->user->profile;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->account  = $account;
         $this->view->user     = $user;
@@ -272,9 +272,9 @@ class user extends control
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
-        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->create;
-        $position[]      = $this->lang->user->create;
-        $this->view->header    = $header;
+        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->create;
+        $position[] = $this->lang->user->create;
+        $this->view->title     = $title;
         $this->view->position  = $position;
         $this->view->depts     = $this->dept->getOptionMenu();
         $this->view->groupList = $groupList;
@@ -313,9 +313,9 @@ class user extends control
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
-        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
-        $position[]      = $this->lang->user->batchCreate;
-        $this->view->header    = $header;
+        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
+        $position[] = $this->lang->user->batchCreate;
+        $this->view->title     = $title;
         $this->view->position  = $position;
         $this->view->depts     = $this->dept->getOptionMenu();
         $this->view->deptID    = $deptID;
@@ -344,9 +344,9 @@ class user extends control
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
-        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
-        $position[]      = $this->lang->user->edit;
-        $this->view->header   = $header;
+        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
+        $position[] = $this->lang->user->edit;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->user     = $this->user->getById($userID);
         $this->view->depts    = $this->dept->getOptionMenu();
@@ -376,9 +376,9 @@ class user extends control
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
-        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
-        $position[]      = $this->lang->user->edit;
-        $this->view->header   = $header;
+        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
+        $position[] = $this->lang->user->edit;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->depts    = $this->dept->getOptionMenu();
         $this->display();
@@ -545,8 +545,7 @@ class user extends control
                 $this->view->demoUsers = $demoUsers;
             }
 
-            $header['title'] = $this->lang->user->login;
-            $this->view->header    = $header;
+            $this->view->title     = $this->lang->user->login;
             $this->view->referer   = $this->referer;
             $this->view->s         = $this->config->global->sn;
             $this->view->keepLogin = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
@@ -566,8 +565,7 @@ class user extends control
     public function deny($module, $method, $refererBeforeDeny = '')
     {
         $this->setReferer();
-        $header['title'] = $this->lang->user->deny;
-        $this->view->header            = $header;
+        $this->view->title             = $this->lang->user->deny;
         $this->view->module            = $module;
         $this->view->method            = $method;
         $this->view->denyPage          = $this->referer;        // The denied page.
@@ -632,8 +630,8 @@ class user extends control
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
 
-        $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
-        $this->view->position[]    = $this->lang->company->dynamic;
+        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
+        $this->view->position[] = $this->lang->company->dynamic;
 
         /* Assign. */
         $this->view->period  = $period;
