@@ -12,7 +12,7 @@ $clientTheme  = $this->app->getClientTheme();
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   <?php
-  html::title($title . ' - ' . $lang->zentaoPMS);
+  echo html::title($title . ' - ' . $lang->zentaoPMS);
 
   js::exportConfigVars();
   if($config->debug)
