@@ -318,7 +318,7 @@ function setHelpLink()
         $(this).after(' <a class="helplink ' + className + '" href=' + helpLink + ' target="_blank">?</a> ');
     });
 
-    if($('a.helplink').size()) $("a.helplink").colorbox({width:600, height:240, iframe:true, transition:'elastic', speed:350, scrolling:false});
+    if($('a.helplink').size()) $("a.helplink").colorbox({width:600, height:240, iframe:true, transition:'none', scrolling:false});
 }
 
 /**
@@ -438,7 +438,7 @@ function setOuterBox()
  */
 function setAbout()
 {
-    if($('a.about').size()) $("a.about").colorbox({width:900, height:330, iframe:true, transition:'elastic', speed:500, scrolling:false});
+    if($('a.about').size()) $("a.about").colorbox({width:900, height:330, iframe:true, transition:'none', scrolling:false});
 }
 
 /**
@@ -526,7 +526,7 @@ function setSubversionLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.export').size()) $(".export").colorbox({width:500, height:240, iframe:true, transition:'elastic', speed:350, scrolling:true});
+   if($('.export').size()) $(".export").colorbox({width:500, height:240, iframe:true, transition:'none', scrolling:true});
 }
 
 /**
