@@ -64,8 +64,8 @@ class doc extends control
         $this->session->set('docList',   $this->app->getURI(true));
 
         /* Set header and position. */
-        $this->view->header->title = $this->lang->doc->index . $this->lang->colon . $this->libs[$libID];
-        $this->view->position[]    = $this->libs[$libID];
+        $this->view->title      = $this->lang->doc->index . $this->lang->colon . $this->libs[$libID];
+        $this->view->position[] = $this->libs[$libID];
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -296,9 +296,9 @@ class doc extends control
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
 
-        $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
-        $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
-        $this->view->position[]    = $this->lang->doc->create;
+        $this->view->title      = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
+        $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
+        $this->view->position[] = $this->lang->doc->create;
 
         $this->view->libID            = $libID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
@@ -351,9 +351,9 @@ class doc extends control
             $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'customdoc', $startModuleID = 0);
         }
 
-        $this->view->header->title = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
-        $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
-        $this->view->position[]    = $this->lang->doc->edit;
+        $this->view->title      = $this->libs[$libID] . $this->lang->colon . $this->lang->doc->create;
+        $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID]);
+        $this->view->position[] = $this->lang->doc->edit;
 
         $this->view->doc              = $doc;
         $this->view->libID            = $libID;
@@ -388,9 +388,9 @@ class doc extends control
         /* Set menu. */
         $this->doc->setMenu($this->libs, $doc->lib);
 
-        $this->view->header->title = "DOC #$doc->id $doc->title - " . $this->libs[$doc->lib];
-        $this->view->position[]    = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
-        $this->view->position[]    = $this->lang->doc->view;
+        $this->view->title      = "DOC #$doc->id $doc->title - " . $this->libs[$doc->lib];
+        $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $this->libs[$doc->lib]);
+        $this->view->position[] = $this->lang->doc->view;
 
         $this->view->doc        = $doc;
         $this->view->lib        = $lib;
