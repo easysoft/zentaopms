@@ -130,9 +130,9 @@ class project extends control
         setcookie('projectTaskOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         /* Header and position. */
-        $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->task;
-        $this->view->position[]    = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[]    = $this->lang->project->task;
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->task;
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->task;
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
@@ -227,9 +227,9 @@ class project extends control
         $this->app->session->set('storyList', $this->app->getURI(true));
 
         /* Header and session. */
-        $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->task;
-        $this->view->position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[]      = $this->lang->project->task;
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->task;
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->task;
 
         /* Get tasks and group them. */
         $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $status = 'all', $groupBy ? $groupBy : 'story');
@@ -320,7 +320,7 @@ class project extends control
         $this->app->session->set('taskList',  $this->app->getURI(true));
         $this->app->session->set('storyList', $this->app->getURI(true));
 
-        $this->view->header->title  = $project->name . $this->lang->colon . $this->lang->project->importTask;
+        $this->view->title          = $project->name . $this->lang->colon . $this->lang->project->importTask;
         $this->view->position[]     = html::a(inlink('browse', "projectID=$toProject"), $project->name);
         $this->view->position[]     = $this->lang->project->importTask;
         $this->view->tasks2Imported = $this->project->getTasks2Imported($fromProject);
@@ -372,9 +372,9 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $header['title'] = $projects[$projectID] . $this->lang->colon . $this->lang->project->importBug;
-        $position[]      = html::a($this->createLink('project', 'task', "projectID=$projectID"), $projects[$projectID]);
-        $position[]      = $this->lang->project->importBug;
+        $title      = $projects[$projectID] . $this->lang->colon . $this->lang->project->importBug;
+        $position[] = html::a($this->createLink('project', 'task', "projectID=$projectID"), $projects[$projectID]);
+        $position[] = $this->lang->project->importBug;
         
         /* Get users, products and projects.*/
         $users    = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
@@ -464,7 +464,7 @@ class project extends control
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         /* Assign. */
-        $this->view->header     = $header;
+        $this->view->title      = $title;
         $this->view->pager      = $pager;
         $this->view->bugs       = $bugs;
         $this->view->recTotal   = $pager->recTotal;
@@ -501,9 +501,9 @@ class project extends control
         $project = $this->commonAction($projectID);
 
         /* Header and position. */
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->story;
-        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->story;
+        $title      = $project->name . $this->lang->colon . $this->lang->project->story;
+        $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[] = $this->lang->project->story;
 
         /* The pager. */
         $stories    = $this->story->getProjectStories($projectID, $orderBy);
@@ -522,7 +522,7 @@ class project extends control
         if($products) $productID = key($products);
 
         /* Assign. */
-        $this->view->header     = $header;
+        $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->productID  = $productID;
         $this->view->stories    = $stories;
@@ -559,9 +559,9 @@ class project extends control
         $productID = key($products);    // Get the first product for creating bug.
 
         /* Header and position. */
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->bug;
-        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->bug;
+        $title      = $project->name . $this->lang->colon . $this->lang->project->bug;
+        $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[] = $this->lang->project->bug;
 
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
@@ -570,7 +570,7 @@ class project extends control
         $users = $this->user->getPairs('noletter');
 
         /* Assign. */
-        $this->view->header    = $header;
+        $this->view->title     = $title;
         $this->view->position  = $position;
         $this->view->bugs      = $bugs;
         $this->view->tabID     = 'bug';
@@ -599,9 +599,9 @@ class project extends control
         $project = $this->commonAction($projectID);
 
         /* Header and position. */
-        $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->build;
-        $this->view->position[]    = html::a(inlink('browse', "projectID=$projectID"), $project->name);
-        $this->view->position[]    = $this->lang->project->build;
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->build;
+        $this->view->position[] = html::a(inlink('browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->build;
 
         /* Get builds. */
         $this->view->builds = $this->loadModel('build')->getProjectBuilds((int)$projectID);
@@ -633,15 +633,15 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->header->title = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]    = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
-        $this->view->position[]    = $this->lang->testtask->common;
-        $this->view->projectID     = $projectID;
-        $this->view->projectName   = $this->projects[$projectID];
-        $this->view->pager         = $pager;
-        $this->view->orderBy       = $orderBy;
-        $this->view->tasks         = $this->testtask->getProjectTasks($projectID);
-        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->title       = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->position[]  = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
+        $this->view->position[]  = $this->lang->testtask->common;
+        $this->view->projectID   = $projectID;
+        $this->view->projectName = $this->projects[$projectID];
+        $this->view->pager       = $pager;
+        $this->view->orderBy     = $orderBy;
+        $this->view->tasks       = $this->testtask->getProjectTasks($projectID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
 
         $this->display();
     }
@@ -661,9 +661,9 @@ class project extends control
         $maxDays     = $this->config->project->maxBurnDay;
 
         /* Header and position. */
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->burn;
-        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->burn;
+        $title      = $project->name . $this->lang->colon . $this->lang->project->burn;
+        $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[] = $this->lang->project->burn;
 
         /* Create charts by flash. */
         //$dataXML = $this->report->createSingleXML($this->project->getBurnData($project->id), $this->lang->project->charts->burn->graph, $this->lang->report->singleColor);
@@ -699,7 +699,7 @@ class project extends control
         $charts = $this->report->createJSChartFlot($project->name, $flotJSON, $count, 900, 400);
 
         /* Assign. */
-        $this->view->header    = $header;
+        $this->view->title     = $title;
         $this->view->position  = $position;
         $this->view->tabID     = 'burn';
         $this->view->charts    = $charts;
@@ -747,11 +747,11 @@ class project extends control
     {
         $project = $this->commonAction($projectID);
 
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->team;
-        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->team;
+        $title      = $project->name . $this->lang->colon . $this->lang->project->team;
+        $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[] = $this->lang->project->team;
 
-        $this->view->header   = $header;
+        $this->view->title    = $title;
         $this->view->position = $position;
 
         $this->display();
@@ -770,13 +770,13 @@ class project extends control
         $this->session->set('docList', $this->app->getURI(true));
 
         $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-        $this->view->header->title = $this->lang->project->doc;
-        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $project->name);
-        $this->view->position[]    = $this->lang->project->doc;
-        $this->view->project       = $project;
-        $this->view->docs          = $this->loadModel('doc')->getProjectDocs($projectID);
-        $this->view->modules       = $this->doc->getProjectModulePairs();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title      = $this->lang->project->doc;
+        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $project->name);
+        $this->view->position[] = $this->lang->project->doc;
+        $this->view->project    = $project;
+        $this->view->docs       = $this->loadModel('doc')->getProjectDocs($projectID);
+        $this->view->modules    = $this->doc->getProjectModulePairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -826,8 +826,8 @@ class project extends control
 
         $this->project->setMenu($this->projects, key($this->projects));
 
-        $this->view->header->title = $this->lang->project->create;
-        $this->view->position[]    = $this->view->header->title;
+        $this->view->title         = $this->lang->project->create;
+        $this->view->position[]    = $this->view->title;
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->allProducts   = $this->loadModel('product')->getPairs();
@@ -874,14 +874,14 @@ class project extends control
         /* Remove current project from the projects. */
         unset($projects[$projectID]);
 
-        $header['title'] = $this->lang->project->edit . $this->lang->colon . $project->name;
-        $position[]      = html::a($browseProjectLink, $project->name);
-        $position[]      = $this->lang->project->edit;
+        $title      = $this->lang->project->edit . $this->lang->colon . $project->name;
+        $position[] = html::a($browseProjectLink, $project->name);
+        $position[] = $this->lang->project->edit;
 
         $linkedProducts = $this->project->getProducts($project->id);
         $linkedProducts = join(',', array_keys($linkedProducts));
         
-        $this->view->header         = $header;
+        $this->view->title          = $title;
         $this->view->position       = $position;
         $this->view->projects       = $projects;
         $this->view->project        = $project;
@@ -921,8 +921,8 @@ class project extends control
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->start;
-        $this->view->position[]    = $this->lang->project->start;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->start;
+        $this->view->position[] = $this->lang->project->start;
         $this->display();
     }
 
@@ -951,8 +951,8 @@ class project extends control
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->putoff;
-        $this->view->position[]    = $this->lang->project->putoff;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->putoff;
+        $this->view->position[] = $this->lang->project->putoff;
         $this->display();
     }
 
@@ -981,8 +981,8 @@ class project extends control
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
-        $this->view->position[]    = $this->lang->project->suspend;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
+        $this->view->position[] = $this->lang->project->suspend;
         $this->display();
     }
 
@@ -1011,8 +1011,8 @@ class project extends control
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->activate;
-        $this->view->position[]    = $this->lang->project->activate;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->activate;
+        $this->view->position[] = $this->lang->project->activate;
         $this->display();
     }
 
@@ -1041,8 +1041,8 @@ class project extends control
             die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
-        $this->view->position[]    = $this->lang->project->suspend;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->suspend;
+        $this->view->position[] = $this->lang->project->suspend;
         $this->display();
     }
 
@@ -1061,8 +1061,8 @@ class project extends control
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
-        $this->view->header->title = $this->lang->project->view;
-        $this->view->position[]    = $this->view->header->title;
+        $this->view->title      = $this->lang->project->view;
+        $this->view->position[] = $this->view->title;
 
         $this->view->project  = $project;
         $this->view->products = $this->project->getProducts($project->id);
@@ -1193,16 +1193,16 @@ class project extends control
         $this->project->setMenu($this->projects, $project->id);
 
         /* Title and position. */
-        $header['title'] = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
-        $position[]      = html::a($browseProjectLink, $project->name);
-        $position[]      = $this->lang->project->manageProducts;
+        $title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $position[] = html::a($browseProjectLink, $project->name);
+        $position[] = $this->lang->project->manageProducts;
 
         $allProducts     = $this->product->getPairs();
         $linkedProducts  = $this->project->getProducts($project->id);
         $linkedProducts  = join(',', array_keys($linkedProducts));
 
         /* Assign. */
-        $this->view->header         = $header;
+        $this->view->title          = $title;
         $this->view->position       = $position;
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
@@ -1232,9 +1232,9 @@ class project extends control
         if(empty($projects)) $this->locate($browseProjectLink);
 
         /* Header and position. */
-        $header['title'] = $this->lang->project->manageChilds . $this->lang->colon . $project->name;
-        $position[]      = html::a($browseProjectLink, $project->name);
-        $position[]      = $this->lang->project->manageChilds;
+        $title      = $this->lang->project->manageChilds . $this->lang->colon . $project->name;
+        $position[] = html::a($browseProjectLink, $project->name);
+        $position[] = $this->lang->project->manageChilds;
 
         $childProjects = $this->project->getChildProjects($project->id);
         $childProjects = join(",", array_keys($childProjects));
@@ -1243,7 +1243,7 @@ class project extends control
         $this->project->setMenu($this->projects, $project->id);
 
         /* Assign. */
-        $this->view->header        = $header;
+        $this->view->title         = $title;
         $this->view->position      = $position;
         $this->view->projects      = $projects;
         $this->view->childProjects = $childProjects;
@@ -1286,12 +1286,12 @@ class project extends control
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
-        $header['title'] = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
-        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $position[]      = $this->lang->project->manageMembers;
-        $this->view->header   = $header;
-        $this->view->position = $position;
+        $title      = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
+        $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $position[] = $this->lang->project->manageMembers;
 
+        $this->view->title          = $title;
+        $this->view->position       = $position;
         $this->view->project        = $project;
         $this->view->users          = $users;
         $this->view->roles          = $roles;
@@ -1366,9 +1366,9 @@ class project extends control
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->project->linkStory;
-        $position[]      = html::a($browseLink, $project->name);
-        $position[]      = $this->lang->project->linkStory;
+        $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
+        $position[] = html::a($browseLink, $project->name);
+        $position[] = $this->lang->project->linkStory;
 
         if($browseType == 'bySearch')
         {    
@@ -1380,7 +1380,7 @@ class project extends control
         }
         $prjStories = $this->story->getProjectStoryPairs($projectID);
 
-        $this->view->header     = $header;
+        $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->project    = $project;
         $this->view->products   = $products;
@@ -1463,8 +1463,8 @@ class project extends control
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);
-        $this->view->header->title = $project->name . $this->lang->colon . $this->lang->project->dynamic;
-        $this->view->position[]    = $this->lang->project->dynamic;
+        $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->dynamic;
+        $this->view->position[] = $this->lang->project->dynamic;
 
         /* Assign. */
         $this->view->projectID = $projectID;
