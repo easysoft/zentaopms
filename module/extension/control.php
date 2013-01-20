@@ -46,11 +46,11 @@ class extension extends control
             }
         }
 
-        $this->view->header->title = $this->lang->extension->browse;
-        $this->view->position[]    = $this->lang->extension->browse;
-        $this->view->tab           = $status;
-        $this->view->extensions    = $extensions;
-        $this->view->versions      = $versions;
+        $this->view->title      = $this->lang->extension->browse;
+        $this->view->position[] = $this->lang->extension->browse;
+        $this->view->tab        = $status;
+        $this->view->extensions = $extensions;
+        $this->view->versions   = $versions;
         $this->display();
     }
 
@@ -112,9 +112,9 @@ class extension extends control
         $this->view->error = '';
         $installTitle      = $upgrade == 'no' ? $this->lang->extension->install : $this->lang->extension->upgrade;
         $installType       = $upgrade == 'no' ? $this->lang->extension->installExt : $this->lang->extension->upgradeExt; 
-        $this->view->installType   = $installType;
-        $this->view->upgrade       = $upgrade;
-        $this->view->header->title = $installTitle . $this->lang->colon . $extension;
+        $this->view->installType = $installType;
+        $this->view->upgrade     = $upgrade;
+        $this->view->title       = $installTitle . $this->lang->colon . $extension;
 
         /* Get the package file name. */
         $packageFile = $this->extension->getPackageFile($extension);
@@ -272,7 +272,7 @@ class extension extends control
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
         $this->view->removeCommands = $this->extension->removePackage($extension);
-        $this->view->header->title  = $this->lang->extension->uninstallFinished;
+        $this->view->title = $this->lang->extension->uninstallFinished;
 
         if($postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
         $this->display();
@@ -301,7 +301,7 @@ class extension extends control
 
         $this->extension->copyPackageFiles($extension);
         $this->extension->updateExtension($extension, array('status' => 'installed'));
-        $this->view->header->title = $this->lang->extension->activateFinished;
+        $this->view->title = $this->lang->extension->activateFinished;
         $this->display();
     }
 
@@ -316,7 +316,7 @@ class extension extends control
     {
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
         $this->view->removeCommands = $this->extension->removePackage($extension);
-        $this->view->header->title  = $this->lang->extension->deactivateFinished;
+        $this->view->title = $this->lang->extension->deactivateFinished;
         $this->display();
     }
 
@@ -352,7 +352,7 @@ class extension extends control
     public function erase($extension)
     {
         $this->view->removeCommands = $this->extension->erasePackage($extension);
-        $this->view->header->title  = $this->lang->extension->eraseFinished;
+        $this->view->title = $this->lang->extension->eraseFinished;
         $this->display();
     }
 

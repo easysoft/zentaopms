@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <table class='table-1'>
-  <caption><?php echo $header->title;?></caption>
+  <caption><?php echo $title;?></caption>
   <tr>
     <td valign='middle'>
       <?php if($error):?>

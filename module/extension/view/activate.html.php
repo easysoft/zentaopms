@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <table class='table-1'>
-  <caption><?php echo $header->title;?></caption>
+  <caption><?php echo $title;?></caption>
   <tr>
     <td valign='middle'>
      <?php
@@ -22,7 +22,7 @@
     }
     else
     {
-        echo "<h3 class='a-center success'>{$header->title}</h3>";
+        echo "<h3 class='a-center success'>{$title}</h3>";
         echo "<p class='a-center'>" . html::commonButton($lang->extension->viewInstalled, 'onclick=parent.location.href="' . inlink('browse', 'type=installed') . '"') . '</p>';
     }
     ?>
