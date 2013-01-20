@@ -60,8 +60,8 @@ class company extends control
         $this->config->company->browse->search['queryID']   = $queryID;
         $this->config->company->browse->search['params']['dept']['values'] = array('' => '') + $this->dept->getOptionMenu();
 
-        $header['title'] = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
-        $position[]      = $this->lang->dept->common;
+        $title      = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
+        $position[] = $this->lang->dept->common;
 
         if($type == 'bydept')
         {
@@ -86,7 +86,7 @@ class company extends control
             $users = $this->loadModel('user')->getByQuery($this->session->userQuery, $pager, $orderBy);
         }
 
-        $this->view->header      = $header;
+        $this->view->title       = $title;
         $this->view->position    = $position;
         $this->view->users       = $users;
         $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
@@ -120,10 +120,10 @@ class company extends control
         $this->lang->company->menu      = $this->lang->admin->menu;
         $this->lang->company->menuOrder = $this->lang->admin->menuOrder;
 
-        $header['title'] = $this->lang->admin->common . $this->lang->colon . $this->lang->company->create;
-        $position[]      = html::a($this->createLink('admin', 'browsecompany'), $this->lang->admin->company);
-        $position[]      = $this->lang->company->create;
-        $this->view->header   = $header;
+        $title      = $this->lang->admin->common . $this->lang->colon . $this->lang->company->create;
+        $position[] = html::a($this->createLink('admin', 'browsecompany'), $this->lang->admin->company);
+        $position[] = $this->lang->company->create;
+        $this->view->title    = $title;
         $this->view->position = $position;
 
         $this->display();
@@ -149,9 +149,9 @@ class company extends control
             die(js::alert($this->lang->company->successSaved));
         }
 
-        $header['title'] = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
-        $position[]      = $this->lang->company->edit;
-        $this->view->header    = $header;
+        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
+        $position[] = $this->lang->company->edit;
+        $this->view->title     = $title;
         $this->view->position  = $position;
         $this->view->company   = $this->company->getById($this->app->company->id);
 
@@ -240,8 +240,8 @@ class company extends control
         $this->view->users    = $users; 
 
         /* The header and position. */
-        $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
-        $this->view->position[]    = $this->lang->company->dynamic;
+        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
+        $this->view->position[] = $this->lang->company->dynamic;
 
         /* Get actions. */
         if($browseType != 'bysearch') 
