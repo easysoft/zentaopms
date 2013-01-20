@@ -77,11 +77,11 @@ class task extends control
         $contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
         $moduleOptionMenu = $this->tree->getOptionMenu($projectID, $viewType = 'task');
 
-        $header['title']  = $project->name . $this->lang->colon . $this->lang->task->create;
-        $position[]       = html::a($taskLink, $project->name);
-        $position[]       = $this->lang->task->create;
+        $title      = $project->name . $this->lang->colon . $this->lang->task->create;
+        $position[] = html::a($taskLink, $project->name);
+        $position[] = $this->lang->task->create;
 
-        $this->view->header           = $header;
+        $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
         $this->view->stories          = $stories;
@@ -129,11 +129,11 @@ class task extends control
         $stories = $this->story->getProjectStoryPairs($projectID);
         $stories['ditto'] = $this->lang->task->ditto;
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-        $header['title'] = $project->name . $this->lang->colon . $this->lang->task->create;
-        $position[]      = html::a($taskLink, $project->name);
-        $position[]      = $this->lang->task->create;
+        $title      = $project->name . $this->lang->colon . $this->lang->task->create;
+        $position[] = html::a($taskLink, $project->name);
+        $position[] = $this->lang->task->create;
 
-        $this->view->header   = $header;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->project  = $project;
         $this->view->stories  = $stories;
@@ -216,11 +216,11 @@ class task extends control
         unset($noclosedProjects[$this->view->project->id]);
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
 
-        $this->view->header->title = $this->lang->task->edit;
-        $this->view->position[]    = $this->lang->task->edit;
-        $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->members       = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->assignedTo);        
-        $this->view->modules       = $this->tree->getOptionMenu($this->view->task->project, $viewType = 'task');
+        $this->view->title      = $this->lang->task->edit;
+        $this->view->position[] = $this->lang->task->edit;
+        $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
+        $this->view->members    = $this->loadModel('user')->appendDeleted($this->view->members, $this->view->task->assignedTo);        
+        $this->view->modules    = $this->tree->getOptionMenu($this->view->task->project, $viewType = 'task');
         $this->display();
     }
 
@@ -263,9 +263,9 @@ class task extends control
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
     
             /* Assign. */
-            $this->view->header->title = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
-            $this->view->position[]    = $this->lang->task->common;
-            $this->view->position[]    = $this->lang->task->batchEdit;
+            $this->view->title      = $project->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->position[] = $this->lang->task->common;
+            $this->view->position[] = $this->lang->task->batchEdit;
 
             $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
             $members = $members + array('closed' => 'Closed');
@@ -336,8 +336,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
-        $this->view->position[]    = $this->lang->task->assign;
+        $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
+        $this->view->position[] = $this->lang->task->assign;
 
         $this->view->users = $this->project->getTeamMemberPairs($projectID);
         $this->display();
@@ -362,11 +362,11 @@ class task extends control
         $project = $this->project->getById($task->project);
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
-        $header['title'] = "TASK#$task->id $task->name / $project->name";
-        $position[]      = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
-        $position[]      = $task->name;
+        $title      = "TASK#$task->id $task->name / $project->name";
+        $position[] = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
+        $position[] = $task->name;
 
-        $this->view->header      = $header;
+        $this->view->title       = $title;
         $this->view->position    = $position;
         $this->view->project     = $project;
         $this->view->task        = $task;
@@ -418,8 +418,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
-        $this->view->position[]    = $this->lang->task->start;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
+        $this->view->position[] = $this->lang->task->start;
         $this->display();
     }
     
@@ -442,9 +442,7 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $header['title'] = $this->lang->task->record;
-
-        $this->view->header         = $header;
+        $this->view->title = $this->lang->task->record;
         $this->view->beforeConsumed = $this->task->getBeforeConsumed($taskID);
         $this->display();
     }
@@ -489,9 +487,9 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
-        $this->view->position[]    = $this->lang->task->finish;
-        $this->view->date            = strftime("%Y-%m-%d %X", strtotime('now'));
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->position[] = $this->lang->task->finish;
+        $this->view->date       = strftime("%Y-%m-%d %X", strtotime('now'));
        
         $this->display();
     }
@@ -522,8 +520,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
-        $this->view->position[]    = $this->lang->task->finish;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->position[] = $this->lang->task->finish;
         
         $this->display();
 
@@ -588,8 +586,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->cancel;
-        $this->view->position[]    = $this->lang->task->cancel;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->cancel;
+        $this->view->position[] = $this->lang->task->cancel;
         
         $this->display();
     }
@@ -620,8 +618,8 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->header->title = $this->view->project->name . $this->lang->colon .$this->lang->task->activate;
-        $this->view->position[]    = $this->lang->task->activate;
+        $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->activate;
+        $this->view->position[] = $this->lang->task->activate;
         $this->display();
     }
 
@@ -770,7 +768,7 @@ class task extends control
 
         $this->project->setMenu($this->project->getPairs(), $projectID);
         $this->projects            = $this->project->getPairs();
-        $this->view->header->title = $this->projects[$projectID] . $this->lang->colon . $this->lang->task->report->common;
+        $this->view->title         = $this->projects[$projectID] . $this->lang->colon . $this->lang->task->report->common;
         $this->view->projectID     = $projectID;
         $this->view->browseType    = $browseType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
