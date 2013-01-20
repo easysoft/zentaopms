@@ -53,12 +53,8 @@ js::set('page', 'create');
     <tr>
       <th class='rowhead'><?php echo $lang->bug->steps;?></th>
       <td>
-        <table class='w-p100 bd-none'>
-          <tr class='bd-none' valign='top'>
-            <td class='w-p85 bd-none padding-zero'><?php echo html::textarea('steps', $steps, "rows='10'");?></td>
-            <td class='bd-none pl-10px' id='tplBox'><?php echo $this->fetch('bug', 'buildTemplates');?></td>
-          </tr>
-        </table>
+        <div class='w-p85 bd-none padding-zero f-left'><?php echo html::textarea('steps', $steps, "rows='10'");?></div>
+        <div class='bd-none pl-10px f-left' id='tplBox'><?php echo $this->fetch('bug', 'buildTemplates');?></div>
       </td>
     </tr>  
     <tr>
