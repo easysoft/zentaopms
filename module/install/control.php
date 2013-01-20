@@ -36,7 +36,7 @@ class install extends control
     {
         if(!isset($this->config->installed) or !$this->config->installed) $this->session->set('installing', true);
 
-        $this->view->header->title = $this->lang->install->welcome;
+        $this->view->title = $this->lang->install->welcome;
 
         if($release = $this->install->getLatestRelease()) $this->view->latestRelease = $release;
 
@@ -51,7 +51,7 @@ class install extends control
      */
     public function step1()
     {
-        $this->view->header->title  = $this->lang->install->checking;
+        $this->view->title          = $this->lang->install->checking;
         $this->view->phpVersion     = $this->install->getPhpVersion();
         $this->view->phpResult      = $this->install->checkPHP();
         $this->view->pdoResult      = $this->install->checkPDO();
@@ -75,7 +75,7 @@ class install extends control
      */
     public function step2()
     {
-        $this->view->header->title = $this->lang->install->setConfig;
+        $this->view->title = $this->lang->install->setConfig;
         $this->display();
     }
 
@@ -97,13 +97,12 @@ class install extends control
                 $this->view->lang   = $this->lang;
                 $this->view->config = $this->config;
                 $this->view->domain = $this->server->HTTP_HOST;
-                $this->view->header = new stdclass();
-                $this->view->header->title = $this->lang->install->saveConfig;
+                $this->view->title  = $this->lang->install->saveConfig;
                 $this->display();
             }
             else
             {
-                $this->view->header->title = $this->lang->install->saveConfig;
+                $this->view->title = $this->lang->install->saveConfig;
                 $this->view->error = $return->error;
                 $this->display();
             }
@@ -135,7 +134,7 @@ class install extends control
 			die(js::locate(inlink('step5'), 'parent'));
         }
 
-        $this->view->header->title = $this->lang->install->getPriv;
+        $this->view->title = $this->lang->install->getPriv;
         if(!isset($this->config->installed) or !$this->config->installed)
         {
             $this->view->error = $this->lang->install->errorNotSaveConfig;
