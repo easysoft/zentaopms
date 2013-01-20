@@ -37,12 +37,13 @@
     <tr>
       <th class='rowhead'><?php echo $lang->testcase->lblStory;?></th>
       <td>
-        <div id='storyIdBox'><?php echo html::select('story', $stories, $storyID, 'class="text-1" onchange=setPreview();');?></div>
+        <div id='storyIdBox'><?php echo html::select('story', $stories, $storyID, 'class="text-1" onchange=setPreview();');?>
         <?php if($storyID == 0): ?>
           <a href='' id='preview' class='iframe hidden'><?php echo $lang->preview;?></a>
         <?php else:?>
           <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $lang->preview, '', "class='iframe' id='preview'");?>
         <?php endif;?>
+        </div>
       </td>
     </tr>  
     <tr>
