@@ -109,8 +109,8 @@ class product extends control
         setcookie('productStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         /* Set header and position. */
-        $this->view->header->title = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
-        $this->view->position[]    = $this->products[$productID];
+        $this->view->title      = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
+        $this->view->position[] = $this->products[$productID];
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -175,12 +175,12 @@ class product extends control
 
         $this->product->setMenu($this->products, key($this->products));
 
-        $this->view->header->title = $this->lang->product->create;
-        $this->view->position[]    = $this->view->header->title;
-        $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
-        $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
-        $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst');
+        $this->view->title      = $this->lang->product->create;
+        $this->view->position[] = $this->view->title;
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst');
+        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
+        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst');
         $this->display();
     }
 
@@ -208,14 +208,14 @@ class product extends control
         $this->product->setMenu($this->products, $productID);
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $this->view->header->title = $this->lang->product->edit . $this->lang->colon . $product->name;
-        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[]    = $this->lang->product->edit;
-        $this->view->product       = $product;
-        $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
-        $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
-        $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst');
+        $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
+        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[] = $this->lang->product->edit;
+        $this->view->product    = $product;
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst');
+        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
+        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst');
 
         $this->display();
     }
@@ -247,10 +247,10 @@ class product extends control
 
         $this->product->setMenu($this->products, $productID);
 
-        $this->view->product       = $product;
-        $this->view->header->title = $this->view->product->name . $this->lang->colon .$this->lang->close;
-        $this->view->position[]    = $this->lang->close;
-        $this->view->actions       = $actions;
+        $this->view->product    = $product;
+        $this->view->title      = $this->view->product->name . $this->lang->colon .$this->lang->close;
+        $this->view->position[] = $this->lang->close;
+        $this->view->actions    = $actions;
         $this->display();
     }
 
@@ -269,13 +269,13 @@ class product extends control
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $this->view->header->title = $product->name . ' - ' . $this->lang->product->view;
-        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[]    = $this->lang->product->view;
-        $this->view->product       = $product;
-        $this->view->actions       = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->title      = $product->name . ' - ' . $this->lang->product->view;
+        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[] = $this->lang->product->view;
+        $this->view->product    = $product;
+        $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->groups     = $this->loadModel('group')->getPairs();
 
         $this->display();
     }
@@ -315,12 +315,12 @@ class product extends control
         $this->session->set('docList', $this->app->getURI(true));
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $this->view->header->title = $product->name . $this->lang->colon . $this->lang->product->doc;
-        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[]    = $this->lang->product->doc;
-        $this->view->product       = $product;
-        $this->view->docs          = $this->loadModel('doc')->getProductDocs($productID);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->doc;
+        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[] = $this->lang->product->doc;
+        $this->view->product    = $product;
+        $this->view->docs       = $this->loadModel('doc')->getProductDocs($productID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -339,11 +339,11 @@ class product extends control
         $this->session->set('productPlanList', $this->app->getURI(true));
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        $this->view->header->title = $product->name . $this->lang->colon . $this->lang->product->roadmap;
-        $this->view->position[]    = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
-        $this->view->position[]    = $this->lang->product->roadmap;
-        $this->view->product       = $product;
-        $this->view->roadmaps      = $this->product->getRoadmap($productID);
+        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+        $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+        $this->view->position[] = $this->lang->product->roadmap;
+        $this->view->product    = $product;
+        $this->view->roadmaps   = $this->product->getRoadmap($productID);
 
         $this->display();
     }
@@ -387,8 +387,8 @@ class product extends control
         $period  = $type == 'account' ? 'all'  : $type;
 
         /* The header and position. */
-        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
-        $this->view->position[]    = $this->lang->product->dynamic;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
+        $this->view->position[] = $this->lang->product->dynamic;
 
         /* Assign. */
         $this->view->productID = $productID;
