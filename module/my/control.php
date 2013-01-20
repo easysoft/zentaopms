@@ -51,7 +51,7 @@ class my extends control
         $this->view->bugs          = $this->loadModel('bug')->getUserBugPairs($account, false, $this->config->my->bugCounts);
         $this->view->stories       = $this->loadModel('story')->getUserStoryPairs($account, $this->config->my->storyCounts);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|withguest');
-        $this->view->header->title = $this->lang->my->common;
+        $this->view->title         = $this->lang->my->common;
 
         $this->display();
     }
@@ -81,8 +81,8 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* The header and position. */
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
-        $this->view->position[]    = $this->lang->my->todo;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
+        $this->view->position[] = $this->lang->my->todo;
 
         /* Assign. */
         $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $orderBy);
@@ -120,16 +120,16 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
-        $this->view->position[]    = $this->lang->my->story;
-        $this->view->stories       = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $pager);
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->type          = $type;
-        $this->view->recTotal      = $recTotal;
-        $this->view->recPerPage    = $recPerPage;
-        $this->view->pageID        = $pageID;
-        $this->view->orderBy       = $orderBy;
-        $this->view->pager         = $pager;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->position[] = $this->lang->my->story;
+        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $orderBy, $pager);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -155,17 +155,17 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
-        $this->view->position[]    = $this->lang->my->task;
-        $this->view->tabID         = 'task';
-        $this->view->tasks         = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $orderBy);
-        $this->view->type          = $type;
-        $this->view->recTotal      = $recTotal;
-        $this->view->recPerPage    = $recPerPage;
-        $this->view->pageID        = $pageID;
-        $this->view->orderBy       = $orderBy;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager         = $pager;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
+        $this->view->position[] = $this->lang->my->task;
+        $this->view->tabID      = 'task';
+        $this->view->tasks      = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $orderBy);
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
         $this->display();
     }
 
@@ -227,17 +227,17 @@ class my extends control
         $this->session->set('bugIDs', $bugIDs . ',');
 
         /* assign. */
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
-        $this->view->position[]    = $this->lang->my->bug;
-        $this->view->bugs          = $bugs;
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->tabID         = 'bug';
-        $this->view->type          = $type;
-        $this->view->recTotal      = $recTotal;
-        $this->view->recPerPage    = $recPerPage;
-        $this->view->pageID        = $pageID;
-        $this->view->orderBy       = $orderBy;
-        $this->view->pager         = $pager;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
+        $this->view->position[] = $this->lang->my->bug;
+        $this->view->bugs       = $bugs;
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->tabID      = 'bug';
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -259,15 +259,15 @@ class my extends control
 
         $this->app->loadLang('testcase');
 
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->testTask;
-        $this->view->position[]    = $this->lang->my->testTask;
-        $this->view->tasks         = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $orderBy);
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->testTask;
+        $this->view->position[] = $this->lang->my->testTask;
+        $this->view->tasks      = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $orderBy);
         
-        $this->view->recTotal      = $recTotal;
-        $this->view->recPerPage    = $recPerPage;
-        $this->view->pageID        = $pageID;
-        $this->view->orderBy       = $orderBy;
-        $this->view->pager         = $pager;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
 
     }
@@ -321,17 +321,17 @@ class my extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase');
         
         /* Assign. */
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->testCase;
-        $this->view->position[]    = $this->lang->my->testCase;
-        $this->view->cases         = $cases;
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->tabID         = 'test';
-        $this->view->type          = $type;
-        $this->view->recTotal      = $recTotal;
-        $this->view->recPerPage    = $recPerPage;
-        $this->view->pageID        = $pageID;
-        $this->view->orderBy       = $orderBy;
-        $this->view->pager         = $pager;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->testCase;
+        $this->view->position[] = $this->lang->my->testCase;
+        $this->view->cases      = $cases;
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->tabID      = 'test';
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         
         $this->display();
     }
@@ -346,10 +346,10 @@ class my extends control
     {
         $this->app->loadLang('project');
 
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProject;
-        $this->view->position[]    = $this->lang->my->myProject;
-        $this->view->tabID         = 'project';
-        $this->view->projects      = @array_reverse($this->user->getProjects($this->app->user->account));
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myProject;
+        $this->view->position[] = $this->lang->my->myProject;
+        $this->view->tabID      = 'project';
+        $this->view->projects   = @array_reverse($this->user->getProjects($this->app->user->account));
 
         $this->display();
     }
@@ -370,9 +370,9 @@ class my extends control
             die(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
 
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
-        $this->view->position[]    = $this->lang->my->editProfile;
-        $this->view->user          = $this->user->getById($this->app->user->id);
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
+        $this->view->position[] = $this->lang->my->editProfile;
+        $this->view->user       = $this->user->getById($this->app->user->id);
 
         $this->display();
     }
@@ -393,9 +393,9 @@ class my extends control
             die(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
 
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
-        $this->view->position[]    = $this->lang->my->changePassword;
-        $this->view->user          = $this->user->getById($this->app->user->id);
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
+        $this->view->position[] = $this->lang->my->changePassword;
+        $this->view->user       = $this->user->getById($this->app->user->id);
 
         $this->display();
     }
@@ -409,12 +409,14 @@ class my extends control
     public function profile()
     {
         if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
-        $user                 = $this->user->getById($this->app->user->account);
-        $deptPath             = $this->dept->getParents($user->dept); 
-        $this->view->deptPath = $deptPath;
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
-        $this->view->position[]    = $this->lang->my->profile;
-        $this->view->user          = $this->user->getById($this->app->user->id);
+
+        $user     = $this->user->getById($this->app->user->account);
+        $deptPath = $this->dept->getParents($user->dept); 
+
+        $this->view->deptPath   = $deptPath;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
+        $this->view->position[] = $this->lang->my->profile;
+        $this->view->user       = $this->user->getById($this->app->user->id);
         $this->display();
     }
 
@@ -451,8 +453,8 @@ class my extends control
         $this->view->pager   = $pager;
 
         /* The header and position. */
-        $this->view->header->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
-        $this->view->position[]    = $this->lang->my->dynamic;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
+        $this->view->position[] = $this->lang->my->dynamic;
 
         /* Assign. */
         $this->view->type       = $type;
