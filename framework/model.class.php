@@ -244,21 +244,4 @@ class model
         $object = str_replace($this->config->db->prefix, '', $table);
         $this->loadModel('action')->create($object, $id, 'deleted', '', $extra = ACTIONMODEL::CAN_UNDELETED);
     }
-
-    /**
-     * Undelete an record.
-     * 
-     * @param  int      $actionID 
-     * @access public
-     * @return void
-     */
-    public function undelete($actionID)
-    {
-        $action = $this->loadModel('action')->getById($actionID);
-        if($action->action != 'deleted') return;
-        $table = $this->config->objectTables[$action->objectType];
-        $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
-        $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
-        $this->action->create($action->objectType, $action->objectID, 'undeleted');
-    }
 }    
