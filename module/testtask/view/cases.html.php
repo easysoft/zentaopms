@@ -56,7 +56,7 @@ var moduleID   = '<?php echo $moduleID;?>';
             <th class='w-100px'>   <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
             <th class='w-80px'>    <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
             <th class='w-status'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-120px {sorter: false}'><?php echo $lang->actions;?></th>
+            <th class='w-100px {sorter: false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
