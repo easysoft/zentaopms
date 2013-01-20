@@ -517,7 +517,11 @@ class testtask extends control
         }
 
         if(!$caseID) $run = $this->testtask->getRunById($runID);
-        if($caseID)  $run->case = $this->loadModel('testcase')->getById($caseID, $version);
+        if($caseID)
+        {
+            $run = new stdclass();
+            $run->case = $this->loadModel('testcase')->getById($caseID, $version);
+        }
 
         $nextCase   = '';
         $caseID     = $caseID ? $caseID : $run->case->id;
