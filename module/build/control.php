@@ -44,7 +44,7 @@ class build extends control
         $bugs    = $this->bug->getProjectBugs($projectID); 
 
         /* Assign. */
-        $this->view->header->title = $this->lang->build->create;
+        $this->view->title     = $this->lang->build->create;
         $this->view->products  = $this->project->getProducts($projectID);
         $this->view->projectID = $projectID;
         $this->view->users     = $this->user->getPairs();
@@ -89,14 +89,14 @@ class build extends control
         $bugs    = $this->bug->getProjectBugs($build->project); 
 
         /* Assign. */
-        $this->view->header->title = $this->lang->build->edit;
-        $this->view->position[]    = $this->lang->build->edit;
-        $this->view->products      = $this->project->getProducts($build->project);
-        $this->view->users         = $this->loadModel('user')->getPairs();
-        $this->view->build         = $build;
-        $this->view->stories       = $stories;
-        $this->view->bugs          = $bugs;
-        $this->view->orderBy       = $orderBy;
+        $this->view->title      = $this->lang->build->edit;
+        $this->view->position[] = $this->lang->build->edit;
+        $this->view->products   = $this->project->getProducts($build->project);
+        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->build      = $build;
+        $this->view->stories    = $stories;
+        $this->view->bugs       = $bugs;
+        $this->view->orderBy    = $orderBy;
         $this->display();
     }
                                                           
@@ -126,14 +126,14 @@ class build extends control
 
         /* Assign. */
         $projects = $this->project->getPairs();
-        $this->view->header->title = "BUILD #$build->id $build->name - " . $projects[$build->project];
-        $this->view->position[]    = $this->lang->build->view;
-        $this->view->products      = $this->project->getProducts($build->project);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->build         = $build;
-        $this->view->stories       = $stories;
-        $this->view->bugs          = $bugs;
-        $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
+        $this->view->title      = "BUILD #$build->id $build->name - " . $projects[$build->project];
+        $this->view->position[] = $this->lang->build->view;
+        $this->view->products   = $this->project->getProducts($build->project);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->build      = $build;
+        $this->view->stories    = $stories;
+        $this->view->bugs       = $bugs;
+        $this->view->actions    = $this->loadModel('action')->getList('build', $buildID);
         $this->display();
     }
  
