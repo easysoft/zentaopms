@@ -146,7 +146,6 @@ class commonModel extends model
 
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
-        if($module == 'help' and $method == 'field') return true;
         return false;
     }
 
