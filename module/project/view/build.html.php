@@ -41,8 +41,9 @@
     <td><?php echo $users[$build->builder]?></td>
     <td class='a-right'>
       <?php 
-      common::printLink('testtask', 'create', "product=0&project=$project->id&build=$build->id", $lang->testtask->create);
-      common::printLink('project', 'bug', "project=$project->id&orderBy=status&build=$build->id", $lang->project->viewBug);
+      common::printIcon('testtask', 'create', "product=0&project=$project->id&build=$build->id", '', 'list');
+      $lang->project->bug = $lang->project->viewBug;
+      common::printIcon('project', 'bug',  "project=$project->id&orderBy=status&build=$build->id", '', 'list');
       common::printIcon('build', 'edit',   "buildID=$build->id");
       common::printIcon('build', 'delete', "buildID=$build->id", '', 'list', '', 'hiddenwin');
       ?>
