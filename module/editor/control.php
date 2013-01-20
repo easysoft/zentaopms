@@ -19,6 +19,8 @@ class editor extends control
      */
     public function index()
     {
+        $this->view->title      = $this->lang->editor->common;
+        $this->view->position[] = $this->lang->editor->common;
         $this->view->moduleList = $this->editor->getModules();
         $this->display();
     }

@@ -11,8 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php include '../../common/view/colorbox.html.php';?>
-<form method='post' target='hiddenwin' action='<?php echo inlink('save', "filePath=$safeFilePath&action=$action")?>' id='dataform'>
+<form method='post' target='hiddenwin' action='<?php echo inlink('save', "filePath=$safeFilePath&action=$action")?>'>
 <table class='table-1'>
   <?php if($filePath):?>        
   <caption>
@@ -29,9 +28,7 @@
   </tr>
   <?php endif?>
   <tr>
-    <td>
-    <?php echo html::textarea('fileContent', str_replace('&', '&amp;', $fileContent), "class='w-p100'")?>
-    </td>
+    <td><?php echo html::textarea('fileContent', str_replace('&', '&amp;', $fileContent), "class='w-p100'")?></td>
   </tr>
   <tr>
     <td>
