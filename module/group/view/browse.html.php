@@ -22,7 +22,7 @@
    <th class='w-id'><?php echo $lang->group->id;?></th>
    <th class='w-100px'><?php echo $lang->group->name;?></th>
    <th><?php echo $lang->group->desc;?></th>
-   <th class='w-200px {sorter:false}'><?php echo $lang->actions;?></th>
+   <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -31,9 +31,11 @@
     <td class='strong'><?php echo $group->id;?></td>
     <td><?php echo $group->name;?></td>
     <td class='a-left'><?php echo $group->desc;?></td>
-    <td class='a-right'>
-      <?php common::printLink('group', 'managepriv',   "type=byGroup&param=$group->id", $lang->group->managePrivByGroup);?>
-      <?php common::printLink('group', 'managemember', "groupID=$group->id", $lang->group->manageMember);?>
+    <td class='a-center'>
+      <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
+      <?php common::printIcon('group', 'managepriv',   "type=byGroup&param=$group->id", '', 'list');?>
+      <?php $lang->group->managemember = $lang->group->manageMember;?>
+      <?php common::printIcon('group', 'managemember', "groupID=$group->id", '', 'list');?>
       <?php common::printIcon('group', 'edit',         "groupID=$group->id", '', 'list');?>
       <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list');?>
       <?php common::printIcon('group', 'delete',       "groupID=$group->id", '', 'list', '', "hiddenwin");?>

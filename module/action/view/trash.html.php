@@ -21,7 +21,7 @@
     <th><?php echo $lang->action->objectName;?></th>
     <th class='w-100px'><?php common::printOrderLink('actor',     $orderBy, $vars, $lang->action->actor);?></th>
     <th class='w-150px'><?php common::printOrderLink('date',      $orderBy, $vars, $lang->action->date);?></th>
-    <th class='w-100px'><?php echo $lang->actions;?></th>
+    <th class='w-60px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -35,8 +35,8 @@
     <td><?php echo $action->date;?></td>
     <td>
       <?php
-      common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');
-      common::printLink('action', 'hideOne',  "actionid=$action->id", $lang->action->hideOne,  'hiddenwin');
+      common::printIcon('action', 'undelete', "actionid=$action->id", '', 'list', '', 'hiddenwin');
+      common::printIcon('action', 'hideOne',  "actionid=$action->id", '', 'list', '', 'hiddenwin');
       ?>
     </td>
   </tr>

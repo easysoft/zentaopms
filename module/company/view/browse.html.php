@@ -59,7 +59,7 @@ js::set('deptID', $deptID);
           <td><?php echo $user->join;?></td>
           <td><?php echo date('Y-m-d', $user->last);?></td>
           <td><?php echo $user->visits;?></td>
-          <td class='a-left'>
+          <td class='a-center'>
             <?php 
             common::printIcon('user', 'edit',   "userID=$user->id&from=company", '', 'list');
             common::printIcon('user', 'delete', "userID=$user->id", '', 'list', '', "hiddenwin");
