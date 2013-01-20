@@ -32,9 +32,9 @@ class upgrade extends control
     {
         $version = str_replace(array(' ', '.'), array('', '_'), $this->config->installedVersion);
         $version = strtolower($version);
-        $this->view->header->title = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
-        $this->view->position[]    = $this->lang->upgrade->common;
-        $this->view->version       = $version;
+        $this->view->title      = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
+        $this->view->position[] = $this->lang->upgrade->common;
+        $this->view->version    = $version;
         $this->display();
     }
 
@@ -46,10 +46,10 @@ class upgrade extends control
      */
     public function confirm()
     {
-        $this->view->header->title = $this->lang->upgrade->confirm;
-        $this->view->position[]    = $this->lang->upgrade->common;
-        $this->view->confirm       = $this->upgrade->getConfirm($this->post->fromVersion);
-        $this->view->fromVersion   = $this->post->fromVersion;
+        $this->view->title       = $this->lang->upgrade->confirm;
+        $this->view->position[]  = $this->lang->upgrade->common;
+        $this->view->confirm     = $this->upgrade->getConfirm($this->post->fromVersion);
+        $this->view->fromVersion = $this->post->fromVersion;
 
         $this->display();
     }
@@ -64,8 +64,8 @@ class upgrade extends control
     {
         $this->upgrade->execute($this->post->fromVersion);
 
-        $this->view->header->title = $this->lang->upgrade->result;
-        $this->view->position[]    = $this->lang->upgrade->common;
+        $this->view->title      = $this->lang->upgrade->result;
+        $this->view->position[] = $this->lang->upgrade->common;
 
         if(!$this->upgrade->isError())
         {
