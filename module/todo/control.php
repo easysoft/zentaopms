@@ -46,10 +46,10 @@ class todo extends control
             die(js::locate($this->createLink('my', 'todo', "date=" . str_replace('-', '', $this->post->date)), 'parent'));
         }
 
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
-        $position[]      = $this->lang->todo->create;
+        $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
+        $position[] = $this->lang->todo->create;
 
-        $this->view->header   = $header;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->date     = strftime("%Y-%m-%d", strtotime($date));
         $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
@@ -78,10 +78,10 @@ class todo extends control
             die(js::locate($this->createLink('my', 'todo', "date=$date"), 'parent'));
         }
 
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
-        $position[]      = $this->lang->todo->create;
+        $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
+        $position[] = $this->lang->todo->create;
 
-        $this->view->header   = $header;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->date     = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
         $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
@@ -115,11 +115,11 @@ class todo extends control
         $todo = $this->todo->getById($todoID);
         if($todo->private and $this->app->user->account != $todo->account) die('private');
        
-        $todo->date      = strftime("%Y-%m-%d", strtotime($todo->date));
-        $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
-        $position[]      = $this->lang->todo->edit;
+        $todo->date = strftime("%Y-%m-%d", strtotime($todo->date));
+        $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->edit;
+        $position[] = $this->lang->todo->edit;
 
-        $this->view->header   = $header;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->times    = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->todo     = $todo;
@@ -177,9 +177,9 @@ class todo extends control
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
 
             /* Assign. */
-            $header['title'] = $this->lang->my->common . $this->lang->colon . $this->lang->todo->batchEdit;
-            $position[]      = $this->lang->todo->common;
-            $position[]      = $this->lang->todo->batchEdit;
+            $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->batchEdit;
+            $position[] = $this->lang->todo->common;
+            $position[] = $this->lang->todo->batchEdit;
 
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->bugs        = $bugs;
@@ -187,7 +187,7 @@ class todo extends control
             $this->view->editedTodos = $editedTodos;
             $this->view->times       = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
             $this->view->time        = date::now();
-            $this->view->header      = $header;
+            $this->view->title       = $title;
             $this->view->position    = $position;
 
             $this->display();
@@ -232,13 +232,13 @@ class todo extends control
         $this->loadModel('user')->setMenu($this->user->getPairs(), $todo->account);
         $this->lang->set('menugroup.todo', $from);
 
-        $this->view->header->title = "TODO #$todo->id $todo->name";
-        $this->view->position[]    = $this->lang->todo->view;
-        $this->view->todo          = $todo;
-        $this->view->times         = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->actions       = $this->loadModel('action')->getList('todo', $todoID);
-        $this->view->from          = $from;
+        $this->view->title      = "TODO #$todo->id $todo->name";
+        $this->view->position[] = $this->lang->todo->view;
+        $this->view->todo       = $todo;
+        $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('todo', $todoID);
+        $this->view->from       = $from;
 
         $this->display();
     }
