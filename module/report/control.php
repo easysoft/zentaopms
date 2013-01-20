@@ -30,8 +30,8 @@ class report extends control
      */
     public function projectDeviation()
     {
-        $this->view->header->title = $this->lang->report->projectDeviation;
-        $this->view->projects      = $this->report->getProjects();
+        $this->view->title    = $this->lang->report->projectDeviation;
+        $this->view->projects = $this->report->getProjects();
         $this->view->submenu       = 'project';
         $this->display();
     }
@@ -47,10 +47,10 @@ class report extends control
         $this->app->loadLang('product');
         $this->app->loadLang('productplan');
         $this->app->loadLang('story');
-        $this->view->header->title = $this->lang->report->productInfo;
-        $this->view->products      = $this->report->getProducts();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->submenu       = 'product';
+        $this->view->title    = $this->lang->report->productInfo;
+        $this->view->products = $this->report->getProducts();
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->submenu  = 'product';
         $this->display();
     }
 
@@ -81,12 +81,12 @@ class report extends control
         {
             $end = date('Y-m-d', strtotime($end));
         }
-        $this->view->header->title = $this->lang->report->bugSummary;
-        $this->view->begin         = $begin;
-        $this->view->end           = $end;
-        $this->view->bugs          = $this->report->getBugs($begin, $end);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->view->submenu       = 'test';
+        $this->view->title   = $this->lang->report->bugSummary;
+        $this->view->begin   = $begin;
+        $this->view->end     = $end;
+        $this->view->bugs    = $this->report->getBugs($begin, $end);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->submenu = 'test';
         $this->display(); 
     }
 
@@ -98,10 +98,10 @@ class report extends control
      */
     public function bugAssign()
     {
-        $this->view->header->title = $this->lang->report->bugAssign;
-        $this->view->submenu       = 'test';
-        $this->view->assigns       = $this->report->getBugAssign();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->title   = $this->lang->report->bugAssign;
+        $this->view->submenu = 'test';
+        $this->view->assigns = $this->report->getBugAssign();
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         $this->display(); 
     }
 
@@ -113,10 +113,10 @@ class report extends control
      */
     public function workload()
     {
-        $this->view->header->title = $this->lang->report->workload;
-        $this->view->workload      = $this->report->getWorkload();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->view->submenu       = 'staff';
+        $this->view->title    = $this->lang->report->workload;
+        $this->view->workload = $this->report->getWorkload();
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->submenu  = 'staff';
         $this->display();
     }
 }
