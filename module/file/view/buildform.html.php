@@ -3,7 +3,6 @@
   /* Define the html code of a file row. */
   $fileRow = <<<EOT
   <div class='fileBox' id='fileBox\$i'>
-    <span class='icon'><span class='icon-file'></span>{$lang->file->common}<span class='fileID'>\$i</span></span>
     <input type='file' name='files[]' class='fileControl'  tabindex='-1' />
     <label tabindex='-1' class='fileLabel'>{$lang->file->label}</label>
     <input type='text' name='labels[]' class='text-3' tabindex='-1' /> 
