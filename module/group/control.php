@@ -35,12 +35,12 @@ class group extends control
     {
         if($companyID == 0) $companyID = $this->app->company->id;
 
-        $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
-        $position[]      = $this->lang->group->browse;
+        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
+        $position[] = $this->lang->group->browse;
 
         $groups = $this->group->getList($companyID);
 
-        $this->view->header   = $header;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->groups   = $groups;
 
@@ -62,8 +62,8 @@ class group extends control
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
-        $this->view->header->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
-        $this->view->position[]    = $this->lang->group->create;
+        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
+        $this->view->position[] = $this->lang->group->create;
         $this->display();
     }
 
@@ -82,9 +82,9 @@ class group extends control
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
-        $header['title'] = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
-        $position[]      = $this->lang->group->edit;
-        $this->view->header   = $header;
+        $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
+        $position[] = $this->lang->group->edit;
+        $this->view->title    = $title;
         $this->view->position = $position;
         $this->view->group    = $this->group->getById($groupID);
 
@@ -107,9 +107,9 @@ class group extends control
             die(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
-        $this->view->header->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
-        $this->view->position[]    = $this->lang->group->copy;
-        $this->view->group         = $this->group->getById($groupID);
+        $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
+        $this->view->position[] = $this->lang->group->copy;
+        $this->view->group      = $this->group->getById($groupID);
         $this->display();
     }
 
@@ -143,8 +143,8 @@ class group extends control
             $group      = $this->group->getById($groupID);
             $groupPrivs = $this->group->getPrivs($groupID);
 
-            $this->view->header->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
-            $this->view->position[]    = $group->name . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->position[] = $group->name . $this->lang->colon . $this->lang->group->managePriv;
 
             /* Join changelog when be equal or greater than this version.*/
             $realVersion = str_replace('_', '.', $version);
@@ -164,8 +164,8 @@ class group extends control
         elseif($type == 'byModule')
         {
             $this->group->sortResource();
-            $this->view->header->title = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
-            $this->view->position[]    = $this->lang->group->managePriv;
+            $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
+            $this->view->position[] = $this->lang->group->managePriv;
 
             foreach($this->lang->resource as $module => $moduleActions)
             {
@@ -201,10 +201,10 @@ class group extends control
         $allUsers   = $this->user->getPairs('nodeleted|noclosed|noempty|noletter');
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
-        $header['title'] = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
-        $position[]      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $position[] = $group->name . $this->lang->colon . $this->lang->group->manageMember;
 
-        $this->view->header     = $header;
+        $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->group      = $group;
         $this->view->groupUsers = $groupUsers;
