@@ -17,7 +17,7 @@
   <?php
   echo $charts; 
   common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin');
-  printf($lang->project->howToUpdateBurn, $this->createLink('help', 'field', 'module=project&method-burn&field=updateburn'));
+  echo $lang->project->howToUpdateBurn;
   ?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

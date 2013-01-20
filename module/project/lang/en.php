@@ -98,7 +98,7 @@ $lang->project->dynamic         = 'Dynamic';
 $lang->project->build           = 'Build';
 $lang->project->testtask        = 'Testtask';
 $lang->project->burn            = 'Burndown';
-$lang->project->computeBurn     = 'Update burndown';
+$lang->project->computeBurn     = 'Update';
 $lang->project->burnData        = 'Burndown data';
 $lang->project->team            = 'Team';
 $lang->project->doc             = 'Doc';
@@ -163,7 +163,7 @@ $lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait
 $lang->project->wbs             = "WBS";
 $lang->project->batchWBS        = "Batch WBS";
 $lang->project->largeBurnChart  = 'View large';
-$lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>How?</i></a>";
+$lang->project->howToUpdateBurn = "<a href='http://www.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank'>How?</a>";
 $lang->project->whyNoStories    = "There no active stories to added to this project. Please check the linked product.";
 $lang->project->doneProjects    = 'Done';
 $lang->project->unDoneProjects  = 'Undone';
