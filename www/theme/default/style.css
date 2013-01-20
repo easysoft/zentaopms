@@ -287,15 +287,14 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #mainmenu a  {color:#E5E5E5; font-weight:normal;}
 #mainmenu .active   {background-color:#e5e5e5;}
 #mainmenu .active a {color:#33a52e; font-weight:bold;}
-#mainmenu #mainbg{ padding-left:12px; background:url(images/main/index_bg.png) left bottom;}
-#mainmenu .active #mainbg{background-position: left top;}
+#mainmenu #mainbg{padding-left:16px; padding-bottom:2px; background:url(images/main/zt-icons.png); background-position:-122px -443px;}
 
 #mainmenu #searchbox{float:right; border:none; background:#E5E5E5 url(images/main/search_bg.png) repeat-x bottom; height:100%;}
 #mainmenu .button-s{border:none; padding:2px}
 
 #searchType  {border:1px solid #ccc; background:#E5E5E5; margin-bottom:2px; color:gray; font-size:12px}
 #searchQuery {height:16px; border:1px solid #ccc; background: #E5E5E5; color:gray; font-size:12px}
-#searchbox #objectSwitcher{ border:none; width:16px; height:18px; background:url(images/main/enter.png) center bottom;}
+#searchbox #objectSwitcher{ border:none; width:16px; height:18px; background:url(images/main/zt-icons.png); background-position:-162px -443px;}
 
 /* Module menu. */
 #modulemenu    {margin-bottom:0px; font-size:14px; border:2px solid #e5e5e5;}
@@ -305,7 +304,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #modulemenu .active a {color:#33a52e; font-weight:bold; padding:4px 4px 2px 4px;}
 #modulemenu .right    {float:right; font-weight:bold;}
 #modulemenu .right  a { font-weight:bold}
-#modulemenu #mybg{ padding-left:10px; background:url(images/main/ui-gray.png); background-position:-146px 144px;}
+#modulemenu #mybg {padding-left:16px; padding-bottom:2px; background:url(images/main/zt-icons.png); background-position:-142px -443px;}
 
 /* Product, project and objects switcher. */
 #productID {background:#e5e5e5; border:1px solid #e5e5e5}
@@ -438,7 +437,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-add    {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -3px no-repeat;}
 .icon-delete {border:none; width:16px; padding:2px 8px; background:url(images/main/zt-icons.png) -100px  -3px no-repeat;}
 .icon-add:hover, .icon-delete:hover {cursor:pointer}
-.icon-allProducts, .icon-allProjects {padding:2px 10px 2px 8px; background:url(images/main/zt-icons.png) -3px  -161px;}
+.icon-allProducts, .icon-allProjects {padding:2px 10px 2px 8px; background:url(images/main/zt-icons.png) 0px  -161px;}
 
 .icon-green-common-edit    {padding:2px 8px;  background:url(images/main/zt-icons.png)  0px  0px no-repeat;} 
 .icon-green-common-comment {padding:2px 8px;  background:url(images/main/zt-icons.png) -20px 0px no-repeat;} 
@@ -472,20 +471,9 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-green-project-unlinkStory {padding:2px 5px 2px 10px; background:url(images/main/zt-icons.png) -180px -201px;}
 .icon-green-productplan-unlinkStory {padding:2px 5px 2px 10px; background:url(images/main/zt-icons.png) -180px -201px;}
 
-#featurebar .f-right .icon-green-project-linkStory, .icon-green-productplan-linkStory {padding:2px 3px 2px 10px; background:url(images/main/zt-icons.png) -160px -201px;}
-#featurebar .f-right .icon-green-story-create      {padding:2px 7px 2px 10px; background:url(images/main/zt-icons.png) 0px   -202px;} 
+.icon-green-project-linkStory, .icon-green-productplan-linkStory {padding:2px 3px 2px 10px; background:url(images/main/zt-icons.png) -160px -201px;}
+#featurebar .f-right .icon-green-story-create, .icon-green-story-create {padding:2px 7px 2px 10px; background:url(images/main/zt-icons.png) 0px   -202px;} 
 #featurebar .f-right .icon-green-story-batchCreate {padding:2px 7px 2px 10px; background:url(images/main/zt-icons.png) -20px -202px;} 
-
-/* Project icons. */
-.icon-green-project-start    {padding:2px 8px; background:url(images/main/zt-icons.png) -61px  -242px;} 
-.icon-green-project-activate {padding:2px 8px; background:url(images/main/zt-icons.png) -120px  -241px;} 
-
-.icon-green-project-delay    {} 
-.icon-green-project-suspend  {} 
-
-.icon-green-project-close    {padding:2px 8px; background:url(images/main/zt-icons.png) -100px -241px;} 
-
-.icon-green-project-unlinkMember {padding:2px 5px 2px 10px; background:url(images/main/zt-icons.png) -180px -201px;}
 
 /* Task icons. */
 .icon-green-task-confirmStoryChange {padding:2px 8px; background:url(images/main/zt-icons.png) -60px  -201px;}
@@ -557,7 +545,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 /* Testtask icons. */
 .icon-green-testtask-create   {padding:2px 8px; background:url(images/main/zt-icons.png) 0px -202px;}
 .icon-green-testtask-cases    {padding:1px 7px 1px 10px; background:url(images/main/zt-icons.png) -80px -322px;}
-#featurebar .f-right .icon-green-testtask-linkCase, .icon-green-testtask-linkCase {padding:2px 3px 2px 10px; background:url(images/main/zt-icons.png) -160px -201px;}
+#featurebar .f-right .icon-green-testtask-linkCase, .icon-green-testtask-linkCase {padding:2px 4px 2px 10px; background:url(images/main/zt-icons.png) -160px -201px;}
 
 /* Effort icons. */
 .icon-green-effort-createForObject {padding:2px 8px;  background:url(images/main/zt-icons.png) -80px -2px;} 
