@@ -36,7 +36,7 @@
     <td>
       <?php
       common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');
-      common::printLink('action', 'hide',     "actionid=$action->id", $lang->action->hide,   'hiddenwin');
+      common::printLink('action', 'hideOne',  "actionid=$action->id", $lang->action->hideOne,  'hiddenwin');
       ?>
     </td>
   </tr>
@@ -45,7 +45,12 @@
   <tfoot>
   <tr>
     <td colspan='6'>
-      <div class='f-left'><?php echo $lang->action->trashTips;?></div>
+      <?php if($trashes):?>
+      <div class='f-left'>
+        <?php echo html::linkButton($lang->action->hideAll, inlink('hideAll'), 'hiddenwin');?>
+        <?php echo $lang->action->trashTips;?>
+      </div>
+      <?php endif;?>
       <div><?php $pager->show();?></div>
     </td>
   </tr>

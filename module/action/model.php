@@ -13,9 +13,9 @@
 <?php
 class actionModel extends model
 {
-    const CAN_UNDELETED = 1;    // The deleted object can be undeleted or not.
-    const BE_UNDELETED  = 0;    // The deleted object has been undeleted or not.
-    const BE_HIDDEN     = 2;
+    const BE_UNDELETED  = 0;    // The deleted object has been undeleted.
+    const CAN_UNDELETED = 1;    // The deleted object can be undeleted.
+    const BE_HIDDEN     = 2;    // The deleted object has been hidded.
 
     /**
      * Create a action.
@@ -611,17 +611,54 @@ class actionModel extends model
     }
 
     /**
-     * Hide object. 
+     * Undelete a record.
+     * 
+     * @param  int      $actionID 
+     * @access public
+     * @return void
+     */
+    public function undelete($actionID)
+    {
+        $action = $this->loadModel('action')->getById($actionID);
+        if($action->action != 'deleted') return;
+
+        /* Update deleted field in object table. */
+        $table = $this->config->objectTables[$action->objectType];
+        $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
+
+        /* Update action record in action table. */
+        $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
+        $this->action->create($action->objectType, $action->objectID, 'undeleted');
+    }
+
+    /**
+     * Hide an object. 
      * 
      * @param  int    $actionID 
      * @access public
      * @return void
      */
-    public function hide($actionID)
+    public function hideOne($actionID)
     {
         $action = $this->getById($actionID);
         if($action->action != 'deleted') return;
+
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(self::BE_HIDDEN)->where('id')->eq($actionID)->exec();
         $this->create($action->objectType, $action->objectID, 'hidden');
+    }
+
+    /**
+     * Hide all deleted objects.
+     * 
+     * @access public
+     * @return void
+     */
+    public function hideAll()
+    {
+        $this->dao->update(TABLE_ACTION)
+            ->set('extra')->eq(self::BE_HIDDEN)
+            ->where('action')->eq('deleted')
+            ->andWhere('extra')->eq(self::CAN_UNDELETED)
+            ->exec();
     }
 }

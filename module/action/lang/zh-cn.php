@@ -10,10 +10,6 @@
  * @link        http://www.zentao.net
  */
 $lang->action->common   = '系统日志';
-$lang->action->trash    = '回收站';
-$lang->action->undelete = '还原';
-$lang->action->hide     = '隐藏';
-
 $lang->action->product    = '产品';
 $lang->action->project    = '项目';
 $lang->action->objectType = '对象类型';
@@ -23,9 +19,16 @@ $lang->action->actor      = '操作者';
 $lang->action->action     = '动作';
 $lang->action->actionID   = '记录ID';
 $lang->action->date       = '日期';
-$lang->action->trashTips  = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
-$lang->action->textDiff   = '文本格式';
-$lang->action->original   = '原始格式';
+
+$lang->action->trash    = '回收站';
+$lang->action->undelete = '还原';
+$lang->action->hideOne  = '隐藏';
+$lang->action->hideAll  = '全部隐藏';
+
+$lang->action->trashTips      = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
+$lang->action->textDiff       = '文本格式';
+$lang->action->original       = '原始格式';
+$lang->action->confirmHideAll = '您确定要全部隐藏这些记录吗？';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';

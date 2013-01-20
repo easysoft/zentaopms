@@ -37,18 +37,19 @@ class action extends control
         $this->session->set('testtaskList',    $uri);
         $this->session->set('docList',         $uri);
 
-        /* Header and position. */
-        $this->view->header->title = $this->lang->action->trash;
-        $this->view->position[]    = $this->lang->action->trash;
-
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $this->view->trashes = $this->action->getTrashes($orderBy, $pager);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->users['system'] = 'system';
+        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+        $trashes = $this->action->getTrashes($orderBy, $pager);
+
+        /* Title and position. */
+        $this->view->title      = $this->lang->action->trash;
+        $this->view->position[] = $this->lang->action->trash;
+
+        $this->view->trashes = $trashes;
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -66,15 +67,35 @@ class action extends control
     }
 
     /**
-     * Hide object. 
+     * Hide an deleted object. 
      * 
      * @param  int    $actionID 
      * @access public
      * @return void
      */
-    public function hide($actionID)
+    public function hideOne($actionID)
     {
-        $this->action->hide($actionID);
+        $this->action->hideOne($actionID);
         die(js::reload('parent'));
+    }
+
+    /**
+     * Hide all deleted objects.
+     * 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function hideAll($confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->action->confirmHideAll, inlink('hideAll', "confirm=yes")));
+        }
+        else
+        {
+            $this->action->hideAll();
+            die(js::reload('parent'));
+        }
     }
 }
