@@ -48,7 +48,7 @@ js::set('page', 'create');
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->title;?></th>
-      <td><?php echo html::input('title', $title, "class='text-1'");?></td>
+      <td><?php echo html::input('title', $bugTitle, "class='text-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->bug->steps;?></th>

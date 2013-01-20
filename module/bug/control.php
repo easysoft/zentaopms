@@ -142,11 +142,11 @@ class bug extends control
             $bug->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : $bug->resolvedBuild;
         }
        
-        $header['title'] = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
-        $position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $position[]      = $this->lang->bug->common;
+        $title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
+        $position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $position[] = $this->lang->bug->common;
 
-        $this->view->header      = $header;
+        $this->view->title       = $title;
         $this->view->position    = $position;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
@@ -197,7 +197,7 @@ class bug extends control
         }
 
         $this->bug->setMenu($this->products, $productID);
-        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
         $this->view->productID     = $productID;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
@@ -294,9 +294,9 @@ class bug extends control
             $builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
             $stories = $this->story->getProductStoryPairs($productID);
         }
-        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
-        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->bug->create;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->create;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->create;
 
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
@@ -311,7 +311,7 @@ class bug extends control
         $this->view->storyID          = $storyID;
         $this->view->buildID          = $buildID;
         $this->view->caseID           = $caseID;
-        $this->view->title            = $title;
+        $this->view->bugTitle         = $title;
         $this->view->steps            = htmlspecialchars($steps);
         $this->view->os               = $os;
         $this->view->browser          = $browser;
@@ -349,9 +349,9 @@ class bug extends control
         $productName = $this->products[$productID];
       
         /* Header and positon. */
-        $this->view->header->title = "BUG #$bug->id $bug->title - " . $this->products[$productID];
-        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
-        $this->view->position[]    = $this->lang->bug->view;
+        $this->view->title      = "BUG #$bug->id $bug->title - " . $this->products[$productID];
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
+        $this->view->position[] = $this->lang->bug->view;
 
         /* Assign. */
         $this->view->productID   = $productID;
@@ -429,9 +429,9 @@ class bug extends control
         $this->bug->setMenu($this->products, $productID);
 
         /* Set header and position. */
-        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->edit;
-        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->bug->edit;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->edit;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->edit;
 
         /* Assign. */
         if($projectID)
@@ -493,10 +493,10 @@ class bug extends control
             $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
 
             /* Assign. */
-            $this->view->header->title   = $product->name . $this->lang->colon . $this->lang->bug->batchEdit;
-            $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-            $this->view->position[]      = $this->lang->bug->common;
-            $this->view->position[]      = $this->lang->bug->batchEdit;
+            $this->view->title      = $product->name . $this->lang->colon . $this->lang->bug->batchEdit;
+            $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+            $this->view->position[] = $this->lang->bug->common;
+            $this->view->position[] = $this->lang->bug->batchEdit;
 
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
             $this->view->productID   = $productID;
@@ -559,8 +559,8 @@ class bug extends control
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
-        $this->view->header->title = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
-        $this->view->position[]    = $this->lang->bug->assignedTo;
+        $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
+        $this->view->position[] = $this->lang->bug->assignedTo;
 
         $this->view->users   = $this->user->getPairs('nodeleted');
         $this->view->bug     = $bug;
@@ -591,9 +591,9 @@ class bug extends control
         $productID       = $bug->product;
         $this->bug->setMenu($this->products, $productID);
 
-        $this->view->header->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->confirmBug;
-        $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]      = $this->lang->bug->confirmBug;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->confirmBug;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->confirmBug;
 
         $this->view->bug     = $bug;
         $this->view->users   = $this->user->getPairs('noletter');
@@ -632,9 +632,9 @@ class bug extends control
         $productID       = $bug->product;
         $this->bug->setMenu($this->products, $productID);
 
-        $this->view->header->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
-        $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]      = $this->lang->bug->resolve;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->resolve;
 
         $this->view->bug     = $bug;
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID);
@@ -667,13 +667,13 @@ class bug extends control
         $productID  = $bug->product;
         $this->bug->setMenu($this->products, $productID);
 
-        $this->view->header->title   = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
-        $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]      = $this->lang->bug->activate;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->activate;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->activate;
 
-        $this->view->bug             = $bug;
-        $this->view->builds          = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
-        $this->view->actions         = $this->action->getList('bug', $bugID);
+        $this->view->bug     = $bug;
+        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID, 'noempty');
+        $this->view->actions = $this->action->getList('bug', $bugID);
 
         $this->display();
     }
@@ -701,9 +701,9 @@ class bug extends control
         $productID  = $bug->product;
         $this->bug->setMenu($this->products, $productID);
 
-        $this->view->header->title = $this->products[$productID] . $this->lang->colon . $this->lang->bug->close;
-        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->bug->close;
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->close;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->close;
 
         $this->view->bug     = $bug;
         $this->view->actions = $this->action->getList('bug', $bugID);
