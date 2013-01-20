@@ -290,7 +290,7 @@ class common extends control
         if(!$icon) $icon = $method;
         if(strpos(',edit,copy,report,export,delete,', ",$icon,") !== false) $module = 'common';
         $color      = $type == 'button' ? 'green' : ($clickable ? 'green' : 'gray');
-        $extraClass = strpos(',export,customFields,runCase,results,', ",$method,") !== false ? $method : $extraClass;
+        $extraClass = strpos(',export,customFields,', ",$method,") !== false ? $method : $extraClass;
         $class      = $extraClass ? "icon-$color-$module-$icon $extraClass" : "icon-$color-$module-$icon";
  
         /* Create the icon link. */
