@@ -38,9 +38,9 @@ class release extends control
         $this->commonAction($productID);
         $products                  = $this->product->getPairs();
         $this->session->set('releaseList', $this->app->getURI(true));
-        $this->view->header->title = $products[$productID] . $this->lang->colon . $this->lang->release->browse;
-        $this->view->position[]    = $this->lang->release->browse;
-        $this->view->releases      = $this->release->getList($productID);
+        $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->release->browse;
+        $this->view->position[] = $this->lang->release->browse;
+        $this->view->releases   = $this->release->getList($productID);
         $this->display();
     }
 
@@ -67,10 +67,10 @@ class release extends control
         unset($builds['trunk']);
 
         $this->commonAction($productID);
-        $this->view->header->title = $this->lang->release->create;
-        $this->view->position[]    = $this->lang->release->create;
-        $this->view->builds        = $builds;
-        $this->view->productID     = $productID;
+        $this->view->title      = $this->lang->release->create;
+        $this->view->position[] = $this->lang->release->create;
+        $this->view->builds     = $builds;
+        $this->view->productID  = $productID;
         $this->display();
     }
 
@@ -115,13 +115,13 @@ class release extends control
             $bugs    = array();
         }
 
-        $this->view->header->title = $this->lang->release->edit;
-        $this->view->position[]    = $this->lang->release->edit;
-        $this->view->release       = $release;
-        $this->view->build         = $build;
-        $this->view->stories       = $stories;
-        $this->view->bugs          = $bugs;
-        $this->view->builds        = $this->loadModel('build')->getProductBuildPairs($release->product);
+        $this->view->title      = $this->lang->release->edit;
+        $this->view->position[] = $this->lang->release->edit;
+        $this->view->release    = $release;
+        $this->view->build      = $build;
+        $this->view->stories    = $stories;
+        $this->view->bugs       = $bugs;
+        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($release->product);
         unset($this->view->builds['trunk']);
         $this->display();
     }
@@ -149,14 +149,15 @@ class release extends control
         
 
         $this->commonAction($release->product);
-        $products                  = $this->product->getPairs();
-        $this->view->header->title = "RELEASE #$release->id $release->name/" . $products[$release->product];
-        $this->view->position[]    = $this->lang->release->view;
-        $this->view->release       = $release;
-        $this->view->stories       = $stories;
-        $this->view->bugs          = $bugs;
-        $this->view->actions       = $this->loadModel('action')->getList('release', $releaseID);
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $products = $this->product->getPairs();
+
+        $this->view->title      = "RELEASE #$release->id $release->name/" . $products[$release->product];
+        $this->view->position[] = $this->lang->release->view;
+        $this->view->release    = $release;
+        $this->view->stories    = $stories;
+        $this->view->bugs       = $bugs;
+        $this->view->actions    = $this->loadModel('action')->getList('release', $releaseID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
  
