@@ -1,7 +1,7 @@
 <div class='block linkbox1' id='projectbox'>
 <?php if(count($projectStats) == 0):?>
 <table class='table-1 a-center bg-gray' height='138px'>
-  <caption><span class='icon-allProjects'></span><?php echo $lang->my->home->projects;?></caption>
+  <caption><span class='icon-allProjects'>&nbsp;</span><?php echo $lang->my->home->projects;?></caption>
   <tr>
     <td valign='middle'>
       <table class='a-left bd-none' align='center'>
