@@ -1,5 +1,5 @@
 <div class='block linkbox1' id='productbox'>
-<?php if(!empty($productStats)):?>
+<?php if(empty($productStats)):?>
 <table class='table-1 a-center bg-gray' height='138px'>
   <caption><span class='icon-allProducts'>&nbsp;</span><?php echo $lang->my->home->products;?></caption>
   <tr>
