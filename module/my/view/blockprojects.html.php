@@ -6,15 +6,7 @@
     <td valign='middle'>
       <table class='a-left bd-none' align='center'>
         <tr>
-          <td><span class='icon-notice'></span></td>
           <td><?php printf($lang->my->home->noProjectsTip, $this->createLink('project', 'create'));?></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class='h-30px'><?php echo $lang->my->home->otherNoTip;?></td>
-        </tr>
-        <tr>
-          <td><span class='icon-help'></span></td>
           <td><?php echo $lang->my->home->help; ?></td>
         </tr>
       </table>
