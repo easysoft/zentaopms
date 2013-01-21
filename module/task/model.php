@@ -417,7 +417,7 @@ class taskModel extends model
         $estimate = fixer::input('post')
             ->setDefault('account', $this->app->user->account) 
             ->setDefault('task', $taskID) 
-            ->setDefault('date', helper::now()) 
+            ->setDefault('date', date(DT_DATE1)) 
             ->cleanFloat('consumed, left')
             ->remove('comment')
             ->get();
