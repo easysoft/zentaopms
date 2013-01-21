@@ -75,6 +75,10 @@
             <td><?php echo $project->days;?></td>
           </tr>
           <tr>
+            <th class='rowhead'><?php echo $lang->project->type;?></th>
+            <td><?php echo $lang->project->typeList[$project->type];?></td>
+          </tr>
+          <tr>
             <th class='rowhead'><?php echo $lang->project->goal;?></th>
             <td class='content'><?php echo $project->goal;?></td>
           </tr>

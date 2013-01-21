@@ -38,6 +38,10 @@
       <td><?php echo html::input('days', $project->days, "class='text-3'") . $lang->project->day;?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->project->type;?></th>
+      <td><?php echo html::select('type', $lang->project->typeList, $project->type, "class='text-2'");?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->project->teamname;?></th>
       <td><?php echo html::input('team', $project->team, "class='text-3'");?></td>
     </tr>  

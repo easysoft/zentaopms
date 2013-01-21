@@ -60,6 +60,10 @@ $lang->project->putoff   = 'Putoff';
 $lang->project->suspend  = 'Suspend';
 $lang->project->close    = 'Close';
 
+$lang->project->typeList['sprint']    = 'Sprint';
+$lang->project->typeList['waterfall'] = 'Waterfall';
+$lang->project->typeList['ops']       = 'OPS';
+
 $lang->project->endList[14]  = 'Two Weeks';
 $lang->project->endList[31]  = 'One Month';
 $lang->project->endList[62]  = 'Two Months';

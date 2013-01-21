@@ -73,6 +73,10 @@ $(document).ready(function()
       <td><?php echo html::input('team', $team, "class='text-3'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->project->type;?></th>
+      <td><?php echo html::select('type', $lang->project->typeList, '', "class='text-2'");?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>
       <td id='productsBox'><?php echo html::checkbox("products", $allProducts, $products);?></td>
     </tr>
