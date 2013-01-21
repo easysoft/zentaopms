@@ -116,11 +116,11 @@ class projectModel extends model
      */
     public function select($projects, $projectID, $currentModule, $currentMethod, $extra = '')
     {
-        $projectMode   = $this->cookie->projectMode ? $this->cookie->projectMode : 'all';
-        $products      = $this->loadModel('product')->getPairs('nocode');
-        $productGroup  = $this->getProductGroupList();
-        $selectGroup   = array();
-        $noPrdProjects = array();
+        $projectMode  = $this->cookie->projectMode ? $this->cookie->projectMode : 'all';
+        $products     = $this->loadModel('product')->getPairs('nocode');
+        $productGroup = $this->getProductGroupList();
+        $selectGroup  = array();
+        $noProducts   = array();
         foreach($productGroup as $projects)
         {
             foreach($projects as $project)
@@ -134,11 +134,11 @@ class projectModel extends model
                 }
                 else
                 {
-                    $noPrdProjects[$project->id] = $project->name;
+                    $noProducts[$project->id] = $project->name;
                 }
             }
         }
-        $selectGroup[$this->lang->project->noProduct] = $noPrdProjects;
+        $selectGroup[$this->lang->project->noProduct] = $noProducts;
 
         /* See product's model method:select. */
         $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod', '$extra');";
