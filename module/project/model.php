@@ -70,6 +70,7 @@ class projectModel extends model
     {
         /* Check the privilege. */
         $project = $this->getById($projectID);
+
         /* Unset story, bug, build and testtask if type is ops. */
         if($project->type == 'ops') 
         {
@@ -115,10 +116,11 @@ class projectModel extends model
      */
     public function select($projects, $projectID, $currentModule, $currentMethod, $extra = '')
     {
-        $projectMode  = $this->cookie->projectMode ? $this->cookie->projectMode : 'all';
-        $products     = $this->loadModel('product')->getPairs('nocode');
-        $productGroup = $this->getProductGroupList();
-        $selectGroup  = array();
+        $projectMode   = $this->cookie->projectMode ? $this->cookie->projectMode : 'all';
+        $products      = $this->loadModel('product')->getPairs('nocode');
+        $productGroup  = $this->getProductGroupList();
+        $selectGroup   = array();
+        $noPrdProjects = array();
         foreach($productGroup as $projects)
         {
             foreach($projects as $project)
@@ -132,10 +134,11 @@ class projectModel extends model
                 }
                 else
                 {
-                    $selectGroup[$this->lang->project->noProduct][$project->id] = $project->name;
+                    $noPrdProjects[$project->id] = $project->name;
                 }
             }
         }
+        $selectGroup[$this->lang->project->noProduct] = $noPrdProjects;
 
         /* See product's model method:select. */
         $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod', '$extra');";
