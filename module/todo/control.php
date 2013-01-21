@@ -267,26 +267,22 @@ class todo extends control
     }
 
     /**
-     * Mark status of a todo.
+     * Finish a todo.
      * 
      * @param  int    $todoID 
-     * @param  string $status   wait|doing|done
      * @access public
      * @return void
      */
-    public function mark($todoID, $status)
+    public function finish($todoID)
     {
-        $this->todo->mark($todoID, $status);
+        $this->todo->finish($todoID);
         $todo = $this->todo->getById($todoID);
-        if($todo->status == 'done')
+        if($todo->type == 'bug' or $todo->type == 'task')
         {
-            if($todo->type == 'bug' or $todo->type == 'task')
-            {
-                $confirmNote = 'confirm' . ucfirst($todo->type);
-                $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
-                $cancelURL   = $this->server->HTTP_REFERER;
-                die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'parent', 'parent'));
-            }
+            $confirmNote = 'confirm' . ucfirst($todo->type);
+            $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->idvalue");
+            $cancelURL   = $this->server->HTTP_REFERER;
+            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, 'parent', 'parent'));
         }
         die(js::reload('parent'));
     }

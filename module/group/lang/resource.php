@@ -97,7 +97,7 @@ $lang->resource->todo->batchEdit    = 'batchEdit';
 $lang->resource->todo->view         = 'view';
 $lang->resource->todo->delete       = 'delete';
 $lang->resource->todo->export       = 'export';
-$lang->resource->todo->mark         = 'mark';
+$lang->resource->todo->finish       = 'finish';
 $lang->resource->todo->import2Today = 'import2Today';
 
 $lang->todo->methodOrder[5]  = 'create';
@@ -106,7 +106,7 @@ $lang->todo->methodOrder[15] = 'edit';
 $lang->todo->methodOrder[20] = 'view';
 $lang->todo->methodOrder[25] = 'delete';
 $lang->todo->methodOrder[30] = 'export';
-$lang->todo->methodOrder[35] = 'mark';
+$lang->todo->methodOrder[35] = 'finish';
 $lang->todo->methodOrder[40] = 'import2Today';
 
 /* Product. */

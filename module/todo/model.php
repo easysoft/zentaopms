@@ -192,11 +192,10 @@ class todoModel extends model
      * @access public
      * @return void
      */
-    public function mark($todoID, $status)
+    public function finish($todoID)
     {
-        $status = ($status == 'done') ? 'wait' : 'done';
-        $this->dao->update(TABLE_TODO)->set('status')->eq($status)->where('id')->eq((int)$todoID)->exec();
-        $this->loadModel('action')->create('todo', $todoID, 'marked', '', $status);
+        $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq((int)$todoID)->exec();
+        $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
         return;
     }
 
@@ -317,6 +316,23 @@ class todoModel extends model
             $todos[] = $todo;
         }
         return $todos;
+    }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object    $todo 
+     * @param  string    $action 
+     * @access public
+     * @return bool
+     */
+    public function isClickable($todo, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'finish') return $todo->status != 'done';
+
+        return true;
     }
 }
 

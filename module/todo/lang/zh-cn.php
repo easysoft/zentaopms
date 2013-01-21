@@ -17,10 +17,7 @@ $lang->todo->edit         = "更新TODO";
 $lang->todo->batchEdit    = "批量编辑";
 $lang->todo->view         = "TODO详情";
 $lang->todo->viewAB       = "详情";
-$lang->todo->markDone     = "未完成";
-$lang->todo->markWait     = "已完成";
-$lang->todo->markDoing    = "已完成";
-$lang->todo->mark         = "更改状态";
+$lang->todo->finish       = "完成";
 $lang->todo->export       = "导出";
 $lang->todo->delete       = "删除TODO";
 $lang->todo->browse       = "浏览TODO";
@@ -79,4 +76,4 @@ $lang->todo->thisyearTodos   = '本年';
 $lang->todo->thismonthTodos  = '本月';
 
 $lang->todo->action = new stdclass();
-$lang->todo->action->marked  = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);
+$lang->todo->action->finished  = array('main' => '$date, 由 <strong>$actor</strong>完成');

@@ -17,10 +17,7 @@ $lang->todo->edit         = "Edit";
 $lang->todo->batchEdit    = "Batch edit";
 $lang->todo->view         = "Info";
 $lang->todo->viewAB       = "Info";
-$lang->todo->markDone     = "Undone";
-$lang->todo->markWait     = "Done";
-$lang->todo->markDoing    = "Done";
-$lang->todo->mark         = "Change status";
+$lang->todo->finish       = "Finish";
 $lang->todo->export       = "Export";
 $lang->todo->delete       = "Delete";
 $lang->todo->browse       = "Browse";
@@ -79,4 +76,4 @@ $lang->todo->thisyearTodos   = 'This Year';
 $lang->todo->thismonthTodos  = 'This Month';
 
 $lang->todo->action = new stdclass();
-$lang->todo->action->marked  = array('main' => '$date, Change status to <stong>$extra</strong> by <strong>$actor</strong>。', 'extra' => $lang->todo->statusList);
+$lang->todo->action->finished  = array('main' => '$date, Finished by <strong>$actor</strong>');

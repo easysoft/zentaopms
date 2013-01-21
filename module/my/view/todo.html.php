@@ -64,7 +64,7 @@
       <th class='w-hour'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->todo->beginAB);?></th>
       <th class='w-hour'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->todo->endAB);?></th>
       <th class='w-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
-      <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
     </thead>
     <tbody>
@@ -83,9 +83,9 @@
       <td><?php echo $todo->begin;?></td>
       <td><?php echo $todo->end;?></td>
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
-      <td>
+      <td class='a-right'>
         <?php 
-        echo html::a($this->createLink('todo', 'mark',   "id=$todo->id&status=$todo->status"), $lang->todo->{'mark'.ucfirst($todo->status)}, 'hiddenwin');
+        common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin');
         common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list');
         common::printIcon('todo', 'delete', "id=$todo->id", '', 'list', '', 'hiddenwin');
         ?>
