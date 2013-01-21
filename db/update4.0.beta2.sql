@@ -14,4 +14,8 @@ UPDATE `zt_config` SET `section` = 'global' WHERE `key` = 'flow';
 UPDATE `zt_project` SET `status` = 'doing' WHERE `status` = '';
 ALTER TABLE  `zt_testtask` ADD  `report` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER  `desc`;
 ALTER TABLE  `zt_project` CHANGE  `type`  `type` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  'sprint';
+
+-- 2013-1-21 change the priv of todo mark method instead finish method.
+UPDATE `zt_groupPriv` SET method='finish'  WHERE module='todo' AND method='mark';
+
 ALTER TABLE `zt_taskEstimate` CHANGE `date` `date` DATE NOT NULL;
