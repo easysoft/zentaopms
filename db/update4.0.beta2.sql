@@ -14,3 +14,4 @@ UPDATE `zt_config` SET `section` = 'global' WHERE `key` = 'flow';
 UPDATE `zt_project` SET `status` = 'doing' WHERE `status` = '';
 ALTER TABLE  `zt_testtask` ADD  `report` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER  `desc`;
 ALTER TABLE  `zt_project` CHANGE  `type`  `type` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  'sprint';
+ALTER TABLE `zt_taskEstimate` CHANGE `date` `date` DATE NOT NULL;

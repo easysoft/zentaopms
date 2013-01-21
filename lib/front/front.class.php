@@ -87,7 +87,7 @@ class html
         $newline = $newline ? "\n" : '';
 
         /* if page has onlybody param then add this param in all link. the param hide header and footer. */
-        if(strpos($href, 'onlybody=yes') === false and isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
+        if(strpos($href, 'onlybody=yes') === false and isonlybody())
         {
             $onlybody = $config->requestType == 'PATH_INFO' ? "?onlybody=yes" : "&onlybody=yes";
             $href .= $onlybody;
@@ -462,7 +462,7 @@ EOT;
         global $config;
 
         /* if page has onlybody param then add this param in all link. the param hide header and footer. */
-        if(strpos($link, 'onlybody=') === false and isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
+        if(strpos($link, 'onlybody=') === false and isonlybody())
         {
             $onlybody = $config->requestType == 'PATH_INFO' ? "?onlybody=yes" : "&onlybody=yes";
             $link .= $onlybody;

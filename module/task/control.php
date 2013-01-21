@@ -430,7 +430,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function record($taskID, $confirm = 'no')
+    public function record($taskID)
     {
         $this->commonAction($taskID);
 
@@ -439,6 +439,7 @@ class task extends control
             $changes  = $this->task->record($taskID);
             $actionID = $this->action->create('task', $taskID, 'Recorded', $this->post->comment, (float)$this->post->consumed);
             $this->action->logHistory($actionID, $changes);
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 

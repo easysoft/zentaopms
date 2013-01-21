@@ -16,6 +16,10 @@
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
+      <th class='rowhead'><?php echo $lang->task->estimate;?></th>
+      <td><?php echo $task->estimate . ' ' . $lang->task->hour;?></td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->task->beforeConsumed;?></th>
       <td><?php echo $beforeConsumed . ' ' . $lang->task->hour;?></td>
     </tr>  

@@ -120,7 +120,7 @@ var browseType  = '<?php echo $browseType;?>';
             </td>
             <td class='a-right'>
               <?php
-              common::printIcon('task', 'record',   "taskID=$task->id", $task, 'list');
+              common::printIcon('task', 'record',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
               if($browseType == 'needconfirm')
               {
                   $lang->task->confirmStoryChange = $lang->confirm;

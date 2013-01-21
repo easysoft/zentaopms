@@ -26,7 +26,7 @@
       ob_start();
       common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task);
       common::printIcon('task', 'start',    "taskID=$task->id", $task);
-      common::printIcon('task', 'record',   "taskID=$task->id", $task);
+      common::printIcon('task', 'record',   "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
       common::printIcon('task', 'finish',   "taskID=$task->id", $task);
       common::printIcon('task', 'close',    "taskID=$task->id", $task);
       common::printIcon('task', 'activate', "taskID=$task->id", $task);

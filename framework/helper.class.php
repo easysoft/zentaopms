@@ -108,7 +108,7 @@ class helper
         }
 
         /* if page has onlybody param then add this param in all link. the param hide header and footer. */
-        if($onlybody or (isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes'))
+        if($onlybody or isonlybody())
         {
             $onlybody = $config->requestType == 'PATH_INFO' ? "?onlybody=yes" : "&onlybody=yes";
             $link .= $onlybody;
@@ -542,4 +542,15 @@ function isLocalIP()
 function getWebRoot()
 {
     return substr($_SERVER['SCRIPT_NAME'], 0, (strrpos($_SERVER['SCRIPT_NAME'], '/') + 1));
+}
+
+/**
+ * Check exist onlybody param.
+ * 
+ * @access public
+ * @return void
+ */
+function isonlybody()
+{
+    return (isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes');
 }
