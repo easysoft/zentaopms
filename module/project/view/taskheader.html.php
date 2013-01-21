@@ -1,8 +1,8 @@
 <div id='featurebar'>
   <div class='f-left'>
   <?php
-    echo "<span id='allTab'>"         ; common::printLink('project', 'task', "project=$projectID&type=all",          $lang->project->allTasks);     echo  '</span>' ;
-    echo "<span id='burnTab'>"        ; common::printLink('project', 'burn', "project=$projectID",                   $lang->project->burn);         echo  '</span>' ;
+    echo "<span id='allTab'>"; common::printLink('project', 'task', "project=$projectID&type=all", $lang->project->allTasks); echo '</span>' ;
+    if($project->type == 'sprint') print "<span id='burnTab'>" and common::printLink('project', 'burn', "project=$projectID", $lang->project->burn); print '</span>' ;
     echo "<span id='assignedtomeTab'>"; common::printLink('project', 'task', "project=$projectID&type=assignedtome", $lang->project->assignedToMe); echo  '</span>' ;
 
     echo "<span id='statusTab'>";
@@ -13,8 +13,6 @@
     echo html::select('groupBy', $lang->project->groups, isset($groupBy) ? $groupBy : '', "onchange='switchGroup($projectID, this.value)'");
     echo "</span>";
 
-    echo "<span id='byprojectTab' onclick='browseByProject()'>"; common::printLink('project', 'task',"project=$projectID&type=byProject", $lang->project->projectTasks); echo '</span>';
-    echo "<span id='bymoduleTab'  onclick='browseByModule()'>";  common::printLink('project', 'task',"project=$projectID&type=byModule", $lang->project->moduleTask); echo '</span>';
     echo "<span id='bysearchTab'><a href='#'><span class='icon-search'></span>{$lang->project->byQuery}</a></span> ";
     ?>
   </div>

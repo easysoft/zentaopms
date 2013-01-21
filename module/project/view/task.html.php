@@ -21,14 +21,12 @@ var browseType  = '<?php echo $browseType;?>';
 <div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
 <table class='cont-lt1'>
   <tr valign='top'>
-    <?php if($browseType =='byproject'):?>
+    <?php if($project->type !='sprint'):?>
     <td class='side'>
       <div class='box-title'><?php echo $lang->project->projectTasks;?></div>
       <div class='box-content'><?php echo $projectTree;?></div>
     </td>
     <td class='divider'></td>
-    <?php endif?>
-    <?php if($browseType =='bymodule'):?>
     <td class='side'>
       <div class='box-title'><?php echo $project->name;?></div>
       <div class='box-content'>
@@ -42,7 +40,7 @@ var browseType  = '<?php echo $browseType;?>';
       </div>
     </td>
     <td class='divider'></td>
-    <?php endif;?>
+    <?php endif?>
     <td>
       <form method='post' action='<?php echo $this->createLink('task', 'batchEdit', "projectID=$project->id&from=projectTask&orderBy=$orderBy");?>'>
         <table class='table-1 fixed colored tablesorter datatable'>
@@ -69,7 +67,7 @@ var browseType  = '<?php echo $browseType;?>';
             <th class='w-35px'>  <?php common::printOrderLink('estimate',  $orderBy, $vars, $lang->task->estimateAB);?></th>
             <th class='w-40px'>  <?php common::printOrderLink('consumed',  $orderBy, $vars, $lang->task->consumedAB);?></th>
             <th class='w-40px'>  <?php common::printOrderLink('left',      $orderBy, $vars, $lang->task->leftAB);?></th>
-            <th><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story);?></th>
+            <?php if($project->type == 'sprint') print '<th>' and common::printOrderLink('story', $orderBy, $vars, $lang->task->story) and print '</th>';?>
             <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
           </thead>
@@ -110,14 +108,17 @@ var browseType  = '<?php echo $browseType;?>';
             <td><?php echo $task->estimate;?></td>
             <td><?php echo $task->consumed;?></td>
             <td><?php echo $task->left;?></td>
-            <td class='a-left' title="<?php echo $task->storyTitle?>">
-              <?php
+            <?php
+            if($project->type == 'sprint')
+            {
+                echo '<td class="a-left" title="' . $task->storyTitle . '"';
                 if($task->storyID)
                 {
                   if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) print $task->storyTitle;
                 }
-              ?>
-            </td>
+                echo '</td>';
+            }
+            ?>
             <td class='a-right'>
               <?php
               common::printIcon('task', 'record',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
@@ -137,7 +138,7 @@ var browseType  = '<?php echo $browseType;?>';
           </tbody>
           <tfoot>
             <tr>
-              <?php $columns = $this->cookie->windowWidth > $this->config->wideSize ? 14 : 12;?>
+              <?php $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 14 : 12) - ($project->type == 'sprint' ? 0 : 1);?>
               <td colspan='<?php echo $columns;?>'>
                 <div class='f-left'>
                 <?php 

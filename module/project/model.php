@@ -70,6 +70,15 @@ class projectModel extends model
     {
         /* Check the privilege. */
         $project = $this->getById($projectID);
+        /* Unset story, bug, build and testtask if type is ops. */
+        if($project->type == 'ops') 
+        {
+            unset($this->lang->project->menu->story);
+            unset($this->lang->project->menu->bug);
+            unset($this->lang->project->menu->build);
+            unset($this->lang->project->menu->testtask);
+        }
+
         if($projects and !isset($projects[$projectID]) and !$this->checkPriv($project))
         {
             echo(js::alert($this->lang->project->accessDenied));

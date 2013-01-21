@@ -139,11 +139,7 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $tasks = array();
-        if($status == 'byModule') 
-        {
-            $tasks = $this->loadModel('task')->getTasksByModule($projectID, $this->tree->getAllChildID($moduleID), $orderBy, $pager);
-        }
-        elseif($browseType != "bysearch")
+        if($browseType != "bysearch")
         {
             $status = $status == 'byProject' ? 'all' : $status;
             $tasks = $this->loadModel('task')->getProjectTasks($projectID, $status, $orderBy, $pager); 
