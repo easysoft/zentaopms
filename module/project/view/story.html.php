@@ -71,11 +71,11 @@
           <?php 
           $param = "projectID={$project->id}&story={$story->id}";
 
-          $lang->task->batchCreate = $lang->project->batchWBS;
-          common::printIcon('task', 'batchCreate', $param . "&iframe=1", '', 'list', '', '', 'batchWBS', true);
-
           $lang->task->create = $lang->project->wbs;
           common::printIcon('task', 'create', $param, '', 'list');
+
+          $lang->task->batchCreate = $lang->project->batchWBS;
+          common::printIcon('task', 'batchCreate', $param . "&iframe=1", '', 'list', '', '', 'batchWBS', true);
 
           $lang->project->unlinkStory = $lang->unlink;
           common::printIcon('project', 'unlinkStory', $param, '', 'list', '', 'hiddenwin');
