@@ -25,5 +25,5 @@
 #cboxTitle{position:absolute; bottom:3px; left:0; text-align:center; width:100%; color:#949494;}
 #cboxCurrent{position:absolute; bottom:3px; left:58px; color:#949494;}
 #cboxSlideshow{position:absolute; bottom:3px; right:30px; color:#0092ef;}
-#cboxClose{position:absolute; top:0; right:0; background:url(images/colorbox/controls.png) -25px 0px no-repeat; width:25px; height:25px; text-indent:-9999px;}
+#cboxClose{position:absolute; top:2px; right:2px; background:url(images/main/zt-icons.png) -60px -22px no-repeat; width:20px; height:20px; text-indent:-9999px;}
 #cboxClose.hover{background-position:-25px -25px;}
