@@ -333,6 +333,7 @@ class task extends control
             $this->action->logHistory($actionID, $changes);
             $this->sendmail($taskID, $actionID);
 
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -415,6 +416,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -485,6 +487,7 @@ class task extends control
                     }
                 }
             }
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -584,6 +587,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -616,6 +620,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->sendmail($taskID, $actionID);
             }
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
