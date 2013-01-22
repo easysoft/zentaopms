@@ -207,4 +207,4 @@ $lang->project->selectGroup->doing     = '(进行中)';
 $lang->project->selectGroup->suspended = '(已挂起)';
 $lang->project->selectGroup->done      = '(已结束)';
 
-$lang->project->projectTasks = '按项目';
+$lang->project->projectTasks = '项目';

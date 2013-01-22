@@ -207,4 +207,4 @@ $lang->project->selectGroup->doing     = '(Doing)';
 $lang->project->selectGroup->suspended = '(Suspended)';
 $lang->project->selectGroup->done      = '(Done)';
 
-$lang->project->projectTasks = 'ProjectTasks';
+$lang->project->projectTasks = 'Projects';
