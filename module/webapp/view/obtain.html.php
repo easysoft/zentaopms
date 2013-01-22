@@ -30,7 +30,7 @@
         </form>
       </div>
       <div class='box-title'><?php echo $lang->webapp->byCategory;?></div>
-      <div class='box-content' id='tree'>
+      <div class='box-content' class='tree'>
         <?php $moduleTree ? print($moduleTree) : print($lang->webapp->errorGetModules);?>
       </div>
     </td>

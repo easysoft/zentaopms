@@ -159,7 +159,7 @@ class projectModel extends model
     {
         $products     = $this->loadModel('product')->getPairs('nocode');
         $productGroup = $this->getProductGroupList();
-        $projectTree  = "<ul id='tree'>";
+        $projectTree  = "<ul class='tree'>";
         foreach($productGroup as $productID => $projects)
         {
             if(!isset($products[$productID]) and $productID != '') continue;
