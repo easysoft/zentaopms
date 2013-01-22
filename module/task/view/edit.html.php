@@ -109,7 +109,7 @@ userList               = "<?php echo join(',', array_keys($users));?>".split(','
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-            <td><?php echo html::input('consumed', $task->consumed, "class='text-1'");?></td>
+            <td><?php echo $task->consumed;?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->left;?></th>
