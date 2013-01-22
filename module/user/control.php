@@ -43,15 +43,16 @@ class user extends control
      * Todos of a user. 
      * 
      * @param  string $account 
-     * @param  string $type         the tod type, today|lastweek|thisweek|all|undone, or a date.
+     * @param  string $type         the todo type, today|lastweek|thisweek|all|undone, or a date.
      * @param  string $status 
+     * @param  string $orderBy 
      * @param  int    $recTotal 
      * @param  int    $recPerPage 
      * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function todo($account, $type = 'today', $status = 'all', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($account, $type = 'today', $status = 'all', $orderBy='date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
@@ -70,7 +71,7 @@ class user extends control
 
         /* Get user, totos. */
         $user  = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-        $todos = $this->todo->getList($type, $account, $status, 0, $pager);
+        $todos = $this->todo->getList($type, $account, $status, 0, $pager, $orderBy);
         $date  = (int)$type == 0 ? helper::today() : $type;
 
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
@@ -84,6 +85,8 @@ class user extends control
         $this->view->user     = $user;
         $this->view->account  = $account;
         $this->view->type     = $type;
+        $this->view->status   = $status;
+        $this->view->orderBy  = $orderBy;
         $this->view->pager    = $pager;
 
         $this->display();
