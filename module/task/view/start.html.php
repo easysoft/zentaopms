@@ -12,7 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form method='post' target='hiddenwin'>
+<?php js::set('confirmFinish', $lang->task->confirmFinish);?>
+<form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
