@@ -387,7 +387,8 @@ class taskModel extends model
     public function start($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $now     = helper::now();
+        if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->newConsumed));
+        $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -399,6 +400,17 @@ class taskModel extends model
             ->autoCheck()
             ->check('consumed,left', 'float')
             ->where('id')->eq((int)$taskID)->exec();
+
+        /* Record consumed and left. */
+        $estimate = fixer::input('post')
+            ->setDefault('account', $this->app->user->account) 
+            ->setDefault('task', $taskID) 
+            ->setDefault('date', date(DT_DATE1)) 
+            ->remove('realStarted,comment')->get();
+
+        $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
+            ->autoCheck()
+            ->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -445,7 +457,8 @@ class taskModel extends model
     public function finish($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $now     = helper::now();
+        if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->newConsumed));
+        $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
@@ -454,6 +467,19 @@ class taskModel extends model
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now) 
             ->remove('comment')->get();
+
+        /* Record consumed and left. */
+        $consumed = $task->consumed - $oldTask->consumed; 
+        $estimate = fixer::input('post')
+            ->setDefault('account', $this->app->user->account) 
+            ->setDefault('task', $taskID) 
+            ->setDefault('date', date(DT_DATE1)) 
+            ->setDefault('left', 0)
+            ->remove('finishedDate,comment')->get();
+
+        $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
+            ->autoCheck()
+            ->exec();
 
         if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumed));;
 
