@@ -18,22 +18,26 @@
 <script language='Javascript'>
 var browseType  = '<?php echo $browseType;?>';
 </script>
-<div id='querybox' class='<?php if($browseType !='bysearch') echo 'hidden';?>'></div>
+<div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
 <table class='cont-lt1'>
   <tr valign='top'>
-    <?php if($project->type !='sprint'):?>
-    <td class='side'>
-      <div class='box-title'><?php echo $lang->project->projectTasks;?></div>
+    <td id="sidebar" onclick="showProject()">>></td>
+    <td class='side' id='project'>
+      <div class='box-title'>
+        <?php echo $lang->project->projectTasks;?>
+        <div class="f-right" id='hideButton' onclick="hideProject()"><<</div>
+      </div>
       <div class='box-content'><?php echo $projectTree;?></div>
     </td>
     <td class='divider'></td>
+    <?php if($project->type !='sprint'):?>
     <td class='side'>
       <div class='box-title'><?php echo $project->name;?></div>
       <div class='box-content'>
         <?php echo $moduleTree;?>
         <div class='a-right'>
           <?php common::printLink('project', 'edit',   "projectID=$projectID", $lang->edit);?>
-          <?php common::printLink('project', 'delete', "projectID=$projectID&confirm=no",   $lang->delete, 'hiddenwin');?>
+          <?php common::printLink('project', 'delete', "projectID=$projectID&confirm=no", $lang->delete, 'hiddenwin');?>
           <?php common::printLink('tree', 'browse',    "rootID=$projectID&view=task", $lang->tree->manage);?>
           <?php common::printLink('tree', 'fix',       "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
         </div>
