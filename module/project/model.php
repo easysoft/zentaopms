@@ -120,7 +120,6 @@ class projectModel extends model
         $products     = $this->loadModel('product')->getPairs('nocode');
         $productGroup = $this->getProductGroupList();
         $selectGroup  = array();
-        $noProducts   = array();
         foreach($productGroup as $projects)
         {
             foreach($projects as $project)
@@ -134,11 +133,10 @@ class projectModel extends model
                 }
                 else
                 {
-                    $noProducts[$project->id] = $project->name;
+                    $selectGroup[$this->lang->project->noProduct][$project->id] = $project->name;
                 }
             }
         }
-        $selectGroup[$this->lang->project->noProduct] = $noProducts;
 
         /* See product's model method:select. */
         $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod', '$extra');";
@@ -554,7 +552,8 @@ class projectModel extends model
             ->orderBy('t1.order')
             ->fetchGroup('product');
 
-        $projects = $this->getList();
+        $noProducts = array();
+        $projects   = $this->getList();
 
         foreach($list as $id => $product)
         {
@@ -564,8 +563,15 @@ class projectModel extends model
                 {
                     unset($list[$id][$ID]);
                 }
+                if(!$project->product)
+                {
+                    $noProducts[] = $project;
+                    unset($list[$id][$ID]); 
+                }
             }
         }
+        unset($list['']);
+        $list[''] = $noProducts;
 
         return $list;
     }
