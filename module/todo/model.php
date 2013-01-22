@@ -232,6 +232,8 @@ class todoModel extends model
     {
         $this->app->loadClass('date');
         $todos = array();
+        $date = strtolower($date);
+
         if($date == 'today') 
         {
             $begin = date::today();

@@ -19,7 +19,7 @@
     <tr>
       <th class='rowhead'><?php echo $lang->todo->date;?></th>
       <td><?php echo html::input('date', $date, "class='select-3 date'");?>
-      <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'><?php echo $lang->todo->futureTodos;?></td>
+      <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->todo->type;?></th>

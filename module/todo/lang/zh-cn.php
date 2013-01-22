@@ -63,17 +63,17 @@ $lang->todo->successMarked  = "成功切换状态！";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';
 
-$lang->todo->thisWeekTodos   = '本周';
-$lang->todo->lastWeekTodos   = '上周';
-$lang->todo->futureTodos     = '暂不指定';
-$lang->todo->allDaysTodos    = '所有';
-$lang->todo->allUndone       = '之前未完';
-$lang->todo->todayTodos      = '今日';
-$lang->todo->yesterdayTodos  = '昨日';
-$lang->todo->lastmonthTodos  = '上月';
-$lang->todo->thisseasonTodos = '本季';
-$lang->todo->thisyearTodos   = '本年';
-$lang->todo->thismonthTodos  = '本月';
+$lang->todo->periods['today']      = '今日';
+$lang->todo->periods['yesterday']  = '昨日';
+$lang->todo->periods['thisWeek']   = '本周';
+$lang->todo->periods['lastWeek']   = '上周';
+$lang->todo->periods['thisMonth']  = '本月';
+$lang->todo->periods['lastmonth']  = '上月';
+$lang->todo->periods['thisSeason'] = '本季';
+$lang->todo->periods['thisYear']   = '本年';
+$lang->todo->periods['future']     = '待定';
+$lang->todo->periods['before']     = '未完';
+$lang->todo->periods['all']        = '所有';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished  = array('main' => '$date, 由 <strong>$actor</strong>完成');

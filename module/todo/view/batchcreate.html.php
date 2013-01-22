@@ -15,7 +15,7 @@
 <form method='post'>
   <table class='table-1' > 
     <caption> <?php echo $lang->todo->batchCreate . $lang->colon . html::input('date', $date, "class='select-2 date' onchange='updateAction(this.value)'");?>
-    <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'><?php echo $lang->todo->futureTodos;?></caption>
+    <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></caption>
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
       <th class='w-100px'><?php echo $lang->todo->type;?></th>

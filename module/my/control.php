@@ -68,7 +68,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function todo($type = 'today', $account = '', $status = 'all', $orderBy="date, status, begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($type = 'today', $account = '', $status = 'all', $orderBy="date,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -87,7 +87,7 @@ class my extends control
         /* Assign. */
         $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $orderBy);
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
-        $this->view->type         = is_numeric($type) ? 'bydate' : $type;
+        $this->view->type         = is_numeric($type) ? 'byDate' : $type;
         $this->view->recTotal     = $recTotal;
         $this->view->recPerPage   = $recPerPage;
         $this->view->pageID       = $pageID;

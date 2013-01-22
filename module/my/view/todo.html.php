@@ -17,18 +17,13 @@
   <div id='featurebar'>
     <div class='f-left'>
       <?php 
-      echo '<span id="today">'     . html::a(inlink('todo', "date=today"),     $lang->todo->todayTodos)    . '</span>';
-      echo '<span id="yesterday">' . html::a(inlink('todo', "date=yesterday"), $lang->todo->yesterdayTodos). '</span>';
-      echo '<span id="thisweek">'  . html::a(inlink('todo', "date=thisweek"),  $lang->todo->thisWeekTodos) . '</span>';
-      echo '<span id="lastweek">'  . html::a(inlink('todo', "date=lastweek"),  $lang->todo->lastWeekTodos) . '</span>';
-      echo '<span id="thismonth">' . html::a(inlink('todo', "date=thismonth"), $lang->todo->thismonthTodos). '</span>';
-      echo '<span id="lastmonth">' . html::a(inlink('todo', "date=lastmonth"), $lang->todo->lastmonthTodos). '</span>';
-      echo '<span id="thisseason">'. html::a(inlink('todo', "date=thisseason"),$lang->todo->thisseasonTodos).'</span>';
-      echo '<span id="thisyear">'  . html::a(inlink('todo', "date=thisyear"),  $lang->todo->thisyearTodos) . '</span>';
-      echo '<span id="future">'    . html::a(inlink('todo', "date=future"),    $lang->todo->futureTodos)   . '</span>';
-      echo '<span id="all">'       . html::a(inlink('todo', "date=all"),       $lang->todo->allDaysTodos)  . '</span>';
-      echo '<span id="before">'    . html::a(inlink('todo', "date=before&account={$app->user->account}&status=undone"), $lang->todo->allUndone) . '</span>';
-      echo "<span id='$date'>"     . html::input('date', $date,"class='w-date date' onchange='changeDate(this.value)'") . '</span>';
+      foreach($lang->todo->periods as $period => $label)
+      {
+          $vars = "date=$period";
+          if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
+          echo "<span id='$period'>" . html::a(inlink('todo', $vars), $label) . '</span>';
+      }
+      echo "<span id='byDate'>" . html::input('date', $date,"class='w-date date' onchange='changeDate(this.value)'") . '</span>';
 
       if($type == 'bydate') 
       {
@@ -76,7 +71,7 @@
         <?php endif;?>
         <?php echo $todo->id; ?>
       </td>
-      <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->dayInFuture : $todo->date;?></td>
+      <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
       <td><?php echo $lang->todo->typeList[$todo->type];?></td>
       <td><span class='<?php echo 'pri' . $todo->pri;?>'><?php echo $todo->pri?></span></td>
       <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my") . $onlybody, $todo->name, '', "class='colorbox'");?></td>
