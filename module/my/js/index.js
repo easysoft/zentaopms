@@ -14,5 +14,5 @@ $(function()
     {
         $(this).sparkline('html', {height:'25px'});
     })
-    if(typeof(flow) != 'undefined' && flow) $.colorbox({href:createLink('admin', 'setFlow'), open:true, width:800, height:330, iframe:true});
+    if(typeof(flow) != 'undefined' && flow) $.colorbox({href:createLink('admin', 'setFlow'), open:true, width:800, height:280, transition:'none', iframe:true});
 });
