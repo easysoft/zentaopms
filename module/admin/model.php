@@ -148,7 +148,8 @@ class adminModel extends model
     public function clearData()
     {
         $result = $this->dbh->query('SHOW TABLES')->fetchAll();
-        $showDemoUsers = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('showDemoUsers')->fetch();
+        if(!isset($this->config->global->showDemoUsers)) return false;
+
         foreach($result as $item) 
         {
             $table = current((array)$item); 
@@ -156,24 +157,15 @@ class adminModel extends model
             if(strpos($table, 'group')   !== false) continue;
             if(strpos($table, 'user')    !== false) 
             {
-                if($showDemoUsers)
-                {
-                    $this->dao->delete()->from($table)
-                        ->where('account')->in(array('productManager', 'projectManager', 'testManager', 'dev1', 'dev2', 'dev3', 'tester1', 'tester2', 'tester3'))
-                        ->exec();
-                    if(dao::isError()) return false;
-                }
+                $deleteUsers = array('productManager', 'projectManager', 'testManager', 'dev1', 'dev2', 'dev3', 'tester1', 'tester2', 'tester3');
+                $this->dao->delete()->from($table)->where('account')->in($deleteUsers)->exec();
+                if(dao::isError()) return false;
                 continue;
             }
-            if(strpos($table, 'config')  !== false)
+            if(strpos($table, 'config') !== false)
             {
-                if($showDemoUsers)
-                {
-                    $this->dao->delete()->from($table)
-                        ->where('`key`')->eq('showDemoUsers')
-                        ->exec();
-                    if(dao::isError()) return false;
-                }
+                $this->loadModel('setting')->deleteItems('key=showDemoUsers');
+                if(dao::isError()) return false;
                 continue;
             }
             if(!$this->dbh->query("TRUNCATE TABLE `$table`")) return false;

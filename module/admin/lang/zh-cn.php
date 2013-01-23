@@ -20,7 +20,7 @@ $lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
 $lang->admin->browseCompany = '浏览公司';
 
 $lang->admin->clearData        = '清除数据';
-$lang->admin->confirmClearData = '您确认要清除数据吗？';
+$lang->admin->confirmClearData = '您确认要清除数据吗(yes/no)?';
 $lang->admin->clearDataFailed  = '清除数据失败！';
 $lang->admin->clearDataSucceed = '清除数据成功！';
 $lang->admin->clearDataDesc    = <<<EOT
@@ -28,7 +28,7 @@ $lang->admin->clearDataDesc    = <<<EOT
 清除数据对数据库的影响如下：
 1、清除数据不会对company, group, groupPriv表进行操作。
 2、如果安装的时候有导入demo数据，则会删除config表key=showDemoUsers的记录，并删除user表中的所有demo用户。
-3、对于其他表则进行全部清除操作。
+3、<font color='red'>对于其他表则进行全部清除操作。</font>
 EOT;
 
 $lang->admin->info = new stdclass();

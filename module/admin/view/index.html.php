@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php $showDemoUsers = isset($this->config->global->showDemoUsers) ? true : false; js::set('showDemoUsers', $showDemoUsers);?>
 <p class='strong mt-10px'>
   <?php 
   echo sprintf($lang->admin->info->version, $config->version);

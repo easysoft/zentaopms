@@ -171,8 +171,6 @@ class admin extends control
      */
     public function clearData($confirm = '')
     {
-        if($confirm == '') $this->display();
-
         if($confirm == 'no')
         {
             die(js::confirm($this->lang->admin->confirmClearData, inlink('clearData', "confirm=yes")));
@@ -180,12 +178,14 @@ class admin extends control
         elseif($confirm == 'yes')
         {
             $result = $this->admin->clearData();
-            if($result)
-            {
-                die(js::alert($this->lang->admin->clearDataSucceed));
-            }
-            die(js::alert($this->lang->admin->clearDataFailed));
+
+            if(!$result) die(js::alert($this->lang->admin->clearDataFailed));
+
+            js::alert($this->lang->admin->clearDataSucceed);
+            die(js::locate(inLink('index'), 'parent'));
         }
+
+        $this->display();
     }
 
     /**

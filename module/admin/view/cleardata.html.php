@@ -15,7 +15,12 @@
   <table align='center' class='table-5'>
     <caption><?php echo $lang->admin->clearData;?></caption>
     <tr><td><?php echo nl2br($lang->admin->clearDataDesc);?></td></tr>
-    <tr><td class='a-center'><?php echo html::submitButton($lang->admin->clearData);?></td></tr>
+    <tr>
+      <td class='a-center'>
+        <span><?php echo $this->lang->admin->confirmClearData . html::input('sure', '', "class='text-2' onkeyup='showClearButton()' autocomplete='off'");?></span>
+        <?php echo html::submitButton($lang->admin->clearData, "class='hidden'");?>
+      </td>
+    </tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
