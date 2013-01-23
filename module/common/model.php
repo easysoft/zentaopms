@@ -80,7 +80,7 @@ class commonModel extends model
         {
             $this->app->user = $this->session->user;
         }
-        elseif($this->app->company->guest)
+        elseif($this->app->company->guest or defined('IN_SHELL'))
         {
             $user             = new stdClass();
             $user->id         = 0;

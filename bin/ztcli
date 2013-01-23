@@ -28,23 +28,28 @@ include './framework/control.class.php';
 include './framework/model.class.php';
 include './framework/helper.class.php';
 include './config/config.php';
-
+    
+/* Set the PATH_INFO variable. */
 if($config->requestType == 'PATH_INFO')
 {
     $path = pathinfo($request['path']);
+
+    /* url like http://pms.zentao.net/zentao/my-todo.html, PATH_INFO is 'my-todo.html'. */
     if(strpos($path['basename'], $config->requestFix))
     {
         $_SERVER['PATH_INFO'] = $path['basename'];
     }
     else 
     {
+        /* url like http://pms.zentao.net/zentao/my/, PATH_INFO is 'my'. */
         if(is_dir('./module/' . $path['basename']))
         {
             $_SERVER['PATH_INFO'] = $path['basename'];
         }
+        /* url like http://pms.zentao.net/zentao/, PATH_INFO is '/'. */
         else
         {
-            $_SERVER['PATH_INFO'] = '';
+            $_SERVER['PATH_INFO'] = '/';
         }
     }
 }
