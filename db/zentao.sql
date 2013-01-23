@@ -279,6 +279,7 @@ CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `company` mediumint(8) unsigned NOT NULL,
   `name` char(30) NOT NULL,
+  `role` char(30) NOT NULL default '',
   `desc` char(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
