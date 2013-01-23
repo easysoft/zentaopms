@@ -302,7 +302,7 @@ class docModel extends model
                 {
                     if(strpos($attribute, '=') === false) continue;
                     list($attributeName, $attributeValue) = explode('=', $attribute);
-                    $$attributeName = $attributeValue;
+                    $$attributeName = trim(str_replace('>', '', $attributeValue));
                 }
 
                 if(!isset($class)) continue;
