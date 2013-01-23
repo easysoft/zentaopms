@@ -9,7 +9,3 @@ elseif($config->requestType == 'GET')
 {
     system('php ztcli "http://localhost/?m=admin&f=win2Unix"');
 }
-
-/* avoid init error. */
-function getWebRoot(){}
-class config{}

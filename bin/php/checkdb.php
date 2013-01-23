@@ -15,7 +15,3 @@ if(!$requestVar)
 {
     echo "Check DataBase successfully!\n";
 }
-
-/* avoid init error. */
-function getWebRoot(){}
-class config{}

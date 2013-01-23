@@ -54,7 +54,3 @@ class computeburn
 
 $computeburn = new computeburn($config);
 $computeburn->run();
-
-/* avoid init error. */
-function getWebRoot(){}
-class config{}

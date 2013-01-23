@@ -63,7 +63,3 @@ $attachFile = $destDir . "/" . "file." . date('Ymd', time()) . ".zip";
 $archive    = new pclzip($attachFile);
 if($archive->create("data/upload", PCLZIP_OPT_REMOVE_PATH, "data")) die(" successfully saved to $attachFile\n");
 die("Error : ".$archive->errorInfo(true));
-
-/* avoid init error. */
-function getWebRoot(){}
-class config{}

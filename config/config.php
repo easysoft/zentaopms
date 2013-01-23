@@ -11,6 +11,10 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+/* Judge class config and function getWebRoot exists or not, make sure php shells can work. */
+if(!class_exists('config')){class config{}}
+if(!function_exists('getWebRoot')){function getWebRoot(){}}
+
 /* Basic settings. */
 $config = new config();
 $config->version     = '4.0.beta2';       // The version of zentaopms. Don't change it.
