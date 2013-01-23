@@ -43,6 +43,7 @@ class my extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal = 1000, $this->config->my->dynamicCounts);   // Init the $recTotal var, thus omit one sql query.
 
+        $this->view->setFlow       = (!(isset($this->config->global->flow) or strpos($this->app->company->admins, ",{$this->app->user->account},") === false)) ? true : false;
         $this->view->projectStats  = $projectStats;
         $this->view->productStats  = $productStats;
         $this->view->actions       = $this->loadModel('action')->getDynamic('all', 'latest3days', 'date_desc', $pager);

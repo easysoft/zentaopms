@@ -37,5 +37,5 @@
     <?php endif;?>
   </tr>
 </table>
-<?php if(!(isset($config->global->flow) or strpos($this->config->version, 'pro') !== false or strpos($this->app->company->admins, ",{$this->app->user->account},") === false)) js::set('flow', 'true', 'number');?>
+<?php if($setFlow) js::set('flow', 'true', 'number');?>
 <?php include '../../common/view/footer.html.php';?>

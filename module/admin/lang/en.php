@@ -54,3 +54,12 @@ $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Bind with community account';
 $lang->admin->bind->action  = 'bind';
 $lang->admin->bind->success = "Bind success";
+
+$lang->admin->selectFlow = 'Please select zentao use flow';
+
+$lang->admin->flowList['full']      = 'Total life cycle management(Zentao fully functional)';
+$lang->admin->flowList['onlyTest']  = 'Test management(Zentao test management extension. Remove the story, task management, Just keep bug, case and test management, Can only be used for the test track)';
+$lang->admin->flowList['onlyTask']  = 'Task management(Zentao task management extension. Remove the story, test management, Just keep task management, Can only be used for the task track)';
+$lang->admin->flowList['onlyStory'] = 'Story management(Zentao story management extension, Remove the task, test management, Just keep story management, Can only be used for the trim story)';
+
+$lang->admin->flowNotice = "<span class='red'>Note: if the choice is not total life cycle management, then you can go to \"Admin -> Extension\", the corresponding extension unloading, can reuse Zentao fully functional.</span>";

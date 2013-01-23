@@ -187,4 +187,21 @@ class admin extends control
             die(js::alert($this->lang->admin->clearDataFailed));
         }
     }
+
+    /**
+     * Set flow.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setFlow()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
+            if($this->post->flow != 'full') die(js::locate($this->createLink('extension', 'install', "extension={$this->config->index->flow2Ext[$this->post->flow]}"), 'parent'));
+            die(js::reload( 'parent.parent'));
+        }
+        $this->display();
+    }
 }
