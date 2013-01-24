@@ -777,21 +777,25 @@ EOT;
      * 
      * @param  string   $key 
      * @param  mix      $value 
-     * @param  string   $type   string|json|number
      * @static
      * @access public
      * @return void
      */
-    static public function set($key, $value, $type = 'string')
+    static public function set($key, $value)
     {
         $js  = self::start(false);
-        if($type == 'json')
+        if(is_array($value) or is_object($value))
         {
             $value = json_encode($value);
             $js .= "$key = $value";
         }
-        elseif($type == 'number')
+        elseif(is_numeric($value))
         {
+            $js .= "$key = $value";
+        }
+        elseif(is_bool($value))
+        {
+            $value = $value ? 'true' : 'false';
             $js .= "$key = $value";
         }
         else
