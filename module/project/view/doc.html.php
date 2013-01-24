@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 fixed colored tablesorter' align='center'>
-  <caption class='caption-tl'>
+  <caption class='caption-tl pb-10px'>
     <div class='f-left'> <?php echo $lang->project->doc;?></div>
     <div class='f-right'><?php common::printIcon('doc', 'create', "libID=project&moduleID=0&productID=0&projectID=$project->id&from=project");?></div>
   </caption>

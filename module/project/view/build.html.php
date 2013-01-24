@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <table class='table-1 tablesorter fixed'>
-  <caption class='caption-tl'>
+  <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->project->build;?></div>
     <div class='f-right'><?php common::printIcon('build', 'create', "project=$project->id");?></div>
   </caption>

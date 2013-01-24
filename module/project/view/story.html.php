@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <form method='post' id='projectStoryForm'>
   <table class='table-1 fixed colored tablesorter datatable'>
-    <caption class='caption-tl'>
+    <caption class='caption-tl pb-10px'>
       <div class='f-left'><?php echo $lang->project->story;?></div>
       <div class='f-right'>
         <?php 

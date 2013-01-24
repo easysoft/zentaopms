@@ -1,4 +1,3 @@
 #productsBox  span{display:block; float:left; width:250px; overflow:hidden; word-break:keep-all; white-space:nowrap}
 #whitelistBox span{display:block; float:left; width:150px; overflow:hidden; word-break:keep-all; white-space:nowrap}
-caption {margin-bottom:10px}
 caption a{padding:5px}
