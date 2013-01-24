@@ -19,7 +19,7 @@
     order/nesting of the generated HTML, so that the structure easier to understand.
 */
 #cboxOverlay{background:#111;}
-#colorbox{box-shadow:5px 5px 2px #555; -webkit-box-shadow:5px 5px 2px #555; -moz-box-shadow:5px 5px 2px #555}
+#colorbox{box-shadow:5px 5px 2px #555; -webkit-box-shadow:5px 5px 2px #555; -moz-box-shadow:5px 5px 2px #555; padding-bottom:10px;}
 #cboxContent{background:#fff; padding:25px 25px 0px;}
 #cboxLoadedContent{margin-bottom:28px;}
 #cboxTitle{position:absolute; bottom:3px; left:0; text-align:center; width:100%; color:#949494;}
