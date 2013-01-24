@@ -1,10 +1,10 @@
 #!/bin/bash
 
-phpCmd=$1
+phpCli=$1
 if [ $# -ne 2 ]; then
   echo "Please input your php path:(example: /usr/bin/php)"
-  read phpCmd 
-  if [ ! -f $phpCmd ]; then 
+  read phpCli 
+  if [ ! -f $phpCli ]; then 
     echo "php path is error"
     exit 1
   fi
@@ -16,23 +16,26 @@ else
   requestType='GET';
 fi
 
-backup="$phpCmd php/backup.php"
-computeburn="$phpCmd php/computeburn.php"
-ztcli="$phpCmd ztcli $*"
-if [ $requestType == 'PATH_INFO' ]; then
-  checkdb="$phpCmd ztcli 'http://localhost/admin-checkdb'";
-else
-  checkdb="$phpCmd ztcli 'http://localhost/?m=admin&f=checkdb'";
-fi
-
+#backup database
+backup="$phpCli php/backup.php"
 echo $backup > backup.sh
+
+#computeburn
+computeburn="$phpCli php/computeburn.php"
 echo $computeburn > computeburn.sh
-echo $checkdb > checkdb.sh
+
+#ztcli
+ztcli="$phpCli ztcli $*"
 echo $ztcli > ztcli.sh
 
-chmod 755 backup.sh
-chmod 755 computeburn.sh
-chmod 755 checkdb.sh
-chmod 755 ztcli.sh
+#check database
+if [ $requestType == 'PATH_INFO' ]; then
+  checkdb="$phpCli ztcli 'http://localhost/admin-checkdb'";
+else
+  checkdb="$phpCli ztcli 'http://localhost/?m=admin&f=checkdb'";
+fi
+echo $checkdb > checkdb.sh
+
+chmod 755 *.sh
 
 exit 0
