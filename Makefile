@@ -64,7 +64,7 @@ phpdoc:
 	phpdoc -d bin,framework,config,lib,module,www -t api -o HTML:frames:phphtmllib -ti ZenTaoPMSAPI参考手册 -s on -pp on -i *test*
 	phpdoc -d bin,framework,config,lib,module,www -t api.chm -o chm:default:default -ti ZenTaoPMSAPI参考手册 -s on -pp on -i *test*
 doxygen:
-	doxygen misc/doc/doxygen/doxygen.conf
+	doxygen doc/doxygen/doxygen.conf
 build4linux:	
 	unzip ZenTaoPMS.$(VERSION).zip
 	rm -fr ZenTaoPMS.$(VERSION).zip
