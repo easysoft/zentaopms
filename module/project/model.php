@@ -72,7 +72,7 @@ class projectModel extends model
         $project = $this->getById($projectID);
 
         /* Unset story, bug, build and testtask if type is ops. */
-        if($project->type == 'ops') 
+        if($project and $project->type == 'ops') 
         {
             unset($this->lang->project->menu->story);
             unset($this->lang->project->menu->bug);
