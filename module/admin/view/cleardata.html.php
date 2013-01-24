@@ -17,7 +17,7 @@
     <tr><td><?php echo nl2br($lang->admin->clearDataDesc);?></td></tr>
     <tr>
       <td class='a-center'>
-        <span><?php echo $this->lang->admin->confirmClearData . html::input('sure', '', "class='text-2' onkeyup='showClearButton()' autocomplete='off'");?></span>
+        <span><?php echo $this->lang->admin->pleaseInputYes . html::input('sure', '', "class='text-2' onkeyup='showClearButton()' autocomplete='off'");?></span>
         <?php echo html::submitButton($lang->admin->clearData, "class='hidden'");?>
       </td>
     </tr>

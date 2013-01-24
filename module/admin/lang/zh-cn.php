@@ -20,7 +20,8 @@ $lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
 $lang->admin->browseCompany = '浏览公司';
 
 $lang->admin->clearData        = '清除数据';
-$lang->admin->confirmClearData = '您确认要清除数据吗(yes/no)?';
+$lang->admin->pleaseInputYes   = '确认清除数据请输入yes：';
+$lang->admin->confirmClearData = '您确认要清除数据吗?';
 $lang->admin->clearDataFailed  = '清除数据失败！';
 $lang->admin->clearDataSucceed = '清除数据成功！';
 $lang->admin->clearDataDesc    = <<<EOT

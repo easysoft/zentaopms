@@ -20,6 +20,7 @@ $lang->admin->welcome = 'Welcome to ZenTaoPMS.';
 $lang->admin->browseCompany = 'Browse Company';
 
 $lang->admin->clearData        = 'Clear Data';
+$lang->admin->pleaseInputYes   = "Input 'yes' to clear data:";
 $lang->admin->confirmClearData = 'Are you sure to clear data?';
 $lang->admin->clearDataFailed  = 'Failed to clear data!';
 $lang->admin->clearDataSucceed = 'Succeed to clear data!';
