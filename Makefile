@@ -54,7 +54,7 @@ tgz:
 	mv zentaotask.zip zentaopms/tmp/extension
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
-	cp ~/zentao/notify/notify.zip zentaopms/www/data/notify/
+	wget http://192.168.1.99/release/notify.zip -O zentaopms/www/data/notify/notify.zip
 	# zip it.
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
@@ -66,10 +66,8 @@ phpdoc:
 doxygen:
 	doxygen doc/doxygen/doxygen.conf
 build4linux:	
-	unzip ZenTaoPMS.$(VERSION).zip
-	rm -fr ZenTaoPMS.$(VERSION).zip
-	sed -e 's/index.php/\/zentao\/index.php/g' zentaopms/www/.htaccess >zentaopms/www/.htaccess.new
-	mv zentaopms/www/.htaccess.new zentaopms/www/.htaccess
+	#unzip ZenTaoPMS.$(VERSION).zip
+	#rm -fr ZenTaoPMS.$(VERSION).zip
 	# build xmapp.
 	cd ./build/linux/ && ./buildxmapp.sh $(xampp)
 	mv ./build/linux/lampp ./
