@@ -657,6 +657,17 @@ function ajaxGetSearchForm()
 }
 
 /**
+ * Hide the link of clearData.
+ * 
+ * @access public
+ * @return void
+ */
+function hideClearDataLink()
+{
+    if(typeof showDemoUsers == 'undefined' || !showDemoUsers) $('#submenuclearData').addClass('hidden');
+}
+
+/**
  * add one option of a select to another select. 
  * 
  * @param  string $SelectID 
@@ -808,6 +819,8 @@ $(document).ready(function()
 
     autoCheck();
     toggleSearch();
+
+    hideClearDataLink();
 
     $(window).resize(function(){saveWindowSize()});   // When window resized, call it again.
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
