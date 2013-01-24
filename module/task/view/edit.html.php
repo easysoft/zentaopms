@@ -46,7 +46,7 @@ userList               = "<?php echo join(',', array_keys($users));?>".split(','
           </fieldset>
         </td></tr>
       </table>
-      <div class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id"));?></div>
+      <div class='a-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id")) .html::hidden('consumed', $task->consumed);?></div>
       <?php include '../../common/view/action.html.php';?>
     </td>
     <td class='divider'></td>
