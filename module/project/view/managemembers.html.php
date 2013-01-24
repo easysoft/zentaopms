@@ -36,7 +36,7 @@
       <td>
         <input type='text'   name='hours[]' id='hours<?php echo $i;?>' value='<?php echo $member->hours;?>' class='text-2' />
         <input type='hidden' name='modes[]' value='update' />
-        <input type='hidden' name='accounts[]' value='<?php echo $member->acount;?>' />
+        <input type='hidden' name='accounts[]' value='<?php echo $member->account;?>' />
       </td>
     </tr>
     <?php $i ++;?>
