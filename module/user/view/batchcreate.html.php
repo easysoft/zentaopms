@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<?php js::set('roleGroup', json_encode($roleGroup));?>
+<?php js::set('roleGroup', $roleGroup);?>
 <form method='post' target='hiddenwin' id='dataform'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->user->batchCreate;?></caption>

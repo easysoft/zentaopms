@@ -15,8 +15,8 @@
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('holders',  $lang->task->placeholder, 'json'); ?>
-<?php js::set('userList', array_keys($users), 'json'); ?>
+<?php js::set('holders',  $lang->task->placeholder); ?>
+<?php js::set('userList', array_keys($users)); ?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table align='center' class='table-1 a-left'> 
     <caption>

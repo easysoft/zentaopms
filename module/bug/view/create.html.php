@@ -16,8 +16,8 @@ include '../../common/view/chosen.html.php';
 include '../../common/view/autocomplete.html.php';
 include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
-js::set('holders', $lang->bug->placeholder, 'json');
-js::set('userList', array_keys($users), 'json');
+js::set('holders', $lang->bug->placeholder);
+js::set('userList', array_keys($users));
 js::set('page', 'create');
 ?>
 

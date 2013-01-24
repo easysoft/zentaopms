@@ -32,7 +32,7 @@ $(document).ready(function()
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
-<?php js::set('holders', $lang->project->placeholder, 'json');?>
+<?php js::set('holders', $lang->project->placeholder);?>
 <form method='post' target='hiddenwin' id='dataform'>
   <table align='center' class='table-1 a-left'> 
     <caption>

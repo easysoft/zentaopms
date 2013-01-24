@@ -17,15 +17,15 @@ include '../../common/view/autocomplete.html.php';
 include '../../common/view/alert.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('page'                   , 'edit');
-js::set('changeProductConfirmed' , 'false', 'number');
-js::set('changeProjectConfirmed' , 'false', 'number');
+js::set('changeProductConfirmed' , false);
+js::set('changeProjectConfirmed' , false);
 js::set('confirmChangeProduct'   , $lang->bug->confirmChangeProduct);
 js::set('oldProjectID'           , $bug->project);
 js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('userList'               , array_keys($users), 'json');
+js::set('userList'               , array_keys($users));
 ?>
 
 <form method='post' target='hiddenwin' enctype='multipart/form-data' id='dataform'>

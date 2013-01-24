@@ -16,7 +16,7 @@ include '../../common/view/treeview.html.php';
 include '../../common/view/colorize.html.php';
 js::set('browseType', $browseType);
 js::set('moduleID', $moduleID);
-js::set('customed', $customed, 'number');
+js::set('customed', $customed);
 ?>
 
 <div id='featurebar'>

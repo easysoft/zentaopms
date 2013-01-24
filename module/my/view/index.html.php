@@ -37,5 +37,5 @@
     <?php endif;?>
   </tr>
 </table>
-<?php if($setFlow) js::set('flow', 'true', 'number');?>
+<?php js::set('flow', $setFlow ? true : false);?>
 <?php include '../../common/view/footer.html.php';?>

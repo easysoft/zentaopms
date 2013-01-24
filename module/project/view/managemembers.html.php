@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('projectID', $project->id);?>
-<?php js::set('roles', $roles, 'json');?>
+<?php js::set('roles', $roles);?>
 <form method='post'>
   <table align='center' class='table-4 a-center'> 
     <caption>

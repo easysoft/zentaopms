@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('holders ', $lang->doc->placeholder, 'json');?>
+<?php js::set('holders ', $lang->doc->placeholder);?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->doc->create;?></caption>
