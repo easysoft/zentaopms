@@ -33,7 +33,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->story->title;?></th>
-      <td><?php echo html::input('title', $title, "class='text-1'");?></td>
+      <td><?php echo html::input('title', $storyTitle, "class='text-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->story->spec;?></th>

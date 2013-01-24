@@ -146,7 +146,7 @@ class story extends control
         $this->view->pri              = $pri;
         $this->view->productID        = $productID;
         $this->view->estimate         = $estimate;
-        $this->view->title            = $title;
+        $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
         $this->view->verify           = $verify;
         $this->view->keywords         = $keywords;
@@ -207,7 +207,7 @@ class story extends control
         $this->view->pri              = $pri;
         $this->view->productID        = $productID;
         $this->view->estimate         = $estimate;
-        $this->view->title            = $title;
+        $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
 
         $this->display();
