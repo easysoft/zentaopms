@@ -21,6 +21,7 @@ while(1)
             $time = $now->format('Y-m-d H:i:s');
             foreach($output as $out) $log .= $out . "\n"; 
             $log = $time . ' ' . $key . ' return ' . $return . ' : ' . $log . "\n";
+            echo $log;
             logCron($log);
         }
     }
