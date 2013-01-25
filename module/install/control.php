@@ -130,7 +130,6 @@ class install extends control
             if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
 
             $this->loadModel('setting')->updateVersion($this->config->version);
-            $this->setting->setSN();
 			die(js::locate(inlink('step5'), 'parent'));
         }
 
