@@ -5,35 +5,45 @@ SET baseDir=%~dp0
 %baseDir:~0,2%
 cd %baseDir% 
 
-::get phpCli
-SET phpCli=%1
-IF "%1"=="" SET /P phpCli="Please input your php path:(example: c:\windows\php.exe)"
-
+::get phpcli
+SET phpcli=%1
+:input
+IF "%1"=="" SET /P phpcli="Please input your php path:(example: c:\windows\php.exe)"
+if not exist %phpcli% (
+  echo php path is error
+  goto input 
+)
 :: get requestType
 SET requestType= 'PATH_INFO' 
 for /f "tokens=3" %%f in ('find /c "'PATH_INFO'" "..\config\my.php"') do set findNum=%%f
 if %findNum% == 0 SET requestType= 'GET'
 
+::ztcli
+SET ztcli= %phpcli% ztcli $*
+echo %ztcli% > ztcli.bat
+echo ztcli.bat ok
+
 ::backup database
-SET backup= %phpCli% php\backup.php 
+SET backup= %phpcli% php\backup.php 
 echo %backup% > backup.bat
+echo backup.bat ok
 
 ::compute burn
 if %requestType% == 'PATH_INFO' (
-  SET computeburn= %phpCli% ztcli 'http://localhost/project-computeburn'
+  SET computeburn= %phpcli% ztcli 'http://localhost/project-computeburn'
 )else (
-  SET computeburn= %phpCli% ztcli 'http://localhost/?m=project&f=computeburn'
+  SET computeburn= %phpcli% ztcli 'http://localhost/?m=project&f=computeburn'
 )
 echo %computeburn% > computeburn.bat
-
-::ztcli
-SET ztcli= %phpCli% ztcli $*
-echo %ztcli% > ztcli.bat
+echo computeburn.bat ok
 
 ::check database
 if %requestType% == 'PATH_INFO' (
-  SET checkdb= %phpCli% ztcli 'http://localhost/admin-checkdb'
+  SET checkdb= %phpcli% ztcli 'http://localhost/admin-checkdb'
 )else (
-  SET checkdb= %phpCli% ztcli 'http://localhost/?m=admin&f=checkdb'
+  SET checkdb= %phpcli% ztcli 'http://localhost/?m=admin&f=checkdb'
 )
 echo %checkdb% > checkdb.bat
+echo checkdb.bat ok
+
+pause
