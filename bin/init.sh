@@ -51,6 +51,12 @@ fi
 echo $checkdb > checkdb.sh
 echo "checkdb.sh ok"
 
+#cron
+mkdir cron
+echo -e "# default cron.\n# minute hour day month week  command.\n\n1 1  * * *   php ../php/backup.php      # backup database and file.\n1 23 * * *   php ../php/computeburn.php # compute burndown chart. " > cron/sys.cron
+echo "cron ok"
+
+chmod -R 755 cron
 chmod 755 *.sh
 
 exit 0
