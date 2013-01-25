@@ -1,5 +1,0 @@
-# default cron.
-# minute hour day month week  command.
-
-1 1  * * *   php ../php/backup.php      # backup database and file. 
-1 23 * * *   php ../php/computeburn.php # compute burndown chart. 
