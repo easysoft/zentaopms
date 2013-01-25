@@ -62,8 +62,6 @@ class webappModel extends model
             $module = trim($module, '/');
             $this->lang->webapp->menu->$moduleID = array('link' => "$module|webapp|index|module=$moduleID");
         }
-        $this->lang->webapp->menu->manageTree = array('link' => "<span class='icon-webapp-manage'>&nbsp;</span>{$this->lang->webapp->manageTree}|tree|browse|rootID=0&view=webapp", 'float' => 'right');
-        $this->lang->webapp->menu->create     = array('link' => "<span class='icon-webapp-create'>&nbsp;</span>{$this->lang->webapp->create}|webapp|create", 'float' => 'right');
     }
 
 

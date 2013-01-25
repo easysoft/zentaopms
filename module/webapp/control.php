@@ -87,11 +87,7 @@ class webapp extends control
         {
             $this->webapp->update($webappID);
             if(dao::isError())die(js::error(dao::getError()));
-            echo "<script type='text/javascript'>";
-            echo "var href = parent.parent.location.href;\n";
-            echo "parent.parent.location.href = href.indexOf('#') < 0 ? href : href.substring(0, href.indexOf('#'));";
-            echo "</script>";
-            die();
+            die(js::reload('parent.parent'));
         }
 
         $this->view->modules = $this->webapp->getModules();

@@ -248,7 +248,9 @@ $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 /* Resource menu. */
 $lang->webapp = new stdclass();
 $lang->webapp->menu = new stdclass();
-$lang->webapp->menu->obtain   = array('link' => 'App Store|webapp|obtain');
+$lang->webapp->menu->obtain     = array('link' => '<span class="icon-webapp-obtain">&nbsp;</span>App Store|webapp|obtain', 'float' => 'right');
+$lang->webapp->menu->manageTree = array('link' => "<span class='icon-webapp-manage'>&nbsp;</span>Manage|tree|browse|rootID=0&view=webapp", 'float' => 'right');
+$lang->webapp->menu->create     = array('link' => "<span class='icon-webapp-create'>&nbsp;</span>Create|webapp|create", 'float' => 'right');
 
 /* Company menu. */
 $lang->company = new stdclass();

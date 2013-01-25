@@ -16,7 +16,7 @@ function toggleShowapp(webappID, webappName)
         height = document.documentElement.clientHeight - 110;
         if(url[webappID] == undefined) url[webappID] = $('#useapp' + webappID).attr('href');
         $('#useapp' + webappID).attr('href', '#iframe' + webappID);
-        var html = "<tr id='iframe" + webappID + "'><td><p>" + webappName + "<span class='f-right'><button class='button-c' onclick='toggleShowapp(" + webappID + ", \" " + webappName + "\")'>" + packup + "</button></sapn></p><iframe src='" + url[webappID] + "' height='" + height + "' width='100%'></iframe></td></tr>";
+        var html = "<tr id='iframe" + webappID + "'><td><p>" + webappName + "<span class='f-right'><button class='button-c' onclick='toggleShowapp(" + webappID + ", \" " + webappName + "\")'>" + packup + "</button></sapn></p><iframe src='" + url[webappID] + "' height='" + height + "' width='100%' style='border:1px solid #999;'></iframe></td></tr>";
         $('#webapps').parent().parent().after(html);
         show[webappID] = true;
     }

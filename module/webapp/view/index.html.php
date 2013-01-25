@@ -28,7 +28,6 @@
             <tr>
               <td>
               <?php
-              $uninstallCode = html::a(inlink('uninstall',  "webapp=$webapp->id"), $lang->webapp->uninstall, 'hiddenwin',  "class='button-c'");
               $url     = $webapp->addType == 'custom' ? $webapp->url : $config->webapp->url . "/webapp-showapp-{$webapp->appid}.html";
               $method  = '';
               $popup   = '';
@@ -43,9 +42,9 @@
                   $method = "popup($width, $height);";
                   $popup  = 'popup';
               }
-              $useAppCode    = html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
-              $editAppCode    = html::a(inlink('edit', "webappID=$webapp->id"), $lang->edit, '',  "class='button-c webapp'");
-              echo $useAppCode . $editAppCode . $uninstallCode;
+              echo html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
+              common::printLink('webapp', 'edit', "webappID=$webapp->id", $lang->edit, '',  "class='button-c webapp'");
+              common::printLink('webapp', 'uninstall',  "webapp=$webapp->id", $lang->webapp->uninstall, 'hiddenwin',  "class='button-c'");
               ?>
               </td>
             </tr>
