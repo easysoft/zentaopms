@@ -1,13 +1,20 @@
 #!/bin/bash
+function input()
+{
+  while :; do
+    echo "Please input your php path:(example: /usr/bin/php)"
+    read phpCli 
+    if [ ! -f $phpCli ]; then 
+      echo "php path is error";
+    else
+      return $phpCli;
+    fi
+  done
+}
 
 phpCli=$1
 if [ $# -ne 2 ]; then
-  echo "Please input your php path:(example: /usr/bin/php)"
-  read phpCli 
-  if [ ! -f $phpCli ]; then 
-    echo "php path is error"
-    exit 1
-  fi
+  phpCli= input
 fi 
 
 if [ "`cat ../config/my.php | grep -c 'PATH_INFO'`" != 0 ];then
@@ -16,9 +23,15 @@ else
   requestType='GET';
 fi
 
+#ztcli
+ztcli="$phpCli ztcli \$*"
+echo $ztcli > ztcli.sh
+echo "ztcli.sh ok"
+
 #backup database
 backup="$phpCli php/backup.php"
 echo $backup > backup.sh
+echo "backup.sh ok"
 
 #computeburn
 if [ $requestType == 'PATH_INFO' ]; then
@@ -27,10 +40,7 @@ else
   computeburn="$phpCli ztcli 'http://localhost/?m=project&f=computeburn'";
 fi
 echo $computeburn > computeburn.sh
-
-#ztcli
-ztcli="$phpCli ztcli \$*"
-echo $ztcli > ztcli.sh
+echo "computeburn.sh ok"
 
 #check database
 if [ $requestType == 'PATH_INFO' ]; then
@@ -39,6 +49,7 @@ else
   checkdb="$phpCli ztcli 'http://localhost/?m=admin&f=checkdb'";
 fi
 echo $checkdb > checkdb.sh
+echo "checkdb.sh ok"
 
 chmod 755 *.sh
 
