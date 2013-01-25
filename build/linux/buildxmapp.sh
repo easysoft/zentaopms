@@ -27,14 +27,7 @@ rm -fr etc/original
 rm -fr etc/httpd.conf.bak
 rm -fr etc/lampp/startftp
 rm -fr etc/ssl*
-rm -fr etc/extra/httpd-dav.conf
-rm -fr etc/extra/httpd-info.conf
-rm -fr etc/extra/httpd-manual.conf
-rm -fr etc/extra/httpd-ssl.conf
-rm -fr etc/extra/httpd-manual.conf
-rm -fr etc/extra/httpd-userdir.conf
-rm -fr etc/extra/httpd-multilang-errordoc.conf
-rm -fr etc/lampp/startssl
+rm -fr etc/extra
 
 # process httpd conf
 cp ../httpd.conf etc/httpd.conf
@@ -47,15 +40,7 @@ grep -v '^$' > etc/my.cnf.new
 mv etc/my.cnf.new etc/my.cnf
 
 # process php.ini
-echo 'zend_extension = /opt/lampp/lib/php/extensions/no-debug-non-zts-20100525/ioncube_loader_lin_5.4.so' > etc/php.ini.new
-grep -v '^;' etc/php.ini |\
-grep -v '^$' |\
-grep -v 'sqlite.so' |\
-grep -v 'radius.so' |\
-grep -v 'pgsql.so' |\
-grep -v 'ming.so' |\
-grep -v 'ncurses.so' >> etc/php.ini.new 
-mv etc/php.ini.new etc/php.ini
+cp ../php.ini etc/php.ini
 
 # rm useless binaries.
 mv bin bin.bak
@@ -152,8 +137,10 @@ rm -fr var/mysql/test
 chmod -R 777 var/mysql
 
 # process modules directory.
+rm -fr modules/httpd.exp
 rm -fr modules/mod_perl.so
 rm -fr modules/mod_actions.so
+rm -fr modules/mod_allowmethods.so
 rm -fr modules/mod_asis.so
 rm -fr modules/mod_authn_dbm
 rm -fr modules/mod_authn_anon
@@ -163,12 +150,22 @@ rm -fr modules/mod_authz_dbm.so
 rm -fr modules/mod_authz_default.so
 rm -fr modules/mod_authz_groupfile.so
 rm -fr modules/mod_authz_owner.so
+rm -fr modules/mod_auth_digest.so
+rm -fr modules/mod_auth_form.so
+rm -fr modules/mod_authn_anon.so
+rm -fr modules/mod_authn_dbd.so
+rm -fr modules/mod_authn_dbm.so
+rm -fr modules/mod_authn_socache.so
+rm -fr modules/mod_authnz_ldap.so
+rm -fr modules/mod_authz_dbd.so
 rm -fr modules/mod_bucketeer.so
+rm -fr modules/mod_buffer.so
 rm -fr modules/mod_cache*
 rm -fr modules/mod_case**
 rm -fr modules/mod_cern_meta.so
 rm -fr modules/mod_cgi*
 rm -fr modules/mod_charset_lite.so
+rm -fr modules/mod_echo.so
 rm -fr modules/mod_dav*.so
 rm -fr modules/mod_dbd.so
 rm -fr modules/mod_disk_cache.so
@@ -181,11 +178,21 @@ rm -fr modules/mod_imagemap.so
 rm -fr modules/mod_include.so
 rm -fr modules/mod_info.so
 rm -fr modules/mod_ldap.so
-rm -fr modules/mod_log*.so
+rm -fr modules/mod_log_debug.so
+rm -fr modules/mod_logio.so
+rm -fr modules/mod_libmethod*
 rm -fr modules/mod_mem_cache.so
+rm -fr modules/mod_mime_magic.so
 rm -fr modules/mod_negotiation.so
 rm -fr modules/mod_proxy*
 rm -fr modules/mod_reqtimeout.so
+rm -fr modules/mod_ratelimit.so
+rm -fr modules/mod_remoteip.so
+rm -fr modules/mod_request.so
+rm -fr modules/mod_sed.so
+rm -fr modules/mod_sess*.so
+rm -fr modules/mod_slotmem_shm.so
+rm -fr modules/mod_socache*.so
 rm -fr modules/mod_speling.so
 rm -fr modules/mod_ssl.so
 rm -fr modules/mod_status.so
@@ -195,9 +202,7 @@ rm -fr modules/mod_unique_id.so
 rm -fr modules/mod_userdir.so
 rm -fr modules/mod_usertrack.so
 rm -fr modules/mod_version.so
-
-# copy customized xmapp config to etc/extra
-cp ../zentao.conf etc/extra/httpd-xampp.conf
+rm -fr modules/mod_vhost_alias.so
 
 # copy the zentao code.
 mv ../../../zentaopms ./zentao
