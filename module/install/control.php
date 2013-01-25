@@ -155,6 +155,7 @@ class install extends control
 	 */
 	public function step5()
 	{
+        $this->view->title = $this->lang->install->success;
 		$this->display();
 		unset($_SESSION['installing']);
 		session_destroy();
