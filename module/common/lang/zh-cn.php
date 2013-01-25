@@ -248,7 +248,7 @@ $lang->report->menu->staff   = array('link' => '组织|report|workload');
 /* 资源视图菜单设置。*/
 $lang->webapp = new stdclass();
 $lang->webapp->menu = new stdclass();
-$lang->webapp->menu->obtain  = array('link' => '应用商店|webapp|obtain', 'float' => 'right');
+$lang->webapp->menu->obtain  = array('link' => '<span class="icon-webapp-obtain">&nbsp;</span>应用商店|webapp|obtain', 'float' => 'right');
 
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();
