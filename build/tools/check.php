@@ -8,10 +8,17 @@ class control {}
 /* set module root path and included the resource of group module. */
 $moduleRoot = '../../module/';
 include $moduleRoot . '/group/lang/resource.php';
+foreach(glob($moduleRoot . '/group/ext/lang/zh-cn/*.php') as $resourceFile)
+{
+    include $resourceFile;
+}
 
 $whiteList[] = 'api-getsessionid';
+$whiteList[] = 'admin-setflow';
+$whiteList[] = 'admin-cleardata';
 $whiteList[] = 'bug-buildtemplates';
 $whiteList[] = 'bug-sendmail';
+$whiteList[] = 'board-managechild';
 $whiteList[] = 'company-create';
 $whiteList[] = 'company-delete';
 $whiteList[] = 'file-buildform';
@@ -19,6 +26,8 @@ $whiteList[] = 'file-printfiles';
 $whiteList[] = 'file-export2csv';
 $whiteList[] = 'file-export2xml';
 $whiteList[] = 'file-export2html';
+$whiteList[] = 'file-export2excel';
+$whiteList[] = 'file-export2word';
 $whiteList[] = 'file-senddownheader';
 $whiteList[] = 'help-field';
 $whiteList[] = 'index-testext';
@@ -75,6 +84,24 @@ foreach(glob($moduleRoot . '*') as $modulePath)
                     if(!$exits) echo $moduleName . "\t" . $methodName . " not in the list. \n";
                 }
             }
+        }
+    }
+    $extControlFiles = glob($modulePath . '/ext/control/*.php');
+    if($extControlFiles)
+    {
+        foreach($extControlFiles as $extControlFile)
+        {
+            $methodFile = substr($extControlFile, strrpos($extControlFile, '/') + 1);
+            $methodName = substr($methodFile, 0, strpos($methodFile, '.'));
+            if(in_array($moduleName . '-' . strtolower($methodName), $whiteList)) continue;
+            if(strpos($methodName, 'ajax') !== false) continue;
+
+            $exits = false;
+            foreach($lang->resource->$moduleName as $key => $label)
+            {
+                if(strtolower($methodName) == strtolower($key)) $exits = true;
+            }
+            if(!$exits) echo $moduleName . "\t" . $methodName . " not in the list. \n";
         }
     }
 }
