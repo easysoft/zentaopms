@@ -22,9 +22,9 @@ tgz:
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload
 	cp -fr tmp zentaopms
 	rm -fr zentaopms/tmp/cache/* 
-	rm -fr zentaoms/tmp/extension/*
-	rm -fr zentaoms/tmp/log/*
-	rm -fr zentaoms/tmp/model/*
+	rm -fr zentaopms/tmp/extension/*
+	rm -fr zentaopms/tmp/log/*
+	rm -fr zentaopms/tmp/model/*
 	cp VERSION zentaopms/
 	# combine js and css files.
 	mkdir -p zentaopms/build/tools && cp build/tools/minifyfront.php zentaopms/build/tools/
