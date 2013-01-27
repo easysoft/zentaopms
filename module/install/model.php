@@ -448,4 +448,19 @@ class installModel extends model
         return true;
     }
 
+    /**
+     * get the mysqldump binary.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getMySQLDump()
+    {
+        $mysqlDump = '';
+        if(strpos(__FILE__, '/opt/lampp') !== false)
+        {
+            $mysqlDump = '/opt/lampp/bin/mysqldump';
+        }
+        if(file_exists($mysqlDump)) return $mysqlDump;
+    }
 }

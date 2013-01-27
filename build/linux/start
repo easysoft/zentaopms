@@ -30,9 +30,8 @@ mv etc/httpd.conf.80 etc/httpd.conf
 sed -e 's/3308/3306/g' etc/my.cnf > etc/my.cnf.3306
 mv etc/my.cnf.3306 etc/my.cnf
 
-sed -e 's/3308/3306/g' zentao/config/my.php |grep -v mysqldump > zentao/config/my.php.3306
+sed -e 's/3308/3306/g' zentao/config/my.php > zentao/config/my.php.3306
 mv zentao/config/my.php.3306 zentao/config/my.php
-echo '$config->mysqldump = "/opt/lampp/bin/mysqldump";' >> zentao/config/my.php
 
 # change directory permissions.
 chmod a+rx lampp

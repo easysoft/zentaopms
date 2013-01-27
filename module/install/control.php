@@ -93,11 +93,12 @@ class install extends control
             if($return->result == 'ok')
             {
                 $this->view = (object)$_POST;
-                $this->view->app    = $this->app;
-                $this->view->lang   = $this->lang;
-                $this->view->config = $this->config;
-                $this->view->domain = $this->server->HTTP_HOST;
-                $this->view->title  = $this->lang->install->saveConfig;
+                $this->view->app       = $this->app;
+                $this->view->lang      = $this->lang;
+                $this->view->config    = $this->config;
+                $this->view->domain    = $this->server->HTTP_HOST;
+                $this->view->title     = $this->lang->install->saveConfig;
+                $this->view->mysqldump = $this->install->getMySQLDump();
                 $this->display();
             }
             else
