@@ -12,10 +12,24 @@ DELETE FROM `zt_config` WHERE `company` = 1 AND `key` = 'sn';
 UPDATE `zt_config` SET `company` = 1 WHERE `key` = 'sn';
 UPDATE `zt_config` SET `section` = 'global' WHERE `key` = 'flow';
 UPDATE `zt_project` SET `status` = 'doing' WHERE `status` = '';
-ALTER TABLE  `zt_testtask` ADD  `report` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER  `desc`;
+ALTER TABLE  `zt_testTask` ADD  `report` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER  `desc`;
 ALTER TABLE  `zt_project` CHANGE  `type`  `type` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  'sprint';
 
 -- 2013-1-21 change the priv of todo mark method instead finish method.
 UPDATE `zt_groupPriv` SET method='finish'  WHERE module='todo' AND method='mark';
 
 ALTER TABLE `zt_taskEstimate` CHANGE `date` `date` DATE NOT NULL;
+
+DELETE FROM `zt_groupPriv` WHERE `module` = 'webapp' and `method` = 'index';
+INSERT INTO `zt_groupPriv` (`company` , `group` , `module` , `method` ) VALUES
+('1', '1', 'webapp', 'index'),
+('1', '2', 'webapp', 'index'),
+('1', '3', 'webapp', 'index'),
+('1', '4', 'webapp', 'index'),
+('1', '5', 'webapp', 'index'),
+('1', '6', 'webapp', 'index'),
+('1', '7', 'webapp', 'index'),
+('1', '8', 'webapp', 'index'),
+('1', '9', 'webapp', 'index'),
+('1', '10', 'webapp', 'index'),
+('1', '11', 'webapp', 'index');
