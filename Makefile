@@ -66,8 +66,8 @@ phpdoc:
 doxygen:
 	doxygen doc/doxygen/doxygen.conf
 build4linux:	
-	#unzip ZenTaoPMS.$(VERSION).zip
-	#rm -fr ZenTaoPMS.$(VERSION).zip
+	unzip ZenTaoPMS.$(VERSION).zip
+	rm -fr ZenTaoPMS.$(VERSION).zip
 	# build xmapp.
 	cd ./build/linux/ && ./buildxmapp.sh $(xampp)
 	mv ./build/linux/lampp ./
