@@ -213,7 +213,7 @@ cp ../start .
 cp ../start88 .
 cp ../stop .
 cp ../lamppctl ./lampp
-cp ../../xampp/index.php htdocs/
+cp ../../windows/index.php htdocs/
 
 # make the auth file
 mkdir auth
