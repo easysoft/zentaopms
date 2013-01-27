@@ -1,29 +1,51 @@
 #!/bin/bash
+# This file is used to start apache at 88 port and mysql at 3308 port.
+
+# check the directory, must at /opt/lampp.
+pwd | grep ^/opt/lampp > /dev/null 2>&1    # check the pwd is /opt/lampp or not.
+if [ $? -ne 0 ]
+then
+  # if the pwd is not /opt/lampp, may be the /opt/lampp is a link, check /opt/lampp exists or not.
+  ls /opt/lampp > /dev/null 2>&1
+  if [ $? -ne 0 ] 
+  then
+    echo "The lampp can only run at /opt/lampp"
+  fi
+fi
+
+# check the run user, must be root.
 if test "`id -u`" -ne 0
 then
   echo "You need to start XAMPP as root!"
   exit
 fi
 
+# replace ports.
 sed -e 's/80/88/g' lampp | sed -e 's/3306/3308/g' > lampp.88
 mv lampp.88 lampp
-chmod a+rx lampp
 
 sed -e 's/80/88/g' etc/httpd.conf > etc/httpd.conf.88
 mv etc/httpd.conf.88 etc/httpd.conf
 
-sed -e 's/80/88/g' etc/extra/httpd-vhosts.conf > etc/extra/httpd-vhosts.conf.88
-mv etc/extra/httpd-vhosts.conf.88 etc/extra/httpd-vhosts.conf
-
 sed -e 's/3306/3308/g' etc/my.cnf > etc/my.cnf.3308
 mv etc/my.cnf.3308 etc/my.cnf
 
-sed -e 's/3306/3308/g' zentao/config/my.php > zentao/config/my.php.3308
+sed -e 's/3306/3308/g' zentao/config/my.php |grep -v mysqldump > zentao/config/my.php.3308
 mv zentao/config/my.php.3308 zentao/config/my.php
+echo '$config->mysqldump = "/opt/lampp/bin/mysqldump";' >> zentao/config/my.php
 
+# change directory permissions.
+chmod a+rx lampp
 chown nobody -R var/mysql
 chmod 777 tmp
+chmod a+rx -R zentao
 chmod 777 -R zentao/tmp
 chmod 777 -R zentao/www/data
+chmod 777 zentao/module
 find zentao/ -name ext |xargs chmod -R 777
+
+# init the shells in zentao/bin
+./zentao/bin/init.sh /opt/lampp/bin/php > /dev/null 2>&1
+
+# start apache, mysql.
 ./lampp start
