@@ -213,7 +213,7 @@ cp ../start .
 cp ../start88 .
 cp ../stop .
 cp ../lamppctl ./lampp
-cp ../../windows/xampp/index.php htdocs/
+cp ../../xampp/index.php htdocs/
 
 # make the auth file
 mkdir auth
@@ -223,7 +223,7 @@ echo 'use "../bin/htpasswd -b users username password" to add a new user.' > aut
 # process the phpmyadmin
 7z x $1/phpmyadmin.7z
 mkdir admin
-mv phpMyAdmin-3.5.4-all-languages admin/phpmyadmin
+mv phpMyAdmin-3.5.5-all-languages admin/phpmyadmin
 mv admin/phpmyadmin/locale admin/phpmyadmin/locale.bak
 mkdir admin/phpmyadmin/locale
 mv admin/phpmyadmin/locale.bak/en_GB admin/phpmyadmin/locale
