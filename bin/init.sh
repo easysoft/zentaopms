@@ -1,62 +1,65 @@
 #!/bin/bash
-function input()
-{
+phpcli=$1
+basePath=$(cd "$(dirname "$0")"; pwd)
+if [ $# -ne 1 ]; then
   while :; do
     echo "Please input your php path:(example: /usr/bin/php)"
-    read phpCli 
-    if [ ! -f $phpCli ]; then 
+    read phpcli 
+    if [ ! -f $phpcli ]; then 
       echo "php path is error";
     else
-      return $phpCli;
+      break;
     fi
   done
-}
-
-phpCli=$1
-if [ $# -ne 2 ]; then
-  phpCli= input
 fi 
 
-if [ "`cat ../config/my.php | grep -c 'PATH_INFO'`" != 0 ];then
+if [ "`cat $basePath/../config/my.php | grep -c 'PATH_INFO'`" != 0 ];then
   requestType='PATH_INFO';
 else
   requestType='GET';
 fi
 
 #ztcli
-ztcli="$phpCli ztcli \$*"
-echo $ztcli > ztcli.sh
+ztcli="$phpcli $basePath/ztcli \$*"
+echo $ztcli > $basePath/ztcli.sh
 echo "ztcli.sh ok"
 
 #backup database
-backup="$phpCli php/backup.php"
-echo $backup > backup.sh
+backup="$phpcli $basePath/php/backup.php"
+echo $backup > $basePath/backup.sh
 echo "backup.sh ok"
 
 #computeburn
 if [ $requestType == 'PATH_INFO' ]; then
-  computeburn="$phpCli ztcli 'http://localhost/project-computeburn'";
+  computeburn="$phpcli $basePath/ztcli 'http://localhost/project-computeburn'";
 else
-  computeburn="$phpCli ztcli 'http://localhost/?m=project&f=computeburn'";
+  computeburn="$phpcli $basePath/ztcli 'http://localhost/?m=project&f=computeburn'";
 fi
-echo $computeburn > computeburn.sh
+echo $computeburn > $basePath/computeburn.sh
 echo "computeburn.sh ok"
 
 #check database
 if [ $requestType == 'PATH_INFO' ]; then
-  checkdb="$phpCli ztcli 'http://localhost/admin-checkdb'";
+  checkdb="$phpcli $basePath/ztcli 'http://localhost/admin-checkdb'";
 else
-  checkdb="$phpCli ztcli 'http://localhost/?m=admin&f=checkdb'";
+  checkdb="$phpcli $basePath/ztcli 'http://localhost/?m=admin&f=checkdb'";
 fi
-echo $checkdb > checkdb.sh
+echo $checkdb > $basePath/checkdb.sh
 echo "checkdb.sh ok"
 
 #cron
-mkdir cron
-echo -e "# default cron.\n# minute hour day month week  command.\n\n1 1  * * *   php ../php/backup.php      # backup database and file.\n1 23 * * *   php ../php/computeburn.php # compute burndown chart. " > cron/sys.cron
-echo "cron ok"
+if [ ! -d "$basePath/cron" ]; then 
+  mkdir $basePath/cron
+fi
+echo "# system cron." > $basePath/cron/sys.cron
+echo "# minute hour day month week  command." >> $basePath/cron/sys.cron
+echo "1 1  * * *   $basePath/backup.sh          # backup database and file." >> $basePath/cron/sys.cron
+echo "1 23 * * *   $basePath/computeburn.sh     # compute burndown chart." >> $basePath/cron/sys.cron
+cron="$phpcli $basePath/php/crond.php"
+echo $cron > $basePath/cron.sh
+echo "cron.sh ok"
 
-chmod -R 755 cron
-chmod 755 *.sh
+chmod -R 755 $basePath/cron
+chmod 755 $basePath/*.sh
 
 exit 0
