@@ -449,7 +449,7 @@ class installModel extends model
     }
 
     /**
-     * get the mysqldump binary.
+     * Get the mysqldump binary.
      * 
      * @access public
      * @return string
@@ -457,10 +457,16 @@ class installModel extends model
     public function getMySQLDump()
     {
         $mysqlDump = '';
-        if(strpos(__FILE__, '/opt/lampp') !== false)
+
+        if(strpos(__FILE__, '/opt/lampp') !== false)         // linux.
         {
             $mysqlDump = '/opt/lampp/bin/mysqldump';
         }
+        elseif(strpos(__FILE__, '\xampp\zentao') !== false)  // windows.
+        {
+            $mysqlDump = '\xampp\mysql\bin\mysqldump.exe';
+        }
+
         if(file_exists($mysqlDump)) return $mysqlDump;
     }
 }
