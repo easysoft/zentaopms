@@ -565,7 +565,7 @@ class projectModel extends model
                 }
                 if(!$project->product)
                 {
-                    $noProducts[] = $project;
+                    if($this->checkPriv($projects[$project->id])) $noProducts[] = $project;
                     unset($list[$id][$ID]); 
                 }
             }
