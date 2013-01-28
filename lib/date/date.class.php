@@ -171,7 +171,7 @@ class date
     }
 
     /**
-     * Get middle of last week 
+     * Get middle of last week.
      * 
      * @access public
      * @return time
@@ -187,7 +187,7 @@ class date
     }
 
     /**
-     * Get this month begin and end time
+     * Get begin and end time of this month.
      * 
      * @access public
      * @return array
@@ -200,7 +200,7 @@ class date
     }
 
     /**
-     * Get last month begin and end time
+     * Get begin and end time of last month.
      * 
      * @access public
      * @return array
@@ -212,33 +212,65 @@ class date
         return array('begin' => $begin, 'end' => $end);
     }
 
+    /**
+     * Get begin and end time of this season. 
+     * 
+     * @static
+     * @access public
+     * @return array 
+     */
     public static function getThisSeason()
     {
-        $year  = date("Y-");
-        $month = date("n");
-        if($month % 3)
-        {
-            $seasonBegin = $month - ($month % 3) + 1;
-            $seasonEnd   = $seasonBegin + 3;
-        }
-        else
-        {
-            $seasonEnd   = $month + 1;
-            $seasonBegin = $seasonEnd - 3;
-        }
-
-        if(strlen($seasonBegin) == 1) $seasonBegin = "0$seasonBegin";
-        if(strlen($seasonEnd) == 1)   $seasonEnd   = "0$seasonEnd";
-        $begin = $year . $seasonBegin;
-        $end   = $year . $seasonEnd;
+        $season = ceil((date('n')) / 3);                                                // Get this session.
+        $begin  = date('Y-m-d H:i:s', mktime(0, 0, 0, $season * 3 - 2, 1, date('Y')));
+        $endDay = date('t', mktime(0, 0 , 0, $season * 3, 1, date("Y")));               // Get end day.
+        $end    = date('Y-m-d H:i:s', mktime(23, 59, 59, $season * 3, $endDay, date('Y')));
 
         return array('begin' => $begin, 'end' => $end);
     }
 
+    /**
+     * Get begin and end time of last season. 
+     * 
+     * @static
+     * @access public
+     * @return array 
+     */
+    public static function getLastSeason()
+    {
+        $season = ceil((date('n')) / 3) - 1;                                             // Get last session.
+        $begin  = date('Y-m-d H:i:s', mktime(0, 0, 0, $season * 3 - 2, 1, date('Y')));
+        $endDay = date('t', mktime(0, 0 , 0, $season * 3, 1, date("Y")));                // Get end day.
+        $end    = date('Y-m-d H:i:s', mktime(23, 59, 59, $season * 3, $endDay, date('Y')));
+        
+        return array('begin' => $begin, 'end' => $end);
+    }
+
+    /**
+     * Get begin and end time of this year.
+     * 
+     * @static
+     * @access public
+     * @return array 
+     */
     public static function getThisYear()
     {
-        $begin = date(DT_DATE1, strtotime('1/1 this year'));
-        $end   = date(DT_DATE1, strtotime('1/1 next year -1 day'));  
+        $begin = date(DT_DATE1, strtotime('1/1 this year')) . ' 00:00:00';
+        $end   = date(DT_DATE1, strtotime('1/1 next year -1 day')) . ' 23:59:59';  
+        return array('begin' => $begin, 'end' => $end);
+    }
+
+    /**
+     * Get begin and end time of last year.
+     * 
+     * @static
+     * @access public
+     * @return array 
+     */
+    public static function getLastYear()
+    {
+        $begin = date(DT_DATE1, strtotime('1/1 last year')) . ' 00:00:00';
+        $end   = date(DT_DATE1, strtotime('1/1 this year -1 day')) . ' 23:59:59';  
         return array('begin' => $begin, 'end' => $end);
     }
 }
