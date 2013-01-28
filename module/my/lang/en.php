@@ -30,7 +30,7 @@ $lang->my->storyMenu->reviewedByMe = 'My reviewed';
 $lang->my->storyMenu->closedByMe   = 'My closed';
 
 $lang->my->home = new stdclass();
-$lang->my->home->latest        = 'Latest actions:';
+$lang->my->home->latest        = 'Dynamic';
 $lang->my->home->action        = "%s, %s <i>%s</i> %s <a href='%s'>%s</a>.";
 $lang->my->home->projects      = 'Project';
 $lang->my->home->products      = 'Product';
