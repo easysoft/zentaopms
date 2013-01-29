@@ -1,6 +1,6 @@
 $(function()
 {
-    if($.cookie('projectBar') != 'show')
+    if($.cookie('projectBar') == 'hide')
     {
         $('#project').hide();
         setOuterBox();
