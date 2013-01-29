@@ -21,11 +21,11 @@ var browseType  = '<?php echo $browseType;?>';
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td id="sidebar" onclick="showProject()">>></td>
+    <td id="sidebar" onclick="showProject()"><span></span></td>
     <td class='side' id='project'>
       <div class='box-title'>
         <?php echo $lang->project->projectTasks;?>
-        <div class="f-right" id='hideButton' onclick="hideProject()"><<</div>
+        <div class="f-right" id='hideButton' onclick="hideProject()"><span></span></div>
       </div>
       <div class='box-content'><?php echo $projectTree;?></div>
     </td>
