@@ -137,6 +137,7 @@ class tree extends control
             $title      = $this->lang->tree->manageWebapp;
             $position[] = $this->lang->tree->manageWebapp;
 
+            $root = new stdclass();
             $root->name = $this->lang->tree->manageWebapp;
             $root->id   = 0;
             $this->view->root = $root;
