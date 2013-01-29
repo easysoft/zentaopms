@@ -100,6 +100,8 @@ $file->removeDir('./xampp/apache/conf/ssl.crl');
 $file->removeDir('./xampp/apache/conf/ssl.crt');
 $file->removeDir('./xampp/apache/conf/ssl.csr');
 $file->removeDir('./xampp/apache/conf/ssl.key');
+$file->removeFile('./xampp/apache/conf/magic');
+$file->removeFile('./xampp/apache/conf/charset.conv');
 
 /* Empty the htdocs directory. */
 $file->removeDir('./xampp/htdocs');
@@ -129,7 +131,8 @@ $file->rename('./xampp/mysql/share', './xampp/mysql/shareold');
 $file->mkdir('./xampp/mysql/share');
 $file->mkdir('./xampp/mysql/share/english');
 $file->copyFile('./xampp/mysql/shareold/english/errmsg.sys', './xampp/mysql/share/english/errmsg.sys');
-$file->removeDir('../xampp/mysql/shareold');
+$file->removeDir('./xampp/mysql/shareold');
+$file->removeFile('./xampp/mysql/resetroot.bat');
 
 /* Process mysql's data directory. */
 $file->removeDir('./xampp/mysql/data/test');
@@ -149,6 +152,7 @@ $file->copyFile($buildDir . '/my.ini', './xampp/mysql/my.ini');
 
 /* Processing php. */
 $file->removeDir('./xampp/php/cfg');
+$file->removeDir('./xampp/php/extras');
 $file->removeDir('./xampp/php/data');
 $file->removeDir('./xampp/php/DB');
 $file->removeDir('./xampp/php/dev');
@@ -176,11 +180,7 @@ $file->batchRemoveFile('./xampp/php/phpdoc');
 $file->batchRemoveFile('./xampp/php/phpuml');
 $file->batchRemoveFile('./xampp/php/*.sh');
 $file->batchRemoveFile('./xampp/php/logs/*');
-
-$file->removeDir('./xampp/php/extras/fonts');
-$file->removeDir('./xampp/php/extras/mibs');
-$file->removeDir('./xampp/php/extras/openssl');
-$file->removeFile('./xampp/php/extras/openssl.cnf');
+$file->batchRemoveFile('./xampp/php/php5embed.lib');
 
 $file->rename('./xampp/php/php5apache2_4.dll', './xampp/php/php5apache2_4.bak');
 $file->rename('./xampp/php/php5ts.dll',   './xampp/php/php5ts.bak');
@@ -223,6 +223,12 @@ $file->copyDir('./xampp/phpmyadmin/locale/zh_TW', './xampp/phpmyadmin/locale.new
 $file->copyDir('./xampp/phpmyadmin/locale/en_GB', './xampp/phpmyadmin/locale.new/en_GB');
 $file->removeDir('./xampp/phpmyadmin/locale');
 $file->rename('./xampp/phpmyadmin/locale.new', './xampp/phpmyadmin/locale');
+$file->copyFile($buildDir . '/phpmyadmin.php', './xampp/phpmyadmin/config.inc.php');
+$file->removeDir('./xampp/phpmyadmin/themes/original/');
+$file->removeDir('./xampp/phpmyadmin/examples/');
+$file->removeDir('./xampp/phpmyadmin/js/openlayers/');
+$file->removeDir('./xampp/phpmyadmin/libraries/tcpdf/');
+$file->batchRemoveFile('./xampp/phpmyadmin/Documentation*');
 
 /* Process the svn. */
 $file->copyDir($buildDir . '/svn/silksvn/', './xampp/silksvn');
