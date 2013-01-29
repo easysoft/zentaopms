@@ -222,14 +222,13 @@ echo 'use "../bin/htpasswd -b users username password" to add a new user.' > aut
 
 # process the phpmyadmin
 7z x $1/phpmyadmin.7z
-mkdir admin
-mv phpMyAdmin-3.5.5-all-languages admin/phpmyadmin
-mv admin/phpmyadmin/locale admin/phpmyadmin/locale.bak
-mkdir admin/phpmyadmin/locale
-mv admin/phpmyadmin/locale.bak/en_GB admin/phpmyadmin/locale
-mv admin/phpmyadmin/locale.bak/zh_* admin/phpmyadmin/locale
-rm -fr admin/phpmyadmin/locale.bak
-cp ../phpmyadmin.php admin/phpmyadmin/config.inc.php
+mv phpMyAdmin-3.5.5-all-languages phpmyadmin
+mv phpmylocale phpmylocale.bak
+mkdir phpmylocale
+mv phpmylocale.bak/en_GB phpmylocale
+mv phpmylocale.bak/zh_* phpmylocale
+rm -fr phpmylocale.bak
+cp ../windows/phpmyadmin.php phpmyconfig.inc.php
 
 # copy the ioncube loader.
 cp ../ioncube_loader_lin_5.4.so lib/php/extensions/no-debug-non-zts-20100525/
