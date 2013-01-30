@@ -28,6 +28,8 @@ rm -fr etc/httpd.conf.bak
 rm -fr etc/lampp/startftp
 rm -fr etc/ssl*
 rm -fr etc/extra
+rm -fr etc/magic
+rm -fr etc/locales.conf
 
 # process httpd conf
 cp ../httpd.conf etc/httpd.conf
@@ -134,6 +136,7 @@ rm -fr var/mysql/cdcol
 rm -fr var/mysql/*.err
 rm -fr var/mysql/ib*
 rm -fr var/mysql/test
+rm -fr var/mysql/phpmyadmin
 chmod -R 777 var/mysql
 
 # process modules directory.
@@ -180,7 +183,7 @@ rm -fr modules/mod_info.so
 rm -fr modules/mod_ldap.so
 rm -fr modules/mod_log_debug.so
 rm -fr modules/mod_logio.so
-rm -fr modules/mod_libmethod*
+rm -fr modules/mod_lbmethod*
 rm -fr modules/mod_mem_cache.so
 rm -fr modules/mod_mime_magic.so
 rm -fr modules/mod_negotiation.so
@@ -223,12 +226,16 @@ echo 'use "../bin/htpasswd -b users username password" to add a new user.' > aut
 # process the phpmyadmin
 7z x $1/phpmyadmin.7z
 mv phpMyAdmin-3.5.5-all-languages phpmyadmin
-mv phpmylocale phpmylocale.bak
-mkdir phpmylocale
-mv phpmylocale.bak/en_GB phpmylocale
-mv phpmylocale.bak/zh_* phpmylocale
-rm -fr phpmylocale.bak
-cp ../windows/phpmyadmin.php phpmyconfig.inc.php
+mv phpmyadmin/locale phpmyadmin/locale.bak
+mkdir phpmyadmin/locale
+mv phpmyadmin/locale.bak/en_GB phpmyadmin/locale
+mv phpmyadmin/locale.bak/zh_* phpmyadmin/locale
+rm -fr phpmyadmin/locale.bak
+cp ../../windows/phpmyadmin.php phpmyadmin/config.inc.php
+rm -fr phpmyadmin/examples
+rm -fr phpmyadmin/js/openlayers
+rm -fr phpmyadmin/libraries/tcpdf
+rm -fr phpmyadmin/Documentation*
 
 # copy the ioncube loader.
 cp ../ioncube_loader_lin_5.4.so lib/php/extensions/no-debug-non-zts-20100525/
