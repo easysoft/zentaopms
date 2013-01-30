@@ -102,8 +102,12 @@ class misc extends control
         $files = $sourceZip->extract(PCLZIP_OPT_PATH, $notifyDir);
         if($files == 0) die("Error : ".$sourceZip->errorInfo(true));
 
-        $currentUser = $this->app->user;
-        $loginInfo   = json_encode(array('account' => $currentUser->account, 'password' => $currentUser->password, 'zentaoRoot' => 'http://' . $this->config->default->domain));
+        $loginInfo = new stdclass();
+        $loginInfo->account = $this->app->user->account;
+        $loginInfo->password = $this->app->user->password;
+        $loginInfo->zentaoRoot = common::getSysURL() . $this->config->webRoot;
+        $loginInfo = json_encode($loginInfo);
+
         file_put_contents($loginFile, $loginInfo);
 
         unlink($packageFile);
