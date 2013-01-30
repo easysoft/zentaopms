@@ -9,7 +9,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bin
  * @version     $Id$
- * @link        http://www.ZenTaoPMS.com
+ * @link        http://www.zentao.net
  */
 error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 define('IN_SHELL', true);
