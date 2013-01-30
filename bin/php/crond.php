@@ -1,13 +1,38 @@
 <?php
-include dirname(dirname(dirname(__FILE__))) . '/lib/crontab/crontab.class.php';
-$cronPath = dirname(dirname(dirname(__FILE__))) . '/bin/cron';
+/**
+ * 禅道计划任务服务程序。
+ * The crond for zentao.
+ *
+ * @copyright   Copyright 2009-2013 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @author      jinyong zhu <zhujinyong@cnezsoft.com>
+ * @package     bin
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+/* Set pathes and include crontab.class.php. */
+$zentaoPath = dirname(dirname(dirname(__FILE__))) . "\\";
+$cronPath   = dirname(dirname(dirname(__FILE__))) . '/bin/cron';
+include $zentaoPath . '/lib/crontab/crontab.class.php';
 
+/* Parase crons. */
 $crons = parseCron($cronPath);
+$lastParsed = time();
+printCrons($crons);
 
-/* run as daemon. */
-while(1)
+/* Start the cron demon. */
+while(true)
 {
-    $now = new DateTime('now');
+    /* If need parse again, re parse the cron files. */
+    if(needParseAgain($cronPath, $lastParsed))
+    {
+        echo "\ncron files changed, re parse them...";
+        $crons = parseCron($cronPath);
+        $lastParsed = time();
+        printCrons($crons);
+    }
+
+    $now = new datetime('now');
     foreach($crons as $key => $cron) 
     {
         if($now > $cron['time']) 
@@ -18,9 +43,9 @@ while(1)
             $log    = '';
             exec($cron['command'], $output, $return);
 
-            $time = $now->format('Y-m-d H:i:s');
+            $time = $now->format('H:i:s');
             foreach($output as $out) $log .= $out . "\n"; 
-            $log = $time . ' ' . $key . ' return ' . $return . ' : ' . $log . "\n";
+            $log = "$time task " .  ($key + 1) . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $log\n";
             echo $log;
             logCron($log);
         }
@@ -31,10 +56,8 @@ while(1)
 /* Log cron results. */
 function logCron($log)
 {
-    $path = dirname(dirname(dirname(__FILE__))) . '/tmp/cron';
-    $file = $path . '/' . date('Ymd');
-
-    if(!file_exists($path)) mkdir($path, 0777);
+    $path = dirname(dirname(dirname(__FILE__))) . '/tmp/log/';
+    $file = $path . 'cron.' . date('Ymd') . '.log';
 
     $fp = fopen($file, "a");
     fwrite($fp, $log);
@@ -44,8 +67,9 @@ function logCron($log)
 /* Parse cron file. */
 function parseCron($path)
 {
-    $crons = array();
     chdir($path);
+
+    $crons = array();
     $files = glob('*');
     foreach($files as $file)
     {
@@ -70,4 +94,25 @@ function parseCron($path)
         }
     }
     return $crons;
+}
+
+function printCrons($crons)
+{
+    echo "\n";
+    echo 'total ' . count($crons) . " tasks found.\n\n";
+    foreach($crons as $id => $cron)
+    {
+        echo ($id + 1) . "\t$cron[schema]\t$cron[command]\n";
+    }
+}
+
+/* Need parse cron files again? */
+function needParseAgain($cronPath, $lastParsed)
+{
+    clearstatcache();
+    chdir($cronPath);
+
+    $files = glob('*');
+    foreach($files as $file) if(filemtime($file) > $lastParsed) return true;
+    return false;
 }
