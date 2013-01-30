@@ -103,8 +103,8 @@ class misc extends control
         if($files == 0) die("Error : ".$sourceZip->errorInfo(true));
 
         $loginInfo = new stdclass();
-        $loginInfo->account = $this->app->user->account;
-        $loginInfo->password = $this->app->user->password;
+        $loginInfo->account    = $this->app->user->account;
+        $loginInfo->password   = $this->app->user->password;
         $loginInfo->zentaoRoot = common::getSysURL() . $this->config->webRoot;
         $loginInfo = json_encode($loginInfo);
 
