@@ -29,18 +29,18 @@ echo backup.bat ok
 
 ::compute burn
 if %requestType% == 'PATH_INFO' (
-  SET computeburn= %phpcli% %baseDir%ztcli 'http://localhost/project-computeburn'
+  SET computeburn= %phpcli% %baseDir%ztcli "http://localhost/project-computeburn"
 )else (
-  SET computeburn= %phpcli% %baseDir%ztcli 'http://localhost/?m=project&f=computeburn'
+  SET computeburn= %phpcli% %baseDir%ztcli "http://localhost/?m=project&f=computeburn"
 )
 echo %computeburn% > %baseDir%computeburn.bat
 echo computeburn.bat ok
 
 ::check database
 if %requestType% == 'PATH_INFO' (
-  SET checkdb= %phpcli% %baseDir%ztcli 'http://localhost/admin-checkdb'
+  SET checkdb= %phpcli% %baseDir%ztcli "http://localhost/admin-checkdb"
 )else (
-  SET checkdb= %phpcli% %baseDir%ztcli 'http://localhost/?m=admin&f=checkdb'
+  SET checkdb= %phpcli% %baseDir%ztcli "http://localhost/?m=admin&f=checkdb"
 )
 echo %checkdb% > %baseDir%checkdb.bat
 echo checkdb.bat ok
