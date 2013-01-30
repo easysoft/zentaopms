@@ -53,17 +53,6 @@ while(true)
     sleep(40);
 }
 
-/* Log cron results. */
-function logCron($log)
-{
-    $path = dirname(dirname(dirname(__FILE__))) . '/tmp/log/';
-    $file = $path . 'cron.' . date('Ymd') . '.log';
-
-    $fp = fopen($file, "a");
-    fwrite($fp, $log);
-    fclose ($fp);
-}
-
 /* Parse cron file. */
 function parseCron($path)
 {
@@ -96,6 +85,7 @@ function parseCron($path)
     return $crons;
 }
 
+/* Print crons. */
 function printCrons($crons)
 {
     echo "\n";
@@ -104,6 +94,17 @@ function printCrons($crons)
     {
         echo ($id + 1) . "\t$cron[schema]\t$cron[command]\n";
     }
+}
+
+/* Log cron results. */
+function logCron($log)
+{
+    $path = dirname(dirname(dirname(__FILE__))) . '/tmp/log/';
+    $file = $path . 'cron.' . date('Ymd') . '.log';
+
+    $fp = fopen($file, "a");
+    fwrite($fp, $log);
+    fclose ($fp);
 }
 
 /* Need parse cron files again? */
