@@ -388,6 +388,7 @@ class installModel extends model
         if($this->post->password == '') die(js::error($this->lang->install->errorEmptyPassword));
 
         /* Insert a company. */
+        $company = new stdclass();
         $company->name   = $this->post->company;
         $company->pms    = $this->post->pms;
         $company->admins = ",{$this->post->account},";
@@ -397,6 +398,7 @@ class installModel extends model
         {
             /* Set admin. */
             $companyID = $this->dbh->lastInsertID();
+            $admin = new stdclass();
             $admin->account  = $this->post->account;
             $admin->realname = $this->post->account;
             $admin->password = md5($this->post->password);
@@ -408,12 +410,12 @@ class installModel extends model
             $this->dao->update(TABLE_GROUP)->set('company')->eq($companyID)->exec($autoCompany = false);
             $this->dao->update(TABLE_GROUPPRIV)->set('company')->eq($companyID)->exec($autoCompany = false);
 
-            /* Update group name and desc on dafault lang.*/
-            include('lang/' . $this->config->default->lang . '.php');
+            /* Update group name and desc on dafault lang. */
             $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
             foreach($groups as $group)
             {
-                if(isset($lang->install->groupList[$group->name]))$this->dao->update(TABLE_GROUP)->data($lang->install->groupList[$group->name])->where('id')->eq($group->id)->exec();
+                $data = zget($this->lang->install->groupList, $group->name, '');
+                if($data) $this->dao->update(TABLE_GROUP)->data($data)->where('id')->eq($group->id)->exec();
             }
         }
     }
