@@ -10,10 +10,12 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-/* Set pathes and include crontab.class.php. */
-$zentaoPath = dirname(dirname(dirname(__FILE__))) . "\\";
-$cronPath   = dirname(dirname(dirname(__FILE__))) . '/bin/cron';
-include $zentaoPath . '/lib/crontab/crontab.class.php';
+/* Set pathes and timezone. */
+$zentaoPath = dirname(dirname(dirname(__FILE__))) . "/";
+$cronPath   = $zentaoPath . 'bin/cron';
+include $zentaoPath . 'config/config.php';
+include $zentaoPath . 'lib/crontab/crontab.class.php';
+date_default_timezone_set($config->timezone);
 
 /* Parase crons. */
 $crons = parseCron($cronPath);
@@ -43,7 +45,7 @@ while(true)
             $log    = '';
             exec($cron['command'], $output, $return);
 
-            $time = $now->format('H:i:s');
+            $time = $now->format('G:i:s');
             foreach($output as $out) $log .= $out . "\n"; 
             $log = "$time task " .  ($key + 1) . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $log\n";
             echo $log;
