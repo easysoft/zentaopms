@@ -458,17 +458,33 @@ class installModel extends model
      */
     public function getMySQLDump()
     {
-        $mysqlDump = '';
+        $mysqldump = '';
 
         if(strpos(__FILE__, '/opt/lampp') !== false)         // linux.
         {
-            $mysqlDump = '/opt/lampp/bin/mysqldump';
+            $mysqldump = '/opt/lampp/bin/mysqldump';
         }
         elseif(strpos(__FILE__, '\xampp\zentao') !== false)  // windows.
         {
-            $mysqlDump = '\xampp\mysql\bin\mysqldump.exe';
+            $mysqldump = substr(__FILE__, 0, 2) . '\xampp\mysql\bin\mysqldump.exe';
+        }
+        else
+        {
+            if(strpos(PHP_OS, 'WIN') !== false)
+            {
+                $mysql = `wmic process where name='mysqld.exe' get executablepath`;
+                if(strpos($mysql, 'mysqld.exe') !== false)
+                {
+                    $mysql = explode("\n", $mysql);
+                    if(isset($mysql[1])) $mysqldump = str_replace('mysqld.exe', 'mysqldump.exe', $mysql[1]);
+                }
+            }
+            else
+            {
+                $mysqldump = `which mysqldump`;
+            }
         }
 
-        if(file_exists($mysqlDump)) return $mysqlDump;
+        if(file_exists($mysqldump)) return $mysqldump;
     }
 }
