@@ -476,15 +476,16 @@ class installModel extends model
                 if(strpos($mysql, 'mysqld.exe') !== false)
                 {
                     $mysql = explode("\n", $mysql);
-                    if(isset($mysql[1])) $mysqldump = str_replace('mysqld.exe', 'mysqldump.exe', $mysql[1]);
+                    if(isset($mysql[1])) $mysqldump = trim(str_replace('mysqld.exe', 'mysqldump.exe', $mysql[1]));
                 }
             }
             else
             {
-                $mysqldump = `which mysqldump`;
+                $mysqldump = trim(`which mysqldump`);
             }
         }
 
         if(file_exists($mysqldump)) return $mysqldump;
+        return '';
     }
 }
