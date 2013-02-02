@@ -46,6 +46,15 @@ if %requestType% == 'PATH_INFO' (
 echo %checkdb% > %baseDir%checkdb.bat
 echo checkdb.bat ok
 
+:: create syncsvn.bat
+if %requestType% == 'PATH_INFO' (
+  SET svnrun= %phpcli% %baseDir%ztcli "http://localhost/svn-run"
+)else (
+  SET svnrun= %phpcli% %baseDir%ztcli "http://localhost/?m=svn&f=run"
+)
+echo %svnrun% > %baseDir%svnrun.bat
+echo svnrun.bat ok
+
 :: create crond.bat
 SET cron= %phpcli% %baseDir%php\crond.php
 echo %cron% > %baseDir%crond.bat
@@ -54,9 +63,10 @@ echo crond.bat ok
 :: create system cron.
 if not exist %cronDir% md %cronDir%
 echo # system cron. > %sysCron%
-echo # minute hour day month week  command. >> %sysCron%
-echo 1 1  * * *   %baseDir%backup.bat      # backup database and file. >> %sysCron%
-echo 1 23 * * *   %baseDir%computeburn.bat # compute burndown chart.   >> %sysCron%
+echo #min   hour day month week  command. >> %sysCron%
+echo 1      1    *   *     *     %baseDir%backup.bat      # backup database and file. >> %sysCron%
+echo 1      23   *   *     *     %baseDir%computeburn.bat # compute burndown chart.   >> %sysCron%
+echo 1-59/2 *    *   *     *     %baseDir%svnrun.bat      # sync subversion.          >> %sysCron%
 
 :: return 0 when success.
 exit /b 0
