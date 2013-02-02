@@ -1306,13 +1306,25 @@ class router
         $trace = debug_backtrace();
         extract($trace[0]);
         extract($trace[1]);
-        $log .= ", last called by $file on $line through function $function.";
+        $log .= ", last called by $file on line $line through function $function.\n";
         error_log($log);
 
         /* If exit, output the error. */
         if($exit)
         {
-            if($this->config->debug) die("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>$log</body></html>");
+            if($this->config->debug)
+            {
+                if(PHP_SAPI != 'cli')
+                {
+                    $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
+                    $htmlError .= "<body>$log</body></html>";
+                    die($htmlError);
+                }
+                else
+                {
+                    die($log);
+                }
+            }
             die();
         }
     }
