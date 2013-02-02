@@ -428,6 +428,7 @@ class svnModel extends model
      */
     public function saveAction2PMS($objects, $log, $repoRoot = '')
     {
+        $action = new stdclass();
         $action->actor   = $log->author;
         $action->action  = 'svncommited';
         $action->date    = $log->date;

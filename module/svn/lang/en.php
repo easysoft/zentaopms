@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* Methods. */
+$lang->svn = new stdclass();
 $lang->svn->common  = 'Subversion';
 $lang->svn->cat     = 'View code';
 $lang->svn->diff    = 'Diff code';
