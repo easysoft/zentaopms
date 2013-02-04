@@ -45,23 +45,23 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->begin;?></th>
-      <td><?php echo html::input('begin', '', "class='text-3 date'");?>
+      <td><?php echo html::input('begin', '', "class='text-3 date'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->end;?></th>
-      <td><?php echo html::input('end', '', "class='text-3 date'");?>
+      <td><?php echo html::input('end', '', "class='text-3 date'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->status;?></th>
-      <td><?php echo html::select('status', $lang->testtask->statusList, '',  "class='select-3'");?>
+      <td><?php echo html::select('status', $lang->testtask->statusList, '',  "class='select-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->name;?></th>
-      <td><?php echo html::input('name', '', "class='text-1'");?>
+      <td><?php echo html::input('name', '', "class='text-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testtask->desc;?></th>
-      <td><?php echo html::textarea('desc', '', "rows=10 class='area-1'");?>
+      <td><?php echo html::textarea('desc', '', "rows=10 class='area-1'");?></td>
     </tr>  
     <tr>
       <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?> </td>
