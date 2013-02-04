@@ -52,7 +52,7 @@ function setPreview()
  */
 function setAfter()
 {
-    if($("#story").select().val() == '') 
+    if($("#story").length == 0 || $("#story").select().val() == '') 
     {
         if($('input[value="continueAdding"]').attr('checked') == true) 
         {
