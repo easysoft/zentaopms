@@ -23,7 +23,7 @@
       <th class='w-70px'><?php echo $lang->task->status;?></th>
       <th class='w-40px'><?php echo $lang->task->pri;?></th>
       <th class='w-30px red'><?php echo $lang->task->estimateAB?></th>
-      <th class='w-30px red'><?php echo $lang->task->consumedAB?></th>
+      <th class='w-50px red'><?php echo $lang->task->consumedThisTime?></th>
       <th class='w-30px red'><?php echo $lang->task->leftAB?></th>
       <th class='w-80px'><?php echo $lang->task->finishedBy;?></th>
       <th class='w-80px'><?php echo $lang->task->closedBy;?></th>
@@ -39,7 +39,7 @@
       <td><?php echo html::select("statuses[$task->id]",      $lang->task->statusList, $task->status, 'class=select-1');?></td>
       <td><?php echo html::select("pris[$task->id]",          (array)$lang->task->priList, $task->pri, 'class=select-1');?></td>
       <td><?php echo html::input("estimates[$task->id]",      $task->estimate, 'class=text-1');?></td>
-      <td><?php echo html::input("consumeds[$task->id]",      $task->consumed, 'class=text-1');?></td>
+      <td><?php echo html::input("consumeds[$task->id]",      '', 'class=text-1');?></td>
       <td><?php echo html::input("lefts[$task->id]",          $task->left, 'class=text-1');?></td>
       <td><?php echo html::select("finishedBys[$task->id]",   $members, $task->finishedBy, 'class=select-1');?></td>
       <td><?php echo html::select("closedBys[$task->id]",     $members, $task->closedBy, 'class=select-1');?></td>

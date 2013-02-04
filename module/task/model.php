@@ -236,6 +236,7 @@ class taskModel extends model
         $tasks      = array();
         $allChanges = array();
         $now        = helper::now();
+        $today      = date(DT_DATE1);
         $taskIDList = $this->post->taskIDList ? $this->post->taskIDList : array();
 
         /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
@@ -255,7 +256,6 @@ class taskModel extends model
                 $task->assignedTo     = $task->status == 'closed' ? 'closed' : $this->post->assignedTos[$taskID];
                 $task->pri            = $this->post->pris[$taskID];
                 $task->estimate       = $this->post->estimates[$taskID];
-                $task->consumed       = $this->post->consumeds[$taskID];
                 $task->left           = $this->post->lefts[$taskID];
                 $task->finishedBy     = $this->post->finishedBys[$taskID];
                 $task->canceledBy     = $this->post->canceledBys[$taskID];
@@ -269,6 +269,19 @@ class taskModel extends model
                 if(isset($this->post->assignedTos[$taskID])) 
                 {
                     $task->assignedDate = $this->post->assignedTos[$taskID] == $oldTask->assignedTo ? $oldTask->assignedDate : $now;
+                }
+
+                if($this->post->consumeds[$taskID])
+                {
+                    $record = new stdclass();
+                    $record->account  = $this->app->user->account;
+                    $record->task     = $taskID;
+                    $record->date     = $today;
+                    $record->left     = $task->left;
+                    $record->consumed = $this->post->consumeds[$taskID];
+                    $this->dao->insert(TABLE_TASKESTIMATE)->data($record)->autoCheck()->exec();
+
+                    $task->consumed = $oldTask->consumed + $record->consumed;
                 }
 
                 switch($task->status)
@@ -305,14 +318,6 @@ class taskModel extends model
                 }
                 if($task->assignedTo) $task->assignedDate = $now;
 
-                $tasks[$taskID] = $task;
-                unset($task);
-            }
-
-            /* Update task data. */
-            foreach($tasks as $taskID => $task)
-            {
-                $oldTask = $this->getById($taskID);
                 $this->dao->update(TABLE_TASK)->data($task)
                     ->autoCheck()
                     ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
@@ -813,13 +818,8 @@ class taskModel extends model
      */
     public function getBeforeConsumed($taskID)
     {
-        $tasks = $this->dao->select('consumed')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->fetchAll();
-        $beforeConsumed = 0;
-        foreach($tasks as $task)
-        {
-            $beforeConsumed += $task->consumed; 
-        }
-        return $beforeConsumed;
+        $task = $this->dao->select('SUM(consumed) as beforeConsumed')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->fetch();
+        return $task->beforeConsumed;
     }
 
     /**
