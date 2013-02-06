@@ -5,6 +5,7 @@ cd lampp
 rm -fr RELEASENOTES
 rm -fr  error
 rm -fr icons
+rm -fr licenses
 rm -fr logs/*
 rm -fr htdocs/*
 rm -fr cgi-bin
@@ -35,11 +36,7 @@ rm -fr etc/locales.conf
 cp ../httpd.conf etc/httpd.conf
 
 # process my.cnf
-grep -v '^innodb' etc/my.cnf| \
-sed -e 's/#skip-innodb/default-storage-engine=MyISAM\nskip-innodb/' | \
-grep -v '^#' | \
-grep -v '^$' > etc/my.cnf.new
-mv etc/my.cnf.new etc/my.cnf
+cp ../my.cnf etc/my.cnf
 
 # process php.ini
 cp ../php.ini etc/php.ini
@@ -48,7 +45,7 @@ cp ../php.ini etc/php.ini
 mv bin bin.bak
 mkdir bin
 cd bin.bak 
-cp htpasswd apachectl apxs my_print_defaults mysql mysql.server mysqld_safe mysqldump php php-config phpize httpd ../bin/
+cp htpasswd apachectl my_print_defaults mysql mysql.server mysqld_safe mysqldump php php-config phpize httpd ../bin/
 cd ../
 rm -fr bin.bak
 
@@ -76,58 +73,44 @@ touch share/lampp/alladdons
 chmod a+rx share/lampp/alladdons
 
 # process lib directory.
-mv lib/php/extensions lib/phpextensions
-rm -fr lib/php
-mkdir lib/php
-mv lib/phpextensions lib/php/extensions
-rm -fr lib/php/extensions/no-debug-non-zts-20090626/interbase.so
-rm -fr lib/php/extensions/no-debug-non-zts-20090626/ming.so
-rm -fr lib/php/extensions/no-debug-non-zts-20090626/ncurses.so
-rm -fr lib/php/extensions/no-debug-non-zts-20090626/oci8.so
-rm -fr lib/php/extensions/no-debug-non-zts-20090626/pgsql.so
-rm -fr lib/php/extensions/no-debug-non-zts-20090626/radius.so
-rm -fr lib/php/extensions/no-debug-non-zts-20090626/sqlite.so
-rm -fr lib/perl5
-rm -fr lib/proftpd
-rm -fr lib/fonts
-rm -fr apr-util-1
-rm -fr apr.exp
-rm -fr aprutil.exp
-rm -fr engines
-rm -fr fips_premain.c
-rm -fr fips_premain.c.sha1
-rm -fr gettext
-rm -fr icu
-rm -fr libapr-1*
-rm -fr libapreq2*
-rm -fr libdb.so.3
-rm -fr libform.so*
-rm -fr libicule.so*
-rm -fr libiculx.*
-rm -fr libicutu.*
-rm -fr liblber*
-rm -fr libldap_r*
-rm -fr libmcrypt
-rm -fr libmenu.so*
-rm -fr libming.so*
-rm -fr libmysqlclient.*
-rm -fr libncurses.so*
-rm -fr libpanel.so*
-rm -fr libpbmscl.so*
-rm -fr libpng.so*
-rm -fr libsablot.so*
-rm -fr libsqlite*
-rm -fr libtds.so*
-rm -fr libtdssrv.so*
-rm -fr libxslt-plugins
-rm -fr libzzip-0*
-rm -fr libzzipwrap*
-rm -fr pkgconfig
-rm -fr plugin
-rm -fr stjR6sfX
-rm -fr terminfo
-rm -fr xml2Conf.sh
-rm -fr xsltConf.sh
+mkdir libnew
+cp lib/VERSION libnew/
+cp lib/ioncube.so libnew/
+cp lib/libapr-1.so.0 libnew/
+cp lib/libaprutil-1.so.0 libnew/
+cp lib/libc-client.so libnew/
+cp lib/libcrypto.so.1.0.0 libnew/
+cp lib/libct.so.3 libnew/
+cp lib/libcurl.so.4 libnew/
+cp lib/libexpat.so.0 libnew/
+cp lib/libexslt.so.0 libnew/
+cp lib/libfreetype.so.6 libnew/
+cp lib/libgcc_s.so.1 libnew/
+cp lib/libgdbm.so.2 libnew/
+cp lib/libiconv.so.2 libnew/
+cp lib/libicudata.so.42 libnew/
+cp lib/libicui18n.so.42 libnew/
+cp lib/libicuio.so.42 libnew/
+cp lib/libicuuc.so.42 libnew/
+cp lib/libintl.so.2 libnew/
+cp lib/libjpeg.so.62 libnew/
+cp lib/liblber-2.4.so.2 libnew/
+cp lib/libldap-2.4.so.2 libnew/
+cp lib/libmcrypt.so.4 libnew/
+cp lib/libncurses.so.5 libnew/
+cp lib/libpcre.so.0 libnew/
+cp lib/libpng12.so.0 libnew/
+cp lib/libpq.so.4 libnew/
+cp lib/libsqlite3.so.0 libnew/
+cp lib/libssl.so.1.0.0 libnew/
+cp lib/libstdc++.so.5 libnew/
+cp lib/libsybdb.so.5 libnew/
+cp lib/libxml2.so.2 libnew/
+cp lib/libxslt.so.1 libnew/
+cp lib/libz.so.1 libnew/
+
+rm -fr lib
+mv libnew lib
 
 # process var directory.
 rm -fr var/perl
@@ -137,6 +120,7 @@ rm -fr var/mysql/*.err
 rm -fr var/mysql/ib*
 rm -fr var/mysql/test
 rm -fr var/mysql/phpmyadmin
+rm -fr var/mysql/mysql_upgrade_info
 chmod -R 777 var/mysql
 
 # process modules directory.
@@ -221,7 +205,7 @@ cp ../../windows/index.php htdocs/
 # make the auth file
 mkdir auth
 touch auth/users
-echo 'use "../bin/htpasswd -b users username password" to add a new user.' > auth/readme
+cp ../adduser.sh auth/
 
 # process the phpmyadmin
 7z x $1/phpmyadmin.7z
@@ -236,6 +220,7 @@ rm -fr phpmyadmin/examples
 rm -fr phpmyadmin/js/openlayers
 rm -fr phpmyadmin/libraries/tcpdf
 rm -fr phpmyadmin/Documentation*
+rm -fr phpmyadmin/themes/original
 
 # copy the ioncube loader.
-cp ../ioncube_loader_lin_5.4.so lib/php/extensions/no-debug-non-zts-20100525/
+cp ../ioncube_loader_lin_5.4.so lib/
