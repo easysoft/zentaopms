@@ -121,7 +121,6 @@ $file->mkdir('./xampp/mysql/bin');
 $file->copyFile('./xampp/mysql/binold/mysql.exe',      './xampp/mysql/bin/mysql.exe');
 $file->copyFile('./xampp/mysql/binold/mysqld.exe',     './xampp/mysql/bin/mysqld.exe');
 $file->copyFile('./xampp/mysql/binold/mysqldump.exe',  './xampp/mysql/bin/mysqldump.exe');
-$file->copyFile('./xampp/mysql/binold/myisamchk.exe',  './xampp/mysql/bin/myisamchk.exe');
 $file->removeFile('./xampp/mysql/binold/my.ini');
 
 $file->removeDir('./xampp/mysql/binold');
