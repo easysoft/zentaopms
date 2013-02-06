@@ -9,5 +9,6 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+$lang->api = new stdclass();
 $lang->api->common   = 'API接口';
 $lang->api->getModel = '超级model调用接口';
