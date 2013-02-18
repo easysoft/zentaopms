@@ -36,11 +36,11 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->company->website;?></th>
-      <td><?php echo html::input('website', $company->website, "class='text-1'");?></td>
+      <td><?php echo html::input('website', zget($company, 'website', 'http://'), "class='text-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->company->backyard;?></th>
-      <td><?php echo html::input('backyard', $company->backyard, "class='text-1'");?></td>
+      <td><?php echo html::input('backyard', zget($company, 'backyard', 'http://'), "class='text-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->company->pms;?></th>
