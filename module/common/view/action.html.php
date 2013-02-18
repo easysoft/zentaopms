@@ -56,7 +56,7 @@ function toggleShow(obj)
     $('.changes').each(function(){
         var box = $(this).parent();
         while($(box).attr('tagName').toLowerCase() != 'li') box = $(box).parent();
-        var switchButtonID = ($(box).find('span').find("input[type='button']").attr('id'));
+        var switchButtonID = ($(box).find('span').find("span").attr('id'));
         switchChange(switchButtonID.replace('switchButton', ''));
     })
 }
