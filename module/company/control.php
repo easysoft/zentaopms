@@ -146,7 +146,7 @@ class company extends control
             $company = $this->loadModel('company')->getByDomain();
             $this->session->set('company', $company);
 
-            die(js::alert($this->lang->company->successSaved));
+            die(js::alert($this->lang->company->successSaved) . js::reload('parent'));
         }
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
