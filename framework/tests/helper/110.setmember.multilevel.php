@@ -14,8 +14,9 @@ $obj->user->name = 'Tom';
 
 helper::setMember('obj', 'user.name', 'Mary');    // overide the exists key.
 helper::setMember('obj', 'user.age',  20);        // add a child key to an existing key.
-helper::setMember('obj', 'home.address', 'us');   // add a child key even the parent doesn't exist.
+helper::setMember('obj', 'home.address', new stdclass());    // add a child key even the parent doesn't exist.
+helper::setMember('obj', 'home.address.postcode', '10000');  // three level.
 
 echo $obj->user->name . "\n";
 echo $obj->user->age . "\n";
-echo $obj->home->address . "\n";
+print_r($obj->home->address);

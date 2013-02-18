@@ -1,3 +1,6 @@
 Mary
 20
-us
+stdClass Object
+(
+    [postcode] => 10000
+)
