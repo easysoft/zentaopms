@@ -723,6 +723,7 @@ class projectModel extends model
             ->fetch();
         if($managers) return $managers;
 
+        $managers = new stdclass();
         $managers->PO = '';
         $managers->QD = '';
         $managers->RD = '';
