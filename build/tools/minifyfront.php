@@ -58,7 +58,11 @@ foreach($langs as $lang)
 
         /* Css file for current lang and current them. */
         $cssCode .= file_get_contents($themeRoot . "lang/$lang.css");
-        if($theme != 'default') $cssCode .= file_get_contents($themeRoot . $theme . '/style.css');
+        if($theme != 'default')
+        {
+            $themCode = file_get_contents($themeRoot . $theme . '/style.css');
+            $cssCode .= str_replace('./images', "../$theme/images", $themCode);
+        }
 
         /* Combine them. */
         $cssFile = $themeRoot . "default/$lang.$theme.css";
