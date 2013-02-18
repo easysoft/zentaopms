@@ -1,8 +1,9 @@
 #!/usr/bin/env php
 <?php
-/**
- * 测试setMenu.
- */
+<<<TC
+title: testing the setMenu() method.
+TC;
+
 include '../../../test/init.php';
 include '../model.php';
 $app->user = new stdclass();
