@@ -412,6 +412,7 @@ class taskModel extends model
             ->setDefault('task', $taskID) 
             ->setDefault('date', date(DT_DATE1)) 
             ->remove('realStarted,comment')->get();
+        $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
 
         $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
             ->autoCheck()
@@ -442,7 +443,7 @@ class taskModel extends model
             ->autoCheck()
             ->exec();
 
-        $consumed = $this->getBeforeConsumed($taskID);
+        $consumed = $oldTask->consumed + $estimate->consumed;
         $this->dao->update(TABLE_TASK)
             ->set('consumed')->eq($consumed)
             ->set('`left`')->eq($estimate->left)
@@ -481,6 +482,7 @@ class taskModel extends model
             ->setDefault('date', date(DT_DATE1)) 
             ->setDefault('left', 0)
             ->remove('finishedDate,comment')->get();
+        $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
 
         $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
             ->autoCheck()
@@ -807,19 +809,6 @@ class taskModel extends model
             ->fetchPairs();
         foreach($stories as $storyID) if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
         return $taskCounts;
-    }
-
-    /**
-     * Get before consumed. 
-     * 
-     * @param  int    $taskID 
-     * @access public
-     * @return int 
-     */
-    public function getBeforeConsumed($taskID)
-    {
-        $task = $this->dao->select('SUM(consumed) as beforeConsumed')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->fetch();
-        return $task->beforeConsumed;
     }
 
     /**

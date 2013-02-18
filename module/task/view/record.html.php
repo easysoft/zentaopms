@@ -17,7 +17,7 @@
     <caption><?php echo $task->name;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->task->beforeConsumed;?></th>
-      <td><?php echo $beforeConsumed . ' ' . $lang->task->hour;?></td>
+      <td><?php echo $task->consumed . ' ' . $lang->task->hour;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->consumedThisTime;?></th>

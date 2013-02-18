@@ -446,7 +446,6 @@ class task extends control
         }
 
         $this->view->title = $this->lang->task->record;
-        $this->view->beforeConsumed = $this->task->getBeforeConsumed($taskID);
         $this->display();
     }
 
