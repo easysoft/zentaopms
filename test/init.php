@@ -1,4 +1,8 @@
 <?php
+/* Set error reporting level. */
+error_reporting(E_ALL ^ E_STRICT);
+
+/* Save current working directory and then change the directory of init.php. */
 $cwd = getcwd();
 chdir(dirname(__FILE__));
 
@@ -18,4 +22,5 @@ $app->connectDB();
 /* Load the common module. */
 $common = $app->loadCommon();
 
+/* Change directory back again. */
 chdir($cwd);
