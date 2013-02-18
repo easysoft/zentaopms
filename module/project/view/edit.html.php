@@ -39,7 +39,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->type;?></th>
-      <td><?php echo html::select('type', $lang->project->typeList, $project->type, "class='text-2'");?></td>
+      <td><?php echo html::select('type', $lang->project->typeList, $project->type, "class='text-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->teamname;?></th>
