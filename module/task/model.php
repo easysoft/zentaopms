@@ -88,6 +88,7 @@ class taskModel extends model
      */
     public function batchCreate($projectID)
     {
+        $this->loadModel('action');
         $now   = helper::now();
         $tasks = fixer::input('post')->get();
         $mails = array();
@@ -127,7 +128,7 @@ class taskModel extends model
 
                 $taskID = $this->dao->lastInsertID();
                 if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
-                $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+                $actionID = $this->action->create('task', $taskID, 'Opened', '');
                 $mails[$i]->taskID  = $taskID;
                 $mails[$i]->actionID = $actionID;
             }
@@ -413,10 +414,7 @@ class taskModel extends model
             ->setDefault('date', date(DT_DATE1)) 
             ->remove('realStarted,comment')->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
-
-        $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
-            ->autoCheck()
-            ->exec();
+        $this->addTaskEstimate($estimate);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -474,6 +472,8 @@ class taskModel extends model
             ->setDefault('finishedDate, lastEditedDate', $now) 
             ->remove('comment')->get();
 
+        if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumed));
+
         /* Record consumed and left. */
         $consumed = $task->consumed - $oldTask->consumed; 
         $estimate = fixer::input('post')
@@ -483,12 +483,7 @@ class taskModel extends model
             ->setDefault('left', 0)
             ->remove('finishedDate,comment')->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
-
-        $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
-            ->autoCheck()
-            ->exec();
-
-        if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumed));;
+        $this->addTaskEstimate($estimate);
 
         $this->setStatus($task);
 
@@ -1173,5 +1168,17 @@ class taskModel extends model
     {
         if(!$this->session->taskOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', $this->session->taskQueryCondition) . ')';
         return $this->session->taskQueryCondition;
+    }
+
+    /**
+     * Add task estimate.
+     * 
+     * @param  object    $data 
+     * @access public
+     * @return void
+     */
+    public function addTaskEstimate($data)
+    {
+        $this->dao->insert(TABLE_TASKESTIMATE)->data($data)->autoCheck()->exec();
     }
 }
