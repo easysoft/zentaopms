@@ -315,6 +315,7 @@ class common extends control
         {
             if($type == 'list')
             {
+                $class = "icon-$color-$module-$icon";
                 echo "<span class='$class' title='$title'>&nbsp;</span>";
             }
         }
