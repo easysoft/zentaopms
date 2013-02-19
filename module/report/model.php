@@ -365,6 +365,18 @@ EOT;
                 $products[$plan->product]->plans[$story->plan]->status[$story->status] = isset($products[$plan->product]->plans[$story->plan]->status[$story->status]) ? $products[$plan->product]->plans[$story->plan]->status[$story->status] + 1 : 1;
             }
         }
+        $unplannedStories = $this->dao->select('product, id, status')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('plan')->eq(0)->andWhere('product')->in(array_keys($products))->fetchGroup('product', 'id');
+        foreach($unplannedStories as $product => $stories)
+        {
+            $products[$product]->plans[0] = new stdClass();
+            $products[$product]->plans[0]->title = $this->lang->report->unplanned;
+            $products[$product]->plans[0]->begin = '';
+            $products[$product]->plans[0]->end   = '';
+            foreach($stories as $story) 
+            {
+                $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
+            }
+        }
         return $products;
     }
 

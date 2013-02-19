@@ -68,5 +68,6 @@ $lang->report->to            = 'to';
 $lang->report->taskTotal     = "Task Total";
 $lang->report->manhourTotal  = "Manhour Total";
 $lang->report->bugTotal      = "%s Bugs";
+$lang->report->unplanned     = 'unplanned';
 
 $lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try pro version for more!</a>';

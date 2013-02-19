@@ -68,5 +68,6 @@ $lang->report->to            = '至';
 $lang->report->taskTotal     = "总任务数";
 $lang->report->manhourTotal  = "总工时";
 $lang->report->bugTotal      = "共%s个Bug";
+$lang->report->unplanned     = '未计划';
 
 $lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，尽在专业版！</a>';
