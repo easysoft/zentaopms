@@ -51,8 +51,7 @@ class company extends control
         $this->company->setMenu($deptID);
 
         /* Save session. */
-        $this->session->set('usersParam', $param);
-        $this->session->set('usersType',  $type);
+        $this->session->set('userList', $this->app->getURI(true));
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
