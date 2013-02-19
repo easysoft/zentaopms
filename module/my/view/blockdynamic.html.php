@@ -1,4 +1,4 @@
-<div class='block'>
+<div class='dynamic'>
 <table class='table-1 colored fixed'>
   <caption>
     <div class='f-left'><span class='icon-dynamic'></span><?php echo $lang->my->home->latest;?></div>

@@ -1,4 +1,5 @@
 .block {border:1px solid #efefef; height:225px;}
+.dynamic{border:1px solid #efefef;}
 .linkbox1{height:180px; overflow-y:auto}
 .linkbox2{height:225px; overflow-y:auto}
 
