@@ -50,6 +50,10 @@ class company extends control
         $deptID = $type == 'bydept' ? (int)$param : 0;
         $this->company->setMenu($deptID);
 
+        /* Save session. */
+        $this->session->set('usersParam', $param);
+        $this->session->set('usersType',  $type);
+
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
