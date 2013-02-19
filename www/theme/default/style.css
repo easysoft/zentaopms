@@ -366,8 +366,6 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .release {background:darkgreen; color:#ccc}
 .plan    {background:#ffcc00;}
 .plan a{color:green}
-.search  {display:block; float:left; clear:none; width:16px; height:16px; padding:0; margin:0 0 0 2px; text-indent:-2000px; overflow:hidden; background: url(images/main/search.gif) no-repeat;} 
-.searchleft{display:block; float:left; clear:none;} 
 .helplink {font-size:9px}
 #bysearchTab a{color:red}
 #fileform .text-3 {margin-bottom:5px}
