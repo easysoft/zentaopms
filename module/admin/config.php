@@ -8,3 +8,7 @@ $config->url->faq       = 'http://www.zentao.net/ask-faq.html';
 $config->url->extension = 'http://www.zentao.net/extension-browse.html';
 $config->url->donation  = 'http://www.zentao.net/help-donation.html';
 $config->url->service   = 'http://www.cnezsoft.com/article-browse-1078.html';
+
+$config->admin->flow2Ext['onlyTest']  = 'zentaotest';
+$config->admin->flow2Ext['onlyTask']  = 'zentaotask';
+$config->admin->flow2Ext['onlyStory'] = 'zentaostory';

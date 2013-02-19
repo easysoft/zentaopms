@@ -14,7 +14,7 @@
 <table class='table-1'>
   <caption>
 <?php
-echo $header->title;
+echo $title;
 if(isset($license) and $upgrade == 'yes') printf($lang->extension->upgradeVersion, $this->post->installedVersion, $this->post->upgradeVersion);
 ?>
 </caption>
