@@ -63,6 +63,6 @@ $lang->webapp->addTypeList['custom'] = 'Custom App';
 
 $lang->webapp->errorOccurs         = 'Error:';
 $lang->webapp->errorGetModules     = "Get extensions' categories data from the www.zentao.net failed. ";
-$lang->webapp->errorGetExtensions  = 'Get extensions from www.zentao.net failed. You can visit <a href="http://www.zentao.net/extension/" target="_blank">www.zentao.net</a> to find your extensions, download it manually and then upload to zentaopms to install it.';
+$lang->webapp->errorGetExtensions  = 'Get extensions from www.zentao.net failed. You can visit  “<a href="' . inlink('create') . '">Create webapp</a>” to create it.';
 $lang->webapp->successInstall      = 'Success Install App.';
 $lang->webapp->confirmDelete       = 'Are you sure delete this app?';

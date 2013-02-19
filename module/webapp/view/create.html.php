@@ -40,7 +40,7 @@
   </tr>
   <tr>
     <th><?php echo $lang->webapp->icon?></th>
-    <td><?php echo html::file('files')?></td>
+    <td><?php echo html::file('files', "class='text-1'")?></td>
   </tr>
   <tr><td colspan='2' align='center'><?php echo html::submitButton()?></td></tr>
 </table>

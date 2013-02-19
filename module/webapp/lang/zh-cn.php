@@ -14,7 +14,7 @@ $lang->webapp->index  = '已加应用';
 $lang->webapp->obtain = '获得应用';
 
 $lang->webapp->install    = '安装应用';
-$lang->webapp->uninstall  = '移除应用';
+$lang->webapp->uninstall  = '移除';
 $lang->webapp->useapp     = '使用';
 $lang->webapp->installed  = '已添加';
 $lang->webapp->edit       = '编辑应用';
@@ -63,6 +63,6 @@ $lang->webapp->addTypeList['custom'] = '自定义应用';
 
 $lang->webapp->errorOccurs        = '错误：';
 $lang->webapp->errorGetModules    = '从www.zentao.net获得插件分类失败。可能是因为网络方面的原因，请检查后重新刷新页面。';
-$lang->webapp->errorGetExtensions = '从www.zentao.net获得插件失败。可能是因为网络方面的原因，您可以到<a href="http://www.zentao.net/extension/" target="_blank">www.zentao.net</a>手工下载插件，然后上传安装。';
+$lang->webapp->errorGetExtensions = '从www.zentao.net获得插件失败。可能是因为网络方面的原因，你可以到 “<a href="' . inlink('create') . '">创建应用</a>” 中自行创建。';
 $lang->webapp->successInstall     = '成功安装应用！';
 $lang->webapp->confirmDelete      = '是否删除该应用？';

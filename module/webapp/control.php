@@ -25,6 +25,7 @@ class webapp extends control
 
         $this->webapp->setMenu($module);
 
+        $this->view->title      = $this->lang->webapp->common;
         $this->view->webapps    = $webapps;
         $this->view->moduleTree = $this->loadModel('tree')->getTreeMenu(0, 'webapp', 0, array('treeModel', 'createWebappLink'));
         $this->view->module     = $module;
@@ -64,6 +65,7 @@ class webapp extends control
             $webapps = $results->webapps;
         }
 
+        $this->view->title      = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->obtain;
         $this->view->moduleTree = $this->webapp->getModulesByAPI();
         $this->view->webapps    = $webapps;
         $this->view->installeds = $this->webapp->getLocalApps('appid');
@@ -90,6 +92,7 @@ class webapp extends control
             die(js::reload('parent.parent'));
         }
 
+        $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->edit;
         $this->view->modules = $this->webapp->getModules();
         $this->view->webapp  = $this->webapp->getLocalAppByID($webappID);
         $this->display();
@@ -112,6 +115,7 @@ class webapp extends control
 
         $this->webapp->setMenu();
 
+        $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->create;
         $this->view->modules = $this->webapp->getModules();
         $this->display();
     }
@@ -137,6 +141,7 @@ class webapp extends control
             die(js::locate(inlink('index', "module={$this->post->module}"), 'parent.parent'));
         }
 
+        $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->install;
         $this->view->modules = $this->webapp->getModules();
         $this->display();
     }
