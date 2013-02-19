@@ -404,7 +404,7 @@ class user extends control
         else
         {
             $this->user->delete(TABLE_USER, $userID);
-            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+            die(js::locate($this->session->userList, 'parent'));
         }
     }
 
