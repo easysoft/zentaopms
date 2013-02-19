@@ -9,7 +9,6 @@
 #cboxContent{position:relative; overflow:hidden;}
 #cboxLoadedContent{overflow:auto;}
 #cboxLoadedContent iframe{display:block; width:100%; height:100%; border:0;}
-#cboxTitle{margin:0;}
 #cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%;}
 #cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
 
@@ -22,7 +21,6 @@
 #colorbox{box-shadow:5px 5px 2px #555; -webkit-box-shadow:5px 5px 2px #555; -moz-box-shadow:5px 5px 2px #555; padding-bottom:10px;}
 #cboxContent{background:#fff; padding:25px 25px 0px;}
 #cboxLoadedContent{margin-bottom:28px;}
-#cboxTitle{position:absolute; bottom:3px; left:0; text-align:center; width:100%; color:#949494;}
 #cboxCurrent{position:absolute; bottom:3px; left:58px; color:#949494;}
 #cboxSlideshow{position:absolute; bottom:3px; right:30px; color:#0092ef;}
 #cboxClose{position:absolute; top:2px; right:2px; background:url(images/main/zt-icons.png) -60px -22px no-repeat; width:20px; height:20px; text-indent:-9999px;}
