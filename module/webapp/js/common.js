@@ -4,7 +4,7 @@ if($('a.popup').size()) $("a.popup").colorbox({width:900, height:600, iframe:tru
 
 function popup(width, height)
 {
-    if(width == 0 || height == 0) $("a.popup").colorbox({width:width, height:height});
+    if(width != 0 && height != 0) $("a.popup").colorbox({width:width, height:height});
 }
 
 var show = new Array();
