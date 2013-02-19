@@ -22,7 +22,7 @@
             <div class='contentDiv'>
               <table class='f-left table-1 fixed'>
                 <?php foreach($stories as $storyID => $story):?>
-                <?php $storyLink = $this->createLink('story', 'view', "storyID=$storyID");?>
+                <?php $storyLink = $this->createLink('story', 'view', "storyID=$storyID", '', true);?>
                 <tr class='a-center'>
                   <td id='story' class='w-id a-left'>
                     <input type='checkbox' name='stories[]' value="<?php echo $storyID;?>" <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?>
@@ -58,7 +58,7 @@
             <div class='contentDiv'>
               <table class='f-left table-1 fixed'>
                 <?php foreach($bugs as $bug):?>
-                <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id");?>
+                <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                 <tr class='a-center'>
                   <td class='w-id a-left' id='bug'>
                     <input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if($bug->status == 'closed' or $bug->status == 'resolved') echo "checked"; ?>> <?php echo sprintf('%03d', $bug->id);?>

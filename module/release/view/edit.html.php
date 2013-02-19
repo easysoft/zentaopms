@@ -53,9 +53,7 @@
                   <div class='contentDiv'>
                     <table class='f-left table-1 fixed'>
                       <?php foreach($stories as $key => $story):?>
-                      <?php
-                      $storyLink = $this->createLink('story', 'view', "storyID=$story->id");
-                      ?>
+                      <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true); ?>
                       <tr class='a-center'>
                         <td id='story' class='w-id a-left'><input type='checkbox' name='stories[]' value="<?php echo $story->id;?>" <?php if(strpos($release->stories, $story->id) !== false) echo 'checked';?>> <?php echo sprintf('%03d', $story->id);?></td>
                         <td class='a-left nobr'><?php echo html::a($storyLink, $story->title, '', "class='preview'");?></td>
@@ -89,7 +87,7 @@
                   <div class='contentDiv'>
                     <table class='f-left table-1 fixed'>
                       <?php foreach($bugs as $bug):?>
-                      <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id");?>
+                      <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                       <tr class='a-center'>
                         <td id='bug' class='w-id a-left'><input type='checkbox' name='bugs[]' value="<?php echo $bug->id;?>" <?php if(strpos($release->bugs, $bug->id) !== false) echo 'checked';?>> <?php echo sprintf('%03d', $bug->id);?></td>
                         <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>

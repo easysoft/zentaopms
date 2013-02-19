@@ -46,7 +46,7 @@
           <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
         </tr>
         <?php foreach($stories as $storyID => $story):?>
-        <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
+        <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
         <tr class='a-center'>
           <td><?php echo sprintf('%03d', $story->id);?></td>
           <td><span class='<?php echo 'pri' . $lang->story->priList[$story->pri]?>'><?php echo $lang->story->priList[$story->pri];?></span></td>
@@ -65,7 +65,7 @@
           <div class='f-right'><?php if(count($bugs)) common::printIcon('release', 'export', 'type=bug', '', 'button', '', '', 'export');?></div>
         </caption>
         <tr>
-          <th class='w-id'>       <?php echo $lang->idAB;?></th>
+          <th class='w-id'><?php echo $lang->idAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
           <th class='w-100px'><?php echo $lang->bug->status;?></th>
           <th class='w-user'><?php echo $lang->openedByAB;?></th>
@@ -74,7 +74,7 @@
           <th class='w-date'><?php echo $lang->bug->resolvedDateAB;?></th>
         </tr>
         <?php foreach($bugs as $bug):?>
-        <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id");?>
+        <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
         <tr class='a-center'>
           <td><?php echo sprintf('%03d', $bug->id);?></td>
           <td class='a-left nobr'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
