@@ -36,6 +36,6 @@ $lang->my->home->projects      = 'Project';
 $lang->my->home->products      = 'Product';
 $lang->my->home->projectHome   = 'Project home';
 $lang->my->home->productHome   = 'Product home';
-$lang->my->home->noProjectsTip = "<a class='button-add' href='%s'>create one now</a>";
-$lang->my->home->noProductsTip = "<a class='button-add' href='%s'>creae one now</a>";
+$lang->my->home->createProject = "create a project?";
+$lang->my->home->createProduct = "create a product?";
 $lang->my->home->help          = "<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>Help Book</a>";

@@ -8,3 +8,10 @@
 #row2 .table-1, #row2 caption{border:none}
 
 caption .f-left {padding-left:0px}
+
+.icon-dynamic {padding-left:16px; background:url(../theme/default/images/main/zt-icons.png); background-position:-65px -444px;}
+.icon-more    {padding-left:16px; background:url(../theme/default/images/main/zt-icons.png); background-position:-102px -443px;}
+.icon-todo    {padding-left:16px; background:url(../theme/default/images/main/zt-icons.png); background-position:-2px  -443px;}
+.icon-bug     {padding-left:16px; background:url(../theme/default/images/main/zt-icons.png); background-position:-42px -442px;}
+.icon-task    {padding-left:16px; background:url(../theme/default/images/main/zt-icons.png); background-position:-22px -442px;}
+.icon-story   {padding-left:16px; background:url(../theme/default/images/main/zt-icons.png); background-position:-82px -443px;}

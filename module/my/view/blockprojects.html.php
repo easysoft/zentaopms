@@ -6,7 +6,7 @@
     <td valign='middle'>
       <table class='a-left bd-none' align='center'>
         <tr>
-          <td><?php printf($lang->my->home->noProjectsTip, $this->createLink('project', 'create'));?></td>
+          <td><?php echo html::a($this->createLink('project', 'create'), $lang->my->home->createProject);?></td>
           <td><?php echo $lang->my->home->help; ?></td>
         </tr>
       </table>
