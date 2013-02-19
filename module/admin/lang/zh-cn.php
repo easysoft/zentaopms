@@ -56,11 +56,11 @@ $lang->admin->bind->caption  = '关联社区账号';
 $lang->admin->bind->action   = '关联';
 $lang->admin->bind->success  = "关联账户成功";
 
-$lang->admin->selectFlow = '请选择禅道使用流程';
+$lang->admin->selectFlow = '您计划如何使用禅道？';
 
-$lang->admin->flowList['full']      = '全生命周期管理（禅道完全功能）';
-$lang->admin->flowList['onlyTest']  = '测试管理（禅道测试管理扩展，去掉了需求、任务管理，只保留bug管理、用例管理和测试任务管理，可以只用作测试跟踪）';
-$lang->admin->flowList['onlyTask']  = '任务管理（禅道任务管理扩展，去掉了需求、测试管理，只保留任务管理，可以只用作简单任务跟踪）';
-$lang->admin->flowList['onlyStory'] = '需求管理（禅道需求管理扩展，去掉了任务、测试管理，只保留需求管理，可以只用作需求整理）';
+$lang->admin->flowList['full']      = '所有功能（包括产品、项目、需求、计划、发布、任务、Bug、用例、测试任务和文档等功能。）';
+$lang->admin->flowList['onlyTest']  = '仅测试管理（包括产品、版本、Bug、用例、测试任务和文档管理等功能。)';
+$lang->admin->flowList['onlyTask']  = '仅任务管理（包括项目、任务和文档管理。)';
+$lang->admin->flowList['onlyStory'] = '仅需求管理（包括产品、需求、计划、发布和文档管理等功能。）';
 
-$lang->admin->flowNotice = "<span class='red'>注：如果不是选择全生命周期管理，则可以到“管理->插件”中，卸载相应的插件，即可重新使用禅道完全功能。</span>";
+$lang->admin->flowNotice = "<span class='red'>注：如果您使用的不是所有功能，后续可以到“管理->插件”中，卸载相应的插件，即可重新使用禅道所有功能。</span>";
