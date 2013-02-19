@@ -8,6 +8,8 @@ function setPreview()
     else
     {
         storyLink = createLink('story', 'view', "storyID=" + $('#story').val());
+        var concat = config.requestType == 'PATH_INFO' ? '?'  : '&';
+        storyLink  = storyLink + concat + 'onlybody=yes';
         $('#preview').removeClass('hidden');
         $('#preview').attr('href', storyLink);
     }
@@ -15,5 +17,5 @@ function setPreview()
 $(function()
 {
      $("#story").chosen({no_results_text: noResultsMatch});
-     $("#preview").colorbox({width:1000, height:550, iframe:true, transition:'none', scrolling:true});
+     $("#preview").colorbox({width:960, height:550, iframe:true, transition:'none', scrolling:true});
 })

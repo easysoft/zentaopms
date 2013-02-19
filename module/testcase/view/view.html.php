@@ -22,8 +22,8 @@
     {
         ob_start();
 
-        common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion");
-        common::printIcon('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version");
+        common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase');
+        common::printIcon('testtask', 'results', "runID=0&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results');
 
         if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&extra=caseID=$case->id,version=$case->version,runID=", '', 'button', 'createBug');
 

@@ -16,5 +16,4 @@ function getList()
 $(document).ready(function()
 {
     $("#story").chosen({no_results_text: noResultsMatch});
-    $("#searchStories").colorbox({width:680, height:400, iframe:true, transition:'none'});
 });

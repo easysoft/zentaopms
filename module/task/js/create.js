@@ -39,7 +39,7 @@ function setPreview()
         $('#preview').attr('href', storyLink);
     }
 
-    $("#preview").colorbox({width:960, height:500, iframe:true, transition:'none', scrolling:true});
+    $("#preview").colorbox({width:960, height:550, iframe:true, transition:'none', scrolling:true});
 
     setAfter();
 }

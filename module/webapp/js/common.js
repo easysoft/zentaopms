@@ -1,5 +1,5 @@
 if($('a.iframe').size()) $("a.iframe").colorbox({width:450, height:220, iframe:true, transition:'none', scrolling:true});
-if($('a.webapp').size()) $("a.webapp").colorbox({width:600, height:400, iframe:true, transition:'none', scrolling:true});
+if($('a.webapp').size()) $("a.webapp").colorbox({width:700, height:430, iframe:true, transition:'none', scrolling:true});
 if($('a.popup').size()) $("a.popup").colorbox({width:900, height:600, iframe:true, transition:'none', scrolling:true});
 
 function popup(width, height)

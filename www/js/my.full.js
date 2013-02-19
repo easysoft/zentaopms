@@ -526,7 +526,7 @@ function setSubversionLink()
 /* Set the colorbox of export. */
 function setExport()
 {
-   if($('.export').size()) $(".export").colorbox({width:500, height:240, iframe:true, transition:'none', scrolling:true});
+   if($('.export').size()) $(".export").colorbox({width:500, height:220, iframe:true, transition:'none', scrolling:true});
 }
 
 /**

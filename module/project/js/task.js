@@ -11,7 +11,7 @@ $(function()
         setOuterBox();
     }
     if(browseType == 'bysearch') ajaxGetSearchForm();
-    $('.iframe').colorbox({width:900, height:400, iframe:true});
+    $('.iframe').colorbox({width:900, height:500, iframe:true});
 });
 
 function showProject()

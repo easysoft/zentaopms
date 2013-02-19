@@ -19,4 +19,4 @@ function changeAction(formName, actionName, actionLink)
     $('#' + formName).attr('action', actionLink).submit();
 }
 
-$(".colorbox").colorbox({width:960, height:600, iframe:true, speed:350, scrolling:true});
+$(".colorbox").colorbox({width:960, height:550, iframe:true, transition:'none'});
