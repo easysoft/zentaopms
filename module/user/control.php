@@ -550,7 +550,7 @@ class user extends control
 
             $this->view->title     = $this->lang->user->login;
             $this->view->referer   = $this->referer;
-            $this->view->s         = $this->config->global->sn;
+            $this->view->s         = zget($this->config->global, 'sn');
             $this->view->keepLogin = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
             $this->display();
         }
