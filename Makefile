@@ -52,6 +52,9 @@ tgz:
 	mv zentaotest.zip zentaopms/tmp/extension
 	mv zentaostory.zip zentaopms/tmp/extension
 	mv zentaotask.zip zentaopms/tmp/extension
+	# copy dailyreminder to zentaopms.
+	svn export https://svn.cnezsoft.com/easysoft/trunk/zentaoext/dailyreminder
+	cp -rf dailyreminder/module zentaopms
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
 	wget http://192.168.1.99/release/notify.zip -O zentaopms/www/data/notify/notify.zip
