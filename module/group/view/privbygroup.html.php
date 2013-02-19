@@ -12,13 +12,13 @@
 ?>
 <form method='post' target='hiddenwin'>
 <div id='featurebar'>
+  <span <?php echo empty($menu) ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=&version=$version"), $lang->group->all)?></span>
   <?php foreach($lang->menu as $module => $title):?>
   <span <?php echo $menu == $module ? "class='active'" : ""?>>
   <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=$module&version=$version"), substr($title, 0, strpos($title, '|')))?>
   </span>
   <?php endforeach;?>
   <span <?php echo $menu == 'other' ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=other&version=$version"), $lang->group->other)?></span>
-  <span <?php echo empty($menu) ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=&version=$version"), $lang->group->all)?></span>
   <span><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value)");?></span>
 </div>
   <table class='table-1 a-left'> 
