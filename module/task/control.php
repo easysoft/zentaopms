@@ -271,7 +271,7 @@ class task extends control
             $members = $members + array('closed' => 'Closed');
 
             if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
-            $this->view->projectID   = $project->id;
+            $this->view->project     = $project;
             $this->view->modules     = $this->tree->getOptionMenu($projectID, $viewType = 'task');
             $this->view->editedTasks = $editedTasks;
             $this->view->members     = $members;

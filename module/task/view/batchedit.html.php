@@ -11,13 +11,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit', "projectID=$projectID&from=taskBatchEdit")?>">
+<form method='post' target='hiddenwin' action="<?php echo $this->inLink('batchEdit', "projectID={$project->id}&from=taskBatchEdit")?>">
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?></caption>
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
       <th class='red'>   <?php echo $lang->task->name?></th>
-      <th class='w-80px'><?php echo $lang->task->module;?></th>
+      <?php if($project->type != 'sprint') echo "<th class='w-80px'>" . $lang->task->module . "</th>";?>
       <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-60px'><?php echo $lang->typeAB;?></th>
       <th class='w-70px'><?php echo $lang->task->status;?></th>
@@ -33,7 +33,7 @@
     <tr class='a-center'>
       <td><?php echo $task->id . html::hidden("taskIDList[$task->id]", $task->id);?></td>
       <td><?php echo html::input("names[$task->id]",          $task->name, 'class=text-1');?></td>
-      <td><?php echo html::select("modules[$task->id]",       $modules, $task->module, 'class=select-1');?></td>
+      <?php if($project->type != 'sprint') echo "<td>" . html::select("modules[$task->id]", $modules, $task->module, 'class=select-1') . "</td>";?>
       <td><?php echo html::select("assignedTos[$task->id]",   $members, $task->assignedTo, 'class=select-1');?></td>
       <td><?php echo html::select("types[$task->id]",         $lang->task->typeList, $task->type, 'class=select-1');?></td>
       <td><?php echo html::select("statuses[$task->id]",      $lang->task->statusList, $task->status, 'class=select-1');?></td>
