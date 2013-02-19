@@ -38,6 +38,15 @@ fi
 echo $computeburn > $basePath/computeburn.sh
 echo "computeburn.sh ok"
 
+# daily remind
+if [ $requestType == 'PATH_INFO' ]; then
+  checkdb="$phpcli $basePath/ztcli 'http://localhost/report-remind'";
+else
+  checkdb="$phpcli $basePath/ztcli 'http://localhost/?m=report&f=remind'";
+fi
+echo $checkdb > $basePath/dailyreminder.sh
+echo "dailyreminder.sh ok"
+
 # check database
 if [ $requestType == 'PATH_INFO' ]; then
   checkdb="$phpcli $basePath/ztcli 'http://localhost/admin-checkdb'";
@@ -62,6 +71,7 @@ if [ ! -d "$basePath/cron" ]; then
 fi
 echo "# system cron." > $basePath/cron/sys.cron
 echo "#min   hour day month week  command." >> $basePath/cron/sys.cron
+echo "0      1    *   *     *     $basePath/dailyreminder.sh   # dailyreminder."            >> $basePath/cron/sys.cron
 echo "1      1    *   *     *     $basePath/backup.sh          # backup database and file." >> $basePath/cron/sys.cron
 echo "1      23   *   *     *     $basePath/computeburn.sh     # compute burndown chart."   >> $basePath/cron/sys.cron
 echo "1-59/2 *    *   *     *     $basePath/syncsvn.sh         # sync subversion."          >> $basePath/cron/sys.cron

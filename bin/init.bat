@@ -28,6 +28,15 @@ SET backup= %phpcli% %baseDir%php\backup.php
 echo %backup% > %baseDir%backup.bat
 echo backup.bat ok
 
+:: create dailyreminder.bat
+if %requestType% == 'PATH_INFO' (
+  SET computeburn= %phpcli% %baseDir%ztcli "http://localhost/report-remind"
+)else (
+  SET computeburn= %phpcli% %baseDir%ztcli "http://localhost/?m=report&f=remind"
+)
+echo %computeburn% > %baseDir%dailyreminder.bat
+echo dailyreminder.bat ok
+
 :: create computeburn.bat
 if %requestType% == 'PATH_INFO' (
   SET computeburn= %phpcli% %baseDir%ztcli "http://localhost/project-computeburn"
@@ -64,9 +73,10 @@ echo crond.bat ok
 if not exist %cronDir% md %cronDir%
 echo # system cron. > %sysCron%
 echo #min   hour day month week  command. >> %sysCron%
-echo 1      1    *   *     *     %baseDir%backup.bat      # backup database and file. >> %sysCron%
-echo 1      23   *   *     *     %baseDir%computeburn.bat # compute burndown chart.   >> %sysCron%
-echo 1-59/2 *    *   *     *     %baseDir%svnrun.bat      # sync subversion.          >> %sysCron%
+echo 0      1    *   *     *     %baseDir%dailyreminder.bat # daily reminder.           >> %sysCron%
+echo 1      1    *   *     *     %baseDir%backup.bat        # backup database and file. >> %sysCron%
+echo 1      23   *   *     *     %baseDir%computeburn.bat   # compute burndown chart.   >> %sysCron%
+echo 1-59/2 *    *   *     *     %baseDir%svnrun.bat        # sync subversion.          >> %sysCron%
 
 :: return 0 when success.
 exit /b 0
