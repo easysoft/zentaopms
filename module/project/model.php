@@ -126,14 +126,15 @@ class projectModel extends model
             {
                 if($projectMode == 'noclosed' and ($project->status == 'done' or $project->status == 'suspended')) continue;
 
+                $status = $project->status != 'done' ? $this->lang->project->selectGroup->doing : '';
                 if($project->product)
                 {
                     $product = isset($products[$project->product]) ? $products[$project->product] : '';
-                    $selectGroup[$product][$project->id] = $project->name;
+                    $selectGroup[$product][$project->id] = $project->name . $status;
                 }
                 else
                 {
-                    $selectGroup[$this->lang->project->noProduct][$project->id] = $project->name;
+                    $selectGroup[$this->lang->project->noProduct][$project->id] = $project->name . $status;
                 }
             }
         }
