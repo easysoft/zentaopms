@@ -52,7 +52,7 @@
       </td>
       <?php endif;?>
 
-      <td><?php echo html::textarea("comments[$story->id]", '', "rows='1' class='area-1'");?></td>
+      <td><?php echo html::input("comments[$story->id]", '', "class='area-1'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>

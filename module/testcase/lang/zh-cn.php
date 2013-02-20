@@ -101,7 +101,6 @@ $lang->testcase->legendVersion      = '版本历史';
 
 $lang->testcase->confirmDelete = '您确认要删除该测试用例吗？';
 $lang->testcase->same          = '同上';
-$lang->testcase->notes         = '(注：“用例类型”和“用例标题”必须填写，否则此行无效)';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

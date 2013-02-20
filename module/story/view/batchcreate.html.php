@@ -18,7 +18,7 @@
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
       <th class='w-200px'><?php echo $lang->story->module;?></th>
       <th class='w-180px'><?php echo $lang->story->plan;?></th>
-      <th><?php echo $lang->story->title;?></th>
+      <th class='red'><?php echo $lang->story->title;?></th>
       <th class='w-200px'><?php echo $lang->story->spec;?></th>
       <th class='w-50px'><?php echo $lang->story->pri;?></th>
       <th class='w-60px'><?php echo $lang->story->estimate;?></th>
@@ -31,19 +31,14 @@
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, 'class=select-1');?></td>
       <td><?php echo html::select("plan[$i]", $plans, $planID, 'class=select-1');?></td>
-      <td><?php echo html::input("title[$i]", $storyTitle, "class='text-1'"); echo "<span class='star'>*</span>";?></td>
-      <td><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='text-1'");?></td>
+      <td><?php echo html::input("title[$i]", $storyTitle, "class='text-1'");?></td>
+      <td><?php echo html::input("spec[$i]", $spec, "class='text-1'");?></td>
       <td><?php echo html::select("pri[$i]", (array)$lang->story->priList, $pri, 'class=select-1');?></td>
       <td><?php echo html::input("estimate[$i]", $estimate, "class='text-1'");?></td>
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='text-1'");?></td>
     </tr>  
     <?php endfor;?>
-    <tr>
-      <td colspan='8'>
-        <div class='half-left red'><?php echo $lang->story->notes;?></div>
-        <div class='half-right'><?php echo html::submitButton() . html::resetButton();?></div>
-      </td>
-    </tr>
+    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

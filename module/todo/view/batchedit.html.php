@@ -17,26 +17,26 @@
     <caption><?php echo $lang->todo->batchEdit . $lang->colon;?></caption>
     <tr>
       <th class='w-20px'><?php echo $lang->idAB;?></th> 
-      <th class='w-200px'><?php echo $lang->todo->date;?></th>
+      <th class='w-150px'><?php echo $lang->todo->date;?></th>
       <th class='w-100px'><?php echo $lang->todo->type;?></th>
       <th class='w-70px'><?php echo $lang->todo->pri;?></th>
-      <th class='w-p65'><?php echo $lang->todo->name;?></th>
-      <th class='w-120px'><?php echo $lang->todo->beginAndEnd;?></th>
+      <th class='w-p65 red'><?php echo $lang->todo->name;?></th>
+      <th class='w-140px'><?php echo $lang->todo->beginAndEnd;?></th>
     </tr>
 
     <?php foreach($editedTodos as $todo):?>
     <tr class='a-center'>
       <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
-      <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='text-1 date'");?></td>
+      <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='text-2 date'");?></td>
       <td><?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange=loadList(this.value,$todo->id) class='select-1'");?></td>
       <td><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, 'class=select-1');?></td>
       <td>
-        <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='f-left text-1 hiddenwin'"); echo "<span class='star'>*</span>";?></div>
+        <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='f-left text-1 hiddenwin'"); ?></div>
         <div class='<?php echo "nameBox" . $todo->id;?>'>
         <?php 
         if($todo->type == 'custom')
         {
-          echo html::input("names[$todo->id]", $todo->name, "class='f-left text-1'"); echo "<span class='star'>*</span>";
+          echo html::input("names[$todo->id]", $todo->name, "class='f-left text-1'"); ;
         }
         elseif($todo->type == 'task')
         {

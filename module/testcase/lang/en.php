@@ -101,7 +101,6 @@ $lang->testcase->legendVersion      = 'Versions';
 
 $lang->testcase->confirmDelete = 'Are you sure to delete this case?';
 $lang->testcase->same          = 'The same as above';
-$lang->testcase->notes         = '(Notes: the type and title must be written, otherwise it is no use)';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

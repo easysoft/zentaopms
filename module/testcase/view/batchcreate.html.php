@@ -21,7 +21,7 @@
       <th class='w-300px'><?php echo $lang->testcase->module;?></th>
       <th class='w-180px'><?php echo $lang->testcase->type;?></th>
       <th><?php echo $lang->testcase->story;?></th>
-      <th class='w-300px'><?php echo $lang->testcase->title;?></th>
+      <th class='w-300px red'><?php echo $lang->testcase->title;?></th>
     </tr>
     <?php for($i = 0; $i < $config->testcase->batchCreate; $i++):?>
     <?php $moduleOptionMenu['same'] = $lang->testcase->same; if($i != 0) $currentModuleID = 'same';?>
@@ -31,17 +31,12 @@
     <tr class='a-center'>
       <td><?php echo $i+1;?></td>
       <td><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class=select-1");?></td>
-      <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=select-1"); echo "<span class='star'>*</span>";?></td>
+      <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=select-1");?></td>
       <td class='a-left'style='overflow:visible'><?php echo html::select("story[$i]", $stories, $story, 'class=select-1');?></td>
-      <td><?php echo html::input("title[$i]", '', "class='text-1'"); echo "<span class='star'>*</span>";?></td>
+      <td><?php echo html::input("title[$i]", '', "class='text-1'");?></td>
     </tr>  
     <?php endfor;?>
-    <tr>
-      <td colspan='5'>
-        <div class='half-left red'><?php echo $lang->testcase->notes;?></div>
-        <div class='half-right'><?php echo html::submitButton() . html::resetButton();?></div>
-      </td>
-    </tr>
+    <tr><td colspan='5' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

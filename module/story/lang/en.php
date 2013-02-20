@@ -163,7 +163,6 @@ $lang->story->affectedBugs         = 'Affected bugs';
 $lang->story->affectedCases        = 'Affected cases';
 
 $lang->story->specTemplate          = "Recommend template:：As <<i class='red'>a type of user</i>>,I want <<i class='red'>some goals</i>>,so that <<i class='red'>some reason</i>>.";
-$lang->story->notes                 = "(notes:if the title is empty, it is no use)";
 $lang->story->needNotReview         = "needn't review";
 $lang->story->afterSubmit           = "After created";
 $lang->story->successSaved          = "Successfully saved";
