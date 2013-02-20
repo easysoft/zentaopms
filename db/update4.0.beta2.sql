@@ -34,4 +34,4 @@ INSERT INTO `zt_groupPriv` (`company` , `group` , `module` , `method` ) VALUES
 ('1', '10', 'webapp', 'index'),
 ('1', '11', 'webapp', 'index');
 
-UPDATE `zt_config` SET `company` = '0' WHERE `key` = 'flow';
+UPDATE `zt_config` SET `company` = '0', `section` = 'global'  WHERE `key` = 'flow';
