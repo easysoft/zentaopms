@@ -17,7 +17,7 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* Basic settings. */
 $config = new config();
-$config->version     = '4.0.beta2';       // The version of zentaopms. Don't change it.
+$config->version     = '4.0';       // The version of zentaopms. Don't change it.
 $config->encoding    = 'UTF-8';           // The encoding of zentaopms.
 $config->cookieLife  = time() + 2592000;  // The cookie life time.
 $config->timezone    = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
