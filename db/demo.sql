@@ -265,19 +265,21 @@ INSERT INTO `zt_task` (`id`, `company`, `project`, `story`, `storyVersion`, `fro
 INSERT INTO `zt_task` (`id`, `company`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `statusCustom`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(8, 1, 1, 4, 1, 0, '售后服务的开发', 'devel', 1, 8, 6, 0, '0000-00-00', 'cancel', 12, '', '售后服务的开发<br />', 'projectManager', '2012-06-05 10:34:45', 'projectManager', '2012-06-05 10:41:20', 'dev1', '0000-00-00 00:00:00', 'dev1', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', '', 'dev1', '2012-06-05 10:41:20', '0');
 INSERT INTO `zt_task` (`id`, `company`, `project`, `story`, `storyVersion`, `fromBug`, `name`, `type`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `statusCustom`, `mailto`, `desc`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `finishedBy`, `finishedDate`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES(9, 1, 1, 4, 1, 0, '售后服务的开发', 'devel', 1, 8, 0, 8, '0000-00-00', 'cancel', 1, '', '售后服务的开发<br />', 'projectManager', '2012-06-05 10:35:01', 'projectManager', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', 'dev1', '2012-06-05 10:41:20', '', '0000-00-00 00:00:00', '', 'dev1', '2012-06-05 10:41:20', '0');
 
-
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'projectManager', '', '2012-06-05', 184, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'dev1', '', '2012-06-05', 184, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'dev2', '', '2012-06-05', 184, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'dev3', '', '2012-06-05', 184, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'projectManager', '', '2012-06-05', 365, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'dev1', '', '2012-06-05', 365, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'dev2', '', '2012-06-05', 365, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'dev3', '', '2012-06-05', 365, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'productManager', 'PO', '2012-06-05', 365, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'testManager', 'QM', '2012-06-05', 365, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'productManager', 'PO', '2012-06-05', 184, 7);
-INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'testManager', 'QM', '2012-06-05', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'dev3', '研发', '2013-02-20', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'productManager', '产品经理', '2013-02-20', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'tester2', '测试', '2013-02-20', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'tester1', '测试', '2013-02-20', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'projectManager', '项目经理', '2013-02-20', 365, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'tester2', '测试', '2013-02-20', 365, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'tester1', '测试', '2013-02-20', 365, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'dev3', '研发', '2013-02-20', 365, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'dev2', '研发', '2013-02-20', 365, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'dev1', '研发', '2013-02-20', 365, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'dev1', '研发', '2013-02-20', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'dev2', '研发', '2013-02-20', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'projectManager', '项目经理', '2013-02-20', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 1, 'testManager', '测试主管', '2013-02-20', 184, 7);
+INSERT INTO `zt_team` (`company`, `project`, `account`, `role`, `join`, `days`, `hours`) VALUES(1, 2, 'productManager', '产品经理', '2013-02-20', 365, 7);
 
 INSERT INTO `zt_testResult` (`id`, `company`, `run`, `case`, `version`, `caseResult`, `stepResults`, `lastRunner`, `date`) VALUES(1, 1, 4, 1, 1, 'pass', 'a:1:{i:1;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}', 'testManager', '2012-06-05 11:11:00');
 INSERT INTO `zt_testResult` (`id`, `company`, `run`, `case`, `version`, `caseResult`, `stepResults`, `lastRunner`, `date`) VALUES(2, 1, 3, 2, 1, 'pass', 'a:1:{i:2;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}', 'testManager', '2012-06-05 11:11:05');
