@@ -541,7 +541,13 @@ function isLocalIP()
  */
 function getWebRoot()
 {
-    return substr($_SERVER['SCRIPT_NAME'], 0, (strrpos($_SERVER['SCRIPT_NAME'], '/') + 1));
+    $path = $_SERVER['SCRIPT_NAME'];
+    if(defined('IN_SHELL'))
+    {
+        $url  = parse_url($_SERVER['argv'][1]);
+        $path = $url['path'];
+    }
+    return substr($path, 0, (strrpos($path, '/') + 1));
 }
 
 /**

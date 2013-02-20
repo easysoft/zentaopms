@@ -70,4 +70,15 @@ $lang->report->manhourTotal  = "Manhour Total";
 $lang->report->bugTotal      = "%s Bugs";
 $lang->report->unplanned     = 'unplanned';
 
+/* daily reminder. */
+$lang->report->idAB  = 'ID';
+$lang->report->bugTitle = 'Bug Title';
+$lang->report->taskName = 'Task Name';
+$lang->report->todoName = 'Todo Name';
+
+$lang->report->mailtitle->begin = 'Notice : Your';
+$lang->report->mailtitle->bug   = " Bugs(%s),";
+$lang->report->mailtitle->task  = " Tasks(%s),";
+$lang->report->mailtitle->todo  = " Todos(%s),";
+
 $lang->report->proVersion = '<a href="http://www.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try pro version for more!</a>';
