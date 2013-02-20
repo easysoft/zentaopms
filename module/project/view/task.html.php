@@ -21,7 +21,7 @@ var browseType  = '<?php echo $browseType;?>';
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
 <table class='cont-lt1'>
   <tr valign='top'>
-    <td id="sidebar" onclick="showProject()"><span></span></td>
+    <div id="sidebar" onclick="showProject()"></div>
     <td class='side' id='project'>
       <div class='box-title'>
         <?php echo $lang->project->projectTasks;?>
@@ -29,7 +29,7 @@ var browseType  = '<?php echo $browseType;?>';
       </div>
       <div class='box-content'><?php echo $projectTree;?></div>
     </td>
-    <td class='divider'></td>
+    <td class='divider' id="project-divider"></td>
     <?php if($project->type !='sprint'):?>
     <td class='side'>
       <div class='box-title'><?php echo $project->name;?></div>
