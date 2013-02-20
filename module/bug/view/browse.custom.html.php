@@ -74,7 +74,7 @@
               <div class='f-left'>
                 <?php 
                 echo html::selectAll() . html::selectReverse(); 
-                if(common::hasPriv('bug', 'batchEdit') and $bugs) echo html::submitButton($lang->bug->batchEdit);
+                if(common::hasPriv('bug', 'batchEdit') and $bugs) echo html::submitButton($lang->edit);
                ?>
               </div>
               <?php endif?>

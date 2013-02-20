@@ -111,8 +111,8 @@ js::set('moduleID'  , $moduleID);
                <div class='f-left'>
                <?php
                echo html::selectAll() . html::selectReverse(); 
-               if(common::hasPriv('testcase', 'batchEdit'))echo html::submitButton($lang->testcase->batchEdit, "onclick='changeAction(\"" . inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy") . "\")'");
-               if(common::hasPriv('testtask', 'batchRun')) echo html::submitButton($lang->testtask->batchRun,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
+               if(common::hasPriv('testcase', 'batchEdit'))echo html::submitButton($lang->edit, "onclick='changeAction(\"" . inLink('batchEdit', "from=testcaseBrowse&productID=$productID&orderBy=$orderBy") . "\")'");
+               if(common::hasPriv('testtask', 'batchRun')) echo html::submitButton($lang->testtask->runCase,  "onclick='changeAction(\"" . $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy") . "\")'");
                ?>
                </div>
                <?php endif?>

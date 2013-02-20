@@ -92,12 +92,12 @@ var moduleID   = '<?php echo $moduleID;?>';
               echo html::selectAll() . html::selectReverse();
               if(common::hasPriv('testcase', 'batchEdit')):
               ?>
-              <input class='button-s' value="<?php echo $lang->testcase->batchEdit; ?>" type="button" onclick="casesform.action='<?php echo $this->createLink('testcase', 'batchEdit', "from=testtaskCases&productID=$productID");?>';casesform.submit();">
+              <input class='button-s' value="<?php echo $lang->edit; ?>" type="button" onclick="casesform.action='<?php echo $this->createLink('testcase', 'batchEdit', "from=testtaskCases&productID=$productID");?>';casesform.submit();">
               <?php endif;?>
               <?php if(common::hasPriv('testtask', 'batchAssign')):?>
               <?php echo html::select('assignedTo', $users);?>
-              <input class='button-s' value="<?php echo $lang->testtask->batchAssign; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchAssign', "taskID=$task->id");?>';casesform.submit();">
-              <input class='button-s' value="<?php echo $lang->testtask->batchRun; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");?>';casesform.submit();">
+              <input class='button-s' value="<?php echo $lang->testtask->assign; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchAssign', "taskID=$task->id");?>';casesform.submit();">
+              <input class='button-s' value="<?php echo $lang->testtask->runCase; ?>" type="button" onclick="casesform.action='<?php echo inLink('batchRUN', "productID=$productID&orderBy=id_desc&from=testtask");?>';casesform.submit();">
               <?php endif;?>
               </div>
               <?php endif;?>

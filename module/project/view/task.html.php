@@ -146,7 +146,7 @@ var browseType  = '<?php echo $browseType;?>';
               <td colspan='<?php echo $columns;?>'>
                 <div class='f-left'>
                 <?php 
-                  if(common::hasPriv('task', 'batchEdit') and count($tasks))echo html::selectAll() . html::selectReverse() . html::submitButton($lang->task->batchEdit); 
+                  if(common::hasPriv('task', 'batchEdit') and count($tasks))echo html::selectAll() . html::selectReverse() . html::submitButton($lang->edit); 
                   echo $summary;
                 ?>
                 </div>

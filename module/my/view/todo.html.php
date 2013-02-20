@@ -101,7 +101,7 @@
         if(common::hasPriv('todo', 'batchEdit'))
         {
             $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
-            echo html::commonButton($lang->todo->batchEdit, "onclick=\"changeAction('todoform', 'batchEdit', '$actionLink')\"");
+            echo html::commonButton($lang->edit, "onclick=\"changeAction('todoform', 'batchEdit', '$actionLink')\"");
 
         }
         if(common::hasPriv('todo', 'import2Today') and $importFuture)

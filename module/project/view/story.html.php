@@ -96,12 +96,12 @@
               if(common::hasPriv('story', 'batchEdit'))
               {
                   $actionLink = $this->createLink('story', 'batchEdit', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
-                  echo html::commonButton($lang->story->batchEdit, "onclick=\"changeAction('projectStoryForm', 'batchEdit', '$actionLink')\"");
+                  echo html::commonButton($lang->edit, "onclick=\"changeAction('projectStoryForm', 'batchEdit', '$actionLink')\"");
               }
               if(common::hasPriv('story', 'batchClose'))
               {
                   $actionLink = $this->createLink('story', 'batchClose', "from=projectStory&productID=0&projectID=$project->id&orderBy=$orderBy");
-                  echo html::commonButton($lang->story->batchClose, "onclick=\"changeAction('projectStoryForm', 'batchClose', '$actionLink')\"");
+                  echo html::commonButton($lang->close, "onclick=\"changeAction('projectStoryForm', 'batchClose', '$actionLink')\"");
               }
           }
           printf($lang->product->storySummary, count($stories), $totalEstimate);

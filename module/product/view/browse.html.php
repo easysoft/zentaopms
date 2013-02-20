@@ -114,12 +114,12 @@ var browseType = '<?php echo $browseType;?>';
                   if(common::hasPriv('story', 'batchEdit'))
                   {
                       $actionLink = $this->createLink('story', 'batchEdit', "from=productBrowse&productID=$productID&projectID=0&orderBy=$orderBy");
-                      echo html::commonButton($lang->story->batchEdit, "onclick=\"changeAction('productStoryForm', 'batchEdit', '$actionLink')\"");
+                      echo html::commonButton($lang->edit, "onclick=\"changeAction('productStoryForm', 'batchEdit', '$actionLink')\"");
                   }
                   if(common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory')
                   {
                       $actionLink = $this->createLink('story', 'batchClose', "from=productBrowse&productID=$productID&projectID=0&orderBy=$orderBy");
-                      echo html::commonButton($lang->story->batchClose, "onclick=\"changeAction('productStoryForm', 'batchClose', '$actionLink')\"");
+                      echo html::commonButton($lang->close, "onclick=\"changeAction('productStoryForm', 'batchClose', '$actionLink')\"");
                   }
               }
               echo $summary;

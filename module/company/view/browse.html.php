@@ -77,7 +77,7 @@ js::set('deptID', $deptID);
           <td colspan='11'>
           <?php
           echo html::selectAll() . html::selectReverse();
-          echo html::submitButton($lang->user->batchEdit, 'onclick=batchEdit()');
+          echo html::submitButton($lang->edit, 'onclick=batchEdit()');
           echo html::submitButton($lang->user->contacts->manage, 'onclick=manageContacts()');
           $pager->show();
           ?>
