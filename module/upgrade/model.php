@@ -76,6 +76,9 @@ class upgradeModel extends model
                 $this->updateTaskAssignedTo();
                 $this->loadModel('setting')->setItem('system.common.global.flow', 'full', 0);
             case '4_0_beta1': $this->execSQL($this->getUpgradeFile('4.0.beta1'));
+            case '4_0_beta2':  
+                $this->execSQL($this->getUpgradeFile('4.0.beta2'));
+                $this->updateProjectType();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -122,6 +125,7 @@ class upgradeModel extends model
         case '3_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('3.2.1'));
         case '3_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('3.3'));
         case '4_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta1'));
+        case '4_0_beta2': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -386,6 +390,18 @@ class upgradeModel extends model
                 ->where('id')->eq($result[0]->case)
                 ->exec();
         }
+    }
+
+    /**
+     * Update type of projects. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function updateProjectType()
+    {
+        $projects = $this->dao->select('root')->from(TABLE_MODULE)->where('type')->eq('task')->fetchPairs('root'); 
+        $this->dao->update(TABLE_PROJECT)->set('type')->eq('waterfall')->where('id')->in($projects)->exec();        
     }
 
     /**
