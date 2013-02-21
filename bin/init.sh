@@ -15,7 +15,7 @@ if [ $# -ne 1 ]; then
     fi
   done
   while :; do
-    echo "Please input zentao url:(example: http://localhost or http://127.0.0.1:88)"
+    echo "Please input zentao url:(example: http://localhost:88/zentao or http://localhost)"
     read baseUrl 
     if [ -z "$baseUrl" ]; then
       echo "zentao url is error"; 
@@ -25,6 +25,7 @@ if [ $# -ne 1 ]; then
   done
 fi 
 
+baseUrl=`echo "$baseUrl" | sed 's/[/]$//g'`
 if [ "`cat $basePath/../config/my.php | grep -c 'PATH_INFO'`" != 0 ];then
   requestType='PATH_INFO';
 else
