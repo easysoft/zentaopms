@@ -1,5 +1,5 @@
 .bug, .task {color:gray; font-size:9px}
 .cont-lt1 .side{width:220px}
-#sidebar{position: fixed;left: 15px;top: 185px;width:20px;height:20px;cursor:pointer;background:url(theme/default/images/main/zt-icons.png) -81px  -161px;}
+#sidebar{position:absolute;left:15px;top:185px;width:20px;height:20px;cursor:pointer;background:url(theme/default/images/main/zt-icons.png) -81px  -161px;}
 #hideButton{cursor:pointer;}
 #hideButton span{padding:2px 10px; background:url(theme/default/images/main/zt-icons.png) -100px  -161px;}
