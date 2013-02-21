@@ -16,11 +16,13 @@ if not exist %phpcli% (
 )
 :input_url
 IF "%2"=="" SET /P baseUrl="Please input zentao url:(example: http://localhost or http://127.0.0.1:88)"
-echo %baseUrl%
 if %baseUrl% == '' (
   echo zentao url is error
   goto input_url 
 )
+
+:: get baseUrl
+if %baseUrl:~-1% == / SET baseUrl=%baseUrl:~0,-1%
 :: get requestType
 SET requestType= 'PATH_INFO' 
 for /f "tokens=3" %%f in ('find /c "'PATH_INFO'" "%baseDir%..\config\my.php"') do set count=%%f
