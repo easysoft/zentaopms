@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `zt_company` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `pms` (`pms`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   `value` text NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `unique` (`company`,`owner`,`module`,`section`,`key`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_dept`;
 CREATE TABLE IF NOT EXISTS `zt_dept` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -358,7 +358,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `company` mediumint(8) unsigned NOT NULL default '0',
   `isCat` enum('1','0') NOT NULL default '0',
   `catID` mediumint(8) unsigned NOT NULL,
-  `type` enum('sprint','project') NOT NULL default 'sprint',
+  `type` varchar(20) NOT NULL default 'sprint',
   `parent` mediumint(8) unsigned NOT NULL default '0',
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
@@ -518,9 +518,10 @@ CREATE TABLE IF NOT EXISTS `zt_taskEstimate` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `company` mediumint(8) unsigned NOT NULL,
   `task` mediumint(8) unsigned NOT NULL default '0',
-  `date` int(10) unsigned NOT NULL default '0',
-  `estimate` tinyint(3) unsigned NOT NULL default '0',
-  `estimater` char(30) NOT NULL default '',
+  `date` date NOT NULL,
+  `left` float unsigned NOT NULL default '0',
+  `consumed` float unsigned NOT NULL,
+  `account` char(30) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `task` (`task`),
   KEY `company` (`company`)
@@ -582,6 +583,7 @@ CREATE TABLE IF NOT EXISTS `zt_testTask` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   `desc` text NOT NULL,
+  `report` text NOT NULL,
   `status` char(30) NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -640,16 +642,16 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `account` (`account`),
   KEY `company` (`company`,`dept`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userContact`;
 CREATE TABLE IF NOT EXISTS `zt_userContact` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
   `company` mediumint(8) unsigned NOT NULL,
   `account` char(30) NOT NULL,
   `listName` varchar(60) NOT NULL,
   `userList` text NOT NULL,
-  PRIMARY KEY (`id`)
-  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userGroup`;
 CREATE TABLE IF NOT EXISTS `zt_userGroup` (
   `company` mediumint(8) unsigned NOT NULL,
@@ -704,19 +706,18 @@ CREATE TABLE IF NOT EXISTS `zt_webapp` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `zt_group` (`id`, `company`, `name`, `desc`, `role`) VALUES
-(1, 1, 'ADMIN', 'for administrator', 'admin'),
-(2, 1, 'DEV', 'for developers.', 'dev'),
-(3, 1, 'QA', 'for testers.', 'qa'),
-(4, 1, 'PM', 'for project managers.', 'pm'),
-(5, 1, 'PO', 'for product owners.', 'po'),
-(6, 1, 'TD', 'for technical director.', 'td'),
-(7, 1, 'PD', 'for product director.', 'pd'),
-(8, 1, 'QD', 'for quality director.', 'qd'),
-(9, 1, 'TOP', 'for top manager.', 'top'),
-(10, 1, 'OTHERS', 'for others.', ''),
-(11, 1, 'guest', 'For guest', 'guest');
-
+INSERT INTO `zt_group` (`id`, `company`, `name`, `role`, `desc`) VALUES
+(1, 1, 'ADMIN', 'admin', 'for administrator'),
+(2, 1, 'DEV', 'dev', 'for developers.'),
+(3, 1, 'QA', 'qa', 'for testers.'),
+(4, 1, 'PM', 'pm', 'for project managers.'),
+(5, 1, 'PO', 'po', 'for product owners.'),
+(6, 1, 'TD', 'td', 'for technical director.'),
+(7, 1, 'PD', 'pd', 'for product director.'),
+(8, 1, 'QD', 'qd', 'for quality director.'),
+(9, 1, 'TOP', 'top', 'for top manager.'),
+(10, 1, 'OTHERS', '', 'for others.'),
+(11, 1, 'guest', 'guest', 'For guest');
 INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 1, 'project', 'unlinkMember'),
 (1, 1, 'task', 'start'),
@@ -984,7 +985,7 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 7, 'todo', 'export'),
 (1, 2, 'user', 'dynamic'),
 (1, 2, 'task', 'create'),
-(1, 2, 'todo', 'mark'),
+(1, 2, 'todo', 'finish'),
 (1, 2, 'productplan', 'browse'),
 (1, 2, 'testtask', 'cases'),
 (1, 2, 'doc', 'editLib'),
@@ -1224,7 +1225,7 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 4, 'qa', 'index'),
 (1, 1, 'story', 'report'),
 (1, 1, 'bug', 'browse'),
-(1, 5, 'todo', 'mark'),
+(1, 5, 'todo', 'finish'),
 (1, 2, 'task', 'edit'),
 (1, 2, 'my', 'dynamic'),
 (1, 2, 'todo', 'view'),
@@ -1356,21 +1357,21 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 1, 'todo', 'import2Today'),
 (1, 1, 'testtask', 'browse'),
 (1, 1, 'testtask', 'batchAssign'),
-(1, 1, 'todo', 'mark'),
+(1, 1, 'todo', 'finish'),
 (1, 1, 'testtask', 'linkcase'),
 (1, 5, 'product', 'edit'),
 (1, 5, 'release', 'browse'),
 (1, 5, 'doc', 'editLib'),
 (1, 5, 'project', 'manageProducts'),
 (1, 7, 'my', 'index'),
-(1, 7, 'todo', 'mark'),
+(1, 7, 'todo', 'finish'),
 (1, 2, 'user', 'profile'),
 (1, 9, 'my', 'project'),
 (1, 3, 'file', 'download'),
 (1, 9, 'my', 'editProfile'),
 (1, 3, 'project', 'task'),
 (1, 3, 'bug', 'report'),
-(1, 3, 'todo', 'mark'),
+(1, 3, 'todo', 'finish'),
 (1, 3, 'user', 'dynamic'),
 (1, 4, 'task', 'delete'),
 (1, 4, 'task', 'activate'),
@@ -1621,7 +1622,7 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 4, 'product', 'browse'),
 (1, 4, 'product', 'index'),
 (1, 4, 'todo', 'import2Today'),
-(1, 4, 'todo', 'mark'),
+(1, 4, 'todo', 'finish'),
 (1, 4, 'todo', 'export'),
 (1, 4, 'todo', 'delete'),
 (1, 4, 'todo', 'view'),
@@ -1662,7 +1663,7 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 6, 'todo', 'view'),
 (1, 6, 'todo', 'delete'),
 (1, 6, 'todo', 'export'),
-(1, 6, 'todo', 'mark'),
+(1, 6, 'todo', 'finish'),
 (1, 6, 'todo', 'import2Today'),
 (1, 6, 'todo', 'batchEdit'),
 (1, 6, 'product', 'index'),
@@ -1909,7 +1910,7 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 8, 'doc', 'createLib'),
 (1, 8, 'doc', 'browse'),
 (1, 8, 'doc', 'editLib'),
-(1, 8, 'todo', 'mark'),
+(1, 8, 'todo', 'finish'),
 (1, 8, 'todo', 'batchEdit'),
 (1, 8, 'todo', 'delete'),
 (1, 8, 'todo', 'create'),
@@ -2042,7 +2043,7 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 9, 'todo', 'view'),
 (1, 9, 'todo', 'delete'),
 (1, 9, 'todo', 'export'),
-(1, 9, 'todo', 'mark'),
+(1, 9, 'todo', 'finish'),
 (1, 9, 'todo', 'import2Today'),
 (1, 9, 'todo', 'batchEdit'),
 (1, 9, 'product', 'index'),
@@ -2165,7 +2166,7 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 10, 'todo', 'view'),
 (1, 10, 'todo', 'delete'),
 (1, 10, 'todo', 'export'),
-(1, 10, 'todo', 'mark'),
+(1, 10, 'todo', 'finish'),
 (1, 10, 'todo', 'import2Today'),
 (1, 10, 'todo', 'batchEdit'),
 (1, 10, 'product', 'index'),
@@ -2242,4 +2243,15 @@ INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 8, 'misc', 'ping'),
 (1, 3, 'misc', 'ping'),
 (1, 1, 'file', 'delete'),
-(1, 1, 'misc', 'ping');
+(1, 1, 'misc', 'ping'),
+(1, 1, 'webapp', 'index'),
+(1, 2, 'webapp', 'index'),
+(1, 3, 'webapp', 'index'),
+(1, 4, 'webapp', 'index'),
+(1, 5, 'webapp', 'index'),
+(1, 6, 'webapp', 'index'),
+(1, 7, 'webapp', 'index'),
+(1, 8, 'webapp', 'index'),
+(1, 9, 'webapp', 'index'),
+(1, 10, 'webapp', 'index'),
+(1, 11, 'webapp', 'index');
