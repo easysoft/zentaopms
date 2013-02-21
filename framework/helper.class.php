@@ -545,7 +545,8 @@ function getWebRoot()
     if(defined('IN_SHELL'))
     {
         $url  = parse_url($_SERVER['argv'][1]);
-        $path = $url['path'];
+        $path = empty($url['path']) ? '/' : rtrim($url['path'], '/');
+        $path = empty($path) ? '/' : $path;
     }
     return substr($path, 0, (strrpos($path, '/') + 1));
 }
