@@ -129,7 +129,9 @@ class taskModel extends model
                 $taskID = $this->dao->lastInsertID();
                 if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
                 $actionID = $this->action->create('task', $taskID, 'Opened', '');
-                $mails[$i]->taskID  = $taskID;
+                
+                $mails[$i]           = new stdclass();
+                $mails[$i]->taskID   = $taskID;
                 $mails[$i]->actionID = $actionID;
             }
             else

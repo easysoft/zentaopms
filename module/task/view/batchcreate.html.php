@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::set('batchCreateNum', $config->task->batchCreate);?>
-<form method='post'>
+<form method='post' target='hiddenwin'>
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->task->project . $lang->colon . $lang->task->batchCreate;?></caption>
     <tr>

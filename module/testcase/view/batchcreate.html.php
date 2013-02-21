@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::set('testcaseBatchCreateNum', $config->testcase->batchCreate);?>
-<form method='post' enctype='multipart/form-data'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table align='center' class='table-1 fixed'> 
     <caption><?php echo $lang->testcase->batchCreate;?></caption>
     <tr>

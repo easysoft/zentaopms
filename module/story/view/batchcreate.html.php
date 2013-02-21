@@ -11,7 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
-<form method='post' enctype='multipart/form-data'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table align='center' class='table-1 fixed'> 
     <caption><?php echo $lang->story->product . $lang->colon . $lang->story->batchCreate;?></caption>
     <tr>

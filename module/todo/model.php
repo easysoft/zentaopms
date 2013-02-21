@@ -58,6 +58,7 @@ class todoModel extends model
         {
             if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]))
             {
+                $todo          = new stdclass();
                 $todo->account = $this->app->user->account;
                 if($this->post->date == false)
                 {

@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form method='post'>
+<form method='post' target='hiddenwin'>
   <table class='table-1' > 
     <caption> <?php echo $lang->todo->batchCreate . $lang->colon . html::input('date', $date, "class='select-2 date' onchange='updateAction(this.value)'");?>
     <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></caption>

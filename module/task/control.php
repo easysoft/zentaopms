@@ -119,7 +119,7 @@ class task extends control
             foreach($mails as $mail)
             {
                 $this->sendmail($mail->taskID, $mail->actionID);
-            }            
+            }
 
             /* Locate the browser. */
             if($iframe) die(js::reload('parent.parent'));

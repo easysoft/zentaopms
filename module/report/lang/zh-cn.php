@@ -76,6 +76,7 @@ $lang->report->bugTitle = 'Bug标题';
 $lang->report->taskName = '任务名称';
 $lang->report->todoName = 'Todo名称';
 
+$lang->report->mailtitle        = new stdclass();
 $lang->report->mailtitle->begin = '提醒：您有';
 $lang->report->mailtitle->bug   = " Bugs(%s),";
 $lang->report->mailtitle->task  = " 任务(%s),";

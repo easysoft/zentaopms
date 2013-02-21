@@ -375,6 +375,7 @@ class storyModel extends model
             {
                 $oldStory = $this->getById($storyID);
 
+                $story                 = new stdclass();
                 $story->lastEditedBy   = $this->app->user->account;
                 $story->lastEditedDate = $now;
                 $story->status         = $oldStory->status;
