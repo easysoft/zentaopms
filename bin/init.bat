@@ -5,9 +5,9 @@ SET baseDir=%~dp0
 SET cronDir=%baseDir%cron\
 set sysCron=%cronDir%sys.cron
 
-:: get phpcli and baseUrl
+:: get phpcli and pmsRoot
 SET phpcli=%1
-SET baseUrl=%2
+SET pmsRoot=%2
 :input_php
 IF "%1"=="" SET /P phpcli="Please input your php path:(example: c:\windows\php.exe)"
 if not exist %phpcli% (
@@ -15,14 +15,14 @@ if not exist %phpcli% (
   goto input_php 
 )
 :input_url
-IF "%2"=="" SET /P baseUrl="Please input zentao url:(example: http://localhost or http://127.0.0.1:88)"
-if %baseUrl% == '' (
+IF "%2"=="" SET /P pmsRoot="Please input zentao url:(example: http://localhost or http://127.0.0.1:88)"
+if %pmsRoot% == '' (
   echo zentao url is error
   goto input_url 
 )
 
-:: get baseUrl
-if %baseUrl:~-1% == / SET baseUrl=%baseUrl:~0,-1%
+:: get pmsRoot
+if %pmsRoot:~-1% == / SET pmsRoot=%pmsRoot:~0,-1%
 :: get requestType
 SET requestType= 'PATH_INFO' 
 for /f "tokens=3" %%f in ('find /c "'PATH_INFO'" "%baseDir%..\config\my.php"') do set count=%%f
@@ -40,36 +40,36 @@ echo backup.bat ok
 
 :: create dailyreminder.bat
 if %requestType% == 'PATH_INFO' (
-  SET computeburn= %phpcli% %baseDir%ztcli "%baseUrl%/report-remind"
+  SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/report-remind"
 )else (
-  SET computeburn= %phpcli% %baseDir%ztcli "%baseUrl%/?m=report&f=remind"
+  SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=report&f=remind"
 )
 echo %computeburn% > %baseDir%dailyreminder.bat
 echo dailyreminder.bat ok
 
 :: create computeburn.bat
 if %requestType% == 'PATH_INFO' (
-  SET computeburn= %phpcli% %baseDir%ztcli "%baseUrl%/project-computeburn"
+  SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/project-computeburn"
 )else (
-  SET computeburn= %phpcli% %baseDir%ztcli "%baseUrl%/?m=project&f=computeburn"
+  SET computeburn= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=project&f=computeburn"
 )
 echo %computeburn% > %baseDir%computeburn.bat
 echo computeburn.bat ok
 
 :: create checkdb.bat
 if %requestType% == 'PATH_INFO' (
-  SET checkdb= %phpcli% %baseDir%ztcli "%baseUrl%/admin-checkdb"
+  SET checkdb= %phpcli% %baseDir%ztcli "%pmsRoot%/admin-checkdb"
 )else (
-  SET checkdb= %phpcli% %baseDir%ztcli "%baseUrl%/?m=admin&f=checkdb"
+  SET checkdb= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=admin&f=checkdb"
 )
 echo %checkdb% > %baseDir%checkdb.bat
 echo checkdb.bat ok
 
 :: create syncsvn.bat
 if %requestType% == 'PATH_INFO' (
-  SET svnrun= %phpcli% %baseDir%ztcli "%baseUrl%/svn-run"
+  SET svnrun= %phpcli% %baseDir%ztcli "%pmsRoot%/svn-run"
 )else (
-  SET svnrun= %phpcli% %baseDir%ztcli "%baseUrl%/?m=svn&f=run"
+  SET svnrun= %phpcli% %baseDir%ztcli "%pmsRoot%/?m=svn&f=run"
 )
 echo %svnrun% > %baseDir%svnrun.bat
 echo svnrun.bat ok
