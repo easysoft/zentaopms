@@ -2,9 +2,9 @@
 # usage: ./init.sh /usr/bin/php http://localhost
 
 phpcli=$1
-baseUrl=$2
+pmsRoot=$2
 basePath=$(cd "$(dirname "$0")"; pwd)
-if [ $# -ne 1 ]; then
+if [ ! -n "$1" ]; then
   while :; do
     echo "Please input your php path:(example: /usr/bin/php)"
     read phpcli 
@@ -14,10 +14,12 @@ if [ $# -ne 1 ]; then
       break;
     fi
   done
+fi 
+if [ ! -n "$2" ]; then
   while :; do
     echo "Please input zentao url:(example: http://localhost:88/zentao or http://localhost)"
-    read baseUrl 
-    if [ -z "$baseUrl" ]; then
+    read pmsRoot 
+    if [ -z "$pmsRoot" ]; then
       echo "zentao url is error"; 
     else
       break;
@@ -25,7 +27,7 @@ if [ $# -ne 1 ]; then
   done
 fi 
 
-baseUrl=`echo "$baseUrl" | sed 's/[/]$//g'`
+pmsRoot=`echo "$pmsRoot" | sed 's/[/]$//g'`
 if [ "`cat $basePath/../config/my.php | grep -c 'PATH_INFO'`" != 0 ];then
   requestType='PATH_INFO';
 else
@@ -44,36 +46,36 @@ echo "backup.sh ok"
 
 # computeburn
 if [ $requestType == 'PATH_INFO' ]; then
-  computeburn="$phpcli $basePath/ztcli '$baseUrl/project-computeburn'";
+  computeburn="$phpcli $basePath/ztcli '$pmsRoot/project-computeburn'";
 else
-  computeburn="$phpcli $basePath/ztcli '$baseUrl/?m=project&f=computeburn'";
+  computeburn="$phpcli $basePath/ztcli '$pmsRoot/?m=project&f=computeburn'";
 fi
 echo $computeburn > $basePath/computeburn.sh
 echo "computeburn.sh ok"
 
 # daily remind
 if [ $requestType == 'PATH_INFO' ]; then
-  checkdb="$phpcli $basePath/ztcli '$baseUrl/report-remind'";
+  checkdb="$phpcli $basePath/ztcli '$pmsRoot/report-remind'";
 else
-  checkdb="$phpcli $basePath/ztcli '$baseUrl/?m=report&f=remind'";
+  checkdb="$phpcli $basePath/ztcli '$pmsRoot/?m=report&f=remind'";
 fi
 echo $checkdb > $basePath/dailyreminder.sh
 echo "dailyreminder.sh ok"
 
 # check database
 if [ $requestType == 'PATH_INFO' ]; then
-  checkdb="$phpcli $basePath/ztcli '$baseUrl/admin-checkdb'";
+  checkdb="$phpcli $basePath/ztcli '$pmsRoot/admin-checkdb'";
 else
-  checkdb="$phpcli $basePath/ztcli '$baseUrl/?m=admin&f=checkdb'";
+  checkdb="$phpcli $basePath/ztcli '$pmsRoot/?m=admin&f=checkdb'";
 fi
 echo $checkdb > $basePath/checkdb.sh
 echo "checkdb.sh ok"
 
 # syncsvn.
 if [ $requestType == 'PATH_INFO' ]; then
-  syncsvn="$phpcli $basePath/ztcli '$baseUrl/svn-run'";
+  syncsvn="$phpcli $basePath/ztcli '$pmsRoot/svn-run'";
 else
-  syncsvn="$phpcli $basePath/ztcli '$baseUrl/?m=svn&f=run'";
+  syncsvn="$phpcli $basePath/ztcli '$pmsRoot/?m=svn&f=run'";
 fi
 echo $syncsvn > $basePath/syncsvn.sh
 echo "syncsvn.sh ok"
