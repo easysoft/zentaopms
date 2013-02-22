@@ -5,6 +5,8 @@
   1.2 进入xampp目录，双击start.bat脚本，启动禅道控制面板程序。
   1.3 通过禅道控制面板程序即可启动禅道运行环境，并访问。
 
+  如果无法通过控制面板启动禅道，进入xampp\service目录，双击运行install.bat，来安装并启动禅道的服务。
+
 2. 注意事项：
 
   2.1 不要改动xampp的目录名，否则程序运行会有问题。
@@ -25,6 +27,9 @@ Please read the flowing notes before you run zentao:
   1.1 Please make sure to put xmapp under the root of one driver, for example c:\xampp or d:\xampp.
   1.2 Enter the xampp directory and double click the start.bat to start the control panel of zentao.
   1.3 Click the 'Start' button to start zentao.
+
+  If you can't start zentao by the control panel, cd xampp\service, double click the install.bat to install and start services
+  for zentao manually.
 
 2. Notice:
 
