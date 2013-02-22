@@ -1108,6 +1108,7 @@ class project extends control
         }
         $project   = $this->commonAction($projectID);
         $this->project->setMenu($this->projects, $project->id);
+        $this->view->title     = $project->name . $this->lang->colon . $this->lang->project->order;
         $this->view->projects  = $this->project->getList();
         $this->view->projectID = $project->id;
         $this->display();
