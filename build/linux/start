@@ -44,7 +44,11 @@ chmod 777 zentao/module
 find zentao/ -name ext |xargs chmod -R 777
 
 # init the shells in zentao/bin
-./zentao/bin/init.sh /opt/lampp/bin/php > /dev/null 2>&1
+if [ ! -f ./zentao/bin/backup.sh ]; then  
+  ip=`ifconfig |grep inet|head -n 1 |awk -F':' '{print $2}' |awk -F ' ' '{print $1}'`
+  pmsRoot=http://$ip/zentao/
+ ./zentao/bin/init.sh /opt/lampp/bin/php $pmsRoot > /dev/null 2>&1
+fi  
 
 # start apache, mysql.
 ./lampp start
