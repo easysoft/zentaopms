@@ -18,6 +18,7 @@ $lang->product->edit   = "编辑产品";
 $lang->product->create = "新增产品";
 $lang->product->read   = "产品详情";
 $lang->product->delete = "删除产品";
+$lang->product->close  = "关闭";
 $lang->product->select = '--请选择产品--';
 
 $lang->product->basicInfo = '基本信息';

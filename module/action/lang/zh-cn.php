@@ -9,7 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->action->common   = '系统日志';
+$lang->action->common     = '系统日志';
 $lang->action->product    = '产品';
 $lang->action->project    = '项目';
 $lang->action->objectType = '对象类型';

@@ -9,11 +9,7 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->action->common   = 'Logs';
-$lang->action->trash    = 'Trash';
-$lang->action->undelete = 'Undelete';
-$lang->action->hide     = 'Hide';
-
+$lang->action->common     = 'Logs';
 $lang->action->product    = 'Product';
 $lang->action->project    = 'Project';
 $lang->action->objectType = 'Object';
@@ -23,9 +19,16 @@ $lang->action->actor      = 'Actor';
 $lang->action->action     = 'Action';
 $lang->action->actionID   = 'ActionID';
 $lang->action->date       = 'Date';
-$lang->action->trashTips  = "Tips:The deleting actions in zentao are all logic";
-$lang->action->textDiff   = 'Text mode';
-$lang->action->original   = 'Original content';
+
+$lang->action->trash    = 'Trash';
+$lang->action->undelete = 'Undelete';
+$lang->action->hideOne  = 'Hide';
+$lang->action->hideAll  = 'Hide all';
+
+$lang->action->trashTips      = "Tips:The deleting actions in zentao are all logic";
+$lang->action->textDiff       = 'Text mode';
+$lang->action->original       = 'Original content';
+$lang->action->confirmHideAll = '您确定要全部隐藏这些记录吗？';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = 'Today';

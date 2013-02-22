@@ -122,6 +122,7 @@ $lang->resource->product->roadmap = 'roadmap';
 $lang->resource->product->doc     = 'doc';
 $lang->resource->product->dynamic = 'dynamic';
 $lang->resource->product->project = 'project';
+$lang->resource->product->close   = 'close';
 
 $lang->product->methodOrder[0]  = 'index';
 $lang->product->methodOrder[5]  = 'browse';
@@ -134,6 +135,7 @@ $lang->product->methodOrder[35] = 'roadmap';
 $lang->product->methodOrder[40] = 'doc';
 $lang->product->methodOrder[45] = 'dynamic';
 $lang->product->methodOrder[50] = 'project';
+$lang->product->methodOrder[55] = 'close';
 
 /* Story. */
 $lang->resource->story = new stdclass();
@@ -285,6 +287,7 @@ $lang->resource->task->view               = 'view';
 $lang->resource->task->export             = 'export';
 $lang->resource->task->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->task->report             = 'reportChart';
+$lang->resource->task->record             = 'record';
 
 $lang->task->methodOrder[5]  = 'create';
 $lang->task->methodOrder[10] = 'batchCreate';
@@ -302,6 +305,7 @@ $lang->task->methodOrder[65] = 'view';
 $lang->task->methodOrder[70] = 'export';
 $lang->task->methodOrder[75] = 'confirmStoryChange';
 $lang->task->methodOrder[90] = 'report';
+$lang->task->methodOrder[95] = 'record';
 
 /* Build. */
 $lang->resource->build = new stdclass();
