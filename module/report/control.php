@@ -133,11 +133,19 @@ class report extends control
         if($this->config->report->dailyreminder->todo) $todos = $this->report->getUserTodos();
         
         $reminder = array();
+
+        $users = array_unique(array_keys($bugs) + array_keys($tasks) + array_keys($todos));
+        if(!empty($users)) foreach($users as $user) $reminder[$user] = new stdclass();
+
         if(!empty($bugs))  foreach($bugs as $user => $bug)   $reminder[$user]->bugs  = $bug;
         if(!empty($tasks)) foreach($tasks as $user => $task) $reminder[$user]->tasks = $task;
         if(!empty($todos)) foreach($todos as $user => $todo) $reminder[$user]->todos = $todo;
 
         $this->loadModel('mail');
+
+        /* Check mail turnon.*/
+        if(!$this->config->mail->turnon) die("Mail turnon is off. Please open config for send mail.\n");
+
         foreach($reminder as $user => $mail)
         {
             /* Get email content and title.*/

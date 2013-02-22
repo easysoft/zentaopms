@@ -76,6 +76,7 @@ $lang->report->bugTitle = 'Bug Title';
 $lang->report->taskName = 'Task Name';
 $lang->report->todoName = 'Todo Name';
 
+$lang->report->mailtitle        = new stdclass();
 $lang->report->mailtitle->begin = 'Notice : Your';
 $lang->report->mailtitle->bug   = " Bugs(%s),";
 $lang->report->mailtitle->task  = " Tasks(%s),";
