@@ -70,6 +70,7 @@ class product extends control
         $this->app->loadLang('my');
         $this->view->projectStats  = $this->loadModel('project')->getProjectStats($status, $productID);
 
+        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
         $this->view->productID = $productID;
         $this->display();
     }
@@ -414,6 +415,7 @@ class product extends control
             die(js::reload('parent'));
         }
         $this->product->setMenu($this->products, $productID);
+        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->product->order;
         $this->view->products = $this->product->getList('noclosed');
         $this->display();
     }
