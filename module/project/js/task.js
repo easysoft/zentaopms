@@ -1,16 +1,6 @@
 $(function()
 {
-    if($.cookie('projectBar') == 'hide')
-    {
-        $('#project').hide();
-        $('#project-divider').hide();
-        setOuterBox();
-    }
-    else
-    {
-        $('#sidebar').hide();
-        setOuterBox();
-    }
+    setOuterBox();
     if(browseType == 'bysearch') ajaxGetSearchForm();
     $('.iframe').colorbox({width:900, height:500, iframe:true});
 });
