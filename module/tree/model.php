@@ -435,7 +435,6 @@ class treeModel extends model
         {
             $i++;
             $newOrder = $i * 10;
-            if($newOrder == $order) continue;
             $this->dao->update(TABLE_MODULE)->set('`order`')->eq($newOrder)->where('id')->eq((int)$moduleID)->limit(1)->exec();
         }
     }
