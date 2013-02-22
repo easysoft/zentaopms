@@ -53,6 +53,7 @@ $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
 $lang->project->createStory   = "Create story";
 $lang->project->all           = 'All';
+$lang->project->typeDesc      = 'No module in sprint, no story in OPS';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';

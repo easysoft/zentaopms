@@ -74,7 +74,7 @@ $(document).ready(function()
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->type;?></th>
-      <td><?php echo html::select('type', $lang->project->typeList, '', "class='text-3'");?></td>
+      <td><?php echo html::select('type', $lang->project->typeList, '', "class='text-3'") . $lang->project->typeDesc;?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->project->manageProducts;?></th>

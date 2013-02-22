@@ -53,6 +53,7 @@ $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
 $lang->project->createStory   = "新增需求";
 $lang->project->all           = '所有';
+$lang->project->typeDesc      = '短期迭代无模块，运维项目无产品需求';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';
@@ -62,7 +63,7 @@ $lang->project->close    = '结束';
 
 $lang->project->typeList['sprint']    = '短期迭代';
 $lang->project->typeList['waterfall'] = '长期项目';
-$lang->project->typeList['ops']       = '运营项目';
+$lang->project->typeList['ops']       = '运维项目';
 
 $lang->project->endList[14]   = '两星期';
 $lang->project->endList[31]   = '一个月';
