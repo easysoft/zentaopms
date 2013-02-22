@@ -52,6 +52,7 @@ $whiteList[] = 'admin-bind';
 $whiteList[] = 'story-commonaction';
 $whiteList[] = 'story-sendmail';
 $whiteList[] = 'webapp-ajaxaddview';
+$whiteList[] = 'report-remind';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
