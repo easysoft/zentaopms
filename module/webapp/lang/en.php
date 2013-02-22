@@ -9,26 +9,26 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->webapp->common = 'Web App';
+$lang->webapp->common = 'App';
 $lang->webapp->index  = 'Added App';
 $lang->webapp->obtain = 'Obtain App';
 
-$lang->webapp->install    = 'Install App';
-$lang->webapp->uninstall  = 'Uninstall App';
-$lang->webapp->useapp     = 'Use App';
+$lang->webapp->install    = 'Install';
+$lang->webapp->uninstall  = 'Remove';
+$lang->webapp->useapp     = 'Run';
 $lang->webapp->installed  = 'Installed';
 $lang->webapp->edit       = 'Edit App';
 $lang->webapp->create     = 'Create App';
-$lang->webapp->manageTree = 'Manage Tree';
+$lang->webapp->manageTree = 'Category';
 
 $lang->webapp->id          = 'ID';
 $lang->webapp->name        = 'Name';
-$lang->webapp->url         = 'Link Address';
+$lang->webapp->url         = 'URL';
 $lang->webapp->icon        = 'Icon';
-$lang->webapp->module      = 'App Category';
+$lang->webapp->module      = 'Category';
 $lang->webapp->author      = 'Author';
 $lang->webapp->desc        = 'Desc';
-$lang->webapp->target      = 'Target';
+$lang->webapp->target      = 'How';
 $lang->webapp->size        = 'Size';
 $lang->webapp->height      = 'Height';
 $lang->webapp->addedTime   = 'Add Time';
