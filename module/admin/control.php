@@ -33,6 +33,8 @@ class admin extends control
         }
 
 		$this->app->loadLang('misc');
+
+        $this->view->title = $this->lang->admin->common;
 		$this->display();
     }
 
