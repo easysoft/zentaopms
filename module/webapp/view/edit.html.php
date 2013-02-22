@@ -46,7 +46,7 @@
     <td>
     <?php
     if($webapp->icon) echo "<p><img src='{$webapp->icon->webPath}' /></p>";
-    echo html::file('files', "class='text-1'");
+    echo html::file('files', "class='text-1' size='57'");
     ?>
     </td>
   </tr>

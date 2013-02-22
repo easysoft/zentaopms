@@ -93,7 +93,7 @@ class webapp extends control
         }
 
         $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->edit;
-        $this->view->modules = $this->webapp->getModules();
+        $this->view->modules = $this->loadModel('tree')->getOptionMenu(0, 'webapp');
         $this->view->webapp  = $this->webapp->getLocalAppByID($webappID);
         $this->display();
     }
@@ -116,7 +116,7 @@ class webapp extends control
         $this->webapp->setMenu();
 
         $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->create;
-        $this->view->modules = $this->webapp->getModules();
+        $this->view->modules = $this->loadModel('tree')->getOptionMenu(0, 'webapp');
         $this->display();
     }
 

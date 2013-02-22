@@ -23,9 +23,9 @@ $lang->webapp->manageTree = '维护分类';
 
 $lang->webapp->id          = '编号';
 $lang->webapp->name        = '名称';
-$lang->webapp->url         = '链接地址';
+$lang->webapp->url         = '网址';
 $lang->webapp->icon        = '图标';
-$lang->webapp->module      = 'WEB分类';
+$lang->webapp->module      = '分类';
 $lang->webapp->author      = '作者';
 $lang->webapp->desc        = '简介';
 $lang->webapp->target      = '打开方式';
