@@ -1,6 +1,6 @@
   </div>
   <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php echo zget($config, 'debug', 'hidden', 'debugwin');?>'></iframe>
+  <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php print($config->debug ? 'debugwin' : 'hidden');?>'></iframe>
   <div id='divider'></div>
 <?php $onlybody = zget($_GET, 'onlybody', 'no');?>
 <?php if($onlybody != 'yes'):?>
