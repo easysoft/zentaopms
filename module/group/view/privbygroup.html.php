@@ -11,16 +11,25 @@
  */
 ?>
 <form method='post' target='hiddenwin'>
-<div id='featurebar'>
-  <span <?php echo empty($menu) ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=&version=$version"), $lang->group->all)?></span>
-  <?php foreach($lang->menu as $module => $title):?>
-  <span <?php echo $menu == $module ? "class='active'" : ""?>>
-  <?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=$module&version=$version"), substr($title, 0, strpos($title, '|')))?>
-  </span>
-  <?php endforeach;?>
-  <span <?php echo $menu == 'other' ? "class='active'" : ""?>><?php echo html::a(inlink('managePriv', "type=byGroup&param=$groupID&menu=other&version=$version"), $lang->group->other)?></span>
-  <span><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value)");?></span>
-</div>
+  <div id='featurebar'>
+    <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
+    <span <?php echo empty($menu) ? "class='active'" : ""?>>
+      <?php echo html::a(inlink('managePriv', sprintf($params, '')), $lang->group->all)?>
+    </span>
+
+    <?php foreach($lang->menu as $module => $title):?>
+    <span <?php echo $menu == $module ? "class='active'" : ""?>>
+      <?php echo html::a(inlink('managePriv', sprintf($params, $module)), substr($title, 0, strpos($title, '|')))?>
+    </span>
+    <?php endforeach;?>
+
+    <span <?php echo $menu == 'other' ? "class='active'" : "";?>>
+      <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), $lang->group->other);?>
+    </span>
+
+    <span><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value)");?></span>
+  </div>
+
   <table class='table-1 a-left'> 
     <tr class='colhead'>
       <th><?php echo $lang->group->module;?></th>
@@ -45,7 +54,7 @@
     }
     ?>
     <tr class='f-14px <?php echo cycle('even, bg-yellow');?>'>
-      <th class='a-right'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></td>
+      <th class='a-right w-150px'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></td>
       <td id='<?php echo $moduleName;?>' class='pv-10px'>
         <?php $i = 1;?>
         <?php foreach($moduleActions as $action => $actionLabel):?>
@@ -61,7 +70,7 @@
     <?php endforeach;?>
     <tr>
       <th class='rowhead'><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
-      <td class='a-center'>
+      <td>
         <?php 
         echo html::submitButton($lang->save, "onclick='setNoChecked()'");
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));

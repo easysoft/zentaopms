@@ -35,8 +35,8 @@ $lang->group->priv     = 'Priviledge';
 $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group users';
 $lang->group->outside  = 'Other users';
-$lang->group->other    = 'Other module';
-$lang->group->all      = 'All priv';
+$lang->group->other    = 'Others';
+$lang->group->all      = 'All';
 
 $lang->group->copyOptions['copyPriv'] = 'Copy priviledge';
 $lang->group->copyOptions['copyUser'] = 'Copy user';
