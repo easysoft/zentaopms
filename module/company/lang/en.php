@@ -30,10 +30,10 @@ $lang->company->phone    = 'Phone';
 $lang->company->fax      = 'Fax';
 $lang->company->address  = 'Address';
 $lang->company->zipcode  = 'Zipcode';
-$lang->company->website  = 'Web site';
-$lang->company->backyard = 'Internal Site';
-$lang->company->pms      = 'ZenTaoPMS Site';
-$lang->company->guest    = 'Guest visit';
+$lang->company->website  = 'Website';
+$lang->company->backyard = 'Intranet';
+$lang->company->pms      = 'Zentao';
+$lang->company->guest    = 'Guest';
 
 $lang->company->guestList[0] = 'Deny';
 $lang->company->guestList[1] = 'Allow';
