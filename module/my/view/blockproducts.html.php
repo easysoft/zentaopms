@@ -17,15 +17,14 @@
   <table class='table-1 colored fixed'>
     <tr class='colhead'>
       <th class='w-150px'><div class='f-left'><span class='icon-allProjects'>&nbsp;</span><?php echo $lang->product->name;?></div></th>
-      <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
-      <th><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
-      <th><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
-      <th><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
+      <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
+      <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['changed'];?></th>
+      <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['draft'];?></th>
+      <th title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['closed'];?></th>
       <th><?php echo $lang->product->plans;?></th>
       <th><?php echo $lang->product->releases;?></th>
       <th><?php echo $lang->product->bugs;?></th>
-      <th><?php echo $lang->bug->unResolved;?></th>
-      <th><?php echo $lang->bug->assignToNull;?></th>
+      <th title='<?php echo $lang->bug->common;?>'><?php echo $lang->bug->unResolved;?></th>
     </tr>
     <?php foreach($productStats as $product):?>
     <tr class='a-center' style='height:30px'>
@@ -38,7 +37,6 @@
       <td><?php echo $product->releases?></td>
       <td><?php echo $product->bugs?></td>
       <td><?php echo $product->unResolved?></td>
-      <td><?php echo $product->assignToNull?></td>
     </tr>
     <?php endforeach;?>
   </table>
