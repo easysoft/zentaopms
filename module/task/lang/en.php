@@ -82,7 +82,7 @@ $lang->task->ditto = 'Ditto';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Pending';
-$lang->task->statusList['doing']   = 'In progress';
+$lang->task->statusList['doing']   = 'Doing';
 $lang->task->statusList['done']    = 'Done';
 $lang->task->statusList['cancel']  = 'Canceled';
 $lang->task->statusList['closed']  = 'Closed';
