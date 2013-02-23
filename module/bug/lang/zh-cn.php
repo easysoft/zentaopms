@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* 字段列表。*/
-$lang->bug->common           = '缺陷管理';
+$lang->bug->common           = 'Bug';
 $lang->bug->id               = 'Bug编号';
 $lang->bug->product          = '所属产品';
 $lang->bug->module           = '所属模块';
