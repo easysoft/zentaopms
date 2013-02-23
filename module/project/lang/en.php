@@ -53,7 +53,7 @@ $lang->project->noProduct     = 'No product';
 $lang->project->select        = '--select project--';
 $lang->project->createStory   = "Create story";
 $lang->project->all           = 'All';
-$lang->project->typeDesc      = 'No module in sprint, no story in OPS';
+$lang->project->typeDesc      = 'No module in sprint, no burndown for waterfall, no story in OPS';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
@@ -127,9 +127,9 @@ $lang->project->allTasks             = 'All';
 $lang->project->assignedToMe         = 'To me';
 
 $lang->project->statusSelects['']             = 'More';
-$lang->project->statusSelects['finishedbyme'] = 'Mydone'; 
+$lang->project->statusSelects['finishedbyme'] = 'Finished by me'; 
 $lang->project->statusSelects['wait']         = 'Pending';
-$lang->project->statusSelects['doing']        = 'Progressing';
+$lang->project->statusSelects['doing']        = 'Doing';
 $lang->project->statusSelects['done']         = 'Done'; 
 $lang->project->statusSelects['closed']       = 'Closed';
 $lang->project->statusSelects['delayed']      = 'Delayed';
@@ -162,7 +162,7 @@ $lang->project->beginAndEnd     = 'Begin and end';
 $lang->project->lblStats        = 'Stats';
 $lang->project->stats           = 'Total work hours is 『%s』hours, <br />Total estimate is『%s』hours,<br />Total confused is『%s』hours<br />Total left is『%s』hours';
 $lang->project->oneLineStats    = "Project『%s』, code is『%s』, products is『%s』,begin from『%s』to 『%s』,total estimate『%s』hours,consumed『%s』hours,left『%s』hours.";
-$lang->project->taskSummary     = "Total tasks shown: <strong>%s</strong>. Pending: <strong>%s</strong>. In progress: <strong>%s</strong>. Estimate: <strong>%s</strong> hrs. Consumed: <strong>%s</strong> hrs. Hours left: <strong>%s</strong>.";
+$lang->project->taskSummary     = "<strong>%s</strong> tasks in this page. Pending: <strong>%s</strong>. doing: <strong>%s</strong>. Est: <strong>%s</strong> h. Consumed: <strong>%s</strong> h. Left: <strong>%s</strong>.";
 $lang->project->memberHours     = "%s has <strong>%s</strong> workhours, ";
 $lang->project->groupSummary    = "<strong>%s</strong> tasks in this group, wait:<strong>%s</strong>, doing:<strong>%s</strong>, estimate <strong>%s</strong>, consumed <strong>%s</strong>, left <strong>%s</strong> hours.";
 $lang->project->wbs             = "WBS";
@@ -204,8 +204,8 @@ $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code = 'Project code';
 
 $lang->project->selectGroup = new stdclass();
-$lang->project->selectGroup->doing     = '(Doing)';
-$lang->project->selectGroup->suspended = '(Suspended)';
-$lang->project->selectGroup->done      = '(Done)';
+$lang->project->selectGroup->doing     = '(doing)';
+$lang->project->selectGroup->suspended = '(suspended)';
+$lang->project->selectGroup->done      = '(done)';
 
 $lang->project->projectTasks = 'Projects';
