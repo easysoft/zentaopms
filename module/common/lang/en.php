@@ -58,11 +58,11 @@ $lang->files        = 'Files ';
 $lang->unfold       = '+';
 $lang->fold         = '-';
 
-$lang->selectAll     = 'Select All';
-$lang->selectReverse = 'Select Reverse';
+$lang->selectAll     = 'All';
+$lang->selectReverse = 'Inverse';
 $lang->notFound      = 'Sorry, the object not found.';
-$lang->showAll       = '++ Show All ++';
-$lang->hideClosed    = '-- Show Progressing --';
+$lang->showAll       = '[[Show all projects]]';
+$lang->hideClosed    = '[[Show projects going]]';
 
 $lang->future       = 'Future';
 $lang->year         = 'Year';
