@@ -13,12 +13,14 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <table class='table-1'>
   <caption><?php echo $lang->webapp->view?></caption>
+  <?php if($type == 'local'):?>
   <tr>
-    <th class='a-right' width='60'><?php echo $lang->webapp->module?></th>
+    <th class='a-right'><?php echo $lang->webapp->module?></th>
     <td><?php echo $modules[$webapp->module]?></td>
   </tr>
+  <?php endif;?>
   <tr>
-    <th class='a-right'><?php echo $lang->webapp->name?></th>
+    <th class='a-right' width='60'><?php echo $lang->webapp->name?></th>
     <td><?php echo $webapp->name?></td>
   </tr>
   <tr>
