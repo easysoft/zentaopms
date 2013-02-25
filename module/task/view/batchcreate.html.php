@@ -43,7 +43,7 @@
       <td><?php echo html::input("estimate[$i]", '', 'class=text-1');?></td>
       <td><?php echo html::input("desc[$i]", '', "class=text-1");?></td>
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=select-1');?></td>
-    </tr>  
+    </tr>
     <?php endfor;?>
     <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
   </table>

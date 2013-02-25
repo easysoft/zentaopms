@@ -438,15 +438,64 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $changes  = $this->task->record($taskID);
-            $actionID = $this->action->create('task', $taskID, 'Recorded', $this->post->comment, (float)$this->post->consumed);
-            $this->action->logHistory($actionID, $changes);
+            $this->task->record($taskID);
             if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->view->title = $this->lang->task->record;
+        $this->session->set('estimateList', $this->app->getURI(true));
+
+        $this->view->estimates = $this->task->getTaskEstimate($taskID);
+        $this->view->title     = $this->lang->task->record;
         $this->display();
+    }
+
+    /**
+     * Edit consumed and estimate. 
+     * 
+     * @param  int    $estimateID 
+     * @access public
+     * @return void
+     */
+    public function editEstimate($estimateID)
+    {
+        $estimate = $this->task->getEstimateById($estimateID);
+        if(!empty($_POST))
+        {
+            $this->task->updateEstimate($estimateID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $url = $this->session->estimateList ? $this->session->estimateList : inlink('record', "taskID={$estimate->task}");
+            die(js::locate($url, 'parent'));
+        }
+
+        $estimate = $this->task->getEstimateById($estimateID);
+
+        $this->view->title      = $this->lang->task->editEstimate;
+        $this->view->position[] = $this->lang->task->editEstimate;
+        $this->view->estimate   = $estimate;
+        $this->display();
+    }
+
+    /**
+     * Delete estimate. 
+     * 
+     * @param  int    $estimateID 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function deleteEstimate($estimateID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
+        }
+        else
+        {
+            $this->task->deleteEstimate($estimateID);
+            die(js::reload('parent'));
+        }
     }
 
     /**

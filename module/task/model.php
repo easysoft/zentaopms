@@ -431,26 +431,42 @@ class taskModel extends model
      */
     public function record($taskID)
     {
-        $oldTask  = $this->getById($taskID);
-        $estimate = fixer::input('post')
-            ->setDefault('account', $this->app->user->account) 
-            ->setDefault('task', $taskID) 
-            ->setDefault('date', date(DT_DATE1)) 
-            ->cleanFloat('consumed, left')
-            ->remove('comment')
-            ->get();
-        $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate)
-            ->autoCheck()
-            ->exec();
+        $record    = fixer::input('post')->get();
+        $estimates = array();
+        $task      = $this->getById($taskID);
+        foreach(array_keys($record->id) as $id)
+        {
+            if($record->dates[$id])
+            {
+                if(!$record->consumed[$id]) die(js::alert('ii')); 
+                $estimates[$id]->date     = $record->dates[$id];
+                $estimates[$id]->task     = $taskID;
+                $estimates[$id]->consumed = $record->consumed[$id];
+                $estimates[$id]->left     = $record->left[$id];
+                $estimates[$id]->comment  = $record->comment[$id];
+            }
+        }
 
-        $consumed = $oldTask->consumed + $estimate->consumed;
+        $consumed = 0;
+        $left     = 0;
+        foreach($estimates as $estimate)
+        {
+            $consumed += $estimate->consumed;
+            $left      = $estimate->left;
+            $comment   = $estimate->comment;
+            unset($estimate->comment);
+            $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate) 
+                ->autoCheck()
+                ->exec();
+            $estimateID = $this->dao->lastInsertID();
+            $this->loadModel('action')->create('task', $taskID, 'Recorded', $comment, $estimateID);
+        }
+
         $this->dao->update(TABLE_TASK)
-            ->set('consumed')->eq($consumed)
-            ->set('`left`')->eq($estimate->left)
+            ->set('consumed')->eq($task->consumed + $consumed)
+            ->set('`left`')->eq($left)
             ->where('id')->eq($taskID)
             ->exec();
-        $task = $this->getById($taskID);
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
     /**
@@ -806,6 +822,103 @@ class taskModel extends model
             ->fetchPairs();
         foreach($stories as $storyID) if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
         return $taskCounts;
+    }
+
+    /**
+     * Get task estimate. 
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return object 
+     */
+    public function getTaskEstimate($taskID)
+    {
+        $estimates = $this->dao->select('*')
+          ->from(TABLE_TASKESTIMATE)  
+          ->where('task')->eq($taskID)
+          ->fetchAll();
+        $comments = $this->dao->select('extra, comment')
+            ->from(TABLE_ACTION)
+            ->where('objectType')->eq('task')
+            ->andWhere('objectID')->eq($taskID)
+            ->andWhere('action')->eq('recorded')
+            ->fetchPairs('extra');
+        foreach($estimates as $estimate)
+        {
+            $estimate->comment = $comments[$estimate->id];
+        }
+        return $estimates; 
+    }
+
+    /**
+     * Get estimate by id. 
+     * 
+     * @param  int    $estimateID 
+     * @access public
+     * @return object. 
+     */
+    public function getEstimateById($estimateID)
+    {
+        $estimate = $this->dao->select('*')
+          ->from(TABLE_TASKESTIMATE)  
+          ->where('id')->eq($estimateID)
+          ->fetch();
+        $comment = $this->dao->select('comment')
+            ->from(TABLE_ACTION)
+            ->where('objectType')->eq('task')
+            ->andWhere('action')->eq('recorded')
+            ->andWhere('extra')->eq($estimateID)
+            ->orderBy('id desc')
+            ->fetch();
+        $estimate->comment = $comment->comment;
+        return $estimate; 
+    }
+
+    /**
+     * Update estimate. 
+     * 
+     * @param  int    $estimateID 
+     * @access public
+     * @return void
+     */
+    public function updateEstimate($estimateID)
+    {
+        $oldEstimate = $this->getEstimateById($estimateID);
+        $estimate    = fixer::input('post')->remove('comment')->get();
+        $task        = $this->getById($oldEstimate->task);
+        $this->dao->update(TABLE_TASKESTIMATE)->data($estimate)
+            ->autoCheck()
+            ->check('consumed', 'notempty')
+            ->where('id')->eq((int)$estimateID)
+            ->exec();
+        $this->loadModel('action')->create('task', $oldEstimate->task, 'Recorded', $this->post->comment, $estimateID);
+        $consumed     = $task->estimate + $estimate->consumed - $oldEstimate->consumed;
+        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('id desc')->fetch();
+        if($lastEstimate and $estimateID == $lastEstimate->id)
+        {
+            $left = $estimate->left; 
+        }
+        else
+        {
+            $left = $task->left; 
+        }
+        $this->dao->update(TABLE_TASK)
+            ->set('consumed')->eq($consumed)
+            ->set('`left`')->eq($left)
+            ->where('id')->eq($task->id)
+            ->exec();
+    }
+
+    /**
+     * Delete estimate. 
+     * 
+     * @param  int    $estimateID 
+     * @access public
+     * @return void
+     */
+    public function deleteEstimate($estimateID)
+    {
+        $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
     }
 
     /**

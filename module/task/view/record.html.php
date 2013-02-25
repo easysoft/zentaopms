@@ -11,30 +11,48 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
-<form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
+<form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
-      <th class='rowhead'><?php echo $lang->task->beforeConsumed;?></th>
-      <td><?php echo $task->consumed . ' ' . $lang->task->hour;?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->consumedThisTime;?></th>
-      <td><?php echo html::input('consumed', '', "class='text-2'") . $lang->task->hour;?></td>
-    </tr>  
-    <tr>
-      <th class='rowhead'><?php echo $lang->task->left;?></th>
-      <td><?php echo html::input('left', '', "class='text-2'") . $lang->task->hour;?></td>
+      <th class="w-id"><?php echo $lang->idAB;?></th>
+      <th class="w-100px"><?php echo $lang->task->date;?></th>
+      <th class="w-60px"><?php echo $lang->task->consumed;?></th>
+      <th class="w-60px"><?php echo $lang->task->left;?></th>
+      <th><?php echo $lang->comment;?></th>
+      <th><?php echo $lang->actions;?></th>
     </tr>
-    <tr>
-      <td class='rowhead'><?php echo $lang->comment;?></td>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>
+    <?php foreach($estimates as $estimate):?>
+    <tr class="a-center">
+      <td><?php echo $estimate->id;?></td>
+      <td><?php echo $estimate->date;?></td>
+      <td><?php echo $estimate->consumed;?></td>
+      <td><?php echo $estimate->left;?></td>
+      <td><?php echo $estimate->comment;?></td>
+      <td align='center'>
+        <?php
+        common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', '', '', '', true);
+        common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', '', 'hiddenwin');
+        ?>
+      </td>
     </tr>
+    <?php endforeach;?>
+    <?php for($i = 1; $i <= 5; $i++):?>
+    <tr class="a-center">
+      <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
+      <td><?php echo html::input("dates[$i]", '', "class='text-6 date'");?></td>
+      <td><?php echo html::input("consumed[$i]", '', "class='text-1'");?></td>
+      <td><?php echo html::input("left[$i]", '', "class='text-1'");?></td>
+      <td><?php echo html::textarea("comment[$i]", '', "class='text-1' rows='1'");?></td>
+      <td><?php echo '';?></td>
+      <td align='center'></td>
+    </tr>
+    <?php endfor;?>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton(); ?></td>
+      <td colspan='6' class='a-center'><?php echo html::submitButton() . html::resetButton(); ?></td>
     </tr>
   </table>
-  <?php include '../../common/view/action.html.php';?>
 </form>
 <?php include '../../common/view/footer.html.php';?>

@@ -51,6 +51,7 @@ $lang->task->beforeConsumed    = 'Before consumed';
 $lang->task->consumedThisTime  = 'This time consumed';
 $lang->task->estStarted        = 'Estimate start';
 $lang->task->realStarted       = 'Real start';
+$lang->task->date              = 'Date';
 $lang->task->deadline          = 'Deadline';
 $lang->task->deadlineAB        = 'Deadline';
 $lang->task->status            = 'Status';
@@ -77,6 +78,8 @@ $lang->task->closedReason      = 'Closed Reason';
 $lang->task->lastEditedBy      = 'Last Edited By';
 $lang->task->lastEditedDate    = 'Last Edited Date';
 $lang->task->lastEdited        = 'Last Edited';
+$lang->task->editEstimate      = 'Edit estimate';
+$lang->task->deleteEstimate    = 'Delete estimate';
 
 $lang->task->ditto = 'Ditto';
 
@@ -127,16 +130,17 @@ $lang->task->legendLife   = 'Lifetime';
 $lang->task->legendDesc   = 'Desc';
 $lang->task->legendAction = 'Action';
 
-$lang->task->ajaxGetUserTasks     = "API:My tasks";
-$lang->task->ajaxGetProjectTasks  = "API:Project tasks";
-$lang->task->confirmDelete        = "Are you sure you want to delete this task?";
-$lang->task->copyStoryTitle       = "Same as story";
-$lang->task->afterSubmit          = "After created";
-$lang->task->successSaved         = "Successfully saved";
-$lang->task->delayWarning         = " <strong class='delayed f-14px'> Postponed %s days </strong>";
-$lang->task->remindBug            = "This task from Bug, update the Bug:%s or not?";
-$lang->task->confirmChangeProject = 'Change project will change module, story and assignedTo also, are you sure?';
-$lang->task->confirmFinish        = '"Left" is 0, this task will be done. Are you sure?';
+$lang->task->ajaxGetUserTasks      = "API:My tasks";
+$lang->task->ajaxGetProjectTasks   = "API:Project tasks";
+$lang->task->confirmDelete         = "Are you sure you want to delete this task?";
+$lang->task->confirmDeleteEstimate = "Are you sure you want to delete this estimate?";
+$lang->task->copyStoryTitle        = "Same as story";
+$lang->task->afterSubmit           = "After created";
+$lang->task->successSaved          = "Successfully saved";
+$lang->task->delayWarning          = " <strong class='delayed f-14px'> Postponed %s days </strong>";
+$lang->task->remindBug             = "This task from Bug, update the Bug:%s or not?";
+$lang->task->confirmChangeProject  = 'Change project will change module, story and assignedTo also, are you sure?';
+$lang->task->confirmFinish         = '"Left" is 0, this task will be done. Are you sure?';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumed    = '"Consumed" must be number';
