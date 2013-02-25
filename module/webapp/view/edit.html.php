@@ -15,34 +15,38 @@
 <table class='table-1'>
   <caption><?php echo $lang->webapp->edit?></caption>
   <tr>
-    <th><?php echo $lang->webapp->module?></th>
+    <th align='left'><?php echo $lang->webapp->module?></th>
     <td><?php echo html::select('module', $modules, $webapp->module, "class='select-3'")?></td>
   </tr>
   <?php if($webapp->addType != 'system'):?>
   <tr>
-    <th><?php echo $lang->webapp->name?></th>
+    <th align='left'><?php echo $lang->webapp->name?></th>
     <td><?php echo html::input('name', $webapp->name, "class='text-3'")?></td>
   </tr>
   <tr>
-    <th><?php echo $lang->webapp->url?></th>
+    <th align='left'><?php echo $lang->webapp->url?></th>
     <td><?php echo html::input('url', $webapp->url, "class='text-3'")?></td>
   </tr>
   <?php endif;?>
   <tr>
-    <th><?php echo $lang->webapp->target?></th>
+    <th align='left'><?php echo $lang->webapp->target?></th>
     <td><?php echo html::select('target', $lang->webapp->targetList, $webapp->target, "class='select-3'")?></td>
   </tr>
   <tr class="size">
-    <th><?php echo $lang->webapp->size?></th>
+    <th align='left'><?php echo $lang->webapp->size?></th>
     <td><?php echo html::select('size', $lang->webapp->sizeList, $webapp->size, "class='select-3'")?></td>
   </tr>
   <tr>
-    <th><?php echo $lang->webapp->desc?></th>
+    <th align='left'><?php echo $lang->webapp->abstract?></th>
+    <td><?php echo html::input('abstract', $webapp->abstract, "class='text-3' maxlength='30'")?> <span><?php echo $lang->webapp->noticeAbstract?></span></td>
+  </tr>
+  <tr>
+    <th align='left'><?php echo $lang->webapp->desc?></th>
     <td><?php echo html::textarea('desc', $webapp->desc, "class='area-1' rows='5'")?></td>
   </tr>
   <?php if($webapp->addType == 'custom'):?>
   <tr>
-    <th><?php echo $lang->webapp->icon?></th>
+    <th align='left'><?php echo $lang->webapp->icon?></th>
     <td>
     <?php
     if($webapp->icon) echo "<p><img src='{$webapp->icon->webPath}' /></p>";

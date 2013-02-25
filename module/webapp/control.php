@@ -121,6 +121,24 @@ class webapp extends control
     }
 
     /**
+     * View app.
+     * 
+     * @param  int    $webappID 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
+    public function view($webappID, $type = 'local')
+    {
+        $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->edit;
+        $this->view->modules = $this->loadModel('tree')->getOptionMenu(0, 'webapp');
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->webapp  = $type == 'local' ? $this->webapp->getLocalAppByID($webappID) : $this->webapp->getAppInfoByAPI($webappID)->webapp;
+        $this->view->type    = $type;
+        $this->display();
+    }
+
+    /**
      * Install web app. 
      * 
      * @param  int    $webappID 
@@ -138,7 +156,7 @@ class webapp extends control
                 die(js::reload('parent'));
             }
             echo js::alert($this->lang->webapp->successInstall);
-            die(js::locate(inlink('index', "module={$this->post->module}"), 'parent.parent'));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->title   = $this->lang->webapp->common . $this->lang->colon . $this->lang->webapp->install;

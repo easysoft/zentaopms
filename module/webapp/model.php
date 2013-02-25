@@ -151,6 +151,21 @@ class webappModel extends model
     }
 
     /**
+     * Add downloads of webapp by api.
+     * 
+     * @param  int    $webappID 
+     * @access public
+     * @return void
+     */
+    public function addDownloadByAPI($webappID)
+    {
+        $apiURL = $this->apiRoot . "downloadApp-$webappID.json";
+        $data   = $this->fetchAPI($apiURL);
+
+        return $data;
+    }
+
+    /**
      * Get webapps by status.
      * 
      * @param  string    $status 
@@ -204,7 +219,7 @@ class webappModel extends model
      */
     public function install($webappID)
     {
-        $data = $this->getAppInfoByAPI($webappID);
+        $data   = $this->getAppInfoByAPI($webappID);
         $webapp = $data->webapp;
 
         $installWebapp->appid     = $webapp->id;
@@ -215,12 +230,17 @@ class webappModel extends model
         $installWebapp->icon      = $webapp->icon ? $this->config->webapp->url . $webapp->icon : '';
         $installWebapp->target    = empty($webapp->target) ? 'blank' : $webapp->target;
         $installWebapp->size      = $webapp->size;
+        $installWebapp->abstract  = $webapp->abstract;
         $installWebapp->desc      = $webapp->desc;
         $installWebapp->addedBy   = $this->app->user->account;
         $installWebapp->addedDate = helper::now();
 
         $this->dao->insert(TABLE_WEBAPP)->data($installWebapp)->autocheck()->exec();
-        return $this->dao->lastInsertID(); 
+        if(!dao::isError())
+        {
+            $this->addDownloadByAPI($webappID);
+            return $this->dao->lastInsertID(); 
+        }
     }
 
     /**

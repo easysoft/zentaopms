@@ -16,15 +16,14 @@
   <tr>
     <td>
       <ul id='webapps'>
-    <?php foreach($webapps as $webapp):?>
+        <?php foreach($webapps as $webapp):?>
         <li>
-          <table class='fixed exttable' id='webapp<?php echo $webapp->id?>'>
+          <table class='exttable' id='webapp<?php echo $webapp->id?>'>
             <tr>
-              <td rowspan='4' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : $webapp->icon?>' width='72' height='72' /></td>
-              <td class='webapp-name'><?php echo $webapp->name?></td>
+              <td rowspan='3' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : $webapp->icon?>' width='72' height='72' /></td>
+              <td class='webapp-name'><?php echo $webapp->name . "($webapp->author)"?></td>
             </tr>
-            <tr><td class='webapp-info'><span title='<?php echo $webapp->desc?>'><?php echo empty($webapp->desc) ? '&nbsp;' : $webapp->desc?></span></td></tr>
-            <tr><td><?php echo $lang->webapp->addTypeList[$webapp->addType];?></td></tr>
+            <tr><td class='webapp-info'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></td></tr>
             <tr>
               <td>
               <?php
@@ -43,14 +42,14 @@
                   $popup  = 'popup';
               }
               echo html::a($url, $lang->webapp->useapp, $target,  "id='useapp$webapp->id' class='button-c $popup' onclick='addView($webapp->id);$method'");
-              common::printLink('webapp', 'edit', "webappID=$webapp->id", $lang->edit, '',  "class='button-c webapp'");
+              common::printLink('webapp', 'view', "webappID=$webapp->id", $lang->webapp->view, '',  "class='button-c webapp'");
               common::printLink('webapp', 'uninstall',  "webapp=$webapp->id", $lang->webapp->uninstall, 'hiddenwin',  "class='button-c'");
               ?>
               </td>
             </tr>
           </table>
         </li>
-    <?php endforeach;?>
+        <?php endforeach;?>
       </ul>
     </td>
   </tr>

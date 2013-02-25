@@ -46,7 +46,32 @@
               <td class='webapp-name'><?php echo $webapp->name?></td>
             </tr>
             <tr><td class='webapp-info'><span title='<?php echo $webapp->desc?>'><?php echo empty($webapp->desc) ? '&nbsp;' : $webapp->desc?></span></td></tr>
-            <tr><td><?php echo isset($installeds[$webapp->id]) ? html::commonButton($lang->webapp->installed, "disabled='disabled' style='color:gray'") : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='button-c iframe'")?></td></tr>
+            <tr>
+              <td>
+              <?php
+                $url     = $webapp->url;
+                $method  = '';
+                $popup   = '';
+                $target  = '_self';
+                if($webapp->target == 'popup')
+                {
+                    $width  = 0;
+                    $height = 0;
+                    if($webapp->size) list($width, $height) = explode('x', $webapp->size);
+                    $method = "popup($width, $height);";
+                    $popup  = 'popup';
+                }
+                else
+                {
+                    $method = "popup(1024, 600);";
+                    $popup  = 'popup';
+                }
+                echo isset($installeds[$webapp->id]) ? html::commonButton($lang->webapp->installed, "disabled='disabled' style='color:gray'") : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='button-c iframe'");
+                common::printLink('webapp', 'view', "webappID=$webapp->id&type=api", $lang->webapp->view, '',  "class='button-c webapp'");
+                echo html::a($url, $lang->webapp->preview, '', "id='useapp$webapp->id' class='button-c $popup' onclick='$method'");
+              ?>
+              </td>
+            </tr>
           </table>
         </li>
         <?php endforeach;?>
