@@ -892,7 +892,7 @@ class taskModel extends model
             ->where('id')->eq((int)$estimateID)
             ->exec();
         $this->loadModel('action')->create('task', $oldEstimate->task, 'Recorded', $this->post->comment, $estimateID);
-        $consumed     = $task->estimate + $estimate->consumed - $oldEstimate->consumed;
+        $consumed     = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('id desc')->fetch();
         if($lastEstimate and $estimateID == $lastEstimate->id)
         {
