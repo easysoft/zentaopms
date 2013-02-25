@@ -3,9 +3,6 @@ function showPriv(value)
   location.href = createLink('group', 'managePriv', "type=byGroup&param="+ groupID + "&menu=&version=" + value);
 }
 
-/* Override the setHelpLink(). */
-function setHelpLink(){}
-
 /**
  * Control the actions select control for a module.
  * 
