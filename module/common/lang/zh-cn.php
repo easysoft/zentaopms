@@ -35,7 +35,6 @@ $lang->link         = '关联';
 $lang->unlink       = '移除';
 $lang->import       = '导入';
 $lang->export       = '导出';
-$lang->exportType   = '导出类型';
 $lang->setFileName  = '文件名：';
 $lang->activate     = '激活';
 $lang->submitting   = '稍候...';
@@ -115,8 +114,8 @@ $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
-$lang->exportTypeList['all']      = '导出全部';
-$lang->exportTypeList['selected'] = '导出选中';
+$lang->exportTypeList['all']      = '全部记录';
+$lang->exportTypeList['selected'] = '选中记录';
 
 /* 支持的编码格式。*/
 $lang->exportEncodeList['gbk']   = 'GBK';

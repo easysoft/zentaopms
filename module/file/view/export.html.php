@@ -43,18 +43,19 @@ function switchEncode(fileType)
     }
 }
 </script>
-<br /><br />
-<form method='post' target='hiddenwin' onsubmit='setDownloading();'>
+<form method='post' target='hiddenwin' onsubmit='setDownloading();' style='margin-top:10px'>
   <table class='table-1'>
     <caption><?php echo $lang->export;?></caption>
     <tr>
-      <td class='a-center'>
-        <?php echo '<p>' . $lang->exportType . '：' . html::radio('exportType', $lang->exportTypeList, ($this->cookie->checkedItem) ? 'selected' : 'all') . '</p>'?>
-        <?php echo $lang->setFileName;?>
-        <?php echo html::input('fileName', '', 'size=15');?>
-        <?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value)');?>
-        <?php echo html::select('encode', $lang->exportEncodeList, 'gbk', key($lang->exportFileTypeList) == 'csv' ? "" : "class='hidden'");?> 
-        <?php echo html::submitButton();?>
+      <td class='a-center' style='padding:30px'>
+        <?php
+        echo $lang->setFileName . ' ';
+        echo html::input('fileName', '', 'class=text-2');
+        echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value)');
+        echo html::select('encode',     $lang->exportEncodeList, 'gbk', key($lang->exportFileTypeList) == 'csv' ? "" : "class='hidden'");
+        echo html::select('exportType', $lang->exportTypeList, ($this->cookie->checkedItem) ? 'selected' : 'all');
+        echo html::submitButton();
+        ?>
       </td>
     </tr>
   </table>

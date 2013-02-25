@@ -35,7 +35,6 @@ $lang->link         = 'Link';
 $lang->unlink       = 'Unlink';
 $lang->import       = 'Import';
 $lang->export       = 'Export';
-$lang->exportType   = 'Exprot Type';
 $lang->setFileName  = 'Filename:';
 $lang->activate     = 'Activate';
 $lang->submitting   = 'Saving...';
@@ -115,8 +114,8 @@ $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
-$lang->exportTypeList['all']      = 'Export ALL';
-$lang->exportTypeList['selected'] = 'Export Checked';
+$lang->exportTypeList['all']      = 'All records';
+$lang->exportTypeList['selected'] = 'Only checked';
 
 /* Support charset. */
 $lang->exportEncodeList['gbk']   = 'GBK';
