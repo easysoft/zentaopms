@@ -1,6 +1,6 @@
 <?php
 $config->todo = new stdclass();
-$config->todo->batchCreate  = 8;
+$config->todo->batchCreate  = 10;
 
 $config->todo->create = new stdclass();
 $config->todo->edit   = new stdclass();
