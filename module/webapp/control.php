@@ -43,7 +43,7 @@ class webapp extends control
      * @access public
      * @return void
      */
-    public function obtain($type = 'byUpdatedTime', $param = '', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function obtain($type = 'byUpdatedTime', $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->webapp->setMenu();
 
