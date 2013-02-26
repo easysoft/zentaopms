@@ -161,8 +161,11 @@ class projectModel extends model
         $projectTree  = "<ul class='tree'>";
         foreach($productGroup as $productID => $projects)
         {
-            if(!isset($products[$productID]) and $productID != '') continue;
+            if(!isset($products[$productID]) and $productID != '')  continue;
+            if(!isset($products[$productID]) and !count($projects)) continue;
+
             $productName  = isset($products[$productID]) ? $products[$productID] : $this->lang->project->noProduct;
+
             $projectTree .= "<li>$productName<ul>";
            
             foreach($projects as $project)
