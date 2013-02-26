@@ -26,11 +26,22 @@
       <th class='w-200px'><?php echo $lang->task->desc;?></th>
       <th class='w-50px'><?php echo $lang->task->pri;?></th>
     </tr>
+
     <?php for($i = 0; $i < $config->task->batchCreate; $i++):?>
-    <?php $story = ($i == 0 and $storyID != 0) ? $storyID : 'ditto';?>
-    <?php
-    $lang->task->typeList['ditto'] = $lang->task->ditto; $type = $i == 0 ? '' : 'ditto';
-    $members['ditto'] = $lang->task->ditto; $member = $i == 0 ? '' : 'ditto';
+    <?php 
+    if($i == 0)
+    {
+        $story  = $storyID;
+        $type   = '';
+        $member = '';
+    }
+    else
+    {
+        $stories['ditto'] = $this->lang->task->ditto; 
+        $lang->task->typeList['ditto'] = $lang->task->ditto; 
+        $members['ditto'] = $lang->task->ditto;
+        $story = $type = $member = 'ditto';
+    }
     ?>
 
     <?php $pri = 3;?>

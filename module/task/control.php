@@ -127,7 +127,6 @@ class task extends control
         }
 
         $stories = $this->story->getProjectStoryPairs($projectID);
-        $stories['ditto'] = $this->lang->task->ditto;
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);

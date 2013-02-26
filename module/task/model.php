@@ -94,12 +94,12 @@ class taskModel extends model
         $mails = array();
         for($i = 0; $i < $this->config->task->batchCreate; $i++)
         {
-            if($tasks->type[$i] != '' and $tasks->name[$i] != '' and $tasks->pri[$i] != 0)
+            if($tasks->type[$i] != '' and $tasks->name[$i] != '')
             {
                 $data[$i] = new stdclass();
-                $data[$i]->story        = $tasks->story[$i] != 'ditto' ? ($tasks->story[$i] ? $tasks->story[$i] : 0) : ($i == 0 ? 0 : $data[$i-1]->story);
-                $data[$i]->type         = $tasks->type[$i] == 'ditto' ? ($i == 0 ? '' : $data[$i-1]->type) : $tasks->type[$i];
-                $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? ($i == 0 ? '' : $data[$i-1]->assignedTo) : $tasks->assignedTo[$i];
+                $data[$i]->story        = $tasks->story[$i]      == 'ditto' ? (isset($data[$i-1]) and isset($data[$i-1]->story)      ? $data[$i-1]->story : 0)      : $tasks->story[$i] ? $tasks->story[$i] : 0;
+                $data[$i]->type         = $tasks->type[$i]       == 'ditto' ? (isset($data[$i-1]) and isset($data[$i-1]->type)       ? $data[$i-1]->type  : 0)      : $tasks->type[$i];
+                $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? (isset($data[$i-1]) and isset($data[$i-1]->assignedTo) ? $data[$i-1]->assignedTo : 0) : $tasks->assignedTo[$i];
                 $data[$i]->name         = $tasks->name[$i];
                 $data[$i]->desc         = $tasks->desc[$i];
                 $data[$i]->pri          = $tasks->pri[$i];
