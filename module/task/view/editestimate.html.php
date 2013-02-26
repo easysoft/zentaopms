@@ -1,3 +1,15 @@
+<?php
+/**
+ * The editEstimate view of task module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     task
+ * @version     $Id: editestimate.html.php 4263 2013-02-24 08:50:46Z zhujinyonging@gmail.com $
+ * @link        http://www.zentao.net
+ */
+?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <form method='post' target='hiddenwin'>
