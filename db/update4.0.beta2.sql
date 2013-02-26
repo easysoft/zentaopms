@@ -36,4 +36,4 @@ INSERT INTO `zt_groupPriv` (`company` , `group` , `module` , `method` ) VALUES
 
 UPDATE `zt_config` SET `company` = '0', `section` = 'global'  WHERE `key` = 'flow';
 ALTER TABLE  `zt_webapp` ADD  `abstract` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER  `author` ;
-ALTER TABLE `zt_webApp` CHANGE `url` `url` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_webapp` CHANGE `url` `url` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
