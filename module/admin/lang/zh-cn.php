@@ -19,11 +19,11 @@ $lang->admin->welcome = '欢迎使用禅道管理软件后台管理系统';
 
 $lang->admin->browseCompany = '浏览公司';
 
-$lang->admin->clearData        = '清除数据';
-$lang->admin->pleaseInputYes   = '确认清除数据请输入yes：';
-$lang->admin->confirmClearData = '您确认要清除数据吗?';
-$lang->admin->clearDataFailed  = '清除数据失败！';
-$lang->admin->clearDataSucceed = '清除数据成功！';
+$lang->admin->clearData             = '清除数据';
+$lang->admin->pleaseInputYes        = '确认清除数据请输入yes：';
+$lang->admin->confirmClearData      = '您确认要清除数据吗?';
+$lang->admin->clearDataFailed       = '清除数据失败！';
+$lang->admin->clearDataSuccessfully = '清除数据成功！';
 $lang->admin->clearDataDesc    = <<<EOT
 <strong><font color='red'>清除数据存在一定的风险，清楚数据之前，我们强烈建议您备份数据库及相应的数据文件，并保证清除数据的时候，没有其他人进行操作。</font></strong>\n
 清除数据对数据库的影响如下：
