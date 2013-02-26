@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
 <form method='post' target='hiddenwin'>
@@ -55,4 +55,3 @@
     </tr>
   </table>
 </form>
-<?php include '../../common/view/footer.html.php';?>
