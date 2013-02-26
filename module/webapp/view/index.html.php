@@ -20,7 +20,7 @@
         <li>
           <table class='exttable' id='webapp<?php echo $webapp->id?>'>
             <tr>
-              <td rowspan='3' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : $webapp->icon?>' width='72' height='72' /></td>
+              <td rowspan='3' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? $config->webRoot . 'theme/default/images/main/webapp-default.png' : $webapp->icon?>' width='72' height='72' /></td>
               <td class='webapp-name'><?php echo $webapp->name . "($webapp->author)"?></td>
             </tr>
             <tr><td class='webapp-info'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></td></tr>
