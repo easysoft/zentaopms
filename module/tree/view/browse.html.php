@@ -107,10 +107,10 @@
 <?php 
 if(strpos($viewType, 'doc') !== false) 
 {
-  include '../../doc/view/footer.html.php';
+    include '../../doc/view/footer.html.php';
 }
 else
 {
-  include '../../common/view/footer.html.php';
+    include '../../common/view/footer.html.php';
 }
 ?>
