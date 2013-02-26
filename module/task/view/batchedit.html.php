@@ -19,7 +19,7 @@
       <th class='red'>   <?php echo $lang->task->name?></th>
       <?php if($project->type != 'sprint') echo "<th class='w-80px'>" . $lang->task->module . "</th>";?>
       <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
-      <th class='w-60px'><?php echo $lang->typeAB;?></th>
+      <th class='w-60px red'><?php echo $lang->typeAB;?></th>
       <th class='w-70px'><?php echo $lang->task->status;?></th>
       <th class='w-40px'><?php echo $lang->task->pri;?></th>
       <th class='w-30px red'><?php echo $lang->task->estimateAB?></th>
