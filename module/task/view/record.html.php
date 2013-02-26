@@ -19,10 +19,10 @@
     <tr>
       <th class="w-id"><?php echo $lang->idAB;?></th>
       <th class="w-100px"><?php echo $lang->task->date;?></th>
-      <th class="w-60px"><?php echo $lang->task->consumed;?></th>
-      <th class="w-60px"><?php echo $lang->task->left;?></th>
+      <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
+      <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
       <th><?php echo $lang->comment;?></th>
-      <th><?php echo $lang->actions;?></th>
+      <th class="w-60px"><?php echo $lang->actions;?></th>
     </tr>
     <?php foreach($estimates as $estimate):?>
     <tr class="a-center">
@@ -30,7 +30,7 @@
       <td><?php echo $estimate->date;?></td>
       <td><?php echo $estimate->consumed;?></td>
       <td><?php echo $estimate->left;?></td>
-      <td><?php echo $estimate->comment;?></td>
+      <td class="a-left"><?php echo $estimate->comment;?></td>
       <td align='center'>
         <?php
         common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', '', '', '', true);
