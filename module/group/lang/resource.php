@@ -671,6 +671,7 @@ $lang->resource->webapp->index     = 'index';
 $lang->resource->webapp->obtain    = 'obtain';
 $lang->resource->webapp->create    = 'create';
 $lang->resource->webapp->edit      = 'edit';
+$lang->resource->webapp->view      = 'view';
 $lang->resource->webapp->install   = 'install';
 $lang->resource->webapp->uninstall = 'uninstall';
 
@@ -678,8 +679,9 @@ $lang->webapp->methodOrder[5] = 'index';
 $lang->webapp->methodOrder[10] = 'obtain';
 $lang->webapp->methodOrder[15] = 'create';
 $lang->webapp->methodOrder[20] = 'edit';
-$lang->webapp->methodOrder[25] = 'install';
-$lang->webapp->methodOrder[30] = 'uninstall';
+$lang->webapp->methodOrder[25] = 'view';
+$lang->webapp->methodOrder[30] = 'install';
+$lang->webapp->methodOrder[35] = 'uninstall';
 
 /* Others. */
 $lang->resource->api = new stdclass();
@@ -805,6 +807,16 @@ $lang->changelog['3.2'][] = 'tree-fix';
 
 $lang->changelog['3.3'][] = 'report-bugAssign';
 
+$lang->changelog['4.0.beta1'][] = 'user-batchCreate';
+$lang->changelog['4.0.beta1'][] = 'user-unlock';
+$lang->changelog['4.0.beta1'][] = 'admin-checkDB';
+$lang->changelog['4.0.beta1'][] = 'webapp-index';
+$lang->changelog['4.0.beta1'][] = 'webapp-obtain';
+$lang->changelog['4.0.beta1'][] = 'webapp-create';
+$lang->changelog['4.0.beta1'][] = 'webapp-edit';
+$lang->changelog['4.0.beta1'][] = 'webapp-install';
+$lang->changelog['4.0.beta1'][] = 'webapp-uninstall';
+
 $lang->changelog['4.0.beta2'][] = 'todo-batchEdit';
 $lang->changelog['4.0.beta2'][] = 'story-batchEdit';
 $lang->changelog['4.0.beta2'][] = 'bug-batchEdit';
@@ -813,3 +825,17 @@ $lang->changelog['4.0.beta2'][] = 'testtask-batchRun';
 $lang->changelog['4.0.beta2'][] = 'user-batchEdit';
 $lang->changelog['4.0.beta2'][] = 'user-manageContacts';
 $lang->changelog['4.0.beta2'][] = 'user-deleteContacts';
+
+$lang->changelog['4.0'][] = 'todo-finish';
+$lang->changelog['4.0'][] = 'product-close';
+$lang->changelog['4.0'][] = 'project-start';
+$lang->changelog['4.0'][] = 'project-activate';
+$lang->changelog['4.0'][] = 'project-putoff';
+$lang->changelog['4.0'][] = 'project-suspend';
+$lang->changelog['4.0'][] = 'project-close';
+$lang->changelog['4.0'][] = 'task-record';
+$lang->changelog['4.0'][] = 'testtask-start';
+$lang->changelog['4.0'][] = 'testtask-close';
+$lang->changelog['4.0'][] = 'webapp-view';
+$lang->changelog['4.0'][] = 'action-hideOne';
+$lang->changelog['4.0'][] = 'action-hideAll';
