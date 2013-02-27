@@ -14,7 +14,7 @@
 <form method='post' target='hiddenwin'>
 <div class='box-title'><?php echo $lang->webapp->install?></div>
 <div class='box-content'>
-  <p align='center' style='margin-top:10px;'><span><?php echo $lang->webapp->selectModule?></span>
+  <p align='center' style='margin:30px 0;'><span><?php echo $lang->webapp->selectModule?></span>
   <?php
   echo html::select('module', $modules);
   echo html::submitButton();

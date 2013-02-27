@@ -44,7 +44,7 @@
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->icon?></th>
-    <td><?php echo html::file('files', "class='text-1' size='57'")?></td>
+    <td><?php echo html::file('files', "class='text-1' size='57'")?><br /><span><?php echo $lang->webapp->noticeIcon?></span></td>
   </tr>
   <tr><td colspan='2' align='center'><?php echo html::submitButton()?></td></tr>
 </table>

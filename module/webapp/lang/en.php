@@ -74,3 +74,4 @@ $lang->webapp->errorGetExtensions = 'Get extensions from www.zentao.net failed. 
 $lang->webapp->successInstall     = 'Success Install App.';
 $lang->webapp->confirmDelete      = 'Are you sure delete this app?';
 $lang->webapp->noticeAbstract     = 'Sentence describes the application, not more than 30 words';
+$lang->webapp->noticeIcon         = 'The size of icon is 72x72.';

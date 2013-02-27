@@ -74,3 +74,4 @@ $lang->webapp->errorGetExtensions = '从www.zentao.net获得插件失败。可�
 $lang->webapp->successInstall     = '成功安装应用！';
 $lang->webapp->confirmDelete      = '是否删除该应用？';
 $lang->webapp->noticeAbstract     = '用一句话介绍应用，不多于30个字';
+$lang->webapp->noticeIcon         = '图标大小建议为72x72';

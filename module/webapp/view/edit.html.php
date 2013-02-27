@@ -48,10 +48,11 @@
   <tr>
     <th align='left'><?php echo $lang->webapp->icon?></th>
     <td>
-    <?php
-    if($webapp->icon) echo "<p><img src='{$webapp->icon->webPath}' /></p>";
-    echo html::file('files', "class='text-1' size='57'");
-    ?>
+      <?php
+      if($webapp->icon) echo "<p><img src='{$webapp->icon->webPath}' /></p>";
+      echo html::file('files', "class='text-1' size='57'");
+      ?>
+      <br /><span><?php echo $lang->webapp->noticeIcon?></span>
     </td>
   </tr>
   <?php endif;?>
