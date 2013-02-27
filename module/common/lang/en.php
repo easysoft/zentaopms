@@ -260,9 +260,9 @@ $lang->company->menu->dept         = array('link' => 'Department|dept|browse', '
 $lang->company->menu->browseGroup  = array('link' => 'Group|group|browse', 'subModule' => 'group');
 $lang->company->menu->edit         = array('link' => 'Company|company|edit');
 $lang->company->menu->dynamic      = 'Dynamic|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<span class="icon-add1">&nbsp;</span>Add Group|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add1">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
-$lang->company->menu->addUser      = array('link' => '<span class="icon-add1">&nbsp;</span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addGroup     = array('link' => '<span class="icon-add">&nbsp;</span>Add Group|group|create', 'float' => 'right');
+$lang->company->menu->batchAddUser = array('link' => '<span class="icon-add">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->addUser      = array('link' => '<span class="icon-add">&nbsp;</span>Add User|user|create|dept=%s&from=company', 'subModule' => 'user', 'float' => 'right');
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();
