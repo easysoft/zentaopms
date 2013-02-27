@@ -286,6 +286,8 @@ $lang->resource->task->delete             = 'delete';
 $lang->resource->task->view               = 'view';
 $lang->resource->task->export             = 'export';
 $lang->resource->task->confirmStoryChange = 'confirmStoryChange';
+$lang->resource->task->editEstimate       = 'editEstimate';
+$lang->resource->task->deleteEstimate     = 'deleteEstimate';
 $lang->resource->task->report             = 'reportChart';
 $lang->resource->task->record             = 'record';
 
@@ -304,6 +306,8 @@ $lang->task->methodOrder[60] = 'delete';
 $lang->task->methodOrder[65] = 'view';
 $lang->task->methodOrder[70] = 'export';
 $lang->task->methodOrder[75] = 'confirmStoryChange';
+$lang->task->methodOrder[80] = 'editEstimate';
+$lang->task->methodOrder[85] = 'deleteEstimate';
 $lang->task->methodOrder[90] = 'report';
 $lang->task->methodOrder[95] = 'record';
 
