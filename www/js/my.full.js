@@ -47,9 +47,10 @@ function loadFixedCSS()
  * @access public
  * @return string
  */
-function createLink(moduleName, methodName, vars, viewType)
+function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
 {
-    if(!viewType) viewType = config.defaultView;
+    if(!viewType)   viewType   = config.defaultView;
+    if(!isOnlyBody) isOnlyBody = false;
     if(vars)
     {
         vars = vars.split('&');
@@ -78,7 +79,7 @@ function createLink(moduleName, methodName, vars, viewType)
     }
 
     /* if page has onlybody param then add this param in all link. the param hide header and footer. */
-    if(onlybody == 'yes')
+    if(onlybody == 'yes' || isOnlyBody)
     {
         var onlybody = config.requestType == 'PATH_INFO' ? "?onlybody=yes" : '&onlybody=yes';
         link = link + onlybody;

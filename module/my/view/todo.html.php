@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php $onlybody = $config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';?>
 <form method='post' id='todoform'>
   <div id='featurebar'>
     <div class='f-left'>
@@ -74,7 +73,7 @@
       <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
       <td><?php echo $lang->todo->typeList[$todo->type];?></td>
       <td><span class='<?php echo 'pri' . $todo->pri;?>'><?php echo $todo->pri?></span></td>
-      <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my") . $onlybody, $todo->name, '', "class='colorbox'");?></td>
+      <td class='a-left'><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my", '', true), $todo->name, '', "class='colorbox'");?></td>
       <td><?php echo $todo->begin;?></td>
       <td><?php echo $todo->end;?></td>
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
