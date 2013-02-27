@@ -79,6 +79,7 @@ class upgradeModel extends model
             case '4_0_beta2':  
                 $this->execSQL($this->getUpgradeFile('4.0.beta2'));
                 $this->updateProjectType();
+                $this->updateEstimatePriv();
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -402,6 +403,35 @@ class upgradeModel extends model
     {
         $projects = $this->dao->select('root')->from(TABLE_MODULE)->where('type')->eq('task')->fetchPairs('root'); 
         $this->dao->update(TABLE_PROJECT)->set('type')->eq('waterfall')->where('id')->in($projects)->exec();        
+    }
+
+    /**
+     * Update estimate priv.
+     * 
+     * @access public
+     * @return void
+     */
+    public function updateEstimatePriv()
+    {
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('task')
+            ->andWhere('method')->eq('edit')
+            ->fetchAll();
+        foreach($groups as $group)
+        {
+            $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($group->company)
+                ->set('`group`')->eq($group->group)
+                ->set('module')->eq('task')
+                ->set('method')->eq('editEstimate')
+                ->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($group->company)
+                ->set('`group`')->eq($group->group)
+                ->set('module')->eq('task')
+                ->set('method')->eq('deleteEstimate')
+                ->exec();
+        }
     }
 
     /**
