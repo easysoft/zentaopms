@@ -45,7 +45,7 @@
       <td><?php echo html::input("dates[$i]", '', "class='text-6 date'");?></td>
       <td><?php echo html::input("consumed[$i]", '', "class='text-1'");?></td>
       <td><?php echo html::input("left[$i]", '', "class='text-1'");?></td>
-      <td><?php echo html::textarea("comment[$i]", '', "class='text-1' rows='1'");?></td>
+      <td class="a-left"><?php echo html::textarea("comment[$i]", '', "class='text-1' rows='1'");?></td>
       <td><?php echo '';?></td>
       <td align='center'></td>
     </tr>
