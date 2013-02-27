@@ -40,7 +40,7 @@ class productplan extends control
             $planID = $this->productplan->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
-            die(js::locate($this->createLink('productplan', 'view', "planID=$planID"), 'parent'));
+            die(js::locate($this->createLink('productplan', 'browse', "productID=$product"), 'parent'));
         }
 
         $this->commonAction($product);
