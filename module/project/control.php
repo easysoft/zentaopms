@@ -671,17 +671,17 @@ class project extends control
         $dataJSON = $this->report->createSingleJSON($sets);
 
         $limitJSON     = '[]';
-        $reflineJSON   = '[]';
+        $baselineJSON  = '[]';
         $beginMicTime  = $this->project->getMicTime($projectInfo->begin);
         $endMicTime    = $this->project->getMicTime($projectInfo->end);
         $maxDayMicTime = $this->project->getMicTime(strtotime($projectInfo->begin) + $maxDays * 24 * 3600);
         $minDayMicTime = $this->project->getMicTime(time() - $maxDays * 24 * 3600);
         if($projectInfo->days <= $maxDays)
         {
-            $limitJSON   = "[[$beginMicTime, 0], [$endMicTime, 0]]";
-            $firstBurn   = reset($sets);
-            $firstTime   = isset($firstBurn->value) ? $firstBurn->value : 0;
-            $reflineJSON = "[[$beginMicTime, $firstTime], [$endMicTime, 0]]";
+            $limitJSON    = "[[$beginMicTime, 0], [$endMicTime, 0]]";
+            $firstBurn    = reset($sets);
+            $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
+            $baselineJSON = "[[$beginMicTime, $firstTime], [$endMicTime, 0]]";
         }
         elseif($count <= $maxDays)
         {
@@ -690,7 +690,7 @@ class project extends control
 
         $flotJSON['data']    = $dataJSON;
         $flotJSON['limit']   = $limitJSON;
-        $flotJSON['refline'] = $reflineJSON;
+        $flotJSON['baseline'] = $baselineJSON;
 
         $charts = $this->report->createJSChartFlot($project->name, $flotJSON, $count, 900, 400);
 

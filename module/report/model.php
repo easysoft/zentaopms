@@ -86,9 +86,9 @@ EOT;
         $height  = $height . 'px';
         $maxDays = $this->config->project->maxBurnDay;
 
-        $dataJSON    = $flotJSON['data'];
-        $limitJSON   = $flotJSON['limit'];
-        $reflineJSON = $flotJSON['refline'];
+        $dataJSON     = $flotJSON['data'];
+        $limitJSON    = $flotJSON['limit'];
+        $baselineJSON = $flotJSON['baseline'];
 return <<<EOT
 <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/excanvas.min.js"></script><![endif]-->
 <script language="javascript" type="text/javascript" src="{$jsRoot}jquery/flot/jquery.flot.min.js"></script>
@@ -97,9 +97,9 @@ return <<<EOT
 <script type="text/javascript">
 $(function () 
 {
-    var data    = $dataJSON;
-    var limit   = $limitJSON;
-    var refline = $reflineJSON;
+    var data     = $dataJSON;
+    var limit    = $limitJSON;
+    var baseline = $baselineJSON;
     function showTooltip(x, y, contents) 
     {
         $('<div id="tooltip">' + contents + '</div>').css
@@ -147,7 +147,7 @@ $(function ()
                 points: {show: true}
             },
             {
-                data:refline,
+                data:baseline,
                 color: "rgb(235, 12, 10)",
                 hoverable: false,
                 lines:  {show: true, lineWidth:0.5, lineType:'dashed', style:'dashed'},
