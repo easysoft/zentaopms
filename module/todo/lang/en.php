@@ -77,3 +77,5 @@ $lang->todo->periods['all']        = 'All';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, Finished by <strong>$actor</strong>');
+$lang->todo->action->marked   = array('main' => '$date, Change status to <stong>$extra</strong> by <strong>$actor</strong>。', 'extra' => $lang->todo->statusList);
+

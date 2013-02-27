@@ -116,6 +116,7 @@ $lang->action->label->totask              = 'converted to task';
 $lang->action->label->svncommited         = 'commited code';
 $lang->action->label->linked2plan         = 'link to plan';
 $lang->action->label->unlinkedfromplan    = 'unlink from plan';
+$lang->action->label->marked              = 'edited';
 $lang->action->label->linked2project      = 'link to project';
 $lang->action->label->unlinkedfromproject = 'unlik from project';
 $lang->action->label->started             = 'started';

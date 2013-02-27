@@ -116,6 +116,7 @@ $lang->action->label->totask              = '转任务';
 $lang->action->label->svncommited         = '提交代码';
 $lang->action->label->linked2plan         = '关联计划';
 $lang->action->label->unlinkedfromplan    = '移除计划';
+$lang->action->label->marked              = '编辑了';
 $lang->action->label->linked2project      = '关联项目';
 $lang->action->label->unlinkedfromproject = '移除项目';
 $lang->action->label->started             = '开始了';
