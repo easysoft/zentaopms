@@ -43,7 +43,19 @@ class todo extends control
             $todoID = $this->todo->create($date, $account);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('todo', $todoID, 'opened');
-            die(js::locate($this->createLink('my', 'todo', "date=" . str_replace('-', '', $this->post->date)), 'parent'));
+            if($this->post->date == '')
+            {
+                $type = 'future'; 
+            }
+            else if($this->post->date == date('Y-m-d'))
+            {
+                $type = 'today'; 
+            }
+            else
+            {
+                $type = str_replace('-', '', $this->post->date);
+            }
+            die(js::locate($this->createLink('my', 'todo', "type=" . $type), 'parent'));
         }
 
         $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;

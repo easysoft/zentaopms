@@ -20,7 +20,7 @@
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->todo->date;?></th>
-    <td><?php echo date(DT_DATE1, strtotime($todo->date));?></td>
+    <td><?php echo $todo->date == '20300101' ? $lang->todo->periods['future'] : date(DT_DATE1, strtotime($todo->date));?></td>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->todo->type;?></th>
