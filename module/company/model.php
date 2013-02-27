@@ -99,6 +99,8 @@ class companyModel extends model
     public function update()
     {
         $company   = fixer::input('post')->stripTags('name')->get();        
+        if($company->website  == 'http://') $company->website  = '';
+        if($company->backyard == 'http://') $company->backyard = '';
         $companyID = $this->app->company->id;
         $this->dao->update(TABLE_COMPANY)
             ->data($company)
