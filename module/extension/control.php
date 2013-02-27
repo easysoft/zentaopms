@@ -230,6 +230,7 @@ class extension extends control
         $this->view->files = $this->extension->copyPackageFiles($extension);
 
         /* Judge need execute db install or not. */
+        $data = new stdclass();
         $data->status = 'installed';
         $data->dirs   = $this->session->dirs2Created;
         $data->files  = $this->view->files;

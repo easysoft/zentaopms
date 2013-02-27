@@ -197,6 +197,7 @@ class extensionModel extends model
     public function getInfoFromPackage($extension)
     {
         /* Init the data. */
+        $data = new stdclass();
         $data->name          = $extension;
         $data->code          = $extension;
         $data->version       = 'unknown';
@@ -415,6 +416,7 @@ class extensionModel extends model
      */
     public function checkExtensionPathes($extension)
     {
+        $return = new stdclass();
         $return->result        = 'ok';
         $return->errors        = '';
         $return->mkdirCommands = '';
@@ -480,6 +482,7 @@ class extensionModel extends model
      */
     public function checkFile($extension)
     {
+        $return = new stdclass();
         $return->result = 'ok';
         $return->error  = '';
 
@@ -505,6 +508,7 @@ class extensionModel extends model
      */
     public function extractPackage($extension) 
     {
+        $return = new stdclass();
         $return->result = 'ok';
         $return->error  = '';
 
@@ -669,6 +673,7 @@ class extensionModel extends model
      */
     public function executeDB($extension, $method = 'install')
     {
+        $return = new stdclass();
         $return->result = 'ok';
         $return->error  = '';
 
