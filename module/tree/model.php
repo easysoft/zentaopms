@@ -218,7 +218,7 @@ class treeModel extends model
         $products = $this->loadModel('product')->getPairs('nocode');
         $projects = $this->loadModel('project')->getProductGroupList();
         $modules  = $this->dao->findByType('projectdoc')->from(TABLE_MODULE)->orderBy('`order`')->fetchAll();
-        $products[0] = $this->lang->project->noProduct;
+
         foreach($projects as $id => $project)
         {
             if($id == '') 
@@ -227,6 +227,8 @@ class treeModel extends model
                 unset($projects['']);
             }
         }
+
+       if(!empty($projects[0])) $products[0] = $this->lang->project->noProduct;
 
         foreach($products as $productID => $productName)
         {
