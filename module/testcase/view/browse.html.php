@@ -87,8 +87,8 @@ js::set('moduleID'  , $moduleID);
               <td><?php echo $users[$case->openedBy];?></td>
               <td><?php echo $users[$case->lastRunner];?></td>
               <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
-              <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-              <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+              <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+              <td class='<?php echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
               <td class='a-right'>
                 <?php
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', '', '', 'runCase');
