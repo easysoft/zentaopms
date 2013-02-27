@@ -176,7 +176,7 @@ class taskModel extends model
 
         if($task->consumed < $oldTask->consumed) 
         {
-            die(js::error($this->lang->task->error->newConsumed));
+            die(js::error($this->lang->task->error->consumedSmall));
         }
         else if($task->consumed != $oldTask->consumed or $task->left != $oldTask->left)
         {
@@ -381,7 +381,7 @@ class taskModel extends model
     public function start($taskID)
     {
         $oldTask = $this->getById($taskID);
-        if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->newConsumed));
+        if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('status', 'doing')
@@ -465,7 +465,7 @@ class taskModel extends model
     public function finish($taskID)
     {
         $oldTask = $this->getById($taskID);
-        if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->newConsumed));
+        if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('left', 0)
