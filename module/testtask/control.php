@@ -508,12 +508,23 @@ class testtask extends control
      */
     public function runCase($runID, $caseID = 0, $version = 0)
     {
+        $preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
         if(!empty($_POST))
         {
             $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
-            echo js::reload('parent');
-            die(js::closeWindow());
+            if($preAndNext->next)
+            {
+                $nextRunID   = $runID ? $preAndNext->next->id : 0;
+                $nextCaseID  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
+                $nextVersion = $preAndNext->next->version;
+                die(js::locate(inlink('runCase', "runID=$nextRunID&caseID=$nextCaseID&version=$nextVersion")));
+            }
+            else
+            {
+                echo js::reload('parent');
+                die(js::closeWindow());
+            }
         }
 
         if(!$caseID) $run = $this->testtask->getRunById($runID);
@@ -523,10 +534,16 @@ class testtask extends control
             $run->case = $this->loadModel('testcase')->getById($caseID, $version);
         }
 
-        $nextCase   = '';
-        $caseID     = $caseID ? $caseID : $run->case->id;
-        $preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $preCase  = '';
+        $nextCase = '';
+        $caseID   = $caseID ? $caseID : $run->case->id;
         if($runID and $preAndNext->next) $preAndNext->next = $this->dao->select('*')->from(TABLE_TESTRUN)->where('`case`')->eq($preAndNext->next->id)->fetch();
+        if($preAndNext->pre)
+        {
+            $preCase['runID']   = $runID ? $preAndNext->pre->id : 0;
+            $preCase['caseID']  = $runID ? $preAndNext->pre->case : $preAndNext->pre->id;
+            $preCase['version'] = $preAndNext->pre->version;
+        }
         if($preAndNext->next)
         {
             $nextCase['runID']   = $runID ? $preAndNext->next->id : 0;
@@ -535,6 +552,7 @@ class testtask extends control
         }
         
         $this->view->run      = $run;
+        $this->view->preCase  = $preCase;
         $this->view->nextCase = $nextCase;
 
         die($this->display());

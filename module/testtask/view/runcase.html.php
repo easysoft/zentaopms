@@ -37,6 +37,7 @@
     <tr class='a-center'>
       <td colspan='5'>
         <?php
+        if($preCase)  echo html::linkButton($lang->testtask->pre, inlink('runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}"));
         if(empty($run->case->steps))
         {
             echo html::submitButton($lang->testtask->pass, "onclick=$('#result').val('pass')");
@@ -45,7 +46,7 @@
         else
         {
             echo html::submitButton();
-            echo html::submitButton($lang->testtask->passAll, "onclick=$('#passall').val(1)");
+            echo html::submitButton($lang->testtask->pass, "onclick=$('#passall').val(1)");
         }
         echo html::hidden('case',    $run->case->id);
         echo html::hidden('version', $run->case->version);
