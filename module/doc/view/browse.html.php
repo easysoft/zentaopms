@@ -46,9 +46,9 @@ var browseType = '<?php echo $browseType;?>';
         <thead>
           <tr class='colhead'>
             <?php $vars = "libID=$libID&module=$moduleID&productID=$productID&projectID=$projectID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
-            <th class='w-id'> <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
-            <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->title);?></th>
-            <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->doc->type);?></th>
+            <th class='w-id'>   <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
+            <th>                <?php common::printOrderLink('title',     $orderBy, $vars, $lang->doc->title);?></th>
+            <th class='w-100px'><?php common::printOrderLink('type',      $orderBy, $vars, $lang->doc->type);?></th>
             <th class='w-100px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?></th>
             <th class='w-120px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
             <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>

@@ -75,24 +75,24 @@ js::set('customed', $customed);
         <table class='table-1 fixed colored tablesorter datatable'>
           <thead>
           <tr class='colhead'>
-            <th class='w-id'>       <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
-            <th class='w-severity'> <?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-            <th class='w-pri'>      <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+            <th class='w-id'>       <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
+            <th class='w-severity'> <?php common::printOrderLink('severity',    $orderBy, $vars, $lang->bug->severityAB);?></th>
+            <th class='w-pri'>      <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
 
-            <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+            <th>                    <?php common::printOrderLink('title',       $orderBy, $vars, $lang->bug->title);?></th>
 
             <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-            <th class='w-80px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->statusAB);?></th>
+            <th class='w-80px'><?php common::printOrderLink('status',           $orderBy, $vars, $lang->bug->statusAB);?></th>
             <?php endif;?>
 
             <?php if($browseType == 'needconfirm'):?>
-            <th class='w-200px'><?php common::printOrderLink('story', $orderBy, $vars, $lang->bug->story);?></th>
+            <th class='w-200px'><?php common::printOrderLink('story',           $orderBy, $vars, $lang->bug->story);?></th>
             <th class='w-50px'><?php echo $lang->actions;?></th>
             <?php else:?>
             <th class='w-user'><?php common::printOrderLink('openedBy',         $orderBy, $vars, $lang->openedByAB);?></th>
 
             <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-            <th class='w-date'>  <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+            <th class='w-date'><?php common::printOrderLink('openedDate',       $orderBy, $vars, $lang->bug->openedDateAB);?></th>
             <?php endif;?>
 
             <th class='w-user'><?php common::printOrderLink('assignedTo',       $orderBy, $vars, $lang->assignedToAB);?></th>
@@ -100,7 +100,7 @@ js::set('customed', $customed);
             <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
 
             <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
-            <th class='w-date'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+            <th class='w-date'><?php common::printOrderLink('resolvedDate',     $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
             <?php endif;?>
 
             <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>

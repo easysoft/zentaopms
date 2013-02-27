@@ -26,14 +26,14 @@
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='colhead'>
-    <th class='w-id'>        <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-    <th class='w-severity'>  <?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-    <th class='w-pri'>       <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-    <th class='w-type'>      <?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
-    <th>                     <?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
-    <th class='w-user'>      <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+    <th class='w-id'>        <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+    <th class='w-severity'>  <?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
+    <th class='w-pri'>       <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+    <th class='w-type'>      <?php common::printOrderLink('type',       $orderBy, $vars, $lang->typeAB);?></th>
+    <th>                     <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+    <th class='w-user'>      <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
     <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
-    <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars,  $lang->bug->resolutionAB);?></th>
+    <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
     <th class='w-80px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
