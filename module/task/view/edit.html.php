@@ -109,7 +109,7 @@ userList               = "<?php echo join(',', array_keys($users));?>".split(','
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->consumed;?></th>
-            <td><?php echo $task->consumed;?></td>
+            <td><?php echo $task->consumed . ' '; common::printIcon('task', 'record',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);?></td>
           </tr>  
           <tr>
             <th class='rowhead'><?php echo $lang->task->left;?></th>
