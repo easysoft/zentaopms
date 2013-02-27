@@ -843,3 +843,5 @@ $lang->changelog['4.0'][] = 'testtask-close';
 $lang->changelog['4.0'][] = 'webapp-view';
 $lang->changelog['4.0'][] = 'action-hideOne';
 $lang->changelog['4.0'][] = 'action-hideAll';
+$lang->changelog['4.0'][] = 'task-editEstimate';
+$lang->changelog['4.0'][] = 'task-deleteEstimate';
