@@ -40,12 +40,12 @@
       <ul id='webapps'>
         <?php foreach($webapps as $webapp):?>
         <li>
-          <table class='fixed exttable'>
+          <table class='exttable'>
             <tr>
               <td rowspan='3' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? '/theme/default/images/main/webapp-default.png' : $config->webapp->url . $webapp->icon?>' width='72' height='72' /></td>
               <td class='webapp-name'><?php echo $webapp->name?></td>
             </tr>
-            <tr><td class='webapp-info'><span title='<?php echo $webapp->desc?>'><?php echo empty($webapp->desc) ? '&nbsp;' : $webapp->desc?></span></td></tr>
+            <tr><td valign='top' class='webapp-info'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></td></tr>
             <tr>
               <td>
               <?php
