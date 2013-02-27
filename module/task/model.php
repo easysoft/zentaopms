@@ -94,57 +94,43 @@ class taskModel extends model
         $mails = array();
         for($i = 0; $i < $this->config->task->batchCreate; $i++)
         {
-            if($tasks->type[$i] != '' and $tasks->name[$i] != '')
-            {
-                $data[$i] = new stdclass();
-                $data[$i]->story        = $tasks->story[$i]      == 'ditto' ? (isset($data[$i-1]) and isset($data[$i-1]->story)      ? $data[$i-1]->story : 0)      : $tasks->story[$i] ? $tasks->story[$i] : 0;
-                $data[$i]->type         = $tasks->type[$i]       == 'ditto' ? (isset($data[$i-1]) and isset($data[$i-1]->type)       ? $data[$i-1]->type  : 0)      : $tasks->type[$i];
-                $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? (isset($data[$i-1]) and isset($data[$i-1]->assignedTo) ? $data[$i-1]->assignedTo : 0) : $tasks->assignedTo[$i];
-                $data[$i]->name         = $tasks->name[$i];
-                $data[$i]->desc         = $tasks->desc[$i];
-                $data[$i]->pri          = $tasks->pri[$i];
-                $data[$i]->estimate     = $tasks->estimate[$i];
-                $data[$i]->left         = $tasks->estimate[$i];
-                $data[$i]->project      = $projectID;
-                $data[$i]->deadline     = '0000-00-00';
-                $data[$i]->status       = 'wait';
-                $data[$i]->openedBy     = $this->app->user->account;
-                $data[$i]->openedDate   = $now;
-                $data[$i]->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, 'wait') + 1;
-                if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
-                if($tasks->assignedTo[$i] != '') $data[$i]->assignedDate = $now;
+            if(empty($tasks->name[$i])) continue;
 
-                $this->dao->insert(TABLE_TASK)->data($data[$i])
-                    ->autoCheck()
-                    ->batchCheck($this->config->task->create->requiredFields, 'notempty')
-                    ->checkIF($data[$i]->estimate != '', 'estimate', 'float')
-                    ->exec();
+            $data[$i] = new stdclass();
+            $data[$i]->story        = $tasks->story[$i]      == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->story : 0)      : ($tasks->story[$i] ? $tasks->story[$i] : 0);
+            $data[$i]->type         = $tasks->type[$i]       == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->type  : 0)      : $tasks->type[$i];
+            $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->assignedTo : 0) : $tasks->assignedTo[$i];
+            $data[$i]->name         = $tasks->name[$i];
+            $data[$i]->desc         = $tasks->desc[$i];
+            $data[$i]->pri          = $tasks->pri[$i];
+            $data[$i]->estimate     = $tasks->estimate[$i];
+            $data[$i]->left         = $tasks->estimate[$i];
+            $data[$i]->project      = $projectID;
+            $data[$i]->deadline     = '0000-00-00';
+            $data[$i]->status       = 'wait';
+            $data[$i]->openedBy     = $this->app->user->account;
+            $data[$i]->openedDate   = $now;
+            $data[$i]->statusCustom = strpos(self::CUSTOM_STATUS_ORDER, 'wait') + 1;
+            if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
+            if($tasks->assignedTo[$i] != '') $data[$i]->assignedDate = $now;
 
-                if(dao::isError()) 
-                {
-                    echo js::error(dao::getError());
-                    die(js::reload('parent'));
-                }
+            $this->dao->insert(TABLE_TASK)->data($data[$i])
+                ->autoCheck()
+                ->batchCheck($this->config->task->create->requiredFields, 'notempty')
+                ->checkIF($data[$i]->estimate != '', 'estimate', 'float')
+                ->exec();
 
-                $taskID = $this->dao->lastInsertID();
-                if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
-                $actionID = $this->action->create('task', $taskID, 'Opened', '');
-                
-                $mails[$i]           = new stdclass();
-                $mails[$i]->taskID   = $taskID;
-                $mails[$i]->actionID = $actionID;
-            }
-            else
-            {
-                unset($tasks->story[$i]);
-                unset($tasks->type[$i]);
-                unset($tasks->name[$i]);
-                unset($tasks->desc[$i]);
-                unset($tasks->assignedTo[$i]);
-                unset($tasks->pri[$i]);
-                unset($tasks->estimate[$i]);
-            }
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $taskID = $this->dao->lastInsertID();
+            if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
+            $actionID = $this->action->create('task', $taskID, 'Opened', '');
+            
+            $mails[$i]           = new stdclass();
+            $mails[$i]->taskID   = $taskID;
+            $mails[$i]->actionID = $actionID;
         }
+
         return $mails;
     }
 
