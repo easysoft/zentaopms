@@ -434,7 +434,7 @@ class taskModel extends model
         }
 
         $consumed = 0;
-        $left     = 0;
+        $left     = $task->left;
         foreach($estimates as $estimate)
         {
             $consumed += $estimate->consumed;
