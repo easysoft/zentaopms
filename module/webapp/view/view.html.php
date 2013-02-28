@@ -12,7 +12,10 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <table class='table-1'>
-  <caption><?php echo $lang->webapp->view?></caption>
+  <caption>
+    <?php echo $lang->webapp->view?>
+    <span class='f-right'><?php if($type =='local') common::printLink('webapp', 'edit', "webappID=$webapp->id", $lang->edit);?></span>
+  </caption>
   <?php if($type == 'local'):?>
   <tr>
     <th class='a-right'><?php echo $lang->webapp->module?></th>
@@ -84,10 +87,6 @@
   <tr>
     <th class='a-right'><?php echo $lang->webapp->views?></th>
     <td><?php echo $webapp->views?></td>
-  </tr>
-  <tr>
-    <th class='a-right'><?php echo $lang->actions?></th>
-    <td><?php common::printLink('webapp', 'edit', "webappID=$webapp->id", $lang->edit);?></td>
   </tr>
 </table>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -13,7 +13,7 @@ $lang->webapp->common = 'WEB应用';
 $lang->webapp->index  = '已加应用';
 $lang->webapp->obtain = '获得应用';
 
-$lang->webapp->install    = '安装应用';
+$lang->webapp->install    = '安装';
 $lang->webapp->uninstall  = '删除';
 $lang->webapp->useapp     = '运行';
 $lang->webapp->view       = '详情';
@@ -36,12 +36,12 @@ $lang->webapp->size        = '大小';
 $lang->webapp->height      = '高度';
 $lang->webapp->addedTime   = '添加时间';
 $lang->webapp->updatedTime = '更新时间';
-$lang->webapp->downloads   = '下载量';
+$lang->webapp->downloads   = '安装量';
 $lang->webapp->grade       = '评分';
 $lang->webapp->addType     = '添加类型';
 $lang->webapp->addedBy     = '安装人';
 $lang->webapp->addedDate   = '安装日期';
-$lang->webapp->views       = '浏览次数';
+$lang->webapp->views       = '使用次数';
 $lang->webapp->packup      = '收起';
 
 $lang->webapp->byDownloads   = '最多下载';
