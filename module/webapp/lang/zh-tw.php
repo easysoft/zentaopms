@@ -14,8 +14,10 @@ $lang->webapp->index  = '已加應用';
 $lang->webapp->obtain = '獲得應用';
 
 $lang->webapp->install    = '安裝應用';
-$lang->webapp->uninstall  = '移除應用';
-$lang->webapp->useapp     = '使用';
+$lang->webapp->uninstall  = '刪除';
+$lang->webapp->useapp     = '運行';
+$lang->webapp->view       = '詳情';
+$lang->webapp->preview    = '預覽';
 $lang->webapp->installed  = '已添加';
 $lang->webapp->edit       = '編輯應用';
 $lang->webapp->create     = '創建應用';
@@ -23,11 +25,12 @@ $lang->webapp->manageTree = '維護分類';
 
 $lang->webapp->id          = '編號';
 $lang->webapp->name        = '名稱';
-$lang->webapp->url         = '連結地址';
+$lang->webapp->url         = '網址';
 $lang->webapp->icon        = '表徵圖';
-$lang->webapp->module      = 'WEB分類';
+$lang->webapp->module      = '分類';
 $lang->webapp->author      = '作者';
-$lang->webapp->desc        = '簡介';
+$lang->webapp->abstract    = '簡介';
+$lang->webapp->desc        = '描述';
 $lang->webapp->target      = '打開方式';
 $lang->webapp->size        = '大小';
 $lang->webapp->height      = '高度';
@@ -36,6 +39,9 @@ $lang->webapp->updatedTime = '更新時間';
 $lang->webapp->downloads   = '下載量';
 $lang->webapp->grade       = '評分';
 $lang->webapp->addType     = '添加類型';
+$lang->webapp->addedBy     = '安裝人';
+$lang->webapp->addedDate   = '安裝日期';
+$lang->webapp->views       = '瀏覽次數';
 $lang->webapp->packup      = '收起';
 
 $lang->webapp->byDownloads   = '最多下載';
@@ -46,23 +52,26 @@ $lang->webapp->byCategory    = '分類瀏覽';
 
 $lang->webapp->selectModule = '選擇分類：';
 $lang->webapp->allModule    = '所有';
-$lang->webapp->noModule     = '未分類';
+$lang->webapp->noModule     = '所有';
 
 $lang->webapp->targetList['']       = '';
 $lang->webapp->targetList['popup']  = '彈窗';
 $lang->webapp->targetList['iframe'] = '內嵌';
 $lang->webapp->targetList['blank']  = '新窗口';
 
-$lang->webapp->sizeList['']        = "";
-$lang->webapp->sizeList['900x600'] = "900 x 600";
-$lang->webapp->sizeList['700x600'] = "700 x 600";
-$lang->webapp->sizeList['600x500'] = "600 x 500";
+$lang->webapp->sizeList['']         = "";
+$lang->webapp->sizeList['1024x600'] = "1024 x 600";
+$lang->webapp->sizeList['900x600']  = "900 x 600";
+$lang->webapp->sizeList['700x600']  = "700 x 600";
+$lang->webapp->sizeList['600x500']  = "600 x 500";
 
 $lang->webapp->addTypeList['system'] = '系統應用';
 $lang->webapp->addTypeList['custom'] = '自定義應用';
 
 $lang->webapp->errorOccurs        = '錯誤：';
 $lang->webapp->errorGetModules    = '從www.zentao.net獲得插件分類失敗。可能是因為網絡方面的原因，請檢查後重新刷新頁面。';
-$lang->webapp->errorGetExtensions = '從www.zentao.net獲得插件失敗。可能是因為網絡方面的原因，您可以到<a href="http://www.zentao.net/extension/" target="_blank">www.zentao.net</a>手工下載插件，然後上傳安裝。';
+$lang->webapp->errorGetExtensions = '從www.zentao.net獲得插件失敗。可能是因為網絡方面的原因，你可以到 “<a href="' . inlink('create') . '">創建應用</a>” 中自行創建。';
 $lang->webapp->successInstall     = '成功安裝應用！';
 $lang->webapp->confirmDelete      = '是否刪除該應用？';
+$lang->webapp->noticeAbstract     = '用一句話介紹應用，不多於30個字';
+$lang->webapp->noticeIcon         = '表徵圖大小建議為72x72';

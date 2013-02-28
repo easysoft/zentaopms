@@ -6,11 +6,11 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 3872 2012-12-24 00:50:43Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 4489 2013-02-27 03:01:03Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
-$lang->task->create             = "新增";
+$lang->task->create             = "建任務";
 $lang->task->batchCreate        = "批量添加";
 $lang->task->batchEdit          = "批量編輯";
 $lang->task->import             = "導入之前未完任務";
@@ -18,6 +18,7 @@ $lang->task->edit               = "編輯";
 $lang->task->delete             = "刪除";
 $lang->task->view               = "查看任務";
 $lang->task->logEfforts         = "記錄工時";
+$lang->task->record             = "工時";
 $lang->task->start              = "開始";
 $lang->task->finish             = "完成";
 $lang->task->close              = "關閉";
@@ -46,8 +47,11 @@ $lang->task->leftAB            = '剩';
 $lang->task->consumed          = '已經消耗';
 $lang->task->consumedAB        = '耗';
 $lang->task->hour              = '小時';
+$lang->task->consumedThisTime  = '消耗';
+$lang->task->leftThisTime      = '剩餘';
 $lang->task->estStarted        = '預計開始';
 $lang->task->realStarted       = '實際開始';
+$lang->task->date              = '日期';
 $lang->task->deadline          = '截止日期';
 $lang->task->deadlineAB        = '截止';
 $lang->task->status            = '任務狀態';
@@ -74,6 +78,8 @@ $lang->task->closedReason      = '關閉原因';
 $lang->task->lastEditedBy      = '最後修改';
 $lang->task->lastEditedDate    = '最後修改日期';
 $lang->task->lastEdited        = '最後編輯';
+$lang->task->editEstimate      = '編輯工時';
+$lang->task->deleteEstimate    = '刪除工時';
 
 $lang->task->ditto = '同上';
 
@@ -124,18 +130,21 @@ $lang->task->legendLife   = '任務的一生';
 $lang->task->legendDesc   = '任務描述';
 $lang->task->legendAction = '操作';
 
-$lang->task->ajaxGetUserTasks     = "介面:我的任務";
-$lang->task->ajaxGetProjectTasks  = "介面:項目任務";
-$lang->task->confirmDelete        = "您確定要刪除這個任務嗎？";
-$lang->task->copyStoryTitle       = "同需求";
-$lang->task->afterSubmit          = "添加之後";
-$lang->task->successSaved         = "成功添加，";
-$lang->task->delayWarning         = " <strong class='delayed f-14px'> 延期%s天 </strong>";
-$lang->task->remindBug            = "該任務為Bug轉化得到，是否更新Bug:%s ?";
-$lang->task->confirmChangeProject = '修改項目會導致相應的所屬模組、相關需求和指派人發生變化，確定嗎？';
+$lang->task->ajaxGetUserTasks      = "介面:我的任務";
+$lang->task->ajaxGetProjectTasks   = "介面:項目任務";
+$lang->task->confirmDelete         = "您確定要刪除這個任務嗎？";
+$lang->task->confirmDeleteEstimate = "您確定要刪除這個記錄嗎？";
+$lang->task->copyStoryTitle        = "同需求";
+$lang->task->afterSubmit           = "添加之後";
+$lang->task->successSaved          = "成功添加，";
+$lang->task->delayWarning          = " <strong class='delayed f-14px'> 延期%s天 </strong>";
+$lang->task->remindBug             = "該任務為Bug轉化得到，是否更新Bug:%s ?";
+$lang->task->confirmChangeProject  = '修改項目會導致相應的所屬模組、相關需求和指派人發生變化，確定嗎？';
+$lang->task->confirmFinish         = '"預計剩餘"為0，確認將任務狀態改為"已完成"嗎？';
 
 $lang->task->error = new stdclass();
-$lang->task->error->consumed = '"已經消耗"必須為數字';
+$lang->task->error->consumed      = '"已經消耗"必須為數字';
+$lang->task->error->consumedSmall = '"已經消耗"必須大於之前消耗';
 
 /* 統計報表。*/
 $lang->task->report = new stdclass();

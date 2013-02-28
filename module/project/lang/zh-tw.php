@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 3835 2012-12-17 10:26:50Z wwccss $
+ * @version     $Id: zh-tw.php 4436 2013-02-23 01:40:51Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -49,10 +49,21 @@ $lang->project->totalConsumed = '總消耗';
 $lang->project->totalLeft     = '總剩餘';
 $lang->project->progess       = '進度';
 $lang->project->viewBug       = '查看bug';
-$lang->project->createTesttask= '提交測試';
 $lang->project->noProduct     = '無產品項目';
 $lang->project->select        = '--請選擇項目--';
 $lang->project->createStory   = "新增需求";
+$lang->project->all           = '所有';
+$lang->project->typeDesc      = '短期迭代禁用模組功能， 長期項目禁用燃盡圖，運維項目禁用燃盡圖和需求。';
+
+$lang->project->start    = '開始';
+$lang->project->activate = '激活';
+$lang->project->putoff   = '延期';
+$lang->project->suspend  = '掛起';
+$lang->project->close    = '結束';
+
+$lang->project->typeList['sprint']    = '短期迭代';
+$lang->project->typeList['waterfall'] = '長期項目';
+$lang->project->typeList['ops']       = '運維項目';
 
 $lang->project->endList[14]   = '兩星期';
 $lang->project->endList[31]   = '一個月';
@@ -73,10 +84,10 @@ $lang->project->basicInfo = '基本信息';
 $lang->project->otherInfo = '其他信息';
 
 /* 欄位取值列表。*/
-$lang->project->statusList['']      = '';
-$lang->project->statusList['wait']  = '未開始';
-$lang->project->statusList['doing'] = '進行中';
-$lang->project->statusList['done']  = '已完成';
+$lang->project->statusList['wait']      = '未開始';
+$lang->project->statusList['doing']     = '進行中';
+$lang->project->statusList['suspended'] = '已掛起';
+$lang->project->statusList['done']      = '已完成';
 
 $lang->project->aclList['open']    = '預設設置(有項目視圖權限，即可訪問)';
 $lang->project->aclList['private'] = '私有項目(只有項目團隊成員才能訪問)';
@@ -157,7 +168,7 @@ $lang->project->groupSummary    = "本組共 <strong>%s</strong> 個任務，未
 $lang->project->wbs             = "分解任務";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->largeBurnChart  = '點擊查看大圖';
-$lang->project->howToUpdateBurn = "<a href='%s' class='helplink'><i>如何更新?</i></a>";
+$lang->project->howToUpdateBurn = "<a href='http://www.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank'>如何更新?</a>";
 $lang->project->whyNoStories    = "看起來沒有需求可以關聯。請檢查下項目關聯的產品中有沒有需求，而且要確保它們已經審核通過。";
 $lang->project->doneProjects    = '已結束';
 $lang->project->unDoneProjects  = '未結束';
@@ -193,7 +204,8 @@ $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code = '團隊內部的簡稱';
 
 $lang->project->selectGroup = new stdclass();
-$lang->project->selectGroup->doing = '(進行中)';
-$lang->project->selectGroup->done  = '(已結束)';
+$lang->project->selectGroup->doing     = '(進行中)';
+$lang->project->selectGroup->suspended = '(已掛起)';
+$lang->project->selectGroup->done      = '(已結束)';
 
-$lang->project->projectTasks = '按項目';
+$lang->project->projectTasks = '項目';

@@ -6,14 +6,10 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 3864 2012-12-20 08:00:07Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4480 2013-02-27 01:57:22Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->action->common   = '系統日誌';
-$lang->action->trash    = '資源回收筒';
-$lang->action->undelete = '還原';
-$lang->action->hide     = '隱藏';
-
+$lang->action->common     = '系統日誌';
 $lang->action->product    = '產品';
 $lang->action->project    = '項目';
 $lang->action->objectType = '對象類型';
@@ -23,9 +19,16 @@ $lang->action->actor      = '操作者';
 $lang->action->action     = '動作';
 $lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
-$lang->action->trashTips  = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
-$lang->action->textDiff   = '文本格式';
-$lang->action->original   = '原始格式';
+
+$lang->action->trash    = '資源回收筒';
+$lang->action->undelete = '還原';
+$lang->action->hideOne  = '隱藏';
+$lang->action->hideAll  = '全部隱藏';
+
+$lang->action->trashTips      = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
+$lang->action->textDiff       = '文本格式';
+$lang->action->original       = '原始格式';
+$lang->action->confirmHideAll = '您確定要全部隱藏這些記錄嗎？';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';
@@ -76,6 +79,9 @@ $lang->action->desc->confirmed    = '$date, 由 <strong>$actor</strong> 確認�
 $lang->action->desc->bugconfirmed = '$date, 由 <strong>$actor</strong> 確認Bug。' . "\n";
 $lang->action->desc->frombug      = '$date, 由 <strong>$actor</strong> Bug轉化而來，Bug編號為 <strong>$extra</strong>。';
 $lang->action->desc->started      = '$date, 由 <strong>$actor</strong> 啟動。' . "\n";
+$lang->action->desc->delayed      = '$date, 由 <strong>$actor</strong> 延期。' . "\n";
+$lang->action->desc->suspended    = '$date, 由 <strong>$actor</strong> 掛起。' . "\n";
+$lang->action->desc->recorded     = '$date, 由 <strong>$actor</strong> 記錄工時，消耗了 <strong>$extra</strong> 小時 。' . "\n";
 $lang->action->desc->canceled     = '$date, 由 <strong>$actor</strong> 取消。' . "\n";
 $lang->action->desc->svncommited  = '$date, 由 <strong>$actor</strong> 提交代碼，版本為<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->finished     = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
@@ -110,10 +116,11 @@ $lang->action->label->totask              = '轉任務';
 $lang->action->label->svncommited         = '提交代碼';
 $lang->action->label->linked2plan         = '關聯計劃';
 $lang->action->label->unlinkedfromplan    = '移除計劃';
+$lang->action->label->marked              = '編輯了';
 $lang->action->label->linked2project      = '關聯項目';
 $lang->action->label->unlinkedfromproject = '移除項目';
-$lang->action->label->marked              = '編輯了';
 $lang->action->label->started             = '開始了';
+$lang->action->label->recorded            = '記錄了工時';
 $lang->action->label->canceled            = '取消了';
 $lang->action->label->finished            = '完成了';
 $lang->action->label->login               = '登錄系統';
@@ -133,7 +140,7 @@ $lang->action->label->testtask    = '測試任務|testtask|view|caseID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文檔庫|doc|browse|libID=%s';
 $lang->action->label->doc         = '文檔|doc|view|docID=%s';
-$lang->action->label->user        = '用戶';
+$lang->action->label->user        = '用戶|user|view|account=%s';
 $lang->action->label->space       = '　';
 
 /* Object type. */
@@ -182,7 +189,6 @@ $lang->action->search->label['linked2plan']         = $lang->action->label->link
 $lang->action->search->label['unlinkedfromplan']    = $lang->action->label->unlinkedfromplan;   
 $lang->action->search->label['linked2project']      = $lang->action->label->linked2project;     
 $lang->action->search->label['unlinkedfromproject'] = $lang->action->label->unlinkedfromproject;
-$lang->action->search->label['marked']              = $lang->action->label->marked;             
 $lang->action->search->label['started']             = $lang->action->label->started;            
 $lang->action->search->label['canceled']            = $lang->action->label->canceled;           
 $lang->action->search->label['finished']            = $lang->action->label->finished;           

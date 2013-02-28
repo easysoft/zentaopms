@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 3507 2012-09-03 00:58:51Z shiyangyangwork@yahoo.cn $
+ * @version     $Id: zh-tw.php 4457 2013-02-26 01:59:23Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->group->common             = '權限分組';
@@ -35,27 +35,32 @@ $lang->group->priv     = '權限';
 $lang->group->option   = '選項';
 $lang->group->inside   = '組內用戶';
 $lang->group->outside  = '組外用戶';
+$lang->group->other    = '其他模組';
+$lang->group->all      = '所有權限';
 
 $lang->group->copyOptions['copyPriv'] = '複製權限';
 $lang->group->copyOptions['copyUser'] = '複製用戶';
 
-$lang->group->versions['']          = '顯示各版本新增權限';
-$lang->group->versions['3.3']       = '禪道3.3';
-$lang->group->versions['3.2.1']     = '禪道3.2.1';
-$lang->group->versions['3.2']       = '禪道3.2';
-$lang->group->versions['3.1']       = '禪道3.1';
-$lang->group->versions['3.0.beta2'] = '禪道3.0.beta2';
-$lang->group->versions['3.0.beta1'] = '禪道3.0.beta1';
-$lang->group->versions['2.4']       = '禪道2.4';
-$lang->group->versions['2.3']       = '禪道2.3';
-$lang->group->versions['2.2']       = '禪道2.2';
-$lang->group->versions['2.1']       = '禪道2.1';
-$lang->group->versions['2.0']       = '禪道2.0';
-$lang->group->versions['1.5']       = '禪道1.5';
-$lang->group->versions['1.4']       = '禪道1.4';
-$lang->group->versions['1.3']       = '禪道1.3';
-$lang->group->versions['1.2']       = '禪道1.2';
-$lang->group->versions['1.1']       = '禪道1.1';
-$lang->group->versions['1.0.1']     = '禪道1.0.1';
+$lang->group->versions['']          = '修改歷史';
+$lang->group->versions['4_0']       = '禪道4.0';
+$lang->group->versions['4_0_beta2'] = '禪道4.0.beta2';
+$lang->group->versions['4_0_beta1'] = '禪道4.0.beta1';
+$lang->group->versions['3_3']       = '禪道3.3';
+$lang->group->versions['3_2_1']     = '禪道3.2.1';
+$lang->group->versions['3_2']       = '禪道3.2';
+$lang->group->versions['3_1']       = '禪道3.1';
+$lang->group->versions['3_0_beta2'] = '禪道3.0.beta2';
+$lang->group->versions['3_0_beta1'] = '禪道3.0.beta1';
+$lang->group->versions['2_4']       = '禪道2.4';
+$lang->group->versions['2_3']       = '禪道2.3';
+$lang->group->versions['2_2']       = '禪道2.2';
+$lang->group->versions['2_1']       = '禪道2.1';
+$lang->group->versions['2_0']       = '禪道2.0';
+$lang->group->versions['1_5']       = '禪道1.5';
+$lang->group->versions['1_4']       = '禪道1.4';
+$lang->group->versions['1_3']       = '禪道1.3';
+$lang->group->versions['1_2']       = '禪道1.2';
+$lang->group->versions['1_1']       = '禪道1.1';
+$lang->group->versions['1_0_1']     = '禪道1.0.1';
 
 include (dirname(__FILE__) . '/resource.php');

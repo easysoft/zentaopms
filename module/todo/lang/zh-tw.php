@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 3753 2012-12-11 05:51:16Z wwccss $
+ * @version     $Id: zh-tw.php 4480 2013-02-27 01:57:22Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->todo->common       = 'TODO';
@@ -17,10 +17,7 @@ $lang->todo->edit         = "更新TODO";
 $lang->todo->batchEdit    = "批量編輯";
 $lang->todo->view         = "TODO詳情";
 $lang->todo->viewAB       = "詳情";
-$lang->todo->markDone     = "未完成";
-$lang->todo->markWait     = "已完成";
-$lang->todo->markDoing    = "已完成";
-$lang->todo->mark         = "更改狀態";
+$lang->todo->finish       = "完成";
 $lang->todo->export       = "導出";
 $lang->todo->delete       = "刪除TODO";
 $lang->todo->browse       = "瀏覽TODO";
@@ -43,10 +40,6 @@ $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事務';
 $lang->todo->idvalue     = '任務或Bug';
 
-$lang->todo->week         = '星期';
-$lang->todo->today        = '今天';
-$lang->todo->weekDateList = '一,二,三,四,五,六,天';
-$lang->todo->dayInFuture  = '暫不指定';
 $lang->todo->confirmBug   = '該Todo關聯的是Bug #%s，需要修改它嗎？';
 $lang->todo->confirmTask  = '該Todo關聯的是Task #%s，需要修改它嗎？';
 
@@ -70,17 +63,19 @@ $lang->todo->successMarked  = "成功切換狀態！";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
 $lang->todo->lblDisableDate = '暫時不設定時間';
 
-$lang->todo->thisWeekTodos   = '本週';
-$lang->todo->lastWeekTodos   = '上周';
-$lang->todo->futureTodos     = '暫不指定';
-$lang->todo->allDaysTodos    = '所有';
-$lang->todo->allUndone       = '之前未完';
-$lang->todo->todayTodos      = '今日';
-$lang->todo->yesterdayTodos  = '昨日';
-$lang->todo->lastmonthTodos  = '上月';
-$lang->todo->thisseasonTodos = '本季';
-$lang->todo->thisyearTodos   = '本年';
-$lang->todo->thismonthTodos  = '本月';
+$lang->todo->periods['today']      = '今日';
+$lang->todo->periods['yesterday']  = '昨日';
+$lang->todo->periods['thisWeek']   = '本週';
+$lang->todo->periods['lastWeek']   = '上周';
+$lang->todo->periods['thisMonth']  = '本月';
+$lang->todo->periods['lastmonth']  = '上月';
+$lang->todo->periods['thisSeason'] = '本季';
+$lang->todo->periods['thisYear']   = '本年';
+$lang->todo->periods['future']     = '待定';
+$lang->todo->periods['before']     = '未完';
+$lang->todo->periods['all']        = '所有';
 
 $lang->todo->action = new stdclass();
-$lang->todo->action->marked  = array('main' => '$date, 由 <strong>$actor</strong> 標記為<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);
+$lang->todo->action->finished  = array('main' => '$date, 由 <strong>$actor</strong>完成');
+$lang->todo->action->marked    = array('main' => '$date, 由 <strong>$actor</strong> 標記為<strong>$extra</strong>。', 'extra' => $lang->todo->statusList);
+

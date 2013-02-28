@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
- * @version     $Id: zh-tw.php 3742 2012-12-10 08:41:09Z wwccss $
+ * @version     $Id: zh-tw.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->admin->common  = '後台管理';
@@ -19,16 +19,17 @@ $lang->admin->welcome = '歡迎使用禪道管理軟件後台管理系統';
 
 $lang->admin->browseCompany = '瀏覽公司';
 
-$lang->admin->clearData        = '清除數據';
-$lang->admin->confirmClearData = '您確認要清除數據嗎？';
-$lang->admin->clearDataFailed  = '清除數據失敗！';
-$lang->admin->clearDataSucceed = '清除數據成功！';
+$lang->admin->clearData             = '清除數據';
+$lang->admin->pleaseInputYes        = '確認清除數據請輸入yes：';
+$lang->admin->confirmClearData      = '您確認要清除數據嗎?';
+$lang->admin->clearDataFailed       = '清除數據失敗！';
+$lang->admin->clearDataSuccessfully = '清除數據成功！';
 $lang->admin->clearDataDesc    = <<<EOT
-<strong><font color='red'>清除數據存在一定的風險，清楚數據之前，我們強烈建議您備份資料庫及相應的數據檔案，並保證清楚數據的時候，沒有其他人進行操作。</font></strong>\n
+<strong><font color='red'>清除數據存在一定的風險，清楚數據之前，我們強烈建議您備份資料庫及相應的數據檔案，並保證清除數據的時候，沒有其他人進行操作。</font></strong>\n
 清除數據對資料庫的影響如下：
 1、清除數據不會對company, group, groupPriv表進行操作。
 2、如果安裝的時候有導入demo數據，則會刪除config表key=showDemoUsers的記錄，並刪除user表中的所有demo用戶。
-3、對於其他表則進行全部清除操作。
+3、<font color='red'>對於其他表則進行全部清除操作。</font>
 EOT;
 
 $lang->admin->info = new stdclass();
@@ -54,3 +55,12 @@ $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption  = '關聯社區賬號';
 $lang->admin->bind->action   = '關聯';
 $lang->admin->bind->success  = "關聯賬戶成功";
+
+$lang->admin->selectFlow = '您計劃如何使用禪道？';
+
+$lang->admin->flowList['full']      = '所有功能（包括產品、項目、需求、計劃、發佈、任務、Bug、用例、測試任務和文檔等功能。）';
+$lang->admin->flowList['onlyTest']  = '僅測試管理（包括產品、版本、Bug、用例、測試任務和文檔管理等功能。)';
+$lang->admin->flowList['onlyTask']  = '僅任務管理（包括項目、任務和文檔管理。)';
+$lang->admin->flowList['onlyStory'] = '僅需求管理（包括產品、需求、計劃、發佈和文檔管理等功能。）';
+
+$lang->admin->flowNotice = "<span class='red'>註：如果您使用的不是所有功能，後續可以到“管理->插件”中，卸載相應的插件，即可重新使用禪道所有功能。</span>";

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 3889 2012-12-24 10:17:18Z wwccss $
+ * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->user->common    = '用戶';
@@ -17,6 +17,7 @@ $lang->user->account   = '用戶名';
 $lang->user->password  = '密碼';
 $lang->user->password2 = '請重複密碼';
 $lang->user->role      = '角色';
+$lang->user->group     = '分組';
 $lang->user->realname  = '真實姓名';
 $lang->user->nickname  = '暱稱';
 $lang->user->commiter  = '原始碼帳號';

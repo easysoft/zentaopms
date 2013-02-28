@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
- * @version     $Id: zh-tw.php 3860 2012-12-19 10:08:20Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->testtask->index          = "測試任務首頁";
@@ -25,7 +25,10 @@ $lang->testtask->results        = "結果";
 $lang->testtask->createBug      = "提Bug";
 $lang->testtask->assign         = '指派';
 $lang->testtask->cases          = '用例';
+$lang->testtask->pre            = '上一個';
 $lang->testtask->next           = '下一個';
+$lang->testtask->start          = "開始";
+$lang->testtask->close          = "關閉";
 
 $lang->testtask->common         = '測試任務';
 $lang->testtask->id             = '任務編號';
@@ -44,6 +47,7 @@ $lang->testtask->linkVersion    = '版本';
 $lang->testtask->lastRunAccount = '執行人';
 $lang->testtask->lastRunTime    = '執行時間';
 $lang->testtask->lastRunResult  = '結果';
+$lang->testtask->report         = '測試總結';
 
 $lang->testtask->statusList['wait']    = '未開始';
 $lang->testtask->statusList['doing']   = '進行中';
@@ -67,7 +71,7 @@ $lang->testtask->fail          = '失敗';
 
 $lang->testtask->byModule      = '按模組';
 $lang->testtask->assignedToMe  = '指派給我';
-$lang->testtask->allCases      = '所有Case';
+$lang->testtask->allCases      = '所有用例';
 
 $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';

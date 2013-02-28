@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
- * @version     $Id: zh-tw.php 3772 2012-12-12 02:18:16Z wwccss $
+ * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->file = new stdclass();
@@ -18,7 +18,7 @@ $lang->file->delete        = '刪除附件';
 $lang->file->export2CSV    = '導出CSV';
 $lang->file->ajaxUpload    = '介面：編輯器上傳附件';
 $lang->file->label         = '標題：';
-$lang->file->maxUploadSize = "最大可上傳附件：<span class='red'>%s</span>";
+$lang->file->maxUploadSize = "<span class='red'>%s</span>";
 
 $lang->file->errorNotExists   = "<span class='red'>檔案夾 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>檔案夾 '%s' 不可寫,請改變檔案夾的權限。在linux中輸入指令:sudo chmod -R 777 '%s'</span>";

@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
- * @version     $Id: zh-tw.php 3238 2012-07-02 01:44:49Z wwccss $
+ * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->productplan->common    = '產品計劃';
@@ -32,3 +32,10 @@ $lang->productplan->title   = '名稱';
 $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '開始日期';
 $lang->productplan->end     = '結束日期';
+
+$lang->productplan->endList[14]  = '兩星期';
+$lang->productplan->endList[31]  = '一個月';
+$lang->productplan->endList[62]  = '兩個月';
+$lang->productplan->endList[93]  = '三個月';
+$lang->productplan->endList[186] = '半年';
+$lang->productplan->endList[365] = '一年';

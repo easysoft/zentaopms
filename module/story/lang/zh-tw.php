@@ -6,11 +6,11 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 3772 2012-12-12 02:18:16Z wwccss $
+ * @version     $Id: zh-tw.php 4395 2013-02-20 02:42:10Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
-$lang->story->create      = "新增";
+$lang->story->create      = "提需求";
 $lang->story->createCase  = "建用例";
 $lang->story->batchCreate = "批量添加";
 $lang->story->change      = "變更";
@@ -163,7 +163,6 @@ $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
 $lang->story->specTemplate          = "建議參考的模板：作為一名<<i class='red'>某種類型的用戶</i>>，我希望<<i class='red'>達成某些目的</i>>，這樣可以<<i class='red'>開發的價值</i>>。";
-$lang->story->notes                 = '(註：如果“需求名稱”為空，則表示不使用此行)';
 $lang->story->needNotReview         = '不需要評審';
 $lang->story->afterSubmit           = "添加之後";
 $lang->story->successSaved          = "需求成功添加，";

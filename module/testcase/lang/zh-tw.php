@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 3768 2012-12-12 00:44:35Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 4395 2013-02-20 02:42:10Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = '用例編號';
@@ -101,7 +101,6 @@ $lang->testcase->legendVersion      = '版本歷史';
 
 $lang->testcase->confirmDelete = '您確認要刪除該測試用例嗎？';
 $lang->testcase->same          = '同上';
-$lang->testcase->notes         = '(註：“用例類型”和“用例標題”必須填寫，否則此行無效)';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
@@ -115,6 +114,7 @@ $lang->testcase->typeList['performance'] = '性能測試';
 $lang->testcase->typeList['config']      = '配置相關';
 $lang->testcase->typeList['install']     = '安裝部署';
 $lang->testcase->typeList['security']    = '安全相關';
+$lang->testcase->typeList['interface']   = '介面測試';
 $lang->testcase->typeList['other']       = '其他';
 
 $lang->testcase->stageList['']           = '';

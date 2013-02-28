@@ -3,7 +3,7 @@ $lang->mail->common = '發信配置';
 $lang->mail->index  = '首頁';
 $lang->mail->detect = '檢測';
 $lang->mail->edit   = '編輯配置';
-$lang->mail->save   = '保存配置';
+$lang->mail->save   = '成功保存';
 $lang->mail->test   = '測試發信';
 
 $lang->mail->turnon      = '是否打開';
@@ -34,8 +34,7 @@ $lang->mail->secureList['tls'] = 'tls';
 
 $lang->mail->inputFromEmail = '請輸入發信郵箱：';
 $lang->mail->nextStep       = '下一步';
-$lang->mail->successSaved   = '配置信息已經成功保存到：<span class="red">%s</span>';
-$lang->mail->saveManual     = '請將該配置信息保存到：<span class="red">%s</span>';
+$lang->mail->successSaved   = '配置信息已經成功保存。';
 $lang->mail->subject        = '測試郵件';
 $lang->mail->content        = '郵箱設置成功';
 $lang->mail->successSended  = '成功發送！';
