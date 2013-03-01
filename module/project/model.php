@@ -788,6 +788,7 @@ class projectModel extends model
         $products = array_unique($_POST['products']);
         foreach($products as $productID)
         {
+            $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();

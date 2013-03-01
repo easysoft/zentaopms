@@ -133,6 +133,7 @@ class testtask extends control
 
             $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetchPairs('id');
             $builds   = $this->dao->select('id, name')->from(TABLE_BUILD)->where('project')->eq($projectID)->fetchPairs('id');
+            $builds   = array('trunk' => 'Trunk') + $builds;
         }
 
         /* Create testtask from testtask of test.*/
