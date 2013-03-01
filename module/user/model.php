@@ -260,13 +260,14 @@ class userModel extends model
                 if($users->email[$i] and !validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i+1)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and empty($users->password[$i])) ? $prev['password'] : $users->password[$i];
                 if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i+1)));
-                if(empty($users->role[$i])) die(js::error(sprintf($this->lang->user->error->role, $id)));
+                $role = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
+                if(empty($role)) die(js::error(sprintf($this->lang->user->error->role, $i+1)));
 
                 $data[$i] = new stdclass();
                 $data[$i]->dept     = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
                 $data[$i]->account  = $users->account[$i];
                 $data[$i]->realname = $users->realname[$i];
-                $data[$i]->role     = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
+                $data[$i]->role     = $role;
                 $data[$i]->group    = $users->group[$i] == 'ditto' ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
@@ -287,9 +288,9 @@ class userModel extends model
                 $group = new stdClass();
                 $group->account = $user->account;
                 $group->group   = $user->group;
+                $this->dao->insert(TABLE_USERGROUP)->data($group)->exec();
             }
             unset($user->group);
-            $this->dao->insert(TABLE_USERGROUP)->data($group)->exec();
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
             if(dao::isError()) 
             {
