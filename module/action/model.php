@@ -463,6 +463,7 @@ class actionModel extends model
      */
     public function transformActions($actions)
     {
+        $this->app->loadLang('todo');
         /* Get commiters. */
         $commiters = $this->loadModel('user')->getCommiters();
 
