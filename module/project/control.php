@@ -165,6 +165,7 @@ class project extends control
             }
             /* Limit current project when no project. */
             if(strpos($this->session->taskQuery, "`project` =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND `project` = $projectID");
+            if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
 
             $projectIDs   = array_keys($this->project->getPairs());
             $projectQuery = "`project` in (" . implode($projectIDs, ',') . ")";  
