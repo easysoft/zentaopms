@@ -36,6 +36,7 @@ table .table-1 td{border:0px;}
       <td align='left'><?php echo "<span title='$case->title'>$case->title</span>"?></td>
       <td><?php echo html::radio("results[$case->id]", $resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'")?></td>
       <td>
+       <?php if(!empty($steps[$caseID])):?>
         <table class='table-1 fixed'>
           <?php $i = 1;?>
           <?php foreach($steps[$caseID] as $stepID => $step):?>
@@ -48,6 +49,7 @@ table .table-1 td{border:0px;}
           <?php $i++?>
           <?php endforeach?>
         </table>
+      <?php endif?>
       </td>
     </tr>  
     <?php endforeach;?>
