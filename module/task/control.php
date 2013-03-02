@@ -444,6 +444,7 @@ class task extends control
 
         $this->session->set('estimateList', $this->app->getURI(true));
 
+        $this->view->task      = $this->task->getById($taskID);
         $this->view->estimates = $this->task->getTaskEstimate($taskID);
         $this->view->title     = $this->lang->task->record;
         $this->display();

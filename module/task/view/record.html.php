@@ -33,8 +33,11 @@
       <td class="a-left"><?php echo $estimate->work;?></td>
       <td align='center'>
         <?php
-        common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', '', '', '', true);
-        common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', '', 'hiddenwin');
+        if($task->status == 'wait' or $task->status == 'doing')
+        {
+            common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', '', '', '', true);
+            common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', '', 'hiddenwin');
+        }
         ?>
       </td>
     </tr>
