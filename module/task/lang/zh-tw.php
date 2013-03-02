@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 4489 2013-02-27 03:01:03Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 4532 2013-03-02 13:14:11Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
@@ -44,10 +44,10 @@ $lang->task->estimate          = '最初預計';
 $lang->task->estimateAB        = '預';
 $lang->task->left              = '預計剩餘';
 $lang->task->leftAB            = '剩';
-$lang->task->consumed          = '已經消耗';
-$lang->task->consumedAB        = '耗';
+$lang->task->consumed          = '總消耗';
+$lang->task->consumedAB        = '消耗';
 $lang->task->hour              = '小時';
-$lang->task->consumedThisTime  = '消耗';
+$lang->task->consumedThisTime  = '工時';
 $lang->task->leftThisTime      = '剩餘';
 $lang->task->estStarted        = '預計開始';
 $lang->task->realStarted       = '實際開始';

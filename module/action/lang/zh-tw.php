@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 4480 2013-02-27 01:57:22Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4502 2013-02-28 02:26:37Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->action->common     = '系統日誌';
@@ -81,7 +81,7 @@ $lang->action->desc->frombug      = '$date, 由 <strong>$actor</strong> Bug轉�
 $lang->action->desc->started      = '$date, 由 <strong>$actor</strong> 啟動。' . "\n";
 $lang->action->desc->delayed      = '$date, 由 <strong>$actor</strong> 延期。' . "\n";
 $lang->action->desc->suspended    = '$date, 由 <strong>$actor</strong> 掛起。' . "\n";
-$lang->action->desc->recorded     = '$date, 由 <strong>$actor</strong> 記錄工時，消耗了 <strong>$extra</strong> 小時 。' . "\n";
+$lang->action->desc->recorded     = '$date, 由 <strong>$actor</strong> 記錄工時。' . "\n";
 $lang->action->desc->canceled     = '$date, 由 <strong>$actor</strong> 取消。' . "\n";
 $lang->action->desc->svncommited  = '$date, 由 <strong>$actor</strong> 提交代碼，版本為<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->finished     = '$date, 由 <strong>$actor</strong> 完成。' . "\n";
