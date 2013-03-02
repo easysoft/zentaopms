@@ -43,19 +43,16 @@ class todo extends control
             $todoID = $this->todo->create($date, $account);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('todo', $todoID, 'opened');
-            if($this->post->date == '')
+            $date = str_replace('-', '', $this->post->date);
+            if($date == '')
             {
-                $type = 'future'; 
+                $date = 'future'; 
             }
-            else if($this->post->date == date('Y-m-d'))
+            else if($date == date('Ymd'))
             {
-                $type = 'today'; 
+                $date = 'today'; 
             }
-            else
-            {
-                $type = str_replace('-', '', $this->post->date);
-            }
-            die(js::locate($this->createLink('my', 'todo', "type=$type"), 'parent'));
+            die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 
         $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
@@ -89,17 +86,13 @@ class todo extends control
             $date = str_replace('-', '', $this->post->date);
             if($date == '')
             {
-                $type = 'future'; 
+                $date = 'future'; 
             }
             else if($date == date('Ymd'))
             {
-                $type = 'today'; 
+                $date= 'today'; 
             }
-            else
-            {
-                $type = $date;
-            }
-            die(js::locate($this->createLink('my', 'todo', "type=$type"), 'parent'));
+            die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 
         $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
