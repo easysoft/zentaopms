@@ -39,3 +39,4 @@ ALTER TABLE  `zt_webapp` ADD  `abstract` VARCHAR( 255 ) CHARACTER SET utf8 COLLA
 ALTER TABLE `zt_webapp` CHANGE `url` `url` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 
 UPDATE `zt_groupPriv` set method='finish' where module='todo' and method='mark';
+ALTER TABLE  `zt_taskEstimate` ADD  `work` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
