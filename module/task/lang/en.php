@@ -45,7 +45,6 @@ $lang->task->estimateAB        = 'Est';
 $lang->task->left              = 'Left';
 $lang->task->leftAB            = 'Left';
 $lang->task->consumed          = 'Consumed';
-$lang->task->totalConsumed     = 'Total Consumed';
 $lang->task->consumedAB        = 'Use';
 $lang->task->hour              = 'Hour';
 $lang->task->consumedThisTime  = 'Effort';
