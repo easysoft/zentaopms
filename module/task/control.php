@@ -431,13 +431,13 @@ class task extends control
      * @access public
      * @return void
      */
-    public function record($taskID)
+    public function recordEstimate($taskID)
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
-            $this->task->record($taskID);
+            $this->task->recordEstimate($taskID);
             if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
