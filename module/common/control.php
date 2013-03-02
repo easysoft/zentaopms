@@ -283,8 +283,9 @@ class common extends control
         {
             $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
         }
-        if($icon == 'toStory')   $title = $lang->bug->toStory;
-        if($icon == 'createBug') $title = $lang->testtask->createBug;
+        if($icon == 'toStory')   $title  = $lang->bug->toStory;
+        if($icon == 'createBug') $title  = $lang->testtask->createBug;
+        if($icon == 'createCase') $title = $lang->bug->buttonCreateTestcase;
 
         /* set the class. */
         if(!$icon) $icon = $method;

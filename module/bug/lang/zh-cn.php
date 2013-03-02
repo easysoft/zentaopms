@@ -77,7 +77,7 @@ $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug详情';
 $lang->bug->resolve            = '解决';
 $lang->bug->close              = '关闭';
-$lang->bug->activate           = '激活Bug';
+$lang->bug->activate           = '激活';
 $lang->bug->reportChart        = '报表统计';
 $lang->bug->export             = '导出';
 $lang->bug->delete             = '删除';
@@ -143,7 +143,7 @@ $lang->bug->buttonActivate       = '激活';
 $lang->bug->buttonResolve        = '解决';
 $lang->bug->buttonClose          = '关闭';
 $lang->bug->buttonToList         = '返回';
-$lang->bug->buttonCreateTestcase = '建用例';
+$lang->bug->buttonCreateTestcase = '转用例';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改产品会导致相应的项目、需求和任务发生变化，确定吗？';

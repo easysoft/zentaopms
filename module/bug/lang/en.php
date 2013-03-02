@@ -75,9 +75,9 @@ $lang->bug->batchEdit          = 'Batch edit';
 $lang->bug->assignTo           = 'Assign';
 $lang->bug->browse             = 'Browse Bug';
 $lang->bug->view               = 'Bug Info';
-$lang->bug->resolve            = 'Resolve Bug';
-$lang->bug->close              = 'Close Bug';
-$lang->bug->activate           = 'Activate Bug';
+$lang->bug->resolve            = 'Resolve';
+$lang->bug->close              = 'Close';
+$lang->bug->activate           = 'Activate';
 $lang->bug->reportChart        = 'Report';
 $lang->bug->export             = 'Export data';
 $lang->bug->delete             = 'Delete Bug';
@@ -143,7 +143,7 @@ $lang->bug->buttonActivate       = 'Activate';
 $lang->bug->buttonResolve        = 'Resolve';
 $lang->bug->buttonClose          = 'Close';
 $lang->bug->buttonToList         = 'Back';
-$lang->bug->buttonCreateTestcase = 'Create case';
+$lang->bug->buttonCreateTestcase = 'Create Case';
 
 /* Confirm messags. */
 $lang->bug->confirmChangeProduct = 'Change product will change project, task and story also, are you sure?';
