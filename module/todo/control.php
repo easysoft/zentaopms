@@ -55,7 +55,7 @@ class todo extends control
             {
                 $type = str_replace('-', '', $this->post->date);
             }
-            die(js::locate($this->createLink('my', 'todo', "type=" . $type), 'parent'));
+            die(js::locate($this->createLink('my', 'todo', "type=$type"), 'parent'));
         }
 
         $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
@@ -87,7 +87,19 @@ class todo extends control
 
             /* Locate the browser. */
             $date = str_replace('-', '', $this->post->date);
-            die(js::locate($this->createLink('my', 'todo', "date=$date"), 'parent'));
+            if($date == '')
+            {
+                $type = 'future'; 
+            }
+            else if($date == date('Ymd'))
+            {
+                $type = 'today'; 
+            }
+            else
+            {
+                $type = $date;
+            }
+            die(js::locate($this->createLink('my', 'todo', "type=$type"), 'parent'));
         }
 
         $title      = $this->lang->my->common . $this->lang->colon . $this->lang->todo->create;
