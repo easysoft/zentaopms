@@ -7,20 +7,30 @@
 $phpConf    = '../php/php.ini';
 $mysqlConf  = '../mysql/my.ini';
 $apacheConf = '../apache/conf/httpd.conf';
+$zentaoConf = '../zentao/config/my.php';
+$pmaConf    = '../phpmyadmin/config.inc.php';
 
 /* Replace drivers for php and mysql. */
 replaceDriver($phpConf);   print("Set driver for php.ini.\n");
-replaceDriver($mysqlConf); print("Set driver for my.ini.\n");
 replaceDriver($mysqlConf); print("Set driver for my.ini.\n");
 
 /* Set ports of apache and mysql. */
 $usedPorts  = getUsedPorts();
 
 $apachePort = setApachePort($usedPorts, 88);
-$mysqlPort  = setMySQLPort($usedPorts, 3308);
-
 $apachePort ? print("Apache is using $apachePort port.\n") : "Set apache port error, please check $apacheConf.\n";
-$mysqlPort  ? print("Mysql is using $mysqlPort port.\n")   : "Set mysql port error, please check $mysqlConf.\n";
+
+$mysqlPort  = setMySQLPort($usedPorts, 3308);
+if($mysqlPort)
+{
+    echo "Mysql is using $mysqlPort port.\n";
+    setZenTaoConf($mysqlPort);
+    setPMAConf($mysqlPort);
+}
+else
+{
+    echo "Set mysql port error, please check $mysqlConf.\n";
+}
 
 /* Replace a config file with current driver. */
 function replaceDriver($file)
@@ -138,4 +148,22 @@ function getUsedPorts()
 
     if(isset($results[1])) return array_flip(array_unique($results[1]));
     return array();
+}
+
+/* Set mysql port for my.php. */
+function setZenTaoConf($mysqlPort)
+{
+    global $zentaoConf;
+    $lines = file_get_contents($zentaoConf);
+    $lines = preg_replace("/=\s'[0-9]{1,}'/", "= '$mysqlPort'", $lines);
+    file_put_contents($zentaoConf, $lines);
+}
+
+/* Set mysql port for phpmyadmin. */
+function setPMAConf($mysqlPort)
+{
+    global $pmaConf;
+    $lines = file_get_contents($pmaConf);
+    $lines = preg_replace("/=\s'[0-9]{1,}'/", "= '$mysqlPort'", $lines);
+    file_put_contents($pmaConf, $lines);
 }
