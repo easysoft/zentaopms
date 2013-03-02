@@ -309,6 +309,7 @@ class story extends control
                 $this->lang->story->menu = $this->lang->project->menu;
                 $this->project->setMenu($this->project->getPairs('nodeleted'), $projectID);
                 $this->lang->set('menugroup.story', 'project');
+                $this->lang->story->menuOrder = $this->lang->project->menuOrder;
                 $allStories = $this->story->getProjectStories($projectID, $orderBy);
             }
             if(!$allStories) $allStories = array();
