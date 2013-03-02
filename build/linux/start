@@ -33,6 +33,9 @@ mv etc/my.cnf.3306 etc/my.cnf
 sed -e 's/3308/3306/g' zentao/config/my.php > zentao/config/my.php.3306
 mv zentao/config/my.php.3306 zentao/config/my.php
 
+sed -e 's/3308/3306/g' phpmyadmin/config.inc.php > phpmyadmin/config.inc.php.3306
+mv phpmyadmin/config.inc.php.3306 phpmyadmin/config.inc.php
+
 # change directory permissions.
 chmod a+rx lampp
 chown nobody -R var/mysql
