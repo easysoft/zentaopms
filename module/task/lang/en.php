@@ -78,7 +78,7 @@ $lang->task->closedReason      = 'Closed Reason';
 $lang->task->lastEditedBy      = 'Last Edited By';
 $lang->task->lastEditedDate    = 'Last Edited Date';
 $lang->task->lastEdited        = 'Last Edited';
-$lang->task->recordEstimate    = 'Record estimate';
+$lang->task->recordEstimate    = 'Record';
 $lang->task->editEstimate      = 'Edit estimate';
 $lang->task->deleteEstimate    = 'Delete estimate';
 
