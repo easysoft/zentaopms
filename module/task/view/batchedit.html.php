@@ -23,7 +23,7 @@
       <th class='w-70px'><?php echo $lang->task->status;?></th>
       <th class='w-40px'><?php echo $lang->task->pri;?></th>
       <th class='w-30px red'><?php echo $lang->task->estimateAB?></th>
-      <th class='w-50px red'><?php echo $lang->task->consumedThisTime?></th>
+      <th class='w-60px red'><?php echo $lang->task->consumedThisTime?></th>
       <th class='w-30px red'><?php echo $lang->task->leftAB?></th>
       <th class='w-80px'><?php echo $lang->task->finishedBy;?></th>
       <th class='w-80px'><?php echo $lang->task->closedBy;?></th>
