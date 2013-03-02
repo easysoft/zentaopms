@@ -171,7 +171,7 @@ class tree extends control
             die(js::reload('parent'));
         }
         $module = $this->tree->getById($moduleID);
-        if($module->owner == null)
+        if($module->owner == null and $module->root != 0)
         {
            $module->owner = $this->loadModel('product')->getById($module->root)->QD;
         }
