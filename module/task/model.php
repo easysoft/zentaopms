@@ -832,7 +832,7 @@ class taskModel extends model
             ->fetchPairs('extra');
         foreach($estimates as $estimate)
         {
-            $estimate->comment = $comments[$estimate->id];
+            $estimate->comment = zget($comments, $estimate->id, '');
         }
         return $estimates; 
     }
