@@ -18,12 +18,12 @@
       <ul id='webapps'>
         <?php foreach($webapps as $webapp):?>
         <li>
-          <table class='exttable' id='webapp<?php echo $webapp->id?>'>
+          <table class='fixed exttable' id='webapp<?php echo $webapp->id?>'>
             <tr>
               <td rowspan='3' width='73' height='73' class='webapp-icon'><img src='<?php echo empty($webapp->icon) ? $config->webRoot . 'theme/default/images/main/webapp-default.png' : $webapp->icon?>' width='72' height='72' /></td>
-              <td class='webapp-name'><?php echo $webapp->name . "($webapp->author)"?></td>
+              <td class='webapp-name' title='<?php echo $webapp->name?>'><?php echo $webapp->name . "($webapp->author)"?></td>
             </tr>
-            <tr><td class='webapp-info'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></td></tr>
+            <tr><td valign='top'><div class='webapp-info' title='<?php echo $webapp->abstract?>'><?php echo empty($webapp->abstract) ? '&nbsp;' : $webapp->abstract?></div></td></tr>
             <tr>
               <td>
               <?php

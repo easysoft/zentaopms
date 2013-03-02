@@ -84,10 +84,6 @@
     <td><?php echo $webapp->downloads?></td>
   </tr>
   <?php endif;?>
-  <tr>
-    <th class='a-right'><?php echo $lang->webapp->views?></th>
-    <td><?php echo $webapp->views?></td>
-  </tr>
 </table>
 <?php include '../../common/view/footer.lite.html.php';?>
 

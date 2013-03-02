@@ -13,6 +13,6 @@
 #webapps li table {border:0px; width:95%; border:1px solid #ddd;}
 #webapps li table .webapp-name{font-size:14px; color:#039; padding-top:2px;}
 #webapps li table .webapp-icon{padding:5px;}
-#webapps li table .webapp-info{color:#888; padding-top:2px; height:32px;}
+#webapps li table .webapp-info{color:#888; padding-top:2px; height:32px; white-space:pre-wrap;}
 
 small{font-weight:normal}
