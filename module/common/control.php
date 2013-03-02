@@ -285,7 +285,6 @@ class common extends control
         }
         if($icon == 'toStory')   $title  = $lang->bug->toStory;
         if($icon == 'createBug') $title  = $lang->testtask->createBug;
-        if($icon == 'createCase') $title = $lang->bug->buttonCreateTestcase;
 
         /* set the class. */
         if(!$icon) $icon = $method;

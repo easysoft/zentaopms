@@ -51,7 +51,7 @@ $lang->testcase->stepExpect = 'Expect';
 
 $lang->testcase->common             = 'Case';
 $lang->testcase->index              = "Index";
-$lang->testcase->create             = "Create";
+$lang->testcase->create             = "Create case";
 $lang->testcase->batchCreate        = "Batch create";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->view               = "Info";
