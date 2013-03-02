@@ -186,7 +186,7 @@ class testcase extends control
         $type         = 'feature';
         $stage        = '';
         $pri          = 0;
-        $title        = '';
+        $caseTitle    = '';
         $precondition = '';
         $keywords     = '';
         $steps        = array();
@@ -200,7 +200,7 @@ class testcase extends control
             $stage        = $testcase->stage;
             $pri          = $testcase->pri;
             $storyID      = $testcase->story;
-            $title        = $testcase->title;
+            $caseTitle    = $testcase->title;
             $precondition = $testcase->precondition;
             $keywords     = $testcase->keywords;
             $steps        = $testcase->steps;
@@ -213,7 +213,7 @@ class testcase extends control
             $type     = $bug->type;
             $pri      = $bug->pri ? $bug->pri : $bug->severity;
             $storyID  = $bug->story;
-            $title    = $bug->title;
+            $caseTitle= $bug->title;
             $keywords = $bug->keywords;
             $steps    = $this->testcase->createStepsFromBug($bug->steps);
         }
@@ -234,6 +234,7 @@ class testcase extends control
 
         $users = $this->user->getPairs();
         $this->view->title            = $title;
+        $this->view->caseTitle        = $caseTitle;
         $this->view->position         = $position;
         $this->view->productID        = $productID;
         $this->view->users            = $users;           

@@ -48,7 +48,7 @@
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testcase->title;?></th>
-      <td><?php echo html::input('title', $title, "class='text-1'");?></td>
+      <td><?php echo html::input('title', $caseTitle, "class='text-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->testcase->precondition;?></th>
