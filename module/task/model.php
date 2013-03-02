@@ -888,7 +888,7 @@ class taskModel extends model
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('id desc')->fetch();
         $this->dao->update(TABLE_TASK)->set("consumed = consumed - {$estimate->consumed}")->set('`left`')->eq($lastEstimate->left)->where('id')->eq($estimate->task)->exec();
-        $this->loadModel('action')->create('task', $oldEstimate->task, 'DeleteEstimate');
+        $this->loadModel('action')->create('task', $estimate->task, 'DeleteEstimate');
     }
 
     /**
