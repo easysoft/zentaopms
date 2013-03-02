@@ -52,18 +52,6 @@
     <th class='a-right'><?php echo $lang->webapp->desc?></th>
     <td><?php echo $webapp->desc?></td>
   </tr>
-  <tr>
-    <th class='a-right'><?php echo $lang->webapp->icon?></th>
-    <td>
-    <?php
-    if($webapp->icon)
-    {
-        $url = $type == 'api' ? $this->config->webapp->url . $webapp->icon : ($webapp->addType == 'system' ? $webapp->icon : $webapp->icon->webPath);
-        echo "<p><img src='$url' /></p>";
-    }
-    ?>
-    </td>
-  </tr>
   <?php if($type == 'local'):?>
   <tr>
     <th class='a-right'><?php echo $lang->webapp->addType?></th>
