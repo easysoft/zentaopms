@@ -239,7 +239,7 @@ class taskModel extends model
                 $oldTask = $this->getById($taskID);
 
                 $task->name           = htmlspecialchars($this->post->names[$taskID]);
-                $task->module         = $this->post->modules[$taskID];
+                $task->module         = isset($this->post->modules[$taskID]) ? $this->post->modules[$taskID] : 0;
                 $task->type           = $this->post->types[$taskID];
                 $task->status         = $this->post->statuses[$taskID];
                 $task->assignedTo     = $task->status == 'closed' ? 'closed' : $this->post->assignedTos[$taskID];
