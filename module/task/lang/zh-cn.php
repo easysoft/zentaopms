@@ -78,6 +78,7 @@ $lang->task->closedReason      = '关闭原因';
 $lang->task->lastEditedBy      = '最后修改';
 $lang->task->lastEditedDate    = '最后修改日期';
 $lang->task->lastEdited        = '最后编辑';
+$lang->task->recordEstimate    = '记录工时';
 $lang->task->editEstimate      = '编辑工时';
 $lang->task->deleteEstimate    = '删除工时';
 
