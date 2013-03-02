@@ -29,7 +29,7 @@
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->comment;?></th>
-      <td><?php echo html::textarea('comment', $estimate->comment, "class=text-5");?></td>
+      <td><?php echo html::textarea('work', $estimate->work, "class=text-5");?></td>
     </tr>  
     <tr>
       <td colspan='2' class='a-center'>

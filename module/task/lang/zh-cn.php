@@ -45,6 +45,7 @@ $lang->task->estimateAB        = '预';
 $lang->task->left              = '预计剩余';
 $lang->task->leftAB            = '剩';
 $lang->task->consumed          = '已经消耗';
+$lang->task->totalConsumed     = '总消耗';
 $lang->task->consumedAB        = '耗';
 $lang->task->hour              = '小时';
 $lang->task->consumedThisTime  = '本次消耗';

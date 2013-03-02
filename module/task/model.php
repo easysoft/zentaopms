@@ -429,7 +429,7 @@ class taskModel extends model
                 $estimates[$id]->task     = $taskID;
                 $estimates[$id]->consumed = $record->consumed[$id];
                 $estimates[$id]->left     = $record->left[$id];
-                $estimates[$id]->comment  = $record->comment[$id];
+                $estimates[$id]->work     = $record->work[$id];
             }
         }
 
@@ -439,13 +439,12 @@ class taskModel extends model
         {
             $consumed += $estimate->consumed;
             $left      = $estimate->left;
-            $comment   = $estimate->comment;
-            unset($estimate->comment);
+            $work      = $estimate->work;
             $this->dao->insert(TABLE_TASKESTIMATE)->data($estimate) 
                 ->autoCheck()
                 ->exec();
             $estimateID = $this->dao->lastInsertID();
-            $this->loadModel('action')->create('task', $taskID, 'Recorded', $comment, $estimateID);
+            $this->loadModel('action')->create('task', $taskID, 'Recorded', '', $estimate->consumed);
         }
 
         $this->dao->update(TABLE_TASK)
@@ -819,22 +818,11 @@ class taskModel extends model
      */
     public function getTaskEstimate($taskID)
     {
-        $estimates = $this->dao->select('*')
+        return $this->dao->select('*')
           ->from(TABLE_TASKESTIMATE)  
           ->where('task')->eq($taskID)
           ->orderBy('id')
           ->fetchAll();
-        $comments = $this->dao->select('extra, comment')
-            ->from(TABLE_ACTION)
-            ->where('objectType')->eq('task')
-            ->andWhere('objectID')->eq($taskID)
-            ->andWhere('action')->eq('recorded')
-            ->fetchPairs('extra');
-        foreach($estimates as $estimate)
-        {
-            $estimate->comment = zget($comments, $estimate->id, '');
-        }
-        return $estimates; 
     }
 
     /**
@@ -846,19 +834,10 @@ class taskModel extends model
      */
     public function getEstimateById($estimateID)
     {
-        $estimate = $this->dao->select('*')
+        return $this->dao->select('*')
           ->from(TABLE_TASKESTIMATE)  
           ->where('id')->eq($estimateID)
           ->fetch();
-        $comment = $this->dao->select('comment')
-            ->from(TABLE_ACTION)
-            ->where('objectType')->eq('task')
-            ->andWhere('action')->eq('recorded')
-            ->andWhere('extra')->eq($estimateID)
-            ->orderBy('id desc')
-            ->fetch();
-        $estimate->comment = $comment->comment;
-        return $estimate; 
     }
 
     /**
@@ -871,14 +850,14 @@ class taskModel extends model
     public function updateEstimate($estimateID)
     {
         $oldEstimate = $this->getEstimateById($estimateID);
-        $estimate    = fixer::input('post')->remove('comment')->get();
+        $estimate    = fixer::input('post')->get();
         $task        = $this->getById($oldEstimate->task);
         $this->dao->update(TABLE_TASKESTIMATE)->data($estimate)
             ->autoCheck()
             ->check('consumed', 'notempty')
             ->where('id')->eq((int)$estimateID)
             ->exec();
-        $this->loadModel('action')->create('task', $oldEstimate->task, 'Recorded', $this->post->comment, $estimateID);
+        $this->loadModel('action')->create('task', $oldEstimate->task, 'EditEstimate');
         $consumed     = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('id desc')->fetch();
         if($lastEstimate and $estimateID == $lastEstimate->id)
@@ -909,6 +888,7 @@ class taskModel extends model
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('id desc')->fetch();
         $this->dao->update(TABLE_TASK)->set("consumed = consumed - {$estimate->consumed}")->set('`left`')->eq($lastEstimate->left)->where('id')->eq($estimate->task)->exec();
+        $this->loadModel('action')->create('task', $oldEstimate->task, 'DeleteEstimate');
     }
 
     /**

@@ -30,7 +30,7 @@
       <td><?php echo $estimate->date;?></td>
       <td><?php echo $estimate->consumed;?></td>
       <td><?php echo $estimate->left;?></td>
-      <td class="a-left"><?php echo $estimate->comment;?></td>
+      <td class="a-left"><?php echo $estimate->work;?></td>
       <td align='center'>
         <?php
         common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', '', '', '', true);
@@ -45,7 +45,7 @@
       <td><?php echo html::input("dates[$i]", '', "class='text-6 date'");?></td>
       <td><?php echo html::input("consumed[$i]", '', "class='text-1'");?></td>
       <td><?php echo html::input("left[$i]", '', "class='text-1'");?></td>
-      <td class="a-left"><?php echo html::textarea("comment[$i]", '', "class='text-1' rows='1'");?></td>
+      <td class="a-left"><?php echo html::textarea("work[$i]", '', "class='text-1' rows='1'");?></td>
       <td><?php echo '';?></td>
       <td align='center'></td>
     </tr>
