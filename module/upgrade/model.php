@@ -423,6 +423,12 @@ class upgradeModel extends model
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
+                ->set('method')->eq('recordEstimate')
+                ->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($group->company)
+                ->set('`group`')->eq($group->group)
+                ->set('module')->eq('task')
                 ->set('method')->eq('editEstimate')
                 ->exec();
             $this->dao->insert(TABLE_GROUPPRIV)
