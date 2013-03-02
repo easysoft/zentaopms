@@ -888,7 +888,7 @@ class taskModel extends model
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('id desc')->fetch();
         $this->dao->update(TABLE_TASK)->set("consumed = consumed - {$estimate->consumed}")->set('`left`')->eq($lastEstimate->left)->where('id')->eq($estimate->task)->exec();
-        $this->loadModel('action')->create('task', $oldEstimate->task, 'DeleteEstimate');
+        $this->loadModel('action')->create('task', $oldEstimate->task, 'DelEstimate');
     }
 
     /**
@@ -1234,7 +1234,6 @@ class taskModel extends model
 
         if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'start')    return $task->status != 'doing'  and $task->status != 'closed' and $task->status != 'cancel';
-        if($action == 'record')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'close')    return $task->status == 'done'   or  $task->status == 'cancel';
         if($action == 'activate') return $task->status == 'done'   or  $task->status == 'closed'  or $task->status == 'cancel' ;
