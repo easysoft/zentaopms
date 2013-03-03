@@ -14,6 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
 <form method='post' target='hiddenwin'>
+  <?php if($estimates):?>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
@@ -42,22 +43,31 @@
       </td>
     </tr>
     <?php endforeach;?>
-    <?php if($task->status == 'wait' or $task->status == 'doing'):?>
+  </table>
+  <?php endif;?>
+  <?php if($task->status == 'wait' or $task->status == 'doing'):?>
+  <table class='table-1'>
+    <caption><?php echo $lang->task->logEfforts;?></caption>
+    <tr>
+      <th class="w-id"><?php echo $lang->idAB;?></th>
+      <th class="w-100px"><?php echo $lang->task->date;?></th>
+      <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
+      <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
+      <th><?php echo $lang->comment;?></th>
+    </tr>
     <?php for($i = 1; $i <= 5; $i++):?>
     <tr class="a-center">
       <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
-      <td><?php echo html::input("dates[$i]", '', "class='text-6 date'");?></td>
-      <td><?php echo html::input("consumed[$i]", '', "class='text-1'");?></td>
-      <td><?php echo html::input("left[$i]", '', "class='text-1'");?></td>
+      <td><?php echo html::input("dates[$i]", '', "class='text-6 a-center date'");?></td>
+      <td><?php echo html::input("consumed[$i]", '', "class='text-1 a-center'");?></td>
+      <td><?php echo html::input("left[$i]", '', "class='text-1 a-center'");?></td>
       <td class="a-left"><?php echo html::textarea("work[$i]", '', "class='text-1' rows='1'");?></td>
-      <td><?php echo '';?></td>
-      <td align='center'></td>
     </tr>
     <?php endfor;?>
     <tr>
       <td colspan='6' class='a-center'><?php echo html::submitButton() . html::resetButton(); ?></td>
     </tr>
-    <?php endif;?>
   </table>
+  <?php endif;?>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>
