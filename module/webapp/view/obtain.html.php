@@ -67,7 +67,7 @@
                     $popup  = 'popup';
                 }
                 echo isset($installeds[$webapp->id]) ? html::commonButton($lang->webapp->installed, "disabled='disabled' style='color:gray'") : html::a(inLink('install', "webappID={$webapp->id}"), $lang->webapp->install, '_self', "class='button-c iframe'");
-                common::printLink('webapp', 'view', "webappID=$webapp->id&type=api", $lang->webapp->view, '',  "class='button-c webapp'");
+                common::printLink('webapp', 'view', "webappID=$webapp->id&type=api", $lang->webapp->view, '',  "class='button-c apiapp'");
                 echo html::a($url, $lang->webapp->preview, '', "id='useapp$webapp->id' class='button-c $popup' onclick='$method'");
               ?>
               </td>
