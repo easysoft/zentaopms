@@ -14,7 +14,6 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
 <form method='post' target='hiddenwin'>
-  <?php if($estimates):?>
   <table class='table-1'>
     <caption><?php echo $task->name;?></caption>
     <tr>
@@ -44,7 +43,6 @@
     </tr>
     <?php endforeach;?>
   </table>
-  <?php endif;?>
   <?php if($task->status == 'wait' or $task->status == 'doing'):?>
   <table class='table-1'>
     <caption><?php echo $lang->task->logEfforts;?></caption>
