@@ -447,9 +447,11 @@ class taskModel extends model
             $this->loadModel('action')->create('task', $taskID, 'RecordEstimate', '', $estimate->consumed);
         }
 
+        $status = $task->status == 'wait' ? 'doing' : $task->status;
         $this->dao->update(TABLE_TASK)
             ->set('consumed')->eq($task->consumed + $consumed)
             ->set('`left`')->eq($left)
+            ->set('status')->eq($status)
             ->where('id')->eq($taskID)
             ->exec();
     }
