@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
- * @version     $Id: zh-tw.php 4532 2013-03-02 13:14:11Z wwccss $
+ * @version     $Id: zh-tw.php 4547 2013-03-02 14:55:28Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "任務一覽";
@@ -78,6 +78,7 @@ $lang->task->closedReason      = '關閉原因';
 $lang->task->lastEditedBy      = '最後修改';
 $lang->task->lastEditedDate    = '最後修改日期';
 $lang->task->lastEdited        = '最後編輯';
+$lang->task->recordEstimate    = '工時';
 $lang->task->editEstimate      = '編輯工時';
 $lang->task->deleteEstimate    = '刪除工時';
 

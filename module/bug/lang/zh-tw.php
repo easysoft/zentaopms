@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
- * @version     $Id: zh-tw.php 4442 2013-02-23 02:23:20Z wwccss $
+ * @version     $Id: zh-tw.php 4536 2013-03-02 13:39:37Z wwccss $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -77,7 +77,7 @@ $lang->bug->browse             = 'Bug列表';
 $lang->bug->view               = 'Bug詳情';
 $lang->bug->resolve            = '解決';
 $lang->bug->close              = '關閉';
-$lang->bug->activate           = '激活Bug';
+$lang->bug->activate           = '激活';
 $lang->bug->reportChart        = '報表統計';
 $lang->bug->export             = '導出';
 $lang->bug->delete             = '刪除';
@@ -143,7 +143,7 @@ $lang->bug->buttonActivate       = '激活';
 $lang->bug->buttonResolve        = '解決';
 $lang->bug->buttonClose          = '關閉';
 $lang->bug->buttonToList         = '返回';
-$lang->bug->buttonCreateTestcase = '建用例';
+$lang->bug->buttonCreateTestcase = '轉用例';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = '修改產品會導致相應的項目、需求和任務發生變化，確定嗎？';
