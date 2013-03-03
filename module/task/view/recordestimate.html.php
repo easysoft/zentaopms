@@ -42,6 +42,7 @@
       </td>
     </tr>
     <?php endforeach;?>
+    <?php if($task->status == 'wait' or $task->status == 'doing'):?>
     <?php for($i = 1; $i <= 5; $i++):?>
     <tr class="a-center">
       <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
@@ -56,6 +57,7 @@
     <tr>
       <td colspan='6' class='a-center'><?php echo html::submitButton() . html::resetButton(); ?></td>
     </tr>
+    <?php endif;?>
   </table>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>
