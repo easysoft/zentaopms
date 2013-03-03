@@ -708,6 +708,18 @@ CREATE TABLE IF NOT EXISTS `zt_webapp` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+INSERT INTO `zt_group` (`id`, `company`, `name`, `role`, `desc`) VALUES
+(1, 1, 'ADMIN', 'admin', 'for administrator'),
+(2, 1, 'DEV', 'dev', 'for developers.'),
+(3, 1, 'QA', 'qa', 'for testers.'),
+(4, 1, 'PM', 'pm', 'for project managers.'),
+(5, 1, 'PO', 'po', 'for product owners.'),
+(6, 1, 'TD', 'td', 'for technical director.'),
+(7, 1, 'PD', 'pd', 'for product director.'),
+(8, 1, 'QD', 'qd', 'for quality director.'),
+(9, 1, 'TOP', 'top', 'for top manager.'),
+(10, 1, 'OTHERS', '', 'for others.'),
+(11, 1, 'guest', 'guest', 'For guest');
 INSERT INTO `zt_groupPriv` (`company`, `group`, `module`, `method`) VALUES
 (1, 1, 'project', 'suspend'),
 (1, 1, 'testtask', 'index'),
