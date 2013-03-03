@@ -134,7 +134,7 @@ class report extends control
         
         $reminder = array();
 
-        $users = array_unique(array_keys($bugs) + array_keys($tasks) + array_keys($todos));
+        $users = array_unique(array_merge(array_keys($bugs), array_keys($tasks), array_keys($todos)));
         if(!empty($users)) foreach($users as $user) $reminder[$user] = new stdclass();
 
         if(!empty($bugs))  foreach($bugs as $user => $bug)   $reminder[$user]->bugs  = $bug;
