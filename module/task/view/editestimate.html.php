@@ -20,7 +20,7 @@
       <td><?php echo html::input('date', $estimate->date, 'class="select-3 date"');?></td>
     </tr>  
     <tr>
-      <th class='rowhead'><?php echo $lang->task->consumed;?></th>
+      <th class='rowhead'><?php echo $lang->task->record;?></th>
       <td><?php echo html::input('consumed', $estimate->consumed, 'class="select-3"');?></td>
     </tr>
     <tr>
