@@ -857,7 +857,6 @@ class taskModel extends model
             ->check('consumed', 'notempty')
             ->where('id')->eq((int)$estimateID)
             ->exec();
-        $this->loadModel('action')->create('task', $oldEstimate->task, 'EditEstimate');
         $consumed     = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('id desc')->fetch();
         if($lastEstimate and $estimateID == $lastEstimate->id)
@@ -873,6 +872,14 @@ class taskModel extends model
             ->set('`left`')->eq($left)
             ->where('id')->eq($task->id)
             ->exec();
+
+        $oldTask = new stdClass();
+        $newTask = new stdClass();
+        $oldTask->consumed = $task->consumed;
+        $newTask->consumed = $consumed;
+        $oldTask->left     = $task->left;
+        $newTask->left     = $left;
+        if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }
 
     /**
@@ -884,11 +891,21 @@ class taskModel extends model
      */
     public function deleteEstimate($estimateID)
     {
-        $estimate     = $this->getEstimateById($estimateID);
+        $estimate = $this->getEstimateById($estimateID);
+        $task     = $this->getById($estimate->task);
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('id desc')->fetch();
-        $this->dao->update(TABLE_TASK)->set("consumed = consumed - {$estimate->consumed}")->set('`left`')->eq($lastEstimate->left)->where('id')->eq($estimate->task)->exec();
-        $this->loadModel('action')->create('task', $estimate->task, 'DeleteEstimate');
+        $consumed = $task->consumed - $estimate->consumed;
+        $left     = $lastEstimate->left;
+        $this->dao->update(TABLE_TASK)->set("consumed")->eq($consumed)->set('`left`')->eq($left)->where('id')->eq($estimate->task)->exec();
+
+        $oldTask = new stdClass();
+        $newTask = new stdClass();
+        $oldTask->consumed = $task->consumed;
+        $newTask->consumed = $consumed;
+        $oldTask->left     = $task->left;
+        $newTask->left     = $left;
+        if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }
 
     /**

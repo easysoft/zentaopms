@@ -462,8 +462,11 @@ class task extends control
         $estimate = $this->task->getEstimateById($estimateID);
         if(!empty($_POST))
         {
-            $this->task->updateEstimate($estimateID);
+            $changes = $this->task->updateEstimate($estimateID);
             if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditEstimate');
+            $this->action->logHistory($actionID, $changes);
 
             $url = $this->session->estimateList ? $this->session->estimateList : inlink('record', "taskID={$estimate->task}");
             die(js::locate($url, 'parent'));
@@ -493,7 +496,12 @@ class task extends control
         }
         else
         {
-            $this->task->deleteEstimate($estimateID);
+            $estimate = $this->task->getEstimateById($estimateID);
+            $changes  = $this->task->deleteEstimate($estimateID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('task', $estimate->task, 'DeleteEstimate');
+            $this->action->logHistory($actionID, $changes);
             die(js::reload('parent'));
         }
     }
