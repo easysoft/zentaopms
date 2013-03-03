@@ -144,7 +144,7 @@ class report extends control
         $this->loadModel('mail');
 
         /* Check mail turnon.*/
-        if(!$this->config->mail->turnon) die("Mail turnon is off. Please open config for send mail.\n");
+        if(!$this->config->mail->turnon) die("You should turn on the Email feature first.\n");
 
         foreach($reminder as $user => $mail)
         {
