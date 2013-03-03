@@ -466,7 +466,7 @@ class taskModel extends model
         $oldTask = new stdClass();
         $newTask = new stdClass();
         $oldTask->consumed = $task->consumed;
-        $newTask->consumed = $consumed;
+        $newTask->consumed = $task->consumed + $consumed;
         $oldTask->left     = $task->left;
         $newTask->left     = $left;
         $oldTask->status   = $oldStatus;

@@ -27,6 +27,11 @@
       <th class='w-50px'><?php echo $lang->task->pri;?></th>
     </tr>
 
+    <?php
+    $stories['ditto'] = $this->lang->task->ditto; 
+    $lang->task->typeList['ditto'] = $lang->task->ditto; 
+    $members['ditto'] = $lang->task->ditto;
+    ?>
     <?php for($i = 0; $i < $config->task->batchCreate; $i++):?>
     <?php 
     if($i == 0)
@@ -37,13 +42,9 @@
     }
     else
     {
-        $stories['ditto'] = $this->lang->task->ditto; 
-        $lang->task->typeList['ditto'] = $lang->task->ditto; 
-        $members['ditto'] = $lang->task->ditto;
         $story = $type = $member = 'ditto';
     }
     ?>
-
     <?php $pri = 3;?>
     <tr class='a-center'>
       <td><?php echo $i+1;?></td>
