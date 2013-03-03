@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->task->finishedDate;?></td>
-      <td><?php echo html::input('finishedDate',$date, "class='select-3'");?></td>
+      <td><?php echo html::input('finishedDate',$date, "class='text-3'");?></td>
     </tr>
 
     <tr>
