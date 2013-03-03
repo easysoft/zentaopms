@@ -420,6 +420,7 @@ class taskModel extends model
         $record    = fixer::input('post')->get();
         $estimates = array();
         $task      = $this->getById($taskID);
+        $oldStatus = $task->status;
         foreach(array_keys($record->id) as $id)
         {
             if($record->dates[$id])
@@ -444,16 +445,35 @@ class taskModel extends model
                 ->autoCheck()
                 ->exec();
             $estimateID = $this->dao->lastInsertID();
-            $this->loadModel('action')->create('task', $taskID, 'RecordEstimate', '', $estimate->consumed);
+            $actionID   = $this->loadModel('action')->create('task', $taskID, 'RecordEstimate', '', $estimate->consumed);
         }
 
-        $status = $task->status == 'wait' ? 'doing' : $task->status;
+        if($left == 0)
+        {
+            $task->status = 'done'; 
+        }
+        else if($task->status == 'wait')
+        {
+            $task->status = 'doing'; 
+        }
         $this->dao->update(TABLE_TASK)
             ->set('consumed')->eq($task->consumed + $consumed)
             ->set('`left`')->eq($left)
-            ->set('status')->eq($status)
+            ->set('status')->eq($task->status)
             ->where('id')->eq($taskID)
             ->exec();
+
+        $oldTask = new stdClass();
+        $newTask = new stdClass();
+        $oldTask->consumed = $task->consumed;
+        $newTask->consumed = $consumed;
+        $oldTask->left     = $task->left;
+        $newTask->left     = $left;
+        $oldTask->status   = $oldStatus;
+        $newTask->status   = $task->status;
+
+        $changes =  common::createChanges($oldTask, $newTask);
+        $this->action->logHistory($actionID, $changes);
     }
 
     /**
@@ -854,6 +874,7 @@ class taskModel extends model
         $oldEstimate = $this->getEstimateById($estimateID);
         $estimate    = fixer::input('post')->get();
         $task        = $this->getById($oldEstimate->task);
+        $oldStatus   = $task->status;
         $this->dao->update(TABLE_TASKESTIMATE)->data($estimate)
             ->autoCheck()
             ->check('consumed', 'notempty')
@@ -869,9 +890,11 @@ class taskModel extends model
         {
             $left = $task->left; 
         }
+        if($left == 0) $task->status = 'done'; 
         $this->dao->update(TABLE_TASK)
             ->set('consumed')->eq($consumed)
             ->set('`left`')->eq($left)
+            ->set('status')->eq($task->status)
             ->where('id')->eq($task->id)
             ->exec();
 
@@ -881,6 +904,8 @@ class taskModel extends model
         $newTask->consumed = $consumed;
         $oldTask->left     = $task->left;
         $newTask->left     = $left;
+        $oldTask->status   = $oldStatus;
+        $newTask->status   = $task->status;
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }
 
@@ -897,9 +922,16 @@ class taskModel extends model
         $task     = $this->getById($estimate->task);
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('id desc')->fetch();
-        $consumed = $task->consumed - $estimate->consumed;
-        $left     = $lastEstimate->left;
-        $this->dao->update(TABLE_TASK)->set("consumed")->eq($consumed)->set('`left`')->eq($left)->where('id')->eq($estimate->task)->exec();
+        $consumed  = $task->consumed - $estimate->consumed;
+        $left      = $lastEstimate->left;
+        $oldStatus = $task->status;
+        if($left == 0) $task->status = 'done'; 
+        $this->dao->update(TABLE_TASK)
+            ->set("consumed")->eq($consumed)
+            ->set('`left`')->eq($left)
+            ->set('status')->eq($task->status)
+            ->where('id')->eq($estimate->task)
+            ->exec();
 
         $oldTask = new stdClass();
         $newTask = new stdClass();
@@ -907,6 +939,8 @@ class taskModel extends model
         $newTask->consumed = $consumed;
         $oldTask->left     = $task->left;
         $newTask->left     = $left;
+        $oldTask->status   = $oldStatus;
+        $newTask->status   = $task->status;
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }
 
