@@ -372,7 +372,7 @@ class user extends control
         }
         elseif($_POST)
         {
-            $this->user->batchEdit();
+            if($this->post->account) $this->user->batchEdit();
             die(js::locate($this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
         }
         $this->lang->set('menugroup.user', 'company');
