@@ -5,15 +5,13 @@
 <script type="text/javascript">
 function path()
 {
-  var args = arguments,
-      result = []
-      ;
+  var args = arguments;
+  var result = [];
        
-  for(var i = 0; i < args.length; i++)
-      result.push(args[i].replace('@', '<?php echo $jsRoot;?>jquery/syntaxhighlighter/scripts/'));
+  for(var i = 0; i < args.length; i++) result.push(args[i].replace('@', '<?php echo $jsRoot;?>jquery/syntaxhighlighter/scripts/'));
        
   return result
-};
+}
  
 SyntaxHighlighter.autoloader.apply(null, path(
   'applescript            @shBrushAppleScript.js',
