@@ -34,6 +34,7 @@ INSERT INTO `zt_groupPriv` (`company` , `group` , `module` , `method` ) VALUES
 ('1', '10', 'webapp', 'index'),
 ('1', '11', 'webapp', 'index');
 
+DELETE FROM `zt_config` where `company` = '0' and `section` = 'global' and `key` = 'flow';
 UPDATE `zt_config` SET `company` = '0', `section` = 'global'  WHERE `key` = 'flow';
 ALTER TABLE  `zt_webapp` ADD  `abstract` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER  `size` ;
 ALTER TABLE `zt_webapp` CHANGE `url` `url` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
