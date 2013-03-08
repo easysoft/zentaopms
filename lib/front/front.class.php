@@ -786,7 +786,7 @@ EOT;
     static public function set($key, $value)
     {
         $js  = self::start(false);
-        if(is_array($value) or is_object($value))
+        if(is_array($value) or is_object($value) or is_string($value))
         {
             $value = json_encode($value);
             $js .= "$key = $value";
