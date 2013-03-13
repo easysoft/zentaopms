@@ -56,7 +56,7 @@ function deleteRow(rowID)
 {
     if($('.stepID').size() == 1) return;
     $('#row' + rowID).remove();
-    updateID();
+    updateStepID();
 }
 
 /**
@@ -69,7 +69,7 @@ function deleteRow(rowID)
 function preInsert(rowID)
 {
     $('#row' + rowID).before(createRow());
-    updateID();
+    updateStepID();
 }
 
 /**
@@ -82,7 +82,7 @@ function preInsert(rowID)
 function postInsert(rowID)
 {
     $('#row' + rowID).after(createRow());
-    updateID();
+    updateStepID();
 }
 
 /**
@@ -116,9 +116,9 @@ function createRow()
  * @access public
  * @return void
  */
-function updateID()
+function updateStepID()
 {
-    i = 1;
+    var i = 1;
     $('.stepID').each(function(){$(this).html(i ++)});
 }
 </script>
