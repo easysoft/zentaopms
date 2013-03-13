@@ -1111,6 +1111,8 @@ class projectModel extends model
      */
     public function getMembers2Import($project, $currentMembers)
     {
+        if($project == 0) return array();
+
         return $this->dao->select('account, role, hours')
             ->from(TABLE_TEAM)
             ->where('project')->eq($project)
