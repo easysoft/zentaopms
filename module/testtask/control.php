@@ -538,7 +538,6 @@ class testtask extends control
         $preCase  = '';
         $nextCase = '';
         $caseID   = $caseID ? $caseID : $run->case->id;
-        if($runID and $preAndNext->next) $preAndNext->next = $this->dao->select('*')->from(TABLE_TESTRUN)->where('`case`')->eq($preAndNext->next->id)->fetch();
         if($preAndNext->pre)
         {
             $preCase['runID']   = $runID ? $preAndNext->pre->id : 0;
@@ -585,8 +584,8 @@ class testtask extends control
         else
         {
             $this->testtask->batchRun($from);
-            $method = $from == 'testcase' ? 'browse' : 'cases';
-            die(js::locate($this->createLink($from, $method, "productID=$productID"), 'parent'));
+            $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
+            die(js::locate($url, 'parent'));
         }
         $this->app->loadLang('testcase');
         $this->testtask->setMenu($this->products, $productID);

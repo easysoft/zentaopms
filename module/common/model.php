@@ -509,69 +509,48 @@ class commonModel extends model
         if(strpos('story, task, bug, testcase, doc', $type) === false) return $preAndNextObject;
         $table = $this->config->objectTables[$type];
 
-        $typeIDs = $type . 'IDs';
-        if($this->session->$typeIDs and strpos($this->session->$typeIDs, ',' . $objectID . ',') !== false)
+        /* Get objectIDs. */
+        $queryCondition    = $type . 'QueryCondition';
+        $typeOnlyCondition = $type . 'OnlyCondition';
+        $queryCondition = $this->session->$queryCondition;
+        $orderBy = $type . 'OrderBy';
+        $orderBy = $this->session->$orderBy;
+        $orderBy = str_replace('`left`', 'left', $orderBy); // process the `left` to left.
+
+        if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
-            $objectIDs = $this->session->$typeIDs;
-            $this->session->set($typeIDs, '');
+            $objects = $this->dao->select('*')->from($table)
+                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
+                ->fetchAll();
         }
         else
         {
-            /* Get objectIDs. */
-            $queryCondition    = $type . 'QueryCondition';
-            $typeOnlyCondition = $type . 'OnlyCondition';
-            $queryCondition = $this->session->$queryCondition;
-            $orderBy = $type . 'OrderBy';
-            $orderBy = $this->session->$orderBy;
-            $orderBy = str_replace('`left`', 'left', $orderBy); // process the `left` to left.
-
-            if(empty($queryCondition) or $this->session->$typeOnlyCondition)
-            {
-                $objects = $this->dao->select('*')->from($table)
-                    ->beginIF($queryCondition != false)->where($queryCondition)->fi()
-                    ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
-                    ->fetchAll();
-            }
-            else
-            {
-                $objects = $this->dbh->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
-            }
-
-            $tmpObjectIDs = array();
-            foreach($objects as $object) $tmpObjectIDs[$object->id] = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? $object->case : $object->id;
-            $objectIDs    = ',' . implode(',', $tmpObjectIDs) . ',';
-            $this->session->set($type . 'IDs', $objectIDs);
+            $objects = $this->dbh->query($queryCondition . " ORDER BY $orderBy")->fetchAll();
         }
+
+        $tmpObjectIDs = array();
+        foreach($objects as $key => $object) $tmpObjectIDs[$key] = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? $object->case : $object->id;
+        $objectIDs = array_flip($tmpObjectIDs);
 
         /* Current object. */
-        $currentStart = strpos($objectIDs, ',' . $objectID . ',') + 1;
-        $currentEnd   = $currentStart + strlen($objectID) - 1;
+        $currentKey = array_search($objectID, $tmpObjectIDs);
 
-        /* Get the previous object. */
-        $tmp      = substr($objectIDs, 0, $currentStart - 1);
-        $preStart = strrpos($tmp, ',', 0) +  1;
-        $preEnd   = $currentStart - 2;
-        if($preEnd - $preStart < 0) 
+        $preKey = $currentKey - 1;
+        $preAndNextObject->pre = '';
+        if($preKey >= 0) 
         {
-            $preAndNextObject->pre = '';
-        }
-        else
-        {
-            $preID = substr($objectIDs, $preStart, $preEnd - $preStart + 1);
-            $preAndNextObject->pre  = $this->dao->select('*')->from($table)->where('id')->eq($preID)->fetch();
+            $preID = $tmpObjectIDs[$preKey];
+            $preAndNextObject->pre = $objects[$objectIDs[$preID]];
         }
         
         /* Get the next object. */
-        $nextStart = $currentEnd + 2;            
-        $nextEnd   = strlen($objectIDs) > $nextStart ? strpos($objectIDs, ',', $nextStart) - 1 : 0;
-        if($nextEnd - $nextStart < 0) 
+        $nextKey = $currentKey + 1;
+        $preAndNextObject->next = '';
+        if($nextKey < count($tmpObjectIDs)) 
         {
-            $preAndNextObject->next = '';
-        }
-        else
-        {
-            $nextID = substr($objectIDs, $nextStart, $nextEnd - $nextStart + 1);
-            $preAndNextObject->next = $this->dao->select('*')->from($table)->where('id')->eq($nextID)->fetch();
+            $nextID = $tmpObjectIDs[$nextKey];
+            $preAndNextObject->next = $objects[$objectIDs[$nextID]];
         }
 
         return $preAndNextObject;
