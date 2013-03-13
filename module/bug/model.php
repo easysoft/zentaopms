@@ -1134,6 +1134,11 @@ class bugModel extends model
             $var = $this->session->bugQuery . ' AND `project`' . helper::dbIN(array_keys($projects));
             $this->session->set('bugQuery', "$var");
         }
+        if(strpos($this->session->bugQuery, '`product`') === false) 
+        {
+            $var = $this->session->bugQuery . ' AND `product` = ' . $productID;
+            $this->session->set('bugQuery', "$var");
+        }
 
         $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
         $bugQuery = $this->loadModel('search')->replaceDynamic($bugQuery);
