@@ -103,7 +103,7 @@ class commonModel extends model
     {
         /* Get configs of system and current user. */
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
-        $config  = $this->loadModel('setting')->getSysAndPersonalConfig($account);
+        if($this->config->db->name) $config  = $this->loadModel('setting')->getSysAndPersonalConfig($account);
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
