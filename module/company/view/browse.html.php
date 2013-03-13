@@ -37,9 +37,9 @@ js::set('deptID', $deptID);
           <th><?php common::printOrderLink('account',  $orderBy, $vars, $lang->user->account);?></th>
           <th><?php common::printOrderLink('role',     $orderBy, $vars, $lang->user->role);?></th>
           <th><?php common::printOrderLink('email',    $orderBy, $vars, $lang->user->email);?></th>
-          <th><?php common::printOrderLink('gander',   $orderBy, $vars, $lang->user->gender);?></th>
+          <th><?php common::printOrderLink('gender',   $orderBy, $vars, $lang->user->gender);?></th>
           <th><?php common::printOrderLink('phone',    $orderBy, $vars, $lang->user->phone);?></th>
-          <th><?php common::printOrderLink('join',     $orderBy, $vars, $lang->user->join);?></th>
+          <th><?php common::printOrderLink('`join`',   $orderBy, $vars, $lang->user->join);?></th>
           <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
           <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
           <th class='w-80px'><?php echo $lang->actions;?></th>

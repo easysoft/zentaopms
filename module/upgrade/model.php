@@ -419,18 +419,35 @@ class upgradeModel extends model
             ->fetchAll();
         foreach($groups as $group)
         {
+            $this->dao->delete()->from(TABLE_GROUPPRIV)
+                ->where('`group`')->eq($group->group)
+                ->andWhere('module')->eq('task')
+                ->andWhere('method')->eq('recordEstimate')
+                ->exec(false);
             $this->dao->insert(TABLE_GROUPPRIV)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('recordEstimate')
                 ->exec();
+
+            $this->dao->delete()->from(TABLE_GROUPPRIV)
+                ->where('`group`')->eq($group->group)
+                ->andWhere('module')->eq('task')
+                ->andWhere('method')->eq('editEstimate')
+                ->exec(false);
             $this->dao->insert(TABLE_GROUPPRIV)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('editEstimate')
                 ->exec();
+
+            $this->dao->delete()->from(TABLE_GROUPPRIV)
+                ->where('`group`')->eq($group->group)
+                ->andWhere('module')->eq('task')
+                ->andWhere('method')->eq('deleteEstimate')
+                ->exec(false);
             $this->dao->insert(TABLE_GROUPPRIV)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
