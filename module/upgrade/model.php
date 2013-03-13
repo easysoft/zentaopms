@@ -403,6 +403,7 @@ class upgradeModel extends model
     {
         $projects = $this->dao->select('root')->from(TABLE_MODULE)->where('type')->eq('task')->fetchPairs('root'); 
         $this->dao->update(TABLE_PROJECT)->set('type')->eq('waterfall')->where('id')->in($projects)->exec();        
+        return true;
     }
 
     /**
@@ -455,6 +456,7 @@ class upgradeModel extends model
                 ->set('method')->eq('deleteEstimate')
                 ->exec();
         }
+        return true;
     }
 
     /**
