@@ -399,6 +399,8 @@ class user extends control
     {
         if($confirm == 'no')
         {
+            $user = $this->user->getByID($userID);
+            if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false and $this->app->user->account == $user->account) return;
             die(js::confirm($this->lang->user->confirmDelete, $this->createLink('user', 'delete', "userID=$userID&confirm=yes")));
         }
         else
