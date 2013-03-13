@@ -1,6 +1,13 @@
 function changeUser(account)
 {
-    link = createLink('company', 'dynamic', 'type=account&param=' + account);
+    if(account == '')
+    {
+        link = createLink('company', 'dynamic', 'type=all');
+    }
+    else
+    {
+        link = createLink('company', 'dynamic', 'type=account&param=' + account);
+    }
     location.href = link;
 }
 function changeProject(project)

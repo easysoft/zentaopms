@@ -1,5 +1,12 @@
 function changeUser(account, projectID)
 {
-    link = createLink('project', 'dynamic', 'projectID=' + projectID + '&type=account&param=' + account);
+    if(account == '')
+    {
+        link = createLink('project', 'dynamic', 'projectID=' + projectID + '&type=all');
+    }
+    else
+    {
+        link = createLink('project', 'dynamic', 'projectID=' + projectID + '&type=account&param=' + account);
+    }
     location.href = link;
 }
