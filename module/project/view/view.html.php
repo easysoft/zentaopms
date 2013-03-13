@@ -47,6 +47,10 @@
   <tr valign='top'>
     <td>
       <fieldset>
+        <legend><?php echo $lang->project->goal;?></legend>
+        <div class='content'><?php echo $project->goal;?></div>
+      </fieldset>
+      <fieldset>
         <legend><?php echo $lang->project->desc;?></legend>
         <div class='content'><?php echo $project->desc;?></div>
       </fieldset>
@@ -77,10 +81,6 @@
           <tr>
             <th class='rowhead'><?php echo $lang->project->type;?></th>
             <td><?php echo $lang->project->typeList[$project->type];?></td>
-          </tr>
-          <tr>
-            <th class='rowhead'><?php echo $lang->project->goal;?></th>
-            <td class='content'><?php echo $project->goal;?></td>
           </tr>
           <tr> 
             <th class='rowhead'><?php echo $lang->project->status;?></th>
