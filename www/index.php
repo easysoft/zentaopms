@@ -34,6 +34,11 @@ if(!isset($config->installed) or !$config->installed) die(header('location: inst
 
 /* Run the app. */
 $common = $app->loadCommon();
+
+/* Check for need upgrade. */
+$config->installedVersion = $common->loadModel('setting')->getVersion();
+if(version_compare($config->version, $config->installedVersion, '>')) die(header('location: upgrade.php'));
+
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
