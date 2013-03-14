@@ -1140,7 +1140,14 @@ class bugModel extends model
             $this->session->set('bugQuery', "$var");
         }
 
-        $bugQuery = str_replace("`product` = 'all'", '1', $this->session->bugQuery); // Search all product.
+        $allProduct = "`product` = 'all'";
+        $bugQuery   = $this->session->bugQuery;
+        if(strpos($this->session->bugQuery, $allProduct) !== false)
+        {
+            $products = array_keys($this->loadModel('product')->getPrivProducts());
+            $bugQuery = str_replace($allProduct, '1', $this->session->bugQuery);
+            $bugQuery = $bugQuery . ' AND `product`' . helper::dbIN(array_keys($products));
+        }
         $bugQuery = $this->loadModel('search')->replaceDynamic($bugQuery);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->andWhere('deleted')->eq(0)

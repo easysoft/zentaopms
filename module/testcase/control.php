@@ -113,10 +113,20 @@ class testcase extends control
                 if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
             }
 
-            $caseQuery = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // If product is all, change it to 1=1.
+            $queryProductID = $productID;
+            $allProduct     = "`product` = 'all'";
+            $caseQuery      = $this->session->testcaseQuery;
+            if(strpos($this->session->testcaseQuery, $allProduct) !== false)
+            {
+                $products  = array_keys($this->loadModel('product')->getPrivProducts());
+                $caseQuery = str_replace($allProduct, '1', $this->session->testcaseQuery);
+                $caseQuery = $caseQuery . ' AND `product`' . helper::dbIN(array_keys($products));
+                $queryProductID = 'all';
+            }
+
             $caseQuery = $this->loadModel('search')->replaceDynamic($caseQuery);
             $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
-                ->andWhere('product')->eq($productID)
+                ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
