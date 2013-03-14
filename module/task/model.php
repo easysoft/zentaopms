@@ -506,7 +506,7 @@ class taskModel extends model
             ->setDefault('task', $taskID) 
             ->setDefault('date', date(DT_DATE1)) 
             ->setDefault('left', 0)
-            ->remove('finishedDate,comment')->get();
+            ->remove('finishedDate,comment,assignedTo')->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 

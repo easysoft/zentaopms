@@ -19,6 +19,10 @@
       <td><?php echo html::input('consumed', $task->consumed, "class='text-3'") . $lang->task->hour;?></td>
     </tr>
     <tr>
+      <td class='rowhead'><?php echo $lang->task->assignedTo;?></td>
+      <td><?php echo html::select('assignedTo', $users, $task->openedBy, "class='select-3'");?></td>
+    </tr>
+    <tr>
       <td class='rowhead'><?php echo $lang->task->finishedDate;?></td>
       <td><?php echo html::input('finishedDate',$date, "class='text-3'");?></td>
     </tr>
