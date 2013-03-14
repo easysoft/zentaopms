@@ -198,7 +198,7 @@ class html
             $string .= "<input type='radio' name='$name' value='$key' ";
             $string .= ($key == $checked) ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " /> $value\n";
+            $string .= " id='$name$key' /><label for='$name$key'>$value</label>\n";
         }
         return $string;
     }
@@ -786,13 +786,13 @@ EOT;
     static public function set($key, $value)
     {
         $js  = self::start(false);
-        if(is_array($value) or is_object($value) or is_string($value))
+        if(is_numeric($value))
         {
-            $value = json_encode($value);
             $js .= "$key = $value";
         }
-        elseif(is_numeric($value))
+        elseif(is_array($value) or is_object($value) or is_string($value))
         {
+            $value = json_encode($value);
             $js .= "$key = $value";
         }
         elseif(is_bool($value))
