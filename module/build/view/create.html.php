@@ -48,7 +48,7 @@
           <tr>
             <td class='w-p50'>
               <table class='mainTable'>
-                <caption><?php echo html::selectAll('story', 'checkbox') . ' ' . $lang->build->linkStories;?></caption>
+                <caption style='padding-left:3px'><?php echo html::selectAll('story', 'checkbox') . ' ' . $lang->build->linkStories;?></caption>
                 <tr style='border-bottom:none'>
                   <td style='border-bottom:none; padding:0px'>
                     <div class='contentDiv'>
@@ -73,7 +73,7 @@
 
             <td class='w-p50'>
               <table class='mainTable'>
-                <caption><?php echo html::selectAll('bug', 'checkbox') . ' ' . $lang->build->linkBugs;?></caption>
+                <caption style='padding-left:3px'><?php echo html::selectAll('bug', 'checkbox') . ' ' . $lang->build->linkBugs;?></caption>
                 <tr style='border-bottom:none'>
                   <td style='border-bottom:none; padding:0px'>
                     <div class='contentDiv'>
