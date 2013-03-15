@@ -171,14 +171,13 @@ class project extends control
             if(strpos($this->session->taskQuery, "`project` =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND `project` = $projectID");
             if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
 
-            $projectIDs   = array_keys($this->project->getPairs());
-            $projectQuery = "`project` in (" . implode($projectIDs, ',') . ")";  
+            $projectQuery = "`project`" . helper::dbIN(array_keys($this->projects));  
             $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $this->session->taskQuery); // Search all project.
             $taskQuery    = $this->loadModel('search')->replaceDynamic($taskQuery);
-
             $this->session->set('taskQueryCondition', $taskQuery);
             $this->session->set('taskOnlyCondition', true);
             $this->session->set('taskOrderBy', $orderBy);
+
             $tasks = $this->project->getSearchTasks($taskQuery, $pager, $orderBy);
         }
 
