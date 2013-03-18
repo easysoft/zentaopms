@@ -80,6 +80,8 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('4.0.beta2'));
                 $this->updateProjectType();
                 $this->updateEstimatePriv();
+            case '4_0':  
+                $this->execSQL($this->getUpgradeFile('4.0'));
 
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
@@ -127,6 +129,7 @@ class upgradeModel extends model
         case '3_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('3.3'));
         case '4_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta1'));
         case '4_0_beta2': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta2'));
+        case '4_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('4.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

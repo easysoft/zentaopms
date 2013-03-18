@@ -313,7 +313,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `parent` mediumint(8) unsigned NOT NULL default '0',
   `path` char(255) NOT NULL default '',
   `grade` tinyint(3) unsigned NOT NULL default '0',
-  `order` tinyint(3) unsigned NOT NULL default '0',
+  `order` smallint(5) unsigned NOT NULL default '0',
   `type` char(30) NOT NULL,
   `owner` varchar(30) NOT NULL,
   PRIMARY KEY  (`id`),
