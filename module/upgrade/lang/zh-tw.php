@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
- * @version     $Id: zh-tw.php 4609 2013-03-18 01:29:18Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4614 2013-03-18 08:02:26Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->upgrade->common  = '升級';
@@ -24,12 +24,11 @@ $lang->upgrade->warnningContent = <<<EOT
    要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。<br />
    比如： mysqldump -u root -p zentao >zentao.bak
 EOT;
-$lang->upgrade->setStatusFile = '<h4>基于安全考慮，升級程序會檢查<strong>%s</strong>檔案的最後更新時間, 以確保安全！</h4>
-                                 <strong style="color:red">該檔案不存在或者已經過期，請用下面的命令來創建或者更新它。</strong>
+$lang->upgrade->setStatusFile = '<h4>升級之前請先執行下面的命令：</h4>
                                  <ul>
-                                 <li>linux下面的命令：<strong>touch %s;</strong></li>
-                                 <li>windows打開命令行，執行<strong>echo ok > %s</strong></li>
-                                 <li>或者刪掉原來的ok檔案，重新創建一個ok檔案，不需要副檔名，不需要內容。</li>
+                                 <li>windows: 打開命令行，執行<strong>echo ok > %s</strong></li>
+                                 <li>linux: <strong>touch %s;</strong></li>
+                                 <li>或者刪掉"%s" 這個檔案 ，重新創建一個ok檔案，不需要副檔名，不需要內容。</li>
                                  </ul>
                                  <strong style="color:red">我已經仔細閲讀上面提示且完成上述工作，<a href="upgrade.php">繼續更新</a></strong>';
 $lang->upgrade->selectVersion = '選擇版本';
