@@ -304,7 +304,6 @@ class my extends control
                 ->andWhere('t1.status')->ne('done')
                 ->andWhere('t3.status')->ne('done')
                 ->orderBy($orderBy)->page($pager)->fetchAll();
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         }
         elseif($type == 'donebyme')
         {
@@ -313,15 +312,14 @@ class my extends control
                 ->Where('t1.assignedTo')->eq($this->app->user->account)
                 ->andWhere('t1.status')->eq('done')
                 ->orderBy($orderBy)->page($pager)->fetchAll();
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase');
         }
         elseif($type == 'openedbyme')
         {
             $cases = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_CASE)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)->page($pager)->fetchAll();
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase');
         }
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
         
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->testCase;
