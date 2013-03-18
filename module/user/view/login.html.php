@@ -55,8 +55,10 @@ include '../../common/view/colorbox.html.php';
   <div id='poweredby'>
     powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a>(<?php echo $config->version;?>)
     <?php echo $lang->donate;?>
+    <?php if($config->checkVersion):?>
     <br />
     <iframe id='updater' class='hidden' frameborder='0' scrolling='no' allowtransparency='true' src="http://www.zentao.net/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html"></iframe>
+    <?php endif;?>
   </div>
 
 </form>
