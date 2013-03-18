@@ -35,6 +35,9 @@ tgz:
 	# delee the unused files.
 	find zentaopms -name .svn |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
+	# notify.zip.
+	mkdir zentaopms/www/data/notify/
+	wget http://192.168.1.99/release/notify.zip -O zentaopms/www/data/notify/notify.zip
 	# change mode.
 	chmod 777 -R zentaopms/tmp/
 	chmod 777 -R zentaopms/www/data
@@ -52,9 +55,6 @@ tgz:
 	mv zentaotest.zip zentaopms/tmp/extension
 	mv zentaostory.zip zentaopms/tmp/extension
 	mv zentaotask.zip zentaopms/tmp/extension
-	# notify.zip.
-	mkdir zentaopms/www/data/notify/
-	wget http://192.168.1.99/release/notify.zip -O zentaopms/www/data/notify/notify.zip
 	# zip it.
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
