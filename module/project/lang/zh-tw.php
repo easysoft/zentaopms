@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 4436 2013-02-23 01:40:51Z wwccss $
+ * @version     $Id: zh-tw.php 4595 2013-03-13 06:28:28Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -65,6 +65,7 @@ $lang->project->typeList['sprint']    = '短期迭代';
 $lang->project->typeList['waterfall'] = '長期項目';
 $lang->project->typeList['ops']       = '運維項目';
 
+$lang->project->endList[7]    = '一星期';
 $lang->project->endList[14]   = '兩星期';
 $lang->project->endList[31]   = '一個月';
 $lang->project->endList[62]   = '兩個月';
