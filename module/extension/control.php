@@ -82,6 +82,7 @@ class extension extends control
             $extensions = $results->extensions;
         }
 
+        $this->view->title      = $this->lang->extension->obtain;
         $this->view->moduleTree = $this->extension->getModulesByAPI();
         $this->view->extensions = $extensions;
         $this->view->installeds = $this->extension->getLocalExtensions('installed');
