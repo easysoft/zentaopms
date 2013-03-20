@@ -112,7 +112,7 @@ $lang->user->placeholder->join      = '入职日期';
 $lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "ID %s，用户名必须三位以上";
+$lang->user->error->account       = "ID %s，英文、数字和下划线的组合，三位以上";
 $lang->user->error->accountDupl   = "ID %s，该用户名已经存在";
 $lang->user->error->realname      = "ID %s，必须填写真实姓名";
 $lang->user->error->password      = "ID %s，密码必须六位以上";

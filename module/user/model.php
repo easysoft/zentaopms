@@ -255,7 +255,7 @@ class userModel extends model
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
                 if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));
                 if(in_array($users->account[$i], $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));
-                if(!validater::checkReg($users->account[$i], '|(.){3,}|')) die(js::error(sprintf($this->lang->user->error->account, $i+1)));
+                if(!validater::checkAccount($users->account[$i])) die(js::error(sprintf($this->lang->user->error->account, $i+1)));
                 if($users->realname[$i] == '') die(js::error(sprintf($this->lang->user->error->realname, $i+1)));
                 if($users->email[$i] and !validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i+1)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and empty($users->password[$i])) ? $prev['password'] : $users->password[$i];
@@ -367,7 +367,7 @@ class userModel extends model
 
             if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
             if(in_array($account, $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(!validater::checkReg($users[$id]['account'], '|(.){3,}|')) die(js::error(sprintf($this->lang->user->error->account, $id)));
+            if(!validater::checkAccount($users[$id]['account'])) die(js::error(sprintf($this->lang->user->error->account, $id)));
             if($users[$id]['realname'] == '') die(js::error(sprintf($this->lang->user->error->realname, $id)));
             if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) die(js::error(sprintf($this->lang->user->error->mail, $id)));
             if(empty($users[$id]['role'])) die(js::error(sprintf($this->lang->user->error->role, $id)));

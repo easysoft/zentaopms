@@ -112,7 +112,7 @@ $lang->user->placeholder->join      = 'The date the employee joined the company'
 $lang->user->placeholder->commiter  = 'The account in version control systems';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "ID %s，account must be three letters at least";
+$lang->user->error->account       = "ID %s，Letters/underline/numbers, three above";
 $lang->user->error->accountDupl   = "ID %s，this account has been exist";
 $lang->user->error->realname      = "ID %s，please input realname";
 $lang->user->error->password      = "ID %s，password must be six letters at least";
