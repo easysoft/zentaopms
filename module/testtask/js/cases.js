@@ -8,7 +8,7 @@ function browseByModule(active)
 
 $(document).ready(function()
 {
-    $("a.iframe").colorbox({width:900, height:550, iframe:true, transition:'none'});
+    $("a.iframe").colorbox({width:900, height:550, iframe:true, transition:'none', onCleanup:function(){parent.location.href=parent.location.href;}});
     $('#' + browseType + 'Tab').addClass('active');
     $('#module' + moduleID).addClass('active'); 
 });
