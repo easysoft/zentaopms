@@ -14,16 +14,18 @@ EOT;
 ?>
 </div>
 <script language='javascript'>
-/**
- * Show the upload max filesize of config.  
- */
-maxUploadInfo = "(<?php printf($lang->file->maxUploadSize, ini_get('upload_max_filesize'));?>)";
 $(function()
 {
+    var maxUploadInfo = maxFilesize();
     parentTag = $('#fileform').parent();
     if(parentTag.attr('tagName') == 'TD') parentTag.parent().find('th').append(maxUploadInfo); 
     if(parentTag.attr('tagName') == 'FIELDSET') parentTag.find('legend').append(maxUploadInfo);
 });
+
+/**
+ * Show the upload max filesize of config.  
+ */
+function maxFilesize(){return "(<?php printf($lang->file->maxUploadSize, ini_get('upload_max_filesize'));?>)";}
 
 /**
  * Set the width of the file form.
