@@ -32,7 +32,7 @@ class report extends control
     {
         $this->view->title    = $this->lang->report->projectDeviation;
         $this->view->projects = $this->report->getProjects();
-        $this->view->submenu       = 'project';
+        $this->view->submenu  = 'project';
         $this->display();
     }
 
