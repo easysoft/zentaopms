@@ -12,7 +12,7 @@
 $lang->file = new stdclass();
 $lang->file->common        = '附件';
 $lang->file->download      = '下载附件';
-$lang->file->edit          = '编辑附件名称';
+$lang->file->edit          = '重命名';
 $lang->file->inputFileName = '请输入附件名称';
 $lang->file->delete        = '删除附件';
 $lang->file->export2CSV    = '导出CSV';

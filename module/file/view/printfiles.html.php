@@ -5,7 +5,7 @@ $sessionString .= session_name() . '=' . session_id();
 <style>.button-c {padding:1px}</style>
 <script language='Javascript'>
 $(function(){
-     $(".edit").colorbox({width:400, height:200, iframe:true, transition:'elastic', speed:350, scrolling:true});
+     $(".edit").colorbox({width:400, height:200, iframe:true, transition:'none', scrolling:true});
 })
 
 /* Delete a file. */
@@ -33,7 +33,7 @@ function downloadFile(fileID)
   foreach($files as $file)
   {
       if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $file->title .'.' . $file->extension, '_blank', "onclick='return downloadFile($file->id)'");
-      common::printLink('file', 'edit', "fileID=$file->id", $lang->edit, '', "class='edit'");
+      common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "class='edit'");
       if(common::hasPriv('file', 'delete'))   echo html::commonButton(' x ', "onclick='deleteFile($file->id)'");
   }
   ?>
