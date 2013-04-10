@@ -59,7 +59,7 @@ js::set('deptID', $deptID);
           <td><?php echo $user->join;?></td>
           <td><?php echo date('Y-m-d', $user->last);?></td>
           <td><?php echo $user->visits;?></td>
-          <td class='a-center'>
+          <td class='a-left'>
             <?php 
             common::printIcon('user', 'edit',   "userID=$user->id&from=company", '', 'list');
             if(strpos($this->app->company->admins, ",{$this->app->user->account},") === false or $this->app->user->account != $user->account) common::printIcon('user', 'delete', "userID=$user->id", '', 'list', '', "hiddenwin");
