@@ -28,7 +28,7 @@
         <?php foreach($projects as $id  =>$project):?>
           <tr class="a-center">
             <td><?php echo $id;?></td>
-            <td align="left"><?php echo $project->name;?></td>
+            <td align="left"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
             <td><?php echo isset($project->tasks) ? $project->tasks : 0;?></td>
             <td><?php echo isset($project->stories) ? $project->stories : 0;?></td>
             <td><?php echo isset($project->bugs) ? $project->bugs : 0;?></td>
