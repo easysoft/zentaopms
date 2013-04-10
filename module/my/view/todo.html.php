@@ -64,7 +64,7 @@
     <tbody>
     <?php foreach($todos as $todo):?>
     <tr class='a-center'>
-      <td class='a-center'>
+      <td class='a-left'>
         <?php if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture)):?>
         <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />         
         <?php endif;?>
