@@ -13,7 +13,7 @@
 <table width='98%' align='center'>
   <tr class='header'>
     <td>
-      BUG #<?php echo $bug->id . "=>$bug->assignedTo " . html::a(common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?>
+      BUG #<?php echo $bug->id . "=>{$users[$bug->assignedTo]} " . html::a(common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?>
     </td>
   </tr>
   <tr>
