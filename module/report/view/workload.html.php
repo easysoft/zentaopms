@@ -30,7 +30,7 @@
             <?php foreach($load['task'] as $project => $info):?>
             <?php $class = $color ? 'rowcolor' : '';?>
             <?php if($id != 1) echo '<tr class="a-center">';?>
-            <td class="<?php echo $class;?>"><?php echo $project;?></td>
+            <td class="<?php echo $class;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
             <td class="<?php echo $class;?>"><?php echo $info['count'];?></td>
             <td class="<?php echo $class;?>"><?php echo $info['manhour'];?></td>
             <?php if($id == 1):?>

@@ -23,7 +23,7 @@
               <?php $id = 1;?>
               <?php foreach($assign['bug'] as $product => $count):?>
               <?php if($id != 1) echo '<tr class="a-center">';?>
-              <td><?php echo $product;?></td>
+              <td><?php echo html::a($this->createLink('product', 'view', "product={$count['productID']}"), $product);?></td>
               <td><?php echo $count['count'];?></td>
               <?php if($id == 1):?>
               <td rowspan="<?php echo count($assign['bug']);?>">
