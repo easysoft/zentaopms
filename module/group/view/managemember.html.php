@@ -14,6 +14,7 @@
 <form method='post' target='hiddenwin'>
   <table align='center' class='table-1 a-left'> 
     <caption><?php echo $group->name . $lang->colon . $lang->group->manageMember;?></caption>
+    <?php if($groupUsers):?>
     <tr>
       <th class='rowhead'><?php echo $lang->group->inside;?><?php echo html::selectAll('group', 'checkbox', true);?> </th>
       <td id='group' class='f-14px pv-10px'><?php $i = 1;?>
@@ -23,6 +24,7 @@
         <?php endforeach;?>
       </td>
     </tr>
+    <?php endif;?>
     <tr>
       <th class='rowhead'><?php echo $lang->group->outside;?><?php echo html::selectAll('other','checkbox');?> </th>
       <td id='other' class='f-14px pv-10px'><?php $i = 1;?>
