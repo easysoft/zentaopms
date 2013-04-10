@@ -20,8 +20,8 @@
     <?php 
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy");
     common::printIcon('task', 'report', "project=$projectID&browseType=$browseType");
+    if($browseType != 'needconfirm') common::printIcon('task', 'export', "projectID=$projectID&orderBy=$orderBy");
     common::printIcon('task', 'batchCreate', "projectID=$projectID");
     common::printIcon('task', 'create', "project=$projectID");
     ?>

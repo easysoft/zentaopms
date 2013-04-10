@@ -31,8 +31,8 @@ var browseType = '<?php echo $browseType;?>';
     <span id='bysearchTab' ><a href='#'><span class='icon-search'></span><?php echo $lang->product->searchStory;?></a></span>
   </div>
   <div class='f-right'>
-    <?php common::printIcon('story', 'export', "productID=$productID&orderBy=$orderBy");?>
     <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID");?>
+    <?php common::printIcon('story', 'export', "productID=$productID&orderBy=$orderBy");?>
     <?php common::printIcon('story', 'batchCreate', "productID=$productID&moduleID=$moduleID");?>
     <?php common::printIcon('story', 'create', "productID=$productID&moduleID=$moduleID"); ?>
   </div>
