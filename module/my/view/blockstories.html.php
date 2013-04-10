@@ -7,7 +7,7 @@
   <?php 
   foreach($stories as $story)
   {
-      echo "<tr><td class='nobr'>" . "#$story->id " . html::a($this->createLink('story', 'view', "id=$story->id"), $story->title) . "</td><td width='5'></td></tr>";
+      echo "<tr><td class='nobr'>" . "#$story->id " . html::a($this->createLink('story', 'view', "id=$story->id"), $story->title, '', "title=$story->title") . "</td><td width='5'></td></tr>";
   }
   ?>
 </table>
