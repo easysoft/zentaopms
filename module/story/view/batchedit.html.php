@@ -16,11 +16,11 @@
     <caption><?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?></caption>
     <tr>
       <th class='w-30px'> <?php echo $lang->idAB;?></th> 
+      <th class='w-100px'><?php echo $lang->story->module;?></th>
+      <th class='w-100px'><?php echo $lang->story->planAB;?></th>
       <th class='red'>    <?php echo $lang->story->title;?></th>
       <th class='w-30px'> <?php echo $lang->story->estimateAB;?></th>
       <th class='w-50px'> <?php echo $lang->priAB;?></th>
-      <th class='w-100px'><?php echo $lang->story->module;?></th>
-      <th class='w-100px'><?php echo $lang->story->planAB;?></th>
       <th class='w-80px'> <?php echo $lang->story->source;?></th>
       <th class='w-60px'> <?php echo $lang->story->status;?></th>
       <th class='w-80px'> <?php echo $lang->story->stageAB;?></th>
@@ -30,11 +30,11 @@
     <?php foreach($editedStories as $story):?>
     <tr class='a-center'>
       <td><?php echo $story->id . html::hidden("storyIDList[$story->id]", $story->id);?></td>
+      <td><?php echo html::select("modules[$story->id]",       $moduleOptionMenus[$story->product], $story->module, 'class=select-1');?></td>
+      <td><?php echo html::select("plans[$story->id]",         $productPlans[$story->product], $story->plan, 'class=select-1');?></td>
       <td><?php echo html::input("titles[$story->id]",         $story->title, 'class=text-1'); ?></td>
       <td><?php echo html::input("estimates[$story->id]",      $story->estimate, 'class=text-1'); ?></td>
       <td><?php echo html::select("pris[$story->id]",          (array)$lang->story->priList, $story->pri, 'class=select-1');?></td>
-      <td><?php echo html::select("modules[$story->id]",       $moduleOptionMenus[$story->product], $story->module, 'class=select-1');?></td>
-      <td><?php echo html::select("plans[$story->id]",         $productPlans[$story->product], $story->plan, 'class=select-1');?></td>
       <td><?php echo html::select("sources[$story->id]",       $lang->story->sourceList, $story->source, 'class=select-1');?></td>
       <td><?php echo $lang->story->statusList[$story->status];?></td>
 
