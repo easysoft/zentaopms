@@ -52,6 +52,12 @@
   <tr valign='top'>
     <td>
       <fieldset>
+        <legend><?php echo $lang->testcase->legendVersion;?></legend>
+        <div>
+          <?php for($i = $case->version; $i >= 1; $i --) echo html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i) . ' ';?>    
+        </div>
+      </fieldset>
+      <fieldset>
         <legend><?php echo $lang->testcase->precondition;?></legend>
         <?php echo $case->precondition;?>
       </fieldset>
@@ -219,12 +225,6 @@
             <td><?php if($case->lastEditedBy) echo $case->lastEditedBy . $lang->at . $case->lastEditedDate;?></td>
           </tr>
         </table>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendVersion;?></legend>
-        <div>
-          <?php for($i = $case->version; $i >= 1; $i --) echo html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i) . ' ';?>    
-        </div>
       </fieldset>
     </td>
   </tr>

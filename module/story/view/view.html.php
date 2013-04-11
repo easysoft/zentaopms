@@ -52,6 +52,10 @@
   <tr valign='top'>
     <td>
       <fieldset>
+        <legend><?php echo $lang->story->legendVersion;?></legend>
+        <div><?php for($i = $story->version; $i >= 1; $i --) echo html::a(inlink('view', "storyID=$story->id&version=$i"), "#$i");?></div>
+      </fieldset>
+      <fieldset>
         <legend><?php echo $lang->story->legendSpec;?></legend>
         <div class='content'><?php echo $story->spec;?></div>
       </fieldset>
@@ -262,10 +266,6 @@
       <fieldset>
         <legend><?php echo $lang->story->legendMailto;?></legend>
         <div><?php $mailto = explode(',', $story->mailto); foreach($mailto as $account) echo ' ' . $users[trim($account)]; ?></div>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->story->legendVersion;?></legend>
-        <div><?php for($i = $story->version; $i >= 1; $i --) echo html::a(inlink('view', "storyID=$story->id&version=$i"), "#$i");?></div>
       </fieldset>
     </td>
   </tr>
