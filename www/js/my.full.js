@@ -556,8 +556,9 @@ function setMailto(mailto, contactListID)
  */
 function setComment()
 {
-    $('#comment').toggle();
-    setTimeout(function() { $('#comment textarea').focus(); }, 50);
+    $('#commentBox').toggle();
+    $('.ke-container').css('width', '100%');
+    setTimeout(function() { $('#commentBox textarea').focus(); }, 50);
 }
 
 /**

@@ -12,6 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div id='main'>
@@ -55,7 +56,7 @@
 
       <fieldset>
         <legend><?php echo $lang->testcase->legendComment;?></legend>
-        <textarea name='comment' rows='6' class='w-p100'></textarea>
+        <?php echo html::textarea('comment', '',  "rows='5' class='area-1'");?>
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->testcase->legendAttatch;?></legend>

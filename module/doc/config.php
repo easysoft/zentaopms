@@ -14,7 +14,7 @@ $config->doc->edit->requiredFields   = 'title';
 
 $config->doc->editor = new stdclass();
 $config->doc->editor->create = array('id' => 'content', 'tools' => 'fullTools');
-$config->doc->editor->edit   = array('id' => 'content', 'tools' => 'fullTools');
+$config->doc->editor->edit   = array('id' => 'content,comment', 'tools' => 'fullTools');
 
 $config->doc->search['module']                   = 'doc';
 $config->doc->search['fields']['title']          = $lang->doc->title;

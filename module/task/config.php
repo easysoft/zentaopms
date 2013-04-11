@@ -16,7 +16,8 @@ $config->task->activate->requiredFields    = 'left';
 
 $config->task->editor = new stdclass();
 $config->task->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->task->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->task->editor->edit   = array('id' => 'desc,comment', 'tools' => 'simpleTools');
+$config->task->editor->view   = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->task->exportFields = '
     id, project, module, story,

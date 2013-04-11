@@ -40,6 +40,10 @@ $config->testcase->edit   = new stdclass();
 $config->testcase->create->requiredFields = 'title,type';
 $config->testcase->edit->requiredFields   = 'title,type';
 
+$config->testcase->editor = new stdclass();
+$config->testcase->editor->edit = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->testcase->editor->view = array('id' => 'comment', 'tools' => 'simpleTools');
+
 $config->testcase->exportFields = '
     id, product, module, story,
     title, precondition, stepDesc, stepExpect, keywords,

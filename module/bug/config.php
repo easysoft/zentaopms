@@ -117,4 +117,5 @@ $config->bug->list->exportFields = 'id, product, module, project, story, task,
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create = array('id' => 'steps', 'tools' => 'bugTools');
-$config->bug->editor->edit   = array('id' => 'steps', 'tools' => 'bugTools');
+$config->bug->editor->edit   = array('id' => 'steps,comment', 'tools' => 'bugTools');
+$config->bug->editor->view   = array('id' => 'comment', 'tools' => 'bugTools');

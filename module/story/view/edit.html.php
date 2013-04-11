@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div id='main'>STORY #<?php echo $story->id . $lang->colon . $story->title;?></div>

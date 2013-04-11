@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
   <div id='main' <?php if($case->deleted) echo "class='deleted'";?>>CASE #<?php echo $case->id . ' ' . $case->title;?></div>
   <div>
@@ -81,7 +82,7 @@
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center actionlink'><?php echo $actionLinks;?></div>
-      <div id='comment' class='hidden'>
+      <div id='commentBox' class='hidden'>
         <fieldset>
           <legend><?php echo $lang->comment;?></legend>
           <form method='post' action='<?php echo inlink('edit', "caseID=$case->id&comment=true")?>'>

@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
   <div id='main' <?php if($bug->deleted) echo "class='deleted'";?>>BUG #<?php echo $bug->id . ' ' . $bug->title;?></div>
   <div>
@@ -62,7 +63,7 @@
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='a-center actionlink'><?php if(!$bug->deleted) echo $actionLinks;?></div>
-      <div id='comment' class='hidden'>
+      <div id='commentBox' class='hidden'>
         <fieldset>
           <legend><?php echo $lang->comment;?></legend>
           <form method='post' action='<?php echo inlink('edit', "bugID=$bug->id&comment=true")?>'>

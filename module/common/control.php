@@ -233,7 +233,7 @@ class common extends control
 
         if(!common::hasPriv($module, 'edit')) return false;
         echo "<span class='link-button'>";
-        echo html::a('#comment', '&nbsp;', '', "class='icon-green-common-comment' title='$lang->comment' onclick='setComment()'");
+        echo html::a('#commentBox', '&nbsp;', '', "class='icon-green-common-comment' title='$lang->comment' onclick='setComment()'");
         echo "</span>";
     }
 
