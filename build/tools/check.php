@@ -146,6 +146,34 @@ foreach(glob($moduleRoot . '*') as $modulePath)
             }
         }
     }
+
+    foreach(glob($modulePath . '/ext/lang/zh-cn/*.php') as $extMainLangFile)
+    {
+        $extMainLines = file($extMainLangFile);
+        $extLangFile  = basename($extMainLangFile);
+        $extEnFile    = $modulePath . '/ext/lang/en/' . $extLangFile;
+        $extLines     = file($extEnFile);
+        foreach($extMainLines as $lineNO => $line)
+        {
+            if(strpos($line, '$lang') === false)
+            {
+                //if($line != $lines[$lineNO]) echo $moduleName . ' ' . $langKey . ' ' . $lineNO . "\n";
+            }
+            else
+            {
+                list($mainKey, $mainValue) = explode('=', $line);
+                list($key, $value) = explode('=', $extLines[$lineNO]);
+                if(trim($mainKey) != trim($key))
+                {
+                    $key = trim($key);
+                    $lineNO = $lineNO + 1;
+                    echo "module $moduleName need checking, command is:";
+                    echo " vim -O +$lineNO ../../module/$moduleName/ext/lang/zh-cn/$extLangFile +$lineNO ../../module/$moduleName/ext/lang/en/$extLangFile \n";
+                    break;
+                }
+            }
+        }
+    }
 }
 
 echo '-------------php5.4 synatax checking-----------------' . "\n";
