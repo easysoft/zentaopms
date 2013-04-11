@@ -477,6 +477,7 @@ $lang->resource->company->index  = 'index';
 $lang->resource->company->browse = 'browse';
 $lang->resource->company->create = 'create';
 $lang->resource->company->edit   = 'edit';
+$lang->resource->company->view   = 'view';
 $lang->resource->company->delete = 'delete';
 $lang->resource->company->dynamic= 'dynamic';
 

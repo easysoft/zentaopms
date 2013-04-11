@@ -162,6 +162,20 @@ class company extends control
     }
 
     /**
+     * View a company.
+     * 
+     * @access public
+     * @return void
+     */
+    public function view()
+    {
+        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
+        $this->view->position[] = $this->lang->company->view;
+        $this->view->company    = $this->company->getById($this->app->company->id);
+        $this->display();
+    }
+
+    /**
      * Delete a company.
      * 
      * @param  int    $companyID 

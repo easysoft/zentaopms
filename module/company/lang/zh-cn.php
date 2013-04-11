@@ -13,6 +13,7 @@ $lang->company->common   = '组织视图';
 $lang->company->index    = "组织视图首页";
 $lang->company->create   = "新增公司";
 $lang->company->edit     = "编辑公司";
+$lang->company->view     = "公司信息";
 $lang->company->read     = "公司信息";
 $lang->company->update   = "更新公司";
 $lang->company->delete   = "删除公司";

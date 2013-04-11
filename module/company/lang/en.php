@@ -13,6 +13,7 @@ $lang->company->common   = 'Company';
 $lang->company->index    = "Index";
 $lang->company->create   = "Create";
 $lang->company->edit     = "Edit";
+$lang->company->view     = "Info";
 $lang->company->read     = "Info";
 $lang->company->update   = "Update";
 $lang->company->delete   = "Delete";

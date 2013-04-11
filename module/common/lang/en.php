@@ -258,7 +258,7 @@ $lang->company->menu->name         = '%s' . $lang->arrow;
 $lang->company->menu->browseUser   = array('link' => 'Users|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept         = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup  = array('link' => 'Group|group|browse', 'subModule' => 'group');
-$lang->company->menu->edit         = array('link' => 'Company|company|edit');
+$lang->company->menu->view         = array('link' => 'Company|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = 'Dynamic|company|dynamic|';
 $lang->company->menu->addGroup     = array('link' => '<span class="icon-add">&nbsp;</span>Add Group|group|create', 'float' => 'right');
 $lang->company->menu->batchAddUser = array('link' => '<span class="icon-add">&nbsp;</span>Batch Add|user|batchCreate', 'subModule' => 'user', 'float' => 'right');
