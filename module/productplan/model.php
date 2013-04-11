@@ -39,7 +39,7 @@ class productplanModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
-            ->orderBy('begin')->fetchAll();
+            ->orderBy('begin desc')->fetchAll();
     }
 
     /**
