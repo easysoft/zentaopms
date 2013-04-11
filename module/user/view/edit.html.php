@@ -28,6 +28,17 @@
       <td><?php echo html::input('realname', $user->realname, "class='text-3'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->user->group;?></th>
+      <td>
+      <?php 
+      foreach($groups as $groupID => $groupName) 
+      {
+          echo html::checkbox('groups', array($groupID => $groupName), in_array($groupID, $user->group) ? $groupID : '');
+      }
+      ?>
+      </td>
+    </tr>  
+    <tr>
       <th class='rowhead'><?php echo $lang->user->role;?></th>
       <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='select-3'");?></td>
     </tr>  

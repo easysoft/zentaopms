@@ -317,7 +317,7 @@ class userModel extends model
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
-            ->remove('password1, password2')
+            ->remove('password1, password2, groups')
             ->specialChars('msn,qq,yahoo,gtalk,wangwang,mobile,phone,address,zipcode')
             ->get();
 
@@ -339,6 +339,17 @@ class userModel extends model
                 $admins = str_replace(',' . $oldUser->account . ',', ',' . $this->post->account . ',', $this->app->company->admins);
                 $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec(false);
                 if(!dao::isError()) $this->app->user->account = $this->post->account;
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
+        if($this->post->groups)
+        {
+            foreach($this->post->groups as $groupID)
+            {
+                $data->account = $this->post->account;
+                $data->group   = $groupID;
+                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
             }
         }
     }

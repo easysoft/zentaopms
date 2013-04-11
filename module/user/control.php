@@ -347,12 +347,16 @@ class user extends control
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
+        $user        = $this->user->getById($userID);
+        $user->group = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($user->account)->fetchPairs();
+
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[] = $this->lang->user->edit;
         $this->view->title    = $title;
         $this->view->position = $position;
-        $this->view->user     = $this->user->getById($userID);
+        $this->view->user     = $user;
         $this->view->depts    = $this->dept->getOptionMenu();
+        $this->view->groups   = $this->loadModel('group')->getPairs();
 
         $this->display();
     }
