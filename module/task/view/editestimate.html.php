@@ -33,7 +33,7 @@
     </tr>  
     <tr>
       <td colspan='2' class='a-center'>
-        <?php echo html::submitButton() . html::resetButton();?>
+        <?php echo html::submitButton() . html::gobackButton();?>
       </td>
     </tr>
   </table>

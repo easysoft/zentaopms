@@ -38,7 +38,7 @@
       <td><?php echo html::select("needReview[$i]", $lang->story->reviewList, 0, "class='text-1'");?></td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
+    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

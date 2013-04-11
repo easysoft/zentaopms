@@ -64,7 +64,7 @@
       <td><?php echo html::textarea('desc', '', "rows=10 class='area-1'");?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?> </td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?> </td>
     </tr>
   </table>
 </form>

@@ -92,7 +92,7 @@
             <td></td>
             <td colspan='2'>
               <?php 
-              echo html::submitButton() . html::resetButton();
+              echo html::submitButton() . html::gobackButton();
               echo html::hidden('parentModuleID', $currentModuleID);
               echo html::hidden('maxOrder', $maxOrder);
               ?>      

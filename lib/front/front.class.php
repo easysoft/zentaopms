@@ -433,6 +433,19 @@ EOT;
     }
 
     /**
+     * gobackButton 
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function gobackButton()
+    {
+        global $lang;
+        return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='button-g'/>";
+    }
+
+    /**
      * Create common button.
      * 
      * @param  string $label the label of the button

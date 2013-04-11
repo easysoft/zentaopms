@@ -91,7 +91,7 @@
       <th class='rowhead'><?php echo $lang->user->zipcode;?></th>
       <td><?php echo html::input('zipcode', $user->zipcode, "class='text-3'");?></td>
     </tr>
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
+    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

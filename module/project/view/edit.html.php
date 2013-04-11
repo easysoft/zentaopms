@@ -85,7 +85,7 @@
       <th class='rowhead'><?php echo $lang->project->whitelist;?></th>
       <td id='whitelistBox'><?php echo html::checkbox('whitelist', $groups, $project->whitelist);?></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
+    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

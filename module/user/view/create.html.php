@@ -62,7 +62,7 @@
       <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>
     </tr>  
 
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
+    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

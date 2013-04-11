@@ -122,7 +122,7 @@
       <th class='rowhead'><?php echo $lang->build->desc;?></th>
       <td><?php echo html::textarea('desc', htmlspecialchars($build->desc), "rows='15' class='area-1'");?></td>
     </tr>  
-    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton() .html::hidden('project', $build->project);?></td></tr>
+    <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton() .html::hidden('project', $build->project);?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

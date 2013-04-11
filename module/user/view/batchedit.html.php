@@ -40,7 +40,7 @@
       <td><?php echo html::input("join[$user->id]", $user->join, "class='w-p70 date'");?></td>
     </tr>
     <?php endforeach;?>
-    <tr><td colspan='7' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td></tr>
+    <tr><td colspan='7' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

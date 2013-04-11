@@ -40,7 +40,7 @@
       <td colspan='2' class='a-center'>
         <?php 
         echo html::submitButton();
-        echo html::resetButton();
+        echo html::gobackButton();
         echo html::hidden('product', $product->id);
         ?>
       </td>

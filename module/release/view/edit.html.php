@@ -109,7 +109,7 @@
       <td><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows='20' class='area-1'");?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton() . html::hidden('product', $release->product);?></td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton() . html::hidden('product', $release->product);?></td>
     </tr>
   </table>
 </form>

@@ -93,7 +93,7 @@
       <td><?php echo html::input('zipcode', $user->zipcode);?></td>
     </tr>  
      <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::resetButton();?></td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td>
     </tr>
   </table>
 </form>
