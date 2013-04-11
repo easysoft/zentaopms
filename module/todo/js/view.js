@@ -1,4 +1,1 @@
-$(function() 
-{ 
-    $(".outer").css('min-height', '400px');
-});
+function setOuterBox(){}
