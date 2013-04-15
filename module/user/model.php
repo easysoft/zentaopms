@@ -318,7 +318,7 @@ class userModel extends model
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->remove('password1, password2')
-            ->specialChars('msn,qq,yahoo,gtalk,wangwang,mobile,phone,address,zipcode')
+            ->specialChars('skype,qq,yahoo,gtalk,wangwang,mobile,phone,address,zipcode')
             ->get();
 
         $this->dao->update(TABLE_USER)->data($user)

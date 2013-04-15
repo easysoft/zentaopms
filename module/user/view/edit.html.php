@@ -56,8 +56,8 @@
       <td><?php echo html::password('password2', '', "class='text-3' autocomplete='off'");?></td>
     </tr>  
      <tr>
-      <th class='rowhead'><?php echo $lang->user->msn;?></th>
-      <td><?php echo html::input('msn', $user->msn, "class='text-3'");?></td>
+      <th class='rowhead'><?php echo $lang->user->skype;?></th>
+      <td><?php echo html::input('skype', $user->skype, "class='text-3'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->user->qq;?></th>

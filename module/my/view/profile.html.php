@@ -96,8 +96,8 @@
     <td><?php echo $user->last;?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->user->msn;?></th>
-    <td><?php echo $user->msn;?></td>
+    <th class='rowhead'><?php echo $lang->user->skype;?></th>
+    <td><?php echo $user->skype;?></td>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->user->qq;?></th>

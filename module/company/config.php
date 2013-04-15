@@ -40,7 +40,7 @@ $config->company->browse->search['fields']['commiter'] = $lang->user->commiter;
 $config->company->browse->search['fields']['birthday'] = $lang->user->birthyear;
 $config->company->browse->search['fields']['gender']   = $lang->user->gender;
 $config->company->browse->search['fields']['qq']       = $lang->user->qq;
-$config->company->browse->search['fields']['msn']      = $lang->user->msn;
+$config->company->browse->search['fields']['skype']      = $lang->user->skype;
 $config->company->browse->search['fields']['yahoo']    = $lang->user->yahoo;
 $config->company->browse->search['fields']['gtalk']    = $lang->user->gtalk;
 $config->company->browse->search['fields']['wangwang'] = $lang->user->wangwang;
@@ -59,7 +59,7 @@ $config->company->browse->search['params']['commiter'] = array('operator' => 'in
 $config->company->browse->search['params']['birthday'] = array('operator' => '>=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->company->browse->search['params']['gender']   = array('operator' => '=',        'control' => 'select', 'values' => $lang->user->genderList);
 $config->company->browse->search['params']['qq']       = array('operator' => '=',        'control' => 'input',  'values' => '');
-$config->company->browse->search['params']['msn']      = array('operator' => '=',        'control' => 'input',  'values' => '');
+$config->company->browse->search['params']['skype']      = array('operator' => '=',        'control' => 'input',  'values' => '');
 $config->company->browse->search['params']['yahoo']    = array('operator' => '=',        'control' => 'input',  'values' => '');
 $config->company->browse->search['params']['gtalk']    = array('operator' => '=',        'control' => 'input',  'values' => '');
 $config->company->browse->search['params']['wangwang'] = array('operator' => '=',        'control' => 'input',  'values' => '');

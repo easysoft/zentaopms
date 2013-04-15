@@ -56,8 +56,8 @@
       </td>
     </tr>  
      <tr>
-      <th class='rowhead'><?php echo $lang->user->msn;?></th>
-      <td><?php echo html::input('msn', $user->msn);?></td>
+      <th class='rowhead'><?php echo $lang->user->skype;?></th>
+      <td><?php echo html::input('skype', $user->skype);?></td>
     </tr>  
     </tr>  
     <tr>
