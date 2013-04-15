@@ -97,11 +97,11 @@
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->user->skype;?></th>
-    <td><?php echo $user->skype;?></td>
+    <td><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></td>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->user->qq;?></th>
-    <td><?php echo $user->qq;?></td>
+    <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
   </tr>  
   <tr>
     <th class='rowhead'><?php echo $lang->user->yahoo;?></th>
