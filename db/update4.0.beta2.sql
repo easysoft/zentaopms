@@ -41,3 +41,5 @@ ALTER TABLE `zt_webapp` CHANGE `url` `url` VARCHAR( 255 ) CHARACTER SET utf8 COL
 
 UPDATE `zt_groupPriv` set method='finish' where module='todo' and method='mark';
 ALTER TABLE  `zt_taskEstimate` ADD  `work` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+ALTER TABLE  `zt_user` CHANGE  `msn`  `skype` CHAR( 90 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
