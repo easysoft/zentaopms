@@ -411,13 +411,13 @@ class my extends control
     {
         if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
 
-        $user     = $this->user->getById($this->app->user->account);
-        $deptPath = $this->dept->getParents($user->dept); 
+        $user = $this->user->getById($this->app->user->account);
 
-        $this->view->deptPath   = $deptPath;
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
         $this->view->position[] = $this->lang->my->profile;
         $this->view->user       = $this->user->getById($this->app->user->id);
+        $this->view->groups     = $this->loadModel('group')->getByAccount($this->app->user->account);
+        $this->view->deptPath   = $this->dept->getParents($user->dept); 
         $this->display();
     }
 

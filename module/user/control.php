@@ -208,22 +208,18 @@ class user extends control
      */
     public function profile($account)
     {
-        $position[]      = $this->lang->user->profile;
-
         /* Set menu. */
         $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         $user = $this->user->getById($account);
-        $deptPath = $this->dept->getParents($user->dept);
        
-        $title = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->account  = $account;
-        $this->view->user     = $user;
-
-        $this->view->deptPath = $deptPath;
+        $this->view->title      = "USER #$user->id $user->account/" . $this->lang->user->profile;
+        $this->view->position[] = $this->lang->user->profile;
+        $this->view->account    = $account;
+        $this->view->user       = $user;
+        $this->view->groups     = $this->loadModel('group')->getByAccount($account);
+        $this->view->deptPath   = $this->dept->getParents($user->dept);
 
         $this->display();
     }
@@ -428,7 +424,8 @@ class user extends control
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->editGroup;
         $this->view->position[] = $this->lang->user->editGroup;
-        $this->view->userGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($account)->fetchPairs();
+        $this->view->account    = $account;
+        $this->view->userGroups = $this->loadModel('group')->getByAccount($account);
         $this->view->groups     = $this->loadModel('group')->getList($this->app->company->id);
         $this->display();
     }

@@ -14,7 +14,15 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
 <table align='center' class='table-4'>
-  <caption><?php echo $lang->user->profile;?></caption>
+  <caption>
+    <div class='f-left'> <?php echo $lang->user->profile;?></div>
+    <div class='f-right'>
+    <?php 
+    echo html::a($this->createLink('user', 'editGroup', "account={$this->app->user->account}"), $lang->user->editGroup);
+    echo html::a($this->createLink('user', 'edit', "userID=$user->id&from=company"), $lang->user->editProfile);
+    ?>
+   </div>
+  </caption>
   <tr>
     <th class='rowhead'><?php echo $lang->user->dept;?></th>
     <td>
@@ -41,6 +49,17 @@
   <tr>
     <th class='rowhead'><?php echo $lang->user->realname;?></th>
     <td><?php echo $user->realname;?></td>
+  </tr>
+  <tr>
+    <th class='rowhead'><?php echo $lang->user->group;?></th>
+    <td>
+    <?php 
+    foreach($groups as $group)
+    {
+        echo $group->name . ' ';
+    }
+    ?>
+    </td>
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->user->role;?></th>
@@ -111,14 +130,6 @@
   <tr>
     <th class='rowhead'><?php echo $lang->user->zipcode;?></th>
     <td><?php echo $user->zipcode;?></td>
-  </tr>
-  <tr>
-    <td colspan='2' class='a-center'>
-      <?php 
-      echo html::a($this->createLink('user', 'edit', "userID=$user->id&from=company"), $lang->user->editProfile);
-      echo html::a($this->createLink('user', 'logout'),    $lang->logout);
-      ?>
-    </td>
   </tr>
 </table>
 <?php include '../../common/view/footer.html.php';?>

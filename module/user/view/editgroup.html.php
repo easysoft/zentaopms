@@ -15,7 +15,7 @@
 <form method='post' target='hiddenwin'>
   <table align='center' class='table-1 tablesorter'>
     <caption class='caption-tl pb-10px'>
-      <div class='f-left'><?php echo $lang->user->editGroup;?></div>
+      <div class='f-left'><?php echo $lang->user->editGroup . $lang->colon . $account;?></div>
       <div class='f-right'><?php common::printIcon('group', 'create');?></div>
     </caption>
     <thead>
@@ -28,7 +28,7 @@
     <tbody>
     <?php foreach($groups as $group):?>
     <tr class='a-left'>
-      <td class='strong'>  <?php echo html::checkbox('groups', array($group->id => $group->id), in_array($group->id, $userGroups) ? $group->id : '', "class='ml-10px'");?></td>
+      <td class='strong'>  <?php echo html::checkbox('groups', array($group->id => $group->id), isset($userGroups[$group->id]) ? $group->id : '', "class='ml-10px'");?></td>
       <td class='a-center'><?php echo $group->name;?></td>
       <td class='a-left'>  <?php echo $group->desc;?></td>
       </tr>
