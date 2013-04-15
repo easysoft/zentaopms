@@ -61,7 +61,8 @@ js::set('deptID', $deptID);
           <td><?php echo $user->visits;?></td>
           <td class='a-left'>
             <?php 
-            common::printIcon('user', 'edit',   "userID=$user->id&from=company", '', 'list');
+            common::printIcon('user', 'edit',      "userID=$user->id&from=company", '', 'list');
+            common::printIcon('user', 'editGroup', "userID=$user->account", '', 'list');
             if(strpos($this->app->company->admins, ",{$this->app->user->account},") === false or $this->app->user->account != $user->account) common::printIcon('user', 'delete', "userID=$user->id", '', 'list', '', "hiddenwin");
             if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60) 
             {

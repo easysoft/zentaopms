@@ -347,16 +347,12 @@ class user extends control
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
-        $user        = $this->user->getById($userID);
-        $user->group = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($user->account)->fetchPairs();
-
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[] = $this->lang->user->edit;
         $this->view->title    = $title;
         $this->view->position = $position;
-        $this->view->user     = $user;
+        $this->view->user     = $this->user->getById($userID);
         $this->view->depts    = $this->dept->getOptionMenu();
-        $this->view->groups   = $this->loadModel('group')->getPairs();
 
         $this->display();
     }
@@ -412,6 +408,29 @@ class user extends control
             $this->user->delete(TABLE_USER, $userID);
             die(js::locate($this->session->userList, 'parent'));
         }
+    }
+
+    /**
+     * Edit user's group. 
+     * 
+     * @param  string    $account 
+     * @access public
+     * @return void
+     */
+    public function editGroup($account)
+    {
+        if(!empty($_POST))
+        {
+            $this->user->updateGroup($account);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+        }
+
+        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->editGroup;
+        $this->view->position[] = $this->lang->user->editGroup;
+        $this->view->userGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($account)->fetchPairs();
+        $this->view->groups     = $this->loadModel('group')->getList($this->app->company->id);
+        $this->display();
     }
 
     /**

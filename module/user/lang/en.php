@@ -48,6 +48,7 @@ $lang->user->batchCreate     = "Batch add user";
 $lang->user->read            = "Info";
 $lang->user->edit            = "Edit";
 $lang->user->batchEdit       = "Batch Edit";
+$lang->user->editGroup       = "Edit Group";
 $lang->user->unlock          = "Unlock";
 $lang->user->update          = "Upgrade";
 $lang->user->delete          = "Delete";
@@ -78,7 +79,6 @@ $lang->user->story       = 'Story';
 $lang->user->team        = 'Team';
 $lang->user->dynamic     = 'Dynamic';
 $lang->user->ajaxGetUser = 'AJAX:get users';
-$lang->user->editProfile = 'Edit profile';
 
 $lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
 $lang->user->loginFailed = "Login failed, please check your account and password.";
