@@ -23,15 +23,22 @@
      <th class='w-id'><?php echo $lang->group->id;?></th>
      <th class='w-100px'><?php echo $lang->group->name;?></th>
      <th><?php echo $lang->group->desc;?></th>
+     <th class='w-p60'><?php echo $lang->group->users;?></th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($groups as $group):?>
     <tr class='a-left'>
       <td class='strong'>  <?php echo html::checkbox('groups', array($group->id => $group->id), isset($userGroups[$group->id]) ? $group->id : '', "class='ml-10px'");?></td>
-      <td class='a-center'><?php echo $group->name;?></td>
-      <td class='a-left'>  <?php echo $group->desc;?></td>
-      </tr>
+      <td><?php echo $group->name;?></td>
+      <td><?php echo $group->desc;?></td>
+      <td>
+      <?php 
+      $groupUsers[$group->id] = array_slice($groupUsers[$group->id], 0, $this->config->group->showUsers);
+      foreach($groupUsers[$group->id] as $user) echo $user . ' ';
+      ?>
+      </td>
+    </tr>
     <?php endforeach;?>
     </tbody>
     <tfoot>

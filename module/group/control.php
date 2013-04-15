@@ -39,10 +39,13 @@ class group extends control
         $position[] = $this->lang->group->browse;
 
         $groups = $this->group->getList($companyID);
+        $groupUsers = array();
+        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
 
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->groups   = $groups;
+        $this->view->title      = $title;
+        $this->view->position   = $position;
+        $this->view->groups     = $groups;
+        $this->view->groupUsers = $groupUsers;
 
         $this->display();
     }

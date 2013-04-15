@@ -421,12 +421,16 @@ class user extends control
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
+        $groups = $this->loadModel('group')->getList($this->app->company->id);
+        $groupUsers = array();
+        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->editGroup;
         $this->view->position[] = $this->lang->user->editGroup;
         $this->view->account    = $account;
-        $this->view->userGroups = $this->loadModel('group')->getByAccount($account);
-        $this->view->groups     = $this->loadModel('group')->getList($this->app->company->id);
+        $this->view->userGroups = $this->group->getByAccount($account);
+        $this->view->groups     = $groups;
+        $this->view->groupUsers = $groupUsers;
         $this->display();
     }
 

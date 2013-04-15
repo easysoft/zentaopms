@@ -22,6 +22,7 @@
    <th class='w-id'><?php echo $lang->group->id;?></th>
    <th class='w-100px'><?php echo $lang->group->name;?></th>
    <th><?php echo $lang->group->desc;?></th>
+   <th class='w-p60'><?php echo $lang->group->users;?></th>
    <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
@@ -29,8 +30,14 @@
   <?php foreach($groups as $group):?>
   <tr class='a-center'>
     <td class='strong'><?php echo $group->id;?></td>
-    <td><?php echo $group->name;?></td>
+    <td class='a-left'><?php echo $group->name;?></td>
     <td class='a-left'><?php echo $group->desc;?></td>
+    <td class='a-left'>
+    <?php 
+    $groupUsers[$group->id] = array_slice($groupUsers[$group->id], 0, $this->config->group->showUsers);
+    foreach($groupUsers[$group->id] as $user) echo $user . ' ';
+    ?>
+    </td>
     <td class='a-center'>
       <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
       <?php common::printIcon('group', 'managepriv',   "type=byGroup&param=$group->id", '', 'list');?>
