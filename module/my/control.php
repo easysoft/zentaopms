@@ -111,7 +111,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function story($type = 'assignedto', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true));
@@ -145,7 +145,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function task($type = 'assignedto', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('taskList',  $this->app->getURI(true));
@@ -181,7 +181,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function bug($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. load Lang. */
         $this->session->set('bugList', $this->app->getURI(true));
@@ -191,36 +191,7 @@ class my extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $bugs = array();
-        if($type == 'assigntome')
-        {
-            $bugs = $this->dao->select('t1.*')
-                ->from(TABLE_BUG)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')
-                ->on('t1.product = t2.id')
-                ->where('t2.deleted')->eq(0)
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t1.assignedTo')->eq($this->app->user->account)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($type == 'openedbyme')
-        {
-            $bugs = $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($type == 'resolvedbyme')
-        {
-            $bugs = $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($type == 'closedbyme')
-        {
-            $bugs = $this->dao->findByClosedBy($this->app->user->account)->from(TABLE_BUG)
-                ->andWhere('deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
+        $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $orderBy, 0, $pager);
 
         /* Save bugIDs session for get the pre and next bug. */
         $bugIDs = '';

@@ -14,10 +14,10 @@
 <div id='featurebar'>
   <div class='f-left'>
     <?php
-    echo "<span id='assignedtoTab'>" . html::a(inlink('story', "type=assignedto"),  $lang->my->storyMenu->assignedToMe) . "</span>";
-    echo "<span id='openedbyTab'>"   . html::a(inlink('story', "type=openedby"),    $lang->my->storyMenu->openedByMe)   . "</span>";
-    echo "<span id='reviewedbyTab'>" . html::a(inlink('story', "type=reviewedby"),  $lang->my->storyMenu->reviewedByMe) . "</span>";
-    echo "<span id='closedbyTab'>"   . html::a(inlink('story', "type=closedby"),    $lang->my->storyMenu->closedByMe)   . "</span>";
+    echo "<span id='assignedToTab'>" . html::a(inlink('story', "type=assignedTo"),  $lang->my->storyMenu->assignedToMe) . "</span>";
+    echo "<span id='openedByTab'>"   . html::a(inlink('story', "type=openedBy"),    $lang->my->storyMenu->openedByMe)   . "</span>";
+    echo "<span id='reviewedByTab'>" . html::a(inlink('story', "type=reviewedBy"),  $lang->my->storyMenu->reviewedByMe) . "</span>";
+    echo "<span id='closedByTab'>"   . html::a(inlink('story', "type=closedBy"),    $lang->my->storyMenu->closedByMe)   . "</span>";
     ?>
   </div>
 </div>

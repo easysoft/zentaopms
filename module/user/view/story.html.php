@@ -13,6 +13,17 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
+<div id='featurebar'>
+  <div class='f-left'>
+    <?php
+    $this->app->loadLang('my');
+    echo "<span id='assignedToTab'>" . html::a(inlink('story', "account=$account&type=assignedTo"),  $lang->my->storyMenu->assignedToMe) . "</span>";
+    echo "<span id='openedByTab'>"   . html::a(inlink('story', "account=$account&type=openedBy"),    $lang->my->storyMenu->openedByMe)   . "</span>";
+    echo "<span id='reviewedByTab'>" . html::a(inlink('story', "account=$account&type=reviewedBy"),  $lang->my->storyMenu->reviewedByMe) . "</span>";
+    echo "<span id='closedByTab'>"   . html::a(inlink('story', "account=$account&type=closedBy"),    $lang->my->storyMenu->closedByMe)   . "</span>";
+    ?>
+  </div>
+</div>
 <table class='table-1 tablesorter fixed'>
   <thead>
     <tr class='colhead'>
@@ -45,4 +56,5 @@
   </tbody>
   <tfoot><tr><td colspan='9'><?php echo $pager->show();?></td></tr></tfoot>
 </table>
+<script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

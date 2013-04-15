@@ -14,10 +14,10 @@
 <div id='featurebar'>
   <div class='f-left'>
     <?php
-    echo "<span id='assigntomeTab'>"    . html::a(inlink('bug', "type=assigntome"),    $lang->bug->assignToMe)    . "</span>";
-    echo "<span id='openedbymeTab'>"    . html::a(inlink('bug', "type=openedbyme"),    $lang->bug->openedByMe)    . "</span>";
-    echo "<span id='resolvedbymeTab'>"  . html::a(inlink('bug', "type=resolvedbyme"),  $lang->bug->resolvedByMe)  . "</span>";
-    echo "<span id='closedbymeTab'>"    . html::a(inlink('bug', "type=closedbyme"),    $lang->bug->closedByMe)    . "</span>";
+    echo "<span id='assignedToTab'>"  . html::a(inlink('bug', "type=assignedTo"),  $lang->bug->assignToMe)    . "</span>";
+    echo "<span id='openedByTab'>"    . html::a(inlink('bug', "type=openedBy"),    $lang->bug->openedByMe)    . "</span>";
+    echo "<span id='resolvedByTab'>"  . html::a(inlink('bug', "type=resolvedBy"),  $lang->bug->resolvedByMe)  . "</span>";
+    echo "<span id='closedByTab'>"    . html::a(inlink('bug', "type=closedBy"),    $lang->bug->closedByMe)    . "</span>";
     ?>
   </div>
 </div>

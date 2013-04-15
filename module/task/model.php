@@ -743,9 +743,8 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getUserTasks($account, $type = 'assignedto', $limit = 0, $pager = null, $orderBy="id_desc")
+    public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy="id_desc")
     {
-        $type = strtolower($type);
         $tasks = $this->dao->select('t1.*, t2.id as projectID, t2.name as projectName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')
@@ -753,11 +752,7 @@ class taskModel extends model
             ->leftjoin(TABLE_STORY)->alias('t3')
             ->on('t1.story = t3.id')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($type == 'openedby')->andWhere('t1.openedBy')->eq($account)->fi()
-            ->beginIF($type == 'assignedto')->andWhere('t1.assignedto')->eq($account)->fi()
-            ->beginIF($type == 'finishedby')->andWhere('t1.finishedby')->eq($account)->fi()
-            ->beginIF($type == 'closedby')->andWhere('t1.closedby')->eq($account)->fi()
-            ->beginIF($type == 'canceledby')->andWhere('t1.canceledby')->eq($account)->fi()
+            ->andWhere("t1.$type")->eq($account)
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)

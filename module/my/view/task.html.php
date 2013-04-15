@@ -12,15 +12,14 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <script language="Javascript">var type='<?php echo $type;?>';</script>
-
 <div id='featurebar'>
   <div class='f-left'>
     <?php
-    echo "<span id='assignedtoTab'>" . html::a(inlink('task', "type=assignedto"),  $lang->my->taskMenu->assignedToMe) . "</span>";
-    echo "<span id='openedbyTab'>"   . html::a(inlink('task', "type=openedby"),    $lang->my->taskMenu->openedByMe)   . "</span>";
-    echo "<span id='finishedbyTab'>" . html::a(inlink('task', "type=finishedby"),  $lang->my->taskMenu->finishedByMe) . "</span>";
-    echo "<span id='closedbyTab'>"   . html::a(inlink('task', "type=closedby"),    $lang->my->taskMenu->closedByMe)   . "</span>";
-    echo "<span id='canceledbyTab'>" . html::a(inlink('task', "type=canceledby"),  $lang->my->taskMenu->canceledByMe) . "</span>";
+    echo "<span id='assignedToTab'>" . html::a(inlink('task', "type=assignedTo"),  $lang->my->taskMenu->assignedToMe) . "</span>";
+    echo "<span id='openedByTab'>"   . html::a(inlink('task', "type=openedBy"),    $lang->my->taskMenu->openedByMe)   . "</span>";
+    echo "<span id='finishedByTab'>" . html::a(inlink('task', "type=finishedBy"),  $lang->my->taskMenu->finishedByMe) . "</span>";
+    echo "<span id='closedByTab'>"   . html::a(inlink('task', "type=closedBy"),    $lang->my->taskMenu->closedByMe)   . "</span>";
+    echo "<span id='canceledByTab'>" . html::a(inlink('task', "type=canceledBy"),  $lang->my->taskMenu->canceledByMe) . "</span>";
     ?>
   </div>
 </div>

@@ -13,6 +13,18 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
+<div id='featurebar'>
+  <div class='f-left'>
+    <?php
+    $this->app->loadLang('my');
+    echo "<span id='assignedToTab'>" . html::a(inlink('task', "account=$account&type=assignedTo"), $lang->my->taskMenu->assignedToMe) . "</span>";
+    echo "<span id='openedByTab'>"   . html::a(inlink('task', "account=$account&type=openedBy"),   $lang->my->taskMenu->openedByMe)   . "</span>";
+    echo "<span id='finishedByTab'>" . html::a(inlink('task', "account=$account&type=finishedBy"), $lang->my->taskMenu->finishedByMe) . "</span>";
+    echo "<span id='closedByTab'>"   . html::a(inlink('task', "account=$account&type=closedBy"),   $lang->my->taskMenu->closedByMe)   . "</span>";
+    echo "<span id='canceledByTab'>" . html::a(inlink('task', "account=$account&type=canceledBy"), $lang->my->taskMenu->canceledByMe) . "</span>";
+    ?>
+  </div>
+</div>
 <table class='table-1 tablesorter' id='tasktable'>
   <thead>
   <tr class='colhead'>
@@ -43,4 +55,5 @@
   </tbody>
   <tfoot><tr><td colspan='9'><?php $pager->show();?></td></tr></tfoot>
 </table> 
+<script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

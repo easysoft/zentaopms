@@ -1023,19 +1023,20 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getUserStories($account, $type = 'assignedto', $orderBy = 'id_desc', $pager = null)
+    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null)
     {
-        $type = strtolower($type);
         $stories = $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($type == 'assignedto')->andWhere('assignedTo')->eq($account)->fi()
-            ->beginIF($type == 'openedby')->andWhere('openedby')->eq($account)->fi()
-            ->beginIF($type == 'reviewedby')->andWhere('reviewedby')->like('%' . $account . '%')->fi()
-            ->beginIF($type == 'closedby')->andWhere('closedby')->eq($account)->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll();
+            ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
+            ->beginIF($type == 'openedBy')->andWhere('openedBy')->eq($account)->fi()
+            ->beginIF($type == 'reviewedBy')->andWhere('reviewedBy')->like('%' . $account . '%')->fi()
+            ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
         
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
         
