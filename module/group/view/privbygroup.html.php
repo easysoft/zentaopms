@@ -53,7 +53,7 @@
         if(!$hasMethod) continue;
     }
     ?>
-    <tr class='f-14px <?php echo cycle('even, bg-yellow');?>'>
+    <tr class='f-14px <?php echo cycle('even, bg-gray');?>'>
       <th class='a-right w-150px'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></td>
       <td id='<?php echo $moduleName;?>' class='pv-10px'>
         <?php $i = 1;?>
