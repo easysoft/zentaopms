@@ -905,7 +905,7 @@ class bug extends control
         if($action->action == 'opened') $action->comment = '';
         $this->view->bug    = $bug;
         $this->view->action = $action;
-        $this->view->users  = $this->user->getPairs('noletter|nodeleted');
+        $this->view->users  = $this->user->getPairs('noletter');
         $mailContent = $this->parse($this->moduleName, 'sendmail');
 
         /* Send it. */

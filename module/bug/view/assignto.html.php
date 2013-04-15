@@ -10,14 +10,24 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php 
+include '../../common/view/header.html.php';
+include '../../common/view/autocomplete.html.php';
+js::set('holders', $lang->bug->placeholder);
+js::set('userList', array_keys($users));
+js::set('page', 'assignedto');
+?>
 <form method='post' target='hiddenwin'>
   <table class='table-1'>
     <caption><?php echo $bug->title;?></caption>
     <tr>
       <th class='rowhead'><?php echo $lang->bug->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo', $users, '', "class='text-3'");?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='text-3'");?></td>
     </tr>  
+    <tr>
+      <td class='rowhead'><?php echo $lang->bug->mailto;?></td>
+      <td><?php echo html::input('mailto', $bug->mailto, 'class="text-1"');?></td>
+    </tr>
     <tr>
       <td class='rowhead'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "rows='6' class='area-1'");?></td>

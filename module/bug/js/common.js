@@ -11,7 +11,7 @@ $(function()
         setAssignedTo();
     }
 
-    if(page == 'create' || page == 'edit')
+    if(page == 'create' || page == 'edit' || page == 'assignedto' || page == 'confirmbug')
     {
         $("#story").chosen({no_results_text:noResultsMatch});
         $("#task").chosen({no_results_text:noResultsMatch});

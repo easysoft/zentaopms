@@ -312,9 +312,14 @@ class bugModel extends model
     public function confirm($bugID)
     {
         $now = helper::now();
-        $bug->confirmed = 1;
-        $bug->lastEditedBy = $this->app->user->account;
-        $bug->lastEditedDate = $now;
+
+        $bug = fixer::input('post')
+            ->setDefault('confirmed', 1)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
         $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
     }
 
