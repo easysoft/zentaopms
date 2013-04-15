@@ -93,6 +93,41 @@ class user extends control
     }
 
     /**
+     * Story of a user.
+     * 
+     * @param  int    $account 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function story($account, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save session. */
+        $this->session->set('storyList', $this->app->getURI(true));
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Set menu. */
+        $this->lang->set('menugroup.user', 'company');
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
+
+        /* Assign. */
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
+        $this->view->position[] = $this->lang->user->story;
+        $this->view->stories    = $this->loadModel('story')->getUserStories($account, 'assignedto', 'id_desc', $pager);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->account    = $account;
+        $this->view->pager      = $pager;
+
+        $this->display();
+    }
+
+    /**
      * Tasks of a user. 
      * 
      * @param  string $account 

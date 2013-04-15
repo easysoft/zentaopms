@@ -528,6 +528,7 @@ $lang->resource->user->editGroup      = 'editGroup';
 $lang->resource->user->unlock         = 'unlock';
 $lang->resource->user->delete         = 'delete';
 $lang->resource->user->todo           = 'todo';
+$lang->resource->user->story          = 'story';
 $lang->resource->user->task           = 'task';
 $lang->resource->user->bug            = 'bug';
 $lang->resource->user->project        = 'project';

@@ -1031,10 +1031,10 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($type == 'assignedto')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
-            ->beginIF($type == 'openedby')->andWhere('openedby')->eq($this->app->user->account)->fi()
-            ->beginIF($type == 'reviewedby')->andWhere('reviewedby')->like('%' . $this->app->user->account . '%')->fi()
-            ->beginIF($type == 'closedby')->andWhere('closedby')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'assignedto')->andWhere('assignedTo')->eq($account)->fi()
+            ->beginIF($type == 'openedby')->andWhere('openedby')->eq($account)->fi()
+            ->beginIF($type == 'reviewedby')->andWhere('reviewedby')->like('%' . $account . '%')->fi()
+            ->beginIF($type == 'closedby')->andWhere('closedby')->eq($account)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
         
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');

@@ -6,9 +6,10 @@
     $date = isset($date) ? $date : helper::today();
 
     echo $userList . $lang->arrow;
-    echo "<span id='todoTab'>";    common::printLink('user', 'todo',"account=$account", $lang->user->todo); echo '</span>';
-    echo "<span id='taskTab'>";    common::printLink('user', 'task',"account=$account", $lang->user->task); echo '</span>';
-    echo "<span id='bugTab'>" ;    common::printLink('user', 'bug', "account=$account", $lang->user->bug);  echo '</span>';
+    echo "<span id='todoTab'>";    common::printLink('user', 'todo',"account=$account",  $lang->user->todo);  echo '</span>';
+    echo "<span id='storyTab'>";   common::printLink('user', 'story',"account=$account", $lang->user->story); echo '</span>';
+    echo "<span id='taskTab'>";    common::printLink('user', 'task',"account=$account",  $lang->user->task);  echo '</span>';
+    echo "<span id='bugTab'>" ;    common::printLink('user', 'bug', "account=$account",  $lang->user->bug);   echo '</span>';
     echo "<span id='dynamicTab'>"; common::printLink('user', 'dynamic', "type=today&account=$account", $lang->user->dynamic); echo '</span>' ;
     echo "<span id='projectTab'>"; common::printLink('user', 'project', "account=$account", $lang->user->project); echo '</span>';
     echo "<span id='profileTab'>"; common::printLink('user', 'profile', "account=$account", $lang->user->profile); echo '</span>';
