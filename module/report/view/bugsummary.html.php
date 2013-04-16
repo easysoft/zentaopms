@@ -25,6 +25,7 @@
           <th><?php echo $lang->bug->resolutionList['postponed'];?></th>
           <th><?php echo $lang->bug->resolutionList['willnotfix'];?></th>
           <th><?php echo $lang->bug->resolutionList['tostory'];?></th>
+          <th><?php echo $lang->report->effectiveRate;?></th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +43,7 @@
             <td><?php echo isset($bug['postponed']) ? $bug['postponed'] : 0;?></td>
             <td><?php echo isset($bug['willnotfix']) ? $bug['willnotfix'] : 0;?></td>
             <td><?php echo isset($bug['tostory']) ? $bug['tostory'] : 0;?></td>
+            <td><?php echo $bug['effectiveRate'] . '%';?></td>
           </tr>
         <?php endforeach;?>
         </tbody>

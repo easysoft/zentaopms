@@ -402,6 +402,16 @@ EOT;
             $bugSummary[$bug->openedBy][$bug->resolution] = empty($bugSummary[$bug->openedBy][$bug->resolution]) ? 1 : $bugSummary[$bug->openedBy][$bug->resolution] + 1;
             $bugSummary[$bug->openedBy]['all'] = empty($bugSummary[$bug->openedBy]['all']) ? 1 : $bugSummary[$bug->openedBy]['all'] + 1;
         }
+
+        foreach($bugSummary as $account => $bug)
+        {
+            $effectiveRate = 0;
+            if(isset($bug['fixed']))     $effectiveRate += $bug['fixed'];
+            if(isset($bug['external']))  $effectiveRate += $bug['external'];
+            if(isset($bug['postponed'])) $effectiveRate += $bug['postponed'];
+            $bugSummary[$account]['effectiveRate'] = $bug['all'] ? ($effectiveRate / $bug['all']) : "0";
+        }
+        uasort($bugSummary, 'summaryCmp');
         return $bugSummary; 
     }
 
@@ -561,4 +571,10 @@ EOT;
         }
         return $todos;
     }
+}
+
+function summaryCmp($pre, $next)
+{
+    if($pre['effectiveRate'] == $next['effectiveRate']) return 0;
+    return $pre['effectiveRate'] > $next['effectiveRate'] ? -1 : 1;
 }
