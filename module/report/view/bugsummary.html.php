@@ -43,7 +43,7 @@
             <td><?php echo isset($bug['postponed']) ? $bug['postponed'] : 0;?></td>
             <td><?php echo isset($bug['willnotfix']) ? $bug['willnotfix'] : 0;?></td>
             <td><?php echo isset($bug['tostory']) ? $bug['tostory'] : 0;?></td>
-            <td><?php echo $bug['effectiveRate'] . '%';?></td>
+            <td><?php echo round($bug['effectiveRate'] * 100, 2) . '%';?></td>
           </tr>
         <?php endforeach;?>
         </tbody>
