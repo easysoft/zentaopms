@@ -41,7 +41,7 @@
       <th class='w-date'>  <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
       <th class='w-status'><?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
       <th class='w-user'>  <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
-      <th class='w-100px'> <?php echo $lang->actions;?></th>
+      <th class='w-140px'> <?php echo $lang->actions;?></th>
     </tr>
     </thead>   
     <tbody>
@@ -62,10 +62,12 @@
       <td><?php echo $users[$task->openedBy];?></td>
       <td class='a-right'>
         <?php 
-        common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list');
-        common::printIcon('task', 'finish',   "taskID=$task->id", $task, 'list');
-        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list');
-        common::printIcon('task', 'activate', "taskID=$task->id", $task, 'list');
+        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+        common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+        common::printIcon('task', 'finish',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+        common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+        common::printIcon('task', 'edit', "taskID=$task->id", '', 'list');
         ?>
       </td>
     </tr>

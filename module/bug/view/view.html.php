@@ -23,11 +23,11 @@
     if(!$bug->deleted)
     {
         ob_start();
-        common::printIcon('bug', 'confirmBug', $params, $bug);
-        common::printIcon('bug', 'assignTo',   $params);
-        common::printIcon('bug', 'resolve',    $params, $bug);
-        common::printIcon('bug', 'close',      $params, $bug);
-        common::printIcon('bug', 'activate',   $params, $bug);
+        common::printIcon('bug', 'confirmBug', $params, $bug, 'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'assignTo',   $params, '',   'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'resolve',    $params, $bug, 'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'iframe', true);
 
         common::printIcon('bug', 'toStory', "product=$bug->product&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', 'toStory');
         common::printIcon('bug', 'createCase', $convertParams, '', 'button', 'createCase');

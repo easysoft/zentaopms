@@ -67,7 +67,7 @@ var browseType = '<?php echo $browseType;?>';
             <th class='w-hour'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
             <th>               <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
             <th>               <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-            <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
           </thead>
           <tbody>
@@ -93,9 +93,10 @@ var browseType = '<?php echo $browseType;?>';
             <td class='a-right'>
               <?php 
               $vars = "story={$story->id}";
-              common::printIcon('story', 'change', $vars, $story, 'list');
-              common::printIcon('story', 'review', $vars, $story, 'list');
-              common::printIcon('story', 'edit', "storyID=$story->id", $story, 'list');
+              common::printIcon('story', 'change',     $vars, $story, 'list');
+              common::printIcon('story', 'review',     $vars, $story, 'list');
+              common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
+              common::printIcon('story', 'edit',       $vars, $story, 'list');
               common::printIcon('story', 'createCase', "productID=$story->product&module=0&from=&param=0&$vars", $story, 'list', 'createCase');
               ?>
             </td>

@@ -72,7 +72,7 @@ var browseType  = '<?php echo $browseType;?>';
             <th class='w-40px'>  <?php common::printOrderLink('consumed',     $orderBy, $vars, $lang->task->consumedAB);?></th>
             <th class='w-40px'>  <?php common::printOrderLink('left',         $orderBy, $vars, $lang->task->leftAB);?></th>
             <?php if($project->type == 'sprint') print '<th>' and common::printOrderLink('story', $orderBy, $vars, $lang->task->story) and print '</th>';?>
-            <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
           </thead>
           <tbody>
@@ -125,15 +125,17 @@ var browseType  = '<?php echo $browseType;?>';
             ?>
             <td class='a-right'>
               <?php
+              common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+              common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
               common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
               if($browseType == 'needconfirm')
               {
                   $lang->task->confirmStoryChange = $lang->confirm;
                   common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
               }
-              common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list');
-              common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list');
-              common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list');
+              common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+              common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
               common::printIcon('task', 'edit',"taskID=$task->id", '', 'list');
               ?>
             </td>

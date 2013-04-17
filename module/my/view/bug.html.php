@@ -34,7 +34,7 @@
     <th class='w-user'>      <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
     <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
     <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-    <th class='w-80px'><?php echo $lang->actions;?></th>
+    <th class='w-140px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -51,9 +51,11 @@
     <td class='a-right'>
       <?php
       $params = "bugID=$bug->id";
-      common::printIcon('bug', 'resolve', $params, $bug, 'list');
-      common::printIcon('bug', 'close', $params, $bug, 'list');
-      common::printIcon('bug', 'edit', $params, '', 'list');
+      common::printIcon('bug', 'confirmBug', $params, $bug, 'list', '', '', 'iframe', true);
+      common::printIcon('bug', 'assignTo',   $params, '', 'list', '', '', 'iframe', true);
+      common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
+      common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
+      common::printIcon('bug', 'edit',       $params, '', 'list');
       ?>
     </td>
   </tr>

@@ -226,6 +226,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .w-130px {width:130px}
 .w-140px {width:140px}
 .w-150px {width:150px}
+.w-160px {width:160px}
 .w-200px {width:200px}
 
 .w-id       {width:55px;}
@@ -506,6 +507,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 .icon-green-bug-confirmStoryChange {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;}
 
 .icon-green-bug-confirmBug {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -282px;} 
+.icon-gray-bug-confirmBug  {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -302px;} 
 
 .icon-green-bug-assignTo   {padding:2px 8px;  background:url(images/main/zt-icons.png) -40px -242px;} 
 

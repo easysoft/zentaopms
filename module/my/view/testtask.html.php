@@ -47,9 +47,10 @@
     <td><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td class='a-right'>
       <?php
-      common::printIcon('testtask', 'cases',  "taskID=$task->id", '', 'list');
-      common::printIcon('testtask', 'edit',   "taskID=$task->id", '', 'list');
-      common::printIcon('testtask', 'delete', "taskID=$task->id", '', 'list', '', 'hiddenwin');
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'list', '', 'hiddenwin');
       ?>
     </td>
   </tr>
