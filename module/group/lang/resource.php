@@ -170,13 +170,14 @@ $lang->story->methodOrder[65] = 'report';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
-$lang->resource->productplan->browse      = 'browse';
-$lang->resource->productplan->create      = 'create';
-$lang->resource->productplan->edit        = 'edit';
-$lang->resource->productplan->delete      = 'delete';
-$lang->resource->productplan->view        = 'view';
-$lang->resource->productplan->linkStory   = 'linkStory';
-$lang->resource->productplan->unlinkStory = 'unlinkStory';
+$lang->resource->productplan->browse           = 'browse';
+$lang->resource->productplan->create           = 'create';
+$lang->resource->productplan->edit             = 'edit';
+$lang->resource->productplan->delete           = 'delete';
+$lang->resource->productplan->view             = 'view';
+$lang->resource->productplan->linkStory        = 'linkStory';
+$lang->resource->productplan->unlinkStory      = 'unlinkStory';
+$lang->resource->productplan->batchUnlinkStory = 'batchUnlinkStory';
 
 $lang->productplan->methodOrder[5]  = 'browse';
 $lang->productplan->methodOrder[10] = 'create';
@@ -185,6 +186,7 @@ $lang->productplan->methodOrder[20] = 'delete';
 $lang->productplan->methodOrder[25] = 'view';
 $lang->productplan->methodOrder[30] = 'linkStory';
 $lang->productplan->methodOrder[35] = 'unlinkStory';
+$lang->productplan->methodOrder[40] = 'batchUnlinkStory';
 
 /* Release. */
 $lang->resource->release = new stdclass();

@@ -16,10 +16,11 @@ $lang->productplan->create    = "Create";
 $lang->productplan->edit      = "Edit";
 $lang->productplan->delete    = "Delete";
 $lang->productplan->view      = "Info";
-$lang->productplan->linkStory       = "Link story";
-$lang->productplan->unlinkStory     = "Remove story";
-$lang->productplan->linkedStories   = 'Stories linked';
-$lang->productplan->unlinkedStories = 'Stories unlinked';
+$lang->productplan->linkStory        = "Link story";
+$lang->productplan->unlinkStory      = "Remove story";
+$lang->productplan->batchUnlinkStory = "Batch Remove";
+$lang->productplan->linkedStories    = 'Stories linked';
+$lang->productplan->unlinkedStories  = 'Stories unlinked';
 
 $lang->productplan->confirmDelete      = "Are you sure to delete this plan?";
 $lang->productplan->confirmUnlinkStory = "Are you sure to remove this story?";

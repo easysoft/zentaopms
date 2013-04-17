@@ -154,7 +154,7 @@ class productplan extends control
     {
         $this->session->set('storyList', $this->app->getURI(true));
 
-        if(!empty($_POST)) $this->productplan->linkStory($planID);
+        if(!empty($_POST['stories'])) $this->productplan->linkStory($planID);
 
         $plan = $this->productplan->getByID($planID);
         $this->commonAction($plan->product);
@@ -188,5 +188,21 @@ class productplan extends control
             $this->productplan->unlinkStory($storyID);
             die(js::reload('parent'));
         }
+    }
+
+    /**
+     * Batch unlink story. 
+     * 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkStory($confirm = 'no')
+    {
+        foreach($this->post->unlinkStories as $storyID)
+        {
+            $this->productplan->unlinkStory($storyID);
+        }
+        die(js::reload('parent'));
     }
 }
