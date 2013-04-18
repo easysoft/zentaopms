@@ -30,11 +30,31 @@ class task extends control
      * 
      * @param  int    $projectID 
      * @param  int    $storyID 
+     * @param  int    $moduleID 
+     * @param  int    $taskID
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $storyID = 0, $moduleID = 0)
+    public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0)
     {
+        $task = new stdClass();
+        $task->module      = $moduleID;
+        $task->assignedTo  = '';
+        $task->name        = '';
+        $task->story       = $storyID;
+        $task->type        = '';
+        $task->pri         = '';
+        $task->estimate    = '';
+        $task->desc        = '';
+        $task->estStarted  = '';
+        $task->deadline    = '';
+        $task->mailto      = '';
+        if($taskID > 0)
+        {
+            $task      = $this->task->getByID($taskID);
+            $projectID = $task->project;
+        }
+
         $project   = $this->project->getById($projectID); 
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
@@ -84,11 +104,10 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
+        $this->view->task             = $task;
         $this->view->stories          = $stories;
-        $this->view->storyID          = $storyID;
         $this->view->members          = $members;
         $this->view->contactLists     = $contactLists;
-        $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
     }

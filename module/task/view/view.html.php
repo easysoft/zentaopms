@@ -36,7 +36,8 @@
       common::printDivider();
       common::printIcon('task', 'edit',  "taskID=$task->id");
       common::printCommentIcon('task');
-      common::printIcon('task', 'delete',"projectID=$task->project&taskID=$task->id", '', 'button', '', 'hiddenwin');
+      common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", '', 'button', 'copy');
+      common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", '', 'button', '', 'hiddenwin');
 
       common::printDivider();
       common::printRPN($browseLink, $preAndNext);

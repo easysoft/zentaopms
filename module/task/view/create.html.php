@@ -35,17 +35,17 @@
     <?php if($project->type != 'sprint'):?>
     <tr>
       <th class='rowhead'><?php echo $lang->task->module;?></th>
-      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='select-3'");?></span></td>
+      <td><span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='select-3'");?></span></td>
     </tr>  
     <?php endif;?>
     <tr>
       <th class='rowhead'><?php echo $lang->task->assignedTo;?></th>
-      <td><?php echo html::select('assignedTo[]', $members, '', 'class=select-3');?></td>
+      <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, 'class=select-3');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->story;?></th>
       <td>
-        <?php echo html::select('story', $stories, $storyID, 'class=select-1 onchange=setPreview();');?>
+        <?php echo html::select('story', $stories, $task->story, 'class=select-1 onchange=setPreview();');?>
         <a href='' id='preview' class='iframe'><?php echo $lang->preview;?></a>
       </td>
     </tr>  
@@ -53,39 +53,39 @@
       <th class='rowhead'><?php echo $lang->task->name;?></th>
       <td>
       <?php
-      echo html::input('name', '', "class='text-1'");
+      echo html::input('name', $task->name, "class='text-1'");
       echo html::commonButton($lang->task->copyStoryTitle, 'onclick=copyStoryTitle()');?>
       </td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->desc;?></th>
-      <td><?php echo html::textarea('desc', '', "rows='7' class='area-1'");?></td>
+      <td><?php echo html::textarea('desc', $task->desc, "rows='7' class='area-1'");?></td>
     </tr>  
     <tr>
       <th class='rowhead'><?php echo $lang->task->pri;?></th>
-      <td><?php echo html::select('pri', $lang->task->priList, '', 'class=select-3');?> 
+      <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=select-3');?> 
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->estimate;?></th>
-      <td><?php echo html::input('estimate', '', "class='text-3'") . $lang->task->hour;?></td>
+      <td><?php echo html::input('estimate', $task->estimate, "class='text-3'") . $lang->task->hour;?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->estStarted;?></th>
-      <td><?php echo html::input('estStarted', '', "class='text-3 date'");?></td>
+      <td><?php echo html::input('estStarted', $task->estStarted, "class='text-3 date'");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->deadline;?></th>
-      <td><?php echo html::input('deadline', '', "class='text-3 date'");?></td>
+      <td><?php echo html::input('deadline', $task->deadline, "class='text-3 date'");?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->type;?></th>
-      <td><?php echo html::select('type', $lang->task->typeList, '', 'class=select-3 onchange="setOwners(this.value)"');?></td>
+      <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=select-3 onchange="setOwners(this.value)"');?></td>
     </tr>
     <tr>
       <th class='rowhead'><?php echo $lang->task->mailto;?></th>
       <td>
         <?php
-        echo html::input('mailto', '', 'class="text-1"');
+        echo html::input('mailto', $task->mailto, 'class="text-1"');
         if($contactLists) echo html::select('', $contactLists, '', "onchange=\"setMailto('mailto', this.value)\"");
         ?>
       </td>
