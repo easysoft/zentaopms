@@ -27,7 +27,7 @@
     </tr>
     <?php $i = 1;?>
     <?php foreach($currentMembers as $member):?>
-    <?php $realname = substr($users[$member->account], 2);?>
+    <?php if(!isset($users[$member->account])) continue; $realname = substr($users[$member->account], 2);?>
     <?php unset($users[$member->account]);?>
     <tr>
       <td><input type='text' name='realnames[]' id='account<?php echo $i;?>' value='<?php echo $realname;?>' readonly class='text-2' /></td>
