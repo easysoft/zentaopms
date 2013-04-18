@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
   <?php 
   echo '<span id="today">'      . html::a(inlink('dynamic', "type=today"),      $lang->action->dynamic->today)      . '</span>';
@@ -24,7 +25,7 @@
   ?>
 </div>
 
-<table class='table-1 colored tablesorter'>
+<table class='table-1 colored tablesorter fixed'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
   <tr class='colhead'>

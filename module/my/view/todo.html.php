@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <form method='post' id='todoform'>
   <div id='featurebar'>
@@ -46,7 +47,7 @@
       ?>
     </div>
   </div>
-  <table class='table-1 tablesorter'>
+  <table class='table-1 tablesorter colored'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='colhead'>

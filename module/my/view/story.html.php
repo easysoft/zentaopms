@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -21,7 +22,7 @@
     ?>
   </div>
 </div>
-<table class='table-1 tablesorter fixed'>
+<table class='table-1 tablesorter fixed colored'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
     <tr class='colhead'>

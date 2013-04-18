@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <script language="Javascript">var type='<?php echo $type;?>';</script>
 <div id='featurebar'>
   <div class='f-left'>
@@ -27,7 +28,7 @@
 <?php if($canBatchClose):?>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
 <?php endif;?>
-  <table class='table-1 tablesorter fixed' id='tasktable'>
+  <table class='table-1 tablesorter fixed colored' id='tasktable'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='colhead'>

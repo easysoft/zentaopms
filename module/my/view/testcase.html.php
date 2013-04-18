@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/colorize.html.php';?>
 <div id='featurebar'>
   <div class='f-left'>
     <?php
@@ -23,7 +24,7 @@
 </div>
 
 <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-<table class='table-1 fixed tablesorter'>
+<table class='table-1 fixed tablesorter colored'>
   <?php 
     $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
     $this->app->loadLang('testtask');
