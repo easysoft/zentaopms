@@ -46,7 +46,7 @@ var browseType = '<?php echo $browseType;?>';
       <td class='a-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'", true, true);?></td>
       <td><?php echo $lang->bug->statusList[$bug->status];?></td>
       <td><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3);?></td>
-      <td><?php echo html::select("assignedTo[$bug->id]", $users, '');?></td>
+      <td><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo));?></td>
       <td><?php echo html::input("estimate[$bug->id]", '', 'size=4');?></td>
     </tr>
     <?php endforeach;?>
