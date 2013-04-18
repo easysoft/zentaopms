@@ -215,6 +215,118 @@ class user extends control
     }
 
     /**
+     * User's testtask 
+     * 
+     * @param  string $account 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function testtask($account, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Set menu. */
+        $this->lang->set('menugroup.user', 'company');
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
+
+        /* Save session. */
+        $this->session->set('testtaskList', $this->app->getURI(true));
+
+        $this->app->loadLang('testcase');
+
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
+        $this->view->position[] = $this->lang->user->testTask;
+        $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $orderBy);
+        
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->account    = $account;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->display();
+
+    }
+
+    /**
+     * User's test case.
+     * 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function testcase($account, $type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save session, load lang. */
+        $this->session->set('caseList', $this->app->getURI(true));
+        $this->app->loadLang('testcase');
+        
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+         /* Set menu. */
+        $this->lang->set('menugroup.user', 'company');
+        $this->user->setMenu($this->user->getPairs('noempty|noclosed'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
+       
+        $cases = array();
+        if($type == 'assigntome')
+        {
+            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
+                ->Where('t1.assignedTo')->eq($account)
+                ->andWhere('t1.status')->ne('done')
+                ->andWhere('t3.status')->ne('done')
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'donebyme')
+        {
+            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                ->Where('t1.assignedTo')->eq($account)
+                ->andWhere('t1.status')->eq('done')
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        elseif($type == 'openedbyme')
+        {
+            $cases = $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll();
+        }
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
+        
+        /* Assign. */
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
+        $this->view->position[] = $this->lang->user->testCase;
+        $this->view->account    = $account;
+        $this->view->cases      = $cases;
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->tabID      = 'test';
+        $this->view->type       = $type;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        
+        $this->display();
+    }
+
+    /**
      * User projects. 
      * 
      * @param  string $account 

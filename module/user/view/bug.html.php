@@ -24,7 +24,7 @@
     ?>
   </div>
 </div>
-<table class='table-1 tablesorter'>
+<table class='table-1 tablesorter fixed'>
   <thead>
   <tr class='colhead'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
