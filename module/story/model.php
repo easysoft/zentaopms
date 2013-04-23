@@ -114,7 +114,7 @@ class storyModel extends model
             ->add('version', 1)
             ->add('status', 'draft')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
-            ->setIF($this->post->needNotReview, 'status', 'active')
+            ->setIF($this->post->needNotReview or $projectID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($projectID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
