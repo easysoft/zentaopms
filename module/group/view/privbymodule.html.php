@@ -12,7 +12,10 @@
 ?>
 <form method='post' target='hiddenwin'>
   <table class='table-6 a-center' align='center'> 
-    <caption class='caption-tl'><?php echo $lang->group->managePriv;?></caption>
+    <caption class='caption-tl'>
+      <div class='f-left'><?php echo $lang->group->managePriv;?></div>
+      <div class='f-right gray'><?php echo $lang->group->shiftOrControl?></div>
+    </caption>
     <tr class='colhead'>
       <th><?php echo $lang->group->module;?></th>
       <th><?php echo $lang->group->method;?></th>
