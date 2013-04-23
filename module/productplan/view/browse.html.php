@@ -20,10 +20,10 @@
   <thead>
   <tr class='colhead'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
-    <th class='w-100px'><?php echo $lang->productplan->begin;?></th>
-    <th class='w-100px'><?php echo $lang->productplan->end;?></th>
     <th><?php echo $lang->productplan->title;?></th>
     <th class='w-p50'><?php echo $lang->productplan->desc;?></th>
+    <th class='w-100px'><?php echo $lang->productplan->begin;?></th>
+    <th class='w-100px'><?php echo $lang->productplan->end;?></th>
     <th class="w-80px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>
@@ -31,10 +31,10 @@
   <?php foreach($plans as $plan):?>
   <tr class='a-center'>
     <td><?php echo html::a(inlink('view', "id=$plan->id"), $plan->id);?></td>
-    <td><?php echo $plan->begin;?></td>
-    <td><?php echo $plan->end;?></td>
     <td class='a-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
     <td class='a-left content' title="<?php echo $plan->desc?>"><?php echo $plan->desc;?></td>
+    <td><?php echo $plan->begin;?></td>
+    <td><?php echo $plan->end;?></td>
     <td class='a-center'>
       <?php
       common::printIcon('productplan', 'linkStory', "planID=$plan->id", '', 'list');
