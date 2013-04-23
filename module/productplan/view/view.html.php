@@ -34,61 +34,6 @@
          common::printRPN($browseLink);
         ?>
         </div>
-        <table class='table-1 tablesorter a-center fixed'>
-          <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
-          <thead>
-          <tr class='colhead'>
-            <th class='w-id'>    <?php echo $lang->idAB;?></th>
-            <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-            <th>                 <?php echo $lang->story->title;?></th>
-            <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-            <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
-            <th class='w-30px'>  <?php echo $lang->story->estimateAB;?></th>
-            <th class='w-status'><?php echo $lang->statusAB;?></th>
-            <th class='w-60px'>  <?php echo $lang->story->stageAB;?></th>
-            <th class='w-50px {sorter:false}'><?php echo $lang->actions?></th>
-          </tr>
-          </thead>
-          <tbody>
-            <?php $totalEstimate = 0.0;?>
-            <?php foreach($planStories as $story):?>
-            <?php
-               $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
-               $totalEstimate += $story->estimate;
-             ?>
-            <tr>
-              <td class='a-left'>
-                <input class='ml-10px' type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
-                <?php echo html::a($viewLink, $story->id);?>
-              </td>
-              <td><span class='<?php echo 'pri' . $story->pri?>'><?php echo $story->pri;?></span></td>
-              <td class='a-left nobr'><?php echo html::a($viewLink , $story->title);?></td>
-              <td><?php echo $users[$story->openedBy];?></td>
-              <td><?php echo $users[$story->assignedTo];?></td>
-              <td><?php echo $story->estimate;?></td>
-              <td><?php echo $lang->story->statusList[$story->status];?></td>
-              <td><?php echo $lang->story->stageList[$story->stage];?></td>
-              <td><?php common::printIcon('productplan', 'unlinkStory', "story=$story->id", '', 'list', '', 'hiddenwin');?></td>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-          <tfoot>
-          <tr>
-            <td colspan='9'>
-              <div class='a-left'>
-              <?php 
-              if(count($planStories) and common::hasPriv('productPlan', 'batchUnlinkStory'))
-              {
-                  echo html::selectAll() . html::selectReverse();
-                  echo html::submitButton($lang->productplan->batchUnlinkStory);
-              }
-              ?>
-              </div>
-              <div class='a-right'><?php printf($lang->product->storySummary, count($planStories), $totalEstimate);?> </div>
-            </td>
-          </tr>
-          </tfoot>
-        </table>
       </td>
       <td class="divider"></td>
       <td class="side">
@@ -111,6 +56,61 @@
         </fieldset>
       </td>
     </tr>
+  </table>
+  <table class='table-1 tablesorter a-center fixed'>
+    <caption class='caption-tl'><?php echo $plan->title .$lang->colon . $lang->productplan->linkedStories;?></caption>
+    <thead>
+    <tr class='colhead'>
+      <th class='w-id'>    <?php echo $lang->idAB;?></th>
+      <th class='w-pri'>   <?php echo $lang->priAB;?></th>
+      <th>                 <?php echo $lang->story->title;?></th>
+      <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
+      <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
+      <th class='w-30px'>  <?php echo $lang->story->estimateAB;?></th>
+      <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <th class='w-60px'>  <?php echo $lang->story->stageAB;?></th>
+      <th class='w-50px {sorter:false}'><?php echo $lang->actions?></th>
+    </tr>
+    </thead>
+    <tbody>
+      <?php $totalEstimate = 0.0;?>
+      <?php foreach($planStories as $story):?>
+      <?php
+         $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
+         $totalEstimate += $story->estimate;
+       ?>
+      <tr>
+        <td class='a-left'>
+          <input class='ml-10px' type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
+          <?php echo html::a($viewLink, $story->id);?>
+        </td>
+        <td><span class='<?php echo 'pri' . $story->pri?>'><?php echo $story->pri;?></span></td>
+        <td class='a-left nobr'><?php echo html::a($viewLink , $story->title);?></td>
+        <td><?php echo $users[$story->openedBy];?></td>
+        <td><?php echo $users[$story->assignedTo];?></td>
+        <td><?php echo $story->estimate;?></td>
+        <td><?php echo $lang->story->statusList[$story->status];?></td>
+        <td><?php echo $lang->story->stageList[$story->stage];?></td>
+        <td><?php common::printIcon('productplan', 'unlinkStory', "story=$story->id", '', 'list', '', 'hiddenwin');?></td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan='9'>
+        <div class='a-left'>
+        <?php 
+        if(count($planStories) and common::hasPriv('productPlan', 'batchUnlinkStory'))
+        {
+            echo html::selectAll() . html::selectReverse();
+            echo html::submitButton($lang->productplan->batchUnlinkStory);
+        }
+        ?>
+        </div>
+        <div class='a-right'><?php printf($lang->product->storySummary, count($planStories), $totalEstimate);?> </div>
+      </td>
+    </tr>
+    </tfoot>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

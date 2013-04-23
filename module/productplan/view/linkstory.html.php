@@ -25,6 +25,7 @@
       <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
       <th class='w-30px'>  <?php echo $lang->story->estimateAB;?></th>
       <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <th class='w-60px'>  <?php echo $lang->story->stageAB;?></th>
     </tr>
     </thead>
     <tbody>
@@ -45,6 +46,7 @@
       <td><?php echo $users[$story->assignedTo];?></td>
       <td><?php echo $story->estimate;?></td>
       <td><?php echo $lang->story->statusList[$story->status];?></td>
+      <td><?php echo $lang->story->stageList[$story->stage];?></td>
     </tr>
     <?php endforeach;?>
     </tbody>
