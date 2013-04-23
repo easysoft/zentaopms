@@ -23,8 +23,8 @@
     </caption>
     <thead>
     <tr class='colhead'>
-      <th class='w-150px {sorter:false}'><?php echo $lang->project->name ?></th>
       <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='w-150px {sorter:false}'><?php echo $lang->project->name ?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th class='w-p30'><?php echo $lang->task->name;?></th>
       <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
@@ -32,15 +32,19 @@
       <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
       <th class='w-status'><?php echo $lang->statusAB;?></th>
       <th><?php echo $lang->task->story;?></th>
-      <th class='w-30px {sorter:false}'><?php echo $lang->import;?></th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($tasks2Imported as $task):?>
     <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
     <tr class='a-center'>
+
+      <td>
+      <input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' />
+      <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
+      </td>
+
       <td><?php echo substr($projects[$task->project], 2);?></td>
-      <td><?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?></td>
       <td><span class='<?php echo 'pri' . $task->pri?>'><?php echo $task->pri;?></span></td>
       <td class='a-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
@@ -62,11 +66,10 @@
         }
         ?>
       </td>
-      <td><input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' /></td>
     </tr>
     <?php endforeach;?>
     </tbody>
   </table>
-  <div class='a-right'><?php echo html::submitButton($lang->project->importTask);?></div>
+  <div><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->project->importTask);?></div>
 </form>
 <?php include '../../common/view/footer.html.php';?>

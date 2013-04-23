@@ -53,7 +53,7 @@ var browseType = '<?php echo $browseType;?>';
     </tbody>
     <tr><td colspan='9'><div class='f-right'><?php $pager->show();?></div></td></tr>
   </table>
-    <div class='a-center'><?php echo html::submitButton($lang->import) . html::gobackButton();?></div>
+  <div><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->import) . html::gobackButton();?></div>
 </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>
