@@ -104,6 +104,12 @@
             echo html::commonButton($lang->edit, "onclick=\"changeAction('todoform', 'batchEdit', '$actionLink')\"");
 
         }
+        if(common::hasPriv('todo', 'batchFinish'))
+        {
+            $actionLink = $this->createLink('todo', 'batchFinish');
+            echo html::commonButton($lang->todo->finish, "onclick=\"changeAction('todoform', 'batchFinish', '$actionLink')\"");
+
+        }
         if(common::hasPriv('todo', 'import2Today') and $importFuture)
         {
             $actionLink = $this->createLink('todo', 'import2Today');

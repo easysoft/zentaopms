@@ -16,6 +16,7 @@ function changeDate(date)
  */
 function changeAction(formName, actionName, actionLink)
 {
+    if(actionName == 'batchFinish') $('#' + formName).attr('target', 'hiddenwin');
     $('#' + formName).attr('action', actionLink).submit();
 }
 

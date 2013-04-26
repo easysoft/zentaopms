@@ -98,6 +98,7 @@ $lang->resource->todo->view         = 'view';
 $lang->resource->todo->delete       = 'delete';
 $lang->resource->todo->export       = 'export';
 $lang->resource->todo->finish       = 'finish';
+$lang->resource->todo->batchFinish  = 'batchFinish';
 $lang->resource->todo->import2Today = 'import2Today';
 
 $lang->todo->methodOrder[5]  = 'create';

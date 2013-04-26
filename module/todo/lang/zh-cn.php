@@ -18,6 +18,7 @@ $lang->todo->batchEdit    = "批量编辑";
 $lang->todo->view         = "TODO详情";
 $lang->todo->viewAB       = "详情";
 $lang->todo->finish       = "完成";
+$lang->todo->batchFinish  = "批量完成";
 $lang->todo->export       = "导出";
 $lang->todo->delete       = "删除TODO";
 $lang->todo->browse       = "浏览TODO";

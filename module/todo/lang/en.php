@@ -18,6 +18,7 @@ $lang->todo->batchEdit    = "Batch edit";
 $lang->todo->view         = "Info";
 $lang->todo->viewAB       = "Info";
 $lang->todo->finish       = "Finish";
+$lang->todo->batchFinish  = "Batch finish";
 $lang->todo->export       = "Export";
 $lang->todo->delete       = "Delete";
 $lang->todo->browse       = "Browse";

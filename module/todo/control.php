@@ -305,6 +305,25 @@ class todo extends control
     }
 
     /**
+     * Batch finish todos.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchFinish()
+    {
+        if(!empty($_POST['todoIDList']))
+        {
+            foreach($_POST['todoIDList'] as $todoID) 
+            {
+                $todo = $this->todo->getById($todoID);
+                if($todo->status != 'done') $this->todo->finish($todoID);
+            }
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
      * Import selected todoes to today.
      * 
      * @access public
