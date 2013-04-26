@@ -24,7 +24,7 @@
     ?>
   </div>
 </div>
-<?php $canBatchClose = common::hasPriv('task', 'batchClose');?>
+<?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
 <?php if($canBatchClose):?>
 <form method='post' target='hiddenwin' action='<?php echo $this->createLink('task', 'batchClose');?>'>
 <?php endif;?>
@@ -48,7 +48,7 @@
     <tbody>
     <?php foreach($tasks as $task):?>
     <tr class='a-center'>
-      <td class='a-left'>
+      <td>
         <?php if($canBatchClose):?><input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?>
       </td>
@@ -77,7 +77,7 @@
     <tfoot>
       <tr>
         <td colspan='11'>
-        <?php if($canBatchClose):?>
+        <?php if($canBatchClose and count($tasks)):?>
         <div class='f-left'><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->close)?></div> 
         <?php endif;?>
         <?php $pager->show();?>
