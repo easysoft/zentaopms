@@ -25,7 +25,6 @@ var browseType = '<?php echo $browseType;?>';
   <table class='table-1 colored tablesorter'>
     <thead>
     <tr class='colhead'>
-      <th class='w-id'>       <?php echo $lang->import;?></th>
       <th class='w-id'>       <?php echo $lang->idAB;?></th>
       <th class='w-severity'> <?php echo $lang->bug->severityAB;?></th>
       <th class='w-pri'>      <?php echo $lang->priAB;?></th>
@@ -39,8 +38,10 @@ var browseType = '<?php echo $browseType;?>';
     <tbody>
     <?php foreach($bugs as $bug):?>
     <tr class='a-center'>
-      <td><?php echo html::checkbox("import[$bug->id]", '');?> </td>
-      <td><?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?></td>
+      <td>
+        <?php echo html::checkbox("import[$bug->id]", '');?> 
+        <?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?>
+      </td>
       <td><span class='<?php echo 'severity' . $lang->bug->severityList[$bug->severity]?>'><?php echo $lang->bug->severityList[$bug->severity]?></span></td>
       <td><span class='<?php echo 'pri' . $lang->bug->priList[$bug->pri]?>'><?php echo $lang->bug->priList[$bug->pri]?></span></td>
       <td class='a-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'", true, true);?></td>
