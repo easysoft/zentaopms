@@ -291,6 +291,7 @@ class bugModel extends model
         $bug = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('assignedDate', $now)
             ->remove('comment')
             ->get();
 
