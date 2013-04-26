@@ -949,11 +949,28 @@ class projectModel extends model
             $taskID = $this->dao->lastInsertID();
             if($task->story != false) $this->story->setStage($task->story);
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
-            $this->action->create('bug', $key, 'Totask', '', $taskID);
-            $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($key)->exec();
             $mails[$key]->taskID  = $taskID;
             $mails[$key]->actionID = $actionID;
+
+            $this->action->create('bug', $key, 'Totask', '', $taskID);
+            $this->dao->update(TABLE_BUG)->set('toTask')->eq($taskID)->where('id')->eq($key)->exec();
+
+            if($task->assignedTo and $task->assignedTo != $bug->assignedTo)
+            {
+                $newBug = new stdClass();
+                $newBug->lastEditedBy   = $this->app->user->account;
+                $newBug->lastEditedDate = $now;
+                $newBug->assignedTo     = $task->assignedTo;
+                $newBug->assignedDate   = $now;
+                $this->dao->update(TABLE_BUG)->data($newBug)->where('id')->eq($key)->exec();
+                if(dao::isError()) die(js::error(dao::getError()));
+                $changes = common::createChanges($bug, $newBug);
+
+                $actionID = $this->action->create('bug', $key, 'Assigned', '', $newBug->assignedTo);
+                $this->action->logHistory($actionID, $changes);
+            }
         }
+
         return $mails;
     }
 
