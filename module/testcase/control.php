@@ -336,6 +336,7 @@ class testcase extends control
         $this->view->position[] = $this->lang->testcase->view;
 
         $this->view->case           = $case;
+        $this->view->version        = $version ? $version : $case->version;
         $this->view->productName    = $this->products[$productID];
         $this->view->modulePath     = $this->tree->getParents($case->module);
         $this->view->users          = $this->user->getPairs('noletter');

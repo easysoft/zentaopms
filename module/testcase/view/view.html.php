@@ -14,7 +14,22 @@
 <?php include '../../common/view/colorize.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
-  <div id='main' <?php if($case->deleted) echo "class='deleted'";?>>CASE #<?php echo $case->id . ' ' . $case->title;?></div>
+  <div id='main' <?php if($case->deleted) echo "class='deleted'";?>>
+    CASE #<?php echo $case->id . ' ' . $case->title;?>
+    <?php if($case->version > 1):?>
+    <span class='f-12px gray'>
+      <?php
+      echo "("; 
+      for($i = $case->version; $i >= 1; $i --)
+      {
+          $class = $i == $version ? "class='blue'" : "class='gray'";
+          echo html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i, '', "$class"); 
+      }
+      echo ")";
+      ?>
+    </span>
+    <?php endif;?>
+  </div>
   <div>
     <?php
     $browseLink  = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");
@@ -52,12 +67,6 @@
 <table class='cont-rt5'>
   <tr valign='top'>
     <td>
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendVersion;?></legend>
-        <div>
-          <?php for($i = $case->version; $i >= 1; $i --) echo html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i) . ' ';?>    
-        </div>
-      </fieldset>
       <fieldset>
         <legend><?php echo $lang->testcase->precondition;?></legend>
         <?php echo $case->precondition;?>

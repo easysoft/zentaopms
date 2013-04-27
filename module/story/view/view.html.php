@@ -13,7 +13,21 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='titlebar'>
-  <div id='main' <?php if($story->deleted) echo "class='deleted'";?>>STORY #<?php echo $story->id . ' ' . $story->title;?></div>
+  <div id='main' <?php if($story->deleted) echo "class='deleted'";?>>STORY #<?php echo $story->id . ' ' . $story->title;?>
+  <?php if($story->version > 1):?>
+  <span class='f-12px gray'>
+    <?php
+    echo "("; 
+    for($i = $story->version; $i >= 1; $i --)
+    {
+        $class = $i == $version ? "class='blue'" : "class='gray'";
+        echo html::a(inlink('view', "storyID=$story->id&version=$i"), '#' . $i, '', "$class"); 
+    }
+    echo ")";
+    ?>
+  </span>
+  <?php endif;?>
+  </div>
   <div>
   <?php
   $browseLink  = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&moduleID=$story->module");
@@ -52,10 +66,6 @@
 <table class='cont-rt5'>
   <tr valign='top'>
     <td>
-      <fieldset>
-        <legend><?php echo $lang->story->legendVersion;?></legend>
-        <div><?php for($i = $story->version; $i >= 1; $i --) echo html::a(inlink('view', "storyID=$story->id&version=$i"), "#$i");?></div>
-      </fieldset>
       <fieldset>
         <legend><?php echo $lang->story->legendSpec;?></legend>
         <div class='content'><?php echo $story->spec;?></div>

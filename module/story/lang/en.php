@@ -150,7 +150,6 @@ $lang->story->legendChildStories   = 'Child story';
 $lang->story->legendSpec           = 'Spec';
 $lang->story->legendVerify         = 'Verify standard';
 $lang->story->legendHistory        = 'History';
-$lang->story->legendVersion        = 'Versions';
 $lang->story->legendMisc           = 'Misc';
 
 $lang->story->lblChange            = 'Change';

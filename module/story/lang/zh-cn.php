@@ -150,7 +150,6 @@ $lang->story->legendChildStories   = '细分需求';
 $lang->story->legendSpec           = '需求描述';
 $lang->story->legendVerify         = '验收标准';
 $lang->story->legendHistory        = '历史记录';
-$lang->story->legendVersion        = '历史版本';
 $lang->story->legendMisc           = '其他相关';
 
 $lang->story->lblChange            = '变更需求';

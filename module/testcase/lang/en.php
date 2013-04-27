@@ -97,7 +97,6 @@ $lang->testcase->legendAction       = 'Action';
 $lang->testcase->legendHistory      = 'History';
 $lang->testcase->legendComment      = 'Comment';
 $lang->testcase->legendProduct      = 'Product & module';
-$lang->testcase->legendVersion      = 'Versions';
 
 $lang->testcase->confirmDelete = 'Are you sure to delete this case?';
 $lang->testcase->same          = 'The same as above';
