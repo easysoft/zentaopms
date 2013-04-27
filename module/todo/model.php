@@ -146,12 +146,13 @@ class todoModel extends model
             /* Initialize todos from the post data. */
             foreach($todoIDList as $todoID)
             {
-                $todo->date  = $this->post->dates[$todoID];
-                $todo->type  = $this->post->types[$todoID];
-                $todo->pri   = $this->post->pris[$todoID];
-                $todo->name  = $todo->type == 'custom' ? htmlspecialchars($this->post->names[$todoID]) : '';
-                $todo->begin = $this->post->begins[$todoID];
-                $todo->end   = $this->post->ends[$todoID];
+                $todo->date   = $this->post->dates[$todoID];
+                $todo->type   = $this->post->types[$todoID];
+                $todo->pri    = $this->post->pris[$todoID];
+                $todo->status = $this->post->status[$todoID];
+                $todo->name   = $todo->type == 'custom' ? htmlspecialchars($this->post->names[$todoID]) : '';
+                $todo->begin  = $this->post->begins[$todoID];
+                $todo->end    = $this->post->ends[$todoID];
                 if($todo->type == 'task') $todo->idvalue = isset($this->post->tasks[$todoID]) ? $this->post->tasks[$todoID] : 0;
                 if($todo->type == 'bug')  $todo->idvalue = isset($this->post->bugs[$todoID]) ? $this->post->bugs[$todoID] : 0;
 
@@ -170,6 +171,8 @@ class todoModel extends model
                     ->checkIF($todo->type == 'task', 'idvalue', 'notempty')
                     ->where('id')->eq($todoID)
                     ->exec();
+
+                if($oldTodo->status != 'done' and $todo->status == 'done') $this->loadModel('action')->create('todo', $todoID, 'finished', '', 'done');
 
                 if(!dao::isError()) 
                 {
