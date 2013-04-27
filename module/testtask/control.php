@@ -599,6 +599,8 @@ class testtask extends control
             ->andWhere('t1.version=t2.version')
             ->fetchGroup('case', 'id');
 
+        $this->view->title            = $this->lang->testtask->batchRun;
+        $this->view->position[]       = $this->lang->testtask->batchRun;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         $this->view->resultList       = $resultList; 
         $this->view->steps            = $steps;
