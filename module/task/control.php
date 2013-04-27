@@ -614,10 +614,10 @@ class task extends control
      */
     public function batchClose()
     {
-        if($this->post->tasks)
+        if($this->post->taskIDList)
         {
-            $tasks = $this->post->tasks;
-            unset($_POST['tasks']);
+            $tasks = $this->post->taskIDList;
+            unset($_POST['taskIDList']);
             $this->loadModel('action');
 
             foreach($tasks as $taskID)

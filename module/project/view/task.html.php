@@ -46,7 +46,7 @@ var browseType  = '<?php echo $browseType;?>';
     <td class='divider'></td>
     <?php endif?>
     <td>
-      <form method='post' action='<?php echo $this->createLink('task', 'batchEdit', "projectID=$project->id&from=projectTask&orderBy=$orderBy");?>'>
+      <form method='post' id='projectTaskForm'>
         <table class='table-1 fixed colored tablesorter datatable'>
           <?php $vars = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage"; ?>
           <thead>
@@ -148,8 +148,22 @@ var browseType  = '<?php echo $browseType;?>';
               <td colspan='<?php echo $columns;?>'>
                 <div class='f-left'>
                 <?php 
-                  if(common::hasPriv('task', 'batchEdit') and count($tasks))echo html::selectAll() . html::selectReverse() . html::submitButton($lang->edit); 
-                  echo $summary;
+                if(count($tasks))
+                {
+                    echo html::selectAll() . html::selectReverse();
+
+                    if(common::hasPriv('task', 'batchEdit'))
+                    {
+                        $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID&from=projectTask&orderBy=$orderBy");
+                        echo html::commonButton($lang->edit, "onclick=\"changeAction('projectTaskForm', 'batchEdit', '$actionLink')\"");
+                    }
+                    if(common::hasPriv('task', 'batchClose') and strtolower($browseType) != 'closedBy')
+                    {
+                        $actionLink = $this->createLink('task', 'batchClose');
+                        echo html::commonButton($lang->close, "onclick=\"changeAction('projectTaskForm', 'batchClose', '$actionLink')\"");
+                    }
+                }
+                echo $summary;
                 ?>
                 </div>
                 <?php $pager->show();?>
