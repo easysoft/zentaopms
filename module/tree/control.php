@@ -177,7 +177,7 @@ class tree extends control
         }
         $this->view->module     = $module;
         $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->root, $this->view->module->type);
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->tree->getAllChildId($moduleID);

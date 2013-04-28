@@ -117,11 +117,13 @@ class html
      * @param  array  $options       the array to create select tag from.
      * @param  string $selectedItems the item(s) to be selected, can like item1,item2.
      * @param  string $attrib        other params such as multiple, size and style.
+     * @param  string $append        adjust if add options[$selectedItems].
      * @return string
      */
-    static public function select($name = '', $options = array(), $selectedItems = "", $attrib = "")
+    static public function select($name = '', $options = array(), $selectedItems = "", $attrib = "", $append = false)
     {
         $options = (array)($options);
+        if($append and !isset($options[$selectedItems])) $options[$selectedItems] = $selectedItems;
         if(!is_array($options) or empty($options)) return false;
 
         /* The begin. */

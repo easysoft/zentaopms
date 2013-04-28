@@ -25,7 +25,7 @@
     <?php if($module->type == 'bug'):?>
     <tr>
       <th class='rowhead'><?php echo $lang->tree->owner;?></th>
-      <td><?php echo html::select('owner', $users, $module->owner, "class='select-1'");?></td>
+      <td><?php echo html::select('owner', $users, $module->owner, "class='select-1'", true);?></td>
     </tr>  
     <?php endif;?>
     <tr>
