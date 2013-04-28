@@ -87,6 +87,8 @@ foreach(glob($moduleRoot . '*') as $modulePath)
             }
         }
     }
+
+    /* Checking extension files. */
     $extControlFiles = glob($modulePath . '/ext/control/*.php');
     if($extControlFiles)
     {
