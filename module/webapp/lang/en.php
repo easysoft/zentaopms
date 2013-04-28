@@ -43,6 +43,7 @@ $lang->webapp->addedBy     = 'Added By';
 $lang->webapp->addedDate   = 'Added date';
 $lang->webapp->views       = 'Views';
 $lang->webapp->packup      = 'Fold';
+$lang->webapp->custom      = 'Custom';
 
 $lang->webapp->byDownloads   = 'Most Downloads';
 $lang->webapp->byAddedTime   = 'New Add';
@@ -64,6 +65,7 @@ $lang->webapp->sizeList['1024x600'] = "1024 x 600";
 $lang->webapp->sizeList['900x600']  = "900 x 600";
 $lang->webapp->sizeList['700x600']  = "700 x 600";
 $lang->webapp->sizeList['600x500']  = "600 x 500";
+$lang->webapp->sizeList['custom']   = "Custom size";
 
 $lang->webapp->addTypeList['system'] = 'System App';
 $lang->webapp->addTypeList['custom'] = 'Custom App';

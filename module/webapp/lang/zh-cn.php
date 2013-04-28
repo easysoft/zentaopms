@@ -43,6 +43,7 @@ $lang->webapp->addedBy     = '安装人';
 $lang->webapp->addedDate   = '安装日期';
 $lang->webapp->views       = '使用次数';
 $lang->webapp->packup      = '收起';
+$lang->webapp->custom      = '自定义';
 
 $lang->webapp->byDownloads   = '最多下载';
 $lang->webapp->byAddedTime   = '最新添加';
@@ -64,6 +65,7 @@ $lang->webapp->sizeList['1024x600'] = "1024 x 600";
 $lang->webapp->sizeList['900x600']  = "900 x 600";
 $lang->webapp->sizeList['700x600']  = "700 x 600";
 $lang->webapp->sizeList['600x500']  = "600 x 500";
+$lang->webapp->sizeList['custom']   = "自定义尺寸";
 
 $lang->webapp->addTypeList['system'] = '系统应用';
 $lang->webapp->addTypeList['custom'] = '自定义应用';

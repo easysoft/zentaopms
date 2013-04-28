@@ -32,9 +32,23 @@
     <th align='left'><?php echo $lang->webapp->target?></th>
     <td><?php echo html::select('target', $lang->webapp->targetList, $webapp->target, "class='select-3'")?></td>
   </tr>
+  <?php 
+  $customWidth  = '';
+  $customHeight = '';
+  if(!array_key_exists($webapp->size, $lang->webapp->sizeList))
+  {
+      $size = $webapp->size;
+      $webapp->size = 'custom';
+      if(strpos($size, 'x') !== false) list($customWidth, $customHeight) = explode('x', $size);
+  }
+  ?>
   <tr class="size">
     <th align='left'><?php echo $lang->webapp->size?></th>
     <td><?php echo html::select('size', $lang->webapp->sizeList, $webapp->size, "class='select-3'")?></td>
+  </tr>
+  <tr class="customSize <?php if($webapp->size != 'custom') echo 'hidden'?>">
+    <th align='left'><?php echo $lang->webapp->custom?></th>
+    <td><?php echo html::input('customWidth', $customWidth, "class='w-40px'") . ' x ' . html::input('customHeight', $customHeight, "class='w-40px'");?></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->abstract?></th>

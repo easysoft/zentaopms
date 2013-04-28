@@ -44,9 +44,16 @@ function addView(webappID)
   $.get(createLink('webapp', 'ajaxAddView', 'webappID=' + webappID));
 }
 
+function customSize(value)
+{
+    $('.customSize').hide();
+    if(value == 'custom') $('.customSize').show();
+}
+
 $(function(){
     setSize($('#target').val());
     $('#target').change(function(){setSize($(this).val())});
+    $('#size').change(function(){customSize($(this).val())});
     $('#modulemenu ul li').removeClass('active');
     if(typeof(module) != "undefined") $('#modulemenu ul li #submenu' + module).parent().addClass('active');
 })

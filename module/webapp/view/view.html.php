@@ -39,9 +39,21 @@
     <td><?php echo $lang->webapp->targetList[$webapp->target]?></td>
   </tr>
   <?php if($webapp->target == 'popup'):?>
+  <?php
+  if(!array_key_exists($webapp->size, $lang->webapp->sizeList))
+  {
+      $size = $webapp->size;
+      $webapp->size = 'custom';
+  }
+  ?>
   <tr>
     <th class='a-right'><?php echo $lang->webapp->size?></th>
-    <td><?php echo $lang->webapp->sizeList[$webapp->size]?></td>
+    <td>
+      <?php
+      echo $lang->webapp->sizeList[$webapp->size];
+      if(isset($size)) echo ' ： ' . $size;
+      ?>
+    </td>
   </tr>
   <?php endif;?>
   <tr>

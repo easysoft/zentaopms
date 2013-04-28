@@ -34,6 +34,10 @@
     <th align='left'><?php echo $lang->webapp->size?></th>
     <td><?php echo html::select('size', $lang->webapp->sizeList, '', "class='select-3'")?></td>
   </tr>
+  <tr class="customSize hidden">
+    <th align='left'><?php echo $lang->webapp->custom?></th>
+    <td><?php echo html::input('customWidth', '', "class='w-40px'") . ' x ' . html::input('customHeight', '', "class='w-40px'");?></td>
+  </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->abstract?></th>
     <td><?php echo html::input('abstract', '', "class='text-3' maxlength='30'")?> <span><?php echo $lang->webapp->noticeAbstract?></span></td>

@@ -253,7 +253,8 @@ class webappModel extends model
     public function update($webappID)
     {
         $webapp = $this->getLocalAppByID($webappID);
-        $data = fixer::input('post')->remove('files')->get();
+        $data = fixer::input('post')->remove('files,customWidth,customHeight')->get();
+        if($data->size == 'custom') $data->size = $this->post->customWidth . 'x' . $this->post->customHeight;
 
         $this->dao->update(TABLE_WEBAPP)->data($data)->where('id')->eq($webappID)->check('url', 'unique', "id != $webappID", false)->exec();
 
@@ -288,7 +289,8 @@ class webappModel extends model
             ->add('addType', 'custom')
             ->add('addedDate', helper::now())
             ->add('author', $this->app->user->account)
-            ->remove('files')->get();
+            ->remove('files,customWidth,customHeight')->get();
+        if($data->size == 'custom') $data->size = $this->post->customWidth . 'x' . $this->post->customHeight;
         $this->dao->insert(TABLE_WEBAPP)->data($data)
             ->autocheck()
             ->batchCheck($this->config->webapp->create->requiredFields, 'notempty')
