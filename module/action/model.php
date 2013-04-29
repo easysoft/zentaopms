@@ -213,16 +213,18 @@ class actionModel extends model
     /**
      * Get deleted objects.
      * 
+     * @param  string    $type all|hidden 
      * @param  string    $orderBy 
      * @param  object    $pager 
      * @access public
      * @return array
      */
-    public function getTrashes($orderBy, $pager)
+    public function getTrashes($type, $orderBy, $pager)
     {
+        $extra = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
-            ->andWhere('extra')->eq(self::CAN_UNDELETED)
+            ->andWhere('extra')->eq($extra)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         if(!$trashes) return array();
         

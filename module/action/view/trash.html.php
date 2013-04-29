@@ -13,6 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
 <table class='table-1 colored tablesorter'>
+  <caption class='caption-tr'>
+    <?php if($type == 'hidden') echo html::a($this->inLink('trash', "type=all"),    $lang->goback);?>
+    <?php if($type == 'all')    echo html::a($this->inLink('trash', "type=hidden"), $lang->action->dynamic->hidden);?>
+  </caption>
   <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <thead>
   <tr class='colhead'>
@@ -36,7 +40,7 @@
     <td>
       <?php
       common::printIcon('action', 'undelete', "actionid=$action->id", '', 'list', '', 'hiddenwin');
-      common::printIcon('action', 'hideOne',  "actionid=$action->id", '', 'list', '', 'hiddenwin');
+      if($type == 'all') common::printIcon('action', 'hideOne',  "actionid=$action->id", '', 'list', '', 'hiddenwin');
       ?>
     </td>
   </tr>

@@ -14,6 +14,7 @@ class action extends control
     /**
      * Trash 
      * 
+     * @param  string $type all|hidden 
      * @param  string $orderBy 
      * @param  int    $recTotal 
      * @param  int    $recPerPage 
@@ -21,7 +22,7 @@ class action extends control
      * @access public
      * @return void
      */
-    public function trash($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function trash($type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -40,13 +41,14 @@ class action extends control
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init($recTotal, $recPerPage, $pageID);
-        $trashes = $this->action->getTrashes($orderBy, $pager);
+        $trashes = $this->action->getTrashes($type, $orderBy, $pager);
 
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
 
         $this->view->trashes = $trashes;
+        $this->view->type    = $type;
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');

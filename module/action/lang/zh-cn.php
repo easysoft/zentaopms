@@ -39,6 +39,7 @@ $lang->action->dynamic->lastWeek   = '上周';
 $lang->action->dynamic->thisMonth  = '本月';
 $lang->action->dynamic->lastMonth  = '上月';
 $lang->action->dynamic->all        = '所有';
+$lang->action->dynamic->hidden     = '已隐藏';
 $lang->action->dynamic->search     = '搜索';
 
 $lang->action->objectTypes['product']     = '产品';

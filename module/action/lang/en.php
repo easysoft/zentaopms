@@ -39,6 +39,7 @@ $lang->action->dynamic->lastWeek   = 'Last week';
 $lang->action->dynamic->thisMonth  = 'This month';
 $lang->action->dynamic->lastMonth  = 'Last month';
 $lang->action->dynamic->all        = 'All';
+$lang->action->dynamic->hidden     = 'Hidden';
 $lang->action->dynamic->search     = 'Search';
 
 $lang->action->objectTypes['product']     = 'Product';
