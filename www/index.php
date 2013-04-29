@@ -13,6 +13,7 @@
  */
 /* Set the error reporting. */
 error_reporting(0);
+
 /* Start output buffer. */
 ob_start();
 
@@ -44,4 +45,4 @@ $common->checkPriv();
 $app->loadModule();
 
 /* Flush the buffer. */
-ob_end_flush();
+echo removeUTF8Bom(ob_get_clean());

@@ -561,3 +561,16 @@ function isonlybody()
 {
     return (isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes');
 }
+
+/**
+ * Remove UTF8 Bom 
+ * 
+ * @param  string    $string
+ * @access public
+ * @return string
+ */
+function removeUTF8Bom($string)
+{
+    if(substr($string, 0, 3) == pack('CCC', 239, 187, 191)) return substr($string, 3);
+    return $string;
+}
