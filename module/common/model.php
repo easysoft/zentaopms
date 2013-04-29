@@ -32,7 +32,7 @@ class commonModel extends model
      */
     public function sendHeader()
     {
-        header("Content-Type: text/html; Language={$this->config->encoding}");
+        header("Content-Type: text/html; Language={$this->config->charset}");
         header("Cache-control: private");
     }
 

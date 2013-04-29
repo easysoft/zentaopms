@@ -17,6 +17,7 @@ $lang->mail->username    = 'smtp帐号';
 $lang->mail->password    = 'smtp密码';
 $lang->mail->secure      = '是否加密';
 $lang->mail->debug       = '调试级别';
+$lang->mail->charset     = '编码';
 
 $lang->mail->turnonList[1]  = '打开';
 $lang->mail->turnonList[0] = '关闭';

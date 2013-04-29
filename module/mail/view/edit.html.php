@@ -54,6 +54,10 @@ include '../../common/view/header.html.php';
     <th class='rowhead'><?php echo $lang->mail->debug; ?></th>
     <td><?php echo html::radio('debug', $lang->mail->debugList, $mailConfig->debug);?></td>
   </tr>
+  <tr>
+    <th class='rowhead'><?php echo $lang->mail->charset; ?></th>
+    <td><?php echo html::radio('charset', $config->charsets[$this->cookie->lang], zget($config->charsets[$this->cookie->lang], $mailConfig->charset, 'utf-8', $mailConfig->charset));?></td>
+  </tr>
 
   <tr>
      <td colspan='2' class='a-center'>

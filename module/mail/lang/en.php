@@ -17,6 +17,7 @@ $lang->mail->username    = 'SMTP account';
 $lang->mail->password    = 'SMTP password';
 $lang->mail->secure      = 'Secure';
 $lang->mail->debug       = 'Debug';
+$lang->mail->charset     = 'Charset';
 
 $lang->mail->turnonList[1] = 'on';
 $lang->mail->turnonList[0] = 'off';

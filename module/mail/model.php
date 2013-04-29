@@ -162,7 +162,7 @@ class mailModel extends model
     {
         if(self::$instance == null) self::$instance = new phpmailer(true);
         $this->mta = self::$instance;
-        $this->mta->CharSet = $this->config->encoding;
+        $this->mta->CharSet = $this->config->charset;
         $funcName = "set{$this->config->mail->mta}";
         if(!method_exists($this, $funcName)) $this->app->error("The MTA {$this->config->mail->mta} not supported now.", __FILE__, __LINE__, $exit = true);
         $this->$funcName();
@@ -182,6 +182,7 @@ class mailModel extends model
         $this->mta->SMTPAuth  = $this->config->mail->smtp->auth;
         $this->mta->Username  = $this->config->mail->smtp->username;
         $this->mta->Password  = $this->config->mail->smtp->password;
+        if(isset($this->config->mail->smtp->charset)) $this->mta->CharSet = $this->config->mail->smtp->charset;
         if(isset($this->config->mail->smtp->port)) $this->mta->Port = $this->config->mail->smtp->port;
         if(isset($this->config->mail->smtp->secure) and !empty($this->config->mail->smtp->secure))$this->mta->SMTPSecure = strtolower($this->config->mail->smtp->secure);
     }
@@ -265,11 +266,11 @@ class mailModel extends model
 
         try 
         {
-            $this->mta->setFrom($this->config->mail->fromAddress, $this->config->mail->fromName);
-            $this->setSubject($subject);
+            $this->mta->setFrom($this->config->mail->fromAddress, $this->convertCharset($this->config->mail->fromName));
+            $this->setSubject($this->convertCharset($subject));
             $this->setTO($toList, $emails);
             $this->setCC($ccList, $emails);
-            $this->setBody($body);
+            $this->setBody($this->convertCharset($body));
             $this->setErrorLang();
             $this->mta->send();
         }
@@ -297,7 +298,7 @@ class mailModel extends model
         foreach($toList as $account)
         {
             if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
-            $this->mta->addAddress($emails[$account]->email, $emails[$account]->realname);
+            $this->mta->addAddress($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
             $emails[$account]->sended = true;
         }
     }
@@ -317,7 +318,7 @@ class mailModel extends model
         foreach($ccList as $account)
         {
             if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
-            $this->mta->addCC($emails[$account]->email, $emails[$account]->realname);
+            $this->mta->addCC($emails[$account]->email, $this->convertCharset($emails[$account]->realname));
             $emails[$account]->sended = true;
         }
     }
@@ -344,6 +345,19 @@ class mailModel extends model
     public function setBody($body)
     {
         $this->mta->msgHtml("$body");
+    }
+
+    /**
+     * Convert charset.
+     * 
+     * @param  string    $string 
+     * @access public
+     * @return string
+     */
+    public function convertCharset($string)
+    {
+        if($this->config->mail->smtp->charset != strtolower($this->config->charset)) return iconv($this->config->charset, $this->config->mail->smtp->charset, $string);
+        return $string;
     }
 
     /**

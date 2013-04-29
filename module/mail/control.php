@@ -111,6 +111,7 @@ class mail extends control
             $mailConfig->smtp->password = $this->post->password;
             $mailConfig->smtp->secure   = $this->post->secure;
             $mailConfig->smtp->debug    = $this->post->debug;
+            $mailConfig->smtp->charset  = $this->post->charset;
 
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
             if(dao::isError()) die(js::error(dao::getError()));

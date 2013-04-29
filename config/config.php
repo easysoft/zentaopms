@@ -17,12 +17,12 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* Basic settings. */
 $config = new config();
-$config->version     = '4.0.1';       // The version of zentaopms. Don't change it.
-$config->encoding    = 'UTF-8';           // The encoding of zentaopms.
-$config->cookieLife  = time() + 2592000;  // The cookie life time.
-$config->timezone    = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
-$config->webRoot     = '';                // The root path of the pms.
-$config->checkVersion= true;              // Auto check for new version or not.
+$config->version      = '4.0.1';       // The version of zentaopms. Don't change it.
+$config->charset      = 'UTF-8';           // The encoding of zentaopms.
+$config->cookieLife   = time() + 2592000;  // The cookie life time.
+$config->timezone     = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
+$config->webRoot      = '';                // The root path of the pms.
+$config->checkVersion = true;              // Auto check for new version or not.
 
 /* The request settings. */
 $config->requestType = 'PATH_INFO';       // The request type: PATH_INFO|GET, if PATH_INFO, must use url rewrite.
@@ -43,6 +43,13 @@ $config->wideSize = 1400;
 $config->langs['zh-cn'] = '中文简体';
 $config->langs['zh-tw'] = '中文繁體';
 $config->langs['en']    = 'English';
+
+/* Supported charsets. */
+$config->charsets['zh-cn']['utf-8'] = 'UTF-8';
+$config->charsets['zh-cn']['gbk']   = 'GBK';
+$config->charsets['zh-tw']['utf-8'] = 'UTF-8';
+$config->charsets['zh-tw']['big5']  = 'BIG5';
+$config->charsets['en']['utf-8']    = 'UTF-8';
 
 /* Default settings. */
 $config->default = new stdclass();
