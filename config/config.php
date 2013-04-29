@@ -17,8 +17,8 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* Basic settings. */
 $config = new config();
-$config->version      = '4.0.1';       // The version of zentaopms. Don't change it.
-$config->charset      = 'UTF-8';           // The encoding of zentaopms.
+$config->version      = '4.1';             // The version of zentaopms. Don't change it.
+$config->charset      = 'UTF-8';           // The charset of zentaopms.
 $config->cookieLife   = time() + 2592000;  // The cookie life time.
 $config->timezone     = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
 $config->webRoot      = '';                // The root path of the pms.
