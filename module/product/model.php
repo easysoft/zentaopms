@@ -137,7 +137,7 @@ class productModel extends model
 
         /* Get team members. */
         $privProducts = $this->getPrivProducts();
-        return isset($privProducts[$product->id]) ? true : false;;
+        return isset($privProducts[$product->id]) ? true : false;
     }
 
     /**
