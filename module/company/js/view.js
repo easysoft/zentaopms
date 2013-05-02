@@ -1,3 +1,3 @@
 $(function(){
-    $('#editCompany').colorbox({width:800, height:520, iframe:true, transition:'none'});
+    $('#editCompany').colorbox({width:750, height:500, iframe:true, transition:'none'});
 });
