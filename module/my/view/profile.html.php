@@ -15,12 +15,7 @@
 <table align='center' class='table-4'>
   <caption>
     <div class='f-left'> <?php echo $lang->my->profile;?></div>
-    <div class='f-right'>
-    <?php 
-    echo html::a($this->createLink('user', 'editGroup', "account={$this->app->user->account}"), $lang->user->editGroup);
-    echo html::a($this->createLink('my', 'editprofile'), $lang->user->editProfile);
-    ?>
-    </div>
+    <div class='f-right'><?php echo html::a($this->createLink('my', 'editprofile'), $lang->user->editProfile);?></div>
   </caption>
   <tr>
     <th class='rowhead'><?php echo $lang->user->dept;?></th>
@@ -51,19 +46,12 @@
     <td><?php echo $user->realname;?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->user->group;?></th>
-    <td>
-    <?php 
-    foreach($groups as $group)
-    {
-        echo $group->name . ' ';
-    }
-    ?>
-    </td>
-  </tr>
-  <tr>
     <th class='rowhead'><?php echo $lang->user->role;?></th>
     <td><?php echo $lang->user->roleList[$user->role];?></td>
+  </tr>
+  <tr>
+    <th class='rowhead'><?php echo $lang->group->priv;?></th>
+    <td><?php foreach($groups as $group) echo $group->name . ' '; ?></td>
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->user->commiter;?></th>

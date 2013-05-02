@@ -32,6 +32,10 @@
       <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='select-3'");?></td>
     </tr>  
     <tr>
+      <th class='rowhead'><?php echo $lang->group->priv;?></th>
+      <td><?php echo html::select('groups[]', $groups, $userGroups, 'size=3 multiple=multiple class=select-3');?></td>
+    </tr>
+    <tr>
       <th class='rowhead'><?php echo $lang->user->commiter;?></th>
       <td><?php echo html::input('commiter', $user->commiter, "class='text-3'");?></td>
     </tr>  

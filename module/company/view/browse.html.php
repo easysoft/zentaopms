@@ -43,7 +43,7 @@ js::set('deptID', $deptID);
           <th><?php common::printOrderLink('`join`',   $orderBy, $vars, $lang->user->join);?></th>
           <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
           <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
-          <th class='w-80px'><?php echo $lang->actions;?></th>
+          <th class='w-60px'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
@@ -64,7 +64,6 @@ js::set('deptID', $deptID);
           <td class='a-left'>
             <?php 
             common::printIcon('user', 'edit',      "userID=$user->id&from=company", '', 'list');
-            common::printIcon('user', 'editGroup', "userID=$user->account", '', 'list');
             if(strpos($this->app->company->admins, ",{$this->app->user->account},") === false or $this->app->user->account != $user->account) common::printIcon('user', 'delete', "userID=$user->id", '', 'list', '', "hiddenwin");
             if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60) 
             {

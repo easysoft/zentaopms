@@ -497,13 +497,18 @@ class user extends control
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
+        $user       = $this->user->getById($userID);
+        $userGroups = $this->loadModel('group')->getByAccount($user->account);
+
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
         $position[] = $this->lang->user->edit;
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->user     = $this->user->getById($userID);
-        $this->view->depts    = $this->dept->getOptionMenu();
-
+        $this->view->title      = $title;
+        $this->view->position   = $position;
+        $this->view->user       = $user;
+        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->userGroups = implode(',', array_keys($userGroups));
+        $this->view->groups     = $this->loadModel('group')->getPairs($this->app->company->id);
+ 
         $this->display();
     }
 
@@ -558,34 +563,6 @@ class user extends control
             $this->user->delete(TABLE_USER, $userID);
             die(js::locate($this->session->userList, 'parent'));
         }
-    }
-
-    /**
-     * Edit user's group. 
-     * 
-     * @param  string    $account 
-     * @access public
-     * @return void
-     */
-    public function editGroup($account)
-    {
-        if(!empty($_POST))
-        {
-            $this->user->updateGroup($account);
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('company', 'browse'), 'parent'));
-        }
-        $groups = $this->loadModel('group')->getList($this->app->company->id);
-        $groupUsers = array();
-        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
-
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->editGroup;
-        $this->view->position[] = $this->lang->user->editGroup;
-        $this->view->account    = $account;
-        $this->view->userGroups = $this->group->getByAccount($account);
-        $this->view->groups     = $groups;
-        $this->view->groupUsers = $groupUsers;
-        $this->display();
     }
 
     /**

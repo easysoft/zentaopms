@@ -16,12 +16,7 @@
 <table align='center' class='table-4'>
   <caption>
     <div class='f-left'> <?php echo $lang->user->profile;?></div>
-    <div class='f-right'>
-    <?php 
-    echo html::a($this->createLink('user', 'editGroup', "account={$this->app->user->account}"), $lang->user->editGroup);
-    echo html::a($this->createLink('user', 'edit', "userID=$user->id&from=company"), $lang->user->editProfile);
-    ?>
-   </div>
+    <div class='f-right'><?php echo html::a($this->createLink('user', 'edit', "userID=$user->id&from=company"), $lang->user->editProfile); ?></div>
   </caption>
   <tr>
     <th class='rowhead'><?php echo $lang->user->dept;?></th>
@@ -51,7 +46,7 @@
     <td><?php echo $user->realname;?></td>
   </tr>
   <tr>
-    <th class='rowhead'><?php echo $lang->user->group;?></th>
+    <th class='rowhead'><?php echo $lang->group->priv;?></th>
     <td>
     <?php 
     foreach($groups as $group)

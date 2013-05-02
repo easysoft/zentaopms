@@ -527,7 +527,6 @@ $lang->resource->user->create         = 'create';
 $lang->resource->user->batchCreate    = 'batchCreate';
 $lang->resource->user->view           = 'view';
 $lang->resource->user->edit           = 'edit';
-$lang->resource->user->editGroup      = 'editGroup';
 $lang->resource->user->unlock         = 'unlock';
 $lang->resource->user->delete         = 'delete';
 $lang->resource->user->todo           = 'todo';
