@@ -49,7 +49,7 @@
   <tfoot>
   <tr>
     <td colspan='6'>
-      <?php if($trashes):?>
+      <?php if($trashes and $type == 'all'):?>
       <div class='f-left'>
         <?php echo html::linkButton($lang->action->hideAll, inlink('hideAll'), 'hiddenwin');?>
         <?php echo $lang->action->trashTips;?>
