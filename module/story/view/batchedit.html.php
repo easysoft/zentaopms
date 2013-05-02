@@ -25,7 +25,7 @@
       <th class='w-60px'> <?php echo $lang->story->status;?></th>
       <th class='w-80px'> <?php echo $lang->story->stageAB;?></th>
       <th class='w-100px'><?php echo $lang->story->closedBy;?></th>
-      <th class='w-120px'><?php echo $lang->story->closedReason;?></th>
+      <th class='w-120px a-left'><?php echo $lang->story->closedReason;?></th>
     </tr>
     <?php foreach($editedStories as $story):?>
     <tr class='a-center'>
