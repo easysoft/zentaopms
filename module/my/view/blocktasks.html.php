@@ -7,7 +7,7 @@
   <?php 
   foreach($tasks as $task)
   {
-      echo "<tr><td class='nobr'>" . "#$task->id " . html::a($this->createLink('task', 'view', "id=$task->id"), $task->name) . "</td><td width='5'</td></tr>";
+      echo "<tr><td class='nobr'>" . "#$task->id " . html::a($this->createLink('task', 'view', "id=$task->id"), $task->name, '', "title=$task->name") . "</td><td width='5'</td></tr>";
   }
   ?>
 </table>
