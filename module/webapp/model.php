@@ -254,7 +254,7 @@ class webappModel extends model
     {
         $webapp = $this->getLocalAppByID($webappID);
         $data = fixer::input('post')->remove('files,customWidth,customHeight')->get();
-        if($data->size == 'custom') $data->size = $this->post->customWidth . 'x' . $this->post->customHeight;
+        if($data->size == 'custom') $data->size = (float)$this->post->customWidth . 'x' . (float)$this->post->customHeight;
 
         $this->dao->update(TABLE_WEBAPP)->data($data)->where('id')->eq($webappID)->check('url', 'unique', "id != $webappID", false)->exec();
 
@@ -290,7 +290,7 @@ class webappModel extends model
             ->add('addedDate', helper::now())
             ->add('author', $this->app->user->account)
             ->remove('files,customWidth,customHeight')->get();
-        if($data->size == 'custom') $data->size = $this->post->customWidth . 'x' . $this->post->customHeight;
+        if($data->size == 'custom') $data->size = (float)$this->post->customWidth . 'x' . (float)$this->post->customHeight;
         $this->dao->insert(TABLE_WEBAPP)->data($data)
             ->autocheck()
             ->batchCheck($this->config->webapp->create->requiredFields, 'notempty')

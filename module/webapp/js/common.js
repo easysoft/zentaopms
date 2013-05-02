@@ -36,7 +36,12 @@ function toggleShowapp(webappID, webappName)
 function setSize(target)
 {
   $('.size').hide();
-  if(target == 'popup') $('.size').show();
+  $('.customSize').hide();
+  if(target == 'popup')
+  {
+    $('.size').show();
+    customSize($('#size').val());
+  }
 }
 
 function addView(webappID)

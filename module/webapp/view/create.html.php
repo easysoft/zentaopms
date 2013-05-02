@@ -36,7 +36,7 @@
   </tr>
   <tr class="customSize hidden">
     <th align='left'><?php echo $lang->webapp->custom?></th>
-    <td><?php echo html::input('customWidth', '', "class='w-40px'") . ' x ' . html::input('customHeight', '', "class='w-40px'");?></td>
+    <td><?php echo html::input('customWidth', '', "class='w-40px'") . 'px X ' . html::input('customHeight', '', "class='w-40px'") . 'px';?></td>
   </tr>
   <tr>
     <th align='left'><?php echo $lang->webapp->abstract?></th>
