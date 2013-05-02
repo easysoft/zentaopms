@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<table align='center' class='table-1 tablesorter'>
+<table align='center' class='table-1 tablesorter fixed'>
   <caption class='caption-tl pb-10px'>
     <div class='f-left'><?php echo $lang->group->browse;?></div>
     <div class='f-right'><?php common::printIcon('group', 'create');?></div>
@@ -28,16 +28,12 @@
   </thead>
   <tbody>
   <?php foreach($groups as $group):?>
+  <?php $users = implode(' ', $groupUsers[$group->id]);?>
   <tr class='a-center'>
     <td class='strong'><?php echo $group->id;?></td>
     <td class='a-left'><?php echo $group->name;?></td>
     <td class='a-left'><?php echo $group->desc;?></td>
-    <td class='a-left'>
-    <?php 
-    $groupUsers[$group->id] = array_slice($groupUsers[$group->id], 0, $this->config->group->showUsers);
-    foreach($groupUsers[$group->id] as $user) echo $user . ' ';
-    ?>
-    </td>
+    <td class='a-left' title='<?php echo $users;?>'><?php echo $users;?></td>
     <td class='a-center'>
       <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
       <?php common::printIcon('group', 'managepriv',   "type=byGroup&param=$group->id", '', 'list');?>
