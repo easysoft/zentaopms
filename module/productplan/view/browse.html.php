@@ -30,7 +30,7 @@
   <tbody>
   <?php foreach($plans as $plan):?>
   <tr class='a-center'>
-    <td><?php echo html::a(inlink('view', "id=$plan->id"), $plan->id);?></td>
+    <td><?php echo $plan->id;?></td>
     <td class='a-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
     <td class='a-left content' title="<?php echo $plan->desc?>"><?php echo $plan->desc;?></td>
     <td><?php echo $plan->begin;?></td>
