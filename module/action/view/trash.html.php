@@ -40,7 +40,7 @@
     <td>
       <?php
       common::printIcon('action', 'undelete', "actionid=$action->id", '', 'list', '', 'hiddenwin');
-      if($type == 'all') common::printIcon('action', 'hideOne',  "actionid=$action->id", '', 'list', '', 'hiddenwin');
+      if($type == 'all') common::printLink('action', 'hideOne',  "actionid=$action->id", $lang->action->hideOne, 'hiddenwin');
       ?>
     </td>
   </tr>
