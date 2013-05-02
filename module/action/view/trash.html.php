@@ -39,7 +39,7 @@
     <td><?php echo $action->date;?></td>
     <td>
       <?php
-      common::printIcon('action', 'undelete', "actionid=$action->id", '', 'list', '', 'hiddenwin');
+      common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');
       if($type == 'all') common::printLink('action', 'hideOne',  "actionid=$action->id", $lang->action->hideOne, 'hiddenwin');
       ?>
     </td>
