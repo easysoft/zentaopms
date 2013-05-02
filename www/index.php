@@ -38,7 +38,7 @@ $common = $app->loadCommon();
 
 /* Check for need upgrade. */
 $config->installedVersion = $common->loadModel('setting')->getVersion();
-if(version_compare($config->version, $config->installedVersion, '>')) die(header('location: upgrade.php'));
+if(!(!is_numeric($config->version{0}) and $config->version{0} != $config->installedVersion{0}) and version_compare($config->version, $config->installedVersion, '>')) die(header('location: upgrade.php'));
 
 $app->parseRequest();
 $common->checkPriv();

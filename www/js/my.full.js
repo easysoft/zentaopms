@@ -417,13 +417,12 @@ function setOuterBox()
     var headerH   = $('#header').height();
     var navbarH   = $('#modulemenu').parent().parent().height();
     var footerH   = $('#footer').height() + 15;
-    if(document.documentElement.clientHeight >= document.documentElement.scrollHeight)
-    {
-        var outerH = winHeight - headerH - footerH - navbarH - 37;
-        if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
-        if ($.browser.msie && ($.browser.version == "6.0")) $('.outer').css('height', outerH);
-        $('.outer').css('min-height', outerH);
-    } 
+
+    var outerH = winHeight - headerH - footerH - navbarH - 37;
+    if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) outerH = winHeight - headerH - footerH - 98;
+    if ($.browser.msie && ($.browser.version == "6.0")) $('.outer').css('height', outerH);
+    $('.outer').css('min-height', outerH);
+    
     if($.browser.msie && ($.browser.version == "6.0") && !$.support.style)
     {
         winWidth -= 49;
