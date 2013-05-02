@@ -4,7 +4,7 @@
     <?php foreach($story->projects as $projectID => $project):?>
     <tr>
       <td class='a-center'><?php echo "<strong>$project->name</strong><br />"; ?> </td>
-      <td class='a-center'><?php foreach($story->teams[$projectID] as $member) echo $users[$member->account] . ' ';?></td>
+      <td class='a-center'><?php foreach($story->teams[$projectID] as $member) echo zget($users, $member->account, $member->account) . ' ';?></td>
       <td>
         <table class='table-1' style='margin:0'>
           <tr class='colhead'>
