@@ -406,25 +406,25 @@ class project extends control
             $bugs = $this->bug->getActiveBugs($pager, $projectID, array_keys($products));
         }
         else
-        {   
+        {
             if($queryID)
             {
                 $query = $this->loadModel('search')->getQuery($queryID);
                 if($query)
                 {
-                    $this->session->set('bugQuery', $query->sql);
-                    $this->session->set('bugForm', $query->form);
+                    $this->session->set('importBugQuery', $query->sql);
+                    $this->session->set('importBugForm', $query->form);
                 }
                 else
                 {
-                    $this->session->set('bugQuery', ' 1 = 1');
+                    $this->session->set('importBugQuery', ' 1 = 1');
                 }
             }
             else
             {
-                if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
+                if($this->session->importBugQuery == false) $this->session->set('importBugQuery', ' 1 = 1');
             }
-            $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->bugQuery); // Search all project.
+            $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->importBugQuery); // Search all project.
             $bugs = $this->project->getSearchBugs($products, $projectID, $bugQuery, $pager, 'id_desc');
         }
 
@@ -441,6 +441,7 @@ class project extends control
         }
         $this->config->bug->search['params']['project']['values'] = array(''=>'') + $projects + array('all'=>$this->lang->project->aboveAllProject);
         $this->config->bug->search['module'] = 'importBug';
+        $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
         unset($this->config->bug->search['fields']['resolvedBy']); 
         unset($this->config->bug->search['fields']['closedBy']);    
         unset($this->config->bug->search['fields']['status']);      
