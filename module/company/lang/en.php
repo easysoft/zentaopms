@@ -23,7 +23,6 @@ $lang->company->depts    = "Dept";
 $lang->company->orgView  = 'Company';
 
 $lang->company->confirmDelete = "Are you sure to delete this company?";
-$lang->company->successSaved  = "Success saved";
 
 $lang->company->id       = 'ID';
 $lang->company->name     = 'Name';
