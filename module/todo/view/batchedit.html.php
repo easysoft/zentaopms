@@ -20,9 +20,9 @@
       <th class='w-150px'>  <?php echo $lang->todo->date;?></th>
       <th class='w-100px'>  <?php echo $lang->todo->type;?></th>
       <th class='w-70px'>   <?php echo $lang->todo->pri;?></th>
-      <th class='w-70px'>   <?php echo $lang->todo->status;?></th>
       <th class='w-p65 red'><?php echo $lang->todo->name;?></th>
       <th class='w-140px'>  <?php echo $lang->todo->beginAndEnd;?></th>
+      <th class='w-70px'>   <?php echo $lang->todo->status;?></th>
     </tr>
 
     <?php foreach($editedTodos as $todo):?>
@@ -31,7 +31,6 @@
       <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='text-2 date'");?></td>
       <td><?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange=loadList(this.value,$todo->id) class='select-1'");?></td>
       <td><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, 'class=select-1');?></td>
-      <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='select-1'");?></td>
       <td>
         <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='f-left text-1 hiddenwin'"); ?></div>
         <div class='<?php echo "nameBox" . $todo->id;?>'>
@@ -51,7 +50,8 @@
         ?>
         </div>
       </td>
-      <td><?php echo html::select("begins[$todo->id]", $times, $todo->begin) . html::select("ends[$todo->id]", $times, $todo->end);?><td>
+      <td><?php echo html::select("begins[$todo->id]", $times, $todo->begin) . html::select("ends[$todo->id]", $times, $todo->end);?></td>
+      <td><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='select-1'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>
