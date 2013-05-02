@@ -1,3 +1,2 @@
-.cont-lt1 .side {width: 120px;}
-.cont-lt1 .side .box-title{padding: 3px;}
-.side .box-content a {padding-left:5px}
+.todoheader {margin-bottom:5px;}
+.todoheader .active{color:#009900; font-weight:bold;}
