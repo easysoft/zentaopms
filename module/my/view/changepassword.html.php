@@ -27,7 +27,7 @@
       <td><?php echo html::password('password2');?></td>
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
     </tr>
   </table>
 </form>

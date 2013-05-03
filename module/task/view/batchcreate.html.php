@@ -57,7 +57,7 @@
       <td><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=select-1');?></td>
     </tr>
     <?php endfor;?>
-    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td></tr>
+    <tr><td colspan='8' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

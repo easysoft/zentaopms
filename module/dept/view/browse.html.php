@@ -56,7 +56,7 @@
           <tr>
             <td></td>
             <td>
-              <?php echo html::submitButton() . html::gobackButton();?>
+              <?php echo html::submitButton() . html::backButton();?>
               <input type='hidden' value='<?php echo $deptID;?>' name='parentDeptID' />
             </td>
           </tr>

@@ -97,7 +97,7 @@ $(document).ready(function()
       <td><?php echo html::checkbox('whitelist', $groups, $whitelist);?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
     </tr>
   </table>
 </form>

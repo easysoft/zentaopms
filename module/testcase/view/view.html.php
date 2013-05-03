@@ -97,7 +97,7 @@
           <form method='post' action='<?php echo inlink('edit', "caseID=$case->id&comment=true")?>'>
             <table align='center' class='table-1'>
             <tr><td><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></td></tr>
-            <tr><td><?php echo html::submitButton() . html::gobackButton();?></td></tr>
+            <tr><td><?php echo html::submitButton() . html::backButton();?></td></tr>
             </table>
           </form>
         </fieldset>

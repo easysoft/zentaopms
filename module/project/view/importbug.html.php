@@ -54,7 +54,7 @@ var browseType = '<?php echo $browseType;?>';
     </tbody>
     <tr><td colspan='9'><div class='f-right'><?php $pager->show();?></div></td></tr>
   </table>
-  <div><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->import) . html::gobackButton();?></div>
+  <div><?php echo html::selectAll() . html::selectReverse() . html::submitButton($lang->import) . html::backButton();?></div>
 </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

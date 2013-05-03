@@ -57,7 +57,7 @@
       <td><?php echo html::textarea('report', htmlspecialchars($task->report), "rows=10 class='area-1'");?></td>
     </tr>  
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?> </td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?> </td>
     </tr>
   </table>
 </form>

@@ -59,7 +59,7 @@ $(document).ready(function()
     </tr>  
     <tr>
       <td colspan='2' class='a-center'>
-        <?php echo html::submitButton() . html::gobackButton() . html::hidden('lib', $libID);?>
+        <?php echo html::submitButton() . html::backButton() . html::hidden('lib', $libID);?>
         <?php echo html::hidden('product', $doc->product) . html::hidden('project', $doc->project);?>
       </td>
     </tr>

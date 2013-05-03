@@ -99,7 +99,7 @@
       <td><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td> 
     </tr>
     <tr>
-      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td>
+      <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
     </tr>
   </table>
 </form>

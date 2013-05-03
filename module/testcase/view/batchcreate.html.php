@@ -36,7 +36,7 @@
       <td><?php echo html::input("title[$i]", '', "class='text-1'");?></td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='5' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td></tr>
+    <tr><td colspan='5' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>

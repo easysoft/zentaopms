@@ -57,7 +57,7 @@
     </tr>  
     <tr>
       <td colspan='2' class='a-center'>
-        <?php echo html::submitButton() . html::gobackButton();?>
+        <?php echo html::submitButton() . html::backButton();?>
       </td>
     </tr>
   </table>

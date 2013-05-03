@@ -44,7 +44,7 @@
       <td>
     </tr>  
     <?php endfor;?>
-    <tr><td colspan='6' class='a-center'><?php echo html::submitButton() . html::gobackButton();?></td></tr>
+    <tr><td colspan='6' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <?php include './footer.html.php';?>

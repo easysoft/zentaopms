@@ -100,7 +100,7 @@ js::set('page', 'create');
     </tr>  
     <tr>
       <td colspan='2' class='a-center'>
-        <?php echo html::submitButton() . html::gobackButton() . html::hidden('case', $caseID);?>
+        <?php echo html::submitButton() . html::backButton() . html::hidden('case', $caseID);?>
       </td>
     </tr>
   </table>

@@ -44,7 +44,7 @@
       <td colspan='2' class='a-center'>
         <?php 
         echo html::submitButton();
-        echo html::gobackButton();
+        echo html::backButton();
         echo html::hidden('product', $product->id);
         ?>
       </td>

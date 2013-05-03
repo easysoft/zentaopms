@@ -25,7 +25,7 @@
     <td><?php echo html::input($product->id, $product->order, "size='5'")?></td>
   </tr>
   <?php endforeach;?>
-  <tr><td colspan='3' align='center'><?php echo html::submitButton() . html::gobackButton()?></td></tr>
+  <tr><td colspan='3' align='center'><?php echo html::submitButton() . html::backButton()?></td></tr>
 </table>
 </form>
 <?php include '../../common/view/footer.html.php';?>
