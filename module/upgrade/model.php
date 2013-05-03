@@ -74,7 +74,6 @@ class upgradeModel extends model
             case '3_3':
                 $this->execSQL($this->getUpgradeFile('3.3'));
                 $this->updateTaskAssignedTo();
-                $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
             case '4_0_beta1': $this->execSQL($this->getUpgradeFile('4.0.beta1'));
             case '4_0_beta2':  
                 $this->execSQL($this->getUpgradeFile('4.0.beta2'));
@@ -608,6 +607,41 @@ class upgradeModel extends model
             {
                 self::$errors[] = $e->getMessage() . "<p>The sql is: $sql</p>";
             }
+        }
+    }
+
+    /**
+     * Process flow.
+     * 
+     * @access public
+     * @return void
+     */
+    public function processFlow()
+    {
+        $flows = $this->dao->select('*')->from(TABLE_CONFIG)->where('`owner`')->eq('system')->andWhere('`module`')->eq('common')->andWhere('`key`')->eq('flow')->fatchAll('company', false);
+        if($flows)
+        {
+            /* Set company to 0 and section to global. */
+            if(!isset($flows[0]))
+            {
+                $flow = array_shift($flows);
+                $this->dao->update(TABLE_CONFIG)->set('company')->eq(0)->set('section')->eq('global')->where('id')->eq($flow->id)->exec(false)
+            }
+            else
+            {
+                $this->dao->update(TABLE_CONFIG)->set('section')->eq('global')->where('id')->eq($flows[0]->id)->exec(false)
+            }
+
+            /* Delete other flow data. */
+            foreach($flows as $company => $flow)
+            {
+                if($company != 0) $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($flow->id)->exec(false);
+            }
+        }
+        else
+        {
+            /* Add flow to zentao.*/
+            $this->loadModel('setting')->setItem('system.common.global.flow', 'full', 0);
         }
     }
 
