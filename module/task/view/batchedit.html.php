@@ -15,7 +15,7 @@
   <table class='table-1 fixed'> 
     <caption><?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?></caption>
     <tr>
-      <th class='w-20px'><?php echo $lang->idAB;?></th> 
+      <th class='w-30px'><?php echo $lang->idAB;?></th> 
       <th class='red'>   <?php echo $lang->task->name?></th>
       <?php if($project->type != 'sprint') echo "<th class='w-80px'>" . $lang->task->module . "</th>";?>
       <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
