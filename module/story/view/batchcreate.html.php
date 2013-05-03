@@ -25,7 +25,7 @@
       <th class='w-50px'><?php echo $lang->story->review;?></th>
     </tr>
     <?php for($i = 0; $i < $config->story->batchCreate; $i++):?>
-    <?php $moduleID = $i == 0 ? 0 : 'same';?>
+    <?php $moduleID = $i == 0 ? $moduleID : 'same';?>
     <?php $planID   = $i == 0 ? '' : 'same';?>
     <tr class='a-center'>
       <td><?php echo $i+1;?></td>
