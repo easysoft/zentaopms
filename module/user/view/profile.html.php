@@ -47,14 +47,7 @@
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->group->priv;?></th>
-    <td>
-    <?php 
-    foreach($groups as $group)
-    {
-        echo $group->name . ' ';
-    }
-    ?>
-    </td>
+    <td><?php foreach($groups as $group) echo $group->name . ' '; ?></td>
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->user->role;?></th>
