@@ -1,2 +1,2 @@
 body{background:white}
-tr {border-bottom:1px solid #eee}
+tr, td, th {border:1px solid #eee}

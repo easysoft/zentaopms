@@ -31,7 +31,7 @@
       <td><?php echo nl2br($step->desc);?></td>
       <td><?php echo nl2br($step->expect);?></td>
       <td class='a-center'><?php echo html::select("steps[$step->id]", $lang->testcase->resultList, $defaultResult);?></td>
-      <td><?php echo html::textarea("reals[$step->id]", '', "rows=3 class='area-1'");?></td>
+      <td><?php echo html::textarea("reals[$step->id]", '', "rows=2 class='area-1'");?></td>
     </tr>
     <?php endforeach;?>
     <tr class='a-center'>
