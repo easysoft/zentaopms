@@ -18,7 +18,7 @@ $lang->group->delete             = 'Delete';
 $lang->group->managePriv         = 'Privilege';
 $lang->group->managePrivByGroup  = 'Privilege';
 $lang->group->managePrivByModule = 'Manage privilege by module';
-$lang->group->shiftOrControl     = 'Press shift or control to multiple select';
+$lang->group->byModuleTips       = '<span class="tips"> (Press shift or control to multiple select)</span>';
 $lang->group->manageMember       = 'Members';
 $lang->group->linkMember         = 'Add members';
 $lang->group->unlinkMember       = 'Remove member';
