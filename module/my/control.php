@@ -94,7 +94,6 @@ class my extends control
         $this->view->pageID       = $pageID;
         $this->view->status       = $status;
         $this->view->account      = $this->app->user->account;
-        echo $orderBy;
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
         $this->view->importFuture = ($type != 'today');
