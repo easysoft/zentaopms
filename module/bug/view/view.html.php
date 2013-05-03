@@ -151,7 +151,7 @@
         <table class='table-1 a-left'>
           <tr>
             <td class='rowhead w-p20'><?php echo $lang->bug->fromCase;?></td>
-            <td><?php if($bug->case) echo html::a($this->createLink('case', 'view', "caseID=$bug->case"), $bug->caseTitle);?></td>
+            <td><?php if($bug->case) echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), $bug->caseTitle);?></td>
           </tr>
           <tr>
             <td valign="top" class='rowhead w-p20'><?php echo $lang->bug->toCase;?></td>
