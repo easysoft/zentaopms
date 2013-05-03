@@ -695,12 +695,11 @@ class taskModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($type == 'undone')->andWhere("t1.status = 'wait'")->orWhere("t1.status = 'doing'")->fi()
-            ->beginIF($type == 'unclosed')->andWhere("t1.status != 'closed'")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
             ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
             ->beginIF($type == 'finishedbyme')->andWhere('t1.finishedby')->eq($this->app->user->account)->fi()
             ->beginIF($type == 'delayed')->andWhere('deadline')->between('1970-1-1', helper::now())->andWhere('t1.status')->in('wait,doing')->fi()
-            ->beginIF(strpos(',all,undone,unclosed,needconfirm,assignedtome,delayed,finishedbyme,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF(strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

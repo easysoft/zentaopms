@@ -129,14 +129,14 @@ $lang->project->assignedToMe         = 'To me';
 
 $lang->project->statusSelects['']             = 'More';
 $lang->project->statusSelects['finishedbyme'] = 'Finished by me'; 
-$lang->project->statusSelects['wait']         = 'Pending';
-$lang->project->statusSelects['undone']       = 'Undone';
-$lang->project->statusSelects['unclosed']     = 'Unclosed';
+$lang->project->statusSelects['wait']         = 'Wait';
 $lang->project->statusSelects['doing']        = 'Doing';
+$lang->project->statusSelects['undone']       = 'Undone';
 $lang->project->statusSelects['done']         = 'Done'; 
 $lang->project->statusSelects['closed']       = 'Closed';
 $lang->project->statusSelects['delayed']      = 'Delayed';
 $lang->project->statusSelects['needconfirm']  = 'Story changed';
+$lang->project->statusSelects['cancel']       = 'Canceled';
 $lang->project->groups['']           = 'Group View';
 $lang->project->groups['story']      = 'Group by story';
 $lang->project->groups['status']     = 'Group by status';
