@@ -22,7 +22,7 @@
       <th class='w-200px'><?php echo $lang->story->spec;?></th>
       <th class='w-50px'><?php echo $lang->story->pri;?></th>
       <th class='w-60px'><?php echo $lang->story->estimate;?></th>
-      <th class='w-40px'><?php echo $lang->story->review;?></th>
+      <th class='w-50px'><?php echo $lang->story->review;?></th>
     </tr>
     <?php for($i = 0; $i < $config->story->batchCreate; $i++):?>
     <?php $moduleID = $i == 0 ? 0 : 'same';?>
