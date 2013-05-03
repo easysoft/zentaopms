@@ -34,7 +34,7 @@
     <tr class='colhead'>
       <th class='w-id'>    <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
       <th class='w-pri'>   <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
-      <th class='w-150px'> <?php common::printOrderLink('projectName', $orderBy, $vars, $lang->task->project);?></th>
+      <th class='w-150px'> <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
       <th>                 <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
       <th class='w-hour'>  <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
       <th class='w-hour'>  <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
