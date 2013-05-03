@@ -68,7 +68,8 @@ $lang->report->to            = '至';
 $lang->report->taskTotal     = "总任务数";
 $lang->report->manhourTotal  = "总工时";
 $lang->report->bugTotal      = "共%s个Bug";
-$lang->report->effectiveRate = "有效率";
+$lang->report->validRate     = "有效率";
+$lang->report->validRateTips = "方案为已解决或延期/状态为已解决";
 $lang->report->unplanned     = '未计划';
 
 /* daily reminder. */

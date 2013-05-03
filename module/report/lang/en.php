@@ -68,7 +68,8 @@ $lang->report->to            = 'to';
 $lang->report->taskTotal     = "Task Total";
 $lang->report->manhourTotal  = "Manhour Total";
 $lang->report->bugTotal      = "%s Bugs";
-$lang->report->effectiveRate = "Effective Rate";
+$lang->report->validRate     = "Valid Rate";
+$lang->report->validRateTips = "Resolution is fixed or postponed/status is resolved";
 $lang->report->unplanned     = 'unplanned';
 
 /* daily reminder. */
