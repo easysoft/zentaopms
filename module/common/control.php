@@ -158,8 +158,8 @@ class common extends control
     public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
     {
         global $lang, $app;
-        if(empty($module)) $module= $app->getModuleName();
-        if(empty($method)) $method= $app->getMethodName();
+        if(empty($module)) $module = $app->getModuleName();
+        if(empty($method)) $method = $app->getMethodName();
         $className = 'header';
 
         if(strpos($orderBy, $fieldName) !== false)

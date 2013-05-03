@@ -78,7 +78,7 @@
       <td><?php echo $todo->begin;?></td>
       <td><?php echo $todo->end;?></td>
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
-      <td class='a-right'>
+      <td class='a-center'>
         <?php 
         common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin');
         common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list');
