@@ -18,7 +18,7 @@
   <?php 
   foreach($lang->todo->periods as $period => $label)
   {
-      $vars = "account={$app->user->account}&date=$period";
+      $vars = "account={$account}&date=$period";
       if($period == 'before') $vars .= "&status=undone";
       echo "<span id='$period'>" . html::a(inlink('todo', $vars), $label) . '</span> ';
   }
