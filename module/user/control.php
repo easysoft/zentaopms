@@ -64,15 +64,16 @@ class user extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Get user, totos. */
+        $user    = $this->user->getById($account);
+        $account = $user->account;
+        $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $orderBy);
+        $date    = (int)$type == 0 ? helper::today() : $type;
+
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
         $this->user->setMenu($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
-
-        /* Get user, totos. */
-        $user  = $this->dao->findByAccount($account)->from(TABLE_USER)->fetch();
-        $todos = $this->todo->getList($type, $account, $status, 0, $pager, $orderBy);
-        $date  = (int)$type == 0 ? helper::today() : $type;
 
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->user->todo;
         $position[] = $this->lang->user->todo;
