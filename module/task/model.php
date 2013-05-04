@@ -278,9 +278,9 @@ class taskModel extends model
                     case 'done':
                     {
                         $task->left = 0;
-                        if(!$task->finishedBy)   $task->finishedBy   = $this->app->user->account;
-                        if(!$task->finishedDate) $task->finishedDate = $now;
-                        if($task->closedReason)  $task->closedDate   = $now;
+                        if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
+                        if($task->closedReason)  $task->closedDate = $now;
+                        $task->finishedDate = $oldTask->status == 'done' ?  $oldTask->finishedDate : $now;
                     }
                     break;
                     case 'cancel':
