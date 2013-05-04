@@ -91,7 +91,7 @@ class testcaseModel extends model
                 $data[$i]->module     = $cases->module[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->module) : $cases->module[$i];
                 $data[$i]->type       = $cases->type[$i] == 'same' ? ($i == 0 ? '' : $data[$i-1]->type) : $cases->type[$i]; 
                 $data[$i]->story      = $cases->story[$i] == 'same' ? ($i == 0 ? 0 : $data[$i-1]->story) : $cases->story[$i]; 
-                $data[$i]->title      = $cases->title[$i];
+                $data[$i]->title      = htmlspecialchars($cases->title[$i]);
                 $data[$i]->openedBy   = $this->app->user->account;
                 $data[$i]->openedDate = $now;
                 $data[$i]->status     = 'normal';

@@ -100,8 +100,8 @@ class taskModel extends model
             $data[$i]->story        = $tasks->story[$i]      == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->story : 0)      : ($tasks->story[$i] ? $tasks->story[$i] : 0);
             $data[$i]->type         = $tasks->type[$i]       == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->type  : 0)      : $tasks->type[$i];
             $data[$i]->assignedTo   = $tasks->assignedTo[$i] == 'ditto' ? (isset($data[$i-1]) ? $data[$i-1]->assignedTo : 0) : $tasks->assignedTo[$i];
-            $data[$i]->name         = $tasks->name[$i];
-            $data[$i]->desc         = $tasks->desc[$i];
+            $data[$i]->name         = htmlspecialchars($tasks->name[$i]);
+            $data[$i]->desc         = htmlspecialchars($tasks->desc[$i]);
             $data[$i]->pri          = $tasks->pri[$i];
             $data[$i]->estimate     = $tasks->estimate[$i];
             $data[$i]->left         = $tasks->estimate[$i];

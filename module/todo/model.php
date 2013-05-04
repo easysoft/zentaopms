@@ -70,8 +70,8 @@ class todoModel extends model
                 }
                 $todo->type    = $todos->types[$i];
                 $todo->pri     = $todos->pris[$i];
-                $todo->name    = isset($todos->names[$i]) ? $todos->names[$i] : '';
-                $todo->desc    = $todos->descs[$i];
+                $todo->name    = isset($todos->names[$i]) ? htmlspecialchars($todos->names[$i]) : '';
+                $todo->desc    = htmlspecialchars($todos->descs[$i]);
                 $todo->begin   = $todos->begins[$i];
                 $todo->end     = $todos->ends[$i];
                 $todo->status  = "wait";
