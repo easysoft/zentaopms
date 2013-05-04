@@ -120,8 +120,9 @@ class projectModel extends model
         $products     = $this->loadModel('product')->getPairs('nocode');
         $productGroup = $this->getProductGroupList();
         $selectGroup  = array();
-        foreach($productGroup as $projects)
+        foreach($productGroup as $productID => $projects)
         {
+            if(!isset($products[$productID]) and $productID != '') continue;
             foreach($projects as $project)
             {
                 if($projectMode == 'noclosed' and ($project->status == 'done' or $project->status == 'suspended')) continue;
