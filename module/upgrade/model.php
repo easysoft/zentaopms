@@ -81,7 +81,10 @@ class upgradeModel extends model
                 $this->updateEstimatePriv();
             case '4_0':  
                 $this->execSQL($this->getUpgradeFile('4.0'));
-
+            case '4_0_1':  
+                $this->execSQL($this->getUpgradeFile('4.0.1'));
+                $this->processFlow();
+                $this->addPriv4_0_1();
             default: if(!$this->isError()) $this->setting->updateVersion($this->config->version);
         }
 
@@ -129,6 +132,7 @@ class upgradeModel extends model
         case '4_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta1'));
         case '4_0_beta2': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta2'));
         case '4_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('4.0'));
+        case '4_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -618,18 +622,18 @@ class upgradeModel extends model
      */
     public function processFlow()
     {
-        $flows = $this->dao->select('*')->from(TABLE_CONFIG)->where('`owner`')->eq('system')->andWhere('`module`')->eq('common')->andWhere('`key`')->eq('flow')->fatchAll('company', false);
+        $flows = $this->dao->select('*')->from(TABLE_CONFIG)->where('`owner`')->eq('system')->andWhere('`module`')->eq('common')->andWhere('`key`')->eq('flow')->fetchAll('company', false);
         if($flows)
         {
             /* Set company to 0 and section to global. */
             if(!isset($flows[0]))
             {
                 $flow = array_shift($flows);
-                $this->dao->update(TABLE_CONFIG)->set('company')->eq(0)->set('section')->eq('global')->where('id')->eq($flow->id)->exec(false)
+                $this->dao->update(TABLE_CONFIG)->set('company')->eq(0)->set('section')->eq('global')->where('id')->eq($flow->id)->exec(false);
             }
             else
             {
-                $this->dao->update(TABLE_CONFIG)->set('section')->eq('global')->where('id')->eq($flows[0]->id)->exec(false)
+                $this->dao->update(TABLE_CONFIG)->set('section')->eq('global')->where('id')->eq($flows[0]->id)->exec(false);
             }
 
             /* Delete other flow data. */
@@ -643,6 +647,47 @@ class upgradeModel extends model
             /* Add flow to zentao.*/
             $this->loadModel('setting')->setItem('system.common.global.flow', 'full', 0);
         }
+    }
+
+    /**
+     * Add priv for version 4.0.1 
+     * 
+     * @access public
+     * @return void
+     */
+    public function addPriv4_0_1()
+    {
+        $oldPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('company')
+            ->andWhere('method')->eq('edit')
+            ->fetchAll();
+
+        foreach($oldPriv as $item)
+        {
+            $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($item->company)
+                ->set('module')->eq('company')
+                ->set('method')->eq('view')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+        }
+
+        $oldPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('todo')
+            ->andWhere('method')->eq('finish')
+            ->fetchAll();
+
+        foreach($oldPriv as $item)
+        {
+            $this->dao->insert(TABLE_GROUPPRIV)
+                ->set('company')->eq($item->company)
+                ->set('module')->eq('todo')
+                ->set('method')->eq('batchFinish')
+                ->set('`group`')->eq($item->group)
+                ->exec();
+        }
+
+        return true;
     }
 
     /**
