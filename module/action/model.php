@@ -484,9 +484,11 @@ class actionModel extends model
             }
             else
             {
-                $todos = $this->dao->select("id, $field AS name, account, private")->from($table)->where('id')->in($objectIds)->fetchAll('id');
+                $todos = $this->dao->select("id, $field AS name, account, private, type, idvalue")->from($table)->where('id')->in($objectIds)->fetchAll('id');
                 foreach($todos as $id => $todo)
                 {
+                    if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
+                    if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
                     if($todo->private == 1 and $todo->account != $this->app->user->account) 
                     {
                        $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
