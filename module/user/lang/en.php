@@ -83,6 +83,14 @@ $lang->user->team        = 'Team';
 $lang->user->dynamic     = 'Dynamic';
 $lang->user->ajaxGetUser = 'AJAX:get users';
 
+$lang->user->openedBy    = 'Opened by him';
+$lang->user->assignedTo  = 'Assigned to him';
+$lang->user->finishedBy  = 'Finished by him';
+$lang->user->resolvedBy  = 'Resolved by him';
+$lang->user->closedBy    = 'Closed by him';
+$lang->user->reviewedBy  = 'Reviewed by him';
+$lang->user->canceledBy  = 'Canceled by him';
+
 $lang->user->testTask2Him = 'Test task to him';
 $lang->user->case2Him     = 'Case to him';
 $lang->user->caseByHim    = 'Case By him';

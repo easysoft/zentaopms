@@ -17,10 +17,10 @@
   <div class='f-left'>
     <?php
     $this->app->loadLang('my');
-    echo "<span id='assignedToTab'>"  . html::a(inlink('bug', "account=$account&type=assignedTo"), $lang->bug->assignToMe)    . "</span>";
-    echo "<span id='openedByTab'>"    . html::a(inlink('bug', "account=$account&type=openedBy"),   $lang->bug->openedByMe)    . "</span>";
-    echo "<span id='resolvedByTab'>"  . html::a(inlink('bug', "account=$account&type=resolvedBy"), $lang->bug->resolvedByMe)  . "</span>";
-    echo "<span id='closedByTab'>"    . html::a(inlink('bug', "account=$account&type=closedBy"),   $lang->bug->closedByMe)    . "</span>";
+    echo "<span id='assignedToTab'>"  . html::a(inlink('bug', "account=$account&type=assignedTo"), $lang->user->assignedTo) . "</span>";
+    echo "<span id='openedByTab'>"    . html::a(inlink('bug', "account=$account&type=openedBy"),   $lang->user->openedBy)   . "</span>";
+    echo "<span id='resolvedByTab'>"  . html::a(inlink('bug', "account=$account&type=resolvedBy"), $lang->user->resolvedBy) . "</span>";
+    echo "<span id='closedByTab'>"    . html::a(inlink('bug', "account=$account&type=closedBy"),   $lang->user->closedBy)   . "</span>";
     ?>
   </div>
 </div>

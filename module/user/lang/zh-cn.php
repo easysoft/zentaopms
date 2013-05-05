@@ -83,6 +83,14 @@ $lang->user->team         = '团队';
 $lang->user->dynamic      = '动态';
 $lang->user->ajaxGetUser  = '接口:获得用户';
 
+$lang->user->openedBy    = '由他创建';
+$lang->user->assignedTo  = '指派给他';
+$lang->user->finishedBy  = '由他完成';
+$lang->user->resolvedBy  = '由他解决';
+$lang->user->closedBy    = '由他关闭';
+$lang->user->reviewedBy  = '由他评审';
+$lang->user->canceledBy  = '由他取消';
+
 $lang->user->testTask2Him = '他的测试任务';
 $lang->user->case2Him     = '指派给他的用例';
 $lang->user->caseByHim    = '他创建的用例';

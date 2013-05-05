@@ -17,11 +17,11 @@
   <div class='f-left'>
     <?php
     $this->app->loadLang('my');
-    echo "<span id='assignedToTab'>" . html::a(inlink('task', "account=$account&type=assignedTo"), $lang->my->taskMenu->assignedToMe) . "</span>";
-    echo "<span id='openedByTab'>"   . html::a(inlink('task', "account=$account&type=openedBy"),   $lang->my->taskMenu->openedByMe)   . "</span>";
-    echo "<span id='finishedByTab'>" . html::a(inlink('task', "account=$account&type=finishedBy"), $lang->my->taskMenu->finishedByMe) . "</span>";
-    echo "<span id='closedByTab'>"   . html::a(inlink('task', "account=$account&type=closedBy"),   $lang->my->taskMenu->closedByMe)   . "</span>";
-    echo "<span id='canceledByTab'>" . html::a(inlink('task', "account=$account&type=canceledBy"), $lang->my->taskMenu->canceledByMe) . "</span>";
+    echo "<span id='assignedToTab'>" . html::a(inlink('task', "account=$account&type=assignedTo"), $lang->user->assignedTo) . "</span>";
+    echo "<span id='openedByTab'>"   . html::a(inlink('task', "account=$account&type=openedBy"),   $lang->user->openedBy)   . "</span>";
+    echo "<span id='finishedByTab'>" . html::a(inlink('task', "account=$account&type=finishedBy"), $lang->user->finishedBy) . "</span>";
+    echo "<span id='closedByTab'>"   . html::a(inlink('task', "account=$account&type=closedBy"),   $lang->user->closedBy)   . "</span>";
+    echo "<span id='canceledByTab'>" . html::a(inlink('task', "account=$account&type=canceledBy"), $lang->user->canceledBy) . "</span>";
     ?>
   </div>
 </div>
