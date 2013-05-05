@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
- * @version     $Id: zh-tw.php 4481 2013-02-27 02:20:43Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4751 2013-05-05 00:29:24Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->arrow        = '<span class="icon-arrow">&nbsp; </span>';
@@ -116,11 +116,6 @@ $lang->exportFileTypeList['html'] = 'html';
 
 $lang->exportTypeList['all']      = '全部記錄';
 $lang->exportTypeList['selected'] = '選中記錄';
-
-/* 支持的編碼格式。*/
-$lang->exportEncodeList['gbk']   = 'GBK';
-$lang->exportEncodeList['big5']  = 'BIG5';
-$lang->exportEncodeList['utf-8'] = 'UTF-8';
 
 /* 風格列表。*/
 $lang->themes['default']   = '預設';
@@ -258,7 +253,7 @@ $lang->company->menu->name         = '%s' . $lang->arrow;
 $lang->company->menu->browseUser   = array('link' => '用戶|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept         = array('link' => '部門|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup  = array('link' => '權限|group|browse', 'subModule' => 'group');
-$lang->company->menu->edit         = array('link' => '公司|company|edit');
+$lang->company->menu->view         = array('link' => '公司|company|view', 'alias' => 'edit');
 $lang->company->menu->dynamic      = '動態|company|dynamic|';
 $lang->company->menu->addGroup     = array('link' => '<span class="icon-add">&nbsp;</span>添加分組|group|create', 'float' => 'right');
 $lang->company->menu->batchAddUser = array('link' => '<span class="icon-add">&nbsp;</span>批量添加|user|batchCreate', 'subModule' => 'user', 'float' => 'right');

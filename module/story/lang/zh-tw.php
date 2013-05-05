@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
- * @version     $Id: zh-tw.php 4395 2013-02-20 02:42:10Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 4684 2013-04-27 05:49:28Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->story->browse      = "需求列表";
@@ -150,7 +150,6 @@ $lang->story->legendChildStories   = '細分需求';
 $lang->story->legendSpec           = '需求描述';
 $lang->story->legendVerify         = '驗收標準';
 $lang->story->legendHistory        = '歷史記錄';
-$lang->story->legendVersion        = '歷史版本';
 $lang->story->legendMisc           = '其他相關';
 
 $lang->story->lblChange            = '變更需求';

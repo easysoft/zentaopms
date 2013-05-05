@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
- * @version     $Id: zh-tw.php 4410 2013-02-21 09:44:35Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4726 2013-05-03 05:51:27Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->report->common     = '統計視圖';
@@ -68,6 +68,8 @@ $lang->report->to            = '至';
 $lang->report->taskTotal     = "總任務數";
 $lang->report->manhourTotal  = "總工時";
 $lang->report->bugTotal      = "共%s個Bug";
+$lang->report->validRate     = "有效率";
+$lang->report->validRateTips = "方案為已解決或延期/狀態為已解決";
 $lang->report->unplanned     = '未計劃';
 
 /* daily reminder. */

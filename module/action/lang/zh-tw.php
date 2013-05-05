@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: zh-tw.php 4537 2013-03-02 13:58:47Z zhujinyonging@gmail.com $
+ * @version     $Id: zh-tw.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->action->common     = '系統日誌';
@@ -39,6 +39,7 @@ $lang->action->dynamic->lastWeek   = '上周';
 $lang->action->dynamic->thisMonth  = '本月';
 $lang->action->dynamic->lastMonth  = '上月';
 $lang->action->dynamic->all        = '所有';
+$lang->action->dynamic->hidden     = '已隱藏';
 $lang->action->dynamic->search     = '搜索';
 
 $lang->action->objectTypes['product']     = '產品';
@@ -122,7 +123,8 @@ $lang->action->label->marked              = '編輯了';
 $lang->action->label->linked2project      = '關聯項目';
 $lang->action->label->unlinkedfromproject = '移除項目';
 $lang->action->label->started             = '開始了';
-$lang->action->label->recorded            = '記錄了工時';
+$lang->action->label->recordestimate      = '記錄了工時';
+$lang->action->label->editestimate        = '編輯工時';
 $lang->action->label->canceled            = '取消了';
 $lang->action->label->finished            = '完成了';
 $lang->action->label->login               = '登錄系統';

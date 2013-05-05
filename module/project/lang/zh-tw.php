@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
- * @version     $Id: zh-tw.php 4595 2013-03-13 06:28:28Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4722 2013-05-03 05:14:13Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
@@ -131,10 +131,12 @@ $lang->project->statusSelects['']             = '更多';
 $lang->project->statusSelects['finishedbyme'] = '我完成';
 $lang->project->statusSelects['wait']         = '未開始';
 $lang->project->statusSelects['doing']        = '進行中';
+$lang->project->statusSelects['undone']       = '未完成';
 $lang->project->statusSelects['done']         = '已完成';
 $lang->project->statusSelects['closed']       = '已關閉';
 $lang->project->statusSelects['delayed']      = '已延期';
 $lang->project->statusSelects['needconfirm']  = '需求變動';
+$lang->project->statusSelects['cancel']       = '已取消';
 $lang->project->groups['']           = '分組查看';
 $lang->project->groups['story']      = '需求分組';
 $lang->project->groups['status']     = '狀態分組';

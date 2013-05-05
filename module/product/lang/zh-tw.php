@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
- * @version     $Id: zh-tw.php 4425 2013-02-22 03:25:33Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4755 2013-05-05 02:28:46Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->product->common = '產品視圖';
@@ -80,7 +80,7 @@ $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '結束';
 
 $lang->product->aclList['open']    = '預設設置(有產品視圖權限，即可訪問)';
-$lang->product->aclList['private'] = '私有項目(只有項目團隊成員才能訪問)';
+$lang->product->aclList['private'] = '私有產品(只有項目團隊成員才能訪問)';
 $lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
 
 $lang->product->storySummary = "本頁共 <strong>%s</strong> 個需求，預計 <strong>%s</strong> 個工時。";

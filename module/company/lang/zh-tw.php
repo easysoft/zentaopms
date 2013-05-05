@@ -6,13 +6,14 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
- * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
+ * @version     $Id: zh-tw.php 4714 2013-05-02 08:10:58Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->company->common   = '組織視圖';
 $lang->company->index    = "組織視圖首頁";
 $lang->company->create   = "新增公司";
 $lang->company->edit     = "編輯公司";
+$lang->company->view     = "公司信息";
 $lang->company->read     = "公司信息";
 $lang->company->update   = "更新公司";
 $lang->company->delete   = "刪除公司";
@@ -22,7 +23,6 @@ $lang->company->depts    = "部門列表";
 $lang->company->orgView  = '組織視圖';
 
 $lang->company->confirmDelete = "您確定刪除該公司嗎？";
-$lang->company->successSaved  = "成功保存";
 
 $lang->company->id       = '編號';
 $lang->company->name     = '公司名稱';

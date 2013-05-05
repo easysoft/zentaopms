@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
- * @version     $Id: zh-tw.php 4457 2013-02-26 01:59:23Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4719 2013-05-03 02:20:28Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->group->common             = '權限分組';
@@ -18,6 +18,7 @@ $lang->group->delete             = '刪除分組';
 $lang->group->managePriv         = '權限維護';
 $lang->group->managePrivByGroup  = '權限維護';
 $lang->group->managePrivByModule = '按模組分配權限';
+$lang->group->byModuleTips       = '<span class="tips">（可以按住shift或者control鍵進行多選）</span>';
 $lang->group->manageMember       = '成員維護';
 $lang->group->linkMember         = '關聯用戶';
 $lang->group->unlinkMember       = '移除用戶';

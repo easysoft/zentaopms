@@ -17,6 +17,7 @@ $lang->mail->username    = 'smtp帳號';
 $lang->mail->password    = 'smtp密碼';
 $lang->mail->secure      = '是否加密';
 $lang->mail->debug       = '調試級別';
+$lang->mail->charset     = '編碼';
 
 $lang->mail->turnonList[1]  = '打開';
 $lang->mail->turnonList[0] = '關閉';
@@ -38,4 +39,5 @@ $lang->mail->successSaved   = '配置信息已經成功保存。';
 $lang->mail->subject        = '測試郵件';
 $lang->mail->content        = '郵箱設置成功';
 $lang->mail->successSended  = '成功發送！';
+$lang->mail->sendmailTips   = '提示：系統不會為當前操作者發信。';
 $lang->mail->needConfigure  = '無法找到郵件配置信息，請先配置郵件發送參數。';

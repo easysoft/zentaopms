@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
- * @version     $Id: zh-tw.php 4480 2013-02-27 01:57:22Z wyd621@gmail.com $
+ * @version     $Id: zh-tw.php 4676 2013-04-26 06:08:23Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->todo->common       = 'TODO';
@@ -18,6 +18,7 @@ $lang->todo->batchEdit    = "批量編輯";
 $lang->todo->view         = "TODO詳情";
 $lang->todo->viewAB       = "詳情";
 $lang->todo->finish       = "完成";
+$lang->todo->batchFinish  = "批量完成";
 $lang->todo->export       = "導出";
 $lang->todo->delete       = "刪除TODO";
 $lang->todo->browse       = "瀏覽TODO";

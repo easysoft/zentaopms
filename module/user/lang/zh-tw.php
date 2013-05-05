@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
+ * @version     $Id: zh-tw.php 4694 2013-05-02 01:40:54Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->user->common    = '用戶';
@@ -25,7 +25,7 @@ $lang->user->avatar    = '頭像';
 $lang->user->birthyear = '出生年';
 $lang->user->gender    = '性別';
 $lang->user->email     = '郵箱';
-$lang->user->skype       = 'MSN';
+$lang->user->skype     = 'Skype';
 $lang->user->qq        = 'QQ';
 $lang->user->yahoo     = '雅虎通';
 $lang->user->gtalk     = 'GTalk';
@@ -48,13 +48,14 @@ $lang->user->batchCreate     = "批量添加用戶";
 $lang->user->read            = "查看用戶";
 $lang->user->edit            = "編輯用戶";
 $lang->user->batchEdit       = "批量編輯";
+$lang->user->editGroup       = "編輯用戶分組";
 $lang->user->unlock          = "解鎖用戶";
 $lang->user->update          = "編輯用戶";
 $lang->user->delete          = "刪除用戶";
 $lang->user->browse          = "瀏覽用戶";
 $lang->user->login           = "用戶登錄";
 $lang->user->userView        = "人員視圖";
-$lang->user->editProfile     = "修改個人信息";
+$lang->user->editProfile     = "修改檔案";
 $lang->user->editPassword    = "修改密碼";
 $lang->user->manageContacts  = '維護聯繫人';
 $lang->user->deleteContacts  = '刪除聯繫人';
@@ -73,12 +74,14 @@ $lang->user->profile     = '檔案';
 $lang->user->project     = '項目';
 $lang->user->task        = '任務';
 $lang->user->bug         = '缺陷';
+$lang->user->test        = '測試';
+$lang->user->testTask    = '我的測試任務';
+$lang->user->testCase    = '我的測試用例';
 $lang->user->todo        = '待辦';
 $lang->user->story       = '需求';
 $lang->user->team        = '團隊';
 $lang->user->dynamic     = '動態';
 $lang->user->ajaxGetUser = '介面:獲得用戶';
-$lang->user->editProfile = '修改信息';
 
 $lang->user->errorDeny   = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
 $lang->user->loginFailed = "登錄失敗，請檢查您的用戶名或密碼是否填寫正確。";
@@ -112,7 +115,7 @@ $lang->user->placeholder->join      = '入職日期';
 $lang->user->placeholder->commiter  = '版本控制系統(subversion)中的帳號';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "ID %s，用戶名必須三位以上";
+$lang->user->error->account       = "ID %s，英文、數字和下劃線的組合，三位以上";
 $lang->user->error->accountDupl   = "ID %s，該用戶名已經存在";
 $lang->user->error->realname      = "ID %s，必須填寫真實姓名";
 $lang->user->error->password      = "ID %s，密碼必須六位以上";

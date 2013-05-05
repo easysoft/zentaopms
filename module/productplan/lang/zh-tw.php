@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
- * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
+ * @version     $Id: zh-tw.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->productplan->common    = '產品計劃';
@@ -16,10 +16,11 @@ $lang->productplan->create    = "創建計劃";
 $lang->productplan->edit      = "編輯計劃";
 $lang->productplan->delete    = "刪除計劃";
 $lang->productplan->view      = "計劃詳情";
-$lang->productplan->linkStory       = "關聯需求";
-$lang->productplan->unlinkStory     = "移除需求";
-$lang->productplan->linkedStories   = '已關聯需求列表';
-$lang->productplan->unlinkedStories = '未關聯需求列表';
+$lang->productplan->linkStory        = "關聯需求";
+$lang->productplan->unlinkStory      = "移除需求";
+$lang->productplan->batchUnlinkStory = "批量移除";
+$lang->productplan->linkedStories    = '已關聯需求列表';
+$lang->productplan->unlinkedStories  = '未關聯需求列表';
 
 $lang->productplan->confirmDelete      = "您確認刪除該計劃嗎？";
 $lang->productplan->confirmUnlinkStory = "您確認移除該需求嗎？";
