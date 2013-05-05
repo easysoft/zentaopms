@@ -69,8 +69,8 @@ $lang->testcase->insertAfter  = '之后添加';
 
 $lang->testcase->selectProduct = '请选择产品';
 $lang->testcase->byModule      = '按模块';
-$lang->testcase->assignToMe    = '指派给我的用例';
-$lang->testcase->openedByMe    = '由我创建的用例';
+$lang->testcase->assignToMe    = '给我的用例';
+$lang->testcase->openedByMe    = '我建的用例';
 $lang->testcase->allCases      = '所有';
 $lang->testcase->needConfirm   = '需求变动';
 $lang->testcase->moduleCases   = '按模块';
