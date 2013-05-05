@@ -20,7 +20,7 @@
   ?>
 </p>
 <?php include '../../misc/view/links.html.php';?>
-<?php if(!$bind and !$ignore):?>
+<?php if(!$bind and !$ignore and common::hasPriv('admin', 'register')):?>
 <div id="notice">
   <div class="f-left"><?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->register->click));?></div>
   <div class="f-right"><?php echo html::a(inlink('ignore'), $lang->admin->notice->ignore, 'hiddenwin');?></div>
