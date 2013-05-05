@@ -858,7 +858,7 @@ class PHPMailer {
       'from_failed' => 'The following From address failed: ',
       'recipients_failed' => 'SMTP Error: The following recipients failed: ',
       'data_not_accepted' => 'SMTP Error: Data not accepted.',
-      'connect_host' => 'SMTP Error: Could not connect to SMTP host.',
+      'connect_host' => 'SMTP Error: Could not connect to SMTP host. Please make user the zentao host:\n 1. ping the smtp host ok;\n 2. telnet the smtp port to smtp host ok;\n 3. If ping and telnet are ok, checking firewall under window, turn off selnux or "setsebool httpd_can_sendmail true" to allow apache to send mail under linux.',
       'file_access' => 'Could not access file: ',
       'file_open' => 'File Error: Could not open file: ',
       'encoding' => 'Unknown encoding: ',
