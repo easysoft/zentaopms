@@ -6,12 +6,12 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
- * @version     $Id: zh-tw.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 4767 2013-05-05 06:10:13Z wwccss $
  * @link        http://www.zentao.net
  */
 $lang->admin->common  = '後台管理';
 $lang->admin->index   = '後台管理首頁';
-$lang->admin->checkDB = '修正數據';
+$lang->admin->checkDB = '檢查資料庫';
 $lang->admin->company = '公司管理';
 $lang->admin->user    = '用戶管理';
 $lang->admin->group   = '分組管理';

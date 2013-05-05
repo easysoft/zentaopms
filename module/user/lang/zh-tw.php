@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
- * @version     $Id: zh-tw.php 4694 2013-05-02 01:40:54Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 4763 2013-05-05 04:06:22Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->user->common    = '用戶';
@@ -70,18 +70,30 @@ $lang->user->allUsers        = '全部用戶';
 $lang->user->deleted         = '(已刪除)';
 $lang->user->select          = '--請選擇用戶--';
 
-$lang->user->profile     = '檔案';
-$lang->user->project     = '項目';
-$lang->user->task        = '任務';
-$lang->user->bug         = '缺陷';
-$lang->user->test        = '測試';
-$lang->user->testTask    = '我的測試任務';
-$lang->user->testCase    = '我的測試用例';
-$lang->user->todo        = '待辦';
-$lang->user->story       = '需求';
-$lang->user->team        = '團隊';
-$lang->user->dynamic     = '動態';
-$lang->user->ajaxGetUser = '介面:獲得用戶';
+$lang->user->profile      = '檔案';
+$lang->user->project      = '項目';
+$lang->user->task         = '任務';
+$lang->user->bug          = '缺陷';
+$lang->user->test         = '測試';
+$lang->user->testTask     = '測試任務';
+$lang->user->testCase     = '測試用例';
+$lang->user->todo         = '待辦';
+$lang->user->story        = '需求';
+$lang->user->team         = '團隊';
+$lang->user->dynamic      = '動態';
+$lang->user->ajaxGetUser  = '介面:獲得用戶';
+
+$lang->user->openedBy    = '由他創建';
+$lang->user->assignedTo  = '指派給他';
+$lang->user->finishedBy  = '由他完成';
+$lang->user->resolvedBy  = '由他解決';
+$lang->user->closedBy    = '由他關閉';
+$lang->user->reviewedBy  = '由他評審';
+$lang->user->canceledBy  = '由他取消';
+
+$lang->user->testTask2Him = '他的任務';
+$lang->user->case2Him     = '給他的用例';
+$lang->user->caseByHim    = '他建的用例';
 
 $lang->user->errorDeny   = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
 $lang->user->loginFailed = "登錄失敗，請檢查您的用戶名或密碼是否填寫正確。";

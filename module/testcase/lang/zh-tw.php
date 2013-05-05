@@ -6,7 +6,7 @@
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
- * @version     $Id: zh-tw.php 4684 2013-04-27 05:49:28Z chencongzhi520@gmail.com $
+ * @version     $Id: zh-tw.php 4764 2013-05-05 04:07:04Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 $lang->testcase->id               = '用例編號';
@@ -69,8 +69,8 @@ $lang->testcase->insertAfter  = '之後添加';
 
 $lang->testcase->selectProduct = '請選擇產品';
 $lang->testcase->byModule      = '按模組';
-$lang->testcase->assignToMe    = '指派給我的用例';
-$lang->testcase->openedByMe    = '由我創建的用例';
+$lang->testcase->assignToMe    = '給我的用例';
+$lang->testcase->openedByMe    = '我建的用例';
 $lang->testcase->allCases      = '所有';
 $lang->testcase->needConfirm   = '需求變動';
 $lang->testcase->moduleCases   = '按模組';
