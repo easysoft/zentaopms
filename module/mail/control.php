@@ -68,6 +68,7 @@ class mail extends control
             $mailConfig = $this->config->mail->smtp;
             $mailConfig->fromAddress = $this->config->mail->fromAddress;
             $mailConfig->fromName    = $this->config->mail->fromName;
+            $mailConfig->charset     = zget($mailConfig, 'charset', 'utf-8');
         }
         elseif($this->session->mailConfig)
         {

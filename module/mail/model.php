@@ -53,6 +53,7 @@ class mailModel extends model
         $config->fromName = 'zentao';
         $config->password = '';
         $config->debug    = 1;
+        $config->charset  = 'utf-8';
         if(!isset($config->host)) $config->host = '';
         if(!isset($config->auth)) $config->auth = 1;
         if(!isset($config->port)) $config->port = '25';

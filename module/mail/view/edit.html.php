@@ -56,7 +56,7 @@ include '../../common/view/header.html.php';
   </tr>
   <tr>
     <th class='rowhead'><?php echo $lang->mail->charset; ?></th>
-    <td><?php echo html::radio('charset', $config->charsets[$this->cookie->lang], zget($config->charsets[$this->cookie->lang], $mailConfig->charset, 'utf-8', $mailConfig->charset));?></td>
+    <td><?php echo html::radio('charset', $config->charsets[$this->cookie->lang], $mailConfig->charset);?></td>
   </tr>
 
   <tr>
