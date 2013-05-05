@@ -624,7 +624,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `birthday` date NOT NULL default '0000-00-00',
   `gender` enum('f','m') NOT NULL default 'f',
   `email` char(90) NOT NULL default '',
-  `msn` char(90) NOT NULL default '',
+  `skype` char(90) NOT NULL default '',
   `qq` char(20) NOT NULL default '',
   `yahoo` char(90) NOT NULL default '',
   `gtalk` char(90) NOT NULL default '',
