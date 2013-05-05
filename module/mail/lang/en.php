@@ -39,4 +39,5 @@ $lang->mail->successSaved   = 'The configuration has been successfully saved.';
 $lang->mail->subject        = "It's a testing email from zentao.";
 $lang->mail->content        = 'If you can see this, the email notification feature can work now!';
 $lang->mail->successSended  = 'Successfully sended!';
+$lang->mail->sendmailTips   = 'Tips: system will not send mail to current user.';
 $lang->mail->needConfigure  = "I can not find the configuration, please configure it first.";
