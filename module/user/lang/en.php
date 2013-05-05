@@ -83,6 +83,10 @@ $lang->user->team        = 'Team';
 $lang->user->dynamic     = 'Dynamic';
 $lang->user->ajaxGetUser = 'AJAX:get users';
 
+$lang->user->testTask2Him = 'Test task to him';
+$lang->user->case2Him     = 'Case to him';
+$lang->user->caseByHim    = 'Case By him';
+
 $lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
 $lang->user->loginFailed = "Login failed, please check your account and password.";
 $lang->user->lockWarning = "You only have %s times to try.";

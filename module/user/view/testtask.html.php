@@ -15,9 +15,9 @@
 <div id='featurebar'>
   <div class='f-left'>
     <?php
-    echo "<span id='testtaskTab'>"   . html::a($this->createLink('user', 'testtask', "account=$account"),  $lang->user->testTask) . "</span>";
-    echo "<span id='assigntomeTab'>" . html::a($this->createLink('user', 'testcase', "account=$account&type=assigntome"),  $lang->testcase->assignToMe) . "</span>";
-    echo "<span id='closedbymeTab'>" . html::a($this->createLink('user', 'testcase', "account=$account&type=openedbyme"),  $lang->testcase->openedByMe) . "</span>";
+    echo "<span id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  $lang->user->testTask2Him) . "</span>";
+    echo "<span id='case2HimTab'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=case2Him"),  $lang->user->case2Him) . "</span>";
+    echo "<span id='caseByHimTab'>" . html::a($this->createLink('user', 'testcase', "account=$account&type=caseByHim"),  $lang->user->caseByHim) . "</span>";
     ?>
   </div>
 </div>

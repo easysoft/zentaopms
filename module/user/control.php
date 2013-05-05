@@ -268,7 +268,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function testcase($account, $type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($account, $type = 'case2Him', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
         $this->session->set('caseList', $this->app->getURI(true));
@@ -284,7 +284,7 @@ class user extends control
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
        
         $cases = array();
-        if($type == 'assigntome')
+        if($type == 'case2Him')
         {
             $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -294,15 +294,7 @@ class user extends control
                 ->andWhere('t3.status')->ne('done')
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
-        elseif($type == 'donebyme')
-        {
-            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                ->Where('t1.assignedTo')->eq($account)
-                ->andWhere('t1.status')->eq('done')
-                ->orderBy($orderBy)->page($pager)->fetchAll();
-        }
-        elseif($type == 'openedbyme')
+        elseif($type == 'caseByHim')
         {
             $cases = $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
                 ->andWhere('deleted')->eq(0)
