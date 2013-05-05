@@ -76,7 +76,7 @@ js::set('deptID', $deptID);
         </tbody>
         <tfoot>
         <tr>
-          <td colspan='11'>
+          <td colspan='12'>
           <?php
           echo html::selectAll() . html::selectReverse();
           echo html::submitButton($lang->edit, 'onclick=batchEdit()');
