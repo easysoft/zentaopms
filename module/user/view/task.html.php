@@ -16,7 +16,6 @@
 <div id='featurebar'>
   <div class='f-left'>
     <?php
-    $this->app->loadLang('my');
     echo "<span id='assignedToTab'>" . html::a(inlink('task', "account=$account&type=assignedTo"), $lang->user->assignedTo) . "</span>";
     echo "<span id='openedByTab'>"   . html::a(inlink('task', "account=$account&type=openedBy"),   $lang->user->openedBy)   . "</span>";
     echo "<span id='finishedByTab'>" . html::a(inlink('task', "account=$account&type=finishedBy"), $lang->user->finishedBy) . "</span>";
