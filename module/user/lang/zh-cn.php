@@ -91,9 +91,9 @@ $lang->user->closedBy    = '由他关闭';
 $lang->user->reviewedBy  = '由他评审';
 $lang->user->canceledBy  = '由他取消';
 
-$lang->user->testTask2Him = '他的测试任务';
-$lang->user->case2Him     = '指派给他的用例';
-$lang->user->caseByHim    = '他创建的用例';
+$lang->user->testTask2Him = '他的任务';
+$lang->user->case2Him     = '给他的用例';
+$lang->user->caseByHim    = '他建的用例';
 
 $lang->user->errorDeny   = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
 $lang->user->loginFailed = "登录失败，请检查您的用户名或密码是否填写正确。";

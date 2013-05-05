@@ -91,9 +91,9 @@ $lang->user->closedBy    = 'Closed by him';
 $lang->user->reviewedBy  = 'Reviewed by him';
 $lang->user->canceledBy  = 'Canceled by him';
 
-$lang->user->testTask2Him = 'Test task to him';
-$lang->user->case2Him     = 'Case to him';
-$lang->user->caseByHim    = 'Case By him';
+$lang->user->testTask2Him = 'His task';
+$lang->user->case2Him     = 'His case';
+$lang->user->caseByHim    = 'Case he opened';
 
 $lang->user->errorDeny   = "Sorry, you can't access the <b>%s</b> module's <b>%s</b> feature";
 $lang->user->loginFailed = "Login failed, please check your account and password.";
