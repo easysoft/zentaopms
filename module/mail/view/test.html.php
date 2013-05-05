@@ -9,11 +9,20 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-include '../../common/view/header.html.php';
+if(isset($error))
+{
+    include '../../common/view/header.lite.html.php';
+    die("<br />" . str_replace('\n', "<br />", join('', $error)));
+}
 ?>
-<form method='post' target='hiddenwin'>
+
+<?php include '../../common/view/header.html.php';?>
+<form method='post' target='resultWin'>
 <table class='table-4' align='center'>
-  <caption><?php echo $lang->mail->test; ?></caption>
+  <caption>
+    <div class='f-left'> <?php echo $lang->mail->test;?></div>
+    <div class='f-right'><?php echo $lang->mail->sendmailTips;?></div>
+  </caption>
   <tr>
     <td class='a-center'>
       <?php 
@@ -25,4 +34,5 @@ include '../../common/view/header.html.php';
   </tr>
 </table>
 </form>
+<table class='table-4 bd-none' align='center'><tr><td><iframe id='resultWin'></iframe></td></tr></table>
 <?php include '../../common/view/footer.html.php';?>

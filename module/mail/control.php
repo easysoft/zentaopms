@@ -144,11 +144,18 @@ class mail extends control
         if($_POST)
         {
             $this->mail->send($this->post->to, $this->lang->mail->subject, $this->lang->mail->content,"", true);
-            if($this->mail->isError()) die(js::error($this->mail->getError()));
+            if($this->mail->isError())
+            {
+                $this->view->error = $this->mail->getError();
+                die($this->display());
+            }
             die(js::alert($this->lang->mail->successSended));
         }
 
-        $this->view->users = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->orderBy('account')->fetchPairs();
+        $this->view->title      = $this->lang->mail->test;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->test;
+        $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->orderBy('account')->fetchPairs();
         $this->display();
     }
 }
