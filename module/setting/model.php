@@ -111,7 +111,7 @@ class settingModel extends model
      */
     public function deleteItems($paramString)
     {
-        $this->createDAO($this->parseItemParam($paramString), 'delete')->exec();
+        $this->createDAO($this->parseItemParam($paramString), 'delete')->exec($autoCompany = false);
     }
 
     /**

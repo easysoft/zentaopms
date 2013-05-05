@@ -402,7 +402,7 @@ class dao
             $sql = sprintf($this->sqlobj->get(), $this->fields, $this->table);
         }
 
-        /* If the method if select, update or delete, set the comapny condition. */
+        /* If the method is select, update or delete, set the comapny condition. */
         if(isset($this->app->company) and $autoCompany and $this->table != '' and $this->table != TABLE_COMPANY and $this->method != 'insert' and $this->method != 'replace')
         {
             /* Get the position to insert company = ?. */

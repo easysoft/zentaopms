@@ -622,31 +622,19 @@ class upgradeModel extends model
      */
     public function processFlow()
     {
-        $flows = $this->dao->select('*')->from(TABLE_CONFIG)->where('`owner`')->eq('system')->andWhere('`module`')->eq('common')->andWhere('`key`')->eq('flow')->fetchAll('company', false);
-        if($flows)
-        {
-            /* Set company to 0 and section to global. */
-            if(!isset($flows[0]))
-            {
-                $flow = array_shift($flows);
-                $this->dao->update(TABLE_CONFIG)->set('company')->eq(0)->set('section')->eq('global')->where('id')->eq($flow->id)->exec(false);
-            }
-            else
-            {
-                $this->dao->update(TABLE_CONFIG)->set('section')->eq('global')->where('id')->eq($flows[0]->id)->exec(false);
-            }
+        /* First delete all flow records. */
+        $this->setting->deleteItems('company=0,1&owner=system&module=common&section=global&key=flow');
 
-            /* Delete other flow data. */
-            foreach($flows as $company => $flow)
-            {
-                if($company != 0) $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($flow->id)->exec(false);
-            }
-        }
-        else
-        {
-            /* Add flow to zentao.*/
-            $this->loadModel('setting')->setItem('system.common.global.flow', 'full', 0);
-        }
+        /* Search the extension table to check zentaotest, zentaotask, zentaostory exists or not. */
+        $flow = 'full';
+        $extension = $this->dao->select('code')->from(TABLE_EXTENSION)
+            ->where('code')->in('zentaotest,zentaotask,zentaostory')
+            ->andWhere('status')->eq('installed')
+            ->fetch('code');
+        if($extension) $flow = 'only' . ucfirst(str_replace('zentao', '', $extension));
+
+        /* Update database again. */
+        $this->setting->setItem('system.common.global.flow', $flow, 0);
     }
 
     /**
