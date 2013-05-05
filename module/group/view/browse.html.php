@@ -46,8 +46,10 @@
   </tr>
   <?php endforeach;?>
   </tbody>
+  <?php if(common::hasPriv('group', 'managePriv')):?>
   <tfoot>
-  <tr><td colspan='5' class='a-center'><?php echo html::linkButton($lang->group->managePrivByModule, inlink('managePriv', 'type=byModule'));?></td></tr>
+    <tr><td colspan='5' class='a-center'><?php echo html::linkButton($lang->group->managePrivByModule, inlink('managePriv', 'type=byModule'));?></td></tr>
   </tfoot>
+  <?php endif;?>
 </table>
 <?php include '../../common/view/footer.html.php';?>
