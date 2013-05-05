@@ -472,7 +472,7 @@ class installModel extends model
         {
             if(strpos(PHP_OS, 'WIN') !== false)
             {
-                $mysql = `wmic process where name='mysqld.exe' get executablepath`;
+                $mysql = @`wmic process where name='mysqld.exe' get executablepath`;
                 if(strpos($mysql, 'mysqld.exe') !== false)
                 {
                     $mysql = explode("\n", $mysql);
@@ -481,7 +481,7 @@ class installModel extends model
             }
             else
             {
-                $mysqldump = trim(`which mysqldump`);
+                $mysqldump = trim(@`which mysqldump`);
             }
         }
 
