@@ -52,7 +52,7 @@ function switchEncode(fileType)
         echo $lang->setFileName . ' ';
         echo html::input('fileName', '', 'class=text-2');
         echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value)');
-        echo html::select('encode',     $lang->exportEncodeList, 'gbk', key($lang->exportFileTypeList) == 'csv' ? "" : "class='hidden'");
+        echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "" : "class='hidden'");
         echo html::select('exportType', $lang->exportTypeList, ($this->cookie->checkedItem) ? 'selected' : 'all');
         echo html::submitButton();
         ?>

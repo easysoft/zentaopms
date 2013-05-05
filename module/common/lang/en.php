@@ -109,11 +109,6 @@ $lang->importEncodeList['gbk']   = 'GBK';
 $lang->importEncodeList['big5']  = 'BIG5';
 $lang->importEncodeList['utf-8'] = 'UTF-8';
 
-/* File type of export. */
-$lang->exportFileTypeList['csv']  = 'csv';
-$lang->exportFileTypeList['xml']  = 'xml';
-$lang->exportFileTypeList['html'] = 'html';
-
 $lang->exportTypeList['all']      = 'All records';
 $lang->exportTypeList['selected'] = 'Only checked';
 

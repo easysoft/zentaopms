@@ -117,11 +117,6 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
-/* 支持的编码格式。*/
-$lang->exportEncodeList['gbk']   = 'GBK';
-$lang->exportEncodeList['big5']  = 'BIG5';
-$lang->exportEncodeList['utf-8'] = 'UTF-8';
-
 /* 风格列表。*/
 $lang->themes['default']   = '默认';
 $lang->themes['green']     = '绿色';
