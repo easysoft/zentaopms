@@ -129,7 +129,7 @@ $(function(){
         <div class='changes hidden' id='changeBox<?php echo $i;?>'>
         <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
-        <?php if($action->comment) echo nl2br($action->comment);?>
+      <?php if($action->comment) echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment; ?>
       <?php if(!empty($action->comment)) echo "</div>";?>
       <?php endif;?>
     </li>
