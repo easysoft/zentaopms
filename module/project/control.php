@@ -442,6 +442,7 @@ class project extends control
         $this->config->bug->search['params']['project']['values'] = array(''=>'') + $projects + array('all'=>$this->lang->project->aboveAllProject);
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
+        $this->config->bug->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($projectID, $viewType = 'bug', $startModuleID = 0);
         unset($this->config->bug->search['fields']['resolvedBy']); 
         unset($this->config->bug->search['fields']['closedBy']);    
         unset($this->config->bug->search['fields']['status']);      
