@@ -447,4 +447,78 @@ class product extends control
         $plans = $this->loadModel('productplan')->getPairs($productID);
         die(html::select('plan', $plans, $planID));
     }
+
+    /**
+     * Drop menu page.
+     * 
+     * @param  int    $productID 
+     * @param  int    $module 
+     * @param  int    $method 
+     * @param  int    $extra 
+     * @access public
+     * @return void
+     */
+    public function dropMenu($productID, $module, $method, $extra)
+    {
+        $this->view->link      = $this->getProductLink($module, $method, $extra);
+        $this->view->productID = $productID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('code')->fetchAll();
+        $this->display();
+    }
+
+    /**
+     * The results page of search.
+     * 
+     * @param  string  $keywords 
+     * @param  string  $module 
+     * @param  string  $method 
+     * @param  mix     $extra 
+     * @access public
+     * @return void
+     */
+    public function searchProduct($keywords, $module, $method, $extra)
+    {
+        $this->view->link     = $this->getProductLink($module, $method, $extra);
+        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        $this->view->keywords = $keywords;
+        $this->display();
+    }
+
+    /**
+     * Create the link from module,method,extra
+     * 
+     * @param  string  $module 
+     * @param  string  $method 
+     * @param  mix     $extra 
+     * @access public
+     * @return void
+     */
+    public function getProductLink($module, $method, $extra)
+    {
+        $link = '';
+        if(strpos('product,roadmap,bug,testcase,testtask,story', $module) !== false)
+        {
+            if($module == 'product' && $method == 'project')
+            {
+                $link = $this->createLink($module, $method, "status=all&productID=%s");
+            }
+            else
+            {
+                $link = $this->createLink($module, $method, "productID=%s");
+            }
+        }
+        else if($module == 'productplan' || $module == 'release')
+        {
+            if($method != 'browse' && $method != 'create') $method = 'browse';
+            $link = $this->createLink($module, $method, "productID=%s");
+        }
+        else if($module == 'tree')
+        {
+            $link = $this->createLink($module, $method, "productID=%s&type=$extra");
+        }
+        return $link;
+    }
 }

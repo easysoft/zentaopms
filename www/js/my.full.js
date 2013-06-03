@@ -124,48 +124,64 @@ function setProductSwitcher()
 }
 
 /**
- * Switch the product.
+ * Show drop menu. 
  * 
- * @param  int    $productID 
- * @param  string $module 
- * @param  string $method 
- * @param  string  $extra 
+ * @param  int     $productID 
+ * @param  string  $module 
+ * @param  string  $method 
+ * @param  mix     $extra 
  * @access public
  * @return void
  */
-function switchProduct(productID, module, method, extra)
+var showProductMenu = 0; // The var to for showing or hiding drop menu.
+function showDropMenu(productID, module, method, extra)
 {
-    /* If the product id is a string, use it as the product browse mode. */
-    if(isNaN(productID))
-    {
-        $.cookie('productMode', productID, {expires:config.cookieLife, path:config.webRoot});
-        productID = 0;
-    }
+    if(showProductMenu == 1) { showProductMenu = 0; return $("#dropMenu").hide();};
 
-    /* Module is product, roadmap, bug, testcase or testtask. switch directly. */
-    if(module == 'product' || module == 'roadmap' || module == 'bug' || module == 'testcase' || module == 'testtask' || module == 'story')
+    $.get(createLink('product', 'dropMenu', "productID=" + productID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
+
+    var timer;
+    var offset = $('#currentProduct').offset();
+
+    $("#dropMenu").css({ top:offset.top + $('#currentProduct').height() + "px", left:offset.left });
+    $("#dropMenu").show();
+    showProductMenu = 1;
+    if(timer) clearTimeout(timer);
+
+    /*
+     $("#dropMenu").mouseover(function(){
+        if(timer) clearTimeout(timer);
+        $("#dropMenu").show();
+         showProductMenu = 1;
+     }).mouseout(function(){
+        timer = setTimeout(function(){$("#dropMenu").hide();}, 200);
+        showProductMenu = 0;
+     });
+     */
+}
+
+/**
+ * Search product in drop menu. 
+ * 
+ * @param  string  $keywords 
+ * @param  int     $productID 
+ * @param  string  $module 
+ * @param  string  $method 
+ * @param  mix     $extra 
+ * @access public
+ * @return void
+ */
+function searchProduct(keywords, $productID, module, method, extra)
+{
+    if(keywords == '')
     {
-        if(module == 'product' && method == 'project')
-        {
-            link = createLink(module, method, "status=all&productID=" + productID);
-        }
-        else
-        {
-            link = createLink(module, method, "productID=" + productID);
-        }
+        showProductMenu = 0;
+        showDropMenu(productID, module, method, extra)
     }
-    /* Module is productplan, relase, must process method not browse and create. */
-    else if(module == 'productplan' || module == 'release')
+    else
     {
-        if(method != 'browse' && method != 'create') method = 'browse';
-        link = createLink(module, method, "productID=" + productID);
+        $.get(createLink('product', 'searchProduct', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#searchResult').html(data);});
     }
-    /* Module is tree. */
-    else if(module == 'tree')
-    {
-        link = createLink(module, method, "productID=" + productID + '&type=' + extra);
-    }
-    location.href=link;
 }
 
 /**
