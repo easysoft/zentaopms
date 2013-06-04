@@ -1,2 +1,2 @@
-ALTER TABLE `zt_module` ADD `product` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `root`,
-ADD `project` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `product`;
+ALTER TABLE `zt_project` ADD `openedVersion` varchar(20) COLLATE 'utf8_general_ci' NOT NULL AFTER `openedDate`;
+ALTER TABLE `zt_product` ADD `createdVersion` varchar(20) COLLATE 'utf8_general_ci' NOT NULL AFTER `createdDate`;
