@@ -228,6 +228,7 @@ class productModel extends model
              ->setDefault('status', 'normal')
              ->setDefault('createdBy', $this->app->user->account)
              ->setDefault('createdDate', helper::now())
+             ->setDefault('createdVersion', $this->config->version)
             ->join('whitelist', ',')
             ->get();
         $this->dao->insert(TABLE_PRODUCT)
