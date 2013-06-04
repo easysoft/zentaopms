@@ -14,15 +14,16 @@
 <form method='post' class='mt-10px' id='dataform'>
   <table class='table-1'> 
     <caption><?php echo $lang->tree->edit;?></caption>
-    <tr>
+    <?php $hidden = ($type != 'story' and $module->type == 'story');?>
+    <tr <?php if($hidden) echo "style='display:none'";?>>
       <th class='rowhead'><?php echo $lang->tree->parent;?></th>
       <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='select-1'");?></td>
-    </tr>  
-    <tr>
+    </tr>
+    <tr <?php if($hidden) echo "style='display:none'";?>>
       <th class='rowhead'><?php echo $lang->tree->name;?></th>
       <td><?php echo html::input('name', $module->name, "class='text-1'");?></td>
-    </tr>  
-    <?php if($module->type == 'bug'):?>
+    </tr>
+    <?php if($type == 'bug'):?>
     <tr>
       <th class='rowhead'><?php echo $lang->tree->owner;?></th>
       <td><?php echo html::select('owner', $users, $module->owner, "class='select-1'", true);?></td>

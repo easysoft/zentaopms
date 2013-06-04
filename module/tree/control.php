@@ -37,6 +37,7 @@ class tree extends control
             $this->view->root = $project;
             $this->view->projectModules = $this->tree->getOptionMenu($rootID, 'task');
         }
+
         /* The viewType is doc. */
         elseif(strpos($viewType, 'doc') !== false)
         {
@@ -162,7 +163,7 @@ class tree extends control
      * @access public
      * @return void
      */
-    public function edit($moduleID)
+    public function edit($moduleID, $type)
     {
         if(!empty($_POST))
         {
@@ -176,6 +177,7 @@ class tree extends control
            $module->owner = $this->loadModel('product')->getById($module->root)->QD;
         }
         $this->view->module     = $module;
+        $this->view->type       = $type;
         $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->root, $this->view->module->type);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
