@@ -33,7 +33,8 @@
     <td>
       <form method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=$viewType");?>'>
         <table align='center' class='table-1'>
-          <caption><?php echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->manageChild;?></caption>
+          <?php $manageChild = 'manage' . ucfirst($viewType) . 'Child';?>
+          <caption><?php echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?></caption>
           <tr>
             <td width='10%'>
               <nobr>
@@ -58,12 +59,6 @@
                       echo html::select('projectModule', $projectModules, '');
                       echo html::commonButton($lang->tree->syncFromProject, "id='copyModule' onclick='syncModule($currentProject, \"task\")'");
                   }
-                  echo '<br />';
-              }
-              elseif($viewType != 'story' and strpos($viewType, 'doc') === false and $viewType != 'webapp')
-              {
-                  echo html::select('productModule', $productModules, '', 'class=select-3');
-                  echo html::commonButton($lang->tree->syncFromProduct, 'onclick="syncModule('.$rootID.')"');
                   echo '<br />';
               }
               else if($viewType == 'story')

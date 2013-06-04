@@ -44,12 +44,51 @@ class treeModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
+        /* Get createdVersion. */
+        if($type == 'task')
+        {
+            $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT) 
+                ->where('id')->eq($rootID)
+                ->fetch('openedVersion');
+        }
+        else
+        {
+            $createdVersion = $this->dao->select('createdVersion')->from(TABLE_PRODUCT) 
+                ->where('id')->eq($rootID)
+                ->fetch('createdVersion');
+        }
+
+        if($createdVersion and version_compare($createdVersion, '4.1', '>') and $type != 'story')
+        {
+            if($type == 'bug' or $type == 'case')
+            {
+                return $this->dao->select('*')->from(TABLE_MODULE)
+                    ->where('root')->eq((int)$rootID)
+                    ->andWhere('type')->in("story,$type")
+                    ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                    ->orderBy('grade desc, type desc, `order`')
+                    ->get();
+            }
+
+            /* $type == 'task' */
+            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)
+                ->where('project')->eq($rootID)
+                ->fetchPairs();
+            $products = implode(',', $products);
+            return $this->dao->select('*')->from(TABLE_MODULE)
+                ->where("(root = $rootID and type = 'task') or (root in('$products') and type = 'story')")
+                ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                ->orderBy('type, grade desc, `order`')
+                ->get();
+        }
+
+        /* $createdVersion > 4.1 or $type == 'story'*/
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('type')->eq($type)
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->orderBy('grade desc, `order`')
-            ->get();
+            ->get(); 
     }
 
     /**
@@ -134,13 +173,13 @@ class treeModel extends model
         $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule));
         while($module = $stmt->fetch())
         {
-            $linkHtml = call_user_func($userFunc, $module, $extra);
+            $linkHtml = call_user_func($userFunc, $type, $module, $extra);
 
             if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
             {
                 if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
                 $treeMenu[$module->parent] .= "<li>$linkHtml";  
-                $treeMenu[$module->parent] .= "<ul>".$treeMenu[$module->id]."</ul>\n";
+                $treeMenu[$module->parent] .= "<ul>" . $treeMenu[$module->id] . "</ul>\n";
             }
             else
             {
@@ -151,7 +190,7 @@ class treeModel extends model
                 else
                 {
                     $treeMenu[$module->parent] = "<li>$linkHtml\n";  
-                }    
+                }
             }
             $treeMenu[$module->parent] .= "</li>\n"; 
         }
@@ -268,7 +307,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createStoryLink($module)
+    public function createStoryLink($type, $module)
     {
         $linkHtml = html::a(helper::createLink('product', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -281,7 +320,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createTaskLink($module)
+    public function createTaskLink($type, $module)
     {
         $linkHtml = html::a(helper::createLink('project', 'task', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -294,7 +333,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createDocLink($module)
+    public function createDocLink($type, $module)
     {
         $linkHtml = html::a(helper::createLink('doc', 'browse', "libID={$module->root}&&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -307,16 +346,23 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createManageLink($module)
+    public function createManageLink($type, $module)
     {
         static $users;
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
         $linkHtml  = $module->name;
         if($module->type == 'bug' and $module->owner) $linkHtml .= '<span class="owner">[' . $users[$module->owner] . ']</span>';
-        if(common::hasPriv('tree', 'edit')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "module={$module->id}"), $this->lang->tree->edit, '', 'class="iframe"');
-        if(common::hasPriv('tree', 'browse') and strpos('productdoc,projectdoc', $module->type) === false and $module->type != 'webapp') $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "root={$module->root}&type={$module->type}&module={$module->id}"), $this->lang->tree->child);
-        if(common::hasPriv('tree', 'delete')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "root={$module->root}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
-        if(common::hasPriv('tree', 'updateorder')) $linkHtml .= ' ' . html::input("orders[$module->id]", $module->order, 'style="width:30px;text-align:center"');
+        if($type != 'story' and $module->type == 'story')
+        {
+            if(common::hasPriv('tree', 'browse')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "root={$module->root}&type=$type&module={$module->id}"), $this->lang->tree->child);
+        }
+        else
+        {
+            if(common::hasPriv('tree', 'edit')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "module={$module->id}"), $this->lang->tree->edit, '', 'class="iframe"');
+            if(common::hasPriv('tree', 'browse') and strpos('productdoc,projectdoc', $module->type) === false and $module->type != 'webapp') $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "root={$module->root}&type=$type&module={$module->id}"), $this->lang->tree->child);
+            if(common::hasPriv('tree', 'delete')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'delete', "root={$module->root}&module={$module->id}"), $this->lang->delete, 'hiddenwin');
+            if(common::hasPriv('tree', 'updateorder')) $linkHtml .= ' ' . html::input("orders[$module->id]", $module->order, 'style="width:30px;text-align:center"');
+        }
         return $linkHtml;
     }
 
@@ -327,7 +373,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createBugLink($module)
+    public function createBugLink($type, $module)
     {
         $linkHtml = html::a(helper::createLink('bug', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
@@ -340,7 +386,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createCaseLink($module)
+    public function createCaseLink($type, $module)
     {
         $linkHtml = html::a(helper::createLink('testcase', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
