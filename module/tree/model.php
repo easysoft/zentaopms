@@ -78,7 +78,7 @@ class treeModel extends model
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where("(root = $rootID and type = 'task') or (root in('$products') and type = 'story')")
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
-                ->orderBy('type, grade desc, `order`')
+                ->orderBy('grade desc, type, `order`')
                 ->get();
         }
 
@@ -351,10 +351,11 @@ class treeModel extends model
         static $users;
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
         $linkHtml  = $module->name;
+        $linkHtml .= $module->type != 'story' ? ' [' . strtoupper(substr($module->type, 0, 1)) . ']' : '';
         if($type == 'bug' and $module->owner) $linkHtml .= '<span class="owner">[' . $users[$module->owner] . ']</span>';
         if($type != 'story' and $module->type == 'story')
         {
-            if(common::hasPriv('tree', 'edit')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "module={$module->id}&type=$type"), $this->lang->tree->edit, '', 'class="iframe"');
+            if(common::hasPriv('tree', 'edit') and $type == 'bug') $linkHtml .= ' ' . html::a(helper::createLink('tree', 'edit',   "module={$module->id}&type=$type"), $this->lang->tree->edit, '', 'class="iframe"');
             if(common::hasPriv('tree', 'browse')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browse', "root={$module->root}&type=$type&module={$module->id}"), $this->lang->tree->child);
         }
         else
@@ -434,8 +435,9 @@ class treeModel extends model
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('parent')->eq((int)$moduleID)
-            ->andWhere('type')->eq($type)
-            ->orderBy('`order`')
+            ->beginIF($type == 'story')->andWhere('type')->eq($type)->fi()
+            ->beginIF($type != 'story')->andWhere('type')->in("$type,story")->fi()
+            ->orderBy('type,`order`')
             ->fetchAll();
     }
     

@@ -76,7 +76,8 @@
               foreach($sons as $sonModule)
               {
                   if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
-                  echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
+                  $disabled = $sonModule->type == $viewType ? '' : 'disabled="true"';
+                  echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=text-3 style="margin-bottom:5px" ' . $disabled) . '<br /></span>';
               }
               for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
               ?>
