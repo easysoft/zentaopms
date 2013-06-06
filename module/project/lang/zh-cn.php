@@ -53,7 +53,7 @@ $lang->project->noProduct     = '无产品项目';
 $lang->project->select        = '--请选择项目--';
 $lang->project->createStory   = "新增需求";
 $lang->project->all           = '所有';
-$lang->project->typeDesc      = '短期迭代禁用模块功能， 长期项目禁用燃尽图，运维项目禁用燃尽图和需求。';
+$lang->project->typeDesc      = '长期项目禁用燃尽图，运维项目禁用燃尽图和需求。';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';

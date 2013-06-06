@@ -21,16 +21,6 @@ var browseType  = '<?php echo $browseType;?>';
 <div id='querybox' class='<?php if($browseType != 'bysearch') echo 'hidden';?>'></div>
 <table class='cont-lt2'>
   <tr valign='top'>
-    <div id="sidebar" onclick="showProject()" <?php if($this->cookie->projectBar != 'hide') echo "class='hidden'"?>></div>
-    <td class='side <?php if($this->cookie->projectBar == 'hide') echo "hidden"?>' id='project'>
-      <div class='box-title'>
-        <?php echo $lang->project->projectTasks;?>
-        <div class="f-right" id='hideButton' onclick="hideProject()"><span></span></div>
-      </div>
-      <div class='box-content'><?php echo $projectTree;?></div>
-    </td>
-    <td class='divider <?php if($this->cookie->projectBar == 'hide') echo "hidden"?>' id="project-divider"></td>
-    <?php if($project->type !='sprint'):?>
     <td class='side'>
       <div class='box-title'><?php echo $project->name;?></div>
       <div class='box-content'>
@@ -44,7 +34,6 @@ var browseType  = '<?php echo $browseType;?>';
       </div>
     </td>
     <td class='divider'></td>
-    <?php endif?>
     <td>
       <form method='post' id='projectTaskForm'>
         <table class='table-1 fixed colored tablesorter datatable'>
