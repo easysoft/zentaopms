@@ -76,7 +76,7 @@ class treeModel extends model
                 ->fetchPairs();
             $products = implode(',', $products);
             return $this->dao->select('*')->from(TABLE_MODULE)
-                ->where("(root = $rootID and type = 'task') or (root in('$products') and type = 'story')")
+                ->where("((root = $rootID and type = 'task') OR (root in($products) and type = 'story'))")
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->orderBy('grade desc, type, `order`')
                 ->get();
