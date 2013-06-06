@@ -6,4 +6,4 @@ if($config->debug)
     js::import($jsRoot . 'jquery/treeview/min.js');
 }
 ?>
-<script language='javascript'>$(function() { $(".tree").treeview({ persist: "cookie", collapsed: true, unique: true }) })</script>
+<script language='javascript'>$(function() { $(".tree").treeview({ persist: "cookie", collapsed: true, unique: false}) })</script>
