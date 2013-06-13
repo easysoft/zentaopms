@@ -31,12 +31,6 @@ class tree extends control
             $this->view->root = $product;
             $this->view->productModules = $this->tree->getOptionMenu($rootID, 'story');
         }
-        elseif($viewType == 'task')
-        {
-            $project = $this->loadModel('project')->getById($rootID);
-            $this->view->root = $project;
-            $this->view->projectModules = $this->tree->getOptionMenu($rootID, 'task');
-        }
 
         /* The viewType is doc. */
         elseif(strpos($viewType, 'doc') !== false)
@@ -76,25 +70,6 @@ class tree extends control
             $title      = $product->name . $this->lang->colon . $this->lang->tree->manageProduct;
             $position[] = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageProduct;
-        }
-        elseif($viewType == 'task')
-        {
-            $this->lang->set('menugroup.tree', 'project');
-            $this->project->setMenu($this->project->getPairs(), $rootID, 'task');
-            $this->lang->tree->menu      = $this->lang->project->menu;
-            $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
-
-            $projects = $this->project->getPairs();
-            unset($projects[$rootID]);
-            $currentProject = key($projects);
-
-            $this->view->allProject     = $projects;
-            $this->view->currentProject = $currentProject;
-            $this->view->projectModules = $this->tree->getOptionMenu($currentProject, 'task');
-
-            $title      = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
-            $position[] = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
-            $position[] = $this->lang->tree->manageProject;
         }
         elseif($viewType == 'bug')
         {
@@ -157,6 +132,48 @@ class tree extends control
     }
 
     /**
+     * Browse task module.
+     * 
+     * @param  int    $rootID 
+     * @param  int    $productID 
+     * @param  int    $currentModuleID 
+     * @access public
+     * @return void
+     */
+    public function browseTask($rootID, $productID = 0, $currentModuleID = 0)
+    {
+        $project = $this->loadModel('project')->getById($rootID);
+        $this->view->root = $project;
+
+        $this->lang->set('menugroup.tree', 'project');
+        $this->project->setMenu($this->project->getPairs(), $rootID);
+        $this->lang->tree->menu      = $this->lang->project->menu;
+        $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
+
+        $projects = $this->project->getPairs();
+        unset($projects[$rootID]);
+        $currentProject = key($projects);
+        $parentModules  = $this->tree->getParents($currentModuleID);
+
+        $title      = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
+        $position[] = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
+        $position[] = $this->lang->tree->manageProject;
+
+        $this->view->title           = $title;
+        $this->view->position        = $position;
+        $this->view->rootID          = $rootID;
+        $this->view->productID       = $productID;
+        $this->view->allProject      = $projects;
+        $this->view->currentProject  = $currentProject;
+        $this->view->projectModules  = $this->tree->getTaskOptionMenu($currentProject, $productID);
+        $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'));
+        $this->view->sons            = $this->tree->getTaskSons($rootID, $productID, $currentModuleID);
+        $this->view->currentModuleID = $currentModuleID;
+        $this->view->parentModules   = $parentModules;
+        $this->display();
+    }
+
+    /**
      * Edit a module.
      * 
      * @param  int    $moduleID 
@@ -171,15 +188,24 @@ class tree extends control
             echo js::alert($this->lang->tree->successSave);
             die(js::reload('parent'));
         }
+
         $module = $this->tree->getById($moduleID);
         if($module->owner == null and $module->root != 0)
         {
            $module->owner = $this->loadModel('product')->getById($module->root)->QD;
         }
-        $this->view->module     = $module;
-        $this->view->type       = $type;
-        $this->view->optionMenu = $this->tree->getOptionMenu($this->view->module->root, $this->view->module->type);
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+
+        if($type == 'task')
+        {
+            $this->view->optionMenu = $this->tree->getTaskOptionMenu($module->root);
+        }
+        else
+        {
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type);
+        }
+        $this->view->module = $module;
+        $this->view->type   = $type;
+        $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->tree->getAllChildId($moduleID);

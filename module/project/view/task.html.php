@@ -26,10 +26,10 @@ var browseType  = '<?php echo $browseType;?>';
       <div class='box-content'>
         <?php echo $moduleTree;?>
         <div class='a-right'>
-          <?php common::printLink('project', 'edit',   "projectID=$projectID", $lang->edit);?>
-          <?php common::printLink('project', 'delete', "projectID=$projectID&confirm=no", $lang->delete, 'hiddenwin');?>
-          <?php common::printLink('tree', 'browse',    "rootID=$projectID&view=task", $lang->tree->manage);?>
-          <?php common::printLink('tree', 'fix',       "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
+          <?php common::printLink('project', 'edit',    "projectID=$projectID", $lang->edit);?>
+          <?php common::printLink('project', 'delete',  "projectID=$projectID&confirm=no", $lang->delete, 'hiddenwin');?>
+          <?php common::printLink('tree', 'browsetask', "rootID=$projectID&productID=0", $lang->tree->manage);?>
+          <?php common::printLink('tree', 'fix',        "root=$projectID&type=task", $lang->tree->fix, 'hiddenwin');?>
         </div>
       </div>
     </td>

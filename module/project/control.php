@@ -109,7 +109,7 @@ class project extends control
      * @return void
      */
     public function task($projectID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
-    {   
+    {
         $this->loadModel('tree');
 
         /* Set browseType, productID, moduleID and queryID. */
@@ -167,6 +167,7 @@ class project extends control
             {
                 if($this->session->taskQuery == false) $this->session->set('taskQuery', ' 1 = 1');
             }
+
             /* Limit current project when no project. */
             if(strpos($this->session->taskQuery, "`project` =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND `project` = $projectID");
             if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
@@ -185,7 +186,7 @@ class project extends control
         $this->config->project->search['actionURL'] = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['params']['project']['values'] = array(''=>'', $projectID => $this->projects[$projectID], 'all' => $this->lang->project->allProject);
-        $this->config->project->search['params']['module']['values']  = $this->tree->getOptionMenu($projectID, $viewType = 'task', $startModuleID = 0);
+        $this->config->project->search['params']['module']['values']  = $this->tree->getTaskOptionMenu($projectID, $startModuleID = 0);
         $this->loadModel('search')->setSearchParams($this->config->project->search);
 
         /* Assign. */
@@ -203,7 +204,7 @@ class project extends control
         $this->view->projectID   = $projectID;
         $this->view->project     = $project;
         $this->view->moduleID    = $moduleID;
-        $this->view->moduleTree  = $this->tree->getTreeMenu($projectID, $viewType = 'task', $startModuleID = 0, array('treeModel', 'createTaskLink'));
+        $this->view->moduleTree  = $this->tree->getTaskTreeMenu($projectID, $productID = 0, $startModuleID = 0, array('treeModel', 'createTaskLink'));
         $this->view->projectTree = $this->project->tree();
 
         $this->display();
