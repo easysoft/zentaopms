@@ -504,7 +504,7 @@ class treeModel extends model
         static $users;
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
         $linkHtml  = $module->name;
-        $linkHtml .= $module->type != 'story' ? ' [' . strtoupper(substr($module->type, 0, 1)) . ']' : '';
+        $linkHtml .= $module->type != 'story' ? ' <span style="font-size:smaller;">[' . strtoupper(substr($module->type, 0, 1)) . ']</span>' : '';
         if($type == 'bug' and $module->owner) $linkHtml .= '<span class="owner">[' . $users[$module->owner] . ']</span>';
         if($type != 'story' and $module->type == 'story')
         {
