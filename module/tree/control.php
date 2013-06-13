@@ -197,7 +197,9 @@ class tree extends control
 
         if($type == 'task')
         {
-            $this->view->optionMenu = $this->tree->getTaskOptionMenu($module->root);
+            $optionMenu = $this->tree->getTaskOptionMenu($module->root);
+            unset($optionMenu[0]);
+            $this->view->optionMenu = $optionMenu;
         }
         else
         {
