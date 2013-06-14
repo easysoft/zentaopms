@@ -95,7 +95,7 @@ class task extends control
         $stories          = $this->story->getProjectStoryPairs($projectID);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
-        $moduleOptionMenu = $this->tree->getOptionMenu($projectID, $viewType = 'task');
+        $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, $viewType = 'task');
 
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);

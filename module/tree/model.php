@@ -171,6 +171,7 @@ class treeModel extends model
         }
         $treeMenu   = array();
         $lastMenu[] = '/';
+        $projectModules = $this->getProjectModules($rootID);
         foreach($products as $id => $product)
         {
             $modules  = $this->dao->select('*')->from(TABLE_MODULE)
@@ -180,6 +181,7 @@ class treeModel extends model
                 ->fetchAll('id');
             foreach($modules as $module)
             {
+                if(!isset($projectModules[$module->id])) continue;
                 $parentModules = explode(',', $module->path);
                 $moduleName = '/' . $product;
                 foreach($parentModules as $parentModuleID)
@@ -303,6 +305,9 @@ class treeModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
+        $manage = $userFunc[1] == 'createTaskManageLink' ? true : false;
+        if(!$manage) $projectModules = $this->getProjectModules($rootID, true);
+
         foreach($products as $id => $product)
         {
             if($userFunc[1] == 'createTaskManageLink')
@@ -324,6 +329,7 @@ class treeModel extends model
             $stmt = $this->dbh->query($query);
             while($module = $stmt->fetch())
             {
+                if(!$manage and !isset($projectModules[$module->id])) continue;
                 $linkHtml = call_user_func($userFunc, $rootID, $id, $module, $extra);
 
                 if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
@@ -350,6 +356,40 @@ class treeModel extends model
             $menu .= $lastMenu . '</li>';
         }
         return $menu;
+    }
+
+    /**
+     * Get project modules. 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getProjectModules($projectID, $parent = false)
+    {
+        $projectModules = array();
+        $field = $parent ? 'path' : 'id';
+        $paths = $this->dao->select('t3.' . $field)
+            ->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')
+            ->on('t1.story = t2.id')
+            ->leftJoin(TABLE_MODULE)->alias('t3')
+            ->on('t2.module = t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->fetchPairs();
+        $paths += $this->dao->select($field)->from(TABLE_MODULE)
+            ->where('root')->eq($projectID)
+            ->andWhere('type')->eq('task')
+            ->fetchPairs();
+        foreach($paths as $path)
+        {
+            $modules = explode(',', $path); 
+            foreach($modules as $module)
+            {
+                $projectModules[$module] = $module;
+            }
+        }
+        return $projectModules;
     }
 
     /**
