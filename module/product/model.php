@@ -331,6 +331,7 @@ class productModel extends model
         $releases = $this->loadModel('release')->getList($productID);
         $roadmap  = array();
         if(is_array($releases)) $releases = array_reverse($releases);
+        if(is_array($plans))    $plans    = array_reverse($plans);
         foreach($releases as $release)
         {
             $year = substr($release->date, 0, 4);
