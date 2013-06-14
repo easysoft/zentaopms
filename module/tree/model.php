@@ -171,7 +171,7 @@ class treeModel extends model
         }
         $treeMenu   = array();
         $lastMenu[] = '/';
-        $projectModules = $this->getProjectModules($rootID);
+        $projectModules = $this->getTaskTreeModules($rootID);
         foreach($products as $id => $product)
         {
             $modules  = $this->dao->select('*')->from(TABLE_MODULE)
@@ -306,7 +306,7 @@ class treeModel extends model
         }
 
         $manage = $userFunc[1] == 'createTaskManageLink' ? true : false;
-        if(!$manage) $projectModules = $this->getProjectModules($rootID, true);
+        if(!$manage) $projectModules = $this->getTaskTreeModules($rootID, true);
 
         foreach($products as $id => $product)
         {
@@ -365,7 +365,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getProjectModules($projectID, $parent = false)
+    public function getTaskTreeModules($projectID, $parent = false)
     {
         $projectModules = array();
         $field = $parent ? 'path' : 'id';
@@ -703,6 +703,31 @@ class treeModel extends model
         if($moduleID == 0) return array();
         $module = $this->getById((int)$moduleID);
         return $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like($module->path . '%')->fetchPairs();
+    }
+
+    /**
+     * Get project module. 
+     * 
+     * @param  int    $projectID 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function getProjectModule($projectID, $productID = 0)
+    {
+        $modules = array();
+        $rootModules = $this->dao->select('path')->from(TABLE_MODULE)
+            ->where('root')->eq($productID)
+            ->andWhere('type')->eq('story')
+            ->andWhere('parent')->eq(0)
+            ->fetchAll();
+        foreach($rootModules as $module)
+        {
+            $modules += $this->dao->select('id')->from(TABLE_MODULE)
+                ->where('path')->like($module->path . '%')
+                ->fetchPairs();
+        }
+        return $modules;
     }
 
     /**

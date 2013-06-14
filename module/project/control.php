@@ -114,8 +114,9 @@ class project extends control
 
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($status);
-        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-        $moduleID   = ($status == 'byModule') ? (int)$param : 0;
+        $queryID    = ($browseType == 'bysearch')  ? (int)$param : 0;
+        $moduleID   = ($browseType == 'bymodule')  ? (int)$param : 0;
+        $productID  = ($browseType == 'byproduct') ? (int)$param : 0;
         $project    = $this->commonAction($projectID, $status);
         $projectID  = $project->id;
      
@@ -139,7 +140,12 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $tasks = array();
-        if($status == 'byModule') 
+        if($status == 'byProduct')
+        {
+            $modules = $this->tree->getProjectModule($projectID, $productID);
+            $tasks   = $this->loadModel('task')->getTasksByModule($projectID, $modules, $orderBy, $pager);
+        }
+        elseif($status == 'byModule') 
         {
             $tasks = $this->loadModel('task')->getTasksByModule($projectID, $this->tree->getAllChildID($moduleID), $orderBy, $pager);
         }
