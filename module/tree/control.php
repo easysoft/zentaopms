@@ -145,6 +145,9 @@ class tree extends control
         $project = $this->loadModel('project')->getById($rootID);
         $this->view->root = $project;
 
+        $products = $this->project->getProducts($rootID);
+        $this->view->products = $products;
+
         $this->lang->set('menugroup.tree', 'project');
         $this->project->setMenu($this->project->getPairs(), $rootID);
         $this->lang->tree->menu      = $this->lang->project->menu;
@@ -154,7 +157,7 @@ class tree extends control
         unset($projects[$rootID]);
         $currentProject = key($projects);
         $parentModules  = $this->tree->getParents($currentModuleID);
-        $syncProject    = version_compare($project->openedVersion, '4.1', '>') ? false : true;
+        $syncProject    = (version_compare($project->openedVersion, '4.1', '>') or $products) ? false : true;
 
         $title      = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
         $position[] = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);

@@ -287,7 +287,7 @@ class treeModel extends model
      */
     public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
     {
-        $extra = array('projectID' => $rootID, 'productID' => $productID);
+        $extra = array('projectID' => $rootID);
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
         $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT) 
             ->where('id')->eq($rootID)
@@ -314,6 +314,7 @@ class treeModel extends model
 
         foreach($products as $id => $product)
         {
+            $extra['productID'] = $id;
             if($userFunc[1] == 'createTaskManageLink')
             {
                 $menu .= "<li>" . $product;

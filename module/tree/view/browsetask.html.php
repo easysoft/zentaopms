@@ -59,14 +59,24 @@
               }
               echo '<br />';
               $maxOrder = 0;
-              echo '<div id="sonModule">';
-              foreach($sons as $sonModule)
+              if(!$syncProject and !$productID)
               {
-                  if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
-                  $disabled = $sonModule->type == 'task' ? '' : 'disabled="true"';
-                  echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=text-3 style="margin-bottom:5px" ' . $disabled) . '<br /></span>';
+                  foreach($products as $id => $product)
+                  {
+                      echo '<span>' . html::input("products[id$id]", $product, 'class=text-3 style="margin-bottom:5px" disabled="true"') . '<br /></span>';
+                  }
               }
-              for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
+              else
+              {
+                  echo '<div id="sonModule">';
+                  foreach($sons as $sonModule)
+                  {
+                      if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
+                      $disabled = $sonModule->type == 'task' ? '' : 'disabled="true"';
+                      echo '<span>' . html::input("modules[id$sonModule->id]", $sonModule->name, 'class=text-3 style="margin-bottom:5px" ' . $disabled) . '<br /></span>';
+                  }
+                  for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++) echo '<span>' . html::input("modules[]", '', 'class=text-3 style="margin-bottom:5px"') . '<br /></span>';
+              }
               ?>
               </div>
             </td>
@@ -75,9 +85,12 @@
             <td></td>
             <td colspan='2'>
               <?php 
-              echo html::submitButton() . html::backButton();
-              echo html::hidden('parentModuleID', $currentModuleID);
-              echo html::hidden('maxOrder', $maxOrder);
+              if($productID)
+              {
+                  echo html::submitButton() . html::backButton();
+                  echo html::hidden('parentModuleID', $currentModuleID);
+                  echo html::hidden('maxOrder', $maxOrder);
+              }
               ?>      
               <input type='hidden' value='<?php echo $currentModuleID;?>' name='parentModuleID' />
             </td>
