@@ -51,15 +51,8 @@
             </td>
             <td id='moduleBox'> 
               <?php
-              if($allProject and $syncProject)
-              {
-                  echo html::select('allProject', $allProject, '', 'onchange=syncProject(this)');
-                  echo html::select('projectModule', $projectModules, '');
-                  echo html::commonButton($lang->tree->syncFromProject, "id='copyModule' onclick='syncModule($currentProject, \"task\")'");
-              }
-              echo '<br />';
               $maxOrder = 0;
-              if(!$syncProject and !$productID)
+              if($newModule and !$productID)
               {
                   foreach($products as $id => $product)
                   {
@@ -85,7 +78,7 @@
             <td></td>
             <td colspan='2'>
               <?php 
-              if($productID)
+              if(!$newModule or $productID)
               {
                   echo html::submitButton() . html::backButton();
                   echo html::hidden('parentModuleID', $currentModuleID);
