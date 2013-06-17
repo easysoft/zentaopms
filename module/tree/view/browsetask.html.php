@@ -51,7 +51,7 @@
             </td>
             <td id='moduleBox'> 
               <?php
-              if($allProject)
+              if($allProject and $syncProject)
               {
                   echo html::select('allProject', $allProject, '', 'onchange=syncProject(this)');
                   echo html::select('projectModule', $projectModules, '');
