@@ -69,7 +69,7 @@
         </td>
         <td class='a-center'>
           <?php 
-          $param = "projectID={$project->id}&story={$story->id}";
+          $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
           $lang->task->create = $lang->project->wbs;
           common::printIcon('task', 'create', $param, '', 'list');

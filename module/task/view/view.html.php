@@ -95,6 +95,7 @@
               }
               else
               {
+                 if($product) echo $product->name . $lang->arrow;
                  foreach($modulePath as $key => $module)
                  {
                    if(!common::printLink('project', 'task', "projectID=$task->project&browseType=byModule&param=$module->id", $module->name)) echo $module->name;

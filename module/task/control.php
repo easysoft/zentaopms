@@ -95,7 +95,7 @@ class task extends control
         $stories          = $this->story->getProjectStoryPairs($projectID);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $contactLists     = $this->user->getContactLists($this->app->user->account, 'withnote');
-        $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, $viewType = 'task');
+        $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
 
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);
@@ -392,6 +392,7 @@ class task extends control
         $this->view->actions     = $this->loadModel('action')->getList('task', $taskID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
+        $this->view->product     = $this->tree->getProduct($task->module);
         $this->view->modulePath  = $this->tree->getParents($task->module);
         $this->display();
     }

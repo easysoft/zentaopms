@@ -165,7 +165,7 @@ class treeModel extends model
             {
                 $startModulePath = $startModule->path . '%';
                 $modulePaths = explode(",", $startModulePath);
-                $rootModule  = $this->getById($modulePahts[0]);
+                $rootModule  = $this->getById($modulePaths[0]);
                 $productID   = $rootModule->root;
             }
         }
@@ -181,7 +181,6 @@ class treeModel extends model
                 ->fetchAll('id');
             foreach($modules as $module)
             {
-                if(!isset($projectModules[$module->id])) continue;
                 $parentModules = explode(',', $module->path);
                 $moduleName = '/' . $product;
                 foreach($parentModules as $parentModuleID)
@@ -222,7 +221,11 @@ class treeModel extends model
             {
                 if(!strpos($menu, '|')) continue;
                 list($label, $moduleID) = explode('|', $menu);
-                $lastMenu[$moduleID] = $label;
+                if(isset($projectModules[$moduleID])) $lastMenu[$moduleID] = $label;
+            }
+            foreach($topMenu as $moduleID => $moduleName)
+            {
+                if(!isset($projectModules[$moduleID])) unset($treeMenu[$moduleID]); 
             }
         }
         return $lastMenu;
@@ -744,6 +747,25 @@ class treeModel extends model
         $path = trim($path, ',');
         if(!$path) return array();
         return $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($path)->orderBy('grade')->fetchAll();
+    }
+
+    /**
+     * Get product by moduleID.
+     * 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function getProduct($moduleID)
+    {
+        if($moduleID == 0) return '';
+        $path  = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch('path');
+        $paths = explode(',', trim($path, ','));
+        if(!$path) return '';
+        $moduleID = $paths[0];
+        $module   = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+        if($module->type != 'story' or !$module->root) return '';
+        return $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($module->root)->fetch();
     }
 
     /**
