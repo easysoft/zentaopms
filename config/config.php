@@ -17,7 +17,7 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* Basic settings. */
 $config = new config();
-$config->version      = '4.2';             // The version of zentaopms. Don't change it.
+$config->version      = '4.1';             // The version of zentaopms. Don't change it.
 $config->charset      = 'UTF-8';           // The charset of zentaopms.
 $config->cookieLife   = time() + 2592000;  // The cookie life time.
 $config->timezone     = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
@@ -34,7 +34,7 @@ $config->viewVar     = 't';               // requestType=GET: the view var name.
 $config->sessionVar  = 'sid';             // requestType=GET: the session var name.
 
 /* Supported views. */
-$config->views  = ',html,json,mhtml'; 
+$config->views  = ',html,json,mhtml,'; 
 
 /* Set the wide window size. */
 $config->wideSize = 1400;
