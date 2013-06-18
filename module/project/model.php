@@ -116,37 +116,11 @@ class projectModel extends model
      */
     public function select($projects, $projectID, $currentModule, $currentMethod, $extra = '')
     {
-        $projectMode  = $this->cookie->projectMode ? $this->cookie->projectMode : 'all';
-        $products     = $this->loadModel('product')->getPairs('nocode');
-        $productGroup = $this->getProductGroupList();
-        $selectGroup  = array();
-        foreach($productGroup as $productID => $projects)
-        {
-            if(!isset($products[$productID]) and $productID != '') continue;
-            foreach($projects as $project)
-            {
-                if($projectMode == 'noclosed' and ($project->status == 'done' or $project->status == 'suspended')) continue;
-
-                $status = $project->status != 'done' ? $this->lang->project->selectGroup->doing : '';
-                if($project->product)
-                {
-                    $product = isset($products[$project->product]) ? $products[$project->product] : '';
-                    $selectGroup[$product][$project->id] = $project->name . $status;
-                }
-                else
-                {
-                    $selectGroup[$this->lang->project->noProduct][$project->id] = $project->name . $status;
-                }
-            }
-        }
-
-        /* See product's model method:select. */
-        $switchCode  = "switchProject($('#projectID').val(), '$currentModule', '$currentMethod', '$extra');";
-        $onchange    = "onchange=\"$switchCode\""; 
-        $onkeypress  = "onkeypress=\"eventKeyCode=event.keyCode; if(eventKeyCode == 13) $switchCode\""; 
-        $onclick     = "onclick=\"eventKeyCode = 13; $switchCode\""; 
-        $selectHtml  = html::selectGroup('projectID', $selectGroup, $projectID, "tabindex=2 $onchange $onkeypress");
-        return $selectHtml;
+        $currentProject = $this->getById($projectID);
+        $output  = "<div id='currentItem'>";
+        $output .= "<a onclick=\"showDropMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name}<span id='dropIcon'></span></a>";
+        $output .= "</div><div id='dropMenu'></div>";
+        return $output;
     }
 
     /**

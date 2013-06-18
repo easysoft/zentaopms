@@ -2,16 +2,10 @@
 <?php js::set('module', $module);?>
 <?php js::set('method', $method);?>
 <?php js::set('extra', $extra);?>
-<script>
-function showMore()
-{
-    $('#moreMenu').removeClass('hidden')
-}
-</script>
+<input type='text' id='search' value='' onkeyup='searchItems(this.value, "product", productID, module, method, extra)' placeholder='<?php echo $this->app->loadLang('search')->search->common;?>'>
 
-搜索：<input type='text' id='search' value='' onkeyup='searchProduct(this.value, productID, module, method, extra)'>
 <div id='searchResult'>
-  <div class='f-left'>
+  <div id='defaultMenu' class='f-left'>
     <ul>
     <?php
       foreach($products as $product)
@@ -26,7 +20,7 @@ function showMore()
       }
     ?>
     </ul>
-    <div class='a-right'><a id='more' onClick='showMore()'>更多&raquo;</a></div>
+    <div class='a-right'><a id='more' onClick='showMore()'><?php echo $lang->more;?>&raquo;</a></div>
   </div>
 
   <div id='moreMenu' class='hidden f-left'>

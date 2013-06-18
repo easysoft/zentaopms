@@ -479,10 +479,10 @@ class product extends control
      * @access public
      * @return void
      */
-    public function searchProduct($keywords, $module, $method, $extra)
+    public function searchItems($keywords, $module, $method, $extra)
     {
         $this->view->link     = $this->getProductLink($module, $method, $extra);
-        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        $this->view->products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
         $this->view->keywords = $keywords;
         $this->display();
     }

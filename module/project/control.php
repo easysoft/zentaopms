@@ -1523,4 +1523,73 @@ class project extends control
         $this->view->projectID = $projectID;        
         $this->display('project', 'tips');
     }
+
+    /**
+     * Drop menu page.
+     * 
+     * @param  int    $projectID 
+     * @param  int    $module 
+     * @param  int    $method 
+     * @param  int    $extra 
+     * @access public
+     * @return void
+     */
+    public function dropMenu($projectID, $module, $method, $extra)
+    {
+        $this->view->link      = $this->getProjectLink($module, $method, $extra);
+        $this->view->projectID = $projectID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->projects  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('code')->fetchAll();
+        $this->display();
+    }
+
+    /**
+     * The results page of search.
+     * 
+     * @param  string  $keywords 
+     * @param  string  $module 
+     * @param  string  $method 
+     * @param  mix     $extra 
+     * @access public
+     * @return void
+     */
+    public function searchItems($keywords, $module, $method, $extra)
+    {
+        $this->view->link     = $this->getProjectLink($module, $method, $extra);
+        $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
+        $this->view->keywords = $keywords;
+        $this->display();
+    }
+
+    /**
+     * Create the link from module,method,extra
+     * 
+     * @param  string  $module 
+     * @param  string  $method 
+     * @param  mix     $extra 
+     * @access public
+     * @return void
+     */
+    public function getProjectLink($module, $method, $extra)
+    {
+        $link = '';
+        if($module == 'task' && ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
+        {   
+            $module = 'project';
+            $method = 'task';
+        }   
+        if($module == 'build' && $method == 'edit')
+        {   
+            $module = 'project';
+            $method = 'build';
+        }   
+
+        if($module == 'project' && $method == 'create') return;
+
+        $link = $this->createLink($module, $method, "projectID=%s");
+        if($extra != '') $link = $this->createLink($module, $method, "projectID=%s&type=$extra");
+        return $link;
+    }
 }

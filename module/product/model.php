@@ -59,12 +59,9 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '')
     {
-        $productMode = $this->cookie->productMode ? $this->cookie->productMode : 'all';
-        $productGroup = array();
-        $products = $this->dao->select('id, status, name')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->orderBy('`order`')->fetchAll('id');
-
-        $output  = "<div id='currentProduct'>";
-        $output .= "<a onclick=\"showDropMenu('$productID', '$currentModule', '$currentMethod', '$extra')\">{$products[$productID]->name}<span id='dropIcon'></span></a>";
+        $currentProduct = $this->getById($productID);
+        $output  = "<div id='currentItem'>";
+        $output .= "<a onclick=\"showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name}<span id='dropIcon'></span></a>";
         $output .= "</div><div id='dropMenu'></div>";
         return $output;
     }
