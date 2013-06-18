@@ -146,6 +146,14 @@ class control
     protected $pathFix;
 
     /**
+     * Prefix for mobile or PC. 
+     * 
+     * @var string   
+     * @access public
+     */
+    public $prefix;
+
+    /**
      * The construct function.
      *
      * 1. global the global vars, refer them by the class member such as $this->app.
@@ -170,6 +178,7 @@ class control
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->loadModel();
+        $this->setPrefix();
 
         /* Init the view vars.  */
         $this->view = new stdclass();
@@ -251,6 +260,18 @@ class control
         $this->global  = $this->app->global;
     }
 
+    /**
+     * Set prefix for mobile or PC.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setPrefix()
+    {
+        $this->prefix = '';
+        if($this->viewType == 'mhtml') $this->prefix = 'm.';
+    }
+
     //-------------------- View related methods --------------------//
     
     /**
@@ -269,10 +290,14 @@ class control
         $modulePath  = $this->app->getModulePath($moduleName);
         $viewExtPath = $this->app->getModuleExtPath($moduleName, 'view');
 
+        /* Set infix for view file in mobile or pc. */
+        $viewType = $this->viewType;
+        if($this->viewType == 'mhtml') $viewType = 'html';
+
         /* The main view file, extension view file and hook file. */
-        $mainViewFile = $modulePath . 'view' . $this->pathFix . $methodName . '.' . $this->viewType . '.php';
-        $extViewFile  = $viewExtPath . $methodName . ".{$this->viewType}.php";
-        $extHookFiles = glob($viewExtPath . $methodName . "*.{$this->viewType}.hook.php");
+        $mainViewFile = $modulePath . 'view' . $this->pathFix . $this->prefix . $methodName . '.' . $viewType . '.php';
+        $extViewFile  = $viewExtPath . $this->prefix . $methodName . ".{$viewType}.php";
+        $extHookFiles = glob($viewExtPath . $this->prefix . $methodName . "*.{$viewType}.hook.php");
 
         $viewFile = file_exists($extViewFile) ? $extViewFile : $mainViewFile;
         if(!is_file($viewFile)) $this->app->error("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
@@ -316,12 +341,12 @@ class control
         $cssCommonExt = $this->app->getModuleExtPath($moduleName, 'css') . 'common' . $this->pathFix;
 
         $css = '';
-        $mainCssFile   = $modulePath . 'css' . $this->pathFix . 'common.css';
-        $methodCssFile = $modulePath . 'css' . $this->pathFix . $methodName . '.css';
+        $mainCssFile   = $modulePath . 'css' . $this->pathFix . $this->prefix . 'common.css';
+        $methodCssFile = $modulePath . 'css' . $this->pathFix . $this->prefix . $methodName . '.css';
         if(file_exists($mainCssFile))   $css .= file_get_contents($mainCssFile);
         if(is_file($methodCssFile))     $css .= file_get_contents($methodCssFile);
 
-        $cssExtFiles = glob($cssCommonExt . '*.css');
+        $cssExtFiles = glob($cssCommonExt . $this->prefix . '*.css');
         if(is_array($cssExtFiles))
         {
             foreach($cssExtFiles as $cssFile)
@@ -330,7 +355,7 @@ class control
             }
         }
 
-        $cssExtFiles = glob($cssMethodExt . '*.css');
+        $cssExtFiles = glob($cssMethodExt . $this->prefix . '*.css');
         if(is_array($cssExtFiles))
         {
             foreach($cssExtFiles as $cssFile)
@@ -358,12 +383,12 @@ class control
         $jsCommonExt = $this->app->getModuleExtPath($moduleName, 'js') . 'common' . $this->pathFix;
 
         $js = '';
-        $mainJsFile   = $modulePath . 'js' . $this->pathFix . 'common.js';
-        $methodJsFile = $modulePath . 'js' . $this->pathFix . $methodName . '.js';
+        $mainJsFile   = $modulePath . 'js' . $this->pathFix . $this->prefix . 'common.js';
+        $methodJsFile = $modulePath . 'js' . $this->pathFix . $this->prefix . $methodName . '.js';
         if(file_exists($mainJsFile))   $js .= file_get_contents($mainJsFile);
         if(is_file($methodJsFile))     $js .= file_get_contents($methodJsFile);
 
-        $jsExtFiles = glob($jsCommonExt . '*.js');
+        $jsExtFiles = glob($jsCommonExt . $this->prefix . '*.js');
         if(is_array($jsExtFiles))
         {
             foreach($jsExtFiles as $jsFile)
@@ -372,7 +397,7 @@ class control
             }
         }
 
-        $jsExtFiles = glob($jsMethodExt . '*.js');
+        $jsExtFiles = glob($jsMethodExt . $this->prefix . '*.js');
         if(is_array($jsExtFiles))
         {
             foreach($jsExtFiles as $jsFile)
