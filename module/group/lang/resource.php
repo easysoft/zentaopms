@@ -561,6 +561,7 @@ $lang->user->methodOrder[70] = 'deleteContacts';
 /* Tree. */
 $lang->resource->tree = new stdclass();
 $lang->resource->tree->browse      = 'browse';
+$lang->resource->tree->browseTask  = 'browseTask';
 $lang->resource->tree->updateOrder = 'updateOrder';
 $lang->resource->tree->manageChild = 'manageChild';
 $lang->resource->tree->edit        = 'edit';
@@ -568,10 +569,11 @@ $lang->resource->tree->fix         = 'fix';
 $lang->resource->tree->delete      = 'delete';
 
 $lang->tree->methodOrder[5]  = 'browse';
-$lang->tree->methodOrder[10] = 'updateOrder';
-$lang->tree->methodOrder[15] = 'manageChild';
-$lang->tree->methodOrder[20] = 'edit';
-$lang->tree->methodOrder[25] = 'delete';
+$lang->tree->methodOrder[10] = 'browseTask';
+$lang->tree->methodOrder[15] = 'updateOrder';
+$lang->tree->methodOrder[20] = 'manageChild';
+$lang->tree->methodOrder[25] = 'edit';
+$lang->tree->methodOrder[30] = 'delete';
 
 /* Report. */
 $lang->resource->report = new stdclass();

@@ -287,7 +287,7 @@ class treeModel extends model
      */
     public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
     {
-        $extra = array('projectID' => $rootID, 'productID' => $productID);
+        $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
         $createdVersion = $this->dao->select('openedVersion')->from(TABLE_PROJECT) 
             ->where('id')->eq($rootID)
@@ -295,6 +295,7 @@ class treeModel extends model
         $products = $this->loadModel('product')->getProductsByProject($rootID);
         if(!$createdVersion or version_compare($createdVersion, '4.1', '<=') or !$products)
         {
+            $extra['tip'] = false;
             return $this->getTreeMenu($rootID, 'task', $startModule, $userFunc, $extra); 
         }
         
@@ -367,6 +368,7 @@ class treeModel extends model
      * Get project modules. 
      * 
      * @param  int    $projectID 
+     * @param  bool   $parent
      * @access public
      * @return array
      */
@@ -376,16 +378,15 @@ class treeModel extends model
         $field = $parent ? 'path' : 'id';
         $paths = $this->dao->select('t3.' . $field)
             ->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')
-            ->on('t1.story = t2.id')
-            ->leftJoin(TABLE_MODULE)->alias('t3')
-            ->on('t2.module = t3.id')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
             ->where('t1.project')->eq($projectID)
             ->fetchPairs();
         $paths += $this->dao->select($field)->from(TABLE_MODULE)
             ->where('root')->eq($projectID)
             ->andWhere('type')->eq('task')
             ->fetchPairs();
+
         foreach($paths as $path)
         {
             $modules = explode(',', $path); 
@@ -548,10 +549,11 @@ class treeModel extends model
      */
     public function createManageLink($type, $module)
     {
+        $tip = strpos('bug,case', $type) === false ? '' : ' <span style="font-size:smaller;">[' . strtoupper(substr($type, 0, 1)) . ']</span>';
         static $users;
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
         $linkHtml  = $module->name;
-        $linkHtml .= $module->type != 'story' ? ' <span style="font-size:smaller;">[' . strtoupper(substr($module->type, 0, 1)) . ']</span>' : '';
+        $linkHtml .= $module->type != 'story' ? $tip : '';
         if($type == 'bug' and $module->owner) $linkHtml .= '<span class="owner">[' . $users[$module->owner] . ']</span>';
         if($type != 'story' and $module->type == 'story')
         {
@@ -580,8 +582,9 @@ class treeModel extends model
     {
         $projectID = $extra['projectID'];
         $productID = $extra['productID'];
+        $tip       = $extra['tip'];
         $linkHtml  = $module->name;
-        $linkHtml .= $module->type != 'story' ? ' [' . strtoupper(substr($module->type, 0, 1)) . ']' : '';
+        $linkHtml .= ($tip and $module->type != 'story') ? ' [T]' : '';
         if($module->type == 'story')
         {
             if(common::hasPriv('tree', 'browseTask')) $linkHtml .= ' ' . html::a(helper::createLink('tree', 'browsetask', "rootID=$projectID&productID=$productID&module={$module->id}"), $this->lang->tree->child);
