@@ -34,7 +34,7 @@ $config->viewVar     = 't';               // requestType=GET: the view var name.
 $config->sessionVar  = 'sid';             // requestType=GET: the session var name.
 
 /* Supported views. */
-$config->views  = ',html,json,'; 
+$config->views  = ',html,json,mhtml'; 
 
 /* Set the wide window size. */
 $config->wideSize = 1400;

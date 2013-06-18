@@ -40,6 +40,10 @@ $common = $app->loadCommon();
 $config->installedVersion = $common->loadModel('setting')->getVersion();
 if(!(!is_numeric($config->version{0}) and $config->version{0} != $config->installedVersion{0}) and version_compare($config->version, $config->installedVersion, '>')) die(header('location: upgrade.php'));
 
+/* Detect mobile. */
+$mobile = $app->loadClass('mobile');
+if($mobile->isMobile() or $mobile->isTablet()) $config->default->view = 'mhtml';
+
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
