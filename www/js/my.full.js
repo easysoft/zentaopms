@@ -126,62 +126,60 @@ function setProductSwitcher()
 /**
  * Show drop menu. 
  * 
- * @param  int     $productID 
- * @param  string  $module 
- * @param  string  $method 
- * @param  mix     $extra 
+ * @param  string $objectType product|project
+ * @param  int    $objectID 
+ * @param  string $module 
+ * @param  string $method 
+ * @param  string $extra 
  * @access public
  * @return void
  */
-var showProductMenu = 0; // The var to for showing or hiding drop menu.
-function showDropMenu(productID, module, method, extra)
+var showProductMenu = 0; //Showing or hiding drop menu.
+function showDropMenu(objectType, objectID, module, method, extra)
 {
     if(showProductMenu == 1) { showProductMenu = 0; return $("#dropMenu").hide();};
-
-    $.get(createLink('product', 'dropMenu', "productID=" + productID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
-
-    var timer;
-    var offset = $('#currentProduct').offset();
-
-    $("#dropMenu").css({ top:offset.top + $('#currentProduct').height() + "px", left:offset.left });
-    $("#dropMenu").show();
+    $.get(createLink(objectType, 'dropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
+    var offset = $('#currentItem').offset();
+    $("#dropMenu").css({ top:offset.top + $('#currentItem').height() + "px", left:offset.left });
+    $("#dropMenu").show('show', function(){$("#dropMenu #search").focus();});
     showProductMenu = 1;
-    if(timer) clearTimeout(timer);
-
-    /*
-     $("#dropMenu").mouseover(function(){
-        if(timer) clearTimeout(timer);
-        $("#dropMenu").show();
-         showProductMenu = 1;
-     }).mouseout(function(){
-        timer = setTimeout(function(){$("#dropMenu").hide();}, 200);
-        showProductMenu = 0;
-     });
-     */
 }
 
 /**
- * Search product in drop menu. 
+ * Search items. 
  * 
- * @param  string  $keywords 
- * @param  int     $productID 
- * @param  string  $module 
- * @param  string  $method 
- * @param  mix     $extra 
+ * @param  string $keywords 
+ * @param  string $objectType 
+ * @param  int    $objectID 
+ * @param  string $module 
+ * @param  string $method 
+ * @param  string $extra 
  * @access public
  * @return void
  */
-function searchProduct(keywords, $productID, module, method, extra)
+function searchItems(keywords, objectType, objectID, module, method, extra)
 {
     if(keywords == '')
     {
         showProductMenu = 0;
-        showDropMenu(productID, module, method, extra)
+        showDropMenu(objectType, objectID, module, method, extra);
     }
     else
     {
-        $.get(createLink('product', 'searchProduct', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#searchResult').html(data);});
+        if(keywords != '-') $.get(createLink(objectType, 'searchItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#searchResult').html(data);});
     }
+}
+
+/**
+ * Show more items. 
+ * 
+ * @access public
+ * @return void
+ */
+function showMore()
+{
+    $('#moreMenu').removeClass('hidden');
+    $('#search').focus();
 }
 
 /**
