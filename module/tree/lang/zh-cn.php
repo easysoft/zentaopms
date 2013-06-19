@@ -31,6 +31,7 @@ $lang->tree->manageStoryChild  = '维护子模块';
 $lang->tree->manageBugChild    = '维护Bug子模块';
 $lang->tree->manageCaseChild   = '维护用例子模块';
 $lang->tree->manageTaskChild   = '维护项目子模块';
+$lang->tree->manageWebappChild = '维护WEB应用子模块';
 $lang->tree->syncFromProduct   = '复制产品视图模块';
 $lang->tree->syncFromProject   = '复制项目视图模块';
 $lang->tree->ajaxGetOptionMenu = '接口:获取下拉列表';
