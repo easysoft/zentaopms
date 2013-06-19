@@ -163,7 +163,7 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
     {
         showMenu = 0;
         showDropMenu(objectType, objectID, module, method, extra);
-        setTimeout(function(){$("#dropMenu #search").focus();}, 100);
+        setTimeout(function(){$("#dropMenu #search").focus();}, 500);
     }
     else
     {

@@ -5,3 +5,8 @@ div#footer, div#debugbar, div#hiddenbar{position:absolute;}
 #divider{margin-bottom:35px}
 #footer{ line-height:15px; height:15px; padding-top:34px}
 #mainmenu #mainbg{background:none;}
+
+#dropMenu {width:530px; z-index:1010212}
+#dropMenu ul {height:300px; overflow:auto}
+#dropMenu #defaultMenu {width:250px}
+#dropMenu #moreMenu {width:250px}
