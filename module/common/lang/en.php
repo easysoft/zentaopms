@@ -163,7 +163,6 @@ $lang->product->menu->doc     = array('link' => 'Doc|product|doc|productID=%s', 
 $lang->product->menu->view    = array('link' => 'Manage|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->module  = 'Modules|tree|browse|productID=%s&view=story';
 $lang->product->menu->project = 'Projects|product|project|status=all&productID=%s';
-$lang->product->menu->order   = 'Order|product|order|productID=%s';
 $lang->product->menu->create  = array('link' => '<span class="icon-add1">&nbsp;</span>New|product|create', 'float' => 'right');
 $lang->product->menu->all     = array('link' => '<span class="icon-all">&nbsp;</span>All|product|index|locate=no&productID=%s', 'float' => 'right');
 
@@ -190,7 +189,6 @@ $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%
 $lang->project->menu->doc       = array('link' => 'Doc|project|doc|porjectID=%s', 'subModule' => 'doc');
 $lang->project->menu->product   = array('link' => 'Product|project|manageproducts|projectID=%s', 'alias' => 'edit,start,suspend,delay,close');
 $lang->project->menu->view      = 'Manage|project|view|projectID=%s';
-$lang->project->menu->order     = 'Order|project|order|projectID=%s';
 $lang->project->menu->create    = array('link' => '<span class="icon-add">&nbsp;</span>New|project|create', 'float' => 'right');
 $lang->project->menu->all       = array('link' => '<span class="icon-allProjects">&nbsp;</span>Projects|project|index|locate=no&status=all&projectID=%s', 'float' => 'right');
 

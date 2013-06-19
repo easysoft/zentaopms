@@ -200,20 +200,6 @@ class projectModel extends model
     }
 
     /**
-     * Save order 
-     * 
-     * @access public
-     * @return void
-     */
-    public function saveOrder()
-    {
-        foreach($_POST as $projectID => $order)
-        {
-            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($projectID)->exec();
-        }
-    }
-
-    /**
      * Create a project. 
      * 
      * @access public
@@ -449,7 +435,7 @@ class projectModel extends model
      */
     public function getPairs($mode = '')
     {
-        $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, `order`, status';
+        $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         $mode    .= $this->cookie->projectMode;
         /* Order by status's content whether or not done */
         $projects = $this->dao->select('*, IF(INSTR(" done", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
@@ -503,7 +489,7 @@ class projectModel extends model
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->orderBy('`order`, status')
+                ->orderBy('status')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -530,7 +516,6 @@ class projectModel extends model
         $list = $this->dao->select('t1.id, t1.name,t1.status, t2.product')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.deleted')->eq(0)
-            ->orderBy('t1.order')
             ->fetchGroup('product');
 
         $noProducts = array();
