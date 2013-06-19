@@ -131,7 +131,6 @@ class productModel extends model
             ->beginIF($status = 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->in($status)->fi()
             ->beginIF($limit > 0)->limit($limit)->fi()
-            ->orderBy('`order` asc')
             ->fetchAll('id');
     }
 
@@ -143,7 +142,7 @@ class productModel extends model
      */
     public function getPairs($mode = '')
     {
-        $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed, `order`';
+        $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
         $mode    .= $this->cookie->productMode;
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)

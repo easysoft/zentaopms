@@ -1,6 +1,6 @@
 <?php
 $config->product = new stdclass();
-$config->product->orderBy = 'isClosed, `order`';
+$config->product->orderBy = 'isClosed';
 
 global $lang, $app;
 $app->loadLang('story');
