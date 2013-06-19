@@ -84,20 +84,6 @@ class productModel extends model
     }
 
     /**
-     * Save order 
-     * 
-     * @access public
-     * @return void
-     */
-    public function saveOrder()
-    {
-        foreach($_POST as $productID => $order)
-        {
-            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($order)->where('id')->eq($productID)->exec();
-        }
-    }
-
-    /**
      * Check privilege.
      * 
      * @param  int    $product 
