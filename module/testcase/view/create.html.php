@@ -19,7 +19,7 @@
       <th class='rowhead'><?php echo $lang->testcase->lblProductAndModule;?></th>
       <td>
         <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value); class='select-3'");?>
-        <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID);?></span>
+        <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange=setStories();");?></span>
       </td>
     </tr>  
     <tr>
