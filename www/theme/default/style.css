@@ -316,7 +316,7 @@ table.tablesorter thead tr .headerSortDown {background-image: url(./images/table
 #dropMenu { border:solid 1px #ccc; position:absolute; display:none; font-size:12px; z-index:999}
 
 #dropMenu #defaultMenu, #dropMenu ul, #dropMenu li {padding:0px}
-#dropMenu #search {border:1px solid #ccc; height:25px; margin:10px 20px 5px}
+#dropMenu #search {border:1px solid #ccc; height:25px; margin:10px 20px 5px; padding-left:5px}
 #dropMenu #search, #dropMenu #defaultMenu {min-width:250px}
 #dropMenu #searchResult {margin:5px 20px 10px;} 
 

@@ -134,15 +134,15 @@ function setProductSwitcher()
  * @access public
  * @return void
  */
-var showProductMenu = 0; //Showing or hiding drop menu.
+var showMenu = 0; //Showing or hiding drop menu.
 function showDropMenu(objectType, objectID, module, method, extra)
 {
-    if(showProductMenu == 1) { showProductMenu = 0; return $("#dropMenu").hide();};
+    if(showMenu == 1) { showMenu = 0; return $("#dropMenu").hide();};
     $.get(createLink(objectType, 'dropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
     var offset = $('#currentItem').offset();
     $("#dropMenu").css({ top:offset.top + $('#currentItem').height() + "px", left:offset.left });
-    $("#dropMenu").show('show', function(){$("#dropMenu #search").focus();});
-    showProductMenu = 1;
+    $("#dropMenu").show('fast', function(){$("#dropMenu #search").focus();});
+    showMenu = 1;
 }
 
 /**
@@ -161,8 +161,9 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
 {
     if(keywords == '')
     {
-        showProductMenu = 0;
+        showMenu = 0;
         showDropMenu(objectType, objectID, module, method, extra);
+        setTimeout(function(){$("#dropMenu #search").focus();}, 100);
     }
     else
     {
