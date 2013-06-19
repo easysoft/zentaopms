@@ -138,7 +138,7 @@ var showMenu = 0; //Showing or hiding drop menu.
 function showDropMenu(objectType, objectID, module, method, extra)
 {
     if(showMenu == 1) { showMenu = 0; return $("#dropMenu").hide();};
-    $.get(createLink(objectType, 'dropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
+    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#dropMenu').html(data);});
     var offset = $('#currentItem').offset();
     $("#dropMenu").css({ top:offset.top + $('#currentItem').height() + "px", left:offset.left });
     $("#dropMenu").show('fast', function(){$("#dropMenu #search").focus();});
@@ -163,11 +163,11 @@ function searchItems(keywords, objectType, objectID, module, method, extra)
     {
         showMenu = 0;
         showDropMenu(objectType, objectID, module, method, extra);
-        setTimeout(function(){$("#dropMenu #search").focus();}, 500);
+        setTimeout(function(){$("#dropMenu #search").focus();}, 300);
     }
     else
     {
-        if(keywords != '-') $.get(createLink(objectType, 'searchItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#searchResult').html(data);});
+        if(keywords != '-') $.get(createLink(objectType, 'ajaxGetMatchedItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data){ $('#searchResult').html(data);});
     }
 }
 

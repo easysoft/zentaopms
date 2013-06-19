@@ -1512,7 +1512,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function dropMenu($projectID, $module, $method, $extra)
+    public function ajaxGetDropMenu($projectID, $module, $method, $extra)
     {
         $this->view->link      = $this->getProjectLink($module, $method, $extra);
         $this->view->projectID = $projectID;
@@ -1533,7 +1533,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function searchItems($keywords, $module, $method, $extra)
+    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
         $this->view->link     = $this->getProjectLink($module, $method, $extra);
         $this->view->projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('code')->fetchAll();
