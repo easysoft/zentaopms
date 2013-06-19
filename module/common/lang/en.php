@@ -179,7 +179,7 @@ $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
 $lang->project->menu->list      = '%s';
-$lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task', 'alias' => 'grouptask,importtask,importbug,burn');
+$lang->project->menu->task      = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,importbug,burn');
 $lang->project->menu->story     = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory');
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
