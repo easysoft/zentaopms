@@ -149,5 +149,5 @@ $lang->user->contacts->noListYet    = 'No contacts list yet.';
 $lang->user->contacts->confirmDelete= 'Are you sure to delete this list?';
 $lang->user->contacts->or           = ' or ';
 
-$lang->user->mobile = new stdclass();
-$lang->user->mobile->login = 'Login ZenTao';
+$lang->user->mobileWeb = new stdclass();
+$lang->user->mobileWeb->login = 'Login ZenTao';

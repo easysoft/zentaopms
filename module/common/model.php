@@ -225,6 +225,54 @@ class commonModel extends model
         echo html::select('', $app->lang->themes,  $app->cookie->theme, 'onchange="selectTheme(this.value)"');
     }
 
+    public function setMobileMenu()
+    {
+        $menu = new stdclass();
+        
+        $role = isset($this->app->user->role) ? $this->app->user->role : '';
+
+        $this->config->locate = new stdclass();
+        $this->config->locate->module = 'my';
+        $this->config->locate->method = 'todo';
+        $this->config->locate->params = '';
+
+        $todo    = $this->lang->my->menu->todo['link'];
+        $task    = $this->lang->my->menu->task;
+        $story   = $this->lang->my->menu->story;
+        $bug     = $this->lang->my->menu->bug;
+        $project = $this->lang->menu->project . '|locate=no&&status=doing&projectID=1';
+        $product = $this->lang->menu->product . '|locate=no&productID=1';
+
+        if($role == 'dev' or $role == 'td' or $role == 'pm')
+        {
+            $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'product' => $product, 'project' => $project);
+        }
+        elseif($role == 'pd' or $role == 'po')
+        {
+            $menu = array('todo' => $todo, 'story' => $story, 'bug' => $bug, 'product' => $product, 'project' => $project);
+        }
+        elseif($role == 'qa' or $role == 'qd')
+        {
+            $menu = array('todo' => $todo, 'bug' => $bug, 'project' => $project, 'product' => $product);
+        }
+        elseif($role == 'top')
+        {
+            $menu = array('project' => $project, 'product' => $product, 'todo' => $todo);
+
+            $this->config->locate->module = 'project';
+            $this->config->locate->method = 'index';
+            $this->config->locate->params = 'locate=no&status=doing';
+        }
+        else
+        {
+            $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'project' => $project, 'product' => $product);
+        }
+
+        unset($this->lang->menuOrder);
+        $this->lang->menu = new stdclass();
+        $this->lang->menu = $menu;
+    }
+
     /**
      * Print the main menu.
      * 
@@ -233,13 +281,14 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public static function printMainmenu($moduleName)
+    public static function printMainmenu($moduleName, $methodName = '')
     {
         global $app, $lang;
         echo "<ul>\n";
 
         /* Set the main main menu. */
         $mainMenu = $moduleName;
+        if($moduleName == 'my') $mainMenu = $methodName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
         /* Sort menu according to menuOrder. */
@@ -261,16 +310,19 @@ class commonModel extends model
             }
         }
 
+        $activeName = $app->getViewType() == 'mhtml' ? 'ui-btn-active' : 'active';
         /* Print all main menus. */
         foreach($lang->menu as $menuKey => $menu)
         {
-            $active = $menuKey == $mainMenu ? "class='active'" : '';
-            list($menuLabel, $module, $method) = explode('|', $menu);
+            $active = $menuKey == $mainMenu ? "class='$activeName'" : '';
+            $link = explode('|', $menu);
+            list($menuLabel, $module, $method) = $link;
+            $vars = isset($link[3]) ? $link[3] : '';
 
             if(common::hasPriv($module, $method))
             {
-                $link  = helper::createLink($module, $method);
-                echo "<li $active><nobr><a href='$link' id='menu$menuKey'>$menuLabel</a></nobr></li>\n";
+                $link  = helper::createLink($module, $method, $vars);
+                echo "<li $active><nobr><a href='$link' $active id='menu$menuKey'>$menuLabel</a></nobr></li>\n";
             }
         }
 

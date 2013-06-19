@@ -32,6 +32,7 @@ class index extends control
      */
     public function index()
     {
+        if($this->config->default->view == 'mhtml') $this->locate($this->createLink($this->config->locate->module, $this->config->locate->method, $this->config->locate->params));
         $this->locate($this->createLink('my', 'index'));
     }
 

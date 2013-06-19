@@ -11,7 +11,7 @@
 include '../../common/view/m.header.lite.html.php';
 ?>
 <div data-role="header" data-position="fixed">
-  <h1><?php echo $lang->user->mobile->login;?></h1>
+  <h1><?php echo $lang->user->mobileWeb->login;?></h1>
 </div>
 <div data-role="content" >
 <form method='post' target='hiddenwin'>

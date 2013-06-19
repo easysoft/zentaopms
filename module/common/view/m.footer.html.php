@@ -2,8 +2,7 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php print($config->debug ? 'debugwin' : 'hidden');?>'></iframe>
 </div>
-<?php $onlybody = zget($_GET, 'onlybody', 'no');
-js::set('onlybody', $onlybody);           // set the onlybody var.
+<?php
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
 
 /* Load hook files for current page. */

@@ -5,6 +5,8 @@ include 'm.header.lite.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <div data-role="header">
   <div data-role="navbar">
+<?php commonModel::printMainmenu($this->moduleName, $this->methodName)?>
+</ul>
   </div>
 </div>
 <?php endif;?>

@@ -149,5 +149,5 @@ $lang->user->contacts->noListYet    = '还没有创建任何列表。';
 $lang->user->contacts->confirmDelete= '您确定要删除这个列表吗？';
 $lang->user->contacts->or           = ' 或者 ';
 
-$lang->user->mobile = new stdclass();
-$lang->user->mobile->login = '登录禅道';
+$lang->user->mobileWeb = new stdclass();
+$lang->user->mobileWeb->login = '登录禅道';

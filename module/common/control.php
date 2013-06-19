@@ -25,6 +25,7 @@ class common extends control
         $this->common->setCompany();
         $this->common->setUser();
         $this->common->loadConfigFromDB();
+        if($this->config->default->view == 'mhtml') $this->common->setMobileMenu();
         $this->app->loadLang('company');
     }
 
