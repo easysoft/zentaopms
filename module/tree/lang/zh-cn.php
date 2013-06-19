@@ -36,7 +36,7 @@ $lang->tree->syncFromProject   = '复制项目视图模块';
 $lang->tree->ajaxGetOptionMenu = '接口:获取下拉列表';
 $lang->tree->ajaxGetSonModules = '接口:获得子菜单列表';
 
-$lang->tree->confirmDelete = '您确定删除该模块吗？';
+$lang->tree->confirmDelete = '该模块及其子模块都会被删除，您确定删除吗？';
 $lang->tree->successSave   = '成功保存';
 $lang->tree->successFixed  = '成功修正数据！';
 

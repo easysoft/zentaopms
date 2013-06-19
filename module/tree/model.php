@@ -889,12 +889,11 @@ class treeModel extends model
      */
     public function delete($moduleID)
     {
-        $module = $this->getById($moduleID);
-        $childs = $this->getAllChildId($moduleID);
+        $module  = $this->getById($moduleID);
+        $childs  = $this->getAllChildId($moduleID);
+        $childs[$moduleID] = $moduleID;
 
-        $this->dao->update(TABLE_MODULE)->set('grade = grade - 1')->where('id')->in($childs)->exec();                 // Update grade of all childs.
-        $this->dao->update(TABLE_MODULE)->set('parent')->eq($module->parent)->where('parent')->eq($moduleID)->exec(); // Update the parent of sons to my parent.
-        $this->dao->delete()->from(TABLE_MODULE)->where('id')->eq($moduleID)->exec();                                 // Delete my self.
+        $this->dao->delete()->from(TABLE_MODULE)->where('id')->in($childs)->exec();
         $this->fixModulePath($module->root, $module->type);
 
         if($module->type == 'story') $this->dao->update(TABLE_STORY)->set('module')->eq($module->parent)->where('module')->eq($moduleID)->exec();
