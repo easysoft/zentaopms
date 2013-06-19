@@ -12,17 +12,51 @@ function loadAssignedTo(projectID)
 }
 
 /**
+ * load assignedTo and stories of module.
+ * 
+ * @access public
+ * @return void
+ */
+function loadModuleRelated()
+{
+    moduleID  = $('#module').val();
+    productID = $('#product').val();
+    setAssignedTo(moduleID, productID);
+    setStories(moduleID, productID);
+}
+
+/**
  * Set the assignedTo field.
  * 
  * @access public
  * @return void
  */
-function setAssignedTo()
+function setAssignedTo(moduleID, productID)
 {
-    link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + $('#module').val() + '&productID=' + $('#product').val());
+    link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
     $.get(link, function(owner)
     {
         $('#assignedTo').val(owner);
+    });
+}
+
+/**
+ * Set story field.
+ * 
+ * @param  moduleID $moduleID 
+ * @param  productID $productID 
+ * @access public
+ * @return void
+ */
+function setStories(moduleID, productID)
+{
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&moduleID=' + moduleID);
+    $.get(link, function(stories)
+    {
+        if(!stories) stories = '<select id="story" name="story"></select>';
+        $('#story').replaceWith(stories);
+        $('#story_chzn').remove();
+        $("#story").chosen({no_results_text: ''});
     });
 }
 

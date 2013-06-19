@@ -28,7 +28,7 @@ js::set('page', 'create');
       <th class='rowhead'><?php echo $lang->bug->lblProductAndModule;?></th>
       <td>
         <?php echo html::select('product', $products, $productID, "onchange=loadAll(this.value) class='select-3'");?>
-        <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='setAssignedTo()'");?></span>
+        <span id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()'");?></span>
       </td>
      </tr>  
      <tr>
