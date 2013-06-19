@@ -5,6 +5,7 @@ include 'colorbox.html.php';
 include 'chosen.html.php';
 //include 'validation.html.php';
 ?>
+<?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <div id='header'>
   <table class='cont' id='topbar'>
     <tr>
