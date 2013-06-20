@@ -9,3 +9,4 @@ include 'm.header.lite.html.php';
   </div>
 </div>
 <div data-role="content">
+  <div data-role='navbar' style='margin:-15px 0 15px 0;'>

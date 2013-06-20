@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/m.header.html.php';?>
-<div data-role='navbar' style='margin:-15px 0 15px 0;'>
   <ul>
     <?php foreach($config->mobile->taskBar as $menu):?>
     <?php $active = $type == $menu ? 'ui-btn-active' : ''?>
