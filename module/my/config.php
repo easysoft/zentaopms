@@ -10,5 +10,6 @@ $config->my->bugCounts     = 10;
 $config->my->storyCounts   = 10; 
 
 $config->mobile = new stdclass();
-$config->mobile->todoBar = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'all');
-$config->mobile->taskBar = array('assignedTo', 'openedBy');
+$config->mobile->todoBar  = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'all');
+$config->mobile->taskBar  = array('assignedTo', 'openedBy');
+$config->mobile->storyBar = array('assignedTo', 'openedBy', 'reviewedBy');

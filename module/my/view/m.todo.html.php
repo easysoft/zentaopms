@@ -24,6 +24,7 @@
     <li><?php echo html::a($this->createLink('todo', 'view', "todoID=$todo->id&from=my"), $todo->name)?></li>
     <?php endforeach;?>
 </ul>
+<p><?php echo $pager->show('right', 'short')?></p>
 <div data-role='footer' data-position='fixed'>
   <div data-role='navbar'>
     <ul>

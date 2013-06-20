@@ -312,6 +312,8 @@ class pager
             $pager .= $this->createLastPage();
         }
 
+        if($type != 'full') $pager = $this->pageID . '/' . $this->pageTotal . ' ' . $pager;
+
         /* Only the full type . */
         if($type == 'full')
         {

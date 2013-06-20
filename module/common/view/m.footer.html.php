@@ -1,6 +1,6 @@
 </div>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='<?php print($config->debug ? 'debugwin' : 'hidden');?>'></iframe>
+<iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='hidden'></iframe>
 </div>
 <?php
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
@@ -11,5 +11,17 @@ $extHookRule  = $extPath . 'm.footer.*.hook.php';
 $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
+<script>
+$(function()
+{
+    $('#navbar li a').click(function(event)
+     {
+         // Prevent the usual navigation behavior
+         //event.preventDefault();
+         //location.hash = $(this).attr("href");
+         //$.mobile.loadPage($(this).attr("href"));
+    });
+});
+</script>
 </body>
 </html>

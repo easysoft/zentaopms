@@ -24,4 +24,5 @@
     <li><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name)?></li>
     <?php endforeach;?>
 </ul>
+<p><?php $pager->show('right', 'short')?></p>
 <?php include '../../common/view/m.footer.html.php';?>
