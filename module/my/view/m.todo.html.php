@@ -11,4 +11,24 @@
  */
 ?>
 <?php include '../../common/view/m.header.html.php';?>
+<div data-role='navbar' style='margin:-15px 0 15px 0;'>
+  <ul>
+    <?php foreach($config->mobile->todoBar as $period):?>
+    <?php $active = $type == $period ? 'ui-btn-active' : ''?>
+    <li><?php echo html::a($this->createLink('my', 'todo', "type=$period"), $lang->todo->periods[$period], '', "class='$active'")?></li>
+    <?php endforeach;?>
+  </ul>
+</div>
+<ul data-role='listview'>
+    <?php foreach($todos as $todo):?>
+    <li><?php echo html::a($this->createLink('todo', 'view', "todoID=$todo->id&from=my"), $todo->name)?></li>
+    <?php endforeach;?>
+</ul>
+<div data-role='footer' data-position='fixed'>
+  <div data-role='navbar'>
+    <ul>
+      <li><?php echo html::a($this->createLink('todo', 'batchCreate'), $lang->todo->create)?></li>
+    </ul>
+  </div>
+</div>
 <?php include '../../common/view/m.footer.html.php';?>
