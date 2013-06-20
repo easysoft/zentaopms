@@ -269,6 +269,7 @@ class commonModel extends model
         }
 
         unset($this->lang->menuOrder);
+        unset($this->lang->menugroup);
         $this->lang->menu = new stdclass();
         $this->lang->menu = $menu;
     }
@@ -288,8 +289,9 @@ class commonModel extends model
 
         /* Set the main main menu. */
         $mainMenu = $moduleName;
-        if($moduleName == 'my') $mainMenu = $methodName;
+        if($moduleName == 'my' and $app->getViewType()) $mainMenu = $methodName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
+        if($moduleName == 'todo' and $app->getViewType()) $mainMenu = $moduleName;
 
         /* Sort menu according to menuOrder. */
         if(isset($lang->menuOrder))

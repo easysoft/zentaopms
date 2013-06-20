@@ -69,7 +69,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function todo($type = 'today', $account = '', $status = 'all', $orderBy = "date,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo($type = 'today', $account = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);

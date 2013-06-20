@@ -23,6 +23,6 @@ echo html::hidden("begins[$i]", '2400');
 echo html::hidden("ends[$i]",   '2400');
 ?>
 <?php endfor;?>
-<p><?php echo html::submitButton()?></p>
+<p><?php echo html::submitButton('', "data-inline='true' data-theme='b'")?></p>
 </form>
 <?php include '../../common/view/m.footer.html.php';?>

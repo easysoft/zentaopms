@@ -22,7 +22,21 @@
 </div>
 <ul data-role='listview'>
   <?php foreach($todos as $todo):?>
-  <li><?php echo html::a($this->createLink('todo', 'view', "todoID=$todo->id&from=my"), $todo->name)?></li>
+  <li>
+<?php echo html::a($this->createLink('todo', 'view', "todoID=$todo->id&from=my"), '#' . $todo->id . ' ' . $todo->name)?>
+<span class='ui-li-count'>
+<?php
+if(empty($todo->begin))
+{
+    echo $lang->todo->lblDisableDate;
+}
+else
+{
+    echo $todo->begin . ' ~ ' . $todo->end;
+}
+?>
+</span>
+</li>
   <?php endforeach;?>
 </ul>
 <p><?php echo $pager->show('right', 'short')?></p>
