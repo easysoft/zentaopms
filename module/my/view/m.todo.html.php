@@ -26,7 +26,11 @@
 <?php echo html::a($this->createLink('todo', 'view', "todoID=$todo->id&from=my"), '#' . $todo->id . ' ' . $todo->name)?>
 <span class='ui-li-count'>
 <?php
-if(empty($todo->begin))
+if($todo->status == 'done')
+{
+    echo $lang->todo->finish;
+}
+elseif(empty($todo->begin))
 {
     echo $lang->todo->lblDisableDate;
 }

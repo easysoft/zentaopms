@@ -32,6 +32,10 @@
       $browseLink = $this->createLink('my', 'todo');
   }
   if(common::hasPriv('todo', 'finish') and $todo->status != 'done') echo '<li>' . html::a($this->createLink('todo', 'finish', "id=$todo->id"), $lang->todo->finish, 'hiddenwin') . '</li>';
+  if($todo->account == $app->user->account and common::hasPriv('todo', 'import2Today') and $todo->date != date('Ymd'))
+  {
+      echo '<li>' . html::a($this->createLink('todo', 'import2Today', "todoID=$todo->id"), $lang->todo->import2Today, 'hiddenwin') . '</li>';
+  }
   if($todo->account == $app->user->account and common::hasPriv('todo', 'delete'))
   {
       echo '<li>' . html::a($this->createLink('todo', 'delete', "todoID=$todo->id"), $lang->delete, 'hiddenwin') . '</li>';

@@ -329,9 +329,9 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function import2Today()
+    public function import2Today($todoID = 0)
     {
-        $todoIDList = $this->post->todoIDList;
+        $todoIDList = $_POST ? $this->post->todoIDList : array($todoID);
         $today      = date::today();
         $this->dao->update(TABLE_TODO)->set('date')->eq($today)->where('id')->in($todoIDList)->exec();
         die(js::locate($this->session->todoList));
