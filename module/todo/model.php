@@ -86,6 +86,10 @@ class todoModel extends model
                     echo js::error(dao::getError());
                     die(js::reload('parent'));
                 }
+                else
+                {
+                    $this->loadModel('action')->create('todo', $this->dao->lastInsertID(), 'opened');
+                }
             }
             else
             {
