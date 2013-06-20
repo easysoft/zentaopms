@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/m.header.html.php';?>
+</div>
 <form method='post' target='hiddenwin'>
 <?php echo html::hidden("date", date('Y-m-d'));?>
 <?php for($i = 1; $i <= 5; $i++):?>
@@ -23,6 +24,11 @@ echo html::hidden("begins[$i]", '2400');
 echo html::hidden("ends[$i]",   '2400');
 ?>
 <?php endfor;?>
-<p><?php echo html::submitButton('', "data-inline='true' data-theme='b'")?></p>
+<p>
+<?php
+echo html::submitButton('', "data-inline='true' data-theme='b'");
+echo html::backButton("data-inline='true'");
+?>
+</p>
 </form>
 <?php include '../../common/view/m.footer.html.php';?>

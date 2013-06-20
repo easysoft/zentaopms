@@ -441,10 +441,10 @@ EOT;
      * @access public
      * @return string the back button tag.
      */
-    public static function backButton()
+    public static function backButton($misc = '')
     {
         global $lang;
-        return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='button-b'/>";
+        return  "<input type='button' onClick='javascript:history.go(-1);' value='{$lang->goback}' class='button-b' $misc/>";
     }
 
     /**
