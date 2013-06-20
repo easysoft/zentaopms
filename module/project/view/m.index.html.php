@@ -10,4 +10,9 @@
  */
 ?>
 <?php include '../../common/view/m.header.html.php';?>
+<ul data-role='listview'>
+  <?php foreach($projectStats as $project):?>
+  <li><?php echo html::a($this->createLink('project', 'task', "projectID=$project->id"), $project->name)?></li>
+  <?php endforeach;?>
+</ul>
 <?php include '../../common/view/m.footer.html.php';?>

@@ -20,9 +20,9 @@
   </ul>
 </div>
 <ul data-role='listview'>
-    <?php foreach($todos as $todo):?>
-    <li><?php echo html::a($this->createLink('todo', 'view', "todoID=$todo->id&from=my"), $todo->name)?></li>
-    <?php endforeach;?>
+  <?php foreach($todos as $todo):?>
+  <li><?php echo html::a($this->createLink('todo', 'view', "todoID=$todo->id&from=my"), $todo->name)?></li>
+  <?php endforeach;?>
 </ul>
 <p><?php echo $pager->show('right', 'short')?></p>
 <div data-role='footer' data-position='fixed'>
