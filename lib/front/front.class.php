@@ -783,7 +783,7 @@ EOT;
      */
     static public function execute($code)
     {
-        $js = self::start();
+        $js = self::start($full = false);
         $js .= $code;
         $js .= self::end();
         echo $js;
