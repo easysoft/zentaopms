@@ -3,10 +3,7 @@ if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::
 include 'm.header.lite.html.php';
 ?>
 <div data-role="header" data-position='fixed'>
-  <div data-role="navbar" id='navbar'>
+  <div data-role="navbar" id='mainMenu'>
     <?php commonModel::printMainmenu($this->moduleName, $this->methodName)?>
     </ul>
   </div>
-</div>
-<div data-role="content">
-  <div data-role='navbar' style='margin:-15px 0 15px 0;'>

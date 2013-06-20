@@ -26,4 +26,5 @@
 .diff-short  {padding:2px 6px; background:url(images/main/zt-icons.png) -101px -422px; border:0px}
 
 .ui-content {padding-left:0px; padding-right:0px}
-.ui-listview {padding-left:15px} 
+
+#subMenu {margin-top:-15px}

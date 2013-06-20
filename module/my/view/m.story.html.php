@@ -11,12 +11,14 @@
  */
 ?>
 <?php include '../../common/view/m.header.html.php';?>
-  <ul>
-    <?php foreach($config->mobile->storyBar as $menu):?>
-    <?php $active = $type == $menu ? 'ui-btn-active' : ''?>
-    <li><?php echo html::a($this->createLink('my', 'story', "type=$menu"), $lang->my->storyMenu->{$menu . 'Me'}, '', "class='$active'")?></li>
-    <?php endforeach;?>
-  </ul>
+  <div data-role='navbar' id='subMenu'>
+    <ul>
+      <?php foreach($config->mobile->storyBar as $menu):?>
+      <?php $active = $type == $menu ? 'ui-btn-active' : ''?>
+      <li><?php echo html::a($this->createLink('my', 'story', "type=$menu"), $lang->my->storyMenu->{$menu . 'Me'}, '', "class='$active' data-theme='d'")?></li>
+      <?php endforeach;?>
+    </ul>
+  </div>
 </div>
 <ul data-role='listview'>
     <?php foreach($stories as $story):?>
