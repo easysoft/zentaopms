@@ -1,15 +1,3 @@
-<?php
-/**
- * The task view file of dashboard module of ZenTaoPMS.
- *
- * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
- * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     my
- * @version     $Id: task.html.php 4735 2013-05-03 08:30:02Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
- */
-?>
 <?php include '../../common/view/m.header.html.php';?>
   <div data-role='navbar' id='subMenu'>
     <ul>
@@ -25,9 +13,32 @@
     </ul>
   </div>
 </div>
-<ul data-role='listview'>
-    <?php foreach($bugs as $bug):?>
-    <li><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title)?></li>
-    <?php endforeach;?>
-</ul>
+<?php foreach($bugs as $bug):?>
+  <div  data-role="collapsible-set">
+    <div data-role="collapsible" data-collapsed="true">
+      <h1><?php echo $bug->title;?></h1>
+      <div><?php echo $bug->steps;?></div>
+      <div data-role='navbar'>
+        <ul>
+        <?php
+        if($this->session->bugList)
+        {
+            $browseLink = $this->session->bugList;
+        }
+        else
+        {
+            $browseLink = $this->createLink('my', 'bug');
+        }
+        common::printIcon('bug', 'confirmBug', "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'assignTo',   "bugID=$bug->id", '',   'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'resolve',    "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'close',      "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'activate',   "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
+        echo '<li>' . html::a($browseLink, $lang->goback) . '</li>';
+        ?>
+        </ul>
+      </div>
+    </div>
+  </div>
+<?php endforeach;?>
 <?php include '../../common/view/m.footer.html.php';?>
