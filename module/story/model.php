@@ -708,13 +708,15 @@ class storyModel extends model
      */
     public function getProductStories($productID = 0, $moduleIds = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.*, t2.title as planTitle')
+        return $this->dao->select('t1.*, t2.title as planTitle, t3.verify, t3.spec')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
+            ->leftJoin(TABLE_STORYSPEC)->alias('t3')->on('t1.id = t3.story')
             ->where('t1.product')->in($productID)
             ->beginIF(!empty($moduleIds))->andWhere('module')->in($moduleIds)->fi() 
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t3.version=t1.version')
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -1025,15 +1027,17 @@ class storyModel extends model
      */
     public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null)
     {
-        $stories = $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle')
+        $stories = $this->dao->select('t1.*, t2.title as planTitle, t3.name as productTitle, t4.spec, t4.verify')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->leftJoin(TABLE_STORYSPEC)->alias('t4')->on('t1.id = t4.story')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
             ->beginIF($type == 'openedBy')->andWhere('openedBy')->eq($account)->fi()
             ->beginIF($type == 'reviewedBy')->andWhere('reviewedBy')->like('%' . $account . '%')->fi()
             ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
+            ->andWhere('t4.version=t1.version')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

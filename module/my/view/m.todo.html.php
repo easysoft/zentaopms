@@ -20,29 +20,28 @@
     </ul>
   </div>
 </div>
-<ul data-role='listview'>
-  <?php foreach($todos as $todo):?>
-  <li>
-<?php echo html::a($this->createLink('todo', 'view', "todoID=$todo->id&from=my"), '#' . $todo->id . ' ' . $todo->name)?>
-<span class='ui-li-count'>
-<?php
-if($todo->status == 'done')
-{
-    echo $lang->todo->finish;
-}
-elseif(empty($todo->begin))
-{
-    echo $lang->todo->lblDisableDate;
-}
-else
-{
-    echo $todo->begin . ' ~ ' . $todo->end;
-}
-?>
-</span>
-</li>
-  <?php endforeach;?>
-</ul>
+ <?php foreach($todos as $todo):?>
+<?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
+<div  data-role="collapsible-set">
+  <div data-role="collapsible" data-collapsed="true">
+    <h1><?php echo $todo->name;?></h1>
+    <div><?php echo $todo->desc;?></div>
+    <div data-role='navbar'>
+      <ul>
+        <?php
+        common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin');
+        if($todo->account == $app->user->account)
+        {
+            common::printIcon('todo', 'edit',   "todoID=$todo->id");
+            common::printIcon('todo', 'delete', "todoID=$todo->id", '', 'button', '', 'hiddenwin');
+        }
+        ?>
+      </ul>
+    </div>
+  </div>
+</div>
+<?php endif;?>
+<?php endforeach;?>
 <p><?php echo $pager->show('right', 'short')?></p>
 <div data-role='footer' data-position='fixed'>
   <div data-role='navbar'>

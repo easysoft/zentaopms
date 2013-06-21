@@ -20,12 +20,33 @@
     </ul>
   </div>
 </div>
-<ul data-role='listview'>
-    <?php foreach($stories as $story):?>
-    <li><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), "#$story->id $story->title")?></li>
-    <?php endforeach;?>
-</ul>
-<p>
-<?php $pager->show('right', 'short')?>
-</p>
+<?php foreach($stories as $story):?>
+<div  data-role="collapsible-set">
+  <div data-role="collapsible" data-collapsed="true">
+    <h1><?php echo $story->title;?></h1>
+    <div>
+      <p><strong><?php echo $lang->story->spec?><strong></p>
+      <?php echo $story->spec?>
+    </div>
+    <div>
+      <p><strong><?php echo $lang->story->verify?><strong></p>
+      <?php echo $story->verify?>
+    </div>
+    <div data-role='navbar'>
+      <ul>
+        <?php
+        if(!$story->deleted)
+        {
+            common::printIcon('story', 'review',     "storyID=$story->id", $story);
+            common::printIcon('story', 'close',      "storyID=$story->id", $story, '', '', '', 'iframe', true);
+            common::printIcon('story', 'activate',   "storyID=$story->id", $story, '', '', '', 'iframe', true);
+            common::printIcon('story', 'delete', "storyID=$story->id", '', '', '', 'hiddenwin');
+        }
+        ?>
+      </ul>
+    </div>
+  </div>
+</div>
+<?php endforeach;?>
+<p><?php $pager->show('right', 'short')?></p>
 <?php include '../../common/view/m.footer.html.php';?>

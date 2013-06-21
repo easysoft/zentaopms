@@ -20,10 +20,25 @@
     </ul>
   </div>
 </div>
-<ul data-role='listview'>
-    <?php foreach($tasks as $task):?>
-    <li><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name)?></li>
-    <?php endforeach;?>
-</ul>
+<?php foreach($tasks as $task):?>
+<div  data-role="collapsible-set">
+  <div data-role="collapsible" data-collapsed="true">
+    <h1><?php echo $task->name;?></h1>
+    <div><?php echo $task->desc;?></div>
+    <div data-role='navbar'>
+      <ul>
+        <?php 
+        common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task);
+        common::printIcon('task', 'start',          "taskID=$task->id", $task);
+        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task);
+        common::printIcon('task', 'finish',         "taskID=$task->id", $task);
+        common::printIcon('task', 'close',          "taskID=$task->id", $task);
+        common::printIcon('task', 'activate',       "taskID=$task->id", $task);
+        ?>
+      </ul>
+    </div>
+  </div>
+</div>
+<?php endforeach;?>
 <p><?php $pager->show('right', 'short')?></p>
 <?php include '../../common/view/m.footer.html.php';?>
