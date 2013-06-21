@@ -6,6 +6,6 @@
   <div><?php echo $lang->comment . html::textarea('comment', '', "rows='6' class='area-1'");?></div>
   <?php echo html::submitButton('', 'data-inline="true" data-theme="b"'); ?>
   <?php echo html::backButton("data-inline='true'");?>
-  <?php include '../../common/view/action.html.php';?>
 </form>
+<?php include '../../common/view/action.html.php';?>
 <?php include '../../common/view/m.footer.html.php';?>
