@@ -12,14 +12,34 @@
 ?>
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<ul data-role='listview'>
 <?php foreach($bugs as $bug):?>
 <?php if($bug->status == 'closed') continue;?>
-<li>
-    <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), "#$bug->id $bug->title")?>
-    <span class='ui-li-count'><?php echo $lang->bug->statusList[$bug->status]?></span>
-</li>
+<div  data-role="collapsible-set">
+  <div data-role="collapsible" data-collapsed="true">
+    <h1><?php echo $bug->title;?></h1>
+    <div><?php echo $bug->steps;?></div>
+    <div data-role='navbar'>
+      <ul>
+      <?php
+      if($this->session->bugList)
+      {
+          $browseLink = $this->session->bugList;
+      }
+      else
+      {
+          $browseLink = $this->createLink('my', 'bug');
+      }
+      common::printIcon('bug', 'confirmBug', "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
+      common::printIcon('bug', 'assignTo',   "bugID=$bug->id", '',   'button', '', '', 'iframe', true);
+      common::printIcon('bug', 'resolve',    "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
+      common::printIcon('bug', 'close',      "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
+      common::printIcon('bug', 'activate',   "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
+      echo '<li>' . html::a($browseLink, $lang->goback) . '</li>';
+      ?>
+      </ul>
+    </div>
+  </div>
+</div>
 <?php endforeach;?>
-</ul>
 <p><?php $pager->show('right', 'short')?></p>
 <?php include '../../common/view/m.footer.html.php';?>
