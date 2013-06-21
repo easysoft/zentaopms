@@ -1,6 +1,5 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
-<?php include '../../common/view/datepicker.html.php';?>
 <form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
     <h3><?php echo $lang->task->start . $this->lang->colon . $task->name;?></h3>
     <?php echo $lang->task->consumed . '(' . $lang->task->hour . ')' . html::input('consumed', $task->consumed);?>
