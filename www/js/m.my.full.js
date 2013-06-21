@@ -62,22 +62,6 @@ function setPing()
 }
 
 /**
- * Set required fields, add star class to them.
- * 
- * @access public
- * @return void
- */
-function setRequiredFields()
-{
-    if(!config.requiredFields) return false;
-    requiredFields = config.requiredFields.split(',');
-    for(i = 0; i < requiredFields.length; i++)
-    {
-        $('#' + requiredFields[i]).after('<span class="star"> * </span>');
-    }
-}
-
-/**
  * Set paceholder 
  * 
  * @access public
@@ -223,7 +207,6 @@ $(document).ready(function()
 {
     setForm();
 
-    setRequiredFields();
     setPlaceholder();
 
     toggleSearch();

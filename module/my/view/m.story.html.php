@@ -22,7 +22,7 @@
 </div>
 <ul data-role='listview'>
     <?php foreach($stories as $story):?>
-    <li><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title)?></li>
+    <li><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), "#$story->id $story->title")?></li>
     <?php endforeach;?>
 </ul>
 <p>
