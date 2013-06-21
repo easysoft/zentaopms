@@ -10,5 +10,5 @@
   <?php echo html::backButton("data-inline='true'");?>
   </div>
 </form>
-<?php include '../../common/view/action.html.php';?>
+<?php include '../../common/view/m.action.html.php';?>
 <?php include '../../common/view/m.footer.html.php';?>
