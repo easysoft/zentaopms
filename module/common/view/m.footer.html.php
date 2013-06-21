@@ -11,17 +11,5 @@ $extHookRule  = $extPath . 'm.footer.*.hook.php';
 $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
-<script>
-$(function()
-{
-    $('#navbar li a').click(function(event)
-     {
-         // Prevent the usual navigation behavior
-         //event.preventDefault();
-         //location.hash = $(this).attr("href");
-         //$.mobile.loadPage($(this).attr("href"));
-    });
-});
-</script>
 </body>
 </html>
