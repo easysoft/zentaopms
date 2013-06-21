@@ -13,7 +13,7 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <h3 class='title'><?php echo "Bug #$bug->id $bug->title"?></h3>
-<div class='textContent'><?php echo $bug->steps;?></td>
+<div class='textContent'><?php echo $bug->steps;?></div>
 <?php include '../../common/view/m.action.html.php';?>
 <div data-role='footer' data-position='fixed'>
   <div data-role='navbar'>
