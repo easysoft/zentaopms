@@ -297,6 +297,11 @@ class common extends control
         /* Create the icon link. */
         if($clickable)
         {
+            if($app->getViewType() == 'mhtml')
+            {
+                echo "<li>" . html::a($link, $title, $target, "class='$extraClass'", true) . "</li>";
+                return;
+            }
             if($type == 'button')
             {
                 echo "<span class='link-button'>";
