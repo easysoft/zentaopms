@@ -1,5 +1,6 @@
 </div>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
+<iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='hidden'></iframe>
 </div>
 <?php
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
