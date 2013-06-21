@@ -18,7 +18,7 @@
     <?php echo html::select('assignedTo', $users, $story->closedBy, 'class="select-3"');?>
     <span><?php echo $lang->story->comment;?></span>
     <?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?>
-    <p>
+    <p class='a-center'>
     <?php echo html::submitButton('', "data-inline='true' data-theme='b'");?>
     <?php echo html::backButton("data-inline='true'");?>
     </p>

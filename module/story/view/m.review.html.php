@@ -42,7 +42,7 @@
   <?php echo html::input('reviewedBy', $app->user->account . ', ', 'class=text-1');?>
   <span><?php echo $lang->story->comment;?></span>
   <?php echo html::textarea('comment', '', "rows='8' class='area-1'");?>
-  <p>
+  <p class='a-center'>
   <?php echo html::submitButton('', "data-inline='true' data-theme='b'");?>
   <?php echo html::backButton("data-inline='true'");?>
   </p>

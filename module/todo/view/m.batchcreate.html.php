@@ -24,7 +24,7 @@ echo html::hidden("begins[$i]", '2400');
 echo html::hidden("ends[$i]",   '2400');
 ?>
 <?php endfor;?>
-<p>
+<p class='a-center'>
 <?php
 echo html::submitButton('', "data-inline='true' data-theme='b'");
 echo html::backButton("data-inline='true'");

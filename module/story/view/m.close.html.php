@@ -26,7 +26,7 @@
     </div>
     <span><?php echo $lang->story->comment;?></span>
     <?php echo html::textarea('comment', '');?>
-    <p>
+    <p class='a-center'>
     <?php echo html::submitButton('', "data-inline='true' data-theme='b'");?>
     <?php echo html::backButton("data-inline='true'");?>
     </p>
