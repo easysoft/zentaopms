@@ -632,7 +632,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createTestTaskLink($module, $extra)
+    public function createTestTaskLink($type, $module, $extra)
     {
         $linkHtml = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
