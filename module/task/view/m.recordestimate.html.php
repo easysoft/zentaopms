@@ -9,11 +9,11 @@
   foreach($estimates as $estimate)
   {
        $allConsumed += $estimate->consumed;
-       $left         = $estimate->left;
+       $allLeft      = $estimate->left;
   }
   ?>
   <div data-role="fieldcontain">
-    <?php echo $lang->task->consumed . ':' . $allConsumed . $lang->task->hour . ', ' . $lang->task->left . ':' . $left . $lang->task->hour;?>
+    <?php echo $lang->task->consumed . ':' . $allConsumed . $lang->task->hour . ', ' . $lang->task->left . ':' . $allLeft . $lang->task->hour;?>
   </div>
   <div data-role="fieldcontain">
     <?php echo '<label for="consumed">' . $lang->task->consumed . '(' . $lang->task->hour . ')</label>' . html::input('consumed[1]', '');?>
