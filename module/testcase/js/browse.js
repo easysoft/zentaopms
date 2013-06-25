@@ -27,7 +27,7 @@ function changeAction(url)
 
 $(document).ready(function()
 {
-    $(".runCase").colorbox({width:900, height:550, iframe:true, transition:'none', onCleanup:function(){parent.location.href=parent.location.href;}});
+    loadColorbox('runCase', 'caseList');
     $('#' + browseType + 'Tab').addClass('active');
     $('#module' + moduleID).addClass('active'); 
     if(browseType == 'bysearch') ajaxGetSearchForm();
