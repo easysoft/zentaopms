@@ -587,6 +587,7 @@ class story extends control
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason));
             $this->action->logHistory($actionID, $changes);
             $this->sendMail($storyID, $actionID);
+            if(isonlybody()) die(js::closeColorbox('parent.parent'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 

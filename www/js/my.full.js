@@ -834,11 +834,8 @@ function loadColorbox(colorboxClass, replaceID)
             onCleanup:function()
             {
                 saveWindowSize();
-                var link     = self.location.href;
-                var onlybody = config.requestType == 'PATH_INFO' ? "?onlybody=yes" : '&onlybody=yes';
-
-                link = link + onlybody;
-                $.get(link, function(data)
+                var link = self.location.href;
+                $.get(link, {onlybody:"yes"}, function(data)
                 {
                     $('#' + replaceID).replaceWith(data)
                     loadColorbox(colorboxClass, replaceID)
