@@ -726,6 +726,14 @@ EOT;
         return $js;
     }
 
+    static public function closeColorbox($window = 'self')
+    {
+        $js  = self::start();
+        $js .= "$window.$.colorbox.close()";
+        $js .= self::end();
+        return $js;
+    }
+
     /**
      * Export the config vars for createLink() js version.
      * 
