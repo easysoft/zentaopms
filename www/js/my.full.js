@@ -817,6 +817,38 @@ function selectItem(SelectID)
     }
 }
 
+/**
+ * Load Colorbox for List.
+ * 
+ * @access public
+ * @return void
+ */
+function loadColorbox(colorboxClass, replaceID)
+{
+    $('.' + colorboxClass).colorbox(
+        {
+            width:900,
+            height:500,
+            iframe:true,
+            transition:'none',
+            onCleanup:function()
+            {
+                saveWindowSize();
+                var link     = self.location.href;
+                var onlybody = config.requestType == 'PATH_INFO' ? "?onlybody=yes" : '&onlybody=yes';
+
+                link = link + onlybody;
+                $.get(link, function(data)
+                {
+                    $('#' + replaceID).replaceWith(data)
+                    loadColorbox(colorboxClass, replaceID)
+                    $('.colored').colorize();
+                    $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
+                });
+            }
+        });
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
