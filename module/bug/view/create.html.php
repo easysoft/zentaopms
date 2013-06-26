@@ -12,6 +12,7 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
+include '../../common/view/form.html.php';
 include '../../common/view/chosen.html.php';
 include '../../common/view/autocomplete.html.php';
 include '../../common/view/alert.html.php';
@@ -21,7 +22,7 @@ js::set('userList', array_keys($users));
 js::set('page', 'create');
 ?>
 
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform' class='ajaxForm'>
   <table class='table-1'> 
     <caption><?php echo $lang->bug->create;?></caption>
     <tr>
