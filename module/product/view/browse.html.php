@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(isonlybody())die(include './storylist.html.php'); ?>
+<?php if(isonlybody()) die(include './storylist.html.php'); ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/treeview.html.php';?>
 <?php include '../../common/view/colorize.html.php';?>
