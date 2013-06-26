@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
-<?php js::set('userList', array_keys($users)); ?>
+<?php if(isset($users)) js::set('userList', array_keys($users)); ?>
 <script language='Javascript'>
 function loadProduct(productID)
 {
