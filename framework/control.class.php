@@ -581,6 +581,20 @@ class control
         echo $this->output;
     }
 
+    /** 
+     * Send data directly, for ajax requests.
+     * 
+     * @param  misc    $data 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
+    public function send($data, $type = 'json')
+    {   
+        if($type == 'json') echo json_encode($data);
+        die(removeUTF8Bom(ob_get_clean()));
+    }   
+
     /**
      * Create a link to one method of one module.
      * 
