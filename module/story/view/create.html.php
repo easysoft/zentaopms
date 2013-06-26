@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform' class='ajaxForm'>
+<form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
   <table align='center' class='table-1'> 
     <caption><?php echo $lang->story->create;?></caption>
     <tr>

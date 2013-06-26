@@ -65,8 +65,16 @@ class task extends control
 
         if(!empty($_POST))
         {
+            $responser['result']  = 'success';
+            $responser['message'] = '';
+
             $tasksID = $this->task->create($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                $responser['result']  = 'fail';
+                $responser['message'] = dao::getError();
+                $this->send($responser);
+            }
 
             /* Create actions. */
             $this->loadModel('action');
@@ -79,16 +87,24 @@ class task extends control
             /* Locate the browser. */
             if($this->post->after == 'continueAdding')
             {
-                echo js::alert($this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding']);
-                die(js::locate($this->createLink('task', 'create', "projectID=$projectID&storyID={$this->post->story}"), 'parent'));
+                $responser['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
+                $responser['locate']  = $this->createLink('task', 'create', "projectID=$projectID&storyID={$this->post->story}");
+                $this->send($responser);
             }
             elseif($this->post->after == 'toTaskList')
             {
-                die(js::locate($taskLink, 'parent'));
+                $responser['locate'] = $taskLink;
+                $this->send($responser);
             }
             elseif($this->post->after == 'toStoryList')
             {
-                die(js::locate($storyLink, 'parent'));
+                $responser['locate'] = $storyLink;
+                $this->send($responser);
+            }
+            else
+            {
+                $responser['locate'] = $taskLink;
+                $this->send($responser);
             }
         }
 

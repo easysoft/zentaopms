@@ -11,13 +11,14 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('holders',  $lang->task->placeholder); ?>
 <?php js::set('userList', array_keys($users)); ?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<form method='post' enctype='multipart/form-data' id='dataform' class='ajaxForm'>
   <table align='center' class='table-1 a-left'> 
     <caption>
       <?php echo $lang->task->create;?>
@@ -102,5 +103,6 @@
       <td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td>
     </tr>
   </table>
+  <span id='responser'></span>
 </form>
 <?php include '../../common/view/footer.html.php';?>
