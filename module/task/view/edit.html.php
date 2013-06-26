@@ -15,12 +15,10 @@
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script language='Javascript'>
-changeProjectConfirmed = false;
-confirmChangeProject   = '<?php echo $lang->task->confirmChangeProject;?>';
-oldStoryID             = '<?php echo $task->story;?>';
-userList               = "<?php echo join(',', array_keys($users));?>".split(',');
-</script>
+<?php js::set('userList', array_keys($users)); ?>
+<?php js::set('oldStoryID', $task->story); ?>
+<?php js::set('confirmChangeProject', $lang->task->confirmChangeProject); ?>
+<?php js::set('changeProjectConfirmed', false); ?>
 <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
 <div id='titlebar'>
   <div id='main'>TASK #<?php echo $task->id . $lang->colon . html::input('name', $task->name, 'class="text-1"');?></div>

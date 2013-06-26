@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/autocomplete.html.php';?>
+<?php js::set('userList', array_keys($users)); ?>
 <script language='Javascript'>
 function loadProduct(productID)
 {
@@ -8,7 +9,6 @@ function loadProduct(productID)
     $('#moduleIdBox').load(moduleLink);
     $('#planIdBox').load(planLink);
 }
-var userList = "<?php echo join(',', array_keys($users));?>".split(',');
 $(function() {
     $("#reviewedBy").autocomplete(userList,{multiple: true,mustMatch: true});
     $("#mailto").autocomplete(userList, { multiple: true, mustMatch: true});
