@@ -144,8 +144,7 @@ class commonModel extends model
             if(stripos($method, 'downnotify') !== false) return true;
         }
 
-        if($module == 'misc' and $method == 'showqrcode') return true;
-        if($module == 'misc' and $method == 'deleteqrcode') return true;
+        if($module == 'misc' and $method == 'qrcode') return true;
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
         return false;
@@ -514,7 +513,7 @@ class commonModel extends model
     public static function printQRCodeLink($color = '')
     {
         global $lang;
-        if(extension_loaded('gd')) echo html::a(helper::createLink('misc', 'showQRCode'), $lang->user->mobileLogin, '', "class='qrCode $color'");
+        if(extension_loaded('gd')) echo html::a(helper::createLink('misc', 'qrCode'), $lang->user->mobileLogin, '', "class='qrCode $color'");
     }
 
     /**

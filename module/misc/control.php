@@ -121,43 +121,21 @@ class misc extends control
     }
 
     /**
-     * Show qr code for mobile login.
+     * Create qrcode for mobile login.
      * 
+     * @param  string $mode     template|qrcode
      * @access public
      * @return void
      */
-    public function showQRCode()
+    public function qrCode($mode = 'template')
     {
+        if($mode == 'template') die($this->display());
+
         $ciqrcode = $this->app->loadClass('ciqrcode');
-
         $loginAPI = common::getSysURL() . $this->config->webRoot;
-        if($this->config->requestType == "GET")       $loginAPI .= "?m=user&f=login&";
-        if($this->config->requestType == "PATH_INFO") $loginAPI .= "user-login?";
-        if($this->loadModel('user')->isLogon())       $loginAPI .= "account={$this->app->user->account}&password={$this->app->user->password}";
+        if($this->loadModel('user')->isLogon()) $loginAPI .= "?sid=" . session_ID();
 
-        $qrImageName = md5($loginAPI) . '.png';
-        $qrWebPath = common::getSysURL() . $this->config->webRoot . "data/$qrImageName";
-        $savePath  = $this->app->getAppRoot() . "www/data/";
-
-        $params['data']     = $loginAPI;
-        $params['level']    = 'L';
-        $params['size']     = 10;
-        $params['savename'] = $savePath . $qrImageName;
-        $this->session->set('qrImage', $params['savename']);
-        $ciqrcode->generate($params);
-
-        $this->view->qrWebPath = $qrWebPath;
-        $this->display();
-    }
-
-    /**
-     * Delete qr code.
-     * 
-     * @access public
-     * @return void
-     */
-    public function deleteQRCode()
-    {
-        @unlink($this->session->qrImage);
+        header("Content-Type: image/png");
+        die($ciqrcode->generate(array('data' => $loginAPI, 'size' => 8)));
     }
 }
