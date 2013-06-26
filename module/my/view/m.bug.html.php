@@ -34,7 +34,6 @@
         common::printIcon('bug', 'resolve',    "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
         common::printIcon('bug', 'close',      "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
         common::printIcon('bug', 'activate',   "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
-        echo '<li>' . html::a($browseLink, $lang->goback) . '</li>';
         ?>
         </ul>
       </div>
