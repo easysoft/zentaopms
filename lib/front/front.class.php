@@ -815,6 +815,16 @@ EOT;
         }
         elseif(is_array($value) or is_object($value) or is_string($value))
         {
+            if(is_array($value) or is_object($value))
+            {
+                $newValue = array();
+                foreach($value as $k => $v)
+                {
+                    $newValue[$k] = is_numeric($v) ? (string)$v : $v;
+                }
+                $value = $newValue;
+            }
+            
             $value = json_encode($value);
             $js .= "$key = $value";
         }
