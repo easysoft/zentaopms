@@ -12,8 +12,9 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/form.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform' class='ajaxForm'>
   <table align='center' class='table-1'> 
     <caption><?php echo $lang->story->create;?></caption>
     <tr>
@@ -75,5 +76,6 @@
     </tr>  
     <tr><td colspan='2' class='a-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
+  <span id='responser'></span>
 </form>
 <?php include '../../common/view/footer.html.php';?>

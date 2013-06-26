@@ -39,8 +39,15 @@ class story extends control
     {
         if(!empty($_POST))
         {
+            $responser['result']  = 'success';
+            $responser['message'] = '';
             $storyID = $this->story->create($projectID, $bugID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                $responser['result']  = 'fail';
+                $responser['message'] = dao::getError();
+                $this->send($responser);
+            }
             if($bugID == 0)
             {
                 $actionID = $this->action->create('story', $storyID, 'Opened', '');
@@ -52,16 +59,19 @@ class story extends control
             $this->sendMail($storyID, $actionID);
             if($this->post->newStory)
             {
-                echo js::alert($this->lang->story->successSaved . $this->lang->story->newStory);
-                die(js::locate($this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID"), 'parent'));
+                $responser['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
+                $responser['locate']  = $this->createLink('story', 'create', "productID=$productID&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID");
+                $this->send($responser);
             }
             if($projectID == 0)
             {
-                die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+                $responser['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
+                $this->send($responser);
             }
             else
             {
-                die(js::locate($this->createLink('project', 'story', "projectID=$projectID"), 'parent'));
+                $responser['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
+                $this->send($responser);
             }
         }
 
