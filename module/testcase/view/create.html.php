@@ -11,8 +11,9 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform' class='ajaxForm'>
   <table class='table-1'> 
     <caption><?php echo $lang->testcase->create;?></caption>
     <tr>
