@@ -159,6 +159,5 @@ class misc extends control
     public function deleteQRCode()
     {
         @unlink($this->session->qrImage);
-        die(js::execute("javascript:history.go(-1)"));
     }
 }

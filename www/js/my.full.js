@@ -471,7 +471,7 @@ function setAbout()
  */
 function setQRCode()
 {
-    if($('a.qrCode').size()) $("a.qrCode").colorbox({width:500, height:500, iframe:true, transition:'none', scrolling:false, onCleanup:function(){location.href = createLink('misc', 'deleteQRCode');}});
+    if($('a.qrCode').size()) $("a.qrCode").colorbox({width:500, height:500, iframe:true, transition:'none', scrolling:false, onCleanup:function(){$.get(createLink('misc', 'deleteQRCode'))}});
 }
 
 /**
