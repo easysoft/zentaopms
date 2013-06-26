@@ -464,6 +464,17 @@ function setAbout()
 }
 
 /**
+ * Set QR Code. 
+ * 
+ * @access public
+ * @return void
+ */
+function setQRCode()
+{
+    if($('a.qrCode').size()) $("a.qrCode").colorbox({width:500, height:500, iframe:true, transition:'none', scrolling:false, onCleanup:function(){location.href = createLink('misc', 'deleteQRCode');}});
+}
+
+/**
  * Set the css of the iframe.
  * 
  * @param  string $color 
@@ -866,6 +877,7 @@ $(document).ready(function()
     saveProject();
 
     setAbout();
+    setQRCode();
     setExport();
     setSubversionLink();
 

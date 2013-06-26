@@ -13,6 +13,7 @@
         <span>Powered by <a href='http://www.zentao.net' target='_blank'>ZenTaoPMS</a> (<?php echo $config->version;?>)</span>
         <?php echo $lang->proVersion;?>
         <?php commonModel::printNotifyLink();?>
+        <?php commonModel::printQRCodeLink();?>
       </td>
     </tr>
   </table>

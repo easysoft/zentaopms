@@ -119,4 +119,46 @@ class misc extends control
         }
         $this->fetch('file', 'sendDownHeader', array('fileName' => 'notify.zip', 'zip', file_get_contents($packageFile)));
     }
+
+    /**
+     * Show qr code for mobile login.
+     * 
+     * @access public
+     * @return void
+     */
+    public function showQRCode()
+    {
+        $ciqrcode = $this->app->loadClass('ciqrcode');
+
+        $loginAPI = common::getSysURL() . $this->config->webRoot;
+        if($this->config->requestType == "GET")       $loginAPI .= "?m=user&f=login&";
+        if($this->config->requestType == "PATH_INFO") $loginAPI .= "user-login?";
+        if($this->loadModel('user')->isLogon())       $loginAPI .= "account={$this->app->user->account}&password={$this->app->user->password}";
+
+        $qrImageName = md5($loginAPI) . '.png';
+        $qrWebPath = common::getSysURL() . $this->config->webRoot . "data/$qrImageName";
+        $savePath  = $this->app->getAppRoot() . "www/data/";
+
+        $params['data']     = $loginAPI;
+        $params['level']    = 'L';
+        $params['size']     = 10;
+        $params['savename'] = $savePath . $qrImageName;
+        $this->session->set('qrImage', $params['savename']);
+        $ciqrcode->generate($params);
+
+        $this->view->qrWebPath = $qrWebPath;
+        $this->display();
+    }
+
+    /**
+     * Delete qr code.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deleteQRCode()
+    {
+        @unlink($this->session->qrImage);
+        die(js::execute("javascript:history.go(-1)"));
+    }
 }

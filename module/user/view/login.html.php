@@ -32,6 +32,7 @@ include '../../common/view/colorbox.html.php';
       <?php 
       echo html::submitButton($lang->login);
       if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
+      commonModel::printQRCodeLink('white');
       echo html::hidden('referer', $referer);
       ?>
       </td>

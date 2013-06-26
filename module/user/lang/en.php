@@ -54,6 +54,7 @@ $lang->user->update          = "Upgrade";
 $lang->user->delete          = "Delete";
 $lang->user->browse          = "Browse";
 $lang->user->login           = "Login";
+$lang->user->mobileLogin     = "Mobile Login";
 $lang->user->userView        = "User view";
 $lang->user->editProfile     = "Edit profile";
 $lang->user->editPassword    = "Change password";
