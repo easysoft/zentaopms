@@ -39,6 +39,7 @@
         {
             common::printIcon('story', 'review',     "storyID=$story->id", $story);
             common::printIcon('story', 'close',      "storyID=$story->id", $story);
+            common::printIcon('story', 'activate',  "storyID=$story->id", $story);
             common::printIcon('story', 'delete', "storyID=$story->id", '', '', '', 'hiddenwin');
         }
         ?>
