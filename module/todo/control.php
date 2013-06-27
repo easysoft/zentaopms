@@ -401,4 +401,17 @@ class todo extends control
 
         $this->display();
     }
+
+    /**
+     * AJAX: get actions of a todo. for web app.
+     * 
+     * @param  int    $todoID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDetail($todoID)
+    {
+        $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
+        $this->display();
+    }
 }

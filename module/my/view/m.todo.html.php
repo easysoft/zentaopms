@@ -24,12 +24,13 @@
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <div  data-role="collapsible-set">
   <div data-role="collapsible" data-collapsed="true">
-    <h1><?php echo $todo->name;?></h1>
+    <h1 onClick="showDetail('todo', <?php echo $todo->id;?>)"><?php echo $todo->name;?></h1>
     <div><?php echo $todo->desc;?></div>
+    <div id='item<?php echo $todo->id;?>'><?php echo $todo->desc;?></div>
     <div data-role='navbar'>
       <ul>
         <?php
-        common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', '', 'hiddenwin');
+        common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'button', '', 'hiddenwin');
         if($todo->account == $app->user->account)
         {
             common::printIcon('todo', 'edit',   "todoID=$todo->id");
