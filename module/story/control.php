@@ -760,6 +760,19 @@ class story extends control
     }
 
     /**
+     * AJAX: get spec and verify of a story. for web app.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDetail($storyID)
+    {
+        $this->view->story = $this->story->getByID($storyID);
+        $this->display();
+    }
+
+    /**
      * Send email.
      * 
      * @param  int    $storyID 

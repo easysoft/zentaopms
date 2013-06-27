@@ -12,19 +12,19 @@
 ?>
 <?php include '../../common/view/m.header.html.php';?>
 </div>
+<script>
+function showDetail(storyID)
+{
+    $.get(createLink('story', 'ajaxGetDetail', "storyID=" + storyID), function(data){$('#item' + storyID).html(data)})
+}
+</script>
 <?php foreach($stories as $story):?>
 <?php if($story->status == 'closed') continue;?>
 <div  data-role="collapsible-set">
   <div data-role="collapsible" data-collapsed="true">
-    <h1><?php echo $story->title;?></h1>
-    <div>
-      <p><strong><?php echo $lang->story->spec?><strong></p>
-      <?php echo $story->spec?>
-    </div>
-    <div>
-      <p><strong><?php echo $lang->story->verify?><strong></p>
-      <?php echo $story->verify?>
-    </div>
+    <h1 onClick="showDetail(<?php echo $story->id; ?>)"><?php echo $story->title;?></h1>
+
+    <div id='item<?php echo $story->id;?>'></div>
     <div data-role='navbar'>
       <ul>
         <?php
@@ -38,6 +38,7 @@
         ?>
       </ul>
     </div>
+
   </div>
 </div>
 <?php endforeach;?>
