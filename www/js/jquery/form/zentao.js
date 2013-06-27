@@ -23,7 +23,7 @@ $.extend(
                 /* The response.result is success. */
                 if(response.result == 'success')
                 {
-                    if($.isFunction(callback)) return callback(response);
+                    if(typeof(callback) == 'function') return callback(response);
                     if(response.message) alert(response.message);
                     if(response.locate) return location.href = response.locate;
                 }
