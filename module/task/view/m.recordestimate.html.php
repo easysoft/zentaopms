@@ -16,7 +16,7 @@
     <?php echo $lang->task->consumed . ':' . $allConsumed . $lang->task->hour . ', ' . $lang->task->left . ':' . $allLeft . $lang->task->hour;?>
   </div>
   <div data-role="fieldcontain">
-    <?php echo '<label for="consumed">' . $lang->task->consumed . '(' . $lang->task->hour . ')</label>' . html::input('consumed[1]', '');?>
+    <?php echo '<label for="consumed">' . $lang->task->consumedThisTime . '(' . $lang->task->hour . ')</label>' . html::input('consumed[1]', '');?>
   </div>
   <div data-role="fieldcontain">
     <?php echo '<label for="left">' . $lang->task->left . '(' . $lang->task->hour . ')</label>' . html::input('left[1]', '');?>
