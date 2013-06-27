@@ -198,6 +198,14 @@ function ajaxGetSearchForm()
     }
 }
 
+/**
+ * Show detail.
+ * 
+ * @param  string $objectType 
+ * @param  int    $objectID 
+ * @access public
+ * @return void
+ */
 function showDetail(objectType, objectID)
 {
     $.get(createLink(objectType, 'ajaxGetDetail', "objectID=" + objectID), function(data){$('#item' + objectID).html(data)});      
