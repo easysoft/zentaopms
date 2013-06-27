@@ -768,7 +768,8 @@ class story extends control
      */
     public function ajaxGetDetail($storyID)
     {
-        $this->view->story = $this->story->getByID($storyID);
+        $this->view->actions = $this->action->getList('story', $storyID);
+        $this->view->story   = $this->story->getByID($storyID);
         $this->display();
     }
 
