@@ -2,18 +2,18 @@
 </div>
 <form method='post' target='hiddenwin'>
   <h3><?php echo "BUG#$bug->id $bug->title";?></h3>
-
   <table class='table-1'>
     <tr>
       <td class='w-60px'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '');?></td>
     </tr>
+    <tr>
+      <td class='a-center' colspan='2'>
+      <?php echo html::submitButton('', 'data-inline="true" data-theme="b"');?>
+      <?php echo html::backButton("data-inline='true'");?>
+      </td>
+    </tr>
   </table>
-
-  <div class='a-center'>
-  <?php echo html::submitButton('', 'data-inline="true" data-theme="b"');?>
-  <?php echo html::backButton("data-inline='true'");?>
-  </div>
 </form>
 <?php include '../../common/view/m.action.html.php';?>
 <?php include '../../common/view/m.footer.html.php';?>
