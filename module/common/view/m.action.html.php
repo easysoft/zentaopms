@@ -94,11 +94,9 @@ $(function(){
 
 <div id='actionbox'>
 <fieldset>
-  <legend>
-  <?php echo $lang->history?>
-  </legend>
+  <legend><?php echo $lang->history?></legend>
 
-  <ol id='historyItem'>
+  <ol id='historyItem' style='padding-left:20px; font-size:11px'>
     <?php $i = 1; ?>
     <?php foreach($actions as $action):?>
     <li value='<?php echo $i ++;?>'>
