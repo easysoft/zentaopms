@@ -834,6 +834,19 @@ class task extends control
     }
 
     /**
+     * AJAX: get the actions of a task. for web app.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDetail($taskID)
+    {
+        $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
+        $this->display();
+    }
+
+    /**
      * The report page.
      * 
      * @param  int    $projectID 

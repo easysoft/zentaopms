@@ -23,8 +23,9 @@
 <?php foreach($tasks as $task):?>
 <div  data-role="collapsible-set">
   <div data-role="collapsible" data-collapsed="true">
-    <h1><?php echo $task->name;?></h1>
+    <h1 onClick="showDetail('task', <?php echo $task->id;?>)"><?php echo $task->name;?></h1>
     <div><?php echo $task->desc;?></div>
+    <div id='item<?php echo $task->id;?>'><?php echo $task->desc;?></div>
     <div data-role='navbar'>
       <ul>
         <?php 
