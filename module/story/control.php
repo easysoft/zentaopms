@@ -41,6 +41,7 @@ class story extends control
         {
             $responser['result']  = 'success';
             $responser['message'] = '';
+
             $storyID = $this->story->create($projectID, $bugID);
             if(dao::isError())
             {

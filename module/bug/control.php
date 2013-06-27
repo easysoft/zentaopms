@@ -222,6 +222,7 @@ class bug extends control
         {
             $responser['result']  = 'success';
             $responser['message'] = '';
+
             $bugID = $this->bug->create();
             if(dao::isError())
             {
@@ -229,6 +230,7 @@ class bug extends control
                 $responser['message'] = dao::getError();
                 $this->send($responser);
             }
+
             $actionID = $this->action->create('bug', $bugID, 'Opened');
             $this->sendmail($bugID, $actionID);
             $responser['locate'] = $this->createLink('bug', 'browse', "productID={$this->post->product}&type=byModule&param={$this->post->module}");
