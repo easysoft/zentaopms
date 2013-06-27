@@ -1,21 +1,10 @@
-<?php
-/**
- * The browse view file of product module of ZenTaoPMS.
- *
- * @copyright   Copyright 2009-2013 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
- * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     product
- * @version     $Id: browse.html.php 4660 2013-04-17 08:22:02Z chencongzhi520@gmail.com $
- * @link        http://www.zentao.net
- */
-?>
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <?php foreach($stories as $story):?>
 <?php if($story->status == 'closed') continue;?>
 <div  data-role="collapsible-set">
-  <div data-role="collapsible" data-collapsed="true">
+  <div data-role="collapsible" data-collapsed="<?php echo $this->session->storyID == $story->id ? 'false' : 'true'?>">
+    <?php if($this->session->storyID == $story->id) echo "<script>showDetail('story', $story->id);</script>";?>
     <h1 onClick="showDetail('story', <?php echo $story->id;?>)"><?php echo $story->title;?></h1>
 
     <div id='item<?php echo $story->id;?>'></div>

@@ -16,7 +16,8 @@
 <?php $this->session->set('bugType', $type);?>
 <?php foreach($bugs as $bug):?>
   <div  data-role="collapsible-set">
-    <div data-role="collapsible" data-collapsed="true">
+    <div data-role="collapsible" data-collapsed="<?php echo $this->session->bugID == $bug->id ? 'false' : 'true'?>">
+      <?php if($this->session->bugID == $bug->id) echo "<script>showDetail('bug', $bug->id);</script>";?>
       <h1 onClick="showDetail('bug', <?php echo $bug->id;?>)"><?php echo $bug->title;?></h1>
       <div><?php echo $bug->steps;?></div>
       <div id='item<?php echo $bug->id;?>'></div>
