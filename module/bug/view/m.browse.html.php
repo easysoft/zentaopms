@@ -29,12 +29,11 @@
       {
           $browseLink = $this->createLink('my', 'bug');
       }
-      common::printIcon('bug', 'confirmBug', "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
-      common::printIcon('bug', 'assignTo',   "bugID=$bug->id", '',   'button', '', '', 'iframe', true);
-      common::printIcon('bug', 'resolve',    "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
-      common::printIcon('bug', 'close',      "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
-      common::printIcon('bug', 'activate',   "bugID=$bug->id", $bug, 'button', '', '', 'iframe', true);
-      echo '<li>' . html::a($browseLink, $lang->goback) . '</li>';
+      common::printIcon('bug', 'confirmBug', "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
+      common::printIcon('bug', 'assignTo',   "bugID=$bug->id", '',   'button', '', '', 'iframe');
+      common::printIcon('bug', 'resolve',    "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
+      common::printIcon('bug', 'close',      "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
+      common::printIcon('bug', 'activate',   "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
       ?>
       </ul>
     </div>
