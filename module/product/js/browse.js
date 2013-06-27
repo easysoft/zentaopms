@@ -25,5 +25,5 @@ function changeAction(formName, actionName, actionLink)
 $(function()
 {
     if(browseType == 'bysearch') ajaxGetSearchForm();
-    loadColorbox('iframe', 'storyList');
+    setModal4List('iframe', 'storyList');
 })

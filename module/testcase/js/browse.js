@@ -27,7 +27,7 @@ function changeAction(url)
 
 $(document).ready(function()
 {
-    loadColorbox('runCase', 'caseList');
+    setModal4List('runCase', 'caseList');
     $('#' + browseType + 'Tab').addClass('active');
     $('#module' + moduleID).addClass('active'); 
     if(browseType == 'bysearch') ajaxGetSearchForm();

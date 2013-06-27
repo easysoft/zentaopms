@@ -829,32 +829,39 @@ function selectItem(SelectID)
 }
 
 /**
- * Load Colorbox for List.
+ * Set modal for list page.
+ *
+ * Open operation pages in modal for list pages, after the modal window close, reload the list content and repace the replaceID.
  * 
+ * @param string   colorboxClass   the class for colorbox binding.
+ * @param string   replaceID       the html object to be replaced.
  * @access public
  * @return void
  */
-function loadColorbox(colorboxClass, replaceID)
+function setModal4List(colorboxClass, replaceID)
 {
     $('.' + colorboxClass).colorbox(
+    {
+        width: 900,
+        height: 500,
+        iframe: true,
+        transition: 'none',
+
+        onCleanup:function()
         {
-            width:900,
-            height:500,
-            iframe:true,
-            transition:'none',
-            onCleanup:function()
+            saveWindowSize();
+
+            var link = self.location.href;
+            $.get(link, {onlybody:"yes"}, function(data)
             {
-                saveWindowSize();
-                var link = self.location.href;
-                $.get(link, {onlybody:"yes"}, function(data)
-                {
-                    $('#' + replaceID).replaceWith(data)
-                    loadColorbox(colorboxClass, replaceID)
-                    $('.colored').colorize();
-                    $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
-                });
-            }
-        });
+                $('#' + replaceID).replaceWith(data);
+                setModal4List(colorboxClass, replaceID);
+
+                $('.colored').colorize();
+                $('tfoot td').css('background', 'white').unbind('click').unbind('hover');
+            });
+        }
+    });
 }
 
 /* Ping the server every some minutes to keep the session. */
