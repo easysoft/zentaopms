@@ -129,7 +129,7 @@ class misc extends control
      */
     public function qrCode($mode = 'template')
     {
-        if($mode == 'template') die($this->display());
+        if($mode == 'template') die("<div style='text-align:center;'><img src='" . inlink('qrcode', 'mode=qrcode') . "' /></div>");
 
         $ciqrcode = $this->app->loadClass('ciqrcode');
         $loginAPI = common::getSysURL() . $this->config->webRoot;
