@@ -14,37 +14,51 @@
 </div>
 <h3><?php echo $story->title?></h3>
 <form method='post' target='hiddenwin'>
-  <span><?php echo $lang->story->reviewedDate;?></span>
-  <?php echo html::input('reviewedDate', helper::today(), 'class=text-3');?>
-  <span><?php echo $lang->story->reviewResult;?></span>
-  <?php echo html::select('result', $lang->story->reviewResultList, '', 'class=select-3 onchange="switchShow(this.value)"');?>
-  <div id='rejectedReasonBox' class='hidden'>
-    <span><?php echo $lang->story->rejectedReason;?></span>
-    <?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=select-3 onchange="setStory(this.value)"');?>
-  </div>
-  <div id='duplicateStoryBox' class='hidden'>
-    <span><?php echo $lang->story->duplicateStory;?></span>
-    <?php echo html::input('duplicateStory', '', 'class=text-3');?>
-  </div>
-  <div id='childStoriesBox' class='hidden'>
-    <span><?php echo $lang->story->childStories;?></span>
-    <?php echo html::input('childStories', '', 'class=text-3');?>
-  </div>
-  <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
-  <div id='preVersionBox' class='hidden'>
-    <span><?php echo $lang->story->preVersion;?></span>
-    <?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?>
-  </div>
-  <?php endif;?>
-  <span><?php echo $lang->story->assignedTo;?></span>
-  <?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy, 'class=select-3');?>
-  <span><?php echo $lang->story->reviewedBy;?></span>
-  <?php echo html::input('reviewedBy', $app->user->account . ', ', 'class=text-1');?>
-  <span><?php echo $lang->story->comment;?></span>
-  <?php echo html::textarea('comment', '', "rows='8' class='area-1'");?>
-  <p class='a-center'>
-  <?php echo html::submitButton('', "data-inline='true' data-theme='b'");?>
-  <?php echo html::backButton("data-inline='true'");?>
-  </p>
+  <table class='table-1'>
+    <tr>
+      <td class='w-70px'><?php echo $lang->story->reviewedDate;?></td>
+      <td><?php echo html::input('reviewedDate', helper::today());?></td>
+    </tr>
+    <tr>
+      <td><?php echo $lang->story->reviewResult;?></td>
+      <td><?php echo html::select('result', $lang->story->reviewResultList, '', 'onchange="switchShow(this.value)"');?></td>
+    </tr>
+    <tr id='rejectedReasonBox' class='hidden'>
+      <td><?php echo $lang->story->rejectedReason;?></td>
+      <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'onchange="setStory(this.value)"');?></td>
+    </tr>
+    <tr id='duplicateStoryBox' class='hidden'>
+      <td><?php echo $lang->story->duplicateStory;?></td>
+      <td><?php echo html::input('duplicateStory', '');?></td>
+    </tr>
+    <tr id='childStoriesBox' class='hidden'>
+      <td><?php echo $lang->story->childStories;?></td>
+      <td><?php echo html::input('childStories', '');?></td>
+    </tr>
+    <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
+    <tr id='preVersionBox' class='hidden'>
+      <td><?php echo $lang->story->preVersion;?></td>
+      <td><?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?></td>
+    </tr>
+    <?php endif;?>
+    <tr>
+      <td><?php echo $lang->story->assignedTo;?></td>
+      <td><?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy);?></td>
+    </tr>
+    <tr>
+      <td><?php echo $lang->story->reviewedBy;?></td>
+      <td><?php echo html::input('reviewedBy', $app->user->account . ', ');?></td>
+    </tr>
+    <tr>
+      <td><?php echo $lang->story->comment;?></td>
+      <td><?php echo html::textarea('comment', '');?></td>
+    </tr>
+    <tr>
+      <td class='a-center' colspan='2'>
+      <?php echo html::submitButton('', "data-inline='true' data-theme='b'");?>
+      <?php echo html::backButton("data-inline='true'");?>
+      </td>
+    <tr>
+  </table>
 </form>
 <?php include '../../common/view/m.footer.html.php';?>

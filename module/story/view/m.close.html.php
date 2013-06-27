@@ -13,22 +13,30 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <form method='post' target='hiddenwin'>
-    <h3><?php echo $story->title;?></h3>
-    <span><?php echo $lang->story->closedReason;?></span>
-    <?php echo html::select('closedReason', $lang->story->reasonList, '', 'onchange="setStory(this.value)"');?>
-    <div id='duplicateStoryBox' class='hidden'>
-      <span><?php echo $lang->story->duplicateStory;?></span>
-      <?php echo html::input('duplicateStory', '');?>
-    </div>
-    <div id='childStoriesBox' class='hidden'>
-      <span><?php echo $lang->story->childStories;?></span>
-      <?php echo html::input('childStories', '');?>
-    </div>
-    <span><?php echo $lang->story->comment;?></span>
-    <?php echo html::textarea('comment', '');?>
-    <p class='a-center'>
-    <?php echo html::submitButton('', "data-inline='true' data-theme='b'");?>
-    <?php echo html::backButton("data-inline='true'");?>
-    </p>
+  <h3><?php echo $story->title;?></h3>
+  <table class='table-1'>
+    <tr>
+      <td class='w-70px'><?php echo $lang->story->closedReason;?></td>
+      <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'onchange="setStory(this.value)"');?></td>
+    </tr>
+    <tr id='duplicateStoryBox' class='hidden'>
+      <td><?php echo $lang->story->duplicateStory;?></td>
+      <td><?php echo html::input('duplicateStory', '');?></td>
+    </tr>
+    <tr id='childStoriesBox' class='hidden'>
+      <td><?php echo $lang->story->childStories;?></td>
+      <td><?php echo html::input('childStories', '');?></td>
+    </tr>
+    <tr>
+      <td><?php echo $lang->story->comment;?></td>
+      <td><?php echo html::textarea('comment', '');?></td>
+    </tr>
+    <tr>
+      <td class='a-center' colspan='2'>
+        <?php echo html::submitButton('', "data-inline='true' data-theme='b'");?>
+        <?php echo html::backButton("data-inline='true'");?>
+      </td>
+    </tr>
+  </table>
 </form>
 <?php include '../../common/view/m.footer.html.php';?>

@@ -15,15 +15,26 @@ include '../../common/view/m.header.lite.html.php';
 </div>
 <div data-role="content" >
 <form method='post' target='hiddenwin'>
-  <?php
-  echo html::input('account', '', "placeholder='{$lang->user->account}'");
-  echo html::password('password', '', "placeholder='{$lang->user->password}'");
-  echo html::select('lang', $config->langs, $this->app->getClientLang(), 'onchange=selectLang(this.value)');
-  echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);
-  echo html::submitButton($lang->login, "data-inline='true' data-theme='b'");
-  if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module), '', "data-inline='true'");
-  echo html::hidden('referer', $referer);
-  ?>
+  <table class='table-1'> 
+    <tr>
+      <td class='rowhead'><?php echo $lang->user->account;?>：</td>  
+      <td><input type='text' name='account' id='account' /></td>
+    </tr>  
+    <tr>
+      <td class='rowhead'><?php echo $lang->user->password;?>：</td>  
+      <td><input type='password' name='password' /></td>
+    </tr>
+    <tr><td></td><td id='keeplogin'><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td></tr>
+    <tr>
+      <td colspan='2' align='center'>
+      <?php 
+      echo html::submitButton($lang->login, "data-inline='true' data-theme='b'");
+      if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module), '', "data-inline='true'");
+      echo html::hidden('referer', $referer);
+      ?>
+      </td>
+    </tr>  
+  </table>
 </form>
 </div>
 <?php include '../../common/view/m.footer.lite.html.php';?>
