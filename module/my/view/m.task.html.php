@@ -20,6 +20,7 @@
     </ul>
   </div>
 </div>
+<?php $this->session->set('taskType', $type);?>
 <?php foreach($tasks as $task):?>
 <div  data-role="collapsible-set">
   <div data-role="collapsible" data-collapsed="true">

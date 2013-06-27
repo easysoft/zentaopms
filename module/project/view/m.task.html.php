@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/m.header.html.php';?>
 </div>
+<?php $this->session->set('tastType', '');?>
 <?php foreach($tasks as $task):?>
 <div  data-role="collapsible-set">
   <div data-role="collapsible" data-collapsed="true">

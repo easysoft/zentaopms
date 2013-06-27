@@ -16,8 +16,9 @@
 <?php if($bug->status == 'closed') continue;?>
 <div  data-role="collapsible-set">
   <div data-role="collapsible" data-collapsed="true">
-    <h1><?php echo $bug->title;?></h1>
+    <h1 onClick="showDetail('bug', <?php echo $bug->id;?>)"><?php echo $bug->title;?></h1>
     <div><?php echo $bug->steps;?></div>
+    <div id='item<?php echo $bug->id;?>'><?php echo $bug->steps;?></div>
     <div data-role='navbar'>
       <ul>
       <?php
