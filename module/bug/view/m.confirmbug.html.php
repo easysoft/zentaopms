@@ -1,9 +1,19 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <form method='post' target='hiddenwin'>
-  <div><?php echo $bug->title;?></div>
-  <div><?php echo $lang->bug->assignedTo . html::select('assignedTo', $users, $bug->assignedTo, "class='text-3'");?></div>
-  <div><?php echo $lang->comment . html::textarea('comment', '', "rows='6' class='area-1'");?></div>
+  <h3><?php echo "BUG#$bug->id $bug->title";?></h3>
+
+  <table class='table-1'>
+    <tr>
+      <td class='w-60px'><?php echo $lang->bug->assignedTo;?></td>
+      <td><?php echo html::select('assignedTo', $users, $bug->assignedTo);?></td>
+    </tr>
+    <tr>
+      <td class='w-60px'><?php echo $lang->comment;?></td>
+      <td><?php echo html::textarea('comment', '');?></td>
+    </tr>
+  </table>
+
   <div class='a-center'>
   <?php echo html::submitButton($lang->bug->buttonConfirm, 'data-inline="true" data-theme="b"');?>
   <?php echo html::backButton("data-inline='true'");?>

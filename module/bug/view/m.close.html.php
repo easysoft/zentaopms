@@ -1,8 +1,15 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <form method='post' target='hiddenwin'>
-  <div><?php echo $bug->title;?></div>
-  <div><?php echo html::textarea('comment', '', "rows='6' class='area-1' placeholder=$lang->comment");?></div>
+  <h3><?php echo "BUG#$bug->id $bug->title";?></h3>
+
+  <table class='table-1'>
+    <tr>
+      <td class='w-60px'><?php echo $lang->comment;?></td>
+      <td><?php echo html::textarea('comment', '');?></td>
+    </tr>
+  </table>
+
   <div class='a-center'>
   <?php echo html::submitButton('', 'data-inline="true" data-theme="b"');?>
   <?php echo html::backButton("data-inline='true'");?>
