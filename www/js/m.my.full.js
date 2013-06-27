@@ -198,6 +198,10 @@ function ajaxGetSearchForm()
     }
 }
 
+function showDetail(objectType, objectID)
+{
+    $.get(createLink(objectType, 'ajaxGetDetail', "objectID=" + objectID), function(data){$('#item' + objectID).html(data)});      
+}
 
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
