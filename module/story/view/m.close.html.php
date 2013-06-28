@@ -13,7 +13,7 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <form method='post' target='hiddenwin'>
-  <h3><?php echo $story->title;?></h3>
+  <h3><?php echo $lang->story->close . $lang->colon . $story->title;?></h3>
   <table class='table-1'>
     <tr>
       <td class='w-70px'><?php echo $lang->story->closedReason;?></td>

@@ -31,7 +31,7 @@
 .a-right  {text-align: right;}
 .a-left   {text-align: left;}
 
-.table-1 {width:100%; margin-bottom:10px}
+.table-1 {width:100%;}
 .rowhead {font-weight:bold; text-align:right; width:80px; border:none}
 
 .w-20px {width:20px}
@@ -50,4 +50,3 @@
 .w-150px {width:150px}
 .w-160px {width:160px}
 .w-200px {width:200px}
-

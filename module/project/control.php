@@ -46,6 +46,7 @@ class project extends control
         $this->session->set('projectList', $this->app->getURI(true));
 
         $this->app->loadLang('my');
+        $this->view->title         = $this->lang->project->allProject;
         $this->view->projectStats  = $this->project->getProjectStats($status);
 
         $this->display();

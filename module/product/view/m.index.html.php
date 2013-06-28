@@ -14,11 +14,15 @@
 <ul data-role='listview'>
   <?php foreach($productStats as $product):?>
   <li>
-    <h3><?php echo $product->name?></h3>
-    <div style='text-align:right'>
-      <span><?php echo html::a($this->createLink('product', 'browse', "productID=$product->id"), $lang->story->browse, '', "data-role='button' data-mini='true' data-inline='true'")?></span>
-      <span><?php echo html::a($this->createLink('bug', 'browse', "productID=$product->id"), $lang->bug->browse, '', "data-role='button' data-mini='true' data-inline='true'")?></span>
-    </div>
+    <table class='table-1 fixed'>
+      <tr>
+        <td><h3><?php echo $product->name?></h3></td>
+        <td width='120'>
+          <?php echo html::a($this->createLink('product', 'browse', "productID=$product->id"), $lang->story->common, '', "data-role='button' data-mini='true' data-inline='true'")?>
+          <?php echo html::a($this->createLink('bug', 'browse', "productID=$product->id"), $lang->bug->common, '', "data-role='button' data-mini='true' data-inline='true'")?>
+        </td>
+      </tr>
+    </table>
   </li>
   <?php endforeach;?>
 </ul>

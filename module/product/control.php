@@ -51,6 +51,7 @@ class product extends control
         $this->product->setMenu($this->products, $productID);
 
         $this->app->loadLang('my');
+        $this->view->title        = $this->lang->product->allProduct;
         $this->view->productStats = $this->product->getStats();
         $this->display();
     }

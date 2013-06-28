@@ -47,7 +47,7 @@
 <div data-role='footer' data-position='fixed'>
   <div data-role='navbar'>
     <ul>
-      <li><?php echo html::a($this->createLink('todo', 'batchCreate'), $lang->todo->create)?></li>
+      <li><?php echo html::a($this->createLink('todo', 'batchCreate'), $lang->todo->create, '', "data-icon='plus'")?></li>
     </ul>
   </div>
 </div>
