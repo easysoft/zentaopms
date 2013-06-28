@@ -290,9 +290,15 @@ class commonModel extends model
 
         /* Set the main main menu. */
         $mainMenu = $moduleName;
-        if($moduleName == 'my' and $app->getViewType()) $mainMenu = $methodName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
-        if($moduleName == 'todo' and $app->getViewType()) $mainMenu = $moduleName;
+        if($app->getViewType() == 'mhtml')
+        {
+            if($moduleName == 'my')   $mainMenu = $methodName;
+            if($moduleName == 'todo') $mainMenu = $moduleName;
+            if($moduleName == 'story' and !array_key_exists('story', $lang->menu)) $mainMenu = 'product';
+            if($moduleName == 'bug'   and !array_key_exists('bug',   $lang->menu)) $mainMenu = 'product';
+            if($moduleName == 'task'  and !array_key_exists('task',  $lang->menu)) $mainMenu = 'project';
+        }
 
         /* Sort menu according to menuOrder. */
         if(isset($lang->menuOrder))
