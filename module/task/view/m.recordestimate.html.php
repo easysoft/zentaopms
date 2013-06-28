@@ -28,8 +28,8 @@
       <td class='w-70px'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
     </tr>
-    <tr>
-      <td><?php echo html::submitButton() . html::hidden('dates[1]', helper::today()) . html::hidden("id[1]", 1); ?></td>
+    <tr class="a-center">
+      <td><?php echo html::submitButton() . html::backButton("data-inline='true'") . html::hidden('dates[1]', helper::today()) . html::hidden("id[1]", 1); ?></td>
     </tr>
   <table>
   <?php endif;?>

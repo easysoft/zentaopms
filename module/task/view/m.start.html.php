@@ -16,8 +16,8 @@
       <td class='w-70px'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
     </tr>
-    <tr>
-      <td colspan="2"><?php echo html::submitButton() .html::hidden('realStarted', helper::today());?></td>
+    <tr class="a-center">
+      <td colspan="2"><?php echo html::submitButton('', 'data-inline="true" data-theme="b"') . html::backButton("data-inline='true'") . html::hidden('realStarted', helper::today());?></td>
     </tr>
   </table>
 </form>

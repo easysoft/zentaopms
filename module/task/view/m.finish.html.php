@@ -17,7 +17,7 @@
       <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
     </tr>
     <tr class='a-center'>
-      <td colspan="2"><?php echo html::submitButton('', 'data-inline="true" data-theme="b"') . html::hidden('finishedDate', $date);?></td>
+      <td colspan="2"><?php echo html::submitButton('', 'data-inline="true" data-theme="b"') . html::backButton("data-inline='true'") . html::hidden('finishedDate', $date);?></td>
     </tr>
   </table>
 </form>

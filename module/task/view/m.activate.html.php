@@ -5,20 +5,20 @@
 
   <table class='table-1'>
     <tr>
-      <td class="w-60px"><?php echo $lang->task->assignedTo;?></td> 
+      <td class="w-70px"><?php echo $lang->task->assignedTo;?></td> 
       <td><?php echo html::select('assignedTo', $users, $task->openedBy);?>
     </tr>
     <tr>
-      <td class="w-60px"><?php echo $lang->task->left;?></td>
+      <td class="w-70px"><?php echo $lang->task->left;?></td>
       <td><?php echo html::input('left', '');?>
     </div>
     <tr>
-      <td class='w-60px'><?php echo $lang->comment;?></td>
+      <td class='w-70px'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
     </tr>
-  <tr class="a-center">
-    <td colspan="2"><?php echo html::submitButton('', 'data-inline="true" data-theme="b"');?></td>
-  </div>
+    <tr class="a-center">
+      <td colspan="2"><?php echo html::submitButton('', 'data-inline="true" data-theme="b"') . html::backButton("data-inline='true'");?></td>
+    </tr>
   </table>
 </form>
 <?php include '../../common/view/m.action.html.php';?>
