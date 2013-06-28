@@ -12,21 +12,26 @@
        $allLeft      = $estimate->left;
   }
   ?>
-  <div data-role="fieldcontain">
-    <?php echo $lang->task->consumed . ':' . $allConsumed . $lang->task->hour . ', ' . $lang->task->left . ':' . $allLeft . $lang->task->hour;?>
-  </div>
-  <div data-role="fieldcontain">
-    <?php echo '<label for="consumed">' . $lang->task->consumedThisTime . '(' . $lang->task->hour . ')</label>' . html::input('consumed[1]', '');?>
-  </div>
-  <div data-role="fieldcontain">
-    <?php echo '<label for="left">' . $lang->task->left . '(' . $lang->task->hour . ')</label>' . html::input('left[1]', '');?>
-  </div>
-  <div data-role="fieldcontain">
-    <?php echo html::textarea('comment', '', "placeholder='$lang->comment'");?>
-  </div>
-  <div data-role="fieldcontain">
-    <?php echo html::submitButton() . html::hidden('dates[1]', helper::today()) . html::hidden("id[1]", 1); ?>
-  </div>
+  <table class='table-1'>
+    <tr>
+      <td colspan="2"><?php echo $lang->task->consumed . ':' . $allConsumed . $lang->task->hour . ', ' . $lang->task->left . ':' . $allLeft . $lang->task->hour;?></td>
+    </tr>
+    <tr>
+      <td class="w-70px"><?php echo $lang->task->consumedThisTime;?></td>
+      <td><?php echo html::input('consumed[1]', '');?></td>
+    </tr>
+    <tr>
+      <td class="w-70px"><?php echo $lang->task->left;?></td>
+      <td><?php echo html::input('left[1]', '');?></td>
+    </tr>
+    <tr>
+      <td class='w-70px'><?php echo $lang->comment;?></td>
+      <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
+    </tr>
+    <tr>
+      <td><?php echo html::submitButton() . html::hidden('dates[1]', helper::today()) . html::hidden("id[1]", 1); ?></td>
+    </tr>
+  <table>
   <?php endif;?>
 </form>
-<?php include '../../common/view/m.footer.html.php';?>
+<?php include '../../common/view/m.footer.html.php';?z

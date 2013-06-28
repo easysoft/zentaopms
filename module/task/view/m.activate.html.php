@@ -16,10 +16,10 @@
       <td class='w-60px'><?php echo $lang->comment;?></td>
       <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
     </tr>
-  </table>
-  <div class="a-center">
-    <?php echo html::submitButton('', 'data-inline="true" data-theme="b"');?>
+  <tr class="a-center">
+    <td colspan="2"><?php echo html::submitButton('', 'data-inline="true" data-theme="b"');?></td>
   </div>
+  </table>
 </form>
 <?php include '../../common/view/m.action.html.php';?>
 <?php include '../../common/view/m.footer.html.php';?>

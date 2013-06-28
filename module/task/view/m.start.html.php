@@ -1,12 +1,25 @@
 <?php include '../../common/view/m.header.html.php';?>
 </div>
 <form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
-    <h3><?php echo $lang->task->start . $this->lang->colon . $task->name;?></h3>
-    <?php echo $lang->task->consumed . '(' . $lang->task->hour . ')' . html::input('consumed', $task->consumed);?>
-    <?php echo $lang->task->left . '(' . $lang->task->hour . ')' . html::input('left', $task->left);?>
-    <?php echo html::textarea('comment', '', "placeholder='$lang->comment'");?>
-    <?php echo html::submitButton() .html::hidden('realStarted', helper::today()); ?>
+  <h3><?php echo $lang->task->start . $this->lang->colon . $task->name;?></h3>
+
+  <table class='table-1'>
+    <tr>
+      <td class='w-70px'><?php echo $lang->task->consumed;?></td>
+      <td><?php echo html::input('consumed', $task->consumed);?></td>
+    </tr>
+    <tr>
+      <td class='w-70px'><?php echo $lang->task->left;?></td>
+      <td><?php echo html::input('left', $task->left);?></td>
+    </tr>
+    <tr>
+      <td class='w-70px'><?php echo $lang->comment;?></td>
+      <td><?php echo html::textarea('comment', '', "data-mini='true'");?></td>
+    </tr>
+    <tr>
+      <td colspan="2"><?php echo html::submitButton() .html::hidden('realStarted', helper::today());?></td>
+    </tr>
   </table>
-  <?php include '../../common/view/m.action.html.php';?>
 </form>
+<?php include '../../common/view/m.action.html.php';?>
 <?php include '../../common/view/m.footer.html.php';?>
