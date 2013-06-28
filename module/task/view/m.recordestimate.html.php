@@ -34,4 +34,4 @@
   <table>
   <?php endif;?>
 </form>
-<?php include '../../common/view/m.footer.html.php';?z
+<?php include '../../common/view/m.footer.html.php';?>
