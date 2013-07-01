@@ -30,7 +30,7 @@ if(!file_exists($destDir))    mkdir($destDir, 0777);
 /* Backup database. */
 $dbRawFile = "db." . date('Ymd') . ".sql";
 $password  = $config->db->password ?  "-p{$config->db->password}" : ' ';
-$command   = "{$config->mysqldump} -u{$config->db->user} $password -P {$config->db->port} {$config->db->name} > {$dbRawFile}";
+$command   = "\"{$config->mysqldump}\" -u{$config->db->user} $password -P {$config->db->port} {$config->db->name} > {$dbRawFile}";
 
 echo "Backuping database,";
 system($command, $return);
