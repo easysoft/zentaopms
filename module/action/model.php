@@ -308,7 +308,7 @@ class actionModel extends model
             $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
         }
 
-        if($this->app->getViewType() == 'mhtml') $action->date = date('y-m-d H:i', strtotime($action->date));
+        if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
 
         /* Cycle actions, replace vars. */
         foreach($action as $key => $value)
