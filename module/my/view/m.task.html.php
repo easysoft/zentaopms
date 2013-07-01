@@ -28,17 +28,15 @@
     <h1 onClick="showDetail('task', <?php echo $task->id;?>)"><?php echo $task->name;?></h1>
     <div><?php echo $task->desc;?></div>
     <div id='item<?php echo $task->id;?>'><?php echo $task->desc;?></div>
-    <div data-role='navbar'>
-      <ul>
-        <?php 
-        common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task);
-        common::printIcon('task', 'start',          "taskID=$task->id", $task);
-        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task);
-        common::printIcon('task', 'finish',         "taskID=$task->id", $task);
-        common::printIcon('task', 'close',          "taskID=$task->id", $task);
-        common::printIcon('task', 'activate',       "taskID=$task->id", $task);
-        ?>
-      </ul>
+    <div data-role='content' class='a-center'>
+      <?php 
+      common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task);
+      common::printIcon('task', 'start',          "taskID=$task->id", $task);
+      common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task);
+      common::printIcon('task', 'finish',         "taskID=$task->id", $task);
+      common::printIcon('task', 'close',          "taskID=$task->id", $task);
+      common::printIcon('task', 'activate',       "taskID=$task->id", $task);
+      ?>
     </div>
   </div>
 </div>

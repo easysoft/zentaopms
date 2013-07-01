@@ -299,7 +299,7 @@ class common extends control
         {
             if($app->getViewType() == 'mhtml')
             {
-                echo "<li>" . html::a($link, $title, $target, "class='$extraClass'", true) . "</li>";
+                echo html::a($link, $title, $target, "class='$extraClass' data-role='button' data-inline='true' data-theme='b'", true);
                 return;
             }
             if($type == 'button')

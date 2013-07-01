@@ -21,8 +21,7 @@
       <h1 onClick="showDetail('bug', <?php echo $bug->id;?>)"><?php echo $bug->title;?></h1>
       <div><?php echo $bug->steps;?></div>
       <div id='item<?php echo $bug->id;?>'></div>
-      <div data-role='navbar'>
-        <ul>
+      <div data-role='content' class='a-center'>
         <?php
         if($this->session->bugList)
         {
@@ -38,7 +37,6 @@
         common::printIcon('bug', 'close',      "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
         common::printIcon('bug', 'activate',   "bugID=$bug->id", $bug, 'button', '', '', 'iframe');
         ?>
-        </ul>
       </div>
     </div>
   </div>

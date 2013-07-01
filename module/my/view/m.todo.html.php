@@ -27,17 +27,15 @@
     <h1 onClick="showDetail('todo', <?php echo $todo->id;?>)"><?php echo $todo->name;?></h1>
     <div><?php echo $todo->desc;?></div>
     <div id='item<?php echo $todo->id;?>'><?php echo $todo->desc;?></div>
-    <div data-role='navbar'>
-      <ul>
-        <?php
-        common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'button', '', 'hiddenwin');
-        if($todo->account == $app->user->account)
-        {
-            common::printIcon('todo', 'import2Today',   "todoID=$todo->id");
-            common::printIcon('todo', 'delete', "todoID=$todo->id", '', 'button', '', 'hiddenwin');
-        }
-        ?>
-      </ul>
+    <div data-role='content' class='a-center'>
+      <?php
+      common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'button', '', 'hiddenwin');
+      if($todo->account == $app->user->account)
+      {
+          common::printIcon('todo', 'import2Today',   "todoID=$todo->id");
+          common::printIcon('todo', 'delete', "todoID=$todo->id", '', 'button', '', 'hiddenwin');
+      }
+      ?>
     </div>
   </div>
 </div>
