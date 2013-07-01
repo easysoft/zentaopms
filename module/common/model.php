@@ -653,7 +653,7 @@ class commonModel extends model
             $queryCondition = explode('ORDER', $sql);
             $queryCondition = $queryCondition[0];
         }
-        if(empty($queryCondition)) $queryCondition = "1=1";
+        if(empty(trim($queryCondition))) $queryCondition = "1=1";
 
         $this->session->set($objectType . 'QueryCondition', $queryCondition);
         $this->session->set($objectType . 'OnlyCondition', $onlyCondition);
