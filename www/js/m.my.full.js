@@ -208,7 +208,11 @@ function ajaxGetSearchForm()
  */
 function showDetail(objectType, objectID)
 {
-    $.get(createLink(objectType, 'ajaxGetDetail', "objectID=" + objectID), function(data){$('#item' + objectID).html(data)});      
+    $.get(createLink(objectType, 'ajaxGetDetail', "objectID=" + objectID), function(data)
+    {
+        $('#item' + objectID).html(data);
+        $("div:jqmData(role='header')").next().css('margin-top', '5px');
+    });      
 }
 
 /* Ping the server every some minutes to keep the session. */
@@ -224,4 +228,12 @@ $(document).ready(function()
     toggleSearch();
 
     if(needPing) setTimeout('setPing()', 1000 * 60);  // After 5 minutes, begin ping.
+    $(document).pjax("a[target!='hiddenwin']", '#main');
+    $(document).on('pjax:complete', function()
+    {
+        $('#main').trigger("pagecreate");
+        var height = 0;
+        $("div:jqmData(role='header')").find("div:jqmData(role='navbar')").each(function(){height = height + $(this).height()})
+        $("div:jqmData(role='header')").next().css('margin-top', (height + 5) + 'px');
+    });
 });

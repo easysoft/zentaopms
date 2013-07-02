@@ -7,6 +7,7 @@ $defaultTheme = $webRoot . 'theme/default/';
 $langTheme    = $themeRoot . 'lang/' . $app->getClientLang() . '.css';
 $clientTheme  = $this->app->getClientTheme();
 ?>
+<?php if($this->server->HTTP_X_PJAX == false):?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,16 +17,14 @@ $clientTheme  = $this->app->getClientTheme();
   echo html::title($title . ' - ' . $lang->zentaoPMS);
 
   js::exportConfigVars();
-  if($config->debug)
-  {
-      js::import($jsRoot . 'jquery/mobile/jquery-1.10.1.min.js', $config->version);
-      js::import($jsRoot . 'm.my.full.js', $config->version);
-      js::import($jsRoot . 'jquery/mobile/jquery.mobile.min.js', $config->version);
+  js::import($jsRoot . 'jquery/mobile/jquery-1.10.1.min.js', $config->version);
+  js::import($jsRoot . 'm.my.full.js', $config->version);
+  js::import($jsRoot . 'jquery/mobile/jquery.mobile.min.js', $config->version);
+  js::import($jsRoot . 'jquery/jquery.pjax.js', $config->version);
 
-      css::import($defaultTheme . 'jquery.mobile.css', $config->version);
-      css::import($defaultTheme . 'm.style.css', $config->version);
-      css::import($langTheme, $config->version);
-  }
+  css::import($defaultTheme . 'jquery.mobile.css', $config->version);
+  css::import($defaultTheme . 'm.style.css', $config->version);
+  css::import($langTheme, $config->version);
 
   if(isset($pageCss)) css::internal($pageCss);
 
@@ -33,4 +32,5 @@ $clientTheme  = $this->app->getClientTheme();
   ?>
 </head>
 <body>
-<div data-role="page">
+<div data-role="page" id='main'>
+<?php endif;?>
